@@ -1,0 +1,50 @@
+/**
+ * @author Cory(coryisbest0728#gmail.com)
+ * @copyright © 2021 Cory. All rights reserved
+ */
+{
+    "layout": { // 布局配置
+        // "frame": "./layout/DefaultFrame", // 主框架
+        "frame": "./layout/tc/TCFrame",
+        "navigation-panel": { // 导航面板
+            "module": "./layout/tc/TCNavigationPanel",
+            "props": {
+                "width": 350, // 导航面板宽度
+                "menu": [{ // 菜单项配置
+                    "label": "客户管理",
+                    "path": "/client",
+                    "items": [{
+                        "label": "客户管理",
+                        "path": "/client/mngt"
+                    }]
+                }, {
+                    "label": "营销管理",
+                    "path": "/prom",
+                    "items": [{
+                        "label": "销售合同管理",
+                        "path": "/prom/contract"
+                    }, {
+                        "label": "销售订单管理",
+                        "path": "/prom/order"
+                    }, {
+                        "label": "任务单管理",
+                        "path": "/prom/task"
+                    }]
+                }, {
+                    "label": "系统管理",
+                    "path": "/sys",
+                    "items": [{
+                        "label": "字典管理",
+                        "path": "/sys/dxnry"
+                    }]
+                }]
+            }
+        },
+        "content-panel": "./layout/DefaultContentPanel", // 内容面板
+        "header-panel": "./layout/tc/TCHeader", // 头部面板
+        "footer-panel": "./layout/DefaultFooter" // 底部面板
+    },
+    "filters": [ // 过滤器
+        "./filters/AuthorizationFilter" // 权限过滤器
+    ]
+}

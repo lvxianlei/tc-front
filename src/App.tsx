@@ -1,25 +1,24 @@
+/**
+ * @author Cory(coryisbest0728#gmail.com)
+ * @copyright © 2021 Cory. All rights reserved
+ */
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router } from 'react-router-dom';
+
+import ApplicationContext from './configuration/ApplicationContext';
+import { ComponentClazz } from './configuration/IApplicationContext';
 
 function App() {
+  const frame: ComponentClazz | undefined = ApplicationContext.get().layout?.frame;
+  const Frame: React.ComponentClass | undefined = frame?.componentClass;
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    Frame
+    ? 
+    <Router>
+      <Frame { ...frame?.props }/>
+    </Router>
+    :
+    null
   );
 }
 

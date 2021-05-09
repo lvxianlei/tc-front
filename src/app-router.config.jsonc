@@ -1,0 +1,11 @@
+/**
+ * @author Cory(coryisbest0728#gmail.com)
+ * @copyright © 2021 Cory. All rights reserved
+ */
+{ // 路由配置
+    "routers": [{ // 客户管理
+        "path": "/client/mngt",
+        "module": "./client-mngt/ClientMngt",
+        "exact": true
+    }]
+}
