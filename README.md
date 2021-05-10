@@ -334,10 +334,6 @@ The router configuration as below:
 
 You can access `http://localhost:3000/client/mngt` in your browser.
 
-## Advanced
-
-To be continued...
-
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
@@ -353,3 +349,6 @@ We are using `Mockjs` to simulate the request/response data. [Mockjs document](h
 We use `Jsonc` as our configuration files, learn more in the [JSON with Comments](https://code.visualstudio.com/docs/languages/json#_json-with-comments) and [jsonc](https://komkom.github.io/)
 
 We use [i18next](https://www.i18next.com/) and [react-i18next](https://react.i18next.com/) as our internationalization(multi-language) tech base. You can click the text link to learn more about that.
+
+# Advanced
+To be continued...
