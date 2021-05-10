@@ -58,7 +58,30 @@ Why we use mock data, check out the [Don’t Wait! Mock the API](https://css-tri
 
 We use [Mockjs](https://github.com/nuysoft/Mock/wiki) to simulate request/response data.
 
-There is a named `mock` folder to store the mock data. For instance, if `/api/client/list` as your real requested API path, you should create mock data file follow 
+There is a named `mock` folder to store the mock data. For instance, if `/api/client/list` as your real requested API path, you should create mock data file as follow:
+```
+.
+├── compiler
+├── env
+│   └── .development.env
+│   └── .production.env
+├── mock # This is the mock folder where to store faked api data
+│   ├── api
+│   │   └── client
+│   │       └── list.js
+│   └── config.js
+├── node_modules
+│   ├── ...
+│   │
+│   ...
+│
+...
+```
+You can see the file `mock/api/client/list.js` as the simulated response data of the api `/api/client/list`. The same path start `mock/` folder.
+
+The extensive of the mock file can be `js/json/jsonc`.
+
+The rule of mock data, please check out [Mockjs document](https://github.com/nuysoft/Mock/wiki).
 
 ### I18n
 
