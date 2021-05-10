@@ -337,6 +337,8 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn `React`, check out the [React documentation](https://reactjs.org/).
 
+TO learn `React-router path/exact/strict`, check out the [React-router path doc](https://reactrouter.com/web/api/Route/path-string-string)
+
 To learn `Typescript`, plz check here [Typescript handbook](https://www.typescriptlang.org/docs/handbook/intro.html).
 
 We are using `Mockjs` to simulate the request/response data. [Mockjs document](https://github.com/nuysoft/Mock/wiki).
