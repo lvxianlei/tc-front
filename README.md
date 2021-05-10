@@ -52,6 +52,44 @@ We can use `process.env.REQUEST_API_PATH_PREFIX` as the variable in our code sni
 
 The variable will be compiled with `.development.env` file when you run `npm start`, and will be compiled with `.production.env` file when you run `npm run build`.
 
+### Request/Response an api data
+
+#### Why `RequestUtil`
+
+`RequestUtil` is very easy useful. You only consider the right condition during writing code, `RequestUtil` will help you handle edge conditions (such as 401, 500, etc.). If you meet the error situation, it will appear the error alert on the top of UI.
+It can hand-free to guide you do the important things. Giving your a high efficiency.
+
+#### How to use
+
+We use `RequestUtil` the static class to request/response an api data.
+
+The sample code as below:
+```typescript
+import RequestUtil from '../utils/RequestUtil'; // The relative path
+
+// do something...
+const tableDataItems: ITableDataItem[] = await RequestUtil.get<ITableDataItem[]>('/client/list');
+consol.log(tableDataItems); // tableDataItems is the response data from api.
+// do something...
+```
+
+`RequestUtil` supplies 2 methods to fetch apis.
+```typescript
+/**
+ * GET
+ */
+RequestUtil.get<T>(path: string, params: Record<string, string | number> = {}): Promise<T>;
+
+/**
+ * POST
+ */
+RequestUtil.post<T>(path: string, params: Record<string, string | number> = {}): Promise<T>;
+```
+* `path: string` is the api path, the prefix of the api has been defined in the env config file. We just consider the path, it will be fine.
+* `params: Record<string, string | number> = {}` is parameters of the api. The default value is `{}`.
+* `T` is [Generics](https://www.typescriptlang.org/docs/handbook/2/generics.html). It is defined as types of response data.
+* `return value` is Promise<T>, so you can use `sync-await` function or `Promise` directly.
+
 ### Mock data
 
 #### Why mock data
@@ -136,6 +174,162 @@ class Sample extends React.Component<ISampleProps, ISampleState> {
 export default withTranslation()(Sample);
 ```
 More information could check out the [withTranslation (HOC)](https://react.i18next.com/latest/withtranslation-hoc)
+
+## Generates a page hand in hand
+### Creates a class of the page
+1. Creates a new file named `ClientMngt.tsx` under the `client-mngt` folder. The file name must be the same as the class name. The directory as below:
+```
+.
+├── compiler/
+├── env/
+├── mock/
+├── node_modules/
+├── public/
+├── src
+│   ├── client-mngt
+│   │   └── ClientMngt.tsx # created the new file
+│   ...
+├── ...
+│
+...
+```
+2. Let's define `props`, `state` and the class. 
+
+Generally, the name of interface should be start with `I`.
+
+* The class must extend an abstract class `AbstractMngtComponent`.
+
+* The interface props must extend an interface `RouteComponentProps`. Because this class will register into the router, The props of the class must be a subinterface of the router.
+
+* The interface state must extend an interface `IAbstractMngtComponentState`.
+
+The code as below:
+```typescript
+import React from 'react';
+import { WithTranslation, withTranslation } from 'react-i18next';
+import { RouteComponentProps, withRouter } from 'react-router';
+
+import AbstractMngtComponent, { IAbstractMngtComponentState, ITabItem } from '../components/AbstractMngtComponent';
+
+export interface IClientMngtProps {}
+export interface IClientMngtWithRouteProps extends RouteComponentProps<IClientMngtProps>, WithTranslation {}
+export interface IClientMngtState extends IAbstractMngtComponentState {}
+
+/**
+ * Client Management
+ */
+class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClientMngtState> {
+    // do something...
+}
+
+export default withRouter(withTranslation(['translation'])(ClientMngt));
+```
+3. You must implement abstract methods from the abstract super class.
+Abstract methods are:
+```typescript
+/**
+ * @abstract
+ * @description Gets tab items
+ * @returns tab items 
+ */
+abstract getTabItems(): ITabItem[];
+
+/**
+ * @abstract
+ * @description Determines whether tab change on
+ * @param activeKey 
+ */
+abstract onTabChange(activeKey: string): void;
+
+/**
+ * @abstract
+ * @description Renders filter components
+ * @param item 
+ * @returns filter components 
+ */
+abstract renderFilterComponents(item: ITabItem): React.ReactNode[];
+
+/**
+ * @abstract
+ * @description Determines whether filter submit on
+ * @param values 
+ */
+abstract onFilterSubmit(values: Record<string, any>): void;
+
+/**
+ * @abstract
+ * @description Gets table data source
+ * @param item 
+ * @returns table data source 
+ */
+abstract getTableDataSource(item: ITabItem): object[];
+
+/**
+ * @abstract
+ * @description Gets table columns
+ * @param item 
+ * @returns table columns 
+ */
+abstract getTableColumns(item: ITabItem): ColumnType<object>[];
+```
+And there are 2 methods could be overrided if necessary, they are:
+```typescript
+/**
+ * @description Gets state, it can override.
+ * @returns state 
+ */
+protected getState(): S {
+    return {
+        selectedTabKey: this.getTabItems()[0].key
+    } as S;
+}
+
+/**
+ * @protected
+ * @description Gets table row key
+ * @returns table row key 
+ */
+protected getTableRowKey(): string | GetRowKey<object> {
+    return 'id';
+}
+```
+
+### Configs the router of the page
+Well done, you are going to be succeed after the last step configuration.
+
+The location of the config file as below:
+```
+.
+├── compiler/
+├── env/
+├── mock/
+├── node_modules/
+├── public/
+├── src
+│   │
+│   ...
+│   ├── app-router.config.jsonc # The router config file
+│   ...
+├── ...
+│
+...
+```
+The router configuration as below:
+```json
+{
+    "routers": [{
+        "path": "/client/mngt", // The access path
+        "module": "./client-mngt/ClientMngt", // The class that a sample above
+        "exact": true
+    }]
+}
+```
+
+You can access `http://localhost:3000/client/mngt` in your browser.
+
+## Advanced
+
+To be continued...
 
 ## Learn More
 
