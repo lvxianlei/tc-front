@@ -54,7 +54,11 @@ The variable will be compiled with `.development.env` file when you run `npm sta
 
 ### Mock data
 
-Why we use mock data, check out the [Don’t Wait! Mock the API](https://css-tricks.com/dont-wait-mock-the-api/)
+#### Why mock data
+
+Check out the [Don’t Wait! Mock the API](https://css-tricks.com/dont-wait-mock-the-api/)
+
+#### How to use
 
 We use [Mockjs](https://github.com/nuysoft/Mock/wiki) to simulate request/response data.
 
@@ -80,19 +84,30 @@ There is a named `mock` folder to store the mock data. For instance, if `/api/cl
 You can see the file `mock/api/client/list.js` as the simulated response data of the api `/api/client/list`. The same path start `mock/` folder.
 
 The extensive of the mock file can be `js/json/jsonc`.
+What is the `.jsonc`, learn more in the [JSON with Comments](https://code.visualstudio.com/docs/languages/json#_json-with-comments) and [jsonc](https://komkom.github.io/).
 
-The rule of mock data, please check out [Mockjs document](https://github.com/nuysoft/Mock/wiki).
+The rule of mock data, please check out [Mockjs syntax specification](https://github.com/nuysoft/Mock/wiki/Syntax-Specification).
 
 ### I18n
 
+#### Why I18n
 
+Check out the [What is I18n](http://www.i18nguy.com/origini18n.html#:~:text=%22I18n%22%20is%20an%20abbreviation%20for,plus%20the%20letter%20%22n%22.&text=Examples%20include%20%22K9%22%20for%20canine,sept%22%20for%20the%20word%20cassette.)
+
+#### How to use
+
+We use [i18next](https://www.i18next.com/) and [react-i18next](https://react.i18next.com/)
 
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+To learn `React`, check out the [React documentation](https://reactjs.org/).
 
-To learn Typescript, plz check here [Typescript handbook](https://www.typescriptlang.org/docs/handbook/intro.html).
+To learn `Typescript`, plz check here [Typescript handbook](https://www.typescriptlang.org/docs/handbook/intro.html).
 
-We are using Mockjs to simulate the request/response data. [Mockjs document](https://github.com/nuysoft/Mock/wiki).
+We are using `Mockjs` to simulate the request/response data. [Mockjs document](https://github.com/nuysoft/Mock/wiki).
+
+We use `Jsonc` as our configuration files, learn more in the [JSON with Comments](https://code.visualstudio.com/docs/languages/json#_json-with-comments) and [jsonc](https://komkom.github.io/)
+
+We use [i18next](https://www.i18next.com/) and [react-i18next](https://react.i18next.com/) as our internationalization(multi-language) tech base. You can click the text link to learn more about that.
