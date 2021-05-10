@@ -65,10 +65,8 @@ We use [Mockjs](https://github.com/nuysoft/Mock/wiki) to simulate request/respon
 There is a named `mock` folder to store the mock data. For instance, if `/api/client/list` as your real requested API path, you should create mock data file as follow:
 ```
 .
-├── compiler
-├── env
-│   └── .development.env
-│   └── .production.env
+├── compiler/
+├── env/
 ├── mock # This is the mock folder where to store faked api data
 │   ├── api
 │   │   └── client
@@ -96,7 +94,48 @@ Check out the [What is I18n](http://www.i18nguy.com/origini18n.html#:~:text=%22I
 
 #### How to use
 
-We use [i18next](https://www.i18next.com/) and [react-i18next](https://react.i18next.com/)
+We use [i18next](https://www.i18next.com/) and [react-i18next](https://react.i18next.com/) as the tech base.
+
+You could see folders as below
+```
+.
+├── compiler/
+├── env/
+├── mock/
+├── node_modules/
+├── public
+│   ├── locales # i18n folder
+│   │   └── en
+│   │   │   └── translation.json
+│   │   └── zh
+│   │       └── translation.json
+│   ...
+├── ...
+│
+...
+```
+`translation.json` is a i18n map(key-value) config file. The key is a variable and the value correspondings a displayed text. One key must be the same in all of language config files.
+
+In the code, we need 2 steps to display i18n text.
+1. The `Prop` must extend `WithTranslation`, a sample as below:
+```typescript
+interface ISampleProps extends WithTranslation {}
+```
+2. We have to use `withTranslation` function to wrap the class, a sample as below:
+```typescript
+import React from 'react';
+import { WithTranslation, withTranslation } from 'react-i18next';
+
+interface ISampleProps extends WithTranslation {}
+interface ISampleState {}
+
+class Sample extends React.Component<ISampleProps, ISampleState> {
+    // do something...
+}
+
+export default withTranslation()(Sample);
+```
+More information could check out the [withTranslation (HOC)](https://react.i18next.com/latest/withtranslation-hoc)
 
 ## Learn More
 
