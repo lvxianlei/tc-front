@@ -171,8 +171,9 @@ class Sample extends React.Component<ISampleProps, ISampleState> {
     // do something...
 
     public render(): React.ReactNode {
+        // 'key' is the key in the translation.json
         return (
-            <div>{ this.props.t('key') }</div> // 'key' is the key in the translation.json
+            <div>{ this.props.t('key') }</div>
         );
     }
 }
