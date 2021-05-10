@@ -11,12 +11,7 @@ import { Link } from 'react-router-dom';
 import AsyncComponent from '../../components/AsyncComponent';
 import ApplicationContext from '../../configuration/ApplicationContext';
 import layoutStyles from '../Layout.module.less';
-
-interface IMenuItem {
-    readonly label: string;
-    readonly path: string;
-    readonly items?: IMenuItem[];
-}
+import IMenuItem from './IMenuItem';
 
 export interface ITCNavigationPanelProps {}
 export interface ITCNavigationPanelRouteProps extends RouteComponentProps<ITCNavigationPanelProps>, WithTranslation {

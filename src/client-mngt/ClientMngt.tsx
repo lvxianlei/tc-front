@@ -8,12 +8,12 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import AbstractMngtComponent, { ITabItem } from '../components/AbstractMngtComponent';
+import AbstractMngtComponent, { IAbstractMngtComponentState, ITabItem } from '../components/AbstractMngtComponent';
 import RequestUtil from '../utils/RequestUtil';
 
 export interface IClientMngtProps {}
 export interface IClientMngtWithRouteProps extends RouteComponentProps<IClientMngtProps>, WithTranslation {}
-export interface IClientMngtState {
+export interface IClientMngtState extends IAbstractMngtComponentState {
     readonly tableDataSource: ITableDataItem[];
 }
 
@@ -32,9 +32,31 @@ interface ITableDataItem {
  */
 class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClientMngtState> {
 
-    public state: IClientMngtState = {
-        tableDataSource: []
-    };
+    /**
+     * @override
+     * @description Gets state
+     * @returns state 
+     */
+    protected getState(): IClientMngtState {
+        return {
+            ...super.getState(),
+            tableDataSource: []
+        };
+    }
+
+    /**
+     * @description Fetchs table data
+     * @param filterValues 
+     */
+    protected async fetchTableData(filterValues: Record<string, any>) {
+        const tableDataItems: ITableDataItem[] = await RequestUtil.get<ITableDataItem[]>('/client/list', {
+            ...filterValues,
+            tabKey: this.state.selectedTabKey
+        });
+        this.setState({
+            tableDataSource: tableDataItems
+        });
+    }
 
     /**
      * @implements
@@ -42,10 +64,7 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const tableDataItems: ITableDataItem[] = await RequestUtil.get<ITableDataItem[]>('/client/list');
-        this.setState({
-            tableDataSource: tableDataItems
-        });
+        this.fetchTableData({});
     }
 
     /**
@@ -111,10 +130,7 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
      * @param values 
      */
     public async onFilterSubmit(values: Record<string, any>) {
-        const tableDataItems: ITableDataItem[] = await RequestUtil.post<ITableDataItem[]>('/client/filter', values);
-        this.setState({
-            tableDataSource: tableDataItems
-        });
+        this.fetchTableData(values);
     }
 
     /**
@@ -133,6 +149,15 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
             label: '国际客户',
             key: 2
         }];
+    }
+
+    /**
+     * @implements
+     * @description Determines whether tab change on
+     * @param activeKey 
+     */
+    public onTabChange(activeKey: string): void {
+        this.fetchTableData({});
     }
 
     /**

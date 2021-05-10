@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Button, Card, Form, Space, Table, Tabs } from 'antd';
+import { Button, Card, Form, FormInstance, Space, Table, Tabs } from 'antd';
 import { ColumnType } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
@@ -16,10 +16,14 @@ export interface ITabItem {
     readonly key: string | number;
 }
 
+export interface IAbstractMngtComponentState {
+    selectedTabKey: React.Key;
+}
+
 /**
  * The abstract management component
  */
-export default abstract class AbstractMngtComponent<P = {}, S = {}> extends AsyncComponent<P, S> {
+export default abstract class AbstractMngtComponent<P, S extends IAbstractMngtComponentState> extends AsyncComponent<P, S> {
 
     /**
      * @constructor
@@ -28,7 +32,18 @@ export default abstract class AbstractMngtComponent<P = {}, S = {}> extends Asyn
      */
     constructor(props: P) {
         super(props);
+        this.state = this.getState();
         this.onFilterSubmit = this.onFilterSubmit.bind(this);
+    }
+
+    /**
+     * @description Gets state, it can override.
+     * @returns state 
+     */
+    protected getState(): S {
+        return {
+            selectedTabKey: this.getTabItems()[0].key
+        } as S;
     }
 
     /**
@@ -37,6 +52,13 @@ export default abstract class AbstractMngtComponent<P = {}, S = {}> extends Asyn
      * @returns tab items 
      */
     abstract getTabItems(): ITabItem[];
+
+    /**
+     * @abstract
+     * @description Determines whether tab change on
+     * @param activeKey 
+     */
+    abstract onTabChange(activeKey: string): void;
 
     /**
      * @abstract
@@ -70,12 +92,24 @@ export default abstract class AbstractMngtComponent<P = {}, S = {}> extends Asyn
     abstract getTableColumns(item: ITabItem): ColumnType<object>[];
 
     /**
+     * @description Handle tab change of abstract mngt component
+     * @param activeKey 
+     */
+    public handleTabChange = (activeKey: string): void => {
+        this.setState({
+            selectedTabKey: activeKey
+        }, () => {
+            this.onTabChange(activeKey);
+        });
+    }
+
+    /**
      * @description Renders AbstractMngtComponent
      * @returns render 
      */
     public render(): React.ReactNode {
         return (
-            <Tabs type="card" className={ styles.tab }>
+            <Tabs type="card" className={ styles.tab } onChange={ this.handleTabChange }>
                 {
                     this.getTabItems().map<React.ReactNode>((item: ITabItem): React.ReactNode => (
                         <Tabs.TabPane key={ item.key } tab={ item.label }>{ this.renderTabContent(item) }</Tabs.TabPane>
@@ -94,7 +128,7 @@ export default abstract class AbstractMngtComponent<P = {}, S = {}> extends Asyn
     protected renderTabContent(item: ITabItem): React.ReactNode {
         return (
             <Space direction="vertical" size="small" className={ layoutStyles.width100 }>
-                <Card>
+                <Card className={ styles.filterCard }>
                     { this.renderFilterContent(item) }
                 </Card>
                 <Card>
