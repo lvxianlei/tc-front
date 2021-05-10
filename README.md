@@ -152,7 +152,7 @@ You could see folders as below
 │
 ...
 ```
-`translation.json` is a i18n map(key-value) config file. The key is a variable and the value correspondings a displayed text. One key must be the same in all of language config files.
+`translation.json` is an i18n map(key-value) config file. The key is a variable and the value correspondings a displayed text. One key must be the same in all of language config files.
 
 In the code, we need 2 steps to display i18n text.
 1. The `Prop` must extend `WithTranslation`, a sample as below:
