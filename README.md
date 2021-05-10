@@ -169,6 +169,12 @@ interface ISampleState {}
 
 class Sample extends React.Component<ISampleProps, ISampleState> {
     // do something...
+
+    public render(): React.ReactNode {
+        return (
+            <div>{ this.props.t('key') }</div> // 'key' is the key in the translation.json
+        );
+    }
 }
 
 export default withTranslation()(Sample);
