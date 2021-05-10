@@ -56,7 +56,7 @@ The variable will be compiled with `.development.env` file when you run `npm sta
 
 #### Why `RequestUtil`
 
-`RequestUtil` is very easy useful. You only consider the right condition during writing code, `RequestUtil` will help you handle edge conditions (such as 401, 500, etc.). If you meet the error situation, it will appear the error alert on the top of UI.
+`RequestUtil` is very easy to use. You only consider the right condition during writing code, `RequestUtil` will help you handle edge conditions (such as 401, 500, etc.). If you meet the error situation, it will appear the error alert on the top of UI.
 It can hand-free to guide you do the important things. Giving your a high efficiency.
 
 #### How to use
