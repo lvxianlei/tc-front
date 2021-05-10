@@ -106,9 +106,9 @@ You could see folders as below
 ├── public
 │   ├── locales # i18n folder
 │   │   └── en
-│   │   │   └── translation.json
+│   │   │   └── translation.json # en language config json file
 │   │   └── zh
-│   │       └── translation.json
+│   │       └── translation.json # zh language config json file
 │   ...
 ├── ...
 │
