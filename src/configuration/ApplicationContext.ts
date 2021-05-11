@@ -2,10 +2,11 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-
-import IApplicationContext, { ComponentClazz, ComponentClazzProps } from "./IApplicationContext";
 import camelcaseKeys from 'camelcase-keys';
+
 import routerConfigJson from '../app-router.config.jsonc';
+import IApplicationContext, { IRouterItem } from './IApplicationContext';
+
 
 const ctxConfigJson: IApplicationContext = {};
 
@@ -20,6 +21,7 @@ export default abstract class ApplicationContext {
     private static ctxConfig: IApplicationContext;
 
     /**
+     * @static
      * @description Gets application context
      * @returns get 
      */
@@ -33,28 +35,20 @@ export default abstract class ApplicationContext {
         return this.ctxConfig;
     }
 
-    private static getClassConfig(key: string): ComponentClazz | undefined {
-        let obj: any | undefined = this.get();
-        key.split('.').forEach((item: string) => {
-            obj = obj[item];
-            if (!obj) {
-                return;
-            }
-        });
-        return obj;
-    }
-
     /**
-     * @description Gets class props
-     * @param key 
-     * @returns class props 
+     * @static
+     * @description Gets router item by path
+     * @param pathname 
+     * @returns router item by path 
      */
-    public static getClassProps(key: string): ComponentClazzProps {
-        let clazz: ComponentClazz | undefined = this.getClassConfig(key);
-        let props: ComponentClazzProps = {};
-        if (typeof clazz === 'object') {
-            props = clazz.props || {};
+    public static getRouterItemByPath(pathname: string): IRouterItem | null {
+        const routers: IRouterItem[] = this.get().routers || [];
+        const hitedRouters: IRouterItem[] = routers.filter<IRouterItem>((value: IRouterItem): value is IRouterItem => {
+            return value.path === pathname; // whether hint the item or not
+        });
+        if (hitedRouters && hitedRouters.length > 0) { // hited item is existed
+            return hitedRouters[ hitedRouters.length - 1 ];
         }
-        return props;
+        return null;
     }
 }

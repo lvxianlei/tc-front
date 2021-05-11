@@ -18,6 +18,7 @@ export interface ILayout extends Record<string, ComponentClazz | undefined> {
 }
 
 export interface IRouterItem {
+    readonly name: string;
     readonly path: string;
     readonly module?: string;
     readonly exact?: boolean;

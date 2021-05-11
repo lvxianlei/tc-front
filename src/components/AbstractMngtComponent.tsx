@@ -2,13 +2,13 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Button, Card, Form, FormInstance, Space, Table, Tabs } from 'antd';
+import { Button, Card, Form, Space, Table, Tabs } from 'antd';
 import { ColumnType } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
-import styles from './AbstractMngtComponent.module.less';
 import layoutStyles from '../layout/Layout.module.less';
+import styles from './AbstractMngtComponent.module.less';
 import AsyncComponent from './AsyncComponent';
 
 export interface ITabItem {

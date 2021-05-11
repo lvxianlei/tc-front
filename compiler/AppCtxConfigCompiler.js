@@ -1,3 +1,7 @@
+/**
+ * @author Cory(coryisbest0728#gmail.com)
+ * @copyright © 2021 Cory. All rights reserved
+ */
 const path = require('path');
 const fs = require('fs');
 const camelcaseKeys = require('camelcase-keys');
@@ -59,9 +63,15 @@ class AppCtxConfigCompiler {
         let imports = '';
         let filtersAlt = `filters:[`;
         filters.forEach((filter) => {
-            const ClazzName = filter.replace(/\/|\./g, '');
-            imports += `import ${ ClazzName } from '${ path.resolve(__dirname, '../src/', filter) }';\n`;
-            filtersAlt += `new ${ ClazzName }(),`;
+            const ClazzName = pascalcase(filter.replace(/\/|\./g, ''));
+            const importDeclaration = `import ${ ClazzName } from '${ path.resolve(__dirname, '../src/', filter) }';\n`;
+            const initialFilterStatement = `new ${ ClazzName }(),`;
+            if (!new RegExp(importDeclaration).test(source)) {
+                imports += importDeclaration;
+            }
+            if (!new RegExp(initialFilterStatement).test(source)) {
+                filtersAlt += initialFilterStatement;
+            }
         });
         filtersAlt += `]`;
         return {
