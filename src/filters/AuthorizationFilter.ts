@@ -3,19 +3,20 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 
+import { RouteComponentProps, StaticContext } from "react-router";
 import { IFilter } from "./IFilter";
 
 /**
- * @TODO Describe the class
+ * Authorization Filter
  */
 export default class AuthorizationFilter implements IFilter {
 
     /**
      * @description Do filter
-     * @returns filter 
+     * @param props 
+     * @returns true if filter 
      */
-    public doFilter(): boolean {
+    public doFilter(props: RouteComponentProps<{}, StaticContext, unknown>): boolean {
         return true;
     }
-    
 }

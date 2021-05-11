@@ -35,12 +35,29 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
      */
     constructor(props: ITCNavigationPanelRouteProps) {
         super(props);
-        this.getRootMenuItemByPath(ApplicationContext.get().layout?.navigationPanel?.props?.menu, props.location.pathname);
         this.state = {
-            selectedDarkMenuItem: this.menuItemStack.pop()
+            selectedDarkMenuItem: this.getSelectedMenuItem(props.location.pathname)
         };
     }
 
+    /**
+     * @protected
+     * @description Gets selected menu item
+     * @param pathname 
+     * @returns selected menu item 
+     */
+    protected getSelectedMenuItem(pathname: string): IMenuItem | undefined {
+        this.getRootMenuItemByPath(ApplicationContext.get().layout?.navigationPanel?.props?.menu, pathname);
+        return this.menuItemStack.pop(); 
+    }
+
+    /**
+     * @private
+     * @description Gets root menu item by path
+     * @param menuItems 
+     * @param path 
+     * @returns  
+     */
     private getRootMenuItemByPath(menuItems: IMenuItem[], path: string) {
         for (let item of menuItems) {
             this.menuItemStack.push(item);
@@ -53,21 +70,13 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
         }
     }
 
-    private darkMenuItemClick(menuItem: IMenuItem): React.MouseEventHandler<HTMLAnchorElement> {
-        return (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>): void => {
-            this.setState({
-                selectedDarkMenuItem: menuItem
-            });
-        };
-    }
-
     /**
      * @description Renders TCNavigationPanel
      * @returns render 
      */
     public render(): React.ReactNode {
         const { menu, location } = this.props;
-        const { selectedDarkMenuItem } = this.state;
+        const selectedDarkMenuItem: IMenuItem | undefined = this.getSelectedMenuItem(location.pathname);
         return (
             <Row className={ layoutStyles.height100 }>
                 <Col span={ 7 }>
@@ -75,7 +84,7 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
                         {
                             menu.map<React.ReactNode>((item: IMenuItem): React.ReactNode => (
                                 <Menu.Item key={ item.path }>
-                                    <Link onClick={ this.darkMenuItemClick(item) } to={ item.items ? item.items[0].path : item.path }>{ item.label }</Link>
+                                    <Link to={ item.items ? item.items[0].path : item.path }>{ item.label }</Link>
                                 </Menu.Item>
                             ))
                         }

@@ -14,7 +14,7 @@ export interface IDefaultContentPanelProps {}
 export interface IDefaultContentPanelState {}
 
 /**
- * @TODO Describe the class
+ * Default Content Panel
  */
 export default class DefaultContentPanel extends AsyncComponent<IDefaultContentPanelProps, IDefaultContentPanelState> {
 

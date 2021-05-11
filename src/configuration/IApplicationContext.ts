@@ -1,3 +1,7 @@
+/**
+ * @author Cory(coryisbest0728#gmail.com)
+ * @copyright © 2021 Cory. All rights reserved
+ */
 import React from 'react';
 
 import { IFilter } from '../filters/IFilter';
