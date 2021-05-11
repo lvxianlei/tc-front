@@ -326,6 +326,7 @@ The router configuration as below:
 ```json
 {
     "routers": [{
+        "name": "客户管理", // This name will be displayed in the breadcrumb
         "path": "/client/mngt", // The access path
         "module": "./client-mngt/ClientMngt", // The class that a sample above
         "exact": true

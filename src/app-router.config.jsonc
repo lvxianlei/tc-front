@@ -4,6 +4,7 @@
  */
 { // 路由配置
     "routers": [{ // 客户管理
+        "name": "客户管理", // 显示在面包屑中的名称
         "path": "/client/mngt",
         "module": "./pages/client-mngt/ClientMngt",
         "exact": true
