@@ -193,8 +193,9 @@ More information could check out the [withTranslation (HOC)](https://react.i18ne
 ├── node_modules/
 ├── public/
 ├── src
-│   ├── client-mngt
-│   │   └── ClientMngt.tsx # created the new file
+│   ├── pages
+│   │   └── client-mngt
+│   │       └── ClientMngt.tsx # created the new file
 │   ...
 ├── ...
 │

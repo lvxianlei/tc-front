@@ -5,7 +5,7 @@
 { // 路由配置
     "routers": [{ // 客户管理
         "path": "/client/mngt",
-        "module": "./client-mngt/ClientMngt",
+        "module": "./pages/client-mngt/ClientMngt",
         "exact": true
     }]
 }
