@@ -54,7 +54,7 @@ module.exports = {
         addWebpackPlugin(new AntdDayjsWebpackPlugin()),
         addWebpackPlugin(new ModifySourcePlugin({
             rules: [{
-                test: /ApplicationContext\.ts$/,
+                test: /\/ApplicationContext\.ts$/,
                 modify: (src, filename) => new AppCtxConfigCompiler().compile(src)
             }]
         })),

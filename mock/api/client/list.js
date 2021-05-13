@@ -17,6 +17,6 @@ for (let i = 0; i < 10; ++i) {
 
 module.exports = {
     msg: "",
-    code: 1,
+    code: 200,
     data: data
 }
