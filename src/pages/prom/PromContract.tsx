@@ -9,9 +9,9 @@
  
  const { Option } = Select;
 
- export interface IClientMngtProps {}
- export interface IClientMngtWithRouteProps extends RouteComponentProps<IClientMngtProps>, WithTranslation {}
- export interface IClientMngtState extends IAbstractMngtComponentState {
+ export interface IPromContractProps {}
+ export interface IPromContractWithRouteProps extends RouteComponentProps<IPromContractProps>, WithTranslation {}
+ export interface IPromContractState extends IAbstractMngtComponentState {
      readonly tableDataSource: ITableDataItem[];
  }
 
@@ -32,14 +32,14 @@
  /**
   * 销售合同管理
   */
- class PromContract extends AbstractMngtComponent<IClientMngtWithRouteProps, IClientMngtState> {
+ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IPromContractState> {
  
      /**
       * @override
       * @description Gets state
       * @returns state 
       */
-     protected getState(): IClientMngtState {
+     protected getState(): IPromContractState {
          return {
              ...super.getState(),
              tableDataSource: []
