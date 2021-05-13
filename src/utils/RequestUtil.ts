@@ -19,6 +19,7 @@ interface IResponse<T> {
 export default abstract class RequestUtil {
 
     /**
+     * @private
      * @static
      * @description Backs to login
      */
@@ -26,6 +27,49 @@ export default abstract class RequestUtil {
         const urlWithoutHost: string = window.location.href.replace(`${window.location.protocol}//${window.location.host}`, '');
         window.history.replaceState(null, '', `/login?goto=${ encodeURIComponent(urlWithoutHost) }`);
         window.location.reload();
+    }
+
+    /**
+     * @private
+     * @static
+     * @description Requests request util
+     * @template T 
+     * @param path 
+     * @param [init] 
+     * @returns request 
+     */
+    private static request<T>(path: string, init?: RequestInit): Promise<T> {
+        return new Promise<T>((resolve: (data: T) => void, reject: (res: IResponse<T>) => void): void => {
+            fetch(this.joinUrl(path, process.env.REQUEST_API_PATH_PREFIX || ''), {
+                mode: 'cors',
+                credentials: 'include',
+                ...(init || {})
+            })
+            .then((res) => {
+                if (res.status !== 200) {
+                    NProgress.done();
+                }
+                if (res.status === 401) {
+                    setTimeout(this.backToLogin, 10);
+                }
+                return res.json();
+            })
+            .then((res: IResponse<T>) => {
+                NProgress.done();
+                if (res.code === 200) {
+                    resolve(res.data);
+                } else if (res.code === 401) {
+                    setTimeout(this.backToLogin, 10);
+                }else {
+                    message.error(res.msg);
+                    reject(res);
+                }
+            })
+            .catch((e: Error) => {
+                NProgress.done();
+                message.error(e.message);
+            });
+        });
     }
 
     /**
@@ -42,34 +86,8 @@ export default abstract class RequestUtil {
         if (params) {
             path += `?${ stringify(params) }`;
         }
-        return new Promise<T>((resolve: (data: T) => void, reject: (res: IResponse<T>) => void): void => {
-            fetch(this.joinUrl(path, process.env.REQUEST_API_PATH_PREFIX || ''), {
-                mode: 'cors',
-                method: 'GET',
-                credentials: 'include'
-            })
-            .then((res) => {
-                if (res.status !== 200) {
-                    NProgress.done();
-                }
-                if (res.status === 401) {
-                    setTimeout(this.backToLogin, 10);
-                }
-                return res.json();
-            })
-            .then((res: IResponse<T>) => {
-                NProgress.done();
-                if (res.code === 1) {
-                    resolve(res.data);
-                } else {
-                    message.error(res.msg);
-                    reject(res);
-                }
-            })
-            .catch((e: Error) => {
-                NProgress.done();
-                message.error(e.message);
-            });
+        return this.request(path, {
+            method: 'GET'
         });
     }
 
@@ -85,35 +103,41 @@ export default abstract class RequestUtil {
      */
     public static post<T>(path: string, params: Record<string, string | number> = {}): Promise<T> {
         NProgress.inc();
-        return new Promise<T>((resolve: (data: T) => void, reject: (res: IResponse<T>) => void): void => {
-            fetch(this.joinUrl(path, process.env.REQUEST_API_PATH_PREFIX || ''), {
-                body: JSON.stringify(params),
-                mode: 'cors',
-                method: 'POST',
-                credentials: 'include'
-            })
-            .then((res) => {
-                if (res.status !== 200) {
-                    NProgress.done();
-                }
-                if (res.status === 401) {
-                    setTimeout(this.backToLogin, 10);
-                }
-                return res.json();
-            })
-            .then((res: IResponse<T>) => {
-                NProgress.done();
-                if (res.code === 1) {
-                    resolve(res.data);
-                } else {
-                    message.error(res.msg);
-                    reject(res);
-                }
-            })
-            .catch((e: Error) => {
-                NProgress.done();
-                message.error(e.message);
-            });
+        return this.request(path, {
+            method: 'POST',
+            body: JSON.stringify(params)
+        });
+    }
+
+    /**
+     * @static
+     * @description Puts request util
+     * @template T 
+     * @param path 
+     * @param [params] 
+     * @returns put 
+     */
+    public static put<T>(path: string, params: Record<string, string | number> = {}): Promise<T> {
+        NProgress.inc();
+        return this.request(path, {
+            method: 'PUT',
+            body: JSON.stringify(params)
+        });
+    }
+
+    /**
+     * @static
+     * @description Deletes request util
+     * @template T 
+     * @param path 
+     * @param [params] 
+     * @returns delete 
+     */
+    public static delete<T>(path: string, params: Record<string, string | number> = {}): Promise<T> {
+        NProgress.inc();
+        return this.request(path, {
+            method: 'DELETE',
+            body: JSON.stringify(params)
         });
     }
 

@@ -43,7 +43,7 @@ class AppCtxConfigCompiler {
             } else {
                 layoutAlt += `${ key }:{componentClass:${ ClazzName },props:{}},`;
             }
-            imports += `import ${ ClazzName } from '${ path.resolve(__dirname, '../src/', this.getLayoutClazz(layout[key])) }';\n`;
+            imports += `import ${ ClazzName } from '${ path.resolve(__dirname, '../src/', this.getLayoutClazz(layout[key])).replace(/\\/g, '\\') }';\n`;
         }
         layoutAlt += `}`;
         return {
@@ -63,8 +63,8 @@ class AppCtxConfigCompiler {
         let imports = '';
         let filtersAlt = `filters:[`;
         filters.forEach((filter) => {
-            const ClazzName = pascalcase(filter.replace(/\/|\./g, ''));
-            const importDeclaration = `import ${ ClazzName } from '${ path.resolve(__dirname, '../src/', filter) }';\n`;
+            const ClazzName = pascalcase(filter.replace(/\/|\.|\\/g, ''));
+            const importDeclaration = `import ${ ClazzName } from '${ path.resolve(__dirname, '../src/', filter).replace(/\\/g, '\\') }';\n`;
             const initialFilterStatement = `new ${ ClazzName }(),`;
             if (!new RegExp(importDeclaration).test(source)) {
                 imports += importDeclaration;
