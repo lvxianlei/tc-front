@@ -59,7 +59,7 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
     }
 
     /**
-     * @implements
+     * @override
      * @description Components did mount
      */
     public async componentDidMount() {
