@@ -69,10 +69,6 @@
          this.fetchTableData({});
      }
 
-     public async goTo() {
-        console.log("1")
-     }
-
      /**
       * @implements
       * @description Gets table data source
