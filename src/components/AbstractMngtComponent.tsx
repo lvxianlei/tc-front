@@ -3,7 +3,7 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 import { Button, Card, Form, Space, Table, Tabs } from 'antd';
-import { ColumnType } from 'antd/lib/table';
+import { ColumnType, TablePaginationConfig } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
@@ -18,6 +18,7 @@ export interface ITabItem {
 
 export interface IAbstractMngtComponentState {
     selectedTabKey: React.Key;
+    tablePagination: TablePaginationConfig;
 }
 
 /**
@@ -34,6 +35,7 @@ export default abstract class AbstractMngtComponent<P, S extends IAbstractMngtCo
         super(props);
         this.state = this.getState();
         this.onFilterSubmit = this.onFilterSubmit.bind(this);
+        this.onTableChange = this.onTableChange.bind(this);
     }
 
     /**
@@ -42,7 +44,13 @@ export default abstract class AbstractMngtComponent<P, S extends IAbstractMngtCo
      */
     protected getState(): S {
         return {
-            selectedTabKey: this.getTabItems()[0].key
+            selectedTabKey: this.getTabItems()[0].key,
+            tablePagination: {
+                current: 1,
+                pageSize: 10,
+                total: 0,
+                showSizeChanger: false
+            }
         } as S;
     }
 
@@ -74,6 +82,13 @@ export default abstract class AbstractMngtComponent<P, S extends IAbstractMngtCo
      * @param values 
      */
     abstract onFilterSubmit(values: Record<string, any>): void;
+
+    /**
+     * @abstract
+     * @description Determines whether table change on
+     * @param pagination 
+     */
+    abstract onTableChange(pagination: TablePaginationConfig): void;
 
     /**
      * @abstract
@@ -176,6 +191,7 @@ export default abstract class AbstractMngtComponent<P, S extends IAbstractMngtCo
     protected renderTableContent(item: ITabItem): React.ReactNode {
         return (
             <Table rowKey={ this.getTableRowKey() } bordered={ true }
+                pagination={ this.state.tablePagination } onChange={ this.onTableChange }
                 dataSource={ this.getTableDataSource(item) } columns={ this.getTableColumns(item) }/>
         );
     }
