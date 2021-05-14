@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Form, Input, Space, TableColumnType } from 'antd';
+import { Form, Input, Space, TableColumnType, TablePaginationConfig } from 'antd';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -15,16 +15,25 @@ export interface IClientMngtProps {}
 export interface IClientMngtWithRouteProps extends RouteComponentProps<IClientMngtProps>, WithTranslation {}
 export interface IClientMngtState extends IAbstractMngtComponentState {
     readonly tableDataSource: ITableDataItem[];
+    readonly name?: string;
 }
 
 interface ITableDataItem {
     readonly id: number;
+    readonly tenantId: number;
     readonly name: string;
-    readonly category: number;
-    readonly contact: string;
-    readonly phoneNumber: string;
-    readonly comment: string;
-    readonly createdDateTime: string;
+    readonly type: number;
+    readonly linkman: string;
+    readonly phone: string;
+    readonly description: string;
+    readonly createTime: string;
+}
+
+interface IResponseData {
+    readonly current: number;
+    readonly size: number;
+    readonly total: number;
+    readonly records: ITableDataItem[]
 }
 
 /**
@@ -40,21 +49,33 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
     protected getState(): IClientMngtState {
         return {
             ...super.getState(),
+            name: '',
             tableDataSource: []
         };
     }
 
     /**
+     * @protected
      * @description Fetchs table data
      * @param filterValues 
+     * @param [pagination] 
      */
-    protected async fetchTableData(filterValues: Record<string, any>) {
-        const tableDataItems: ITableDataItem[] = await RequestUtil.get<ITableDataItem[]>('/client/list', {
+    protected async fetchTableData(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>('/customer/page', {
             ...filterValues,
-            tabKey: this.state.selectedTabKey
+            current: pagination.current || this.state.tablePagination.current,
+            size: pagination.pageSize ||this.state.tablePagination.pageSize,
+            type: this.state.selectedTabKey
         });
         this.setState({
-            tableDataSource: tableDataItems
+            ...filterValues,
+            tableDataSource: resData.records,
+            tablePagination: {
+                ...this.state.tablePagination,
+                current: resData.current,
+                pageSize: resData.size,
+                total: resData.total
+            }
         });
     }
 
@@ -89,28 +110,28 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
             title: '客户名称',
             dataIndex: 'name'
         }, {
-            key: 'category',
+            key: 'type',
             title: '客户类型',
-            dataIndex: 'category',
-            render: (category: number): React.ReactNode => {
-                return  category === 1 ? '国内客户' : '国际客户';
+            dataIndex: 'type',
+            render: (type: number): React.ReactNode => {
+                return  type === 1 ? '国内客户' : '国际客户';
             }
         }, {
-            key: 'contact',
+            key: 'linkman',
             title: '重要联系人',
-            dataIndex: 'contact'
+            dataIndex: 'linkman'
         }, {
-            key: 'phoneNumber',
+            key: 'phone',
             title: '手机号码',
-            dataIndex: 'phoneNumber'
+            dataIndex: 'phone'
         }, {
-            key: 'comment',
+            key: 'description',
             title: '备注',
-            dataIndex: 'comment'
+            dataIndex: 'description'
         }, {
-            key: 'createdDateTime',
+            key: 'createTime',
             title: '创建时间',
-            dataIndex: 'createdDateTime'
+            dataIndex: 'createTime'
         }, {
             key: 'operation',
             title: '操作',
@@ -122,6 +143,15 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
                 </Space>
             )
         }];
+    }
+
+    /**
+     * @implements
+     * @description Determines whether table change on
+     * @param pagination 
+     */
+    public onTableChange(pagination: TablePaginationConfig): void {
+        this.fetchTableData({ name: this.state.name }, pagination);
     }
     
     /**
