@@ -1,4 +1,4 @@
- import { Form, Input, Space, TableColumnType, Select } from 'antd';
+ import { Form, Input, Space, TableColumnType, Select, TablePaginationConfig } from 'antd';
  import React from 'react';
  import { WithTranslation, withTranslation } from 'react-i18next';
  import { RouteComponentProps, withRouter } from 'react-router';
@@ -29,6 +29,13 @@
      readonly deliveryTime: string;
  }
  
+ interface IResponseData {
+    readonly size: number;
+    readonly current: number;
+    readonly total: number;
+    readonly records: ITableDataItem[];
+ }
+
  /**
   * 销售合同管理
   */
@@ -50,13 +57,22 @@
       * @description Fetchs table data
       * @param filterValues 
       */
-     protected async fetchTableData(filterValues: Record<string, any>) {
-         const tableDataItems: ITableDataItem[] = await RequestUtil.get<ITableDataItem[]>('/contract/page', {
+     protected async fetchTableData(filterValues: Record<string, any>,pagination: TablePaginationConfig = {}) {
+         const resData: IResponseData = await RequestUtil.get<IResponseData>('/customer/contract', {
              ...filterValues,
-             tabKey: this.state.selectedTabKey
+             current: pagination.current || this.state.tablePagination.current,
+             size: pagination.pageSize ||this.state.tablePagination.pageSize,
+             countryCode: this.state.selectedTabKey
          });
          this.setState({
-             tableDataSource: tableDataItems
+            ...filterValues,
+            tableDataSource: resData.records,
+            tablePagination: {
+                ...this.state.tablePagination,
+                current: resData.current,
+                pageSize: resData.size,
+                total: resData.total
+            }
          });
      }
  
@@ -157,6 +173,16 @@
              )
          }];
      }
+
+     /**
+     * @implements
+     * @description Determines whether table change on
+     * @param pagination 
+     */
+    public onTableChange(pagination: TablePaginationConfig): void {
+        this.fetchTableData(pagination);
+    }
+    
      
      /**
       * @implements
@@ -175,13 +201,13 @@
      public getTabItems(): ITabItem[] {
          return [{
              label: '全部',
-             key: 0
+             key: ""
          }, {
              label: '国内业务',
-             key: 1
+             key: 0
          }, {
              label: '国际业务',
-             key: 2
+             key: 1
          }];
      }
  
@@ -202,20 +228,19 @@
       */
      public renderFilterComponents(item: ITabItem): React.ReactNode[] {
          return [
-             <>
                 <Form.Item name="internalNumber" key="internalNumber">
                     <Input placeholder="内部合同编号关键词"/>
-                </Form.Item>
+                </Form.Item>,
                 <Form.Item name="projectName" key="projectName">
                     <Input placeholder="工程名称关键词"/>
-                </Form.Item>
+                </Form.Item>,
                 <Form.Item name="customerCompany" key="customerCompany">
                     <Input placeholder="业主单位关键词"/>
-                </Form.Item>
-                <Form.Item name="name" key="name">
-                    <Input placeholder="合同签订单位关键词"/>
-                </Form.Item>
+                </Form.Item>,
                 <Form.Item name="signCustomerName" key="signCustomerName">
+                    <Input placeholder="合同签订单位关键词"/>
+                </Form.Item>,
+                <Form.Item name="winBidType" key="winBidType">
                     <Select defaultValue="0">
                         <Option value="0" >全部中标类型</Option>
                         <Option value="1">国家电网</Option>
@@ -223,7 +248,6 @@
                         <Option value="3">...</Option>
                     </Select>
                 </Form.Item>
-             </>
          ];
      }
  }
