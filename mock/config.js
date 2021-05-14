@@ -12,9 +12,9 @@ function traverseFiles(filePath) {
             traverseFiles(path.join(filePath, file));
         });
     } else { // file
-        const apiPath = filePath.replace(__dirname, '').replace(/(\.js$)|(\.json$)|(\.jsonc$)/, '');
+        const apiPath = filePath.replace(__dirname, '').replace(/(\.js$)|(\.json$)|(\.jsonc$)/, '').replace(/\\+/g, '/');
         config[apiPath] = {
-            path: filePath.replace(__dirname, '../../../mock')
+            path: filePath
         };
     }
 }
