@@ -14,7 +14,7 @@ function traverseFiles(filePath) {
     } else { // file
         const apiPath = filePath.replace(__dirname, '').replace(/(\.js$)|(\.json$)|(\.jsonc$)/, '');
         config[apiPath] = {
-            path: filePath
+            path: filePath.replace(__dirname, '../../../mock')
         };
     }
 }
