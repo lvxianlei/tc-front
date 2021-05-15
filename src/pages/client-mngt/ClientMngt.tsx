@@ -9,6 +9,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import AbstractMngtComponent, { IAbstractMngtComponentState, ITabItem } from '../../components/AbstractMngtComponent';
+import ConfirmableButton from '../../components/ConfirmableButton';
 import RequestUtil from '../../utils/RequestUtil';
 
 export interface IClientMngtProps {}
@@ -139,7 +140,7 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
             render: (): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Link to="">编辑</Link>
-                    <Link to="">删除</Link>
+                    <ConfirmableButton confirmTitle="要删除该客户吗？" type="link" placement="topRight">删除</ConfirmableButton>
                 </Space>
             )
         }];
