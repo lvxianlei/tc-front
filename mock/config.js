@@ -3,7 +3,9 @@ const fs = require('fs');
 
 let config = {};
 
-traverseFiles(path.join(__dirname, './api'));
+const apiFolder = path.join(__dirname, './api');
+
+traverseFiles(apiFolder);
 
 function traverseFiles(filePath) {
     const stats = fs.statSync(filePath)
@@ -12,7 +14,7 @@ function traverseFiles(filePath) {
             traverseFiles(path.join(filePath, file));
         });
     } else { // file
-        const apiPath = filePath.replace(__dirname, '').replace(/(\.js$)|(\.json$)|(\.jsonc$)/, '').replace(/\\+/g, '/');
+        const apiPath = filePath.replace(apiFolder, '').replace(/(\.js$)|(\.json$)|(\.jsonc$)/, '').replace(/\\+/g, '/');
         config[apiPath] = {
             path: filePath
         };

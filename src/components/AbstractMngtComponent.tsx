@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Button, Card, Form, Space, Table, Tabs } from 'antd';
+import { Button, Card, Form, FormItemProps, Space, Table, Tabs } from 'antd';
 import { ColumnType, TablePaginationConfig } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
@@ -35,6 +35,7 @@ export default abstract class AbstractMngtComponent<P, S extends IAbstractMngtCo
         super(props);
         this.state = this.getState();
         this.onFilterSubmit = this.onFilterSubmit.bind(this);
+        this.onNewClick = this.onNewClick.bind(this);
         this.onTableChange = this.onTableChange.bind(this);
     }
 
@@ -70,11 +71,18 @@ export default abstract class AbstractMngtComponent<P, S extends IAbstractMngtCo
 
     /**
      * @abstract
-     * @description Renders filter components
+     * @description Gets filter form item props
      * @param item 
-     * @returns filter components 
+     * @returns filter form item props 
      */
-    abstract renderFilterComponents(item: ITabItem): React.ReactNode[];
+    abstract getFilterFormItemProps(item: ITabItem): FormItemProps[];
+
+    /**
+     * @abstract
+     * @description Determines whether new click on
+     * @param event 
+     */
+    abstract onNewClick(event: React.MouseEvent<HTMLButtonElement>): void;
 
     /**
      * @abstract
@@ -99,7 +107,7 @@ export default abstract class AbstractMngtComponent<P, S extends IAbstractMngtCo
     abstract getTableDataSource(item: ITabItem): object[];
 
     /**
-     * @abstract
+     * @implements
      * @description Gets table columns
      * @param item 
      * @returns table columns 
@@ -165,7 +173,11 @@ export default abstract class AbstractMngtComponent<P, S extends IAbstractMngtCo
     protected renderFilterContent(item: ITabItem): React.ReactNode {
         return (
             <Form layout="inline" onFinish={ this.onFilterSubmit }>
-                { this.renderFilterComponents(item) }
+                {
+                    this.getFilterFormItemProps(item).map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
+                        <Form.Item key={ `${ props.name }_${ index }` } { ...props }/>
+                    ))
+                }
                 <Form.Item>
                     <Button type="primary" htmlType="submit">查询</Button>
                 </Form.Item>
@@ -178,7 +190,7 @@ export default abstract class AbstractMngtComponent<P, S extends IAbstractMngtCo
 
     protected renderExtraOperationContent(item: ITabItem): React.ReactNode {
         return (
-            <Button type="primary">新增</Button>
+            <Button type="primary" onClick={ this.onNewClick }>新增</Button>
         );
     }
 

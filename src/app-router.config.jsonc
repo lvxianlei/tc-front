@@ -8,5 +8,15 @@
         "path": "/client/mngt",
         "module": "./pages/client-mngt/ClientMngt",
         "exact": true
+    }, { // 新增客户
+        "name": "新增客户",
+        "path": "/client/mngt/new",
+        "module": "./pages/client-mngt/ClientNew",
+        "exact": true
+    }, { // 编辑客户
+        "name": "编辑客户",
+        "path": "/client/mngt/setting/:id",
+        "module": "./pages/client-mngt/ClientSetting",
+        "exact": true
     }]
 }

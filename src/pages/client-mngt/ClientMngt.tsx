@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Form, Input, Space, TableColumnType, TablePaginationConfig } from 'antd';
+import { FormItemProps, Input, Space, TableColumnType, TablePaginationConfig } from 'antd';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -62,7 +62,7 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
      * @param [pagination] 
      */
     protected async fetchTableData(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>('/customer/page', {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-customer/customer/page', {
             ...filterValues,
             current: pagination.current || this.state.tablePagination.current,
             size: pagination.pageSize ||this.state.tablePagination.pageSize,
@@ -95,7 +95,7 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
      * @param item 
      * @returns table data source 
      */
-    public getTableDataSource(item: ITabItem): object[] {
+    public getTableDataSource(item: ITabItem): ITableDataItem[] {
         return this.state.tableDataSource;
     }
 
@@ -137,9 +137,9 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
-            render: (): React.ReactNode => (
+            render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to="">编辑</Link>
+                    <Link to={ `/client/mngt/setting/${ (record as ITableDataItem).id }` }>编辑</Link>
                     <ConfirmableButton confirmTitle="要删除该客户吗？" type="link" placement="topRight">删除</ConfirmableButton>
                 </Space>
             )
@@ -193,16 +193,24 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
 
     /**
      * @implements
-     * @description Renders filter components
-     * @param item 
-     * @returns filter components 
+     * @description Determines whether new click on
+     * @param event 
      */
-    public renderFilterComponents(item: ITabItem): React.ReactNode[] {
-        return [
-            <Form.Item name="name" key="name">
-                <Input placeholder="搜索客户名称关键词"/>
-            </Form.Item>
-        ];
+    public onNewClick(event: React.MouseEvent<HTMLButtonElement>): void {
+        this.props.history.push('/client/mngt/new');
+    }
+
+    /**
+     * @implements
+     * @description Gets filter form item props
+     * @param item 
+     * @returns filter form item props 
+     */
+    public getFilterFormItemProps(item: ITabItem): FormItemProps[] {
+        return [{
+            name: 'name',
+            children: <Input placeholder="搜索客户名称关键词"/>
+        }];
     }
 }
 

@@ -1,0 +1,25 @@
+@import '~antd/es/style/themes/index.less';
+
+.hspace {
+    align-items: baseline;
+    :global(.ant-space-item) {
+        padding: 20px;
+    }
+}
+
+.space :global(.ant-space-item),
+.hspace :global(.ant-space-item) {
+    width: 100%;
+}
+
+.btnOperationContainer {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.title {
+    border-left: 4px solid @primary-color;
+    padding-left: 10px;
+    font-weight: 500;
+    margin-bottom: 24px;
+}

@@ -251,11 +251,11 @@ abstract onTabChange(activeKey: string): void;
 
 /**
  * @abstract
- * @description Renders filter components
+ * @description Gets filter form item props
  * @param item 
- * @returns filter components 
+ * @returns filter form item props 
  */
-abstract renderFilterComponents(item: ITabItem): React.ReactNode[];
+abstract getFilterFormItemProps(item: ITabItem): FormItemProps[];
 
 /**
  * @abstract
@@ -263,6 +263,13 @@ abstract renderFilterComponents(item: ITabItem): React.ReactNode[];
  * @param values 
  */
 abstract onFilterSubmit(values: Record<string, any>): void;
+
+/**
+ * @abstract
+ * @description Determines whether new click on
+ * @param event 
+ */
+abstract onNewClick(event: React.MouseEvent<HTMLButtonElement>): void;
 
 /**
  * @abstract

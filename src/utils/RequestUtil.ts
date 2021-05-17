@@ -43,6 +43,9 @@ export default abstract class RequestUtil {
             fetch(this.joinUrl(path, process.env.REQUEST_API_PATH_PREFIX || ''), {
                 mode: 'cors',
                 credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 ...(init || {})
             })
             .then((res) => {

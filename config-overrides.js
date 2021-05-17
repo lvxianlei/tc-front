@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const {
     override,
     overrideDevServer,
@@ -72,12 +73,13 @@ module.exports = {
     ,
     devServer: overrideDevServer(
         function (config) {
+            const proxy = {};
+            fs.readdirSync(path.join(__dirname, './mock/api/')).forEach((dirname) => {
+                proxy[`/${ dirname }`] = 'http://localhost:3001'; // mock server url
+            });
             return Object.assign(config || {}, {
                 port: 3000,
-                proxy: {
-                    // mock server url
-                    '/api': 'http://localhost:3001'
-                },
+                proxy: proxy,
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",

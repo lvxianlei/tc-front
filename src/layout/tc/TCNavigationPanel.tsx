@@ -36,35 +36,36 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
     constructor(props: ITCNavigationPanelRouteProps) {
         super(props);
         this.state = {
-            selectedDarkMenuItem: this.getSelectedMenuItem(props.location.pathname)
+            selectedDarkMenuItem: this.getMenuItemByPath(ApplicationContext.get().layout?.navigationPanel?.props?.menu, props.location.pathname)
         };
     }
 
     /**
      * @protected
-     * @description Gets selected menu item
+     * @description Gets menu item by path
+     * @param menuItems 
      * @param pathname 
-     * @returns selected menu item 
+     * @returns menu item by path 
      */
-    protected getSelectedMenuItem(pathname: string): IMenuItem | undefined {
-        this.getRootMenuItemByPath(ApplicationContext.get().layout?.navigationPanel?.props?.menu, pathname);
+    protected getMenuItemByPath(menuItems: IMenuItem[], pathname: string): IMenuItem | undefined {
+        this.traverseRootMenuItemByPath(menuItems, pathname);
         return this.menuItemStack.pop(); 
     }
 
     /**
      * @private
-     * @description Gets root menu item by path
+     * @description Traverses root menu item by path
      * @param menuItems 
      * @param path 
      * @returns  
      */
-    private getRootMenuItemByPath(menuItems: IMenuItem[], path: string) {
+    private traverseRootMenuItemByPath(menuItems: IMenuItem[], path: string) {
         for (let item of menuItems) {
             this.menuItemStack.push(item);
-            if (item.path === path) { // Hint the item
+            if (new RegExp(item.path).test(path)) { // Hint the item
                 return;
             } else if (item.items && item.items.length > 0) { // If the item has children, it will recurse
-                this.getRootMenuItemByPath(item.items, path);
+                this.traverseRootMenuItemByPath(item.items, path);
             }
             this.menuItemStack.pop();
         }
@@ -76,7 +77,8 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
      */
     public render(): React.ReactNode {
         const { menu, location } = this.props;
-        const selectedDarkMenuItem: IMenuItem | undefined = this.getSelectedMenuItem(location.pathname);
+        const selectedDarkMenuItem: IMenuItem | undefined = this.getMenuItemByPath(ApplicationContext.get().layout?.navigationPanel?.props?.menu, location.pathname);
+        const selectedSubMenuItem: IMenuItem | undefined =  this.getMenuItemByPath(selectedDarkMenuItem?.items || [], location.pathname);
         return (
             <Row className={ layoutStyles.height100 }>
                 <Col span={ 7 }>
@@ -91,7 +93,7 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
                     </Menu>
                 </Col>
                 <Col span={ 17 }>
-                    <Menu mode="inline" theme="light" className={ layoutStyles.height100 } selectedKeys={[ location.pathname ]}>
+                    <Menu mode="inline" theme="light" className={ layoutStyles.height100 } selectedKeys={[ selectedSubMenuItem?.path || '' ]}>
                         {
                             selectedDarkMenuItem?.items?.map<React.ReactNode>((item: IMenuItem): React.ReactNode => (
                                 <Menu.Item key={ item.path }>
