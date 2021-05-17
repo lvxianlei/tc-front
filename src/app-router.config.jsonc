@@ -8,5 +8,11 @@
         "path": "/client/mngt",
         "module": "./pages/client-mngt/ClientMngt",
         "exact": true
+    },
+    {
+        "name": "销售合同管理", 
+        "path": "/prom/contract",
+        "module": "./pages/prom/PromContract",
+        "exact": true
     }]
 }
