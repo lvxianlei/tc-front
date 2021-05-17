@@ -245,7 +245,6 @@
                         <Option value="0" >全部中标类型</Option>
                         <Option value="1">国家电网</Option>
                         <Option value="2">南方电网</Option>
-                        <Option value="3">...</Option>
                     </Select>
                 </Form.Item>
          ];
