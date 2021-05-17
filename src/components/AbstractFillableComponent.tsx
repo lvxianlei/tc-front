@@ -55,7 +55,7 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      * @returns title 
      */
     protected getTitle(): string {
-        return ApplicationContext.getRouterItemByPath(this.props.match.path)?.name || '';
+        return ApplicationContext.getRouterItemByPath(this.props.location.pathname)?.name || '';
     }
 
     /**
