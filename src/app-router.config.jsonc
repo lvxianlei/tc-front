@@ -18,5 +18,10 @@
         "path": "/client/mngt/setting/:id",
         "module": "./pages/client-mngt/ClientSetting",
         "exact": true
+    }, {
+        "name": "销售合同管理", 
+        "path": "/prom/contract",
+        "module": "./pages/prom/PromContract",
+        "exact": true
     }]
 }
