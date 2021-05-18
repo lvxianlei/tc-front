@@ -97,8 +97,8 @@
 
      public handleAdd(): void {
         const contract: IContract | undefined = this.state.contract;
-        const paymentPlanDtos: IpaymentPlanDtos[] | undefined = this.state.contract?.paymentPlanDtos;
-        const indexLength : number | undefined= this.state.contract?.paymentPlanDtos?.length;
+        let paymentPlanDtos: IpaymentPlanDtos[] | undefined = contract?.paymentPlanDtos;
+        const indexLength : number | undefined= contract?.paymentPlanDtos?.length;
         let i:number | undefined = indexLength ? indexLength+1 : 1;
         const Plan: IpaymentPlanDtos = {
             index: i,
@@ -110,10 +110,16 @@
         let addPlan = paymentPlanDtos ? paymentPlanDtos : []
         addPlan.push(Plan)
         this.setState({
-            contract: { paymentPlanDtos: addPlan }
-        });
-
-        console.log(contract)
+            // contract: { paymentPlanDtos: addPlan }
+            contract: {
+                ...contract,
+                paymentPlanDtos: addPlan
+            }
+        },() => {
+            
+        })
+        this.forceUpdate()
+        console.log(this.state.contract)
     }
 
     public getTableDataSource(): IpaymentPlanDtos[] | undefined {
@@ -407,8 +413,7 @@
                 children: (
                     <>
                         <Table columns={ this.getpaymentPlanColumns() }
-                            // dataSource={ this.getTableDataSource() }
-                            dataSource={ contract?.paymentPlanDtos }
+                            dataSource={ this.state.contract?.paymentPlanDtos }
                             rowKey={(record) => `record`}
                         />
                     </>
