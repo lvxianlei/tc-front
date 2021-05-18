@@ -2,7 +2,8 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
- import React from 'react';
+ import moment from 'moment';
+import React from 'react';
  import { WithTranslation, withTranslation } from 'react-i18next';
  import { RouteComponentProps, withRouter } from 'react-router';
  import { IFormItemGroup } from '../../components/AbstractFillableComponent';
@@ -27,6 +28,9 @@
      public async componentDidMount() {
          super.componentDidMount();
          const contract: IContract = await RequestUtil.get<IContract>(`/customer/contract/${ this.props.match.params.id }`);
+         
+         contract.deliveryTime = moment(contract.deliveryTime)
+         console.log(contract)
          this.setState({
             contract: contract
          });
