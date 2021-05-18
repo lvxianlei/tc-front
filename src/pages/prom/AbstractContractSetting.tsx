@@ -14,6 +14,7 @@ import AbstractFillableComponent, {
     IFormItemGroup,
 } from '../../components/AbstractFillableComponent';
 import ConfirmableButton from '../../components/ConfirmableButton';
+import moment from 'moment';
 
  
  
@@ -34,11 +35,11 @@ import ConfirmableButton from '../../components/ConfirmableButton';
      readonly simpleProjectName?: string;
      readonly winBidType?: number;
      readonly saleType?: number;
-     readonly customerInfoDto?: IcustomerInfoVo;
+     readonly customerInfoDto?: IcustomerInfoDto;
      readonly signCustomerName?: string;
      readonly signContractTime?: string;
      readonly signUserName?: string;
-     readonly deliveryTime?: string;
+     deliveryTime?: any;
      readonly reviewTime?: string;
      readonly chargeType?: string;
      readonly salesman?: string;
@@ -52,7 +53,7 @@ import ConfirmableButton from '../../components/ConfirmableButton';
      readonly attachVO?: [];
  }
 
- export interface IcustomerInfoVo {
+ export interface IcustomerInfoDto {
     readonly customerCompany?: string;
     readonly customerLinkman?: string;
     readonly customerPhone?: string;
@@ -104,31 +105,25 @@ import ConfirmableButton from '../../components/ConfirmableButton';
      public handleAdd(): void {
         const contract: IContract | undefined = this.state.contract;
         const paymentPlanDtos: IpaymentPlanDtos[] = contract?.paymentPlanDtos || [];
-        // const indexLength: number = paymentPlanDtos.length;
-        // let i:number | undefined = indexLength ? indexLength+1 : 1;
         const plan: IpaymentPlanDtos = {
             index: paymentPlanDtos.length + 1,
-            returnedTime: '12',
+            returnedTime: '',
             returnedRate: undefined,
             returnedAmount: undefined,
             description: ""
         };
-        // let addPlan = paymentPlanDtos ? paymentPlanDtos : []
-        // paymentPlanDtos.push(plan)
         this.setState({
             contract: {
                 ...(contract || {}),
                 paymentPlanDtos: [...paymentPlanDtos, plan]
             }
         });
-        // this.forceUpdate();
-
-        console.log(this.state.contract);
     }
 
-    // public getTableDataSource(): IpaymentPlanDtos[] | undefined {
-    //     return this.state.contract?.paymentPlanDtos;
-    // }
+    public attachHandleAdd(): void {
+        
+    }
+    
 
     //  public onChange = (selectedRowKeys: React.Key[], selectedRows: DataType[]): void => {
     //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -148,27 +143,59 @@ import ConfirmableButton from '../../components/ConfirmableButton';
                 <Form.Item
                     name={['paymentPlanDtos', 'returnedTime']}
                 >
-                     <Input />
+                    <DatePicker />
                 </Form.Item>
             )
         }, {
             key: 'returnedRate',
             title: '计划回款占比（%）',
-            dataIndex: 'returnedRate'
+            dataIndex: 'returnedRate',
+            render: (): React.ReactNode => (
+                <Form.Item
+                    name={['paymentPlanDtos', 'returnedRate']}
+                >
+                    <Input />
+                </Form.Item>
+            )
         }, {
             key: 'returnedAmount',
             title: '计划回款金额（元）',
-            dataIndex: 'returnedAmount'
+            dataIndex: 'returnedAmount',
+            render: (): React.ReactNode => (
+                <Form.Item
+                    name={['paymentPlanDtos', 'returnedAmount']}
+                    
+                >
+                    <Input prefix="￥"/>
+                </Form.Item>
+            )
         }, {
             key: 'description',
             title: '备注',
-            dataIndex: 'description'
+            dataIndex: 'description',
+            render: (): React.ReactNode => (
+                <Form.Item
+                    name={['paymentPlanDtos', 'description']}
+                >
+                    <Input.TextArea rows={ 5 } maxLength={ 300 }/>
+                </Form.Item>
+            )
         }, {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
-            render: (): React.ReactNode => (
-                <ConfirmableButton confirmTitle="要删除该条回款计划吗？" type="link" placement="topRight"><DeleteOutlined /></ConfirmableButton>
+            render: (_: undefined, record: object): React.ReactNode => (
+                <ConfirmableButton confirmTitle="要删除该条回款计划吗？" type="link" placement="topRight" onConfirm={ ()=>{
+                    let index = (record as IpaymentPlanDtos).index;
+                    const paymentPlanDtos = this.state.contract?.paymentPlanDtos||[];
+                    const contract: IContract | undefined = this.state.contract;
+                    this.setState({ 
+                        contract: {
+                            ...(contract || {}),
+                            paymentPlanDtos: paymentPlanDtos.filter(item => item.index !== index) 
+                        }
+                    });
+                } }><DeleteOutlined /></ConfirmableButton>
             )
         }]
      }
@@ -207,6 +234,19 @@ import ConfirmableButton from '../../components/ConfirmableButton';
             )
         }]
      }
+
+     protected getGeneratNum(): string { 
+        var result: number = Math.floor(Math.random()*1000);
+        let num: string = "";
+        if(result<10){
+            num =  "00"+result;
+        }else if(result<100){
+            num =  "0"+result;
+        }else{
+            num =  result.toString();
+        }
+        return moment().format('YYYYMMDD')+num
+    }
      /**
       * @implements
       * @description Gets form item groups
@@ -214,6 +254,7 @@ import ConfirmableButton from '../../components/ConfirmableButton';
       */
      public getFormItemGroups(): IFormItemGroup[][] {
          const contract: IContract | undefined = this.state.contract;
+         const GeneratNum :string = this.getGeneratNum();
          return [[{
              title: '基础信息',
              itemProps: [{
@@ -228,7 +269,7 @@ import ConfirmableButton from '../../components/ConfirmableButton';
              }, {
                 label: '内部合同编号',
                 name: 'internalNumber',
-                initialValue: contract?.internalNumber,
+                initialValue: contract?.internalNumber || GeneratNum,
                 children: <Input disabled/>
             }, {
                 label: '工程名称',
@@ -280,7 +321,7 @@ import ConfirmableButton from '../../components/ConfirmableButton';
                 children: <Input/>
             }, {
                 label: '业主联系电话',
-                name: 'customerInfoDto.customerPhone',
+                name: 'customerPhone',
                 initialValue: contract?.customerInfoDto?.customerPhone,
                 children: <Input/>
             }, {
@@ -397,60 +438,7 @@ import ConfirmableButton from '../../components/ConfirmableButton';
                     
                 )
             }]
-         }, {
-        //      title: '回款计划',
-        //      itemProps: [ {
-        //         name: 'planType',
-        //         initialValue: contract?.planType,
-        //         children: (
-        //             <>
-        //                 <Radio.Group>
-        //                     <Radio value={1}>按占比</Radio>
-        //                     <Radio value={2}>按金额</Radio>
-        //                 </Radio.Group>
-        //                 <Button type="primary" style={{ float: 'right' }} onClick={ this.handleAdd }>新增</Button>
-        //             </>
-        //         )
-        //     }, {
-        //         name: 'paymentPlanDtos',
-        //         initialValue: contract?.paymentPlanDtos,
-        //         children: (
-        //             <>
-        //                 <Table columns={ this.getpaymentPlanColumns() }
-        //                     // dataSource={ this.getTableDataSource() }
-        //                     dataSource={ contract?.paymentPlanDtos }
-        //                     pagination={ false }
-        //                     rowKey='index'
-        //                 />
-        //             </>
-        //         )
-        //     }]
-        //  },{
-            title: '附件',
-            itemProps: [ {
-               children: (
-                    <Space size="small" style={{ float: 'right' }}>
-                        <Button type="primary">添加</Button>
-                        <Button type="primary">下载</Button>
-                        <Button type="primary">删除</Button>
-                    </Space>
-               )
-           }, {
-               name: 'attachVO',
-               initialValue: contract?.attachVO,
-               children: (
-                   <>
-                       <Table
-                            rowSelection={{
-                                type: 'checkbox'
-                            }} 
-                            columns={ this.getAttachmentColumns() }
-                            dataSource={contract?.attachVO}
-                       />
-                   </>
-               )
-           }]
-        }]];
+         }]];
     }
 
     /**
@@ -481,6 +469,26 @@ import ConfirmableButton from '../../components/ConfirmableButton';
                         />
                     </>
                 );
+            }
+        },{
+            title: '附件',   
+            render: (): React.ReactNode => {
+                return (
+                    <>
+                        <Space size="small" style={{ float: 'right' }}>
+                            <Button type="primary" onClick={ this.attachHandleAdd }>添加</Button>
+                            <Button type="primary">下载</Button>
+                            <Button type="primary">删除</Button>
+                        </Space>
+                        <Table
+                            rowSelection={{
+                                type: 'checkbox'
+                            }} 
+                            columns={ this.getAttachmentColumns() }
+                            dataSource={contract?.attachVO}
+                       />
+                    </>
+                )
             }
         }];
     }
