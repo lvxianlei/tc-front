@@ -1,4 +1,4 @@
- import { Form, Input, Space, TableColumnType, Select, TablePaginationConfig } from 'antd';
+ import { FormItemProps, Input, Space, TableColumnType, Select, TablePaginationConfig } from 'antd';
  import React from 'react';
  import { WithTranslation, withTranslation } from 'react-i18next';
  import { RouteComponentProps, withRouter } from 'react-router';
@@ -164,9 +164,9 @@
              key: 'operation',
              title: '操作',
              dataIndex: 'operation',
-             render: (): React.ReactNode => (
+             render: (_: undefined, record: object): React.ReactNode => (
                  <Space direction="horizontal" size="small">
-                     <Link to="">编辑</Link>
+                     <Link to={ `/prom/contract/setting/${ (record as ITableDataItem).id }` }>编辑</Link>
                      <Link to="">删除</Link>
                      <Link to="">添加汇款记录</Link>
                  </Space>
@@ -219,6 +219,15 @@
      public onTabChange(activeKey: string): void {
          this.fetchTableData({});
      }
+
+     /**
+     * @implements
+     * @description Determines whether new click on
+     * @param event 
+     */
+    public onNewClick(event: React.MouseEvent<HTMLButtonElement>): void {
+        this.props.history.push('/prom/contract/new');
+    }
  
      /**
       * @implements
@@ -226,28 +235,32 @@
       * @param item 
       * @returns filter components 
       */
-     public renderFilterComponents(item: ITabItem): React.ReactNode[] {
-         return [
-                <Form.Item name="internalNumber" key="internalNumber">
-                    <Input placeholder="内部合同编号关键词"/>
-                </Form.Item>,
-                <Form.Item name="projectName" key="projectName">
-                    <Input placeholder="工程名称关键词"/>
-                </Form.Item>,
-                <Form.Item name="customerCompany" key="customerCompany">
-                    <Input placeholder="业主单位关键词"/>
-                </Form.Item>,
-                <Form.Item name="signCustomerName" key="signCustomerName">
-                    <Input placeholder="合同签订单位关键词"/>
-                </Form.Item>,
-                <Form.Item name="winBidType" key="winBidType">
-                    <Select defaultValue="0">
-                        <Option value="0" >全部中标类型</Option>
-                        <Option value="1">国家电网</Option>
-                        <Option value="2">南方电网</Option>
-                    </Select>
-                </Form.Item>
-         ];
+     public getFilterFormItemProps(item: ITabItem): FormItemProps[] {
+         return [{
+             name: 'internalNumber',
+             children: <Input placeholder="内部合同编号关键词"/>
+         },
+         {
+            name: 'projectName',
+            children: <Input placeholder="工程名称关键词"/>
+        },
+        {
+            name: 'customerCompany',
+            children: <Input placeholder="业主单位关键词"/>
+        },
+        {
+            name: 'signCustomerName',
+            children: <Input placeholder="合同签订单位关键词"/>
+        },
+        {
+            name: 'winBidType',
+            children: 
+            <Select defaultValue="0">
+            <Option value="0" >全部中标类型</Option>
+            <Option value="1">国家电网</Option>
+            <Option value="2">南方电网</Option>
+        </Select>
+        }];
      }
  }
  
