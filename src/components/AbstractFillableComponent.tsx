@@ -23,13 +23,7 @@ export interface IExtraSection extends ISection {
     readonly render: () => React.ReactNode;
 }
 
-// export interface IData {
-//     readonly id: number | string;
-// }
-
-export interface IAbstractFillableComponentState {
-    // data: IData
-}
+export interface IAbstractFillableComponentState {}
 
 /**
  * Abstract fillable form component.
