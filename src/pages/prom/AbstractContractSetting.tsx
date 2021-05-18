@@ -146,7 +146,7 @@ import ConfirmableButton from '../../components/ConfirmableButton';
             dataIndex: 'returnedTime',
             render: (): React.ReactNode => (
                 <Form.Item
-                    name="returnedTime"
+                    name={['paymentPlanDtos', 'returnedTime']}
                 >
                      <Input />
                 </Form.Item>
