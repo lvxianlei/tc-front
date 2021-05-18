@@ -2,14 +2,20 @@
  * @author zyc
  * @copyright © 2021 
  */
- import { Input, Select, DatePicker, Radio, Button, Table, TableColumnType, Space, Form  } from 'antd';
- import { DeleteOutlined } from '@ant-design/icons';
- import { Link } from 'react-router-dom';
- import React from 'react';
- import { RouteComponentProps } from 'react-router';
- import ConfirmableButton from '../../components/ConfirmableButton';
+import { DeleteOutlined } from '@ant-design/icons';
+import { Button, DatePicker, Form, Input, Radio, Select, Space, Table, TableColumnType } from 'antd';
+import React from 'react';
+import { RouteComponentProps } from 'react-router';
+import { Link } from 'react-router-dom';
+
+import AbstractFillableComponent, {
+    IAbstractFillableComponentState,
+    IExtraSection,
+    IFormItemGroup,
+} from '../../components/AbstractFillableComponent';
+import ConfirmableButton from '../../components/ConfirmableButton';
+
  
- import AbstractFillableComponent, { IAbstractFillableComponentState, IExtraSection, IFormItemGroup } from '../../components/AbstractFillableComponent';
  
  export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
      readonly contract?: IContract;
@@ -447,6 +453,11 @@
         }]];
     }
 
+    /**
+     * @override
+     * @description Renders extra sections
+     * @returns extra sections 
+     */
     public renderExtraSections(): IExtraSection[] {
         const contract: IContract | undefined = this.state.contract;
         const paymentPlanDtos: IpaymentPlanDtos[] = contract?.paymentPlanDtos || [];
