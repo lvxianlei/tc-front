@@ -9,7 +9,7 @@
  import { RouteComponentProps } from 'react-router';
  import ConfirmableButton from '../../components/ConfirmableButton';
  
- import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGroup } from '../../components/AbstractFillableComponent';
+ import AbstractFillableComponent, { IAbstractFillableComponentState, IExtraSection, IFormItemGroup } from '../../components/AbstractFillableComponent';
  
  export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
      readonly contract?: IContract;
@@ -83,7 +83,7 @@
      constructor(props: P) {
         super(props)
         this.handleAdd = this.handleAdd.bind(this);
-        this.getTableDataSource = this.getTableDataSource.bind(this);
+        // this.getTableDataSource = this.getTableDataSource.bind(this);
      }
  
      /**
@@ -97,28 +97,32 @@
 
      public handleAdd(): void {
         const contract: IContract | undefined = this.state.contract;
-        const paymentPlanDtos: IpaymentPlanDtos[] | undefined = this.state.contract?.paymentPlanDtos;
-        const indexLength : number | undefined= this.state.contract?.paymentPlanDtos?.length;
-        let i:number | undefined = indexLength ? indexLength+1 : 1;
-        const Plan: IpaymentPlanDtos = {
-            index: i,
+        const paymentPlanDtos: IpaymentPlanDtos[] = contract?.paymentPlanDtos || [];
+        // const indexLength: number = paymentPlanDtos.length;
+        // let i:number | undefined = indexLength ? indexLength+1 : 1;
+        const plan: IpaymentPlanDtos = {
+            index: paymentPlanDtos.length + 1,
             returnedTime: '12',
             returnedRate: undefined,
             returnedAmount: undefined,
             description: ""
         };
-        let addPlan = paymentPlanDtos ? paymentPlanDtos : []
-        addPlan.push(Plan)
+        // let addPlan = paymentPlanDtos ? paymentPlanDtos : []
+        // paymentPlanDtos.push(plan)
         this.setState({
-            contract: { paymentPlanDtos: addPlan }
+            contract: {
+                ...(contract || {}),
+                paymentPlanDtos: [...paymentPlanDtos, plan]
+            }
         });
+        // this.forceUpdate();
 
-        console.log(contract)
+        console.log(this.state.contract);
     }
 
-    public getTableDataSource(): IpaymentPlanDtos[] | undefined {
-        return this.state.contract?.paymentPlanDtos;
-    }
+    // public getTableDataSource(): IpaymentPlanDtos[] | undefined {
+    //     return this.state.contract?.paymentPlanDtos;
+    // }
 
     //  public onChange = (selectedRowKeys: React.Key[], selectedRows: DataType[]): void => {
     //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -388,33 +392,34 @@
                 )
             }]
          }, {
-             title: '回款计划',
-             itemProps: [ {
-                name: 'planType',
-                initialValue: contract?.planType,
-                children: (
-                    <>
-                        <Radio.Group>
-                            <Radio value={1}>按占比</Radio>
-                            <Radio value={2}>按金额</Radio>
-                        </Radio.Group>
-                        <Button type="primary" style={{ float: 'right' }} onClick={ this.handleAdd }>新增</Button>
-                    </>
-                )
-            }, {
-                name: 'paymentPlanDtos',
-                initialValue: contract?.paymentPlanDtos,
-                children: (
-                    <>
-                        <Table columns={ this.getpaymentPlanColumns() }
-                            // dataSource={ this.getTableDataSource() }
-                            dataSource={ contract?.paymentPlanDtos }
-                            rowKey={(record) => `record`}
-                        />
-                    </>
-                )
-            }]
-         },{
+        //      title: '回款计划',
+        //      itemProps: [ {
+        //         name: 'planType',
+        //         initialValue: contract?.planType,
+        //         children: (
+        //             <>
+        //                 <Radio.Group>
+        //                     <Radio value={1}>按占比</Radio>
+        //                     <Radio value={2}>按金额</Radio>
+        //                 </Radio.Group>
+        //                 <Button type="primary" style={{ float: 'right' }} onClick={ this.handleAdd }>新增</Button>
+        //             </>
+        //         )
+        //     }, {
+        //         name: 'paymentPlanDtos',
+        //         initialValue: contract?.paymentPlanDtos,
+        //         children: (
+        //             <>
+        //                 <Table columns={ this.getpaymentPlanColumns() }
+        //                     // dataSource={ this.getTableDataSource() }
+        //                     dataSource={ contract?.paymentPlanDtos }
+        //                     pagination={ false }
+        //                     rowKey='index'
+        //                 />
+        //             </>
+        //         )
+        //     }]
+        //  },{
             title: '附件',
             itemProps: [ {
                children: (
@@ -440,5 +445,32 @@
                )
            }]
         }]];
-     }
+    }
+
+    public renderExtraSections(): IExtraSection[] {
+        const contract: IContract | undefined = this.state.contract;
+        const paymentPlanDtos: IpaymentPlanDtos[] = contract?.paymentPlanDtos || [];
+        console.log(paymentPlanDtos);
+        return [{
+            title: '回款计划',
+            render: (): React.ReactNode => {
+                return (
+                    <>
+                        <Form.Item name="planType" initialValue={ contract?.planType || 1 }>
+                            <Radio.Group>
+                                <Radio value={ 1 }>按占比</Radio>
+                                <Radio value={ 2 }>按金额</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                        <Button type="primary" style={{ float: 'right' }} onClick={ this.handleAdd }>新增</Button>
+                        <Table columns={ this.getpaymentPlanColumns() }
+                            dataSource={ paymentPlanDtos }
+                            pagination={ false }
+                            rowKey='index'
+                        />
+                    </>
+                );
+            }
+        }];
+    }
  }
