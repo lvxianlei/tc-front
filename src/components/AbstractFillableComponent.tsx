@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Button, Card, Form, FormInstance, FormItemProps, FormProps, Space } from 'antd';
+import { Button, Card, Col, ColProps, Form, FormInstance, FormItemProps, FormProps, Row, Space } from 'antd';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -17,6 +17,7 @@ interface ISection {
 
 export interface IFormItemGroup extends ISection {
     readonly itemProps: FormItemProps[];
+    readonly itemCol?: ColProps;
 }
 
 export interface IExtraSection extends ISection {
@@ -156,6 +157,18 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
                                                 <React.Fragment key={ group.title }>
                                                     <div className={ styles.title }>{ group.title }</div>
                                                     {
+                                                        group.itemCol
+                                                        ?
+                                                        <Row gutter={ 24 }>
+                                                        {
+                                                            group.itemProps.map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
+                                                                <Col span={ group.itemCol?.span }>
+                                                                    <Form.Item key={ `${ props.name }_${ index }` } { ...props }/>
+                                                                </Col>
+                                                            ))
+                                                        }
+                                                        </Row>
+                                                        :
                                                         group.itemProps.map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
                                                             <Form.Item key={ `${ props.name }_${ index }` } { ...props }/>
                                                         ))

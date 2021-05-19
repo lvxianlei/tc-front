@@ -3,7 +3,9 @@
  * @copyright © 2021 
  */
 import { DeleteOutlined } from '@ant-design/icons';
-import { Button, DatePicker, Form, Input, Radio, Select, Space, Table, TableColumnType } from 'antd';
+import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Radio, Row, Select, Space, Table, TableColumnType } from 'antd';
+import { FormListFieldData, FormListOperation } from 'antd/lib/form/FormList';
+import moment from 'moment';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -14,7 +16,6 @@ import AbstractFillableComponent, {
     IFormItemGroup,
 } from '../../components/AbstractFillableComponent';
 import ConfirmableButton from '../../components/ConfirmableButton';
-import moment from 'moment';
 
  
  
@@ -49,7 +50,7 @@ import moment from 'moment';
      readonly description?: string;
      readonly productInfoDto?: IproductInfoDto;
      readonly planType?: number;
-     readonly paymentPlanDtos?: IpaymentPlanDtos[];
+     readonly paymentPlanDtos?: IPaymentPlanDto[];
      readonly attachVO?: [];
  }
 
@@ -64,7 +65,7 @@ import moment from 'moment';
     readonly voltageGrade?: number;
  }
 
- export interface IpaymentPlanDtos {
+ export interface IPaymentPlanDto {
     readonly index?: number;
     readonly returnedTime?: string;
     readonly returnedRate?: number;
@@ -83,124 +84,142 @@ import moment from 'moment';
   */
  export default abstract class AbstractContractSetting<P extends RouteComponentProps, S extends IAbstractContractSettingState> extends AbstractFillableComponent<P, S> {
  
-     public state: S = {
-        contract: undefined
-     } as S;
+    public state: S = {
+    contract: undefined
+    } as S;
 
-     constructor(props: P) {
-        super(props)
-        this.handleAdd = this.handleAdd.bind(this);
-        // this.getTableDataSource = this.getTableDataSource.bind(this);
-     }
- 
-     /**
-      * @override
-      * @description Gets return path
-      * @returns return path 
-      */
-     protected getReturnPath(): string {
-         return '/prom/contract';
-     }
-
-     public handleAdd(): void {
-        const contract: IContract | undefined = this.state.contract;
-        const paymentPlanDtos: IpaymentPlanDtos[] = contract?.paymentPlanDtos || [];
-        const plan: IpaymentPlanDtos = {
-            index: paymentPlanDtos.length + 1,
-            returnedTime: '',
-            returnedRate: undefined,
-            returnedAmount: undefined,
-            description: ""
-        };
-        this.setState({
-            contract: {
-                ...(contract || {}),
-                paymentPlanDtos: [...paymentPlanDtos, plan]
-            }
-        });
+    constructor(props: P) {
+    super(props)
+    // this.handleAdd = this.handleAdd.bind(this);
+    // this.getTableDataSource = this.getTableDataSource.bind(this);
     }
+
+    /**
+     * @override
+     * @description Gets return path
+     * @returns return path 
+     */
+    protected getReturnPath(): string {
+        // return '/prom/contract';
+        return '';
+    }
+
+    /**
+     * @override
+     * @description Gets form props
+     * @returns form props 
+     */
+    protected getFormProps(): FormProps {
+        return {
+            ...super.getFormProps(),
+            labelCol: {
+                span: 8
+            },
+            wrapperCol: {
+                span: 16
+            }
+        };
+    }
+
+    // public handleAdd(): void {
+    //     const contract: IContract | undefined = this.state.contract;
+    //     const paymentPlanDtos: IPaymentPlanDto[] = contract?.paymentPlanDtos || [];
+    //     const plan: IPaymentPlanDto = {
+    //         index: paymentPlanDtos.length + 1,
+    //         returnedTime: '',
+    //         returnedRate: undefined,
+    //         returnedAmount: undefined,
+    //         description: ""
+    //     };
+    //     this.setState({
+    //         contract: {
+    //             ...(contract || {}),
+    //             paymentPlanDtos: [...paymentPlanDtos, plan]
+    //         }
+    //     });
+    // }
 
     public attachHandleAdd(): void {
         
     }
-    
 
-    //  public onChange = (selectedRowKeys: React.Key[], selectedRows: DataType[]): void => {
-    //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    //   }
- 
-     public getpaymentPlanColumns(): TableColumnType<object>[] {
-        return [{
-            key: 'index',
-            title: '期次',
-            dataIndex: 'index',
-            render: (text,record,index) => `${index+1}`
-        }, {
-            key: 'returnedTime',
-            title: '计划回款日期',
-            dataIndex: 'returnedTime',
-            render: (): React.ReactNode => (
-                <Form.Item
-                    name={['paymentPlanDtos', 'returnedTime']}
-                >
-                    <DatePicker />
-                </Form.Item>
-            )
-        }, {
-            key: 'returnedRate',
-            title: '计划回款占比（%）',
-            dataIndex: 'returnedRate',
-            render: (): React.ReactNode => (
-                <Form.Item
-                    name={['paymentPlanDtos', 'returnedRate']}
-                >
-                    <Input />
-                </Form.Item>
-            )
-        }, {
-            key: 'returnedAmount',
-            title: '计划回款金额（元）',
-            dataIndex: 'returnedAmount',
-            render: (): React.ReactNode => (
-                <Form.Item
-                    name={['paymentPlanDtos', 'returnedAmount']}
+
+//  public onChange = (selectedRowKeys: React.Key[], selectedRows: DataType[]): void => {
+//     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+//   }
+
+    // public getpaymentPlanColumns(): TableColumnType<object>[] {
+    //     return [{
+    //         key: 'index',
+    //         title: '期次',
+    //         dataIndex: 'index',
+    //         render: (text,record,index) => `${index+1}`
+    //     }, {
+    //         key: 'returnedTime',
+    //         title: '计划回款日期',
+    //         dataIndex: 'returnedTime',
+    //         render: (): React.ReactNode => (
+    //             <Form.Item
+    //                 name={['paymentPlanDtos', 'returnedTime']}
+    //             >
+    //                 <DatePicker />
+    //             </Form.Item>
+    //         )
+    //     }, {
+    //         key: 'returnedRate',
+    //         title: '计划回款占比（%）',
+    //         dataIndex: 'returnedRate',
+    //         render: (): React.ReactNode => (
+    //             <Form.Item
+    //                 name={['paymentPlanDtos', 'returnedRate']}
+    //             >
+    //                 <Input />
+    //             </Form.Item>
+    //         )
+    //     }, {
+    //         key: 'returnedAmount',
+    //         title: '计划回款金额（元）',
+    //         dataIndex: 'returnedAmount',
+    //         render: (): React.ReactNode => (
+    //             <Form.Item
+    //                 name={['paymentPlanDtos', 'returnedAmount']}
                     
-                >
-                    <Input prefix="￥"/>
-                </Form.Item>
-            )
-        }, {
-            key: 'description',
-            title: '备注',
-            dataIndex: 'description',
-            render: (): React.ReactNode => (
-                <Form.Item
-                    name={['paymentPlanDtos', 'description']}
-                >
-                    <Input.TextArea rows={ 5 } maxLength={ 300 }/>
-                </Form.Item>
-            )
-        }, {
-            key: 'operation',
-            title: '操作',
-            dataIndex: 'operation',
-            render: (_: undefined, record: object): React.ReactNode => (
-                <ConfirmableButton confirmTitle="要删除该条回款计划吗？" type="link" placement="topRight" onConfirm={ ()=>{
-                    let index = (record as IpaymentPlanDtos).index;
-                    const paymentPlanDtos = this.state.contract?.paymentPlanDtos||[];
-                    const contract: IContract | undefined = this.state.contract;
-                    this.setState({ 
-                        contract: {
-                            ...(contract || {}),
-                            paymentPlanDtos: paymentPlanDtos.filter(item => item.index !== index) 
-                        }
-                    });
-                } }><DeleteOutlined /></ConfirmableButton>
-            )
-        }]
-     }
+    //             >
+    //                 <Input prefix="￥"/>
+    //             </Form.Item>
+    //         )
+    //     }, {
+    //         key: 'description',
+    //         title: '备注',
+    //         dataIndex: 'description',
+    //         render: (): React.ReactNode => (
+    //             <Form.Item
+    //                 name={['paymentPlanDtos', 'description']}
+    //             >
+    //                 <Input.TextArea rows={ 5 } maxLength={ 300 }/>
+    //             </Form.Item>
+    //         )
+    //     }, {
+    //         key: 'operation',
+    //         title: '操作',
+    //         dataIndex: 'operation',
+    //         render: (_: undefined, record: object): React.ReactNode => (
+    //             <ConfirmableButton confirmTitle="要删除该条回款计划吗？" type="link" placement="topRight" onConfirm={ ()=>{
+    //                 let index = (record as IPaymentPlanDto).index;
+    //                 const paymentPlanDtos = this.state.contract?.paymentPlanDtos||[];
+    //                 const contract: IContract | undefined = this.state.contract;
+    //                 this.setState({ 
+    //                     contract: {
+    //                         ...(contract || {}),
+    //                         paymentPlanDtos: paymentPlanDtos.filter(item => item.index !== index) 
+    //                     }
+    //                 });
+    //             } }><DeleteOutlined /></ConfirmableButton>
+    //         )
+    //     }]
+    // }
 
-     public getAttachmentColumns(): TableColumnType<object>[] {
+    public getAttachmentColumns(): TableColumnType<object>[] {
         return [{
             key: 'name',
             title: '附件名称',
@@ -233,40 +252,43 @@ import moment from 'moment';
                 </Space>
             )
         }]
-     }
+    }
 
-     protected getGeneratNum(): string { 
-        var result: number = Math.floor(Math.random()*1000);
-        let num: string = "";
-        if(result<10){
-            num =  "00"+result;
-        }else if(result<100){
-            num =  "0"+result;
-        }else{
+    protected getGeneratNum(): string { 
+        var result: number = Math.floor( Math.random() * 1000 );
+        let num: string = '';
+        if(result < 10) {
+            num =  '00' + result;
+        } else if (result<100){
+            num = '0' + result;
+        } else {
             num =  result.toString();
         }
-        return moment().format('YYYYMMDD')+num
+        return moment().format('YYYYMMDD') + num;
     }
-     /**
-      * @implements
-      * @description Gets form item groups
-      * @returns form item groups 
-      */
-     public getFormItemGroups(): IFormItemGroup[][] {
+    /**
+     * @implements
+     * @description Gets form item groups
+     * @returns form item groups 
+     */
+    public getFormItemGroups(): IFormItemGroup[][] {
          const contract: IContract | undefined = this.state.contract;
-         const GeneratNum :string = this.getGeneratNum();
+         const GeneratNum: string = this.getGeneratNum();
          return [[{
-             title: '基础信息',
-             itemProps: [{
-                 label: '合同编号',
-                 name: 'contractNumber',
-                 initialValue: contract?.contractNumber,
-                 rules: [{
-                     required: true,
-                     message: '请输入合同编号'
-                 }],
-                 children: <Input/>
-             }, {
+            title: '基础信息',
+            itemCol: {
+                span: 8
+            },
+            itemProps: [{
+                label: '合同编号',
+                name: 'contractNumber',
+                initialValue: contract?.contractNumber,
+                rules: [{
+                    required: true,
+                    message: '请输入合同编号'
+                }],
+                children: <Input/>
+            }, {
                 label: '内部合同编号',
                 name: 'internalNumber',
                 initialValue: contract?.internalNumber || GeneratNum,
@@ -286,15 +308,15 @@ import moment from 'moment';
                 initialValue: contract?.simpleProjectName,
                 children: <Input/>
             }, {
-                 label: '中标类型',
-                 name: 'winBidType',
-                 initialValue: contract?.winBidType,
-                 children: (
-                     <Select>
-                         <Select.Option value={ 1 }>国家电网</Select.Option>
-                         <Select.Option value={ 2 }>南方电网</Select.Option>
-                     </Select>
-                 )
+                label: '中标类型',
+                name: 'winBidType',
+                initialValue: contract?.winBidType,
+                children: (
+                    <Select>
+                        <Select.Option value={ 1 }>国家电网</Select.Option>
+                        <Select.Option value={ 2 }>南方电网</Select.Option>
+                    </Select>
+                )
              }, {
                 label: '销售类型',
                 name: 'saleType',
@@ -364,7 +386,7 @@ import moment from 'moment';
                 label: '评审时间',
                 name: 'reviewTime',
                 initialValue: contract?.reviewTime,
-                children:  <DatePicker showTime  format="YYYY-MM-DD HH:mm" />
+                children:  <DatePicker showTime format="YYYY-MM-DD HH:mm" />
             }, {
                 label: '销售员',
                 name: 'salesman',
@@ -405,14 +427,17 @@ import moment from 'moment';
                     </Select>
                 )
             }, {
-                 label: '备注',
+                label: '备注',
                  name: 'description',
                  initialValue: contract?.description,
                  children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息"/>
              }]
          }, {
-             title: '产品信息',
-             itemProps: [ {
+            title: '产品信息',
+            itemCol: {
+                span: 12
+            },
+            itemProps: [ {
                 label: '产品类型',
                 name: 'productType',
                 initialValue: contract?.productInfoDto?.productType,
@@ -438,7 +463,7 @@ import moment from 'moment';
                     
                 )
             }]
-         }]];
+        }]];
     }
 
     /**
@@ -448,8 +473,6 @@ import moment from 'moment';
      */
     public renderExtraSections(): IExtraSection[] {
         const contract: IContract | undefined = this.state.contract;
-        const paymentPlanDtos: IpaymentPlanDtos[] = contract?.paymentPlanDtos || [];
-        console.log(paymentPlanDtos);
         return [{
             title: '回款计划',
             render: (): React.ReactNode => {
@@ -461,12 +484,58 @@ import moment from 'moment';
                                 <Radio value={ 2 }>按金额</Radio>
                             </Radio.Group>
                         </Form.Item>
-                        <Button type="primary" style={{ float: 'right' }} onClick={ this.handleAdd }>新增</Button>
-                        <Table columns={ this.getpaymentPlanColumns() }
+                        <Form.List name="paymentPlanDtos">
+                            {
+                                (fields: FormListFieldData[], operation: FormListOperation): React.ReactNode => {
+                                    return (
+                                        <>
+                                            <Button type="primary" onClick={ () => ( operation.add() ) }>新增</Button>
+                                            {
+                                                fields.map<React.ReactNode>((field: FormListFieldData, index: number): React.ReactNode => (
+                                                    <Row key={ `${ field.name }_${ index }` }>
+                                                        <Col span={ 2 }>{ index + 1 }</Col>
+                                                        <Col span={ 5 }>
+                                                            <Form.Item { ...field } name={[field.name, 'returnedTime']} fieldKey={[field.fieldKey, 'returnedTime']}>
+                                                                <DatePicker format="YYYY-MM-DD"/>
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={ 5 }>
+                                                            <Form.Item { ...field } name={[field.name, 'returnedRate']} fieldKey={[field.fieldKey, 'returnedRate']}>
+                                                                <Input/>
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={ 5 }>
+                                                            <Form.Item { ...field } name={[field.name, 'returnedAmount']} fieldKey={[field.fieldKey, 'returnedAmount']}>
+                                                                <InputNumber stringMode={ false } precision={ 2 }
+                                                                    formatter={ value => `$ ${ value }`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
+                                                                    parser={ value => value?.replace(/\$\s?|(,*)/g, '') || '' }/>
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={ 5 }>
+                                                            <Form.Item { ...field } name={[field.name, 'description']} fieldKey={[field.fieldKey, 'description']}>
+                                                                <Input.TextArea rows={ 5 } maxLength={ 300 }/>
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={ 2 }>
+                                                            <ConfirmableButton confirmTitle="要删除该条回款计划吗？"
+                                                                type="link" placement="topRight"
+                                                                onConfirm={ () => { operation.remove(index); } }>
+                                                                <DeleteOutlined />
+                                                            </ConfirmableButton>
+                                                        </Col>
+                                                    </Row>
+                                                ))
+                                            }
+                                        </>
+                                    );
+                                }
+                            }
+                        </Form.List>
+                        {/* <Table columns={ this.getpaymentPlanColumns() } bordered={ true }
                             dataSource={ paymentPlanDtos }
                             pagination={ false }
                             rowKey='index'
-                        />
+                        /> */}
                     </>
                 );
             }

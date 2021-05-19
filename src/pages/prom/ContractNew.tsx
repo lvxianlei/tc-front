@@ -6,7 +6,7 @@
  import { RouteComponentProps, withRouter } from 'react-router';
  
  import RequestUtil from '../../utils/RequestUtil';
- import AbstractContractSetting, { IAbstractContractSettingState } from './AbstractContractSetting';
+ import AbstractContractSetting, { IAbstractContractSettingState, IPaymentPlanDto } from './AbstractContractSetting';
  import moment from 'moment'
  
  export interface IContractNewProps {}
@@ -28,8 +28,16 @@
         values.signContractTime = moment(values.signContractTime).format('YYYY-MM-DD');
         values.deliveryTime = moment(values.deliveryTime).format('YYYY-MM-DD');
         values.reviewTime = moment(values.reviewTime).format('YYYY-MM-DD HH:mm');
+        values.paymentPlanDtos?.map((plan: IPaymentPlanDto, index: number): IPaymentPlanDto => {
+            return {
+                ...plan,
+                returnedTime: moment(plan.returnedTime).format('YYYY-MM-DD'),
+                index: index + 1
+            };
+        });
          console.log(values )
-         return await RequestUtil.post('/tower-market/contract', values);
+         return Promise.resolve();
+        //  return await RequestUtil.post('/tower-market/contract', values);
      }
  }
  
