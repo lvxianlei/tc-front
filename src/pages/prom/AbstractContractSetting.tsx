@@ -3,7 +3,7 @@
  * @copyright © 2021 
  */
 import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Radio, Row, Select, Space, Table, TableColumnType } from 'antd';
+import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Radio, Row, Select, Space, Upload, Checkbox, Cascader, Modal } from 'antd';
 import { FormListFieldData, FormListOperation } from 'antd/lib/form/FormList';
 import moment from 'moment';
 import React from 'react';
@@ -16,13 +16,15 @@ import AbstractFillableComponent, {
     IFormItemGroup,
 } from '../../components/AbstractFillableComponent';
 import ConfirmableButton from '../../components/ConfirmableButton';
-
- 
+import styles from './AbstractContractSetting.module.less';
+import ModalComponent from '../../components/ModalComponent'
  
  export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
+     visible: boolean | undefined;
      readonly contract?: IContract;
  }
  
+
  export interface ITabItem {
     readonly label: string;
     readonly key: string | number;
@@ -40,18 +42,18 @@ import ConfirmableButton from '../../components/ConfirmableButton';
      readonly signCustomerName?: string;
      readonly signContractTime?: string;
      readonly signUserName?: string;
-     deliveryTime?: any;
+     readonly deliveryTime?: string;
      readonly reviewTime?: string;
      readonly chargeType?: string;
      readonly salesman?: string;
-     readonly regionInfoDTO?: string;
+     readonly regionInfoDTO?: IregionInfoDTO;
      readonly contractAmount?: number;
      readonly currencyType?: number;
      readonly description?: string;
      readonly productInfoDto?: IproductInfoDto;
      readonly planType?: number;
      readonly paymentPlanDtos?: IPaymentPlanDto[];
-     readonly attachVO?: [];
+     readonly attachDTO?: IattachDTO[];
  }
 
  export interface IcustomerInfoDto {
@@ -73,25 +75,41 @@ import ConfirmableButton from '../../components/ConfirmableButton';
     readonly description?: string;
  }
 
+ export interface IattachDTO {
+     readonly name?: string;
+     readonly username?: string;
+     readonly fileSize?: string;
+     readonly description?: string;
+ }
+
+ export interface IregionInfoDTO {
+    readonly countryCode?: string;
+    readonly provinceCode?: string;
+    readonly cityCode?: string;
+    readonly districtCode?: string;
+ }
+
  export interface DataType {
     key: React.Key;
     name: string;
     age: number;
     address: string;
   }
+
  /**
   * Abstract Contract Setting
   */
  export default abstract class AbstractContractSetting<P extends RouteComponentProps, S extends IAbstractContractSettingState> extends AbstractFillableComponent<P, S> {
  
     public state: S = {
-    contract: undefined
+        contract: undefined,
+        visible: false
     } as S;
 
     constructor(props: P) {
-    super(props)
-    // this.handleAdd = this.handleAdd.bind(this);
-    // this.getTableDataSource = this.getTableDataSource.bind(this);
+        super(props)
+        this.showModal = this.showModal.bind(this)
+        this.closeModal = this.closeModal.bind(this)
     }
 
     /**
@@ -121,138 +139,12 @@ import ConfirmableButton from '../../components/ConfirmableButton';
         };
     }
 
-    // public handleAdd(): void {
-    //     const contract: IContract | undefined = this.state.contract;
-    //     const paymentPlanDtos: IPaymentPlanDto[] = contract?.paymentPlanDtos || [];
-    //     const plan: IPaymentPlanDto = {
-    //         index: paymentPlanDtos.length + 1,
-    //         returnedTime: '',
-    //         returnedRate: undefined,
-    //         returnedAmount: undefined,
-    //         description: ""
-    //     };
-    //     this.setState({
-    //         contract: {
-    //             ...(contract || {}),
-    //             paymentPlanDtos: [...paymentPlanDtos, plan]
-    //         }
-    //     });
-    // }
-
-    public attachHandleAdd(): void {
-        
-    }
-
 
 //  public onChange = (selectedRowKeys: React.Key[], selectedRows: DataType[]): void => {
 //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
 //   }
 
-    // public getpaymentPlanColumns(): TableColumnType<object>[] {
-    //     return [{
-    //         key: 'index',
-    //         title: '期次',
-    //         dataIndex: 'index',
-    //         render: (text,record,index) => `${index+1}`
-    //     }, {
-    //         key: 'returnedTime',
-    //         title: '计划回款日期',
-    //         dataIndex: 'returnedTime',
-    //         render: (): React.ReactNode => (
-    //             <Form.Item
-    //                 name={['paymentPlanDtos', 'returnedTime']}
-    //             >
-    //                 <DatePicker />
-    //             </Form.Item>
-    //         )
-    //     }, {
-    //         key: 'returnedRate',
-    //         title: '计划回款占比（%）',
-    //         dataIndex: 'returnedRate',
-    //         render: (): React.ReactNode => (
-    //             <Form.Item
-    //                 name={['paymentPlanDtos', 'returnedRate']}
-    //             >
-    //                 <Input />
-    //             </Form.Item>
-    //         )
-    //     }, {
-    //         key: 'returnedAmount',
-    //         title: '计划回款金额（元）',
-    //         dataIndex: 'returnedAmount',
-    //         render: (): React.ReactNode => (
-    //             <Form.Item
-    //                 name={['paymentPlanDtos', 'returnedAmount']}
-                    
-    //             >
-    //                 <Input prefix="￥"/>
-    //             </Form.Item>
-    //         )
-    //     }, {
-    //         key: 'description',
-    //         title: '备注',
-    //         dataIndex: 'description',
-    //         render: (): React.ReactNode => (
-    //             <Form.Item
-    //                 name={['paymentPlanDtos', 'description']}
-    //             >
-    //                 <Input.TextArea rows={ 5 } maxLength={ 300 }/>
-    //             </Form.Item>
-    //         )
-    //     }, {
-    //         key: 'operation',
-    //         title: '操作',
-    //         dataIndex: 'operation',
-    //         render: (_: undefined, record: object): React.ReactNode => (
-    //             <ConfirmableButton confirmTitle="要删除该条回款计划吗？" type="link" placement="topRight" onConfirm={ ()=>{
-    //                 let index = (record as IPaymentPlanDto).index;
-    //                 const paymentPlanDtos = this.state.contract?.paymentPlanDtos||[];
-    //                 const contract: IContract | undefined = this.state.contract;
-    //                 this.setState({ 
-    //                     contract: {
-    //                         ...(contract || {}),
-    //                         paymentPlanDtos: paymentPlanDtos.filter(item => item.index !== index) 
-    //                     }
-    //                 });
-    //             } }><DeleteOutlined /></ConfirmableButton>
-    //         )
-    //     }]
-    // }
 
-    public getAttachmentColumns(): TableColumnType<object>[] {
-        return [{
-            key: 'name',
-            title: '附件名称',
-            dataIndex: 'name'
-        }, {
-            key: 'fileSize',
-            title: '文件大小',
-            dataIndex: 'fileSize'
-        }, {
-            key: 'userName',
-            title: '上传时间',
-            dataIndex: 'userName'
-        }, {
-            key: 'userName',
-            title: '上传人员',
-            dataIndex: 'userName'
-        }, {
-            key: 'description',
-            title: '备注',
-            dataIndex: 'description'
-        }, {
-            key: 'operation',
-            title: '操作',
-            dataIndex: 'operation',
-            render: (): React.ReactNode => (
-                <Space direction="horizontal" size="small">
-                    <Link to={ `` }>预览</Link>
-                    <Link to={ `` }>下载</Link>
-                    <ConfirmableButton confirmTitle="要删除该附件吗？" type="link" placement="topRight">删除</ConfirmableButton>
-                </Space>
-            )
-        }]
-    }
 
     protected getGeneratNum(): string { 
         var result: number = Math.floor( Math.random() * 1000 );
@@ -266,6 +158,44 @@ import ConfirmableButton from '../../components/ConfirmableButton';
         }
         return moment().format('YYYYMMDD') + num;
     }
+
+    public checkChange(record: Record<string, any>): void {
+        console.log(record)
+    }
+
+    public getregionInfo(): any {
+        return  [
+            {
+                value: 'zhejiang',
+                label: 'Zhejiang',
+                children: [
+                {
+                    value: 'hangzhou',
+                    label: 'Hangzhou',
+                    children: [
+                    {
+                        value: 'xihu',
+                        label: 'West Lake',
+                    },
+                    ],
+                },
+                ],
+            }
+        ]
+    }
+
+    public showModal(): void {
+        this.setState({
+            visible: true
+        })
+    }
+
+    public closeModal(): void {
+        this.setState({
+            visible: false
+        })
+    }
+
     /**
      * @implements
      * @description Gets form item groups
@@ -310,7 +240,7 @@ import ConfirmableButton from '../../components/ConfirmableButton';
             }, {
                 label: '中标类型',
                 name: 'winBidType',
-                initialValue: contract?.winBidType,
+                initialValue: contract?.winBidType || 1,
                 children: (
                     <Select>
                         <Select.Option value={ 1 }>国家电网</Select.Option>
@@ -320,7 +250,7 @@ import ConfirmableButton from '../../components/ConfirmableButton';
              }, {
                 label: '销售类型',
                 name: 'saleType',
-                initialValue: contract?.saleType,
+                initialValue: contract?.saleType || 1,
                 children: (
                     <Select>
                         <Select.Option value={ 1 }>国内业务</Select.Option>
@@ -335,7 +265,16 @@ import ConfirmableButton from '../../components/ConfirmableButton';
                     required: true,
                     message: '请选择业主单位'
                 }],
-                children: <Input/>
+                children: 
+                    <>
+                        <Input suffix={
+                           <Button type="primary" onClick={this.showModal}>
+                                Open Modal
+                            </Button>
+                            
+                        }/>
+                        <ModalComponent isModalVisible={ this.state.visible || false } confirmTitle="选择客户" handleOk={ this.closeModal} handleCancel={ this.closeModal }/>
+                    </>
             }, {
                 label: '业主联系人',
                 name: 'customerLinkman',
@@ -358,7 +297,7 @@ import ConfirmableButton from '../../components/ConfirmableButton';
             }, {
                 label: '合同签订日期',
                 name: 'signContractTime',
-                initialValue: contract?.signContractTime,
+                initialValue: moment(contract?.signContractTime),
                 rules: [{
                     required: true,
                     message: '请选择合同签订日期'
@@ -376,7 +315,7 @@ import ConfirmableButton from '../../components/ConfirmableButton';
             }, {
                 label: '要求交货日期',
                 name: 'deliveryTime',
-                initialValue: contract?.deliveryTime,
+                initialValue: moment(contract?.deliveryTime),
                 rules: [{
                     required: true,
                     message: '请选择要求交货日期'
@@ -385,8 +324,18 @@ import ConfirmableButton from '../../components/ConfirmableButton';
             }, {
                 label: '评审时间',
                 name: 'reviewTime',
-                initialValue: contract?.reviewTime,
+                initialValue: moment(contract?.reviewTime),
                 children:  <DatePicker showTime format="YYYY-MM-DD HH:mm" />
+            }, {
+                label: '所属国家',
+                name: 'countryCode',
+                initialValue: contract?.regionInfoDTO?.countryCode || 1,
+                children: (
+                    <Select>
+                        <Select.Option value={ 1 }>中国</Select.Option>
+                        <Select.Option value={ 2 }>海外</Select.Option>
+                    </Select>
+                )
             }, {
                 label: '销售员',
                 name: 'salesman',
@@ -410,7 +359,12 @@ import ConfirmableButton from '../../components/ConfirmableButton';
                 label: '所属区域',
                 name: 'regionInfoDTO',
                 initialValue: contract?.regionInfoDTO,
-                children: <Input />
+                children: (
+                    <Cascader
+                        defaultValue={['zhejiang', 'hangzhou', 'xihu']}
+                        options={this.getregionInfo()}
+                    />
+                )
             }, {
                 label: '合同总价',
                 name: 'contractAmount',
@@ -489,25 +443,34 @@ import ConfirmableButton from '../../components/ConfirmableButton';
                                 (fields: FormListFieldData[], operation: FormListOperation): React.ReactNode => {
                                     return (
                                         <>
-                                            <Button type="primary" onClick={ () => ( operation.add() ) }>新增</Button>
+                                            <Button type="primary" onClick={ () => ( operation.add() ) } className={ styles.btn }>新增</Button>
+                                            <Row className={ styles.FormHeader }>
+                                                <Col span={ 2 }>期次</Col>
+                                                <Col span={ 5 }>计划回款日期</Col>
+                                                <Col span={ 5 }>计划回款占比(%)</Col>
+                                                <Col span={ 5 }>计划回款金额</Col>
+                                                <Col span={ 5 }>备注</Col>
+                                                <Col span={ 2 }>操作</Col>
+                                            </Row>
                                             {
                                                 fields.map<React.ReactNode>((field: FormListFieldData, index: number): React.ReactNode => (
-                                                    <Row key={ `${ field.name }_${ index }` }>
+                                                    <Row key={ `${ field.name }_${ index }` } className={ styles.FormItem }>
                                                         <Col span={ 2 }>{ index + 1 }</Col>
                                                         <Col span={ 5 }>
+                                                            
                                                             <Form.Item { ...field } name={[field.name, 'returnedTime']} fieldKey={[field.fieldKey, 'returnedTime']}>
                                                                 <DatePicker format="YYYY-MM-DD"/>
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={ 5 }>
-                                                            <Form.Item { ...field } name={[field.name, 'returnedRate']} fieldKey={[field.fieldKey, 'returnedRate']}>
+                                                            <Form.Item { ...field } name={['paymentPlanDtos', 'returnedRate']} fieldKey={[field.fieldKey, 'returnedRate']}>
                                                                 <Input/>
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={ 5 }>
                                                             <Form.Item { ...field } name={[field.name, 'returnedAmount']} fieldKey={[field.fieldKey, 'returnedAmount']}>
                                                                 <InputNumber stringMode={ false } precision={ 2 }
-                                                                    formatter={ value => `$ ${ value }`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
+                                                                    formatter={ value => `￥ ${ value }`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
                                                                     parser={ value => value?.replace(/\$\s?|(,*)/g, '') || '' }/>
                                                             </Form.Item>
                                                         </Col>
@@ -531,11 +494,6 @@ import ConfirmableButton from '../../components/ConfirmableButton';
                                 }
                             }
                         </Form.List>
-                        {/* <Table columns={ this.getpaymentPlanColumns() } bordered={ true }
-                            dataSource={ paymentPlanDtos }
-                            pagination={ false }
-                            rowKey='index'
-                        /> */}
                     </>
                 );
             }
@@ -544,18 +502,102 @@ import ConfirmableButton from '../../components/ConfirmableButton';
             render: (): React.ReactNode => {
                 return (
                     <>
-                        <Space size="small" style={{ float: 'right' }}>
-                            <Button type="primary" onClick={ this.attachHandleAdd }>添加</Button>
-                            <Button type="primary">下载</Button>
-                            <Button type="primary">删除</Button>
-                        </Space>
-                        <Table
-                            rowSelection={{
-                                type: 'checkbox'
-                            }} 
-                            columns={ this.getAttachmentColumns() }
-                            dataSource={contract?.attachVO}
-                       />
+                        <Row className={ styles.attachHeader }>
+                            <Col span={ 1 }></Col>
+                            <Col span={ 6 }>附件名称</Col>
+                            <Col span={ 2 }>文件大小</Col>
+                            <Col span={ 4 }>上传时间</Col>
+                            <Col span={ 4 }>上传人员</Col>
+                            <Col span={ 4 }>备注</Col>
+                            <Col span={ 3 }>操作</Col>
+                        </Row>
+                        <Form.List name="attachDTO">
+                            {
+                                (fields: FormListFieldData[], operation: FormListOperation): React.ReactNode => {
+                                    return (
+                                        <>
+                                            <Space size="small" className={ styles.attachBtn }>
+                                                <Upload  action='/tower-system/attach' onChange={ (info)=>{
+                                                    console.log(info)
+                                                    if (info.file.status !== 'uploading') {
+                                                        // console.log(info.file, info.fileList);
+                                                      }
+                                                      if (info.file.status === 'done') {
+                                                        console.log(info.file, info.fileList);
+                                                        operation.add({
+                                                            name: info.file.name,
+                                                            username: 'admin',
+                                                            fileSize: info.file.size,
+                                                            description: ''
+                                                        })
+                                                      } else if (info.file.status === 'error') {
+                                                        console.log(info.file, info.fileList);
+                                                        operation.add({
+                                                            name: info.file.name,
+                                                            username: 'admin',
+                                                            fileSize: info.file.size,
+                                                            description: ''
+                                                        })
+                                                      }
+                                                } } showUploadList= {false}>
+                                                    <Button type="primary">添加</Button>
+                                                </Upload>
+                                                <Button type="primary">下载</Button>
+                                                <Button type="primary" onClick={ ()=> {
+                                                    console.log(fields)
+                                                    // operation.remove(fields)
+                                                } }>删除</Button>
+                                            </Space>
+                                            {
+                                                fields.map<React.ReactNode>((field: FormListFieldData, index: number): React.ReactNode => (
+                                                    <Row key={ `${ field.name }_${ index }` } className={ styles.FormItem }>
+                                                        <Col span={ 1 }>
+                                                            <Checkbox value={ field.fieldKey } onChange={ this.checkChange }></Checkbox>
+                                                        </Col>
+                                                        <Col span={ 6 }>
+                                                            <Form.Item { ...field } name={[field.name, 'name']} fieldKey={[field.fieldKey, 'returnedTime']}>
+                                                                <Input disabled  className={ styles.Input }/>
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={ 2 }>
+                                                            <Form.Item { ...field } name={[field.name, 'fileSize']} fieldKey={[field.fieldKey, 'returnedRate']}>
+                                                                <Input disabled  className={ styles.Input }/>
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={ 4 }>
+                                                            <Form.Item { ...field } name={[field.name, 'username']} fieldKey={[field.fieldKey, 'returnedAmount']}>
+                                                                <Input disabled  className={ styles.Input }/>
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={ 4 }>
+                                                            <Form.Item { ...field } name={[field.name, 'username']} fieldKey={[field.fieldKey, 'returnedAmount']}>
+                                                                <Input disabled  className={ styles.Input }/>
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={ 4 }>
+                                                            <Form.Item { ...field } name={[field.name, 'description']} fieldKey={[field.fieldKey, 'description']}>
+                                                                <Input.TextArea rows={ 5 } maxLength={ 300 }/>
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={ 3 }>
+                                                            <Space direction="horizontal" size="small">
+                                                                <Link to={ `` }>预览</Link>
+                                                                <Link to={ `` }>下载</Link>
+                                                                <ConfirmableButton confirmTitle="要删除该附件吗？"
+                                                                    type="link" placement="topRight"
+                                                                    onConfirm={ () => { operation.remove(index); } }>
+                                                                    <DeleteOutlined />
+                                                                </ConfirmableButton>
+                                                            </Space>
+                                                        </Col>
+                                                    </Row>
+                                                ))
+                                            }
+                                        </>
+                                    );
+                                }
+                            }
+                        </Form.List>
                     </>
                 )
             }
