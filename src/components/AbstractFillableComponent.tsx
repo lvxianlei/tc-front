@@ -96,11 +96,20 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      * @description Determines whether submit and continue on
      */
     protected onSubmitAndContinue(): void {
-        if (this.form.current) {
-            this.onSubmit(this.form.current.getFieldsValue()).then(() => {
-                this.form.current?.resetFields();
+        if (this.getForm()) {
+            this.onSubmit(this.getForm()?.getFieldsValue()).then(() => {
+                this.getForm()?.resetFields();
             });
         }
+    }
+
+    /**
+     * @protected
+     * @description Gets form
+     * @returns form 
+     */
+    protected getForm(): FormInstance | null {
+        return this.form?.current;
     }
 
     /**
@@ -162,8 +171,8 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
                                                         <Row gutter={ 24 }>
                                                         {
                                                             group.itemProps.map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
-                                                                <Col span={ group.itemCol?.span }>
-                                                                    <Form.Item key={ `${ props.name }_${ index }` } { ...props }/>
+                                                                <Col span={ group.itemCol?.span } key={ `${ props.name }_${ index }` }>
+                                                                    <Form.Item { ...props }/>
                                                                 </Col>
                                                             ))
                                                         }

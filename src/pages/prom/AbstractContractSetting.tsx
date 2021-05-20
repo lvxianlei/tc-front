@@ -17,7 +17,7 @@ import AbstractFillableComponent, {
 } from '../../components/AbstractFillableComponent';
 import ConfirmableButton from '../../components/ConfirmableButton';
 import styles from './AbstractContractSetting.module.less';
-import ModalComponent from '../../components/ModalComponent'
+// import ModalComponent from '../../components/ModalComponent';
  
  export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
      visible: boolean | undefined;
@@ -273,7 +273,7 @@ import ModalComponent from '../../components/ModalComponent'
                             </Button>
                             
                         }/>
-                        <ModalComponent isModalVisible={ this.state.visible || false } confirmTitle="选择客户" handleOk={ this.closeModal} handleCancel={ this.closeModal }/>
+                        {/* <ModalComponent isModalVisible={ this.state.visible || false } confirmTitle="选择客户" handleOk={ this.closeModal} handleCancel={ this.closeModal }/> */}
                     </>
             }, {
                 label: '业主联系人',
@@ -361,7 +361,7 @@ import ModalComponent from '../../components/ModalComponent'
                 initialValue: contract?.regionInfoDTO,
                 children: (
                     <Cascader
-                        defaultValue={['zhejiang', 'hangzhou', 'xihu']}
+                        // defaultValue={['zhejiang', 'hangzhou', 'xihu']}
                         options={this.getregionInfo()}
                     />
                 )
@@ -438,7 +438,7 @@ import ModalComponent from '../../components/ModalComponent'
                                 <Radio value={ 2 }>按金额</Radio>
                             </Radio.Group>
                         </Form.Item>
-                        <Form.List name="paymentPlanDtos">
+                        <Form.List name="paymentPlanDtos" initialValue={ contract?.paymentPlanDtos || [] }>
                             {
                                 (fields: FormListFieldData[], operation: FormListOperation): React.ReactNode => {
                                     return (
