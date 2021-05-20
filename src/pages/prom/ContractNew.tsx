@@ -28,7 +28,7 @@
         values.signContractTime = moment(values.signContractTime).format('YYYY-MM-DD');
         values.deliveryTime = moment(values.deliveryTime).format('YYYY-MM-DD');
         values.reviewTime = moment(values.reviewTime).format('YYYY-MM-DD HH:mm');
-        values.paymentPlanDtos?.map((plan: IPaymentPlanDto, index: number): IPaymentPlanDto => {
+        values.paymentPlanDtos = values.paymentPlanDtos?.map((plan: IPaymentPlanDto, index: number): IPaymentPlanDto => {
             return {
                 ...plan,
                 returnedTime: moment(plan.returnedTime).format('YYYY-MM-DD'),
