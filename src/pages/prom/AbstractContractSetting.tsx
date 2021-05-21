@@ -2,8 +2,8 @@
  * @author zyc
  * @copyright © 2021 
  */
-import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Radio, Row, Select, Space, Upload, Checkbox, Cascader, Modal } from 'antd';
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Radio, Row, Select, Space, Upload, Checkbox, Cascader, TablePaginationConfig, TableColumnType, FormItemProps } from 'antd';
 import { FormListFieldData, FormListOperation } from 'antd/lib/form/FormList';
 import moment from 'moment';
 import React from 'react';
@@ -17,13 +17,25 @@ import AbstractFillableComponent, {
 } from '../../components/AbstractFillableComponent';
 import ConfirmableButton from '../../components/ConfirmableButton';
 import styles from './AbstractContractSetting.module.less';
-// import ModalComponent from '../../components/ModalComponent';
+import ModalComponent from '../../components/ModalComponent';
+import RequestUtil from '../../utils/RequestUtil';
+import { CascaderOptionType } from 'antd/lib/cascader';
+
+const { Option } = Select;
  
  export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
+     tablePagination: TablePaginationConfig;
      visible: boolean | undefined;
      readonly contract?: IContract;
+     checkList: any;
+     tableDataSource: [];
+     regionInfoData: [] ;
+     childData: [] | undefined;
+     col:  [],
+     selectedRowKeys: React.Key[] | any,
+     selectedRows: object[] | any,
+     name: string
  }
- 
 
  export interface ITabItem {
     readonly label: string;
@@ -52,11 +64,12 @@ import styles from './AbstractContractSetting.module.less';
      readonly description?: string;
      readonly productInfoDto?: IproductInfoDto;
      readonly planType?: number;
-     readonly paymentPlanDtos?: IPaymentPlanDto[];
+    paymentPlanDtos?: IPaymentPlanDto[];
      readonly attachDTO?: IattachDTO[];
  }
 
  export interface IcustomerInfoDto {
+    readonly customerId?: number;
     readonly customerCompany?: string;
     readonly customerLinkman?: string;
     readonly customerPhone?: string;
@@ -69,7 +82,7 @@ import styles from './AbstractContractSetting.module.less';
 
  export interface IPaymentPlanDto {
     readonly index?: number;
-    readonly returnedTime?: string;
+    readonly returnedTime?: any;
     readonly returnedRate?: number;
     readonly returnedAmount?: number;
     readonly description?: string;
@@ -89,13 +102,15 @@ import styles from './AbstractContractSetting.module.less';
     readonly districtCode?: string;
  }
 
- export interface DataType {
-    key: React.Key;
-    name: string;
-    age: number;
-    address: string;
-  }
+export interface IResponseData {
+    total: number | undefined;
+    size: number | undefined;
+    current: number | undefined;
+    readonly parentCode: string;
+    records: [];
+ }
 
+ export interface DataType{}
  /**
   * Abstract Contract Setting
   */
@@ -103,13 +118,30 @@ import styles from './AbstractContractSetting.module.less';
  
     public state: S = {
         contract: undefined,
-        visible: false
+        visible: false,
+        checkList: [],
+        tableDataSource: [],
+        tablePagination: {
+            current: 1,
+            pageSize: 10,
+            total: 0,
+            showSizeChanger: false
+        },
+        regionInfoData: [],
+        childData: [],
+        col: [],
+        selectedRowKeys: [],
+        selectedRows: [],
+        name: ""
     } as S;
 
     constructor(props: P) {
         super(props)
-        this.showModal = this.showModal.bind(this)
-        this.closeModal = this.closeModal.bind(this)
+    }
+
+    public async componentDidMount() {
+        super.componentDidMount();
+        this.getregionInfo({}); 
     }
 
     /**
@@ -139,13 +171,6 @@ import styles from './AbstractContractSetting.module.less';
         };
     }
 
-
-//  public onChange = (selectedRowKeys: React.Key[], selectedRows: DataType[]): void => {
-//     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-//   }
-
-
-
     protected getGeneratNum(): string { 
         var result: number = Math.floor( Math.random() * 1000 );
         let num: string = '';
@@ -158,44 +183,203 @@ import styles from './AbstractContractSetting.module.less';
         }
         return moment().format('YYYYMMDD') + num;
     }
+     /**
+     * @override
+     * @description 附件表格选择
+     * @returns 
+     */
 
-    public checkChange(record: Record<string, any>): void {
-        console.log(record)
-    }
-
-    public getregionInfo(): any {
-        return  [
-            {
-                value: 'zhejiang',
-                label: 'Zhejiang',
-                children: [
-                {
-                    value: 'hangzhou',
-                    label: 'Hangzhou',
-                    children: [
-                    {
-                        value: 'xihu',
-                        label: 'West Lake',
-                    },
-                    ],
-                },
-                ],
-            }
-        ]
-    }
-
-    public showModal(): void {
+    public checkChange = (record: Record<string, any>): void => {
+        let checked: any = this.state.checkList;
+        if(record.target.checked) {
+            checked.push(record.target.value)
+        } else {
+            checked = checked.filter((item: any) => item !== record.target.value);
+        }
         this.setState({
-            visible: true
+            checkList: checked
         })
     }
 
-    public closeModal(): void {
+    public  getregionInfo = async (record: Record<string, any>) => {
+            const resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-system/region`);
+            this.setState({
+                regionInfoData:  resData.records
+            })
+    }
+    
+    public onRegionInfoChange =  async (record: Record<string, any>,selectedOptions?: CascaderOptionType[] | any) => {
+         if(selectedOptions.length < 3 ) {
+            let parentCode = record[selectedOptions.length - 1];
+            const resData: [] = await RequestUtil.get(`/tower-system/region/${ parentCode }`);
+            const targetOption = selectedOptions[selectedOptions.length - 1];
+            targetOption.children = resData;
+         }
+    }
+
+    /**
+     * @override
+     * @description 弹窗
+     * @returns 
+     */
+    public showModal = (record: Record<string, any>): void => {
+        this.setState({
+            visible: true,
+            name: record.tip
+        })
+        this.getTable({})
+    }
+
+    public closeModal = (): void => {
         this.setState({
             visible: false
         })
     }
 
+    public okModal = ():void => {
+        const tip: string = this.state.name;
+        const contract: IContract | undefined = this.state.contract;
+        const selectValue = this.state.selectedRows;
+        if(tip == "customerCompany") {
+            if(selectValue.length > 0 ) {
+                const select = {
+                    customerId: selectValue[0].id,
+                    customerCompany: selectValue[0].name,
+                    customerLinkman: selectValue[0].linkman,
+                    customerPhone: selectValue[0].phone
+                }
+                this.setState({
+                    visible: false,
+                    contract: {
+                        ...(contract || {}),
+                        customerInfoDto: select,
+                        signCustomerName: selectValue[0].name
+                    }
+                })
+                this.getForm()?.setFieldsValue(select)
+                this.getForm()?.setFieldsValue({ signCustomerName: selectValue[0].name })
+            }
+        } else {
+            if(selectValue.length > 0 ) {
+                this.setState({
+                    visible: false,
+                    contract: {
+                        ...(contract || {}),
+                        signCustomerName: selectValue[0].name
+                    }
+                })
+                this.getForm()?.setFieldsValue({ signCustomerName: selectValue[0].name })
+            }
+        }
+        
+    }
+
+    public oksignCustomerModal = (): void => {
+        const contract: IContract | undefined = this.state.contract;
+        const selectValue = this.state.selectedRows;
+        this.setState({
+            visible: false,
+            contract: {
+                ...(contract || {}),
+                signCustomerName: selectValue[0].name
+            }
+        })
+        this.getForm()?.setFieldsValue({ signCustomerName: selectValue[0].name })
+    }
+
+    protected async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-customer/customer/page', {
+            ...filterValues,
+            current: pagination.current || this.state.tablePagination.current,
+            size: pagination.pageSize ||this.state.tablePagination.pageSize
+        });
+        this.setState({
+           ...filterValues,
+           tableDataSource: resData.records,
+           tablePagination: {
+               ...this.state.tablePagination,
+               current: resData.current,
+               pageSize: resData.size,
+               total: resData.total
+           }
+        });
+    }
+
+    public getFilterFormItemProps(): FormItemProps[]  {
+        return [{
+                name: 'type',
+                children: 
+                <Select defaultValue="0">
+                    <Option value="0" >国内</Option>
+                    <Option value="1">国际</Option>
+                </Select>
+            },{
+                name: 'name',
+                children: <Input placeholder="客户名字关键字"/>
+            }];
+    }
+
+    public onFilterSubmit = async (values: Record<string, any>) => {
+        this.getTable(values);
+    }
+
+    public getTableDataSource(): object[]  {
+        return this.state.tableDataSource;
+    }
+
+    protected renderModal (): React.ReactNode {
+        return (
+            <ModalComponent 
+                isModalVisible={ this.state.visible || false } 
+                confirmTitle="选择客户" 
+                handleOk={ this.okModal} 
+                handleCancel={ this.closeModal } 
+                columns={this.getTableColumns()} 
+                dataSource={this.getTableDataSource()} 
+                pagination={this.state.tablePagination}
+                onTableChange={this.onTableChange}
+                onSelectChange={this.onSelectChange}
+                selectedRowKeys={this.state.selectedRowKeys}
+                getFilterFormItemProps={this.getFilterFormItemProps()}
+                onFilterSubmit={this.onFilterSubmit}
+                name={this.state.name}
+            />
+        );
+    }
+
+    public getTableColumns(): TableColumnType<object>[] {
+        return [{
+            key: 'type',
+            title: '客户类型',
+            dataIndex: 'type',
+            render: (type: number): React.ReactNode => {
+                return  type === 1 ? '国内客户' : '国际客户';
+            }
+        }, {
+            key: 'name',
+            title: '客户名称',
+            dataIndex: 'name'
+        }, {
+            key: 'linkman',
+            title: '首要联系人',
+            dataIndex: 'linkman'
+        }, {
+            key: 'phone',
+            title: '联系电话',
+            dataIndex: 'phone'
+        }];
+    }
+
+    public onTableChange = (pagination: TablePaginationConfig): void => {
+        this.getTable(pagination);
+    }
+
+    public onSelectChange = (selectedRowKeys: React.Key[],selectedRows: DataType[]) => {
+        this.setState({ 
+            selectedRowKeys,
+            selectedRows
+         });
+    }
     /**
      * @implements
      * @description Gets form item groups
@@ -267,13 +451,12 @@ import styles from './AbstractContractSetting.module.less';
                 }],
                 children: 
                     <>
-                        <Input suffix={
-                           <Button type="primary" onClick={this.showModal}>
-                                Open Modal
-                            </Button>
-                            
+                        <Input value={ contract?.customerInfoDto?.customerCompany } suffix={
+                           <Button type="text" target="customerCompany" onClick={ () => this.showModal({tip: "customerCompany"}) }>
+                                <PlusOutlined />
+                           </Button>
                         }/>
-                        {/* <ModalComponent isModalVisible={ this.state.visible || false } confirmTitle="选择客户" handleOk={ this.closeModal} handleCancel={ this.closeModal }/> */}
+                        { this.renderModal() }
                     </>
             }, {
                 label: '业主联系人',
@@ -284,7 +467,7 @@ import styles from './AbstractContractSetting.module.less';
                 label: '业主联系电话',
                 name: 'customerPhone',
                 initialValue: contract?.customerInfoDto?.customerPhone,
-                children: <Input/>
+                children: <Input />
             }, {
                 label: '合同签订单位',
                 name: 'signCustomerName',
@@ -293,7 +476,15 @@ import styles from './AbstractContractSetting.module.less';
                     required: true,
                     message: '请选择合同签订单位'
                 }],
-                children: <Input/>
+                children:
+                    <>
+                        <Input value={ contract?.signCustomerName } suffix={
+                           <Button type="text" target="customerCompany"  onClick={() => this.showModal({tip: "signCustomerName"})}>
+                                <PlusOutlined />
+                           </Button>
+                        }/>
+                        { this.renderModal() }
+                    </>
             }, {
                 label: '合同签订日期',
                 name: 'signContractTime',
@@ -361,8 +552,11 @@ import styles from './AbstractContractSetting.module.less';
                 initialValue: contract?.regionInfoDTO,
                 children: (
                     <Cascader
-                        // defaultValue={['zhejiang', 'hangzhou', 'xihu']}
-                        options={this.getregionInfo()}
+                        defaultValue={['北京市', '北京市', '丰台区']}
+                        fieldNames={{ label: 'name', value: 'code' }}
+                        options={this.state.regionInfoData}
+                        onChange={this.onRegionInfoChange}
+                        changeOnSelect
                     />
                 )
             }, {
@@ -463,7 +657,7 @@ import styles from './AbstractContractSetting.module.less';
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={ 5 }>
-                                                            <Form.Item { ...field } name={['paymentPlanDtos', 'returnedRate']} fieldKey={[field.fieldKey, 'returnedRate']}>
+                                                            <Form.Item { ...field } name={[field.name, 'returnedRate']} fieldKey={[field.fieldKey, 'returnedRate']}>
                                                                 <Input/>
                                                             </Form.Item>
                                                         </Col>
@@ -524,12 +718,6 @@ import styles from './AbstractContractSetting.module.less';
                                                       }
                                                       if (info.file.status === 'done') {
                                                         console.log(info.file, info.fileList);
-                                                        operation.add({
-                                                            name: info.file.name,
-                                                            username: 'admin',
-                                                            fileSize: info.file.size,
-                                                            description: ''
-                                                        })
                                                       } else if (info.file.status === 'error') {
                                                         console.log(info.file, info.fileList);
                                                         operation.add({
@@ -542,17 +730,30 @@ import styles from './AbstractContractSetting.module.less';
                                                 } } showUploadList= {false}>
                                                     <Button type="primary">添加</Button>
                                                 </Upload>
-                                                <Button type="primary">下载</Button>
                                                 <Button type="primary" onClick={ ()=> {
-                                                    console.log(fields)
-                                                    // operation.remove(fields)
+                                                    let attachDTO =  this.getForm()?.getFieldValue("attachDTO");
+                                                    let checked = this.state.checkList;
+                                                    let batchId: any[] = [];
+                                                    checked.map((item: any) => {
+                                                        batchId.push(attachDTO[item].id)
+                                                    })
+                                                    console.log(batchId)
+                                                } }>下载</Button>
+                                                <Button type="primary" onClick={ ()=> {
+                                                    let attachDTO =  this.getForm()?.getFieldValue("attachDTO");
+                                                    let checked = this.state.checkList;
+                                                    let batchId: any[] = [];
+                                                    checked.map((item: any) => {
+                                                        batchId.push(attachDTO[item].id)
+                                                    })
+                                                    operation.remove(this.state.checkList)
                                                 } }>删除</Button>
                                             </Space>
                                             {
                                                 fields.map<React.ReactNode>((field: FormListFieldData, index: number): React.ReactNode => (
                                                     <Row key={ `${ field.name }_${ index }` } className={ styles.FormItem }>
                                                         <Col span={ 1 }>
-                                                            <Checkbox value={ field.fieldKey } onChange={ this.checkChange }></Checkbox>
+                                                            <Checkbox value={ index } onChange={ this.checkChange }></Checkbox>
                                                         </Col>
                                                         <Col span={ 6 }>
                                                             <Form.Item { ...field } name={[field.name, 'name']} fieldKey={[field.fieldKey, 'returnedTime']}>
@@ -585,7 +786,11 @@ import styles from './AbstractContractSetting.module.less';
                                                                 <Link to={ `` }>下载</Link>
                                                                 <ConfirmableButton confirmTitle="要删除该附件吗？"
                                                                     type="link" placement="topRight"
-                                                                    onConfirm={ () => { operation.remove(index); } }>
+                                                                    onConfirm={ () => { 
+                                                                        let attachDTO =  this.getForm()?.getFieldValue("attachDTO");
+                                                                        // operation.remove(index); 
+                                                                        console.log(attachDTO[index].id)
+                                                                    }}>
                                                                     <DeleteOutlined />
                                                                 </ConfirmableButton>
                                                             </Space>
@@ -604,3 +809,4 @@ import styles from './AbstractContractSetting.module.less';
         }];
     }
  }
+

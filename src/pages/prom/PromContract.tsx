@@ -5,6 +5,7 @@
  import { Link } from 'react-router-dom';
 
  import AbstractMngtComponent, { IAbstractMngtComponentState, ITabItem } from '../../components/AbstractMngtComponent';
+import ConfirmableButton from '../../components/ConfirmableButton';
  import RequestUtil from '../../utils/RequestUtil';
  
  const { Option } = Select;
@@ -30,6 +31,7 @@
  }
  
  interface IResponseData {
+    readonly id: number;
     readonly size: number;
     readonly current: number;
     readonly total: number;
@@ -167,7 +169,11 @@
              render: (_: undefined, record: object): React.ReactNode => (
                  <Space direction="horizontal" size="small">
                      <Link to={ `/prom/contract/setting/${ (record as ITableDataItem).id }` }>编辑</Link>
-                     <Link to="">删除</Link>
+                     <ConfirmableButton confirmTitle="要删除该客户吗？" type="link" placement="topRight" onConfirm={ async () => {
+                         let id = (record as ITableDataItem).id;
+                         const resData:IResponseData = await RequestUtil.delete('/contract', {id: id})
+                         console.log(resData)
+                     } }>删除</ConfirmableButton>
                      <Link to="">添加汇款记录</Link>
                  </Space>
              )
@@ -256,10 +262,10 @@
             name: 'winBidType',
             children: 
             <Select defaultValue="0">
-            <Option value="0" >全部中标类型</Option>
-            <Option value="1">国家电网</Option>
-            <Option value="2">南方电网</Option>
-        </Select>
+                <Option value="0" >全部中标类型</Option>
+                <Option value="1">国家电网</Option>
+                <Option value="2">南方电网</Option>
+            </Select>
         }];
      }
  }

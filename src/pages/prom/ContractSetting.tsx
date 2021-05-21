@@ -2,14 +2,14 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { FormProps } from 'antd';
 import React from 'react';
  import { WithTranslation, withTranslation } from 'react-i18next';
  import { RouteComponentProps, withRouter } from 'react-router';
  import { IFormItemGroup } from '../../components/AbstractFillableComponent';
  
  import RequestUtil from '../../utils/RequestUtil';
- import AbstractContractSetting, { IAbstractContractSettingState, IContract } from './AbstractContractSetting';
+ import AbstractContractSetting, { IAbstractContractSettingState, IContract, IPaymentPlanDto } from './AbstractContractSetting';
+ import moment from 'moment'
  
  export interface IContractSettingProps {
      readonly id: string;
@@ -31,8 +31,16 @@ import React from 'react';
         this.setState({
             contract: contract
         });
+        contract.paymentPlanDtos = contract.paymentPlanDtos?.map((plan: IPaymentPlanDto, index: number): IPaymentPlanDto => {
+            return {
+                ...plan,
+                returnedTime: moment(plan.returnedTime),
+                index: index + 1
+            };
+        });
         this.getForm()?.setFieldsValue({
-            paymentPlanDtos: contract.paymentPlanDtos
+            paymentPlanDtos: contract?.paymentPlanDtos,
+            attachDTO: contract?.attachDTO
         });
     }
  

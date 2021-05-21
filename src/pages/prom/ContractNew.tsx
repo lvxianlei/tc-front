@@ -35,9 +35,8 @@
                 index: index + 1
             };
         });
-         console.log(values )
-         return Promise.resolve();
-        //  return await RequestUtil.post('/tower-market/contract', values);
+        //  return Promise.resolve();
+         return await RequestUtil.post('/tower-market/contract', values);
      }
  }
  
