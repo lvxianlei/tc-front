@@ -33,5 +33,10 @@
         "path": "/prom/contract/setting/:id",
         "module": "./pages/prom/ContractSetting",
         "exact": true
+    }, { // 新增回款计划
+        "name": "新增回款计划",
+        "path": "/prom/contract/paymentRecord",
+        "module": "./pages/prom/PaymentRecordNew",
+        "exact": true
     }]
 }

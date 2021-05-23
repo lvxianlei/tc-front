@@ -119,20 +119,12 @@ export interface IResponseData {
     public state: S = {
         contract: undefined,
         visible: false,
-        checkList: [],
-        tableDataSource: [],
         tablePagination: {
             current: 1,
             pageSize: 10,
             total: 0,
             showSizeChanger: false
-        },
-        regionInfoData: [],
-        childData: [],
-        col: [],
-        selectedRowKeys: [],
-        selectedRows: [],
-        name: ""
+        }
     } as S;
 
     constructor(props: P) {
@@ -272,19 +264,6 @@ export interface IResponseData {
             }
         }
         
-    }
-
-    public oksignCustomerModal = (): void => {
-        const contract: IContract | undefined = this.state.contract;
-        const selectValue = this.state.selectedRows;
-        this.setState({
-            visible: false,
-            contract: {
-                ...(contract || {}),
-                signCustomerName: selectValue[0].name
-            }
-        })
-        this.getForm()?.setFieldsValue({ signCustomerName: selectValue[0].name })
     }
 
     protected async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {

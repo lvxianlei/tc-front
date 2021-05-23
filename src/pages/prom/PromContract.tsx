@@ -30,7 +30,7 @@ import ConfirmableButton from '../../components/ConfirmableButton';
      readonly deliveryTime: string;
  }
  
- interface IResponseData {
+ export interface IResponseData {
     readonly id: number;
     readonly size: number;
     readonly current: number;
@@ -174,7 +174,7 @@ import ConfirmableButton from '../../components/ConfirmableButton';
                          const resData:IResponseData = await RequestUtil.delete('/contract', {id: id})
                          console.log(resData)
                      } }>删除</ConfirmableButton>
-                     <Link to="">添加汇款记录</Link>
+                     <Link to={ `/prom/contract/paymentRecord` }>添加回款记录</Link>
                  </Space>
              )
          }];
