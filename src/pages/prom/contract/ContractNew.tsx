@@ -25,16 +25,16 @@ class ContractNew extends AbstractContractSetting<IContractNewRouteProps, IContr
      * @returns submit 
      */
     public async onSubmit(values: Record<string, any>): Promise<void> {
-    values.signContractTime = moment(values.signContractTime).format('YYYY-MM-DD');
-    values.deliveryTime = moment(values.deliveryTime).format('YYYY-MM-DD');
-    values.reviewTime = moment(values.reviewTime).format('YYYY-MM-DD HH:mm');
-    values.paymentPlanDtos = values.paymentPlanDtos?.map((plan: IPaymentPlanDto, index: number): IPaymentPlanDto => {
-        return {
-            ...plan,
-            returnedTime: moment(plan.returnedTime).format('YYYY-MM-DD'),
-            index: index + 1
-        };
-    });
+        values.signContractTime = moment(values.signContractTime).format('YYYY-MM-DD');
+        values.deliveryTime = moment(values.deliveryTime).format('YYYY-MM-DD');
+        values.reviewTime = moment(values.reviewTime).format('YYYY-MM-DD HH:mm');
+        values.paymentPlanDtos = values.paymentPlanDtos?.map((plan: IPaymentPlanDto, index: number): IPaymentPlanDto => {
+            return {
+                ...plan,
+                returnedTime: moment(plan.returnedTime).format('YYYY-MM-DD'),
+                index: index + 1
+            };
+        });
     //  return Promise.resolve();
         return await RequestUtil.post('/tower-market/contract', values);
     }

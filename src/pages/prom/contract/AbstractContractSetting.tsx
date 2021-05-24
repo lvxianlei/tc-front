@@ -142,8 +142,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
      * @returns return path 
      */
     protected getReturnPath(): string {
-        // return '/prom/contract';
-        return '';
+        return '/prom/contract';
     }
 
     /**
@@ -421,175 +420,175 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                         </Select>
                     )
                 }, {
-                label: '业主单位',
-                name: 'customerCompany',
-                initialValue: contract?.customerInfoDto?.customerCompany,
-                rules: [{
-                    required: true,
-                    message: '请选择业主单位'
-                }],
-                children: 
-                    <>
-                        <Input value={ contract?.customerInfoDto?.customerCompany } suffix={
-                            <Button type="text" target="customerCompany" onClick={ () => this.showModal({tip: "customerCompany"}) }>
-                                <PlusOutlined />
-                            </Button>
-                        }/>
-                        { this.renderModal() }
-                    </>
-            }, {
-                label: '业主联系人',
-                name: 'customerLinkman',
-                initialValue: contract?.customerInfoDto?.customerLinkman,
-                children: <Input/>
-            }, {
-                label: '业主联系电话',
-                name: 'customerPhone',
-                initialValue: contract?.customerInfoDto?.customerPhone,
-                children: <Input />
-            }, {
-                label: '合同签订单位',
-                name: 'signCustomerName',
-                initialValue: contract?.signCustomerName,
-                rules: [{
-                    required: true,
-                    message: '请选择合同签订单位'
-                }],
-                children:
-                    <>
-                        <Input value={ contract?.signCustomerName } suffix={
-                            <Button type="text" target="customerCompany"  onClick={() => this.showModal({tip: "signCustomerName"})}>
-                                <PlusOutlined />
-                            </Button>
-                        }/>
-                        { this.renderModal() }
-                    </>
-            }, {
-                label: '合同签订日期',
-                name: 'signContractTime',
-                initialValue: moment(contract?.signContractTime),
-                rules: [{
-                    required: true,
-                    message: '请选择合同签订日期'
-                }],
-                children:  <DatePicker />
-            }, {
-                label: '签订人',
-                name: 'signUserName',
-                initialValue: contract?.signUserName,
-                rules: [{
-                    required: true,
-                    message: '请输入签订人'
-                }],
-                children:  <Input />
-            }, {
-                label: '要求交货日期',
-                name: 'deliveryTime',
-                initialValue: moment(contract?.deliveryTime),
-                rules: [{
-                    required: true,
-                    message: '请选择要求交货日期'
-                }],
-                children:  <DatePicker />
-            }, {
-                label: '评审时间',
-                name: 'reviewTime',
-                initialValue: moment(contract?.reviewTime),
-                children:  <DatePicker showTime format="YYYY-MM-DD HH:mm" />
-            }, {
-                label: '所属国家',
-                name: 'countryCode',
-                initialValue: contract?.regionInfoDTO?.countryCode || 1,
-                children: (
-                    <Select>
-                        <Select.Option value={ 1 }>中国</Select.Option>
-                        <Select.Option value={ 2 }>海外</Select.Option>
-                    </Select>
-                )
-            }, {
-                label: '销售员',
-                name: 'salesman',
-                initialValue: contract?.salesman,
-                rules: [{
-                    required: true,
-                    message: '请输入销售员'
-                }],
-                children:  <Input />
-            }, {
-                label: '计价方式',
-                name: 'chargeType',
-                initialValue: contract?.chargeType,
-                children: (
-                    <Select>
-                        <Select.Option value={ 1 }>订单总价、总重计算单价</Select.Option>
-                        <Select.Option value={ 2 }>产品单价、基数计算总价</Select.Option>
-                    </Select>
-                )
-            }, {
-                label: '所属区域',
-                name: 'regionInfoDTO',
-                initialValue: contract?.regionInfoDTO,
-                children: (
-                    <Cascader
-                        defaultValue={['北京市', '北京市', '丰台区']}
-                        fieldNames={{ label: 'name', value: 'code' }}
-                        options={this.state.regionInfoData}
-                        onChange={this.onRegionInfoChange}
-                        changeOnSelect
-                    />
-                )
-            }, {
-                label: '合同总价',
-                name: 'contractAmount',
-                initialValue: contract?.contractAmount,
-                children: <Input prefix="￥" />
-            }, {
-                label: '币种',
-                name: 'currencyType',
-                initialValue: contract?.currencyType,
-                children: (
-                    <Select>
-                        <Select.Option value={ 1 }>RMB人民币</Select.Option>
-                        <Select.Option value={ 2 }>USD美元</Select.Option>
-                    </Select>
-                )
-            }, {
-                label: '备注',
-                    name: 'description',
-                    initialValue: contract?.description,
-                    children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息"/>
-                }]
-            }, {
-                title: '产品信息',
-                itemCol: {
-                    span: 12
-            },
-            itemProps: [ {
-                label: '产品类型',
-                name: 'productType',
-                initialValue: contract?.productInfoDto?.productType,
-                children: (
-                    <Select>
-                        <Select.Option value={ 1 }>角钢塔</Select.Option>
-                        <Select.Option value={ 2 }>管塔</Select.Option>
-                        <Select.Option value={ 3 }>螺栓</Select.Option>
-                    </Select>
-                )
-            }, {
-                label: '电压等级',
-                name: 'voltageGrade',
-                initialValue: contract?.productInfoDto?.voltageGrade,
-                children: (
-                    <>
-                        <Select style={{ width: '90%' }}>
-                            <Select.Option value={ 1 }>220</Select.Option>
-                            <Select.Option value={ 2 }>110</Select.Option>
+                    label: '业主单位',
+                    name: 'customerCompany',
+                    initialValue: contract?.customerInfoDto?.customerCompany,
+                    rules: [{
+                        required: true,
+                        message: '请选择业主单位'
+                    }],
+                    children: 
+                        <>
+                            <Input value={ contract?.customerInfoDto?.customerCompany } suffix={
+                                <Button type="text" target="customerCompany" onClick={ () => this.showModal({tip: "customerCompany"}) }>
+                                    <PlusOutlined />
+                                </Button>
+                            }/>
+                            { this.renderModal() }
+                        </>
+                }, {
+                    label: '业主联系人',
+                    name: 'customerLinkman',
+                    initialValue: contract?.customerInfoDto?.customerLinkman,
+                    children: <Input/>
+                }, {
+                    label: '业主联系电话',
+                    name: 'customerPhone',
+                    initialValue: contract?.customerInfoDto?.customerPhone,
+                    children: <Input />
+                }, {
+                    label: '合同签订单位',
+                    name: 'signCustomerName',
+                    initialValue: contract?.signCustomerName,
+                    rules: [{
+                        required: true,
+                        message: '请选择合同签订单位'
+                    }],
+                    children:
+                        <>
+                            <Input value={ contract?.signCustomerName } suffix={
+                                <Button type="text" target="customerCompany"  onClick={() => this.showModal({tip: "signCustomerName"})}>
+                                    <PlusOutlined />
+                                </Button>
+                            }/>
+                            { this.renderModal() }
+                        </>
+                }, {
+                    label: '合同签订日期',
+                    name: 'signContractTime',
+                    initialValue: moment(contract?.signContractTime),
+                    rules: [{
+                        required: true,
+                        message: '请选择合同签订日期'
+                    }],
+                    children:  <DatePicker />
+                }, {
+                    label: '签订人',
+                    name: 'signUserName',
+                    initialValue: contract?.signUserName,
+                    rules: [{
+                        required: true,
+                        message: '请输入签订人'
+                    }],
+                    children:  <Input />
+                }, {
+                    label: '要求交货日期',
+                    name: 'deliveryTime',
+                    initialValue: moment(contract?.deliveryTime),
+                    rules: [{
+                        required: true,
+                        message: '请选择要求交货日期'
+                    }],
+                    children:  <DatePicker />
+                }, {
+                    label: '评审时间',
+                    name: 'reviewTime',
+                    initialValue: moment(contract?.reviewTime),
+                    children:  <DatePicker showTime format="YYYY-MM-DD HH:mm" />
+                }, {
+                    label: '所属国家',
+                    name: 'countryCode',
+                    initialValue: contract?.regionInfoDTO?.countryCode || 1,
+                    children: (
+                        <Select>
+                            <Select.Option value={ 1 }>中国</Select.Option>
+                            <Select.Option value={ 2 }>海外</Select.Option>
                         </Select>
-                        <span> KV</span>
-                    </>
-                    
-                )
-            }]
+                    )
+                }, {
+                    label: '销售员',
+                    name: 'salesman',
+                    initialValue: contract?.salesman,
+                    rules: [{
+                        required: true,
+                        message: '请输入销售员'
+                    }],
+                    children:  <Input />
+                }, {
+                    label: '计价方式',
+                    name: 'chargeType',
+                    initialValue: contract?.chargeType,
+                    children: (
+                        <Select>
+                            <Select.Option value={ 1 }>订单总价、总重计算单价</Select.Option>
+                            <Select.Option value={ 2 }>产品单价、基数计算总价</Select.Option>
+                        </Select>
+                    )
+                }, {
+                    label: '所属区域',
+                    name: 'regionInfoDTO',
+                    initialValue: contract?.regionInfoDTO,
+                    children: (
+                        <Cascader
+                            defaultValue={['北京市', '北京市', '丰台区']}
+                            fieldNames={{ label: 'name', value: 'code' }}
+                            options={this.state.regionInfoData}
+                            onChange={this.onRegionInfoChange}
+                            changeOnSelect
+                        />
+                    )
+                }, {
+                    label: '合同总价',
+                    name: 'contractAmount',
+                    initialValue: contract?.contractAmount,
+                    children: <Input prefix="￥" />
+                }, {
+                    label: '币种',
+                    name: 'currencyType',
+                    initialValue: contract?.currencyType,
+                    children: (
+                        <Select>
+                            <Select.Option value={ 1 }>RMB人民币</Select.Option>
+                            <Select.Option value={ 2 }>USD美元</Select.Option>
+                        </Select>
+                    )
+                }, {
+                    label: '备注',
+                        name: 'description',
+                        initialValue: contract?.description,
+                        children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息"/>
+                    }]
+                }, {
+                    title: '产品信息',
+                    itemCol: {
+                        span: 12
+                    },
+                    itemProps: [ {
+                        label: '产品类型',
+                        name: 'productType',
+                        initialValue: contract?.productInfoDto?.productType,
+                        children: (
+                            <Select>
+                                <Select.Option value={ 1 }>角钢塔</Select.Option>
+                                <Select.Option value={ 2 }>管塔</Select.Option>
+                                <Select.Option value={ 3 }>螺栓</Select.Option>
+                            </Select>
+                        )
+                    }, {
+                        label: '电压等级',
+                        name: 'voltageGrade',
+                        initialValue: contract?.productInfoDto?.voltageGrade,
+                        children: (
+                            <>
+                                <Select style={{ width: '90%' }}>
+                                    <Select.Option value={ 1 }>220</Select.Option>
+                                    <Select.Option value={ 2 }>110</Select.Option>
+                                </Select>
+                                <span> KV</span>
+                            </>
+                            
+                        )
+                    }]
         }]];
     }
 

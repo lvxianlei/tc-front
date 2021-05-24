@@ -47,5 +47,10 @@
         "path": "/prom/order",
         "module": "./pages/prom/order/SaleOrder",
         "exact": true
+    }, {
+        "name": "新增订单", 
+        "path": "/prom/order/new",
+        "module": "./pages/prom/order/SaleOrderNew",
+        "exact": true
     }]
 }
