@@ -109,15 +109,15 @@ import ConfirmableButton from '../../components/ConfirmableButton';
              key: 'contractNumber',
              title: '合同编号',
              dataIndex: 'contractNumber',
-             render: (contractNumber: number): React.ReactNode => {
-                 return <Link to="">{contractNumber}</Link>
+             render: (_: undefined, record: object): React.ReactNode => {
+                 return <Link to={ `/prom/contract/detail/${ (record as ITableDataItem).id }` }>{ (record as ITableDataItem).contractNumber }</Link>
             }
          }, {
              key: 'internalNumber',
              title: '内部合同编号',
              dataIndex: 'internalNumber',
-             render: (internalNumber: number): React.ReactNode => {
-                return <Link to="">{internalNumber}</Link>
+             render: (_: undefined, record: object): React.ReactNode => {
+                return <Link to={ `/prom/contract/detail/${ (record as ITableDataItem).id }` }>{ (record as ITableDataItem).internalNumber }</Link>
            }
          }, {
              key: 'projectName',
