@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Button, ColProps, Table } from 'antd';
+import { Button, ColProps, Input, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import React from 'react';
 import { withTranslation } from 'react-i18next';
@@ -11,13 +11,25 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import AbstractDetailComponent from '../../components/AbstractDetailComponent';
 import ConfirmableButton from '../../components/ConfirmableButton';
 import { ITabItem } from '../../components/ITabableComponent';
+import RequestUtil from '../../utils/RequestUtil';
 import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../../utils/SummaryRenderUtil';
 
 export interface IContractDetailProps {
     readonly id: string;
 }
 export interface IContractDetailRouteProps extends RouteComponentProps<IContractDetailProps> {}
-export interface IContractDetailState {}
+export interface IContractDetailState {
+    readonly contractDetail: IContractDetail[];
+}
+
+interface IContractDetail {
+    readonly internalNumber: string;
+ }
+
+ interface IResponseData {
+     readonly id: number;
+     readonly records: IContractDetail[];
+ }
 
 /**
  * Contract detail page component.
@@ -25,7 +37,22 @@ export interface IContractDetailState {}
 class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, IContractDetailState> {
 
     protected getTitle(): string {
-        return `${ super.getTitle() }（<合同编号>）`;
+        return `${ super.getTitle() }`;
+    }
+
+    /**
+      * @description Fetchs table data
+      * @param filterValues 
+      */
+     protected async fetchTableData() {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>(`/contract/${ this.props.match.params.id }`);
+        this.setState({
+           contractDetail: resData.records
+        });
+    }
+
+    public async componentWillMount() {
+        this.fetchTableData();
     }
     
     /**
@@ -33,11 +60,11 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
      * @description Gets subinfo col props
      * @returns subinfo col props 
      */
-    public getSubinfoColProps(): ColProps[] {
+    public getSubinfoColProps = (): ColProps[] => {
         return [{
             span: 8,
             children: (
-                <span>内部合同编号：HT001</span>
+                <span>内部合同编号：</span>
             )
         }, {
             span: 8,
