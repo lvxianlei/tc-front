@@ -6,22 +6,18 @@ import { Button, Card, Col, ColProps, Form, FormInstance, FormItemProps, FormPro
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import ApplicationContext from '../configuration/ApplicationContext';
 import layoutStyles from '../layout/Layout.module.less';
+import { IRenderedSection, ISection } from '../utils/SummaryRenderUtil';
 import styles from './AbstractFillableComponent.module.less';
-import AsyncComponent from './AsyncComponent';
+import AbstractTitledRouteComponent from './AbstractTitledRouteComponent';
 
-interface ISection {
-    readonly title: string;
+interface IAuthoritableFormItemProps extends FormItemProps {
+    readonly authority?: string;
 }
 
 export interface IFormItemGroup extends ISection {
-    readonly itemProps: FormItemProps[];
+    readonly itemProps: IAuthoritableFormItemProps[];
     readonly itemCol?: ColProps;
-}
-
-export interface IExtraSection extends ISection {
-    readonly render: () => React.ReactNode;
 }
 
 export interface IAbstractFillableComponentState {}
@@ -29,7 +25,7 @@ export interface IAbstractFillableComponentState {}
 /**
  * Abstract fillable form component.
  */
-export default abstract class AbstractFillableComponent<P extends RouteComponentProps, S extends IAbstractFillableComponentState> extends AsyncComponent<P, S> {
+export default abstract class AbstractFillableComponent<P extends RouteComponentProps, S extends IAbstractFillableComponentState> extends AbstractTitledRouteComponent<P, S> {
     
     private form: React.RefObject<FormInstance> = React.createRef<FormInstance>();
 
@@ -42,15 +38,6 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
         super(props);
         this.onFormFinish = this.onFormFinish.bind(this);
         this.onSubmitAndContinue = this.onSubmitAndContinue.bind(this);
-    }
-
-    /**
-     * @protected
-     * @description Gets title
-     * @returns title 
-     */
-    protected getTitle(): string {
-        return ApplicationContext.getRouterItemByPath(this.props.location.pathname)?.name || '';
     }
 
     /**
@@ -134,7 +121,7 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      * @description Renders extra sections
      * @returns extra sections 
      */
-    protected renderExtraSections(): IExtraSection[] {
+    protected renderExtraSections(): IRenderedSection[] {
         return [];
     }
 
@@ -145,6 +132,44 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      */
     protected renderSaveAndContinue(): React.ReactNode {
         return <Button type="primary" htmlType="button" onClick={ this.onSubmitAndContinue }>保存并继续新增</Button>;
+    }
+
+    /**
+     * @protected
+     * @description Renders form items
+     * @param items 
+     * @param itemIndex 
+     * @returns form items 
+     */
+    protected renderFormItems(items: IFormItemGroup[], itemIndex: number): React.ReactNode {
+        return (
+            <div key={ itemIndex }>
+                {
+                    items.map<React.ReactNode>((group: IFormItemGroup): React.ReactNode => (
+                        <React.Fragment key={ group.title }>
+                            <div className={ styles.title }>{ group.title }</div>
+                            {
+                                group.itemCol
+                                ?
+                                <Row gutter={ 24 }>
+                                {
+                                    group.itemProps.map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
+                                        <Col span={ group.itemCol?.span } key={ `${ props.name }_${ index }` }>
+                                            <Form.Item { ...props }/>
+                                        </Col>
+                                    ))
+                                }
+                                </Row>
+                                :
+                                group.itemProps.map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
+                                    <Form.Item key={ `${ props.name }_${ index }` } { ...props }/>
+                                ))
+                            }
+                        </React.Fragment>
+                    ))
+                }
+            </div>
+        );
     }
 
     /**
@@ -159,38 +184,11 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
                     <Space size="large" direction="vertical" className={ `${ layoutStyles.width100 } ${ styles.space }` }>
                         <Space size="middle" direction="horizontal" className={ `${ layoutStyles.width100 } ${ styles.hspace }` }>
                             {
-                                formItemGroups.map<React.ReactNode>((items: IFormItemGroup[], itemIndex: number): React.ReactNode => (
-                                    <div key={ itemIndex }>
-                                        {
-                                            items.map<React.ReactNode>((group: IFormItemGroup): React.ReactNode => (
-                                                <React.Fragment key={ group.title }>
-                                                    <div className={ styles.title }>{ group.title }</div>
-                                                    {
-                                                        group.itemCol
-                                                        ?
-                                                        <Row gutter={ 24 }>
-                                                        {
-                                                            group.itemProps.map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
-                                                                <Col span={ group.itemCol?.span } key={ `${ props.name }_${ index }` }>
-                                                                    <Form.Item { ...props }/>
-                                                                </Col>
-                                                            ))
-                                                        }
-                                                        </Row>
-                                                        :
-                                                        group.itemProps.map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
-                                                            <Form.Item key={ `${ props.name }_${ index }` } { ...props }/>
-                                                        ))
-                                                    }
-                                                </React.Fragment>
-                                            ))
-                                        }
-                                    </div>
-                                ))
+                                formItemGroups.map<React.ReactNode>((items: IFormItemGroup[], itemIndex: number): React.ReactNode => this.renderFormItems(items, itemIndex))
                             }
                         </Space>
                         {
-                            this.renderExtraSections().map<React.ReactNode>((section: IExtraSection): React.ReactNode => (
+                            this.renderExtraSections().map<React.ReactNode>((section: IRenderedSection): React.ReactNode => (
                                 <React.Fragment key={ section.title }>
                                     <div className={ styles.title }>{ section.title }</div>
                                     { section.render() }

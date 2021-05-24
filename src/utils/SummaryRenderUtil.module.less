@@ -1,0 +1,40 @@
+@import '~antd/es/style/themes/index.less';
+
+.section {
+    margin: @margin-lg;
+}
+
+.title {
+    font-weight: 500;
+    margin-bottom: @margin-lg;
+    font-size: @font-size-base;
+}
+
+.col {
+    padding: @padding-sm @padding-lg;
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: -1px;
+        bottom: -1px;
+        border: @border-width-base @border-style-base @border-color-base;
+    }
+    &.label {
+        text-align: right;
+        background-color: @background-color-base;
+    }
+}
+
+.summariableBar {
+    font-size: @font-size-sm;
+    background-color: @background-color-base;
+    padding: @padding-sm @padding-lg;
+}
+
+.hasExtraOperation {
+    :global(.ant-space-item:last-child) {
+        margin-left: auto;
+    }
+}

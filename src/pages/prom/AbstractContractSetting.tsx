@@ -12,10 +12,10 @@ import { Link } from 'react-router-dom';
 
 import AbstractFillableComponent, {
     IAbstractFillableComponentState,
-    IExtraSection,
     IFormItemGroup,
 } from '../../components/AbstractFillableComponent';
 import ConfirmableButton from '../../components/ConfirmableButton';
+import { IRenderedSection } from '../../utils/SummaryRenderUtil';
 import styles from './AbstractContractSetting.module.less';
 import ModalComponent from '../../components/ModalComponent';
 import RequestUtil from '../../utils/RequestUtil';
@@ -73,34 +73,34 @@ const { Option } = Select;
     readonly customerCompany?: string;
     readonly customerLinkman?: string;
     readonly customerPhone?: string;
- }
+}
 
- export interface IproductInfoDto {
+export interface IproductInfoDto {
     readonly productType?: string;
     readonly voltageGrade?: number;
- }
+}
 
- export interface IPaymentPlanDto {
+export interface IPaymentPlanDto {
     readonly index?: number;
     readonly returnedTime?: any;
     readonly returnedRate?: number;
     readonly returnedAmount?: number;
     readonly description?: string;
- }
+}
 
- export interface IattachDTO {
-     readonly name?: string;
-     readonly username?: string;
-     readonly fileSize?: string;
-     readonly description?: string;
- }
+export interface IattachDTO {
+    readonly name?: string;
+    readonly username?: string;
+    readonly fileSize?: string;
+    readonly description?: string;
+}
 
- export interface IregionInfoDTO {
+export interface IregionInfoDTO {
     readonly countryCode?: string;
     readonly provinceCode?: string;
     readonly cityCode?: string;
     readonly districtCode?: string;
- }
+}
 
 export interface IResponseData {
     total: number | undefined;
@@ -594,11 +594,10 @@ export interface IResponseData {
     }
 
     /**
-     * @override
      * @description Renders extra sections
      * @returns extra sections 
      */
-    public renderExtraSections(): IExtraSection[] {
+    public renderExtraSections(): IRenderedSection[] {
         const contract: IContract | undefined = this.state.contract;
         return [{
             title: '回款计划',

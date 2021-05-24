@@ -37,6 +37,10 @@
         "name": "新增回款计划",
         "path": "/prom/contract/paymentRecord",
         "module": "./pages/prom/PaymentRecordNew",
+    }, { // 合同详情
+        "name": "合同详情",
+        "path": "/prom/contract/detail/:id",
+        "module": "./pages/prom/ContractDetail",
         "exact": true
     }]
 }

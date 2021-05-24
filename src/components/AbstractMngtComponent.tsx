@@ -10,11 +10,7 @@ import React from 'react';
 import layoutStyles from '../layout/Layout.module.less';
 import styles from './AbstractMngtComponent.module.less';
 import AsyncComponent from './AsyncComponent';
-
-export interface ITabItem {
-    readonly label: string;
-    readonly key: string | number;
-}
+import { ITabableComponent, ITabItem } from './ITabableComponent';
 
 export interface IAbstractMngtComponentState {
     selectedTabKey: React.Key;
@@ -24,7 +20,7 @@ export interface IAbstractMngtComponentState {
 /**
  * The abstract management component
  */
-export default abstract class AbstractMngtComponent<P, S extends IAbstractMngtComponentState> extends AsyncComponent<P, S> {
+export default abstract class AbstractMngtComponent<P, S extends IAbstractMngtComponentState> extends AsyncComponent<P, S> implements ITabableComponent {
 
     /**
      * @constructor

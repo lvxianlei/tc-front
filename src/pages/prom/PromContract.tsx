@@ -1,10 +1,11 @@
- import { FormItemProps, Input, Space, TableColumnType, Select, TablePaginationConfig } from 'antd';
- import React from 'react';
- import { WithTranslation, withTranslation } from 'react-i18next';
- import { RouteComponentProps, withRouter } from 'react-router';
- import { Link } from 'react-router-dom';
+import { FormItemProps, Input, Select, Space, TableColumnType, TablePaginationConfig } from 'antd';
+import React from 'react';
+import { WithTranslation, withTranslation } from 'react-i18next';
+import { RouteComponentProps, withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
 
- import AbstractMngtComponent, { IAbstractMngtComponentState, ITabItem } from '../../components/AbstractMngtComponent';
+import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../components/AbstractMngtComponent';
+import { ITabItem } from '../../components/ITabableComponent';
 import ConfirmableButton from '../../components/ConfirmableButton';
  import RequestUtil from '../../utils/RequestUtil';
  
