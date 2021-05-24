@@ -134,6 +134,37 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
         return <Button type="primary" htmlType="button" onClick={ this.onSubmitAndContinue }>保存并继续新增</Button>;
     }
 
+    protected renderFormItems(items: IFormItemGroup[], itemIndex: number): React.ReactNode {
+        return (
+            <div key={ itemIndex }>
+                {
+                    items.map<React.ReactNode>((group: IFormItemGroup): React.ReactNode => (
+                        <React.Fragment key={ group.title }>
+                            <div className={ styles.title }>{ group.title }</div>
+                            {
+                                group.itemCol
+                                ?
+                                <Row gutter={ 24 }>
+                                {
+                                    group.itemProps.map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
+                                        <Col span={ group.itemCol?.span } key={ `${ props.name }_${ index }` }>
+                                            <Form.Item { ...props }/>
+                                        </Col>
+                                    ))
+                                }
+                                </Row>
+                                :
+                                group.itemProps.map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
+                                    <Form.Item key={ `${ props.name }_${ index }` } { ...props }/>
+                                ))
+                            }
+                        </React.Fragment>
+                    ))
+                }
+            </div>
+        );
+    }
+
     /**
      * @description Renders AbstractFillableComponent
      * @returns render 
@@ -146,34 +177,7 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
                     <Space size="large" direction="vertical" className={ `${ layoutStyles.width100 } ${ styles.space }` }>
                         <Space size="middle" direction="horizontal" className={ `${ layoutStyles.width100 } ${ styles.hspace }` }>
                             {
-                                formItemGroups.map<React.ReactNode>((items: IFormItemGroup[], itemIndex: number): React.ReactNode => (
-                                    <div key={ itemIndex }>
-                                        {
-                                            items.map<React.ReactNode>((group: IFormItemGroup): React.ReactNode => (
-                                                <React.Fragment key={ group.title }>
-                                                    <div className={ styles.title }>{ group.title }</div>
-                                                    {
-                                                        group.itemCol
-                                                        ?
-                                                        <Row gutter={ 24 }>
-                                                        {
-                                                            group.itemProps.map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
-                                                                <Col span={ group.itemCol?.span } key={ `${ props.name }_${ index }` }>
-                                                                    <Form.Item { ...props }/>
-                                                                </Col>
-                                                            ))
-                                                        }
-                                                        </Row>
-                                                        :
-                                                        group.itemProps.map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
-                                                            <Form.Item key={ `${ props.name }_${ index }` } { ...props }/>
-                                                        ))
-                                                    }
-                                                </React.Fragment>
-                                            ))
-                                        }
-                                    </div>
-                                ))
+                                formItemGroups.map<React.ReactNode>((items: IFormItemGroup[], itemIndex: number): React.ReactNode => this.renderFormItems(items, itemIndex))
                             }
                         </Space>
                         {
