@@ -18,15 +18,6 @@ import { ITabItem } from './ITabableComponent';
 export default abstract class AbstractDetailComponent<P extends RouteComponentProps, S = {}> extends AbstractTabableComponent<P, S> {
 
     /**
-     * @constructor
-     * Creates an instance of AbstractDetailComponent.
-     * @param props 
-     */
-    constructor(props: P) {
-        super(props);
-    }
-
-    /**
      * @abstract
      * @description Gets subinfo col props
      * @returns subinfo col props 
