@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Tabs, TabsProps } from 'antd';
+import { Tabs, TabsProps, Button } from 'antd';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -42,9 +42,11 @@ export default abstract class AbstractTabableComponent<P extends RouteComponentP
             <Tabs { ...this.getTabsProps() }>
                 {
                     this.getTabItems().map<React.ReactNode>((item: ITabItem): React.ReactNode => (
+                        <>
                         <Tabs.TabPane tab={ item.label } key={ item.key }>
                             { item.content }
                         </Tabs.TabPane>
+                        </>
                     ))
                 }
             </Tabs>
