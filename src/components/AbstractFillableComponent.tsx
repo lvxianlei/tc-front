@@ -134,6 +134,13 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
         return <Button type="primary" htmlType="button" onClick={ this.onSubmitAndContinue }>保存并继续新增</Button>;
     }
 
+    /**
+     * @protected
+     * @description Renders form items
+     * @param items 
+     * @param itemIndex 
+     * @returns form items 
+     */
     protected renderFormItems(items: IFormItemGroup[], itemIndex: number): React.ReactNode {
         return (
             <div key={ itemIndex }>
