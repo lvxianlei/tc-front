@@ -33,7 +33,7 @@
                     "returnedAmount": 1,
                     "description": "vxvx"
                 }],
-                "attachDTO": 
+                "attachVos": 
                 [
                     {
                         "id": 1,

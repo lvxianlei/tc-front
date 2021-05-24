@@ -13,62 +13,62 @@ import { Link } from 'react-router-dom';
 import AbstractFillableComponent, {
     IAbstractFillableComponentState,
     IFormItemGroup,
-} from '../../components/AbstractFillableComponent';
-import ConfirmableButton from '../../components/ConfirmableButton';
-import { IRenderedSection } from '../../utils/SummaryRenderUtil';
+} from '../../../components/AbstractFillableComponent';
+import ConfirmableButton from '../../../components/ConfirmableButton';
+import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 import styles from './AbstractContractSetting.module.less';
-import ModalComponent from '../../components/PromModalComponent';
-import RequestUtil from '../../utils/RequestUtil';
+import ModalComponent from '../../../components/PromModalComponent';
+import RequestUtil from '../../../utils/RequestUtil';
 import { CascaderOptionType } from 'antd/lib/cascader';
 
 const { Option } = Select;
- 
- export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
-     tablePagination: TablePaginationConfig;
-     visible: boolean | undefined;
-     readonly contract?: IContract;
-     checkList: any;
-     tableDataSource: [];
-     regionInfoData: [] ;
-     childData: [] | undefined;
-     col:  [],
-     selectedRowKeys: React.Key[] | any,
-     selectedRows: object[] | any,
-     name: string
- }
 
- export interface ITabItem {
+export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
+    tablePagination: TablePaginationConfig;
+    visible: boolean | undefined;
+    readonly contract?: IContract;
+    checkList: any;
+    tableDataSource: [];
+    regionInfoData: [] ;
+    childData: [] | undefined;
+    col:  [],
+    selectedRowKeys: React.Key[] | any,
+    selectedRows: object[] | any,
+    name: string
+}
+
+export interface ITabItem {
     readonly label: string;
     readonly key: string | number;
 }
 
- export interface IContract {
-     readonly id?: number;
-     readonly contractNumber?: string;
-     readonly internalNumber?: string;
-     readonly projectName?: string;
-     readonly simpleProjectName?: string;
-     readonly winBidType?: number;
-     readonly saleType?: number;
-     readonly customerInfoDto?: IcustomerInfoDto;
-     readonly signCustomerName?: string;
-     readonly signContractTime?: string;
-     readonly signUserName?: string;
-     readonly deliveryTime?: string;
-     readonly reviewTime?: string;
-     readonly chargeType?: string;
-     readonly salesman?: string;
-     readonly regionInfoDTO?: IregionInfoDTO;
-     readonly contractAmount?: number;
-     readonly currencyType?: number;
-     readonly description?: string;
-     readonly productInfoDto?: IproductInfoDto;
-     readonly planType?: number;
+export interface IContract {
+    readonly id?: number;
+    readonly contractNumber?: string;
+    readonly internalNumber?: string;
+    readonly projectName?: string;
+    readonly simpleProjectName?: string;
+    readonly winBidType?: number;
+    readonly saleType?: number;
+    readonly customerInfoDto?: IcustomerInfoDto;
+    readonly signCustomerName?: string;
+    readonly signContractTime?: string;
+    readonly signUserName?: string;
+    readonly deliveryTime?: string;
+    readonly reviewTime?: string;
+    readonly chargeType?: string;
+    readonly salesman?: string;
+    readonly regionInfoDTO?: IregionInfoDTO;
+    readonly contractAmount?: number;
+    readonly currencyType?: number;
+    readonly description?: string;
+    readonly productInfoDto?: IproductInfoDto;
+    readonly planType?: number;
     paymentPlanDtos?: IPaymentPlanDto[];
-     readonly attachDTO?: IattachDTO[];
- }
+    readonly attachInfoDtos?: IattachDTO[];
+}
 
- export interface IcustomerInfoDto {
+export interface IcustomerInfoDto {
     readonly customerId?: number;
     readonly customerCompany?: string;
     readonly customerLinkman?: string;
@@ -108,14 +108,14 @@ export interface IResponseData {
     current: number | undefined;
     readonly parentCode: string;
     records: [];
- }
+}
 
- export interface DataType{}
- /**
-  * Abstract Contract Setting
-  */
- export default abstract class AbstractContractSetting<P extends RouteComponentProps, S extends IAbstractContractSettingState> extends AbstractFillableComponent<P, S> {
- 
+export interface DataType{}
+/**
+ * Abstract Contract Setting
+ */
+export default abstract class AbstractContractSetting<P extends RouteComponentProps, S extends IAbstractContractSettingState> extends AbstractFillableComponent<P, S> {
+
     public state: S = {
         contract: undefined,
         visible: false,
@@ -175,7 +175,7 @@ export interface IResponseData {
         }
         return moment().format('YYYYMMDD') + num;
     }
-     /**
+        /**
      * @override
      * @description 附件表格选择
      * @returns 
@@ -194,19 +194,19 @@ export interface IResponseData {
     }
 
     public  getregionInfo = async (record: Record<string, any>) => {
-            const resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-system/region`);
-            this.setState({
-                regionInfoData:  resData.records
-            })
+        const resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-system/region`);
+        this.setState({
+            regionInfoData:  resData.records
+        })
     }
-    
+
     public onRegionInfoChange =  async (record: Record<string, any>,selectedOptions?: CascaderOptionType[] | any) => {
-         if(selectedOptions.length < 3 ) {
+        if(selectedOptions.length < 3 ) {
             let parentCode = record[selectedOptions.length - 1];
             const resData: [] = await RequestUtil.get(`/tower-system/region/${ parentCode }`);
             const targetOption = selectedOptions[selectedOptions.length - 1];
             targetOption.children = resData;
-         }
+        }
     }
 
     /**
@@ -273,14 +273,14 @@ export interface IResponseData {
             size: pagination.pageSize ||this.state.tablePagination.pageSize
         });
         this.setState({
-           ...filterValues,
-           tableDataSource: resData.records,
-           tablePagination: {
-               ...this.state.tablePagination,
-               current: resData.current,
-               pageSize: resData.size,
-               total: resData.total
-           }
+            ...filterValues,
+            tableDataSource: resData.records,
+            tablePagination: {
+                ...this.state.tablePagination,
+                current: resData.current,
+                pageSize: resData.size,
+                total: resData.total
+            }
         });
     }
 
@@ -288,10 +288,10 @@ export interface IResponseData {
         return [{
                 name: 'type',
                 children: 
-                <Select defaultValue="0">
-                    <Option value="0" >国内</Option>
-                    <Option value="1">国际</Option>
-                </Select>
+                    <Select defaultValue="0">
+                        <Option value="0" >国内</Option>
+                        <Option value="1">国际</Option>
+                    </Select>
             },{
                 name: 'name',
                 children: <Input placeholder="客户名字关键字"/>
@@ -357,7 +357,7 @@ export interface IResponseData {
         this.setState({ 
             selectedRowKeys,
             selectedRows
-         });
+        });
     }
     /**
      * @implements
@@ -365,62 +365,62 @@ export interface IResponseData {
      * @returns form item groups 
      */
     public getFormItemGroups(): IFormItemGroup[][] {
-         const contract: IContract | undefined = this.state.contract;
-         const GeneratNum: string = this.getGeneratNum();
-         return [[{
-            title: '基础信息',
-            itemCol: {
-                span: 8
-            },
-            itemProps: [{
-                label: '合同编号',
-                name: 'contractNumber',
-                initialValue: contract?.contractNumber,
-                rules: [{
-                    required: true,
-                    message: '请输入合同编号'
-                }],
-                children: <Input/>
-            }, {
-                label: '内部合同编号',
-                name: 'internalNumber',
-                initialValue: contract?.internalNumber || GeneratNum,
-                children: <Input disabled/>
-            }, {
-                label: '工程名称',
-                name: 'projectName',
-                initialValue: contract?.projectName,
-                rules: [{
-                    required: true,
-                    message: '请输入工程名称'
-                }],
-                children: <Input/>
-            }, {
-                label: '工程简称',
-                name: 'simpleProjectName',
-                initialValue: contract?.simpleProjectName,
-                children: <Input/>
-            }, {
-                label: '中标类型',
-                name: 'winBidType',
-                initialValue: contract?.winBidType || 1,
-                children: (
-                    <Select>
-                        <Select.Option value={ 1 }>国家电网</Select.Option>
-                        <Select.Option value={ 2 }>南方电网</Select.Option>
-                    </Select>
-                )
-             }, {
-                label: '销售类型',
-                name: 'saleType',
-                initialValue: contract?.saleType || 1,
-                children: (
-                    <Select>
-                        <Select.Option value={ 1 }>国内业务</Select.Option>
-                        <Select.Option value={ 2 }>国际业务</Select.Option>
-                    </Select>
-                )
-            }, {
+            const contract: IContract | undefined = this.state.contract;
+            const GeneratNum: string = this.getGeneratNum();
+            return [[{
+                title: '基础信息',
+                itemCol: {
+                    span: 8
+                },
+                itemProps: [{
+                    label: '合同编号',
+                    name: 'contractNumber',
+                    initialValue: contract?.contractNumber,
+                    rules: [{
+                        required: true,
+                        message: '请输入合同编号'
+                    }],
+                    children: <Input/>
+                }, {
+                    label: '内部合同编号',
+                    name: 'internalNumber',
+                    initialValue: contract?.internalNumber || GeneratNum,
+                    children: <Input disabled/>
+                }, {
+                    label: '工程名称',
+                    name: 'projectName',
+                    initialValue: contract?.projectName,
+                    rules: [{
+                        required: true,
+                        message: '请输入工程名称'
+                    }],
+                    children: <Input/>
+                }, {
+                    label: '工程简称',
+                    name: 'simpleProjectName',
+                    initialValue: contract?.simpleProjectName,
+                    children: <Input/>
+                }, {
+                    label: '中标类型',
+                    name: 'winBidType',
+                    initialValue: contract?.winBidType || 1,
+                    children: (
+                        <Select>
+                            <Select.Option value={ 1 }>国家电网</Select.Option>
+                            <Select.Option value={ 2 }>南方电网</Select.Option>
+                        </Select>
+                    )
+                }, {
+                    label: '销售类型',
+                    name: 'saleType',
+                    initialValue: contract?.saleType || 1,
+                    children: (
+                        <Select>
+                            <Select.Option value={ 1 }>国内业务</Select.Option>
+                            <Select.Option value={ 2 }>国际业务</Select.Option>
+                        </Select>
+                    )
+                }, {
                 label: '业主单位',
                 name: 'customerCompany',
                 initialValue: contract?.customerInfoDto?.customerCompany,
@@ -431,9 +431,9 @@ export interface IResponseData {
                 children: 
                     <>
                         <Input value={ contract?.customerInfoDto?.customerCompany } suffix={
-                           <Button type="text" target="customerCompany" onClick={ () => this.showModal({tip: "customerCompany"}) }>
+                            <Button type="text" target="customerCompany" onClick={ () => this.showModal({tip: "customerCompany"}) }>
                                 <PlusOutlined />
-                           </Button>
+                            </Button>
                         }/>
                         { this.renderModal() }
                     </>
@@ -458,9 +458,9 @@ export interface IResponseData {
                 children:
                     <>
                         <Input value={ contract?.signCustomerName } suffix={
-                           <Button type="text" target="customerCompany"  onClick={() => this.showModal({tip: "signCustomerName"})}>
+                            <Button type="text" target="customerCompany"  onClick={() => this.showModal({tip: "signCustomerName"})}>
                                 <PlusOutlined />
-                           </Button>
+                            </Button>
                         }/>
                         { this.renderModal() }
                     </>
@@ -555,14 +555,14 @@ export interface IResponseData {
                 )
             }, {
                 label: '备注',
-                 name: 'description',
-                 initialValue: contract?.description,
-                 children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息"/>
-             }]
-         }, {
-            title: '产品信息',
-            itemCol: {
-                span: 12
+                    name: 'description',
+                    initialValue: contract?.description,
+                    children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息"/>
+                }]
+            }, {
+                title: '产品信息',
+                itemCol: {
+                    span: 12
             },
             itemProps: [ {
                 label: '产品类型',
@@ -683,7 +683,7 @@ export interface IResponseData {
                             <Col span={ 4 }>备注</Col>
                             <Col span={ 3 }>操作</Col>
                         </Row>
-                        <Form.List name="attachDTO">
+                        <Form.List name="attachInfoDtos">
                             {
                                 (fields: FormListFieldData[], operation: FormListOperation): React.ReactNode => {
                                     return (
@@ -693,10 +693,10 @@ export interface IResponseData {
                                                     console.log(info)
                                                     if (info.file.status !== 'uploading') {
                                                         // console.log(info.file, info.fileList);
-                                                      }
-                                                      if (info.file.status === 'done') {
+                                                        }
+                                                        if (info.file.status === 'done') {
                                                         console.log(info.file, info.fileList);
-                                                      } else if (info.file.status === 'error') {
+                                                        } else if (info.file.status === 'error') {
                                                         console.log(info.file, info.fileList);
                                                         operation.add({
                                                             name: info.file.name,
@@ -704,25 +704,25 @@ export interface IResponseData {
                                                             fileSize: info.file.size,
                                                             description: ''
                                                         })
-                                                      }
+                                                        }
                                                 } } showUploadList= {false}>
                                                     <Button type="primary">添加</Button>
                                                 </Upload>
                                                 <Button type="primary" onClick={ ()=> {
-                                                    let attachDTO: any[] =  this.getForm()?.getFieldValue("attachDTO");
+                                                    let attachInfoDtos: any[] =  this.getForm()?.getFieldValue("attachInfoDtos");
                                                     let checked: any[] = this.state.checkList;
                                                     let batchId: any[] = [];
                                                     checked.map((item: any) => {
-                                                        batchId.push(attachDTO[item].id)
+                                                        batchId.push(attachInfoDtos[item].id)
                                                     })
                                                     console.log(batchId)
                                                 } }>下载</Button>
                                                 <Button type="primary" onClick={ ()=> {
-                                                    let attachDTO: any[] =  this.getForm()?.getFieldValue("attachDTO");
+                                                    let attachInfoDtos: any[] =  this.getForm()?.getFieldValue("attachInfoDtos");
                                                     let checked: any[] = this.state.checkList;
                                                     let batchId: any[] = [];
                                                     checked.map((item: any) => {
-                                                        batchId.push(attachDTO[item].id)
+                                                        batchId.push(attachInfoDtos[item].id)
                                                     })
                                                     operation.remove(this.state.checkList)
                                                 } }>删除</Button>
@@ -765,9 +765,9 @@ export interface IResponseData {
                                                                 <ConfirmableButton confirmTitle="要删除该附件吗？"
                                                                     type="link" placement="topRight"
                                                                     onConfirm={ () => { 
-                                                                        let attachDTO =  this.getForm()?.getFieldValue("attachDTO");
+                                                                        let attachInfoDtos =  this.getForm()?.getFieldValue("attachInfoDtos");
                                                                         // operation.remove(index); 
-                                                                        console.log(attachDTO[index].id)
+                                                                        console.log(attachInfoDtos[index].id)
                                                                     }}>
                                                                     <DeleteOutlined />
                                                                 </ConfirmableButton>
@@ -786,5 +786,5 @@ export interface IResponseData {
             }
         }];
     }
- }
+}
 

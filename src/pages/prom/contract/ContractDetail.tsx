@@ -2,39 +2,72 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Button, ColProps, Input, Table } from 'antd';
+import { Button, ColProps, Input, Table, TableColumnType } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 
-import AbstractDetailComponent from '../../components/AbstractDetailComponent';
-import ConfirmableButton from '../../components/ConfirmableButton';
-import { ITabItem } from '../../components/ITabableComponent';
-import RequestUtil from '../../utils/RequestUtil';
-import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../../utils/SummaryRenderUtil';
+import AbstractDetailComponent from '../../../components/AbstractDetailComponent';
+import ConfirmableButton from '../../../components/ConfirmableButton';
+import { ITabItem } from '../../../components/ITabableComponent';
+import RequestUtil from '../../../utils/RequestUtil';
+import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../../../utils/SummaryRenderUtil';
 
 export interface IContractDetailProps {
     readonly id: string;
 }
 export interface IContractDetailRouteProps extends RouteComponentProps<IContractDetailProps> {}
 export interface IContractDetailState {
-    readonly contractDetail: IContractDetail[];
+    readonly detail?: IDetail;
+    readonly orderData?: IOrderData;
 }
 
-interface IContractDetail {
-    readonly internalNumber: string;
- }
+interface IDetail {
+    readonly id?: number;
+    readonly internalNumber?: string;
+    readonly deliveryTime?: string;
+    readonly contractNumber?: string;
+    readonly projectName?: string;
+    readonly simpleProjectName?: string;
+    readonly winBidType?: number;
+    readonly updateUser?: string;
+    readonly updateTime?: string;
+    readonly createUser?: string;
+    readonly createTime?: string;
+    readonly attachVos?: IAttachVos[];
+}
 
- interface IResponseData {
-     readonly id: number;
-     readonly records: IContractDetail[];
- }
+interface IOrderData {
+    readonly taxAmount?: number;
+    readonly orderQuantity?: number;
+    readonly internalNumber?: string;
+}
+
+interface IResponseData {
+    readonly id: number;
+    readonly records: IDetail;
+}
+
+interface IAttachVos {
+    readonly name?: string;
+    readonly username?: string;
+    readonly fileSize?: string;
+    readonly description?: string;
+    readonly filePath?: string;
+    readonly fileSuffix?: string;
+    readonly id?: number;
+}
 
 /**
  * Contract detail page component.
  */
 class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, IContractDetailState> {
+
+    public state: IContractDetailState = {
+        detail: undefined,
+        orderData: undefined
+    }
 
     protected getTitle(): string {
         return `${ super.getTitle() }`;
@@ -44,10 +77,15 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
       * @description Fetchs table data
       * @param filterValues 
       */
-     protected async fetchTableData() {
+    protected async fetchTableData() {
         const resData: IResponseData = await RequestUtil.get<IResponseData>(`/contract/${ this.props.match.params.id }`);
+        const orderData: IOrderData = await RequestUtil.get<IOrderData>(`/saleOrder/getSaleOrderDetailsById`, {
+            contractId: this.props.match.params.id 
+        });
+        console.log(resData,orderData)
         this.setState({
-           contractDetail: resData.records
+            detail: resData.records,
+            orderData: orderData
         });
     }
 
@@ -60,21 +98,21 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
      * @description Gets subinfo col props
      * @returns subinfo col props 
      */
-    public getSubinfoColProps = (): ColProps[] => {
+    public getSubinfoColProps (): ColProps[] {
+        const detail: IDetail | undefined = this.state?.detail;
         return [{
             span: 8,
             children: (
-                <span>内部合同编号：</span>
+                <span>内部合同编号：{ detail?.internalNumber }</span>
             )
         }, {
             span: 8,
             children: (
-                <span>交货日期：2019-04-15 12:00</span>
+                <span>交货日期：{ detail?.deliveryTime }</span>
             )
         }];
     }
 
-    
     /**
      * @implements
      * @description Renders operation area
@@ -93,6 +131,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
      * @returns base info grid 
      */
     private getBaseInfoGrid(): IRenderedGrid {
+        const detail: IDetail | undefined = this.state?.detail;
         return {
             labelCol: {
                 span: 4
@@ -102,19 +141,19 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
             },
             rows: [[{
                 label: '合同编号',
-                value: '12312312'
+                value: detail?.contractNumber
             },{
                 label: '内部合同编号',
-                value: '45678'
+                value: detail?.internalNumber
             }], [{
                 label: '工程名称',
-                value: '12321312'
+                value: detail?.projectName
             }, {
                 label: '工程简称',
-                value: '12312312'
+                value: detail?.simpleProjectName
             }], [{
                 label: '中标类型',
-                value: '12321'
+                value: detail?.winBidType == 1 ? "国家电网": "南方电网"
             }]]
         };
     }
@@ -129,40 +168,40 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
             dataIndex: 'index'
         }, {
             title: '状态',
-            dataIndex: 'status'
+            dataIndex: 'productStatus'
         }, {
             title: '线路名称',
             dataIndex: 'lineName'
         }, {
             title: '产品类型',
-            dataIndex: 'type'
+            dataIndex: 'productType'
         }, {
             title: '塔型',
-            dataIndex: 'towerType'
+            dataIndex: 'productShape'
         }, {
             title: '杆塔号',
-            dataIndex: 'towerNumber'
+            dataIndex: 'productNumber'
         }, {
             title: '电压等级（KV）',
-            dataIndex: 'eLevel'
+            dataIndex: 'voltageGrade'
         }, {
             title: '呼高（米）',
-            dataIndex: 'height'
+            dataIndex: 'productHeight'
         }, {
             title: '单位',
-            dataIndex: 'unit'
+            dataIndex: 'price'
         }, {
             title: '数量',
-            dataIndex: 'count'
+            dataIndex: 'num'
         }, {
             title: '单价',
             dataIndex: 'price'
         }, {
             title: '金额',
-            dataIndex: 'amount'
+            dataIndex: 'totalAmount'
         }, {
             title: '标段',
-            dataIndex: 'tag'
+            dataIndex: 'tender'
         }, {
             title: '备注',
             dataIndex: 'description'
@@ -174,6 +213,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
      * @returns sys info grid 
      */
     private getSysInfoGrid(): IRenderedGrid {
+        const detail: IDetail | undefined = this.state?.detail;
         return {
             labelCol: {
                 span: 4
@@ -183,16 +223,16 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
             },
             rows: [[{
                 label: '最后编辑人',
-                value: '12312312'
+                value: detail?.updateUser
             },{
                 label: '最后编辑时间',
-                value: '2019-03-15 17:27'
+                value: detail?.updateTime
             }], [{
                 label: '创建人',
-                value: '12321312'
+                value: detail?.createUser
             }, {
                 label: '创建时间',
-                value: '2019-03-15 17:27'
+                value: detail?.createTime
             }]]
         };
     }
@@ -202,40 +242,55 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
      * @returns order summariable items 
      */
     private getOrderSummariableItems(): IRenderdSummariableItem[] {
+        const orderData: IOrderData | undefined = this.state.orderData;
+        // orderData.map<React.ReactNode>((res: any) => {
+        //     console.log(res)
+        // })
         return [{
             fieldItems: [{
                 label: '订单编号',
-                value: 'GNDC202104-002'
+                value: orderData?.internalNumber
             }, {
                 label: '采购订单号',
-                value: 'PO2021003'
+                value: orderData?.internalNumber
             }, {
                 label: '订单数量',
-                value: '100.23吨'
+                value: orderData?.orderQuantity?.toString()
             }, {
                 label: '订单金额',
-                value: '￥100.23'
+                value: orderData?.taxAmount?.toString()
             }],
             render: (): React.ReactNode => (
                 <Table pagination={ false } bordered={ true } columns={ this.getOrderColumns() }/>
             )
+        }];
+    }
+
+
+    public getColumns(): TableColumnType<object>[] {
+        return [ {
+            key: 'name',
+            title: '附件名称',
+            dataIndex: 'name'
         }, {
-            fieldItems: [{
-                label: '订单编号',
-                value: 'GNDC202104-002'
-            }, {
-                label: '采购订单号',
-                value: 'PO2021003'
-            }, {
-                label: '订单数量',
-                value: '100.23吨'
-            }, {
-                label: '订单金额',
-                value: '￥100.23'
-            }],
-            render: (): React.ReactNode => (
-                <Table pagination={ false } bordered={ true } columns={ this.getOrderColumns() }/>
-            )
+            key: 'fileSize',
+            title: '文件大小',
+            dataIndex: 'fileSize',
+        }, {
+            key: 'winBidType',
+            title: '上传时间',
+            dataIndex: 'winBidType',
+            render: (productType: number): React.ReactNode => {
+                return  productType === 1 ? '国家电网' : '南方电网';
+            }
+        }, {
+            key: 'userName',
+            title: '上传人员',
+            dataIndex: 'userName'
+        },  {
+            key: 'description',
+            title: '备注',
+            dataIndex: 'description'
         }];
     }
 
@@ -358,7 +413,15 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
             key: 2,
             content: SummaryRenderUtil.renderSections([{
                 title: '相关附件',
-                render: (): React.ReactNode => '可以用Table组件'
+                render: (): React.ReactNode => {
+                    const detail = this.state?.detail;
+                    const dataSource = detail?.attachVos
+                    return (
+                        <>
+                            <Table dataSource={ dataSource } columns={ this.getColumns() } />
+                        </>
+                    )
+                }
             }])
         }, {
             label: '回款记录',

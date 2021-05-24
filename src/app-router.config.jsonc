@@ -21,26 +21,31 @@
     }, {
         "name": "销售合同管理", 
         "path": "/prom/contract",
-        "module": "./pages/prom/PromContract",
+        "module": "./pages/prom/contract/PromContract",
         "exact": true
     }, { // 新增合同
         "name": "新增合同",
         "path": "/prom/contract/new",
-        "module": "./pages/prom/ContractNew",
+        "module": "./pages/prom/contract/ContractNew",
         "exact": true
     }, { // 编辑合同
         "name": "编辑合同",
         "path": "/prom/contract/setting/:id",
-        "module": "./pages/prom/ContractSetting",
+        "module": "./pages/prom/contract/ContractSetting",
         "exact": true
     }, { // 新增回款计划
         "name": "新增回款计划",
         "path": "/prom/contract/paymentRecord",
-        "module": "./pages/prom/PaymentRecordNew",
+        "module": "./pages/prom/contract/PaymentRecordNew",
     }, { // 合同详情
         "name": "合同详情",
         "path": "/prom/contract/detail/:id",
-        "module": "./pages/prom/ContractDetail",
+        "module": "./pages/prom/contract/ContractDetail",
+        "exact": true
+    }, {
+        "name": "销售订单管理", 
+        "path": "/prom/order",
+        "module": "./pages/prom/order/SaleOrder",
         "exact": true
     }]
 }

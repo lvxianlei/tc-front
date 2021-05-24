@@ -3,24 +3,24 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 import React from 'react';
- import { WithTranslation, withTranslation } from 'react-i18next';
- import { RouteComponentProps, withRouter } from 'react-router';
- import { IFormItemGroup } from '../../components/AbstractFillableComponent';
- 
- import RequestUtil from '../../utils/RequestUtil';
- import AbstractContractSetting, { IAbstractContractSettingState, IContract, IPaymentPlanDto } from './AbstractContractSetting';
- import moment from 'moment'
- 
- export interface IContractSettingProps {
-     readonly id: string;
- }
- export interface IContractSettingRouteProps extends RouteComponentProps<IContractSettingProps>, WithTranslation {}
- export interface IContractSettingState extends IAbstractContractSettingState {}
+import { WithTranslation, withTranslation } from 'react-i18next';
+import { RouteComponentProps, withRouter } from 'react-router';
+import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
+
+import RequestUtil from '../../../utils/RequestUtil';
+import AbstractContractSetting, { IAbstractContractSettingState, IContract, IPaymentPlanDto } from './AbstractContractSetting';
+import moment from 'moment'
+
+export interface IContractSettingProps {
+    readonly id: string;
+}
+export interface IContractSettingRouteProps extends RouteComponentProps<IContractSettingProps>, WithTranslation {}
+export interface IContractSettingState extends IAbstractContractSettingState {}
  
  /**
   * Contract Setting
   */
- class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps, IContractSettingState> {
+class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps, IContractSettingState> {
  
     /**
      * @description Components did mount
@@ -40,7 +40,7 @@ import React from 'react';
         });
         this.getForm()?.setFieldsValue({
             paymentPlanDtos: contract?.paymentPlanDtos,
-            attachDTO: contract?.attachDTO
+            attachInfoDtos: contract?.attachInfoDtos
         });
     }
  
