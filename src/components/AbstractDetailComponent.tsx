@@ -6,19 +6,16 @@ import { Card, Col, ColProps, Row, Space, Tabs } from 'antd';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import styles from './AbstractDetailComponent.module.less';
 import layoutStyles from '../layout/Layout.module.less';
-import AbstractTitledRouteComponent from './AbstractTitledRouteComponent';
+import styles from './AbstractDetailComponent.module.less';
+import AbstractTabableComponent from './AbstractTabableComponent';
 import { ITabItem } from './ITabableComponent';
-
-// export interface IAbstractDetailComponentProps {}
-// export interface IAbstractDetailComponentState {}
 
 /**
  * The abstract detail component.
  * All detail page should extend from this abstract class.
  */
-export default abstract class AbstractDetailComponent<P extends RouteComponentProps, S = {}> extends AbstractTitledRouteComponent<P, S> {
+export default abstract class AbstractDetailComponent<P extends RouteComponentProps, S = {}> extends AbstractTabableComponent<P, S> {
 
     /**
      * @constructor
@@ -44,13 +41,6 @@ export default abstract class AbstractDetailComponent<P extends RouteComponentPr
     abstract renderOperationArea(): React.ReactNode | React.ReactNode[];
 
     /**
-     * @abstract
-     * @description Gets tab items
-     * @returns tab items 
-     */
-    abstract getTabItems(): ITabItem[];
-
-    /**
      * @description Renders AbstractDetailComponent
      * @returns render 
      */
@@ -72,15 +62,7 @@ export default abstract class AbstractDetailComponent<P extends RouteComponentPr
                         </Space>
                     </Space>
                 </Card>
-                <Tabs className={ styles.tabs }>
-                    {
-                        this.getTabItems().map<React.ReactNode>((item: ITabItem): React.ReactNode => (
-                            <Tabs.TabPane tab={ item.label } key={ item.key }>
-                                { item.content }
-                            </Tabs.TabPane>
-                        ))
-                    }
-                </Tabs>
+                { super.render() }
             </Space>
         );
     }
