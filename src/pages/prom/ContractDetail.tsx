@@ -25,7 +25,7 @@ export interface IContractDetailState {}
 class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, IContractDetailState> {
 
     protected getTitle(): string {
-        return `${ super.getTitle() }（<合同编号>）`
+        return `${ super.getTitle() }（<合同编号>）`;
     }
     
     /**
