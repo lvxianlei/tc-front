@@ -8,8 +8,9 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import AbstractMngtComponent, { IAbstractMngtComponentState, ITabItem } from '../../components/AbstractMngtComponent';
+import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../components/AbstractMngtComponent';
 import ConfirmableButton from '../../components/ConfirmableButton';
+import { ITabItem } from '../../components/ITabableComponent';
 import RequestUtil from '../../utils/RequestUtil';
 
 export interface IClientMngtProps {}

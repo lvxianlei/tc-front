@@ -4,23 +4,23 @@
  */
 import { FormProps } from 'antd';
 import React from 'react';
- import { WithTranslation, withTranslation } from 'react-i18next';
- import { RouteComponentProps, withRouter } from 'react-router';
- import { IFormItemGroup } from '../../components/AbstractFillableComponent';
- 
- import RequestUtil from '../../utils/RequestUtil';
- import AbstractContractSetting, { IAbstractContractSettingState, IContract } from './AbstractContractSetting';
- 
- export interface IContractSettingProps {
-     readonly id: string;
- }
- export interface IContractSettingRouteProps extends RouteComponentProps<IContractSettingProps>, WithTranslation {}
- export interface IContractSettingState extends IAbstractContractSettingState {}
- 
- /**
-  * Contract Setting
-  */
- class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps, IContractSettingState> {
+import { WithTranslation, withTranslation } from 'react-i18next';
+import { RouteComponentProps, withRouter } from 'react-router';
+import { IFormItemGroup } from '../../components/AbstractFillableComponent';
+
+import RequestUtil from '../../utils/RequestUtil';
+import AbstractContractSetting, { IAbstractContractSettingState, IContract } from './AbstractContractSetting';
+
+export interface IContractSettingProps {
+    readonly id: string;
+}
+export interface IContractSettingRouteProps extends RouteComponentProps<IContractSettingProps>, WithTranslation {}
+export interface IContractSettingState extends IAbstractContractSettingState {}
+
+/**
+ * Contract Setting
+ */
+class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps, IContractSettingState> {
  
     /**
      * @description Components did mount

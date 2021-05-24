@@ -3,7 +3,22 @@
  * @copyright © 2021 
  */
 import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Radio, Row, Select, Space, Upload, Checkbox, Cascader, Modal } from 'antd';
+import {
+    Button,
+    Cascader,
+    Checkbox,
+    Col,
+    DatePicker,
+    Form,
+    FormProps,
+    Input,
+    InputNumber,
+    Radio,
+    Row,
+    Select,
+    Space,
+    Upload,
+} from 'antd';
 import { FormListFieldData, FormListOperation } from 'antd/lib/form/FormList';
 import moment from 'moment';
 import React from 'react';
@@ -12,94 +27,89 @@ import { Link } from 'react-router-dom';
 
 import AbstractFillableComponent, {
     IAbstractFillableComponentState,
-    IExtraSection,
     IFormItemGroup,
 } from '../../components/AbstractFillableComponent';
 import ConfirmableButton from '../../components/ConfirmableButton';
+import { IRenderedSection } from '../../utils/SummaryRenderUtil';
 import styles from './AbstractContractSetting.module.less';
+
 // import ModalComponent from '../../components/ModalComponent';
  
- export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
-     visible: boolean | undefined;
-     readonly contract?: IContract;
- }
- 
-
- export interface ITabItem {
-    readonly label: string;
-    readonly key: string | number;
+export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
+    visible: boolean | undefined;
+    readonly contract?: IContract;
 }
 
- export interface IContract {
-     readonly id?: number;
-     readonly contractNumber?: string;
-     readonly internalNumber?: string;
-     readonly projectName?: string;
-     readonly simpleProjectName?: string;
-     readonly winBidType?: number;
-     readonly saleType?: number;
-     readonly customerInfoDto?: IcustomerInfoDto;
-     readonly signCustomerName?: string;
-     readonly signContractTime?: string;
-     readonly signUserName?: string;
-     readonly deliveryTime?: string;
-     readonly reviewTime?: string;
-     readonly chargeType?: string;
-     readonly salesman?: string;
-     readonly regionInfoDTO?: IregionInfoDTO;
-     readonly contractAmount?: number;
-     readonly currencyType?: number;
-     readonly description?: string;
-     readonly productInfoDto?: IproductInfoDto;
-     readonly planType?: number;
-     readonly paymentPlanDtos?: IPaymentPlanDto[];
-     readonly attachDTO?: IattachDTO[];
- }
+export interface IContract {
+    readonly id?: number;
+    readonly contractNumber?: string;
+    readonly internalNumber?: string;
+    readonly projectName?: string;
+    readonly simpleProjectName?: string;
+    readonly winBidType?: number;
+    readonly saleType?: number;
+    readonly customerInfoDto?: IcustomerInfoDto;
+    readonly signCustomerName?: string;
+    readonly signContractTime?: string;
+    readonly signUserName?: string;
+    readonly deliveryTime?: string;
+    readonly reviewTime?: string;
+    readonly chargeType?: string;
+    readonly salesman?: string;
+    readonly regionInfoDTO?: IregionInfoDTO;
+    readonly contractAmount?: number;
+    readonly currencyType?: number;
+    readonly description?: string;
+    readonly productInfoDto?: IproductInfoDto;
+    readonly planType?: number;
+    readonly paymentPlanDtos?: IPaymentPlanDto[];
+    readonly attachDTO?: IattachDTO[];
+}
 
- export interface IcustomerInfoDto {
+export interface IcustomerInfoDto {
     readonly customerCompany?: string;
     readonly customerLinkman?: string;
     readonly customerPhone?: string;
- }
+}
 
- export interface IproductInfoDto {
+export interface IproductInfoDto {
     readonly productType?: string;
     readonly voltageGrade?: number;
- }
+}
 
- export interface IPaymentPlanDto {
+export interface IPaymentPlanDto {
     readonly index?: number;
     readonly returnedTime?: string;
     readonly returnedRate?: number;
     readonly returnedAmount?: number;
     readonly description?: string;
- }
+}
 
- export interface IattachDTO {
-     readonly name?: string;
-     readonly username?: string;
-     readonly fileSize?: string;
-     readonly description?: string;
- }
+export interface IattachDTO {
+    readonly name?: string;
+    readonly username?: string;
+    readonly fileSize?: string;
+    readonly description?: string;
+}
 
- export interface IregionInfoDTO {
+export interface IregionInfoDTO {
     readonly countryCode?: string;
     readonly provinceCode?: string;
     readonly cityCode?: string;
     readonly districtCode?: string;
- }
+}
 
- export interface DataType {
+export interface DataType {
     key: React.Key;
     name: string;
     age: number;
     address: string;
-  }
+}
 
- /**
-  * Abstract Contract Setting
-  */
- export default abstract class AbstractContractSetting<P extends RouteComponentProps, S extends IAbstractContractSettingState> extends AbstractFillableComponent<P, S> {
+/**
+ * Abstract Contract Setting
+ */
+export default abstract class AbstractContractSetting<P extends RouteComponentProps, S extends IAbstractContractSettingState> extends AbstractFillableComponent<P, S> {
  
     public state: S = {
         contract: undefined,
@@ -421,11 +431,10 @@ import styles from './AbstractContractSetting.module.less';
     }
 
     /**
-     * @override
      * @description Renders extra sections
      * @returns extra sections 
      */
-    public renderExtraSections(): IExtraSection[] {
+    public renderExtraSections(): IRenderedSection[] {
         const contract: IContract | undefined = this.state.contract;
         return [{
             title: '回款计划',

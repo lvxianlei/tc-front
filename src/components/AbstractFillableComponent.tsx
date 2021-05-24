@@ -6,22 +6,18 @@ import { Button, Card, Col, ColProps, Form, FormInstance, FormItemProps, FormPro
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import ApplicationContext from '../configuration/ApplicationContext';
 import layoutStyles from '../layout/Layout.module.less';
+import { IRenderedSection, ISection } from '../utils/SummaryRenderUtil';
 import styles from './AbstractFillableComponent.module.less';
-import AsyncComponent from './AsyncComponent';
+import AbstractTitledRouteComponent from './AbstractTitledRouteComponent';
 
-interface ISection {
-    readonly title: string;
+interface IAuthoritableFormItemProps extends FormItemProps {
+    readonly authority?: string;
 }
 
 export interface IFormItemGroup extends ISection {
-    readonly itemProps: FormItemProps[];
+    readonly itemProps: IAuthoritableFormItemProps[];
     readonly itemCol?: ColProps;
-}
-
-export interface IExtraSection extends ISection {
-    readonly render: () => React.ReactNode;
 }
 
 export interface IAbstractFillableComponentState {}
@@ -29,7 +25,7 @@ export interface IAbstractFillableComponentState {}
 /**
  * Abstract fillable form component.
  */
-export default abstract class AbstractFillableComponent<P extends RouteComponentProps, S extends IAbstractFillableComponentState> extends AsyncComponent<P, S> {
+export default abstract class AbstractFillableComponent<P extends RouteComponentProps, S extends IAbstractFillableComponentState> extends AbstractTitledRouteComponent<P, S> {
     
     private form: React.RefObject<FormInstance> = React.createRef<FormInstance>();
 
@@ -42,15 +38,6 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
         super(props);
         this.onFormFinish = this.onFormFinish.bind(this);
         this.onSubmitAndContinue = this.onSubmitAndContinue.bind(this);
-    }
-
-    /**
-     * @protected
-     * @description Gets title
-     * @returns title 
-     */
-    protected getTitle(): string {
-        return ApplicationContext.getRouterItemByPath(this.props.location.pathname)?.name || '';
     }
 
     /**
@@ -134,7 +121,7 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      * @description Renders extra sections
      * @returns extra sections 
      */
-    protected renderExtraSections(): IExtraSection[] {
+    protected renderExtraSections(): IRenderedSection[] {
         return [];
     }
 
@@ -190,7 +177,7 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
                             }
                         </Space>
                         {
-                            this.renderExtraSections().map<React.ReactNode>((section: IExtraSection): React.ReactNode => (
+                            this.renderExtraSections().map<React.ReactNode>((section: IRenderedSection): React.ReactNode => (
                                 <React.Fragment key={ section.title }>
                                     <div className={ styles.title }>{ section.title }</div>
                                     { section.render() }

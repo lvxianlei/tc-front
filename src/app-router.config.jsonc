@@ -33,5 +33,10 @@
         "path": "/prom/contract/setting/:id",
         "module": "./pages/prom/ContractSetting",
         "exact": true
+    }, { // 合同详情
+        "name": "合同详情",
+        "path": "/prom/contract/detail/:id",
+        "module": "./pages/prom/ContractDetail",
+        "exact": true
     }]
 }
