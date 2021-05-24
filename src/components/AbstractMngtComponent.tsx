@@ -6,11 +6,12 @@ import { Button, Card, Form, FormItemProps, Space, Table, Tabs } from 'antd';
 import { ColumnType, TablePaginationConfig } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
+import { RouteComponentProps } from 'react-router';
 
 import layoutStyles from '../layout/Layout.module.less';
 import styles from './AbstractMngtComponent.module.less';
-import AsyncComponent from './AsyncComponent';
-import { ITabableComponent, ITabItem } from './ITabableComponent';
+import AbstractTabableComponent from './AbstractTabableComponent';
+import ITabableComponent, { ITabItem } from './ITabableComponent';
 
 export interface IAbstractMngtComponentState {
     selectedTabKey: React.Key;
@@ -20,7 +21,7 @@ export interface IAbstractMngtComponentState {
 /**
  * The abstract management component
  */
-export default abstract class AbstractMngtComponent<P, S extends IAbstractMngtComponentState> extends AsyncComponent<P, S> implements ITabableComponent {
+export default abstract class AbstractMngtComponent<P extends RouteComponentProps, S extends IAbstractMngtComponentState> extends AbstractTabableComponent<P, S> /*AsyncComponent<P, S> implements ITabableComponent*/ {
 
     /**
      * @constructor

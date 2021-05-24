@@ -4,7 +4,7 @@ import React from "react";
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-export interface ITabableComponent {
+export default interface ITabableComponent {
 
     /**
      * @interface
