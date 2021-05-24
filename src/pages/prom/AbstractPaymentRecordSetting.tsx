@@ -9,7 +9,7 @@ import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 
  
  import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGroup } from '../../components/AbstractFillableComponent';
-import ModalComponent from '../../components/ModalComponent';
+import ModalComponent from '../../components/PromModalComponent';
 import RequestUtil from '../../utils/RequestUtil';
 import moment from 'moment';
 

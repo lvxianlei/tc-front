@@ -17,7 +17,7 @@ import AbstractFillableComponent, {
 import ConfirmableButton from '../../components/ConfirmableButton';
 import { IRenderedSection } from '../../utils/SummaryRenderUtil';
 import styles from './AbstractContractSetting.module.less';
-import ModalComponent from '../../components/ModalComponent';
+import ModalComponent from '../../components/PromModalComponent';
 import RequestUtil from '../../utils/RequestUtil';
 import { CascaderOptionType } from 'antd/lib/cascader';
 
@@ -709,8 +709,8 @@ export interface IResponseData {
                                                     <Button type="primary">添加</Button>
                                                 </Upload>
                                                 <Button type="primary" onClick={ ()=> {
-                                                    let attachDTO =  this.getForm()?.getFieldValue("attachDTO");
-                                                    let checked = this.state.checkList;
+                                                    let attachDTO: any[] =  this.getForm()?.getFieldValue("attachDTO");
+                                                    let checked: any[] = this.state.checkList;
                                                     let batchId: any[] = [];
                                                     checked.map((item: any) => {
                                                         batchId.push(attachDTO[item].id)
@@ -718,8 +718,8 @@ export interface IResponseData {
                                                     console.log(batchId)
                                                 } }>下载</Button>
                                                 <Button type="primary" onClick={ ()=> {
-                                                    let attachDTO =  this.getForm()?.getFieldValue("attachDTO");
-                                                    let checked = this.state.checkList;
+                                                    let attachDTO: any[] =  this.getForm()?.getFieldValue("attachDTO");
+                                                    let checked: any[] = this.state.checkList;
                                                     let batchId: any[] = [];
                                                     checked.map((item: any) => {
                                                         batchId.push(attachDTO[item].id)
