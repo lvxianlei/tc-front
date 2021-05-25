@@ -7,12 +7,6 @@
  import React from 'react';
  
  export interface IDictModalProps extends ModalProps {
-    //  readonly confirmTitle: React.ReactNode | RenderFunction;
-    //  readonly okText?: string;
-    //  readonly cancelText?: string;
-    //  readonly onConfirm?: (e?: React.MouseEvent<HTMLElement>) => void;
-    //  readonly onCancel?: (e?: React.MouseEvent<HTMLElement>) => void;
-    //  readonly placement?: TooltipPlacement;
      readonly title?:string;
      readonly visible?: boolean; 
      readonly value?: string;
@@ -27,16 +21,16 @@
   * @TODO Describe the class
   */
  export default class DictModal extends React.Component<IDictModalProps, IDictModalState> {
-     /**
-      * @override
-      * @description Gets state
-      * @returns state 
-      */
-    public state: IDictModalState = {
-        contract: [],
-        visible: false,
-        editValue: '',
-    }
+    //  /**
+    //   * @override
+    //   * @description Gets state
+    //   * @returns state 
+    //   */
+    // public state: IDictModalState = {
+    //     contract: [],
+    //     visible: false,
+    //     editValue: '',
+    // }
  
     
      /**

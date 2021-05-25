@@ -2,7 +2,7 @@
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { Table, Checkbox, Space, Popconfirm, Tabs } from 'antd';
+import { Table, Checkbox, Space, Popconfirm, Tabs, Button } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import AbstractTabableComponent from '../../components/AbstractTabableComponent';
 import { ITabItem } from '../../components/ITabableComponent';
@@ -14,11 +14,12 @@ import DictModal from './DictModal';
 export interface IDictMngtProps {}
 export interface IDictMngtWithRouteProps extends RouteComponentProps<IDictMngtProps>, WithTranslation {}
 export interface IDictMngtState {
-    readonly contract: IContract[];
+    readonly dict: IDictValue[];
     readonly visible: boolean;
     readonly editValue: string;
+    readonly tab:IDictValue[];
 }
-interface IContract {
+interface IDictValue {
     readonly id: number,
     readonly name: string;
     readonly disable: boolean;
@@ -26,9 +27,9 @@ interface IContract {
     readonly amount: number;
 }
 
-interface contractValue{
+interface dictValue{
     readonly current: number ,
-    readonly records: IContract[],
+    readonly records: IDictValue[],
     readonly size: number,
     readonly total: number,
 }
@@ -50,18 +51,19 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
       * @returns state 
       */
      public state: IDictMngtState = {
-            contract: [],
+            dict: [],
             visible: false,
             editValue: '',
+            tab:[],
     }
     /**
      * @description Components did mount
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const contract: contractValue = await RequestUtil.get<contractValue>(`/system/dict`);
+        const dict: dictValue = await RequestUtil.get<dictValue>(`/system/dict`);
         this.setState({
-                contract:contract.records
+            dict:dict.records
         });
     }
 
@@ -98,8 +100,8 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
         }];
     }
     public handleDelete = (record: Record<string,any>) => {
-        const contract = [...this.state.contract];
-        this.setState({ contract: contract.filter(item => item.id !== record.id) });
+        const dict = [...this.state.dict];
+        this.setState({ dict: dict.filter(item => item.id !== record.id) });
     };
     /**
      * @implements
@@ -107,33 +109,33 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
      * @returns tab items 
      */
      public getTabItems(): ITabItem[] {
-        const {contract} = this.state;
-        // console.log(this.state.contract)
+        const {dict} = this.state;
+        // console.log(this.state.dict)
         return [{
             label: '产品',
             key: 1,
             content: SummaryRenderUtil.renderSections([{
                 title: '产品类型',
-                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()} dataSource={contract}/>
+                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()} dataSource={dict}/>
             }, {
                 title: '电压等级',
-                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()}/>
+                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()} dataSource={dict}/>
             }, {
                 title: '计量单位',
-                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()}/>
+                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()} dataSource={dict}/>
             }, {
                 title: '材料标准',
-                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()}/>
+                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()} dataSource={dict}/>
             }])
         },{
             label: '财务',
             key: 2,
             content: SummaryRenderUtil.renderSections([{
                 title: '币种',
-                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()}/>
+                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()} dataSource={dict}/>
             }, {
                 title: '税率',
-                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()}/>
+                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()} dataSource={dict}/>
             }, {
                 title: '计价方式',
                 render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()}/>
@@ -172,7 +174,7 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
 
     public closeModal(): void {
         this.setState({
-            visible: false
+            visible: false,
         })
     }
     public handleOk(value:string): void {
