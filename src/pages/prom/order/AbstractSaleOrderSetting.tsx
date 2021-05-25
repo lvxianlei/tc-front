@@ -2,13 +2,17 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Button, DatePicker, Input, Select } from 'antd';
+import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Row, Select } from 'antd';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { PlusOutlined } from '@ant-design/icons';
-
+import { DeleteOutlined } from '@ant-design/icons';
 
 import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGroup } from '../../../components/AbstractFillableComponent';
+import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
+import { FormListFieldData, FormListOperation } from 'antd/lib/form/FormList';
+import ConfirmableButton from '../../../components/ConfirmableButton';
+import moment from 'moment';
+import styles from './AbstractSaleOrderSetting.module.less'
 
 export interface IAbstractSaleOrderSettingState extends IAbstractFillableComponentState {
     readonly saleOrder?: ISaleOrder;
@@ -36,8 +40,12 @@ export interface ISaleOrder {
     readonly creditInsurance?: number;
     readonly orderDeliveryTime?: string;
     readonly description?: string;
+    readonly productDtos?: IProductDtos[];
 }
 
+interface IProductDtos {
+    readonly productStatus: number;
+}
 interface IContractInfoDto {
     readonly contractNumber?: string;
     readonly internalNumber?: string;
@@ -58,11 +66,41 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
 
     /**
      * @override
+     * @description Gets form props
+     * @returns form props 
+     */
+     protected getFormProps(): FormProps {
+        return {
+            ...super.getFormProps(),
+            labelCol: {
+                span: 8
+            },
+            wrapperCol: {
+                span: 16
+            }
+        };
+    }
+    
+    /**
+     * @override
      * @description Gets return path
      * @returns return path 
      */
     protected getReturnPath(): string {
         return "/prom/order";
+    }
+
+    protected getGeneratNum(): string { 
+        var result: number = Math.floor( Math.random() * 1000 );
+        let num: string = '';
+        if(result < 10) {
+            num =  '00' + result;
+        } else if (result<100){
+            num = '0' + result;
+        } else {
+            num =  result.toString();
+        }
+        return moment().format('YYYYMMDD') + num;
     }
 
     /**
@@ -72,12 +110,17 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      */
     public getFormItemGroups(): IFormItemGroup[][] {
         const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
+        console.log( saleOrder?.productDtos?.length)
+        const GeneratNum: string = this.getGeneratNum();
         return [[{
             title: '基础信息',
+            itemCol: {
+                span: 8
+            },
             itemProps: [{
                 label: '订单编号',
                 name: 'ordersNumber',
-                initialValue: saleOrder?.ordersNumber,
+                initialValue: saleOrder?.ordersNumber || GeneratNum,
                 rules: [{
                     required: true,
                     message: '请输入订单编号'
@@ -148,7 +191,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             }, {
                 label: '订单数量',
                 name: 'orderQuantity',
-                initialValue: saleOrder?.orderQuantity,
+                initialValue: saleOrder?.orderQuantity || saleOrder?.productDtos?.length,
                 children: <Input disabled/>
             }, {
                 label: '含税金额',
@@ -240,5 +283,146 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息"/>
             }]
         }]];
+    }
+
+    /**
+     * @description Renders extra sections
+     * @returns extra sections 
+     */
+    public renderExtraSections(): IRenderedSection[] {
+        const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
+        return [{
+            title: '产品信息',
+            render: (): React.ReactNode => {
+                return (
+                    <>
+                        <Form.List name="paymentPlanDtos" initialValue={ saleOrder?.productDtos || [] }>
+                            {
+                                (fields: FormListFieldData[], operation: FormListOperation): React.ReactNode => {
+                                    return (
+                                        <>
+                                            <Button type="primary" onClick={ () => {
+                                                operation.add();
+                                                this.setState({
+
+                                                })
+                                            }   } className={ styles.addBtn }>新增</Button>
+                                            <Row  className={ styles.FormHeader }>
+                                                <Col span={ 1 }></Col>
+                                                <Col span={ 1 }>序号</Col>
+                                                <Col span={ 2 }>状态</Col>
+                                                <Col span={ 2 }>* 线路名称</Col>
+                                                <Col span={ 2 }>产品类型</Col>
+                                                <Col span={ 2 }>* 塔型</Col>
+                                                <Col span={ 2 }>* 杆塔号</Col>
+                                                <Col span={ 2 }>* 电压等级</Col>
+                                                <Col span={ 2 }>呼高（米）</Col>
+                                                <Col span={ 2 }>单价</Col>
+                                                <Col span={ 2 }>金额</Col>
+                                                <Col span={ 2 }>标段</Col>
+                                                <Col span={ 2 }>备注</Col>
+                                            </Row>
+                                            {
+                                                fields.map<React.ReactNode>((field: FormListFieldData, index: number): React.ReactNode => (
+                                                    <Row key={ `${ field.name }_${ index }` } className={ styles.FormItem }>
+                                                        <Col span={ 1 }>
+                                                            <ConfirmableButton confirmTitle="要删除该条回款计划吗？"
+                                                                type="link" placement="topRight"
+                                                                onConfirm={ () => { operation.remove(index); } }>
+                                                                <DeleteOutlined />
+                                                            </ConfirmableButton>
+                                                        </Col>
+                                                        <Col span={ 1 }>{ index + 1 }</Col>
+                                                        <Col span={ 2 }>
+                                                            <Form.Item { ...field } name={[field.name, 'productStatus']} fieldKey={[field.fieldKey, 'productStatus']}>
+                                                                <Input disabled/>
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={ 2 }>
+                                                            <Form.Item { ...field } name={[field.name, 'lineName']} fieldKey={[field.fieldKey, 'lineName']}>
+                                                                <Input/>
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={ 2 }>
+                                                            <Form.Item { ...field } name={[field.name, 'productType']} fieldKey={[field.fieldKey, 'productType']}>
+                                                                <Select>
+                                                                    <Select.Option value={ 1 }>角钢塔</Select.Option>
+                                                                    <Select.Option value={ 2 }>管塔</Select.Option>
+                                                                    <Select.Option value={ 3 }>螺栓</Select.Option>
+                                                                </Select>
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={ 2 }>
+                                                            <Form.Item { ...field } name={[field.name, 'productShape']} fieldKey={[field.fieldKey, 'productShape']}>
+                                                                <Input/>
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={ 2 }>
+                                                            <Form.Item { ...field } name={[field.name, 'productNumber']} fieldKey={[field.fieldKey, 'productNumber']}>
+                                                                <Input/>
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={ 2 }>
+                                                            <Form.Item { ...field } name={[field.name, 'voltageGrade']} fieldKey={[field.fieldKey, 'voltageGrade']}>
+                                                                <Select style={{ width: '90%' }}>
+                                                                    <Select.Option value={ 1 }>220</Select.Option>
+                                                                    <Select.Option value={ 2 }>110</Select.Option>
+                                                                </Select>
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={ 2 }>
+                                                            <Form.Item { ...field } name={[field.name, 'productHeight']} fieldKey={[field.fieldKey, 'productHeight']}>
+                                                                <Input/>
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={ 2 }>
+                                                            <Form.Item { ...field } name={[field.name, 'price']} fieldKey={[field.fieldKey, 'price']}>
+                                                                <Input prefix="￥"/>
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={ 2 }>
+                                                            <Form.Item { ...field } name={[field.name, 'totalAmount']} fieldKey={[field.fieldKey, 'totalAmount']}>
+                                                                <Input prefix="￥"/>
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={ 2 }>
+                                                            <Form.Item { ...field } name={[field.name, 'tender']} fieldKey={[field.fieldKey, 'tender']}>
+                                                                <Input prefix="￥"/>
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={ 2 }>
+                                                            <Form.Item { ...field } name={[field.name, 'description']} fieldKey={[field.fieldKey, 'description']}>
+                                                                <Input.TextArea rows={ 5 } maxLength={ 300 }/>
+                                                            </Form.Item>
+                                                        </Col>
+                                                    </Row>
+                                                ))
+                                            }
+                                        </>
+                                    );
+                                }
+                            }
+                            
+                        </Form.List>
+                        <Row>
+                            <Col span={ 16 }>
+                            总计
+                        </Col>
+                        <Col span={ 2 }>
+                        <Form.Item className={ styles.FormItem }>
+                                <Input/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={ 2 }>
+                        <Form.Item className={ styles.FormItem }>
+                                <Input/>
+                            </Form.Item>
+                        </Col>
+                        </Row>
+                        
+                    </>
+                );
+            }
+        }];
     }
 }

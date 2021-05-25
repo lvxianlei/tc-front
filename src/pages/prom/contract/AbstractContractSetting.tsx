@@ -2,7 +2,7 @@
  * @author zyc
  * @copyright © 2021 
  */
-import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
 import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Radio, Row, Select, Space, Upload, Checkbox, Cascader, TablePaginationConfig, TableColumnType, FormItemProps } from 'antd';
 import { FormListFieldData, FormListOperation } from 'antd/lib/form/FormList';
 import moment from 'moment';
@@ -17,7 +17,7 @@ import AbstractFillableComponent, {
 import ConfirmableButton from '../../../components/ConfirmableButton';
 import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 import styles from './AbstractContractSetting.module.less';
-import ModalComponent from '../../../components/PromModalComponent';
+import ContractSelectionComponent from '../../../components/ContractSelectionModal';
 import RequestUtil from '../../../utils/RequestUtil';
 import { CascaderOptionType } from 'antd/lib/cascader';
 
@@ -25,7 +25,6 @@ const { Option } = Select;
 
 export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
     tablePagination: TablePaginationConfig;
-    visible: boolean | undefined;
     readonly contract?: IContract;
     checkList: any;
     tableDataSource: [];
@@ -118,18 +117,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
 
     public state: S = {
         contract: undefined,
-        visible: false,
-        tablePagination: {
-            current: 1,
-            pageSize: 10,
-            total: 0,
-            showSizeChanger: false
-        }
     } as S;
-
-    constructor(props: P) {
-        super(props)
-    }
 
     public async componentDidMount() {
         super.componentDidMount();
@@ -213,25 +201,11 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
      * @description 弹窗
      * @returns 
      */
-    public showModal = (record: Record<string, any>): void => {
-        this.setState({
-            visible: true,
-            name: record.tip
-        })
-        this.getTable({})
-    }
 
-    public closeModal = (): void => {
-        this.setState({
-            visible: false
-        })
-    }
-
-    public okModal = ():void => {
-        const tip: string = this.state.name;
+    public handleOk = (values: Record<string, any>):void => {
         const contract: IContract | undefined = this.state.contract;
         const selectValue = this.state.selectedRows;
-        if(tip == "customerCompany") {
+        if(values.tip == "customerCompany") {
             if(selectValue.length > 0 ) {
                 const select = {
                     customerId: selectValue[0].id,
@@ -240,7 +214,6 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     customerPhone: selectValue[0].phone
                 }
                 this.setState({
-                    visible: false,
                     contract: {
                         ...(contract || {}),
                         customerInfoDto: select,
@@ -253,7 +226,6 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         } else {
             if(selectValue.length > 0 ) {
                 this.setState({
-                    visible: false,
                     contract: {
                         ...(contract || {}),
                         signCustomerName: selectValue[0].name
@@ -262,94 +234,6 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 this.getForm()?.setFieldsValue({ signCustomerName: selectValue[0].name })
             }
         }
-        
-    }
-
-    protected async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-customer/customer/page', {
-            ...filterValues,
-            current: pagination.current || this.state.tablePagination.current,
-            size: pagination.pageSize ||this.state.tablePagination.pageSize
-        });
-        this.setState({
-            ...filterValues,
-            tableDataSource: resData.records,
-            tablePagination: {
-                ...this.state.tablePagination,
-                current: resData.current,
-                pageSize: resData.size,
-                total: resData.total
-            }
-        });
-    }
-
-    public getFilterFormItemProps(): FormItemProps[]  {
-        return [{
-                name: 'type',
-                children: 
-                    <Select defaultValue="0">
-                        <Option value="0" >国内</Option>
-                        <Option value="1">国际</Option>
-                    </Select>
-            },{
-                name: 'name',
-                children: <Input placeholder="客户名字关键字"/>
-            }];
-    }
-
-    public onFilterSubmit = async (values: Record<string, any>) => {
-        this.getTable(values);
-    }
-
-    public getTableDataSource(): object[]  {
-        return this.state.tableDataSource;
-    }
-
-    protected renderModal (): React.ReactNode {
-        return (
-            <ModalComponent 
-                isModalVisible={ this.state.visible || false } 
-                confirmTitle="选择客户" 
-                handleOk={ this.okModal} 
-                handleCancel={ this.closeModal } 
-                columns={this.getTableColumns()} 
-                dataSource={this.getTableDataSource()} 
-                pagination={this.state.tablePagination}
-                onTableChange={this.onTableChange}
-                onSelectChange={this.onSelectChange}
-                selectedRowKeys={this.state.selectedRowKeys}
-                getFilterFormItemProps={this.getFilterFormItemProps()}
-                onFilterSubmit={this.onFilterSubmit}
-                name={this.state.name}
-            />
-        );
-    }
-
-    public getTableColumns(): TableColumnType<object>[] {
-        return [{
-            key: 'type',
-            title: '客户类型',
-            dataIndex: 'type',
-            render: (type: number): React.ReactNode => {
-                return  type === 1 ? '国内客户' : '国际客户';
-            }
-        }, {
-            key: 'name',
-            title: '客户名称',
-            dataIndex: 'name'
-        }, {
-            key: 'linkman',
-            title: '首要联系人',
-            dataIndex: 'linkman'
-        }, {
-            key: 'phone',
-            title: '联系电话',
-            dataIndex: 'phone'
-        }];
-    }
-
-    public onTableChange = (pagination: TablePaginationConfig): void => {
-        this.getTable(pagination);
     }
 
     public onSelectChange = (selectedRowKeys: React.Key[],selectedRows: DataType[]) => {
@@ -357,7 +241,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             selectedRowKeys,
             selectedRows
         });
-    }
+    } 
     /**
      * @implements
      * @description Gets form item groups
@@ -429,12 +313,10 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     }],
                     children: 
                         <>
-                            <Input value={ contract?.customerInfoDto?.customerCompany } suffix={
-                                <Button type="text" target="customerCompany" onClick={ () => this.showModal({tip: "customerCompany"}) }>
-                                    <PlusOutlined />
-                                </Button>
+                            <Input value={ contract?.customerInfoDto?.customerCompany } suffix={ 
+                                <ContractSelectionComponent handleOk={ () => this.handleOk({tip: "customerCompany"}) } onSelectChange={ this.onSelectChange }/>
                             }/>
-                            { this.renderModal() }
+                            
                         </>
                 }, {
                     label: '业主联系人',
@@ -456,12 +338,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     }],
                     children:
                         <>
-                            <Input value={ contract?.signCustomerName } suffix={
-                                <Button type="text" target="customerCompany"  onClick={() => this.showModal({tip: "signCustomerName"})}>
-                                    <PlusOutlined />
-                                </Button>
-                            }/>
-                            { this.renderModal() }
+                            <Input value={ contract?.signCustomerName }/>
                         </>
                 }, {
                     label: '合同签订日期',

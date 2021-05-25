@@ -7,13 +7,15 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 
+
 import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGroup } from '../../../components/AbstractFillableComponent';
-import ModalComponent from '../../../components/PromModalComponent';
+import ModalComponent from '../../../components/ContractSelectionModal';
 import RequestUtil from '../../../utils/RequestUtil';
 import moment from 'moment';
+import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 
 const { Option } = Select;
- 
+
 export interface IAbstractPaymentRecordSettingState extends IAbstractFillableComponentState {
     name: string;
     selectedRowKeys: React.Key[] | any;
@@ -43,88 +45,88 @@ export interface DataType{}
 
 
 export interface IResponseData {
-    total: number | undefined;
-    size: number | undefined;
-    current: number | undefined;
-    records: [];
- }
- 
- /**
-  * Abstract paymentRecord Setting
-  */
+total: number | undefined;
+size: number | undefined;
+current: number | undefined;
+records: [];
+}
+
+/**
+ * Abstract paymentRecord Setting
+ */
 export default abstract class AbstractPaymentRecordSetting<P extends RouteComponentProps, S extends IAbstractPaymentRecordSettingState> extends AbstractFillableComponent<P, S> {
- 
+
     public state: S = {
-        paymentRecord: undefined,
-        visible: false,
-        tablePagination: {
-            current: 1,
-            pageSize: 10,
-            total: 0,
-            showSizeChanger: false
-        },
+    paymentRecord: undefined,
+    visible: false,
+    tablePagination: {
+        current: 1,
+        pageSize: 10,
+        total: 0,
+        showSizeChanger: false
+    },
     } as S;
 
     protected getFormProps(): FormProps {
-        return {
-            ...super.getFormProps(),
-            labelCol: {
-                span: 8
-            },
-            wrapperCol: {
-                span: 16
-            }
-        };
-    }
+    return {
+        ...super.getFormProps(),
+        labelCol: {
+            span: 8
+        },
+        wrapperCol: {
+            span: 16
+        }
+    };
+}
 
-        /**
-         * @override
-         * @description Gets return path
-         * @returns return path 
-         */
+    /**
+     * @override
+     * @description Gets return path
+     * @returns return path 
+     */
     protected getReturnPath(): string {
-        return '';
+    return '/prom/contract';
     }
 
     protected getGeneratNum(): string { 
-        var result: number = Math.floor( Math.random() * 1000 );
-        let num: string = '';
-        if(result < 10) {
-            num =  '00' + result;
-        } else if (result<100){
-            num = '0' + result;
-        } else {
-            num =  result.toString();
-        }
-        return moment().format('YYYYMMDD') + num;
+    var result: number = Math.floor( Math.random() * 1000 );
+    let num: string = '';
+    if(result < 10) {
+        num =  '00' + result;
+    } else if (result<100){
+        num = '0' + result;
+    } else {
+        num =  result.toString();
     }
+    return moment().format('YYYYMMDD') + num;
+}
 
     protected renderModal (): React.ReactNode {
-        return (
-            <ModalComponent 
-                isModalVisible={ this.state.visible || false } 
-                confirmTitle="选择客户" 
-                handleOk={ this.okModal} 
-                handleCancel={ this.closeModal } 
-                columns={this.getTableColumns()} 
-                dataSource={this.getTableDataSource()} 
-                pagination={this.state.tablePagination}
-                onTableChange={this.onTableChange}
-                onSelectChange={this.onSelectChange}
-                selectedRowKeys={this.state.selectedRowKeys}
-                getFilterFormItemProps={this.getFilterFormItemProps()}
-                onFilterSubmit={this.onFilterSubmit}
-                name={this.state.name}
-            />
-        );
-    }
+    return (
+        <ModalComponent 
+            isModalVisible={ this.state.visible || false } 
+            confirmTitle="选择合同" 
+            handleOk={ this.okModal} 
+            handleCancel={ this.closeModal } 
+            columns={this.getTableColumns()} 
+            dataSource={this.getTableDataSource()} 
+            pagination={this.state.tablePagination}
+            onTableChange={this.onTableChange}
+            onSelectChange={this.onSelectChange}
+            selectedRowKeys={this.state.selectedRowKeys}
+            getFilterFormItemProps={this.getFilterFormItemProps()}
+            onFilterSubmit={this.onFilterSubmit}
+            name={this.state.name}
+        />
+    );
+}
 
-        /**
-     * @override
-     * @description 弹窗
-     * @returns 
-     */
-    public showModal = (record: Record<string, any>): void => {
+    /**
+ * @override
+ * @description 弹窗
+ * @returns 
+ */
+        public showModal = (record: Record<string, any>): void => {
         this.setState({
             visible: true,
             name: record.tip
@@ -137,27 +139,42 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
             visible: false
         })
     }
-    
+
     public okModal = ():void => {
         const tip: string = this.state.name;
         const paymentRecord: IPaymentRecord | undefined = this.state.paymentRecord;
         const selectValue = this.state.selectedRows;
-        if(selectValue.length > 0 ) {
-            this.setState({
-                visible: false,
-                paymentRecord: {
-                    ...(paymentRecord || {}),
-                    contractId: selectValue[0].contractNumber,
-                    customerName: selectValue[0].signCustomerName,
-                    name: selectValue[0].projectName,
-                }
-            })
-            this.getForm()?.setFieldsValue({ contractId: selectValue[0].contractNumber, name: selectValue[0].projectName, customerName: selectValue[0].signCustomerName })
+        if(tip == "contract") {
+            if(selectValue.length > 0 ) {
+                this.setState({
+                    visible: false,
+                    paymentRecord: {
+                        ...(paymentRecord || {}),
+                        contractId: selectValue[0].contractNumber,
+                        customerName: selectValue[0].signCustomerName,
+                        name: selectValue[0].projectName,
+                    }
+                })
+                this.getForm()?.setFieldsValue({ contractId: selectValue[0].contractNumber, name: selectValue[0].projectName, customerName: selectValue[0].signCustomerName })
+            }
+        } else {
+            if(selectValue.length > 0 ) {
+                this.setState({
+                    visible: false,
+                    paymentRecord: {
+                        ...(paymentRecord || {}),
+                        customerName: selectValue[0].signCustomerName,
+                    }
+                })
+                this.getForm()?.setFieldsValue({ customerName: selectValue[0].signCustomerName })
+            }
         }
+            
+        
     }
 
     protected getTable = async (filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) => {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>('/customer/contract', {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>(`/customer/contract`, {
             ...filterValues,
             current: pagination.current || this.state.tablePagination.current,
             size: pagination.pageSize ||this.state.tablePagination.pageSize
@@ -231,8 +248,8 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
             key: 'chargeType',
             title: '计价方式',
             dataIndex: 'chargeType',
-            render: (chargeType: number): React.ReactNode => {
-                return  chargeType === 1 ? '订单总价、总重计算单价' : '产品单价、基数计算总价';
+            render: (type: number): React.ReactNode => {
+                return  type === 1 ? '订单总价、总重计算单价' : '产品单价、基数计算总价';
             }
         }];
     }
@@ -245,14 +262,14 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
         this.setState({ 
             selectedRowKeys,
             selectedRows
-            });
+        });
     }
- 
-     /**
-      * @implements
-      * @description Gets form item groups
-      * @returns form item groups 
-      */
+
+    /**
+     * @implements
+     * @description Gets form item groups
+     * @returns form item groups 
+     */
     public getFormItemGroups(): IFormItemGroup[][] {
         const paymentRecord: IPaymentRecord | undefined = this.state.paymentRecord;
         const GeneratNum: string = this.getGeneratNum();
@@ -271,12 +288,12 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 }],
                 children: 
                 <>
-                <Input value={ paymentRecord?.name } suffix={
-                    <Button type="text" target="customerCompany"  onClick={() => this.showModal({tip: "name"})}>
-                        <PlusOutlined />
-                    </Button>
-                }/>
-                { this.renderModal() }
+                    <Input value={ paymentRecord?.contractId } suffix={
+                        <Button type="text" target="customerCompany"  onClick={() => this.showModal({tip: "contract"})}>
+                            <PlusOutlined />
+                        </Button>
+                    }/>
+                    { this.renderModal() }
                 </>
             }, {
                 label: '工程名称',
@@ -293,7 +310,15 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 required: true,
                 message: '请选择来款单位'
             }],
-            children: <Input/>
+            children: 
+            <>
+                <Input value={ paymentRecord?.customerName } suffix={
+                    <Button type="text" target="customerCompany"  onClick={() => this.showModal({tip: "customerName"})}>
+                        <PlusOutlined />
+                    </Button>
+                }/>
+                { this.renderModal() }
+            </>
         },  {
             label: '回款计划',
             name: 'name',
@@ -306,8 +331,8 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
         }, {
             label: '计划回款日期',
             name: 'name',
-            initialValue: paymentRecord?.name,
-            // children: <DatePicker />
+            initialValue: moment(paymentRecord?.name),
+            children: <DatePicker />
         }, {
             label: '计划回款占比',
             name: 'name',
@@ -336,61 +361,184 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
             }, {
                 label: '来款时间',
                 name: 'refundTime',
-                initialValue: paymentRecord?.refundTime,
+                initialValue: moment(paymentRecord?.refundTime),
                 rules: [{
                 required: true,
                 message: '请选择来款时间'
             }],
                 children: <DatePicker />
             }, {
-            label: '来款方式',
-            name: 'refundMode',
-            initialValue: paymentRecord?.refundMode,
-            children:
-                <Select>
-                    <Select.Option value={ 1 }>现金</Select.Option>
-                    <Select.Option value={ 2 }>商承</Select.Option>
-                    <Select.Option value={ 3 }>银行</Select.Option>
-                </Select>
-        }, {
-            label: '来款金额（￥）',
-            name: 'refundAmount',
-            initialValue: paymentRecord?.refundAmount,
-            children: <Input/>
-        }, {
-            label: '币种',
-            name: 'currencyType',
-            initialValue: paymentRecord?.currencyType,
-            children: 
-                <Select>
-                    <Select.Option value={ 1 }>RMB人民币</Select.Option>
-                    <Select.Option value={ 2 }>USD美元</Select.Option>
-                </Select>
-        }, {
-            label: '汇率',
-            name: 'exchangeRate',
-            initialValue: paymentRecord?.exchangeRate,
-            children: <Input/>
-        }, {
-            label: '外币金额',
-            name: 'foreignExchangeAmount',
-            initialValue: paymentRecord?.foreignExchangeAmount,
-            rules: [{
-                required: true,
-                message: '请输入外币金额'
-            }],
-            children: <Input/>
-        }, {
-            label: '收款银行',
-            name: 'refundBank',
-            initialValue: paymentRecord?.refundBank,
-            children: <Input/>
-        }, {
-            label: '备注',
-            name: 'description',
-            initialValue: paymentRecord?.description,
-            children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息"/>
-        }]
+                label: '来款方式',
+                name: 'refundMode',
+                initialValue: paymentRecord?.refundMode,
+                children:
+                    <Select>
+                        <Select.Option value={ 1 }>现金</Select.Option>
+                        <Select.Option value={ 2 }>商承</Select.Option>
+                        <Select.Option value={ 3 }>银行</Select.Option>
+                    </Select>
+            }, {
+                label: '来款金额（￥）',
+                name: 'refundAmount',
+                initialValue: paymentRecord?.refundAmount,
+                children: <Input/>
+            }, {
+                label: '币种',
+                name: 'currencyType',
+                initialValue: paymentRecord?.currencyType,
+                children: 
+                    <Select>
+                        <Select.Option value={ 1 }>RMB人民币</Select.Option>
+                        <Select.Option value={ 2 }>USD美元</Select.Option>
+                    </Select>
+            }, {
+                label: '汇率',
+                name: 'exchangeRate',
+                initialValue: paymentRecord?.exchangeRate,
+                children: <Input/>
+            }, {
+                label: '外币金额',
+                name: 'foreignExchangeAmount',
+                initialValue: paymentRecord?.foreignExchangeAmount,
+                rules: [{
+                    required: true,
+                    message: '请输入外币金额'
+                }],
+                children: <Input/>
+            }, {
+                label: '收款银行',
+                name: 'refundBank',
+                initialValue: paymentRecord?.refundBank,
+                children: <Input/>
+            }, {
+                label: '备注',
+                name: 'description',
+                initialValue: paymentRecord?.description,
+                children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息"/>
+            }]
         }]];
     }
+    /**
+     * @description Renders extra sections
+     * @returns extra sections 
+     */
+    //  public renderExtraSections(): IRenderedSection[] {
+    //     const contract: IContract | undefined = this.state.contract;
+    //     return [{
+    //         title: '附件',   
+    //         render: (): React.ReactNode => {
+    //             return (
+    //                 <>
+    //                     <Row className={ styles.attachHeader }>
+    //                         <Col span={ 1 }></Col>
+    //                         <Col span={ 6 }>附件名称</Col>
+    //                         <Col span={ 2 }>文件大小</Col>
+    //                         <Col span={ 4 }>上传时间</Col>
+    //                         <Col span={ 4 }>上传人员</Col>
+    //                         <Col span={ 4 }>备注</Col>
+    //                         <Col span={ 3 }>操作</Col>
+    //                     </Row>
+    //                     <Form.List name="attachInfoDtos">
+    //                         {
+    //                             (fields: FormListFieldData[], operation: FormListOperation): React.ReactNode => {
+    //                                 return (
+    //                                     <>
+    //                                         <Space size="small" className={ styles.attachBtn }>
+    //                                             <Upload  action='/tower-system/attach' onChange={ (info)=>{
+    //                                                 console.log(info)
+    //                                                 if (info.file.status !== 'uploading') {
+    //                                                     // console.log(info.file, info.fileList);
+    //                                                     }
+    //                                                     if (info.file.status === 'done') {
+    //                                                     console.log(info.file, info.fileList);
+    //                                                     } else if (info.file.status === 'error') {
+    //                                                     console.log(info.file, info.fileList);
+    //                                                     operation.add({
+    //                                                         name: info.file.name,
+    //                                                         username: 'admin',
+    //                                                         fileSize: info.file.size,
+    //                                                         description: ''
+    //                                                     })
+    //                                                     }
+    //                                             } } showUploadList= {false}>
+    //                                                 <Button type="primary">添加</Button>
+    //                                             </Upload>
+    //                                             <Button type="primary" onClick={ ()=> {
+    //                                                 let attachInfoDtos: any[] =  this.getForm()?.getFieldValue("attachInfoDtos");
+    //                                                 let checked: any[] = this.state.checkList;
+    //                                                 let batchId: any[] = [];
+    //                                                 checked.map((item: any) => {
+    //                                                     batchId.push(attachInfoDtos[item].id)
+    //                                                 })
+    //                                                 console.log(batchId)
+    //                                             } }>下载</Button>
+    //                                             <Button type="primary" onClick={ ()=> {
+    //                                                 let attachInfoDtos: any[] =  this.getForm()?.getFieldValue("attachInfoDtos");
+    //                                                 let checked: any[] = this.state.checkList;
+    //                                                 let batchId: any[] = [];
+    //                                                 checked.map((item: any) => {
+    //                                                     batchId.push(attachInfoDtos[item].id)
+    //                                                 })
+    //                                                 operation.remove(this.state.checkList)
+    //                                             } }>删除</Button>
+    //                                         </Space>
+    //                                         {
+    //                                             fields.map<React.ReactNode>((field: FormListFieldData, index: number): React.ReactNode => (
+    //                                                 <Row key={ `${ field.name }_${ index }` } className={ styles.FormItem }>
+    //                                                     <Col span={ 1 }>
+    //                                                         <Checkbox value={ index } onChange={ this.checkChange }></Checkbox>
+    //                                                     </Col>
+    //                                                     <Col span={ 6 }>
+    //                                                         <Form.Item { ...field } name={[field.name, 'name']} fieldKey={[field.fieldKey, 'returnedTime']}>
+    //                                                             <Input disabled  className={ styles.Input }/>
+    //                                                         </Form.Item>
+    //                                                     </Col>
+    //                                                     <Col span={ 2 }>
+    //                                                         <Form.Item { ...field } name={[field.name, 'fileSize']} fieldKey={[field.fieldKey, 'returnedRate']}>
+    //                                                             <Input disabled  className={ styles.Input }/>
+    //                                                         </Form.Item>
+    //                                                     </Col>
+    //                                                     <Col span={ 4 }>
+    //                                                         <Form.Item { ...field } name={[field.name, 'username']} fieldKey={[field.fieldKey, 'returnedAmount']}>
+    //                                                             <Input disabled  className={ styles.Input }/>
+    //                                                         </Form.Item>
+    //                                                     </Col>
+    //                                                     <Col span={ 4 }>
+    //                                                         <Form.Item { ...field } name={[field.name, 'username']} fieldKey={[field.fieldKey, 'returnedAmount']}>
+    //                                                             <Input disabled  className={ styles.Input }/>
+    //                                                         </Form.Item>
+    //                                                     </Col>
+    //                                                     <Col span={ 4 }>
+    //                                                         <Form.Item { ...field } name={[field.name, 'description']} fieldKey={[field.fieldKey, 'description']}>
+    //                                                             <Input.TextArea rows={ 5 } maxLength={ 300 }/>
+    //                                                         </Form.Item>
+    //                                                     </Col>
+    //                                                     <Col span={ 3 }>
+    //                                                         <Space direction="horizontal" size="small">
+    //                                                             <Link to={ `` }>预览</Link>
+    //                                                             <Link to={ `` }>下载</Link>
+    //                                                             <ConfirmableButton confirmTitle="要删除该附件吗？"
+    //                                                                 type="link" placement="topRight"
+    //                                                                 onConfirm={ () => { 
+    //                                                                     let attachInfoDtos =  this.getForm()?.getFieldValue("attachInfoDtos");
+    //                                                                     // operation.remove(index); 
+    //                                                                     console.log(attachInfoDtos[index].id)
+    //                                                                 }}>
+    //                                                                 <DeleteOutlined />
+    //                                                             </ConfirmableButton>
+    //                                                         </Space>
+    //                                                     </Col>
+    //                                                 </Row>
+    //                                             ))
+    //                                         }
+    //                                     </>
+    //                                 );
+    //                             }
+    //                         }
+    //                     </Form.List>
+    //                 </>
+    //             )
+    //         }
+    //     }];
+    // }
 }
