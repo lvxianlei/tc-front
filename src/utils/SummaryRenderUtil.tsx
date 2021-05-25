@@ -19,7 +19,7 @@ export interface IRenderedSection extends ISection {
 
 interface IRenderedFieldItem {
     readonly label: string;
-    readonly value?: string;
+    readonly value?: string | number;
 }
 
 type IRenderedGridCols = IRenderedFieldItem[];
