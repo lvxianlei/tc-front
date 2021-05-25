@@ -13,6 +13,7 @@ import ConfirmableButton from '../../../components/ConfirmableButton';
 import { ITabItem } from '../../../components/ITabableComponent';
 import RequestUtil from '../../../utils/RequestUtil';
 import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../../../utils/SummaryRenderUtil';
+import styles from './ContractDetail.module.less'
 
 export interface IContractDetailProps {
     readonly id: string;
@@ -20,7 +21,7 @@ export interface IContractDetailProps {
 export interface IContractDetailRouteProps extends RouteComponentProps<IContractDetailProps> {}
 export interface IContractDetailState {
     readonly detail?: IDetail;
-    readonly orderData?: IOrderData;
+    readonly orderData: IOrderItem[];
 }
 
 interface IDetail {
@@ -38,12 +39,16 @@ interface IDetail {
     readonly attachVos?: IAttachVos[];
 }
 
-interface IOrderData {
+interface IOrderItem {
     readonly taxAmount?: number;
     readonly orderQuantity?: number;
     readonly internalNumber?: string;
+    readonly products?: IProducts[];
 }
 
+interface IProducts {
+
+}
 interface IResponseData {
     readonly id: number;
     readonly records: IDetail;
@@ -66,7 +71,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
 
     public state: IContractDetailState = {
         detail: undefined,
-        orderData: undefined
+        orderData: []
     }
 
     protected getTitle(): string {
@@ -79,10 +84,10 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
       */
     protected async fetchTableData() {
         const resData: IResponseData = await RequestUtil.get<IResponseData>(`/contract/${ this.props.match.params.id }`);
-        const orderData: IOrderData = await RequestUtil.get<IOrderData>(`/saleOrder/getSaleOrderDetailsById`, {
+        const orderData: IOrderItem[] = await RequestUtil.get<IOrderItem[]>(`/saleOrder/getSaleOrderDetailsById`, {
             contractId: this.props.match.params.id 
         });
-        console.log(resData,orderData)
+        console.log(orderData)
         this.setState({
             detail: resData.records,
             orderData: orderData
@@ -100,6 +105,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
      */
     public getSubinfoColProps (): ColProps[] {
         const detail: IDetail | undefined = this.state?.detail;
+        console.log(this.state?.detail)
         return [{
             span: 8,
             children: (
@@ -242,28 +248,28 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
      * @returns order summariable items 
      */
     private getOrderSummariableItems(): IRenderdSummariableItem[] {
-        const orderData: IOrderData | undefined = this.state.orderData;
-        // orderData.map<React.ReactNode>((res: any) => {
-        //     console.log(res)
-        // })
-        return [{
-            fieldItems: [{
-                label: '订单编号',
-                value: orderData?.internalNumber
-            }, {
-                label: '采购订单号',
-                value: orderData?.internalNumber
-            }, {
-                label: '订单数量',
-                value: orderData?.orderQuantity?.toString()
-            }, {
-                label: '订单金额',
-                value: orderData?.taxAmount?.toString()
-            }],
-            render: (): React.ReactNode => (
-                <Table pagination={ false } bordered={ true } columns={ this.getOrderColumns() }/>
-            )
-        }];
+        const orderData: IOrderItem[] = this.state.orderData;
+        return orderData.map<IRenderdSummariableItem>((item: IOrderItem): IRenderdSummariableItem=> {
+            return{
+                fieldItems: [{
+                    label: '订单编号',
+                    value: item.internalNumber
+                }, {
+                    label: '采购订单号',
+                    value: item.internalNumber
+                }, {
+                    label: '订单数量',
+                    value: item.orderQuantity
+                }, {
+                    label: '订单金额',
+                    value:  item.taxAmount
+                }],
+                render: (): React.ReactNode => (
+                    <Table dataSource={ item.products } pagination={ false } bordered={ true } columns={ this.getOrderColumns() }/>
+                )
+            }  
+        })
+        
     }
 
 
@@ -403,6 +409,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                 render: (): React.ReactNode => SummaryRenderUtil.renderGrid(this.getBaseInfoGrid())
             }, {
                 title: '订单信息',
+                className: styles.orderSection,
                 render: (): React.ReactNode => SummaryRenderUtil.renderSummariableAreas(this.getOrderSummariableItems())
             }, {
                 title: '系统信息',
