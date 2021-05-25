@@ -16,6 +16,7 @@ import styles from './AbstractSaleOrderSetting.module.less'
 
 export interface IAbstractSaleOrderSettingState extends IAbstractFillableComponentState {
     readonly saleOrder?: ISaleOrder;
+    readonly orderQuantity: number;
 }
 
 export interface ISaleOrder {
@@ -61,7 +62,8 @@ interface IContractInfoDto {
 export default abstract class AbstractSaleOrderSetting<P extends RouteComponentProps, S extends IAbstractSaleOrderSettingState> extends AbstractFillableComponent<P, S> {
 
     public state: S = {
-        saleOrder: undefined
+        saleOrder: undefined,
+        orderQuantity: 0,
     } as S;
 
     /**
@@ -79,6 +81,11 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 span: 16
             }
         };
+    }
+
+    public componentDidUpdate(): void {
+        const orderQuantity: number = this.state.orderQuantity;
+        this.getForm()?.setFieldsValue({ orderQuantity: orderQuantity })
     }
     
     /**
@@ -110,7 +117,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      */
     public getFormItemGroups(): IFormItemGroup[][] {
         const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
-        console.log( saleOrder?.productDtos?.length)
+        const orderQuantity: number = this.state.orderQuantity;
         const GeneratNum: string = this.getGeneratNum();
         return [[{
             title: '基础信息',
@@ -191,7 +198,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             }, {
                 label: '订单数量',
                 name: 'orderQuantity',
-                initialValue: saleOrder?.orderQuantity || saleOrder?.productDtos?.length,
+                initialValue: saleOrder?.orderQuantity || orderQuantity,
                 children: <Input disabled/>
             }, {
                 label: '含税金额',
@@ -302,11 +309,13 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                     return (
                                         <>
                                             <Button type="primary" onClick={ () => {
-                                                operation.add();
-                                                this.setState({
-
-                                                })
-                                            }   } className={ styles.addBtn }>新增</Button>
+                                                    operation.add();
+                                                    const orderQuantity: number = this.state.orderQuantity;
+                                                    this.setState({
+                                                        orderQuantity: orderQuantity+1
+                                                    })
+                                                }   
+                                            } className={ styles.addBtn }>新增</Button>
                                             <Row  className={ styles.FormHeader }>
                                                 <Col span={ 1 }></Col>
                                                 <Col span={ 1 }>序号</Col>
@@ -328,7 +337,13 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                         <Col span={ 1 }>
                                                             <ConfirmableButton confirmTitle="要删除该条回款计划吗？"
                                                                 type="link" placement="topRight"
-                                                                onConfirm={ () => { operation.remove(index); } }>
+                                                                onConfirm={ () => { 
+                                                                    operation.remove(index); 
+                                                                    const orderQuantity: number = this.state.orderQuantity;
+                                                                    this.setState({
+                                                                        orderQuantity: orderQuantity-1
+                                                                    })
+                                                                } }>
                                                                 <DeleteOutlined />
                                                             </ConfirmableButton>
                                                         </Col>
@@ -372,7 +387,12 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                         </Col>
                                                         <Col span={ 2 }>
                                                             <Form.Item { ...field } name={[field.name, 'productHeight']} fieldKey={[field.fieldKey, 'productHeight']}>
-                                                                <Input/>
+                                                            <InputNumber
+                                                                min="0"
+                                                                step="0.01"
+                                                                stringMode={ false } 
+                                                                precision={ 2 }
+                                                            />
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={ 2 }>
