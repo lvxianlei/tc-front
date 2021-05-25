@@ -122,7 +122,7 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
     //delete-row
     public handleDelete = (record: Record<string,any>) => {
         const dict = [...this.state.dict];
-        this.setState({ dict: dict.filter(item => item.id !== record.id) });
+        this.setState({ dict: dict.filter((item:IDictValue) => item.id !== record.id) });
     };
     /**
      * @implements
