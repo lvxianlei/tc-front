@@ -10,10 +10,15 @@
     border: 1px solid #ccc;
   }
   
-.row-dragging td {
-    padding: 16px;
+:global(.row-dragging td) {
+    padding:16px 150px;
 }
 
-.row-dragging .drag-visible {
+:global(.row-dragging .drag-visible) {
     visibility: visible;
+}
+
+:global(.row-dragging) {
+    background: #fafafa;
+    border: 1px solid #ccc;
 }

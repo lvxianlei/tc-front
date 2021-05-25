@@ -25,7 +25,8 @@ export interface IDictMngtState {
     readonly dict: IDictValue[];
     readonly visible: boolean;
     readonly editValue: string;
-    readonly tab:IDictValue[];
+    readonly type: string;
+    readonly tab: IDictValue[];
 }
 interface IDictValue {
     readonly id: number,
@@ -33,17 +34,23 @@ interface IDictValue {
     readonly disable: boolean;
     readonly sort: number;
     readonly amount: number;
+    readonly type: number;
 }
 
-interface dictValue{
+interface IDictResponseData {
     readonly current: number ,
     readonly records: IDictValue[],
     readonly size: number,
     readonly total: number,
+    readonly id: number,
+    readonly name: string;
+    readonly disable: boolean;
+    readonly sort: number;
+    readonly amount: number;
 }
 
 /**
- * Client Management
+ * Dict Management
  */
 class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMngtState> {
 
@@ -61,15 +68,16 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
      public state: IDictMngtState = {
             dict: [],
             visible: false,
-            editValue: '',
-            tab:[],
+            editValue: '',//弹框值
+            tab:[],    //tab页
+            type: '',    //类型
     }
     /**
      * @description Components did mount
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const dict: dictValue = await RequestUtil.get<dictValue>(`/system/dict`);
+        const dict: IDictResponseData = await RequestUtil.get<IDictResponseData>(`/system/dict`);
         this.setState({
             dict:dict.records,   //内容
             tab: dict.records,   //tab标签
@@ -80,7 +88,7 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
      * @description Gets charging record columns
      * @returns charging record columns 
      */
-    public getChargingRecordColumns(): ColumnsType<object> {
+    public getChargingRecordColumns(res:IDictValue): ColumnsType<object> {
         return [{
             title: '选项值名',
             dataIndex: 'name'
@@ -104,12 +112,14 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
             key: 'x',
             render: (text, record) => (
                 <Space size="middle">
-                    <a onClick={() => this.showModal(record)}>编辑</a>
+                    <a onClick={() => this.showModal(record,res.name)}>编辑</a>
                     <ConfirmableButton confirmTitle="要删除该数据吗？" type="link" placement="topRight" onConfirm={() => this.handleDelete(record)}>删除</ConfirmableButton>
                 </Space>
               ),
         }];
     }
+
+    //delete-row
     public handleDelete = (record: Record<string,any>) => {
         const dict = [...this.state.dict];
         this.setState({ dict: dict.filter(item => item.id !== record.id) });
@@ -134,10 +144,10 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
                             <div>
                                 <div className={styles.title}>
                                 <span>{res.name}</span>
-                                <Button type='primary'onClick={()=>this.showModal({name:''})}>新增</Button>
+                                <Button type='primary'onClick={()=>this.showModal({name:''},res.name)}>新增</Button>
                                 </div>
                                 <Table 
-                                    columns={this.getChargingRecordColumns()} 
+                                    columns={this.getChargingRecordColumns(res)} 
                                     dataSource={dict}
                                     rowKey="sort"
                                     components={{
@@ -159,7 +169,6 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
     public onSortEnd = (props:any) => {
         const {oldIndex,newIndex} = props;
         const { dict } = this.state;
-        console.log(dict)
         if (oldIndex !== newIndex) {
           const newData = arrayMove(dict, oldIndex, newIndex).filter(el => !!el);
           console.log('Sorted items: ', newData);
@@ -188,10 +197,11 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
 
 
 
-    public showModal(record: Record<string,any> ): void {
+    public showModal(record: Record<string,any> ,res:string): void {
         this.setState({
             visible: true,
-            editValue: record.name
+            editValue: record.name,
+            type:res
         })
     }
     //closeModal
@@ -202,7 +212,7 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
     }
     //ok
     public handleOk(value:string): void {
-        console.log(value)
+        console.log(value, this.state.type)
         this.setState({
             visible: false,
         })
@@ -214,7 +224,8 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
 
 
     public onChange = async(activeKey:string)=>{
-        const dict: dictValue = await RequestUtil.get<dictValue>(`/system/dict`);
+        console.log(activeKey)
+        const dict: IDictResponseData = await RequestUtil.get<IDictResponseData>(`/system/dict`);
         this.setState({
             dict:dict.records
         })
@@ -224,20 +235,19 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
         const { editValue } = this.state;
         return (
             <>
-            <Tabs { ...this.getTabsProps() } onChange={this.onChange}>
+             <Tabs { ...this.getTabsProps() } onChange={this.onChange}>
                 {
                     this.getTabItems().map<React.ReactNode>((item: ITabItem): React.ReactNode => (
-                        <>
                         <Tabs.TabPane tab={ item.label } key={ item.key }>
                             { item.content }
                         </Tabs.TabPane>
-                        </>
                     ))
                 }
             </Tabs>
             <DictModal visible={this.state.visible} handleCancel={this.closeModal} value={editValue} title={editValue?'修改选项':'新增选项'} {...this.props} onFinish={this.onFinish}/>
             </>
         );
+        
     }
 }
 

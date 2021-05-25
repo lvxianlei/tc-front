@@ -14,7 +14,7 @@ import ITabableComponent, { ITabItem } from './ITabableComponent';
  * Abstract tabable component
  */
 export default abstract class AbstractTabableComponent<P extends RouteComponentProps, S = {}> extends AbstractTitledRouteComponent<P, S> implements ITabableComponent {
-
+ 
     /**
      * @abstract
      * @description Gets tab items
@@ -42,11 +42,9 @@ export default abstract class AbstractTabableComponent<P extends RouteComponentP
             <Tabs { ...this.getTabsProps() }>
                 {
                     this.getTabItems().map<React.ReactNode>((item: ITabItem): React.ReactNode => (
-                        <>
                         <Tabs.TabPane tab={ item.label } key={ item.key }>
                             { item.content }
                         </Tabs.TabPane>
-                        </>
                     ))
                 }
             </Tabs>
