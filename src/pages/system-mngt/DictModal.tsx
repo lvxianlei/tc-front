@@ -15,7 +15,9 @@
      readonly saveValue?:(e?: React.MouseEvent<HTMLElement>) => void;
      readonly onFinish?:(e?: React.MouseEvent<HTMLElement>) => void;
  }
- export interface IDictModalState {}
+ export interface IDictModalState {
+     readonly editValue:string;
+ }
  
  /**
   * @TODO Describe the class
@@ -26,22 +28,24 @@
     //   * @description Gets state
     //   * @returns state 
     //   */
-    // public state: IDictModalState = {
-    //     contract: [],
-    //     visible: false,
-    //     editValue: '',
-    // }
+    public state: IDictModalState = {
+        editValue: '',
+    }
  
-    
+    // public componentWillReceiveProps(nextProps:any){
+    //       nextProps.value&&this.setState({
+    //           editValue:nextProps.value
+    //       })
+    // }
      /**
       * @description Renders DictModal
       * @returns render 
       */
     public render(): React.ReactNode {
-        
          return (
-            <Modal title={this.props.title} visible={this.props.visible} footer={null} onCancel={this.props.handleCancel}>
-                <Form onFinish={this.props.onFinish}>
+            <div>
+            {this.props.visible && <Modal title={this.props.title} visible={this.props.visible} footer={null} onCancel={this.props.handleCancel}>
+               <Form onFinish={this.props.onFinish}>
                 <Form.Item
                     name="name"
                     label="选项值名"
@@ -50,10 +54,11 @@
                 >
                     <Input placeholder="请填写选项值名"/>
                 </Form.Item>
-                <Button type="primary" htmlType="submit">确认</Button>
+                <Button type="primary" htmlType="submit">保存</Button>
                 <Button onClick={this.props.handleCancel}>取消</Button>
                 </Form>
-            </Modal>
+            </Modal>}
+            </div>
          );
     }
  }

@@ -3,10 +3,10 @@ const Mock = require('mockjs');
 const Random = Mock.Random;
 
 const records = [];
-for (let i = 1; i < 10; ++i) {
+for (let i = 1; i < 5; ++i) {
     records.push({
         "id": Random.natural(1),
-        "name": `${ Random.ctitle(7, 10) }有限公司`,
+        "name": `${ Random.ctitle(1, 3) }`,
         "disable": true,
         "sort": Random.natural(5),
         "amount": Random.natural(5),
@@ -19,7 +19,7 @@ module.exports = {
     data: {
         records: [{
             "id": Random.natural(1),
-            "name": `${ Random.ctitle(7, 10) }有限公司`,
+            "name": `${ Random.ctitle(1,3) }`,
             "disable": true,
             "sort": Random.natural(5),
             "amount": Random.natural(5),

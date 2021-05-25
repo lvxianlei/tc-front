@@ -10,6 +10,14 @@ import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../..
 import RequestUtil from '../../utils/RequestUtil';
 import ConfirmableButton from '../../components/ConfirmableButton';
 import DictModal from './DictModal';
+import styles from './DictMngt.module.less';
+import { arrayMove, SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
+import { MenuOutlined } from '@ant-design/icons';
+
+const DragHandle = SortableHandle(() => <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />);
+const SortableItem = SortableElement((props: JSX.IntrinsicAttributes & React.ClassAttributes<HTMLTableRowElement> & React.HTMLAttributes<HTMLTableRowElement>) => <tr {...props} />);
+const SortableCon = SortableContainer((props: JSX.IntrinsicAttributes & React.ClassAttributes<HTMLTableSectionElement> & React.HTMLAttributes<HTMLTableSectionElement>) => <tbody {...props} />);
+
 
 export interface IDictMngtProps {}
 export interface IDictMngtWithRouteProps extends RouteComponentProps<IDictMngtProps>, WithTranslation {}
@@ -63,7 +71,8 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
         super.componentDidMount();
         const dict: dictValue = await RequestUtil.get<dictValue>(`/system/dict`);
         this.setState({
-            dict:dict.records
+            dict:dict.records,   //内容
+            tab: dict.records,   //tab标签
         });
     }
 
@@ -77,13 +86,15 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
             dataIndex: 'name'
         }, {
             title: '排序',
-            dataIndex: 'sort'
+            dataIndex: 'sort',
+            width:'10%',
+            className: 'drag-visible',
+            render: () => <DragHandle />,
         }, {
             title: '启用',
             width:'10%',
             dataIndex: 'disable',
             render: (text, record): React.ReactNode => {
-                console.log(text)
                 return  <Checkbox  onChange={(e)=>{console.log(e)}} defaultChecked={text}/>;
             }
         }, {
@@ -109,61 +120,73 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
      * @returns tab items 
      */
      public getTabItems(): ITabItem[] {
-        const {dict} = this.state;
+        const {dict,tab} = this.state;
         // console.log(this.state.dict)
-        return [{
-            label: '产品',
-            key: 1,
-            content: SummaryRenderUtil.renderSections([{
-                title: '产品类型',
-                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()} dataSource={dict}/>
-            }, {
-                title: '电压等级',
-                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()} dataSource={dict}/>
-            }, {
-                title: '计量单位',
-                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()} dataSource={dict}/>
-            }, {
-                title: '材料标准',
-                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()} dataSource={dict}/>
-            }])
-        },{
-            label: '财务',
-            key: 2,
-            content: SummaryRenderUtil.renderSections([{
-                title: '币种',
-                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()} dataSource={dict}/>
-            }, {
-                title: '税率',
-                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()} dataSource={dict}/>
-            }, {
-                title: '计价方式',
-                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()}/>
-            }, {
-                title: '来款方式',
-                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()}/>
-            }])
-        },{
-            label: '其他',
-            key: 3,
-            content: SummaryRenderUtil.renderSections([{
-                title: '客户类型',
-                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()}/>
-            }, {
-                title: '中标类型',
-                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()}/>
-            }, {
-                title: '销售类型',
-                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()}/>
-            }, {
-                title: '文件类型',
-                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()}/>
-            }, {
-                title: '合同级别',
-                render: (): React.ReactNode => <Table columns={this.getChargingRecordColumns()}/>
-            }])
-        }];
+        return tab.map((item:IDictValue)=>{
+            return {
+                label:item.name,
+                key:item.id,
+                content: SummaryRenderUtil.renderSections(
+                     dict.map((res:IDictValue)=>{
+                        return {
+                            title:'',
+                            render:(): React.ReactNode => 
+                            <div>
+                                <div className={styles.title}>
+                                <span>{res.name}</span>
+                                <Button type='primary'onClick={()=>this.showModal({name:''})}>新增</Button>
+                                </div>
+                                <Table 
+                                    columns={this.getChargingRecordColumns()} 
+                                    dataSource={dict}
+                                    rowKey="sort"
+                                    components={{
+                                        body: {
+                                          wrapper: this.DraggableContainer,
+                                          row: this.DraggableBodyRow,
+                                        },
+                                    }}
+                                />
+                            </div>
+                        }
+                     }
+                ))
+            }
+        })
+        
     }
+
+    public onSortEnd = (props:any) => {
+        const {oldIndex,newIndex} = props;
+        const { dict } = this.state;
+        console.log(dict)
+        if (oldIndex !== newIndex) {
+          const newData = arrayMove(dict, oldIndex, newIndex).filter(el => !!el);
+          console.log('Sorted items: ', newData);
+          this.setState({ dict: newData });
+        }
+    }
+
+    public DraggableContainer = (props:IDictMngtWithRouteProps) => (
+        <SortableCon
+            useDragHandle
+            disableAutoscroll
+            helperClass="row-dragging"
+            onSortEnd={this.onSortEnd}
+            {...props}
+        />
+    );
+    
+    public DraggableBodyRow = ({ ...restProps }) => {
+        const { dict } = this.state;
+        // function findIndex base on Table rowKey props and should always be a right array index
+        const index = dict.findIndex(x => x.sort === restProps['data-row-key']);
+        return <SortableItem index={index} {...restProps}  />;
+    };
+
+
+
+
 
     public showModal(record: Record<string,any> ): void {
         this.setState({
@@ -171,26 +194,37 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
             editValue: record.name
         })
     }
-
+    //closeModal
     public closeModal(): void {
         this.setState({
             visible: false,
         })
     }
+    //ok
     public handleOk(value:string): void {
         console.log(value)
         this.setState({
             visible: false,
         })
     }
+    //Modal-Value
     public onFinish = (values:any) =>{ 
         this.handleOk(values)
+    }
+
+
+    public onChange = async(activeKey:string)=>{
+        const dict: dictValue = await RequestUtil.get<dictValue>(`/system/dict`);
+        this.setState({
+            dict:dict.records
+        })
+        
     }
     public render(): React.ReactNode {
         const { editValue } = this.state;
         return (
             <>
-            <Tabs { ...this.getTabsProps() }>
+            <Tabs { ...this.getTabsProps() } onChange={this.onChange}>
                 {
                     this.getTabItems().map<React.ReactNode>((item: ITabItem): React.ReactNode => (
                         <>
