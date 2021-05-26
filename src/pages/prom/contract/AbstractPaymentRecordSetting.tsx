@@ -2,28 +2,26 @@
  * @author zyc
  * @copyright © 2021 zyc
  */
-import { Button, DatePicker, FormItemProps, FormProps, Input, Select, TableColumnType, TablePaginationConfig } from 'antd';
+import { DatePicker, FormProps, Input, Select } from 'antd';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 
 
 import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGroup } from '../../../components/AbstractFillableComponent';
-import ModalComponent from '../../../components/ContractSelectionModal';
+import ClientSelectionComponent from '../../../components/ClientSelectionModal';
+import ContractSelectionComponent from '../../../components/ContractSelectionModal';
+import PaymentPlanSelectionComponent from '../../../components/PaymentPlanSelectionModal'
 import RequestUtil from '../../../utils/RequestUtil';
 import moment from 'moment';
-import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 
 const { Option } = Select;
 
 export interface IAbstractPaymentRecordSettingState extends IAbstractFillableComponentState {
-    name: string;
-    selectedRowKeys: React.Key[] | any;
-    tablePagination: TablePaginationConfig;
-    visible: boolean;
+    readonly selectedRowKeys: React.Key[] | any;
     readonly paymentRecord?: IPaymentRecord;
-    selectedRows: object[] | any;
-    tableDataSource: [];
+    readonly selectedRows: object[] | any;
+    readonly tableDataSource: [];
+    readonly id: number;
 }
 
 export interface IPaymentRecord {
@@ -39,16 +37,21 @@ export interface IPaymentRecord {
     readonly foreignExchangeAmount?: number;
     readonly refundBank?: string;
     readonly description?: string;
+    readonly projectName?: string;
+    readonly returnedTime?: string;
+    readonly returnedRate?: number;
+    readonly returnedAmount?: number;
+    readonly refundNumber?: number;
+    readonly signCustomerId?: number;
 }
 
 export interface DataType{}
 
-
 export interface IResponseData {
-total: number | undefined;
-size: number | undefined;
-current: number | undefined;
-records: [];
+    readonly total: number | undefined;
+    readonly size: number | undefined;
+    readonly current: number | undefined;
+    readonly records: [];
 }
 
 /**
@@ -57,27 +60,20 @@ records: [];
 export default abstract class AbstractPaymentRecordSetting<P extends RouteComponentProps, S extends IAbstractPaymentRecordSettingState> extends AbstractFillableComponent<P, S> {
 
     public state: S = {
-    paymentRecord: undefined,
-    visible: false,
-    tablePagination: {
-        current: 1,
-        pageSize: 10,
-        total: 0,
-        showSizeChanger: false
-    },
+        paymentRecord: undefined,
     } as S;
 
     protected getFormProps(): FormProps {
-    return {
-        ...super.getFormProps(),
-        labelCol: {
-            span: 8
-        },
-        wrapperCol: {
-            span: 16
-        }
-    };
-}
+        return {
+            ...super.getFormProps(),
+            labelCol: {
+                span: 8
+            },
+            wrapperCol: {
+                span: 16
+            }
+        };
+    }
 
     /**
      * @override
@@ -85,184 +81,105 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
      * @returns return path 
      */
     protected getReturnPath(): string {
-    return '/prom/contract';
+        return '/prom/contract';
     }
 
     protected getGeneratNum(): string { 
-    var result: number = Math.floor( Math.random() * 1000 );
-    let num: string = '';
-    if(result < 10) {
-        num =  '00' + result;
-    } else if (result<100){
-        num = '0' + result;
-    } else {
-        num =  result.toString();
+        var result: number = Math.floor( Math.random() * 1000 );
+        let num: string = '';
+        if(result < 10) {
+            num =  '00' + result;
+        } else if (result<100){
+            num = '0' + result;
+        } else {
+            num =  result.toString();
+        }
+        return moment().format('YYYYMMDD') + num;
     }
-    return moment().format('YYYYMMDD') + num;
-}
-
-    protected renderModal (): React.ReactNode {
-    return (
-        <ModalComponent 
-            isModalVisible={ this.state.visible || false } 
-            confirmTitle="选择合同" 
-            handleOk={ this.okModal} 
-            handleCancel={ this.closeModal } 
-            columns={this.getTableColumns()} 
-            dataSource={this.getTableDataSource()} 
-            pagination={this.state.tablePagination}
-            onTableChange={this.onTableChange}
-            onSelectChange={this.onSelectChange}
-            selectedRowKeys={this.state.selectedRowKeys}
-            getFilterFormItemProps={this.getFilterFormItemProps()}
-            onFilterSubmit={this.onFilterSubmit}
-            name={this.state.name}
-        />
-    );
-}
 
     /**
- * @override
- * @description 弹窗
- * @returns 
- */
-        public showModal = (record: Record<string, any>): void => {
-        this.setState({
-            visible: true,
-            name: record.tip
-        })
-        this.getTable({})
-    }
-
-    public closeModal = (): void => {
-        this.setState({
-            visible: false
-        })
-    }
-
-    public okModal = ():void => {
-        const tip: string = this.state.name;
-        const paymentRecord: IPaymentRecord | undefined = this.state.paymentRecord;
-        const selectValue = this.state.selectedRows;
-        if(tip == "contract") {
-            if(selectValue.length > 0 ) {
-                this.setState({
-                    visible: false,
-                    paymentRecord: {
-                        ...(paymentRecord || {}),
-                        contractId: selectValue[0].contractNumber,
-                        customerName: selectValue[0].signCustomerName,
-                        name: selectValue[0].projectName,
-                    }
-                })
-                this.getForm()?.setFieldsValue({ contractId: selectValue[0].contractNumber, name: selectValue[0].projectName, customerName: selectValue[0].signCustomerName })
-            }
-        } else {
-            if(selectValue.length > 0 ) {
-                this.setState({
-                    visible: false,
-                    paymentRecord: {
-                        ...(paymentRecord || {}),
-                        customerName: selectValue[0].signCustomerName,
-                    }
-                })
-                this.getForm()?.setFieldsValue({ customerName: selectValue[0].signCustomerName })
-            }
-        }
-            
-        
-    }
-
-    protected getTable = async (filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) => {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>(`/customer/contract`, {
-            ...filterValues,
-            current: pagination.current || this.state.tablePagination.current,
-            size: pagination.pageSize ||this.state.tablePagination.pageSize
-        });
-        this.setState({
-            ...filterValues,
-            tableDataSource: resData.records,
-            tablePagination: {
-                ...this.state.tablePagination,
-                current: resData.current,
-                pageSize: resData.size,
-                total: resData.total
-            }
-        });
-    }
-
-    public getFilterFormItemProps(): FormItemProps[]  {
-        return [{
-                name: 'type',
-                children: 
-                <Select defaultValue="0">
-                    <Option value="0" >国内</Option>
-                    <Option value="1">国际</Option>
-                </Select>
-            },{
-                name: 'name',
-                children: <Input placeholder="工程名称关键字"/>
-            }, {
-                name: 'name',
-                children: <Input placeholder="业主单位关键字"/>
-            }];
-    }
-
-    public onFilterSubmit = async (values: Record<string, any>) => {
-        this.getTable(values);
-    }
-
-    public getTableDataSource(): object[]  {
-        return this.state.tableDataSource;
-    }
-
-    public getTableColumns(): TableColumnType<object>[] {
-        return [{
-            key: 'contractNumber',
-            title: '合同编号',
-            dataIndex: 'contractNumber'
-        }, {
-            key: 'projectName',
-            title: '工程名称',
-            dataIndex: 'projectName'
-        }, {
-            key: 'saleType',
-            title: '销售类型',
-            dataIndex: 'saleType',
-            render: (saleType: number): React.ReactNode => {
-                return  saleType === 1 ? '国内客户' : '国际客户';
-            }
-        }, {
-            key: 'customerCompany',
-            title: '业主单位',
-            dataIndex: 'customerCompany'
-        }, {
-            key: 'signCustomerName',
-            title: '合同签订单位',
-            dataIndex: 'signCustomerName'
-        }, {
-            key: 'deliveryTime',
-            title: '要求交货日期',
-            dataIndex: 'deliveryTime'
-        }, {
-            key: 'chargeType',
-            title: '计价方式',
-            dataIndex: 'chargeType',
-            render: (type: number): React.ReactNode => {
-                return  type === 1 ? '订单总价、总重计算单价' : '产品单价、基数计算总价';
-            }
-        }];
-    }
-
-    public onTableChange = (pagination: TablePaginationConfig): void => {
-        this.getTable(pagination);
-    }
-
+     * @override
+     * @description 弹窗表格选择
+     * @returns 
+     */
     public onSelectChange = (selectedRowKeys: React.Key[],selectedRows: DataType[]) => {
         this.setState({ 
             selectedRowKeys,
             selectedRows
         });
+    }
+
+    /**
+     * @override
+     * @description 客户弹窗
+     * @returns 
+     */
+    public handleOk = ():void => {
+        const paymentRecord: IPaymentRecord | undefined = this.state.paymentRecord;
+        const selectValue = this.state.selectedRows;
+        console.log(selectValue)
+        if(selectValue.length > 0 ) {
+            this.setState({
+                paymentRecord: {
+                    ...(paymentRecord || {}),
+                    customerName: selectValue[0].name,
+                    signCustomerId: selectValue[0].id
+                }
+            })
+            this.getForm()?.setFieldsValue({ customerName: selectValue[0].name })
+        }
+    }
+
+    /**
+     * @override
+     * @description 合同弹窗
+     * @returns 
+     */
+     public handleContractOk = ():void => {
+        const paymentRecord: IPaymentRecord | undefined = this.state.paymentRecord;
+        const selectValue = this.state.selectedRows;
+        if(selectValue.length > 0 ) {
+            this.setState({
+                paymentRecord: {
+                    ...(paymentRecord || {}),
+                    signCustomerId: selectValue[0].signCustomerId,
+                    projectName: selectValue[0].projectName,
+                    contractId: selectValue[0].contractNumber,
+                    customerName: selectValue[0].signCustomerName,
+                },
+                id: selectValue[0].id
+            })
+            this.getForm()?.setFieldsValue({ 
+                projectName: selectValue[0].projectName, 
+                contractId: selectValue[0].contractNumber,
+                customerName: selectValue[0].signCustomerName })
+        }
+    }
+    
+    /**
+     * @override
+     * @description 回款计划弹窗
+     * @returns 
+     */
+     public handlePlanOk = ():void => {
+        const paymentRecord: IPaymentRecord | undefined = this.state.paymentRecord;
+        const selectValue = this.state.selectedRows;
+        if(selectValue.length > 0 ) {
+            this.setState({
+                paymentRecord: {
+                    ...(paymentRecord || {}),
+                    paymentPlanId: selectValue[0].period,
+                    returnedTime: selectValue[0].returnedTime,
+                    returnedRate: selectValue[0].returnedRate,
+                    returnedAmount: selectValue[0].returnedAmount,
+                },
+                id: selectValue[0].id
+            })
+            this.getForm()?.setFieldsValue({ paymentPlanId: selectValue[0].period,
+                returnedTime: moment(selectValue[0].returnedTime),
+                returnedRate: selectValue[0].returnedRate,
+                returnedAmount: selectValue[0].returnedAmount, })
+        }
     }
 
     /**
@@ -287,18 +204,15 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                     message: '请选择合同'
                 }],
                 children: 
-                <>
-                    <Input value={ paymentRecord?.contractId } suffix={
-                        <Button type="text" target="customerCompany"  onClick={() => this.showModal({tip: "contract"})}>
-                            <PlusOutlined />
-                        </Button>
-                    }/>
-                    { this.renderModal() }
-                </>
+                    <>
+                        <Input value={ paymentRecord?.contractId } suffix={ 
+                            <ContractSelectionComponent handleOk={ () => this.handleContractOk() } onSelectChange={ this.onSelectChange }/>
+                        }/>
+                    </>
             }, {
                 label: '工程名称',
-                name: 'name',
-                initialValue: paymentRecord?.name,
+                name: 'projectName',
+                initialValue: paymentRecord?.projectName,
                 children: (
                     <Input disabled/>
                 )
@@ -311,37 +225,39 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 message: '请选择来款单位'
             }],
             children: 
-            <>
-                <Input value={ paymentRecord?.customerName } suffix={
-                    <Button type="text" target="customerCompany"  onClick={() => this.showModal({tip: "customerName"})}>
-                        <PlusOutlined />
-                    </Button>
-                }/>
-                { this.renderModal() }
-            </>
+                <>
+                    <Input value={ paymentRecord?.customerName } suffix={ 
+                        <ClientSelectionComponent handleOk={ () => this.handleOk() } onSelectChange={ this.onSelectChange }/>
+                    }/>
+                </>
         },  {
             label: '回款计划',
-            name: 'name',
-            initialValue: paymentRecord?.name,
+            name: 'paymentPlanId',
+            initialValue: paymentRecord?.paymentPlanId,
             rules: [{
                 required: true,
                 message: '请选择回款计划'
             }],
-            children: <Input/>
+            children: 
+                <>
+                    <Input value={ paymentRecord?.paymentPlanId } suffix={ 
+                        <PaymentPlanSelectionComponent handleOk={ () => this.handlePlanOk() } onSelectChange={ this.onSelectChange } Id={ this.state.id }/>
+                    }/>
+                </>
         }, {
             label: '计划回款日期',
-            name: 'name',
-            initialValue: moment(paymentRecord?.name),
+            name: 'returnedTime',
+            initialValue: moment(paymentRecord?.returnedTime),
             children: <DatePicker />
         }, {
             label: '计划回款占比',
-            name: 'name',
-            initialValue: paymentRecord?.name,
+            name: 'returnedRate',
+            initialValue: paymentRecord?.returnedRate,
             children: <Input disabled />
         }, {
             label: '计划回款金额（￥）',
-            name: 'name',
-            initialValue: paymentRecord?.name,
+            name: 'returnedAmount',
+            initialValue: paymentRecord?.returnedAmount,
             children: <Input disabled/>
         }]
         }, {
@@ -351,8 +267,8 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
         },
             itemProps: [{
                 label: '编号',
-                name: 'paymentPlanId',
-                initialValue: paymentRecord?.paymentPlanId || GeneratNum,
+                name: 'refundNumber',
+                initialValue: paymentRecord?.refundNumber || GeneratNum,
                 rules: [{
                 required: true,
                 message: '请输入编号'
@@ -418,127 +334,4 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
             }]
         }]];
     }
-    /**
-     * @description Renders extra sections
-     * @returns extra sections 
-     */
-    //  public renderExtraSections(): IRenderedSection[] {
-    //     const contract: IContract | undefined = this.state.contract;
-    //     return [{
-    //         title: '附件',   
-    //         render: (): React.ReactNode => {
-    //             return (
-    //                 <>
-    //                     <Row className={ styles.attachHeader }>
-    //                         <Col span={ 1 }></Col>
-    //                         <Col span={ 6 }>附件名称</Col>
-    //                         <Col span={ 2 }>文件大小</Col>
-    //                         <Col span={ 4 }>上传时间</Col>
-    //                         <Col span={ 4 }>上传人员</Col>
-    //                         <Col span={ 4 }>备注</Col>
-    //                         <Col span={ 3 }>操作</Col>
-    //                     </Row>
-    //                     <Form.List name="attachInfoDtos">
-    //                         {
-    //                             (fields: FormListFieldData[], operation: FormListOperation): React.ReactNode => {
-    //                                 return (
-    //                                     <>
-    //                                         <Space size="small" className={ styles.attachBtn }>
-    //                                             <Upload  action='/tower-system/attach' onChange={ (info)=>{
-    //                                                 console.log(info)
-    //                                                 if (info.file.status !== 'uploading') {
-    //                                                     // console.log(info.file, info.fileList);
-    //                                                     }
-    //                                                     if (info.file.status === 'done') {
-    //                                                     console.log(info.file, info.fileList);
-    //                                                     } else if (info.file.status === 'error') {
-    //                                                     console.log(info.file, info.fileList);
-    //                                                     operation.add({
-    //                                                         name: info.file.name,
-    //                                                         username: 'admin',
-    //                                                         fileSize: info.file.size,
-    //                                                         description: ''
-    //                                                     })
-    //                                                     }
-    //                                             } } showUploadList= {false}>
-    //                                                 <Button type="primary">添加</Button>
-    //                                             </Upload>
-    //                                             <Button type="primary" onClick={ ()=> {
-    //                                                 let attachInfoDtos: any[] =  this.getForm()?.getFieldValue("attachInfoDtos");
-    //                                                 let checked: any[] = this.state.checkList;
-    //                                                 let batchId: any[] = [];
-    //                                                 checked.map((item: any) => {
-    //                                                     batchId.push(attachInfoDtos[item].id)
-    //                                                 })
-    //                                                 console.log(batchId)
-    //                                             } }>下载</Button>
-    //                                             <Button type="primary" onClick={ ()=> {
-    //                                                 let attachInfoDtos: any[] =  this.getForm()?.getFieldValue("attachInfoDtos");
-    //                                                 let checked: any[] = this.state.checkList;
-    //                                                 let batchId: any[] = [];
-    //                                                 checked.map((item: any) => {
-    //                                                     batchId.push(attachInfoDtos[item].id)
-    //                                                 })
-    //                                                 operation.remove(this.state.checkList)
-    //                                             } }>删除</Button>
-    //                                         </Space>
-    //                                         {
-    //                                             fields.map<React.ReactNode>((field: FormListFieldData, index: number): React.ReactNode => (
-    //                                                 <Row key={ `${ field.name }_${ index }` } className={ styles.FormItem }>
-    //                                                     <Col span={ 1 }>
-    //                                                         <Checkbox value={ index } onChange={ this.checkChange }></Checkbox>
-    //                                                     </Col>
-    //                                                     <Col span={ 6 }>
-    //                                                         <Form.Item { ...field } name={[field.name, 'name']} fieldKey={[field.fieldKey, 'returnedTime']}>
-    //                                                             <Input disabled  className={ styles.Input }/>
-    //                                                         </Form.Item>
-    //                                                     </Col>
-    //                                                     <Col span={ 2 }>
-    //                                                         <Form.Item { ...field } name={[field.name, 'fileSize']} fieldKey={[field.fieldKey, 'returnedRate']}>
-    //                                                             <Input disabled  className={ styles.Input }/>
-    //                                                         </Form.Item>
-    //                                                     </Col>
-    //                                                     <Col span={ 4 }>
-    //                                                         <Form.Item { ...field } name={[field.name, 'username']} fieldKey={[field.fieldKey, 'returnedAmount']}>
-    //                                                             <Input disabled  className={ styles.Input }/>
-    //                                                         </Form.Item>
-    //                                                     </Col>
-    //                                                     <Col span={ 4 }>
-    //                                                         <Form.Item { ...field } name={[field.name, 'username']} fieldKey={[field.fieldKey, 'returnedAmount']}>
-    //                                                             <Input disabled  className={ styles.Input }/>
-    //                                                         </Form.Item>
-    //                                                     </Col>
-    //                                                     <Col span={ 4 }>
-    //                                                         <Form.Item { ...field } name={[field.name, 'description']} fieldKey={[field.fieldKey, 'description']}>
-    //                                                             <Input.TextArea rows={ 5 } maxLength={ 300 }/>
-    //                                                         </Form.Item>
-    //                                                     </Col>
-    //                                                     <Col span={ 3 }>
-    //                                                         <Space direction="horizontal" size="small">
-    //                                                             <Link to={ `` }>预览</Link>
-    //                                                             <Link to={ `` }>下载</Link>
-    //                                                             <ConfirmableButton confirmTitle="要删除该附件吗？"
-    //                                                                 type="link" placement="topRight"
-    //                                                                 onConfirm={ () => { 
-    //                                                                     let attachInfoDtos =  this.getForm()?.getFieldValue("attachInfoDtos");
-    //                                                                     // operation.remove(index); 
-    //                                                                     console.log(attachInfoDtos[index].id)
-    //                                                                 }}>
-    //                                                                 <DeleteOutlined />
-    //                                                             </ConfirmableButton>
-    //                                                         </Space>
-    //                                                     </Col>
-    //                                                 </Row>
-    //                                             ))
-    //                                         }
-    //                                     </>
-    //                                 );
-    //                             }
-    //                         }
-    //                     </Form.List>
-    //                 </>
-    //             )
-    //         }
-    //     }];
-    // }
 }

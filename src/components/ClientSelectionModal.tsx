@@ -2,18 +2,18 @@
  * @author zyc
  * @copyright © 2021
  */
-import { FormItemProps, Input, Select, TableColumnType } from 'antd';
+import { FormItemProps, Input, Select } from 'antd';
 import React from 'react';
 
 import { GetRowKey } from 'rc-table/lib/interface';
-import Table, { TablePaginationConfig } from 'antd/lib/table';
+import Table, { ColumnType, TablePaginationConfig } from 'antd/lib/table';
 import styles from './PromModalComponent.module.less'
 import AbstractModalComponent, {IAbstractModalComponentProps, IAbstractModalComponentState, IResponseData } from './AbstractModalComponent'
 import RequestUtil from '../utils/RequestUtil';
 
 const { Option } = Select;
 
-export interface IContractSelectionComponentState extends IAbstractModalComponentState {
+export interface IClientSelectionComponentState extends IAbstractModalComponentState {
     readonly tableDataSource: [];
     readonly selectedRowKeys: React.Key[] | any,
     readonly selectedRows: object[] | any,
@@ -22,9 +22,9 @@ export interface IContractSelectionComponentState extends IAbstractModalComponen
 
 export interface DataType{}
 /**
- * Contract Selection Component
+ * Client Selection Component
  */
-export default abstract class ContractSelectionComponent<P extends IAbstractModalComponentProps, S  extends IContractSelectionComponentState> extends AbstractModalComponent<P, IContractSelectionComponentState> {
+export default abstract class ClientSelectionComponent<P extends IAbstractModalComponentProps, S  extends IClientSelectionComponentState> extends AbstractModalComponent<P, IClientSelectionComponentState> {
     /**
      * @description Renders AbstractTabableComponent
      * @returns render 
@@ -49,7 +49,7 @@ export default abstract class ContractSelectionComponent<P extends IAbstractModa
     }
     
     protected async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/contract/page', {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-customer/customer/page', {
             ...filterValues,
             current: pagination.current || this.state.tablePagination.current,
             size: pagination.pageSize ||this.state.tablePagination.pageSize
@@ -65,21 +65,18 @@ export default abstract class ContractSelectionComponent<P extends IAbstractModa
             }
         });
     }
- 
+
     public getFilterFormItemProps(): FormItemProps[]  {
         return [{
                 name: 'type',
                 children: 
-                <Select defaultValue="0">
-                    <Option value="0" >国内</Option>
-                    <Option value="1">国际</Option>
-                </Select>
+                    <Select defaultValue="0">
+                        <Option value="0" >国内</Option>
+                        <Option value="1">国际</Option>
+                    </Select>
             },{
                 name: 'name',
-                children: <Input placeholder="工程名称关键字"/>
-            }, {
-                name: 'name',
-                children: <Input placeholder="业主单位关键字"/>
+                children: <Input placeholder="客户名字关键字"/>
             }];
     }
 
@@ -91,57 +88,43 @@ export default abstract class ContractSelectionComponent<P extends IAbstractModa
         return this.state.tableDataSource;
     }
 
-    public getTableColumns(): TableColumnType<object>[] {
+
+    public getTableColumns(): ColumnType<object>[] {
         return [{
-            key: 'contractNumber',
-            title: '合同编号',
-            dataIndex: 'contractNumber'
-        }, {
-            key: 'projectName',
-            title: '工程名称',
-            dataIndex: 'projectName'
-        }, {
-            key: 'saleType',
-            title: '销售类型',
-            dataIndex: 'saleType',
-            render: (saleType: number): React.ReactNode => {
-                return  saleType === 1 ? '国内客户' : '国际客户';
-            }
-        }, {
-            key: 'customerCompany',
-            title: '业主单位',
-            dataIndex: 'customerCompany'
-        }, {
-            key: 'signCustomerName',
-            title: '合同签订单位',
-            dataIndex: 'signCustomerName'
-        }, {
-            key: 'deliveryTime',
-            title: '要求交货日期',
-            dataIndex: 'deliveryTime'
-        }, {
-            key: 'chargeType',
-            title: '计价方式',
-            dataIndex: 'chargeType',
+            key: 'type',
+            title: '客户类型',
+            dataIndex: 'type',
             render: (type: number): React.ReactNode => {
-                return  type === 1 ? '订单总价、总重计算单价' : '产品单价、基数计算总价';
+                return  type === 1 ? '国内客户' : '国际客户';
             }
+        }, {
+            key: 'name',
+            title: '客户名称',
+            dataIndex: 'name'
+        }, {
+            key: 'linkman',
+            title: '首要联系人',
+            dataIndex: 'linkman'
+        }, {
+            key: 'phone',
+            title: '联系电话',
+            dataIndex: 'phone'
         }];
     }
 
     public onTableChange = (pagination: TablePaginationConfig): void => {
         this.getTable(pagination);
     }
-       
+      
     public render(): React.ReactNode {
         return (
             <>
                 { super.render() }
             </> 
-            
+               
         );
     }
- 
+
     protected getTableRowKey(): string | GetRowKey<object> {
         return 'id';
     }

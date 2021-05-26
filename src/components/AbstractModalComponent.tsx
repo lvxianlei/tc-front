@@ -10,6 +10,7 @@ import { stringify } from 'query-string';
 export interface IAbstractModalComponentProps {
     readonly handleOk: (vales: Record<string, any>) => void;
     readonly onSelectChange: (selectedRowKeys: React.Key[],selectedRows: DataType[]) => void;
+    readonly Id?: number;
 }
 
 export interface IAbstractModalComponentState {
@@ -30,6 +31,7 @@ export interface IResponseData {
     readonly current: number | undefined;
     readonly parentCode: string;
     readonly records: [];
+    readonly paymentPlanVos: [];
 }
 
 export default abstract class AbstractModalComponent<P extends IAbstractModalComponentProps, S extends IAbstractModalComponentState> extends AbstractShowModalComponent<P,S> {
@@ -81,13 +83,6 @@ export default abstract class AbstractModalComponent<P extends IAbstractModalCom
        * @param pagination 
        */
     abstract onTableChange(pagination: TablePaginationConfig): void;
-
-    public onSelectChange = (selectedRowKeys: React.Key[],selectedRows: DataType[]) => {
-        this.setState({ 
-            selectedRowKeys,
-            selectedRows
-        });
-    } 
 
        /**
      * @abstract
@@ -155,12 +150,12 @@ export default abstract class AbstractModalComponent<P extends IAbstractModalCom
                     visible={this.state.isModalVisible} 
                     okText={ this.state.okText }
                     cancelText={ this.state.cancelText }
-                    onOk={
+                    onOk={ 
                         () => {
                             this.setState ({
                                 isModalVisible: false
                             })
-                            // this.props.handleOk
+                           { this.props.handleOk((value)) }
                         }
                     } 
                     onCancel={this.handleCancel}
@@ -198,4 +193,8 @@ export default abstract class AbstractModalComponent<P extends IAbstractModalCom
     }
     
 
+}
+
+function value(value: any) {
+    throw new Error('Function not implemented.');
 }

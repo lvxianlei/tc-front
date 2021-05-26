@@ -17,7 +17,7 @@ import AbstractFillableComponent, {
 import ConfirmableButton from '../../../components/ConfirmableButton';
 import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 import styles from './AbstractContractSetting.module.less';
-import ContractSelectionComponent from '../../../components/ContractSelectionModal';
+import ClientSelectionComponent from '../../../components/ClientSelectionModal';
 import RequestUtil from '../../../utils/RequestUtil';
 import { CascaderOptionType } from 'antd/lib/cascader';
 
@@ -314,9 +314,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     children: 
                         <>
                             <Input value={ contract?.customerInfoDto?.customerCompany } suffix={ 
-                                <ContractSelectionComponent handleOk={ () => this.handleOk({tip: "customerCompany"}) } onSelectChange={ this.onSelectChange }/>
+                                <ClientSelectionComponent handleOk={ () => this.handleOk({tip: "customerCompany"}) } onSelectChange={ this.onSelectChange }/>
                             }/>
-                            
                         </>
                 }, {
                     label: '业主联系人',
@@ -338,7 +337,9 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     }],
                     children:
                         <>
-                            <Input value={ contract?.signCustomerName }/>
+                            <Input value={ contract?.signCustomerName } suffix={ 
+                                <ClientSelectionComponent handleOk={ () => this.handleOk({tip: "signCustomerName"}) } onSelectChange={ this.onSelectChange }/>
+                            }/>
                         </>
                 }, {
                     label: '合同签订日期',

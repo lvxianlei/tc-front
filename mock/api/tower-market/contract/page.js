@@ -15,7 +15,8 @@ for (let i = 1; i < 10; ++i) {
         "voltageGrade|1-2": 1,
         "customerCompany": Random.cword(5,10),
         "signCustomerName": Random.cword(5,10),
-        "deliveryTime": Random.date('yyyy-MM-dd')
+        "deliveryTime": Random.date('yyyy-MM-dd'),
+        "signCustomerId": Random.natural(2)
     });
 }
 
@@ -34,7 +35,8 @@ module.exports = {
             "voltageGrade|1-2": 1,
             "customerCompany": Random.cword(5,10),
             "signCustomerName": Random.cword(5,10),
-            "deliveryTime": Random.date('yyyy-MM-dd')
+            "deliveryTime": Random.date('yyyy-MM-dd'),
+            "signCustomerId": Random.natural(2)
         }].concat(records),
         current: Random.natural(1, 20),
         size: 10,

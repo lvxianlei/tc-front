@@ -1,0 +1,21 @@
+{
+    "code": 200,
+    "data": {
+            "paymentPlanVos": 
+                [{
+                    "period": 1,
+                    "returnedRate": 1,
+                    "returnedAmount": 2,
+                    "description": "qwqew",
+                    "returnedTime": "2021-02-21"
+                },
+                {
+                    "period": 2,
+                    "returnedRate": 2,
+                    "returnedAmount": 1,
+                    "description": "vxvx",
+                    "returnedTime": "2021-05-25"
+                }]
+    },
+    "msg": ""
+}
