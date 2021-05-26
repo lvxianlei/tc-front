@@ -8,7 +8,7 @@ for (let i = 1; i < 5; ++i) {
         "id": Random.natural(1),
         "type": `${ Random.ctitle(1, 3) }`,
         "name": `${ Random.ctitle(1, 3) }`,
-        "disable": true,
+        "disable": Random.boolean(),
         "sort": Random.natural(5),
         "amount": Random.natural(5),
     });
@@ -25,7 +25,7 @@ module.exports = {
             "id": Random.natural(1),
             "type": `${ Random.ctitle(1, 3) }`,
             "name": `${ Random.ctitle(1, 3) }`,
-            "disable": true,
+            "disable": Random.boolean(),
             "sort": Random.natural(5),
             "amount": Random.natural(5),
         }].concat(records),
