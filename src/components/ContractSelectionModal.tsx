@@ -6,8 +6,7 @@ import { FormItemProps, Input, Select, TableColumnType } from 'antd';
 import React from 'react';
 
 import { GetRowKey } from 'rc-table/lib/interface';
-import Table, { TablePaginationConfig } from 'antd/lib/table';
-import styles from './PromModalComponent.module.less'
+import { TablePaginationConfig } from 'antd/lib/table';
 import AbstractModalComponent, {IAbstractModalComponentProps, IAbstractModalComponentState, IResponseData } from './AbstractModalComponent'
 import RequestUtil from '../utils/RequestUtil';
 
@@ -35,7 +34,8 @@ export default abstract class ContractSelectionComponent<P extends IAbstractModa
             pageSize: 10,
             total: 0,
             showSizeChanger: false
-        }
+        },
+        isFilter: true
     } as S
 
     public showModal =  (): void => {

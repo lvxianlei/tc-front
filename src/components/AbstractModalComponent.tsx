@@ -1,11 +1,10 @@
 import React from 'react'
-import {Modal, ModalProps, Form, Button, Card, Space, Table, FormItemProps} from 'antd'
+import {Modal, Form, Button, Card, Space, Table, FormItemProps} from 'antd'
 
 import { GetRowKey } from 'rc-table/lib/interface';
 import { ColumnType, TablePaginationConfig } from 'antd/lib/table';
-import styles from './PromModalComponent.module.less'
+import styles from './AbstractModalComponent.module.less'
 import AbstractShowModalComponent from './AbstractShowModalComponent';
-import { stringify } from 'query-string';
 
 export interface IAbstractModalComponentProps {
     readonly handleOk: (vales: Record<string, any>) => void;
@@ -21,6 +20,7 @@ export interface IAbstractModalComponentState {
     readonly tablePagination: TablePaginationConfig;
     readonly selectedRowKeys: React.Key[] | any,
     readonly selectedRows: object[] | any,
+    readonly isFilter: boolean
 }
 
 export interface DataType{}
@@ -48,7 +48,6 @@ export default abstract class AbstractModalComponent<P extends IAbstractModalCom
 
     /**
      * @description Gets state, it can override.
-     * @returns state 
      */
     protected getState(): S {
         return {
@@ -56,6 +55,7 @@ export default abstract class AbstractModalComponent<P extends IAbstractModalCom
             confirmTitle: "",
             okText: "确认",
             cancelText: "取消",
+            isFilter: true,
         } as S;
     }
 
@@ -113,15 +113,18 @@ export default abstract class AbstractModalComponent<P extends IAbstractModalCom
      * @description modal内表格 
      * @param event 
      */
-
     protected renderTableContent(): React.ReactNode {
         return (
-            <Space className={ styles.filterForm } direction="vertical">
-                <Card className={ styles.filterForm }>
-                    { this.renderFilterContent() }
-                </Card>
-                <Card className={ styles.filterForm }>
-                    <Space direction="vertical" size="large">
+            <Space direction="vertical" className={ styles.modalTable } >
+                { this.state.isFilter ? 
+                    <Card className={ styles.tableCard }>
+                        {  this.renderFilterContent() }
+                    </Card>
+                    :
+                    <></>
+                }
+                <Card className={ styles.tableCard }>
+                    <Space direction="vertical" size="large" >
                         <Table 
                             rowKey={ this.getTableRowKey() } 
                             bordered={ true }
@@ -170,7 +173,7 @@ export default abstract class AbstractModalComponent<P extends IAbstractModalCom
     /**
      * @description 弹窗列表过滤
      */
-     protected renderFilterContent(): React.ReactNode {
+    protected renderFilterContent(): React.ReactNode {
         return (
             <Form layout="inline" onFinish={ this.onFilterSubmit }>        
                 {

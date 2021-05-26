@@ -1,21 +1,7 @@
 import React from 'react'
-import {Modal, ModalProps, Form, Button, Card, Space, Table, FormItemProps} from 'antd'
+import {Button} from 'antd'
 
 import { PlusOutlined } from '@ant-design/icons';
-import { GetRowKey } from 'rc-table/lib/interface';
-import { ColumnType, TablePaginationConfig } from 'antd/lib/table';
-import styles from './PromModalComponent.module.less'
-
-// interface ITableProps{
-//     readonly columns: ColumnType<object>[];
-//     readonly dataSource: object[];
-//     readonly pagination: TablePaginationConfig;
-//     readonly onTableChange: (pagination: TablePaginationConfig) => void;
-//     readonly onSelectChange: (selectedRowKeys: React.Key[],selectedRows: DataType[]) => void;
-//     readonly selectedRowKeys: [];
-//     readonly getFilterFormItemProps: FormItemProps[];
-//     readonly onFilterSubmit: (values: Record<string, any>) => void;
-// }
 
 export interface IAbstractShowModalComponentProps {
     

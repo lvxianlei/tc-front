@@ -6,7 +6,6 @@ import { FormItemProps, TableColumnType } from 'antd';
 import React from 'react';
 
 import { GetRowKey } from 'rc-table/lib/interface';
-import styles from './PromModalComponent.module.less'
 import AbstractModalComponent, {IAbstractModalComponentProps, IAbstractModalComponentState, IResponseData } from './AbstractModalComponent'
 import RequestUtil from '../utils/RequestUtil';
 
@@ -26,7 +25,7 @@ export default abstract class PaymentPlanSelectionComponent<P extends IAbstractM
      * @returns render 
      */
     public state:S = {
-        
+        isFilter: false
     } as S
 
     public showModal =  (): void => {

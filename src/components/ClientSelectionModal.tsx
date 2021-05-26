@@ -7,7 +7,6 @@ import React from 'react';
 
 import { GetRowKey } from 'rc-table/lib/interface';
 import Table, { ColumnType, TablePaginationConfig } from 'antd/lib/table';
-import styles from './PromModalComponent.module.less'
 import AbstractModalComponent, {IAbstractModalComponentProps, IAbstractModalComponentState, IResponseData } from './AbstractModalComponent'
 import RequestUtil from '../utils/RequestUtil';
 
@@ -35,7 +34,8 @@ export default abstract class ClientSelectionComponent<P extends IAbstractModalC
             pageSize: 10,
             total: 0,
             showSizeChanger: false
-        }
+        },
+        isFilter: true
     } as S
 
     public showModal =  (): void => {
