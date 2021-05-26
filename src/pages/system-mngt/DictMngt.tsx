@@ -29,7 +29,7 @@ export interface IDictMngtState {
     readonly tab: IDictValue[];
 }
 interface IDictValue {
-    readonly id: number,
+    readonly id: number;
     readonly name: string;
     readonly disable: boolean;
     readonly sort: number;
@@ -38,15 +38,16 @@ interface IDictValue {
 }
 
 interface IDictResponseData {
-    readonly current: number ,
-    readonly records: IDictValue[],
-    readonly size: number,
-    readonly total: number,
-    readonly id: number,
+    readonly current: number ;
+    readonly records: IDictValue[];
+    readonly size: number;
+    readonly total: number;
+    readonly id: number;
     readonly name: string;
     readonly disable: boolean;
     readonly sort: number;
     readonly amount: number;
+    readonly type: number;
 }
 
 /**
@@ -122,7 +123,8 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
     //delete-row
     public handleDelete = (record: Record<string,any>) => {
         const dict = [...this.state.dict];
-        this.setState({ dict: dict.filter((item:IDictValue) => item.id !== record.id) });
+        const value = dict.filter<boolean>((item:IDictValue): boolean => item.id !== record.id)
+        this.setState({ dict: value });
     };
     /**
      * @implements
@@ -132,7 +134,7 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
      public getTabItems(): ITabItem[] {
         const {dict,tab} = this.state;
         // console.log(this.state.dict)
-        return tab.map((item:IDictValue)=>{
+        return tab.map<ITabItem>((item:IDictValue)=>{
             return {
                 label:item.name,
                 key:item.id,
