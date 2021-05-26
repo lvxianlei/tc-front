@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Tabs, TabsProps, Button } from 'antd';
+import { Tabs, TabsProps } from 'antd';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
