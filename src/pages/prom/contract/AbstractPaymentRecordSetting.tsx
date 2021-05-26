@@ -279,9 +279,9 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 name: 'refundTime',
                 initialValue: moment(paymentRecord?.refundTime),
                 rules: [{
-                required: true,
-                message: '请选择来款时间'
-            }],
+                    required: true,
+                    message: '请选择来款时间'
+                }],
                 children: <DatePicker />
             }, {
                 label: '来款方式',
@@ -297,6 +297,10 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 label: '来款金额（￥）',
                 name: 'refundAmount',
                 initialValue: paymentRecord?.refundAmount,
+                rules: [{
+                    required: true,
+                    message: '请输入来款金额'
+                }],
                 children: <Input/>
             }, {
                 label: '币种',
