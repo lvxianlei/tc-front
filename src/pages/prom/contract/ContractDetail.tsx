@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Button, ColProps, Input, Table, TableColumnType } from 'antd';
+import { Button, ColProps, DatePicker, Form, FormInstance, Input, InputNumber, Select, Table, TableColumnType } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import React from 'react';
 import { withTranslation } from 'react-i18next';
@@ -14,14 +14,20 @@ import { ITabItem } from '../../../components/ITabableComponent';
 import RequestUtil from '../../../utils/RequestUtil';
 import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../../../utils/SummaryRenderUtil';
 import styles from './ContractDetail.module.less'
+import ClientSelectionComponent from '../../../components/ClientSelectionModal';
+import moment from 'moment';
+import { DataType, IPaymentPlanDto } from './AbstractContractSetting';
 
 export interface IContractDetailProps {
     readonly id: string;
 }
 export interface IContractDetailRouteProps extends RouteComponentProps<IContractDetailProps> {}
 export interface IContractDetailState {
-    readonly detail?: IDetail;
+    readonly detail: IDetail;
     readonly orderData: IOrderItem[];
+    readonly editingKey: string;
+    readonly selectedRowKeys?: React.Key[] | any,
+    readonly selectedRows?: object[] | any,
 }
 
 interface IDetail {
@@ -37,6 +43,40 @@ interface IDetail {
     readonly createUser?: string;
     readonly createTime?: string;
     readonly attachVos?: IAttachVos[];
+    paymentPlanVos: IPaymentPlanVos[];
+}
+
+interface IPaymentPlanVos{
+    readonly contractId?: number;
+    readonly createTime?: string;
+    readonly createUser?: number;
+    readonly id?: number;
+    readonly isDeleted?: number;
+    paymentRecordVos: IPaymentRecordVos[];
+    readonly period?: number;
+    readonly returnedAmount?: number;
+    readonly returnedRate?: number;
+    readonly returnedTime?: string;
+    readonly status?: number;
+    readonly updateTime?: string;
+    readonly updateUser?: string; 
+    readonly paymentPlanId?: number;
+}
+
+interface IPaymentRecordVos{
+    readonly key?: React.Key;
+    readonly refundTime?: string | moment.Moment;
+    readonly customerName?: string;
+    readonly customerId?: number;
+    readonly refundAmount?: number;
+    readonly currencyType?: number;
+    readonly exchangeRate?: number;
+    readonly foreignExchangeAmount?: number;
+    readonly refundBank?: string;
+    readonly description?: string;
+    readonly refundMode?: number;
+    readonly contractId?: number;
+    readonly refundNumber?: number;
 }
 
 interface IOrderItem {
@@ -46,13 +86,7 @@ interface IOrderItem {
     readonly products?: IProducts[];
 }
 
-interface IProducts {
-
-}
-interface IResponseData {
-    readonly id: number;
-    readonly records: IDetail;
-}
+interface IProducts {}
 
 interface IAttachVos {
     readonly name?: string;
@@ -64,14 +98,35 @@ interface IAttachVos {
     readonly id?: number;
 }
 
+interface EditTableColumnType<RecordType> extends TableColumnType<object> {
+    readonly editable?: boolean; 
+    readonly type?: React.ReactNode;
+    readonly title: string;
+}
+
+
 /**
  * Contract detail page component.
  */
 class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, IContractDetailState> {
 
     public state: IContractDetailState = {
-        detail: undefined,
-        orderData: []
+        detail: {
+            paymentPlanVos: []
+        },
+        orderData: [],
+        editingKey: ""
+    }
+
+    protected form: React.RefObject<FormInstance> = React.createRef<FormInstance>();
+
+    /**
+     * @protected
+     * @description Gets form
+     * @returns form 
+     */
+     protected getForm(): FormInstance | null {
+        return this.form?.current;
     }
 
     protected getTitle(): string {
@@ -83,14 +138,14 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
       * @param filterValues 
       */
     protected async fetchTableData() {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>(`/contract/${ this.props.match.params.id }`);
+        const resData: IDetail = await RequestUtil.get<IDetail>(`/tower-market/contract/${ this.props.match.params.id }`);
         const orderData: IOrderItem[] = await RequestUtil.get<IOrderItem[]>(`/saleOrder/getSaleOrderDetailsById`, {
             contractId: this.props.match.params.id 
         });
-        console.log(orderData)
         this.setState({
-            detail: resData.records,
-            orderData: orderData
+            detail: resData,
+            orderData: orderData,
+
         });
     }
 
@@ -105,7 +160,6 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
      */
     public getSubinfoColProps (): ColProps[] {
         const detail: IDetail | undefined = this.state?.detail;
-        console.log(this.state?.detail)
         return [{
             span: 8,
             children: (
@@ -272,6 +326,54 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
         
     }
 
+    /**
+     * @override
+     * @description 弹窗
+     * @returns 
+     */
+
+     public handleOk = (values: Record<string, any>):void => {
+        const selectValue = this.state.selectedRows;
+        const detail: IDetail = this.state.detail;
+        let paymentPlan: IPaymentPlanVos[] = detail.paymentPlanVos;
+        const paymentPlanId: number = parseInt(this.state.editingKey.split("-")[0]);
+        const tableIndex: number = parseInt(this.state.editingKey.split("-")[1]);
+        if(selectValue.length > 0 ) {
+            paymentPlan = paymentPlan.map<IPaymentPlanVos>((items: IPaymentPlanVos): IPaymentPlanVos=>{
+                if(items.id === paymentPlanId) {
+                    return {
+                        ...items,
+                        paymentRecordVos: items.paymentRecordVos.map((item,index) => {
+                            if(index === tableIndex ) {
+                                return {
+                                    ...item,
+                                    customerName: selectValue[0].name
+                                }
+                            } else {
+                                return item
+                            }
+                        })
+                    }
+                } else {
+                    return items
+                }
+            })
+            detail.paymentPlanVos = [...paymentPlan];
+            this.setState({
+                detail: {
+                    ...detail,
+                }
+            })
+            this.getForm()?.setFieldsValue({ customerName: selectValue[0].name })
+        }
+    }
+
+    public onSelectChange = (selectedRowKeys: React.Key[],selectedRows: DataType[]) => {
+        this.setState({ 
+            selectedRowKeys,
+            selectedRows
+        });
+    } 
 
     public getColumns(): TableColumnType<object>[] {
         return [ {
@@ -304,35 +406,160 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
      * @description Gets charging record columns
      * @returns charging record columns 
      */
-    private getChargingRecordColumns(): ColumnsType<object> {
+    private getChargingRecordColumns(): EditTableColumnType<object>[] {
         return [{
             title: '来款时间',
-            dataIndex: 'chargingTime'
+            dataIndex: 'refundTime',
+            editable: true,
+            type: <DatePicker />,
         }, {
             title: '来款单位',
-            dataIndex: 'chargerOrg'
+            dataIndex: 'customerName',
+            editable: true,
+            type: <Input suffix={ <ClientSelectionComponent handleOk={ () => this.handleOk({}) } onSelectChange={ this.onSelectChange }/>
+                }/>,
         }, {
             title: '来款方式',
-            dataIndex: 'chargingType'
+            dataIndex: 'refundMode',
+            editable: true,
+            type: 
+                <Select>
+                    <Select.Option value={ 1 }>现金</Select.Option>
+                    <Select.Option value={ 2 }>商承</Select.Option>
+                    <Select.Option value={ 3 }>银行</Select.Option>
+                </Select>
         }, {
             title: '来款金额（￥）',
-            dataIndex: 'amount'
+            dataIndex: 'refundAmount',
+            editable: true,
+            type: <Input />,
         }, {
             title: '币种',
-            dataIndex: 'currency'
+            dataIndex: 'currencyType',
+            editable: true,
+            type: 
+                <Select>
+                    <Select.Option value={ 1 }>RMB人民币</Select.Option>
+                    <Select.Option value={ 2 }>USD美元</Select.Option>
+                </Select>
         }, {
             title: '汇率',
-            dataIndex: 'exchangeRate'
+            dataIndex: 'exchangeRate',
+            editable: true,
+            type: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 }/>
         }, {
             title: '外币金额',
-            dataIndex: 'foreignCurrencyExchange'
+            dataIndex: 'foreignExchangeAmount',
+            editable: true,
+            type: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 }/>
         }, {
             title: '收款银行',
-            dataIndex: 'bank'
+            dataIndex: 'refundBank',
+            editable: true,
+            type: <Input/>
         }, {
             title: '备注',
-            dataIndex: 'description'
+            dataIndex: 'description',
+            editable: true,
+            type: <Input.TextArea rows={ 5 } maxLength={ 300 }/>
+        }, {
+            title: '操作',
+            dataIndex: 'operation',
+            render: (_, record: Record<string, any>,index: number) =>{
+                const editable = this.isEditing(record.paymentPlanId+'-'+index);
+                return (editable == this.state.editingKey) ? (
+                    <>
+                        <Button type="link" key="editable" onClick={() => {
+                            console.log(this.getForm()?.getFieldsValue())
+                        }}>保存</Button>
+                        <ConfirmableButton confirmTitle="要取消编辑吗？"
+                            type="link" placement="topRight"
+                            onConfirm={ () => { 
+                                this.setState({
+                                    editingKey: ""
+                                })
+                            } }>
+                            <a>取消</a>
+                        </ConfirmableButton>
+                    </>
+                ) : (
+                    <>
+                        <Button type="link" key="editable" disabled={this.state.editingKey !== ''} onClick={() => {
+                            this.isEditing(record.paymentPlanId+'-'+index)
+                            this.setState({
+                                editingKey: record.paymentPlanId+'-'+index
+                            })
+                            this.getForm()?.setFieldsValue({
+                                refundTime: "",
+                                customerName: "",
+                                refundMode: 1,
+                                refundAmount: 0,
+                                currencyType: 1,
+                                exchangeRate: 0,
+                                foreignExchangeAmount: 0,
+                                refundBank: "",
+                                description: "",
+                                ...record,
+                            });
+                            console.log(this.getForm()?.getFieldsValue())
+                        }}>编辑</Button>
+                        <ConfirmableButton confirmTitle="要删除该条回款计划吗？"
+                            type="link" placement="topRight"
+                            onConfirm={ () => {  } }>
+                            <a>删除</a>
+                        </ConfirmableButton>
+                    </>
+                )
+            }
+                
         }];
+    }
+ 
+    public getMergedColumns(): EditTableColumnType<object>[] {
+        return this.getChargingRecordColumns().map<EditTableColumnType<object>>((col: EditTableColumnType<object>): EditTableColumnType<object> => {
+            if(!col.editable) {
+                return col
+            } else {
+                return {
+                    ...col,
+                    onCell: (record: Record<string, any>, index?: number) =>{ return {
+                        record,
+                        type: col.type,
+                        dataIndex: col.dataIndex,
+                        title: col.title,
+                        editing: this.isEditing(record.paymentPlanId+'-'+index),
+                    }}
+                }
+            }
+        })
+    }
+
+    public getEditableCell = (records: Record<string, any>) => {
+        return (
+            <td {...records}>
+                {(records.editing == this.state.editingKey) ? (
+                    <Form.Item
+                        name = { records.dataIndex }
+                        initialValue = { (records.dataIndex === "refundTime") ? 
+                            moment(records.record[records.dataIndex])
+                            : (records.dataIndex === "refundMode") ? 
+                            (records.record[records.dataIndex] === "RMB人民币" )? 1 : 2 
+                            : (records.dataIndex === "currencyType") ?
+                             (records.record[records.dataIndex] === "现金") ? 1 : (records.record[records.dataIndex] ==="商承") ? 2 : 3 
+                            :  records.record[records.dataIndex]
+                        } 
+                    >
+                        {records.type}
+                    </Form.Item>
+                    ) : (
+                    records.children
+                )}
+            </td>
+          );
+    }
+
+    public isEditing(key: string) {
+        return key
     }
 
     /**
@@ -340,59 +567,71 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
      * @returns charging record summariable items 
      */
     private getChargingRecordSummariableItems(): IRenderdSummariableItem[] {
-        return [{
-            fieldItems: [{
-                label: '第1期回款计划',
-                value: '2019-04-01'
-            }, {
-                label: '计划回款占比',
-                value: '33.33%'
-            }, {
-                label: '计划回款金额',
-                value: '¥ 15,000.00'
-            }, {
-                label: '已回款金额',
-                value: '¥ 5,000.00'
-            }, {
-                label: '未回款金额',
-                value: '¥ 10,000.00'
-            }],
-            renderExtraInBar: (): React.ReactNode => (
-                <Button type="primary">添加</Button>
-            ),
-            render: (): React.ReactNode => (
-                <>
-                    <Table pagination={ false } bordered={ true } columns={ this.getChargingRecordColumns() }/>
-                    可以换成动态添加表单Form.List
-                </>
-            )
-        }, {
-            fieldItems: [{
-                label: '第2期回款计划',
-                value: '2019-04-01'
-            }, {
-                label: '计划回款占比',
-                value: '33.33%'
-            }, {
-                label: '计划回款金额',
-                value: '¥ 15,000.00'
-            }, {
-                label: '已回款金额',
-                value: '¥ 5,000.00'
-            }, {
-                label: '未回款金额',
-                value: '¥ 10,000.00'
-            }],
-            renderExtraInBar: (): React.ReactNode => (
-                <Button type="primary">添加</Button>
-            ),
-            render: (): React.ReactNode => (
-                <>
-                    <Table pagination={ false } bordered={ true } columns={ this.getChargingRecordColumns() }/>
-                    可以换成动态添加表单Form.List
-                </>
-            )
-        }];
+        const detail: IDetail = this.state.detail;
+        let paymentPlan: IPaymentPlanVos[] = detail.paymentPlanVos;
+        return paymentPlan.map<IRenderdSummariableItem>((items: IPaymentPlanVos, index: number) : IRenderdSummariableItem => {
+            return {fieldItems: [
+                {
+                    label: `第${ items.period }期计划 `,
+                    value: items.returnedTime
+                }, {
+                    label: '计划回款占比',
+                    value: items.returnedRate
+                }, {
+                    label: '计划回款金额',
+                    value: items.returnedAmount
+                }, {
+                    label: '已回款金额',
+                    value: items.returnedRate
+                }, {
+                    label: '未回款金额',
+                    value: items.returnedRate
+                }],
+                renderExtraInBar: (): React.ReactNode => (
+                    <Button type="primary" onClick={ () => {
+                        let paymentRecordVos: IPaymentRecordVos[] = paymentPlan[index].paymentRecordVos;
+                        paymentRecordVos.push
+                            ({
+                                refundTime: "",
+                                customerName: "",
+                                refundMode: 1,
+                                refundAmount: 0,
+                                currencyType: 1,
+                                exchangeRate: 0,
+                                foreignExchangeAmount: 0,
+                                refundBank: "",
+                                description: "",
+                            })
+                        this.setState({
+                            detail: {
+                                paymentPlanVos: [
+                                    ...paymentPlan
+                                ]
+                            }
+                        })
+                        console.log(detail)
+                    } }>添加</Button>
+                ),
+                render: (): React.ReactNode => (
+                    <>
+                        <Form ref={ this.form } >
+                            <Table 
+                                rowKey='index' 
+                                dataSource={ [...items.paymentRecordVos] } 
+                                columns={ this.getMergedColumns() } 
+                                bordered 
+                                pagination={ false }
+                                components={{
+                                    body: {
+                                      cell: this.getEditableCell,
+                                    },
+                                }}
+                            ></Table>
+                        </Form>
+                    </>
+                )
+            };
+        })
     }
 
     /**
