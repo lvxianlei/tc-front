@@ -38,5 +38,10 @@
         "path": "/prom/contract/detail/:id",
         "module": "./pages/prom/ContractDetail",
         "exact": true
+    }, { // 字典管理
+        "name": "字典管理",
+        "path": "/sys/dxnry",
+        "module": "./pages/system-mngt/DictMngt",
+        "exact": true
     }]
 }

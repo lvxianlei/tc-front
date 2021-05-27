@@ -1,0 +1,51 @@
+{
+    "code": 200,
+    "data":[{
+        "code":"Excepteur",
+        "name":"tab1",
+        "dictionaries":[{
+            "category":"commodo irure elit in",
+            "createTime":"2002-04-17T15:24:40.153Z",
+            "createUser":-11946276,
+            "description":"culpa",
+            "id":-19536955,
+            "isDeleted":-13089701,
+            "name":"commodo dolor nisi voluptate",
+            "sort":-45600472,
+            "status":-24996535,
+            "tenantId":"quis mollit eu laborum do",
+            "type":"labore",
+            "updateTime":"1958-08-02T02:53:19.388Z",
+            "updateUser":54198744
+        },{
+            "category":"aute Excepteur veniam",
+            "createTime":"1995-08-22T07:55:13.715Z",
+            "createUser":-6979170,
+            "description":"cupidatat",
+            "id":19812989,
+            "isDeleted":-82125739,
+            "name":"aliquip in aute anim",
+            "sort":46314460,
+            "status":10225344,
+            "tenantId":"ut",
+            "type":"pariatur",
+            "updateTime":"1989-05-31T22:24:33.869Z",
+            "updateUser":11165084
+        },{
+            "category":"consequat aliqua Ut ullamco",
+            "createTime":"1962-04-06T17:39:32.197Z",
+            "createUser":14881242,
+            "description":"cillum",
+            "id":28922634,
+            "isDeleted":37565412,
+            "name":"elit consequa",
+            "sort":-60538546,
+            "status":-50562500,
+            "tenantId":"anim",
+            "type":"do",
+            "updateTime":"1993-11-12T07:22:14.747Z",
+            "updateUser":54127566
+        }]
+    }],
+    "msg":""
+}

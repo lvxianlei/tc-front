@@ -14,7 +14,7 @@ import ITabableComponent, { ITabItem } from './ITabableComponent';
  * Abstract tabable component
  */
 export default abstract class AbstractTabableComponent<P extends RouteComponentProps, S = {}> extends AbstractTitledRouteComponent<P, S> implements ITabableComponent {
-
+ 
     /**
      * @abstract
      * @description Gets tab items
