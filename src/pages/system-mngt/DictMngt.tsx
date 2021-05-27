@@ -87,7 +87,6 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
     public async componentDidMount() {
         super.componentDidMount();
         const dictTabsResponse: IDictTabsData[] = await RequestUtil.get<IDictTabsData[]>(`/tower-system/dictionary/types`);
-        // const dictDataSourceResponse: IDictDataSourceData[] = await RequestUtil.get<IDictDataSourceData[]>(`/tower-system/dictionary/types/${dictTabsResponse[0].code}`);
         this.getDataSourceFromTab(dictTabsResponse[0].code);
         this.setState({
             tabs: dictTabsResponse,   //tab标签
@@ -152,8 +151,8 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
                             render:(): React.ReactNode => 
                             <div>
                                 <div className={styles.title}>
-                                <span>{res.name}</span>
-                                <Button type='primary'onClick={()=>this.showModal({name:''},res.name)}>新增</Button>
+                                    <span>{res.name}</span>
+                                    <Button type='primary'onClick={()=>this.showModal({name:''},res.name)}>新增</Button>
                                 </div>
                                 <Table 
                                     columns={this.getChargingRecordColumns(res)} 
