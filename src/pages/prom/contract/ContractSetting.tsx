@@ -2,24 +2,24 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { FormProps } from 'antd';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { IFormItemGroup } from '../../components/AbstractFillableComponent';
+import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
 
-import RequestUtil from '../../utils/RequestUtil';
-import AbstractContractSetting, { IAbstractContractSettingState, IContract } from './AbstractContractSetting';
+import RequestUtil from '../../../utils/RequestUtil';
+import AbstractContractSetting, { IAbstractContractSettingState, IContract, IPaymentPlanDto } from './AbstractContractSetting';
+import moment from 'moment'
 
 export interface IContractSettingProps {
     readonly id: string;
 }
 export interface IContractSettingRouteProps extends RouteComponentProps<IContractSettingProps>, WithTranslation {}
 export interface IContractSettingState extends IAbstractContractSettingState {}
-
-/**
- * Contract Setting
- */
+ 
+ /**
+  * Contract Setting
+  */
 class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps, IContractSettingState> {
  
     /**
@@ -27,12 +27,20 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const contract: IContract = await RequestUtil.get<IContract>(`/customer/contract/${ this.props.match.params.id }`);
+        const contract: IContract = await RequestUtil.get<IContract>(`/tower-market/contract/page/${ this.props.match.params.id }`);
         this.setState({
             contract: contract
         });
+        contract.paymentPlanDtos = contract.paymentPlanDtos?.map<IPaymentPlanDto>((plan: IPaymentPlanDto, index: number): IPaymentPlanDto => {
+            return {
+                ...plan,
+                returnedTime: moment(plan.returnedTime),
+                index: index + 1
+            };
+        });
         this.getForm()?.setFieldsValue({
-            paymentPlanDtos: contract.paymentPlanDtos
+            paymentPlanDtos: contract?.paymentPlanDtos,
+            attachInfoDtos: contract?.attachInfoDtos
         });
     }
  

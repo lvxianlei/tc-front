@@ -1,0 +1,121 @@
+{
+    "code": 200,
+    "data": {
+        "id": 2,
+        "contractNumber":  "1111",
+        "internalNumber":  "11111",
+        "simpleProjectName": "有限公司简称", 
+        "projectName": "zzzzz",
+        "saleType": 1,
+        "winBidType": 1,
+        "productType": 1,
+        "voltageGrade": 1,
+        "signUserName": "admin",
+        "salesman": "销售",
+        "signCustomerName": "Random.cword(5,10)",
+        "customerInfoDto": {
+            "customerId": 1,
+            "customerCompany": "有限公司",
+            "customerLinkman": "admin",
+            "customerPhone": "12345678912"
+        },
+        "deliveryTime": "2021-01-01",
+        "paymentPlanVos": 
+            [{
+                "period": 1,
+                "returnedRate": 1,
+                "returnedAmount": 58888,
+                "description": "qwqew",
+                "returnedTime": "2021-02-21",
+                "id": 123,
+                "contractId": 1,
+                "paymentRecordVos": [
+                    {
+                        "refundTime": "2021-01-11",
+                        "customerName": "北京什么什么公司",
+                        "customerId": 5896244,
+                        "refundAmount": 88,
+                        "currencyType": 1,
+                        "exchangeRate": "",
+                        "foreignExchangeAmount": "",
+                        "refundBank": "中国银行中关村支行",
+                        "description": "现金人民币来款没有汇率exchangeRate&外币金额foreignExchangeAmount",
+                        "refundMode": 1,
+                        "contractId": 1,
+                        "refundNumber": 1001111,
+                        "paymentPlanId": 123,
+                        "id": 1
+                    },
+                    {
+                        "refundTime": "2021-01-11",
+                        "customerName": "北京什么什么公司",
+                        "customerId": 5896244,
+                        "refundAmount": 8800,
+                        "currencyType": 2,
+                        "exchangeRate": 0.64,
+                        "foreignExchangeAmount": 200.00,
+                        "refundBank": "中国银行中关村支行",
+                        "description": "商承外币来款有汇率exchangeRate&外币金额foreignExchangeAmount",
+                        "refundMode": 3,
+                        "contractId": 1,
+                        "refundNumber": 1001111,
+                        "paymentPlanId": 123,
+                        "id": 2
+                    }
+                ]
+            },
+            {
+                "period": 2,
+                "returnedRate": 2,
+                "returnedAmount": 1,
+                "description": "vxvx",
+                "returnedTime": "2021-05-25",
+                "id": 124,
+                "contractId": 2,
+                "paymentRecordVos": [
+                    {
+                        "refundTime": "2021-01-11",
+                        "customerName": "北京什么什么公司",
+                        "customerId": 5896244,
+                        "refundAmount": 8800,
+                        "currencyType": 2,
+                        "exchangeRate": 0.64,
+                        "foreignExchangeAmount": 200,
+                        "refundBank": "中国银行中关村支行",
+                        "description": "商承外币来款有汇率exchangeRate&外币金额foreignExchangeAmount",
+                        "refundMode": 1,
+                        "contractId": 2,
+                        "refundNumber": 1001111,
+                        "paymentPlanId": 124,
+                        "id": 3
+                    }
+                ]
+            }],
+        "attachVos": [
+            {
+                "id": 1,
+                "name": "string",
+                "username": "string",
+                "fileSize": "string",
+                "description": "string"
+            },
+            {
+                "id": 2,
+                "name": "上传",
+                "username": "admin",
+                "fileSize": "string",
+                "description": "string"
+            },
+            {
+                "id": 4,
+                "name": "上传",
+                "username": "admin",
+                "fileSize": "string",
+                "description": "string"
+            }
+        ],
+        "updateUser": "是谁",
+        "updateTime": "2011-11-25"
+    },
+    "msg": ""
+}
