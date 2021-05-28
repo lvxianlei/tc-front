@@ -115,7 +115,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
             paymentPlanVos: []
         },
         orderData: [],
-        editingKey: ""
+        editingKey: ''
     }
 
     protected form: React.RefObject<FormInstance> = React.createRef<FormInstance>();
@@ -125,7 +125,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
      * @description Gets form
      * @returns form 
      */
-     protected getForm(): FormInstance | null {
+    protected getForm(): FormInstance | null {
         return this.form?.current;
     }
 
@@ -213,7 +213,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                 value: detail?.simpleProjectName
             }], [{
                 label: '中标类型',
-                value: detail?.winBidType == 1 ? "国家电网": "南方电网"
+                value: detail?.winBidType == 1 ? '国家电网': '南方电网'
             }]]
         };
     }
@@ -363,8 +363,11 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                     ...detail,
                 }
             })
-            this.getForm()?.setFieldsValue({ customerName: selectValue[0].name })
-            console.log(this.getForm()?.getFieldsValue())
+            console.log(this.state.detail)
+            
+            this.getForm()?.setFieldsValue({ customerName: selectValue[0].name, refundAmount: "100" })
+
+            console.log(this.getForm()?.getFieldsValue(true))
         }
     }
 
@@ -400,6 +403,11 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
             title: '备注',
             dataIndex: 'description'
         }];
+    }
+
+    public async save() {
+        const row = (await this.getForm()?.validateFields())  as IPaymentRecordVos
+        console.log(this.getForm()?.getFieldsValue(true))
     }
 
     /**
@@ -474,14 +482,12 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                 const editable = this.isEditing(record.paymentPlanId+'-'+index);
                 return (editable == this.state.editingKey) ? (
                     <>
-                        <Button type="link" key="editable" onClick={() => {
-                            console.log(this.getForm()?.getFieldsValue())
-                        }}>保存</Button>
+                        <Button type="link" key="editable" onClick={() => this.save()}>保存</Button>
                         <ConfirmableButton confirmTitle="要取消编辑吗？"
                             type="link" placement="topRight"
                             onConfirm={ () => { 
                                 this.setState({
-                                    editingKey: ""
+                                    editingKey: ''
                                 })
                             } }>
                             <a>取消</a>
@@ -506,25 +512,24 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                 
         }];
     }
+
     public tableRowChange(record: Record<string, any>, index: number): void {
         this.isEditing(record.paymentPlanId+'-'+index)
         this.setState({
             editingKey: record.paymentPlanId+'-'+index
         })
-        setTimeout(() => {
-           this.getForm()?.setFieldsValue({
-                "refundTime": "",
-                "customerName": "",
-                "refundMode": 1,
-                "refundAmount": 0,
-                "currencyType": 1,
-                "exchangeRate": 0,
-                "foreignExchangeAmount": 0,
-                "refundBank": "",
-                "description": "",
-                ...record
-            }); 
-        }, 5000)
+        this.getForm()?.setFieldsValue({
+            "refundTime": "",
+            "customerName": "",
+            "refundMode": 1,
+            "refundAmount": 0,
+            "currencyType": 1,
+            "exchangeRate": 0,
+            "foreignExchangeAmount": 0,
+            "refundBank": "",
+            "description": "",
+            ...record
+        }); 
     }
  
     public getMergedColumns(): EditTableColumnType<object>[] {
@@ -546,7 +551,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
         })
     }
 
-    public getEditableCell = (records: Record<string, any>) => {       
+    public getEditableCell = (records: Record<string, any>) => {
         return ( 
             <td {...records}>
                 {(records.editing == this.state.editingKey) ? (
@@ -554,13 +559,6 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                         name = { records.dataIndex }
                         initialValue = { (records.dataIndex === "refundTime") ? 
                             moment(records.record[records.dataIndex])
-                            : (records.dataIndex === "currencyType") ? 
-                            (records.record[records.dataIndex] === "现金") ?
-                                1 : (records.record[records.dataIndex] ==="商承") ? 
-                                    2 : 3 
-                            : (records.dataIndex === "refundMode") ? 
-                            (records.record[records.dataIndex] === "RMB人民币" ) ? 
-                                1 : 2 
                             :  records.record[records.dataIndex]
                         } 
                     >
@@ -570,7 +568,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                     records.children
                 )}
             </td>
-          );
+        );
     }
 
     public isEditing(key: string) {

@@ -172,7 +172,7 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
                     <Link to={ `/prom/contract/setting/${ (record as ITableDataItem).id }` }>编辑</Link>
                     <ConfirmableButton confirmTitle="要删除该客户吗？" type="link" placement="topRight" onConfirm={ async () => {
                         let id = (record as ITableDataItem).id;
-                        const resData:IResponseData = await RequestUtil.delete('/contract', {id: id})
+                        const resData:IResponseData = await RequestUtil.delete('/tower-market/contract', {id: id})
                         console.log(resData)
                     } }>删除</ConfirmableButton>
                     <Link to={ `/prom/contract/paymentRecord` }>添加回款记录</Link>
@@ -189,7 +189,6 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
     public onTableChange(pagination: TablePaginationConfig): void {
         this.fetchTableData(pagination);
     }
-    
      
     /**
      * @implements
