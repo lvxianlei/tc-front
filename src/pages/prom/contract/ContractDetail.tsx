@@ -149,7 +149,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
         });
     }
 
-    public async componentWillMount() {
+    public async componentDidMount() {
         this.fetchTableData();
     }
     
@@ -331,8 +331,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
      * @description 弹窗
      * @returns 
      */
-
-     public handleOk = (values: Record<string, any>):void => {
+    public handleOk = (values: Record<string, any>):void => {
         const selectValue = this.state.selectedRows;
         const detail: IDetail = this.state.detail;
         let paymentPlan: IPaymentPlanVos[] = detail.paymentPlanVos;
@@ -365,6 +364,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                 }
             })
             this.getForm()?.setFieldsValue({ customerName: selectValue[0].name })
+            console.log(this.getForm()?.getFieldsValue())
         }
     }
 
@@ -416,8 +416,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
             title: '来款单位',
             dataIndex: 'customerName',
             editable: true,
-            type: <Input suffix={ <ClientSelectionComponent handleOk={ () => this.handleOk({}) } onSelectChange={ this.onSelectChange }/>
-                }/>,
+            type: <Input suffix={ <ClientSelectionComponent handleOk={ () => this.handleOk({}) } onSelectChange={ this.onSelectChange } />} />,
         }, {
             title: '来款方式',
             dataIndex: 'refundMode',
@@ -427,7 +426,10 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                     <Select.Option value={ 1 }>现金</Select.Option>
                     <Select.Option value={ 2 }>商承</Select.Option>
                     <Select.Option value={ 3 }>银行</Select.Option>
-                </Select>
+                </Select>,
+            render: (refundMode: number): React.ReactNode => {
+                return  refundMode === 1 ? '现金' : refundMode === 2 ? '商承' : '银行';
+            }
         }, {
             title: '来款金额（￥）',
             dataIndex: 'refundAmount',
@@ -441,7 +443,10 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                 <Select>
                     <Select.Option value={ 1 }>RMB人民币</Select.Option>
                     <Select.Option value={ 2 }>USD美元</Select.Option>
-                </Select>
+                </Select>,
+            render: (currencyType: number): React.ReactNode => {
+                return  currencyType === 1 ? 'RMB人民币' : 'USD美元';
+            }
         }, {
             title: '汇率',
             dataIndex: 'exchangeRate',
@@ -484,28 +489,15 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                     </>
                 ) : (
                     <>
-                        <Button type="link" key="editable" disabled={this.state.editingKey !== ''} onClick={() => {
-                            this.isEditing(record.paymentPlanId+'-'+index)
-                            this.setState({
-                                editingKey: record.paymentPlanId+'-'+index
-                            })
-                            this.getForm()?.setFieldsValue({
-                                refundTime: "",
-                                customerName: "",
-                                refundMode: 1,
-                                refundAmount: 0,
-                                currencyType: 1,
-                                exchangeRate: 0,
-                                foreignExchangeAmount: 0,
-                                refundBank: "",
-                                description: "",
-                                ...record,
-                            });
-                            console.log(this.getForm()?.getFieldsValue())
-                        }}>编辑</Button>
+                        <Button type="link" key="editable" disabled={this.state.editingKey !== ''} onClick={ () => this.tableRowChange(record, index) }>编辑</Button>
                         <ConfirmableButton confirmTitle="要删除该条回款计划吗？"
                             type="link" placement="topRight"
-                            onConfirm={ () => {  } }>
+                            onConfirm={ async () => { 
+                                const data: boolean = await RequestUtil.delete<boolean>(`/tower-market/paymentRecord/${ record.id }`);
+                                if(data) {
+                                    this.fetchTableData();
+                                }
+                            } }>
                             <a>删除</a>
                         </ConfirmableButton>
                     </>
@@ -513,6 +505,26 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
             }
                 
         }];
+    }
+    public tableRowChange(record: Record<string, any>, index: number): void {
+        this.isEditing(record.paymentPlanId+'-'+index)
+        this.setState({
+            editingKey: record.paymentPlanId+'-'+index
+        })
+        setTimeout(() => {
+           this.getForm()?.setFieldsValue({
+                "refundTime": "",
+                "customerName": "",
+                "refundMode": 1,
+                "refundAmount": 0,
+                "currencyType": 1,
+                "exchangeRate": 0,
+                "foreignExchangeAmount": 0,
+                "refundBank": "",
+                "description": "",
+                ...record
+            }); 
+        }, 5000)
     }
  
     public getMergedColumns(): EditTableColumnType<object>[] {
@@ -534,18 +546,21 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
         })
     }
 
-    public getEditableCell = (records: Record<string, any>) => {
-        return (
+    public getEditableCell = (records: Record<string, any>) => {       
+        return ( 
             <td {...records}>
                 {(records.editing == this.state.editingKey) ? (
                     <Form.Item
                         name = { records.dataIndex }
                         initialValue = { (records.dataIndex === "refundTime") ? 
                             moment(records.record[records.dataIndex])
+                            : (records.dataIndex === "currencyType") ? 
+                            (records.record[records.dataIndex] === "现金") ?
+                                1 : (records.record[records.dataIndex] ==="商承") ? 
+                                    2 : 3 
                             : (records.dataIndex === "refundMode") ? 
-                            (records.record[records.dataIndex] === "RMB人民币" )? 1 : 2 
-                            : (records.dataIndex === "currencyType") ?
-                             (records.record[records.dataIndex] === "现金") ? 1 : (records.record[records.dataIndex] ==="商承") ? 2 : 3 
+                            (records.record[records.dataIndex] === "RMB人民币" ) ? 
+                                1 : 2 
                             :  records.record[records.dataIndex]
                         } 
                     >
@@ -609,12 +624,11 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                                 ]
                             }
                         })
-                        console.log(detail)
                     } }>添加</Button>
                 ),
                 render: (): React.ReactNode => (
                     <>
-                        <Form ref={ this.form } >
+                        <Form ref={ this.form }  component={false}>
                             <Table 
                                 rowKey='index' 
                                 dataSource={ [...items.paymentRecordVos] } 

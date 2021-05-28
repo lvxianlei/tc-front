@@ -43,7 +43,8 @@
                         "refundMode": 1,
                         "contractId": 1,
                         "refundNumber": 1001111,
-                        "paymentPlanId": 123
+                        "paymentPlanId": 123,
+                        "id": 1
                     },
                     {
                         "refundTime": "2021-01-11",
@@ -55,10 +56,11 @@
                         "foreignExchangeAmount": 200.00,
                         "refundBank": "中国银行中关村支行",
                         "description": "商承外币来款有汇率exchangeRate&外币金额foreignExchangeAmount",
-                        "refundMode": 1,
+                        "refundMode": 3,
                         "contractId": 1,
                         "refundNumber": 1001111,
-                        "paymentPlanId": 123
+                        "paymentPlanId": 123,
+                        "id": 2
                     }
                 ]
             },
@@ -84,7 +86,8 @@
                         "refundMode": 1,
                         "contractId": 2,
                         "refundNumber": 1001111,
-                        "paymentPlanId": 124
+                        "paymentPlanId": 124,
+                        "id": 3
                     }
                 ]
             }],
