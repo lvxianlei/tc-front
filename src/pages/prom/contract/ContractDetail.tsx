@@ -447,7 +447,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                 ),
                 render: (): React.ReactNode => (
                     <> 
-                        <Form ref={ this.form }>
+                        <Form ref={ this.form } onFinish={(values: Record<string, any>) => { this.save(values) }}>
                             <Table 
                                 rowKey='id' 
                                 dataSource={ [...tableData] } 
@@ -539,7 +539,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                 const editable = this.isEditing(record.paymentPlanId+'-'+index);
                 return (editable == this.state.editingKey) ? (
                     <>
-                        <Button type="link" key="editable" onClick={() => this.save()}>保存</Button>
+                        <Button type="link" key="editable"  htmlType="submit" onClick={() => this.save}>保存</Button>
                         <ConfirmableButton confirmTitle="要取消编辑吗？"
                             type="link" placement="topRight"
                             onConfirm={ () => { 
@@ -586,9 +586,9 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
      /**
      * @description 行保存
      */
-      public async save() {
-        const row = (await this.getForm()?.validateFields())  as IPaymentRecordVos;
-        console.log(this.getForm()?.getFieldsValue(true))
+      public async save(values: Record<string, any>): Promise<void> {
+        const row = (await this.getForm()?.validateFields()) as IPaymentRecordVos;
+        console.log(values, this.getForm()?.getFieldsValue(true))
     }
  
     /**
@@ -617,7 +617,6 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
      * @description 表格components-body-cell
      */
     public getEditableCell = (records: Record<string, any>) => {
-        console.log(records.children)
         return ( 
             <td {...records}>
                 {(records.editing == this.state.editingKey) ? (
@@ -628,7 +627,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                         //     :  records.record[records.dataIndex]
                         // } 
                     > 
-                        {records.type}
+                        { records.type }
                     </Form.Item>
                     ) : (
                     <>{ records.children }</>
