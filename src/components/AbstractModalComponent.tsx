@@ -7,8 +7,8 @@ import styles from './AbstractModalComponent.module.less'
 import AbstractShowModalComponent from './AbstractShowModalComponent';
 
 export interface IAbstractModalComponentProps {
-    readonly handleOk: (vales: Record<string, any>) => void;
-    readonly onSelectChange: (selectedRowKeys: React.Key[],selectedRows: DataType[]) => void;
+    readonly handleOk: (selectedRows: DataType[]) => void;
+    // readonly onSelectChange: (selectedRowKeys: React.Key[],selectedRows: DataType[]) => void;
     readonly Id?: number;
 }
 
@@ -23,7 +23,26 @@ export interface IAbstractModalComponentState {
     readonly isFilter: boolean
 }
 
-export interface DataType{}
+export interface DataType{
+    readonly linkman?: string;
+    readonly name?: string;
+    readonly id?: number;
+    readonly type?: number;
+    readonly phone?: string;
+    readonly signCustomerId?: number;
+    readonly projectName?: string;
+    readonly contractNumber?: string;
+    readonly signCustomerName?: string;
+    readonly saleType?: number;
+    readonly customerCompany?: string;
+    readonly deliveryTime?: string;
+    readonly chargeType?: number;
+    readonly returnedAmount?: number;
+    readonly returnedRate?: number;
+    readonly returnedTime?: string;
+    readonly period?: number;
+    readonly description?: string;
+}
 
 export interface IResponseData {
     readonly total: number | undefined;
@@ -108,6 +127,13 @@ export default abstract class AbstractModalComponent<P extends IAbstractModalCom
      */
     abstract getFilterFormItemProps(): FormItemProps[];
 
+    public onSelectChange = (selectedRowKeys: React.Key[],selectedRows: DataType[]) => {
+        this.setState({ 
+            selectedRowKeys,
+            selectedRows
+        });
+    } 
+
     /**
      * @abstract
      * @description modal内表格 
@@ -135,7 +161,7 @@ export default abstract class AbstractModalComponent<P extends IAbstractModalCom
                             rowSelection={{
                                 type: "radio",
                                 selectedRowKeys: this.state.selectedRowKeys,
-                                onChange: this.props.onSelectChange
+                                onChange: this.onSelectChange
                             }}
                         />
                     </Space>
@@ -158,7 +184,7 @@ export default abstract class AbstractModalComponent<P extends IAbstractModalCom
                             this.setState ({
                                 isModalVisible: false
                             })
-                           { this.props.handleOk((value)) }
+                           { this.props.handleOk(this.state.selectedRows) }
                         }
                     } 
                     onCancel={this.handleCancel}
@@ -194,10 +220,4 @@ export default abstract class AbstractModalComponent<P extends IAbstractModalCom
     protected getTableRowKey(): string | GetRowKey<object> {
         return 'id';
     }
-    
-
-}
-
-function value(value: any) {
-    throw new Error('Function not implemented.');
 }

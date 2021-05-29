@@ -3,7 +3,7 @@
  * @copyright © 2021 
  */
 import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Radio, Row, Select, Space, Upload, Checkbox, Cascader, TablePaginationConfig, TableColumnType, FormItemProps } from 'antd';
+import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Radio, Row, Select, Space, Upload, Checkbox, Cascader, TablePaginationConfig } from 'antd';
 import { FormListFieldData, FormListOperation } from 'antd/lib/form/FormList';
 import moment from 'moment';
 import React from 'react';
@@ -19,10 +19,9 @@ import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 import styles from './AbstractContractSetting.module.less';
 import ClientSelectionComponent from '../../../components/ClientSelectionModal';
 import RequestUtil from '../../../utils/RequestUtil';
+import { DataType } from '../../../components/AbstractModalComponent';
 import { CascaderOptionType } from 'antd/lib/cascader';
-
-const { Option } = Select;
-
+import { SelectValue } from 'antd/lib/select';
 export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
     tablePagination: TablePaginationConfig;
     readonly contract?: IContract;
@@ -30,10 +29,7 @@ export interface IAbstractContractSettingState extends IAbstractFillableComponen
     tableDataSource: [];
     regionInfoData: [] ;
     childData: [] | undefined;
-    col:  [],
-    selectedRowKeys: React.Key[] | any,
-    selectedRows: object[] | any,
-    name: string
+    col: [];
 }
 
 export interface ITabItem {
@@ -109,7 +105,7 @@ export interface IResponseData {
     records: [];
 }
 
-export interface DataType{}
+
 /**
  * Abstract Contract Setting
  */
@@ -162,7 +158,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         }
         return moment().format('YYYYMMDD') + num;
     }
-        /**
+    /**
      * @override
      * @description 附件表格选择
      * @returns 
@@ -171,7 +167,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     public checkChange = (record: Record<string, any>): void => {
         let checked: any = this.state.checkList;
         if(record.target.checked) {
-            checked.push(record.target.value)
+            checked.push(record.target.value);
         } else {
             checked = checked.filter((item: any) => item !== record.target.value);
         }
@@ -201,47 +197,40 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
      * @description 弹窗
      * @returns 
      */
-
-    public handleOk = (values: Record<string, any>):void => {
+    public handleOk = (selectedRows: DataType[]):void => {
         const contract: IContract | undefined = this.state.contract;
-        const selectValue = this.state.selectedRows;
-        if(values.tip == "customerCompany") {
-            if(selectValue.length > 0 ) {
-                const select = {
-                    customerId: selectValue[0].id,
-                    customerCompany: selectValue[0].name,
-                    customerLinkman: selectValue[0].linkman,
-                    customerPhone: selectValue[0].phone
+        if(selectedRows.length > 0 ) {
+            this.setState({
+                contract: {
+                    ...(contract || {}),
+                    signCustomerName: selectedRows[0].name
                 }
-                this.setState({
-                    contract: {
-                        ...(contract || {}),
-                        customerInfoDto: select,
-                        signCustomerName: selectValue[0].name
-                    }
-                })
-                this.getForm()?.setFieldsValue(select)
-                this.getForm()?.setFieldsValue({ signCustomerName: selectValue[0].name })
-            }
-        } else {
-            if(selectValue.length > 0 ) {
-                this.setState({
-                    contract: {
-                        ...(contract || {}),
-                        signCustomerName: selectValue[0].name
-                    }
-                })
-                this.getForm()?.setFieldsValue({ signCustomerName: selectValue[0].name })
-            }
+            })
+            this.getForm()?.setFieldsValue({ signCustomerName: selectedRows[0].name });
         }
     }
 
-    public onSelectChange = (selectedRowKeys: React.Key[],selectedRows: DataType[]) => {
-        this.setState({ 
-            selectedRowKeys,
-            selectedRows
-        });
-    } 
+    public handleCustomerCompanyOk = (selectedRows: DataType[]):void => {
+        const contract: IContract | undefined = this.state.contract;
+        if(selectedRows.length > 0 ) {
+            const select = {
+                customerId: selectedRows[0].id,
+                customerCompany: selectedRows[0].name,
+                customerLinkman: selectedRows[0].linkman,
+                customerPhone: selectedRows[0].phone
+            }
+            this.setState({
+                contract: {
+                    ...(contract || {}),
+                    customerInfoDto: select,
+                    signCustomerName: selectedRows[0].name
+                }
+            })
+            this.getForm()?.setFieldsValue(select);
+            this.getForm()?.setFieldsValue({ signCustomerName: selectedRows[0].name });
+        }
+    }
+
     /**
      * @implements
      * @description Gets form item groups
@@ -314,7 +303,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     children: 
                         <>
                             <Input value={ contract?.customerInfoDto?.customerCompany } suffix={ 
-                                <ClientSelectionComponent handleOk={ () => this.handleOk({tip: "customerCompany"}) } onSelectChange={ this.onSelectChange }/>
+                                <ClientSelectionComponent handleOk={ this.handleCustomerCompanyOk } />
                             }/>
                         </>
                 }, {
@@ -338,7 +327,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     children:
                         <>
                             <Input value={ contract?.signCustomerName } suffix={ 
-                                <ClientSelectionComponent handleOk={ () => this.handleOk({tip: "signCustomerName"}) } onSelectChange={ this.onSelectChange }/>
+                                <ClientSelectionComponent handleOk={ this.handleOk } />
                             }/>
                         </>
                 }, {
@@ -378,7 +367,9 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     name: 'countryCode',
                     initialValue: contract?.regionInfoDTO?.countryCode || 1,
                     children: (
-                        <Select>
+                        <Select onChange={ (value: SelectValue) => {
+                            this.getForm()?.setFieldsValue({ countryCode: value })
+                        } }>
                             <Select.Option value={ 1 }>中国</Select.Option>
                             <Select.Option value={ 2 }>海外</Select.Option>
                         </Select>
@@ -413,13 +404,14 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                             options={this.state.regionInfoData}
                             onChange={this.onRegionInfoChange}
                             changeOnSelect
+                            disabled={ this.getForm()?.getFieldValue('countryCode') === 2 }
                         />
                     )
                 }, {
                     label: '合同总价',
                     name: 'contractAmount',
                     initialValue: contract?.contractAmount,
-                    children: <Input prefix="￥" />
+                    children: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } prefix="￥"/>
                 }, {
                     label: '币种',
                     name: 'currencyType',
@@ -566,7 +558,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                     return (
                                         <>
                                             <Space size="small" className={ styles.attachBtn }>
-                                                <Upload  action='/tower-system/attach' onChange={ (info)=>{
+                                                <Upload  action="/tower-system/attach" onChange={ (info)=>{
                                                     console.log(info)
                                                     if (info.file.status !== 'uploading') {
                                                         // console.log(info.file, info.fileList);

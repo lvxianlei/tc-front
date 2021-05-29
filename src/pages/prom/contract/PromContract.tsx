@@ -1,4 +1,4 @@
-import { FormItemProps, Input, Select, Space, TableColumnType, TablePaginationConfig } from 'antd';
+import { Button, Form, FormItemProps, Input, Popconfirm, Select, Space, TableColumnType, TablePaginationConfig } from 'antd';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../../components/AbstractMngtComponent';
 import { ITabItem } from '../../../components/ITabableComponent';
-import ConfirmableButton from '../../../components/ConfirmableButton';
 import RequestUtil from '../../../utils/RequestUtil';
 
 const { Option } = Select;
@@ -29,6 +28,7 @@ interface ITableDataItem {
     readonly customerCompany: string;
     readonly signCustomerName: string;
     readonly deliveryTime: string;
+    readonly status: number;
 }
 
 export interface IResponseData {
@@ -43,7 +43,6 @@ export interface IResponseData {
   * 销售合同管理
   */
 class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IPromContractState> {
-
     /**
      * @override
      * @description Gets state
@@ -169,13 +168,25 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
             dataIndex: 'operation',
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={ `/prom/contract/setting/${ (record as ITableDataItem).id }` }>编辑</Link>
-                    <ConfirmableButton confirmTitle="要删除该客户吗？" type="link" placement="topRight" onConfirm={ async () => {
-                        let id = (record as ITableDataItem).id;
-                        const resData:IResponseData = await RequestUtil.delete('/tower-market/contract', {id: id})
-                        console.log(resData)
-                    } }>删除</ConfirmableButton>
-                    <Link to={ `/prom/contract/paymentRecord` }>添加回款记录</Link>
+                    <Button type="link"  href={ `/prom/contract/setting/${ (record as ITableDataItem).id }` } disabled={ (record as ITableDataItem).status === 0 }>
+                        编辑
+                    </Button>
+                    <Popconfirm 
+                        title="要删除该客户吗？" 
+                        placement="topRight" 
+                        okText="确认"
+                        cancelText="取消"
+                        onConfirm={ async () => {
+                            let id = (record as ITableDataItem).id;
+                            const resData:IResponseData = await RequestUtil.delete('/tower-market/contract', {id: id})
+                        } }
+                        disabled={ (record as ITableDataItem).status === 0 }
+                    >
+                        <Button type="link" disabled={ (record as ITableDataItem).status === 0 }>
+                            删除
+                        </Button>
+                    </Popconfirm>
+                    <Button type="link" href={ `/prom/contract/paymentRecord` } disabled={ (record as ITableDataItem).status === 1 }>添加回款记录</Button>
                 </Space>
             )
         }];
@@ -261,11 +272,13 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
         {
             name: 'winBidType',
             children: 
-            <Select defaultValue="0">
-                <Option value="0" >全部中标类型</Option>
-                <Option value="1">国家电网</Option>
-                <Option value="2">南方电网</Option>
-            </Select>
+                <Form.Item>
+                    <Select>
+                        <Option value="0">国家电网</Option>
+                        <Option value="1">南方电网</Option>
+                    </Select>
+                </Form.Item>
+            
         }];
     }
  }

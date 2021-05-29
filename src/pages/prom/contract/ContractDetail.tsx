@@ -16,7 +16,8 @@ import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../..
 import styles from './ContractDetail.module.less'
 import ClientSelectionComponent from '../../../components/ClientSelectionModal';
 import moment from 'moment';
-import { DataType, IPaymentPlanDto } from './AbstractContractSetting';
+import { DataType } from '../../../components/AbstractModalComponent';
+import { IResponseData } from './AbstractContractSetting';
 
 export interface IContractDetailProps {
     readonly id: string;
@@ -86,7 +87,9 @@ interface IOrderItem {
     readonly products?: IProducts[];
 }
 
-interface IProducts {}
+interface IProducts {
+    readonly saleOrderId: number;
+}
 
 interface IAttachVos {
     readonly name?: string;
@@ -104,7 +107,6 @@ interface EditTableColumnType<RecordType> extends TableColumnType<object> {
     readonly title: string;
 }
 
-
 /**
  * Contract detail page component.
  */
@@ -115,7 +117,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
             paymentPlanVos: []
         },
         orderData: [],
-        editingKey: ''
+        editingKey: '',
     }
 
     protected form: React.RefObject<FormInstance> = React.createRef<FormInstance>();
@@ -145,7 +147,6 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
         this.setState({
             detail: resData,
             orderData: orderData,
-
         });
     }
 
@@ -182,7 +183,9 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
         return [
             <Button key="new" href="/prom/contract/new">新增</Button>,
             <Button key="setting" href={ `/prom/contract/setting/${ this.props.match.params.id }`}>编辑</Button>,
-            <ConfirmableButton key="delete" confirmTitle="要删除该合同吗？">删除</ConfirmableButton>
+            <ConfirmableButton key="delete" confirmTitle="要删除该合同吗？" onConfirm={ async () => {
+                const resData: IResponseData = await RequestUtil.delete('/tower-market/contract', {id: this.props.match.params.id})
+            } }>删除</ConfirmableButton>
         ];
     }
 
@@ -319,11 +322,10 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                     value:  item.taxAmount
                 }],
                 render: (): React.ReactNode => (
-                    <Table dataSource={ item.products } pagination={ false } bordered={ true } columns={ this.getOrderColumns() }/>
+                    <Table rowKey={ record => (record as IProducts).saleOrderId }  dataSource={ item.products } pagination={ false } bordered={ true } columns={ this.getOrderColumns() }/>
                 )
             }  
-        })
-        
+        })  
     }
 
     /**
@@ -331,13 +333,12 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
      * @description 弹窗
      * @returns 
      */
-    public handleOk = (values: Record<string, any>):void => {
-        const selectValue = this.state.selectedRows;
+    public handleOk = (selectedRows: DataType[]):void => {
         const detail: IDetail = this.state.detail;
         let paymentPlan: IPaymentPlanVos[] = detail.paymentPlanVos;
         const paymentPlanId: number = parseInt(this.state.editingKey.split("-")[0]);
         const tableIndex: number = parseInt(this.state.editingKey.split("-")[1]);
-        if(selectValue.length > 0 ) {
+        if(selectedRows.length > 0 ) {
             paymentPlan = paymentPlan.map<IPaymentPlanVos>((items: IPaymentPlanVos): IPaymentPlanVos=>{
                 if(items.id === paymentPlanId) {
                     return {
@@ -346,7 +347,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                             if(index === tableIndex ) {
                                 return {
                                     ...item,
-                                    customerName: selectValue[0].name
+                                    customerName: selectedRows[0].name
                                 }
                             } else {
                                 return item
@@ -363,20 +364,9 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                     ...detail,
                 }
             })
-            console.log(this.state.detail)
-            
-            this.getForm()?.setFieldsValue({ customerName: selectValue[0].name, refundAmount: "100" })
-
-            console.log(this.getForm()?.getFieldsValue(true))
+            this.getForm()?.setFieldsValue({ customerName: selectedRows[0].name })
         }
     }
-
-    public onSelectChange = (selectedRowKeys: React.Key[],selectedRows: DataType[]) => {
-        this.setState({ 
-            selectedRowKeys,
-            selectedRows
-        });
-    } 
 
     public getColumns(): TableColumnType<object>[] {
         return [ {
@@ -405,9 +395,76 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
         }];
     }
 
-    public async save() {
-        const row = (await this.getForm()?.validateFields())  as IPaymentRecordVos
-        console.log(this.getForm()?.getFieldsValue(true))
+    /**
+     * @description Gets charging record summariable items
+     * @returns charging record summariable items 
+     */
+     private getChargingRecordSummariableItems(): IRenderdSummariableItem[] {
+        const detail: IDetail = this.state.detail;
+        let paymentPlan: IPaymentPlanVos[] = detail.paymentPlanVos;
+        return paymentPlan.map<IRenderdSummariableItem>((items: IPaymentPlanVos, index: number) : IRenderdSummariableItem => {
+            const tableData: IPaymentRecordVos[] = JSON.parse(JSON.stringify(items.paymentRecordVos))
+            return {fieldItems: [
+                {
+                    label: `第${ items.period }期计划 `,
+                    value: items.returnedTime
+                }, {
+                    label: '计划回款占比',
+                    value: items.returnedRate
+                }, {
+                    label: '计划回款金额',
+                    value: items.returnedAmount
+                }, {
+                    label: '已回款金额',
+                    value: items.returnedRate
+                }, {
+                    label: '未回款金额',
+                    value: items.returnedRate
+                }],
+                renderExtraInBar: (): React.ReactNode => (
+                    <Button type="primary" onClick={ () => {
+                        let paymentRecordVos: IPaymentRecordVos[] = paymentPlan[index].paymentRecordVos;
+                        paymentRecordVos.push
+                            ({
+                                refundTime: "",
+                                customerName: "",
+                                refundMode: 1,
+                                refundAmount: 0,
+                                currencyType: 1,
+                                exchangeRate: 0,
+                                foreignExchangeAmount: 0,
+                                refundBank: "",
+                                description: "",
+                            })
+                        this.setState({
+                            detail: {
+                                paymentPlanVos: [
+                                    ...paymentPlan
+                                ]
+                            }
+                        })
+                    } }>添加</Button>
+                ),
+                render: (): React.ReactNode => (
+                    <> 
+                        <Form ref={ this.form } onFinish={(values: Record<string, any>) => { this.save(values) }}>
+                            <Table 
+                                rowKey='id' 
+                                dataSource={ [...tableData] } 
+                                columns={ this.getMergedColumns() } 
+                                bordered 
+                                pagination={ false }
+                                components={{
+                                    body: {
+                                      cell: this.getEditableCell,
+                                    },
+                                }}
+                            ></Table>
+                        </Form>
+                    </>
+                )
+            };
+        })
     }
 
     /**
@@ -424,7 +481,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
             title: '来款单位',
             dataIndex: 'customerName',
             editable: true,
-            type: <Input suffix={ <ClientSelectionComponent handleOk={ () => this.handleOk({}) } onSelectChange={ this.onSelectChange } />} />,
+            type: <Input suffix={ <ClientSelectionComponent handleOk={ this.handleOk } />} />,
         }, {
             title: '来款方式',
             dataIndex: 'refundMode',
@@ -482,7 +539,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                 const editable = this.isEditing(record.paymentPlanId+'-'+index);
                 return (editable == this.state.editingKey) ? (
                     <>
-                        <Button type="link" key="editable" onClick={() => this.save()}>保存</Button>
+                        <Button type="link" key="editable"  htmlType="submit" onClick={() => this.save}>保存</Button>
                         <ConfirmableButton confirmTitle="要取消编辑吗？"
                             type="link" placement="topRight"
                             onConfirm={ () => { 
@@ -490,12 +547,12 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                                     editingKey: ''
                                 })
                             } }>
-                            <a>取消</a>
+                            <Button type="link">取消</Button>
                         </ConfirmableButton>
                     </>
                 ) : (
                     <>
-                        <Button type="link" key="editable" disabled={this.state.editingKey !== ''} onClick={ () => this.tableRowChange(record, index) }>编辑</Button>
+                        <Button type="link" key="editable" disabled={this.state.editingKey !== ''} onClick={ () => this.tableRowEdit(record, index) }>编辑</Button>
                         <ConfirmableButton confirmTitle="要删除该条回款计划吗？"
                             type="link" placement="topRight"
                             onConfirm={ async () => { 
@@ -504,7 +561,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                                     this.fetchTableData();
                                 }
                             } }>
-                            <a>删除</a>
+                            <Button type="link">删除</Button>
                         </ConfirmableButton>
                     </>
                 )
@@ -513,25 +570,30 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
         }];
     }
 
-    public tableRowChange(record: Record<string, any>, index: number): void {
+    /**
+     * @description 行编辑
+     */
+    public tableRowEdit(record: Record<string, any>, index: number): void {
         this.isEditing(record.paymentPlanId+'-'+index)
         this.setState({
             editingKey: record.paymentPlanId+'-'+index
         })
         this.getForm()?.setFieldsValue({
-            "refundTime": "",
-            "customerName": "",
-            "refundMode": 1,
-            "refundAmount": 0,
-            "currencyType": 1,
-            "exchangeRate": 0,
-            "foreignExchangeAmount": 0,
-            "refundBank": "",
-            "description": "",
             ...record
-        }); 
+        });
+    }
+
+     /**
+     * @description 行保存
+     */
+      public async save(values: Record<string, any>): Promise<void> {
+        const row = (await this.getForm()?.validateFields()) as IPaymentRecordVos;
+        console.log(values, this.getForm()?.getFieldsValue(true))
     }
  
+    /**
+     * @description 表格获取Columns
+     */
     public getMergedColumns(): EditTableColumnType<object>[] {
         return this.getChargingRecordColumns().map<EditTableColumnType<object>>((col: EditTableColumnType<object>): EditTableColumnType<object> => {
             if(!col.editable) {
@@ -551,99 +613,34 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
         })
     }
 
+    /**
+     * @description 表格components-body-cell
+     */
     public getEditableCell = (records: Record<string, any>) => {
         return ( 
             <td {...records}>
                 {(records.editing == this.state.editingKey) ? (
                     <Form.Item
                         name = { records.dataIndex }
-                        initialValue = { (records.dataIndex === "refundTime") ? 
-                            moment(records.record[records.dataIndex])
-                            :  records.record[records.dataIndex]
-                        } 
-                    >
-                        {records.type}
+                        // initialValue = { (records.dataIndex === "refundTime") ? 
+                        //     moment(records.record[records.dataIndex])
+                        //     :  records.record[records.dataIndex]
+                        // } 
+                    > 
+                        { records.type }
                     </Form.Item>
                     ) : (
-                    records.children
+                    <>{ records.children }</>
                 )}
             </td>
         );
     }
 
+    /**
+     * @description 是否编辑
+     */
     public isEditing(key: string) {
         return key
-    }
-
-    /**
-     * @description Gets charging record summariable items
-     * @returns charging record summariable items 
-     */
-    private getChargingRecordSummariableItems(): IRenderdSummariableItem[] {
-        const detail: IDetail = this.state.detail;
-        let paymentPlan: IPaymentPlanVos[] = detail.paymentPlanVos;
-        return paymentPlan.map<IRenderdSummariableItem>((items: IPaymentPlanVos, index: number) : IRenderdSummariableItem => {
-            return {fieldItems: [
-                {
-                    label: `第${ items.period }期计划 `,
-                    value: items.returnedTime
-                }, {
-                    label: '计划回款占比',
-                    value: items.returnedRate
-                }, {
-                    label: '计划回款金额',
-                    value: items.returnedAmount
-                }, {
-                    label: '已回款金额',
-                    value: items.returnedRate
-                }, {
-                    label: '未回款金额',
-                    value: items.returnedRate
-                }],
-                renderExtraInBar: (): React.ReactNode => (
-                    <Button type="primary" onClick={ () => {
-                        let paymentRecordVos: IPaymentRecordVos[] = paymentPlan[index].paymentRecordVos;
-                        paymentRecordVos.push
-                            ({
-                                refundTime: "",
-                                customerName: "",
-                                refundMode: 1,
-                                refundAmount: 0,
-                                currencyType: 1,
-                                exchangeRate: 0,
-                                foreignExchangeAmount: 0,
-                                refundBank: "",
-                                description: "",
-                            })
-                        this.setState({
-                            detail: {
-                                paymentPlanVos: [
-                                    ...paymentPlan
-                                ]
-                            }
-                        })
-                    } }>添加</Button>
-                ),
-                render: (): React.ReactNode => (
-                    <>
-                        <Form ref={ this.form }  component={false}>
-                            <Table 
-                                rowKey='index' 
-                                dataSource={ [...items.paymentRecordVos] } 
-                                columns={ this.getMergedColumns() } 
-                                bordered 
-                                pagination={ false }
-                                components={{
-                                    body: {
-                                      cell: this.getEditableCell,
-                                    },
-                                }}
-                            ></Table>
-                        </Form>
-                    </>
-                )
-            };
-        })
     }
 
     /**
@@ -676,7 +673,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                     const dataSource = detail?.attachVos
                     return (
                         <>
-                            <Table dataSource={ dataSource } columns={ this.getColumns() } />
+                            <Table rowKey="index" dataSource={ dataSource } columns={ this.getColumns() } />
                         </>
                     )
                 }

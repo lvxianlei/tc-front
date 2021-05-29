@@ -7,7 +7,7 @@ import React from 'react';
 
 import { GetRowKey } from 'rc-table/lib/interface';
 import { TablePaginationConfig } from 'antd/lib/table';
-import AbstractModalComponent, {IAbstractModalComponentProps, IAbstractModalComponentState, IResponseData } from './AbstractModalComponent'
+import AbstractModalComponent, {DataType, IAbstractModalComponentProps, IAbstractModalComponentState, IResponseData } from './AbstractModalComponent'
 import RequestUtil from '../utils/RequestUtil';
 
 const { Option } = Select;
@@ -19,11 +19,21 @@ export interface IContractSelectionComponentState extends IAbstractModalComponen
 }
 
 
-export interface DataType{}
+// export interface ContractDataType extends DataType{
+//     readonly signCustomerId?: number;
+//     readonly projectName?: string;
+//     readonly contractNumber?: string;
+//     readonly signCustomerName?: string;
+//     readonly saleType?: number;
+//     readonly customerCompany?: string;
+//     readonly deliveryTime?: string;
+//     readonly chargeType?: number;
+//     readonly id?: number;
+// }
 /**
  * Contract Selection Component
  */
-export default abstract class ContractSelectionComponent<P extends IAbstractModalComponentProps, S  extends IContractSelectionComponentState> extends AbstractModalComponent<P, IContractSelectionComponentState> {
+export default class ContractSelectionComponent<P extends IAbstractModalComponentProps, S  extends IContractSelectionComponentState> extends AbstractModalComponent<P, IContractSelectionComponentState> {
     /**
      * @description Renders AbstractTabableComponent
      * @returns render 
@@ -70,7 +80,7 @@ export default abstract class ContractSelectionComponent<P extends IAbstractModa
         return [{
                 name: 'type',
                 children: 
-                <Select defaultValue="0">
+                <Select>
                     <Option value="0" >国内</Option>
                     <Option value="1">国际</Option>
                 </Select>

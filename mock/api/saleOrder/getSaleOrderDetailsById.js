@@ -14,7 +14,8 @@ for (let i = 1; i < 5; ++i) {
         "productNumber": Random.natural(15),
         "productShape":	 Random.natural(15),
         "productStatus|1-3": 1,
-        "productType|1-2": 1
+        "productType|1-2": 1,
+        "saleOrderId": Random.increment(5)
     });
 }
 for (let i = 1; i < 5; ++i) {
@@ -23,7 +24,7 @@ for (let i = 1; i < 5; ++i) {
         "taxAmount": Random.increment(3),
         "orderQuantity": Random.increment(4),
         "internalNumber": Random.increment(4),
-        "products": pro
+        "products": pro,
     });
 }
 

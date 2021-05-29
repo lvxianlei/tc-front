@@ -8,6 +8,7 @@ import React from 'react';
 import { GetRowKey } from 'rc-table/lib/interface';
 import AbstractModalComponent, {IAbstractModalComponentProps, IAbstractModalComponentState, IResponseData } from './AbstractModalComponent'
 import RequestUtil from '../utils/RequestUtil';
+import { DataType } from './AbstractModalComponent';
 
 export interface IPaymentPlanSelectionComponentState extends IAbstractModalComponentState {
     readonly tableDataSource: [];
@@ -15,7 +16,14 @@ export interface IPaymentPlanSelectionComponentState extends IAbstractModalCompo
     readonly selectedRows: object[] | any,
 }
 
-export interface DataType{}
+// export interface PaymentPlanDataType extends DataType{
+//     readonly returnedAmount: number;
+//     readonly returnedRate: number;
+//     readonly returnedTime: string;
+//     readonly period: number;
+//     readonly description: string;
+//     readonly id: number;
+// }
 /**
  * PaymentPlan Selection Component
  */
