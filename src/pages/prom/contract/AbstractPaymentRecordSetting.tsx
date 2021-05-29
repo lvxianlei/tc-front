@@ -2,7 +2,7 @@
  * @author zyc
  * @copyright © 2021 zyc
  */
-import { DatePicker, FormProps, Input, Select } from 'antd';
+import { DatePicker, FormProps, Input, InputNumber, Select } from 'antd';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -13,13 +13,12 @@ import ContractSelectionComponent from '../../../components/ContractSelectionMod
 import PaymentPlanSelectionComponent from '../../../components/PaymentPlanSelectionModal'
 import RequestUtil from '../../../utils/RequestUtil';
 import moment from 'moment';
+import { DataType } from '../../../components/AbstractModalComponent';
 
 const { Option } = Select;
 
 export interface IAbstractPaymentRecordSettingState extends IAbstractFillableComponentState {
-    readonly selectedRowKeys: React.Key[] | any;
     readonly paymentRecord?: IPaymentRecord;
-    readonly selectedRows: object[] | any;
     readonly tableDataSource: [];
     readonly id: number;
 }
@@ -44,8 +43,6 @@ export interface IPaymentRecord {
     readonly refundNumber?: number;
     readonly signCustomerId?: number;
 }
-
-export interface DataType{}
 
 export interface IResponseData {
     readonly total: number | undefined;
@@ -99,34 +96,20 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
 
     /**
      * @override
-     * @description 弹窗表格选择
-     * @returns 
-     */
-    public onSelectChange = (selectedRowKeys: React.Key[],selectedRows: DataType[]) => {
-        this.setState({ 
-            selectedRowKeys,
-            selectedRows
-        });
-    }
-
-    /**
-     * @override
      * @description 客户弹窗
      * @returns 
      */
-    public handleOk = ():void => {
+    public handleOk = (selectedRows: DataType[]):void => {
         const paymentRecord: IPaymentRecord | undefined = this.state.paymentRecord;
-        const selectValue = this.state.selectedRows;
-        console.log(selectValue)
-        if(selectValue.length > 0 ) {
+        if(selectedRows.length > 0 ) {
             this.setState({
                 paymentRecord: {
                     ...(paymentRecord || {}),
-                    customerName: selectValue[0].name,
-                    signCustomerId: selectValue[0].id
+                    customerName: selectedRows[0].name,
+                    signCustomerId: selectedRows[0].id
                 }
             })
-            this.getForm()?.setFieldsValue({ customerName: selectValue[0].name })
+            this.getForm()?.setFieldsValue({ customerName: selectedRows[0].name })
         }
     }
 
@@ -135,24 +118,23 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
      * @description 合同弹窗
      * @returns 
      */
-     public handleContractOk = ():void => {
+     public handleContractOk = (selectedRows: DataType[] | any):void => {
         const paymentRecord: IPaymentRecord | undefined = this.state.paymentRecord;
-        const selectValue = this.state.selectedRows;
-        if(selectValue.length > 0 ) {
+        if(selectedRows.length > 0 ) {
             this.setState({
                 paymentRecord: {
                     ...(paymentRecord || {}),
-                    signCustomerId: selectValue[0].signCustomerId,
-                    projectName: selectValue[0].projectName,
-                    contractId: selectValue[0].contractNumber,
-                    customerName: selectValue[0].signCustomerName,
+                    signCustomerId: selectedRows[0].signCustomerId,
+                    projectName: selectedRows[0].projectName, 
+                    contractId: selectedRows[0].contractNumber,
+                    customerName: selectedRows[0].signCustomerName
                 },
-                id: selectValue[0].id
+                id: selectedRows[0].id
             })
             this.getForm()?.setFieldsValue({ 
-                projectName: selectValue[0].projectName, 
-                contractId: selectValue[0].contractNumber,
-                customerName: selectValue[0].signCustomerName })
+                projectName: selectedRows[0].projectName, 
+                contractId: selectedRows[0].contractNumber,
+                customerName: selectedRows[0].signCustomerName })
         }
     }
     
@@ -161,24 +143,24 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
      * @description 回款计划弹窗
      * @returns 
      */
-     public handlePlanOk = ():void => {
+     public handlePlanOk = (selectedRows: DataType[] | any):void => {
         const paymentRecord: IPaymentRecord | undefined = this.state.paymentRecord;
-        const selectValue = this.state.selectedRows;
-        if(selectValue.length > 0 ) {
+        if(selectedRows.length > 0 ) {
             this.setState({
                 paymentRecord: {
                     ...(paymentRecord || {}),
-                    paymentPlanId: selectValue[0].period,
-                    returnedTime: selectValue[0].returnedTime,
-                    returnedRate: selectValue[0].returnedRate,
-                    returnedAmount: selectValue[0].returnedAmount,
+                    paymentPlanId: selectedRows[0].period,
+                    returnedTime: selectedRows[0].returnedTime,
+                    returnedRate: selectedRows[0].returnedRate,
+                    returnedAmount: selectedRows[0].returnedAmount,
                 },
-                id: selectValue[0].id
+                id: selectedRows[0].id
             })
-            this.getForm()?.setFieldsValue({ paymentPlanId: selectValue[0].period,
-                returnedTime: moment(selectValue[0].returnedTime),
-                returnedRate: selectValue[0].returnedRate,
-                returnedAmount: selectValue[0].returnedAmount, })
+            this.getForm()?.setFieldsValue({ 
+                paymentPlanId: selectedRows[0].period,
+                returnedTime: moment(selectedRows[0].returnedTime),
+                returnedRate: selectedRows[0].returnedRate,
+                returnedAmount: selectedRows[0].returnedAmount, })
         }
     }
 
@@ -206,7 +188,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 children: 
                     <>
                         <Input value={ paymentRecord?.contractId } suffix={ 
-                            <ContractSelectionComponent handleOk={ () => this.handleContractOk() } onSelectChange={ this.onSelectChange }/>
+                            <ContractSelectionComponent handleOk={ this.handleContractOk }/>
                         }/>
                     </>
             }, {
@@ -227,7 +209,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
             children: 
                 <>
                     <Input value={ paymentRecord?.customerName } suffix={ 
-                        <ClientSelectionComponent handleOk={ () => this.handleOk() } onSelectChange={ this.onSelectChange }/>
+                        <ClientSelectionComponent handleOk={ this.handleOk }/>
                     }/>
                 </>
         },  {
@@ -241,7 +223,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
             children: 
                 <>
                     <Input value={ paymentRecord?.paymentPlanId } suffix={ 
-                        <PaymentPlanSelectionComponent handleOk={ () => this.handlePlanOk() } onSelectChange={ this.onSelectChange } Id={ this.state.id }/>
+                        <PaymentPlanSelectionComponent handleOk={ this.handlePlanOk } Id={ this.state.id }/>
                     }/>
                 </>
         }, {
@@ -277,12 +259,12 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
             }, {
                 label: '来款时间',
                 name: 'refundTime',
-                initialValue: moment(paymentRecord?.refundTime),
+                initialValue: paymentRecord?.refundTime,
                 rules: [{
                     required: true,
                     message: '请选择来款时间'
                 }],
-                children: <DatePicker />
+                children: <DatePicker  showTime format="YYYY-MM-DD HH:mm" />
             }, {
                 label: '来款方式',
                 name: 'refundMode',
@@ -315,7 +297,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 label: '汇率',
                 name: 'exchangeRate',
                 initialValue: paymentRecord?.exchangeRate,
-                children: <Input/>
+                children: <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 }/>
             }, {
                 label: '外币金额',
                 name: 'foreignExchangeAmount',
@@ -324,7 +306,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                     required: true,
                     message: '请输入外币金额'
                 }],
-                children: <Input/>
+                children: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 }/>
             }, {
                 label: '收款银行',
                 name: 'refundBank',

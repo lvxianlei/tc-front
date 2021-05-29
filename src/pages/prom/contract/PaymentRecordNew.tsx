@@ -28,6 +28,7 @@ class PaymentRecordNew extends AbstractPaymentRecordSetting<IContractNewRoutePro
      */
     public async onSubmit(values: Record<string, any>): Promise<void> {
         values.refundTime = moment(values.refundTime).format('YYYY-MM-DD HH:mm');
+        values.returnedTime =  moment(values.returnedTime).format('YYYY-MM-DD HH:mm');
         //  return Promise.resolve();
         const confirmValues: Record<string, any> = {
             ...values,

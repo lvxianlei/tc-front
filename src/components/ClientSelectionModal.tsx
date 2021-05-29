@@ -7,23 +7,41 @@ import React from 'react';
 
 import { GetRowKey } from 'rc-table/lib/interface';
 import Table, { ColumnType, TablePaginationConfig } from 'antd/lib/table';
-import AbstractModalComponent, {IAbstractModalComponentProps, IAbstractModalComponentState, IResponseData } from './AbstractModalComponent'
+import AbstractModalComponent, {DataType, IAbstractModalComponentProps, IAbstractModalComponentState, IResponseData } from './AbstractModalComponent'
 import RequestUtil from '../utils/RequestUtil';
 
 const { Option } = Select;
 
 export interface IClientSelectionComponentState extends IAbstractModalComponentState {
-    readonly tableDataSource: [];
+    readonly tableDataSource: IClient[];
     readonly selectedRowKeys: React.Key[] | any,
     readonly selectedRows: object[] | any,
 }
 
+export interface IClient {
+    readonly id: number;
+    readonly tenantId: number;
+    readonly name: string;
+    readonly type: number;
+    readonly linkman: string;
+    readonly phone: string;
+    readonly description: string;
+    readonly createTime: string;
+    readonly length: number;
+}
 
-export interface DataType{}
+
+// export interface ClientDataType extends DataType{
+//     readonly linkman?: string;
+//     readonly name?: string;
+//     readonly id?: number;
+//     readonly type?: number;
+//     readonly phone?: string;
+// }
 /**
  * Client Selection Component
  */
-export default abstract class ClientSelectionComponent<P extends IAbstractModalComponentProps, S  extends IClientSelectionComponentState> extends AbstractModalComponent<P, IClientSelectionComponentState> {
+export default class ClientSelectionComponent<P extends IAbstractModalComponentProps, S  extends IClientSelectionComponentState> extends AbstractModalComponent<P, IClientSelectionComponentState> {
     /**
      * @description Renders AbstractTabableComponent
      * @returns render 
@@ -70,7 +88,7 @@ export default abstract class ClientSelectionComponent<P extends IAbstractModalC
         return [{
                 name: 'type',
                 children: 
-                    <Select defaultValue="0">
+                    <Select>
                         <Option value="0" >国内</Option>
                         <Option value="1">国际</Option>
                     </Select>
@@ -120,8 +138,7 @@ export default abstract class ClientSelectionComponent<P extends IAbstractModalC
         return (
             <>
                 { super.render() }
-            </> 
-               
+            </>  
         );
     }
 

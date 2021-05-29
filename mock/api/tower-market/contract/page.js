@@ -16,7 +16,8 @@ for (let i = 1; i < 10; ++i) {
         "customerCompany": Random.cword(5,10),
         "signCustomerName": Random.cword(5,10),
         "deliveryTime": Random.date('yyyy-MM-dd'),
-        "signCustomerId": Random.natural(2)
+        "signCustomerId": Random.natural(2),
+        "status|0-1":1
     });
 }
 
@@ -36,7 +37,8 @@ module.exports = {
             "customerCompany": Random.cword(5,10),
             "signCustomerName": Random.cword(5,10),
             "deliveryTime": Random.date('yyyy-MM-dd'),
-            "signCustomerId": Random.natural(2)
+            "signCustomerId": Random.natural(2),
+            "status": 1
         }].concat(records),
         current: Random.natural(1, 20),
         size: 10,
