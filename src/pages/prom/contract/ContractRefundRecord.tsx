@@ -10,7 +10,6 @@ import RequestUtil from '../../../utils/RequestUtil';
 import SummaryRenderUtil, { IRenderdSummariableItem } from '../../../utils/SummaryRenderUtil';
 import moment from 'moment';
 import { DataType } from '../../../components/AbstractModalComponent';
-import isEqual from 'react-fast-compare';
 import styles from './ContractRefundRecord.module.less';
 import ClientSelectionComponent from '../../../components/ClientSelectionModal';
 
@@ -65,8 +64,6 @@ interface EditTableColumnType<RecordType> extends TableColumnType<object> {
     readonly title: string;
 }
 
-// const [form] = Form.useForm();
-
 /**
  * The refund recirds in the contract
  */
@@ -76,7 +73,6 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
      * @description Form of contract refund record
      */
     protected form: React.RefObject<FormInstance> = React.createRef<FormInstance>();
-    // protected form?: FormInstance;
 
     // constructor(props: IContractRefundRecordProps) {
     //     super(props);
@@ -250,6 +246,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                     }
                     return paymentRecordVo;
                 });
+                console.log(values)
             } else { // add a new
                 const newPlan: IPaymentPlanVo = await RequestUtil.post<IPaymentPlanVo>('/tower-market/paymentRecord', values);
                 paymentRecordVos.push(newPlan);
@@ -270,7 +267,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             title: '来款时间',
             dataIndex: 'refundTime',
             editable: true,
-            type: <DatePicker />
+            type: <DatePicker format="YYYY-MM-DD" />
         }, {
             title: '来款单位',
             dataIndex: 'customerName',

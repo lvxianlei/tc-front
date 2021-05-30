@@ -8,7 +8,6 @@ import AbstractShowModalComponent from './AbstractShowModalComponent';
 
 export interface IAbstractModalComponentProps {
     readonly handleOk: (selectedRows: DataType[]) => void;
-    // readonly onSelectChange: (selectedRowKeys: React.Key[],selectedRows: DataType[]) => void;
     readonly Id?: number;
 }
 

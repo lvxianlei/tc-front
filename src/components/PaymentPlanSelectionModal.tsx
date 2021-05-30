@@ -19,14 +19,6 @@ export interface IPaymentPlanSelectionComponentState extends IAbstractModalCompo
     readonly selectedRows: object[] | any,
 }
 
-// export interface PaymentPlanDataType extends DataType{
-//     readonly returnedAmount: number;
-//     readonly returnedRate: number;
-//     readonly returnedTime: string;
-//     readonly period: number;
-//     readonly description: string;
-//     readonly id: number;
-// }
 /**
  * PaymentPlan Selection Component
  */

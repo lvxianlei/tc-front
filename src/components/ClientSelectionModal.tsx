@@ -34,14 +34,6 @@ export interface IClient {
     readonly length: number;
 }
 
-
-// export interface ClientDataType extends DataType{
-//     readonly linkman?: string;
-//     readonly name?: string;
-//     readonly id?: number;
-//     readonly type?: number;
-//     readonly phone?: string;
-// }
 /**
  * Client Selection Component
  */

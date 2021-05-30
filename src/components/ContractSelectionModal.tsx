@@ -22,18 +22,6 @@ export interface IContractSelectionComponentState extends IAbstractModalComponen
     readonly selectedRows: object[] | any,
 }
 
-
-// export interface ContractDataType extends DataType{
-//     readonly signCustomerId?: number;
-//     readonly projectName?: string;
-//     readonly contractNumber?: string;
-//     readonly signCustomerName?: string;
-//     readonly saleType?: number;
-//     readonly customerCompany?: string;
-//     readonly deliveryTime?: string;
-//     readonly chargeType?: number;
-//     readonly id?: number;
-// }
 /**
  * Contract Selection Component
  */
