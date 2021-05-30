@@ -63,5 +63,35 @@
         "path": "/auth/roles/setting/:id",
         "module": "./pages/auth/role/RoleSetting",
         "exact": true
+    }, { // 销售任务单管理
+        "name": "销售任务单管理",
+        "path": "/prom/task",
+        "module": "./pages/prom/task-mngt/TasktMngt",
+        "exact": true
+    }, { // 新增任务单
+        "name": "创建任务单",
+        "path": "/prom/task/new",
+        "module": "./pages/prom/task-mngt/TaskNew",
+        "exact": true
+    }, { // 编辑任务单
+        "name": "编辑任务单",
+        "path": "/prom/task/edit/:id",
+        "module": "./pages/prom/task-mngt/TaskEdit",
+        "exact": true
+    }, { // 任务单完善特殊要求
+        "name": "编辑任务单",
+        "path": "/prom/task/special/:id",
+        "module": "./pages/prom/task-mngt/TaskSpecial",
+        "exact": true
+    }, { // 任务单完善产品信息
+        "name": "编辑任务单",
+        "path": "/prom/task/product/:id",
+        "module": "./pages/prom/task-mngt/TaskProduct",
+        "exact": true
+    }, { // 查看任务单
+        "name": "查看任务单",
+        "path": "/prom/task/view/:id",
+        "module": "./pages/prom/task-mngt/TaskDetail",
+        "exact": true
     }]
 }
