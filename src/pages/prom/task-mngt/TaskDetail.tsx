@@ -234,100 +234,7 @@
          }];
      }
  
-     /**
-      * @description Gets charging record columns
-      * @returns charging record columns 
-      */
-     private getChargingRecordColumns(): ColumnsType<object> {
-         return [{
-             title: '来款时间',
-             dataIndex: 'chargingTime'
-         }, {
-             title: '来款单位',
-             dataIndex: 'chargerOrg'
-         }, {
-             title: '来款方式',
-             dataIndex: 'chargingType'
-         }, {
-             title: '来款金额（￥）',
-             dataIndex: 'amount'
-         }, {
-             title: '币种',
-             dataIndex: 'currency'
-         }, {
-             title: '汇率',
-             dataIndex: 'exchangeRate'
-         }, {
-             title: '外币金额',
-             dataIndex: 'foreignCurrencyExchange'
-         }, {
-             title: '收款银行',
-             dataIndex: 'bank'
-         }, {
-             title: '备注',
-             dataIndex: 'description'
-         }];
-     }
- 
-     /**
-      * @description Gets charging record summariable items
-      * @returns charging record summariable items 
-      */
-     private getChargingRecordSummariableItems(): IRenderdSummariableItem[] {
-         return [{
-             fieldItems: [{
-                 label: '第1期回款计划',
-                 value: '2019-04-01'
-             }, {
-                 label: '计划回款占比',
-                 value: '33.33%'
-             }, {
-                 label: '计划回款金额',
-                 value: '¥ 15,000.00'
-             }, {
-                 label: '已回款金额',
-                 value: '¥ 5,000.00'
-             }, {
-                 label: '未回款金额',
-                 value: '¥ 10,000.00'
-             }],
-             renderExtraInBar: (): React.ReactNode => (
-                 <Button type="primary">添加</Button>
-             ),
-             render: (): React.ReactNode => (
-                 <>
-                     <Table pagination={ false } bordered={ true } columns={ this.getChargingRecordColumns() }/>
-                     可以换成动态添加表单Form.List
-                 </>
-             )
-         }, {
-             fieldItems: [{
-                 label: '第2期回款计划',
-                 value: '2019-04-01'
-             }, {
-                 label: '计划回款占比',
-                 value: '33.33%'
-             }, {
-                 label: '计划回款金额',
-                 value: '¥ 15,000.00'
-             }, {
-                 label: '已回款金额',
-                 value: '¥ 5,000.00'
-             }, {
-                 label: '未回款金额',
-                 value: '¥ 10,000.00'
-             }],
-             renderExtraInBar: (): React.ReactNode => (
-                 <Button type="primary">添加</Button>
-             ),
-             render: (): React.ReactNode => (
-                 <>
-                     <Table pagination={ false } bordered={ true } columns={ this.getChargingRecordColumns() }/>
-                     可以换成动态添加表单Form.List
-                 </>
-             )
-         }];
-     }
+
  
      /**
       * @implements
@@ -352,18 +259,11 @@
                  render: (): React.ReactNode => SummaryRenderUtil.renderGrid(this.getSysInfoGrid())
              }])
          }, {
-             label: '相关附件',
+             label: '变更产品信息',
              key: 2,
              content: SummaryRenderUtil.renderSections([{
-                 title: '相关附件',
+                 title: '变更产品信息',
                  render: (): React.ReactNode => '可以用Table组件'
-             }])
-         }, {
-             label: '回款记录',
-             key: 3,
-             content: SummaryRenderUtil.renderSections([{
-                 title: '回款记录',
-                 render: (): React.ReactNode => SummaryRenderUtil.renderSummariableAreas(this.getChargingRecordSummariableItems())
              }])
          }];
      }

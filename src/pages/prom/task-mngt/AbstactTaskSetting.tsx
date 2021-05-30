@@ -308,7 +308,9 @@
                                         <Button type="primary" onClick={this.showModal}>
                                             Open Modal
                                         </Button>  
-                                    }/>
+                                    }
+                                        disabled
+                                    />
                                     {/* <ModalComponent isModalVisible={ this.state.visible || false } confirmTitle="选择客户" handleOk={ this.closeModal} handleCancel={ this.closeModal }/> */}
                                 </>
                         },  {
@@ -352,7 +354,7 @@
                                 required: true,
                                 message: '请选择客户交货日期'
                             }],
-                            children:  <DatePicker />
+                            children:  <DatePicker disabled/>
                         }, {
                             label: '计划交货日期',
                             name: 'planDeliveryTime',
@@ -361,12 +363,12 @@
                                 required: true,
                                 message: '计划交货日期'
                             }],
-                            children:  <DatePicker />
+                            children:  <DatePicker disabled/>
                         }, {
                             label: '备注',
                             name: 'description',
                             initialValue: task?.description,
-                            children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息"/>
+                            children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息" disabled/>
                         }]
                     },{
                         title: '特殊要求',
@@ -448,7 +450,9 @@
                                         <Button type="primary" onClick={this.showModal}>
                                             Open Modal
                                         </Button>  
-                                    }/>
+                                    }
+                                        disabled    
+                                    />
                                     {/* <ModalComponent isModalVisible={ this.state.visible || false } confirmTitle="选择客户" handleOk={ this.closeModal} handleCancel={ this.closeModal }/> */}
                                 </>
                         },  {
@@ -492,7 +496,7 @@
                                 required: true,
                                 message: '请选择客户交货日期'
                             }],
-                            children:  <DatePicker />
+                            children:  <DatePicker disabled/>
                         }, {
                             label: '计划交货日期',
                             name: 'planDeliveryTime',
@@ -501,12 +505,12 @@
                                 required: true,
                                 message: '计划交货日期'
                             }],
-                            children:  <DatePicker />
+                            children:  <DatePicker disabled/>
                         }, {
                             label: '备注',
                             name: 'description',
                             initialValue: task?.description,
-                            children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息"/>
+                            children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息" disabled/>
                         }]
                     },{
                         title: '特殊要求',
@@ -518,7 +522,7 @@
                             name: 'materialStandard',
                             initialValue: task?.materialStandard || 1,
                             children: (
-                                <Select>
+                                <Select disabled>
                                     <Select.Option value={ 1 }>国家电网</Select.Option>
                                     <Select.Option value={ 2 }>南方电网</Select.Option>
                                 </Select>
@@ -531,7 +535,7 @@
                                 required: true,
                                 message: '请输入原材料要求'
                             }],
-                            children: <Input />
+                            children: <Input disabled/>
                         },  {
                             label: '焊接要求',
                             name: 'weldingDemand',
@@ -540,22 +544,22 @@
                                 required: true,
                                 message: '请输入焊接要求'
                             }],
-                            children: <Input />
+                            children: <Input disabled/>
                         }, {
                             label: '包装要求',
                             name: 'packDemand',
                             initialValue: task?.packDemand,
-                            children: <Input />
+                            children: <Input disabled/>
                         }, {
                             label: '镀锌要求',
                             name: 'galvanizeDemand',
                             initialValue: task?.galvanizeDemand,
-                            children: <Input />
+                            children: <Input disabled/>
                         }, {
                             label: '备注',
                             name: 'peculiarDescription',
                             initialValue: task?.peculiarDescription,
-                            children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息" />
+                            children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息" disabled/>
                         }]
                     }]];
                     break;

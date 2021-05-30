@@ -30,9 +30,6 @@ import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
             task,
             taskTable: task?.productInfoVOList,
         });
-        // this.getForm()?.setFieldsValue({
-        //     paymentPlanDtos: task.paymentPlanDtos
-        // });
     }
     /**
      * @override
@@ -56,16 +53,9 @@ import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
         values.signTaskTime = moment(values.signTaskTime).format('YYYY-MM-DD');
         values.deliveryTime = moment(values.deliveryTime).format('YYYY-MM-DD');
         values.reviewTime = moment(values.reviewTime).format('YYYY-MM-DD HH:mm');
-        // values.paymentPlanDtos = values.paymentPlanDtos?.map((plan: IPaymentPlanDto, index: number): IPaymentPlanDto => {
-        //     return {
-        //         ...plan,
-        //         returnedTime: moment(plan.returnedTime).format('YYYY-MM-DD'),
-        //         index: index + 1
-        //     };
-        // });
          console.log(values )
          return Promise.resolve();
-        //  return await RequestUtil.post('/tower-market/task', values);
+        //  return await RequestUtil.post('/tower-market/taskNotice', values);
      }
  }
  
