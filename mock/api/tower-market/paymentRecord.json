@@ -1,0 +1,20 @@
+{
+    "code": 200,
+    "data": {
+        "refundTime": "2021-01-11",
+        "customerName": "北京什么什么公司",
+        "customerId": 5896344,
+        "refundAmount": 8998,
+        "currencyType": 1,
+        "exchangeRate": "",
+        "foreignExchangeAmount": "",
+        "refundBank": "中国银行中关村支行",
+        "description": "现金人民币来款没有汇率exchangeRate&外币金额foreignExchangeAmount",
+        "refundMode": 1,
+        "contractId": 1,
+        "refundNumber": 1001111,
+        "paymentPlanId": 130,
+        "id": 3
+    },
+    "msg": ""
+}

@@ -3,12 +3,16 @@
  * @copyright © 2021
  */
 import { FormItemProps, Input, Select, TableColumnType } from 'antd';
+import { TablePaginationConfig } from 'antd/lib/table';
+import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
-import { GetRowKey } from 'rc-table/lib/interface';
-import { TablePaginationConfig } from 'antd/lib/table';
-import AbstractModalComponent, {DataType, IAbstractModalComponentProps, IAbstractModalComponentState, IResponseData } from './AbstractModalComponent'
 import RequestUtil from '../utils/RequestUtil';
+import AbstractModalComponent, {
+    IAbstractModalComponentProps,
+    IAbstractModalComponentState,
+    IResponseData,
+} from './AbstractModalComponent';
 
 const { Option } = Select;
 
@@ -33,20 +37,25 @@ export interface IContractSelectionComponentState extends IAbstractModalComponen
 /**
  * Contract Selection Component
  */
-export default class ContractSelectionComponent<P extends IAbstractModalComponentProps, S  extends IContractSelectionComponentState> extends AbstractModalComponent<P, IContractSelectionComponentState> {
+export default class ContractSelectionComponent extends AbstractModalComponent<IAbstractModalComponentProps, IContractSelectionComponentState> {
+
     /**
-     * @description Renders AbstractTabableComponent
-     * @returns render 
+     * @override
+     * @description Gets state
+     * @returns state 
      */
-    public state:S = {
-        tablePagination: {
-            current: 1,
-            pageSize: 10,
-            total: 0,
-            showSizeChanger: false
-        },
-        isFilter: true
-    } as S
+    protected getState(): IContractSelectionComponentState {
+        return {
+            ...super.getState(),
+            tablePagination: {
+                current: 1,
+                pageSize: 10,
+                total: 0,
+                showSizeChanger: false
+            },
+            isFilter: true
+        };
+    }
 
     public showModal =  (): void => {
         this.setState({
@@ -141,15 +150,6 @@ export default class ContractSelectionComponent<P extends IAbstractModalComponen
 
     public onTableChange = (pagination: TablePaginationConfig): void => {
         this.getTable(pagination);
-    }
-       
-    public render(): React.ReactNode {
-        return (
-            <>
-                { super.render() }
-            </> 
-            
-        );
     }
  
     protected getTableRowKey(): string | GetRowKey<object> {

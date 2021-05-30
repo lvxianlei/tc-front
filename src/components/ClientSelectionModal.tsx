@@ -3,12 +3,16 @@
  * @copyright © 2021
  */
 import { FormItemProps, Input, Select } from 'antd';
+import Table, { ColumnType, TablePaginationConfig } from 'antd/lib/table';
+import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
-import { GetRowKey } from 'rc-table/lib/interface';
-import Table, { ColumnType, TablePaginationConfig } from 'antd/lib/table';
-import AbstractModalComponent, {DataType, IAbstractModalComponentProps, IAbstractModalComponentState, IResponseData } from './AbstractModalComponent'
 import RequestUtil from '../utils/RequestUtil';
+import AbstractModalComponent, {
+    IAbstractModalComponentProps,
+    IAbstractModalComponentState,
+    IResponseData,
+} from './AbstractModalComponent';
 
 const { Option } = Select;
 
@@ -41,20 +45,25 @@ export interface IClient {
 /**
  * Client Selection Component
  */
-export default class ClientSelectionComponent<P extends IAbstractModalComponentProps, S  extends IClientSelectionComponentState> extends AbstractModalComponent<P, IClientSelectionComponentState> {
+export default class ClientSelectionComponent extends AbstractModalComponent<IAbstractModalComponentProps, IClientSelectionComponentState> {
+
     /**
-     * @description Renders AbstractTabableComponent
-     * @returns render 
+     * @override
+     * @description Gets state
+     * @returns state 
      */
-    public state:S = {
-        tablePagination: {
-            current: 1,
-            pageSize: 10,
-            total: 0,
-            showSizeChanger: false
-        },
-        isFilter: true
-    } as S
+    protected getState(): IClientSelectionComponentState {
+        return {
+            ...super.getState(),
+            tablePagination: {
+                current: 1,
+                pageSize: 10,
+                total: 0,
+                showSizeChanger: false
+            },
+            isFilter: true
+        };
+    }
 
     public showModal =  (): void => {
         this.setState({
@@ -87,9 +96,9 @@ export default class ClientSelectionComponent<P extends IAbstractModalComponentP
     public getFilterFormItemProps(): FormItemProps[]  {
         return [{
                 name: 'type',
-                children: 
+                children:
                     <Select>
-                        <Option value="0" >国内</Option>
+                        <Option value="0">国内</Option>
                         <Option value="1">国际</Option>
                     </Select>
             },{

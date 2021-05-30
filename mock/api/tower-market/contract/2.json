@@ -114,6 +114,8 @@
                 "description": "string"
             }
         ],
+        "createUser": "是谁2",
+        "createTime": "2011-11-23",
         "updateUser": "是谁",
         "updateTime": "2011-11-25"
     },

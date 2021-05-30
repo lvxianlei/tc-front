@@ -2,13 +2,16 @@
  * @author zyc
  * @copyright © 2021
  */
-import { FormItemProps, TableColumnType } from 'antd';
+import { FormItemProps, TableColumnType, TablePaginationConfig } from 'antd';
+import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
-import { GetRowKey } from 'rc-table/lib/interface';
-import AbstractModalComponent, {IAbstractModalComponentProps, IAbstractModalComponentState, IResponseData } from './AbstractModalComponent'
 import RequestUtil from '../utils/RequestUtil';
-import { DataType } from './AbstractModalComponent';
+import AbstractModalComponent, {
+    IAbstractModalComponentProps,
+    IAbstractModalComponentState,
+    IResponseData,
+} from './AbstractModalComponent';
 
 export interface IPaymentPlanSelectionComponentState extends IAbstractModalComponentState {
     readonly tableDataSource: [];
@@ -27,14 +30,37 @@ export interface IPaymentPlanSelectionComponentState extends IAbstractModalCompo
 /**
  * PaymentPlan Selection Component
  */
-export default abstract class PaymentPlanSelectionComponent<P extends IAbstractModalComponentProps, S  extends IPaymentPlanSelectionComponentState> extends AbstractModalComponent<P, IPaymentPlanSelectionComponentState> {
+export default class PaymentPlanSelectionComponent extends AbstractModalComponent<IAbstractModalComponentProps, IPaymentPlanSelectionComponentState> {
+
     /**
-     * @description Renders AbstractTabableComponent
-     * @returns render 
+     * @implements
+     * @description Determines whether filter submit on
+     * @param values 
      */
-    public state:S = {
-        isFilter: false
-    } as S
+    public onFilterSubmit(values: Record<string, any>): void {
+        throw new Error('Method not implemented.');
+    }
+
+    /**
+     * @override
+     * @description Determines whether table change on
+     * @param pagination 
+     */
+    public onTableChange(pagination: TablePaginationConfig): void {
+        throw new Error('Method not implemented.');
+    }
+
+    /**
+     * @override
+     * @description Gets state
+     * @returns state 
+     */
+    protected getState(): IPaymentPlanSelectionComponentState {
+        return {
+            ...super.getState(),
+            isFilter: false
+        };
+    }
 
     public showModal =  (): void => {
         this.setState({
@@ -79,14 +105,6 @@ export default abstract class PaymentPlanSelectionComponent<P extends IAbstractM
             title: '备注',
             dataIndex: 'description'
         }];
-    }
-    
-    public render(): React.ReactNode {
-        return (
-            <>
-                { super.render() }
-            </> 
-        );
     }
 
     protected getTableRowKey(): string | GetRowKey<object> {
