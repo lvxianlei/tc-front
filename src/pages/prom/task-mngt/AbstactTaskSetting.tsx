@@ -40,8 +40,9 @@
  export interface IAbstractTaskSettingState extends IAbstractFillableComponentState {
      visible: boolean | undefined;
      current: number;
+     taskTable?: IProductInfoVO[];
      readonly task?: ITask;
-     readonly taskTable?: IProductInfoVOList[];
+    
      
  }
  
@@ -60,7 +61,7 @@
     readonly peculiarDescription?:	string;
     readonly planDeliveryTime?:	string;
     readonly productChangeInfoVOList?: object [];	
-    readonly productInfoVOList?: IProductInfoVOList [];
+    readonly productInfoVOList?: IProductInfoVO [];
     readonly projectName?: string;
     readonly saleOrderNumber?: string;	
     readonly signContractTime?:	string;	
@@ -70,7 +71,7 @@
     readonly weldingDemand?: string;
  }
  
- export interface IProductInfoVOList {
+ export interface IProductInfoVO {
     readonly description?:	string;	
     readonly lineName?:	string;	
     readonly num?: number;		
@@ -657,7 +658,7 @@
     }
     //rowSelect
     public rowSelection = {
-        onSelect: (record: IProductInfoVOList, selected: any, selectedRows: any, nativeEvent: any) => {
+        onSelect: (record: IProductInfoVO, selected: any, selectedRows: any, nativeEvent: any) => {
             // setSelectRows(selectedRows);
         },
         onSelectAll: (selected: any, selectedRows: any, changeRows: any) => {

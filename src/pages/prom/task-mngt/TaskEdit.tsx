@@ -8,11 +8,11 @@
  import RequestUtil from '../../../utils/RequestUtil';
  import AbstractTaskSetting, { IAbstractTaskSettingState, ITask } from './AbstactTaskSetting';
  import moment from 'moment'
-import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
+ import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
  
  export interface ITaskEditProps {
     readonly id: string;
-}
+ }
  export interface ITaskEditRouteProps extends RouteComponentProps<ITaskEditProps>, WithTranslation {}
  export interface ITaskEditState extends IAbstractTaskSettingState {}
  
