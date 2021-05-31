@@ -38,9 +38,9 @@
  // import ModalComponent from '../../components/ModalComponent';
   
  export interface IAbstractTaskSettingState extends IAbstractFillableComponentState {
-     visible: boolean | undefined;
+     popUp: boolean | undefined;
      checkStep: number;
-     taskTable?: IProductInfoVO[];
+     taskTable: IProductInfoVO[];
      readonly task?: ITask;
     
      
@@ -61,7 +61,7 @@
     readonly peculiarDescription?:	string;
     readonly planDeliveryTime?:	string;
     readonly productChangeInfoVOList?: object [];	
-    readonly productInfoVOList?: IProductInfoVO [];
+    readonly productInfoVOList: IProductInfoVO [];
     readonly projectName?: string;
     readonly saleOrderNumber?: string;	
     readonly signContractTime?:	string;	
@@ -111,12 +111,13 @@
   
      public state: S = {
         task: undefined,
-        visible: false,
+        popUp: false,
         checkStep: 0,
      } as S;
  
      constructor(props: P) {
          super(props)
+         this.click = this.click.bind(this)
      }
  
      /**
@@ -188,7 +189,7 @@
                                             Open Modal
                                         </Button>  
                                     }/>
-                                    {/* <ModalComponent isModalVisible={ this.state.visible || false } confirmTitle="选择客户" handleOk={ this.closeModal} handleCancel={ this.closeModal }/> */}
+                                    {/* <ModalComponent isModalVisible={ this.state.popUp || false } confirmTitle="选择客户" handleOk={ this.closeModal} handleCancel={ this.closeModal }/> */}
                                 </>
                         },  {
                             label: '内部合同编号',
@@ -281,7 +282,7 @@
                                     }
                                         disabled
                                     />
-                                    {/* <ModalComponent isModalVisible={ this.state.visible || false } confirmTitle="选择客户" handleOk={ this.closeModal} handleCancel={ this.closeModal }/> */}
+                                    {/* <ModalComponent isModalVisible={ this.state.popUp || false } confirmTitle="选择客户" handleOk={ this.closeModal} handleCancel={ this.closeModal }/> */}
                                 </>
                         },  {
                             label: '内部合同编号',
@@ -423,7 +424,7 @@
                                     }
                                         disabled    
                                     />
-                                    {/* <ModalComponent isModalVisible={ this.state.visible || false } confirmTitle="选择客户" handleOk={ this.closeModal} handleCancel={ this.closeModal }/> */}
+                                    {/* <ModalComponent isModalVisible={ this.state.popUp || false } confirmTitle="选择客户" handleOk={ this.closeModal} handleCancel={ this.closeModal }/> */}
                                 </>
                         },  {
                             label: '内部合同编号',
@@ -594,6 +595,20 @@
             checkStep:checkStep-1
         })
     }
+    public click= ()=>{
+        const {taskTable} = this.state;
+        const task:IProductInfoVO[] = taskTable;
+        task.push({
+            description: '',
+            lineName: '',
+            num: 0,
+            price: 0,	
+        })
+        console.log(task)
+        this.setState({
+            taskTable:[...task]
+        })
+    }
 
     /**
      * @description Renders extra sections
@@ -611,15 +626,13 @@
                         <>
                             <div className={styles.column_to_row}>
                                 <div className={styles.title}>产品信息</div>
-                                <Button type='primary' onClick={()=>{
-                                    this.setState({
-                                        taskTable:taskTable
-                                    })
-                                }}>新增</Button>
+                                <Button type='primary' onClick={
+                                     this.click
+                                }>新增</Button>
                             </div>
                             <Table 
                                 columns={this.columns()} 
-                                dataSource={taskTable} 
+                                dataSource={[...taskTable]} 
                                 scroll={{ x: 1300 }} 
                                 rowSelection={this.rowSelection}
                             />
