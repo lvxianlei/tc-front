@@ -8,25 +8,23 @@ import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
 import RequestUtil from '../utils/RequestUtil';
-import AbstractFilteredSelectionModal from './AbstractFilteredSelectionModal';
+import AbstractFilteredSelectionModal from './AbstractFilteredSelecableModal';
 import {
-    IAbstractModalComponentProps,
-    IAbstractModalComponentState,
+    IAbstractSelectableModalProps,
+    IAbstractSelectableModalState,
     IResponseData,
-} from './AbstractSelectionModal';
+} from './AbstractSelectableModal';
 
 const { Option } = Select;
 
-export interface IContractSelectionComponentState extends IAbstractModalComponentState {
+export interface IContractSelectionComponentState extends IAbstractSelectableModalState {
     readonly tableDataSource: [];
-    readonly selectedRowKeys: React.Key[] | any,
-    readonly selectedRows: object[] | any,
 }
 
 /**
  * Contract Selection Component
  */
-export default class ContractSelectionComponent extends AbstractFilteredSelectionModal<IAbstractModalComponentProps, IContractSelectionComponentState> {
+export default class ContractSelectionComponent extends AbstractFilteredSelectionModal<IAbstractSelectableModalProps, IContractSelectionComponentState> {
 
     /**
      * @override
@@ -56,7 +54,7 @@ export default class ContractSelectionComponent extends AbstractFilteredSelectio
         this.getTable({})
     }
     
-    protected async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
+    public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/contract/page', {
             ...filterValues,
             current: pagination.current || this.state.tablePagination.current,
@@ -137,10 +135,6 @@ export default class ContractSelectionComponent extends AbstractFilteredSelectio
         }];
     }
 
-    public onTableChange = (pagination: TablePaginationConfig): void => {
-        this.getTable(pagination);
-    }
- 
     protected getTableRowKey(): string | GetRowKey<object> {
         return 'id';
     }

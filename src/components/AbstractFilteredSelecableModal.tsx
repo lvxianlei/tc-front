@@ -4,16 +4,15 @@ import {Modal, Form, Button, Card, Space, Table, FormItemProps} from 'antd'
 import { GetRowKey } from 'rc-table/lib/interface';
 import { TablePaginationConfig } from 'antd/lib/table';
 import styles from './AbstractSelectionModal.module.less'
-import AbstractSelectionModal, { DataType, IAbstractModalComponentState } from './AbstractSelectionModal';
+import AbstractSelectionModal, { DataType, IAbstractSelectableModalState } from './AbstractSelectableModal';
 
-export interface IAbstractModalComponentProps {
+export interface IAbstractSelectableModalProps {
     readonly onSelect: (selectedRows: DataType[]) => void;
     readonly Id?: number;
 }
 
 
-export default abstract class AbstractFilteredSelectionModal<P extends IAbstractModalComponentProps, S extends IAbstractModalComponentState> extends AbstractSelectionModal<P,S> {
-
+export default abstract class AbstractFilteredSelecableModal<P extends IAbstractSelectableModalProps, S extends IAbstractSelectableModalState> extends AbstractSelectionModal<P,S> {
      /**
      * @abstract
      * @description Determines whether filter submit on
@@ -21,15 +20,22 @@ export default abstract class AbstractFilteredSelectionModal<P extends IAbstract
      */
     abstract onFilterSubmit(values: Record<string, any>): void;
 
-      /**
-       * @abstract
-       * @description Determines whether table change on
-       * @param pagination 
-       */
-    abstract onTableChange(pagination: TablePaginationConfig): void;
-
      /**
      * @abstract
+     * @description 获取列表
+     * @param values 
+     */
+      abstract getTable(values: Record<string, any>): void;
+
+    /**
+     * @description Determines whether table change on
+     * @param pagination 
+     */
+    public onTableChange = (pagination: TablePaginationConfig): void => {
+        this.getTable(pagination);
+    }
+
+     /**
      * @description Gets filter form item props
      * @param item 
      * @returns filter form item props 
@@ -37,9 +43,7 @@ export default abstract class AbstractFilteredSelectionModal<P extends IAbstract
     abstract getFilterFormItemProps(): FormItemProps[];
 
     /**
-     * @abstract
      * @description modal内表格 
-     * @param event 
      */
     protected renderTableContent(): React.ReactNode {
         return (

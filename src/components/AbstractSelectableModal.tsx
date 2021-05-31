@@ -4,14 +4,14 @@ import {Modal, Card, Space, Table} from 'antd'
 import { GetRowKey } from 'rc-table/lib/interface';
 import { ColumnType, TablePaginationConfig } from 'antd/lib/table';
 import styles from './AbstractSelectionModal.module.less'
-import AbstractShowModalComponent from './AbstractShowModalComponent';
+import PopModalButton from './PopModalButton';
 
-export interface IAbstractModalComponentProps {
+export interface IAbstractSelectableModalProps {
     readonly onSelect: (selectedRows: DataType[]) => void;
-    readonly Id?: number;
+    readonly id?: number;
 }
 
-export interface IAbstractModalComponentState {
+export interface IAbstractSelectableModalState {
     readonly isModalVisible: boolean,
     readonly confirmTitle: string,
     readonly okText?: string,
@@ -51,11 +51,11 @@ export interface IResponseData {
     readonly paymentPlanVos: [];
 }
 
-export default abstract class AbstractSelectionModal<P extends IAbstractModalComponentProps, S extends IAbstractModalComponentState> extends AbstractShowModalComponent<P,S> {
+export default abstract class AbstractSelectionModal<P extends IAbstractSelectableModalProps, S extends IAbstractSelectableModalState> extends React.Component<P,S> {
 
     /**
      * @constructor
-     * Creates an instance of AbstractModalComponent.
+     * Creates an instance of AbstractSelectableModal.
      * @param props 
      */
     constructor(props: P) {
@@ -76,7 +76,6 @@ export default abstract class AbstractSelectionModal<P extends IAbstractModalCom
     }
 
     /**
-     * @abstract
      * @description 取消操作 
      * @param event 
      */
@@ -85,6 +84,16 @@ export default abstract class AbstractSelectionModal<P extends IAbstractModalCom
             isModalVisible: false
         })
     };
+
+    /**
+     * @description 显示弹窗 
+     * @param event 
+     */
+    public showModal =  (): void => {
+        this.setState({
+            isModalVisible: true,
+        })
+    }
 
        /**
      * @abstract
@@ -110,9 +119,7 @@ export default abstract class AbstractSelectionModal<P extends IAbstractModalCom
     } 
 
     /**
-     * @abstract
      * @description modal内表格 
-     * @param event 
      */
     protected renderTableContent(): React.ReactNode {
         return (
@@ -139,7 +146,7 @@ export default abstract class AbstractSelectionModal<P extends IAbstractModalCom
     public render(): React.ReactNode {
         return (
             <>
-                {super.render()}
+                <PopModalButton showModal={ this.showModal }/>
                 <Modal 
                     title={ this.state.confirmTitle } 
                     visible={this.state.isModalVisible} 

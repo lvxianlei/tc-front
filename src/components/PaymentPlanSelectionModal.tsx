@@ -7,22 +7,20 @@ import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
 import RequestUtil from '../utils/RequestUtil';
-import AbstractModalComponent, {
-    IAbstractModalComponentProps,
-    IAbstractModalComponentState,
+import AbstractSelectableModal, {
+    IAbstractSelectableModalProps,
+    IAbstractSelectableModalState,
     IResponseData,
-} from './AbstractSelectionModal';
+} from './AbstractSelectableModal';
 
-export interface IPaymentPlanSelectionComponentState extends IAbstractModalComponentState {
+export interface IPaymentPlanSelectionComponentState extends IAbstractSelectableModalState {
     readonly tableDataSource: [];
-    readonly selectedRowKeys: React.Key[] | any,
-    readonly selectedRows: object[] | any,
 }
 
 /**
  * PaymentPlan Selection Component
  */
-export default class PaymentPlanSelectionComponent extends AbstractModalComponent<IAbstractModalComponentProps, IPaymentPlanSelectionComponentState> {
+export default class PaymentPlanSelectionComponent extends AbstractSelectableModal<IAbstractSelectableModalProps, IPaymentPlanSelectionComponentState> {
 
     /**
      * @override
@@ -44,7 +42,7 @@ export default class PaymentPlanSelectionComponent extends AbstractModalComponen
     }
     
     protected async getTable() {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-market/contract/${this.props.Id}`);
+        const resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-market/contract/${this.props.id}`);
         this.setState({
             tableDataSource: resData.paymentPlanVos,
         });

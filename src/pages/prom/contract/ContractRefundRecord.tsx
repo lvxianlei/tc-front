@@ -9,7 +9,7 @@ import ConfirmableButton from '../../../components/ConfirmableButton';
 import RequestUtil from '../../../utils/RequestUtil';
 import SummaryRenderUtil, { IRenderdSummariableItem } from '../../../utils/SummaryRenderUtil';
 import moment from 'moment';
-import { DataType } from '../../../components/AbstractSelectionModal';
+import { DataType } from '../../../components/AbstractSelectableModal';
 import styles from './ContractRefundRecord.module.less';
 import ClientSelectionComponent from '../../../components/ClientSelectionModal';
 

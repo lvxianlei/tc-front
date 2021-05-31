@@ -8,19 +8,17 @@ import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
 import RequestUtil from '../utils/RequestUtil';
-import AbstractFilteredSelectionModal from './AbstractFilteredSelectionModal';
+import AbstractFilteredSelectionModal from './AbstractFilteredSelecableModal';
 import {
-    IAbstractModalComponentProps,
-    IAbstractModalComponentState,
+    IAbstractSelectableModalProps,
+    IAbstractSelectableModalState,
     IResponseData,
-} from './AbstractSelectionModal';
+} from './AbstractSelectableModal';
 
 const { Option } = Select;
 
-export interface IClientSelectionComponentState extends IAbstractModalComponentState {
+export interface IClientSelectionComponentState extends IAbstractSelectableModalState {
     readonly tableDataSource: IClient[];
-    readonly selectedRowKeys: React.Key[] | any,
-    readonly selectedRows: object[] | any,
 }
 
 export interface IClient {
@@ -38,7 +36,7 @@ export interface IClient {
 /**
  * Client Selection Component
  */
-export default class ClientSelectionComponent extends AbstractFilteredSelectionModal<IAbstractModalComponentProps, IClientSelectionComponentState> {
+export default class ClientSelectionComponent extends AbstractFilteredSelectionModal<IAbstractSelectableModalProps, IClientSelectionComponentState> {
 
     /**
      * @override
@@ -58,17 +56,11 @@ export default class ClientSelectionComponent extends AbstractFilteredSelectionM
         };
     }
 
-    public showModal =  (): void => {
-        this.setState({
-            isModalVisible: true,
-        })
-    }
-
     public componentDidMount(): void {
         this.getTable({})
     }
     
-    protected async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
+    public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-customer/customer/page', {
             ...filterValues,
             current: pagination.current || this.state.tablePagination.current,
@@ -130,18 +122,6 @@ export default class ClientSelectionComponent extends AbstractFilteredSelectionM
             title: '联系电话',
             dataIndex: 'phone'
         }];
-    }
-
-    public onTableChange = (pagination: TablePaginationConfig): void => {
-        this.getTable(pagination);
-    }
-      
-    public render(): React.ReactNode {
-        return (
-            <>
-                { super.render() }
-            </>  
-        );
     }
 
     protected getTableRowKey(): string | GetRowKey<object> {

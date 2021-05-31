@@ -13,7 +13,7 @@ import ContractSelectionComponent from '../../../components/ContractSelectionMod
 import PaymentPlanSelectionComponent from '../../../components/PaymentPlanSelectionModal'
 import RequestUtil from '../../../utils/RequestUtil';
 import moment from 'moment';
-import { DataType } from '../../../components/AbstractSelectionModal';
+import { DataType } from '../../../components/AbstractSelectableModal';
 
 const { Option } = Select;
 
@@ -223,7 +223,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
             children: 
                 <>
                     <Input value={ paymentRecord?.paymentPlanId } suffix={ 
-                        <PaymentPlanSelectionComponent onSelect={ this.onPlanSelect } Id={ this.state.id }/>
+                        <PaymentPlanSelectionComponent onSelect={ this.onPlanSelect } id={ this.state.id }/>
                     }/>
                 </>
         }, {

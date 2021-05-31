@@ -19,7 +19,7 @@ import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 import styles from './AbstractContractSetting.module.less';
 import ClientSelectionComponent from '../../../components/ClientSelectionModal';
 import RequestUtil from '../../../utils/RequestUtil';
-import { DataType } from '../../../components/AbstractSelectionModal';
+import { DataType } from '../../../components/AbstractSelectableModal';
 import { CascaderOptionType } from 'antd/lib/cascader';
 import { SelectValue } from 'antd/lib/select';
 import { RuleObject } from 'antd/lib/form';
