@@ -51,23 +51,7 @@ export default abstract class AbstractFilteredSelecableModal<P extends IAbstract
                 <Card className={ styles.tableCard }>
                     {  this.renderFilterContent() }
                 </Card>
-                <Card className={ styles.tableCard }>
-                    <Space direction="vertical" size="large" >
-                        <Table 
-                            rowKey={ this.getTableRowKey() } 
-                            bordered={ true }
-                            pagination={ this.state.tablePagination } 
-                            onChange={ this.onTableChange }
-                            dataSource={ this.getTableDataSource() } 
-                            columns={this.getTableColumns()}
-                            rowSelection={{
-                                type: "radio",
-                                selectedRowKeys: this.state.selectedRowKeys,
-                                onChange: this.onSelectChange
-                            }}
-                        />
-                    </Space>
-                </Card>
+                { super.renderTableContent() }
             </Space>
         );
     }

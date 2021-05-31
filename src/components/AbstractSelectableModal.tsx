@@ -123,23 +123,21 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
      */
     protected renderTableContent(): React.ReactNode {
         return (
-            <Space direction="vertical" className={ styles.modalTable } >
-                <Card className={ styles.tableCard }>
-                    <Space direction="vertical" size="large" >
-                        <Table 
-                            rowKey={ this.getTableRowKey() } 
-                            bordered={ true } 
-                            dataSource={ this.getTableDataSource() } 
-                            columns={this.getTableColumns()}
-                            rowSelection={{
-                                type: "radio",
-                                selectedRowKeys: this.state.selectedRowKeys,
-                                onChange: this.onSelectChange
-                            }}
-                        />
-                    </Space>
-                </Card>
-            </Space>
+            <Card className={ styles.tableCard }>
+                <Space direction="vertical" size="large" >
+                    <Table 
+                        rowKey={ this.getTableRowKey() } 
+                        bordered={ true } 
+                        dataSource={ this.getTableDataSource() } 
+                        columns={this.getTableColumns()}
+                        rowSelection={{
+                            type: "radio",
+                            selectedRowKeys: this.state.selectedRowKeys,
+                            onChange: this.onSelectChange
+                        }}
+                    />
+                </Space>
+            </Card>
         );
     }
 
@@ -163,7 +161,9 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
                     onCancel={this.handleCancel}
                     width="60%"
                 >
-                    {this.renderTableContent()}
+                    <Space direction="vertical" className={ styles.modalTable } >
+                        {this.renderTableContent()}  
+                    </Space> 
                 </Modal>  
             </>
         );
