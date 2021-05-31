@@ -17,6 +17,16 @@
   * Create a new client.
   */
  class TaskNew extends AbstractTaskSetting<ITaskNewRouteProps, ITaskNewState> {
+
+    /**
+     * @description Components did mount
+     */
+       public async componentDidMount() {
+        super.componentDidMount();
+        this.setState({
+            taskTable: [],
+        });
+    }
  
      /**
       * @implements

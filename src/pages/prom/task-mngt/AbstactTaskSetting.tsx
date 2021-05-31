@@ -110,10 +110,10 @@
  export default abstract class AbstractTaskSetting<P extends RouteComponentProps, S extends IAbstractTaskSettingState> extends AbstractFillableComponent<P, S> {
   
      public state: S = {
-        task: undefined,
-        popUp: false,
-        checkStep: 0,
-     } as S;
+         task: undefined,
+         popUp: false,
+         checkStep: 0,
+     }  as S;
  
      constructor(props: P) {
          super(props)
@@ -596,8 +596,8 @@
         })
     }
     public click= ()=>{
-        const {taskTable} = this.state;
-        const task:IProductInfoVO[] = taskTable;
+        const { taskTable } = this.state;
+        const task:IProductInfoVO[] = taskTable || [];
         task.push({
             description: '',
             lineName: '',
@@ -632,7 +632,7 @@
                             </div>
                             <Table 
                                 columns={this.columns()} 
-                                dataSource={[...taskTable]} 
+                                dataSource={taskTable} 
                                 scroll={{ x: 1300 }} 
                                 rowSelection={this.rowSelection}
                             />

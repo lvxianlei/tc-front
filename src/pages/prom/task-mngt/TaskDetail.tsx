@@ -89,9 +89,10 @@
   * Contract detail page component.
   */
  class TaskDetail extends AbstractDetailComponent<ITaskDetailRouteProps, ITaskDetailState> {
- 
+     
+    //title
      protected getTitle(): string {
-         return `${ super.getTitle() }（<任务编号>）`;
+         return `${ super.getTitle() }（${ this.props.match.params.id }）`;
      }
 
     /**
@@ -101,7 +102,6 @@
         const task: ITask = await RequestUtil.get<ITask>(`/tower-market/taskNotice/${ this.props.match.params.id }`);
         this.setState({
             task,
-            // taskTable: task?.productInfoVOList,
         });
     }
     // componentDidMount
