@@ -41,6 +41,7 @@
      popUp: boolean | undefined;
      checkStep: number;
      taskTable: IProductInfoVO[];
+     selectedKeys: object;
      readonly task?: ITask;
     
      
@@ -80,7 +81,7 @@
     readonly productNumber?: string;	
     readonly productShape?:	string;	
     readonly productStatus?: number;	
-    readonly productTypeName?: string;
+    readonly productTypeName: string;
     readonly saleOrderId?: number;	
     readonly taskNoticeId?: number;	
     readonly tender?: string;	
@@ -95,6 +96,9 @@
  }
  
  
+ export interface IStep {
+     readonly title: string;
+ }
 
  
  export interface DataType {
@@ -113,6 +117,7 @@
          task: undefined,
          popUp: false,
          checkStep: 0,
+         selectedKeys: [],
      }  as S;
  
      constructor(props: P) {
@@ -166,15 +171,6 @@
                             span: 8
                         },
                         itemProps: [{
-                            label: '任务编号',
-                            name: 'taskNumber',
-                            initialValue: task?.taskNumber,
-                            rules: [{
-                                required: true,
-                                message: '请输入任务编号'
-                            }],
-                            children: <Input disabled value={task?.taskNumber}/>
-                        }, {
                             label: '关联订单',
                             name: 'saleOrderNumber',
                             initialValue: task?.saleOrderNumber,
@@ -540,7 +536,7 @@
           
      }
     //步骤
-    public steps=[
+    public steps: Array<IStep> = [
         {
             title: '创建任务单',
         },
@@ -603,6 +599,7 @@
             lineName: '',
             num: 0,
             price: 0,	
+            productTypeName:'',
         })
         console.log(task)
         this.setState({
@@ -634,7 +631,15 @@
                                 columns={this.columns()} 
                                 dataSource={taskTable} 
                                 scroll={{ x: 1300 }} 
-                                rowSelection={this.rowSelection}
+                                rowKey={(record:IProductInfoVO)=>record.productTypeName}
+                                rowSelection={{
+                                    type:'checkbox',
+                                    onChange:( selectedKeys: object )=>{
+                                        this.setState({
+                                            selectedKeys
+                                        })
+                                    }
+                                }}
                             />
                         </>
                     :null}
@@ -644,15 +649,7 @@
         }]
 
     }
-    //rowSelect
-    public rowSelection = {
-        onSelect: (record: IProductInfoVO, selected: any, selectedRows: any, nativeEvent: any) => {
-            // setSelectRows(selectedRows);
-        },
-        onSelectAll: (selected: any, selectedRows: any, changeRows: any) => {
-            // setSelectRows(selectedRows);
-        }
-    };
+
     //table-column
     public columns= () => {
         return [
@@ -714,19 +711,22 @@
                 key: 'description' 
             },
             {
-            title: '操作',
-            key: 'operation',
-            fixed: 'right',
-            width: 100,
-            render: () => 
-                    <ConfirmableButton 
-                        confirmTitle="要删除该条回款计划吗？"
-                        type="link" 
-                        placement="topRight"
-                        // onConfirm={ () => { operation.remove(index); } }
-                    >
-                        <DeleteOutlined />
-                    </ConfirmableButton>
+                title: '操作',
+                key: 'operation',
+                fixed: 'right',
+                width: 100,
+                render: ( record: IProductInfoVO ) => 
+                        <ConfirmableButton 
+                            confirmTitle="要删除该条回款计划吗？"
+                            type="link" 
+                            placement="topRight"
+                            onConfirm={ () => {
+                                window.open('https://gimg2.baidu.com/image_search/src=http%3A%2F%2F1812.img.pp.sohu.com.cn%2Fimages%2Fblog%2F2009%2F11%2F18%2F18%2F8%2F125b6560a6ag214.jpg&refer=http%3A%2F%2F1812.img.pp.sohu.com.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1625048322&t=3b6da010e79ec1fcb5855fe9a69c3ceb')
+                            // <iframe src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2F1812.img.pp.sohu.com.cn%2Fimages%2Fblog%2F2009%2F11%2F18%2F18%2F8%2F125b6560a6ag214.jpg&refer=http%3A%2F%2F1812.img.pp.sohu.com.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1625048322&t=3b6da010e79ec1fcb5855fe9a69c3ceb" frameBorder="0"></iframe>
+                            }}
+                        >
+                            <DeleteOutlined />
+                        </ConfirmableButton>
             },
         ];
     }

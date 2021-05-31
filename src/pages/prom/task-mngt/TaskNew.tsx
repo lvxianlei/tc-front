@@ -35,11 +35,12 @@
       * @returns submit 
       */
      public async onSubmit(values: Record<string, any>): Promise<void> {
-        values.signTaskTime = moment(values.signTaskTime).format('YYYY-MM-DD');
+        values.planDeliveryTime = moment(values.planDeliveryTime).format('YYYY-MM-DD');
         values.deliveryTime = moment(values.deliveryTime).format('YYYY-MM-DD');
-        values.reviewTime = moment(values.reviewTime).format('YYYY-MM-DD HH:mm');
-         console.log(values )
-         return Promise.resolve();
+        values.signContractTime = moment(values.signContractTime).format('YYYY-MM-DD');
+        values.productIds = this.state.selectedKeys;
+        console.log(values)
+        return Promise.resolve();
         //  return await RequestUtil.post('/tower-market/taskNotice', values);
      }
  }
