@@ -264,7 +264,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                     required: true,
                     message: '请选择来款时间'
                 }],
-                children: <DatePicker  showTime format="YYYY-MM-DD HH:mm" />
+                children: <DatePicker showTime format="YYYY-MM-DD HH:mm" />
             }, {
                 label: '来款方式',
                 name: 'refundMode',
@@ -283,7 +283,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                     required: true,
                     message: '请输入来款金额'
                 }],
-                children: <Input/>
+                children: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 }/>
             }, {
                 label: '币种',
                 name: 'currencyType',
@@ -311,12 +311,12 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 label: '收款银行',
                 name: 'refundBank',
                 initialValue: paymentRecord?.refundBank,
-                children: <Input/>
+                children: <Input maxLength={ 100 }/>
             }, {
                 label: '备注',
                 name: 'description',
                 initialValue: paymentRecord?.description,
-                children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息"/>
+                children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息" />
             }]
         }]];
     }
