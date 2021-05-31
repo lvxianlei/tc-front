@@ -12,10 +12,10 @@ import RequestUtil from '../../../utils/RequestUtil';
  export interface ITaskMngtProps {}
  export interface ITaskMngtWithRouteProps extends RouteComponentProps<ITaskMngtProps>, WithTranslation {}
  export interface ITaskMngtState extends IAbstractMngtComponentState {
-     readonly tableDataSource: ITableDataItem[];
+     readonly tableDataSource: ITaskTableDataItem[];
  }
 
- interface ITableDataItem {
+ interface ITaskTableDataItem {
      readonly id: number;
      readonly internalNumber: string;
      readonly materialDemand: string;
@@ -34,7 +34,7 @@ import RequestUtil from '../../../utils/RequestUtil';
     readonly total: number;
     readonly hitCount: boolean;
     readonly pages: number;
-    readonly records: ITableDataItem[];
+    readonly records: ITaskTableDataItem[];
  }
 
  /**
@@ -108,7 +108,7 @@ import RequestUtil from '../../../utils/RequestUtil';
             title: '任务编号',
             dataIndex: 'taskNumber',
             render: (taskNumber: number): React.ReactNode => {
-                 return <Link to= {`/prom/task/view/${taskNumber}` }>{taskNumber}</Link>
+                 return <Link to= {`/prom/task/view/1` }>{taskNumber}</Link>
             }
         },  {
             key: 'saleOrderNumber',
@@ -157,13 +157,13 @@ import RequestUtil from '../../../utils/RequestUtil';
              dataIndex: 'operation',
              render: (_: undefined, record: object): React.ReactNode => (
                  <Space direction="horizontal" size="small">
-                     <Link to={ `/prom/task/edit/${ (record as ITableDataItem).id }` }>编辑</Link>
+                     <Link to={ `/prom/task/edit/${ (record as ITaskTableDataItem).id }` }>编辑</Link>
                      <Link to="">删除</Link>
-                     <Link to={ `/prom/task/special/${ (record as ITableDataItem).id }` }>完善特殊要求</Link>
+                     <Link to={ `/prom/task/special/${ (record as ITaskTableDataItem).id }` }>完善特殊要求</Link>
                      {
-                        (record as ITableDataItem).taskReviewStatus===1? 
-                        <Link to={ `/prom/task/product/${ (record as ITableDataItem).id }` }>完善产品信息</Link>
-                        :<Link to={ `/prom/task/product/${ (record as ITableDataItem).id }` }>变更产品信息</Link>
+                        (record as ITaskTableDataItem).taskReviewStatus===1? 
+                        <Link to={ `/prom/task/product/${ (record as ITaskTableDataItem).id }` }>完善产品信息</Link>
+                        :<Link to={ `/prom/task/product/${ (record as ITaskTableDataItem).id }` }>变更产品信息</Link>
                      }
                      
                  </Space>

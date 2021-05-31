@@ -12,13 +12,79 @@
  import ConfirmableButton from '../../../components/ConfirmableButton';
  import { ITabItem } from '../../../components/ITabableComponent';
  import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../../../utils/SummaryRenderUtil';
+ import RequestUtil from '../../../utils/RequestUtil';
  
  export interface ITaskDetailProps {
      readonly id: string;
  }
  export interface ITaskDetailRouteProps extends RouteComponentProps<ITaskDetailProps> {}
- export interface ITaskDetailState {}
+ export interface ITaskDetailState {
+    readonly task?:ITask
+ }
  
+ export interface ITask {
+    readonly contractId?: number;	
+    readonly createTime?: string;
+    readonly createUserName?: string;
+    readonly customerCompany?: string;	
+    readonly deliveryTime?:	string;	
+    readonly description?: string;		
+    readonly galvanizeDemand?:string;	
+    readonly internalNumber?: string;	
+    readonly materialDemand?: string;
+    readonly materialStandard?:	number | string;
+    readonly packDemand?: string;	
+    readonly peculiarDescription?:	string;
+    readonly planDeliveryTime?:	string;
+    readonly productChangeInfoVOList?: IProductChangeInfoVO [];	
+    readonly productInfoVOList?: IProductInfoVO [];
+    readonly projectName?: string;
+    readonly saleOrderNumber?: string;	
+    readonly signContractTime?:	string;	
+    readonly signCustomerName?:	string;		
+    readonly simpleProjectName?: string;	
+    readonly taskNumber?: string;		
+    readonly weldingDemand?: string;
+ }
+ 
+ export interface IProductInfoVO {
+    readonly description?:	string;	
+    readonly lineName?:	string;	
+    readonly num?: number;		
+    readonly price?: number;	
+    readonly productHeight?: number;
+    readonly productNumber?: string;	
+    readonly productShape?:	string;	
+    readonly productStatus?: number;	
+    readonly productTypeName?: string;
+    readonly saleOrderId?: number;	
+    readonly taskNoticeId?: number;	
+    readonly tender?: string;	
+    readonly totalAmount?: number;	
+    readonly unit?:	string;
+    readonly voltageGradeName?:	string;
+ }
+
+ export interface IProductChangeInfoVO {
+    readonly index?: number;
+    readonly changeType?: number;
+    readonly createTime?: string;
+    readonly description?:	string;	
+    readonly lineName?:	string;	
+    readonly num?: number;		
+    readonly price?: number;	
+    readonly productHeight?: number;
+    readonly productNumber?: string;	
+    readonly productShape?:	string;	
+    readonly productStatus?: number;	
+    readonly productTypeName?: string;
+    readonly saleOrderId?: number;	
+    readonly taskNoticeId?: number;	
+    readonly tender?: string;	
+    readonly totalAmount?: number;	
+    readonly unit?:	string;
+    readonly voltageGradeName?:	string;
+ }
  /**
   * Contract detail page component.
   */
@@ -27,6 +93,21 @@
      protected getTitle(): string {
          return `${ super.getTitle() }（<任务编号>）`;
      }
+
+    /**
+     * @description Components did mount
+     */
+    public async fetchTableData() {
+        const task: ITask = await RequestUtil.get<ITask>(`/tower-market/taskNotice/${ this.props.match.params.id }`);
+        this.setState({
+            task,
+            // taskTable: task?.productInfoVOList,
+        });
+    }
+    // componentDidMount
+    public async componentDidMount() {
+        this.fetchTableData();
+    }
      
      /**
       * @implements
@@ -69,6 +150,7 @@
       * @returns base info grid 
       */
      private getBaseInfoGrid(): IRenderedGrid {
+         const task: ITask | undefined = this.state?.task;
          return {
              labelCol: {
                  span: 4
@@ -78,34 +160,34 @@
              },
              rows: [[{
                  label: '合同编号',
-                 value: '12312312'
+                 value: task?.internalNumber
              },  {
                  label: '关联订单',
-                 value: '12312312'
+                 value: task?.saleOrderNumber
              }], [{
                  label: '关联合同',
-                 value: '45678'
+                 value: task?.internalNumber
              },  {
                  label: '工程名称',
-                 value: '12321312'
+                 value: task?.projectName
              }], [{
                  label: '工程简称',
-                 value: '12312312'
+                 value: task?.simpleProjectName
              },  {
                  label: '业主单位',
-                 value: '12321'
+                 value: task?.customerCompany
              }], [{
                  label: '合同签订单位',
-                 value: '12312312'
+                 value: task?.signCustomerName
              },  {
                  label: '合同签订日期',
-                 value: '12321'
+                 value: task?.signContractTime
              }], [{
                  label: '客户交货日期',
-                 value: '12312312'
+                 value: task?.deliveryTime
              },  {
                  label: '计划交货日期',
-                 value: '12321'
+                 value: task?.planDeliveryTime
              }]]
          };
      }
@@ -115,6 +197,7 @@
       * @returns special info grid 
       */
       private getSpecialInfoGrid(): IRenderedGrid {
+        const task: ITask | undefined = this.state?.task;
         return {
             labelCol: {
                 span: 4
@@ -124,74 +207,26 @@
             },
             rows: [[{
                 label: '原材料标准',
-                value: '12312312'
+                value: task?.materialStandard
             },  {
                 label: '原材料要求',
-                value: '12312312'
+                value: task?.materialDemand
             }], [{
                 label: '焊接要求',
-                value: '45678'
+                value: task?.weldingDemand
             },  {
                 label: '包装要求',
-                value: '12321312'
+                value: task?.packDemand
             }], [{
                 label: '镀锌要求',
-                value: '12312312'
+                value: task?.galvanizeDemand
             },  {
                 label: '备注',
-                value: '12321'
+                value: task?.peculiarDescription
             }]]
         };
     }
-     /**
-      * @description Gets order columns
-      * @returns order columns 
-      */
-     private getOrderColumns(): ColumnsType<object> {
-         return [{
-             title: '序号',
-             dataIndex: 'index'
-         }, {
-             title: '状态',
-             dataIndex: 'status'
-         }, {
-             title: '线路名称',
-             dataIndex: 'lineName'
-         }, {
-             title: '产品类型',
-             dataIndex: 'type'
-         }, {
-             title: '塔型',
-             dataIndex: 'towerType'
-         }, {
-             title: '杆塔号',
-             dataIndex: 'towerNumber'
-         }, {
-             title: '电压等级（KV）',
-             dataIndex: 'eLevel'
-         }, {
-             title: '呼高（米）',
-             dataIndex: 'height'
-         }, {
-             title: '单位',
-             dataIndex: 'unit'
-         }, {
-             title: '数量',
-             dataIndex: 'count'
-         }, {
-             title: '单价',
-             dataIndex: 'price'
-         }, {
-             title: '金额',
-             dataIndex: 'amount'
-         }, {
-             title: '标段',
-             dataIndex: 'tag'
-         }, {
-             title: '备注',
-             dataIndex: 'description'
-         }];
-     }
+    
  
      /**
       * @description Gets sys info grid
@@ -221,21 +256,130 @@
          };
      }
  
-     /**
-      * @description Gets order summariable items
-      * @returns order summariable items 
-      */
-     private getOrderSummariableItems(): IRenderdSummariableItem[] {
-         return [{
-             fieldItems: [],
-             render: (): React.ReactNode => (
-                 <Table pagination={ false } bordered={ true } columns={ this.getOrderColumns() }/>
-             )
-         }];
-     }
+     
  
+     public getProductColumns= () => {
+        return [
+            {
+                title: '状态',
+                width: 100,
+                dataIndex: 'productStatus',
+                key: 'productStatus',
+            },
+            {
+                title: '线路名称',
+                width: 150,
+                dataIndex: 'lineName',
+                key: 'lineName',
+            },
+            { 
+                title: '产品类型', 
+                dataIndex: 'productTypeName', 
+                key: 'productTypeName' 
+            },
+            { 
+                title: '塔型', 
+                dataIndex: 'productShape', 
+                key: 'productShape' 
+            },
+            { 
+                title: '杆塔号', 
+                dataIndex: 'productNumber', 
+                key: 'productNumber' 
+            },
+            { 
+                title: '电压等级', 
+                dataIndex: 'voltageGradeName', 
+                key: 'voltageGradeName' 
+            },
+            { 
+                title: '呼高（米）',
+                dataIndex: 'productHeight', 
+                key: 'productHeight' 
+            },
+            { 
+                title: '单位', 
+                dataIndex: 'unit', 
+                key: 'unit' 
+            },
+            { 
+                title: '数量', 
+                dataIndex: 'num', 
+                key: 'num' 
+            },
+            { 
+                title: '标段', 
+                dataIndex: 'tender', 
+                key: 'tender' 
+            },
+            { 
+                title: '备注', 
+                dataIndex: 'description', 
+                key: 'description' 
+            }
+        ];
+    }
 
- 
+    public getProductChangeColumns = () => {
+        return [{
+            title: '序号', 
+            render:(text:string,record:any,index: number)=>`${index+1}`,
+        },{
+            title: '操作', 
+            dataIndex: 'changeType', 
+            key: 'changeType'
+        },{
+            title: '操作时间', 
+            dataIndex: 'createTime', 
+            key: 'createTime'
+        },{
+            title: '状态',
+            width: 100,
+            dataIndex: 'productStatus',
+            key: 'productStatus',
+        },{
+            title: '线路名称',
+            width: 150,
+            dataIndex: 'lineName',
+            key: 'lineName',
+        },{ 
+            title: '产品类型', 
+            dataIndex: 'productTypeName', 
+            key: 'productTypeName' 
+        },{ 
+            title: '塔型', 
+            dataIndex: 'productShape', 
+            key: 'productShape' 
+        },{ 
+            title: '杆塔号', 
+            dataIndex: 'productNumber', 
+            key: 'productNumber' 
+        },{ 
+            title: '电压等级', 
+            dataIndex: 'voltageGradeName', 
+            key: 'voltageGradeName' 
+        },{ 
+            title: '呼高（米）',
+            dataIndex: 'productHeight', 
+            key: 'productHeight' 
+        },{ 
+            title: '单位', 
+            dataIndex: 'unit', 
+            key: 'unit' 
+        },{ 
+            title: '数量', 
+            dataIndex: 'num', 
+            key: 'num' 
+        },{ 
+            title: '标段', 
+            dataIndex: 'tender', 
+            key: 'tender' 
+        },{ 
+            title: '备注', 
+            dataIndex: 'description', 
+            key: 'description' 
+        }];
+    }
      /**
       * @implements
       * @description Gets tab items
@@ -253,7 +397,7 @@
                  render: (): React.ReactNode => SummaryRenderUtil.renderGrid(this.getSpecialInfoGrid())
             }, {
                  title: '产品信息',
-                 render: (): React.ReactNode => SummaryRenderUtil.renderSummariableAreas(this.getOrderSummariableItems())
+                 render: (): React.ReactNode => <Table dataSource={  this.state?.task?.productInfoVOList}  columns={this.getProductColumns()} scroll={{ x: 1300 }} />
              }, {
                  title: '系统信息',
                  render: (): React.ReactNode => SummaryRenderUtil.renderGrid(this.getSysInfoGrid())
@@ -263,7 +407,7 @@
              key: 2,
              content: SummaryRenderUtil.renderSections([{
                  title: '变更产品信息',
-                 render: (): React.ReactNode => '可以用Table组件'
+                 render: (): React.ReactNode => <Table dataSource={  this.state?.task?.productChangeInfoVOList}  columns={this.getProductChangeColumns()} scroll={{ x: 1300 }} />
              }])
          }];
      }

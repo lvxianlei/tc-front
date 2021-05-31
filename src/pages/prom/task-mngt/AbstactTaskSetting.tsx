@@ -39,7 +39,7 @@
   
  export interface IAbstractTaskSettingState extends IAbstractFillableComponentState {
      visible: boolean | undefined;
-     current: number;
+     checkStep: number;
      taskTable?: IProductInfoVO[];
      readonly task?: ITask;
     
@@ -112,13 +112,11 @@
      public state: S = {
         task: undefined,
         visible: false,
-        current: 0,
+        checkStep: 0,
      } as S;
  
      constructor(props: P) {
          super(props)
-         this.showModal = this.showModal.bind(this)
-         this.closeModal = this.closeModal.bind(this)
      }
  
      /**
@@ -148,35 +146,7 @@
      }
   
  
-     protected getGeneratNum(): string { 
-         var result: number = Math.floor( Math.random() * 1000 );
-         let num: string = '';
-         if(result < 10) {
-             num =  '00' + result;
-         } else if (result<100){
-             num = '0' + result;
-         } else {
-             num =  result.toString();
-         }
-         return moment().format('YYYYMMDD') + num;
-     }
- 
-     public checkChange(record: Record<string, any>): void {
-         console.log(record)
-     }
 
- 
-     public showModal(): void {
-         this.setState({
-             visible: true
-         })
-     }
- 
-     public closeModal(): void {
-         this.setState({
-             visible: false
-         })
-     }
  
      /**
       * @implements
@@ -185,10 +155,9 @@
       */
      public getFormItemGroups(): IFormItemGroup[][] {
           const task: ITask | undefined = this.state.task;
-          const GeneratNum: string = this.getGeneratNum();
-          const { current } = this.state;
+          const { checkStep } = this.state;
           let module: IFormItemGroup[][] = [];
-          switch(current){
+          switch(checkStep){
                 case 0:
                     module = [[{
                         title: '基础信息',
@@ -215,7 +184,7 @@
                             children: 
                                 <>
                                     <Input suffix={
-                                        <Button type="primary" onClick={this.showModal}>
+                                        <Button type="primary" >
                                             Open Modal
                                         </Button>  
                                     }/>
@@ -306,7 +275,7 @@
                             children: 
                                 <>
                                     <Input suffix={
-                                        <Button type="primary" onClick={this.showModal}>
+                                        <Button type="primary" >
                                             Open Modal
                                         </Button>  
                                     }
@@ -448,7 +417,7 @@
                             children: 
                                 <>
                                     <Input suffix={
-                                        <Button type="primary" onClick={this.showModal}>
+                                        <Button type="primary" >
                                             Open Modal
                                         </Button>  
                                     }
@@ -569,6 +538,7 @@
           return module
           
      }
+    //步骤
     public steps=[
         {
             title: '创建任务单',
@@ -581,12 +551,13 @@
         },
     ];
 
+    //底部按钮
     protected renderSaveAndContinue(): React.ReactNode {
-            const { current } = this.state;
+            const { checkStep } = this.state;
             return (
                 <Space className={styles.column_to_row}> 
                     
-                    {current !== 2?
+                    {checkStep !== 2?
                         <Button 
                             type="primary" 
                             htmlType="button" 
@@ -595,7 +566,7 @@
                             保存并转交下一节点
                         </Button> 
                     : null}
-                    {/* {current !== 0? 
+                    {/* {checkStep !== 0? 
                         <Button 
                             type="primary" 
                             htmlType="button" 
@@ -607,16 +578,20 @@
                 </Space>
             );
     }
+
+    //下一步
     public onSubmitAndContinue = () => {
-        const{ current } = this.state;
+        const{ checkStep } = this.state;
         this.setState({
-            current:current+1
+            checkStep:checkStep+1
         })
     } 
+
+    //上一步
     public onSubmitAndBack = () => {
-        const{ current } = this.state;
+        const{ checkStep } = this.state;
         this.setState({
-            current:current-1
+            checkStep:checkStep-1
         })
     }
 
@@ -626,13 +601,13 @@
      */
   
     public renderExtraSections():IRenderedSection[]{
-        const { current, taskTable } = this.state;
+        const { checkStep, taskTable } = this.state;
         return [{
             title:'',
             render:():React.ReactNode=>{
                 return (
                     <>
-                    {current===2?
+                    {checkStep===2?
                         <>
                             <div className={styles.column_to_row}>
                                 <div className={styles.title}>产品信息</div>
@@ -742,10 +717,12 @@
             },
         ];
     }
+
+    //标题
     protected getTitle(): string {
-        const { current } = this.state;
+        const { checkStep } = this.state;
         let title = '';
-        switch (current){
+        switch (checkStep){
             case 0: 
                 title = '创建任务单';
                 break;
@@ -759,13 +736,12 @@
         return title;
     }
     public render(){
-        console.log(this.state.current)
         return (
             <> 
                 <Steps 
-                    current={this.state.current} 
-                    type="navigation"
-                    size="small"
+                    current = { this.state.checkStep } 
+                    type = "navigation"
+                    size = "small"
                 >
                     {this.steps.map(item => (
                     <Step key={item.title} title={item.title} />

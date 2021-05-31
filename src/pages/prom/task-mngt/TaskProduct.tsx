@@ -29,7 +29,7 @@ import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
         this.setState({
             task,
             taskTable: task?.productInfoVOList,
-            current: 2
+            checkStep: 2
         });
     }
 
