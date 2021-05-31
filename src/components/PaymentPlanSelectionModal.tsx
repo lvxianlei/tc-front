@@ -2,7 +2,7 @@
  * @author zyc
  * @copyright © 2021
  */
-import { FormItemProps, TableColumnType, TablePaginationConfig } from 'antd';
+import { TableColumnType } from 'antd';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
@@ -11,7 +11,7 @@ import AbstractModalComponent, {
     IAbstractModalComponentProps,
     IAbstractModalComponentState,
     IResponseData,
-} from './AbstractModalComponent';
+} from './AbstractSelectionModal';
 
 export interface IPaymentPlanSelectionComponentState extends IAbstractModalComponentState {
     readonly tableDataSource: [];
@@ -25,24 +25,6 @@ export interface IPaymentPlanSelectionComponentState extends IAbstractModalCompo
 export default class PaymentPlanSelectionComponent extends AbstractModalComponent<IAbstractModalComponentProps, IPaymentPlanSelectionComponentState> {
 
     /**
-     * @implements
-     * @description Determines whether filter submit on
-     * @param values 
-     */
-    public onFilterSubmit(values: Record<string, any>): void {
-        throw new Error('Method not implemented.');
-    }
-
-    /**
-     * @override
-     * @description Determines whether table change on
-     * @param pagination 
-     */
-    public onTableChange(pagination: TablePaginationConfig): void {
-        throw new Error('Method not implemented.');
-    }
-
-    /**
      * @override
      * @description Gets state
      * @returns state 
@@ -50,7 +32,7 @@ export default class PaymentPlanSelectionComponent extends AbstractModalComponen
     protected getState(): IPaymentPlanSelectionComponentState {
         return {
             ...super.getState(),
-            isFilter: false
+            confirmTitle: "选择回款计划"
         };
     }
 
@@ -69,10 +51,6 @@ export default class PaymentPlanSelectionComponent extends AbstractModalComponen
     }
     public getTableDataSource(): object[]  {
         return this.state.tableDataSource;
-    }
-
-    public getFilterFormItemProps(): FormItemProps[]  {
-        return [];
     }
 
     public getTableColumns(): TableColumnType<object>[] {

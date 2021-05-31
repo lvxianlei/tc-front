@@ -1,13 +1,13 @@
 import React from 'react'
-import {Modal, Form, Button, Card, Space, Table, FormItemProps} from 'antd'
+import {Modal, Card, Space, Table} from 'antd'
 
 import { GetRowKey } from 'rc-table/lib/interface';
 import { ColumnType, TablePaginationConfig } from 'antd/lib/table';
-import styles from './AbstractModalComponent.module.less'
+import styles from './AbstractSelectionModal.module.less'
 import AbstractShowModalComponent from './AbstractShowModalComponent';
 
 export interface IAbstractModalComponentProps {
-    readonly handleOk: (selectedRows: DataType[]) => void;
+    readonly onSelect: (selectedRows: DataType[]) => void;
     readonly Id?: number;
 }
 
@@ -19,7 +19,6 @@ export interface IAbstractModalComponentState {
     readonly tablePagination: TablePaginationConfig;
     readonly selectedRowKeys: React.Key[] | any,
     readonly selectedRows: object[] | any,
-    readonly isFilter: boolean
 }
 
 export interface DataType{
@@ -52,7 +51,7 @@ export interface IResponseData {
     readonly paymentPlanVos: [];
 }
 
-export default abstract class AbstractModalComponent<P extends IAbstractModalComponentProps, S extends IAbstractModalComponentState> extends AbstractShowModalComponent<P,S> {
+export default abstract class AbstractSelectionModal<P extends IAbstractModalComponentProps, S extends IAbstractModalComponentState> extends AbstractShowModalComponent<P,S> {
 
     /**
      * @constructor
@@ -73,7 +72,6 @@ export default abstract class AbstractModalComponent<P extends IAbstractModalCom
             confirmTitle: "",
             okText: "确认",
             cancelText: "取消",
-            isFilter: true,
         } as S;
     }
 
@@ -87,20 +85,6 @@ export default abstract class AbstractModalComponent<P extends IAbstractModalCom
             isModalVisible: false
         })
     };
-
-     /**
-     * @abstract
-     * @description Determines whether filter submit on
-     * @param values 
-     */
-    abstract onFilterSubmit(values: Record<string, any>): void;
-
-      /**
-       * @abstract
-       * @description Determines whether table change on
-       * @param pagination 
-       */
-    abstract onTableChange(pagination: TablePaginationConfig): void;
 
        /**
      * @abstract
@@ -118,14 +102,6 @@ export default abstract class AbstractModalComponent<P extends IAbstractModalCom
      */
     abstract getTableColumns(): ColumnType<object>[];
 
-     /**
-     * @abstract
-     * @description Gets filter form item props
-     * @param item 
-     * @returns filter form item props 
-     */
-    abstract getFilterFormItemProps(): FormItemProps[];
-
     public onSelectChange = (selectedRowKeys: React.Key[],selectedRows: DataType[]) => {
         this.setState({ 
             selectedRowKeys,
@@ -141,20 +117,11 @@ export default abstract class AbstractModalComponent<P extends IAbstractModalCom
     protected renderTableContent(): React.ReactNode {
         return (
             <Space direction="vertical" className={ styles.modalTable } >
-                { this.state.isFilter ? 
-                    <Card className={ styles.tableCard }>
-                        {  this.renderFilterContent() }
-                    </Card>
-                    :
-                    <></>
-                }
                 <Card className={ styles.tableCard }>
                     <Space direction="vertical" size="large" >
                         <Table 
                             rowKey={ this.getTableRowKey() } 
-                            bordered={ true }
-                            pagination={ this.state.tablePagination } 
-                            onChange={ this.onTableChange }
+                            bordered={ true } 
                             dataSource={ this.getTableDataSource() } 
                             columns={this.getTableColumns()}
                             rowSelection={{
@@ -183,7 +150,7 @@ export default abstract class AbstractModalComponent<P extends IAbstractModalCom
                             this.setState ({
                                 isModalVisible: false
                             })
-                           { this.props.handleOk(this.state.selectedRows) }
+                           { this.props.onSelect(this.state.selectedRows) }
                         }
                     } 
                     onCancel={this.handleCancel}
@@ -192,27 +159,6 @@ export default abstract class AbstractModalComponent<P extends IAbstractModalCom
                     {this.renderTableContent()}
                 </Modal>  
             </>
-        );
-    }
-
-    /**
-     * @description 弹窗列表过滤
-     */
-    protected renderFilterContent(): React.ReactNode {
-        return (
-            <Form layout="inline" onFinish={ this.onFilterSubmit }>        
-                {
-                    this.getFilterFormItemProps().map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
-                        <Form.Item key={ `${ props.name }_${ index }` } { ...props }/>
-                    ))
-                }
-                <Form.Item>
-                    <Button type="primary" htmlType="submit">查询</Button>
-                </Form.Item>
-                <Form.Item>
-                    <Button htmlType="reset">重置</Button>
-                </Form.Item>
-            </Form>
         );
     }
 

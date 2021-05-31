@@ -8,11 +8,12 @@ import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
 import RequestUtil from '../utils/RequestUtil';
-import AbstractModalComponent, {
+import AbstractFilteredSelectionModal from './AbstractFilteredSelectionModal';
+import {
     IAbstractModalComponentProps,
     IAbstractModalComponentState,
     IResponseData,
-} from './AbstractModalComponent';
+} from './AbstractSelectionModal';
 
 const { Option } = Select;
 
@@ -37,7 +38,7 @@ export interface IClient {
 /**
  * Client Selection Component
  */
-export default class ClientSelectionComponent extends AbstractModalComponent<IAbstractModalComponentProps, IClientSelectionComponentState> {
+export default class ClientSelectionComponent extends AbstractFilteredSelectionModal<IAbstractModalComponentProps, IClientSelectionComponentState> {
 
     /**
      * @override
@@ -53,7 +54,7 @@ export default class ClientSelectionComponent extends AbstractModalComponent<IAb
                 total: 0,
                 showSizeChanger: false
             },
-            isFilter: true
+            confirmTitle: "选择客户"
         };
     }
 

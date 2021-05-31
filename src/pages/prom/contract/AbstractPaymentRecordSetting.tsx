@@ -13,7 +13,7 @@ import ContractSelectionComponent from '../../../components/ContractSelectionMod
 import PaymentPlanSelectionComponent from '../../../components/PaymentPlanSelectionModal'
 import RequestUtil from '../../../utils/RequestUtil';
 import moment from 'moment';
-import { DataType } from '../../../components/AbstractModalComponent';
+import { DataType } from '../../../components/AbstractSelectionModal';
 
 const { Option } = Select;
 
@@ -99,7 +99,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
      * @description 客户弹窗
      * @returns 
      */
-    public handleOk = (selectedRows: DataType[]):void => {
+    public onSelect = (selectedRows: DataType[]):void => {
         const paymentRecord: IPaymentRecord | undefined = this.state.paymentRecord;
         if(selectedRows.length > 0 ) {
             this.setState({
@@ -118,7 +118,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
      * @description 合同弹窗
      * @returns 
      */
-     public handleContractOk = (selectedRows: DataType[] | any):void => {
+     public onContractSelect = (selectedRows: DataType[] | any):void => {
         const paymentRecord: IPaymentRecord | undefined = this.state.paymentRecord;
         if(selectedRows.length > 0 ) {
             this.setState({
@@ -143,7 +143,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
      * @description 回款计划弹窗
      * @returns 
      */
-     public handlePlanOk = (selectedRows: DataType[] | any):void => {
+     public onPlanSelect = (selectedRows: DataType[] | any):void => {
         const paymentRecord: IPaymentRecord | undefined = this.state.paymentRecord;
         if(selectedRows.length > 0 ) {
             this.setState({
@@ -188,7 +188,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 children: 
                     <>
                         <Input value={ paymentRecord?.contractId } suffix={ 
-                            <ContractSelectionComponent handleOk={ this.handleContractOk }/>
+                            <ContractSelectionComponent onSelect={ this.onContractSelect }/>
                         }/>
                     </>
             }, {
@@ -209,7 +209,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
             children: 
                 <>
                     <Input value={ paymentRecord?.customerName } suffix={ 
-                        <ClientSelectionComponent handleOk={ this.handleOk }/>
+                        <ClientSelectionComponent onSelect={ this.onSelect }/>
                     }/>
                 </>
         },  {
@@ -223,7 +223,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
             children: 
                 <>
                     <Input value={ paymentRecord?.paymentPlanId } suffix={ 
-                        <PaymentPlanSelectionComponent handleOk={ this.handlePlanOk } Id={ this.state.id }/>
+                        <PaymentPlanSelectionComponent onSelect={ this.onPlanSelect } Id={ this.state.id }/>
                     }/>
                 </>
         }, {

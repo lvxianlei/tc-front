@@ -8,11 +8,12 @@ import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
 import RequestUtil from '../utils/RequestUtil';
-import AbstractModalComponent, {
+import AbstractFilteredSelectionModal from './AbstractFilteredSelectionModal';
+import {
     IAbstractModalComponentProps,
     IAbstractModalComponentState,
     IResponseData,
-} from './AbstractModalComponent';
+} from './AbstractSelectionModal';
 
 const { Option } = Select;
 
@@ -25,7 +26,7 @@ export interface IContractSelectionComponentState extends IAbstractModalComponen
 /**
  * Contract Selection Component
  */
-export default class ContractSelectionComponent extends AbstractModalComponent<IAbstractModalComponentProps, IContractSelectionComponentState> {
+export default class ContractSelectionComponent extends AbstractFilteredSelectionModal<IAbstractModalComponentProps, IContractSelectionComponentState> {
 
     /**
      * @override
@@ -41,7 +42,7 @@ export default class ContractSelectionComponent extends AbstractModalComponent<I
                 total: 0,
                 showSizeChanger: false
             },
-            isFilter: true
+            confirmTitle: "选择合同"
         };
     }
 

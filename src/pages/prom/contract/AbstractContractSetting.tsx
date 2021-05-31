@@ -19,7 +19,7 @@ import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 import styles from './AbstractContractSetting.module.less';
 import ClientSelectionComponent from '../../../components/ClientSelectionModal';
 import RequestUtil from '../../../utils/RequestUtil';
-import { DataType } from '../../../components/AbstractModalComponent';
+import { DataType } from '../../../components/AbstractSelectionModal';
 import { CascaderOptionType } from 'antd/lib/cascader';
 import { SelectValue } from 'antd/lib/select';
 export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
@@ -197,7 +197,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
      * @description 弹窗
      * @returns 
      */
-    public handleOk = (selectedRows: DataType[]):void => {
+    public onSelect = (selectedRows: DataType[]):void => {
         const contract: IContract | undefined = this.state.contract;
         if(selectedRows.length > 0 ) {
             this.setState({
@@ -210,7 +210,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         }
     }
 
-    public handleCustomerCompanyOk = (selectedRows: DataType[]):void => {
+    public onCustomerCompanySelect = (selectedRows: DataType[]):void => {
         const contract: IContract | undefined = this.state.contract;
         if(selectedRows.length > 0 ) {
             const select = {
@@ -303,7 +303,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     children: 
                         <>
                             <Input value={ contract?.customerInfoDto?.customerCompany } suffix={ 
-                                <ClientSelectionComponent handleOk={ this.handleCustomerCompanyOk } />
+                                <ClientSelectionComponent onSelect={ this.onCustomerCompanySelect } />
                             }/>
                         </>
                 }, {
@@ -327,7 +327,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     children:
                         <>
                             <Input value={ contract?.signCustomerName } suffix={ 
-                                <ClientSelectionComponent handleOk={ this.handleOk } />
+                                <ClientSelectionComponent onSelect={ this.onSelect } />
                             }/>
                         </>
                 }, {
