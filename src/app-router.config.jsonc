@@ -79,12 +79,12 @@
         "module": "./pages/prom/task-mngt/TaskEdit",
         "exact": true
     }, { // 任务单完善特殊要求
-        "name": "编辑任务单",
+        "name": "完善特殊要求",
         "path": "/prom/task/special/:id",
         "module": "./pages/prom/task-mngt/TaskSpecial",
         "exact": true
     }, { // 任务单完善产品信息
-        "name": "编辑任务单",
+        "name": "完善产品信息",
         "path": "/prom/task/product/:id",
         "module": "./pages/prom/task-mngt/TaskProduct",
         "exact": true
