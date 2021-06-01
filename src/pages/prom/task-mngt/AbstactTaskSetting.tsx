@@ -41,7 +41,7 @@
      popUp: boolean | undefined;
      checkStep: StepItem;
      productDataSource: IProductInfoVO[];
-     selectedKeys: object;
+     selectedKeys: React.Key[];
      readonly task?: ITask;
     
      
@@ -59,7 +59,7 @@
     readonly materialDemand?: string;
     readonly materialStandard?:	number | string;
     readonly packDemand?: string;	
-    readonly peculiarDescription?:	string;
+    readonly peculiarDescription?: string;
     readonly planDeliveryTime?:	string;
     readonly productChangeInfoVOList?: object [];	
     readonly productInfoVOList: IProductInfoVO [];
@@ -127,7 +127,7 @@ enum StepTitleItem {
          task: undefined,
          popUp: false,
          checkStep: StepItem.NEW_TASK, 
-         selectedKeys: [],
+         selectedKeys: {},
      }  as S;
  
      constructor(props: P) {
@@ -638,7 +638,7 @@ enum StepTitleItem {
                                 rowKey={(record:IProductInfoVO)=>record.productTypeName}
                                 rowSelection={{
                                     type:'checkbox',
-                                    onChange:( selectedKeys: object )=>{
+                                    onChange:( selectedKeys: React.Key[] )=>{
                                         this.setState({
                                             selectedKeys
                                         })

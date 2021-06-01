@@ -397,7 +397,7 @@
                  render: (): React.ReactNode => SummaryRenderUtil.renderGrid(this.getSpecialInfoGrid())
             }, {
                  title: '产品信息',
-                 render: (): React.ReactNode => <Table dataSource={  this.state?.task?.productInfoVOList}  columns={this.getProductColumns()} scroll={{ x: 1300 }} />
+                 render: (): React.ReactNode => <Table dataSource={ this.state?.task?.productInfoVOList }  columns={ this.getProductColumns() } scroll={{ x: 1300 }} />
              }, {
                  title: '系统信息',
                  render: (): React.ReactNode => SummaryRenderUtil.renderGrid(this.getSysInfoGrid())
@@ -407,7 +407,7 @@
              key: 2,
              content: SummaryRenderUtil.renderSections([{
                  title: '变更产品信息',
-                 render: (): React.ReactNode => <Table dataSource={  this.state?.task?.productChangeInfoVOList}  columns={this.getProductChangeColumns()} scroll={{ x: 1300 }} />
+                 render: (): React.ReactNode => <Table dataSource={ this.state?.task?.productChangeInfoVOList }  columns={ this.getProductChangeColumns() } scroll={{ x: 1300 }} />
              }])
          }];
      }

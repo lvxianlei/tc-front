@@ -47,12 +47,12 @@ import RequestUtil from '../../../utils/RequestUtil';
       * @description Gets state
       * @returns state 
       */
-     protected getState(): ITaskMngtState {
-         return {
-             ...super.getState(),
-             tableDataSource: []
-         };
-     }
+    protected getState(): ITaskMngtState {
+        return {
+            ...super.getState(),
+            tableDataSource: []
+        };
+    }
  
      /**
       * @description Fetchs table data
@@ -61,8 +61,8 @@ import RequestUtil from '../../../utils/RequestUtil';
      protected async fetchTableData(filterValues: Record<string, any>,pagination: TablePaginationConfig = {}) {
          const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/taskNotice/page', {
              ...filterValues,
-             current: pagination.current || this.state.tablePagination.current,
-             size: pagination.pageSize ||this.state.tablePagination.pageSize,
+             current: pagination.current || this.state?.tablePagination?.current,
+             size: pagination.pageSize ||this.state?.tablePagination?.pageSize,
              countryCode: this.state.selectedTabKey
          });
          this.setState({

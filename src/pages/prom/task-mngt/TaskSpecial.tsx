@@ -57,7 +57,7 @@ import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
         values.deliveryTime = moment(values.deliveryTime).format('YYYY-MM-DD');
         values.signContractTime = moment(values.signContractTime).format('YYYY-MM-DD');
         values.productIds = this.state.selectedKeys;
-        console.log(values )
+        console.log(values)
         return Promise.resolve();
         //  return await RequestUtil.post('/tower-market/taskNotice', values);
      }
