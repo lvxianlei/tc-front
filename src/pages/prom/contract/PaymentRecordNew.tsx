@@ -37,6 +37,15 @@ class PaymentRecordNew extends AbstractPaymentRecordSetting<IContractNewRoutePro
         console.log(confirmValues)
         return await RequestUtil.post('/tower-market/paymentRecord', confirmValues);
     }
+
+    /**
+     * @override
+     * @description Renders save and continue
+     * @returns save and continue 
+     */
+     protected renderSaveAndContinue(): React.ReactNode {
+        return null;
+    }
 }
 
 export default withRouter(withTranslation()(PaymentRecordNew));

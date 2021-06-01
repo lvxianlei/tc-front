@@ -6,7 +6,7 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 
 import RequestUtil from '../../../utils/RequestUtil';
-import AbstractContractSetting, { IAbstractContractSettingState, IPaymentPlanDto } from './AbstractContractSetting';
+import AbstractContractSetting, { IAbstractContractSettingState, IPaymentPlanDto, IContract } from './AbstractContractSetting';
 import moment from 'moment'
 
 export interface IContractNewProps {}
@@ -35,7 +35,7 @@ class ContractNew extends AbstractContractSetting<IContractNewRouteProps, IContr
                 index: index + 1
             };
         });
-    //  return Promise.resolve();
+        values.customerInfoDto = this.state.contract?.customerInfoDto;
         return await RequestUtil.post('/tower-market/contract', values);
     }
 }

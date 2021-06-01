@@ -42,16 +42,6 @@
         "path": "/prom/contract/detail/:id",
         "module": "./pages/prom/contract/ContractDetail",
         "exact": true
-    }, {
-        "name": "销售订单管理", 
-        "path": "/prom/order",
-        "module": "./pages/prom/order/SaleOrder",
-        "exact": true
-    }, {
-        "name": "新增订单", 
-        "path": "/prom/order/new",
-        "module": "./pages/prom/order/SaleOrderNew",
-        "exact": true
     }, { // 字典管理
         "name": "字典管理",
         "path": "/sys/dxnry",
