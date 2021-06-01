@@ -15,7 +15,7 @@ import ITabableComponent, { ITabItem } from './ITabableComponent';
 
 export interface IAbstractMngtComponentState {
     selectedTabKey: React.Key;
-    tablePagination: TablePaginationConfig;
+    tablePagination: TablePaginationConfig | undefined;
 }
 
 /**
@@ -148,9 +148,15 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
     protected renderTabContent(item: ITabItem): React.ReactNode {
         return (
             <Space direction="vertical" size="small" className={ layoutStyles.width100 }>
-                <Card className={ styles.filterCard }>
-                    { this.renderFilterContent(item) }
-                </Card>
+                {
+                    this.getFilterFormItemProps(item).length
+                    ?
+                    <Card className={ styles.filterCard }>
+                        { this.renderFilterContent(item) }
+                    </Card>
+                    :
+                    null
+                }
                 <Card>
                     <Space className={ layoutStyles.width100 } direction="vertical" size="large">
                         { this.renderExtraOperationContent(item) }
@@ -200,7 +206,7 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
     protected renderTableContent(item: ITabItem): React.ReactNode {
         return (
             <Table rowKey={ this.getTableRowKey() } bordered={ true }
-                pagination={ this.state.tablePagination } onChange={ this.onTableChange }
+                pagination={ this.state.tablePagination || false } onChange={ this.onTableChange }
                 dataSource={ this.getTableDataSource(item) } columns={ this.getTableColumns(item) }/>
         );
     }

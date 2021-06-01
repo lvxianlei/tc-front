@@ -70,8 +70,8 @@ export default class ContractSelectionComponent extends AbstractModalComponent<I
     protected async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/contract/page', {
             ...filterValues,
-            current: pagination.current || this.state.tablePagination.current,
-            size: pagination.pageSize ||this.state.tablePagination.pageSize
+            current: pagination.current || this.state.tablePagination?.current,
+            size: pagination.pageSize ||this.state.tablePagination?.pageSize
         });
         this.setState({
             ...filterValues,
