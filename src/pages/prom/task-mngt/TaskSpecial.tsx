@@ -31,9 +31,6 @@ import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
             productDataSource: task?.productInfoVOList,
             checkStep: 1
         });
-        // this.getForm()?.setFieldsValue({
-        //     paymentPlanDtos: task.paymentPlanDtos
-        // });
     }
  
 
@@ -42,7 +39,7 @@ import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
      * @description Gets form item groups
      * @returns form item groups 
      */
-      public getFormItemGroups(): IFormItemGroup[][] {
+    public getFormItemGroups(): IFormItemGroup[][] {
         if (this.state.task) {
             return super.getFormItemGroups();
         }

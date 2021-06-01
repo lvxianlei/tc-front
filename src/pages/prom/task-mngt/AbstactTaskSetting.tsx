@@ -558,7 +558,7 @@ enum StepTitleItem {
             return (
                 <Space className={styles.column_to_row}> 
                     
-                    {checkStep !== 2?
+                    {checkStep !== StepItem.COMPLETE_PRODUCT_INFO ?
                         <Button 
                             type="primary" 
                             htmlType="button" 
@@ -567,7 +567,7 @@ enum StepTitleItem {
                             保存并转交下一节点
                         </Button> 
                     : null}
-                    {/* {checkStep !== 0? 
+                    {/* {checkStep !== StepItem.NEW_TASK ? 
                         <Button 
                             type="primary" 
                             htmlType="button" 
@@ -584,7 +584,7 @@ enum StepTitleItem {
     public onSubmitAndContinue = () => {
         const{ checkStep } = this.state;
         this.setState({
-            checkStep:checkStep+1
+            checkStep: checkStep + 1
         })
     } 
 
@@ -592,7 +592,7 @@ enum StepTitleItem {
     public onSubmitAndBack = () => {
         const{ checkStep } = this.state;
         this.setState({
-            checkStep:checkStep-1
+            checkStep: checkStep - 1
         })
     }
     //新增
@@ -606,7 +606,6 @@ enum StepTitleItem {
             price: 0,	
             productTypeName:'',
         })
-        console.log(task)
         this.setState({
             productDataSource:[...task]
         })
@@ -624,7 +623,7 @@ enum StepTitleItem {
             render:():React.ReactNode=>{
                 return (
                     <>
-                    {checkStep===2?
+                    {checkStep === StepItem.COMPLETE_PRODUCT_INFO ?
                         <>
                             <div className={styles.column_to_row}>
                                 <div className={styles.title}>产品信息</div>
@@ -722,7 +721,7 @@ enum StepTitleItem {
                 width: 100,
                 render: ( record: IProductInfoVO ) => 
                         <ConfirmableButton 
-                            confirmTitle="要删除该条回款计划吗？"
+                            confirmTitle="要删除该条数据吗？"
                             type="link" 
                             placement="topRight"
                             onConfirm={ () => {
