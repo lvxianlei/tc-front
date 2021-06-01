@@ -39,7 +39,7 @@
   
  export interface IAbstractTaskSettingState extends IAbstractFillableComponentState {
      popUp: boolean | undefined;
-     checkStep: number;
+     checkStep: StepItem;
      taskTable: IProductInfoVO[];
      selectedKeys: object;
      readonly task?: ITask;
@@ -108,6 +108,11 @@
      address: string;
  }
  
+enum StepItem {
+    NEW_TASK = 0,   //新增任务单
+    COMPLETE_SPECIAL_OPTIONS = 1,   //完善特殊信息
+    COMPLETE_PRODUCT_INFO = 2,   //晚上产品信息
+}
  /**
   * Abstract Task Setting
   */
@@ -116,7 +121,7 @@
      public state: S = {
          task: undefined,
          popUp: false,
-         checkStep: 0,
+         checkStep: StepItem.NEW_TASK, 
          selectedKeys: [],
      }  as S;
  
@@ -164,7 +169,7 @@
           const { checkStep } = this.state;
           let module: IFormItemGroup[][] = [];
           switch(checkStep){
-                case 0:
+                case StepItem.NEW_TASK:
                     module = [[{
                         title: '基础信息',
                         itemCol: {
@@ -246,7 +251,7 @@
                         }]
                     }]];
                     break;
-                case 1:
+                case StepItem.COMPLETE_SPECIAL_OPTIONS:
                     module = [[{
                         title: '基础信息',
                         itemCol: {
@@ -388,7 +393,7 @@
                         }]
                     }]];
                     break;
-                case 2:
+                case StepItem.COMPLETE_PRODUCT_INFO:
                     module = [[{
                         title: '基础信息',
                         itemCol: {
@@ -732,20 +737,7 @@
 
     //标题
     protected getTitle(): string {
-        const { checkStep } = this.state;
-        let title = '';
-        switch (checkStep){
-            case 0: 
-                title = '创建任务单';
-                break;
-            case 1: 
-                title = '完善特殊要求';
-                break;
-            case 2: 
-                title =' 完善产品信息';
-                break;
-        }
-        return title;
+        return this.steps[this.state.checkStep].title;
     }
     public render(){
         return (
@@ -756,7 +748,7 @@
                     size = "small"
                 >
                     {this.steps.map(item => (
-                    <Step key={item.title} title={item.title} />
+                        <Step key={item.title} title={item.title} />
                     ))}
                 </Steps>
                 { super.render() }
