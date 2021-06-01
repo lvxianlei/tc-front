@@ -104,7 +104,7 @@ export default abstract class RequestUtil {
      * @returns {Promise<T>}
      * @memberof RequestUtil
      */
-    public static post<T>(path: string, params: Record<string, string | number> = {}): Promise<T> {
+    public static post<T>(path: string, params: Record<string, any> = {}): Promise<T> {
         NProgress.inc();
         return this.request(path, {
             method: 'POST',
@@ -120,7 +120,7 @@ export default abstract class RequestUtil {
      * @param [params] 
      * @returns put 
      */
-    public static put<T>(path: string, params: Record<string, string | number> = {}): Promise<T> {
+    public static put<T>(path: string, params: Record<string, any> = {}): Promise<T> {
         NProgress.inc();
         return this.request(path, {
             method: 'PUT',
@@ -136,7 +136,7 @@ export default abstract class RequestUtil {
      * @param [params] 
      * @returns delete 
      */
-    public static delete<T>(path: string, params: Record<string, string | number> = {}): Promise<T> {
+    public static delete<T>(path: string, params: Record<string, any> = {}): Promise<T> {
         NProgress.inc();
         return this.request(path, {
             method: 'DELETE',
