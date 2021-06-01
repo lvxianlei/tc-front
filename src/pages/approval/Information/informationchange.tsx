@@ -5,7 +5,7 @@
 import React, { useState } from 'react'
 import { Form, Input, Button, Row, Col, DatePicker, Space, Select, Table } from 'antd';
 import "./index.less"
-import tasklist from './tasklist'
+import informationlist from './informationlist'
 interface IProps {
 
 }
@@ -16,7 +16,7 @@ const { Option } = Select;
 function handleChange(value: string) {
     console.log(`selected ${value}`);
 }
-const { dataSource, columns } = tasklist
+const { dataSource, columns } = informationlist
 
 const layout = {
     labelCol: { span: 8 },
@@ -52,7 +52,7 @@ const taskapproval = (props: IProps) => {
                 <Row>
                     <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
                         <Form.Item
-                            label="任务编号"
+                            label="订单编号"
                             name="username"
                             rules={[{ required: true, message: 'Please input your username!' }]}
                         >
@@ -63,16 +63,16 @@ const taskapproval = (props: IProps) => {
                     <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
 
                         <Form.Item
-                            label="关联订单"
+                            label="采购订单号"
                             name="password"
-                            rules={[{ required: true, message: 'Please input your password!' }]}
+                            rules={[{ required: false, message: 'Please input your password!' }]}
                         >
                             <Input />
                         </Form.Item>
                     </Col>
                     <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
                         <Form.Item
-                            label="合同编号"
+                            label="关联合同编号"
                             name="password"
                             rules={[{ required: true, message: 'Please input your password!' }]}
                         >
@@ -84,54 +84,50 @@ const taskapproval = (props: IProps) => {
                     <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
 
                         <Form.Item
-                            label="工程名称"
+                            label="内部合同编号"
                             name="username"
                             rules={[{ required: false, message: 'Please input your username!' }]}
                         >
                             <Input />
                         </Form.Item>
 
+                    </Col>
+                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+
+                        <Form.Item
+                            label="工程名字"
+                            name="password"
+                            rules={[{ required: false, message: 'Please input your password!' }]}
+                        >
+                            <Input />
+                        </Form.Item>
                     </Col>
                     <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
 
                         <Form.Item
                             label="业主单位"
-                            name="password"
-                            rules={[{ required: false, message: 'Please input your password!' }]}
+                            name="username"
+                            rules={[{ required: false, message: 'Please input your username!' }]}
                         >
-                            <Input />
+                                <Input />
                         </Form.Item>
+
                     </Col>
+                    </Row>
+                    <Row>
                     <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+
                         <Form.Item
                             label="合同签订单位"
                             name="password"
                             rules={[{ required: false, message: 'Please input your password!' }]}
                         >
-                            <Input />
+                               <Input />
                         </Form.Item>
                     </Col>
-                </Row>
-                <Row>
                     <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
-
                         <Form.Item
-                            label="合同签订日期
-
-                            "
-                            name="username"
-                            rules={[{ required: false, message: 'Please input your username!' }]}
-                        >
-                            <Space direction="vertical">
-                                <DatePicker onChange={onChange} />
-                            </Space>
-                        </Form.Item>
-
-                    </Col>
-                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
-
-                        <Form.Item
-                            label="客户交货日期"
+                            label="合同签订日期"
                             name="password"
                             rules={[{ required: false, message: 'Please input your password!' }]}
                         >
@@ -142,7 +138,183 @@ const taskapproval = (props: IProps) => {
                     </Col>
                     <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
                         <Form.Item
-                            label=" 计划交货日期"
+                            label="合同要求交货日期"
+                            name="password"
+                            rules={[{ required: false, message: 'Please input your password!' }]}
+                        >
+                            <Space direction="vertical">
+                                <DatePicker onChange={onChange} />
+                            </Space>
+                        </Form.Item>
+                    </Col>
+                    </Row>
+                    <Row>
+                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+                        <Form.Item
+                            label="计价方式"
+                            name="password"
+                            rules={[{ required: false, message: 'Please input your password!' }]}
+                        >
+                                 <Input />
+                        </Form.Item>
+                    </Col>
+                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+                        <Form.Item
+                            label="币种"
+                            name="password"
+                            rules={[{ required: false, message: 'Please input your password!' }]}
+                        >
+                                 <Input />
+                        </Form.Item>
+                    </Col>
+                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+                        <Form.Item
+                            label="订单数量"
+                            name="password"
+                            rules={[{ required: false, message: 'Please input your password!' }]}
+                        >
+                               <Input />
+                        </Form.Item>
+                    </Col>
+                    </Row>
+                    <Row>
+                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+                        <Form.Item
+                            label="含税金额"
+                            name="password"
+                            rules={[{ required: true, message: 'Please input your password!' }]}
+                        >
+                                <Input />
+                        </Form.Item>
+                    </Col>
+                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+                        <Form.Item
+                            label="含税单价"
+                            name="password"
+                            rules={[{ required: false, message: 'Please input your password!' }]}
+                        >
+                              <Input />
+                        </Form.Item>
+                    </Col>
+                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+                        <Form.Item
+                            label="税率"
+                            name="password"
+                            rules={[{ required: false, message: 'Please input your password!' }]}
+                        >
+                                <Input />
+                        </Form.Item>
+                    </Col>
+                    </Row>
+                    <Row>
+                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+                        <Form.Item
+                            label="不含税金额"
+                            name="password"
+                            rules={[{ required: false, message: 'Please input your password!' }]}
+                        >
+                             <Input />
+                        </Form.Item>
+                    </Col>
+                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+                        <Form.Item
+                            label="不含税单价"
+                            name="password"
+                            rules={[{ required: false, message: 'Please input your password!' }]}
+                        >
+                               <Input />
+                        </Form.Item>
+                    </Col>
+                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+                        <Form.Item
+                            label="汇率"
+                            name="password"
+                            rules={[{ required: false, message: 'Please input your password!' }]}
+                        >
+                              <Input />
+                        </Form.Item>
+                    </Col>
+                    </Row>
+                    <Row>
+                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+                        <Form.Item
+                            label="外汇金额"
+                            name="password"
+                            rules={[{ required: false, message: 'Please input your password!' }]}
+                        >
+                              <Input />
+                        </Form.Item>
+                    </Col>
+                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+                        <Form.Item
+                            label="外汇单价"
+                            name="password"
+                            rules={[{ required: false, message: 'Please input your password!' }]}
+                        >
+                               <Input />
+                        </Form.Item>
+                    </Col>
+                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+                        <Form.Item
+                            label="保函类型"
+                            name="password"
+                            rules={[{ required: false, message: 'Please input your password!' }]}
+                        >
+                               <Input />
+                        </Form.Item>
+                    </Col>
+                    </Row>
+                    <Row>
+                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+                        <Form.Item
+                            label="保函金额"
+                            name="password"
+                            rules={[{ required: false, message: 'Please input your password!' }]}
+                        >
+                              <Input />
+                        </Form.Item>
+                    </Col>
+                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+                        <Form.Item
+                            label="港口费用"
+                            name="password"
+                            rules={[{ required: false, message: 'Please input your password!' }]}
+                        >
+                               <Input />
+                        </Form.Item>
+                    </Col>
+                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+                        <Form.Item
+                            label="海运及保险费"
+                            name="password"
+                            rules={[{ required: false, message: 'Please input your password!' }]}
+                        >
+                           <Input />
+                        </Form.Item>
+                    </Col>
+                    </Row>
+                    <Row>
+                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+                        <Form.Item
+                            label="佣金"
+                            name="password"
+                            rules={[{ required: false, message: 'Please input your password!' }]}
+                        >
+                            <Input />
+                        </Form.Item>
+                    </Col>
+                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+                        <Form.Item
+                            label="出口信用保险"
+                            name="password"
+                            rules={[{ required: false, message: 'Please input your password!' }]}
+                        >
+                           <Input />
+                        </Form.Item>
+                    </Col>
+                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+                        <Form.Item
+                            label="订单交货日期"
                             name="password"
                             rules={[{ required: true, message: 'Please input your password!' }]}
                         >
@@ -151,90 +323,8 @@ const taskapproval = (props: IProps) => {
                             </Space>
                         </Form.Item>
                     </Col>
-                </Row>
-
-                <Row>
-                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
-                        <Form.Item
-
-                            label="计划备注"
-                            name="pass"
-                            rules={[{ required: false, message: 'Please input your password!' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                    </Col>
-                </Row>
-
-
-
-
-
-                <div className="noname2">
-                    <p><b>特殊要求</b> </p></div>
-                <Row>
-                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
-                        <Form.Item
-                            label="原材料标准"
-                            name="username"
-                            rules={[{ required: true, message: 'Please input your username!' }]}
-                        >
-                            <Select defaultValue="国网" style={{ width: 120 }} onChange={handleChange}>
-                                <Option value="国网">国网</Option>
-                                <Option value="lucy">Lucy</Option>
-                                <Option value="disabled" disabled>Disabled</Option>
-                                <Option value="Yiminghe">国网</Option>
-                            </Select>
-                        </Form.Item>
-
-                    </Col>
-                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
-
-                        <Form.Item
-                            label="原材料要求"
-                            name="password"
-                            rules={[{ required: false, message: 'Please input your password!' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
-                        <Form.Item
-                            label="焊接要求"
-                            name="password"
-                            rules={[{ required: false, message: 'Please input your password!' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
-
-                        <Form.Item
-                            label="包装要求"
-                            name="username"
-                            rules={[{ required: false, message: 'Please input your username!' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-
-                    </Col>
-                    <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
-
-                        <Form.Item
-                            label="镀锌要求"
-                            name="password"
-                            rules={[{ required: false, message: 'Please input your password!' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                    </Col>
-                </Row>
-
-
-
-                <Row>
+                    </Row>
+                    <Row>
                     <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
                         <Form.Item
 
@@ -251,7 +341,7 @@ const taskapproval = (props: IProps) => {
                     <p><b>产品信息</b> </p></div>
                 <div className="table">
                     <Table dataSource={dataSource} columns={columns as any} bordered scroll={{ y: 300, x: '100vw' }} />;
-                    </div>
+                     </div>
 
                 <Form.Item {...tailLayout}>
 

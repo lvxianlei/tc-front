@@ -36,7 +36,16 @@
                         {
                             "label": "任务单审批",
                             "path": "/approval/task"
+                        },
+                        {
+                            "label": "任务单产品变更审批",
+                            "path": "/approval/taskchange"
+                        },
+                        {
+                            "label": "产品信息变更",
+                            "path": "/approval/information"
                         }
+                        
                     ]
                 },{
                     "label": "系统管理",

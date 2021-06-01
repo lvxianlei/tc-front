@@ -35,10 +35,10 @@
     "web-vitals": "^1.1.1"
   },
   "scripts": {
-    "start": "NODE_ENV=development GENERATE_SOURCEMAP=false react-app-rewired start",
-    "build": "NODE_ENV=production GENERATE_SOURCEMAP=true react-app-rewired build",
-    "test": "NODE_ENV=development GENERATE_SOURCEMAP=false react-app-rewired test",
-    "eject": "NODE_ENV=development GENERATE_SOURCEMAP=false react-app-rewired eject"
+    "start": "cross-env NODE_ENV=development GENERATE_SOURCEMAP=false react-app-rewired start",
+    "build": "cross-env NODE_ENV=production GENERATE_SOURCEMAP=true react-app-rewired build",
+    "test": "cross-env NODE_ENV=development GENERATE_SOURCEMAP=false react-app-rewired test",
+    "eject": "cross-env NODE_ENV=development GENERATE_SOURCEMAP=false react-app-rewired eject"
   },
   "eslintConfig": {
     "extends": [
@@ -64,6 +64,7 @@
     "@types/camelcase-keys": "^5.1.1",
     "antd-dayjs-webpack-plugin": "^1.0.6",
     "babel-plugin-import": "^1.13.3",
+    "cross-env": "^7.0.3",
     "customize-cra": "^1.0.0",
     "dotenv-webpack": "^7.0.2",
     "jsonc-loader": "^0.1.1",
