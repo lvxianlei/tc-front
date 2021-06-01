@@ -8,36 +8,23 @@ import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
 import RequestUtil from '../utils/RequestUtil';
-import AbstractModalComponent, {
-    IAbstractModalComponentProps,
-    IAbstractModalComponentState,
+import AbstractFilteredSelectionModal from './AbstractFilteredSelecableModal';
+import {
+    IAbstractSelectableModalProps,
+    IAbstractSelectableModalState,
     IResponseData,
-} from './AbstractModalComponent';
+} from './AbstractSelectableModal';
 
 const { Option } = Select;
 
-export interface IContractSelectionComponentState extends IAbstractModalComponentState {
+export interface IContractSelectionComponentState extends IAbstractSelectableModalState {
     readonly tableDataSource: [];
-    readonly selectedRowKeys: React.Key[] | any,
-    readonly selectedRows: object[] | any,
 }
 
-
-// export interface ContractDataType extends DataType{
-//     readonly signCustomerId?: number;
-//     readonly projectName?: string;
-//     readonly contractNumber?: string;
-//     readonly signCustomerName?: string;
-//     readonly saleType?: number;
-//     readonly customerCompany?: string;
-//     readonly deliveryTime?: string;
-//     readonly chargeType?: number;
-//     readonly id?: number;
-// }
 /**
  * Contract Selection Component
  */
-export default class ContractSelectionComponent extends AbstractModalComponent<IAbstractModalComponentProps, IContractSelectionComponentState> {
+export default class ContractSelectionComponent extends AbstractFilteredSelectionModal<IAbstractSelectableModalProps, IContractSelectionComponentState> {
 
     /**
      * @override
@@ -53,7 +40,7 @@ export default class ContractSelectionComponent extends AbstractModalComponent<I
                 total: 0,
                 showSizeChanger: false
             },
-            isFilter: true
+            confirmTitle: "选择合同"
         };
     }
 
@@ -67,7 +54,7 @@ export default class ContractSelectionComponent extends AbstractModalComponent<I
         this.getTable({})
     }
     
-    protected async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
+    public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/contract/page', {
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
@@ -148,10 +135,6 @@ export default class ContractSelectionComponent extends AbstractModalComponent<I
         }];
     }
 
-    public onTableChange = (pagination: TablePaginationConfig): void => {
-        this.getTable(pagination);
-    }
- 
     protected getTableRowKey(): string | GetRowKey<object> {
         return 'id';
     }

@@ -2,53 +2,25 @@
  * @author zyc
  * @copyright © 2021
  */
-import { FormItemProps, TableColumnType, TablePaginationConfig } from 'antd';
+import { TableColumnType } from 'antd';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
 import RequestUtil from '../utils/RequestUtil';
-import AbstractModalComponent, {
-    IAbstractModalComponentProps,
-    IAbstractModalComponentState,
+import AbstractSelectableModal, {
+    IAbstractSelectableModalProps,
+    IAbstractSelectableModalState,
     IResponseData,
-} from './AbstractModalComponent';
+} from './AbstractSelectableModal';
 
-export interface IPaymentPlanSelectionComponentState extends IAbstractModalComponentState {
+export interface IPaymentPlanSelectionComponentState extends IAbstractSelectableModalState {
     readonly tableDataSource: [];
-    readonly selectedRowKeys: React.Key[] | any,
-    readonly selectedRows: object[] | any,
 }
 
-// export interface PaymentPlanDataType extends DataType{
-//     readonly returnedAmount: number;
-//     readonly returnedRate: number;
-//     readonly returnedTime: string;
-//     readonly period: number;
-//     readonly description: string;
-//     readonly id: number;
-// }
 /**
  * PaymentPlan Selection Component
  */
-export default class PaymentPlanSelectionComponent extends AbstractModalComponent<IAbstractModalComponentProps, IPaymentPlanSelectionComponentState> {
-
-    /**
-     * @implements
-     * @description Determines whether filter submit on
-     * @param values 
-     */
-    public onFilterSubmit(values: Record<string, any>): void {
-        throw new Error('Method not implemented.');
-    }
-
-    /**
-     * @override
-     * @description Determines whether table change on
-     * @param pagination 
-     */
-    public onTableChange(pagination: TablePaginationConfig): void {
-        throw new Error('Method not implemented.');
-    }
+export default class PaymentPlanSelectionComponent extends AbstractSelectableModal<IAbstractSelectableModalProps, IPaymentPlanSelectionComponentState> {
 
     /**
      * @override
@@ -58,7 +30,7 @@ export default class PaymentPlanSelectionComponent extends AbstractModalComponen
     protected getState(): IPaymentPlanSelectionComponentState {
         return {
             ...super.getState(),
-            isFilter: false
+            confirmTitle: "选择回款计划"
         };
     }
 
@@ -70,17 +42,13 @@ export default class PaymentPlanSelectionComponent extends AbstractModalComponen
     }
     
     protected async getTable() {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-market/contract/${this.props.Id}`);
+        const resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-market/contract/${this.props.id}`);
         this.setState({
             tableDataSource: resData.paymentPlanVos,
         });
     }
     public getTableDataSource(): object[]  {
         return this.state.tableDataSource;
-    }
-
-    public getFilterFormItemProps(): FormItemProps[]  {
-        return [];
     }
 
     public getTableColumns(): TableColumnType<object>[] {

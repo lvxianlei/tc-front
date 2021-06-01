@@ -8,18 +8,17 @@ import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
 import RequestUtil from '../utils/RequestUtil';
-import AbstractModalComponent, {
-    IAbstractModalComponentProps,
-    IAbstractModalComponentState,
+import AbstractFilteredSelectionModal from './AbstractFilteredSelecableModal';
+import {
+    IAbstractSelectableModalProps,
+    IAbstractSelectableModalState,
     IResponseData,
-} from './AbstractModalComponent';
+} from './AbstractSelectableModal';
 
 const { Option } = Select;
 
-export interface IClientSelectionComponentState extends IAbstractModalComponentState {
+export interface IClientSelectionComponentState extends IAbstractSelectableModalState {
     readonly tableDataSource: IClient[];
-    readonly selectedRowKeys: React.Key[] | any,
-    readonly selectedRows: object[] | any,
 }
 
 export interface IClient {
@@ -34,18 +33,10 @@ export interface IClient {
     readonly length: number;
 }
 
-
-// export interface ClientDataType extends DataType{
-//     readonly linkman?: string;
-//     readonly name?: string;
-//     readonly id?: number;
-//     readonly type?: number;
-//     readonly phone?: string;
-// }
 /**
  * Client Selection Component
  */
-export default class ClientSelectionComponent extends AbstractModalComponent<IAbstractModalComponentProps, IClientSelectionComponentState> {
+export default class ClientSelectionComponent extends AbstractFilteredSelectionModal<IAbstractSelectableModalProps, IClientSelectionComponentState> {
 
     /**
      * @override
@@ -61,21 +52,15 @@ export default class ClientSelectionComponent extends AbstractModalComponent<IAb
                 total: 0,
                 showSizeChanger: false
             },
-            isFilter: true
+            confirmTitle: "选择客户"
         };
-    }
-
-    public showModal =  (): void => {
-        this.setState({
-            isModalVisible: true,
-        })
     }
 
     public componentDidMount(): void {
         this.getTable({})
     }
     
-    protected async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
+    public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-customer/customer/page', {
             ...filterValues,
             current: pagination.current || this.state.tablePagination.current,
@@ -137,18 +122,6 @@ export default class ClientSelectionComponent extends AbstractModalComponent<IAb
             title: '联系电话',
             dataIndex: 'phone'
         }];
-    }
-
-    public onTableChange = (pagination: TablePaginationConfig): void => {
-        this.getTable(pagination);
-    }
-      
-    public render(): React.ReactNode {
-        return (
-            <>
-                { super.render() }
-            </>  
-        );
     }
 
     protected getTableRowKey(): string | GetRowKey<object> {

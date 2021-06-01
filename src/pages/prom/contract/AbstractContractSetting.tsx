@@ -3,7 +3,7 @@
  * @copyright © 2021 
  */
 import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Radio, Row, Select, Space, Upload, Checkbox, Cascader, TablePaginationConfig } from 'antd';
+import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Radio, Row, Select, Space, Upload, Checkbox, Cascader, TablePaginationConfig, RadioChangeEvent } from 'antd';
 import { FormListFieldData, FormListOperation } from 'antd/lib/form/FormList';
 import moment from 'moment';
 import React from 'react';
@@ -19,17 +19,24 @@ import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 import styles from './AbstractContractSetting.module.less';
 import ClientSelectionComponent from '../../../components/ClientSelectionModal';
 import RequestUtil from '../../../utils/RequestUtil';
-import { DataType } from '../../../components/AbstractModalComponent';
+import { DataType } from '../../../components/AbstractSelectableModal';
 import { CascaderOptionType } from 'antd/lib/cascader';
 import { SelectValue } from 'antd/lib/select';
+import { RuleObject } from 'antd/lib/form';
+import { StoreValue } from 'antd/lib/form/interface';
+import { render } from 'nprogress';
+import Modal from 'antd/lib/modal/Modal';
+import { IAttachVo } from './ContractAttachment';
 export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
-    tablePagination: TablePaginationConfig;
-    readonly contract?: IContract;
-    checkList: any;
-    tableDataSource: [];
-    regionInfoData: [] ;
-    childData: [] | undefined;
-    col: [];
+    readonly tablePagination: TablePaginationConfig;
+    readonly contract: IContract;
+    readonly checkList: [];
+    readonly tableDataSource: [];
+    readonly regionInfoData: [] ;
+    readonly childData: [] | undefined;
+    readonly col: [];
+    readonly url: string;
+    readonly isVisible: boolean;
 }
 
 export interface ITabItem {
@@ -53,14 +60,15 @@ export interface IContract {
     readonly reviewTime?: string;
     readonly chargeType?: string;
     readonly salesman?: string;
-    readonly regionInfoDTO?: IregionInfoDTO;
+    readonly region?: [];
+    readonly countryCode?: number;
     readonly contractAmount?: number;
     readonly currencyType?: number;
     readonly description?: string;
     readonly productInfoDto?: IproductInfoDto;
     readonly planType?: number;
     paymentPlanDtos?: IPaymentPlanDto[];
-    readonly attachInfoDtos?: IattachDTO[];
+    readonly attachInfoDtos: IattachDTO[];
 }
 
 export interface IcustomerInfoDto {
@@ -88,23 +96,21 @@ export interface IattachDTO {
     readonly username?: string;
     readonly fileSize?: string;
     readonly description?: string;
-}
-
-export interface IregionInfoDTO {
-    readonly countryCode?: string;
-    readonly provinceCode?: string;
-    readonly cityCode?: string;
-    readonly districtCode?: string;
+    readonly keyType?: string;
+    readonly keyId?: number;
+    readonly id?: number;
+    readonly fileSuffix?: string;
+    readonly filePath: string;
+    readonly fileUploadTime?: string;
 }
 
 export interface IResponseData {
-    total: number | undefined;
-    size: number | undefined;
-    current: number | undefined;
+    readonly total: number | undefined;
+    readonly size: number | undefined;
+    readonly current: number | undefined;
     readonly parentCode: string;
-    records: [];
+    readonly records: [];
 }
-
 
 /**
  * Abstract Contract Setting
@@ -112,12 +118,15 @@ export interface IResponseData {
 export default abstract class AbstractContractSetting<P extends RouteComponentProps, S extends IAbstractContractSettingState> extends AbstractFillableComponent<P, S> {
 
     public state: S = {
-        contract: undefined,
+        contract: {},
+        checkList: [],
+        url: '',
+        isVisible: false
     } as S;
 
     public async componentDidMount() {
         super.componentDidMount();
-        this.getregionInfo({}); 
+        this.getRegionInfo({}); 
     }
 
     /**
@@ -163,7 +172,6 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
      * @description 附件表格选择
      * @returns 
      */
-
     public checkChange = (record: Record<string, any>): void => {
         let checked: any = this.state.checkList;
         if(record.target.checked) {
@@ -172,11 +180,11 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             checked = checked.filter((item: any) => item !== record.target.value);
         }
         this.setState({
-            checkList: checked
+            checkList: checked,
         })
     }
 
-    public  getregionInfo = async (record: Record<string, any>) => {
+    public  getRegionInfo = async (record: Record<string, any>) => {
         const resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-system/region`);
         this.setState({
             regionInfoData:  resData.records
@@ -197,7 +205,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
      * @description 弹窗
      * @returns 
      */
-    public handleOk = (selectedRows: DataType[]):void => {
+    public onSelect = (selectedRows: DataType[]):void => {
         const contract: IContract | undefined = this.state.contract;
         if(selectedRows.length > 0 ) {
             this.setState({
@@ -210,7 +218,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         }
     }
 
-    public handleCustomerCompanyOk = (selectedRows: DataType[]):void => {
+    public onCustomerCompanySelect = (selectedRows: DataType[]):void => {
         const contract: IContract | undefined = this.state.contract;
         if(selectedRows.length > 0 ) {
             const select = {
@@ -232,6 +240,40 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     }
 
     /**
+     * @description 验证业主联系电话格式
+     */
+    public checkcustomerPhone = (value: StoreValue): Promise<void | any> =>{
+        return new Promise(async (resolve, reject) => {  // 返回一个promise
+            const regPhone: RegExp = /^1[3|4|5|8][0-9]\d{8}$/;
+            const regTel: RegExp = /^\d{3}-\d{8}|\d{4}-\d{7}$/;
+            if(regPhone.test(value) || regTel.test(value) ) {
+                resolve(true)
+            } else 
+                resolve(false)
+        }).catch(error => {
+            Promise.reject(error)
+        })
+    }
+
+    /**
+     * @description 验证合同编号是否重复
+     */
+    public checkContractNumber = (value: StoreValue): Promise<void | any> =>{
+        return new Promise(async (resolve, reject) => {  // 返回一个promise
+            const resData = await RequestUtil.get('/tower-market/contract/isContractNumberRepeated', {
+                contractId: this.state.contract?.id,
+                contractNumber: value
+            });
+            if (resData) {
+                resolve(resData)
+            } else 
+                resolve(false)
+        }).catch(error => {
+            Promise.reject(error)
+        })
+    }
+
+    /**
      * @implements
      * @description Gets form item groups
      * @returns form item groups 
@@ -250,9 +292,21 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     initialValue: contract?.contractNumber,
                     rules: [{
                         required: true,
-                        message: '请输入合同编号'
+                        validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                            if(value && value != '') {
+                                this.checkContractNumber(value).then(res => {
+                                    if (res) {
+                                        callback()
+                                    } else {
+                                        callback('合同编号重复')
+                                    }
+                                })
+                            } else {
+                                callback('请输入合同编号')
+                            }
+                        }
                     }],
-                    children: <Input/>
+                    children: <Input value={ contract?.contractNumber }/>
                 }, {
                     label: '内部合同编号',
                     name: 'internalNumber',
@@ -266,12 +320,12 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                         required: true,
                         message: '请输入工程名称'
                     }],
-                    children: <Input/>
+                    children: <Input maxLength={ 100 }/>
                 }, {
                     label: '工程简称',
                     name: 'simpleProjectName',
                     initialValue: contract?.simpleProjectName,
-                    children: <Input/>
+                    children: <Input maxLength={ 50 }/>
                 }, {
                     label: '中标类型',
                     name: 'winBidType',
@@ -303,19 +357,30 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     children: 
                         <>
                             <Input value={ contract?.customerInfoDto?.customerCompany } suffix={ 
-                                <ClientSelectionComponent handleOk={ this.handleCustomerCompanyOk } />
+                                <ClientSelectionComponent onSelect={ this.onCustomerCompanySelect } />
                             }/>
                         </>
                 }, {
                     label: '业主联系人',
                     name: 'customerLinkman',
                     initialValue: contract?.customerInfoDto?.customerLinkman,
-                    children: <Input/>
+                    children: <Input maxLength={ 30 }/>
                 }, {
                     label: '业主联系电话',
                     name: 'customerPhone',
                     initialValue: contract?.customerInfoDto?.customerPhone,
-                    children: <Input />
+                    children: <Input maxLength={ 30 }/>,
+                    rules: [{
+                        validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                            this.checkcustomerPhone(value).then(res => {
+                                if (res) {
+                                    callback()
+                                } else {
+                                    callback('业主联系电话格式有误')
+                                }
+                            })
+                        }
+                    }],
                 }, {
                     label: '合同签订单位',
                     name: 'signCustomerName',
@@ -327,7 +392,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     children:
                         <>
                             <Input value={ contract?.signCustomerName } suffix={ 
-                                <ClientSelectionComponent handleOk={ this.handleOk } />
+                                <ClientSelectionComponent onSelect={ this.onSelect } />
                             }/>
                         </>
                 }, {
@@ -338,7 +403,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                         required: true,
                         message: '请选择合同签订日期'
                     }],
-                    children:  <DatePicker />
+                    children:  <DatePicker format="YYYY-MM-DD"/>
                 }, {
                     label: '签订人',
                     name: 'signUserName',
@@ -347,7 +412,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                         required: true,
                         message: '请输入签订人'
                     }],
-                    children:  <Input />
+                    children:  <Input maxLength={ 20 }/>
                 }, {
                     label: '要求交货日期',
                     name: 'deliveryTime',
@@ -356,7 +421,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                         required: true,
                         message: '请选择要求交货日期'
                     }],
-                    children:  <DatePicker />
+                    children:  <DatePicker format="YYYY-MM-DD"/>
                 }, {
                     label: '评审时间',
                     name: 'reviewTime',
@@ -365,10 +430,16 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 }, {
                     label: '所属国家',
                     name: 'countryCode',
-                    initialValue: contract?.regionInfoDTO?.countryCode || 1,
+                    initialValue: contract?.countryCode,
                     children: (
-                        <Select onChange={ (value: SelectValue) => {
+                        <Select onChange={ (value: number) => {
                             this.getForm()?.setFieldsValue({ countryCode: value })
+                            this.setState({
+                                contract: {
+                                    ...(contract || {}),
+                                    countryCode: value
+                                }
+                            })
                         } }>
                             <Select.Option value={ 1 }>中国</Select.Option>
                             <Select.Option value={ 2 }>海外</Select.Option>
@@ -382,7 +453,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                         required: true,
                         message: '请输入销售员'
                     }],
-                    children:  <Input />
+                    children:  <Input maxLength={ 20 }/>
                 }, {
                     label: '计价方式',
                     name: 'chargeType',
@@ -396,10 +467,9 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 }, {
                     label: '所属区域',
                     name: 'regionInfoDTO',
-                    initialValue: contract?.regionInfoDTO,
+                    initialValue: contract?.region,
                     children: (
                         <Cascader
-                            defaultValue={['北京市', '北京市', '丰台区']}
                             fieldNames={{ label: 'name', value: 'code' }}
                             options={this.state.regionInfoData}
                             onChange={this.onRegionInfoChange}
@@ -424,11 +494,10 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     )
                 }, {
                     label: '备注',
-                        name: 'description',
-                        initialValue: contract?.description,
-                        children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息"/>
-                    }]
-                }, {
+                    name: 'description',
+                    initialValue: contract?.description,
+                    children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息"/>
+                }]}, {
                     title: '产品信息',
                     itemCol: {
                         span: 12
@@ -462,6 +531,15 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         }]];
     }
 
+    public render() {
+        return <>
+                {super.render()}
+                <Modal visible={ this.state.isVisible }>
+                    <iframe src={ this.state.url }frameBorder="0"></iframe>
+                </Modal>
+            </>
+    }
+
     /**
      * @description Renders extra sections
      * @returns extra sections 
@@ -474,7 +552,14 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 return (
                     <>
                         <Form.Item name="planType" initialValue={ contract?.planType || 1 }>
-                            <Radio.Group>
+                            <Radio.Group onChange={ (e: RadioChangeEvent) => {
+                                this.setState({
+                                    contract: {
+                                        ...(contract || {}),
+                                        planType: e.target.value
+                                    }
+                                })
+                            } }>
                                 <Radio value={ 1 }>按占比</Radio>
                                 <Radio value={ 2 }>按金额</Radio>
                             </Radio.Group>
@@ -498,21 +583,32 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                     <Row key={ `${ field.name }_${ index }` } className={ styles.FormItem }>
                                                         <Col span={ 2 }>{ index + 1 }</Col>
                                                         <Col span={ 5 }>
-                                                            
-                                                            <Form.Item { ...field } name={[field.name, 'returnedTime']} fieldKey={[field.fieldKey, 'returnedTime']}>
+                                                            <Form.Item { ...field } name={[field.name, 'returnedTime']} fieldKey={[field.fieldKey, 'returnedTime']} rules={[{
+                                                                required: true,
+                                                                message: '请选择计划回款日期'
+                                                            }]}>
                                                                 <DatePicker format="YYYY-MM-DD"/>
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={ 5 }>
-                                                            <Form.Item { ...field } name={[field.name, 'returnedRate']} fieldKey={[field.fieldKey, 'returnedRate']}>
-                                                                <Input/>
+                                                            <Form.Item { ...field } name={[field.name, 'returnedRate']} fieldKey={[field.fieldKey, 'returnedRate']} rules={[{
+                                                                required: this.state.contract?.planType === 1 || this.state.contract?.planType === undefined,
+                                                                message: '请输入计划回款占比'
+                                                            }]}>
+                                                                <Input disabled={ this.state.contract?.planType === 2 }/>
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={ 5 }>
-                                                            <Form.Item { ...field } name={[field.name, 'returnedAmount']} fieldKey={[field.fieldKey, 'returnedAmount']}>
-                                                                <InputNumber stringMode={ false } precision={ 2 }
+                                                            <Form.Item { ...field } name={[field.name, 'returnedAmount']} fieldKey={[field.fieldKey, 'returnedAmount']} rules={[{
+                                                                required: this.state.contract?.planType === 2,
+                                                                message: '请输入计划回款金额'
+                                                            }]}>
+                                                                <InputNumber 
+                                                                    stringMode={ false } 
+                                                                    precision={ 2 }
                                                                     formatter={ value => `￥ ${ value }`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
-                                                                    parser={ value => value?.replace(/\$\s?|(,*)/g, '') || '' }/>
+                                                                    parser={ value => value?.replace(/\$\s?|(,*)/g, '') || '' } 
+                                                                    disabled={ this.state.contract?.planType === 1 || this.state.contract?.planType === undefined}/>
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={ 5 }>
@@ -564,36 +660,59 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                         // console.log(info.file, info.fileList);
                                                         }
                                                         if (info.file.status === 'done') {
-                                                        console.log(info.file, info.fileList);
+                                                            console.log(info.file, info.fileList); 
+                                                            const index: number = this.state.contract.attachInfoDtos.length; 
+                                                            const contract: IContract = this.state.contract;
+                                                            const attachInfoDtos: IattachDTO[] = contract.attachInfoDtos;
+                                                            operation.add({
+                                                                name: info.file.response.name,
+                                                                username: info.file.response.username,
+                                                                fileSize: info.file.size,
+                                                                description: '',
+                                                                filePath: info.file.response.filePath,
+                                                                id: info.file.response.attachId
+                                                            })
+                                                            attachInfoDtos[index] = {
+                                                                name: info.file.response.name,
+                                                                username: info.file.response.username,
+                                                                fileSize: info.file.response.size,
+                                                                description: '',
+                                                                filePath: info.file.response.filePath,
+                                                                id: info.file.response.attachId
+                                                            }
+                                                            this.setState({
+                                                                contract: {
+                                                                    ...(contract || {}),
+                                                                    attachInfoDtos: attachInfoDtos
+                                                                }
+                                                            })
+                                                            console.log(contract)
                                                         } else if (info.file.status === 'error') {
-                                                        console.log(info.file, info.fileList);
-                                                        operation.add({
-                                                            name: info.file.name,
-                                                            username: 'admin',
-                                                            fileSize: info.file.size,
-                                                            description: ''
-                                                        })
+                                                            console.log(info.file, info.fileList);
                                                         }
                                                 } } showUploadList= {false}>
                                                     <Button type="primary">添加</Button>
                                                 </Upload>
                                                 <Button type="primary" onClick={ ()=> {
-                                                    let attachInfoDtos: any[] =  this.getForm()?.getFieldValue("attachInfoDtos");
                                                     let checked: any[] = this.state.checkList;
-                                                    let batchId: any[] = [];
-                                                    checked.map((item: any) => {
-                                                        batchId.push(attachInfoDtos[item].id)
+                                                    let attachInfoDtos: IattachDTO[] =  this.state.contract?.attachInfoDtos;
+                                                    attachInfoDtos.map<IattachDTO>((items: IattachDTO, index: number): IattachDTO | any=> {
+                                                        if(checked.includes(index)){
+                                                            window.open(items.filePath)
+                                                        }
                                                     })
-                                                    console.log(batchId)
                                                 } }>下载</Button>
-                                                <Button type="primary" onClick={ ()=> {
+                                                <Button type="primary" onClick={ async ()=> {
                                                     let attachInfoDtos: any[] =  this.getForm()?.getFieldValue("attachInfoDtos");
                                                     let checked: any[] = this.state.checkList;
                                                     let batchId: any[] = [];
                                                     checked.map((item: any) => {
                                                         batchId.push(attachInfoDtos[item].id)
                                                     })
-                                                    operation.remove(this.state.checkList)
+                                                    const resData: IResponseData = await RequestUtil.post(`/tower-system/attach/${ checked.join(',') }`)
+                                                    if(resData) {
+                                                        operation.remove(this.state.checkList)
+                                                    }
                                                 } }>删除</Button>
                                             </Space>
                                             {
@@ -629,14 +748,27 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                         </Col>
                                                         <Col span={ 3 }>
                                                             <Space direction="horizontal" size="small">
-                                                                <Link to={ `` }>预览</Link>
-                                                                <Link to={ `` }>下载</Link>
+                                                                <Button type="link" onClick={ async () => {
+                                                                    let attachInfoDtos: IattachDTO =  this.state.contract?.attachInfoDtos[index];
+                                                                    this.setState({
+                                                                        isVisible: true,
+                                                                        url: attachInfoDtos.filePath
+                                                                    })
+                                                                } }>预览</Button>
+                                                                <Button type="link" onClick={
+                                                                    () => {
+                                                                        let attachInfoDtos: IattachDTO =  this.state.contract?.attachInfoDtos[index];
+                                                                        window.open(attachInfoDtos.filePath);
+                                                                    }
+                                                                }>下载</Button>
                                                                 <ConfirmableButton confirmTitle="要删除该附件吗？"
                                                                     type="link" placement="topRight"
-                                                                    onConfirm={ () => { 
+                                                                    onConfirm={ async () => { 
                                                                         let attachInfoDtos =  this.getForm()?.getFieldValue("attachInfoDtos");
-                                                                        // operation.remove(index); 
-                                                                        console.log(attachInfoDtos[index].id)
+                                                                        const resData: IResponseData = await RequestUtil.post(`/tower-system/attach/${ attachInfoDtos[index].id }`)
+                                                                        if(resData) {
+                                                                            operation.remove(index);
+                                                                        }
                                                                     }}>
                                                                     <DeleteOutlined />
                                                                 </ConfirmableButton>

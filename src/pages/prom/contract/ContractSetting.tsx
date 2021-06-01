@@ -38,8 +38,29 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
                 index: index + 1
             };
         });
+        console.log(contract)
         this.getForm()?.setFieldsValue({
-            paymentPlanDtos: contract?.paymentPlanDtos,
+            contractNumber: contract.contractNumber,
+            id: contract.id,
+            internalNumber: contract.internalNumber,
+            projectName: contract.projectName,
+            simpleProjectName: contract.simpleProjectName,
+            winBidType: contract.winBidType,
+            saleType: contract.saleType,
+            signCustomerName: contract.signCustomerName,
+            signContractTime: moment(contract.signContractTime),
+            signUserName: contract.signUserName,
+            deliveryTime: moment(contract.deliveryTime),
+            reviewTime: moment(contract.reviewTime),
+            chargeType: contract.chargeType,
+            salesman: contract.saleType,
+            region: [],
+            countryCode: contract.countryCode,
+            contractAmount: contract.contractAmount,
+            currencyType: contract.currencyType,
+            description: contract.description,
+            planType: contract.planType,
+            paymentPlanDtos: contract.paymentPlanDtos,
             attachInfoDtos: contract?.attachInfoDtos
         });
     }
@@ -63,6 +84,7 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
      * @returns submit 
      */
     public async onSubmit(values: Record<string, any>): Promise<void> {
+        values.customerInfoDto = this.state.contract?.customerInfoDto;
         return await RequestUtil.put('/tower-customer/customer', {
             ...values,
             id: Number(this.props.match.params.id)
