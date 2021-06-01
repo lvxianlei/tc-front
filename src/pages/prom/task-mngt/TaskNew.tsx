@@ -24,7 +24,7 @@
        public async componentDidMount() {
         super.componentDidMount();
         this.setState({
-            taskTable: [],
+            productDataSource: [],
         });
     }
  

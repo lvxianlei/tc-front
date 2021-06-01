@@ -40,7 +40,7 @@
  export interface IAbstractTaskSettingState extends IAbstractFillableComponentState {
      popUp: boolean | undefined;
      checkStep: StepItem;
-     taskTable: IProductInfoVO[];
+     productDataSource: IProductInfoVO[];
      selectedKeys: object;
      readonly task?: ITask;
     
@@ -127,7 +127,7 @@ enum StepItem {
  
      constructor(props: P) {
          super(props)
-         this.click = this.click.bind(this)
+         this.handleAdd = this.handleAdd.bind(this)
      }
  
      /**
@@ -596,9 +596,10 @@ enum StepItem {
             checkStep:checkStep-1
         })
     }
-    public click= ()=>{
-        const { taskTable } = this.state;
-        const task:IProductInfoVO[] = taskTable || [];
+    //新增
+    public handleAdd = () => {
+        const { productDataSource } = this.state;
+        const task:IProductInfoVO[] = productDataSource || [];
         task.push({
             description: '',
             lineName: '',
@@ -608,7 +609,7 @@ enum StepItem {
         })
         console.log(task)
         this.setState({
-            taskTable:[...task]
+            productDataSource:[...task]
         })
     }
 
@@ -618,7 +619,7 @@ enum StepItem {
      */
   
     public renderExtraSections():IRenderedSection[]{
-        const { checkStep, taskTable } = this.state;
+        const { checkStep, productDataSource } = this.state;
         return [{
             title:'',
             render:():React.ReactNode=>{
@@ -629,12 +630,12 @@ enum StepItem {
                             <div className={styles.column_to_row}>
                                 <div className={styles.title}>产品信息</div>
                                 <Button type='primary' onClick={
-                                     this.click
+                                     this.handleAdd
                                 }>新增</Button>
                             </div>
                             <Table 
                                 columns={this.columns()} 
-                                dataSource={taskTable} 
+                                dataSource={productDataSource} 
                                 scroll={{ x: 1300 }} 
                                 rowKey={(record:IProductInfoVO)=>record.productTypeName}
                                 rowSelection={{
@@ -656,7 +657,7 @@ enum StepItem {
     }
 
     //table-column
-    public columns= () => {
+    public columns = () => {
         return [
             {
                 title: '状态',
@@ -739,13 +740,13 @@ enum StepItem {
     protected getTitle(): string {
         return this.steps[this.state.checkStep].title;
     }
-    public render(){
+    public render() {
         return (
             <> 
                 <Steps 
-                    current = { this.state.checkStep } 
-                    type = "navigation"
-                    size = "small"
+                    current={ this.state.checkStep } 
+                    type="navigation"
+                    size="small"
                 >
                     {this.steps.map(item => (
                         <Step key={item.title} title={item.title} />

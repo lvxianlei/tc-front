@@ -28,7 +28,7 @@
         const task: ITask = await RequestUtil.get<ITask>(`/tower-market/taskNotice/${ this.props.match.params.id }`);
         this.setState({
             task,
-            taskTable: task?.productInfoVOList,
+            productDataSource: task?.productInfoVOList,
         });
     }
     /**
