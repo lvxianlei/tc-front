@@ -8,7 +8,7 @@ import { RouteComponentProps } from 'react-router';
 import AbstractFillableComponent, {
     IAbstractFillableComponentState,
     IFormItemGroup,
-} from '../../components/AbstractFillableComponent';
+} from '../../../components/AbstractFillableComponent';
 
 export interface IAbstractRoleSettingState extends IAbstractFillableComponentState {}
 
@@ -23,7 +23,7 @@ export default abstract class AbstractRoleSetting<P extends RouteComponentProps,
      * @returns return path 
      */
      protected getReturnPath(): string {
-        return '/sys/roles';
+        return '/auth/roles';
     }
     
     /**

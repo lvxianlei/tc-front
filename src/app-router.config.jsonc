@@ -50,17 +50,17 @@
     }, { // 角色管理
         "name": "角色管理",
         "path": "/auth/roles",
-        "module": "./pages/security/RoleMngt",
+        "module": "./pages/auth/role/RoleMngt",
         "exact": true
     }, { // 添加角色
         "name": "添加角色",
         "path": "/auth/roles/new",
-        "module": "./pages/security/RoleNew",
+        "module": "./pages/auth/role/RoleNew",
         "exact": true
     }, { // 编辑角色
         "name": "编辑角色",
         "path": "/auth/roles/setting/:id",
-        "module": "./pages/security/RoleSetting",
+        "module": "./pages/auth/role/RoleSetting",
         "exact": true
     }]
 }
