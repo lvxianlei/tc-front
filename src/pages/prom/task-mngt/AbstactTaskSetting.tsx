@@ -111,7 +111,12 @@
 enum StepItem {
     NEW_TASK = 0,   //新增任务单
     COMPLETE_SPECIAL_OPTIONS = 1,   //完善特殊信息
-    COMPLETE_PRODUCT_INFO = 2,   //晚上产品信息
+    COMPLETE_PRODUCT_INFO = 2,   //完善产品信息
+}
+enum StepTitleItem {
+    NEW_TASK = '新增任务单',   //新增任务单
+    COMPLETE_SPECIAL_OPTIONS = '完善特殊信息',   //完善特殊信息
+    COMPLETE_PRODUCT_INFO = '完善产品信息',   //完善产品信息
 }
  /**
   * Abstract Task Setting
@@ -541,17 +546,11 @@ enum StepItem {
           
      }
     //步骤
-    public steps: Array<IStep> = [
-        {
-            title: '创建任务单',
-        },
-        {
-            title: '完善特殊要求',
-        },
-        {
-            title: '完善产品信息',
-        },
-    ];
+    public steps: StepTitleItem[] = [
+        StepTitleItem.NEW_TASK,
+        StepTitleItem.COMPLETE_PRODUCT_INFO,
+        StepTitleItem.COMPLETE_SPECIAL_OPTIONS
+    ]
 
     //底部按钮
     protected renderSaveAndContinue(): React.ReactNode {
@@ -738,7 +737,7 @@ enum StepItem {
 
     //标题
     protected getTitle(): string {
-        return this.steps[this.state.checkStep].title;
+        return this.steps[this.state.checkStep];
     }
     public render() {
         return (
@@ -749,7 +748,7 @@ enum StepItem {
                     size="small"
                 >
                     {this.steps.map(item => (
-                        <Step key={item.title} title={item.title} />
+                        <Step key={item} title={item} />
                     ))}
                 </Steps>
                 { super.render() }
