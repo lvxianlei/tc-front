@@ -6,6 +6,7 @@ import React from 'react';
 import { withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 
+import RequestUtil from '../../../utils/RequestUtil';
 import AbstractRoleSetting, { IAbstractRoleSettingState } from './AbstractRoleSetting';
 
 export interface IRoleNewProps {}
@@ -23,8 +24,8 @@ class RoleNew extends AbstractRoleSetting<IRoleNewRouteProps, IRoleNewState> {
      * @param values 
      * @returns submit 
      */
-    public onSubmit(values: Record<string, any>): Promise<void> {
-        throw new Error('Method not implemented.');
+    public async onSubmit(values: Record<string, any>): Promise<void> {
+        await RequestUtil.post('/sinzetech-system/role', values);
     }
 }
 

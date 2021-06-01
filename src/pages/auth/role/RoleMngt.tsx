@@ -13,6 +13,7 @@ import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../../com
 import ConfirmableButton from '../../../components/ConfirmableButton';
 import { ITabItem } from '../../../components/ITabableComponent';
 import RequestUtil from '../../../utils/RequestUtil';
+import { IRole } from './IRole';
 
 interface IRoleMngtProps {}
 interface IRoleRouteProps extends RouteComponentProps<IRoleMngtProps>, WithTranslation {}
@@ -25,20 +26,6 @@ interface IRoleMngtState extends IAbstractMngtComponentState, IFIlterValue {
 interface IFIlterValue {
     readonly name?: string;
     readonly code?: string;
-}
-
-export interface IRole {
-    readonly id: number;
-    readonly name: string;
-    readonly clientId: string;
-    readonly code: string;
-    readonly description: string;
-    readonly hasChildren: boolean;
-    readonly isDeleted: number;
-    readonly parentId: number;
-    readonly parentName: string;
-    readonly sort: number;
-    readonly tenantId: string;
 }
 
 /**
@@ -64,7 +51,7 @@ class RoleMngt extends AbstractMngtComponent<IRoleRouteProps, IRoleMngtState> {
      * @param [filterValues] 
      */
     protected async fetchRoles(filterValues: IFIlterValue = {}) {
-        const roles: IRole[] = await RequestUtil.get('/sinzetech-system/role', filterValues);
+        const roles: IRole[] = await RequestUtil.get<IRole[]>('/sinzetech-system/role', filterValues);
         this.setState({
             roles: roles
         });
