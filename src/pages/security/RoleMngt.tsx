@@ -2,7 +2,8 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Button, FormItemProps, Input, Space, TableColumnType, TablePaginationConfig, TableProps } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
+import { FormItemProps, Input, Space, TableColumnType, TablePaginationConfig, TableProps } from 'antd';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -212,7 +213,9 @@ class RoleMngt extends AbstractMngtComponent<IRoleRouteProps, IRoleMngtState> {
         return (
             <Space direction="horizontal" size="middle">
                 { super.renderExtraOperationContent(item) }
-                <ConfirmableButton confirmTitle="确定删除这些角色吗？" disabled={ !this.state.selectedRoles?.length } onConfirm={ this.onBatchDelete() }>
+                <ConfirmableButton confirmTitle="确定删除这些角色吗？" danger={ true }
+                    icon={ <DeleteOutlined /> }
+                    disabled={ !this.state.selectedRoles?.length } onConfirm={ this.onBatchDelete() }>
                     删除
                 </ConfirmableButton>
             </Space>
