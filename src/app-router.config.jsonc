@@ -37,6 +37,7 @@
         "name": "新增回款计划",
         "path": "/prom/contract/paymentRecord",
         "module": "./pages/prom/contract/PaymentRecordNew",
+        "exact": true
     }, { // 合同详情
         "name": "合同详情",
         "path": "/prom/contract/detail/:id",
@@ -56,6 +57,21 @@
         "name": "字典管理",
         "path": "/sys/dxnry",
         "module": "./pages/system-mngt/DictMngt",
+        "exact": true
+    }, { // 角色管理
+        "name": "角色管理",
+        "path": "/auth/roles",
+        "module": "./pages/auth/role/RoleMngt",
+        "exact": true
+    }, { // 添加角色
+        "name": "添加角色",
+        "path": "/auth/roles/new",
+        "module": "./pages/auth/role/RoleNew",
+        "exact": true
+    }, { // 编辑角色
+        "name": "编辑角色",
+        "path": "/auth/roles/setting/:id",
+        "module": "./pages/auth/role/RoleSetting",
         "exact": true
     }]
 }

@@ -65,8 +65,8 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
     protected async fetchTableData(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-customer/customer/page', {
             ...filterValues,
-            current: pagination.current || this.state.tablePagination.current,
-            size: pagination.pageSize ||this.state.tablePagination.pageSize,
+            current: pagination.current || this.state.tablePagination?.current,
+            size: pagination.pageSize ||this.state.tablePagination?.pageSize,
             type: this.state.selectedTabKey
         });
         this.setState({

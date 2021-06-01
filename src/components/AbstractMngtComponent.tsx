@@ -3,7 +3,7 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 import { Button, Card, Form, FormItemProps, Space, Table, Tabs } from 'antd';
-import { ColumnType, TablePaginationConfig } from 'antd/lib/table';
+import { ColumnType, TablePaginationConfig, TableProps } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -15,7 +15,7 @@ import ITabableComponent, { ITabItem } from './ITabableComponent';
 
 export interface IAbstractMngtComponentState {
     selectedTabKey: React.Key;
-    tablePagination: TablePaginationConfig;
+    tablePagination: TablePaginationConfig | undefined;
 }
 
 /**
@@ -112,6 +112,22 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
     abstract getTableColumns(item: ITabItem): ColumnType<object>[];
 
     /**
+     * @description Gets table props
+     * @param item 
+     * @returns table props 
+     */
+    protected getTableProps(item: ITabItem): TableProps<object> {
+        return {
+            rowKey: this.getTableRowKey(),
+            bordered: true,
+            pagination: this.state.tablePagination || false,
+            onChange: this.onTableChange,
+            dataSource: this.getTableDataSource(item),
+            columns: this.getTableColumns(item)
+        };
+    }
+
+    /**
      * @description Handle tab change of abstract mngt component
      * @param activeKey 
      */
@@ -148,9 +164,15 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
     protected renderTabContent(item: ITabItem): React.ReactNode {
         return (
             <Space direction="vertical" size="small" className={ layoutStyles.width100 }>
-                <Card className={ styles.filterCard }>
-                    { this.renderFilterContent(item) }
-                </Card>
+                {
+                    this.getFilterFormItemProps(item).length
+                    ?
+                    <Card className={ styles.filterCard }>
+                        { this.renderFilterContent(item) }
+                    </Card>
+                    :
+                    null
+                }
                 <Card>
                     <Space className={ layoutStyles.width100 } direction="vertical" size="large">
                         { this.renderExtraOperationContent(item) }
@@ -199,9 +221,7 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      */
     protected renderTableContent(item: ITabItem): React.ReactNode {
         return (
-            <Table rowKey={ this.getTableRowKey() } bordered={ true }
-                pagination={ this.state.tablePagination } onChange={ this.onTableChange }
-                dataSource={ this.getTableDataSource(item) } columns={ this.getTableColumns(item) }/>
+            <Table { ...this.getTableProps(item) }/>
         );
     }
 
