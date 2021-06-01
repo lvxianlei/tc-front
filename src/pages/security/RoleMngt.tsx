@@ -202,6 +202,12 @@ class RoleMngt extends AbstractMngtComponent<IRoleRouteProps, IRoleMngtState> {
         };
     }
 
+    /**
+     * @override
+     * @description Renders extra operation content
+     * @param item 
+     * @returns extra operation content 
+     */
     protected renderExtraOperationContent(item: ITabItem): React.ReactNode {
         return (
             <Space direction="horizontal" size="middle">
