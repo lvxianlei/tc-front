@@ -75,7 +75,12 @@ module.exports = {
         function (config) {
             const proxy = {};
             fs.readdirSync(path.join(__dirname, './mock/api/')).forEach((dirname) => {
-                proxy[`/${ dirname }`] = 'http://localhost:3001'; // mock server url
+                const stats = fs.statSync(path.join(__dirname, './mock/api/', dirname));
+                if (stats.isDirectory()) {
+                    proxy[`/${ dirname }`] = 'http://localhost:3001'; // mock server url
+                } else {
+                    proxy[`/${ dirname }`] = `http://localhost:3001/${ dirname.replace(/\.[\w\d]+/, '') }`;
+                }
             });
             return Object.assign(config || {}, {
                 port: 3000,

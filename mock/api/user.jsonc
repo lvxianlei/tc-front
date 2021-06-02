@@ -1,0 +1,34 @@
+{
+    "msg": "",
+    "code": 200,
+    "data": {
+        "records|10": [{
+            "account": "proident",
+            "clientId": "gghjgjh",
+            "createTime": "1984-09-17T23:24:35.911Z",
+            "createUser": 10776122,
+            "departmentId": 71269473,
+            "departmentName": "exercitation laborum velit",
+            "email": "commodo in amet sed",
+            "id|+1": 1,
+            "isDeleted|0-1": 1, // 1是 0否
+            "name": "elit proident enim",
+            "openId": "velit quis enim incididunt id",
+            "password": "deserunt ad culpa consequat qui",
+            "phone": "nostrud aliquip",
+            "portrait": "commodo",
+            "roleIds": "dolore nisi",
+            "status|0-1": 1, // 业务状态 1有效 0无效
+            "tenantId": "Ut",
+            "tenantName": "nostrud amet aliqua",
+            "updateTime": "2019-12-14T06:44:05.601Z",
+            "updateUser": 44741378,
+            "userId": 99843610,
+            "userRoleList": [],
+            "userRoleNames": "Lorem nisi Duis"
+        }],
+        "current|1-10": 1,
+        "size": 10,
+        "total": 257
+    }
+}

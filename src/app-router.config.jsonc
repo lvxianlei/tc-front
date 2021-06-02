@@ -63,5 +63,10 @@
         "path": "/auth/roles/setting/:id",
         "module": "./pages/auth/role/RoleSetting",
         "exact": true
+    }, { // 用户管理
+        "name": "用户管理",
+        "path": "/sys/users",
+        "module": "./pages/system-mngt/user/UserMngt",
+        "exact": true
     }]
 }
