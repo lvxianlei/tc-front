@@ -9,6 +9,7 @@ import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
 
 import RequestUtil from '../../../utils/RequestUtil';
 import AbstractSaleOrderSetting, { IAbstractSaleOrderSettingState, ISaleOrder, IProductVos } from './AbstractSaleOrderSetting';
+import moment from 'moment'
 
 export interface IContractSettingProps {
     readonly id: string;
@@ -19,7 +20,7 @@ export interface IContractSettingState extends IAbstractSaleOrderSettingState {}
 /**
  * Contract Setting
  */
-class SaleOrderSetting extends AbstractSaleOrderSetting<IContractSettingRouteProps, IContractSettingState> {
+class ChangeProduct extends AbstractSaleOrderSetting<IContractSettingRouteProps, IContractSettingState> {
 
     /**
      * @description Components did mount
@@ -28,7 +29,8 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<IContractSettingRoutePro
         super.componentDidMount();
         const saleOrder: ISaleOrder = await RequestUtil.get<ISaleOrder>(`/tower-market/saleOrder/${ this.props.match.params.id }`);
         this.setState({
-            saleOrder: saleOrder
+            saleOrder: saleOrder,
+            isReadonly: true
         });
         saleOrder.productVos = saleOrder.productVos?.map<IProductVos>((product: IProductVos, index: number): IProductVos => {
             return {
@@ -37,7 +39,7 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<IContractSettingRoutePro
             };
         });
         this.getForm()?.setFieldsValue({
-            productVos: saleOrder.productVos,
+            productVos: saleOrder.productChangeRecordVos,
             totalWeight: saleOrder.orderQuantity,
             totalPrice: saleOrder.taxPrice,
             totalAmount: saleOrder.taxAmount,
@@ -65,7 +67,7 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<IContractSettingRoutePro
      * @returns submit 
      */
     public async onSubmit(values: Record<string, any>): Promise<void> {
-        return await RequestUtil.put('/tower-customer/customer', {
+        return await RequestUtil.put('/tower-market/saleOrder/submitProductContentChangeAudit', {
             ...values,
             id: Number(this.props.match.params.id)
         });
@@ -81,4 +83,4 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<IContractSettingRoutePro
     }
 }
 
-export default withRouter(withTranslation()(SaleOrderSetting));
+export default withRouter(withTranslation()(ChangeProduct));

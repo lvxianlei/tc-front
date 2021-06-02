@@ -63,6 +63,11 @@
         "path": "/prom/order/detail/:id",
         "module": "./pages/prom/order/SaleOrderDetail",
         "exact": true
+    }, { // 变更产品信息
+        "name": "订单详情",
+        "path": "/prom/order/ChangeProduct/:id",
+        "module": "./pages/prom/order/ChangeProduct",
+        "exact": true
     }, { // 字典管理
         "name": "字典管理",
         "path": "/sys/dxnry",

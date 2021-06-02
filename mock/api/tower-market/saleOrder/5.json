@@ -90,6 +90,62 @@
                 "unit":"吨",
                 "voltageGrade": 1
             }],
-            "productChangeRecordVos":[{"description":"in nulla velit irure","lineName":"aliquip Excepteur","num":1236842.8362086564,"price":-11156680.89089033,"productHeight":-1820298.5373543203,"productNumber":"anim","productShape":"enim nulla veniam","productStatus":-62210774,"productType":-56494605,"saleOrderId":-59914364,"taskNoticeId":54564973,"tender":"Lorem magna","totalAmount":-15111520.486190692,"unit":"in nostrud nisi ex","voltageGrade":-33358448}]
+            "productChangeRecordVos":[
+                {
+                    "changeType": 1,
+                    "description":"quis",
+                    "lineName":"dolor incididunt ",
+                    "num":55,
+                    "price":87.3050,
+                    "productHeight":68443935.15664011,
+                    "productId":11,
+                    "productNumber":"nostrud dolore incididunt velit",
+                    "productShape":"nostrud incididunt anim ut",
+                    "productStatus":1,
+                    "productType":2,
+                    "saleOrderId":5,
+                    "taskNoticeId":6,
+                    "tender":"sunt",
+                    "totalAmount":436.52,
+                    "unit":"吨",
+                    "voltageGrade": 1
+                },{
+                    "changeType": 1,
+                    "description":"quis",
+                    "lineName":"dolor incididunt ",
+                    "num":800,
+                    "price":87.3050,
+                    "productHeight":68443935.15664011,
+                    "productId":11,
+                    "productNumber":"nostrud dolore incididunt velit",
+                    "productShape":"nostrud incididunt anim ut",
+                    "productStatus":3,
+                    "productType":2,
+                    "saleOrderId":5,
+                    "taskNoticeId":6,
+                    "tender":"sunt",
+                    "totalAmount":69844.00,
+                    "unit":"吨",
+                    "voltageGrade": 2
+                },{
+                    "changeType": 1,
+                    "description":"quis",
+                    "lineName":"dolor incididunt ",
+                    "num":6000,
+                    "price":87.3050,
+                    "productHeight":68443935.15664011,
+                    "productId":11,
+                    "productNumber":"nostrud dolore incididunt velit",
+                    "productShape":"nostrud incididunt anim ut",
+                    "productStatus":3,
+                    "productType":1,
+                    "saleOrderId":5,
+                    "taskNoticeId":6,
+                    "tender":"sunt",
+                    "totalAmount":523830.00,
+                    "unit":"吨",
+                    "voltageGrade": 1
+                } 
+            ]
     }
 }
