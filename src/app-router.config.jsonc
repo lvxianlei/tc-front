@@ -63,11 +63,6 @@
         "path": "/auth/roles/setting/:id",
         "module": "./pages/auth/role/RoleSetting",
         "exact": true
-    }, { // 用户管理
-        "name": "用户管理",
-        "path": "/sys/users",
-        "module": "./pages/system-mngt/user/UserMngt",
-        "exact": true
     }, { // 销售任务单管理
         "name": "销售任务单管理",
         "path": "/prom/task",
@@ -97,6 +92,21 @@
         "name": "查看任务单",
         "path": "/prom/task/view/:id",
         "module": "./pages/prom/task-mngt/TaskDetail",
+        "exact": true
+    }, { // 用户管理
+        "name": "用户管理",
+        "path": "/sys/users",
+        "module": "./pages/system-mngt/user/UserMngt",
+        "exact": true
+    }, { // 新增用户
+        "name": "新增用户",
+        "path": "/sys/users/new",
+        "module": "./pages/system-mngt/user/UserNew",
+        "exact": true
+    }, { // 修改用户
+        "name": "修改用户",
+        "path": "/sys/users/setting/:id",
+        "module": "./pages/system-mngt/user/UserSetting",
         "exact": true
     }]
 }
