@@ -53,6 +53,11 @@
         "path": "/prom/order/new",
         "module": "./pages/prom/order/SaleOrderNew",
         "exact": true
+    }, {
+        "name": "编辑订单", 
+        "path": "/prom/order/setting/:id",
+        "module": "./pages/prom/order/SaleOrderSetting",
+        "exact": true
     }, { // 字典管理
         "name": "字典管理",
         "path": "/sys/dxnry",

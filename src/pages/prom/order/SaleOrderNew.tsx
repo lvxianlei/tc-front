@@ -25,18 +25,17 @@ class SaleOrderNew extends AbstractSaleOrderSetting<ISaleOrderNewRouteProps, ISa
      * @returns submit 
      */
     public async onSubmit(values: Record<string, any>): Promise<void> {
-        // values.signSaleOrderTime = moment(values.signSaleOrderTime).format('YYYY-MM-DD');
-        // values.deliveryTime = moment(values.deliveryTime).format('YYYY-MM-DD');
-        // values.reviewTime = moment(values.reviewTime).format('YYYY-MM-DD HH:mm');
-        // values.paymentPlanDtos = values.paymentPlanDtos?.map((plan: IPaymentPlanDto, index: number): IPaymentPlanDto => {
-        //     return {
-        //         ...plan,
-        //         returnedTime: moment(plan.returnedTime).format('YYYY-MM-DD'),
-        //         index: index + 1
-        //     };
-        // });
-    //  return Promise.resolve();
+        values.orderDeliveryTime = moment(values.orderDeliveryTime).format('YYYY-MM-DD');
         return await RequestUtil.post('/tower-market/SaleOrder', values);
+    }
+
+    /**
+     * @override
+     * @description Renders save and continue
+     * @returns save and continue 
+     */
+     protected renderSaveAndContinue(): React.ReactNode {
+        return null;
     }
 }
 
