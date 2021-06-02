@@ -27,7 +27,7 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const contract: IContract = await RequestUtil.get<IContract>(`/tower-market/contract/page/${ this.props.match.params.id }`);
+        const contract: IContract = await RequestUtil.get<IContract>(`/tower-market/contract/${ this.props.match.params.id }`);
         this.setState({
             contract: contract
         });
