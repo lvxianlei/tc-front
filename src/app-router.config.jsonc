@@ -58,6 +58,11 @@
         "path": "/prom/order/setting/:id",
         "module": "./pages/prom/order/SaleOrderSetting",
         "exact": true
+    }, { // 订单详情
+        "name": "订单详情",
+        "path": "/prom/order/detail/:id",
+        "module": "./pages/prom/order/SaleOrderDetail",
+        "exact": true
     }, { // 字典管理
         "name": "字典管理",
         "path": "/sys/dxnry",

@@ -106,14 +106,14 @@ class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps, IProm
             title: '订单编号',
             dataIndex: 'ordersNumber',
             render: (_: undefined, record: object): React.ReactNode => {
-                    return <Link to={ `/prom/contract/detail/${ (record as ITableDataItem).id }` }>{ (record as ITableDataItem).ordersNumber }</Link>
+                    return <Link to={ `/prom/order/detail/${ (record as ITableDataItem).id }` }>{ (record as ITableDataItem).ordersNumber }</Link>
             }
         }, {
             key: 'internalNumber',
             title: '内部合同编号',
             dataIndex: 'internalNumber',
             render: (_: undefined, record: object): React.ReactNode => {
-                return <Link to={ `/prom/contract/detail/${ (record as ITableDataItem).id }` }>{ (record as ITableDataItem).internalNumber }</Link>
+                return <Link to={ `/prom/order/detail/${ (record as ITableDataItem).id }` }>{ (record as ITableDataItem).internalNumber }</Link>
             }
         }, {
             key: 'projectName',
@@ -149,9 +149,9 @@ class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps, IProm
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Link to={ `/prom/order/setting/${ (record as ITableDataItem).id }` }>编辑</Link>
-                    <ConfirmableButton confirmTitle="要删除该客户吗？" type="link" placement="topRight" onConfirm={ async () => {
+                    <ConfirmableButton confirmTitle="要删除该订单吗？" type="link" placement="topRight" onConfirm={ async () => {
                         let id = (record as ITableDataItem).id;
-                        const resData:IResponseData = await RequestUtil.delete('/contract', {id: id})
+                        const resData:IResponseData = await RequestUtil.delete('/tower-market/saleOrder', {id: id})
                         console.log(resData)
                     } }>删除</ConfirmableButton>
                     <Link to={ `` }>变更产品信息</Link>
