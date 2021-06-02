@@ -40,6 +40,10 @@ export interface DataType{
     readonly returnedTime?: string;
     readonly period?: number;
     readonly description?: string;
+    readonly contractId?: number;
+    readonly internalNumber?: string;
+    readonly signContractTime?: string;
+    readonly saleOrderNumber?: string;
 }
 
 export interface IResponseData {

@@ -34,6 +34,7 @@
  } from '../../../components/AbstractFillableComponent';
  import ConfirmableButton from '../../../components/ConfirmableButton';
  import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
+ import { DataType } from '../../../components/AbstractSelectableModal';
  import styles from './AbstractTaskSetting.module.less';
  const { Step } = Steps
   
@@ -47,14 +48,14 @@
  }
  
  export interface ITask {
-    readonly contractId: number;	
+    readonly contractId?: number;	
     readonly createTime?: string;
     readonly createUserName?: string;
     readonly customerCompany?: string;	
     readonly deliveryTime?:	string;	
     readonly description?: string;		
     readonly galvanizeDemand?:string;	
-    readonly internalNumber: string;	
+    readonly internalNumber?: string;	
     readonly materialDemand?: string;
     readonly materialStandard?:	number | string;
     readonly packDemand?: string;	
@@ -71,62 +72,54 @@
     readonly weldingDemand?: string;
  }
  
- export interface IProductInfoVO {
-    readonly description?:	string;	
-    readonly lineName?:	string;	
-    readonly num?: number;		
-    readonly price?: number;	
+export interface IProductInfoVO {
+    readonly description?: string;	
+    readonly lineName?:	string;
+    readonly num?: number;
+    readonly price?: number;
     readonly productHeight?: number;
     readonly productNumber?: string;	
-    readonly productShape?:	string;	
-    readonly productStatus?: number;	
+    readonly productShape?:	string;
+    readonly productStatus?: number;
     readonly productTypeName: string;
-    readonly saleOrderId?: number;	
-    readonly taskNoticeId?: number;	
-    readonly tender?: string;	
-    readonly totalAmount?: number;	
+    readonly saleOrderId?: number;
+    readonly taskNoticeId?: number;
+    readonly tender?: string;
+    readonly totalAmount?: number	
     readonly unit?:	string;
     readonly voltageGradeName?:	string;
- }
+}
 
- export interface IProductChangeInfoVO {
+export interface IProductChangeInfoVO {
     readonly index?: number;
     readonly changeType?: number;
     readonly createTime?: string;
-    readonly description?:	string;	
-    readonly lineName?:	string;	
-    readonly num?: number;		
-    readonly price?: number;	
+    readonly description?:	string;
+    readonly lineName?:	string;
+    readonly num?: number;
+    readonly price?: number;
     readonly productHeight?: number;
-    readonly productNumber?: string;	
-    readonly productShape?:	string;	
+    readonly productNumber?: string;
+    readonly productShape?:	string;
     readonly productStatus?: number;	
     readonly productTypeName?: string;
     readonly saleOrderId?: number;	
-    readonly taskNoticeId?: number;	
-    readonly tender?: string;	
+    readonly taskNoticeId?: number;
+    readonly tender?: string;
     readonly totalAmount?: number;	
     readonly unit?:	string;
     readonly voltageGradeName?:	string;
- }
+}
  
- export interface IproductInfoDto {
-     readonly productType?: string;
-     readonly voltageGrade?: number;
- }
+export interface IproductInfoDto {
+    readonly productType?: string;
+    readonly voltageGrade?: number;
+}
  
  
- export interface IStep {
-     readonly title: string;
- }
-
- 
- export interface DataType {
-     key: React.Key;
-     name: string;
-     age: number;
-     address: string;
- }
+export interface IStep {
+    readonly title: string;
+}
  
 export enum StepItem {
     NEW_TASK = 0,   //新增任务单
@@ -181,7 +174,7 @@ enum StepTitleItem {
          };
      }
 
-     public onCustomerCompanySelect = (selectedRows: any):void => {
+     public onOrderSelect = (selectedRows: DataType[]):void => {
         if(selectedRows.length > 0 ) {
             const task:ITask = {
                 contractId: selectedRows[0].contractId,
@@ -230,7 +223,7 @@ enum StepTitleItem {
                             children: 
                                 <>
                                     <Input value={ task?.saleOrderNumber } suffix={ 
-                                        <OrderSelectionComponent onSelect={ this.onCustomerCompanySelect } />
+                                        <OrderSelectionComponent onSelect={ this.onOrderSelect } />
                                     }/>
                                 </>
                         },  {
