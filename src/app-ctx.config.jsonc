@@ -34,10 +34,14 @@
                     "path": "/approval",
                     "items": [
                         {
+                            "label": "审批3",
+                            "path": "/approval/lxlp"
+                        },
+                        {
                             "label": "任务单审批",
                             "path": "/approval/task"
                         },
-                        {
+                       {
                             "label": "任务单产品变更审批",
                             "path": "/approval/taskchange"
                         },

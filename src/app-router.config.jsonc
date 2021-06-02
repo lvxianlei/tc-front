@@ -102,17 +102,23 @@
         "path": "/approval/task",
         "module": "./pages/approval/task/taskapproval",
         "exact": true
-    },
-    { // 任务单产品变更审批
+    }, { // 任务单产品变更审批
         "name": "任务单产品变更审批",
         "path": "/approval/taskchange",
         "module": "./pages/approval/Taskchange/taskchange",
         "exact": true
-    },{//产品信息变更
+    }, {//审批
+        "name": "审批3",
+        "path":   "/approval/lxlp",
+        "module": "./pages/approval/approvaladd/Approvalx",
+        "exact": true
+        
+    }, {//产品信息变更
         "name": "产品信息变更",
         "path":   "/approval/information",
         "module": "./pages/approval/Information/informationchange",
-        "exact": false
-     
-    }]
+        "exact": true
+    }
+   
+]
 }

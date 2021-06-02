@@ -648,7 +648,7 @@ enum StepTitleItem {
                                 }>新增</Button>
                             </div>
                             <Table 
-                                columns={this.columns()} 
+                                columns={this.columns() as any} 
                                 dataSource={productDataSource} 
                                 scroll={{ x: 1300 }} 
                                 rowKey={(record:IProductInfoVO)=>record.productTypeName}
