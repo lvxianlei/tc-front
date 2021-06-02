@@ -20,6 +20,7 @@
      Upload,
      Steps,
      Table,
+     TableColumnType,
  } from 'antd';
  import { FormListFieldData, FormListOperation } from 'antd/lib/form/FormList';
  import moment from 'moment';
@@ -671,7 +672,7 @@ enum StepTitleItem {
     }
 
     //table-column
-    public columns = () => {
+    public columns(): TableColumnType<IProductInfoVO>[] {
         return [
             {
                 title: '状态',
@@ -735,7 +736,7 @@ enum StepTitleItem {
                 key: 'operation',
                 fixed: 'right',
                 width: 100,
-                render: ( record: IProductInfoVO ) => 
+                render: ( record: IProductInfoVO ): React.ReactNode => 
                         <ConfirmableButton 
                             confirmTitle="要删除该条数据吗？"
                             type="link" 
