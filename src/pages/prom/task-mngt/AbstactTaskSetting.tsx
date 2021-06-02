@@ -38,7 +38,6 @@
  // import ModalComponent from '../../components/ModalComponent';
   
  export interface IAbstractTaskSettingState extends IAbstractFillableComponentState {
-     popUp: boolean | undefined;
      checkStep: StepItem;
      productDataSource: IProductInfoVO[];
      selectedKeys: React.Key[];
@@ -129,7 +128,7 @@
      address: string;
  }
  
-enum StepItem {
+export enum StepItem {
     NEW_TASK = 0,   //新增任务单
     COMPLETE_SPECIAL_OPTIONS = 1,   //完善特殊信息
     COMPLETE_PRODUCT_INFO = 2,   //完善产品信息
@@ -146,7 +145,6 @@ enum StepTitleItem {
   
      public state: S = {
          task: undefined,
-         popUp: false,
          checkStep: StepItem.NEW_TASK, 
          selectedKeys: {},
      }  as S;
@@ -216,7 +214,6 @@ enum StepTitleItem {
                                             Open Modal
                                         </Button>  
                                     }/>
-                                    {/* <ModalComponent isModalVisible={ this.state.popUp || false } confirmTitle="选择客户" handleOk={ this.closeModal} handleCancel={ this.closeModal }/> */}
                                 </>
                         },  {
                             label: '内部合同编号',
@@ -309,7 +306,6 @@ enum StepTitleItem {
                                     }
                                         disabled
                                     />
-                                    {/* <ModalComponent isModalVisible={ this.state.popUp || false } confirmTitle="选择客户" handleOk={ this.closeModal} handleCancel={ this.closeModal }/> */}
                                 </>
                         },  {
                             label: '内部合同编号',
@@ -451,7 +447,6 @@ enum StepTitleItem {
                                     }
                                         disabled    
                                     />
-                                    {/* <ModalComponent isModalVisible={ this.state.popUp || false } confirmTitle="选择客户" handleOk={ this.closeModal} handleCancel={ this.closeModal }/> */}
                                 </>
                         },  {
                             label: '内部合同编号',
@@ -637,11 +632,11 @@ enum StepTitleItem {
      * @returns extra sections 
      */
   
-    public renderExtraSections():IRenderedSection[]{
+    public renderExtraSections(): IRenderedSection[] {
         const { checkStep, productDataSource } = this.state;
         return [{
             title:'',
-            render:():React.ReactNode=>{
+            render:():React.ReactNode => {
                 return (
                     <>
                     {checkStep === StepItem.COMPLETE_PRODUCT_INFO ?

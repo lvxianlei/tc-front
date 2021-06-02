@@ -6,7 +6,7 @@
  import { RouteComponentProps, withRouter } from 'react-router';
  
  import RequestUtil from '../../../utils/RequestUtil';
- import AbstractTaskSetting, { IAbstractTaskSettingState, ITask } from './AbstactTaskSetting';
+ import AbstractTaskSetting, { IAbstractTaskSettingState, ITask, StepItem } from './AbstactTaskSetting';
  import moment from 'moment'
 import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
  
@@ -29,7 +29,7 @@ import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
         this.setState({
             task,
             productDataSource: task?.productInfoVOList,
-            checkStep: 1
+            checkStep: StepItem.COMPLETE_SPECIAL_OPTIONS
         });
     }
  

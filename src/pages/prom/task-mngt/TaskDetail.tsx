@@ -45,6 +45,8 @@
     readonly simpleProjectName?: string;	
     readonly taskNumber?: string;		
     readonly weldingDemand?: string;
+    readonly updateUserName?: string;
+    readonly updateTime?: string;
  }
  
  export interface IProductInfoVO {
@@ -233,6 +235,7 @@
       * @returns sys info grid 
       */
      private getSysInfoGrid(): IRenderedGrid {
+         const task: ITask | undefined = this.state?.task;
          return {
              labelCol: {
                  span: 4
@@ -242,16 +245,16 @@
              },
              rows: [[{
                  label: '最后编辑人',
-                 value: '12312312'
+                 value: task?.updateUserName
              },{
                  label: '最后编辑时间',
-                 value: '2019-03-15 17:27'
+                 value: task?.updateTime
              }], [{
                  label: '创建人',
-                 value: '12321312'
+                 value: task?.createUserName
              }, {
                  label: '创建时间',
-                 value: '2019-03-15 17:27'
+                 value: task?.createTime
              }]]
          };
      }
