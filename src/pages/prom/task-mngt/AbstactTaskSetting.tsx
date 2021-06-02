@@ -1,5 +1,5 @@
 /**
- * @author zyc
+ * @author lxy
  * @copyright © 2021 
  */
  import { DeleteOutlined } from '@ant-design/icons';
@@ -27,7 +27,7 @@
  import React from 'react';
  import { RouteComponentProps } from 'react-router';
  import { Link } from 'react-router-dom';
- 
+ import OrderSelectionComponent from '../../../components/OrderSelectionModal';
  import AbstractFillableComponent, {
      IAbstractFillableComponentState,
      IFormItemGroup,
@@ -36,33 +36,32 @@
  import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
  import styles from './AbstractTaskSetting.module.less';
  const { Step } = Steps
- // import ModalComponent from '../../components/ModalComponent';
   
  export interface IAbstractTaskSettingState extends IAbstractFillableComponentState {
      checkStep: StepItem;
      productDataSource: IProductInfoVO[];
      selectedKeys: React.Key[];
      readonly task?: ITask;
-    
+     readonly contractInfoDTO : ITask;
      
  }
  
  export interface ITask {
-    readonly contractId?: number;	
+    readonly contractId: number;	
     readonly createTime?: string;
     readonly createUserName?: string;
     readonly customerCompany?: string;	
     readonly deliveryTime?:	string;	
     readonly description?: string;		
     readonly galvanizeDemand?:string;	
-    readonly internalNumber?: string;	
+    readonly internalNumber: string;	
     readonly materialDemand?: string;
     readonly materialStandard?:	number | string;
     readonly packDemand?: string;	
     readonly peculiarDescription?: string;
     readonly planDeliveryTime?:	string;
     readonly productChangeInfoVOList?: IProductChangeInfoVO [];	
-    readonly productInfoVOList: IProductInfoVO [];
+    readonly productInfoVOList?: IProductInfoVO [];
     readonly projectName?: string;
     readonly saleOrderNumber?: string;	
     readonly signContractTime?:	string;	
@@ -148,6 +147,7 @@ enum StepTitleItem {
          task: undefined,
          checkStep: StepItem.NEW_TASK, 
          selectedKeys: {},
+         contractInfoDTO:{},
      }  as S;
  
      constructor(props: P) {
@@ -180,6 +180,25 @@ enum StepTitleItem {
              }
          };
      }
+
+     public onCustomerCompanySelect = (selectedRows: any):void => {
+        if(selectedRows.length > 0 ) {
+            const task:ITask = {
+                contractId: selectedRows[0].contractId,
+                customerCompany: selectedRows[0].customerCompany,
+                internalNumber: selectedRows[0].internalNumber,
+                projectName: selectedRows[0].projectName,
+                signContractTime: selectedRows[0].signContractTime,
+                signCustomerName: selectedRows[0].signCustomerName,
+                saleOrderNumber: selectedRows[0].saleOrderNumber,
+            }
+            this.setState({
+                task,
+                contractInfoDTO:task
+            })
+            this.getForm()?.setFieldsValue(task);
+        }
+    }
   
  
 
@@ -210,10 +229,8 @@ enum StepTitleItem {
                             }],
                             children: 
                                 <>
-                                    <Input suffix={
-                                        <Button type="primary" >
-                                            Open Modal
-                                        </Button>  
+                                    <Input value={ task?.saleOrderNumber } suffix={ 
+                                        <OrderSelectionComponent onSelect={ this.onCustomerCompanySelect } />
                                     }/>
                                 </>
                         },  {
@@ -298,16 +315,7 @@ enum StepTitleItem {
                                 required: true,
                                 message: '请选择关联订单'
                             }],
-                            children: 
-                                <>
-                                    <Input suffix={
-                                        <Button type="primary" >
-                                            Open Modal
-                                        </Button>  
-                                    }
-                                        disabled
-                                    />
-                                </>
+                            children: <Input disabled />
                         },  {
                             label: '内部合同编号',
                             name: 'internalNumber',
@@ -439,16 +447,7 @@ enum StepTitleItem {
                                 required: true,
                                 message: '请选择关联订单'
                             }],
-                            children: 
-                                <>
-                                    <Input suffix={
-                                        <Button type="primary" >
-                                            Open Modal
-                                        </Button>  
-                                    }
-                                        disabled    
-                                    />
-                                </>
+                            children: <Input disabled />
                         },  {
                             label: '内部合同编号',
                             name: 'internalNumber',

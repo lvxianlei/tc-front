@@ -28,7 +28,7 @@ import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
         const task: ITask = await RequestUtil.get<ITask>(`/tower-market/taskNotice/${ this.props.match.params.id }`);
         this.setState({
             task,
-            productDataSource: task?.productInfoVOList,
+            productDataSource: task?.productInfoVOList || [],
             checkStep: StepItem.COMPLETE_PRODUCT_INFO
         });
     }
