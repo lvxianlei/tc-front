@@ -57,7 +57,7 @@ class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps, IProm
      * @param filterValues 
      */
     protected async fetchTableData(filterValues: Record<string, any>,pagination: TablePaginationConfig = {}) {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>('/saleOrder/page', {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/saleOrder', {
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize ||this.state.tablePagination?.pageSize,

@@ -69,7 +69,7 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
      * @description Components did mount
      */
     public async componentDidMount() {
-        const orderItems: IOrderItem[] = await RequestUtil.get<IOrderItem[]>(`/saleOrder/getSaleOrderDetailsById`, {
+        const orderItems: IOrderItem[] = await RequestUtil.get<IOrderItem[]>(`/tower-market/saleOrder/getSaleOrderDetailsById`, {
             contractId: this.props.match.params.id
         });
         this.setState({
