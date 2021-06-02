@@ -61,7 +61,7 @@
     readonly packDemand?: string;	
     readonly peculiarDescription?: string;
     readonly planDeliveryTime?:	string;
-    readonly productChangeInfoVOList?: object [];	
+    readonly productChangeInfoVOList?: IProductChangeInfoVO [];	
     readonly productInfoVOList: IProductInfoVO [];
     readonly projectName?: string;
     readonly saleOrderNumber?: string;	
@@ -82,6 +82,27 @@
     readonly productShape?:	string;	
     readonly productStatus?: number;	
     readonly productTypeName: string;
+    readonly saleOrderId?: number;	
+    readonly taskNoticeId?: number;	
+    readonly tender?: string;	
+    readonly totalAmount?: number;	
+    readonly unit?:	string;
+    readonly voltageGradeName?:	string;
+ }
+
+ export interface IProductChangeInfoVO {
+    readonly index?: number;
+    readonly changeType?: number;
+    readonly createTime?: string;
+    readonly description?:	string;	
+    readonly lineName?:	string;	
+    readonly num?: number;		
+    readonly price?: number;	
+    readonly productHeight?: number;
+    readonly productNumber?: string;	
+    readonly productShape?:	string;	
+    readonly productStatus?: number;	
+    readonly productTypeName?: string;
     readonly saleOrderId?: number;	
     readonly taskNoticeId?: number;	
     readonly tender?: string;	
