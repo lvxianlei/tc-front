@@ -9,64 +9,51 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../components/AbstractMngtComponent';
-import ConfirmableButton from '../../components/ConfirmableButton';
-import { ITabItem } from '../../components/ITabableComponent';
-import RequestUtil from '../../utils/RequestUtil';
+import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../../components/AbstractMngtComponent';
+import ConfirmableButton from '../../../components/ConfirmableButton';
+import { ITabItem } from '../../../components/ITabableComponent';
+import RequestUtil from '../../../utils/RequestUtil';
+import { IUser } from './IUser';
 
-interface IRoleMngtProps {}
-interface IRoleRouteProps extends RouteComponentProps<IRoleMngtProps>, WithTranslation {}
-interface IRoleMngtState extends IAbstractMngtComponentState, IFIlterValue {
-    readonly roles: IRole[];
-    readonly selectedRoleKeys: React.Key[];
-    readonly selectedRoles: IRole[];
+interface IUserMngtProps {}
+interface IUserRouteProps extends RouteComponentProps<IUserMngtProps>, WithTranslation {}
+interface IUserMngtState extends IAbstractMngtComponentState, IFIlterValue {
+    readonly users: IUser[];
+    readonly selectedUserKeys: React.Key[];
+    readonly selectedUsers: IUser[];
 }
 
 interface IFIlterValue {
+    readonly account?: string;
     readonly name?: string;
-    readonly code?: string;
-}
-
-export interface IRole {
-    readonly id: number;
-    readonly name: string;
-    readonly clientId: string;
-    readonly code: string;
-    readonly description: string;
-    readonly hasChildren: boolean;
-    readonly isDeleted: number;
-    readonly parentId: number;
-    readonly parentName: string;
-    readonly sort: number;
-    readonly tenantId: string;
 }
 
 /**
- * Roles management
+ * Users management
  */
-class RoleMngt extends AbstractMngtComponent<IRoleRouteProps, IRoleMngtState> {
+class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
 
     /**
      * @override
      * @description Gets state
      * @returns state 
      */
-    protected getState(): IRoleMngtState {
+    protected getState(): IUserMngtState {
         return {
             ...super.getState(),
-            tablePagination: undefined,
-            roles: []
+            // tablePagination: undefined,
+            users: []
         };
     }
 
     /**
-     * @description Fetchs roles
+     * @description Fetchs users
      * @param [filterValues] 
      */
-    protected async fetchRoles(filterValues: IFIlterValue = {}) {
-        const roles: IRole[] = await RequestUtil.get('/sinzetech-system/role', filterValues);
+    protected async fetchUsers(filterValues: IFIlterValue = {}) {
+        const users: IUser[] = await RequestUtil.get<IUser[]>('/user', filterValues);
         this.setState({
-            roles: roles
+            users: users
         });
     }
 
@@ -74,7 +61,7 @@ class RoleMngt extends AbstractMngtComponent<IRoleRouteProps, IRoleMngtState> {
      * @description Components did mount
      */
     public componentDidMount() {
-        this.fetchRoles();
+        this.fetchUsers();
     }
 
     /**
@@ -82,18 +69,18 @@ class RoleMngt extends AbstractMngtComponent<IRoleRouteProps, IRoleMngtState> {
      * @param item 
      * @returns delete 
      */
-    private onDelete(items: IRole[]): () => void {
+    private onDelete(items: IUser[]): () => void {
         return async () => {
-            await RequestUtil.delete('/sinzetech-system/role', { ids: items.map<number>((item: IRole): number => item.id) });
-            this.setState({
-                selectedRoles: [],
-                selectedRoleKeys: []
-            }, () => {
-                this.fetchRoles({
-                    name: this.state.name,
-                    code: this.state.code
-                });
-            });
+            // await RequestUtil.delete('/sinzetech-system/role', { ids: items.map<number>((item: IUser): number => item.id) });
+            // this.setState({
+            //     selectedUsers: [],
+            //     selectedUserKeys: []
+            // }, () => {
+            //     this.fetchUsers({
+            //         name: this.state.name,
+            //         account: this.state.account
+            //     });
+            // });
         };
     }
 
@@ -102,7 +89,7 @@ class RoleMngt extends AbstractMngtComponent<IRoleRouteProps, IRoleMngtState> {
      * @returns batch delete 
      */
     private onBatchDelete(): () => void {
-        return this.onDelete(this.state.selectedRoles);
+        return this.onDelete(this.state.selectedUsers);
     }
 
     /**
@@ -112,7 +99,7 @@ class RoleMngt extends AbstractMngtComponent<IRoleRouteProps, IRoleMngtState> {
      */
     public getTabItems(): ITabItem[] {
         return [{
-            label: '角色列表',
+            label: '用户列表',
             key: 0
         }];
     }
@@ -132,13 +119,13 @@ class RoleMngt extends AbstractMngtComponent<IRoleRouteProps, IRoleMngtState> {
      */
     public getFilterFormItemProps(item: ITabItem): FormItemProps<any>[] {
         return [{
-            label: '角色名称',
-            name: 'name',
-            children: <Input placeholder="请输入角色名称"/>
+            label: '账号',
+            name: 'account',
+            children: <Input placeholder="请输入账号"/>
         }, {
-            label: '角色编码',
-            name: 'code',
-            children: <Input placeholder="请输入角色编码"/>
+            label: '姓名',
+            name: 'name',
+            children: <Input placeholder="请输入姓名"/>
         }];
     }
 
@@ -148,7 +135,7 @@ class RoleMngt extends AbstractMngtComponent<IRoleRouteProps, IRoleMngtState> {
      * @param event 
      */
     public onNewClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
-        this.props.history.push('/auth/roles/new');
+        this.props.history.push('/auth/users/new');
     }
     
     /**
@@ -157,7 +144,7 @@ class RoleMngt extends AbstractMngtComponent<IRoleRouteProps, IRoleMngtState> {
      * @param values 
      */
     public onFilterSubmit(values: Record<string, any>): void {
-        this.fetchRoles(values);
+        this.fetchUsers(values);
     }
     
     /**
@@ -172,8 +159,8 @@ class RoleMngt extends AbstractMngtComponent<IRoleRouteProps, IRoleMngtState> {
      */
     private SelectChange = (selectedRowKeys: React.Key[], selectedRows: object[]): void => {
         this.setState({
-            selectedRoleKeys: selectedRowKeys,
-            selectedRoles: selectedRows as IRole[]
+            selectedUserKeys: selectedRowKeys,
+            selectedUsers: selectedRows as IUser[]
         });
     }
 
@@ -184,7 +171,7 @@ class RoleMngt extends AbstractMngtComponent<IRoleRouteProps, IRoleMngtState> {
      * @returns table data source 
      */
     public getTableDataSource(item: ITabItem): object[] {
-        return this.state.roles;
+        return this.state.users;
     }
 
     /**
@@ -197,7 +184,7 @@ class RoleMngt extends AbstractMngtComponent<IRoleRouteProps, IRoleMngtState> {
         return {
             ...super.getTableProps(item),
             rowSelection: {
-                selectedRowKeys: this.state.selectedRoleKeys,
+                selectedRowKeys: this.state.selectedUserKeys,
                 onChange: this.SelectChange
             }
         };
@@ -213,9 +200,9 @@ class RoleMngt extends AbstractMngtComponent<IRoleRouteProps, IRoleMngtState> {
         return (
             <Space direction="horizontal" size="middle">
                 { super.renderExtraOperationContent(item) }
-                <ConfirmableButton confirmTitle="确定删除这些角色吗？" danger={ true }
+                <ConfirmableButton confirmTitle="确定删除这些用户吗？" danger={ true }
                     icon={ <DeleteOutlined /> }
-                    disabled={ !this.state.selectedRoles?.length } onConfirm={ this.onBatchDelete() }>
+                    disabled={ !this.state.selectedUsers?.length } onConfirm={ this.onBatchDelete() }>
                     删除
                 </ConfirmableButton>
             </Space>
@@ -230,22 +217,25 @@ class RoleMngt extends AbstractMngtComponent<IRoleRouteProps, IRoleMngtState> {
      */
     public getTableColumns(item: ITabItem): TableColumnType<object>[] {
         return [{
-            title: '角色名称',
+            title: '登录账号',
+            dataIndex: 'account'
+        }, {
+            title: '用户姓名',
             dataIndex: 'name'
         }, {
-            title: '编码',
-            dataIndex: 'code'
+            title: '所属角色',
+            dataIndex: 'userRoleNames'
         }, {
-            title: '排序',
-            dataIndex: 'sort'
+            title: '所属机构',
+            dataIndex: 'departmentName'
         }, {
             title: '操作',
             render: (_: undefined, item: object): React.ReactNode => {
                 return (
                     <Space direction="horizontal" size="middle">
-                        <Link to={ `/auth/roles/detail/${ (item as IRole).id }` }>查看</Link>
-                        <Link to={ `/auth/roles/setting/${ (item as IRole).id }` }>编辑</Link>
-                        <ConfirmableButton confirmTitle="确定要删除该角色吗？" type="link" onConfirm={ this.onDelete([item as IRole]) }>删除</ConfirmableButton>
+                        <Link to={ `/auth/users/detail/${ (item as IUser).id }` }>查看</Link>
+                        <Link to={ `/auth/users/setting/${ (item as IUser).id }` }>编辑</Link>
+                        <ConfirmableButton confirmTitle="确定要删除该角色吗？" type="link" onConfirm={ this.onDelete([item as IUser]) }>删除</ConfirmableButton>
                     </Space>
                 );
             }
@@ -253,4 +243,4 @@ class RoleMngt extends AbstractMngtComponent<IRoleRouteProps, IRoleMngtState> {
     }
 }
 
-export default withRouter(withTranslation()(RoleMngt));
+export default withRouter(withTranslation()(UserMngt));

@@ -26,7 +26,7 @@
                         "label": "销售订单管理",
                         "path": "/prom/order"
                     }, {
-                        "label": "任务单管理",
+                        "label": "销售任务单管理",
                         "path": "/prom/task"
                     }]
                 },{
@@ -51,6 +51,9 @@
                     "label": "系统管理",
                     "path": "/sys",
                     "items": [{
+                        "label": "用户管理",
+                        "path": "/sys/users"
+                    }, {
                         "label": "字典管理",
                         "path": "/sys/dxnry"
                     }]
@@ -58,9 +61,6 @@
                     "label": "权限管理",
                     "path": "/auth",
                     "items": [{
-                    //     "label": "用户管理",
-                    //     "path": ""
-                    // }, {
                         "label": "角色管理",
                         "path": "/auth/roles"
                     }]
