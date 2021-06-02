@@ -15,7 +15,6 @@ import moment from 'moment';
 import styles from './AbstractSaleOrderSetting.module.less'
 import ContractSelectionComponent from '../../../components/ContractSelectionModal';
 import { DataType } from '../../../components/AbstractSelectableModal';
-import { couldStartTrivia } from 'typescript';
 
 export interface IAbstractSaleOrderSettingState extends IAbstractFillableComponentState {
     readonly saleOrder?: ISaleOrder;
@@ -29,9 +28,9 @@ export interface ISaleOrder {
     readonly contractInfoDto?: IContractInfoDto;
     readonly orderQuantity?: number;
     readonly type?: number;
-    readonly taxAmount?: number;
+    readonly taxAmount: number;
     readonly taxPrice?: number;
-    readonly taxRate?: number;
+    readonly taxRate: number;
     readonly amount?: number;
     readonly price?: number;
     readonly exchangeRate?: number;
@@ -50,7 +49,22 @@ export interface ISaleOrder {
 }
 
 interface IProductDtos {
-    readonly productStatus: number;
+    readonly productStatus?: number;
+    readonly description?: string;	
+    readonly id?: number;
+    readonly lineName?: string;
+    readonly num: number;
+    readonly price: number;
+    readonly productHeight?: number;
+    readonly productNumber?: string;
+    readonly productShape?: string;	
+    readonly productType?: number;
+    readonly saleOrderId?: number;
+    readonly taskNoticeId?: number;
+    readonly tender?: string;
+    readonly totalAmount?: number;
+    readonly unit?: string;
+    readonly voltageGrade?: number;
 }
 
 interface IContractInfoDto {
@@ -126,7 +140,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             };
             this.setState({
                 saleOrder: {
-                    ...(saleOrder || {}),
+                    ...(saleOrder || { taxAmount: 0, taxRate: 0 }),
                     contractInfoDto: select
                 },
             })
@@ -148,6 +162,19 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             }
         ]
     }
+
+    /**
+     * @description 根据税率计算不含税金额
+     */
+    public getAmount(): void {
+        const saleOrder: ISaleOrder = this.getForm()?.getFieldsValue(true);
+        const taxAmount: number = saleOrder.taxAmount;
+        const taxRate: number = saleOrder.taxRate;
+        let amount: number = 0;
+        amount = taxAmount / (1 + taxRate)
+        this.getForm()?.setFieldsValue({ amount: amount.toFixed(2) });
+    }
+
     /**
      * @implements
      * @description Gets form item groups
@@ -250,7 +277,14 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                     required: true,
                     message: '请输入含税金额'
                 }],
-                children: <Input  prefix="￥" disabled={ saleOrder?.contractInfoDto?.chargeType === 2 }/>
+                children: <Input  prefix="￥" disabled={ saleOrder?.contractInfoDto?.chargeType === 2 } onBlur={ 
+                    () => {
+                        const saleOrderValue: ISaleOrder = this.getForm()?.getFieldsValue(true);
+                        if(saleOrder?.contractInfoDto?.chargeType === 1) {
+                            this.getForm()?.setFieldsValue({ totalAmount: saleOrderValue.taxAmount });
+                        }  
+                    }
+                }/>
             }, {
                 label: '含税单价',
                 name: 'taxPrice',
@@ -262,18 +296,13 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 initialValue: saleOrder?.taxRate,
                 children: 
                     <Select showSearch onSearch={(value: string) => {
-                        console.log(typeof(parseFloat(parseFloat(value).toFixed(4))))
                         this.setState({
                             newOption: {
                                 label: parseFloat(parseFloat(value).toFixed(4)),
                                 value: parseFloat(parseFloat(value).toFixed(4))
                             }
                         });
-                    }} onChange={ () => {
-                        const saleOrder: ISaleOrder = this.getForm()?.getFieldsValue(true);
-                        // const amount: number = saleOrder.amount;
-                        console.log(saleOrder)
-                    } }>
+                    }} onChange={ () => this.getAmount() }>
                         {
                             this.state.newOption ? 
                             <Select.Option key={ this.state.newOption.value } value={ this.state.newOption.label }>{ this.state.newOption.value }</Select.Option> 
@@ -367,29 +396,30 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             render: (): React.ReactNode => {
                 return (
                     <>
-                        <Form.List name="paymentPlanDtos" initialValue={ saleOrder?.productDtos || [] }>
+                        <Form.List name="productDtos" initialValue={ saleOrder?.productDtos || [] }>
                             {
                                 (fields: FormListFieldData[], operation: FormListOperation): React.ReactNode => {
                                     return (
                                         <>
                                             <Button type="primary" onClick={ () => {
-                                                    operation.add();
-                                                    const orderQuantity: number = this.state.orderQuantity;
-                                                    this.setState({
-                                                        orderQuantity: orderQuantity+1
-                                                    })
+                                                operation.add();
+                                                const orderQuantity: number = this.state.orderQuantity;
+                                                this.setState({
+                                                    orderQuantity: orderQuantity+1
+                                                })
                                                 }   
                                             } className={ styles.addBtn }>新增</Button>
                                             <Row  className={ styles.FormHeader }>
                                                 <Col span={ 1 }></Col>
                                                 <Col span={ 1 }>序号</Col>
-                                                <Col span={ 2 }>状态</Col>
+                                                <Col span={ 1 }>状态</Col>
                                                 <Col span={ 2 }>* 线路名称</Col>
                                                 <Col span={ 2 }>产品类型</Col>
                                                 <Col span={ 2 }>* 塔型</Col>
                                                 <Col span={ 2 }>* 杆塔号</Col>
                                                 <Col span={ 2 }>* 电压等级</Col>
-                                                <Col span={ 2 }>呼高（米）</Col>
+                                                <Col span={ 1 }>呼高（米）</Col>
+                                                <Col span={ 2 } className={ saleOrder?.contractInfoDto?.chargeType === 2? styles.isShow : '' }>* 重量（吨）</Col>
                                                 <Col span={ 2 }>单价</Col>
                                                 <Col span={ 2 }>金额</Col>
                                                 <Col span={ 2 }>标段</Col>
@@ -412,13 +442,20 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                             </ConfirmableButton>
                                                         </Col>
                                                         <Col span={ 1 }>{ index + 1 }</Col>
-                                                        <Col span={ 2 }>
+                                                        <Col span={ 1 }>
                                                             <Form.Item { ...field } name={[field.name, 'productStatus']} fieldKey={[field.fieldKey, 'productStatus']}>
                                                                 <Input disabled/>
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={ 2 }>
-                                                            <Form.Item { ...field } name={[field.name, 'lineName']} fieldKey={[field.fieldKey, 'lineName']}>
+                                                            <Form.Item 
+                                                                { ...field } 
+                                                                name={[field.name, 'lineName']} 
+                                                                fieldKey={[field.fieldKey, 'lineName']} 
+                                                                rules= {[{
+                                                                    required: true,
+                                                                    message: '请输入线路名称'
+                                                                }]}>
                                                                 <Input/>
                                                             </Form.Item>
                                                         </Col>
@@ -432,12 +469,18 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={ 2 }>
-                                                            <Form.Item { ...field } name={[field.name, 'productShape']} fieldKey={[field.fieldKey, 'productShape']}>
+                                                            <Form.Item { ...field } name={[field.name, 'productShape']} fieldKey={[field.fieldKey, 'productShape']} rules= {[{
+                                                                    required: true,
+                                                                    message: '请输入塔型'
+                                                                }]}>
                                                                 <Input/>
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={ 2 }>
-                                                            <Form.Item { ...field } name={[field.name, 'productNumber']} fieldKey={[field.fieldKey, 'productNumber']}>
+                                                            <Form.Item { ...field } name={[field.name, 'productNumber']} fieldKey={[field.fieldKey, 'productNumber']} rules= {[{
+                                                                    required: true,
+                                                                    message: '请输入杆塔号'
+                                                                }]}>
                                                                 <Input/>
                                                             </Form.Item>
                                                         </Col>
@@ -449,7 +492,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                                 </Select>
                                                             </Form.Item>
                                                         </Col>
-                                                        <Col span={ 2 }>
+                                                        <Col span={ 1 }>
                                                             <Form.Item { ...field } name={[field.name, 'productHeight']} fieldKey={[field.fieldKey, 'productHeight']}>
                                                             <InputNumber
                                                                 min="0"
@@ -459,19 +502,73 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                             />
                                                             </Form.Item>
                                                         </Col>
+                                                        <Col span={ 2 }  className={ saleOrder?.contractInfoDto?.chargeType === 2? styles.isShow : '' }>
+                                                            <Form.Item { ...field } name={[field.name, 'num']} fieldKey={[field.fieldKey, 'num']} rules= {[{
+                                                                    required: true,
+                                                                    message: '请输入产品重量'
+                                                                }]}>
+                                                                <Input onBlur={ () => {
+                                                                    const productDtos: IProductDtos[] = this.getForm()?.getFieldsValue(true).productDtos;
+                                                                    if(productDtos[0]) {
+                                                                        if(productDtos[index].num) {
+                                                                            let totalNum: number = 0;
+                                                                            productDtos.map<void>((items: IProductDtos): void => {
+                                                                                totalNum = Number(totalNum) + Number(items.num);
+                                                                            })
+                                                                            this.getForm()?.setFieldsValue({ totalWeight: totalNum });
+                                                                        }
+                                                                    }
+                                                                } }/>
+                                                            </Form.Item>
+                                                        </Col>
                                                         <Col span={ 2 }>
-                                                            <Form.Item { ...field } name={[field.name, 'price']} fieldKey={[field.fieldKey, 'price']}>
-                                                                <Input prefix="￥"/>
+                                                            <Form.Item { ...field } name={[field.name, 'price']} fieldKey={[field.fieldKey, 'price']} rules= {[{
+                                                                    required: true,
+                                                                    message: '请输入产品单价'
+                                                                }]}>
+                                                                <Input prefix="￥" disabled={ saleOrder?.contractInfoDto?.chargeType !== 2 } onBlur={ () => {
+                                                                    const productDtos: IProductDtos[] = this.getForm()?.getFieldsValue(true).productDtos;
+                                                                    if(productDtos[0]) {
+                                                                        if(productDtos[index].price) {
+                                                                            const price: number = productDtos[index].price;
+                                                                            let totalPrice: number = 0;
+                                                                            let amount: number = 0;
+                                                                            let totalAmount: number = 0;
+                                                                            if(saleOrder?.contractInfoDto?.chargeType === 2) {
+                                                                                amount = price * 1; 
+                                                                            } else {
+                                                                                
+                                                                            }
+                                                                            productDtos.map<void>((items: IProductDtos): void => {
+                                                                                totalPrice = Number(totalPrice) + Number(items.price);
+                                                                            })
+                                                                            productDtos[index] = {
+                                                                                ...productDtos[index],
+                                                                                totalAmount: amount
+                                                                            }
+                                                                            this.getForm()?.setFieldsValue({ totalPrice: totalPrice, productDtos: productDtos });
+                                                                            productDtos.map<void>((items: IProductDtos): void => {
+                                                                                totalAmount = Number(totalAmount) + Number(items.totalAmount);
+                                                                            })
+                                                                            this.getForm()?.setFieldsValue({ totalAmount: totalAmount });
+                                                                            if(saleOrder?.contractInfoDto?.chargeType === 2) {
+                                                                                this.getForm()?.setFieldsValue({ taxAmount: totalAmount, taxPrice: totalPrice });
+                                                                            }
+                                                                            this.getAmount();
+                                                                            console.log(productDtos)
+                                                                        }
+                                                                    }
+                                                                } }/>
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={ 2 }>
                                                             <Form.Item { ...field } name={[field.name, 'totalAmount']} fieldKey={[field.fieldKey, 'totalAmount']}>
-                                                                <Input prefix="￥"/>
+                                                                <Input prefix="￥" disabled/>
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={ 2 }>
                                                             <Form.Item { ...field } name={[field.name, 'tender']} fieldKey={[field.fieldKey, 'tender']}>
-                                                                <Input prefix="￥"/>
+                                                                <Input/>
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={ 2 }>
@@ -489,21 +586,25 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             
                         </Form.List>
                         <Row>
-                            <Col span={ 16 }>
-                            总计
-                        </Col>
-                        <Col span={ 2 }>
-                        <Form.Item className={ styles.FormItem }>
-                                <Input/>
-                            </Form.Item>
-                        </Col>
-                        <Col span={ 2 }>
-                        <Form.Item className={ styles.FormItem }>
-                                <Input/>
-                            </Form.Item>
-                        </Col>
+                            <Col span={ 14 }>
+                                总计
+                            </Col>
+                            <Col span={ 2 } className={ saleOrder?.contractInfoDto?.chargeType === 2? styles.isShow : '' }>
+                                <Form.Item name="totalWeight">
+                                    <Input disabled/>
+                                </Form.Item>
+                                </Col>
+                            <Col span={ 2 }>
+                                <Form.Item name="totalPrice">
+                                    <Input disabled/>
+                                </Form.Item>
+                            </Col>
+                            <Col span={ 2 }>
+                                <Form.Item name="totalAmount">
+                                    <Input disabled/>
+                                </Form.Item>
+                            </Col>
                         </Row>
-                        
                     </>
                 );
             }
