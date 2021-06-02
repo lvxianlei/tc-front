@@ -42,6 +42,12 @@ export default abstract class AbstractFilteredSelecableModal<P extends IAbstract
      */
     abstract getFilterFormItemProps(): FormItemProps[];
 
+    public getTableProps() {
+        return {
+            pagination: this.state.tablePagination,
+            onChange:  this.onTableChange 
+        }
+    }
     /**
      * @description modal内表格 
      */
@@ -54,18 +60,9 @@ export default abstract class AbstractFilteredSelecableModal<P extends IAbstract
                 <Card className={ styles.tableCard }>
                 <Space direction="vertical" size="large" >
                     <Table 
-                        rowKey={ this.getTableRowKey() } 
-                        bordered={ true } 
-                        dataSource={ this.getTableDataSource() } 
-                        columns={this.getTableColumns()}
+                        { ...super.getTableProps() } 
                         pagination={ this.state.tablePagination } 
-                        onChange={ this.onTableChange }
-                        rowSelection={{
-                            type: "radio",
-                            selectedRowKeys: this.state.selectedRowKeys,
-                            onChange: this.onSelectChange
-                        }}
-                    />
+                        onChange={ this.onTableChange }/>
                 </Space>
             </Card>
             </Space>

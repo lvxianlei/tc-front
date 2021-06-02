@@ -117,6 +117,20 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
             selectedRows
         });
     } 
+    
+    public getTableProps(): any {
+        return {
+            rowKey:  this.getTableRowKey(),
+            bordered:  true, 
+            dataSource:  this.getTableDataSource(), 
+            columns: this.getTableColumns(),
+            rowSelection: {
+                type: "radio",
+                selectedRowKeys: this.state.selectedRowKeys,
+                onChange: this.onSelectChange
+            }
+        }
+    }
 
     /**
      * @description modal内表格 
@@ -126,15 +140,7 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
             <Card className={ styles.tableCard }>
                 <Space direction="vertical" size="large" >
                     <Table 
-                        rowKey={ this.getTableRowKey() } 
-                        bordered={ true } 
-                        dataSource={ this.getTableDataSource() } 
-                        columns={this.getTableColumns()}
-                        rowSelection={{
-                            type: "radio",
-                            selectedRowKeys: this.state.selectedRowKeys,
-                            onChange: this.onSelectChange
-                        }}
+                        { ...this.getTableProps() }
                     />
                 </Space>
             </Card>
