@@ -29,8 +29,15 @@ export interface IRouterItem {
     readonly children?: IRouterItem[];
 }
 
-export default interface IApplicationContext {
+export interface IClientConfig {
+    readonly clientId?: string;
+    readonly clientSecret?: string;
+}
+
+export default interface IApplicationContext extends IClientConfig {
+    readonly home?: string;
     readonly layout?: ILayout;
     readonly filters?: IFilter[];
     readonly routers?: IRouterItem[];
+    readonly globalRouters?: IRouterItem[];
 }
