@@ -4,6 +4,7 @@
  */
 
 import { RouteComponentProps, StaticContext } from "react-router";
+import AuthUtil from "../utils/AuthUtil";
 import { IFilter } from "./IFilter";
 
 /**
@@ -17,6 +18,14 @@ export default class AuthorizationFilter implements IFilter {
      * @returns true if filter 
      */
     public doFilter(props: RouteComponentProps<{}, StaticContext, unknown>): boolean {
-        return true;
+        let accessable: boolean = true;
+        if (props.location.pathname !== '/login') {
+            accessable = !!(AuthUtil.getAuthorization() && AuthUtil.getSinzetechAuth() && AuthUtil.getTenantId());
+            if (!accessable) {
+                const { location } = window;
+                props.history.replace(`/login?goto=${ encodeURIComponent(location.href.replace(`${ location.protocol }//${ location.host }`, '')) }`);
+            }
+        }
+        return accessable;
     }
 }
