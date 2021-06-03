@@ -28,6 +28,7 @@
  import { RouteComponentProps } from 'react-router';
  import { Link } from 'react-router-dom';
  import OrderSelectionComponent from '../../../components/OrderSelectionModal';
+ import ProductSelectionComponent from '../../../components/ProductSelectionModal';
  import AbstractFillableComponent, {
      IAbstractFillableComponentState,
      IFormItemGroup,
@@ -81,7 +82,7 @@ export interface IProductInfoVO {
     readonly productNumber?: string;	
     readonly productShape?:	string;
     readonly productStatus?: number;
-    readonly productTypeName: string;
+    readonly productTypeName?: string;
     readonly saleOrderId?: number;
     readonly taskNoticeId?: number;
     readonly tender?: string;
@@ -145,7 +146,6 @@ enum StepTitleItem {
  
      constructor(props: P) {
          super(props)
-         this.handleAdd = this.handleAdd.bind(this)
      }
  
      /**
@@ -173,8 +173,9 @@ enum StepTitleItem {
              }
          };
      }
-
-     public onOrderSelect = (selectedRows: DataType[]):void => {
+    
+    //订单选择
+    public onOrderSelect = (selectedRows: DataType[]):void => {
         if(selectedRows.length > 0 ) {
             const task:ITask = {
                 contractId: selectedRows[0].contractId,
@@ -190,6 +191,19 @@ enum StepTitleItem {
                 contractInfoDTO:task
             })
             this.getForm()?.setFieldsValue(task);
+        }
+    }
+   
+    //产品选择
+    public onProductSelect = (selectedRows: DataType[]):void => {
+        console.log(selectedRows)
+        const { productDataSource } = this.state;
+        if(selectedRows.length > 0 ) {
+            const task:IProductInfoVO[] = productDataSource || [];
+            task.push(selectedRows[0])
+            this.setState({
+                productDataSource:[...task]
+            })
         }
     }
   
@@ -604,21 +618,7 @@ enum StepTitleItem {
             checkStep: checkStep - 1
         })
     }
-    //新增
-    public handleAdd = () => {
-        const { productDataSource } = this.state;
-        const task:IProductInfoVO[] = productDataSource || [];
-        task.push({
-            description: '',
-            lineName: '',
-            num: 0,
-            price: 0,	
-            productTypeName:'',
-        })
-        this.setState({
-            productDataSource:[...task]
-        })
-    }
+
 
     /**
      * @description Renders extra sections
@@ -636,15 +636,13 @@ enum StepTitleItem {
                         <>
                             <div className={styles.column_to_row}>
                                 <div className={styles.title}>产品信息</div>
-                                <Button type='primary' onClick={
-                                     this.handleAdd
-                                }>新增</Button>
+                                <ProductSelectionComponent onSelect={ this.onProductSelect }  saleOrderId={ this.state?.task?.saleOrderNumber }/>
                             </div>
                             <Table 
                                 columns={this.columns()} 
-                                dataSource={productDataSource} 
+                                dataSource={[...productDataSource]} 
                                 scroll={{ x: 1300 }} 
-                                rowKey={(record:IProductInfoVO)=>record.productTypeName}
+                                rowKey={(record:IProductInfoVO)=>record?.taskNoticeId?record?.taskNoticeId:''}
                                 rowSelection={{
                                     type:'checkbox',
                                     onChange:( selectedKeys: React.Key[] )=>{
@@ -665,6 +663,9 @@ enum StepTitleItem {
 
     //table-column
     public columns(): TableColumnType<IProductInfoVO>[] {
+
+        const { productDataSource } = this.state;
+
         return [
             {
                 title: '状态',
@@ -734,7 +735,16 @@ enum StepTitleItem {
                             type="link" 
                             placement="topRight"
                             onConfirm={ () => {
-                                console.log(record)
+                                let num = 0;
+                                productDataSource.map(({taskNoticeId},index:number)=>{
+                                    if( taskNoticeId == record.taskNoticeId ){
+                                        num = index;
+                                    }
+                                })
+                                productDataSource.splice(num,1);
+                                this.setState({
+                                    productDataSource
+                                })
                             }}
                         >
                             <DeleteOutlined />

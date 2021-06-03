@@ -44,6 +44,20 @@ export interface DataType{
     readonly internalNumber?: string;
     readonly signContractTime?: string;
     readonly saleOrderNumber?: string;
+    readonly lineName?: string	;
+    readonly num?:number;
+    readonly price?: number;
+    readonly productHeight?: number;
+    readonly productNumber?: string;
+    readonly productShape?: string;
+    readonly productStatus?: number;
+    readonly productType?: number;
+    readonly saleOrderId?: number;
+    readonly taskNoticeId?: number;	
+    readonly tender?: string;
+    readonly totalAmount?:number;
+    readonly unit?: string;
+    readonly voltageGrade?: number;
 }
 
 export interface IResponseData {
@@ -53,6 +67,7 @@ export interface IResponseData {
     readonly parentCode: string;
     readonly records: [];
     readonly paymentPlanVos: [];
+    readonly productVos: [];
 }
 
 export default abstract class AbstractSelectionModal<P extends IAbstractSelectableModalProps, S extends IAbstractSelectableModalState> extends React.Component<P,S> {
