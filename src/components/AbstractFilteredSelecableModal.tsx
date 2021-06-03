@@ -44,10 +44,12 @@ export default abstract class AbstractFilteredSelecableModal<P extends IAbstract
 
     public getTableProps() {
         return {
+            ...super.getTableProps(),
             pagination: this.state.tablePagination,
             onChange:  this.onTableChange 
         }
     }
+
     /**
      * @description modal内表格 
      */
@@ -59,10 +61,7 @@ export default abstract class AbstractFilteredSelecableModal<P extends IAbstract
                 </Card>
                 <Card className={ styles.tableCard }>
                 <Space direction="vertical" size="large" >
-                    <Table 
-                        { ...super.getTableProps() } 
-                        pagination={ this.state.tablePagination } 
-                        onChange={ this.onTableChange }/>
+                    { super.renderTableContent() }
                 </Space>
             </Card>
             </Space>
