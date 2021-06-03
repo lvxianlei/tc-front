@@ -26,7 +26,7 @@ export interface IAbstractSaleOrderSettingState extends IAbstractFillableCompone
 export interface ISaleOrder {
     readonly id?: number;
     readonly ordersNumber?: number;
-    readonly contractInfoVo?: IcontractInfoVo;
+    readonly contractInfoVo?: IContractInfoVo;
     readonly orderQuantity?: number;
     readonly type?: number;
     readonly taxAmount: number;
@@ -74,7 +74,7 @@ export interface IProductVos {
 
 interface IProductVo extends IProductVos {}
 
-interface IcontractInfoVo {
+export interface IContractInfoVo {
     readonly contractNumber?: string;
     readonly internalNumber?: string;
     readonly projectName?: string;
@@ -85,6 +85,8 @@ interface IcontractInfoVo {
     readonly currencyType?: number;
     readonly chargeType?: number;
     readonly orderDeliveryTime?: object;
+    readonly contractId?: number;
+    readonly signCustomerId?: number;
 }
 
 interface IOption {
@@ -140,7 +142,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
     public onSelect = (selectedRows: DataType[] | any): void => {
         const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
         if(selectedRows.length > 0 ) {
-            const modalSelectedValue: IcontractInfoVo = {
+            const modalSelectedValue: IContractInfoVo = {
                 contractNumber: selectedRows[0].contractNumber,
                 internalNumber: selectedRows[0].internalNumber,
                 projectName: selectedRows[0].projectName,
@@ -151,6 +153,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 currencyType: selectedRows[0].currencyType,
                 chargeType: selectedRows[0].chargeType,
                 orderDeliveryTime: moment(selectedRows[0].deliveryTime),
+                contractId: selectedRows[0].id,
+                signCustomerId: selectedRows[0].signCustomerId
             };
             this.setState({
                 saleOrder: {
