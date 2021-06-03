@@ -49,7 +49,6 @@ export interface IResponseData {
     readonly parentCode: string;
     readonly records: [];
     readonly paymentPlanVos: [];
-    readonly productVos: [];
 }
 
 export default abstract class AbstractSelectionModal<P extends IAbstractSelectableModalProps, S extends IAbstractSelectableModalState> extends React.Component<P,S> {

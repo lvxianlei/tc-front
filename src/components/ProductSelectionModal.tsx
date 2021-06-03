@@ -22,8 +22,11 @@
  }
  export interface IOrderSelectionComponentProps extends IAbstractSelectableModalProps {
     readonly saleOrderId?: string;
-}
+ }
  
+ export interface IResponseDataMore extends IResponseData {
+    readonly productVos: [];
+ }
  export interface IOrder {
     readonly description: string;
     readonly lineName: string	;
@@ -70,7 +73,7 @@
      }
      
      public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-         const resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-market/saleOrder/${this.props.saleOrderId}`);
+         const resData: IResponseDataMore = await RequestUtil.get<IResponseDataMore>(`/tower-market/saleOrder/${this.props.saleOrderId}`);
          this.setState({
              ...filterValues,
              tableDataSource: resData.productVos,
