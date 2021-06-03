@@ -15,7 +15,13 @@ interface ILoginProps {}
 interface ILoginRouteProps extends RouteComponentProps<ILoginProps> {}
 
 interface ILoginState {
-    readonly captcha: string;
+    readonly captcha: ICaptcha;
+    readonly tenant: ITenant;
+}
+
+interface ICaptcha {
+    readonly image: string;
+    readonly key: string;
 }
 
 /**
@@ -24,7 +30,16 @@ interface ILoginState {
 class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
 
     public state: ILoginState = {
-        captcha: ''
+        captcha: {
+            image: '',
+            key: ''
+        },
+        tenant: {
+            tenantId: '',
+            tenantName: '',
+            domain: '',
+            logo: ''
+        }
     };
 
     /**
@@ -43,13 +58,13 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const { image } = await RequestUtil.get('/sinzetech-auth/oauth/captcha');
+        const [captcha, tenant] = await Promise.all<ICaptcha, ITenant>([
+            RequestUtil.get<ICaptcha>('/sinzetech-auth/oauth/captcha'),
+            RequestUtil.get<ITenant>('/sinzetech-system/tenantClient/info')
+        ]);
         this.setState({
-            captcha: image
-        });
-        const tenant: ITenant = await RequestUtil.get<ITenant>('/sinzetech-system/tenantClient/info');
-        AuthUtil.setTenantId(tenant.tenantId, {
-            expires: 7
+            captcha: captcha,
+            tenant: tenant
         });
     }
 
@@ -58,8 +73,16 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
      * @param values 
      */
     private async onSubmit(values: Record<string, any>) {
-        const { access_token } = await RequestUtil.post('/sinzetech-auth/oauth/token', values, {
-            'Content-Type': 'application/x-www-form-urlencoded'
+        AuthUtil.setTenantId(this.state.tenant.tenantId, {
+            expires: 7
+        });
+        const { access_token } = await RequestUtil.post('/sinzetech-auth/oauth/token', {
+            ...values,
+            tenantId: this.state.tenant.tenantId
+        }, {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Captcha-code': values.code,
+            'Captcha-key': this.state.captcha.key
         });
         AuthUtil.setSinzetechAuth(access_token, {
             expires: 7
@@ -108,13 +131,16 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
                                             <Input placeholder="请输入验证码" prefix={ <SafetyCertificateOutlined /> }/>
                                         </Form.Item>
                                         {
-                                            this.state.captcha
+                                            this.state.captcha.image
                                             ?
-                                            <img src={ this.state.captcha }/>
+                                            <img src={ this.state.captcha.image }/>
                                             :
                                             null
                                         }
                                     </Space>
+                                </Form.Item>
+                                <Form.Item name="type" initialValue="account" className={ layoutStyles.hidden }>
+                                    <Input type="hidden"/>
                                 </Form.Item>
                                 <Form.Item name="grant_type" initialValue="password" className={ layoutStyles.hidden }>
                                     <Input type="hidden"/>

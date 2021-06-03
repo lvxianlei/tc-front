@@ -120,7 +120,7 @@ export default abstract class RequestUtil {
         NProgress.inc();
         return this.request(path, {
             method: 'POST',
-            body: JSON.stringify(params),
+            body: (headers as any || {})['Content-Type'] === 'application/x-www-form-urlencoded' ? stringify(params) : JSON.stringify(params),
             headers: headers
         });
     }
