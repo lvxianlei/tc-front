@@ -1,0 +1,11 @@
+{
+    "code": 200,
+    "success": true,
+    "data": {
+        "tenantId": "000000",
+        "domain": "http://tc.huijintong.com:8866",
+        "tenantName": "新之科技有限公司",
+        "logo": "http://water-oss.oss-cn-beijing.aliyuncs.com/upload/20210527/d41e955bc7728908f7fda7aecd01e47f.png"
+    },
+    "msg": "操作成功"
+}

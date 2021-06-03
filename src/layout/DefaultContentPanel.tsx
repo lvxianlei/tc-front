@@ -24,34 +24,18 @@ export default class DefaultContentPanel extends AsyncComponent<IDefaultContentP
      */
     public render(): React.ReactNode {
         return (
-            <Switch>
+            <>
                 {
                     ApplicationContext.get().routers?.map<React.ReactNode>((router: IRouterItem): React.ReactNode => (
                         router.path
                         ?
                         <Route path={ router.path } key={ router.path } exact={ router.exact }
-                            render={ this.routeRender(router.module) }/>
+                            render={ ApplicationContext.routeRender(router.module) }/>
                         :
                         null
                     ))
                 }
-            </Switch>
+            </>
         );
-    }
-
-    protected routeRender(module: string | undefined): (props: RouteComponentProps<{}>) => React.ReactNode {
-        return (props: RouteComponentProps<{}>): React.ReactNode => {
-            let valid: boolean = true;
-            for (let filter of ApplicationContext.get().filters || []) {
-                if (!filter.doFilter(props)) { // As long as one filter failed, valid will be false.
-                    valid = false;
-                }
-            }
-            if (valid) {
-                return <AsyncPanel module={ module}/>;
-            } else {
-                return null;
-            }
-        };
     }
 }

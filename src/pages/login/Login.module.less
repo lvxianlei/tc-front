@@ -1,0 +1,33 @@
+@import '~antd/es/style/themes/index.less';
+
+.header {
+  height: 45px !important;
+  background-color: #FFF;
+  box-shadow: 0 2px 8px 0 rgba(174,186,208,.27);
+}
+
+.content {
+  flex-grow: 1;
+  position: relative;
+  margin: 0;
+  overflow: auto;
+  background-color: #FFF;
+  display: flex;
+}
+
+.loginArea {
+  margin-left: auto;
+  margin-right: 125px;
+}
+
+.loginCard {
+  width: 380px;
+  text-align: center;
+  :global(.ant-input-prefix .anticon) {
+    color: @text-color-secondary;
+  }
+}
+
+.loginTitle {
+  margin-bottom: 42px !important;
+}

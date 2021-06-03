@@ -3,6 +3,12 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 { // 路由配置
+    "globalRouters": [{
+        "name": "登录",
+        "path": "/login",
+        "module": "./pages/login/Login",
+        "exact": true
+    }],
     "routers": [{ // 客户管理
         "name": "客户管理", // 显示在面包屑中的名称
         "path": "/client/mngt",
