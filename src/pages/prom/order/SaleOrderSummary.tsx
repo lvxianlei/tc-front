@@ -1,6 +1,6 @@
 /**
- * @author Cory(coryisbest0728#gmail.com)
- * @copyright © 2021 Cory. All rights reserved
+ * @author zyc
+ * @copyright © 2021 
  */
 import { Table, TableColumnType } from 'antd';
 import React from 'react';

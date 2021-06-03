@@ -1,6 +1,6 @@
 /**
- * @author Cory(coryisbest0728#gmail.com)
- * @copyright © 2021 Cory. All rights reserved
+ * @author zyc
+ * @copyright © 2021
  */
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
@@ -43,7 +43,6 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<IContractSettingRoutePro
             totalAmount: saleOrder.taxAmount,
             orderQuantity: saleOrder.orderQuantity,
         });
-        console.log(this.getForm()?.getFieldsValue(true))
     }
 
     /**

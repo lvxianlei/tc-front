@@ -13,7 +13,8 @@ for (let i = 1; i < 10; ++i) {
         "customerCompany": Random.cword(5,10),
         "signCustomerName": Random.cword(5,10),
         "deliveryTime": Random.date('yyyy-MM-dd'),
-        "orderDeliveryTime": Random.date('yyyy-MM-dd')
+        "orderDeliveryTime": Random.date('yyyy-MM-dd'),
+        "contractId": Random.increment(),
     });
 }
 
@@ -30,7 +31,8 @@ module.exports = {
             "customerCompany": Random.cword(5,10),
             "signCustomerName": Random.cword(5,10),
             "deliveryTime": Random.date('yyyy-MM-dd'),
-            "orderDeliveryTime": Random.date('yyyy-MM-dd')
+            "orderDeliveryTime": Random.date('yyyy-MM-dd'),
+            "contractId": 2
         }].concat(records),
         current: Random.natural(1, 20),
         size: 10,

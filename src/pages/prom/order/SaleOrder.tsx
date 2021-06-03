@@ -25,6 +25,7 @@ interface ITableDataItem {
     readonly signCustomerName: string;
     readonly deliveryTime: string;
     readonly orderDeliveryTime: string;
+    readonly contractId: string;
 }
 
 export interface IResponseData {
@@ -113,7 +114,7 @@ class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps, IProm
             title: '内部合同编号',
             dataIndex: 'internalNumber',
             render: (_: undefined, record: object): React.ReactNode => {
-                return <Link to={ `/prom/order/detail/${ (record as ITableDataItem).id }` }>{ (record as ITableDataItem).internalNumber }</Link>
+                return <Link to={ `/prom/contract/detail/${ (record as ITableDataItem).contractId }` }>{ (record as ITableDataItem).internalNumber }</Link>
             }
         }, {
             key: 'projectName',
@@ -151,8 +152,7 @@ class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps, IProm
                     <Link to={ `/prom/order/setting/${ (record as ITableDataItem).id }` }>编辑</Link>
                     <ConfirmableButton confirmTitle="要删除该订单吗？" type="link" placement="topRight" onConfirm={ async () => {
                         let id = (record as ITableDataItem).id;
-                        const resData:IResponseData = await RequestUtil.delete('/tower-market/saleOrder', {id: id})
-                        console.log(resData)
+                        const resData:IResponseData = await RequestUtil.delete('/tower-market/saleOrder', {id: id});
                     } }>删除</ConfirmableButton>
                     <Link to={ `/prom/order/ChangeProduct/${ (record as ITableDataItem).id }` }>变更产品信息</Link>
                 </Space>

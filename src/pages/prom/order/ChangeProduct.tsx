@@ -1,6 +1,6 @@
 /**
- * @author Cory(coryisbest0728#gmail.com)
- * @copyright © 2021 Cory. All rights reserved
+ * @author zyc
+ * @copyright © 2021 
  */
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
@@ -9,7 +9,6 @@ import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
 
 import RequestUtil from '../../../utils/RequestUtil';
 import AbstractSaleOrderSetting, { IAbstractSaleOrderSettingState, ISaleOrder, IProductVos } from './AbstractSaleOrderSetting';
-import moment from 'moment'
 
 export interface IContractSettingProps {
     readonly id: string;
@@ -30,7 +29,7 @@ class ChangeProduct extends AbstractSaleOrderSetting<IContractSettingRouteProps,
         const saleOrder: ISaleOrder = await RequestUtil.get<ISaleOrder>(`/tower-market/saleOrder/${ this.props.match.params.id }`);
         this.setState({
             saleOrder: saleOrder,
-            isReadonly: true
+            isChangeProduct: true
         });
         saleOrder.productVos = saleOrder.productVos?.map<IProductVos>((product: IProductVos, index: number): IProductVos => {
             return {
@@ -45,7 +44,6 @@ class ChangeProduct extends AbstractSaleOrderSetting<IContractSettingRouteProps,
             totalAmount: saleOrder.taxAmount,
             orderQuantity: saleOrder.orderQuantity,
         });
-        console.log(this.getForm()?.getFieldsValue(true))
     }
 
     /**

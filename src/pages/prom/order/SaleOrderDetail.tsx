@@ -1,6 +1,6 @@
 /**
- * @author Cory(coryisbest0728#gmail.com)
- * @copyright © 2021 Cory. All rights reserved
+ * @author zyc
+ * @copyright © 2021
  */
 import { Button, ColProps } from 'antd';
 import React from 'react';
@@ -57,7 +57,6 @@ class SaleOrderDetail extends AbstractDetailComponent<IContractDetailRouteProps,
      */
     public getSubinfoColProps (): ColProps[] {
         const detail: IDetail | undefined = this.state?.detail;
-        console.log(detail)
         return [{
             span: 8,
             children: (
@@ -71,6 +70,13 @@ class SaleOrderDetail extends AbstractDetailComponent<IContractDetailRouteProps,
         }];
     }
 
+    public deleteOrder = async (): Promise<void> => {
+        const resData: IResponseData = await RequestUtil.delete('/tower-market/saleOrder', {id: this.props.match.params.id})
+        if(resData) {
+            this.props.history.push(`/prom/order`);
+        }
+    }
+
     /**
      * @implements
      * @description Renders operation area
@@ -80,9 +86,7 @@ class SaleOrderDetail extends AbstractDetailComponent<IContractDetailRouteProps,
         return [
             <Button key="new" href="/prom/order/new">新增</Button>,
             <Button key="setting" href={ `/prom/order/setting/${ this.props.match.params.id }`}>编辑</Button>,
-            <ConfirmableButton key="delete" confirmTitle="要删除该订单吗？" onConfirm={ async () => {
-                const resData: IResponseData = await RequestUtil.delete('/tower-market/saleOrder', {id: this.props.match.params.id})
-            } }>删除</ConfirmableButton>
+            <ConfirmableButton key="delete" confirmTitle="要删除该订单吗？" onConfirm={ this.deleteOrder }>删除</ConfirmableButton>
         ];
     }
 

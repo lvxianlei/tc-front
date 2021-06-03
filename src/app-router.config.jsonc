@@ -64,7 +64,7 @@
         "module": "./pages/prom/order/SaleOrderDetail",
         "exact": true
     }, { // 变更产品信息
-        "name": "订单详情",
+        "name": "变更产品信息",
         "path": "/prom/order/ChangeProduct/:id",
         "module": "./pages/prom/order/ChangeProduct",
         "exact": true
