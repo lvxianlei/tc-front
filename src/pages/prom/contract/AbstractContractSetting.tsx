@@ -155,18 +155,6 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         };
     }
 
-    protected getGeneratNum(): string { 
-        var result: number = Math.floor( Math.random() * 1000 );
-        let num: string = '';
-        if(result < 10) {
-            num =  '00' + result;
-        } else if (result<100){
-            num = '0' + result;
-        } else {
-            num =  result.toString();
-        }
-        return moment().format('YYYYMMDD') + num;
-    }
     /**
      * @override
      * @description 附件表格选择
@@ -185,14 +173,14 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     }
 
     public  getRegionInfo = async (record: Record<string, any>) => {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-system/region`);
+        const resData: [] = await RequestUtil.get(`/tower-system/region/${ '00' }`);
         this.setState({
-            regionInfoData:  resData.records
+            regionInfoData:  resData
         })
     }
 
     public onRegionInfoChange =  async (record: Record<string, any>,selectedOptions?: CascaderOptionType[] | any) => {
-        if(selectedOptions.length < 3 ) {
+        if( selectedOptions.length > 0 && selectedOptions.length < 3 ) {
             let parentCode = record[selectedOptions.length - 1];
             const resData: [] = await RequestUtil.get(`/tower-system/region/${ parentCode }`);
             const targetOption = selectedOptions[selectedOptions.length - 1];
@@ -280,7 +268,6 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
      */
     public getFormItemGroups(): IFormItemGroup[][] {
             const contract: IContract | undefined = this.state.contract;
-            const GeneratNum: string = this.getGeneratNum();
             return [[{
                 title: '基础信息',
                 itemCol: {
@@ -310,7 +297,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 }, {
                     label: '内部合同编号',
                     name: 'internalNumber',
-                    initialValue: contract?.internalNumber || GeneratNum,
+                    initialValue: contract?.internalNumber,
                     children: <Input disabled/>
                 }, {
                     label: '工程名称',
@@ -433,7 +420,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     initialValue: contract?.countryCode,
                     children: (
                         <Select onChange={ (value: number) => {
-                            this.getForm()?.setFieldsValue({ countryCode: value })
+                            this.getForm()?.setFieldsValue({ countryCode: value, regionInfoDTO: [] })
                             this.setState({
                                 contract: {
                                     ...(contract || {}),
