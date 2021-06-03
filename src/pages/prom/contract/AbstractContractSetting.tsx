@@ -252,8 +252,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 contractId: this.state.contract?.id,
                 contractNumber: value
             });
-            if (resData) {
-                resolve(resData)
+            if (!resData) {
+                resolve(!resData)
             } else 
                 resolve(false)
         }).catch(error => {
