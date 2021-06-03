@@ -11,7 +11,8 @@ const {
     addLessLoader,
     addWebpackModuleRule
 } = require('customize-cra');
-const Dotenv = require('dotenv-webpack');
+const DotenvWebpack = require('dotenv-webpack');
+const Dotenv = require('dotenv');
 const AntdDayjsWebpackPlugin = require('antd-dayjs-webpack-plugin');
 const AppCtxConfigCompiler = require('./compiler/AppCtxConfigCompiler');
 const { ModifySourcePlugin } = require('modify-source-webpack-plugin');
@@ -45,7 +46,7 @@ module.exports = {
                 javascriptEnabled: true
             }
         }),
-        addWebpackPlugin(new Dotenv({
+        addWebpackPlugin(new DotenvWebpack({
             path: `./env/.${ process.env.NODE_ENV }.env`, // load this now instead of the ones in '.env'
             safe: true, // load '.env.example' to verify the '.env' variables are all set. Can also be a string to a different file.
             systemvars: true, // load all the predefined 'process.env' variables which will trump anything local per dotenv specs.
@@ -59,7 +60,7 @@ module.exports = {
                 modify: (src, filename) => new AppCtxConfigCompiler().compile(src)
             }]
         })),
-        process.env.NODE_ENV === 'development'
+        (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'integration')
         ?
         addWebpackPlugin(new MockWebpackPlugin({
             // mock config
@@ -74,8 +75,13 @@ module.exports = {
     devServer: overrideDevServer(
         function (config) {
             const proxy = {};
+            const envConfig = Dotenv.config({ path: path.join(__dirname, '/env', `.${ process.env.NODE_ENV }.env`) });
             fs.readdirSync(path.join(__dirname, './mock/api/')).forEach((dirname) => {
-                proxy[`/${ dirname }`] = 'http://localhost:3001'; // mock server url
+                const stats = fs.statSync(path.join(__dirname, './mock/api/', dirname));
+                if (!stats.isDirectory()) {
+                    dirname = dirname.replace(/\.[\w\d]+/, '');
+                }
+                proxy[`/${ dirname }`] = envConfig.parsed.REQUEST_API_REAL_HOST_NAME; // mock server url
             });
             return Object.assign(config || {}, {
                 port: 3000,

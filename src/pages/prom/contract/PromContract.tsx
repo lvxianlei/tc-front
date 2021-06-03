@@ -60,7 +60,7 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
      * @param filterValues 
      */
     protected async fetchTableData(filterValues: Record<string, any>,pagination: TablePaginationConfig = {}) {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/contract/page', {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/contract', {
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize ||this.state.tablePagination?.pageSize,
