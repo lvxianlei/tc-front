@@ -40,24 +40,6 @@ export interface DataType{
     readonly returnedTime?: string;
     readonly period?: number;
     readonly description?: string;
-    readonly contractId?: number;
-    readonly internalNumber?: string;
-    readonly signContractTime?: string;
-    readonly saleOrderNumber?: string;
-    readonly lineName?: string	;
-    readonly num?:number;
-    readonly price?: number;
-    readonly productHeight?: number;
-    readonly productNumber?: string;
-    readonly productShape?: string;
-    readonly productStatus?: number;
-    readonly productType?: number;
-    readonly saleOrderId?: number;
-    readonly taskNoticeId?: number;	
-    readonly tender?: string;
-    readonly totalAmount?:number;
-    readonly unit?: string;
-    readonly voltageGrade?: number;
 }
 
 export interface IResponseData {
