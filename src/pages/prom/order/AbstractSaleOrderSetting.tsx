@@ -304,8 +304,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      public getTotalAmount(): void {
         const productVos: IProductVos[] = this.getForm()?.getFieldsValue(true).productVos;
         let totalAmount: number = 0;
-        productVos.map<void>((items: IProductVo): void => {
-            totalAmount = Number(totalAmount) + Number(items.totalAmount);
+        productVos.map<number>((items: IProductVo): number => {
+            return totalAmount = Number(totalAmount) + Number(items.totalAmount);
         })
         this.getForm()?.setFieldsValue({ taxAmount: totalAmount, totalAmount: totalAmount });
     }
