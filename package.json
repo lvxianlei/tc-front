@@ -36,6 +36,7 @@
   },
   "scripts": {
     "start": "NODE_ENV=development GENERATE_SOURCEMAP=false react-app-rewired start",
+    "intg": "NODE_ENV=integration GENERATE_SOURCEMAP=false react-app-rewired start",
     "build": "NODE_ENV=production GENERATE_SOURCEMAP=true react-app-rewired build",
     "test": "NODE_ENV=development GENERATE_SOURCEMAP=false react-app-rewired test",
     "eject": "NODE_ENV=development GENERATE_SOURCEMAP=false react-app-rewired eject"
