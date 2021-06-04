@@ -59,11 +59,9 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const hrefSplit: string[] =  window.location.href.split('/');
-        const href: string = hrefSplit[0] + '//' +  hrefSplit[1] + hrefSplit[2];
         const [captcha, tenant] = await Promise.all<ICaptcha, ITenant>([
             RequestUtil.get<ICaptcha>('/sinzetech-auth/oauth/captcha'),
-            RequestUtil.get<ITenant>(`/sinzetech-system/tenantClient/info?domain=${ href }`)
+            RequestUtil.get<ITenant>(`/sinzetech-system/tenantClient/info?domain=${ window.location.protocol }//${ window.location.host }`)
         ]);
         this.setState({
             captcha: captcha,
