@@ -27,10 +27,12 @@ class AppCtxConfigCompiler {
                 const objAlt = this.handleFilters(appCtxConfig[key], source);
                 source = objAlt.source;
                 appCtxAlt += `${ objAlt.objAlt },`;
-            } else if(key === 'clientId' || key === 'clientSecret') {
-                appCtxAlt += key+`: "`+ appCtxConfig[key]+`",`;
+            } else if (key === 'clientId') {
+                appCtxAlt +=` ${ key } : ${ appCtxConfig[key] }`;
+            } else if (key === 'clientSecret') {
+                appCtxAlt +=` ${ key } : ${ appCtxConfig[key] }`;
             }
-        }
+        } 
         appCtxAlt += '}';
         return source.replace('const ctxConfigJson: IApplicationContext = {};', `const ctxConfigJson: IApplicationContext = ${ appCtxAlt };`);
     }
