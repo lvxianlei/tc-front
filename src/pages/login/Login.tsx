@@ -2,6 +2,7 @@ import { LockOutlined, SafetyCertificateOutlined, UserOutlined } from '@ant-desi
 import { Button, Card, Form, Input, Layout, Space, Typography } from 'antd';
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import MD5 from 'crypto-js/md5';
 
 import AsyncComponent from '../../components/AsyncComponent';
 import ApplicationContext from '../../configuration/ApplicationContext';
@@ -76,6 +77,7 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
         AuthUtil.setTenantId(this.state.tenant.tenantId, {
             expires: 7
         });
+        values.password = MD5(values.password).toString();
         const { access_token } = await RequestUtil.post('/sinzetech-auth/oauth/token', {
             ...values,
             tenantId: this.state.tenant.tenantId

@@ -3,8 +3,8 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 {
-    "clientId": "123", // 后端提供clientId
-    "clientSecret": "123", // 后端提供clientSecret
+    "clientId": "tower-erp", // 后端提供clientId
+    "clientSecret": "tower-erp-secret", // 后端提供clientSecret
     "home": "/client/mngt", // 登录后，进入的首页
     "layout": { // 布局配置
         "frame": "./layout/tc/TCFrame", // 主体框架
