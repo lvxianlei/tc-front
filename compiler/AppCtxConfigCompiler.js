@@ -22,15 +22,17 @@ class AppCtxConfigCompiler {
             if (key === 'layout') {
                 const objAlt = this.handleLayout(appCtxConfig[key], source);
                 source = objAlt.source;
-                appCtxAlt += `${ objAlt.objAlt },`;
+                appCtxAlt += `${objAlt.objAlt},`;
             } else if (key === 'filters') {
                 const objAlt = this.handleFilters(appCtxConfig[key], source);
                 source = objAlt.source;
-                appCtxAlt += `${ objAlt.objAlt },`;
+                appCtxAlt += `${objAlt.objAlt},`;
+            } else {
+                appCtxAlt += ` ${key}: ${appCtxConfig[key]}`;
             }
-        }
+        } 
         appCtxAlt += '}';
-        return source.replace('const ctxConfigJson: IApplicationContext = {};', `const ctxConfigJson: IApplicationContext = ${ appCtxAlt };`);
+        return source.replace('const ctxConfigJson: IApplicationContext = {};', `const ctxConfigJson: IApplicationContext = ${appCtxAlt};`);
     }
 
     handleLayout(layout, source) {
@@ -39,12 +41,12 @@ class AppCtxConfigCompiler {
         for (let key in layout) {
             const ClazzName = pascalcase(key);
             if (typeof layout[key] === 'object') {
-                layoutAlt += `${ key }:{componentClass:${ ClazzName },props:${JSON.stringify(layout[key].props)}},`;
+                layoutAlt += `${key}:{componentClass:${ClazzName},props:${JSON.stringify(layout[key].props)}},`;
             } else {
-                layoutAlt += `${ key }:{componentClass:${ ClazzName },props:{}},`;
+                layoutAlt += `${key}:{componentClass:${ClazzName},props:{}},`;
             }
             // imports += `import ${ ClazzName } from '${ path.resolve(__dirname, '../src/', this.getLayoutClazz(layout[key])) }';\n`;
-            imports += `import ${ ClazzName } from '${ this.getRelativePathFromSrc(this.getLayoutClazz(layout[key])) }';\n`;
+            imports += `import ${ClazzName} from '${ this.getRelativePathFromSrc(this.getLayoutClazz(layout[key])) }';\n`;
         }
         layoutAlt += `}`;
         return {
@@ -55,11 +57,11 @@ class AppCtxConfigCompiler {
 
     getRelativePathFromSrc(modulePath) {
         if (modulePath.indexOf('./') === 0) { // start with "./"
-            return `.${ modulePath }`;
+            return `.${modulePath}`;
         } else if (modulePath.indexOf('/') === 0) { // start with "/"
-            return `..${ modulePath }`;
+            return `..${modulePath}`;
         } else {
-            return `../${ modulePath }`;
+            return `../${modulePath}`;
         }
     }
 
@@ -75,8 +77,8 @@ class AppCtxConfigCompiler {
         let filtersAlt = `filters:[`;
         filters.forEach((filter) => {
             const ClazzName = pascalcase(filter.replace(/\/|\.|\\/g, ''));
-            const importDeclaration = `import ${ ClazzName } from '${ this.getRelativePathFromSrc(filter) }';\n`;
-            const initialFilterStatement = `new ${ ClazzName }(),`;
+            const importDeclaration = `import ${ClazzName} from '${this.getRelativePathFromSrc(filter)}';\n`;
+            const initialFilterStatement = `new ${ClazzName}(),`;
             if (!new RegExp(importDeclaration).test(source)) {
                 imports += importDeclaration;
             }

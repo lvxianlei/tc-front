@@ -3,6 +3,7 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 import Base64 from 'crypto-js/enc-base64';
+import Utf8 from 'crypto-js/enc-utf8'
 import Cookies, { CookieAttributes } from 'js-cookie';
 
 import ApplicationContext from '../configuration/ApplicationContext';
@@ -11,7 +12,6 @@ import { IClientConfig } from '../configuration/IApplicationContext';
 
 const TENANT_ID_KEY: string = 'SINZETECH_TENANT_ID';
 const TOKEN_KEY: string = 'SINZETECH_TOKEN';
-
 export default abstract class AuthUtil {
 
     /**
@@ -27,7 +27,7 @@ export default abstract class AuthUtil {
     public static getAuthorization(): string {
         if (!this.authorization) {
             const clinetInfo: IClientConfig = ApplicationContext.get();
-            this.authorization = `${ Base64.parse(`${ clinetInfo.clientId }:${ clinetInfo.clientSecret }`).toString() }`;
+            this.authorization = `${ Base64.stringify(Utf8.parse(`${ clinetInfo.clientId }:${ clinetInfo.clientSecret }`)) }`;
         }
         return this.authorization;
     }
