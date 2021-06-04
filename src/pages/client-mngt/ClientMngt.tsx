@@ -63,7 +63,7 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
      * @param [pagination] 
      */
     protected async fetchTableData(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-customer/customer/page', {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-customer/customer', {
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize ||this.state.tablePagination?.pageSize,
@@ -173,7 +173,7 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
     public getTabItems(): ITabItem[] {
         return [{
             label: '全部客户',
-            key: 0
+            key: ''
         }, {
             label: '国内客户',
             key: 1

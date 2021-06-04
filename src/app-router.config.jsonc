@@ -3,6 +3,12 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 { // 路由配置
+    "globalRouters": [{
+        "name": "登录",
+        "path": "/login",
+        "module": "./pages/login/Login",
+        "exact": true
+    }],
     "routers": [{ // 客户管理
         "name": "客户管理", // 显示在面包屑中的名称
         "path": "/client/mngt",
@@ -42,6 +48,31 @@
         "name": "合同详情",
         "path": "/prom/contract/detail/:id",
         "module": "./pages/prom/contract/ContractDetail",
+        "exact": true
+    }, {
+        "name": "销售订单管理", 
+        "path": "/prom/order",
+        "module": "./pages/prom/order/SaleOrder",
+        "exact": true
+    }, {
+        "name": "新增订单", 
+        "path": "/prom/order/new",
+        "module": "./pages/prom/order/SaleOrderNew",
+        "exact": true
+    }, {
+        "name": "编辑订单", 
+        "path": "/prom/order/setting/:id",
+        "module": "./pages/prom/order/SaleOrderSetting",
+        "exact": true
+    }, { // 订单详情
+        "name": "订单详情",
+        "path": "/prom/order/detail/:id",
+        "module": "./pages/prom/order/SaleOrderDetail",
+        "exact": true
+    }, { // 变更产品信息
+        "name": "变更产品信息",
+        "path": "/prom/order/ChangeProduct/:id",
+        "module": "./pages/prom/order/ChangeProduct",
         "exact": true
     }, { // 字典管理
         "name": "字典管理",
@@ -107,6 +138,34 @@
         "name": "修改用户",
         "path": "/sys/users/setting/:id",
         "module": "./pages/system-mngt/user/UserSetting",
+        "exact": true
+    }, { //审批
+        "name": "任务单审批",
+        "path": "/approval/task/",
+        "module": "./pages/approval/approvaladd/Approvaladd",
+        "exact": true
+    },
+    { // 任务审批管理
+        "name": "任务审批",
+        "path": "/approval/taskone/:id",
+        "module": "./pages/approval/task/Taskapproval",
+        "exact": true
+    },
+    { // 任务单产品变更审批
+        "name": "任务单产品变更审批",
+        "path": "/approval/taskchange/:id",
+        "module": "./pages/approval/Taskchange/Taskchange",
+        "exact": true
+    },
+    { //产品信息变更
+        "name": "产品信息变更",
+        "path": "/approval/information/:id",
+        "module": "./pages/approval/Information/Informationchange",
+        "exact": true
+    },{//任务单详情
+        "name": "任务单详情",
+        "path": "/approval/missiondetail/:id",
+        "module": "./pages/approval/missiondetail/Missiondetail",
         "exact": true
     }]
 }

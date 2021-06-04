@@ -42,6 +42,14 @@ export default abstract class AbstractFilteredSelecableModal<P extends IAbstract
      */
     abstract getFilterFormItemProps(): FormItemProps[];
 
+    public getTableProps() {
+        return {
+            ...super.getTableProps(),
+            pagination: this.state.tablePagination,
+            onChange:  this.onTableChange 
+        }
+    }
+
     /**
      * @description modal内表格 
      */
@@ -51,7 +59,11 @@ export default abstract class AbstractFilteredSelecableModal<P extends IAbstract
                 <Card className={ styles.tableCard }>
                     {  this.renderFilterContent() }
                 </Card>
-                { super.renderTableContent() }
+                <Card className={ styles.tableCard }>
+                <Space direction="vertical" size="large" >
+                    { super.renderTableContent() }
+                </Space>
+            </Card>
             </Space>
         );
     }
