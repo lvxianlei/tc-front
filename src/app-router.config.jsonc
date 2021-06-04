@@ -114,5 +114,33 @@
         "path": "/sys/users/setting/:id",
         "module": "./pages/system-mngt/user/UserSetting",
         "exact": true
+    }, { //审批
+        "name": "任务单审批",
+        "path": "/approval/task/",
+        "module": "./pages/approval/approvaladd/Approvaladd",
+        "exact": true
+    },
+    { // 任务审批管理
+        "name": "任务审批",
+        "path": "/approval/taskone/:id",
+        "module": "./pages/approval/task/Taskapproval",
+        "exact": true
+    },
+    { // 任务单产品变更审批
+        "name": "任务单产品变更审批",
+        "path": "/approval/taskchange/:id",
+        "module": "./pages/approval/Taskchange/Taskchange",
+        "exact": true
+    },
+    { //产品信息变更
+        "name": "产品信息变更",
+        "path": "/approval/information/:id",
+        "module": "./pages/approval/Information/Informationchange",
+        "exact": true
+    },{//任务单详情
+        "name": "任务单详情",
+        "path": "/approval/missiondetail/:id",
+        "module": "./pages/approval/missiondetail/Missiondetail",
+        "exact": true
     }]
 }
