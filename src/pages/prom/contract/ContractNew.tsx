@@ -36,6 +36,7 @@ class ContractNew extends AbstractContractSetting<IContractNewRouteProps, IContr
             };
         });
         values.customerInfoDto = this.state.contract?.customerInfoDto;
+        values.signCustomerId = this.state.contract?.signCustomerId;
         return await RequestUtil.post('/tower-market/contract', values);
     }
 }

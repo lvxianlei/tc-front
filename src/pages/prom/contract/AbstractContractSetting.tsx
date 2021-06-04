@@ -8,7 +8,6 @@ import { FormListFieldData, FormListOperation } from 'antd/lib/form/FormList';
 import moment from 'moment';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { Link } from 'react-router-dom';
 
 import AbstractFillableComponent, {
     IAbstractFillableComponentState,
@@ -21,12 +20,10 @@ import ClientSelectionComponent from '../../../components/ClientSelectionModal';
 import RequestUtil from '../../../utils/RequestUtil';
 import { DataType } from '../../../components/AbstractSelectableModal';
 import { CascaderOptionType } from 'antd/lib/cascader';
-import { SelectValue } from 'antd/lib/select';
 import { RuleObject } from 'antd/lib/form';
 import { StoreValue } from 'antd/lib/form/interface';
-import { render } from 'nprogress';
 import Modal from 'antd/lib/modal/Modal';
-import { IAttachVo } from './ContractAttachment';
+import AuthUtil from '../../../utils/AuthUtil';
 export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
     readonly tablePagination: TablePaginationConfig;
     readonly contract: IContract;
@@ -69,6 +66,7 @@ export interface IContract {
     readonly planType?: number;
     paymentPlanDtos?: IPaymentPlanDto[];
     readonly attachInfoDtos: IattachDTO[];
+    readonly signCustomerId?: number;
 }
 
 export interface IcustomerInfoDto {
@@ -155,18 +153,6 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         };
     }
 
-    protected getGeneratNum(): string { 
-        var result: number = Math.floor( Math.random() * 1000 );
-        let num: string = '';
-        if(result < 10) {
-            num =  '00' + result;
-        } else if (result<100){
-            num = '0' + result;
-        } else {
-            num =  result.toString();
-        }
-        return moment().format('YYYYMMDD') + num;
-    }
     /**
      * @override
      * @description 附件表格选择
@@ -185,14 +171,14 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     }
 
     public  getRegionInfo = async (record: Record<string, any>) => {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-system/region`);
+        const resData: [] = await RequestUtil.get(`/tower-system/region/${ '00' }`);
         this.setState({
-            regionInfoData:  resData.records
+            regionInfoData:  resData
         })
     }
 
     public onRegionInfoChange =  async (record: Record<string, any>,selectedOptions?: CascaderOptionType[] | any) => {
-        if(selectedOptions.length < 3 ) {
+        if( selectedOptions.length > 0 && selectedOptions.length < 3 ) {
             let parentCode = record[selectedOptions.length - 1];
             const resData: [] = await RequestUtil.get(`/tower-system/region/${ parentCode }`);
             const targetOption = selectedOptions[selectedOptions.length - 1];
@@ -207,11 +193,13 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
      */
     public onSelect = (selectedRows: DataType[]):void => {
         const contract: IContract | undefined = this.state.contract;
+        console.log(selectedRows)
         if(selectedRows.length > 0 ) {
             this.setState({
                 contract: {
                     ...(contract || {}),
-                    signCustomerName: selectedRows[0].name
+                    signCustomerName: selectedRows[0].name,
+                    signCustomerId: selectedRows[0].id
                 }
             })
             this.getForm()?.setFieldsValue({ signCustomerName: selectedRows[0].name });
@@ -231,7 +219,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 contract: {
                     ...(contract || {}),
                     customerInfoDto: select,
-                    signCustomerName: selectedRows[0].name
+                    signCustomerName: selectedRows[0].name,
+                    signCustomerId: selectedRows[0].id
                 }
             })
             this.getForm()?.setFieldsValue(select);
@@ -264,10 +253,11 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 contractId: this.state.contract?.id,
                 contractNumber: value
             });
-            if (resData) {
-                resolve(resData)
-            } else 
+            if (!resData) {
+                resolve(!resData)
+            } else {
                 resolve(false)
+            }
         }).catch(error => {
             Promise.reject(error)
         })
@@ -280,7 +270,6 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
      */
     public getFormItemGroups(): IFormItemGroup[][] {
             const contract: IContract | undefined = this.state.contract;
-            const GeneratNum: string = this.getGeneratNum();
             return [[{
                 title: '基础信息',
                 itemCol: {
@@ -310,7 +299,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 }, {
                     label: '内部合同编号',
                     name: 'internalNumber',
-                    initialValue: contract?.internalNumber || GeneratNum,
+                    initialValue: contract?.internalNumber,
                     children: <Input disabled/>
                 }, {
                     label: '工程名称',
@@ -431,9 +420,13 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     label: '所属国家',
                     name: 'countryCode',
                     initialValue: contract?.countryCode,
+                    rules: [{
+                        required: true,
+                        message: '请选择所属国家'
+                    }],
                     children: (
                         <Select onChange={ (value: number) => {
-                            this.getForm()?.setFieldsValue({ countryCode: value })
+                            this.getForm()?.setFieldsValue({ countryCode: value, regionInfoDTO: [] })
                             this.setState({
                                 contract: {
                                     ...(contract || {}),
@@ -458,6 +451,10 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     label: '计价方式',
                     name: 'chargeType',
                     initialValue: contract?.chargeType,
+                    rules: [{
+                        required: true,
+                        message: '请选择选择计价方式'
+                    }],
                     children: (
                         <Select>
                             <Select.Option value={ 1 }>订单总价、总重计算单价</Select.Option>
@@ -468,6 +465,10 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     label: '所属区域',
                     name: 'regionInfoDTO',
                     initialValue: contract?.region,
+                    rules: [{
+                        required: this.getForm()?.getFieldValue('countryCode') === 2 ? false : true,
+                        message: '请选择所属区域'
+                    }],
                     children: (
                         <Cascader
                             fieldNames={{ label: 'name', value: 'code' }}
@@ -481,11 +482,19 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     label: '合同总价',
                     name: 'contractAmount',
                     initialValue: contract?.contractAmount,
+                    rules: [{
+                        required: true,
+                        message: '请输入合同总价'
+                    }],
                     children: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } prefix="￥"/>
                 }, {
                     label: '币种',
                     name: 'currencyType',
                     initialValue: contract?.currencyType,
+                    rules: [{
+                        required: true,
+                        message: '请选择币种'
+                    }],
                     children: (
                         <Select>
                             <Select.Option value={ 1 }>RMB人民币</Select.Option>
@@ -654,42 +663,50 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                     return (
                                         <>
                                             <Space size="small" className={ styles.attachBtn }>
-                                                <Upload  action="/tower-system/attach" onChange={ (info)=>{
-                                                    console.log(info)
+                                                <Upload  action={ () => {
+                                                    const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                                                    return baseUrl+'sinzetech-resource/oss/put-file'
+                                                } } onChange={ (info)=>{
                                                     if (info.file.status !== 'uploading') {
                                                         // console.log(info.file, info.fileList);
+                                                    }
+                                                    if (info.file.status === 'done') {
+                                                        console.log(info.file, info.fileList); 
+                                                        let index: number = 1;
+                                                        if(this.state.contract.attachInfoDtos) {
+                                                            index = this.state.contract.attachInfoDtos.length + 1;
+                                                        } else {
+                                                            index = 1;
+                                                        } 
+                                                        const contract: IContract = this.state.contract;
+                                                        let attachInfoDtos: IattachDTO[] = contract.attachInfoDtos;
+                                                        console.log(info.file.response.data.link)
+                                                        const attachInfoItem: IattachDTO = {
+                                                            name: info.file.response.data.name,
+                                                            username: info.file.response.data.username,
+                                                            fileSize: info.file.response.data.size,
+                                                            description: '',
+                                                            filePath: info.file.response.data.link,
+                                                            id: info.file.response.data.attachId,
+                                                            fileUploadTime: info.file.response.data.fileUploadTime,
+                                                            fileSuffix: info.file.response.data.fileSuffix
+                                                        };
+                                                        operation.add(attachInfoItem);
+                                                        if(attachInfoDtos) {
+                                                            attachInfoDtos.push(attachInfoItem);  
+                                                        } else {
+                                                            attachInfoDtos = [attachInfoItem];
                                                         }
-                                                        if (info.file.status === 'done') {
-                                                            console.log(info.file, info.fileList); 
-                                                            const index: number = this.state.contract.attachInfoDtos.length; 
-                                                            const contract: IContract = this.state.contract;
-                                                            const attachInfoDtos: IattachDTO[] = contract.attachInfoDtos;
-                                                            operation.add({
-                                                                name: info.file.response.name,
-                                                                username: info.file.response.username,
-                                                                fileSize: info.file.size,
-                                                                description: '',
-                                                                filePath: info.file.response.filePath,
-                                                                id: info.file.response.attachId
-                                                            })
-                                                            attachInfoDtos[index] = {
-                                                                name: info.file.response.name,
-                                                                username: info.file.response.username,
-                                                                fileSize: info.file.response.size,
-                                                                description: '',
-                                                                filePath: info.file.response.filePath,
-                                                                id: info.file.response.attachId
+                                                        
+                                                        this.setState({
+                                                            contract: {
+                                                                ...(contract || {}),
+                                                                attachInfoDtos: attachInfoDtos
                                                             }
-                                                            this.setState({
-                                                                contract: {
-                                                                    ...(contract || {}),
-                                                                    attachInfoDtos: attachInfoDtos
-                                                                }
-                                                            })
-                                                            console.log(contract)
-                                                        } else if (info.file.status === 'error') {
-                                                            console.log(info.file, info.fileList);
-                                                        }
+                                                        })
+                                                    } else if (info.file.status === 'error') {
+                                                        console.log(info.file, info.fileList);
+                                                    }
                                                 } } showUploadList= {false}>
                                                     <Button type="primary">添加</Button>
                                                 </Upload>
@@ -722,22 +739,22 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                             <Checkbox value={ index } onChange={ this.checkChange }></Checkbox>
                                                         </Col>
                                                         <Col span={ 6 }>
-                                                            <Form.Item { ...field } name={[field.name, 'name']} fieldKey={[field.fieldKey, 'returnedTime']}>
+                                                            <Form.Item { ...field } name={[field.name, 'name']} fieldKey={[field.fieldKey, 'name']}>
                                                                 <Input disabled  className={ styles.Input }/>
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={ 2 }>
-                                                            <Form.Item { ...field } name={[field.name, 'fileSize']} fieldKey={[field.fieldKey, 'returnedRate']}>
+                                                            <Form.Item { ...field } name={[field.name, 'fileSize']} fieldKey={[field.fieldKey, 'fileSize']}>
                                                                 <Input disabled  className={ styles.Input }/>
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={ 4 }>
-                                                            <Form.Item { ...field } name={[field.name, 'username']} fieldKey={[field.fieldKey, 'returnedAmount']}>
+                                                            <Form.Item { ...field } name={[field.name, 'fileUploadTime']} fieldKey={[field.fieldKey, 'fileUploadTime']}>
                                                                 <Input disabled  className={ styles.Input }/>
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={ 4 }>
-                                                            <Form.Item { ...field } name={[field.name, 'username']} fieldKey={[field.fieldKey, 'returnedAmount']}>
+                                                            <Form.Item { ...field } name={[field.name, 'username']} fieldKey={[field.fieldKey, 'userName']}>
                                                                 <Input disabled  className={ styles.Input }/>
                                                             </Form.Item>
                                                         </Col>
