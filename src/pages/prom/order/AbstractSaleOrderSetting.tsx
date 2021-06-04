@@ -44,15 +44,15 @@ export interface ISaleOrder {
     readonly creditInsurance?: number;
     readonly orderDeliveryTime?: string;
     readonly description?: string;
-    productVos?: IProductVos[];
+    productVos?: IProductVo[];
     readonly purchaseOrderNumber?: string;
     readonly guaranteeType?: string;
     readonly totalWeight: number;
     readonly totalAmount: number;
-    readonly productChangeRecordVos: IProductVos[];
+    readonly productChangeRecordVos: IProductVo[];
 }
 
-export interface IProductVos {
+export interface IProductVo {
     readonly index?: number;
     readonly productStatus?: number;
     readonly description?: string;	
@@ -71,8 +71,6 @@ export interface IProductVos {
     readonly unit?: string;
     readonly voltageGrade?: number;
 }
-
-interface IProductVo extends IProductVos {}
 
 export interface IContractInfoVo {
     readonly contractNumber?: string;
@@ -223,12 +221,12 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      */
     public getPrice = (): void => {
         const saleOrder: ISaleOrder = this.getForm()?.getFieldsValue(true);
-        const productVos: IProductVos[] = this.getForm()?.getFieldsValue(true).productVos;
+        const productVos: IProductVo[] = this.getForm()?.getFieldsValue(true).productVos;
         if(productVos.length > 0) {
             let totalPrice: number = 0;
             totalPrice = saleOrder.taxAmount / saleOrder.totalWeight;
             totalPrice = parseFloat(totalPrice.toFixed(4));
-            productVos.map<void>((items: IProductVos, ind: number): void => {
+            productVos.map<void>((items: IProductVo, ind: number): void => {
                 productVos[ind] = {
                     ...productVos[ind],
                     price: totalPrice
@@ -255,11 +253,11 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      * @description 订单总重-输入产品重量计算总计重量
      */
     public numBlur(index: number): void {
-        let productVos: IProductVos[] = this.getForm()?.getFieldsValue(true).productVos;
+        let productVos: IProductVo[] = this.getForm()?.getFieldsValue(true).productVos;
         // 判断productVos是否有值
         if(productVos[index] && productVos[index].num) {
             let totalNum: number = 0;
-            productVos.map<void>((items: IProductVos): void => {
+            productVos.map<void>((items: IProductVo): void => {
                 totalNum = Number(totalNum) + Number(items.num);
             })
             this.getForm()?.setFieldsValue({ totalWeight: totalNum });
@@ -268,7 +266,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             })
             this.getPrice();
             this.getPriceAccordTaxRate();
-            productVos.map<void>((items: IProductVos, ind: number): void => {
+            productVos.map<void>((items: IProductVo, ind: number): void => {
                 const num: number = productVos[ind].num;
                 const price: number = productVos[ind].price;
                 productVos[ind] = {
@@ -285,7 +283,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      */
     public priceBlur(index: number): void {
         const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
-        const productVos: IProductVos[] = this.getForm()?.getFieldsValue(true).productVos;
+        const productVos: IProductVo[] = this.getForm()?.getFieldsValue(true).productVos;
         if(productVos[0] && productVos[index].price) {
             const price: number = productVos[index].price;
             let totalPrice: number = 0;
@@ -294,7 +292,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             if(saleOrder?.contractInfoVo?.chargeType === chargeType.ORDER_TOTAL_WEIGHT) {
                 amount = price * 1; 
             }
-            productVos.map<void>((items: IProductVos): void => {
+            productVos.map<void>((items: IProductVo): void => {
                 totalPrice = Number(totalPrice) + Number(items.price);
             })
             productVos[index] = {
@@ -311,7 +309,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      * @description 产品单价-计算总计金额
      */
      public getTotalAmount(): void {
-        const productVos: IProductVos[] = this.getForm()?.getFieldsValue(true).productVos;
+        const productVos: IProductVo[] = this.getForm()?.getFieldsValue(true).productVos;
         let totalAmount: number = 0;
         productVos.map<number>((items: IProductVo): number => {
             return totalAmount = Number(totalAmount) + Number(items.totalAmount);
@@ -325,7 +323,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      public tableDelete(index: number): void {
         const saleOrderValue: ISaleOrder = this.getForm()?.getFieldsValue(true);
         const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
-        const productVos: IProductVos[] = this.getForm()?.getFieldsValue(true).productVos;
+        const productVos: IProductVo[] = this.getForm()?.getFieldsValue(true).productVos;
         const orderQuantity: number = this.state.orderQuantity;
         this.setState({
             orderQuantity: orderQuantity - 1
@@ -556,7 +554,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
     public renderExtraSections(): IRenderedSection[] {
         const readonly: boolean = this.state.isChangeProduct;
         const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
-        const productVos: IProductVos[] = this.getForm()?.getFieldsValue(true).productVos;
+        const productVos: IProductVo[] = this.getForm()?.getFieldsValue(true).productVos;
         return [{
             title: '产品信息',
             render: (): React.ReactNode => {

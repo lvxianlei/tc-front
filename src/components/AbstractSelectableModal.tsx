@@ -2,7 +2,7 @@ import React from 'react'
 import {Modal, Card, Space, Table} from 'antd'
 
 import { GetRowKey } from 'rc-table/lib/interface';
-import { ColumnType, TablePaginationConfig } from 'antd/lib/table';
+import { ColumnType, TablePaginationConfig, TableProps } from 'antd/lib/table';
 import styles from './AbstractSelectionModal.module.less'
 import PopModalButton from './PopModalButton';
 
@@ -118,7 +118,7 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
         });
     } 
     
-    public getTableProps(): any {
+    public getTableProps(): TableProps<object> {
         return {
             rowKey:  this.getTableRowKey(),
             bordered:  true, 
