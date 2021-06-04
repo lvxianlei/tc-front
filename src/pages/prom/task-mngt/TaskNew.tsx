@@ -28,6 +28,7 @@
         });
     }
  
+
      /**
       * @implements
       * @description Determines whether submit on
@@ -38,10 +39,11 @@
         values.planDeliveryTime = moment(values.planDeliveryTime).format('YYYY-MM-DD');
         values.deliveryTime = moment(values.deliveryTime).format('YYYY-MM-DD');
         values.signContractTime = moment(values.signContractTime).format('YYYY-MM-DD');
-        values.productIds = this.state.selectedKeys;
+        values.productIds = this.state.selectedKeys.length > 0 ? this.state.selectedKeys.length : [];
+        values.contractInfoDTO = this.state.contractInfoDTO;
+        values.saleOrderId = this.state?.task?.saleOrderId;
         console.log(values)
-        return Promise.resolve();
-        //  return await RequestUtil.post('/tower-market/taskNotice', values);
+        return await RequestUtil.post('/tower-market/taskNotice/save', values);
      }
  }
  
