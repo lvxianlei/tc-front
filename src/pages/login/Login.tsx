@@ -59,9 +59,11 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
      */
     public async componentDidMount() {
         super.componentDidMount();
+        const hrefSplit: string[] =  window.location.href.split('/');
+        const href: string = hrefSplit[0] + '//' +  hrefSplit[1] + hrefSplit[2];
         const [captcha, tenant] = await Promise.all<ICaptcha, ITenant>([
             RequestUtil.get<ICaptcha>('/sinzetech-auth/oauth/captcha'),
-            RequestUtil.get<ITenant>('/sinzetech-system/tenantClient/info')
+            RequestUtil.get<ITenant>(`/sinzetech-system/tenantClient/info?domain=${ href }`)
         ]);
         this.setState({
             captcha: captcha,
@@ -106,7 +108,7 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
                         <Card className={ style.loginCard }>
                             <Typography.Title level={ 4 } className={ style.loginTitle }>账号登录</Typography.Title>
                             <Form onFinish={ this.onSubmit }>
-                                <Form.Item name="email" rules={[
+                                <Form.Item name="username" rules={[
                                     {
                                         required: true,
                                         message: '请输入用户名'
@@ -141,10 +143,10 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
                                         }
                                     </Space>
                                 </Form.Item>
-                                <Form.Item name="type" initialValue="account" className={ layoutStyles.hidden }>
+                                <Form.Item name="grant_type" initialValue="captcha" className={ layoutStyles.hidden }>
                                     <Input type="hidden"/>
                                 </Form.Item>
-                                <Form.Item name="grant_type" initialValue="password" className={ layoutStyles.hidden }>
+                                <Form.Item name="password" initialValue="password" className={ layoutStyles.hidden }>
                                     <Input type="hidden"/>
                                 </Form.Item>
                                 <Form.Item name="scope" initialValue="all" className={ layoutStyles.hidden }>

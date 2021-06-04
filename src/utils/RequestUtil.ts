@@ -9,6 +9,7 @@ import { stringify } from 'query-string';
 import AuthUtil from './AuthUtil';
 
 interface IResponse<T> {
+    readonly access_token: any;
     readonly code: number;
     readonly data: T;
     readonly msg: string;
@@ -43,20 +44,24 @@ export default abstract class RequestUtil {
     private static request<T>(path: string, init?: RequestInit): Promise<T> {
         return new Promise<T>((resolve: (data: T) => void, reject: (res: IResponse<T>) => void): void => {
             let headers: HeadersInit = {
-                'Content-Type': 'application/json',
+                'Content-Type': init?.headers ? 'application/x-www-form-urlencoded;charset=UTF-8' : 'application/json;charset=UTF-8',
                 'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
-                'Tenant-Id': AuthUtil.getTenantId()
+                'Tenant-Id': AuthUtil.getTenantId(),
             };
             const sinzetechAuth: string = AuthUtil.getSinzetechAuth();
             if (sinzetechAuth) {
                 headers['Sinzetech-Auth'] = sinzetechAuth;
             }
+            if(init?.headers) {
+                headers['Captcha-Code'] = JSON.parse(JSON.stringify(init?.headers))['Captcha-code'];
+                headers['Captcha-Key'] = JSON.parse(JSON.stringify(init?.headers))['Captcha-key'];
+            }
+            
             fetch(this.joinUrl(path, process.env.REQUEST_API_PATH_PREFIX || ''), {
                 mode: 'cors',
                 ...(init || {}),
                 headers: {
-                    ...headers,
-                    ...init?.headers
+                    ...headers
                 }
             })
             .then((res) => {
@@ -68,8 +73,11 @@ export default abstract class RequestUtil {
                 }
                 return res.json();
             })
-            .then((res: IResponse<T>) => {
+            .then((res: IResponse<T> | any) => {
                 NProgress.done();
+                if(res.access_token){
+                    resolve(res);
+                }
                 if (res.code === 200) {
                     resolve(res.data);
                 } else if (res.code === 401) {
@@ -139,7 +147,7 @@ export default abstract class RequestUtil {
         return this.request(path, {
             method: 'PUT',
             body: JSON.stringify(params),
-            headers: headers
+            headers: headers,
         });
     }
 

@@ -27,6 +27,8 @@ class AppCtxConfigCompiler {
                 const objAlt = this.handleFilters(appCtxConfig[key], source);
                 source = objAlt.source;
                 appCtxAlt += `${ objAlt.objAlt },`;
+            } else if(key === 'clientId' || key === 'clientSecret') {
+                appCtxAlt += key+`: "`+ appCtxConfig[key]+`",`;
             }
         }
         appCtxAlt += '}';
