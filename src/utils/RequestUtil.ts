@@ -9,7 +9,6 @@ import { stringify } from 'query-string';
 import AuthUtil from './AuthUtil';
 
 interface IResponse<T> {
-    readonly access_token: any;
     readonly code: number;
     readonly data: T;
     readonly msg: string;
@@ -71,7 +70,7 @@ export default abstract class RequestUtil {
             })
             .then((res: IResponse<T> | any) => {
                 NProgress.done();
-                if(path === '/sinzetech-auth/oauth/token'){
+                if(path === '/sinzetech-auth/oauth/token') {
                     resolve(res);
                 }
                 if (res.code === 200) {
@@ -143,7 +142,7 @@ export default abstract class RequestUtil {
         return this.request(path, {
             method: 'PUT',
             body: JSON.stringify(params),
-            headers: headers,
+            headers: headers
         });
     }
 

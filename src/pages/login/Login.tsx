@@ -144,7 +144,7 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
                                 <Form.Item name="grant_type" initialValue="captcha" className={ layoutStyles.hidden }>
                                     <Input type="hidden"/>
                                 </Form.Item>
-                                <Form.Item name="password" initialValue="password" className={ layoutStyles.hidden }>
+                                <Form.Item name="type" initialValue="account" className={ layoutStyles.hidden }>
                                     <Input type="hidden"/>
                                 </Form.Item>
                                 <Form.Item name="scope" initialValue="all" className={ layoutStyles.hidden }>
