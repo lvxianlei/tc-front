@@ -44,23 +44,20 @@ export default abstract class RequestUtil {
     private static request<T>(path: string, init?: RequestInit): Promise<T> {
         return new Promise<T>((resolve: (data: T) => void, reject: (res: IResponse<T>) => void): void => {
             let headers: HeadersInit = {
-                'Content-Type': init?.headers ? 'application/x-www-form-urlencoded;charset=UTF-8' : 'application/json;charset=UTF-8',
+                'Content-Type': 'application/json',
                 'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
-                'Tenant-Id': AuthUtil.getTenantId(),
+                'Tenant-Id': AuthUtil.getTenantId()
             };
             const sinzetechAuth: string = AuthUtil.getSinzetechAuth();
             if (sinzetechAuth) {
                 headers['Sinzetech-Auth'] = sinzetechAuth;
             }
-            if(init?.headers) {
-                headers['Captcha-Code'] = JSON.parse(JSON.stringify(init?.headers))['Captcha-code'];
-                headers['Captcha-Key'] = JSON.parse(JSON.stringify(init?.headers))['Captcha-key'];
-            }
             fetch(this.joinUrl(path, process.env.REQUEST_API_PATH_PREFIX || ''), {
                 mode: 'cors',
                 ...(init || {}),
                 headers: {
-                    ...headers
+                    ...headers,
+                    ...init?.headers
                 }
             })
             .then((res) => {
@@ -74,7 +71,7 @@ export default abstract class RequestUtil {
             })
             .then((res: IResponse<T> | any) => {
                 NProgress.done();
-                if(res.access_token){
+                if(path === '/sinzetech-auth/oauth/token'){
                     resolve(res);
                 }
                 if (res.code === 200) {
