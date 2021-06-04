@@ -29,7 +29,7 @@ class AppCtxConfigCompiler {
                 appCtxAlt += `${ objAlt.objAlt },`;
             } else if (key === 'clientId') {
                 appCtxAlt +=` ${ key } : ${ appCtxConfig[key] }`;
-            } else if (key === 'clientSecret') {
+            } else {
                 appCtxAlt +=` ${ key } : ${ appCtxConfig[key] }`;
             }
         } 
