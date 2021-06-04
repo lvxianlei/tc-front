@@ -255,8 +255,9 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             });
             if (!resData) {
                 resolve(!resData)
-            } else 
+            } else {
                 resolve(false)
+            }
         }).catch(error => {
             Promise.reject(error)
         })
