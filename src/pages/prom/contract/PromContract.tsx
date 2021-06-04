@@ -168,7 +168,7 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
             dataIndex: 'operation',
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type="link"  href={ `/prom/contract/setting/${ (record as ITableDataItem).id }` } disabled={ (record as ITableDataItem).status === 0 }>
+                    <Button type="link"  href={ `/prom/contract/setting/${ (record as ITableDataItem).id }` } disabled={ (record as ITableDataItem).status === 1 }>
                         编辑
                     </Button>
                     <Popconfirm 
@@ -180,13 +180,13 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
                             let id = (record as ITableDataItem).id;
                             const resData:IResponseData = await RequestUtil.delete('/tower-market/contract', {id: id})
                         } }
-                        disabled={ (record as ITableDataItem).status === 0 }
+                        disabled={ (record as ITableDataItem).status === 1 }
                     >
-                        <Button type="link" disabled={ (record as ITableDataItem).status === 0 }>
+                        <Button type="link" disabled={ (record as ITableDataItem).status === 1 }>
                             删除
                         </Button>
                     </Popconfirm>
-                    <Button type="link" href={ `/prom/contract/paymentRecord` } disabled={ (record as ITableDataItem).status === 1 }>添加回款记录</Button>
+                    <Button type="link" href={ `/prom/contract/paymentRecord` } disabled={ (record as ITableDataItem).status === 0 }>添加回款记录</Button>
                 </Space>
             )
         }];
