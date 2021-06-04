@@ -2,7 +2,7 @@ import React from 'react'
 import {Modal, Card, Space, Table} from 'antd'
 
 import { GetRowKey } from 'rc-table/lib/interface';
-import { ColumnType, TablePaginationConfig } from 'antd/lib/table';
+import { ColumnType, TablePaginationConfig, TableProps } from 'antd/lib/table';
 import styles from './AbstractSelectionModal.module.less'
 import PopModalButton from './PopModalButton';
 
@@ -117,6 +117,20 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
             selectedRows
         });
     } 
+    
+    public getTableProps(): TableProps<object> {
+        return {
+            rowKey:  this.getTableRowKey(),
+            bordered:  true, 
+            dataSource:  this.getTableDataSource(), 
+            columns: this.getTableColumns(),
+            rowSelection: {
+                type: "radio",
+                selectedRowKeys: this.state.selectedRowKeys,
+                onChange: this.onSelectChange
+            }
+        }
+    }
 
     /**
      * @description modal内表格 
@@ -126,15 +140,7 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
             <Card className={ styles.tableCard }>
                 <Space direction="vertical" size="large" >
                     <Table 
-                        rowKey={ this.getTableRowKey() } 
-                        bordered={ true } 
-                        dataSource={ this.getTableDataSource() } 
-                        columns={this.getTableColumns()}
-                        rowSelection={{
-                            type: "radio",
-                            selectedRowKeys: this.state.selectedRowKeys,
-                            onChange: this.onSelectChange
-                        }}
+                        { ...this.getTableProps() }
                     />
                 </Space>
             </Card>

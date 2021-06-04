@@ -25,6 +25,7 @@ interface ITableDataItem {
     readonly signCustomerName: string;
     readonly deliveryTime: string;
     readonly orderDeliveryTime: string;
+    readonly contractId: string;
 }
 
 export interface IResponseData {
@@ -57,7 +58,7 @@ class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps, IProm
      * @param filterValues 
      */
     protected async fetchTableData(filterValues: Record<string, any>,pagination: TablePaginationConfig = {}) {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>('/saleOrder/page', {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/saleOrder', {
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize ||this.state.tablePagination?.pageSize,
@@ -106,14 +107,14 @@ class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps, IProm
             title: '订单编号',
             dataIndex: 'ordersNumber',
             render: (_: undefined, record: object): React.ReactNode => {
-                    return <Link to={ `/prom/contract/detail/${ (record as ITableDataItem).id }` }>{ (record as ITableDataItem).ordersNumber }</Link>
+                    return <Link to={ `/prom/order/detail/${ (record as ITableDataItem).id }` }>{ (record as ITableDataItem).ordersNumber }</Link>
             }
         }, {
             key: 'internalNumber',
             title: '内部合同编号',
             dataIndex: 'internalNumber',
             render: (_: undefined, record: object): React.ReactNode => {
-                return <Link to={ `/prom/contract/detail/${ (record as ITableDataItem).id }` }>{ (record as ITableDataItem).internalNumber }</Link>
+                return <Link to={ `/prom/contract/detail/${ (record as ITableDataItem).contractId }` }>{ (record as ITableDataItem).internalNumber }</Link>
             }
         }, {
             key: 'projectName',
@@ -149,12 +150,11 @@ class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps, IProm
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Link to={ `/prom/order/setting/${ (record as ITableDataItem).id }` }>编辑</Link>
-                    <ConfirmableButton confirmTitle="要删除该客户吗？" type="link" placement="topRight" onConfirm={ async () => {
+                    <ConfirmableButton confirmTitle="要删除该订单吗？" type="link" placement="topRight" onConfirm={ async () => {
                         let id = (record as ITableDataItem).id;
-                        const resData:IResponseData = await RequestUtil.delete('/contract', {id: id})
-                        console.log(resData)
+                        const resData:IResponseData = await RequestUtil.delete('/tower-market/saleOrder', {id: id});
                     } }>删除</ConfirmableButton>
-                    <Link to={ `` }>变更产品信息</Link>
+                    <Link to={ `/prom/order/ChangeProduct/${ (record as ITableDataItem).id }` }>变更产品信息</Link>
                 </Space>
             )
         }];
