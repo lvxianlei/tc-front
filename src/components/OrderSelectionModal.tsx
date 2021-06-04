@@ -2,7 +2,8 @@
  * @author lxy
  * @copyright © 2021
  */
- import { FormItemProps, Input, Select, Modal, Space, Button} from 'antd';
+ import { FormItemProps, Input, Select, DatePicker} from 'antd';
+ import moment from 'moment';
  import Table, { ColumnType, TablePaginationConfig } from 'antd/lib/table';
  import { GetRowKey } from 'rc-table/lib/interface';
  import React from 'react';
@@ -55,11 +56,12 @@
              confirmTitle: "选择订单"
          };
      }
- 
+     
+     //componentDidMount
      public componentDidMount(): void {
          this.getTable({})
      }
-     
+     //接口、获值
      public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
          const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/saleOrder', {
              ...filterValues,
@@ -77,7 +79,7 @@
              }
          });
      }
- 
+     //查询字段
      public getFilterFormItemProps(): FormItemProps[]  {
          return [{
                  name: 'projectName',
@@ -87,16 +89,17 @@
                 children: <Input placeholder="业主单位关键字"/>
              }];
      }
- 
+    
+     //查询
      public onFilterSubmit = async (values: Record<string, any>) => {
          this.getTable(values);
      }
- 
+     //dataSource
      public getTableDataSource(): object[]  {
          return this.state.tableDataSource;
      }
  
- 
+     //table-column
      public getTableColumns(): ColumnType<object>[] {
          return [
             {
@@ -126,11 +129,11 @@
             },  {
                 key: 'orderDeliveryTime',
                 title: '订单交货日期',
-                dataIndex: 'orderDeliveryTime'
+                dataIndex: 'orderDeliveryTime',
             }
         ];
      }
- 
+     //row-key
      protected getTableRowKey(): string | GetRowKey<object> {
          return 'id';
      }

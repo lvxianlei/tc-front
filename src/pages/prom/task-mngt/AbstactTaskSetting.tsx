@@ -37,6 +37,7 @@
  import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
  import { DataType } from '../../../components/AbstractSelectableModal';
  import styles from './AbstractTaskSetting.module.less';
+import RequestUtil from '../../../utils/RequestUtil';
  const { Step } = Steps
   
  export interface IAbstractTaskSettingState extends IAbstractFillableComponentState {
@@ -51,6 +52,7 @@
     readonly contractId?: number;
     readonly internalNumber?: string;
     readonly signContractTime?: string;
+    readonly orderDeliveryTime?: string;
     readonly saleOrderNumber?: string;
     readonly lineName?: string	;
     readonly num?:number;
@@ -91,6 +93,7 @@
     readonly simpleProjectName?: string;	
     readonly taskNumber?: string;		
     readonly weldingDemand?: string;
+    readonly saleOrderId?: number;
  }
  
 export interface IProductInfoVO {
@@ -196,21 +199,30 @@ enum StepTitleItem {
     
     //订单选择
     public onOrderSelect = (selectedRows: DataTypeMore[]):void => {
+        console.log(selectedRows)
         if(selectedRows.length > 0 ) {
             const task:ITask = {
                 contractId: selectedRows[0].contractId,
                 customerCompany: selectedRows[0].customerCompany,
                 internalNumber: selectedRows[0].internalNumber,
                 projectName: selectedRows[0].projectName,
-                signContractTime: selectedRows[0].signContractTime,
+                saleOrderId: selectedRows[0].id,
+                signContractTime: selectedRows[0].orderDeliveryTime,
                 signCustomerName: selectedRows[0].signCustomerName,
                 saleOrderNumber: selectedRows[0].saleOrderNumber,
             }
+            this.getForm()?.setFieldsValue({
+                signContractTime: moment(selectedRows[0].orderDeliveryTime),
+                internalNumber: selectedRows[0].internalNumber,
+                saleOrderNumber: selectedRows[0].saleOrderNumber,
+                projectName: selectedRows[0].projectName,
+                customerCompany: selectedRows[0].customerCompany,
+                signCustomerName: selectedRows[0].signCustomerName,
+            });
             this.setState({
                 task,
                 contractInfoDTO:task
             })
-            this.getForm()?.setFieldsValue(task);
         }
     }
    
@@ -227,7 +239,7 @@ enum StepTitleItem {
         }
     }
   
- 
+
 
  
      /**
@@ -237,6 +249,9 @@ enum StepTitleItem {
       */
      public getFormItemGroups(): IFormItemGroup[][] {
           const task: ITask | undefined = this.state.task;
+          console.log(task)
+          console.log(task?.signContractTime)
+          console.log(moment(task?.signContractTime))
           const { checkStep } = this.state;
           let module: IFormItemGroup[][] = [];
           switch(checkStep){
@@ -292,16 +307,12 @@ enum StepTitleItem {
                                 required: true,
                                 message: '请选择订单交货日期'
                             }],
-                            children:  <DatePicker disabled/>
+                            children:  <DatePicker disabled showTime format='YYYY-MM-DD HH:mm:ss'/>
                         }, {
                             label: '客户交货日期',
                             name: 'deliveryTime',
                             initialValue: moment(task?.deliveryTime),
-                            rules: [{
-                                required: true,
-                                message: '请选择客户交货日期'
-                            }],
-                            children:  <DatePicker />
+                            children:  <DatePicker disabledDate={(current)=>{return current && current > moment(task?.signContractTime)}} format="YYYY-MM-DD"/>
                         }, {
                             label: '计划交货日期',
                             name: 'planDeliveryTime',
@@ -310,7 +321,7 @@ enum StepTitleItem {
                                 required: true,
                                 message: '计划交货日期'
                             }],
-                            children:  <DatePicker />
+                            children:  <DatePicker/>
                         }, {
                             label: '备注',
                             name: 'description',
@@ -375,15 +386,11 @@ enum StepTitleItem {
                                 required: true,
                                 message: '请选择订单交货日期'
                             }],
-                            children:  <DatePicker disabled/>
+                            children: <DatePicker disabled showTime format='YYYY-MM-DD HH:mm:ss'/>
                         }, {
                             label: '客户交货日期',
                             name: 'deliveryTime',
                             initialValue: moment(task?.deliveryTime),
-                            rules: [{
-                                required: true,
-                                message: '请选择客户交货日期'
-                            }],
                             children:  <DatePicker disabled/>
                         }, {
                             label: '计划交货日期',
@@ -507,15 +514,11 @@ enum StepTitleItem {
                                 required: true,
                                 message: '请选择订单交货日期'
                             }],
-                            children:  <DatePicker disabled/>
+                            children:  <DatePicker disabled showTime format='YYYY-MM-DD HH:mm:ss'/>
                         }, {
                             label: '客户交货日期',
                             name: 'deliveryTime',
                             initialValue: moment(task?.deliveryTime),
-                            rules: [{
-                                required: true,
-                                message: '请选择客户交货日期'
-                            }],
                             children:  <DatePicker disabled/>
                         }, {
                             label: '计划交货日期',
@@ -623,13 +626,26 @@ enum StepTitleItem {
             );
     }
 
+
     //下一步
-    public onSubmitAndContinue = () => {
+    public async onSubmitAndContinue() {
         const{ checkStep } = this.state;
         this.setState({
-            checkStep: checkStep + 1
+            checkStep: checkStep + 1,
         })
-    } 
+        const values = this.getForm()?.getFieldsValue(true)
+        values.productIds = this.state.selectedKeys.length > 0 ? this.state.selectedKeys : [];
+        values.contractInfoDTO = this.state.contractInfoDTO;
+        values.saleOrderId = this.state?.task?.saleOrderId;
+        RequestUtil.post('/tower-market/taskNotice/saveToNextStep', {
+            ...values,
+            planDeliveryTime:moment(values.planDeliveryTime).format('YYYY-MM-DD'),
+            deliveryTim: moment(values.deliveryTime).format('YYYY-MM-DD'),
+            signContractTime: moment(values.signContractTime).format('YYYY-MM-DD'),
+        });
+        
+    }
+    
 
     //上一步
     public onSubmitAndBack = () => {
@@ -660,9 +676,9 @@ enum StepTitleItem {
                             </div>
                             <Table 
                                 columns={this.columns()} 
-                                dataSource={[...productDataSource]} 
+                                dataSource={ [...productDataSource] } 
                                 scroll={{ x: 1300 }} 
-                                rowKey={(record:IProductInfoVO)=>record?.taskNoticeId?record?.taskNoticeId:''}
+                                rowKey={( record: IProductInfoVO ) => record ?.taskNoticeId?record?.taskNoticeId : ''}
                                 rowSelection={{
                                     type:'checkbox',
                                     onChange:( selectedKeys: React.Key[] )=>{
@@ -755,13 +771,13 @@ enum StepTitleItem {
                             type="link" 
                             placement="topRight"
                             onConfirm={ () => {
-                                let num = 0;
-                                productDataSource.map(({taskNoticeId},index:number)=>{
+                                let num:number = 0;
+                                productDataSource.map(({ taskNoticeId }, index: number)=>{
                                     if( taskNoticeId == record.taskNoticeId ){
                                         num = index;
                                     }
                                 })
-                                productDataSource.splice(num,1);
+                                productDataSource.splice(num, 1);
                                 this.setState({
                                     productDataSource
                                 })

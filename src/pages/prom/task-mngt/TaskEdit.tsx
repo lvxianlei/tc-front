@@ -43,6 +43,7 @@
         return [];
     }
  
+
      /**
       * @implements
       * @description Determines whether submit on
@@ -54,9 +55,8 @@
         values.deliveryTime = moment(values.deliveryTime).format('YYYY-MM-DD');
         values.signContractTime = moment(values.signContractTime).format('YYYY-MM-DD');
         values.productIds = this.state.selectedKeys;
-        console.log(values)
-        return Promise.resolve();
-        //  return await RequestUtil.post('/tower-market/taskNotice', values);
+        values.contractInfoDTO = this.state.contractInfoDTO;
+        await RequestUtil.post('/tower-market/taskNotice/save', values);
      }
  }
  

@@ -67,11 +67,13 @@
              confirmTitle: "选择明细"
          };
      }
- 
+
+     //componentDidMount
      public componentDidMount(): void {
          this.getTable({})
      }
-     
+
+     //接口、获值
      public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
          const resData: IResponseDataMore = await RequestUtil.get<IResponseDataMore>(`/tower-market/saleOrder/${this.props.saleOrderId}`);
          this.setState({
@@ -79,7 +81,8 @@
              tableDataSource: resData.productVos,
          });
      }
- 
+    
+     //查询字段
      public getFilterFormItemProps(): FormItemProps[]  {
          return [{
                  name: 'lineName',
@@ -87,15 +90,16 @@
              }];
      }
  
+     //查询
      public onFilterSubmit = async (values: Record<string, any>) => {
          this.getTable(values);
      }
- 
+     //dataSource
      public getTableDataSource(): object[]  {
          return this.state.tableDataSource;
      }
  
- 
+     //table-column
      public getTableColumns(): ColumnType<object>[] {
          return [
             { 
@@ -150,7 +154,8 @@
             },
         ];
      }
- 
+  
+     //row-key
      protected getTableRowKey(): string | GetRowKey<object> {
          return 'taskNoticeId';
      }
