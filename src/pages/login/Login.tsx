@@ -36,7 +36,7 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
             key: ''
         },
         tenant: {
-            tenantId: '',
+            // tenantId: '',
             tenantName: '',
             domain: '',
             logo: ''
@@ -76,10 +76,10 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
      * @param values 
      */
     private async onSubmit(values: Record<string, any>) {
-        AuthUtil.setTenantId(this.state.tenant.tenantId, {
-            expires: 7
-        });
-        values.password = MD5(values.password).toString();
+        // AuthUtil.setTenantId(this.state.tenant.tenantId, {
+        //     expires: 7
+        // });
+        // values.password = MD5(values.password).toString();
         const { access_token } = await RequestUtil.post('/sinzetech-auth/oauth/token', {
             ...values,
             tenantId: this.state.tenant.tenantId
@@ -124,7 +124,7 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
                                 ]}>
                                     <Input.Password placeholder="请输入密码" prefix={ <LockOutlined /> }/>
                                 </Form.Item>
-                                <Form.Item>
+                                {/* <Form.Item>
                                     <Space direction="horizontal" className={ layoutStyles.width100 }>
                                         <Form.Item name="code" noStyle={ true }
                                             rules={[{
@@ -142,8 +142,8 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
                                             null
                                         }
                                     </Space>
-                                </Form.Item>
-                                <Form.Item name="grant_type" initialValue="captcha" className={ layoutStyles.hidden }>
+                                </Form.Item> */}
+                                <Form.Item name="grant_type" initialValue="password" className={ layoutStyles.hidden }>
                                     <Input type="hidden"/>
                                 </Form.Item>
                                 <Form.Item name="password" initialValue="password" className={ layoutStyles.hidden }>

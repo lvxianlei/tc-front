@@ -52,11 +52,10 @@ export default abstract class RequestUtil {
             if (sinzetechAuth) {
                 headers['Sinzetech-Auth'] = sinzetechAuth;
             }
-            if(init?.headers) {
-                headers['Captcha-Code'] = JSON.parse(JSON.stringify(init?.headers))['Captcha-code'];
-                headers['Captcha-Key'] = JSON.parse(JSON.stringify(init?.headers))['Captcha-key'];
-            }
-            
+            // if(init?.headers) {
+            //     headers['Captcha-Code'] = JSON.parse(JSON.stringify(init?.headers))['Captcha-code'];
+            //     headers['Captcha-Key'] = JSON.parse(JSON.stringify(init?.headers))['Captcha-key'];
+            // }
             fetch(this.joinUrl(path, process.env.REQUEST_API_PATH_PREFIX || ''), {
                 mode: 'cors',
                 ...(init || {}),
