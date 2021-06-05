@@ -3,9 +3,11 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 import camelcaseKeys from 'camelcase-keys';
-import { matchPath } from 'react-router';
+import React from 'react';
+import { matchPath, RouteComponentProps } from 'react-router';
 
 import routerConfigJson from '../app-router.config.jsonc';
+import AsyncPanel from '../AsyncPanel';
 import IApplicationContext, { IRouterItem } from './IApplicationContext';
 
 
@@ -52,5 +54,26 @@ export default abstract class ApplicationContext {
             return hitedRouters[ hitedRouters.length - 1 ];
         }
         return null;
+    }
+
+    /**
+     * @static
+     * @param module 
+     * @returns 
+     */
+    public static routeRender(module: string | undefined): (props: RouteComponentProps<{}>) => React.ReactNode {
+        return (props: RouteComponentProps<{}>): React.ReactNode => {
+            let valid: boolean = true;
+            for (let filter of this.get().filters || []) {
+                if (!filter.doFilter(props)) { // As long as one filter failed, valid will be false.
+                    valid = false;
+                }
+            }
+            if (valid) {
+                return <AsyncPanel module={ module}/>;
+            } else {
+                return null;
+            }
+        };
     }
 }

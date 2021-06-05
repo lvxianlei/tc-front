@@ -17,7 +17,10 @@ for (let i = 1; i < 10; ++i) {
         "signCustomerName": Random.cword(5,10),
         "deliveryTime": Random.date('yyyy-MM-dd'),
         "signCustomerId": Random.natural(2),
-        "status|0-1":1
+        "status|0-1":1,
+        "currencyType|1-2": 1,
+        "chargeType|1-2": 1,
+        "signContractTime": Random.date('yyyy-MM-dd'),
     });
 }
 
@@ -38,7 +41,10 @@ module.exports = {
             "signCustomerName": Random.cword(5,10),
             "deliveryTime": Random.date('yyyy-MM-dd'),
             "signCustomerId": Random.natural(2),
-            "status": 1
+            "status": 1,
+            "signContractTime": Random.date('yyyy-MM-dd'),
+            "currencyType|1-2": 1,
+            "chargeType|1-2": 1 
         }].concat(records),
         current: Random.natural(1, 20),
         size: 10,

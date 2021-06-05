@@ -1,5 +1,5 @@
 /**
- * @author zyc
+ * @author lxy
  * @copyright © 2021 
  */
  import { DeleteOutlined } from '@ant-design/icons';
@@ -20,30 +20,54 @@
      Upload,
      Steps,
      Table,
+     TableColumnType,
  } from 'antd';
  import { FormListFieldData, FormListOperation } from 'antd/lib/form/FormList';
  import moment from 'moment';
  import React from 'react';
  import { RouteComponentProps } from 'react-router';
  import { Link } from 'react-router-dom';
- 
+ import OrderSelectionComponent from '../../../components/OrderSelectionModal';
+ import ProductSelectionComponent from '../../../components/ProductSelectionModal';
  import AbstractFillableComponent, {
      IAbstractFillableComponentState,
      IFormItemGroup,
  } from '../../../components/AbstractFillableComponent';
  import ConfirmableButton from '../../../components/ConfirmableButton';
  import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
+ import { DataType } from '../../../components/AbstractSelectableModal';
  import styles from './AbstractTaskSetting.module.less';
+import RequestUtil from '../../../utils/RequestUtil';
  const { Step } = Steps
- // import ModalComponent from '../../components/ModalComponent';
   
  export interface IAbstractTaskSettingState extends IAbstractFillableComponentState {
      checkStep: StepItem;
      productDataSource: IProductInfoVO[];
      selectedKeys: React.Key[];
      readonly task?: ITask;
-    
+     readonly contractInfoDTO : ITask;
      
+ }
+ export interface DataTypeMore extends DataType {
+    readonly contractId?: number;
+    readonly internalNumber?: string;
+    readonly signContractTime?: string;
+    readonly orderDeliveryTime?: string;
+    readonly saleOrderNumber?: string;
+    readonly lineName?: string	;
+    readonly num?:number;
+    readonly price?: number;
+    readonly productHeight?: number;
+    readonly productNumber?: string;
+    readonly productShape?: string;
+    readonly productStatus?: number;
+    readonly productType?: number;
+    readonly saleOrderId?: number;
+    readonly taskNoticeId?: number;	
+    readonly tender?: string;
+    readonly totalAmount?:number;
+    readonly unit?: string;
+    readonly voltageGrade?: number;
  }
  
  export interface ITask {
@@ -61,7 +85,7 @@
     readonly peculiarDescription?: string;
     readonly planDeliveryTime?:	string;
     readonly productChangeInfoVOList?: IProductChangeInfoVO [];	
-    readonly productInfoVOList: IProductInfoVO [];
+    readonly productInfoVOList?: IProductInfoVO [];
     readonly projectName?: string;
     readonly saleOrderNumber?: string;	
     readonly signContractTime?:	string;	
@@ -69,64 +93,57 @@
     readonly simpleProjectName?: string;	
     readonly taskNumber?: string;		
     readonly weldingDemand?: string;
+    readonly saleOrderId?: number;
  }
  
- export interface IProductInfoVO {
-    readonly description?:	string;	
-    readonly lineName?:	string;	
-    readonly num?: number;		
-    readonly price?: number;	
+export interface IProductInfoVO {
+    readonly description?: string;	
+    readonly lineName?:	string;
+    readonly num?: number;
+    readonly price?: number;
     readonly productHeight?: number;
     readonly productNumber?: string;	
-    readonly productShape?:	string;	
-    readonly productStatus?: number;	
-    readonly productTypeName: string;
-    readonly saleOrderId?: number;	
-    readonly taskNoticeId?: number;	
-    readonly tender?: string;	
-    readonly totalAmount?: number;	
+    readonly productShape?:	string;
+    readonly productStatus?: number;
+    readonly productTypeName?: string;
+    readonly saleOrderId?: number;
+    readonly taskNoticeId?: number;
+    readonly tender?: string;
+    readonly totalAmount?: number	
     readonly unit?:	string;
     readonly voltageGradeName?:	string;
- }
+}
 
- export interface IProductChangeInfoVO {
+export interface IProductChangeInfoVO {
     readonly index?: number;
     readonly changeType?: number;
     readonly createTime?: string;
-    readonly description?:	string;	
-    readonly lineName?:	string;	
-    readonly num?: number;		
-    readonly price?: number;	
+    readonly description?:	string;
+    readonly lineName?:	string;
+    readonly num?: number;
+    readonly price?: number;
     readonly productHeight?: number;
-    readonly productNumber?: string;	
-    readonly productShape?:	string;	
+    readonly productNumber?: string;
+    readonly productShape?:	string;
     readonly productStatus?: number;	
     readonly productTypeName?: string;
     readonly saleOrderId?: number;	
-    readonly taskNoticeId?: number;	
-    readonly tender?: string;	
+    readonly taskNoticeId?: number;
+    readonly tender?: string;
     readonly totalAmount?: number;	
     readonly unit?:	string;
     readonly voltageGradeName?:	string;
- }
+}
  
- export interface IproductInfoDto {
-     readonly productType?: string;
-     readonly voltageGrade?: number;
- }
+export interface IproductInfoDto {
+    readonly productType?: string;
+    readonly voltageGrade?: number;
+}
  
  
- export interface IStep {
-     readonly title: string;
- }
-
- 
- export interface DataType {
-     key: React.Key;
-     name: string;
-     age: number;
-     address: string;
- }
+export interface IStep {
+    readonly title: string;
+}
  
 export enum StepItem {
     NEW_TASK = 0,   //新增任务单
@@ -147,11 +164,11 @@ enum StepTitleItem {
          task: undefined,
          checkStep: StepItem.NEW_TASK, 
          selectedKeys: {},
+         contractInfoDTO:{},
      }  as S;
  
      constructor(props: P) {
          super(props)
-         this.handleAdd = this.handleAdd.bind(this)
      }
  
      /**
@@ -179,8 +196,50 @@ enum StepTitleItem {
              }
          };
      }
+    
+    //订单选择
+    public onOrderSelect = (selectedRows: DataTypeMore[]):void => {
+        console.log(selectedRows)
+        if(selectedRows.length > 0 ) {
+            const task:ITask = {
+                contractId: selectedRows[0].contractId,
+                customerCompany: selectedRows[0].customerCompany,
+                internalNumber: selectedRows[0].internalNumber,
+                projectName: selectedRows[0].projectName,
+                saleOrderId: selectedRows[0].id,
+                signContractTime: selectedRows[0].orderDeliveryTime,
+                signCustomerName: selectedRows[0].signCustomerName,
+                saleOrderNumber: selectedRows[0].saleOrderNumber,
+            }
+            this.getForm()?.setFieldsValue({
+                signContractTime: moment(selectedRows[0].orderDeliveryTime),
+                internalNumber: selectedRows[0].internalNumber,
+                saleOrderNumber: selectedRows[0].saleOrderNumber,
+                projectName: selectedRows[0].projectName,
+                customerCompany: selectedRows[0].customerCompany,
+                signCustomerName: selectedRows[0].signCustomerName,
+            });
+            this.setState({
+                task,
+                contractInfoDTO:task
+            })
+        }
+    }
+   
+    //产品选择
+    public onProductSelect = (selectedRows: DataType[]):void => {
+        console.log(selectedRows)
+        const { productDataSource } = this.state;
+        if(selectedRows.length > 0 ) {
+            const task:IProductInfoVO[] = productDataSource || [];
+            task.push(selectedRows[0])
+            this.setState({
+                productDataSource:[...task]
+            })
+        }
+    }
   
- 
+
 
  
      /**
@@ -190,6 +249,9 @@ enum StepTitleItem {
       */
      public getFormItemGroups(): IFormItemGroup[][] {
           const task: ITask | undefined = this.state.task;
+          console.log(task)
+          console.log(task?.signContractTime)
+          console.log(moment(task?.signContractTime))
           const { checkStep } = this.state;
           let module: IFormItemGroup[][] = [];
           switch(checkStep){
@@ -209,10 +271,8 @@ enum StepTitleItem {
                             }],
                             children: 
                                 <>
-                                    <Input suffix={
-                                        <Button type="primary" >
-                                            Open Modal
-                                        </Button>  
+                                    <Input value={ task?.saleOrderNumber } suffix={ 
+                                        <OrderSelectionComponent onSelect={ this.onOrderSelect } />
                                     }/>
                                 </>
                         },  {
@@ -247,16 +307,12 @@ enum StepTitleItem {
                                 required: true,
                                 message: '请选择订单交货日期'
                             }],
-                            children:  <DatePicker disabled/>
+                            children:  <DatePicker disabled showTime format='YYYY-MM-DD HH:mm:ss'/>
                         }, {
                             label: '客户交货日期',
                             name: 'deliveryTime',
                             initialValue: moment(task?.deliveryTime),
-                            rules: [{
-                                required: true,
-                                message: '请选择客户交货日期'
-                            }],
-                            children:  <DatePicker />
+                            children:  <DatePicker disabledDate={(current)=>{return current && current > moment(task?.signContractTime)}} format="YYYY-MM-DD"/>
                         }, {
                             label: '计划交货日期',
                             name: 'planDeliveryTime',
@@ -265,7 +321,7 @@ enum StepTitleItem {
                                 required: true,
                                 message: '计划交货日期'
                             }],
-                            children:  <DatePicker />
+                            children:  <DatePicker/>
                         }, {
                             label: '备注',
                             name: 'description',
@@ -297,16 +353,7 @@ enum StepTitleItem {
                                 required: true,
                                 message: '请选择关联订单'
                             }],
-                            children: 
-                                <>
-                                    <Input suffix={
-                                        <Button type="primary" >
-                                            Open Modal
-                                        </Button>  
-                                    }
-                                        disabled
-                                    />
-                                </>
+                            children: <Input disabled />
                         },  {
                             label: '内部合同编号',
                             name: 'internalNumber',
@@ -339,15 +386,11 @@ enum StepTitleItem {
                                 required: true,
                                 message: '请选择订单交货日期'
                             }],
-                            children:  <DatePicker disabled/>
+                            children: <DatePicker disabled showTime format='YYYY-MM-DD HH:mm:ss'/>
                         }, {
                             label: '客户交货日期',
                             name: 'deliveryTime',
                             initialValue: moment(task?.deliveryTime),
-                            rules: [{
-                                required: true,
-                                message: '请选择客户交货日期'
-                            }],
                             children:  <DatePicker disabled/>
                         }, {
                             label: '计划交货日期',
@@ -438,16 +481,7 @@ enum StepTitleItem {
                                 required: true,
                                 message: '请选择关联订单'
                             }],
-                            children: 
-                                <>
-                                    <Input suffix={
-                                        <Button type="primary" >
-                                            Open Modal
-                                        </Button>  
-                                    }
-                                        disabled    
-                                    />
-                                </>
+                            children: <Input disabled />
                         },  {
                             label: '内部合同编号',
                             name: 'internalNumber',
@@ -480,15 +514,11 @@ enum StepTitleItem {
                                 required: true,
                                 message: '请选择订单交货日期'
                             }],
-                            children:  <DatePicker disabled/>
+                            children:  <DatePicker disabled showTime format='YYYY-MM-DD HH:mm:ss'/>
                         }, {
                             label: '客户交货日期',
                             name: 'deliveryTime',
                             initialValue: moment(task?.deliveryTime),
-                            rules: [{
-                                required: true,
-                                message: '请选择客户交货日期'
-                            }],
                             children:  <DatePicker disabled/>
                         }, {
                             label: '计划交货日期',
@@ -596,13 +626,26 @@ enum StepTitleItem {
             );
     }
 
+
     //下一步
-    public onSubmitAndContinue = () => {
+    public async onSubmitAndContinue() {
         const{ checkStep } = this.state;
         this.setState({
-            checkStep: checkStep + 1
+            checkStep: checkStep + 1,
         })
-    } 
+        const values = this.getForm()?.getFieldsValue(true)
+        values.productIds = this.state.selectedKeys.length > 0 ? this.state.selectedKeys : [];
+        values.contractInfoDTO = this.state.contractInfoDTO;
+        values.saleOrderId = this.state?.task?.saleOrderId;
+        RequestUtil.post('/tower-market/taskNotice/saveToNextStep', {
+            ...values,
+            planDeliveryTime:moment(values.planDeliveryTime).format('YYYY-MM-DD'),
+            deliveryTim: moment(values.deliveryTime).format('YYYY-MM-DD'),
+            signContractTime: moment(values.signContractTime).format('YYYY-MM-DD'),
+        });
+        
+    }
+    
 
     //上一步
     public onSubmitAndBack = () => {
@@ -611,21 +654,7 @@ enum StepTitleItem {
             checkStep: checkStep - 1
         })
     }
-    //新增
-    public handleAdd = () => {
-        const { productDataSource } = this.state;
-        const task:IProductInfoVO[] = productDataSource || [];
-        task.push({
-            description: '',
-            lineName: '',
-            num: 0,
-            price: 0,	
-            productTypeName:'',
-        })
-        this.setState({
-            productDataSource:[...task]
-        })
-    }
+
 
     /**
      * @description Renders extra sections
@@ -643,15 +672,13 @@ enum StepTitleItem {
                         <>
                             <div className={styles.column_to_row}>
                                 <div className={styles.title}>产品信息</div>
-                                <Button type='primary' onClick={
-                                     this.handleAdd
-                                }>新增</Button>
+                                <ProductSelectionComponent onSelect={ this.onProductSelect }  saleOrderId={ this.state?.task?.saleOrderNumber }/>
                             </div>
                             <Table 
-                                columns={this.columns() as any} 
-                                dataSource={productDataSource} 
+                                columns={this.columns()} 
+                                dataSource={ [...productDataSource] } 
                                 scroll={{ x: 1300 }} 
-                                rowKey={(record:IProductInfoVO)=>record.productTypeName}
+                                rowKey={( record: IProductInfoVO ) => record ?.taskNoticeId?record?.taskNoticeId : ''}
                                 rowSelection={{
                                     type:'checkbox',
                                     onChange:( selectedKeys: React.Key[] )=>{
@@ -671,7 +698,10 @@ enum StepTitleItem {
     }
 
     //table-column
-    public columns = () => {
+    public columns(): TableColumnType<IProductInfoVO>[] {
+
+        const { productDataSource } = this.state;
+
         return [
             {
                 title: '状态',
@@ -735,13 +765,22 @@ enum StepTitleItem {
                 key: 'operation',
                 fixed: 'right',
                 width: 100,
-                render: ( record: IProductInfoVO ) => 
+                render: ( record: IProductInfoVO ): React.ReactNode => 
                         <ConfirmableButton 
                             confirmTitle="要删除该条数据吗？"
                             type="link" 
                             placement="topRight"
                             onConfirm={ () => {
-                                console.log(record)
+                                let num:number = 0;
+                                productDataSource.map(({ taskNoticeId }, index: number)=>{
+                                    if( taskNoticeId == record.taskNoticeId ){
+                                        num = index;
+                                    }
+                                })
+                                productDataSource.splice(num, 1);
+                                this.setState({
+                                    productDataSource
+                                })
                             }}
                         >
                             <DeleteOutlined />

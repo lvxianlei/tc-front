@@ -6,6 +6,8 @@ import { message } from 'antd';
 import NProgress from 'nprogress';
 import { stringify } from 'query-string';
 
+import AuthUtil from './AuthUtil';
+
 interface IResponse<T> {
     readonly code: number;
     readonly data: T;
@@ -40,13 +42,22 @@ export default abstract class RequestUtil {
      */
     private static request<T>(path: string, init?: RequestInit): Promise<T> {
         return new Promise<T>((resolve: (data: T) => void, reject: (res: IResponse<T>) => void): void => {
+            let headers: HeadersInit = {
+                'Content-Type': 'application/json',
+                'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                'Tenant-Id': AuthUtil.getTenantId()
+            };
+            const sinzetechAuth: string = AuthUtil.getSinzetechAuth();
+            if (sinzetechAuth) {
+                headers['Sinzetech-Auth'] = sinzetechAuth;
+            }
             fetch(this.joinUrl(path, process.env.REQUEST_API_PATH_PREFIX || ''), {
                 mode: 'cors',
-                credentials: 'include',
+                ...(init || {}),
                 headers: {
-                    'Content-Type': 'application/json'
-                },
-                ...(init || {})
+                    ...headers,
+                    ...init?.headers
+                }
             })
             .then((res) => {
                 if (res.status !== 200) {
@@ -57,8 +68,11 @@ export default abstract class RequestUtil {
                 }
                 return res.json();
             })
-            .then((res: IResponse<T>) => {
+            .then((res: IResponse<T> | any) => {
                 NProgress.done();
+                if(path === '/sinzetech-auth/oauth/token') {
+                    resolve(res);
+                }
                 if (res.code === 200) {
                     resolve(res.data);
                 } else if (res.code === 401) {
@@ -75,40 +89,42 @@ export default abstract class RequestUtil {
         });
     }
 
+    
     /**
-     * Get fetch
-     *
      * @static
-     * @template T
-     * @param {string} path
-     * @returns {Promise<T>}
-     * @memberof RequestUtil
+     * @description Gets request util
+     * @template T 
+     * @param path 
+     * @param [params] 
+     * @param [headers] 
+     * @returns get 
      */
-    public static get<T>(path: string, params?: Record<string, any>): Promise<T> {
+    public static get<T>(path: string, params?: Record<string, any>, headers?: HeadersInit) : Promise<T> {
         NProgress.inc();
         if (params) {
             path += `?${ stringify(params) }`;
         }
         return this.request(path, {
-            method: 'GET'
+            method: 'GET',
+            headers: headers
         });
     }
 
     /**
-     * Post fetch
-     *
      * @static
-     * @template T
-     * @param {string} path
-     * @param {Record<string, any>} [params={}]
-     * @returns {Promise<T>}
-     * @memberof RequestUtil
+     * @description Posts request util
+     * @template T 
+     * @param path 
+     * @param [params] 
+     * @param [headers] 
+     * @returns post 
      */
-    public static post<T>(path: string, params: Record<string, any> = {}): Promise<T> {
+    public static post<T>(path: string, params: Record<string, any> = {}, headers?: HeadersInit): Promise<T> {
         NProgress.inc();
         return this.request(path, {
             method: 'POST',
-            body: JSON.stringify(params)
+            body: (headers as any || {})['Content-Type'] === 'application/x-www-form-urlencoded' ? stringify(params) : JSON.stringify(params),
+            headers: headers
         });
     }
 
@@ -118,13 +134,15 @@ export default abstract class RequestUtil {
      * @template T 
      * @param path 
      * @param [params] 
+     * @param [headers] 
      * @returns put 
      */
-    public static put<T>(path: string, params: Record<string, any> = {}): Promise<T> {
+    public static put<T>(path: string, params: Record<string, any> = {}, headers?: HeadersInit): Promise<T> {
         NProgress.inc();
         return this.request(path, {
             method: 'PUT',
-            body: JSON.stringify(params)
+            body: JSON.stringify(params),
+            headers: headers
         });
     }
 
@@ -134,13 +152,15 @@ export default abstract class RequestUtil {
      * @template T 
      * @param path 
      * @param [params] 
+     * @param [headers] 
      * @returns delete 
      */
-    public static delete<T>(path: string, params: Record<string, any> = {}): Promise<T> {
+    public static delete<T>(path: string, params: Record<string, any> = {}, headers?: HeadersInit): Promise<T> {
         NProgress.inc();
         return this.request(path, {
             method: 'DELETE',
-            body: JSON.stringify(params)
+            body: JSON.stringify(params),
+            headers: headers
         });
     }
 

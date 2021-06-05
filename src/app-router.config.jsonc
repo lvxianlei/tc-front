@@ -3,6 +3,12 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 { // 路由配置
+    "globalRouters": [{
+        "name": "登录",
+        "path": "/login",
+        "module": "./pages/login/Login",
+        "exact": true
+    }],
     "routers": [{ // 客户管理
         "name": "客户管理", // 显示在面包屑中的名称
         "path": "/client/mngt",
@@ -36,11 +42,37 @@
     }, { // 新增回款计划
         "name": "新增回款计划",
         "path": "/prom/contract/paymentRecord",
-        "module": "./pages/prom/contract/PaymentRecordNew"
+        "module": "./pages/prom/contract/PaymentRecordNew",
+        "exact": true
     }, { // 合同详情
         "name": "合同详情",
         "path": "/prom/contract/detail/:id",
         "module": "./pages/prom/contract/ContractDetail",
+        "exact": true
+    }, {
+        "name": "销售订单管理", 
+        "path": "/prom/order",
+        "module": "./pages/prom/order/SaleOrder",
+        "exact": true
+    }, {
+        "name": "新增订单", 
+        "path": "/prom/order/new",
+        "module": "./pages/prom/order/SaleOrderNew",
+        "exact": true
+    }, {
+        "name": "编辑订单", 
+        "path": "/prom/order/setting/:id",
+        "module": "./pages/prom/order/SaleOrderSetting",
+        "exact": true
+    }, { // 订单详情
+        "name": "订单详情",
+        "path": "/prom/order/detail/:id",
+        "module": "./pages/prom/order/SaleOrderDetail",
+        "exact": true
+    }, { // 变更产品信息
+        "name": "变更产品信息",
+        "path": "/prom/order/ChangeProduct/:id",
+        "module": "./pages/prom/order/ChangeProduct",
         "exact": true
     }, { // 字典管理
         "name": "字典管理",
@@ -61,11 +93,6 @@
         "name": "编辑角色",
         "path": "/auth/roles/setting/:id",
         "module": "./pages/auth/role/RoleSetting",
-        "exact": true
-    }, { // 用户管理
-        "name": "用户管理",
-        "path": "/sys/users",
-        "module": "./pages/system-mngt/user/UserMngt",
         "exact": true
     }, { // 销售任务单管理
         "name": "销售任务单管理",
@@ -97,28 +124,20 @@
         "path": "/prom/task/view/:id",
         "module": "./pages/prom/task-mngt/TaskDetail",
         "exact": true
-    }, { // 任务审批管理
-        "name": "审批",
-        "path": "/approval/task",
-        "module": "./pages/approval/task/taskapproval",
+    }, { // 用户管理
+        "name": "用户管理",
+        "path": "/sys/users",
+        "module": "./pages/system-mngt/user/UserMngt",
         "exact": true
-    }, { // 任务单产品变更审批
-        "name": "任务单产品变更审批",
-        "path": "/approval/taskchange",
-        "module": "./pages/approval/Taskchange/taskchange",
+    }, { // 新增用户
+        "name": "新增用户",
+        "path": "/sys/users/new",
+        "module": "./pages/system-mngt/user/UserNew",
         "exact": true
-    }, {//审批
-        "name": "审批3",
-        "path":   "/approval/lxlp",
-        "module": "./pages/approval/approvaladd/Approvalx",
+    }, { // 修改用户
+        "name": "修改用户",
+        "path": "/sys/users/setting/:id",
+        "module": "./pages/system-mngt/user/UserSetting",
         "exact": true
-        
-    }, {//产品信息变更
-        "name": "产品信息变更",
-        "path":   "/approval/information",
-        "module": "./pages/approval/Information/informationchange",
-        "exact": true
-    }
-   
-]
+    }]
 }

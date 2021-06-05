@@ -3,6 +3,9 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 {
+    "clientId": "tower-erp", // 后端提供clientId
+    "clientSecret": "tower-erp-secret", // 后端提供clientSecret
+    "home": "/client/mngt", // 登录后，进入的首页
     "layout": { // 布局配置
         "frame": "./layout/tc/TCFrame", // 主体框架
         "navigation-panel": { // 导航面板
@@ -29,28 +32,6 @@
                         "label": "销售任务单管理",
                         "path": "/prom/task"
                     }]
-                },{
-                    "label": "审批",
-                    "path": "/approval",
-                    "items": [
-                        {
-                            "label": "审批3",
-                            "path": "/approval/lxlp"
-                        },
-                        {
-                            "label": "任务单审批",
-                            "path": "/approval/task"
-                        },
-                       {
-                            "label": "任务单产品变更审批",
-                            "path": "/approval/taskchange"
-                        },
-                        {
-                            "label": "产品信息变更",
-                            "path": "/approval/information"
-                        }
-                        
-                    ]
                 },{
                     "label": "系统管理",
                     "path": "/sys",

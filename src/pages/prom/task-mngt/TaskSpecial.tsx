@@ -28,7 +28,7 @@ import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
         const task: ITask = await RequestUtil.get<ITask>(`/tower-market/taskNotice/${ this.props.match.params.id }`);
         this.setState({
             task,
-            productDataSource: task?.productInfoVOList,
+            productDataSource: task?.productInfoVOList || [],
             checkStep: StepItem.COMPLETE_SPECIAL_OPTIONS
         });
     }
@@ -46,6 +46,7 @@ import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
         return [];
     }
 
+
      /**
       * @implements
       * @description Determines whether submit on
@@ -56,10 +57,10 @@ import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
         values.planDeliveryTime = moment(values.planDeliveryTime).format('YYYY-MM-DD');
         values.deliveryTime = moment(values.deliveryTime).format('YYYY-MM-DD');
         values.signContractTime = moment(values.signContractTime).format('YYYY-MM-DD');
-        values.productIds = this.state.selectedKeys;
-        console.log(values)
-        return Promise.resolve();
-        //  return await RequestUtil.post('/tower-market/taskNotice', values);
+        values.productIds = this.state.selectedKeys.length > 0 ? this.state.selectedKeys.length : [];
+        values.contractInfoDTO = this.state.contractInfoDTO;
+        values.saleOrderId = this.state?.task?.saleOrderId;
+        return await RequestUtil.post('/tower-market/taskNotice/save', values);
      }
  }
  

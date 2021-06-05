@@ -23,6 +23,13 @@ interface IUserMngtState extends IAbstractMngtComponentState, IFIlterValue {
     readonly selectedUsers: IUser[];
 }
 
+interface IResponseData {
+    readonly current: number;
+    readonly size: number;
+    readonly total: number;
+    readonly records: IUser[]
+}
+
 interface IFIlterValue {
     readonly account?: string;
     readonly name?: string;
@@ -41,8 +48,9 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
     protected getState(): IUserMngtState {
         return {
             ...super.getState(),
-            // tablePagination: undefined,
-            users: []
+            users: [],
+            account: '',
+            name: ''
         };
     }
 
@@ -50,10 +58,21 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
      * @description Fetchs users
      * @param [filterValues] 
      */
-    protected async fetchUsers(filterValues: IFIlterValue = {}) {
-        const users: IUser[] = await RequestUtil.get<IUser[]>('/user', filterValues);
+    protected async fetchUsers(filterValues: IFIlterValue = {}, pagination: TablePaginationConfig = {}) {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>('/sinzetech-user/user', {
+            ...filterValues,
+            current: pagination.current || this.state.tablePagination?.current,
+            size: pagination.pageSize ||this.state.tablePagination?.pageSize,
+        });
         this.setState({
-            users: users
+            ...filterValues,
+            users: resData.records,
+            tablePagination: {
+                ...this.state.tablePagination,
+                current: resData.current,
+                pageSize: resData.size,
+                total: resData.total
+            }
         });
     }
 
@@ -61,6 +80,7 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
      * @description Components did mount
      */
     public componentDidMount() {
+        super.componentDidMount();
         this.fetchUsers();
     }
 
@@ -71,16 +91,16 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
      */
     private onDelete(items: IUser[]): () => void {
         return async () => {
-            // await RequestUtil.delete('/sinzetech-system/role', { ids: items.map<number>((item: IUser): number => item.id) });
-            // this.setState({
-            //     selectedUsers: [],
-            //     selectedUserKeys: []
-            // }, () => {
-            //     this.fetchUsers({
-            //         name: this.state.name,
-            //         account: this.state.account
-            //     });
-            // });
+            await RequestUtil.delete('/sinzetech-user/user', { ids: items.map<number>((item: IUser): number => item?.id as number) });
+            this.setState({
+                selectedUsers: [],
+                selectedUserKeys: []
+            }, () => {
+                this.fetchUsers({
+                    name: this.state.name,
+                    account: this.state.account
+                });
+            });
         };
     }
 
@@ -135,7 +155,7 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
      * @param event 
      */
     public onNewClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
-        this.props.history.push('/auth/users/new');
+        this.props.history.push('/sys/users/new');
     }
     
     /**
@@ -152,7 +172,12 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
      * @description Determines whether table change on
      * @param pagination 
      */
-    public onTableChange(pagination: TablePaginationConfig): void {}
+    public onTableChange(pagination: TablePaginationConfig): void {
+        this.fetchUsers({
+            account: this.state.account,
+            name: this.state.name
+        }, pagination);
+    }
     
     /**
      * @description Select change of role mngt
@@ -233,8 +258,8 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
             render: (_: undefined, item: object): React.ReactNode => {
                 return (
                     <Space direction="horizontal" size="middle">
-                        <Link to={ `/auth/users/detail/${ (item as IUser).id }` }>查看</Link>
-                        <Link to={ `/auth/users/setting/${ (item as IUser).id }` }>编辑</Link>
+                        {/* <Link to={ `/sys/users/detail/${ (item as IUser).id }` }>查看</Link> */}
+                        <Link to={ `/sys/users/setting/${ (item as IUser).userId }` }>编辑</Link>
                         <ConfirmableButton confirmTitle="确定要删除该角色吗？" type="link" onConfirm={ this.onDelete([item as IUser]) }>删除</ConfirmableButton>
                     </Space>
                 );

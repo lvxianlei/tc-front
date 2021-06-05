@@ -1,7 +1,3 @@
-/**
- * @author Cory(coryisbest0728#gmail.com)
- * @copyright © 2021 Cory. All rights reserved
- */
  import { Button, ColProps, Table } from 'antd';
  import { ColumnsType } from 'antd/lib/table';
  import React from 'react';

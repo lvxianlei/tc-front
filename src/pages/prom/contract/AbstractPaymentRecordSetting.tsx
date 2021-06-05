@@ -81,19 +81,6 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
         return '/prom/contract';
     }
 
-    protected getGeneratNum(): string { 
-        var result: number = Math.floor( Math.random() * 1000 );
-        let num: string = '';
-        if(result < 10) {
-            num =  '00' + result;
-        } else if (result<100){
-            num = '0' + result;
-        } else {
-            num =  result.toString();
-        }
-        return moment().format('YYYYMMDD') + num;
-    }
-
     /**
      * @override
      * @description 客户弹窗
@@ -171,7 +158,6 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
      */
     public getFormItemGroups(): IFormItemGroup[][] {
         const paymentRecord: IPaymentRecord | undefined = this.state.paymentRecord;
-        const GeneratNum: string = this.getGeneratNum();
         return [[{
             title: '回款计划',
             itemCol: {
@@ -250,7 +236,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
             itemProps: [{
                 label: '编号',
                 name: 'refundNumber',
-                initialValue: paymentRecord?.refundNumber || GeneratNum,
+                initialValue: paymentRecord?.refundNumber,
                 rules: [{
                 required: true,
                 message: '请输入编号'
