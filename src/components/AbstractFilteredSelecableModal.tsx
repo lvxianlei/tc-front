@@ -1,10 +1,10 @@
-import React from 'react'
-import {Modal, Form, Button, Card, Space, Table, FormItemProps} from 'antd'
-
-import { GetRowKey } from 'rc-table/lib/interface';
+import { Button, Card, Form, FormItemProps, Space } from 'antd';
 import { TablePaginationConfig } from 'antd/lib/table';
-import styles from './AbstractSelectionModal.module.less'
+import { GetRowKey } from 'rc-table/lib/interface';
+import React from 'react';
+
 import AbstractSelectionModal, { DataType, IAbstractSelectableModalState } from './AbstractSelectableModal';
+import styles from './AbstractSelectionModal.module.less';
 
 export interface IAbstractSelectableModalProps {
     readonly onSelect: (selectedRows: DataType[]) => void;

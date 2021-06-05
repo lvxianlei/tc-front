@@ -2,14 +2,13 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Card, Col, ColProps, Row, Space, Tabs } from 'antd';
+import { Card, Col, ColProps, Row, Space } from 'antd';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import layoutStyles from '../layout/Layout.module.less';
 import styles from './AbstractDetailComponent.module.less';
 import AbstractTabableComponent from './AbstractTabableComponent';
-import { ITabItem } from './ITabableComponent';
 
 /**
  * The abstract detail component.

@@ -1,7 +1,6 @@
-import React from 'react'
-import {Button} from 'antd'
-
 import { PlusOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
+import React from 'react';
 
 export interface IPopModalButtonProps { 
     readonly showModal: () => void; 
@@ -15,14 +14,9 @@ export default abstract class PopModalButton<P extends IPopModalButtonProps, S e
 
     public render(): React.ReactNode {
         return (
-            <>
-                <Button type="text" target="customerCompany" onClick={ this.props.showModal }>
-                    <PlusOutlined />
-                </Button> 
-            </>
-           
-                
-            
+            <Button type="text" target="customerCompany" onClick={ this.props.showModal }>
+                <PlusOutlined />
+            </Button>
         );
     }
 }

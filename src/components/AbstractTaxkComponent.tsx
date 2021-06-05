@@ -2,14 +2,16 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
- import { Button, Card, Col, ColProps, Form, FormInstance, FormItemProps, FormProps, Row, Space } from 'antd';
- import React from 'react';
- import { RouteComponentProps } from 'react-router';
+import { Button, Card, Col, ColProps, Form, FormInstance, FormItemProps, FormProps, Row, Space } from 'antd';
+import React from 'react';
+import { RouteComponentProps } from 'react-router';
+
+import layoutStyles from '../layout/Layout.module.less';
+import { IRenderedSection, ISection } from '../utils/SummaryRenderUtil';
+import styles from './AbstractFillableComponent.module.less';
+import AbstractTitledRouteComponent from './AbstractTitledRouteComponent';
+
  
- import layoutStyles from '../layout/Layout.module.less';
- import { IRenderedSection, ISection } from '../utils/SummaryRenderUtil';
- import styles from './AbstractFillableComponent.module.less';
- import AbstractTitledRouteComponent from './AbstractTitledRouteComponent';
  
  interface IAuthoritableFormItemProps extends FormItemProps {
      readonly authority?: string;

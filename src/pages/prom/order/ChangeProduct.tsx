@@ -8,7 +8,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
 
 import RequestUtil from '../../../utils/RequestUtil';
-import AbstractSaleOrderSetting, { IAbstractSaleOrderSettingState, ISaleOrder, IProductVos } from './AbstractSaleOrderSetting';
+import AbstractSaleOrderSetting, { IAbstractSaleOrderSettingState, ISaleOrder, IProductVo } from './AbstractSaleOrderSetting';
 
 export interface IContractSettingProps {
     readonly id: string;
@@ -31,7 +31,7 @@ class ChangeProduct extends AbstractSaleOrderSetting<IContractSettingRouteProps,
             saleOrder: saleOrder,
             isChangeProduct: true
         });
-        saleOrder.productVos = saleOrder.productVos?.map<IProductVos>((product: IProductVos, index: number): IProductVos => {
+        saleOrder.productVos = saleOrder.productVos?.map<IProductVo>((product: IProductVo, index: number): IProductVo => {
             return {
                 ...product,
                 index: index + 1
@@ -42,7 +42,7 @@ class ChangeProduct extends AbstractSaleOrderSetting<IContractSettingRouteProps,
             totalWeight: saleOrder.orderQuantity,
             totalPrice: saleOrder.taxPrice,
             totalAmount: saleOrder.taxAmount,
-            orderQuantity: saleOrder.orderQuantity,
+            orderQuantity: saleOrder.orderQuantity
         });
     }
 

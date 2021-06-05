@@ -20,7 +20,7 @@ import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
   * Create a new client.
   */
  class TaskProduct extends AbstractTaskSetting<ITaskProductRouteProps, ITaskProductState> {
-      /**
+    /**
      * @description Components did mount
      */
     public async componentDidMount() {

@@ -2,18 +2,16 @@
  * @author lxy
  * @copyright © 2021
  */
- import { FormItemProps, Input, Select, Modal, Space, Button} from 'antd';
- import Table, { ColumnType, TablePaginationConfig } from 'antd/lib/table';
- import { GetRowKey } from 'rc-table/lib/interface';
- import React from 'react';
- import styles from './AbstractSelectionModal.module.less'
- import RequestUtil from '../utils/RequestUtil';
- import AbstractFilteredSelectionModal from './AbstractFilteredSelecableModal';
- import {
-     IAbstractSelectableModalProps,
-     IAbstractSelectableModalState,
-     IResponseData,
- } from './AbstractSelectableModal';
+import { Button, FormItemProps, Input, Modal, Select, Space } from 'antd';
+import Table, { ColumnType, TablePaginationConfig } from 'antd/lib/table';
+import { GetRowKey } from 'rc-table/lib/interface';
+import React from 'react';
+
+import RequestUtil from '../utils/RequestUtil';
+import AbstractFilteredSelectionModal from './AbstractFilteredSelecableModal';
+import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from './AbstractSelectableModal';
+import styles from './AbstractSelectionModal.module.less';
+
  
  const { Option } = Select;
  
