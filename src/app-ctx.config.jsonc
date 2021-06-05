@@ -33,6 +33,7 @@
                         "path": "/prom/task"
                     }]
                 },{
+>>>>>>> architecture
                     "label": "系统管理",
                     "path": "/sys",
                     "items": [{

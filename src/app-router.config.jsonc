@@ -139,5 +139,7 @@
         "path": "/sys/users/setting/:id",
         "module": "./pages/system-mngt/user/UserSetting",
         "exact": true
+<<<<<<< approval-pzt
+=======
     }]
 }
