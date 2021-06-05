@@ -139,5 +139,15 @@
         "path": "/sys/users/setting/:id",
         "module": "./pages/system-mngt/user/UserSetting",
         "exact": true
+    },{ //审批
+        "name": "任务单审批",
+        "path": "/approval/approvalall",
+        "module": "./pages/approval/approvalall/Approvalall",
+        "exact": true
+    },{ // 任务审批管理
+        "name": "任务审批",
+        "path": "/approval/task/:id",
+        "module": "./pages/approval/task/Taskapproval",
+        "exact": true
     }]
 }
