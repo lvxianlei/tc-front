@@ -101,10 +101,18 @@ export enum chargeType {
  */
 export default abstract class AbstractSaleOrderSetting<P extends RouteComponentProps, S extends IAbstractSaleOrderSettingState> extends AbstractFillableComponent<P, S> {
 
-    public state: S = {
-        saleOrder: undefined,
-        isChangeProduct: false
-    } as S;
+    public state: S = this.getState();
+
+    /**
+     * @description Gets state
+     * @returns state 
+     */
+    protected getState(): S {
+        return {
+            saleOrder: undefined,
+            isChangeProduct: false
+        } as S;
+    }
 
     /**
      * @override

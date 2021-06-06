@@ -139,5 +139,10 @@
         "path": "/sys/users/setting/:id",
         "module": "./pages/system-mngt/user/UserSetting",
         "exact": true
+    }, { // 审批产品信息变更
+        "name": "产品信息变更",
+        "path": "/approval/product-change/:id",
+        "module": "./pages/approval/ProductChangeApproval",
+        "exact": true
     }]
 }

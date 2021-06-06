@@ -23,6 +23,7 @@
         "taxPrice":87.3050,
         "taxRate":0.64,
         "contractInfoVo":{
+            "contractNumber": 12312321,
             "chargeType": 1,
             "contractId": 2,
             "currencyType": 1,

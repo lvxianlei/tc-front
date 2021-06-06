@@ -129,10 +129,10 @@ import AbstractTitledRouteComponent from './AbstractTitledRouteComponent';
  
      /**
       * @protected
-      * @description Renders save and continue
-      * @returns save and continue 
+      * @description Descriptions product change approval
+      * @returns extra operation area 
       */
-     protected renderSaveAndContinue(): React.ReactNode {
+     protected renderExtraOperationArea(): React.ReactNode {
          return <Button type="primary" htmlType="button" onClick={ this.onSubmitAndContinue }>保存并继续新增</Button>;
      }
  
@@ -200,7 +200,7 @@ import AbstractTitledRouteComponent from './AbstractTitledRouteComponent';
                          <div className={ styles.btnOperationContainer }>
                              <Space direction="horizontal" size="large">
                                  <Button type="primary" htmlType="submit">通过</Button>
-                                 { this.renderSaveAndContinue() }
+                                 { this.renderExtraOperationArea() }
                                  <Button type="ghost" htmlType="submit">驳回</Button>
                                  <Button type="ghost" htmlType="reset">取消</Button>
                              </Space>

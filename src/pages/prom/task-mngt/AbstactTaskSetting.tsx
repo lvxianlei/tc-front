@@ -599,7 +599,7 @@ enum StepTitleItem {
     ]
 
     //底部按钮
-    protected renderSaveAndContinue(): React.ReactNode {
+    protected renderExtraOperationArea(): React.ReactNode {
             const { checkStep } = this.state;
             return (
                 <Space className={styles.column_to_row}> 

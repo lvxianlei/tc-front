@@ -73,10 +73,10 @@ class ChangeProduct extends AbstractSaleOrderSetting<IContractSettingRouteProps,
 
     /**
      * @override
-     * @description Renders save and continue
-     * @returns save and continue 
+     * @description Descriptions product change approval
+     * @returns extra operation area 
      */
-    protected renderSaveAndContinue(): React.ReactNode {
+    protected renderExtraOperationArea(): React.ReactNode {
         return null;
     }
 }
