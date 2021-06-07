@@ -183,7 +183,7 @@
                  label: '合同签订单位',
                  value: task?.signCustomerName
              },  {
-                 label: '合同签订日期',
+                 label: '订单交货日期',
                  value: task?.signContractTime
              }], [{
                  label: '客户交货日期',

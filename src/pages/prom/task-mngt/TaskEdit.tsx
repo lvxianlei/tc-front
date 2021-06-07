@@ -25,7 +25,7 @@
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const task: ITask = await RequestUtil.get<ITask>(`/tower-market/taskNotice/${ this.props.match.params.id }`);
+        const task: ITask = await RequestUtil.get<ITask>(`/tower-market/taskNotice/edit`,{id: this.props.match.params.id });
         this.setState({
             task,
             productDataSource: task?.productInfoVOList || [],
@@ -56,6 +56,7 @@
         values.signContractTime = moment(values.signContractTime).format('YYYY-MM-DD');
         values.productIds = this.state.selectedKeys;
         values.contractInfoDTO = this.state.contractInfoDTO;
+        values.saleOrderId = this.state?.task?.saleOrderId;
         await RequestUtil.post('/tower-market/taskNotice', values);
      }
  }

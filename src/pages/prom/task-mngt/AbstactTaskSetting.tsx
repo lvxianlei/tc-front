@@ -199,7 +199,6 @@ enum StepTitleItem {
     
     //订单选择
     public onOrderSelect = (selectedRows: DataTypeMore[]):void => {
-        console.log(selectedRows)
         if(selectedRows.length > 0 ) {
             const task:ITask = {
                 contractId: selectedRows[0].contractId,
@@ -228,7 +227,6 @@ enum StepTitleItem {
    
     //产品选择
     public onProductSelect = (selectedRows: DataType[]):void => {
-        console.log(selectedRows)
         const { productDataSource } = this.state;
         if(selectedRows.length > 0 ) {
             const task:IProductInfoVO[] = productDataSource || [];
@@ -651,7 +649,7 @@ enum StepTitleItem {
                         <>
                             <div className={styles.column_to_row}>
                                 <div className={styles.title}>产品信息</div>
-                                <ProductSelectionComponent onSelect={ this.onProductSelect }  saleOrderId={ this.state?.task?.saleOrderNumber }/>
+                                <ProductSelectionComponent onSelect={ this.onProductSelect }  saleOrderId={ this.state?.task?.saleOrderId }/>
                             </div>
                             <Table 
                                 columns={this.columns()} 

@@ -19,7 +19,7 @@ import styles from './AbstractSelectableModal.module.less';
      readonly tableDataSource: IOrder[];
  }
  export interface IOrderSelectionComponentProps extends IAbstractSelectableModalProps {
-    readonly saleOrderId?: string;
+    readonly saleOrderId?: string | number;
  }
  
  export interface IResponseDataMore extends IResponseData {
@@ -155,7 +155,7 @@ import styles from './AbstractSelectableModal.module.less';
   
      //row-key
      protected getTableRowKey(): string | GetRowKey<object> {
-         return 'taskNoticeId';
+         return 'id';
      }
 
      public render(): React.ReactNode {
