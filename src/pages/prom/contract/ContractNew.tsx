@@ -8,6 +8,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import RequestUtil from '../../../utils/RequestUtil';
 import AbstractContractSetting, { IAbstractContractSettingState, IPaymentPlanDto, IContract } from './AbstractContractSetting';
 import moment from 'moment'
+import { message } from 'antd';
 
 export interface IContractNewProps {}
 export interface IContractNewRouteProps extends RouteComponentProps<IContractNewProps>, WithTranslation {}
@@ -25,6 +26,11 @@ class ContractNew extends AbstractContractSetting<IContractNewRouteProps, IContr
      * @returns submit 
      */
     public async onSubmit(values: Record<string, any>): Promise<void> {
+        const planValue: IPaymentPlanDto[] = this.getForm()?.getFieldsValue(true).paymentPlanDtos;
+        let totalRate: number = 0;
+        planValue.map<number>((item: IPaymentPlanDto): number => {
+            return totalRate = Number(item.returnedRate) + Number(totalRate);
+        })
         values.signContractTime = moment(values.signContractTime).format('YYYY-MM-DD');
         values.deliveryTime = moment(values.deliveryTime).format('YYYY-MM-DD');
         values.reviewTime = moment(values.reviewTime).format('YYYY-MM-DD HH:mm');

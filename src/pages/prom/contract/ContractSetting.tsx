@@ -27,18 +27,24 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
      */
     public async componentDidMount() {
         super.componentDidMount();
+        console.log(this.props.match.params.id)
         const contract: IContract = await RequestUtil.get<IContract>(`/tower-market/contract/${ this.props.match.params.id }`);
         this.setState({
             contract: contract
         });
-        contract.paymentPlanDtos = contract.paymentPlanDtos?.map<IPaymentPlanDto>((plan: IPaymentPlanDto, index: number): IPaymentPlanDto => {
+        contract.paymentPlanDtos = contract.paymentPlanVos?.map<IPaymentPlanDto>((plan: IPaymentPlanDto, index: number): IPaymentPlanDto => {
             return {
                 ...plan,
                 returnedTime: moment(plan.returnedTime),
                 index: index + 1
             };
         });
-        console.log(contract)
+        this.setState({
+            contract: {
+                ...contract,
+                customerInfoDto: contract.customerInfoVo,
+            }
+        })
         this.getForm()?.setFieldsValue({
             contractNumber: contract.contractNumber,
             id: contract.id,
@@ -61,7 +67,10 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
             description: contract.description,
             planType: contract.planType,
             paymentPlanDtos: contract.paymentPlanDtos,
-            attachInfoDtos: contract?.attachInfoDtos
+            attachInfoDtos: contract?.attachInfoDtos,
+            customerCompany: contract.customerInfoVo?.customerCompany,
+            customerLinkman: contract.customerInfoVo?.customerLinkman,
+            customerPhone: contract.customerInfoVo?.customerPhone
         });
     }
  
@@ -85,9 +94,19 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
      */
     public async onSubmit(values: Record<string, any>): Promise<void> {
         values.customerInfoDto = this.state.contract?.customerInfoDto;
-        return await RequestUtil.put('/tower-customer/customer', {
+        values.signContractTime = moment(values.signContractTime).format('YYYY-MM-DD');
+        values.deliveryTime = moment(values.deliveryTime).format('YYYY-MM-DD');
+        values.reviewTime = moment(values.reviewTime).format('YYYY-MM-DD HH:mm');
+        values.paymentPlanDtos = values.paymentPlanDtos?.map((plan: IPaymentPlanDto, index: number): IPaymentPlanDto => {
+            return {
+                ...plan,
+                returnedTime: moment(plan.returnedTime).format('YYYY-MM-DD'),
+                index: index + 1
+            };
+        });
+        return await RequestUtil.put('/tower-market/contract', {
             ...values,
-            id: Number(this.props.match.params.id)
+            id: this.props.match.params.id
         });
     }
 
