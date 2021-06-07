@@ -6,6 +6,7 @@ import AbstractFillableComponent, {
     IAbstractFillableComponentState,
     IFormItemGroup
 } from '../../../components/AbstractFillableComponent';
+import styles from "../ApprovalList.module.less"
 import RequestUtil from '../../../utils/RequestUtil';
 import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 
@@ -14,8 +15,8 @@ import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
  */
 export interface IAbstractTaxkchangeState extends IAbstractFillableComponentState {
     readonly contract: IContract,
-    readonly ProductInfoVOList: IProductInfoVOList[] | undefined,
-    readonly productChangeInfoVOList?: IProductChangeInfoVOList[] 
+    readonly productInfoVOList: IProductInfoVOList[] | undefined,
+    readonly productChangeInfoVOList: IProductChangeInfoVOList[] | undefined
 }
 /**
  * Icontract
@@ -55,7 +56,7 @@ export interface IContract {
     readonly peculiarDescription?: string;
 
     readonly productChangeInfoVOList?: IProductChangeInfoVOList[];
-    readonly productInfoVOList: IProductInfoVOList[];
+    readonly productInfoVOList?: IProductInfoVOList[];
 };
 
 //变更明细
@@ -113,7 +114,7 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
      */
     public state: S = {
         contract: {},
-        ProductInfoVOList: {},
+        productInfoVOList: {},
         productChangeInfoVOList: {}
     } as S;
     /**
@@ -222,7 +223,7 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
                 name: 'materialDemand',
                 initialValue: contract?.materialDemand,
                 children: (
-                    <Select defaultValue={contract?.materialDemand} style={{ width: 120 }} disabled>
+                    <Select defaultValue={contract?.materialDemand} className={styles.materialStandards} disabled>
                         <Select.Option value="over">未定义</Select.Option>
                     </Select>
                 )
@@ -258,7 +259,7 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
             title: '产品信息',
             render: (): React.ReactNode => {
                 return <Table rowKey="changeType" bordered={true} pagination={false}
-                    columns={this.getProductTableColumns()} dataSource={this.state.contract?.productChangeInfoVOList}
+                    columns={this.getProductTableColumns()} dataSource={this.state.contract?.productInfoVOList}
                 />;
             }
         }];
@@ -272,7 +273,7 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
         return RequestUtil.post('/tower-market/audit/adopt', {
             auditId: values.contractId
         }).then((res) => {
-            message.success('操作已成功！变更产品信息已通过审批。');
+            message.success('操作已成功！任务单信息已通过审批。');
         });
     }
 
@@ -283,7 +284,7 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
         return RequestUtil.post('/tower-market/audit/reject', {
             auditId: this.props.match.params
         }).then((): void => {
-            message.warning('已驳回产品信息变更的申请！');
+            message.warning('已驳回任务单审批的申请！');
             this.props.history.push(this.getReturnPath());
         });
     }
@@ -302,7 +303,8 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
     protected getPrimaryOperationButtonLabel(): string {
         return '通过';
     }
-    protected renderSaveAndContinue(): React.ReactNode {
+  
+    protected renderExtraOperationArea(): React.ReactNode {
         return <Button type="primary" htmlType="button" onClick={this.onReject}>驳回</Button>;
     }
     /**
@@ -311,9 +313,6 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
     */
     private getProductTableColumns(): TableColumnType<object>[] {
         return [{
-            title: '类型',
-            dataIndex: 'changeType'
-        }, {
             title: '线路名称',
             dataIndex: 'lineName'
         }, {

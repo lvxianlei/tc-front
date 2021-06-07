@@ -18,7 +18,7 @@ module.exports = {
                 "isDeleted": Random.boolean(1, 1, true),
                 "startTime": Random.datetime('yyyy年MM月dd日  HH:mm:ss'),
                 "tenantId": Random.integer(100),
-                "type": Random.integer(3),
+                "type|0-2": 0,
                 "typeName": Random.csentence(3, 5),
                 "updateTime": Random.datetime('yyyy年MM月dd日  HH:mm:ss'),
                 "updateUser": Mock.mock('@cname()')

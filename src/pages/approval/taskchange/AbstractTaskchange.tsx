@@ -6,6 +6,7 @@ import AbstractFillableComponent, {
     IAbstractFillableComponentState,
     IFormItemGroup
 } from '../../../components/AbstractFillableComponent';
+import styles from "../ApprovalList.module.less"
 import RequestUtil from '../../../utils/RequestUtil';
 import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 
@@ -109,7 +110,7 @@ export interface IProductInfoVOList {
 /**
  * Abstract Contract Setting
  */
-export default abstract class AbstractTaxkchange<P extends RouteComponentProps, S extends IAbstractTaxkchangeState> extends AbstractFillableComponent<P, S> {
+export default abstract class AbstractTaskChange<P extends RouteComponentProps, S extends IAbstractTaxkchangeState> extends AbstractFillableComponent<P, S> {
     /**
      * State  of abstract taxkchange
      */
@@ -118,15 +119,6 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
         ProductInfoVOList: {},
         productChangeInfoVOList: {}
     } as S;
-    /**
-     * Components did mount
-     */
-    public async componentDidMount() {
-        super.componentDidMount();
-    }
-
-
-
     /**
      * @override
      * @description Gets form props
@@ -224,7 +216,7 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
                 name: 'materialDemand',
                 initialValue: contract?.materialDemand,
                 children: (
-                    <Select defaultValue={contract?.materialDemand} style={{ width: 120 }} disabled>
+                    <Select defaultValue={contract?.materialDemand} className={styles.materialStandards} disabled>
                         <Select.Option value="over">未定义</Select.Option>
                     </Select>
                 )
@@ -275,7 +267,7 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
             auditId: values.contractId
         }).then((): void => {
             console.log(values);
-            message.success('操作已成功！变更产品信息已通过审批。');
+            message.success('操作已成功！任务单 产品变更审批 已通过审批。');
         });
     }
 
@@ -286,7 +278,7 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
         return RequestUtil.post('/tower-market/audit/reject', {
             auditId: this.props.match.params
         }).then((): void => {
-            message.warning('已驳回产品信息变更的申请！');
+            message.warning('已驳回任务单 产品 变更 审批的申请！');
             this.props.history.push(this.getReturnPath());
         });
     }
@@ -303,10 +295,10 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
      * @returns primary operation button label 
      */
     protected getPrimaryOperationButtonLabel(): string {
-        return '通过';
+        return '通过'
     }
-    protected renderSaveAndContinue(): React.ReactNode {
-        return <Button type="primary" htmlType="button" onClick={this.onReject}>驳回</Button>;
+    protected renderExtraOperationArea(): React.ReactNode {
+        return <Button type="primary" htmlType="button" onClick={this.onReject}>驳回</Button>
     }
     /**
     * Gets product table columns

@@ -2,7 +2,7 @@ import moment from 'moment';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import RequestUtil from '../../../utils/RequestUtil';
-import AbstractContractSetting, { IAbstractTaxkchangeState, IContract } from './AbstractTaskchange';
+import AbstractTaskChange, { IAbstractTaxkchangeState, IContract } from './AbstractTaskchange';
 
 
 export interface ITaxkChangeProps {
@@ -11,7 +11,7 @@ export interface ITaxkChangeProps {
 export interface ITaxkChangeRouteProps extends RouteComponentProps<ITaxkChangeProps>, WithTranslation { }
 export interface ITaxkchangeState extends IAbstractTaxkchangeState { }
 
-class TaskChange extends AbstractContractSetting<ITaxkChangeRouteProps, ITaxkchangeState> {
+class TaskChange extends AbstractTaskChange<ITaxkChangeRouteProps, ITaxkchangeState> {
 
     /**
      * @description Components did mount

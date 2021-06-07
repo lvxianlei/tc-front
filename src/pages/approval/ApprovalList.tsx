@@ -1,12 +1,13 @@
 import {
     Button,
     Dropdown,
+    Form,
     FormItemProps,
     Menu,
     Select,
     Space,
     TableColumnType,
-    TablePaginationConfig,
+    TablePaginationConfig
 } from "antd";
 import React from "react";
 import { WithTranslation, withTranslation } from "react-i18next";
@@ -15,7 +16,7 @@ import { RouteComponentProps, withRouter } from "react-router";
 //引入Link
 import { Link } from "react-router-dom";
 //引入css
-// import "./Approvalall.modal.less"
+import styles from "./ApprovalList.module.less";
 import AbstractMngtComponent, {
     IAbstractMngtComponentState,
 } from "../../components/AbstractMngtComponent";
@@ -29,6 +30,7 @@ export interface IApprovalallRouteProps
     WithTranslation { }
 export interface IApprovalState extends IAbstractMngtComponentState {
     readonly tableDataSource: ITaskTableDataItem[];
+
 }
 //头部下拉列表事件
 function handleChange(value: string) {
@@ -43,18 +45,14 @@ interface IResponseData {
     readonly current: number;
     readonly pageSize: string;
     readonly total: number;
-}
-interface Sex {
-    MALE: number;
-
-    readonly auditStatus: number
+    readonly type: string | number;
 }
 //响应数据的限制
 interface ITaskTableDataItem {
     //id
     readonly id: number;
 
-    readonly type: string;
+    readonly type: string | number;
     //业务类型
     readonly typeName: string;
     //状态类型
@@ -91,13 +89,13 @@ const menubar = (records: object) => {
 enum AuditStatus {
     PENDING_APPROVAL = 0,
     ADOPT = 1,
-    REJECT = 2,
+    REJECT = 2
 }
 
 enum AuditStatusItem {
     PENDING_APPROVAL = "待审批",
     ADOPT = "通过",
-    REJECT = "驳回",
+    REJECT = "驳回"
 }
 
 class ApprovalAll extends AbstractMngtComponent<
@@ -109,7 +107,7 @@ class ApprovalAll extends AbstractMngtComponent<
         return {
             //默认设置
             ...super.getState(),
-            tableDataSource: [],
+            tableDataSource: []
         };
     }
     //发送请求
@@ -126,7 +124,9 @@ class ApprovalAll extends AbstractMngtComponent<
                 //每页数量
                 size: pagination.pageSize || this.state?.tablePagination?.pageSize,
                 //react.key
-                auditStatus: this.state.selectedTabKey,
+                auditStatus: this.state.selectedTabKey
+                
+
             }
         );
 
@@ -137,7 +137,7 @@ class ApprovalAll extends AbstractMngtComponent<
                 ...this.state.tablePagination,
                 current: resData.current,
                 pageSize: resData.size,
-                total: resData.total,
+                total: resData.total
             },
         });
     }
@@ -160,14 +160,14 @@ class ApprovalAll extends AbstractMngtComponent<
                 align: "center",
                 render: (id: number): React.ReactNode => {
                     return <Link to={``}>{id}</Link>;
-                },
+                }
             },
             {
                 key: "typeName",
                 title: "业务类型",
                 dataIndex: "typeName",
                 align: "center",
-                width: 150,
+                width: 150
             },
             {
                 key: "businessNumber",
@@ -176,14 +176,14 @@ class ApprovalAll extends AbstractMngtComponent<
                 align: "center",
                 render: (businessNumber: number): React.ReactNode => {
                     return <Link to={``}>{businessNumber}</Link>;
-                },
+                }
             },
             {
                 key: "updateTime",
                 title: "提交时间",
                 dataIndex: "updateTime",
                 align: "center",
-                width: 200,
+                width: 200
             },
             {
                 key: "auditStatus",
@@ -199,7 +199,7 @@ class ApprovalAll extends AbstractMngtComponent<
                         case AuditStatus.REJECT:
                             return "驳回"
                     }
-                },
+                }
 
             },
             {
@@ -228,7 +228,7 @@ class ApprovalAll extends AbstractMngtComponent<
                             )}
                         </Space>
                     );
-                },
+                }
             },
         ];
     }
@@ -238,7 +238,6 @@ class ApprovalAll extends AbstractMngtComponent<
      */
     public onTableChange(pagination: TablePaginationConfig): void {
         this.fetchTableData(pagination);
-        console.log(pagination);
     }
     /**
      * @implements
@@ -280,20 +279,19 @@ class ApprovalAll extends AbstractMngtComponent<
      * @returns filter components
      */
     public getFilterFormItemProps(item: ITabItem): FormItemProps[] {
+
         return [
             {
+                name: "type",
+                initialValue:"0",
                 children: (
-                    <Select
-                        defaultValue="全部"
-                        style={{ width: 170 }}
-                        onChange={handleChange}
-                    >
-                        <Option value="全部">全部</Option>
-                        <Option value="产品信息变更审批">产品信息变更审批</Option>
-                        <Option value="任务单产品信息审批">任务单产品信息审批</Option>
-                    </Select>
+                        <Select className={styles.drop_down_menu} onChange={handleChange}>
+                            <Option value="0">全部</Option>
+                            <Option value="1">产品信息变更审批</Option>
+                            <Option value="2">任务单产品信息审批</Option>
+                        </Select>
                 ),
-            },
+            }
         ];
     }
     /**

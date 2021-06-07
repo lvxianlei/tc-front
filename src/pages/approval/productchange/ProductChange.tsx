@@ -3,14 +3,14 @@ import moment from 'moment';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import RequestUtil from '../../../utils/RequestUtil';
-import AbstractContractSetting, { IAbstractTaxkchangeState, IContract } from './AbstractProductchange';
+import AbstractTaxkchange, { IAbstractTaxkchangeState, IContract } from './AbstractProductchange';
 export interface ITaxkChangeProps {
     readonly id: string;
 }
 export interface ITaxkChangeRouteProps extends RouteComponentProps<ITaxkChangeProps>, WithTranslation { }
 export interface ITaxkchangeState extends IAbstractTaxkchangeState { }
 
-class ProductChange extends AbstractContractSetting<ITaxkChangeRouteProps, ITaxkchangeState> {
+class ProductChange extends AbstractTaxkchange<ITaxkChangeRouteProps, ITaxkchangeState> {
 
     /**
      * @description Components did mount
@@ -20,7 +20,8 @@ class ProductChange extends AbstractContractSetting<ITaxkChangeRouteProps, ITaxk
         const contract: IContract = await RequestUtil.get<IContract>(`/tower-market/taskNotice/auditDetail`);
         this.setState({
             contract: contract,
-            productChangeInfoVOList: contract.productChangeInfoVOList
+            productChangeInfoVOList: contract.productChangeInfoVOList,
+            productInfoVOList:contract.productInfoVOList
         });
         this.getForm()?.setFieldsValue({
             id: contract.id,
