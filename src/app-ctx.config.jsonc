@@ -38,7 +38,7 @@
                     "items": [
                         {
                             "label": "任务单审批",
-                            "path": "/approval/approvalall"
+                            "path": "/approval/list"
                         }]
                 },{
                     "label": "系统管理",
