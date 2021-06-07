@@ -115,10 +115,22 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
     private getProductTableColumns(): TableColumnType<object>[] {
         return [{
             title: '类型',
-            dataIndex: 'changeType'
+            dataIndex: 'changeType',
+            render: (changeType: number): React.ReactNode => {
+                switch (changeType) {
+                    case 0:
+                        return '未变更';
+                    case 3:
+                        return '修改内容';
+                }
+                return changeType === 1 ? '变更前' : '变更后';
+            }
         }, {
             title: '版本',
-            dataIndex: 'recordType'
+            dataIndex: 'recordType',
+            render: (recordType: number): React.ReactNode => {
+                return recordType === 1 ? '变更前' : '变更后';
+            }
         }, {
             title: '序号',
             dataIndex: 'index'
