@@ -1,4 +1,4 @@
-import { FormItemProps, Input, Button, Space, TableColumnType, TablePaginationConfig } from 'antd';
+import { FormItemProps, Input, Button, Space, TableColumnType, TablePaginationConfig, Select } from 'antd';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -8,7 +8,6 @@ import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../../com
 import { ITabItem } from '../../../components/ITabableComponent';
 import RequestUtil from '../../../utils/RequestUtil';
 
-
  export interface ITaskMngtProps {}
  export interface ITaskMngtWithRouteProps extends RouteComponentProps<ITaskMngtProps>, WithTranslation {}
  export interface ITaskMngtState extends IAbstractMngtComponentState {
@@ -16,6 +15,7 @@ import RequestUtil from '../../../utils/RequestUtil';
  }
 
  interface ITaskTableDataItem {
+     readonly status: number;
      readonly id: number;
      readonly internalNumber: string;
      readonly materialDemand: string;
@@ -63,7 +63,7 @@ import RequestUtil from '../../../utils/RequestUtil';
              ...filterValues,
              current: pagination.current || this.state?.tablePagination?.current,
              size: pagination.pageSize ||this.state?.tablePagination?.pageSize,
-             countryCode: this.state.selectedTabKey
+             taskReviewStatus: this.state.selectedTabKey
          });
          this.setState({
             ...filterValues,
@@ -107,22 +107,22 @@ import RequestUtil from '../../../utils/RequestUtil';
             key: 'taskNumber',
             title: '任务编号',
             dataIndex: 'taskNumber',
-            render: (taskNumber: number): React.ReactNode => {
-                 return <Link to= {`/prom/task/view/1` }>{taskNumber}</Link>
+            render: (taskNumber:number, record: object): React.ReactNode => {
+                 return <Link to= {`/prom/task/view/${ (record as ITaskTableDataItem).id }` }>{taskNumber}</Link>
             }
         },  {
             key: 'saleOrderNumber',
             title: '订单编号',
             dataIndex: 'saleOrderNumber',
             render: (saleOrderNumber: number): React.ReactNode => {
-                 return <Link to="">{saleOrderNumber}</Link>
-            }
+                 return <Link to= {`/prom/order/detail/${ saleOrderNumber }` }>{saleOrderNumber}</Link>
+            } 
         },  {
             key: 'internalNumber',
             title: '合同编号',
             dataIndex: 'internalNumber',
             render: (internalNumber: number): React.ReactNode => {
-                 return <Link to="">{internalNumber}</Link>
+                 return <Link to={ `/prom/contract/detail/${ internalNumber }` }>{ internalNumber}</Link>
             }
         },  {
             key: 'projectName',
@@ -149,7 +149,7 @@ import RequestUtil from '../../../utils/RequestUtil';
             title: '审批状态',
             dataIndex: 'taskReviewStatus',
             render: (taskReviewStatus: number): React.ReactNode => {
-                return  taskReviewStatus === 0 ? '待审批' : taskReviewStatus === 1? '已通过 ' : '已驳回';
+                return  taskReviewStatus > 0 ? taskReviewStatus === 0 ? '审批中' : taskReviewStatus === 1? '已通过 ' : '已驳回': '-';
             }
         }, {
              key: 'operation',
@@ -157,23 +157,23 @@ import RequestUtil from '../../../utils/RequestUtil';
              dataIndex: 'operation',
              render: (_: undefined, record: object): React.ReactNode => (
                  <Space direction="horizontal" size="small">
-                    <Button type="link"  href={ `/prom/task/edit/${ (record as ITaskTableDataItem).id }` } disabled={ (record as ITaskTableDataItem).taskReviewStatus !== 0 }>
+                    <Button type="link"  href={ `/prom/task/edit/${ (record as ITaskTableDataItem).id }` } disabled={ (record as ITaskTableDataItem).status !== 1 }>
                         编辑
                     </Button>
                     <ConfirmableButton confirmTitle="要删除该数据吗？" type="link" placement="topRight" onConfirm={() => this.handleDelete(record)} >
-                        <Button type="link" disabled={ (record as ITaskTableDataItem).taskReviewStatus !== 0 }>
+                        <Button type="link" disabled={ (record as ITaskTableDataItem).status !== 1 }>
                             删除
                         </Button>
                     </ConfirmableButton>
-                    <Button type="link"  href={ `/prom/task/special/${ (record as ITaskTableDataItem).id }` } disabled={ (record as ITaskTableDataItem).taskReviewStatus !== 0 }>
+                    <Button type="link"  href={ `/prom/task/special/${ (record as ITaskTableDataItem).id }` } disabled={ (record as ITaskTableDataItem).status !== 2 }>
                         完善特殊要求
                     </Button>
                      {
-                        (record as ITaskTableDataItem).taskReviewStatus===0? 
+                        (record as ITaskTableDataItem).status !==4 ? 
                         <Button type="link"  href={ `/prom/task/product/${ (record as ITaskTableDataItem).id }` } disabled={ (record as ITaskTableDataItem).taskReviewStatus !== 0 }>
                             完善产品信息
                         </Button>
-                        :<Button type="link"  href={ `/prom/task/product/${ (record as ITaskTableDataItem).id }` } >
+                        :<Button type="link"  href={ `/prom/task/product/${ (record as ITaskTableDataItem).id }` } disabled={ (record as ITaskTableDataItem).taskReviewStatus !== 0 }>
                             变更产品信息
                         </Button>
                      }
@@ -221,12 +221,12 @@ import RequestUtil from '../../../utils/RequestUtil';
              label: '审批中',
              key: 0
          }, {
-             label: '已驳回',
+             label: '已通过',
              key: 1
          }, {
-             label: '已通过',
+             label: '已驳回',
              key: 2
-        }];
+         }];
      }
  
      /**
@@ -270,7 +270,7 @@ import RequestUtil from '../../../utils/RequestUtil';
            {
                name: 'projectName',
                children: <Input placeholder="工程名称关键字"/>
-           }
+           },
         ];
      }
  }

@@ -249,9 +249,6 @@ enum StepTitleItem {
       */
      public getFormItemGroups(): IFormItemGroup[][] {
           const task: ITask | undefined = this.state.task;
-          console.log(task)
-          console.log(task?.signContractTime)
-          console.log(moment(task?.signContractTime))
           const { checkStep } = this.state;
           let module: IFormItemGroup[][] = [];
           switch(checkStep){
@@ -337,15 +334,6 @@ enum StepTitleItem {
                             span: 8
                         },
                         itemProps: [{
-                            label: '任务编号',
-                            name: 'taskNumber',
-                            initialValue: task?.taskNumber,
-                            rules: [{
-                                required: true,
-                                message: '请输入任务编号'
-                            }],
-                            children: <Input disabled value={task?.taskNumber}/>
-                        }, {
                             label: '关联订单',
                             name: 'saleOrderNumber',
                             initialValue: task?.saleOrderNumber,
@@ -465,15 +453,6 @@ enum StepTitleItem {
                             span: 8
                         },
                         itemProps: [{
-                            label: '任务编号',
-                            name: 'taskNumber',
-                            initialValue: task?.taskNumber,
-                            rules: [{
-                                required: true,
-                                message: '请输入任务编号'
-                            }],
-                            children: <Input disabled/>
-                        }, {
                             label: '关联订单',
                             name: 'saleOrderNumber',
                             initialValue: task?.saleOrderNumber,
