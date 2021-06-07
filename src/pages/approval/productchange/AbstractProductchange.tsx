@@ -271,18 +271,17 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
     public onSubmit(values: Record<string, any>): Promise<void> {
         return RequestUtil.post('/tower-market/audit/adopt', {
             auditId: values.contractId
-        }).then((res) => {
+        }).then((): void => {
             message.success('操作已成功！任务单信息已通过审批。');
         });
     }
-
     /**
      * Determines whether reject on
      */
     public onReject = (): Promise<void> => {
         return RequestUtil.post('/tower-market/audit/reject', {
             auditId: this.props.match.params
-        }).then((): void => {
+        }).then(() => {
             message.warning('已驳回任务单审批的申请！');
             this.props.history.push(this.getReturnPath());
         });
