@@ -21,7 +21,7 @@ class ProductChange extends AbstractTaxkchange<ITaxkChangeRouteProps, ITaxkchang
         this.setState({
             contract: contract,
             productChangeInfoVOList: contract.productChangeInfoVOList,
-            productInfoVOList:contract.productInfoVOList
+            productInfoVOList: contract.productInfoVOList
         });
         this.getForm()?.setFieldsValue({
             id: contract.id,
