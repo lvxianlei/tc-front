@@ -10,7 +10,7 @@ import React from 'react';
 import RequestUtil from '../utils/RequestUtil';
 import AbstractFilteredSelectionModal from './AbstractFilteredSelecableModal';
 import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from './AbstractSelectableModal';
-import styles from './AbstractSelectionModal.module.less';
+import styles from './AbstractSelectableModal.module.less';
 
  
  const { Option } = Select;

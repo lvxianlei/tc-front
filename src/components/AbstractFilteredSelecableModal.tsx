@@ -4,7 +4,7 @@ import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
 import AbstractSelectionModal, { DataType, IAbstractSelectableModalState } from './AbstractSelectableModal';
-import styles from './AbstractSelectionModal.module.less';
+import styles from './AbstractSelectableModal.module.less';
 
 export interface IAbstractSelectableModalProps {
     readonly onSelect: (selectedRows: DataType[]) => void;
