@@ -56,7 +56,7 @@
         values.signContractTime = moment(values.signContractTime).format('YYYY-MM-DD');
         values.productIds = this.state.selectedKeys;
         values.contractInfoDTO = this.state.contractInfoDTO;
-        await RequestUtil.post('/tower-market/taskNotice/save', values);
+        await RequestUtil.post('/tower-market/taskNotice', values);
      }
  }
  
