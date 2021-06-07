@@ -14,7 +14,7 @@ import styles from './ContractRefundRecord.module.less';
 import ClientSelectionComponent from '../../../components/ClientSelectionModal';
 
 export interface IContractRefundRecord {
-    readonly paymentPlanVos?: IPaymentPlanVo[];
+    readonly paymentPlanVos: IPaymentPlanVo[];
 }
 
 export interface IContractRefundRecordProps extends IContractRefundRecord {
@@ -113,7 +113,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             const paymentPlanVos: IPaymentPlanVo[] = this.state.paymentPlanVos || [];
             const paymentRecordVos: IPaymentRecordVo[] = paymentPlanVos[index].paymentRecordVos;
             paymentRecordVos.push({
-                refundTime: '',
+                refundTime: moment('2021-01-01'),
                 customerName: '',
                 refundMode: 1,
                 refundAmount: 0,
@@ -167,8 +167,6 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             e.preventDefault();
             this.setState({
                 editingKey: record.paymentPlanId + '-' + index
-            }, () => {
-                console.log(this.getForm()?.getFieldsValue());
             });
         };
     }
@@ -195,9 +193,12 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
         const keyParts: string [] = (this.state.editingKey || '').split('-');
         const paymentPlanId: number = parseInt(keyParts[0]);
         const tableIndex: number = parseInt(keyParts[1]);
+        console.log(this.state.editingKey)
         if( selectedRows.length > 0 ) {
             paymentPlanVos = paymentPlanVos.map<IPaymentPlanVo>((items: IPaymentPlanVo): IPaymentPlanVo => {
+                console.log(items.id,paymentPlanId )
                 if(items.id === paymentPlanId) {
+                    console.log(items)
                     return {
                         ...items,
                         paymentRecordVos: items.paymentRecordVos.map<IPaymentRecordVo>((item: IPaymentRecordVo, index: number): IPaymentRecordVo => {
@@ -216,12 +217,14 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                     return items;
                 }
             });
+            console.log(paymentPlanVos)
             this.setState({
                 paymentPlanVos: [ ...paymentPlanVos ]
             });
             this.getForm()?.setFieldsValue({
                 customerName: selectedRows[0].name
             });
+            console.log(this.state.paymentPlanVos)
         }
     }
 
@@ -455,7 +458,6 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
     private getChargingRecordSummariableItems(): IRenderdSummariableItem[] {
         let paymentPlanVos: IPaymentPlanVo[] = this.state.paymentPlanVos || [];
         return paymentPlanVos.map<IRenderdSummariableItem>((item: IPaymentPlanVo, index: number) : IRenderdSummariableItem => {
-            // const tableData: IPaymentRecordVo[] = JSON.parse(JSON.stringify(items.paymentRecordVos))
             return {
                 fieldItems: [{
                     label: `第${ item.period }期计划 `,
