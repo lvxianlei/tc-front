@@ -188,7 +188,7 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
                                     rowKey="id"
                                     components={{
                                         body: {
-                                          wrapper: this.draggableContainer,
+                                          wrapper: this.draggableContainer(index),
                                           row: this.draggableBodyRow(index),
                                         },
                                     }}
@@ -212,32 +212,36 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
 
 
     //drag-after-dictDataSource
-    public onSortEnd = async (props: { oldIndex: number; newIndex: number; }) => {
-        const { oldIndex, newIndex } = props;
-        const { dictDataSource } = this.state;
-        if (oldIndex !== newIndex) {
-          const newDictDataSource = dictDataSource.map((item:IDictDataSourceData)=>{
-              const newData = arrayMove(item.dictionaries,oldIndex, newIndex).filter(el => !!el);
-              item.dictionaries = newData;
-              return item
-          })
-          await RequestUtil.put(`/tower-system/dictionary/updateSortOrEnable`,newDictDataSource);
-          this.setState({ dictDataSource: newDictDataSource });
+    public onSortEnd = (index: number) =>{
+        return async (props: { oldIndex: number; newIndex: number; }) => {
+            const { oldIndex, newIndex } = props;
+            const { dictDataSource } = this.state;
+            if (oldIndex !== newIndex) {
+                const newDictDataSource = dictDataSource.map((item:IDictDataSourceData)=>{
+                    const newData = arrayMove(item.dictionaries,oldIndex, newIndex).filter(el => !!el);
+                    item.dictionaries = newData;
+                    return item
+                })
+                await RequestUtil.put(`/tower-system/dictionary/updateSortOrEnable`,newDictDataSource[index].dictionaries);
+                this.setState({ dictDataSource: newDictDataSource });
+            }
         }
-    }
+    }   
 
 
 
     //drag-container
-    public draggableContainer = (props:IDictMngtWithRouteProps) => (
-        <SortableCon
-            useDragHandle
-            disableAutoscroll
-            helperClass="row-dragging"
-            onSortEnd={this.onSortEnd}
-            {...props}
-        />
-    );
+    public draggableContainer = (index: number):CustomizeComponent =>{
+        return  (props:IDictMngtWithRouteProps) => (
+            <SortableCon
+                useDragHandle
+                disableAutoscroll
+                helperClass="row-dragging"
+                onSortEnd={this.onSortEnd(index)}
+                {...props}
+            />
+        );
+    } 
 
 
     //drag-item
