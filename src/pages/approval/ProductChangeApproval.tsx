@@ -53,7 +53,9 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const saleOrder: ISaleOrder = await RequestUtil.get<ISaleOrder>(`/tower-market/saleOrder/${ this.props.match.params.id }`);
+        const saleOrder: ISaleOrder = await RequestUtil.get<ISaleOrder>('/tower-market/saleOrder/getSaleOrderByAuditId', {
+            auditId: this.props.match.params.id
+        });
         this.setState({
             saleOrder: {
                 ...saleOrder,
@@ -112,6 +114,12 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
      */
     private getProductTableColumns(): TableColumnType<object>[] {
         return [{
+            title: '类型',
+            dataIndex: 'changeType'
+        }, {
+            title: '版本',
+            dataIndex: 'recordType'
+        }, {
             title: '序号',
             dataIndex: 'index'
         }, {
