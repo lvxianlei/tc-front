@@ -145,7 +145,7 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
                                 }
                                 await RequestUtil.put(`/tower-system/dictionary/updateSortOrEnable`,[values]);
                             }} 
-                            defaultChecked={ text === 1 ? true : false }
+                            defaultChecked={ text === 1 }
                         />;
             }
         }, {
