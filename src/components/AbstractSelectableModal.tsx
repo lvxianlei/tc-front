@@ -3,7 +3,7 @@ import { ColumnType, TablePaginationConfig, TableProps } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
-import styles from './AbstractSelectionModal.module.less';
+import styles from './AbstractSelectableModal.module.less';
 import PopModalButton from './PopModalButton';
 
 export interface IAbstractSelectableModalProps {

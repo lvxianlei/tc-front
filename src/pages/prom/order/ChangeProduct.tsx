@@ -10,16 +10,16 @@ import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
 import RequestUtil from '../../../utils/RequestUtil';
 import AbstractSaleOrderSetting, { IAbstractSaleOrderSettingState, ISaleOrder, IProductVo } from './AbstractSaleOrderSetting';
 
-export interface IContractSettingProps {
+export interface IChangeProductProps {
     readonly id: string;
 }
-export interface IContractSettingRouteProps extends RouteComponentProps<IContractSettingProps>, WithTranslation {}
-export interface IContractSettingState extends IAbstractSaleOrderSettingState {}
+export interface IChangeProductRouteProps extends RouteComponentProps<IChangeProductProps>, WithTranslation {}
+export interface IChangeProductState extends IAbstractSaleOrderSettingState {}
 
 /**
  * Contract Setting
  */
-class ChangeProduct extends AbstractSaleOrderSetting<IContractSettingRouteProps, IContractSettingState> {
+class ChangeProduct extends AbstractSaleOrderSetting<IChangeProductRouteProps, IChangeProductState> {
 
     /**
      * @description Components did mount
