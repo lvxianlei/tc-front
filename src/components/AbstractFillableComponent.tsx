@@ -126,12 +126,19 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
     }
 
     /**
-     * @protected
-     * @description Renders save and continue
-     * @returns save and continue 
+     * @description Renders extra operation area
+     * @returns extra operation area 
      */
-    protected renderSaveAndContinue(): React.ReactNode {
+    protected renderExtraOperationArea(): React.ReactNode {
         return <Button type="primary" htmlType="button" onClick={ this.onSubmitAndContinue }>保存并继续新增</Button>;
+    }
+
+    /**
+     * @description Gets primary operation button label
+     * @returns primary operation button label 
+     */
+    protected getPrimaryOperationButtonLabel(): string {
+        return '保存';
     }
 
     /**
@@ -191,14 +198,14 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
                             this.renderExtraSections().map<React.ReactNode>((section: IRenderedSection): React.ReactNode => (
                                 <React.Fragment key={ section.title }>
                                     <div className={ styles.title }>{ section.title }</div>
-                                    { section.render() }
+                                    { section.render.call(this) }
                                 </React.Fragment>
                             ))
                         }
                         <div className={ styles.btnOperationContainer }>
                             <Space direction="horizontal" size="large">
-                                <Button type="primary" htmlType="submit">保存</Button>
-                                { this.renderSaveAndContinue() }
+                                <Button type="primary" htmlType="submit">{ this.getPrimaryOperationButtonLabel() }</Button>
+                                { this.renderExtraOperationArea() }
                                 <Button type="ghost" htmlType="reset">取消</Button>
                             </Space>
                         </div>

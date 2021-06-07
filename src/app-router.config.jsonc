@@ -144,8 +144,7 @@
         "path": "/approval/list",
         "module": "./pages/approval/ApprovalList",
         "exact": true
-    },
-    { // 任务审批管理
+    },{ // 任务审批管理
         "name": "任务审批",
         "path": "/approval/task/productchange/:id",
         "module": "./pages/approval/productchange/ProductChange",
@@ -155,6 +154,11 @@
         "name": "任务单产品变更审批",
         "path": "/approval/task/change/:id",
         "module": "./pages/approval/taskchange/TaskChange",
+        "exact": true
+    }, { // 审批产品信息变更
+        "name": "产品信息变更",
+        "path": "/approval/product-change/:id",
+        "module": "./pages/approval/ProductChangeApproval",
         "exact": true
     }]
 }

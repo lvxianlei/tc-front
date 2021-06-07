@@ -22,7 +22,6 @@ class ProductChange extends AbstractContractSetting<ITaxkChangeRouteProps, ITaxk
             contract: contract,
             productChangeInfoVOList: contract.productChangeInfoVOList
         });
-
         this.getForm()?.setFieldsValue({
             id: contract.id,
             saleOrderNumber: contract.saleOrderNumber,

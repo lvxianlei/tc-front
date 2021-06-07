@@ -23,7 +23,7 @@ class TaskChange extends AbstractContractSetting<ITaxkChangeRouteProps, ITaxkcha
             contract: contract,
             productChangeInfoVOList: contract.productChangeInfoVOList
         });
-
+        console.log(this.props.match.params);
         this.getForm()?.setFieldsValue({
             id: contract.id,
             saleOrderNumber: contract.saleOrderNumber,

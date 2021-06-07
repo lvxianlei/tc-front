@@ -1,9 +1,9 @@
-import React from 'react'
-import {Modal, Card, Space, Table} from 'antd'
-
-import { GetRowKey } from 'rc-table/lib/interface';
+import { Card, Modal, Space, Table } from 'antd';
 import { ColumnType, TablePaginationConfig, TableProps } from 'antd/lib/table';
-import styles from './AbstractSelectionModal.module.less'
+import { GetRowKey } from 'rc-table/lib/interface';
+import React from 'react';
+
+import styles from './AbstractSelectionModal.module.less';
 import PopModalButton from './PopModalButton';
 
 export interface IAbstractSelectableModalProps {

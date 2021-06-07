@@ -1,6 +1,5 @@
 {
     "code": 200,
-    "msg": "审批通过",
-    "data": null,
-    "success": true
+    "data": true,
+    "msg": ""
 }

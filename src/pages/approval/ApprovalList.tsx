@@ -75,12 +75,12 @@ const menubar = (records: object) => {
                 </Button>
             </Menu.Item>
             <Menu.Item>
-                <Button href={`/approval/taskchange/${(records as ITaskTableDataItem).id}`} ghost>
+                <Button href={`/approval/task/change/${(records as ITaskTableDataItem).id}`} ghost>
                     任务单产品变更审批
                 </Button>
             </Menu.Item>
             <Menu.Item>
-                <Button href={`/approval/information/${(records as ITaskTableDataItem).id}`} ghost>
+                <Button href={`/approval/product-change/${(records as ITaskTableDataItem).id}`} ghost>
                     产品信息变更审批
                 </Button>
             </Menu.Item>

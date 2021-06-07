@@ -57,10 +57,10 @@ class UserSetting extends AbstractUserSetting<IUserSettingRouteProps, IUserSetti
 
     /**
      * @override
-     * @description Renders save and continue
-     * @returns save and continue 
+     * @description Descriptions product change approval
+     * @returns extra operation area 
      */
-    protected renderSaveAndContinue(): React.ReactNode {
+    protected renderExtraOperationArea(): React.ReactNode {
         return null;
     }
 }

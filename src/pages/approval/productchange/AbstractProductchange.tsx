@@ -15,7 +15,7 @@ import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 export interface IAbstractTaxkchangeState extends IAbstractFillableComponentState {
     readonly contract: IContract,
     readonly ProductInfoVOList: IProductInfoVOList[] | undefined,
-    readonly productChangeInfoVOList: IProductChangeInfoVOList[] | undefined
+    readonly productChangeInfoVOList?: IProductChangeInfoVOList[] 
 }
 /**
  * Icontract
@@ -57,10 +57,7 @@ export interface IContract {
     readonly productChangeInfoVOList?: IProductChangeInfoVOList[];
     readonly productInfoVOList: IProductInfoVOList[];
 };
-//返回
-interface ICodeList {
-    code: string
-}
+
 //变更明细
 export interface IProductChangeInfoVOList {
     readonly index?: number;

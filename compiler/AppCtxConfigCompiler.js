@@ -19,6 +19,7 @@ class AppCtxConfigCompiler {
             ), { deep: true });
         let appCtxAlt = '{';
         for (let key in appCtxConfig) {
+            const value = appCtxConfig[key];
             if (key === 'layout') {
                 const objAlt = this.handleLayout(appCtxConfig[key], source);
                 source = objAlt.source;
@@ -27,8 +28,15 @@ class AppCtxConfigCompiler {
                 const objAlt = this.handleFilters(appCtxConfig[key], source);
                 source = objAlt.source;
                 appCtxAlt += `${objAlt.objAlt},`;
-            } else {
-                appCtxAlt += ` ${key}: ${appCtxConfig[key]}`;
+            } else if (typeof value === 'string') {
+                appCtxAlt += `${key}: "${value}",`;
+            } else if (typeof value === 'number'
+                || typeof value === 'boolean'
+                || value === null
+                || typeof value === 'undefined') {
+                appCtxAlt += `${key}: ${value},`;
+            } else if (typeof value === 'array' || typeof value === 'object') {
+                appCtxAlt += `${key}: ${JSON.stringify(value)},`;
             }
         } 
         appCtxAlt += '}';
