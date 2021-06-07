@@ -126,7 +126,7 @@ export default class ContractSelectionComponent extends AbstractFilteredSelectio
             title: '计价方式',
             dataIndex: 'chargeType',
             render: (type: number): React.ReactNode => {
-                return  type === 1 ? '订单总价、总重计算单价' : '产品单价、基数计算总价';
+                return  type === 0 ? '订单总价、总重计算单价' : '产品单价、基数计算总价';
             }
         }];
     }

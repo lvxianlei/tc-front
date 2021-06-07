@@ -31,18 +31,34 @@ class ChangeProduct extends AbstractSaleOrderSetting<IChangeProductRouteProps, I
             saleOrder: saleOrder,
             isChangeProduct: true
         });
-        saleOrder.productVos = saleOrder.productVos?.map<IProductVo>((product: IProductVo, index: number): IProductVo => {
+        saleOrder.productDtos = saleOrder.productDtos?.map<IProductVo>((product: IProductVo, index: number): IProductVo => {
             return {
                 ...product,
                 index: index + 1
             };
         });
+        this.setState({
+            saleOrder: {
+                ...saleOrder,
+                contractInfoDto: saleOrder.contractInfoVo
+            }
+        })
         this.getForm()?.setFieldsValue({
-            productVos: saleOrder.productChangeRecordVos,
             totalWeight: saleOrder.orderQuantity,
             totalPrice: saleOrder.taxPrice,
             totalAmount: saleOrder.taxAmount,
-            orderQuantity: saleOrder.orderQuantity
+            orderQuantity: saleOrder.orderQuantity,
+            chargeType: saleOrder.contractInfoVo?.chargeType,
+            contractId: saleOrder.contractInfoVo?.contractId,
+            currencyType: saleOrder.contractInfoVo?.currencyType,
+            customerCompany: saleOrder.contractInfoVo?.customerCompany,
+            deliveryTime: saleOrder.contractInfoVo?.deliveryTime,
+            internalNumber: saleOrder.contractInfoVo?.internalNumber,
+            projectName: saleOrder.contractInfoVo?.projectName,
+            signContractTime: saleOrder.contractInfoVo?.signContractTime,
+            signCustomerId: saleOrder.contractInfoVo?.signCustomerId,
+            signCustomerName: saleOrder.contractInfoVo?.signCustomerName,
+            productDtos: saleOrder.productVos,
         });
     }
 
