@@ -6,7 +6,7 @@
  import { RouteComponentProps, withRouter } from 'react-router';
  
  import RequestUtil from '../../../utils/RequestUtil';
- import AbstractTaskSetting, { IAbstractTaskSettingState, ITask } from './AbstactTaskSetting';
+ import AbstractTaskSetting, { IAbstractTaskSettingState, ITask, StepItem } from './AbstactTaskSetting';
  import moment from 'moment'
  import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
  
@@ -57,7 +57,8 @@
         values.productIds = this.state.selectedKeys;
         values.contractInfoDTO = this.state.contractInfoDTO;
         values.saleOrderId = this.state?.task?.saleOrderId;
-        await RequestUtil.post('/tower-market/taskNotice', values);
+        values.id = this.state?.task?.id;
+        this.state.checkStep === StepItem.COMPLETE_PRODUCT_INFO ? await RequestUtil.post('/tower-market/taskNotice/saveAndSubApprove', values):await RequestUtil.post('/tower-market/taskNotice', values);
      }
  }
  

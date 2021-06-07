@@ -94,6 +94,7 @@ import RequestUtil from '../../../utils/RequestUtil';
     readonly taskNumber?: string;		
     readonly weldingDemand?: string;
     readonly saleOrderId?: number;
+    readonly id?: number;
  }
  
 export interface IProductInfoVO {
@@ -112,6 +113,7 @@ export interface IProductInfoVO {
     readonly totalAmount?: number	
     readonly unit?:	string;
     readonly voltageGradeName?:	string;
+    readonly id?: number;
 }
 
 export interface IProductChangeInfoVO {
@@ -655,7 +657,7 @@ enum StepTitleItem {
                                 columns={this.columns()} 
                                 dataSource={ [...productDataSource] } 
                                 scroll={{ x: 1300 }} 
-                                rowKey={( record: IProductInfoVO ) => record ?.taskNoticeId?record?.taskNoticeId : ''}
+                                rowKey={( record: IProductInfoVO ) => record ?.id?record?.id : ''}
                                 rowSelection={{
                                     type:'checkbox',
                                     onChange:( selectedKeys: React.Key[] )=>{
