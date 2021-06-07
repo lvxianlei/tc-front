@@ -229,11 +229,20 @@ class ApprovalAll extends AbstractMngtComponent<
         ];
     }
     /**
+     * Determines whether filter submit on
+     * @param values 
+     */
+    public async onFilterSubmit(values: Record<string, any>) {
+        this.fetchTableData(values);
+    }
+    /**
      * Determines whether table change on
      * @param pagination 
      */
     public onTableChange(pagination: TablePaginationConfig): void {
-        this.fetchTableData(pagination);
+        this.fetchTableData({}, pagination);
+        console.log(pagination);
+
     }
     /**
      * @implements
@@ -298,12 +307,7 @@ class ApprovalAll extends AbstractMngtComponent<
     public onNewClick(
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>
     ): void { }
-    /**
-     *
-     */
-    public async onFilterSubmit(values: Record<string, any>) {
-        this.fetchTableData(values);
-    }
+
 
     /**
      * @implements
