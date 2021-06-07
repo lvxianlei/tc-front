@@ -15,8 +15,8 @@ import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
  */
 export interface IAbstractTaxkchangeState extends IAbstractFillableComponentState {
     readonly contract: IContract,
-    readonly productInfoVOList: IProductInfoVOList[] | undefined,
-    readonly productChangeInfoVOList: IProductChangeInfoVOList[] | undefined
+    readonly productInfoVOList?: IProductInfoVOList[],
+    readonly productChangeInfoVOList?: IProductChangeInfoVOList[]
 }
 /**
  * Icontract
@@ -160,7 +160,6 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
                 label: '任务编号',
                 name: 'taskNoticeId',
                 initialValue: contract?.taskNoticeId,
-                rules: [],
                 children: <Input value={contract?.taskNoticeId} disabled />
             }, {
                 label: '关联订单',
@@ -259,7 +258,8 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
             title: '产品信息',
             render: (): React.ReactNode => {
                 return <Table rowKey="changeType" bordered={true} pagination={false}
-                    columns={this.getProductTableColumns()} dataSource={this.state.contract?.productInfoVOList}
+                    columns={this.getProductTableColumns()}
+                    dataSource={this.state.contract?.productInfoVOList}
                 />;
             }
         }];
@@ -303,7 +303,7 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
     protected getPrimaryOperationButtonLabel(): string {
         return '通过';
     }
-  
+
     protected renderExtraOperationArea(): React.ReactNode {
         return <Button type="primary" htmlType="button" onClick={this.onReject}>驳回</Button>;
     }

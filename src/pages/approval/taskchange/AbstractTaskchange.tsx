@@ -15,8 +15,8 @@ import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
  */
 export interface IAbstractTaxkchangeState extends IAbstractFillableComponentState {
     readonly contract: IContract,
-    readonly ProductInfoVOList: IProductInfoVOList[] | undefined,
-    readonly productChangeInfoVOList: IProductChangeInfoVOList[] | undefined
+    readonly productInfoVOList?: IProductInfoVOList[],
+    readonly productChangeInfoVOList?: IProductChangeInfoVOList[]
 }
 /**
  * Icontract
@@ -116,7 +116,7 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
      */
     public state: S = {
         contract: {},
-        ProductInfoVOList: {},
+        productInfoVOList: {},
         productChangeInfoVOList: {}
     } as S;
     /**
@@ -252,7 +252,8 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
             title: '产品信息',
             render: (): React.ReactNode => {
                 return <Table rowKey="changeType" bordered={true} pagination={false}
-                    columns={this.getProductTableColumns()} dataSource={this.state.contract?.productChangeInfoVOList}
+                    columns={this.getProductTableColumns()}
+                    dataSource={this.state.contract?.productChangeInfoVOList}
                 />;
             }
         }];

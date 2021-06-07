@@ -32,10 +32,6 @@ export interface IApprovalState extends IAbstractMngtComponentState {
     readonly tableDataSource: ITaskTableDataItem[];
 
 }
-//头部下拉列表事件
-function handleChange(value: string) {
-    console.log(`selected ${value}`);
-}
 //antd
 const { Option } = Select;
 
@@ -125,7 +121,7 @@ class ApprovalAll extends AbstractMngtComponent<
                 size: pagination.pageSize || this.state?.tablePagination?.pageSize,
                 //react.key
                 auditStatus: this.state.selectedTabKey
-                
+
 
             }
         );
@@ -283,13 +279,13 @@ class ApprovalAll extends AbstractMngtComponent<
         return [
             {
                 name: "type",
-                initialValue:"0",
+                initialValue: "0",
                 children: (
-                        <Select className={styles.drop_down_menu} onChange={handleChange}>
-                            <Option value="0">全部</Option>
-                            <Option value="1">产品信息变更审批</Option>
-                            <Option value="2">任务单产品信息审批</Option>
-                        </Select>
+                    <Select className={styles.drop_down_menu}>
+                        <Option value="0">全部</Option>
+                        <Option value="1">产品信息变更审批</Option>
+                        <Option value="2">任务单产品信息审批</Option>
+                    </Select>
                 ),
             }
         ];
