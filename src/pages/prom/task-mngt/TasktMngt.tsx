@@ -1,9 +1,9 @@
-import { FormItemProps, Input, Select, Space, TableColumnType, TablePaginationConfig } from 'antd';
+import { FormItemProps, Input, Button, Space, TableColumnType, TablePaginationConfig } from 'antd';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
-
+import ConfirmableButton from '../../../components/ConfirmableButton';
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../../components/AbstractMngtComponent';
 import { ITabItem } from '../../../components/ITabableComponent';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -59,7 +59,7 @@ import RequestUtil from '../../../utils/RequestUtil';
       * @param filterValues 
       */
      protected async fetchTableData(filterValues: Record<string, any>,pagination: TablePaginationConfig = {}) {
-         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/taskNotice/page', {
+         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/taskNotice', {
              ...filterValues,
              current: pagination.current || this.state?.tablePagination?.current,
              size: pagination.pageSize ||this.state?.tablePagination?.pageSize,
@@ -157,13 +157,25 @@ import RequestUtil from '../../../utils/RequestUtil';
              dataIndex: 'operation',
              render: (_: undefined, record: object): React.ReactNode => (
                  <Space direction="horizontal" size="small">
-                     <Link to={ `/prom/task/edit/${ (record as ITaskTableDataItem).id }` }>编辑</Link>
-                     <Link to="">删除</Link>
-                     <Link to={ `/prom/task/special/${ (record as ITaskTableDataItem).id }` }>完善特殊要求</Link>
+                    <Button type="link"  href={ `/prom/task/edit/${ (record as ITaskTableDataItem).id }` } disabled={ (record as ITaskTableDataItem).taskReviewStatus !== 0 }>
+                        编辑
+                    </Button>
+                    <ConfirmableButton confirmTitle="要删除该数据吗？" type="link" placement="topRight" onConfirm={() => this.handleDelete(record)} >
+                        <Button type="link" disabled={ (record as ITaskTableDataItem).taskReviewStatus !== 0 }>
+                            删除
+                        </Button>
+                    </ConfirmableButton>
+                    <Button type="link"  href={ `/prom/task/special/${ (record as ITaskTableDataItem).id }` } disabled={ (record as ITaskTableDataItem).taskReviewStatus !== 0 }>
+                        完善特殊要求
+                    </Button>
                      {
-                        (record as ITaskTableDataItem).taskReviewStatus===1? 
-                        <Link to={ `/prom/task/product/${ (record as ITaskTableDataItem).id }` }>完善产品信息</Link>
-                        :<Link to={ `/prom/task/product/${ (record as ITaskTableDataItem).id }` }>变更产品信息</Link>
+                        (record as ITaskTableDataItem).taskReviewStatus===0? 
+                        <Button type="link"  href={ `/prom/task/product/${ (record as ITaskTableDataItem).id }` } disabled={ (record as ITaskTableDataItem).taskReviewStatus !== 0 }>
+                            完善产品信息
+                        </Button>
+                        :<Button type="link"  href={ `/prom/task/product/${ (record as ITaskTableDataItem).id }` } >
+                            变更产品信息
+                        </Button>
                      }
                      
                  </Space>
@@ -177,9 +189,15 @@ import RequestUtil from '../../../utils/RequestUtil';
      * @param pagination 
      */
     public onTableChange(pagination: TablePaginationConfig): void {
-        this.fetchTableData(pagination);
+        this.fetchTableData({},pagination);
     }
     
+     //delete-row
+    public handleDelete = async(record: Record<string,any>) => {
+        //接口
+        await RequestUtil.delete(`/tower-market/taskNotice?id=${record.id}`);
+        this.fetchTableData({});
+    };
      
      /**
       * @implements
