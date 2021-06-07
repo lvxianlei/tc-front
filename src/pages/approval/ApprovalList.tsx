@@ -241,8 +241,6 @@ class ApprovalAll extends AbstractMngtComponent<
      */
     public onTableChange(pagination: TablePaginationConfig): void {
         this.fetchTableData({}, pagination);
-        console.log(pagination);
-
     }
     /**
      * @implements

@@ -150,7 +150,6 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
      */
     public getFormItemGroups(): IFormItemGroup[][] {
         const contract: IContract | undefined = this.state.contract;
-        console.log(this.state);
         return [[{
             title: '基础信息',
             itemCol: {

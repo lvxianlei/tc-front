@@ -143,7 +143,6 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
      */
     public getFormItemGroups(): IFormItemGroup[][] {
         const contract: IContract | undefined = this.state.contract;
-        console.log(this.state);
         return [[{
             title: '基础信息',
             itemCol: {
@@ -267,7 +266,7 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
         return RequestUtil.post('/tower-market/audit/adopt', {
             auditId: values.contractId
         }).then((): void => {
-            console.log(values);
+            //等待进行判断
             message.success('操作已成功！任务单 产品变更审批 已通过审批。');
         });
     }

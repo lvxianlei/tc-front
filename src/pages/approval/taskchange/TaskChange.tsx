@@ -16,6 +16,7 @@ class TaskChange extends AbstractTaskChange<ITaxkChangeRouteProps, ITaxkchangeSt
     /**
      * @description Components did mount
      */
+     //等待传id
     public async componentDidMount() {
         super.componentDidMount();
         const contract: IContract = await RequestUtil.get<IContract>(`/tower-market/taskNotice/auditDetail`);
@@ -23,7 +24,6 @@ class TaskChange extends AbstractTaskChange<ITaxkChangeRouteProps, ITaxkchangeSt
             contract: contract,
             productChangeInfoVOList: contract.productChangeInfoVOList
         });
-        console.log(this.props.match.params);
         this.getForm()?.setFieldsValue({
             id: contract.id,
             saleOrderNumber: contract.saleOrderNumber,
