@@ -178,7 +178,8 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
                         cancelText="取消"
                         onConfirm={ async () => {
                             let id = (record as ITableDataItem).id;
-                            const resData:IResponseData = await RequestUtil.delete('/tower-market/contract', {id: id})
+                            const resData:IResponseData = await RequestUtil.delete(`/tower-market/contract?id=${ id }`);
+                            this.fetchTableData({});
                         } }
                         disabled={ (record as ITableDataItem).status === 1 }
                     >

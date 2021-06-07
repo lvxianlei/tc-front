@@ -154,7 +154,7 @@ class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps, IProm
                         let id = (record as ITableDataItem).id;
                         const resData:IResponseData = await RequestUtil.delete('/tower-market/saleOrder', {id: id});
                     } }>删除</ConfirmableButton>
-                    <Link to={ `/prom/order/ChangeProduct/${ (record as ITableDataItem).id }` }>变更产品信息</Link>
+                    <Link to={ `/prom/order/changeproduct/${ (record as ITableDataItem).id }` }>变更产品信息</Link>
                 </Space>
             )
         }];

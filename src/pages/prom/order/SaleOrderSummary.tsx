@@ -9,6 +9,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 
 import RequestUtil from '../../../utils/RequestUtil';
 import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../../../utils/SummaryRenderUtil';
+import { IProductVo } from './AbstractSaleOrderSetting';
 //  import styles from './SaleOrderSummary.module.less';
 
 interface ISaleOrderSummaryParamsProps {
@@ -17,7 +18,7 @@ interface ISaleOrderSummaryParamsProps {
 
 interface ISaleOrderSummaryProps {
     readonly baseInfo?: IContractBaseInfo;
-    readonly productData?: IProductVos[];
+    readonly productData?: IProductVo[];
     readonly sysInfo?: IContractSysInfo;
 }
 
@@ -41,7 +42,7 @@ export interface IContractBaseInfo {
     readonly orderQuantity?: number;
     readonly portCharge?: number;
     readonly price?: number;
-    readonly productVos?: IProductVos[];
+    readonly productVos?: IProductVo[];
     readonly taxAmount?: number;
     readonly taxPrice?: number;
     readonly taxRate?: number;
@@ -61,10 +62,6 @@ export interface IContractInfoVo {
     readonly simpleProjectName?: string;
     readonly signUserName?: string;
     readonly description?: string;
-}
-
-interface IProductVos{
-
 }
 
 export interface IContractSysInfo {
