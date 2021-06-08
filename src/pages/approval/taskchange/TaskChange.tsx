@@ -16,7 +16,6 @@ class TaskChange extends AbstractTaskChange<ITaxkChangeRouteProps, ITaxkchangeSt
     /**
      * @description Components did mount
      */
-     //等待传id
     public async componentDidMount() {
         super.componentDidMount();
         const contract: IContract = await RequestUtil.get<IContract>(`/tower-market/taskNotice/auditDetail`);

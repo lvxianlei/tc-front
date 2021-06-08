@@ -1,6 +1,7 @@
 import { Button, DatePicker, FormProps, Input, message, Select, Table, TableColumnType } from 'antd';
 import moment from 'moment';
 import React from 'react';
+// import {AxiosResponse} from   "axios"
 import { RouteComponentProps } from 'react-router';
 import AbstractFillableComponent, {
     IAbstractFillableComponentState,
@@ -104,6 +105,15 @@ export interface IProductInfoVOList {
     readonly orderDeliveryTime?: object;
     readonly contractId?: number;
     readonly signCustomerId?: number;
+}
+/**
+ * Iresponse
+ * @template T 
+ */
+interface IResponse<T = any> {
+    readonly code: number;
+    readonly msg: string;
+    readonly data: T;
 }
 /**
  * Abstract Contract Setting
@@ -221,7 +231,7 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
                 name: 'materialDemand',
                 initialValue: contract?.materialDemand,
                 children: (
-                    <Select defaultValue={contract?.materialDemand} className={styles.materialStandards} disabled>
+                    <Select className={styles.materialStandards} disabled>
                         <Select.Option value="over">未定义</Select.Option>
                     </Select>
                 )
@@ -271,8 +281,14 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
     public onSubmit(values: Record<string, any>): Promise<void> {
         return RequestUtil.post('/tower-market/audit/adopt', {
             auditId: values.contractId
-        }).then((): void => {
-            message.success('操作已成功！任务单信息已通过审批。');
+        }).then((res: IResponse | any): void => {
+            if (!res.data) {
+                message.warning("操作失败,请稍后再试!")
+            } else {
+                message.success('操作已成功！任务单信息已通过审批。');
+                this.props.history.push(this.getReturnPath());
+            }
+
         });
     }
     /**
@@ -281,9 +297,15 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
     public onReject = (): Promise<void> => {
         return RequestUtil.post('/tower-market/audit/reject', {
             auditId: this.props.match.params
-        }).then(() => {
-            message.warning('已驳回任务单审批的申请！');
-            this.props.history.push(this.getReturnPath());
+        }).then((res: IResponse | any): void => {
+            if (!res.data) {
+                message.warning("操作失败,请稍后再试!")
+            } else {
+                message.warning('已驳回任务单审批的申请！');
+                this.props.history.push(this.getReturnPath());
+            }
+
+
         });
     }
     /**

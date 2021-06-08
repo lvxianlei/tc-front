@@ -25,7 +25,7 @@ export interface IContract {
     readonly auditStatus: number;
     readonly id?: number;
     //任务编号
-    readonly taskNoticeId: number;
+    readonly taskNumber: number;
     //关联订单
     readonly saleOrderNumber: number;
     //合同编号
@@ -40,6 +40,8 @@ export interface IContract {
     readonly signContractTime?: string;
     //客户交货日期
     readonly deliveryTime?: string;
+    //订单交货日期
+    readonly orderDeliveryTime?: string;
     //计划交货日期
     readonly planDeliveryTime: string;
     //计划备注
@@ -107,6 +109,11 @@ export interface IProductInfoVOList {
     readonly contractId?: number;
     readonly signCustomerId?: number;
 }
+interface IResponse<T = any> {
+    readonly code: number;
+    readonly msg: string;
+    readonly data: T;
+}
 /**
  * Abstract Contract Setting
  */
@@ -150,10 +157,9 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
             },
             itemProps: [{
                 label: '任务编号',
-                name: 'taskNoticeId',
-                initialValue: contract?.taskNoticeId,
-                rules: [],
-                children: <Input value={contract?.taskNoticeId} disabled />
+                name: 'taskNumber',
+                initialValue: contract?.taskNumber,
+                children: <Input value={contract?.taskNumber} disabled />
             }, {
                 label: '关联订单',
                 name: 'saleOrderNumber',
@@ -215,7 +221,7 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
                 name: 'materialDemand',
                 initialValue: contract?.materialDemand,
                 children: (
-                    <Select defaultValue={contract?.materialDemand} className={styles.materialStandards} disabled>
+                    <Select className={styles.materialStandards} disabled>
                         <Select.Option value="over">未定义</Select.Option>
                     </Select>
                 )
@@ -265,21 +271,31 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
     public onSubmit(values: Record<string, any>): Promise<void> {
         return RequestUtil.post('/tower-market/audit/adopt', {
             auditId: values.contractId
-        }).then((): void => {
-            //等待进行判断
-            message.success('操作已成功！任务单 产品变更审批 已通过审批。');
-        });
-    }
+        }).then((res: IResponse | any): any => {
+            console.log(values);
+            console.log(res);
 
+            if (!res.data) {
+                 message.warning('操作失败 , 请稍后再试!');
+            } else {
+                message.success('操作已成功！任务单 产品变更审批 已通过审批。');
+                this.props.history.push(this.getReturnPath());
+            }
+        })
+    }
     /**
      * Determines whether reject on
      */
     public onReject = (): Promise<void> => {
         return RequestUtil.post('/tower-market/audit/reject', {
             auditId: this.props.match.params
-        }).then((): void => {
-            message.warning('已驳回任务单 产品 变更 审批的申请！');
-            this.props.history.push(this.getReturnPath());
+        }).then((res: IResponse | any): void => {
+            if (!res.data) {
+                message.warning("操作失败,请稍后再试!")
+            } else {
+                message.warning('已驳回任务单 产品 变更 审批的申请！');
+                this.props.history.push(this.getReturnPath());
+            }
         });
     }
     /**
