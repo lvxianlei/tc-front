@@ -33,6 +33,14 @@
                         "path": "/prom/task"
                     }]
                 },{
+                    "label": "审批",
+                    "path": "/approval",
+                    "items": [
+                        {
+                            "label": "任务单审批",
+                            "path": "/approval/list"
+                        }]
+                },{
                     "label": "系统管理",
                     "path": "/sys",
                     "items": [{
