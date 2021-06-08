@@ -35,7 +35,9 @@ interface IDetail extends IContractBaseInfo, IContractSysInfo, IContractAttachme
 class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, IContractDetailState> {
 
     public state: IContractDetailState = {
-        detail: {}
+        detail: {
+            paymentPlanVos: []
+        }
     }
 
     /**

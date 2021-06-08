@@ -36,7 +36,7 @@ export interface IOrderItem {
     readonly taxAmount?: number;
     readonly orderQuantity?: number;
     readonly internalNumber?: string;
-    readonly products?: IProduct[];
+    readonly productVos?: IProduct[];
 }
 
 export interface IProduct {
@@ -184,6 +184,7 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
     private getOrderSummariableItems(): IRenderdSummariableItem[] {
         const orderItems: IOrderItem[] = this.state.orderItems || [];
         return orderItems.map<IRenderdSummariableItem>((item: IOrderItem): IRenderdSummariableItem => {
+            console.log(item)
             return {
                 fieldItems: [{
                     label: '订单编号',
@@ -200,10 +201,10 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
                 }],
                 render: (): React.ReactNode => (
                     <Table rowKey="index"  dataSource={
-                        item.products?.map<IProduct>(
-                            (product: IProduct, index: number): IProduct => (
+                        item.productVos?.map<IProduct>(
+                            (productVos: IProduct, index: number): IProduct => (
                                 {
-                                    ...product,
+                                    ...productVos,
                                     index: index + 1
                                 }
                             )

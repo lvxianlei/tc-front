@@ -209,7 +209,7 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
 
     protected renderExtraOperationContent(item: ITabItem): React.ReactNode {
         return (
-            <Button type="primary" onClick={ this.getTabItems }>新增</Button>
+            <Button type="primary" onClick={ this.onNewClick }>新增</Button>
         );
     }
 

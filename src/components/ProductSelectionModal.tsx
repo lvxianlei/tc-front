@@ -10,7 +10,7 @@ import React from 'react';
 import RequestUtil from '../utils/RequestUtil';
 import AbstractFilteredSelectionModal from './AbstractFilteredSelecableModal';
 import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from './AbstractSelectableModal';
-import styles from './AbstractSelectionModal.module.less';
+import styles from './AbstractSelectableModal.module.less';
 
  
  const { Option } = Select;
@@ -19,7 +19,7 @@ import styles from './AbstractSelectionModal.module.less';
      readonly tableDataSource: IOrder[];
  }
  export interface IOrderSelectionComponentProps extends IAbstractSelectableModalProps {
-    readonly saleOrderId?: string;
+    readonly saleOrderId?: string | number;
  }
  
  export interface IResponseDataMore extends IResponseData {
@@ -155,7 +155,7 @@ import styles from './AbstractSelectionModal.module.less';
   
      //row-key
      protected getTableRowKey(): string | GetRowKey<object> {
-         return 'taskNoticeId';
+         return 'id';
      }
 
      public render(): React.ReactNode {

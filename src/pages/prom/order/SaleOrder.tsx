@@ -107,7 +107,7 @@ class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps, IProm
             title: '订单编号',
             dataIndex: 'ordersNumber',
             render: (_: undefined, record: object): React.ReactNode => {
-                    return <Link to={ `/prom/order/detail/${ (record as ITableDataItem).id }` }>{ (record as ITableDataItem).ordersNumber }</Link>
+                    return <Link to={ `/prom/order/detail/${ (record as ITableDataItem).id }` }>{ (record as ITableDataItem).id }</Link>
             }
         }, {
             key: 'internalNumber',
@@ -133,7 +133,7 @@ class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps, IProm
              title: '计价方式',
              dataIndex: 'chargeType',
              render: (productType: number): React.ReactNode => {
-                return  productType === 1 ? '订单总价、总重计算单价' : '产品单价、基数计算总价';
+                return  productType === 0 ? '订单总价、总重计算单价' : '产品单价、基数计算总价';
              }
          }, {
             key: 'deliveryTime',
@@ -152,9 +152,10 @@ class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps, IProm
                     <Link to={ `/prom/order/setting/${ (record as ITableDataItem).id }` }>编辑</Link>
                     <ConfirmableButton confirmTitle="要删除该订单吗？" type="link" placement="topRight" onConfirm={ async () => {
                         let id = (record as ITableDataItem).id;
-                        const resData:IResponseData = await RequestUtil.delete('/tower-market/saleOrder', {id: id});
+                        const resData:IResponseData = await RequestUtil.delete(`/tower-market/saleOrder?id=${ id }`);
+                        this.fetchTableData({});
                     } }>删除</ConfirmableButton>
-                    <Link to={ `/prom/order/ChangeProduct/${ (record as ITableDataItem).id }` }>变更产品信息</Link>
+                    <Link to={ `/prom/order/changeproduct/${ (record as ITableDataItem).id }` }>变更产品信息</Link>
                 </Space>
             )
         }];
