@@ -54,11 +54,11 @@
         values.planDeliveryTime = moment(values.planDeliveryTime).format('YYYY-MM-DD');
         values.deliveryTime = moment(values.deliveryTime).format('YYYY-MM-DD');
         values.signContractTime = moment(values.signContractTime).format('YYYY-MM-DD');
-        values.productIds = this.state.selectedKeys;
-        values.contractInfoDTO = this.state.contractInfoDTO;
+        values.productIds = this.state.selectedKeys.length > 0 ? this.state.selectedKeys : [];
+        values.contractInfoDTO = this.state?.contractInfoDTO;
         values.saleOrderId = this.state?.task?.saleOrderId;
         values.id = this.state?.task?.id;
-        this.state.checkStep === StepItem.COMPLETE_PRODUCT_INFO ? await RequestUtil.post('/tower-market/taskNotice/saveAndSubApprove', values):await RequestUtil.post('/tower-market/taskNotice', values);
+        return this.state.checkStep === StepItem.COMPLETE_PRODUCT_INFO ? await RequestUtil.post('/tower-market/taskNotice/saveAndSubApprove', values):await RequestUtil.post('/tower-market/taskNotice', values);
      }
  }
  

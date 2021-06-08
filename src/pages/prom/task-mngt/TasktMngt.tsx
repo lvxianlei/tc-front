@@ -149,7 +149,7 @@ import RequestUtil from '../../../utils/RequestUtil';
             title: '审批状态',
             dataIndex: 'taskReviewStatus',
             render: (taskReviewStatus: number): React.ReactNode => {
-                return  taskReviewStatus > 0 ? taskReviewStatus === 0 ? '审批中' : taskReviewStatus === 1? '已通过 ' : '已驳回': '-';
+                return  taskReviewStatus > -1 ? taskReviewStatus === 0 ? '审批中' : taskReviewStatus === 1? '已通过 ' : '已驳回': '-';
             }
         }, {
              key: 'operation',
@@ -170,10 +170,10 @@ import RequestUtil from '../../../utils/RequestUtil';
                     </Button>
                      {
                         (record as ITaskTableDataItem).status !==4 ? 
-                        <Button type="link"  href={ `/prom/task/product/${ (record as ITaskTableDataItem).id }` } disabled={ (record as ITaskTableDataItem).taskReviewStatus !== 0 }>
+                        <Button type="link"  href={ `/prom/task/product/${ (record as ITaskTableDataItem).id }` } disabled={ (record as ITaskTableDataItem).status !== 3 || (record as ITaskTableDataItem).taskReviewStatus === 0 }>
                             完善产品信息
                         </Button>
-                        :<Button type="link"  href={ `/prom/task/product/${ (record as ITaskTableDataItem).id }` } disabled={ (record as ITaskTableDataItem).taskReviewStatus !== 0 }>
+                        :<Button type="link"  href={ `/prom/task/product/${ (record as ITaskTableDataItem).id }` } disabled={ (record as ITaskTableDataItem).taskReviewStatus === 0 }>
                             变更产品信息
                         </Button>
                      }
@@ -235,7 +235,13 @@ import RequestUtil from '../../../utils/RequestUtil';
       * @param activeKey 
       */
      public onTabChange(activeKey: string): void {
-         this.fetchTableData({});
+        const tablePagination:TablePaginationConfig = {
+            current: 1,
+            pageSize: 10,
+            total: 0,
+            showSizeChanger: false
+        }
+        this.fetchTableData({},tablePagination);
      }
 
      /**
