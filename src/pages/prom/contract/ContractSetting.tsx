@@ -8,7 +8,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
 
 import RequestUtil from '../../../utils/RequestUtil';
-import AbstractContractSetting, { IAbstractContractSettingState, IattachDTO, IContract, IPaymentPlanDto } from './AbstractContractSetting';
+import AbstractContractSetting, { IAbstractContractSettingState, IattachDTO, IContract, IPaymentPlanDto, IRegion } from './AbstractContractSetting';
 import moment from 'moment'
 
 export interface IContractSettingProps {
@@ -17,11 +17,6 @@ export interface IContractSettingProps {
 export interface IContractSettingRouteProps extends RouteComponentProps<IContractSettingProps>, WithTranslation {}
 export interface IContractSettingState extends IAbstractContractSettingState {}
  
-interface IRegion {
-    readonly name: string;
-    readonly code: string;
-    children: IRegion[];
-}
  /**
   * Contract Setting
   */
@@ -82,14 +77,24 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
             customerLinkman: contract.customerInfoVo?.customerLinkman,
             customerPhone: contract.customerInfoVo?.customerPhone
         });
-        const region: [] = this.state.contract.region;
+        const region: string[] = this.state.contract.region;
         let regionInfoData: IRegion[] =  this.state.regionInfoData;
         if(region.length > 0) {
-            region.map(async (item: string) => {
-                const index: number = regionInfoData.findIndex((regionInfo: IRegion) => regionInfo.code === item);
-                const resData: IRegion[] = await RequestUtil.get(`/tower-system/region/${ item }`);
-                regionInfoData[index].children = resData;
-                console.log(regionInfoData)
+            const index: number = regionInfoData.findIndex((regionInfo: IRegion) => regionInfo.code == region[0]);
+            
+            const resData: IRegion[] = await RequestUtil.get(`/tower-system/region/${ region[0] }`);
+            regionInfoData[index] ={
+                ...regionInfoData[index],
+                children: resData
+            }
+            const childrenIndex: number = regionInfoData[index].children.findIndex((regionInfo: IRegion) => regionInfo.code === region[1]);
+            const resChildrenData: IRegion[] = await RequestUtil.get(`/tower-system/region/${ region[1] }`);
+            regionInfoData[index].children[childrenIndex] = {
+                ...regionInfoData[index].children[childrenIndex],
+                children: resChildrenData
+            }
+            this.setState({
+                regionInfoData: regionInfoData
             })
         }
     }

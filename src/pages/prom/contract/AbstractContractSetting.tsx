@@ -29,7 +29,7 @@ export interface IAbstractContractSettingState extends IAbstractFillableComponen
     readonly contract: IContract;
     readonly checkList: [];
     readonly tableDataSource: [];
-    readonly regionInfoData: [] ;
+    readonly regionInfoData: [] | IRegion[];
     readonly childData: [] | undefined;
     readonly col: [];
     readonly url: string;
@@ -115,6 +115,12 @@ export interface IResponseData {
     readonly records: [];
 }
 
+export interface IRegion {
+    readonly name: string;
+    readonly code: string;
+    children: IRegion[];
+}
+
 export enum planType {
     PROPORTION = 0,   //占比
     AMOUNT = 1,   //金额
@@ -135,6 +141,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     public async componentDidMount() {
         super.componentDidMount();
         this.getRegionInfo({}); 
+
     }
 
     /**
@@ -188,7 +195,6 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     }
 
     public onRegionInfoChange =  async (record: Record<string, any>,selectedOptions?: CascaderOptionType[] | any) => {
-        console.log(record,selectedOptions)
         if( selectedOptions.length > 0 && selectedOptions.length < 3 ) {
             let parentCode = record[selectedOptions.length - 1];
             const resData: [] = await RequestUtil.get(`/tower-system/region/${ parentCode }`);
@@ -834,7 +840,6 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                     attachInfoDtos: attachInfoDtos
                                                                 }
                                                             })
-                                                            console.log(contract.attachInfoDtos)
                                                         } else if (info.file.status === 'error') {
                                                             console.log(info.file, info.fileList);
                                                         }
