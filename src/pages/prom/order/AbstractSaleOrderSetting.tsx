@@ -75,7 +75,6 @@ export interface IProductVo {
 }
 
 export interface IContractInfoDto {
-    readonly contractNumber?: string;
     readonly internalNumber?: string;
     readonly projectName?: string;
     readonly customerCompany?: string;
@@ -85,7 +84,7 @@ export interface IContractInfoDto {
     readonly currencyType?: number;
     readonly chargeType?: number;
     readonly orderDeliveryTime?: object;
-    readonly contractId?: number;
+    readonly contractId?: string;
     readonly signCustomerId?: number;
 }
 
@@ -151,7 +150,6 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
         if(selectedRows.length > 0 ) {
             const modalSelectedValue: IContractInfoDto = {
-                contractNumber: selectedRows[0].contractNumber,
                 internalNumber: selectedRows[0].internalNumber,
                 projectName: selectedRows[0].projectName,
                 customerCompany: selectedRows[0].customerCompany,
@@ -381,14 +379,14 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 children: <Input disabled={ readonly }/>
             }, {
                 label: '关联合同',
-                name: 'contractNumber',
-                initialValue: saleOrder?.contractInfoDto?.contractNumber,
+                name: 'contractId',
+                initialValue: saleOrder?.contractInfoDto?.contractId,
                 rules: [{
                     required: true,
                     message: '请选择关联合同'
                 }],
                 children:
-                    <Input value={ saleOrder?.contractInfoDto?.contractNumber } suffix={ 
+                    <Input value={ saleOrder?.contractInfoDto?.contractId } suffix={ 
                         <ContractSelectionComponent onSelect={ this.onSelect } />
                     } disabled={ readonly }/>
             },  {

@@ -81,9 +81,8 @@ class ChangeProduct extends AbstractSaleOrderSetting<IChangeProductRouteProps, I
      * @returns submit 
      */
     public async onSubmit(values: Record<string, any>): Promise<void> {
-        return await RequestUtil.put('/tower-market/saleOrder/submitProductContentChangeAudit', {
-            ...values,
-            id: Number(this.props.match.params.id)
+        return await RequestUtil.post(`/tower-market/saleOrder/submitProductContentChangeAudit?saleOrderId=${ values.productDtos[0].saleOrderId }`, {
+            ...values.productDtos
         });
     }
 
