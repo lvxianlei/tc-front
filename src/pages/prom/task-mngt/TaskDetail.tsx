@@ -87,11 +87,15 @@
   * Contract detail page component.
   */
  class TaskDetail extends AbstractDetailComponent<ITaskDetailRouteProps, ITaskDetailState> {
+
+    public state: ITaskDetailState = {
+        task: {}
+    }
      
     //title
-     protected getTitle(): string {
-         return `${ super.getTitle() }（${ this.props.match.params.id }）`;
-     }
+    protected getTitle(): string {
+        return `${ super.getTitle() }（${ this.props.match.params.id }）`;
+    }
 
     /**
      * @description Components did mount
@@ -113,15 +117,16 @@
       * @returns subinfo col props 
       */
      public getSubinfoColProps(): ColProps[] {
+         const { task } = this.state;
          return [{
              span: 8,
              children: (
-                 <span>内部合同编号：HT001</span>
+                 <span>内部合同编号：{task?.internalNumber}</span>
              )
          }, {
              span: 8,
              children: (
-                 <span>交货日期：2019-04-15 12:00</span>
+                 <span>交货日期：{task?.planDeliveryTime}</span>
              )
          }];
      }
@@ -178,7 +183,7 @@
                  label: '合同签订单位',
                  value: task?.signCustomerName
              },  {
-                 label: '合同签订日期',
+                 label: '订单交货日期',
                  value: task?.signContractTime
              }], [{
                  label: '客户交货日期',
