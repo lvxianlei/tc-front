@@ -57,7 +57,7 @@ export interface IContract {
     readonly reviewTime?: string;
     readonly chargeType?: string;
     readonly salesman?: string;
-    readonly region?: [];
+    readonly region: [];
     readonly countryCode?: number;
     readonly contractAmount?: number;
     readonly currencyType?: number;
@@ -65,10 +65,10 @@ export interface IContract {
     readonly productInfoDto?: IproductInfoDto;
     readonly planType?: number;
     paymentPlanDtos?: IPaymentPlanDto[];
-    readonly attachInfoDtos: IattachDTO[];
+    attachInfoDtos: IattachDTO[];
     readonly signCustomerId?: string | number;
     readonly customerInfoVo?: IcustomerInfoDto;
-    readonly attachInfoVos: IattachDTO[];
+    readonly attachVos: IattachDTO[];
     readonly paymentPlanVos?: IPaymentPlanDto[];
 }
 
@@ -104,6 +104,7 @@ export interface IattachDTO {
     readonly fileSuffix?: string;
     readonly filePath: string;
     readonly fileUploadTime?: string;
+    readonly index?: number;
 }
 
 export interface IResponseData {
@@ -187,6 +188,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     }
 
     public onRegionInfoChange =  async (record: Record<string, any>,selectedOptions?: CascaderOptionType[] | any) => {
+        console.log(record,selectedOptions)
         if( selectedOptions.length > 0 && selectedOptions.length < 3 ) {
             let parentCode = record[selectedOptions.length - 1];
             const resData: [] = await RequestUtil.get(`/tower-system/region/${ parentCode }`);
@@ -573,10 +575,10 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     )
                 }, {
                     label: '所属区域',
-                    name: 'regionInfoDTO',
+                    name: 'region',
                     initialValue: contract?.region,
                     rules: [{
-                        required: this.getForm()?.getFieldValue('countryCode') === 1 ? false : true,
+                        required: this.getForm()?.getFieldValue('countryCode') === 1 || contract?.countryCode === 1 ? false : true,
                         message: '请选择所属区域'
                     }],
                     children: (
@@ -585,7 +587,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                             options={this.state.regionInfoData}
                             onChange={this.onRegionInfoChange}
                             changeOnSelect
-                            disabled={ this.getForm()?.getFieldValue('countryCode') === 1 }
+                            disabled={ this.getForm()?.getFieldValue('countryCode') === 1 || contract?.countryCode === 1 }
                         />
                     )
                 }, {
@@ -629,7 +631,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                             <Select>
                                 <Select.Option value={ 1 }>角钢塔</Select.Option>
                                 <Select.Option value={ 2 }>管塔</Select.Option>
-                                <Select.Option value={ 3 }>螺栓</Select.Option>%
+                                <Select.Option value={ 3 }>螺栓</Select.Option>
                             </Select>
                         )
                     }, {
@@ -817,7 +819,6 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                 fileSize: info.file.response.data.size,
                                                                 description: '',
                                                                 filePath: info.file.response.data.link,
-                                                                id: info.file.response.data.attachId,
                                                                 fileUploadTime: info.file.response.data.fileUploadTime,
                                                                 fileSuffix: info.file.response.data.fileSuffix
                                                             };
@@ -827,13 +828,13 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                             } else {
                                                                 attachInfoDtos = [attachInfoItem];
                                                             }
-                                                            
                                                             this.setState({
                                                                 contract: {
                                                                     ...(contract || {}),
                                                                     attachInfoDtos: attachInfoDtos
                                                                 }
                                                             })
+                                                            console.log(contract.attachInfoDtos)
                                                         } else if (info.file.status === 'error') {
                                                             console.log(info.file, info.fileList);
                                                         }

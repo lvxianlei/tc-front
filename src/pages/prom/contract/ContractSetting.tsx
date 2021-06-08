@@ -8,7 +8,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
 
 import RequestUtil from '../../../utils/RequestUtil';
-import AbstractContractSetting, { IAbstractContractSettingState, IContract, IPaymentPlanDto } from './AbstractContractSetting';
+import AbstractContractSetting, { IAbstractContractSettingState, IattachDTO, IContract, IPaymentPlanDto } from './AbstractContractSetting';
 import moment from 'moment'
 
 export interface IContractSettingProps {
@@ -17,6 +17,11 @@ export interface IContractSettingProps {
 export interface IContractSettingRouteProps extends RouteComponentProps<IContractSettingProps>, WithTranslation {}
 export interface IContractSettingState extends IAbstractContractSettingState {}
  
+interface IRegion {
+    readonly name: string;
+    readonly code: string;
+    children: IRegion[];
+}
  /**
   * Contract Setting
   */
@@ -27,7 +32,6 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
      */
     public async componentDidMount() {
         super.componentDidMount();
-        console.log(this.props.match.params.id)
         const contract: IContract = await RequestUtil.get<IContract>(`/tower-market/contract/${ this.props.match.params.id }`);
         this.setState({
             contract: contract
@@ -39,6 +43,12 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
                 index: index + 1
             };
         });
+        contract.attachInfoDtos = contract.attachVos?.map<IattachDTO>((attach: IattachDTO, index: number): IattachDTO => {
+            return {
+                ...attach,
+                index: index + 1
+            };
+        })
         this.setState({
             contract: {
                 ...contract,
@@ -59,8 +69,8 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
             deliveryTime: moment(contract.deliveryTime),
             reviewTime: moment(contract.reviewTime),
             chargeType: contract.chargeType,
-            salesman: contract.saleType,
-            region: [],
+            salesman: contract.salesman,
+            region: contract.region || [],
             countryCode: contract.countryCode,
             contractAmount: contract.contractAmount,
             currencyType: contract.currencyType,
@@ -72,6 +82,16 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
             customerLinkman: contract.customerInfoVo?.customerLinkman,
             customerPhone: contract.customerInfoVo?.customerPhone
         });
+        const region: [] = this.state.contract.region;
+        let regionInfoData: IRegion[] =  this.state.regionInfoData;
+        if(region.length > 0) {
+            region.map(async (item: string) => {
+                const index: number = regionInfoData.findIndex((regionInfo: IRegion) => regionInfo.code === item);
+                const resData: IRegion[] = await RequestUtil.get(`/tower-system/region/${ item }`);
+                regionInfoData[index].children = resData;
+                console.log(regionInfoData)
+            })
+        }
     }
  
     /**

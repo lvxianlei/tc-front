@@ -239,7 +239,9 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             values = {
                 ...values,
                 refundTime: moment(values.refundTime).format('YYYY-MM-DD HH:mm'),
-                customerId: customerId
+                customerId: customerId,
+                contractId: paymentPlanVo.contractId,
+                paymentPlanId: paymentPlanVo.id,
             }
             if (values.id) { // edit
                 await RequestUtil.put<boolean>('/tower-market/paymentRecord', values);
