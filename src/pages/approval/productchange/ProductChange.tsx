@@ -24,24 +24,10 @@ class ProductChange extends AbstractTaxkchange<ITaxkChangeRouteProps, ITaxkchang
             productInfoVOList: contract.productInfoVOList
         });
         this.getForm()?.setFieldsValue({
-            id: contract.id,
-            saleOrderNumber: contract.saleOrderNumber,
-            contractId: contract.contractId,
-            projectName: contract.projectName,
-            signCustomerName: contract.signCustomerName,
+            ...contract,
             signContractTime: moment(contract.signContractTime),
-            customerCompany: contract.customerCompany,
             planDeliveryTime: moment(contract.planDeliveryTime),
             deliveryTime: moment(contract.deliveryTime),
-            description: contract.description,
-            weldingDemand: contract.weldingDemand,
-            packDemand: contract.packDemand,
-            galvanizeDemand: contract.galvanizeDemand,
-            materialDemand: contract.materialDemand,
-            productChangeInfoVOList: contract.productChangeInfoVOList,
-            productInfoVOList: contract?.productInfoVOList,
-            peculiarDescription: contract?.peculiarDescription,
-            auditStatus: contract?.auditStatus
         });
     }
 
