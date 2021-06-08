@@ -1,4 +1,4 @@
-import { Button, DatePicker, FormProps, Input, message, Select, Table, TableColumnType } from 'antd';
+import { Button, DatePicker, FormProps, Input, message, Select, Table, TableColumnType, Tag } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -22,6 +22,8 @@ export interface IAbstractTaxkchangeState extends IAbstractFillableComponentStat
  * Icontract
  */
 export interface IContract {
+    //原材料标准
+    readonly materialStandard: number;
     readonly auditStatus: number;
     readonly id?: number;
     //任务编号
@@ -108,11 +110,6 @@ export interface IProductInfoVOList {
     readonly orderDeliveryTime?: object;
     readonly contractId?: number;
     readonly signCustomerId?: number;
-}
-interface IResponse<T = any> {
-    readonly code: number;
-    readonly msg: string;
-    readonly data: T;
 }
 /**
  * Abstract Contract Setting
@@ -218,11 +215,12 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
             },
             itemProps: [{
                 label: '原材料标准',
-                name: 'materialDemand',
-                initialValue: contract?.materialDemand,
+                name: 'materialStandard',
+                initialValue: contract?.materialStandard || 1,
                 children: (
-                    <Select className={styles.materialStandards} disabled>
-                        <Select.Option value="over">未定义</Select.Option>
+                    <Select disabled>
+                        <Select.Option value={1}>国家电网</Select.Option>
+                        <Select.Option value={2}>南方电网</Select.Option>
                     </Select>
                 )
             }, {
@@ -271,16 +269,10 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
     public onSubmit(values: Record<string, any>): Promise<void> {
         return RequestUtil.post('/tower-market/audit/adopt', {
             auditId: values.contractId
-        }).then((res: IResponse | any): any => {
-            console.log(values);
-            console.log(res);
+        }).then((): void => {
+            message.success('操作已成功！任务单 产品变更审批 已通过审批。');
+            this.props.history.push(this.getReturnPath());
 
-            if (!res.data) {
-                 message.warning('操作失败 , 请稍后再试!');
-            } else {
-                message.success('操作已成功！任务单 产品变更审批 已通过审批。');
-                this.props.history.push(this.getReturnPath());
-            }
         })
     }
     /**
@@ -289,13 +281,9 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
     public onReject = (): Promise<void> => {
         return RequestUtil.post('/tower-market/audit/reject', {
             auditId: this.props.match.params
-        }).then((res: IResponse | any): void => {
-            if (!res.data) {
-                message.warning("操作失败,请稍后再试!")
-            } else {
-                message.warning('已驳回任务单 产品 变更 审批的申请！');
-                this.props.history.push(this.getReturnPath());
-            }
+        }).then((): void => {
+            message.warning('已驳回任务单 产品 变更 审批的申请！');
+            this.props.history.push(this.getReturnPath());
         });
     }
     /**
@@ -321,35 +309,76 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
     * @returns product table columns 
     */
     private getProductTableColumns(): TableColumnType<object>[] {
+        // const contract: IContract | undefined = this.state.contract;
         return [{
             title: '类型',
-            dataIndex: 'changeType'
+            dataIndex: 'changeType',
+            align: "center",
+            render: (changeType: number): React.ReactNode => {
+                switch (changeType) {
+                    case 0:
+                        return <Tag color="default">未变更</Tag>
+                    case 1:
+                        return <Tag color="success">新增引用</Tag>
+                    case 2:
+                        return <Tag color="error">删除引用</Tag>
+                    case 3:
+                        return <Tag color="warning">修改内容</Tag>
+                }
+            }
         }, {
             title: '线路名称',
+            align: "center",
             dataIndex: 'lineName'
         }, {
             title: '产品类型',
-            dataIndex: 'productTypeName'
+            align: "center",
+            dataIndex: 'productType',
+            render: (productType: number): React.ReactNode => {
+                switch (productType) {
+                    case 0:
+                        return "角钢塔"
+                    case 1:
+                        return "管塔"
+                    case 2:
+                        return "螺栓"
+                }
+            }
         }, {
             title: '塔型',
-            dataIndex: 'productShape	'
+            align: "center",
+            dataIndex: 'productShape'
         }, {
             title: '杆塔号',
+            align: "center",
             dataIndex: 'productNumber'
         }, {
             title: '电压等级',
-            dataIndex: 'voltageGradeName'
+            align: "center",
+            dataIndex: 'voltageGrade',
+            render: (voltageGrade: number): React.ReactNode => {
+                switch (voltageGrade) {
+                    case 1:
+                        return <span>220 KV</span>
+                    case 2:
+                        return <span>110 KV</span>
+                }
+            }
         }, {
             title: '呼高（米）',
+            align: "center",
             dataIndex: 'productHeight'
         }, {
             title: '单位',
+            align: "center",
             dataIndex: 'unit'
         }, {
             title: '数量',
+            align: "center",
             dataIndex: 'num'
         }, {
             title: '标段',
+            align: "center",
             dataIndex: 'tender'
         }, {
             title: '备注',

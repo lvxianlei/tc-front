@@ -1,7 +1,6 @@
-import { Button, DatePicker, FormProps, Input, message, Select, Table, TableColumnType } from 'antd';
+import { Button, DatePicker, FormProps, Input, message, Select, Table, TableColumnType, Tag } from 'antd';
 import moment from 'moment';
 import React from 'react';
-// import {AxiosResponse} from   "axios"
 import { RouteComponentProps } from 'react-router';
 import AbstractFillableComponent, {
     IAbstractFillableComponentState,
@@ -23,10 +22,12 @@ export interface IAbstractTaxkchangeState extends IAbstractFillableComponentStat
  * Icontract
  */
 export interface IContract {
+    //原材料标准
+    readonly materialStandard: number;
     readonly auditStatus: number;
     readonly id?: number;
     //任务编号
-    readonly taskNoticeId: number;
+    readonly taskNumber: number;
     //关联订单
     readonly saleOrderNumber: number;
     //合同编号
@@ -41,6 +42,8 @@ export interface IContract {
     readonly signContractTime?: string;
     //客户交货日期
     readonly deliveryTime?: string;
+    //订单交货日期
+    readonly orderDeliveryTime?: string;
     //计划交货日期
     readonly planDeliveryTime: string;
     //计划备注
@@ -57,8 +60,10 @@ export interface IContract {
     readonly peculiarDescription?: string;
 
     readonly productChangeInfoVOList?: IProductChangeInfoVOList[];
-    readonly productInfoVOList?: IProductInfoVOList[];
-};
+    readonly productInfoVOList: IProductInfoVOList[];
+}
+;
+
 
 //变更明细
 export interface IProductChangeInfoVOList {
@@ -107,18 +112,9 @@ export interface IProductInfoVOList {
     readonly signCustomerId?: number;
 }
 /**
- * Iresponse
- * @template T 
- */
-interface IResponse<T = any> {
-    readonly code: number;
-    readonly msg: string;
-    readonly data: T;
-}
-/**
  * Abstract Contract Setting
  */
-export default abstract class AbstractTaxkchange<P extends RouteComponentProps, S extends IAbstractTaxkchangeState> extends AbstractFillableComponent<P, S> {
+export default abstract class AbstractTaskChange<P extends RouteComponentProps, S extends IAbstractTaxkchangeState> extends AbstractFillableComponent<P, S> {
     /**
      * State  of abstract taxkchange
      */
@@ -127,15 +123,6 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
         productInfoVOList: {},
         productChangeInfoVOList: {}
     } as S;
-    /**
-     * Components did mount
-     */
-    public async componentDidMount() {
-        super.componentDidMount();
-    }
-
-
-
     /**
      * @override
      * @description Gets form props
@@ -167,18 +154,27 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
             },
             itemProps: [{
                 label: '任务编号',
-                name: 'taskNoticeId',
-                initialValue: contract?.taskNoticeId,
-                children: <Input value={contract?.taskNoticeId} disabled />
+                name: 'taskNumber',
+                initialValue: contract?.taskNumber,
+                rules: [{
+                    required: true
+                }],
+                children: <Input value={contract?.taskNumber} disabled />
             }, {
                 label: '关联订单',
                 name: 'saleOrderNumber',
                 initialValue: contract?.saleOrderNumber,
+                rules: [{
+                    required: true
+                }],
                 children: <Input value={contract?.saleOrderNumber} disabled />
             }, {
                 label: '合同编号',
                 name: 'contractId',
                 initialValue: contract?.contractId,
+                rules: [{
+                    required: true
+                }],
                 children: <Input value={contract?.contractId} disabled />,
             }, {
                 label: '工程名称',
@@ -200,10 +196,6 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
                 label: '合同签订日期',
                 name: 'signContractTime',
                 initialValue: moment(contract?.signContractTime),
-                rules: [{
-                    required: true,
-                    message: '请选择合同签订日期'
-                }],
                 children: <DatePicker format="YYYY-MM-DD" disabled />
             }, {
                 label: '客户交货日期',
@@ -214,6 +206,9 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
                 label: '计划交货日期',
                 name: 'planDeliveryTime',
                 initialValue: moment(contract?.planDeliveryTime),
+                rules: [{
+                    required: true
+                }],
                 children: <DatePicker format="YYYY-MM-DD" disabled />
             }, {
                 label: '计划备注',
@@ -228,11 +223,12 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
             },
             itemProps: [{
                 label: '原材料标准',
-                name: 'materialDemand',
-                initialValue: contract?.materialDemand,
+                name: 'materialStandard',
+                initialValue: contract?.materialStandard || 1,
                 children: (
-                    <Select className={styles.materialStandards} disabled>
-                        <Select.Option value="over">未定义</Select.Option>
+                    <Select disabled>
+                        <Select.Option value={1}>国家电网</Select.Option>
+                        <Select.Option value={2}>南方电网</Select.Option>
                     </Select>
                 )
             }, {
@@ -268,7 +264,7 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
             render: (): React.ReactNode => {
                 return <Table rowKey="changeType" bordered={true} pagination={false}
                     columns={this.getProductTableColumns()}
-                    dataSource={this.state.contract?.productInfoVOList}
+                    dataSource={this.state.contract?.productChangeInfoVOList}
                 />;
             }
         }];
@@ -281,15 +277,13 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
     public onSubmit(values: Record<string, any>): Promise<void> {
         return RequestUtil.post('/tower-market/audit/adopt', {
             auditId: values.contractId
-        }).then((res: IResponse | any): void => {
-            if (!res.data) {
-                message.warning("操作失败,请稍后再试!")
-            } else {
-                message.success('操作已成功！任务单信息已通过审批。');
-                this.props.history.push(this.getReturnPath());
-            }
+        }).then((): void => {
+            console.log(values);
+            
+            message.success('操作已成功！任务单  已通过审批。');
+            this.props.history.push(this.getReturnPath());
 
-        });
+        })
     }
     /**
      * Determines whether reject on
@@ -297,15 +291,9 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
     public onReject = (): Promise<void> => {
         return RequestUtil.post('/tower-market/audit/reject', {
             auditId: this.props.match.params
-        }).then((res: IResponse | any): void => {
-            if (!res.data) {
-                message.warning("操作失败,请稍后再试!")
-            } else {
-                message.warning('已驳回任务单审批的申请！');
-                this.props.history.push(this.getReturnPath());
-            }
-
-
+        }).then((): void => {
+            message.warning('已驳回任务单  审批的申请！');
+            this.props.history.push(this.getReturnPath());
         });
     }
     /**
@@ -321,11 +309,10 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
      * @returns primary operation button label 
      */
     protected getPrimaryOperationButtonLabel(): string {
-        return '通过';
+        return '通过'
     }
-
     protected renderExtraOperationArea(): React.ReactNode {
-        return <Button type="primary" htmlType="button" onClick={this.onReject}>驳回</Button>;
+        return <Button type="primary" htmlType="button" onClick={this.onReject}>驳回</Button>
     }
     /**
     * Gets product table columns
@@ -334,30 +321,57 @@ export default abstract class AbstractTaxkchange<P extends RouteComponentProps, 
     private getProductTableColumns(): TableColumnType<object>[] {
         return [{
             title: '线路名称',
+            align: "center",
             dataIndex: 'lineName'
         }, {
             title: '产品类型',
-            dataIndex: 'productTypeName'
+            align: "center",
+            dataIndex: 'productType',
+            render: (productType: number): React.ReactNode => {
+                switch (productType) {
+                    case 0:
+                        return "角钢塔"
+                    case 1:
+                        return "管塔"
+                    case 2:
+                        return "螺栓"
+                }
+            }
         }, {
             title: '塔型',
-            dataIndex: 'productShape	'
+            align: "center",
+            dataIndex: 'productShape'
         }, {
             title: '杆塔号',
+            align: "center",
             dataIndex: 'productNumber'
         }, {
             title: '电压等级',
-            dataIndex: 'voltageGradeName'
+            align: "center",
+            dataIndex: 'voltageGrade',
+            render: (voltageGrade: number): React.ReactNode => {
+                switch (voltageGrade) {
+                    case 1:
+                        return <span>220 KV</span>
+                    case 2:
+                        return <span>110 KV</span>
+                }
+            }
         }, {
             title: '呼高（米）',
+            align: "center",
             dataIndex: 'productHeight'
         }, {
             title: '单位',
+            align: "center",
             dataIndex: 'unit'
         }, {
             title: '数量',
+            align: "center",
             dataIndex: 'num'
         }, {
             title: '标段',
+            align: "center",
             dataIndex: 'tender'
         }, {
             title: '备注',

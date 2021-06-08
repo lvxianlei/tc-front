@@ -19,8 +19,8 @@ import AbstractSaleOrderSetting, {
 export interface IProductChangeApprovalProps {
     readonly id: string;
 }
-export interface IProductChangeApprovalRouteProps extends RouteComponentProps<IProductChangeApprovalProps>, WithTranslation {}
-export interface IProductChangeApprovalState extends IAbstractSaleOrderSettingState {}
+export interface IProductChangeApprovalRouteProps extends RouteComponentProps<IProductChangeApprovalProps>, WithTranslation { }
+export interface IProductChangeApprovalState extends IAbstractSaleOrderSettingState { }
 
 /**
  * Product change approval
@@ -74,7 +74,7 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
      * @description Gets form item groups
      * @returns form item groups 
      */
-     public getFormItemGroups(): IFormItemGroup[][] {
+    public getFormItemGroups(): IFormItemGroup[][] {
         if (this.state.saleOrder) {
             return super.getFormItemGroups();
         }
@@ -185,8 +185,8 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
         return [{
             title: '产品信息',
             render: (): React.ReactNode => {
-                return <Table rowKey="index" bordered={ true } pagination={ false }
-                    columns={ this.getProductTableColumns() } dataSource={ this.state.saleOrder?.productChangeRecordVos }/>;
+                return <Table rowKey="index" bordered={true} pagination={false}
+                    columns={this.getProductTableColumns()} dataSource={this.state.saleOrder?.productChangeRecordVos} />;
             }
         }];
     }
@@ -206,7 +206,7 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
      * @returns extra operation area 
      */
     protected renderExtraOperationArea(): React.ReactNode {
-        return <Button type="default" onClick={ this.onReject }>驳回</Button>;
+        return <Button type="default" onClick={this.onReject}>驳回</Button>;
     }
 }
 

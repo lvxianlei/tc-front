@@ -5,6 +5,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import RequestUtil from '../../../utils/RequestUtil';
 import AbstractTaxkchange, { IAbstractTaxkchangeState, IContract } from './AbstractProductchange';
 export interface ITaxkChangeProps {
+    readonly businessId: string;
     readonly id: string;
 }
 export interface ITaxkChangeRouteProps extends RouteComponentProps<ITaxkChangeProps>, WithTranslation { }
@@ -17,7 +18,12 @@ class ProductChange extends AbstractTaxkchange<ITaxkChangeRouteProps, ITaxkchang
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const contract: IContract = await RequestUtil.get<IContract>(`/tower-market/taskNotice/auditDetail`);
+        const contract: IContract = await RequestUtil.get<IContract>(
+            `/tower-market/taskNotice/auditDetail`,
+            {
+                auditId: this.props.match.params.id,
+                taskNoticeId: this.props.match.params.businessId
+            });
         this.setState({
             contract: contract,
             productChangeInfoVOList: contract.productChangeInfoVOList,

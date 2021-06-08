@@ -45,6 +45,7 @@ interface IResponseData {
 }
 //响应数据的限制
 interface ITaskTableDataItem {
+    readonly businessId: number;
     //id
     readonly id: number;
 
@@ -64,17 +65,29 @@ const menubar = (records: object) => {
     return (
         <Menu>
             <Menu.Item>
-                <Button href={`/approval/task/productchange/${(records as ITaskTableDataItem).id}`} ghost>
+
+                <Button href={`/approval/task/productchange/
+                            ${(records as ITaskTableDataItem).id}&
+                            ${(records as ITaskTableDataItem).businessId}`}
+                    value="default">
                     任务单审批
                 </Button>
+
+
             </Menu.Item>
             <Menu.Item>
-                <Button href={`/approval/task/change/${(records as ITaskTableDataItem).id}`} ghost>
+                <Button href={`/approval/task/change/
+                            ${(records as ITaskTableDataItem).id}&
+                            ${(records as ITaskTableDataItem).businessId}`}
+                    value="default">
                     任务单产品变更审批
                 </Button>
             </Menu.Item>
             <Menu.Item>
-                <Button href={`/approval/product-change/${(records as ITaskTableDataItem).id}`} ghost>
+                <Button href={`/approval/task/product-change/
+                            ${(records as ITaskTableDataItem).id}&
+                            ${(records as ITaskTableDataItem).businessId}`}
+                            value="default">
                     产品信息变更审批
                 </Button>
             </Menu.Item>
@@ -92,6 +105,11 @@ enum AuditStatusItem {
     PENDING_APPROVAL = "待审批",
     ADOPT = "通过",
     REJECT = "驳回"
+}
+//业务类型
+enum BusinessType {
+    SALE_ORDER_AUDIT = "产品信息变更审批",
+    TASK_AUDIT = "任务单产品审批",
 }
 
 class ApprovalAll extends AbstractMngtComponent<
@@ -141,6 +159,8 @@ class ApprovalAll extends AbstractMngtComponent<
     public componentDidMount() {
         super.componentDidMount();
         this.fetchTableData({});
+
+
     }
     //
     public getTableData(): object[] {
@@ -159,11 +179,19 @@ class ApprovalAll extends AbstractMngtComponent<
                 }
             },
             {
-                key: "typeName",
+                key: "type",
                 title: "业务类型",
-                dataIndex: "typeName",
+                dataIndex: "type",
                 align: "center",
-                width: 150
+                width: 150,
+                render: (type: string): React.ReactNode => {
+                    switch (type) {
+                        case "SALE_ORDER_AUDIT":
+                            return BusinessType.SALE_ORDER_AUDIT
+                        case "TASK_AUDIT":
+                            return BusinessType.TASK_AUDIT
+                    }
+                }
             },
             {
                 key: "businessNumber",
@@ -282,16 +310,16 @@ class ApprovalAll extends AbstractMngtComponent<
      * @returns filter components
      */
     public getFilterFormItemProps(item: ITabItem): FormItemProps[] {
-
+        console.log(this.state);
         return [
             {
                 name: "type",
-                initialValue: "0",
+                initialValue: "",
                 children: (
                     <Select className={styles.drop_down_menu}>
-                        <Option value="0">全部</Option>
-                        <Option value="1">产品信息变更审批</Option>
-                        <Option value="2">任务单产品信息审批</Option>
+                        <Option value="">全部</Option>
+                        <Option value="SALE_ORDER_AUDIT">产品信息变更审批</Option>
+                        <Option value="TASK_AUDIT">任务单产品信息审批</Option>
                     </Select>
                 ),
             }

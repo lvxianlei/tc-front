@@ -6,6 +6,7 @@ import AbstractTaskChange, { IAbstractTaxkchangeState, IContract } from './Abstr
 
 
 export interface ITaxkChangeProps {
+    readonly businessId: string;
     readonly id: string;
 }
 export interface ITaxkChangeRouteProps extends RouteComponentProps<ITaxkChangeProps>, WithTranslation { }
@@ -18,7 +19,10 @@ class TaskChange extends AbstractTaskChange<ITaxkChangeRouteProps, ITaxkchangeSt
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const contract: IContract = await RequestUtil.get<IContract>(`/tower-market/taskNotice/auditDetail`);
+        const contract: IContract = await RequestUtil.get<IContract>(`/tower-market/taskNotice/auditDetail`, {
+            auditId: this.props.match.params.id,
+            taskNoticeId: this.props.match.params.businessId
+        });
         this.setState({
             contract: contract,
             productChangeInfoVOList: contract.productChangeInfoVOList
@@ -30,6 +34,8 @@ class TaskChange extends AbstractTaskChange<ITaxkChangeRouteProps, ITaxkchangeSt
             deliveryTime: moment(contract.deliveryTime),
         });
     }
+
+
 }
 
 export default withRouter(withTranslation()(TaskChange));
