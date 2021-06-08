@@ -42,7 +42,7 @@ export interface ITabItem {
 }
 
 export interface IContract {
-    readonly id?: string;
+    readonly id?: string | number;
     readonly contractNumber?: string;
     readonly internalNumber?: string;
     readonly projectName?: string;
@@ -66,14 +66,14 @@ export interface IContract {
     readonly planType?: number;
     paymentPlanDtos?: IPaymentPlanDto[];
     readonly attachInfoDtos: IattachDTO[];
-    readonly signCustomerId?: number;
+    readonly signCustomerId?: string | number;
     readonly customerInfoVo?: IcustomerInfoDto;
     readonly attachInfoVos: IattachDTO[];
     readonly paymentPlanVos?: IPaymentPlanDto[];
 }
 
 export interface IcustomerInfoDto {
-    readonly customerId?: number;
+    readonly customerId?: string | number;
     readonly customerCompany?: string;
     readonly customerLinkman?: string;
     readonly customerPhone?: string;
@@ -86,6 +86,7 @@ export interface IproductInfoDto {
 
 export interface IPaymentPlanDto {
     readonly index?: number;
+    readonly period?: number;
     readonly returnedTime?: any;
     readonly returnedRate: number;
     readonly returnedAmount: number;
@@ -99,7 +100,7 @@ export interface IattachDTO {
     readonly description?: string;
     readonly keyType?: string;
     readonly keyId?: number;
-    readonly id?: number;
+    readonly id?: string;
     readonly fileSuffix?: string;
     readonly filePath: string;
     readonly fileUploadTime?: string;
@@ -206,7 +207,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 contract: {
                     ...(contract || {}),
                     signCustomerName: selectedRows[0].name,
-                    signCustomerId: selectedRows[0].id
+                    signCustomerId: selectedRows[0].id?.toString()
                 }
             })
             this.getForm()?.setFieldsValue({ signCustomerName: selectedRows[0].name });
@@ -227,7 +228,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     ...(contract || {}),
                     customerInfoDto: select,
                     signCustomerName: selectedRows[0].name,
-                    signCustomerId: selectedRows[0].id
+                    signCustomerId: selectedRows[0].id,
                 }
             })
             this.getForm()?.setFieldsValue(select);
