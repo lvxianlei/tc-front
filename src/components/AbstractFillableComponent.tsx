@@ -79,6 +79,13 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
     abstract onSubmit(values: Record<string, any>): Promise<void>;
 
     /**
+     * @description Determines whether cancel on
+     */
+    protected onCancel = (): void => {
+        this.props.history.push(this.getReturnPath());
+    }
+
+    /**
      * @protected
      * @description Determines whether submit and continue on
      */
@@ -206,7 +213,7 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
                             <Space direction="horizontal" size="large">
                                 <Button type="primary" htmlType="submit">{ this.getPrimaryOperationButtonLabel() }</Button>
                                 { this.renderExtraOperationArea() }
-                                <Button type="ghost" htmlType="reset">取消</Button>
+                                <Button type="ghost" htmlType="reset" onClick={ this.onCancel }>取消</Button>
                             </Space>
                         </div>
                     </Space>
