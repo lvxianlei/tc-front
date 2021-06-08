@@ -43,7 +43,7 @@
         values.contractInfoDTO = this.state.contractInfoDTO;
         values.saleOrderId = this.state?.task?.saleOrderId;
         console.log(values)
-        return await RequestUtil.post('/tower-market/taskNotice/save', values);
+        return await RequestUtil.post('/tower-market/taskNotice', values);
      }
  }
  

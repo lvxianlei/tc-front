@@ -141,7 +141,17 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Link to={ `/client/mngt/setting/${ (record as ITableDataItem).id }` }>编辑</Link>
-                    <ConfirmableButton confirmTitle="要删除该客户吗？" type="link" placement="topRight">删除</ConfirmableButton>
+                    <ConfirmableButton 
+                        confirmTitle="要删除该客户吗？" 
+                        type="link" 
+                        placement="topRight"
+                        onConfirm={ async () => {
+                            await RequestUtil.delete(`/tower-customer/customer?customerId=${ (record as ITableDataItem).id }`);
+                            this.fetchTableData({});
+                        } }
+                    >
+                        删除
+                    </ConfirmableButton>
                 </Space>
             )
         }];

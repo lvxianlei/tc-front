@@ -2,13 +2,14 @@
  * @author zyc
  * @copyright © 2021
  */
+import moment from 'moment';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
 
 import RequestUtil from '../../../utils/RequestUtil';
-import AbstractSaleOrderSetting, { IAbstractSaleOrderSettingState, ISaleOrder, IProductVo } from './AbstractSaleOrderSetting';
+import AbstractSaleOrderSetting, { IAbstractSaleOrderSettingState, ISaleOrder, IProductVo, IContractInfoDto } from './AbstractSaleOrderSetting';
 
 export interface IContractSettingProps {
     readonly id: string;
@@ -30,18 +31,35 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<IContractSettingRoutePro
         this.setState({
             saleOrder: saleOrder
         });
-        saleOrder.productVos = saleOrder.productVos?.map<IProductVo>((product: IProductVo, index: number): IProductVo => {
+        saleOrder.productDtos = saleOrder.productVos?.map<IProductVo>((product: IProductVo, index: number): IProductVo => {
             return {
                 ...product,
                 index: index + 1
             };
         });
+        this.setState({
+            saleOrder: {
+                ...saleOrder,
+                productDtos: saleOrder.productVos,
+                contractInfoDto: saleOrder.contractInfoVo
+            }
+        })
         this.getForm()?.setFieldsValue({
-            productVos: saleOrder.productVos,
             totalWeight: saleOrder.orderQuantity,
             totalPrice: saleOrder.taxPrice,
             totalAmount: saleOrder.taxAmount,
             orderQuantity: saleOrder.orderQuantity,
+            chargeType: saleOrder.contractInfoVo?.chargeType,
+            contractId: saleOrder.contractInfoVo?.contractId,
+            currencyType: saleOrder.contractInfoVo?.currencyType,
+            customerCompany: saleOrder.contractInfoVo?.customerCompany,
+            deliveryTime: saleOrder.contractInfoVo?.deliveryTime,
+            internalNumber: saleOrder.contractInfoVo?.internalNumber,
+            projectName: saleOrder.contractInfoVo?.projectName,
+            signContractTime: saleOrder.contractInfoVo?.signContractTime,
+            signCustomerId: saleOrder.contractInfoVo?.signCustomerId,
+            signCustomerName: saleOrder.contractInfoVo?.signCustomerName,
+            productDtos: saleOrder.productVos,
         });
     }
 
@@ -64,9 +82,28 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<IContractSettingRoutePro
      * @returns submit 
      */
     public async onSubmit(values: Record<string, any>): Promise<void> {
-        return await RequestUtil.put('/tower-customer/customer', {
+        values.orderDeliveryTime = moment(values.orderDeliveryTime).format('YYYY-MM-DD');
+        let contractInfoDto: IContractInfoDto = {};
+        const contract: IContractInfoDto | undefined = this.state.saleOrder?.contractInfoDto;
+        contractInfoDto = {
+            chargeType: values.chargeType,
+            contractId: contract?.contractId,
+            currencyType: values.currencyType,
+            customerCompany: values.customerCompany,
+            deliveryTime: values.deliveryTime,
+            internalNumber: values.internalNumber,
+            projectName: values.projectName,
+            signContractTime: values.signContractTime,
+            signCustomerId: contract?.signCustomerId,
+            signCustomerName: values.signCustomerName,
+        }
+        values = {
             ...values,
-            id: Number(this.props.match.params.id)
+            contractInfoDto
+        }
+        return await RequestUtil.put('/tower-market/saleOrder', {
+            ...values,
+            id: this.props.match.params.id
         });
     }
 

@@ -6,7 +6,7 @@
  import { RouteComponentProps, withRouter } from 'react-router';
  
  import RequestUtil from '../../../utils/RequestUtil';
- import AbstractTaskSetting, { IAbstractTaskSettingState, ITask } from './AbstactTaskSetting';
+ import AbstractTaskSetting, { IAbstractTaskSettingState, ITask, StepItem } from './AbstactTaskSetting';
  import moment from 'moment'
  import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
  
@@ -25,7 +25,7 @@
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const task: ITask = await RequestUtil.get<ITask>(`/tower-market/taskNotice/${ this.props.match.params.id }`);
+        const task: ITask = await RequestUtil.get<ITask>(`/tower-market/taskNotice/edit`,{id: this.props.match.params.id });
         this.setState({
             task,
             productDataSource: task?.productInfoVOList || [],
@@ -56,7 +56,9 @@
         values.signContractTime = moment(values.signContractTime).format('YYYY-MM-DD');
         values.productIds = this.state.selectedKeys;
         values.contractInfoDTO = this.state.contractInfoDTO;
-        await RequestUtil.post('/tower-market/taskNotice/save', values);
+        values.saleOrderId = this.state?.task?.saleOrderId;
+        values.id = this.state?.task?.id;
+        this.state.checkStep === StepItem.COMPLETE_PRODUCT_INFO ? await RequestUtil.post('/tower-market/taskNotice/saveAndSubApprove', values):await RequestUtil.post('/tower-market/taskNotice', values);
      }
  }
  

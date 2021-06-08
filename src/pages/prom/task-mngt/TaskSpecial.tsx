@@ -25,7 +25,7 @@ import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const task: ITask = await RequestUtil.get<ITask>(`/tower-market/taskNotice/${ this.props.match.params.id }`);
+        const task: ITask = await RequestUtil.get<ITask>(`/tower-market/taskNotice/edit`,{id: this.props.match.params.id });
         this.setState({
             task,
             productDataSource: task?.productInfoVOList || [],
@@ -60,7 +60,7 @@ import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
         values.productIds = this.state.selectedKeys.length > 0 ? this.state.selectedKeys.length : [];
         values.contractInfoDTO = this.state.contractInfoDTO;
         values.saleOrderId = this.state?.task?.saleOrderId;
-        return await RequestUtil.post('/tower-market/taskNotice/save', values);
+        return await RequestUtil.post('/tower-market/taskNotice', values);
      }
  }
  

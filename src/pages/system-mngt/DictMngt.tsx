@@ -11,6 +11,8 @@ import ConfirmableButton from '../../components/ConfirmableButton';
 import styles from './DictMngt.module.less';
 import { arrayMove, SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 import { MenuOutlined } from '@ant-design/icons';
+import { CustomizeComponent } from 'rc-table/es/interface';
+import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 
 const DragHandle = SortableHandle(() => <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />);
 const SortableItem = SortableElement((props: JSX.IntrinsicAttributes & React.ClassAttributes<HTMLTableRowElement> & React.HTMLAttributes<HTMLTableRowElement>) => <tr {...props} />);
@@ -25,6 +27,8 @@ export interface IDictMngtState {
     readonly editValue: string;
     readonly type: string;
     readonly tabs: IDictTabsData[];
+    readonly selectedTab: string;
+    readonly selectedValue: IDictDataSource;
 }
 
 interface IDictTabsData {
@@ -41,18 +45,18 @@ interface IDictDataSourceData {
 }
 
 interface IDictDataSource {
-    readonly category: string	
-    readonly createTime: string	
-    readonly createUser: number	
-    readonly id: number	
-    readonly isDeleted:	number	
-    readonly name: string	
-    readonly sort: number	
-    readonly status: number	
-    readonly tenantId: string	
-    readonly type: string		
-    readonly updateTime: string	
-    readonly updateUser: number
+    category?: string
+    type?: string
+    name?: string		
+    readonly createTime?: string	
+    readonly createUser?: number	
+    readonly id?: number	
+    readonly isDeleted?: number	
+    readonly sort?: number	
+    readonly status?: number	
+    readonly tenantId?: string
+    readonly updateTime?: string	
+    readonly updateUser?: number
 }
 
 
@@ -75,9 +79,11 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
      public state: IDictMngtState = {
         dictDataSource: [],
         visible: false,
-        editValue: '',//弹框值
-        tabs:[],    //tab页
-        type: '',    //类型
+        editValue: '', //弹框值
+        tabs:[], //tab页
+        type: '', //类型
+        selectedTab:'',
+        selectedValue: {}, //当前行
     }
 
 
@@ -90,6 +96,7 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
         this.getDataSourceFromTab(dictTabsResponse[0].code);
         this.setState({
             tabs: dictTabsResponse,   //tab标签
+            selectedTab: dictTabsResponse[0].code, //当前tab
         });
     }
 
@@ -100,6 +107,16 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
             dictDataSource:dictDataSourceResponse,   //内容
         })
     }
+   
+    //刷新
+    public async updateTab(code:string){
+        const dictTabsResponse: IDictTabsData[] = await RequestUtil.get<IDictTabsData[]>(`/tower-system/dictionary/types`);
+        this.getDataSourceFromTab(code);
+        this.setState({
+            tabs: dictTabsResponse,   //tab标签
+        });
+    }
+
     /**
      * @description Gets charging record columns
      * @returns charging record columns 
@@ -117,9 +134,19 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
         }, {
             title: '启用',
             width:'10%',
-            dataIndex: 'disable',
-            render: (text, record): React.ReactNode => {
-                return  <Checkbox  onChange={(e)=>{console.log(e)}} defaultChecked={text}/>;
+            dataIndex: 'status',
+            render: (text, record:Record<string,any>): React.ReactNode => {
+                return  <Checkbox  
+                            onChange={async (e)=>{
+                                let values = {
+                                    id:record.id,
+                                    sort: record.sort,
+                                    status: e.target.checked ? 1 : 2
+                                }
+                                await RequestUtil.put(`/tower-system/dictionary/updateSortOrEnable`,[values]);
+                            }} 
+                            defaultChecked={ text === 1 }
+                        />;
             }
         }, {
             title: '操作',
@@ -127,7 +154,7 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
             width:'10%',
             render: (text, record) => (
                 <Space size="middle">
-                    <a onClick={() => this.showModal(record,res.name)}>编辑</a>
+                    <a onClick={() => this.showModal(record,res)}>编辑</a>
                     <ConfirmableButton confirmTitle="要删除该数据吗？" type="link" placement="topRight" onConfirm={() => this.handleDelete(record)}>删除</ConfirmableButton>
                 </Space>
               ),
@@ -145,23 +172,23 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
                 label:item.name,
                 key:item.code,
                 content: SummaryRenderUtil.renderSections(
-                    dictDataSource.map((res:IDictDataSourceData)=>{
+                    dictDataSource.map((res: IDictDataSourceData, index: number) => {
                         return {
                             title:'',
                             render:(): React.ReactNode => 
                             <div>
                                 <div className={styles.title}>
                                     <span>{res.name}</span>
-                                    <Button type='primary'onClick={()=>this.showModal({name:''},res.name)}>新增</Button>
+                                    <Button type='primary'onClick={()=>this.showModal({name:''},res)}>新增</Button>
                                 </div>
                                 <Table 
                                     columns={this.getChargingRecordColumns(res)} 
                                     dataSource={res.dictionaries}
-                                    rowKey="sort"
+                                    rowKey="id"
                                     components={{
                                         body: {
-                                          wrapper: this.DraggableContainer,
-                                          row: this.DraggableBodyRow,
+                                          wrapper: this.draggableContainer(index),
+                                          row: this.draggableBodyRow(index),
                                         },
                                     }}
                                 />
@@ -176,54 +203,65 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
 
 
     //delete-row
-    public handleDelete = (record: Record<string,any>) => {
+    public handleDelete = async(record: Record<string,any>) => {
         //接口
-        console.log(record)
+        await RequestUtil.delete(`/tower-system/dictionary?dictionaryId=${record.id}`)
+        this.updateTab(this.state.selectedTab)
     };
 
 
     //drag-after-dictDataSource
-    public onSortEnd = (props: { oldIndex: number; newIndex: number; }) => {
-        const {oldIndex,newIndex} = props;
-        const { dictDataSource } = this.state;
-        if (oldIndex !== newIndex) {
-          const newDictDataSource = dictDataSource.map((item:IDictDataSourceData)=>{
-              const newData = arrayMove(item.dictionaries,oldIndex, newIndex).filter(el => !!el);
-              item.dictionaries = newData;
-              return item
-          })
-          console.log('Sorted items: ', newDictDataSource);
-          this.setState({ dictDataSource: newDictDataSource });
+    public onSortEnd = (index: number) =>{
+        return async (props: { oldIndex: number; newIndex: number; }) => {
+            const { oldIndex, newIndex } = props;
+            const { dictDataSource } = this.state;
+            if (oldIndex !== newIndex) {
+                const newDictDataSource = dictDataSource.map((item:IDictDataSourceData)=>{
+                    const newData = arrayMove(item.dictionaries,oldIndex, newIndex).filter(el => !!el);
+                    item.dictionaries = newData;
+                    return item
+                })
+                await RequestUtil.put(`/tower-system/dictionary/updateSortOrEnable`,newDictDataSource[index].dictionaries);
+                this.setState({ dictDataSource: newDictDataSource });
+            }
         }
-    }
+    }   
+
+
 
     //drag-container
-    public DraggableContainer = (props:IDictMngtWithRouteProps) => (
-        <SortableCon
-            useDragHandle
-            disableAutoscroll
-            helperClass="row-dragging"
-            onSortEnd={this.onSortEnd}
-            {...props}
-        />
-    );
+    public draggableContainer = (index: number):CustomizeComponent =>{
+        return  (props:IDictMngtWithRouteProps) => (
+            <SortableCon
+                useDragHandle
+                disableAutoscroll
+                helperClass="row-dragging"
+                onSortEnd={this.onSortEnd(index)}
+                {...props}
+            />
+        );
+    } 
+
 
     //drag-item
-    public DraggableBodyRow = ({ ...restProps }) => {
-        const { dictDataSource } = this.state;
-        const index = dictDataSource.map(item=>{
-              return item.dictionaries.findIndex(x => x.sort === restProps['data-row-key'])
-        })
-        return <SortableItem index={index[0]} {...restProps}  />;
-    };
+    public draggableBodyRow = (index: number):CustomizeComponent => {
+        return ({ ...restProps }) => {
+            const { dictDataSource } = this.state;
+            const num = dictDataSource.map(item=>{
+                return item.dictionaries.findIndex(x => x.id === restProps['data-row-key'])
+            })
+            return <SortableItem index={num[index]} {...restProps}  />;
+        };
+    }
 
 
     //modal-show
-    public showModal(record: Record<string,any> ,res:string): void {
+    public showModal(record: Record<string,any> ,res:IDictDataSourceData): void {
         this.setState({
             visible: true,
             editValue: record.name,
-            type:res
+            type:res.code,
+            selectedValue: record,
         })
     }
     //modal-close
@@ -234,15 +272,30 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
     }
     
     //modal-value
-    public onFinish = (values:string) =>{ 
-        console.log(values, this.state.type)
+    public onFinish = async ( values: IDictDataSource ) =>{
+        let dataSource: IDictDataSource = {};
+        const { selectedValue } = this.state; 
+        if(selectedValue.id){
+            dataSource = selectedValue;
+        }
+        else{
+            dataSource.type = this.state.selectedTab;
+            dataSource.category = this.state.type;
+        }
+        dataSource.name = values.name;
+        
         this.setState({
             visible: false,
         })
+        selectedValue.id?await RequestUtil.put('/tower-system/dictionary', dataSource):await RequestUtil.post('/tower-system/dictionary', dataSource);
+        this.updateTab(this.state.selectedTab)
     }
 
     //tab-change-tableDataSource
     public onChange = async(activeKey:string)=>{
+        this.setState({
+            selectedTab: activeKey
+        })
         this.getDataSourceFromTab(activeKey);
     }
 

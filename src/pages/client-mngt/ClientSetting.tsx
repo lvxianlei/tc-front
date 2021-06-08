@@ -50,12 +50,13 @@ class ClientSetting extends AbstractClientSetting<IClientSettingRouteProps, ICli
      * @param values 
      * @returns submit 
      */
-     public async onSubmit(values: Record<string, any>): Promise<void> {
+    public async onSubmit(values: Record<string, any>): Promise<void> {
         return await RequestUtil.put('/tower-customer/customer', {
             ...values,
-            id: Number(this.props.match.params.id)
+            id: this.props.match.params.id
         });
     }
+
 
     /**
      * @override

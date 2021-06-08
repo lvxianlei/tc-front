@@ -1,0 +1,74 @@
+{
+    "code": 200,
+    "data":{
+        "contractId": 57366695,
+        "createTime": "1995-10-16T12:56:24.193Z",
+        "createUserName": "Ut sint esse ad",
+        "customerCompany": "l",
+        "deliveryTime": "1963-01-01T12:27:33.827Z",
+        "description": "incididunt eu qui elit",
+        "galvanizeDemand": "Duis",
+        "id": -29730777,
+        "internalNumber": "Duis et",
+        "marketAuditId": 41937770,
+        "materialDemand": "Ut culpa labore esse nostrud",
+        "materialStandard": 42316033,
+        "packDemand": "amet culpa deserunt fugiat reprehenderit",
+        "peculiarDescription": "veniam Ut",
+        "planDeliveryTime": "1952-12-10T04:02:37.58Z",
+        "productChangeInfoVOList": [
+            {
+                "auditId": -27824948,
+                "changeType": -83882576,
+                "createTime": "2007-06-27T03:52:57.637Z",
+                "description": "nostrud officia laboris cupidatat",
+                "lineName": "cillum enim minim proident magna",
+                "num": -57626938.73151203,
+                "price": 27761996.868236586,
+                "productHeight": 48207224.26492825,
+                "productNumber": "voluptate Lorem consectetur elit exercitation",
+                "productShape": "culpa",
+                "productStatus": 20212246,
+                "productType": -57630472,
+                "productTypeName": "Lorem occaecat proident eiusmod",
+                "recordType": -9311727,
+                "saleOrderId": 42503816,
+                "taskNoticeId": 92725897,
+                "tender": "sed consectetur in occaecat",
+                "totalAmount": 77736356.72610086,
+                "unit": "elit ad aute ipsum",
+                "voltageGrade": -82742084,
+                "voltageGradeName": "t"
+            }
+        ],
+        "productInfoVOList": [
+            {
+                "description": "Lorem",
+                "lineName": "adi",
+                "num": 70155032.23266056,
+                "price": -40297524.795830645,
+                "productHeight": 24257219.09882395,
+                "productNumber": "non qui in",
+                "productShape": "sit cupidatat aliquip consectetur",
+                "productStatus": -27024758,
+                "productTypeName": "laborum mollit reprehenderit",
+                "saleOrderId": 92490309,
+                "taskNoticeId": -21066717,
+                "tender": "sed ut",
+                "totalAmount": 40990505.10838559,
+                "unit": "exercitation ex quis",
+                "voltageGradeName": "eu"
+            }
+        ],
+        "projectName": "voluptate non amet ea",
+        "saleOrderNumber": "dolor magna Duis tempor",
+        "signContractTime": "1950-07-12T05:50:40.647Z",
+        "signCustomerName": "veniam",
+        "simpleProjectName": "pariatur inc",
+        "taskNumber": "veniam laboris Duis in ullamco",
+        "updateTime": "2008-11-07T15:26:04.471Z",
+        "updateUserName": "anim",
+        "weldingDemand": "nisi"
+    }
+
+}

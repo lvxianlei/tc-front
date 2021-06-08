@@ -94,6 +94,7 @@ import RequestUtil from '../../../utils/RequestUtil';
     readonly taskNumber?: string;		
     readonly weldingDemand?: string;
     readonly saleOrderId?: number;
+    readonly id?: number;
  }
  
 export interface IProductInfoVO {
@@ -112,6 +113,7 @@ export interface IProductInfoVO {
     readonly totalAmount?: number	
     readonly unit?:	string;
     readonly voltageGradeName?:	string;
+    readonly id?: number;
 }
 
 export interface IProductChangeInfoVO {
@@ -199,7 +201,6 @@ enum StepTitleItem {
     
     //订单选择
     public onOrderSelect = (selectedRows: DataTypeMore[]):void => {
-        console.log(selectedRows)
         if(selectedRows.length > 0 ) {
             const task:ITask = {
                 contractId: selectedRows[0].contractId,
@@ -228,7 +229,6 @@ enum StepTitleItem {
    
     //产品选择
     public onProductSelect = (selectedRows: DataType[]):void => {
-        console.log(selectedRows)
         const { productDataSource } = this.state;
         if(selectedRows.length > 0 ) {
             const task:IProductInfoVO[] = productDataSource || [];
@@ -249,9 +249,6 @@ enum StepTitleItem {
       */
      public getFormItemGroups(): IFormItemGroup[][] {
           const task: ITask | undefined = this.state.task;
-          console.log(task)
-          console.log(task?.signContractTime)
-          console.log(moment(task?.signContractTime))
           const { checkStep } = this.state;
           let module: IFormItemGroup[][] = [];
           switch(checkStep){
@@ -337,15 +334,6 @@ enum StepTitleItem {
                             span: 8
                         },
                         itemProps: [{
-                            label: '任务编号',
-                            name: 'taskNumber',
-                            initialValue: task?.taskNumber,
-                            rules: [{
-                                required: true,
-                                message: '请输入任务编号'
-                            }],
-                            children: <Input disabled value={task?.taskNumber}/>
-                        }, {
                             label: '关联订单',
                             name: 'saleOrderNumber',
                             initialValue: task?.saleOrderNumber,
@@ -465,15 +453,6 @@ enum StepTitleItem {
                             span: 8
                         },
                         itemProps: [{
-                            label: '任务编号',
-                            name: 'taskNumber',
-                            initialValue: task?.taskNumber,
-                            rules: [{
-                                required: true,
-                                message: '请输入任务编号'
-                            }],
-                            children: <Input disabled/>
-                        }, {
                             label: '关联订单',
                             name: 'saleOrderNumber',
                             initialValue: task?.saleOrderNumber,
@@ -672,13 +651,13 @@ enum StepTitleItem {
                         <>
                             <div className={styles.column_to_row}>
                                 <div className={styles.title}>产品信息</div>
-                                <ProductSelectionComponent onSelect={ this.onProductSelect }  saleOrderId={ this.state?.task?.saleOrderNumber }/>
+                                <ProductSelectionComponent onSelect={ this.onProductSelect }  saleOrderId={ this.state?.task?.saleOrderId }/>
                             </div>
                             <Table 
                                 columns={this.columns()} 
                                 dataSource={ [...productDataSource] } 
                                 scroll={{ x: 1300 }} 
-                                rowKey={( record: IProductInfoVO ) => record ?.taskNoticeId?record?.taskNoticeId : ''}
+                                rowKey={( record: IProductInfoVO ) => record ?.id?record?.id : ''}
                                 rowSelection={{
                                     type:'checkbox',
                                     onChange:( selectedKeys: React.Key[] )=>{

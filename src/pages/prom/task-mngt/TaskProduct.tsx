@@ -25,7 +25,7 @@ import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const task: ITask = await RequestUtil.get<ITask>(`/tower-market/taskNotice/${ this.props.match.params.id }`);
+        const task: ITask = await RequestUtil.get<ITask>(`/tower-market/taskNotice/edit`,{id: this.props.match.params.id });
         this.setState({
             task,
             productDataSource: task?.productInfoVOList || [],
