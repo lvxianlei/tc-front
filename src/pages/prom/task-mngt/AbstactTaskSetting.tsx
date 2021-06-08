@@ -698,6 +698,9 @@ enum StepTitleItem {
                 width: 100,
                 dataIndex: 'productStatus',
                 key: 'productStatus',
+                render:(productStatus:number)=>{
+                    return productStatus === 1 ? '待下发' : productStatus === 2 ? '审批中' : '已下发'
+                }
             },
             {
                 title: '线路名称',
