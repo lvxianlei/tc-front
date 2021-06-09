@@ -71,6 +71,7 @@ import RequestUtil from '../../../utils/RequestUtil';
  }
  
  export interface ITask {
+    id?: number;
     readonly contractId?: number;	
     readonly createTime?: string;
     readonly createUserName?: string;
@@ -93,8 +94,7 @@ import RequestUtil from '../../../utils/RequestUtil';
     readonly simpleProjectName?: string;	
     readonly taskNumber?: string;		
     readonly weldingDemand?: string;
-    readonly saleOrderId?: number;
-    readonly id?: number;
+    readonly saleOrderId?: number | string;
  }
  
 export interface IProductInfoVO {
@@ -573,8 +573,8 @@ enum StepTitleItem {
     //步骤
     public steps: StepTitleItem[] = [
         StepTitleItem.NEW_TASK,
-        StepTitleItem.COMPLETE_PRODUCT_INFO,
-        StepTitleItem.COMPLETE_SPECIAL_OPTIONS
+        StepTitleItem.COMPLETE_SPECIAL_OPTIONS,
+        StepTitleItem.COMPLETE_PRODUCT_INFO
     ]
 
     //底部按钮
@@ -604,24 +604,35 @@ enum StepTitleItem {
                 </Space>
             );
     }
+    //底部保存按钮
+    public getPrimaryOperationButtonLabel() {
+        return this.state.checkStep === StepItem.COMPLETE_PRODUCT_INFO ? '保存并提交审批' : '保存'
+    }
 
 
     //下一步
     public async onSubmitAndContinue() {
-        const{ checkStep } = this.state;
+        const{ checkStep, task } = this.state;
         this.setState({
             checkStep: checkStep + 1,
         })
+        let data = task || {};
         const values = this.getForm()?.getFieldsValue(true)
         values.productIds = this.state.selectedKeys.length > 0 ? this.state.selectedKeys : [];
         values.contractInfoDTO = this.state.contractInfoDTO;
         values.saleOrderId = this.state?.task?.saleOrderId;
-        RequestUtil.post('/tower-market/taskNotice/saveToNextStep', {
+        
+        const taskId: number = await RequestUtil.post('/tower-market/taskNotice/saveToNextStep', {
             ...values,
+            id:this.state?.task?.id,
             planDeliveryTime:moment(values.planDeliveryTime).format('YYYY-MM-DD'),
             deliveryTim: moment(values.deliveryTime).format('YYYY-MM-DD'),
             signContractTime: moment(values.signContractTime).format('YYYY-MM-DD'),
         });
+        data.id = taskId
+        this.setState({
+            task: data
+        })
         
     }
     
@@ -657,7 +668,7 @@ enum StepTitleItem {
                                 columns={this.columns()} 
                                 dataSource={ [...productDataSource] } 
                                 scroll={{ x: 1300 }} 
-                                rowKey={( record: IProductInfoVO ) => record ?.id?record?.id : ''}
+                                rowKey={( record: IProductInfoVO ) => record?.id? record?.id : ''}
                                 rowSelection={{
                                     type:'checkbox',
                                     onChange:( selectedKeys: React.Key[] )=>{
@@ -687,6 +698,9 @@ enum StepTitleItem {
                 width: 100,
                 dataIndex: 'productStatus',
                 key: 'productStatus',
+                render:(productStatus:number)=>{
+                    return productStatus === 1 ? '待下发' : productStatus === 2 ? '审批中' : '已下发'
+                }
             },
             {
                 title: '线路名称',
