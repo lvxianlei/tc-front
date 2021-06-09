@@ -140,7 +140,7 @@
         "module": "./pages/system-mngt/user/UserSetting",
         "exact": true
     },{ //任务单审批
-        "name": "任务单审批",
+        "name": "审批中心",
         "path": "/approval/task",
         "module": "./pages/approval/ApprovalList",
         "exact": true

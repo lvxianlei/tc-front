@@ -28,6 +28,7 @@ export interface IProductChangeApprovalState extends IAbstractSaleOrderSettingSt
  */
 class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeApprovalRouteProps, IProductChangeApprovalState> {
 
+
     /**
      * @override
      * @description Gets state
@@ -54,14 +55,23 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
      */
     public async componentDidMount() {
         super.componentDidMount();
-        console.log(this.props);
-
         const saleOrder: ISaleOrder = await RequestUtil.get<ISaleOrder>('tower-market/saleOrder/getSaleOrderByAuditId', {
             auditId: this.props.match.params.id
         });
         this.setState({
+            saleOrder: saleOrder,
+            isChangeProduct: true
+        });
+        saleOrder.productDtos = saleOrder.productDtos?.map<IProductVo>((product: IProductVo, index: number): IProductVo => {
+            return {
+                ...product,
+                index: index + 1
+            };
+        });
+        this.setState({
             saleOrder: {
                 ...saleOrder,
+                contractInfoDto: saleOrder.contractInfoVo,
                 productChangeRecordVos: saleOrder.productChangeRecordVos?.map<IProductVo>((product: IProductVo, index: number): IProductVo => {
                     return {
                         ...product,
@@ -69,6 +79,23 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
                     };
                 })
             }
+        })
+        this.getForm()?.setFieldsValue({
+            totalWeight: saleOrder.orderQuantity,
+            totalPrice: saleOrder.taxPrice,
+            totalAmount: saleOrder.taxAmount,
+            orderQuantity: saleOrder.orderQuantity,
+            chargeType: saleOrder.contractInfoVo?.chargeType,
+            contractId: saleOrder.contractInfoVo?.contractId,
+            currencyType: saleOrder.contractInfoVo?.currencyType,
+            customerCompany: saleOrder.contractInfoVo?.customerCompany,
+            deliveryTime: saleOrder.contractInfoVo?.deliveryTime,
+            internalNumber: saleOrder.contractInfoVo?.internalNumber,
+            projectName: saleOrder.contractInfoVo?.projectName,
+            signContractTime: saleOrder.contractInfoVo?.signContractTime,
+            signCustomerId: saleOrder.contractInfoVo?.signCustomerId,
+            signCustomerName: saleOrder.contractInfoVo?.signCustomerName,
+            productDtos: saleOrder.productVos,
         });
     }
 
@@ -142,28 +169,29 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
             dataIndex: 'productStatus',
             render: (productStatus: number): React.ReactNode => {
                 switch (productStatus) {
-                    case 0:
-                        return "角钢塔"
-                    case 1:
-                        return "管塔"
-                    case 2:
-                        return "螺栓"
-                }
-            }
-        }, {
-            title: '线路名称',
-            dataIndex: 'lineName'
-        }, {
-            title: '产品类型',
-            dataIndex: 'productStatus',
-            render: (productStatus: number): React.ReactNode => {
-                switch (productStatus) {
                     case 1:
                         return "待下发"
                     case 2:
                         return "审批中"
                     case 3:
                         return "已下发"
+                }
+
+            }
+        }, {
+            title: '线路名称',
+            dataIndex: 'lineName'
+        }, {
+            title: '产品类型',
+            dataIndex: 'productType',
+            render: (productType: number): React.ReactNode => {
+                switch (productType) {
+                    case 0:
+                        return "角钢塔"
+                    case 1:
+                        return "管塔"
+                    case 2:
+                        return "螺栓"
                 }
             }
         }, {

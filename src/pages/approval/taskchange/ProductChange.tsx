@@ -51,7 +51,8 @@ class ProductChange extends AbstractTaxkchange<ITaxkChangeRouteProps, ITaxkchang
      */
     onSubmit(values: Record<string, any>): Promise<void> {
         return RequestUtil.post('/tower-market/audit/adopt', {
-            auditId: values.contractId
+            auditId: values.contractId,
+            description: "通过"
         }).then((): void => {
             message.success('操作已成功！任务单  已通过审批。');
             this.props.history.push(this.getReturnPath());
@@ -63,7 +64,8 @@ class ProductChange extends AbstractTaxkchange<ITaxkChangeRouteProps, ITaxkchang
     public onReject = (): Promise<void> => {
         const contract: IContract | undefined = this.state.contract;
         return RequestUtil.post('/tower-market/audit/reject', {
-            auditId: contract.id
+            auditId: contract.id,
+            description: "驳回"
         }).then((): void => {
             message.warning('已驳回任务单  审批的申请！');
             this.props.history.push(this.getReturnPath());

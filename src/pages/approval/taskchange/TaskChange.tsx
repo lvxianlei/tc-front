@@ -56,7 +56,7 @@ class TaskChange extends AbstractProductchange<ITaxkChangeRouteProps, ITaxkchang
     public onSubmit(values: Record<string, any>): Promise<void> {
         return RequestUtil.post('/tower-market/audit/adopt', {
             auditId: values.contractId,
-            description: "同意"
+            description: "通过"
         }).then((): void => {
             message.success('操作已成功！任务单 产品变更审批 已通过审批。');
             this.props.history.push(this.getReturnPath());
@@ -70,6 +70,7 @@ class TaskChange extends AbstractProductchange<ITaxkChangeRouteProps, ITaxkchang
         const contract: IContract | undefined = this.state.contract;
         return RequestUtil.post('/tower-market/audit/reject', {
             auditId: contract.id,
+            description: "驳回"
         }).then((): void => {
             message.warning('已驳回任务单 产品 变更 审批的申请！');
             this.props.history.push(this.getReturnPath());

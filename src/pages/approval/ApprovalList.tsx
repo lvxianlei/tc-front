@@ -62,44 +62,62 @@ interface ITaskTableDataItem {
 
 //操作
 const menubar = (records: object) => {
-    return (
-        <Menu>
+
+    console.log(records);
+    
+    if ((records as ITaskTableDataItem).type === "SALE_ORDER_AUDIT") {
+        
+        return (
+            <Menu>
             <Menu.Item>
-
-                <Button href={`/approval/task/productchange/
-                            ${(records as ITaskTableDataItem).id}&
-                            ${(records as ITaskTableDataItem).businessId}`}
+                <Button href={`/approval/task/product-change/
+                        ${(records as ITaskTableDataItem).id}`}
                     value="default">
-                    任务单审批
-                </Button>
-
-
+                    产品信息变更审批
+            </Button>
             </Menu.Item>
+            </Menu>
+       
+      
+        )
+    } else if ((records as ITaskTableDataItem).type === "TASK_AUDIT") {
+        return (
+            <Menu>
             <Menu.Item>
                 <Button href={`/approval/task/change/
-                            ${(records as ITaskTableDataItem).id}&
-                            ${(records as ITaskTableDataItem).businessId}`}
+                    ${(records as ITaskTableDataItem).id}&
+                    ${(records as ITaskTableDataItem).businessId}`}
                     value="default">
                     任务单产品变更审批
                 </Button>
             </Menu.Item>
+        </Menu>
+        )
+
+    } else {
+        return (
+            <Menu>
             <Menu.Item>
-                <Button href={`/approval/task/product-change/
-                            ${(records as ITaskTableDataItem).id}`}
+                <Button href={`/approval/task/productchange/
+                        ${(records as ITaskTableDataItem).id}&
+                        ${(records as ITaskTableDataItem).businessId}`}
                     value="default">
-                    产品信息变更审批
-                </Button>
+                    任务单审批
+            </Button>
             </Menu.Item>
         </Menu>
-    );
-};
+        )
 
+    }
+}
+
+//审批状态
 enum AuditStatus {
     PENDING_APPROVAL = 0,
     ADOPT = 1,
     REJECT = 2
 }
-
+//table
 enum AuditStatusItem {
     PENDING_APPROVAL = "待审批",
     ADOPT = "通过",
