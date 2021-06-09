@@ -29,7 +29,7 @@ export interface IAbstractContractSettingState extends IAbstractFillableComponen
     readonly contract: IContract;
     readonly checkList: [];
     readonly tableDataSource: [];
-    readonly regionInfoData: [] ;
+    readonly regionInfoData: [] | IRegion[];
     readonly childData: [] | undefined;
     readonly col: [];
     readonly url: string;
@@ -42,7 +42,7 @@ export interface ITabItem {
 }
 
 export interface IContract {
-    readonly id?: string;
+    readonly id?: string | number;
     readonly contractNumber?: string;
     readonly internalNumber?: string;
     readonly projectName?: string;
@@ -57,7 +57,7 @@ export interface IContract {
     readonly reviewTime?: string;
     readonly chargeType?: string;
     readonly salesman?: string;
-    readonly region?: [];
+    readonly region: [];
     readonly countryCode?: number;
     readonly contractAmount?: number;
     readonly currencyType?: number;
@@ -65,15 +65,15 @@ export interface IContract {
     readonly productInfoDto?: IproductInfoDto;
     readonly planType?: number;
     paymentPlanDtos?: IPaymentPlanDto[];
-    readonly attachInfoDtos: IattachDTO[];
-    readonly signCustomerId?: number;
+    attachInfoDtos: IattachDTO[];
+    readonly signCustomerId?: string | number;
     readonly customerInfoVo?: IcustomerInfoDto;
-    readonly attachInfoVos: IattachDTO[];
+    readonly attachVos: IattachDTO[];
     readonly paymentPlanVos?: IPaymentPlanDto[];
 }
 
 export interface IcustomerInfoDto {
-    readonly customerId?: number;
+    readonly customerId?: string | number;
     readonly customerCompany?: string;
     readonly customerLinkman?: string;
     readonly customerPhone?: string;
@@ -86,6 +86,7 @@ export interface IproductInfoDto {
 
 export interface IPaymentPlanDto {
     readonly index?: number;
+    readonly period?: number;
     readonly returnedTime?: any;
     readonly returnedRate: number;
     readonly returnedAmount: number;
@@ -99,10 +100,11 @@ export interface IattachDTO {
     readonly description?: string;
     readonly keyType?: string;
     readonly keyId?: number;
-    readonly id?: number;
+    readonly id?: string;
     readonly fileSuffix?: string;
     readonly filePath: string;
     readonly fileUploadTime?: string;
+    readonly index?: number;
 }
 
 export interface IResponseData {
@@ -111,6 +113,12 @@ export interface IResponseData {
     readonly current: number | undefined;
     readonly parentCode: string;
     readonly records: [];
+}
+
+export interface IRegion {
+    readonly name: string;
+    readonly code: string;
+    children: IRegion[];
 }
 
 export enum planType {
@@ -133,6 +141,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     public async componentDidMount() {
         super.componentDidMount();
         this.getRegionInfo({}); 
+
     }
 
     /**
@@ -206,7 +215,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 contract: {
                     ...(contract || {}),
                     signCustomerName: selectedRows[0].name,
-                    signCustomerId: selectedRows[0].id
+                    signCustomerId: selectedRows[0].id?.toString()
                 }
             })
             this.getForm()?.setFieldsValue({ signCustomerName: selectedRows[0].name });
@@ -227,7 +236,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     ...(contract || {}),
                     customerInfoDto: select,
                     signCustomerName: selectedRows[0].name,
-                    signCustomerId: selectedRows[0].id
+                    signCustomerId: selectedRows[0].id,
                 }
             })
             this.getForm()?.setFieldsValue(select);
@@ -572,10 +581,10 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     )
                 }, {
                     label: '所属区域',
-                    name: 'regionInfoDTO',
+                    name: 'region',
                     initialValue: contract?.region,
                     rules: [{
-                        required: this.getForm()?.getFieldValue('countryCode') === 1 ? false : true,
+                        required: this.getForm()?.getFieldValue('countryCode') === 1 || contract?.countryCode === 1 ? false : true,
                         message: '请选择所属区域'
                     }],
                     children: (
@@ -584,7 +593,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                             options={this.state.regionInfoData}
                             onChange={this.onRegionInfoChange}
                             changeOnSelect
-                            disabled={ this.getForm()?.getFieldValue('countryCode') === 1 }
+                            disabled={ this.getForm()?.getFieldValue('countryCode') === 1 || contract?.countryCode === 1 }
                         />
                     )
                 }, {
@@ -628,7 +637,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                             <Select>
                                 <Select.Option value={ 1 }>角钢塔</Select.Option>
                                 <Select.Option value={ 2 }>管塔</Select.Option>
-                                <Select.Option value={ 3 }>螺栓</Select.Option>%
+                                <Select.Option value={ 3 }>螺栓</Select.Option>
                             </Select>
                         )
                     }, {
@@ -816,7 +825,6 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                 fileSize: info.file.response.data.size,
                                                                 description: '',
                                                                 filePath: info.file.response.data.link,
-                                                                id: info.file.response.data.attachId,
                                                                 fileUploadTime: info.file.response.data.fileUploadTime,
                                                                 fileSuffix: info.file.response.data.fileSuffix
                                                             };
@@ -826,7 +834,6 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                             } else {
                                                                 attachInfoDtos = [attachInfoItem];
                                                             }
-                                                            
                                                             this.setState({
                                                                 contract: {
                                                                     ...(contract || {}),

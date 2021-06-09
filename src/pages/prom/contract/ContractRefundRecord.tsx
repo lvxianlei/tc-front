@@ -25,10 +25,10 @@ export interface IContractRefundRecordState extends IContractRefundRecord {
 }
 
 interface IPaymentPlanVo {
-    readonly contractId?: number;
+    readonly contractId?: string | number;
     readonly createTime?: string;
     readonly createUser?: number;
-    readonly id?: number;
+    readonly id?: string;
     readonly isDeleted?: number;
     paymentRecordVos: IPaymentRecordVo[];
     readonly period?: number;
@@ -38,15 +38,15 @@ interface IPaymentPlanVo {
     readonly status?: number;
     readonly updateTime?: string;
     readonly updateUser?: string; 
-    readonly paymentPlanId?: number;
+    readonly paymentPlanId?: string;
 }
 
 interface IPaymentRecordVo {
-    readonly id?: number;
+    readonly id?: string | number;
     readonly key?: React.Key;
     readonly refundTime?: string | moment.Moment;
     readonly customerName?: string;
-    readonly customerId?: number;
+    readonly customerId?: string | number;
     readonly refundAmount?: number;
     readonly currencyType?: number;
     readonly exchangeRate?: number;
@@ -54,8 +54,9 @@ interface IPaymentRecordVo {
     readonly refundBank?: string;
     readonly description?: string;
     readonly refundMode?: number;
-    readonly contractId?: number;
+    readonly contractId?: string | number;
     readonly refundNumber?: number;
+    readonly paymentPlanId?: string;
 }
 
 interface EditTableColumnType<RecordType> extends TableColumnType<object> {
@@ -68,7 +69,6 @@ interface EditTableColumnType<RecordType> extends TableColumnType<object> {
  * The refund recirds in the contract
  */
 export default class ContractRefundRecord extends React.Component<IContractRefundRecordProps, IContractRefundRecordState> {
-
     /**
      * @description Form of contract refund record
      */
@@ -122,6 +122,8 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                 foreignExchangeAmount: 0,
                 refundBank: '',
                 description: '',
+                customerId: '',
+                paymentPlanId: this.state.paymentPlanVos[index].id
             });
             this.setState({
                 paymentPlanVos: [ ...paymentPlanVos ]
@@ -191,18 +193,15 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
     public onSelect = (selectedRows: DataType[]): void => {
         let paymentPlanVos: IPaymentPlanVo[] = this.state.paymentPlanVos || [];
         const keyParts: string [] = (this.state.editingKey || '').split('-');
-        const paymentPlanId: number = parseInt(keyParts[0]);
-        const tableIndex: number = parseInt(keyParts[1]);
-        console.log(this.state.editingKey)
+        const paymentPlanId: string = keyParts[0];
+        const tableIndex: string = keyParts[1];
         if( selectedRows.length > 0 ) {
             paymentPlanVos = paymentPlanVos.map<IPaymentPlanVo>((items: IPaymentPlanVo): IPaymentPlanVo => {
-                console.log(items.id,paymentPlanId )
                 if(items.id === paymentPlanId) {
-                    console.log(items)
                     return {
                         ...items,
                         paymentRecordVos: items.paymentRecordVos.map<IPaymentRecordVo>((item: IPaymentRecordVo, index: number): IPaymentRecordVo => {
-                            if(index === tableIndex ) {
+                            if(index === Number(tableIndex) ) {
                                 return {
                                     ...item,
                                     customerName: selectedRows[0].name,
@@ -217,14 +216,12 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                     return items;
                 }
             });
-            console.log(paymentPlanVos)
             this.setState({
                 paymentPlanVos: [ ...paymentPlanVos ]
             });
             this.getForm()?.setFieldsValue({
                 customerName: selectedRows[0].name
             });
-            console.log(this.state.paymentPlanVos)
         }
     }
 
@@ -233,11 +230,19 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
      * @param values 
      * @returns save 
      */
-    public save = async (values: Record<string, string | number>) => {
+    public save = async (values: Record<string, any>) => {
         try {
             const paymentPlanVos: IPaymentPlanVo[] = (this.state.paymentPlanVos || []);
             const paymentPlanVo: IPaymentPlanVo = paymentPlanVos[values.index as number];
             let paymentRecordVos: IPaymentRecordVo[] = paymentPlanVo.paymentRecordVos;
+            const customerId: string| number | undefined = paymentRecordVos[values.index as number].customerId;
+            values = {
+                ...values,
+                refundTime: moment(values.refundTime).format('YYYY-MM-DD HH:mm'),
+                customerId: customerId,
+                contractId: paymentPlanVo.contractId,
+                paymentPlanId: paymentPlanVo.id,
+            }
             if (values.id) { // edit
                 await RequestUtil.put<boolean>('/tower-market/paymentRecord', values);
                 paymentPlanVo.paymentRecordVos = paymentRecordVos.map<IPaymentRecordVo>((paymentRecordVo: IPaymentRecordVo): IPaymentRecordVo => {
@@ -249,7 +254,6 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                     }
                     return paymentRecordVo;
                 });
-                console.log(values)
             } else { // add a new
                 const newPlan: IPaymentPlanVo = await RequestUtil.post<IPaymentPlanVo>('/tower-market/paymentRecord', values);
                 paymentRecordVos.push(newPlan);
@@ -258,6 +262,9 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                 paymentPlanVos: [ ...paymentPlanVos ],
                 editingKey: ''
             });
+            if(this.props.onDeleted) {
+                this.props.onDeleted();
+            }
         } catch(e) {}
     }
 
@@ -270,7 +277,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             title: '来款时间',
             dataIndex: 'refundTime',
             editable: true,
-            type: <DatePicker format="YYYY-MM-DD" />
+            type: <DatePicker showTime format="YYYY-MM-DD HH:mm" />
         }, {
             title: '来款单位',
             dataIndex: 'customerName',

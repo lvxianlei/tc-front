@@ -199,7 +199,7 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
      * @param pagination 
      */
     public onTableChange(pagination: TablePaginationConfig): void {
-        this.fetchTableData(pagination);
+        this.fetchTableData({}, pagination);
     }
      
     /**

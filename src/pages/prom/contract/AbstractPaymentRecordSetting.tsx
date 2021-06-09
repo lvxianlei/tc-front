@@ -24,10 +24,10 @@ export interface IAbstractPaymentRecordSettingState extends IAbstractFillableCom
 }
 
 export interface IPaymentRecord {
-    readonly contractId?: number;
+    readonly contractId?: string | number;
     readonly name?: string;
     readonly customerName?: string;
-    readonly paymentPlanId?: number;
+    readonly paymentPlanId?: string;
     readonly refundTime?: string;
     readonly refundMode?: string;
     readonly refundAmount?: string;
@@ -41,7 +41,7 @@ export interface IPaymentRecord {
     readonly returnedRate?: number;
     readonly returnedAmount?: number;
     readonly refundNumber?: number;
-    readonly signCustomerId?: number;
+    readonly signCustomerId?: string | number;
 }
 
 export interface IResponseData {

@@ -8,7 +8,6 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import RequestUtil from '../../../utils/RequestUtil';
 import AbstractContractSetting, { IAbstractContractSettingState, IPaymentPlanDto, IContract } from './AbstractContractSetting';
 import moment from 'moment'
-import { message } from 'antd';
 
 export interface IContractNewProps {}
 export interface IContractNewRouteProps extends RouteComponentProps<IContractNewProps>, WithTranslation {}
@@ -38,7 +37,7 @@ class ContractNew extends AbstractContractSetting<IContractNewRouteProps, IContr
             return {
                 ...plan,
                 returnedTime: moment(plan.returnedTime).format('YYYY-MM-DD'),
-                index: index + 1
+                period: index + 1
             };
         });
         values.customerInfoDto = this.state.contract?.customerInfoDto;
