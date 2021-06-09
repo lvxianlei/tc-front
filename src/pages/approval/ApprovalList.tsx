@@ -60,56 +60,6 @@ interface ITaskTableDataItem {
     readonly updateTime: number | string;
 }
 
-//操作
-const menubar = (records: object) => {
-
-    console.log(records);
-    
-    if ((records as ITaskTableDataItem).type === "SALE_ORDER_AUDIT") {
-        
-        return (
-            <Menu>
-            <Menu.Item>
-                <Button href={`/approval/task/product-change/
-                        ${(records as ITaskTableDataItem).id}`}
-                    value="default">
-                    产品信息变更审批
-            </Button>
-            </Menu.Item>
-            </Menu>
-       
-      
-        )
-    } else if ((records as ITaskTableDataItem).type === "TASK_AUDIT") {
-        return (
-            <Menu>
-            <Menu.Item>
-                <Button href={`/approval/task/change/
-                    ${(records as ITaskTableDataItem).id}&
-                    ${(records as ITaskTableDataItem).businessId}`}
-                    value="default">
-                    任务单产品变更审批
-                </Button>
-            </Menu.Item>
-        </Menu>
-        )
-
-    } else {
-        return (
-            <Menu>
-            <Menu.Item>
-                <Button href={`/approval/task/productchange/
-                        ${(records as ITaskTableDataItem).id}&
-                        ${(records as ITaskTableDataItem).businessId}`}
-                    value="default">
-                    任务单审批
-            </Button>
-            </Menu.Item>
-        </Menu>
-        )
-
-    }
-}
 
 //审批状态
 enum AuditStatus {
@@ -254,19 +204,21 @@ class ApprovalAll extends AbstractMngtComponent<
                     return (
                         <Space direction="horizontal" size="small">
                             {(records as ITaskTableDataItem).auditStatus ===
-                                AuditStatus.PENDING_APPROVAL ? (
-                                <Dropdown
-                                    overlay={menubar(records as ITaskTableDataItem)}
-                                    placement="bottomLeft"
-                                    trigger={["click"]}
-                                >
-                                    <Button type="link">审批</Button>
-                                </Dropdown>
-                            ) : (
-                                <Button type="link" disabled>
-                                    审批
-                                </Button>
-                            )}
+                                AuditStatus.PENDING_APPROVAL ?
+                                (
+                                    (records as ITaskTableDataItem).auditStatus === AuditStatus.PENDING_APPROVAL ?
+                                        <Button href={`/approval/task/product-change/
+                                    ${(records as ITaskTableDataItem).id}`} type="link" >审批</Button>
+                                        :
+                                        <Button href={`/approval/task/change/
+                                    ${(records as ITaskTableDataItem).id}&
+                                    ${(records as ITaskTableDataItem).businessId}`} type="link" >审批</Button>
+
+                                ) : (
+                                    <Button type="link" disabled>
+                                        审批
+                                    </Button>
+                                )}
                         </Space>
                     );
                 }

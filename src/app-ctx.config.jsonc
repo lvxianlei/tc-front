@@ -37,7 +37,7 @@
                     "path": "/approval",
                     "items": [
                         {
-                            "label": "任务单审批",
+                            "label": "审批中心",
                             "path": "/approval/task"
                         }]
                 },{
