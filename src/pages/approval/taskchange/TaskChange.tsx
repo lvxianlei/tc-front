@@ -22,6 +22,107 @@ export interface ITaxkChangeRouteProps extends RouteComponentProps<ITaxkChangePr
 export interface ITaxkchangeState extends IAbstractTaxkchangeState { }
 
 class TaskChange extends AbstractProductchange<ITaxkChangeRouteProps, ITaxkchangeState> {
+    getFormItemGroups(): IFormItemGroup[][] {
+        const contract: IContract | undefined = this.state.contract;
+        return [[{
+            title: '基础信息',
+            itemCol: {
+                span: 8
+            },
+            itemProps: [{
+                label: '任务编号',
+                name: 'taskNumber',
+                initialValue: contract?.taskNumber,
+                children: <Input disabled />
+            }, {
+                label: '关联订单',
+                name: 'saleOrderNumber',
+                initialValue: contract?.saleOrderNumber,
+                children: <Input disabled />
+            }, {
+                label: '合同编号',
+                name: 'contractId',
+                initialValue: contract?.contractId,
+                children: <Input disabled />,
+            }, {
+                label: '工程名称',
+                name: 'projectName',
+                initialValue: contract?.projectName,
+                children: <Input disabled />
+            }, {
+                label: '业主单位',
+                name: 'customerCompany',
+                initialValue: contract?.customerCompany,
+                children: <Input disabled />
+
+            }, {
+                label: '合同签订单位',
+                name: 'signCustomerName',
+                initialValue: contract?.signCustomerName,
+                children: <Input disabled />
+            }, {
+                label: '合同签订日期',
+                name: 'signContractTime',
+                initialValue: moment(contract?.signContractTime),
+                rules: [{
+                    required: true,
+                    message: '请选择合同签订日期'
+                }],
+                children: <DatePicker format="YYYY-MM-DD" disabled />
+            }, {
+                label: '客户交货日期',
+                name: 'deliveryTime',
+                initialValue: moment(contract?.deliveryTime),
+                children: <DatePicker format="YYYY-MM-DD" disabled />
+            }, {
+                label: '计划交货日期',
+                name: 'planDeliveryTime',
+                initialValue: moment(contract?.planDeliveryTime),
+                children: <DatePicker format="YYYY-MM-DD" disabled />
+            }, {
+                label: '计划备注',
+                name: 'description',
+                initialValue: contract?.description,
+                children: <Input.TextArea disabled />
+            }]
+        }, {
+            title: '特殊要求',
+            itemCol: {
+                span: 8
+            },
+            itemProps: [{
+                label: '原材料标准',
+                name: 'materialStandard',
+                initialValue: contract?.materialStandard || 1,
+                children: (
+                    <Select disabled>
+                        <Select.Option value={1}>国家电网</Select.Option>
+                        <Select.Option value={2}>南方电网</Select.Option>
+                    </Select>
+                )
+            }, {
+                label: '焊接要求',
+                name: 'weldingDemand',
+                initialValue: contract?.weldingDemand,
+                children: <Input disabled />
+            }, {
+                label: '包装要求',
+                name: 'packDemand',
+                initialValue: contract?.packDemand,
+                children: <Input disabled />
+            }, {
+                label: '镀锌要求',
+                name: 'galvanizeDemand',
+                initialValue: contract?.galvanizeDemand,
+                children: <Input disabled />
+            }, {
+                label: '备注',
+                name: 'peculiarDescription',
+                initialValue: contract?.peculiarDescription,
+                children: <Input.TextArea disabled />
+            }]
+        }]];
+    }
 
     /**
      * Components did mount

@@ -191,7 +191,6 @@ class ApprovalAll extends AbstractMngtComponent<
                             return "驳回"
                     }
                 }
-
             },
             {
                 key: "operation",
