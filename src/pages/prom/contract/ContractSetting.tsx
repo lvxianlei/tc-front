@@ -79,23 +79,25 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
         });
         const region: string[] = this.state.contract.region;
         let regionInfoData: IRegion[] =  this.state.regionInfoData;
-        if(region.length > 0) {
-            const index: number = regionInfoData.findIndex((regionInfo: IRegion) => regionInfo.code == region[0]);
-            
-            const resData: IRegion[] = await RequestUtil.get(`/tower-system/region/${ region[0] }`);
-            regionInfoData[index] ={
-                ...regionInfoData[index],
-                children: resData
+        if(this.state.contract.countryCode === 0) {
+            if(region.length > 0) {
+                const index: number = regionInfoData.findIndex((regionInfo: IRegion) => regionInfo.code == region[0]);
+                
+                const resData: IRegion[] = await RequestUtil.get(`/tower-system/region/${ region[0] }`);
+                regionInfoData[index] ={
+                    ...regionInfoData[index],
+                    children: resData
+                }
+                const childrenIndex: number = regionInfoData[index].children.findIndex((regionInfo: IRegion) => regionInfo.code === region[1]);
+                const resChildrenData: IRegion[] = await RequestUtil.get(`/tower-system/region/${ region[1] }`);
+                regionInfoData[index].children[childrenIndex] = {
+                    ...regionInfoData[index].children[childrenIndex],
+                    children: resChildrenData
+                }
+                this.setState({
+                    regionInfoData: regionInfoData
+                })
             }
-            const childrenIndex: number = regionInfoData[index].children.findIndex((regionInfo: IRegion) => regionInfo.code === region[1]);
-            const resChildrenData: IRegion[] = await RequestUtil.get(`/tower-system/region/${ region[1] }`);
-            regionInfoData[index].children[childrenIndex] = {
-                ...regionInfoData[index].children[childrenIndex],
-                children: resChildrenData
-            }
-            this.setState({
-                regionInfoData: regionInfoData
-            })
         }
     }
  

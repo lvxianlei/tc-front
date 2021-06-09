@@ -619,7 +619,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                         <li>{ index + 1 }</li>
                                                         <li>
                                                             <Form.Item { ...field } name={[field.name, 'productStatus']} fieldKey={[field.fieldKey, 'productStatus']}>
-                                                                { this.getForm()?.getFieldsValue(true).productDtos[index].productStatus === 1 ? '待下发' : this.getForm()?.getFieldsValue(true).productDtos[index].productStatus === 2 ? '审批中' : '已下发' }
+                                                                { this.getForm()?.getFieldsValue(true).productDtos[index]?.productStatus && this.getForm()?.getFieldsValue(true).productDtos[index]?.productStatus === 3 ? '已下发' : this.getForm()?.getFieldsValue(true).productDtos[index]?.productStatus === 2 ? '审批中' : '待下发' }
                                                             </Form.Item>
                                                         </li>
                                                         <li>

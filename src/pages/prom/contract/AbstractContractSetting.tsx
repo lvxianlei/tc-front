@@ -862,7 +862,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                     checked.map((item: any) => {
                                                         batchId.push(attachInfoDtos[item].id)
                                                     })
-                                                    const resData: IResponseData = await RequestUtil.post(`/tower-system/attach/${ checked.join(',') }`)
+                                                    const resData: IResponseData = await RequestUtil.delete(`/tower-system/attach?ids=${ batchId.join(',') }`)
                                                     if(resData) {
                                                         operation.remove(this.state.checkList)
                                                     }
@@ -918,7 +918,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                     type="link" placement="topRight"
                                                                     onConfirm={ async () => { 
                                                                         let attachInfoDtos =  this.getForm()?.getFieldValue("attachInfoDtos");
-                                                                        const resData: IResponseData = await RequestUtil.post(`/tower-system/attach/${ attachInfoDtos[index].id }`)
+                                                                        const resData: IResponseData = await RequestUtil.delete(`/tower-system/attach?ids=${ attachInfoDtos[index].id }`)
                                                                         if(resData) {
                                                                             operation.remove(index);
                                                                         }
