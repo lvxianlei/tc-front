@@ -75,7 +75,6 @@ export interface IProductVo {
 }
 
 export interface IContractInfoDto {
-    readonly contractNumber?: string;
     readonly internalNumber?: string;
     readonly projectName?: string;
     readonly customerCompany?: string;
@@ -85,7 +84,7 @@ export interface IContractInfoDto {
     readonly currencyType?: number;
     readonly chargeType?: number;
     readonly orderDeliveryTime?: object;
-    readonly contractId?: number;
+    readonly contractId?: string;
     readonly signCustomerId?: number;
 }
 
@@ -151,7 +150,6 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
         if(selectedRows.length > 0 ) {
             const modalSelectedValue: IContractInfoDto = {
-                contractNumber: selectedRows[0].contractNumber,
                 internalNumber: selectedRows[0].internalNumber,
                 projectName: selectedRows[0].projectName,
                 customerCompany: selectedRows[0].customerCompany,
@@ -381,14 +379,14 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 children: <Input disabled={ readonly }/>
             }, {
                 label: '关联合同',
-                name: 'contractNumber',
-                initialValue: saleOrder?.contractInfoDto?.contractNumber,
+                name: 'contractId',
+                initialValue: saleOrder?.contractInfoDto?.contractId,
                 rules: [{
                     required: true,
                     message: '请选择关联合同'
                 }],
                 children:
-                    <Input value={ saleOrder?.contractInfoDto?.contractNumber } suffix={ 
+                    <Input value={ saleOrder?.contractInfoDto?.contractId } suffix={ 
                         <ContractSelectionComponent onSelect={ this.onSelect } />
                     } disabled={ readonly }/>
             },  {
@@ -621,7 +619,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                         <li>{ index + 1 }</li>
                                                         <li>
                                                             <Form.Item { ...field } name={[field.name, 'productStatus']} fieldKey={[field.fieldKey, 'productStatus']}>
-                                                                { this.getForm()?.getFieldsValue(true).productDtos[index].productStatus === 1 ? '待下发' : this.getForm()?.getFieldsValue(true).productDtos[index].productStatus === 2 ? '审批中' : '已下发' }
+                                                                { this.getForm()?.getFieldsValue(true).productDtos[index]?.productStatus && this.getForm()?.getFieldsValue(true).productDtos[index]?.productStatus === 3 ? '已下发' : this.getForm()?.getFieldsValue(true).productDtos[index]?.productStatus === 2 ? '审批中' : '待下发' }
                                                             </Form.Item>
                                                         </li>
                                                         <li>
@@ -690,7 +688,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                         </li>
                                                         <li className={ saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ? styles.isShow : styles.item }>
                                                             <Form.Item { ...field } name={[field.name, 'num']} fieldKey={[field.fieldKey, 'num']} rules= {[{
-                                                                    required: saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT,
+                                                                    required: saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE,
                                                                     message: '请输入产品重量'
                                                                 }]}>
                                                                 <Input onBlur={ () => this.numBlur(index) } disabled={ readonly  }/>

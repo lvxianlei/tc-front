@@ -13,11 +13,11 @@ import { IFilter } from "./IFilter";
 export default class AuthorizationFilter implements IFilter {
 
     /**
-     * @description Do filter
+     * @description Descriptions authorization filter
      * @param props 
-     * @returns true if filter 
+     * @returns filter 
      */
-    public doFilter(props: RouteComponentProps<{}, StaticContext, unknown>): boolean {
+    public doFilter(props: RouteComponentProps<{}, StaticContext, unknown>): Promise<boolean> {
         let accessable: boolean = true;
         if (props.location.pathname !== '/login') {
             accessable = !!(AuthUtil.getAuthorization() && AuthUtil.getSinzetechAuth() && AuthUtil.getTenantId());
@@ -26,6 +26,6 @@ export default class AuthorizationFilter implements IFilter {
                 props.history.replace(`/login?goto=${ encodeURIComponent(location.href.replace(`${ location.protocol }//${ location.host }`, '')) }`);
             }
         }
-        return accessable;
+        return Promise.resolve(accessable);
     }
 }

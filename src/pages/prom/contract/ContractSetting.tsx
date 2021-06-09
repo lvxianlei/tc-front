@@ -8,7 +8,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
 
 import RequestUtil from '../../../utils/RequestUtil';
-import AbstractContractSetting, { IAbstractContractSettingState, IContract, IPaymentPlanDto } from './AbstractContractSetting';
+import AbstractContractSetting, { IAbstractContractSettingState, IattachDTO, IContract, IPaymentPlanDto, IRegion } from './AbstractContractSetting';
 import moment from 'moment'
 
 export interface IContractSettingProps {
@@ -27,7 +27,6 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
      */
     public async componentDidMount() {
         super.componentDidMount();
-        console.log(this.props.match.params.id)
         const contract: IContract = await RequestUtil.get<IContract>(`/tower-market/contract/${ this.props.match.params.id }`);
         this.setState({
             contract: contract
@@ -39,6 +38,12 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
                 index: index + 1
             };
         });
+        contract.attachInfoDtos = contract.attachVos?.map<IattachDTO>((attach: IattachDTO, index: number): IattachDTO => {
+            return {
+                ...attach,
+                index: index + 1
+            };
+        })
         this.setState({
             contract: {
                 ...contract,
@@ -59,8 +64,8 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
             deliveryTime: moment(contract.deliveryTime),
             reviewTime: moment(contract.reviewTime),
             chargeType: contract.chargeType,
-            salesman: contract.saleType,
-            region: [],
+            salesman: contract.salesman,
+            region: contract.region || [],
             countryCode: contract.countryCode,
             contractAmount: contract.contractAmount,
             currencyType: contract.currencyType,
@@ -72,6 +77,28 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
             customerLinkman: contract.customerInfoVo?.customerLinkman,
             customerPhone: contract.customerInfoVo?.customerPhone
         });
+        const region: string[] = this.state.contract.region;
+        let regionInfoData: IRegion[] =  this.state.regionInfoData;
+        if(this.state.contract.countryCode === 0) {
+            if(region.length > 0) {
+                const index: number = regionInfoData.findIndex((regionInfo: IRegion) => regionInfo.code == region[0]);
+                
+                const resData: IRegion[] = await RequestUtil.get(`/tower-system/region/${ region[0] }`);
+                regionInfoData[index] ={
+                    ...regionInfoData[index],
+                    children: resData
+                }
+                const childrenIndex: number = regionInfoData[index].children.findIndex((regionInfo: IRegion) => regionInfo.code === region[1]);
+                const resChildrenData: IRegion[] = await RequestUtil.get(`/tower-system/region/${ region[1] }`);
+                regionInfoData[index].children[childrenIndex] = {
+                    ...regionInfoData[index].children[childrenIndex],
+                    children: resChildrenData
+                }
+                this.setState({
+                    regionInfoData: regionInfoData
+                })
+            }
+        }
     }
  
     /**
