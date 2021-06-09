@@ -192,7 +192,7 @@ class ApprovalAll extends AbstractMngtComponent<
                 dataIndex: "businessId",
                 align: "center",
                 render: (id: number): React.ReactNode => {
-                    return <Link to={``}>{id}</Link>;
+                    return <span className={styles.color}>{id}</span>;
                 }
             },
             {
@@ -216,7 +216,7 @@ class ApprovalAll extends AbstractMngtComponent<
                 dataIndex: "businessNumber",
                 align: "center",
                 render: (businessNumber: number): React.ReactNode => {
-                    return <Link to={``}>{businessNumber}</Link>;
+                    return <span className={styles.color}>{businessNumber}</span>;
                 }
             },
             {
