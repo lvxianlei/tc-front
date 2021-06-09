@@ -1,13 +1,11 @@
-import { DatePicker, Input, message, Select, TableColumnType, Tag } from 'antd';
+import { Button, DatePicker, FormProps, Input, message, Select, Table, TableColumnType } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
 import RequestUtil from '../../../utils/RequestUtil';
-import AbstractProductchange, { IAbstractTaxkchangeState, IContract } from './AbstractTaskchange';
-
-
+import AbstractTaxkchange, { IAbstractTaxkchangeState, IContract, IProductChangeInfoVOList } from './AbstractTaskchange';
 export interface ITaxkChangeProps {
     readonly businessId: string;
     readonly id: string;
@@ -21,11 +19,11 @@ enum ProductType {
 export interface ITaxkChangeRouteProps extends RouteComponentProps<ITaxkChangeProps>, WithTranslation { }
 export interface ITaxkchangeState extends IAbstractTaxkchangeState { }
 
-class TaskChange extends AbstractProductchange<ITaxkChangeRouteProps, ITaxkchangeState> {
+class ProductChange extends AbstractTaxkchange<ITaxkChangeRouteProps, ITaxkchangeState> {
 
     /**
-     * Components did mount
-     */
+    * @description Components did mount
+    */
     public async componentDidMount() {
         super.componentDidMount();
         const contract: IContract = await RequestUtil.get<IContract>(
@@ -46,21 +44,17 @@ class TaskChange extends AbstractProductchange<ITaxkChangeRouteProps, ITaxkchang
             deliveryTime: moment(contract.deliveryTime),
         });
     }
-
-
     /**
      * Determines whether submit on
      * @param values 
      * @returns submit 
      */
-    public onSubmit(values: Record<string, any>): Promise<void> {
+    onSubmit(values: Record<string, any>): Promise<void> {
         return RequestUtil.post('/tower-market/audit/adopt', {
-            auditId: values.contractId,
-            description: "同意"
+            auditId: values.contractId
         }).then((): void => {
-            message.success('操作已成功！任务单 产品变更审批 已通过审批。');
+            message.success('操作已成功！任务单  已通过审批。');
             this.props.history.push(this.getReturnPath());
-
         })
     }
     /**
@@ -69,21 +63,20 @@ class TaskChange extends AbstractProductchange<ITaxkChangeRouteProps, ITaxkchang
     public onReject = (): Promise<void> => {
         const contract: IContract | undefined = this.state.contract;
         return RequestUtil.post('/tower-market/audit/reject', {
-            auditId: contract.id,
+            auditId: contract.id
         }).then((): void => {
-            message.warning('已驳回任务单 产品 变更 审批的申请！');
+            message.warning('已驳回任务单  审批的申请！');
             this.props.history.push(this.getReturnPath());
         });
     }
 
     /**
-    * Gets return path
-    * @returns return path 
-    */
+     * Gets return path
+     * @returns return path 
+     */
     protected getReturnPath(): string {
         return "/approval/task";
     }
-
 
 
     /**
@@ -92,22 +85,6 @@ class TaskChange extends AbstractProductchange<ITaxkChangeRouteProps, ITaxkchang
      */
     getProductTableColumns(): TableColumnType<object>[] {
         return [{
-            title: '类型',
-            dataIndex: 'changeType',
-            align: "center",
-            render: (changeType: number): React.ReactNode => {
-                switch (changeType) {
-                    case 0:
-                        return <Tag color="default">未变更</Tag>
-                    case 1:
-                        return <Tag color="success">新增引用</Tag>
-                    case 2:
-                        return <Tag color="error">删除引用</Tag>
-                    case 3:
-                        return <Tag color="warning">修改内容</Tag>
-                }
-            }
-        }, {
             title: '线路名称',
             align: "center",
             dataIndex: 'lineName'
@@ -167,7 +144,6 @@ class TaskChange extends AbstractProductchange<ITaxkChangeRouteProps, ITaxkchang
         }];
     }
 
-
 }
 
-export default withRouter(withTranslation()(TaskChange));
+export default withRouter(withTranslation()(ProductChange));

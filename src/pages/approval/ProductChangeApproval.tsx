@@ -17,6 +17,7 @@ import AbstractSaleOrderSetting, {
 } from '../prom/order/AbstractSaleOrderSetting';
 
 export interface IProductChangeApprovalProps {
+    readonly businessId: any;
     readonly id: string;
 }
 export interface IProductChangeApprovalRouteProps extends RouteComponentProps<IProductChangeApprovalProps>, WithTranslation { }
@@ -44,7 +45,7 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
      * @returns return path 
      */
     protected getReturnPath(): string {
-        return "/approval/list";
+        return "/approval/task";
     }
 
     /**
@@ -53,7 +54,9 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const saleOrder: ISaleOrder = await RequestUtil.get<ISaleOrder>('/tower-market/saleOrder/getSaleOrderByAuditId', {
+        console.log(this.props);
+
+        const saleOrder: ISaleOrder = await RequestUtil.get<ISaleOrder>('tower-market/saleOrder/getSaleOrderByAuditId', {
             auditId: this.props.match.params.id
         });
         this.setState({
@@ -89,7 +92,7 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
      */
     public onSubmit(values: Record<string, any>): Promise<void> {
         return RequestUtil.post('/tower-market/audit/adopt', {
-            auditId: values.id
+            auditId: this.props.match.params.id
         }).then((): void => {
             message.success('操作已成功！变更产品信息已通过审批。');
         });
@@ -136,13 +139,33 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
             dataIndex: 'index'
         }, {
             title: '状态',
-            dataIndex: 'productStatus'
+            dataIndex: 'productStatus',
+            render: (productStatus: number): React.ReactNode => {
+                switch (productStatus) {
+                    case 0:
+                        return "角钢塔"
+                    case 1:
+                        return "管塔"
+                    case 2:
+                        return "螺栓"
+                }
+            }
         }, {
             title: '线路名称',
             dataIndex: 'lineName'
         }, {
             title: '产品类型',
-            dataIndex: 'productType'
+            dataIndex: 'productStatus',
+            render: (productStatus: number): React.ReactNode => {
+                switch (productStatus) {
+                    case 1:
+                        return "待下发"
+                    case 2:
+                        return "审批中"
+                    case 3:
+                        return "已下发"
+                }
+            }
         }, {
             title: '塔型',
             dataIndex: 'productShape'
@@ -151,7 +174,15 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
             dataIndex: 'productNumber'
         }, {
             title: '电压等级',
-            dataIndex: 'voltageGrade'
+            dataIndex: 'voltageGrade',
+            render: (voltageGrade: number): React.ReactNode => {
+                switch (voltageGrade) {
+                    case 1:
+                        return <span>220 KV</span>
+                    case 2:
+                        return <span>110 KV</span>
+                }
+            }
         }, {
             title: '呼高（米）',
             dataIndex: 'productHeight'

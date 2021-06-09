@@ -111,6 +111,7 @@ export interface IProductInfoVOList {
     readonly contractId?: number;
     readonly signCustomerId?: number;
 }
+
 /**
  * Abstract Contract Setting
  */
@@ -140,12 +141,11 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
             }
         };
     }
-
     /**
      * Gets form item groups
      * @returns form item groups 
      */
-    public getFormItemGroups(): IFormItemGroup[][] {
+    getFormItemGroups(): IFormItemGroup[][] {
         const contract: IContract | undefined = this.state.contract;
         return [[{
             title: '基础信息',
@@ -156,33 +156,33 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
                 label: '任务编号',
                 name: 'taskNumber',
                 initialValue: contract?.taskNumber,
-                children: <Input value={contract?.taskNumber} disabled />
+                children: <Input disabled />
             }, {
                 label: '关联订单',
                 name: 'saleOrderNumber',
                 initialValue: contract?.saleOrderNumber,
-                children: <Input value={contract?.saleOrderNumber} disabled />
+                children: <Input disabled />
             }, {
                 label: '合同编号',
                 name: 'contractId',
                 initialValue: contract?.contractId,
-                children: <Input value={contract?.contractId} disabled />,
+                children: <Input disabled />,
             }, {
                 label: '工程名称',
                 name: 'projectName',
                 initialValue: contract?.projectName,
-                children: <Input value={contract?.projectName} disabled />
+                children: <Input disabled />
             }, {
                 label: '业主单位',
                 name: 'customerCompany',
                 initialValue: contract?.customerCompany,
-                children: <Input value={contract?.customerCompany} disabled />
+                children: <Input disabled />
 
             }, {
                 label: '合同签订单位',
                 name: 'signCustomerName',
                 initialValue: contract?.signCustomerName,
-                children: <Input value={contract?.customerCompany} disabled />
+                children: <Input disabled />
             }, {
                 label: '合同签订日期',
                 name: 'signContractTime',
@@ -206,7 +206,7 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
                 label: '计划备注',
                 name: 'description',
                 initialValue: contract?.description,
-                children: <Input.TextArea value={contract?.description} disabled />
+                children: <Input.TextArea disabled />
             }]
         }, {
             title: '特殊要求',
@@ -227,22 +227,22 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
                 label: '焊接要求',
                 name: 'weldingDemand',
                 initialValue: contract?.weldingDemand,
-                children: <Input value={contract?.weldingDemand} disabled />
+                children: <Input disabled />
             }, {
                 label: '包装要求',
                 name: 'packDemand',
                 initialValue: contract?.packDemand,
-                children: <Input value={contract?.packDemand} disabled />
+                children: <Input disabled />
             }, {
                 label: '镀锌要求',
                 name: 'galvanizeDemand',
                 initialValue: contract?.galvanizeDemand,
-                children: <Input value={contract?.galvanizeDemand} disabled />
+                children: <Input disabled />
             }, {
                 label: '备注',
                 name: 'peculiarDescription',
                 initialValue: contract?.peculiarDescription,
-                children: <Input.TextArea value={contract?.peculiarDescription} disabled />
+                children: <Input.TextArea disabled />
             }]
         }]];
     }
@@ -266,23 +266,16 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
      * @param values 
      * @returns submit 
      */
-    public onSubmit(values: Record<string, any>): Promise<void> {
-        return RequestUtil.post('/tower-market/audit/adopt', {
-            auditId: values.contractId
-        }).then((): void => {
-            message.success('操作已成功！任务单 产品变更审批 已通过审批。');
-            this.props.history.push(this.getReturnPath());
-
-        })
-    }
+    abstract onSubmit(values: Record<string, any>): Promise<void>
     /**
      * Determines whether reject on
      */
-    public onReject = (): Promise<void> => {
+    abstract onReject = (): Promise<void> => {
+        const contract: IContract | undefined = this.state.contract;
         return RequestUtil.post('/tower-market/audit/reject', {
-            auditId: this.props.match.params
+            auditId: "1402131886490787842"
         }).then((): void => {
-            message.warning('已驳回任务单 产品 变更 审批的申请！');
+            message.warning('已驳回任务单  审批的申请！');
             this.props.history.push(this.getReturnPath());
         });
     }
@@ -291,7 +284,7 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
      * @returns return path 
      */
     protected getReturnPath(): string {
-        return "/approval/list";
+        return "/approval/task";
     }
     /**
      * @override
@@ -308,83 +301,7 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
     * Gets product table columns
     * @returns product table columns 
     */
-    private getProductTableColumns(): TableColumnType<object>[] {
-        // const contract: IContract | undefined = this.state.contract;
-        return [{
-            title: '类型',
-            dataIndex: 'changeType',
-            align: "center",
-            render: (changeType: number): React.ReactNode => {
-                switch (changeType) {
-                    case 0:
-                        return <Tag color="default">未变更</Tag>
-                    case 1:
-                        return <Tag color="success">新增引用</Tag>
-                    case 2:
-                        return <Tag color="error">删除引用</Tag>
-                    case 3:
-                        return <Tag color="warning">修改内容</Tag>
-                }
-            }
-        }, {
-            title: '线路名称',
-            align: "center",
-            dataIndex: 'lineName'
-        }, {
-            title: '产品类型',
-            align: "center",
-            dataIndex: 'productType',
-            render: (productType: number): React.ReactNode => {
-                switch (productType) {
-                    case 0:
-                        return "角钢塔"
-                    case 1:
-                        return "管塔"
-                    case 2:
-                        return "螺栓"
-                }
-            }
-        }, {
-            title: '塔型',
-            align: "center",
-            dataIndex: 'productShape'
-        }, {
-            title: '杆塔号',
-            align: "center",
-            dataIndex: 'productNumber'
-        }, {
-            title: '电压等级',
-            align: "center",
-            dataIndex: 'voltageGrade',
-            render: (voltageGrade: number): React.ReactNode => {
-                switch (voltageGrade) {
-                    case 1:
-                        return <span>220 KV</span>
-                    case 2:
-                        return <span>110 KV</span>
-                }
-            }
-        }, {
-            title: '呼高（米）',
-            align: "center",
-            dataIndex: 'productHeight'
-        }, {
-            title: '单位',
-            align: "center",
-            dataIndex: 'unit'
-        }, {
-            title: '数量',
-            align: "center",
-            dataIndex: 'num'
-        }, {
-            title: '标段',
-            align: "center",
-            dataIndex: 'tender'
-        }, {
-            title: '备注',
-            dataIndex: 'description'
-        }];
-    }
+    abstract getProductTableColumns(): TableColumnType<object>[]
 
 
 }

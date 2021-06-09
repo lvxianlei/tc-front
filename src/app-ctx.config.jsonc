@@ -65,6 +65,6 @@
         "footer-panel": "./layout/DefaultFooter" // 底部面板
     },
     "filters": [ // 过滤器
-        // "./filters/AuthorizationFilter" // 权限过滤器
+        "./filters/AuthorizationFilter" // 权限过滤器
     ]
 }

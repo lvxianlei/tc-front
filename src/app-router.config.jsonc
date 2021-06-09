@@ -147,7 +147,7 @@
     },{ // 任务审批管理
         "name": "任务审批",
         "path": "/approval/task/productchange/:id&:businessId",
-        "module": "./pages/approval/productchange/ProductChange",
+        "module": "./pages/approval/taskchange/ProductChange",
         "exact": true
     },
     { // 任务单产品变更审批
