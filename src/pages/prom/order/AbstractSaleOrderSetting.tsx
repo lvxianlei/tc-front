@@ -688,7 +688,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                         </li>
                                                         <li className={ saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ? styles.isShow : styles.item }>
                                                             <Form.Item { ...field } name={[field.name, 'num']} fieldKey={[field.fieldKey, 'num']} rules= {[{
-                                                                    required: saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT,
+                                                                    required: saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE,
                                                                     message: '请输入产品重量'
                                                                 }]}>
                                                                 <Input onBlur={ () => this.numBlur(index) } disabled={ readonly  }/>
