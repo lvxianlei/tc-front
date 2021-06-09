@@ -7,7 +7,7 @@ import React from 'react';
 import { matchPath, RouteComponentProps } from 'react-router';
 
 import routerConfigJson from '../app-router.config.jsonc';
-import AsyncPanel from '../AsyncPanel';
+import { IFilter } from '../filters/IFilter';
 import IApplicationContext, { IRouterItem } from './IApplicationContext';
 
 
@@ -58,22 +58,19 @@ export default abstract class ApplicationContext {
 
     /**
      * @static
-     * @param module 
-     * @returns 
+     * @description Do filters all
+     * @param props 
+     * @returns filters all 
      */
-    public static routeRender(module: string | undefined): (props: RouteComponentProps<{}>) => React.ReactNode {
-        return (props: RouteComponentProps<{}>): React.ReactNode => {
-            let valid: boolean = true;
-            for (let filter of this.get().filters || []) {
-                if (!filter.doFilter(props)) { // As long as one filter failed, valid will be false.
-                    valid = false;
-                }
+    public static async doFiltersAll(props: RouteComponentProps<{}>): Promise<boolean> {
+        const filters: IFilter[] = this.get().filters || [];
+        const doFilterHandlers: Promise<boolean>[] = filters.map<Promise<boolean>>((filter: IFilter): Promise<boolean> => { return filter.doFilter(props); });
+        const permits: boolean[] = await Promise.all(doFilterHandlers);
+        for (let permit of permits) {
+            if (!permit) { // denied
+                return false;
             }
-            if (valid) {
-                return <AsyncPanel module={ module}/>;
-            } else {
-                return null;
-            }
-        };
+        }
+        return true;
     }
 }
