@@ -21,6 +21,14 @@ const mockConfig = require('./mock/config');
 
 module.exports = {
     webpack: override(
+        function (config) {
+            const scopePluginIndex = config.resolve.plugins.findIndex(
+                ({ constructor }) => constructor && constructor.name === 'ModuleScopePlugin'
+            );
+    
+            config.resolve.plugins.splice(scopePluginIndex, 1);
+            return config;
+        },
         addWebpackModuleRule({ test: /.jsonc$/, use: 'jsonc-loader' }),
         fixBabelImports('antd', {
             libraryName: 'antd',
