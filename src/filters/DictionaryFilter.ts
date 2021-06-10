@@ -7,7 +7,6 @@ import { RouteComponentProps, StaticContext } from 'react-router';
 import ApplicationContext from '../configuration/ApplicationContext';
 import { IDict, IEnums } from '../configuration/IApplicationContext';
 import RequestUtil from '../utils/RequestUtil';
-import { IDictionaryFilter } from './IDictionaryFilter';
 import { IFilter } from './IFilter';
 
 export interface IAllDict {
@@ -34,6 +33,7 @@ export default class DictionaryFilter implements IFilter {
             enums={...enums,[value]:  item.dictionaryTypes}
             return enums
         })
-        return Promise.resolve(true);
+        ApplicationContext.get({ dictionaryOption: enums });
+        return true;
     }
 }
