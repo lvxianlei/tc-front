@@ -1,9 +1,6 @@
 import {
     Button,
-    Dropdown,
-    Form,
     FormItemProps,
-    Menu,
     Select,
     Space,
     TableColumnType,
@@ -14,7 +11,6 @@ import { WithTranslation, withTranslation } from "react-i18next";
 //引入路由
 import { RouteComponentProps, withRouter } from "react-router";
 //引入Link
-import { Link } from "react-router-dom";
 //引入css
 import styles from "./ApprovalList.module.less";
 import AbstractMngtComponent, {
@@ -45,6 +41,7 @@ interface IResponseData {
 }
 //响应数据的限制
 interface ITaskTableDataItem {
+    readonly businessId: number;
     //id
     readonly id: number;
 
@@ -59,39 +56,23 @@ interface ITaskTableDataItem {
     readonly updateTime: number | string;
 }
 
-//操作
-const menubar = (records: object) => {
-    return (
-        <Menu>
-            <Menu.Item>
-                <Button href={`/approval/task/productchange/${(records as ITaskTableDataItem).id}`} ghost>
-                    任务单审批
-                </Button>
-            </Menu.Item>
-            <Menu.Item>
-                <Button href={`/approval/task/change/${(records as ITaskTableDataItem).id}`} ghost>
-                    任务单产品变更审批
-                </Button>
-            </Menu.Item>
-            <Menu.Item>
-                <Button href={`/approval/product-change/${(records as ITaskTableDataItem).id}`} ghost>
-                    产品信息变更审批
-                </Button>
-            </Menu.Item>
-        </Menu>
-    );
-};
 
+//审批状态
 enum AuditStatus {
     PENDING_APPROVAL = 0,
     ADOPT = 1,
     REJECT = 2
 }
-
+//table
 enum AuditStatusItem {
     PENDING_APPROVAL = "待审批",
     ADOPT = "通过",
     REJECT = "驳回"
+}
+//业务类型
+enum BusinessType {
+    SALE_ORDER_AUDIT = "产品信息变更审批",
+    TASK_AUDIT = "任务单产品审批",
 }
 
 class ApprovalAll extends AbstractMngtComponent<
@@ -153,26 +134,28 @@ class ApprovalAll extends AbstractMngtComponent<
                 key: "businessId",
                 title: "审批单编号",
                 dataIndex: "businessId",
-                align: "center",
-                render: (id: number): React.ReactNode => {
-                    return <Link to={``}>{id}</Link>;
-                }
+                align: "center"
             },
             {
-                key: "typeName",
+                key: "type",
                 title: "业务类型",
-                dataIndex: "typeName",
+                dataIndex: "type",
                 align: "center",
-                width: 150
+                width: 150,
+                render: (type: string): React.ReactNode => {
+                    switch (type) {
+                        case "SALE_ORDER_AUDIT":
+                            return BusinessType.SALE_ORDER_AUDIT
+                        case "TASK_AUDIT":
+                            return BusinessType.TASK_AUDIT
+                    }
+                }
             },
             {
                 key: "businessNumber",
                 title: "业务单编号",
                 dataIndex: "businessNumber",
-                align: "center",
-                render: (businessNumber: number): React.ReactNode => {
-                    return <Link to={``}>{businessNumber}</Link>;
-                }
+                align: "center"
             },
             {
                 key: "updateTime",
@@ -196,7 +179,6 @@ class ApprovalAll extends AbstractMngtComponent<
                             return "驳回"
                     }
                 }
-
             },
             {
                 key: "operation",
@@ -209,19 +191,21 @@ class ApprovalAll extends AbstractMngtComponent<
                     return (
                         <Space direction="horizontal" size="small">
                             {(records as ITaskTableDataItem).auditStatus ===
-                                AuditStatus.PENDING_APPROVAL ? (
-                                <Dropdown
-                                    overlay={menubar(records as ITaskTableDataItem)}
-                                    placement="bottomLeft"
-                                    trigger={["click"]}
-                                >
-                                    <Button type="link">审批</Button>
-                                </Dropdown>
-                            ) : (
-                                <Button type="link" disabled>
-                                    审批
-                                </Button>
-                            )}
+                                AuditStatus.PENDING_APPROVAL ?
+                                (
+                                    (records as ITaskTableDataItem).auditStatus === AuditStatus.PENDING_APPROVAL ?
+                                        <Button href={`/approval/task/product-change/
+                                    ${(records as ITaskTableDataItem).id}`} type="link" >审批</Button>
+                                        :
+                                        <Button href={`/approval/task/change/
+                                    ${(records as ITaskTableDataItem).id}&
+                                    ${(records as ITaskTableDataItem).businessId}`} type="link" >审批</Button>
+
+                                ) : (
+                                    <Button type="link" disabled>
+                                        审批
+                                    </Button>
+                                )}
                         </Space>
                     );
                 }
@@ -282,16 +266,16 @@ class ApprovalAll extends AbstractMngtComponent<
      * @returns filter components
      */
     public getFilterFormItemProps(item: ITabItem): FormItemProps[] {
-
+        console.log(this.state);
         return [
             {
                 name: "type",
-                initialValue: "0",
+                initialValue: "",
                 children: (
                     <Select className={styles.drop_down_menu}>
-                        <Option value="0">全部</Option>
-                        <Option value="1">产品信息变更审批</Option>
-                        <Option value="2">任务单产品信息审批</Option>
+                        <Option value="">全部</Option>
+                        <Option value="SALE_ORDER_AUDIT">产品信息变更审批</Option>
+                        <Option value="TASK_AUDIT">任务单产品信息审批</Option>
                     </Select>
                 ),
             }
@@ -305,8 +289,6 @@ class ApprovalAll extends AbstractMngtComponent<
     public onNewClick(
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>
     ): void { }
-
-
     /**
      * @implements
      * @description Gets table data source
@@ -315,6 +297,9 @@ class ApprovalAll extends AbstractMngtComponent<
      */
     public getTableDataSource(item: ITabItem): object[] {
         return this.state.tableDataSource;
+    }
+    protected renderExtraOperationContent(item: ITabItem): React.ReactNode {
+        return null
     }
 }
 

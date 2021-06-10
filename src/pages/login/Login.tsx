@@ -11,6 +11,7 @@ import AuthUtil from '../../utils/AuthUtil';
 import RequestUtil from '../../utils/RequestUtil';
 import { ITenant } from '../system-mngt/ITenant';
 import style from './Login.module.less';
+import { ToolOutlined } from '@ant-design/icons';
 
 interface ILoginProps {}
 interface ILoginRouteProps extends RouteComponentProps<ILoginProps> {}
@@ -104,7 +105,10 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
                 <Layout.Content className={ style.content }>
                     <div className={ style.loginArea }>
                         <Card className={ style.loginCard }>
-                            <Typography.Title level={ 4 } className={ style.loginTitle }>账号登录</Typography.Title>
+                            <div className={ style.loginLogo }>
+                                <ToolOutlined />
+                            </div>
+                            <Typography.Title level={ 4 } className={ style.loginTitle }>XX管理系统</Typography.Title>
                             <Form onFinish={ this.onSubmit }>
                                 <Form.Item name="username" rules={[
                                     {
@@ -112,7 +116,7 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
                                         message: '请输入用户名'
                                     }
                                 ]}>
-                                    <Input placeholder="请输入用户名" autoFocus={ true } prefix={ <UserOutlined /> }/>
+                                    <Input placeholder="请输入用户名" size="large" autoFocus={ true } prefix={ <UserOutlined /> }/>
                                 </Form.Item>
                                 <Form.Item name="password" rules={[
                                     {
@@ -120,7 +124,7 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
                                         message: '请输入密码'
                                     }
                                 ]}>
-                                    <Input.Password placeholder="请输入密码" prefix={ <LockOutlined /> }/>
+                                    <Input.Password placeholder="请输入密码"  size="large" prefix={ <LockOutlined /> }/>
                                 </Form.Item>
                                 <Form.Item>
                                     <Space direction="horizontal" className={ layoutStyles.width100 }>
@@ -130,7 +134,7 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
                                                 message: '请输入验证码'
                                             }]}
                                         >
-                                            <Input placeholder="请输入验证码" prefix={ <SafetyCertificateOutlined /> }/>
+                                            <Input placeholder="请输入验证码" size="large" prefix={ <SafetyCertificateOutlined /> }/>
                                         </Form.Item>
                                         {
                                             this.state.captcha.image
@@ -151,7 +155,7 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
                                     <Input type="hidden"/>
                                 </Form.Item>
                                 <Form.Item>
-                                    <Button type="primary" htmlType="submit" className={ layoutStyles.width100 }>登录</Button>
+                                    <Button type="primary" htmlType="submit" size="large" className={ layoutStyles.width100 }>登录</Button>
                                 </Form.Item>
                             </Form>
                         </Card>

@@ -17,15 +17,35 @@ import AbstractSaleOrderSetting, {
 } from '../prom/order/AbstractSaleOrderSetting';
 
 export interface IProductChangeApprovalProps {
+    readonly businessId: any;
     readonly id: string;
 }
-export interface IProductChangeApprovalRouteProps extends RouteComponentProps<IProductChangeApprovalProps>, WithTranslation {}
-export interface IProductChangeApprovalState extends IAbstractSaleOrderSettingState {}
-
+export interface IProductChangeApprovalRouteProps extends RouteComponentProps<IProductChangeApprovalProps>, WithTranslation { }
+export interface IProductChangeApprovalState extends IAbstractSaleOrderSettingState { }
+//产品类型
+enum ProductType {
+    ANGLE_STEEL_TOWER = 0,  //"角钢塔" 
+    TUBE_TOWER = 1,        //"管塔"
+    BOLT = 2              //"螺栓"
+}
+//类型
+enum StateType {
+    UNCHANGED = 0,              //未变更
+    NEWREFERENCE = 1,         //新增引用
+    QUOTE = 2,                //删除引用
+    MODIFYREFERENCE = 3     //修改引用内容         
+}
+//状态
+enum ProductStatus {
+    UTO_BEISSUED = 0,         // 待下发
+    UNDER_APPROVAL = 1,      // 审批中
+    ISSUED = 2             // 已下发
+}
 /**
  * Product change approval
  */
 class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeApprovalRouteProps, IProductChangeApprovalState> {
+
 
     /**
      * @override
@@ -44,7 +64,7 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
      * @returns return path 
      */
     protected getReturnPath(): string {
-        return "/approval/list";
+        return "/approval/task";
     }
 
     /**
@@ -57,8 +77,19 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
             auditId: this.props.match.params.id
         });
         this.setState({
+            saleOrder: saleOrder,
+            isChangeProduct: true
+        });
+        saleOrder.productDtos = saleOrder.productDtos?.map<IProductVo>((product: IProductVo, index: number): IProductVo => {
+            return {
+                ...product,
+                index: index + 1
+            };
+        });
+        this.setState({
             saleOrder: {
                 ...saleOrder,
+                contractInfoDto: saleOrder.contractInfoVo,
                 productChangeRecordVos: saleOrder.productChangeRecordVos?.map<IProductVo>((product: IProductVo, index: number): IProductVo => {
                     return {
                         ...product,
@@ -66,6 +97,23 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
                     };
                 })
             }
+        })
+        this.getForm()?.setFieldsValue({
+            totalWeight: saleOrder.orderQuantity,
+            totalPrice: saleOrder.taxPrice,
+            totalAmount: saleOrder.taxAmount,
+            orderQuantity: saleOrder.orderQuantity,
+            chargeType: saleOrder.contractInfoVo?.chargeType,
+            contractId: saleOrder.contractInfoVo?.contractId,
+            currencyType: saleOrder.contractInfoVo?.currencyType,
+            customerCompany: saleOrder.contractInfoVo?.customerCompany,
+            deliveryTime: saleOrder.contractInfoVo?.deliveryTime,
+            internalNumber: saleOrder.contractInfoVo?.internalNumber,
+            projectName: saleOrder.contractInfoVo?.projectName,
+            signContractTime: saleOrder.contractInfoVo?.signContractTime,
+            signCustomerId: saleOrder.contractInfoVo?.signCustomerId,
+            signCustomerName: saleOrder.contractInfoVo?.signCustomerName,
+            productDtos: saleOrder.productVos,
         });
     }
 
@@ -74,7 +122,7 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
      * @description Gets form item groups
      * @returns form item groups 
      */
-     public getFormItemGroups(): IFormItemGroup[][] {
+    public getFormItemGroups(): IFormItemGroup[][] {
         if (this.state.saleOrder) {
             return super.getFormItemGroups();
         }
@@ -84,12 +132,12 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
     /**
      * @override
      * @description Determines whether submit on
-     * @param values 
+     * @param _values 
      * @returns submit 
      */
-    public onSubmit(values: Record<string, any>): Promise<void> {
+    public onSubmit(_values: Record<string, any>): Promise<void> {
         return RequestUtil.post('/tower-market/audit/adopt', {
-            auditId: values.id
+            auditId: this.props.match.params.id
         }).then((): void => {
             message.success('操作已成功！变更产品信息已通过审批。');
         });
@@ -113,36 +161,42 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
      * @returns product table columns 
      */
     private getProductTableColumns(): TableColumnType<object>[] {
+        const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
         return [{
             title: '类型',
             dataIndex: 'changeType',
             render: (changeType: number): React.ReactNode => {
                 switch (changeType) {
-                    case 0:
+                    case StateType.UNCHANGED:
                         return '未变更';
-                    case 3:
-                        return '修改内容';
+                    case StateType.MODIFYREFERENCE:
+                        return '修改';
+                    case StateType.NEWREFERENCE:
+                        return '变更前'
+                    case StateType.QUOTE:
+                        return '变更后'
                 }
-                return changeType === 1 ? '变更前' : '变更后';
-            }
-        }, {
-            title: '版本',
-            dataIndex: 'recordType',
-            render: (recordType: number): React.ReactNode => {
-                return recordType === 1 ? '变更前' : '变更后';
             }
         }, {
             title: '序号',
             dataIndex: 'index'
-        }, {
-            title: '状态',
-            dataIndex: 'productStatus'
-        }, {
+        },
+        {
             title: '线路名称',
             dataIndex: 'lineName'
         }, {
             title: '产品类型',
-            dataIndex: 'productType'
+            dataIndex: 'productType',
+            render: (productType: number): React.ReactNode => {
+                switch (productType) {
+                    case ProductType.ANGLE_STEEL_TOWER:
+                        return "角钢塔"
+                    case ProductType.TUBE_TOWER:
+                        return "管塔"
+                    case ProductType.BOLT:
+                        return "螺栓"
+                }
+            }
         }, {
             title: '塔型',
             dataIndex: 'productShape'
@@ -151,7 +205,15 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
             dataIndex: 'productNumber'
         }, {
             title: '电压等级',
-            dataIndex: 'voltageGrade'
+            dataIndex: 'voltageGrade',
+            render: (voltageGrade: number): React.ReactNode => {
+                switch (voltageGrade) {
+                    case 1:
+                        return <span>220 KV</span>
+                    case 2:
+                        return <span>110 KV</span>
+                }
+            }
         }, {
             title: '呼高（米）',
             dataIndex: 'productHeight'
@@ -185,8 +247,8 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
         return [{
             title: '产品信息',
             render: (): React.ReactNode => {
-                return <Table rowKey="index" bordered={ true } pagination={ false }
-                    columns={ this.getProductTableColumns() } dataSource={ this.state.saleOrder?.productChangeRecordVos }/>;
+                return <Table rowKey="index" bordered={true} pagination={false}
+                    columns={this.getProductTableColumns()} dataSource={this.state.saleOrder?.productChangeRecordVos} />;
             }
         }];
     }
@@ -206,7 +268,7 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
      * @returns extra operation area 
      */
     protected renderExtraOperationArea(): React.ReactNode {
-        return <Button type="default" onClick={ this.onReject }>驳回</Button>;
+        return <Button type="default" onClick={this.onReject}>驳回</Button>;
     }
 }
 
