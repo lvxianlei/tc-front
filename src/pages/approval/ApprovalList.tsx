@@ -1,9 +1,6 @@
 import {
     Button,
-    Dropdown,
-    Form,
     FormItemProps,
-    Menu,
     Select,
     Space,
     TableColumnType,
@@ -14,7 +11,6 @@ import { WithTranslation, withTranslation } from "react-i18next";
 //引入路由
 import { RouteComponentProps, withRouter } from "react-router";
 //引入Link
-import { Link } from "react-router-dom";
 //引入css
 import styles from "./ApprovalList.module.less";
 import AbstractMngtComponent, {
@@ -126,8 +122,6 @@ class ApprovalAll extends AbstractMngtComponent<
     public componentDidMount() {
         super.componentDidMount();
         this.fetchTableData({});
-
-
     }
     //
     public getTableData(): object[] {
@@ -142,7 +136,7 @@ class ApprovalAll extends AbstractMngtComponent<
                 dataIndex: "businessId",
                 align: "center",
                 render: (id: number): React.ReactNode => {
-                    return <span className={styles.color}>{id}</span>;
+                    return {id}
                 }
             },
             {
@@ -166,7 +160,7 @@ class ApprovalAll extends AbstractMngtComponent<
                 dataIndex: "businessNumber",
                 align: "center",
                 render: (businessNumber: number): React.ReactNode => {
-                    return <span className={styles.color}>{businessNumber}</span>;
+                    return {businessNumber}
                 }
             },
             {
@@ -301,8 +295,6 @@ class ApprovalAll extends AbstractMngtComponent<
     public onNewClick(
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>
     ): void { }
-
-
     /**
      * @implements
      * @description Gets table data source
@@ -312,6 +304,8 @@ class ApprovalAll extends AbstractMngtComponent<
     public getTableDataSource(item: ITabItem): object[] {
         return this.state.tableDataSource;
     }
+    protected renderExtraOperationContent(item: ITabItem): React.ReactNode {
+        return }
 }
 
 export default withRouter(withTranslation()(ApprovalAll));

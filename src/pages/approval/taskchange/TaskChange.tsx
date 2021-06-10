@@ -5,7 +5,7 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
 import RequestUtil from '../../../utils/RequestUtil';
-import AbstractProductchange, { IAbstractTaxkchangeState, IContract } from './AbstractTaskchange';
+import AbstractTaskChange, { IAbstractTaxkchangeState, IContract } from './AbstractTaskchange';
 
 
 export interface ITaxkChangeProps {
@@ -21,7 +21,7 @@ enum ProductType {
 export interface ITaxkChangeRouteProps extends RouteComponentProps<ITaxkChangeProps>, WithTranslation { }
 export interface ITaxkchangeState extends IAbstractTaxkchangeState { }
 
-class TaskChange extends AbstractProductchange<ITaxkChangeRouteProps, ITaxkchangeState> {
+class TaskChange extends AbstractTaskChange<ITaxkChangeRouteProps, ITaxkchangeState> {
     getFormItemGroups(): IFormItemGroup[][] {
         const contract: IContract | undefined = this.state.contract;
         return [[{

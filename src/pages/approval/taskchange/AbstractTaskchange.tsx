@@ -1,12 +1,10 @@
-import { Button, DatePicker, FormProps, Input, message, Select, Table, TableColumnType, Tag } from 'antd';
-import moment from 'moment';
+import { Button, FormProps, message, Table, TableColumnType } from 'antd';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 import AbstractFillableComponent, {
     IAbstractFillableComponentState,
     IFormItemGroup
 } from '../../../components/AbstractFillableComponent';
-import styles from "../ApprovalList.module.less"
 import RequestUtil from '../../../utils/RequestUtil';
 import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 

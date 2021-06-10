@@ -55,7 +55,7 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const saleOrder: ISaleOrder = await RequestUtil.get<ISaleOrder>('tower-market/saleOrder/getSaleOrderByAuditId', {
+        const saleOrder: ISaleOrder = await RequestUtil.get<ISaleOrder>('/tower-market/saleOrder/getSaleOrderByAuditId', {
             auditId: this.props.match.params.id
         });
         this.setState({
@@ -114,10 +114,10 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
     /**
      * @override
      * @description Determines whether submit on
-     * @param values 
+     * @param _values 
      * @returns submit 
      */
-    public onSubmit(values: Record<string, any>): Promise<void> {
+    public onSubmit(_values: Record<string, any>): Promise<void> {
         return RequestUtil.post('/tower-market/audit/adopt', {
             auditId: this.props.match.params.id
         }).then((): void => {
