@@ -161,6 +161,7 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
      * @returns product table columns 
      */
     private getProductTableColumns(): TableColumnType<object>[] {
+        const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
         return [{
             title: '类型',
             dataIndex: 'changeType',
@@ -169,7 +170,7 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
                     case StateType.UNCHANGED:
                         return '未变更';
                     case StateType.MODIFYREFERENCE:
-                        return '修改内容';
+                        return '修改';
                     case StateType.NEWREFERENCE:
                         return '变更前'
                     case StateType.QUOTE:
@@ -177,29 +178,10 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
                 }
             }
         }, {
-            title: '版本',
-            dataIndex: 'recordType',
-            render: (recordType: number): React.ReactNode => {
-                return recordType === 1 ? '变更前' : '变更后';
-            }
-        }, {
             title: '序号',
             dataIndex: 'index'
-        }, {
-            title: '状态',
-            dataIndex: 'productStatus',
-            render: (productStatus: number): React.ReactNode => {
-                switch (productStatus) {
-                    case ProductStatus.UTO_BEISSUED:
-                        return "待下发"
-                    case ProductStatus.UNDER_APPROVAL:
-                        return "审批中"
-                    case ProductStatus.ISSUED:
-                        return "已下发"
-                }
-
-            }
-        }, {
+        },
+        {
             title: '线路名称',
             dataIndex: 'lineName'
         }, {
