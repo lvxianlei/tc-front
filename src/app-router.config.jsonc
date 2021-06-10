@@ -140,24 +140,18 @@
         "module": "./pages/system-mngt/user/UserSetting",
         "exact": true
     },{ //任务单审批
-        "name": "任务单审批",
-        "path": "/approval/list",
+        "name": "审批中心",
+        "path": "/approval/task",
         "module": "./pages/approval/ApprovalList",
         "exact": true
-    },{ // 任务审批管理
-        "name": "任务审批",
-        "path": "/approval/task/productchange/:id",
-        "module": "./pages/approval/productchange/ProductChange",
-        "exact": true
-    },
-    { // 任务单产品变更审批
+    },{ // 任务单产品变更审批
         "name": "任务单产品变更审批",
-        "path": "/approval/task/change/:id",
+        "path": "/approval/task/change/:id&:businessId",
         "module": "./pages/approval/taskchange/TaskChange",
         "exact": true
     }, { // 审批产品信息变更
-        "name": "产品信息变更",
-        "path": "/approval/product-change/:id",
+        "name": "产品信息变更审批",
+        "path": "/approval/task/product-change/:id",
         "module": "./pages/approval/ProductChangeApproval",
         "exact": true
     }]
