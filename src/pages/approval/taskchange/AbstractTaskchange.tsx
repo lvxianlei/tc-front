@@ -171,7 +171,8 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
     abstract onReject = (): Promise<void> => {
         const contract: IContract | undefined = this.state.contract;
         return RequestUtil.post('/tower-market/audit/reject', {
-            auditId: "1402131886490787842"
+            auditId: contract.id,
+            description: "驳回"
         }).then((): void => {
             message.warning('已驳回任务单  审批的申请！');
             this.props.history.push(this.getReturnPath());

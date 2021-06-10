@@ -299,7 +299,8 @@ class ApprovalAll extends AbstractMngtComponent<
         return this.state.tableDataSource;
     }
     protected renderExtraOperationContent(item: ITabItem): React.ReactNode {
-        return }
+        return null
+    }
 }
 
 export default withRouter(withTranslation()(ApprovalAll));

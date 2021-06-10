@@ -22,7 +22,25 @@ export interface IProductChangeApprovalProps {
 }
 export interface IProductChangeApprovalRouteProps extends RouteComponentProps<IProductChangeApprovalProps>, WithTranslation { }
 export interface IProductChangeApprovalState extends IAbstractSaleOrderSettingState { }
-
+//产品类型
+enum ProductType {
+    ANGLE_STEEL_TOWER = 0,  //"角钢塔" 
+    TUBE_TOWER = 1,        //"管塔"
+    BOLT = 2              //"螺栓"
+}
+//类型
+enum StateType {
+    UNCHANGED = 0,              //未变更
+    NEWREFERENCE = 1,         //新增引用
+    QUOTE = 2,                //删除引用
+    MODIFYREFERENCE = 3     //修改引用内容         
+}
+//状态
+enum ProductStatus {
+    UTO_BEISSUED = 0,         // 待下发
+    UNDER_APPROVAL = 1,      // 审批中
+    ISSUED = 2             // 已下发
+}
 /**
  * Product change approval
  */
@@ -148,12 +166,15 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
             dataIndex: 'changeType',
             render: (changeType: number): React.ReactNode => {
                 switch (changeType) {
-                    case 0:
+                    case StateType.UNCHANGED:
                         return '未变更';
-                    case 3:
+                    case StateType.MODIFYREFERENCE:
                         return '修改内容';
+                    case StateType.NEWREFERENCE:
+                        return '变更前'
+                    case StateType.QUOTE:
+                        return '变更后'
                 }
-                return changeType === 1 ? '变更前' : '变更后';
             }
         }, {
             title: '版本',
@@ -169,11 +190,11 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
             dataIndex: 'productStatus',
             render: (productStatus: number): React.ReactNode => {
                 switch (productStatus) {
-                    case 1:
+                    case ProductStatus.UTO_BEISSUED:
                         return "待下发"
-                    case 2:
+                    case ProductStatus.UNDER_APPROVAL:
                         return "审批中"
-                    case 3:
+                    case ProductStatus.ISSUED:
                         return "已下发"
                 }
 
@@ -186,11 +207,11 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
             dataIndex: 'productType',
             render: (productType: number): React.ReactNode => {
                 switch (productType) {
-                    case 0:
+                    case ProductType.ANGLE_STEEL_TOWER:
                         return "角钢塔"
-                    case 1:
+                    case ProductType.TUBE_TOWER:
                         return "管塔"
-                    case 2:
+                    case ProductType.BOLT:
                         return "螺栓"
                 }
             }

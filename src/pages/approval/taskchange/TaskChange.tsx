@@ -18,6 +18,13 @@ enum ProductType {
     TUBE_TOWER = 1,        //"管塔"
     BOLT = 2              //"螺栓"
 }
+//类型
+enum StateType{
+    UNCHANGED=0,              //未变更
+    NEWREFERENCE=1 ,         //新增引用
+    QUOTE=2,                //删除引用
+    MODIFYREFERENCE =3     //修改引用         
+}
 export interface ITaxkChangeRouteProps extends RouteComponentProps<ITaxkChangeProps>, WithTranslation { }
 export interface ITaxkchangeState extends IAbstractTaxkchangeState { }
 
@@ -199,13 +206,13 @@ class TaskChange extends AbstractTaskChange<ITaxkChangeRouteProps, ITaxkchangeSt
             align: "center",
             render: (changeType: number): React.ReactNode => {
                 switch (changeType) {
-                    case 0:
+                    case StateType.UNCHANGED:
                         return <Tag color="default">未变更</Tag>
-                    case 1:
+                    case StateType.NEWREFERENCE:
                         return <Tag color="success">新增引用</Tag>
-                    case 2:
+                    case StateType.QUOTE:
                         return <Tag color="error">删除引用</Tag>
-                    case 3:
+                    case StateType.MODIFYREFERENCE:
                         return <Tag color="warning">修改内容</Tag>
                 }
             }
