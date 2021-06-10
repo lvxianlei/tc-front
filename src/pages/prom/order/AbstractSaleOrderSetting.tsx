@@ -386,9 +386,15 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                     message: '请选择关联合同'
                 }],
                 children:
-                    <Input value={ saleOrder?.contractInfoDto?.contractId } suffix={ 
-                        <ContractSelectionComponent onSelect={ this.onSelect } />
-                    } disabled={ readonly }/>
+                    <>
+                        {
+                            readonly ? <Input value={ saleOrder?.contractInfoDto?.contractId }
+                            disabled={ readonly }/> : <Input value={ saleOrder?.contractInfoDto?.contractId } suffix={ 
+                                <ContractSelectionComponent onSelect={ this.onSelect }/>
+                            } disabled={ readonly }/>
+                        }
+                    </>
+                    
             },  {
                 label: '内部合同编号',
                 name: 'internalNumber',
