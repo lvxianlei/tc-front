@@ -134,10 +134,7 @@ class ApprovalAll extends AbstractMngtComponent<
                 key: "businessId",
                 title: "审批单编号",
                 dataIndex: "businessId",
-                align: "center",
-                render: (id: number): React.ReactNode => {
-                    return {id}
-                }
+                align: "center"
             },
             {
                 key: "type",
@@ -158,10 +155,7 @@ class ApprovalAll extends AbstractMngtComponent<
                 key: "businessNumber",
                 title: "业务单编号",
                 dataIndex: "businessNumber",
-                align: "center",
-                render: (businessNumber: number): React.ReactNode => {
-                    return {businessNumber}
-                }
+                align: "center"
             },
             {
                 key: "updateTime",
