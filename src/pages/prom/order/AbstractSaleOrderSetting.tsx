@@ -21,6 +21,7 @@ export interface IAbstractSaleOrderSettingState extends IAbstractFillableCompone
     readonly orderQuantity: number;
     readonly newOption: IOption;
     readonly isChangeProduct: boolean;
+    
 }
 
 export interface ISaleOrder {
