@@ -683,7 +683,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             render: (): React.ReactNode => {
                 return (
                     <>
-                        <Form.Item name="planType" initialValue={ contract?.planType || 1 }>
+                        <Form.Item name="planType" initialValue={ contract?.planType || 0 }>
                             <Radio.Group onChange={ (e: RadioChangeEvent) => {
                                 this.setState({
                                     contract: {
