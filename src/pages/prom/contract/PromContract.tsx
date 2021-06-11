@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../../components/AbstractMngtComponent';
 import { ITabItem } from '../../../components/ITabableComponent';
+import ApplicationContext from '../../../configuration/ApplicationContext';
 import RequestUtil from '../../../utils/RequestUtil';
 
 const { Option } = Select;
@@ -83,6 +84,7 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
       * @description Components did mount
       */
     public async componentDidMount() {
+        console.log(ApplicationContext.get().dictionaryOption);
         super.componentDidMount();
         this.fetchTableData({});
     }

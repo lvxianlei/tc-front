@@ -40,14 +40,10 @@ export default interface IApplicationContext extends IClientConfig {
     readonly filters?: IFilter[];
     readonly routers?: IRouterItem[];
     readonly globalRouters?: IRouterItem[];
-    readonly dictionaryOption?: IEnums;
+    readonly dictionaryOption?: Record<string, IDict | undefined>;
 }
 
 export interface IDict {
     readonly name?: string;
     readonly code?: string;
-}
-
-export interface IEnums {
-    readonly [x: string]: IDict | undefined;
 }

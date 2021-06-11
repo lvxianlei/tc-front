@@ -22,7 +22,7 @@ export default abstract class ApplicationContext {
      * @description Ctx config of application context
      */
     private static ctxConfig: IApplicationContext;
-    
+
     /**
      * @description Statics application context
      * @param [config] 
@@ -32,7 +32,12 @@ export default abstract class ApplicationContext {
         if (!this.ctxConfig) {
             this.ctxConfig = {
                 ...ctxConfigJson,
-                ...camelcaseKeys(routerConfigJson, { deep: true }),
+                ...camelcaseKeys(routerConfigJson, { deep: true })
+            };
+        }
+        if (config) {
+            this.ctxConfig = {
+                ...this.ctxConfig,
                 ...config
             };
         }

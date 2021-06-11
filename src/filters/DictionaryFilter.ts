@@ -5,7 +5,7 @@
 
 import { RouteComponentProps, StaticContext } from 'react-router';
 import ApplicationContext from '../configuration/ApplicationContext';
-import { IDict, IEnums } from '../configuration/IApplicationContext';
+import { IDict } from '../configuration/IApplicationContext';
 import RequestUtil from '../utils/RequestUtil';
 import { IFilter } from './IFilter';
 
@@ -27,13 +27,12 @@ export default class DictionaryFilter implements IFilter {
      */
     public async doFilter(props: RouteComponentProps<{}, StaticContext, unknown>): Promise<boolean> {
         const dicts: IAllDict[] = await RequestUtil.get(`/tower-system/dictionary/allDictionary`);
-        let enums: IEnums =  {};
-        dicts.map<IEnums>((item: IAllDict): IEnums => {
-            const value: string = item.code;
-            enums={...enums,[value]:  item.dictionaryTypes}
-            return enums
-        })
-        ApplicationContext.get({ dictionaryOption: enums });
+        const dictionaryOption: Record<string, IDict | undefined> = {};
+        dicts.forEach((dict: IAllDict): void => {
+            dictionaryOption[dict.code] = dict.dictionaryTypes;
+        });
+        ApplicationContext.get({ dictionaryOption: dictionaryOption });
+        console.log(ApplicationContext.get().dictionaryOption);
         return true;
     }
 }
