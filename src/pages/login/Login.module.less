@@ -11,23 +11,42 @@
   position: relative;
   margin: 0;
   overflow: auto;
-  background-color: #FFF;
+  background-color: rgba(242, 242, 242, 1);
   display: flex;
+  background-image: url('../../../public/login-bg.jpg');
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-size: 1278px 559px;
+  background-origin: border-box;
 }
 
 .loginArea {
   margin-left: auto;
   margin-right: 125px;
+  position: absolute;
+  left: 50%;  
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .loginCard {
-  width: 380px;
+  width: 480px;
+  height: 560px;
   text-align: center;
+  padding: 20px;
   :global(.ant-input-prefix .anticon) {
     color: @text-color-secondary;
   }
 }
 
+.loginLogo {
+  font-size: 72px;
+  color: #0079FE !important;
+}
+
 .loginTitle {
   margin-bottom: 42px !important;
+  font-size: 36px !important;
+  color: #0079FE !important;
 }

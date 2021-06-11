@@ -1,12 +1,10 @@
-import { Button, DatePicker, FormProps, Input, message, Select, Table, TableColumnType } from 'antd';
-import moment from 'moment';
+import { Button, FormProps, message, Table, TableColumnType } from 'antd';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 import AbstractFillableComponent, {
     IAbstractFillableComponentState,
     IFormItemGroup
 } from '../../../components/AbstractFillableComponent';
-import styles from "../ApprovalList.module.less"
 import RequestUtil from '../../../utils/RequestUtil';
 import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 
@@ -22,10 +20,12 @@ export interface IAbstractTaxkchangeState extends IAbstractFillableComponentStat
  * Icontract
  */
 export interface IContract {
+    //原材料标准
+    readonly materialStandard: number;
     readonly auditStatus: number;
     readonly id?: number;
     //任务编号
-    readonly taskNoticeId: number;
+    readonly taskNumber: number;
     //关联订单
     readonly saleOrderNumber: number;
     //合同编号
@@ -40,6 +40,8 @@ export interface IContract {
     readonly signContractTime?: string;
     //客户交货日期
     readonly deliveryTime?: string;
+    //订单交货日期
+    readonly orderDeliveryTime?: string;
     //计划交货日期
     readonly planDeliveryTime: string;
     //计划备注
@@ -107,6 +109,7 @@ export interface IProductInfoVOList {
     readonly contractId?: number;
     readonly signCustomerId?: number;
 }
+
 /**
  * Abstract Contract Setting
  */
@@ -136,112 +139,11 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
             }
         };
     }
-
     /**
      * Gets form item groups
      * @returns form item groups 
      */
-    public getFormItemGroups(): IFormItemGroup[][] {
-        const contract: IContract | undefined = this.state.contract;
-        return [[{
-            title: '基础信息',
-            itemCol: {
-                span: 8
-            },
-            itemProps: [{
-                label: '任务编号',
-                name: 'taskNoticeId',
-                initialValue: contract?.taskNoticeId,
-                rules: [],
-                children: <Input value={contract?.taskNoticeId} disabled />
-            }, {
-                label: '关联订单',
-                name: 'saleOrderNumber',
-                initialValue: contract?.saleOrderNumber,
-                children: <Input value={contract?.saleOrderNumber} disabled />
-            }, {
-                label: '合同编号',
-                name: 'contractId',
-                initialValue: contract?.contractId,
-                children: <Input value={contract?.contractId} disabled />,
-            }, {
-                label: '工程名称',
-                name: 'projectName',
-                initialValue: contract?.projectName,
-                children: <Input value={contract?.projectName} disabled />
-            }, {
-                label: '业主单位',
-                name: 'customerCompany',
-                initialValue: contract?.customerCompany,
-                children: <Input value={contract?.customerCompany} disabled />
-
-            }, {
-                label: '合同签订单位',
-                name: 'signCustomerName',
-                initialValue: contract?.signCustomerName,
-                children: <Input value={contract?.customerCompany} disabled />
-            }, {
-                label: '合同签订日期',
-                name: 'signContractTime',
-                initialValue: moment(contract?.signContractTime),
-                rules: [{
-                    required: true,
-                    message: '请选择合同签订日期'
-                }],
-                children: <DatePicker format="YYYY-MM-DD" disabled />
-            }, {
-                label: '客户交货日期',
-                name: 'deliveryTime',
-                initialValue: moment(contract?.deliveryTime),
-                children: <DatePicker format="YYYY-MM-DD" disabled />
-            }, {
-                label: '计划交货日期',
-                name: 'planDeliveryTime',
-                initialValue: moment(contract?.planDeliveryTime),
-                children: <DatePicker format="YYYY-MM-DD" disabled />
-            }, {
-                label: '计划备注',
-                name: 'description',
-                initialValue: contract?.description,
-                children: <Input.TextArea value={contract?.description} disabled />
-            }]
-        }, {
-            title: '特殊要求',
-            itemCol: {
-                span: 8
-            },
-            itemProps: [{
-                label: '原材料标准',
-                name: 'materialDemand',
-                initialValue: contract?.materialDemand,
-                children: (
-                    <Select defaultValue={contract?.materialDemand} className={styles.materialStandards} disabled>
-                        <Select.Option value="over">未定义</Select.Option>
-                    </Select>
-                )
-            }, {
-                label: '焊接要求',
-                name: 'weldingDemand',
-                initialValue: contract?.weldingDemand,
-                children: <Input value={contract?.weldingDemand} disabled />
-            }, {
-                label: '包装要求',
-                name: 'packDemand',
-                initialValue: contract?.packDemand,
-                children: <Input value={contract?.packDemand} disabled />
-            }, {
-                label: '镀锌要求',
-                name: 'galvanizeDemand',
-                initialValue: contract?.galvanizeDemand,
-                children: <Input value={contract?.galvanizeDemand} disabled />
-            }, {
-                label: '备注',
-                name: 'peculiarDescription',
-                initialValue: contract?.peculiarDescription,
-                children: <Input.TextArea value={contract?.peculiarDescription} disabled />
-            }]
-        }]];
-    }
+    abstract getFormItemGroups(): IFormItemGroup[][]
     /**
      * Returns abstract taxkchange
      * @returns extra sections 
@@ -262,23 +164,17 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
      * @param values 
      * @returns submit 
      */
-    public onSubmit(values: Record<string, any>): Promise<void> {
-        return RequestUtil.post('/tower-market/audit/adopt', {
-            auditId: values.contractId
-        }).then((): void => {
-            //等待进行判断
-            message.success('操作已成功！任务单 产品变更审批 已通过审批。');
-        });
-    }
-
+    abstract onSubmit(values: Record<string, any>): Promise<void>
     /**
      * Determines whether reject on
      */
-    public onReject = (): Promise<void> => {
+    abstract onReject = (): Promise<void> => {
+        const contract: IContract | undefined = this.state.contract;
         return RequestUtil.post('/tower-market/audit/reject', {
-            auditId: this.props.match.params
+            auditId: contract.id,
+            description: "驳回"
         }).then((): void => {
-            message.warning('已驳回任务单 产品 变更 审批的申请！');
+            message.warning('已驳回任务单  审批的申请！');
             this.props.history.push(this.getReturnPath());
         });
     }
@@ -287,7 +183,7 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
      * @returns return path 
      */
     protected getReturnPath(): string {
-        return "/approval/list";
+        return "/approval/task";
     }
     /**
      * @override
@@ -304,42 +200,7 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
     * Gets product table columns
     * @returns product table columns 
     */
-    private getProductTableColumns(): TableColumnType<object>[] {
-        return [{
-            title: '类型',
-            dataIndex: 'changeType'
-        }, {
-            title: '线路名称',
-            dataIndex: 'lineName'
-        }, {
-            title: '产品类型',
-            dataIndex: 'productTypeName'
-        }, {
-            title: '塔型',
-            dataIndex: 'productShape	'
-        }, {
-            title: '杆塔号',
-            dataIndex: 'productNumber'
-        }, {
-            title: '电压等级',
-            dataIndex: 'voltageGradeName'
-        }, {
-            title: '呼高（米）',
-            dataIndex: 'productHeight'
-        }, {
-            title: '单位',
-            dataIndex: 'unit'
-        }, {
-            title: '数量',
-            dataIndex: 'num'
-        }, {
-            title: '标段',
-            dataIndex: 'tender'
-        }, {
-            title: '备注',
-            dataIndex: 'description'
-        }];
-    }
+    abstract getProductTableColumns(): TableColumnType<object>[]
 
 
 }

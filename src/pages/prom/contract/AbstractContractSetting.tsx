@@ -667,7 +667,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         return <>
                 {super.render()}
                 <Modal visible={ this.state.isVisible } onCancel={ this.modalCancel } onOk={ this.modalCancel } width={ "60%" }>
-                    <iframe src={ this.state.url } frameBorder="0"></iframe>
+                   { this.state.url.substr((this.state.url.lastIndexOf(".")) + 1) === 'pdf' ? <iframe src={ this.state.url } frameBorder="0" className={ styles.iframe }></iframe> : <img src={ this.state.url }/> }
                 </Modal>
             </>
     }
@@ -683,7 +683,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             render: (): React.ReactNode => {
                 return (
                     <>
-                        <Form.Item name="planType" initialValue={ contract?.planType || 1 }>
+                        <Form.Item name="planType" initialValue={ contract?.planType || 0 }>
                             <Radio.Group onChange={ (e: RadioChangeEvent) => {
                                 this.setState({
                                     contract: {
@@ -903,10 +903,16 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                             <Space direction="horizontal" size="small">
                                                                 <Button type="link" onClick={ async () => {
                                                                     let attachInfoDtos: IattachDTO =  this.state.contract?.attachInfoDtos[index];
-                                                                    this.setState({
-                                                                        isVisible: true,
-                                                                        url: attachInfoDtos.filePath
-                                                                    })
+                                                                    const suffix: string = attachInfoDtos.filePath.substr((attachInfoDtos.filePath.lastIndexOf(".")) + 1);
+                                                                    if(suffix === 'jpg' || suffix === 'pdf' || suffix ===  'jpeg' || suffix === 'png') {
+                                                                       this.setState({
+                                                                            isVisible: true,
+                                                                            url: attachInfoDtos.filePath
+                                                                        }) 
+                                                                    } else {
+                                                                        message.info('仅图片、pdf支持预览')
+                                                                    }
+                                                                    
                                                                 } }>预览</Button>
                                                                 <Button type="link" onClick={
                                                                     () => {

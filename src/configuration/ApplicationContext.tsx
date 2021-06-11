@@ -24,15 +24,21 @@ export default abstract class ApplicationContext {
     private static ctxConfig: IApplicationContext;
 
     /**
-     * @static
-     * @description Gets application context
+     * @description Statics application context
+     * @param [config] 
      * @returns get 
      */
-    public static get(): IApplicationContext {
+    public static get(config: IApplicationContext = {}): IApplicationContext {
         if (!this.ctxConfig) {
             this.ctxConfig = {
                 ...ctxConfigJson,
                 ...camelcaseKeys(routerConfigJson, { deep: true })
+            };
+        }
+        if (config) {
+            this.ctxConfig = {
+                ...this.ctxConfig,
+                ...config
             };
         }
         return this.ctxConfig;

@@ -46,8 +46,10 @@ export interface IProduct {
 
 export interface IContractSysInfo {
     readonly updateUser?: string;
+    readonly updateUserName?: string;
     readonly updateTime?: string;
     readonly createUser?: string;
+    readonly createUserName?: string;
     readonly createTime?: string;
 }
 
@@ -230,13 +232,13 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
             },
             rows: [[{
                 label: '最后编辑人',
-                value: sysInfo?.updateUser
+                value: sysInfo?.updateUserName
             },{
                 label: '最后编辑时间',
                 value: sysInfo?.updateTime
             }], [{
                 label: '创建人',
-                value: sysInfo?.createUser
+                value: sysInfo?.createUserName
             }, {
                 label: '创建时间',
                 value: sysInfo?.createTime
