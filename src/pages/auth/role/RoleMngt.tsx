@@ -71,7 +71,7 @@ class RoleMngt extends AbstractMngtComponent<IRoleRouteProps, IRoleMngtState> {
      */
     private onDelete(items: IRole[]): () => void {
         return async () => {
-            await RequestUtil.delete('/sinzetech-system/role', { ids: items.map<number>((item: IRole): number => item.id) });
+            await RequestUtil.delete(`/sinzetech-system/role?ids=${items.map<number>((item: IRole): number => item.id)}`);
             this.setState({
                 selectedRoles: [],
                 selectedRoleKeys: []
@@ -230,7 +230,7 @@ class RoleMngt extends AbstractMngtComponent<IRoleRouteProps, IRoleMngtState> {
             render: (_: undefined, item: object): React.ReactNode => {
                 return (
                     <Space direction="horizontal" size="middle">
-                        <Link to={ `/auth/roles/detail/${ (item as IRole).id }` }>查看</Link>
+                        {/* <Link to={ `/auth/roles/detail/${ (item as IRole).id }` }>查看</Link> */}
                         <Link to={ `/auth/roles/setting/${ (item as IRole).id }` }>编辑</Link>
                         <ConfirmableButton confirmTitle="确定要删除该角色吗？" type="link" onConfirm={ this.onDelete([item as IRole]) }>删除</ConfirmableButton>
                     </Space>

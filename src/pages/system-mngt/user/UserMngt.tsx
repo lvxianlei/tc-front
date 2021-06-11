@@ -259,7 +259,7 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
                 return (
                     <Space direction="horizontal" size="middle">
                         {/* <Link to={ `/sys/users/detail/${ (item as IUser).id }` }>查看</Link> */}
-                        <Link to={ `/sys/users/setting/${ (item as IUser).userId }` }>编辑</Link>
+                        <Link to={ `/sys/users/setting/${ (item as IUser).id }` }>编辑</Link>
                         <ConfirmableButton confirmTitle="确定要删除该角色吗？" type="link" onConfirm={ this.onDelete([item as IUser]) }>删除</ConfirmableButton>
                     </Space>
                 );
