@@ -75,8 +75,8 @@ export default abstract class AbstractRoleSetting<P extends RouteComponentProps,
      */
     protected wrapAuthority2DataNode(authorities: (IAuthority & DataNode)[] = []): DataNode[] {
         authorities.forEach((authority: (IAuthority & DataNode)): void => {
-            authority.title = authority.categoryName;
-            authority.key = authority.categoryId;
+            authority.title = authority.name;
+            authority.key = authority.id;
             authority.selectable = authority.checked;
             if (authority.children && authority.children.length) {
                 this.wrapAuthority2DataNode(authority.children as (IAuthority & DataNode)[]);
@@ -84,6 +84,8 @@ export default abstract class AbstractRoleSetting<P extends RouteComponentProps,
         });
         return authorities;
     }
+
+
 
     /**
      * @description Wraps role to data node
@@ -112,6 +114,7 @@ export default abstract class AbstractRoleSetting<P extends RouteComponentProps,
             functionIdList: checkedKeys
         });
     }
+    
 
     /**
      * @implements

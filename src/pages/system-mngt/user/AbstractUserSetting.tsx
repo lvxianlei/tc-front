@@ -68,7 +68,6 @@ export default abstract class AbstractUserSetting<P extends RouteComponentProps,
      */
      protected wrapRole2DataNode(roles: (IRole & SelectDataNode)[] = []): SelectDataNode[] {
         roles.forEach((role: IRole & SelectDataNode): void => {
-            role.title = role.name;
             role.value = role.id;
             if (role.children && role.children.length) {
                 this.wrapRole2DataNode(role.children);
