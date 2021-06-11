@@ -178,11 +178,21 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
      * @param record 
      * @returns plan 
      */
-    private deletePlan(record: Record<string, any>): (e?: React.MouseEvent<HTMLElement>) => void {
+    private deletePlan(record: Record<string, any>, index: number): (e?: React.MouseEvent<HTMLElement>) => void {       
         return async () => {
-            const data: boolean = await RequestUtil.delete<boolean>(`/tower-market/paymentRecord/${ record.id }`);
-            if(data && this.props.onDeleted) {
-                this.props.onDeleted();
+            if(record.id) {
+                const data: boolean = await RequestUtil.delete<boolean>(`/tower-market/paymentRecord/${ record.id }`);
+                if(data && this.props.onDeleted) {
+                    this.props.onDeleted();
+                }
+            } else {
+                const paymentPlanVos: IPaymentPlanVo[] = (this.state.paymentPlanVos || []);
+                const paymentPlanVo: IPaymentPlanVo = paymentPlanVos.filter(item => item.id === record.paymentPlanId)[0];
+                let paymentRecordVos: IPaymentRecordVo[] = paymentPlanVo.paymentRecordVos;
+                paymentRecordVos.splice(index);
+                this.setState({
+                    paymentPlanVos: [ ...paymentPlanVos ]
+                });
             }
         }
     }
@@ -232,10 +242,12 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
      */
     public save = async (values: Record<string, any>) => {
         try {
+            const keyParts: string [] = (this.state.editingKey || '').split('-');
+            const paymentPlanId: string = keyParts[0];
             const paymentPlanVos: IPaymentPlanVo[] = (this.state.paymentPlanVos || []);
-            const paymentPlanVo: IPaymentPlanVo = paymentPlanVos[values.index as number];
+            const paymentPlanVo: IPaymentPlanVo = paymentPlanVos.filter(item => item.id === paymentPlanId)[0];
             let paymentRecordVos: IPaymentRecordVo[] = paymentPlanVo.paymentRecordVos;
-            const customerId: string| number | undefined = paymentRecordVos[values.index as number].customerId;
+            const customerId: string| number | undefined = paymentRecordVos[ values.index as number ].customerId;
             values = {
                 ...values,
                 refundTime: moment(values.refundTime).format('YYYY-MM-DD HH:mm'),
@@ -256,7 +268,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                 });
             } else { // add a new
                 const newPlan: IPaymentPlanVo = await RequestUtil.post<IPaymentPlanVo>('/tower-market/paymentRecord', values);
-                paymentRecordVos.push(newPlan);
+                paymentRecordVos[values.index as number] = newPlan;
             }
             this.setState({
                 paymentPlanVos: [ ...paymentPlanVos ],
@@ -265,7 +277,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             if(this.props.onDeleted) {
                 this.props.onDeleted();
             }
-        } catch(e) {}
+        } catch(e) {}   
     }
 
     /**
@@ -360,7 +372,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                         <Button type="link" htmlType="button" disabled={ this.state.editingKey !== '' } onClick={ this.editRow(record, index) }>编辑</Button>
                         <ConfirmableButton confirmTitle="要删除该条回款计划吗？"
                             type="link" placement="topRight"
-                            onConfirm={ this.deletePlan(record) }>
+                            onConfirm={ this.deletePlan(record, index) }>
                             删除
                         </ConfirmableButton>
                     </Space>

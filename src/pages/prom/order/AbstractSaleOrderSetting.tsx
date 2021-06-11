@@ -387,9 +387,15 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                     message: '请选择关联合同'
                 }],
                 children:
-                    <Input value={ saleOrder?.contractInfoDto?.contractId } suffix={ 
-                        <ContractSelectionComponent onSelect={ this.onSelect } />
-                    } disabled={ readonly }/>
+                    <>
+                        {
+                            readonly ? <Input value={ saleOrder?.contractInfoDto?.contractId }
+                            disabled={ readonly }/> : <Input value={ saleOrder?.contractInfoDto?.contractId } suffix={ 
+                                <ContractSelectionComponent onSelect={ this.onSelect }/>
+                            } disabled={ readonly }/>
+                        }
+                    </>
+                    
             },  {
                 label: '内部合同编号',
                 name: 'internalNumber',
@@ -605,7 +611,6 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                 </ul>
                                             {
                                                 fields.map<React.ReactNode>((field: FormListFieldData, index: number): React.ReactNode => (
-
                                                     <ul key={ `${ field.name }_${ index }` } className={ styles.FormItem }>
                                                         <li>
                                                             <ConfirmableButton confirmTitle="要删除该条回款计划吗？"
@@ -619,7 +624,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                         </li>
                                                         <li>{ index + 1 }</li>
                                                         <li>
-                                                            <Form.Item { ...field } name={[field.name, 'productStatus']} fieldKey={[field.fieldKey, 'productStatus']}>
+                                                            <Form.Item { ...field } name={[field.name, 'productStatus']} fieldKey={[field.fieldKey, 'productStatus']} initialValue={ this.getForm()?.getFieldsValue(true).productDtos[index]?.productStatus || 1 }>
                                                                 { this.getForm()?.getFieldsValue(true).productDtos[index]?.productStatus && this.getForm()?.getFieldsValue(true).productDtos[index]?.productStatus === 3 ? '已下发' : this.getForm()?.getFieldsValue(true).productDtos[index]?.productStatus === 2 ? '审批中' : '待下发' }
                                                             </Form.Item>
                                                         </li>
@@ -632,12 +637,12 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                                     required: true,
                                                                     message: '请输入线路名称'
                                                                 }]}>
-                                                                <Input disabled={ readonly && saleOrder?.productVos[index].productStatus !== 3 }/>
+                                                                <Input disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 }/>
                                                             </Form.Item>
                                                         </li>
                                                         <li>
                                                             <Form.Item { ...field } name={[field.name, 'productType']} fieldKey={[field.fieldKey, 'productType']}>
-                                                                <Select disabled={ readonly && saleOrder?.productVos[index].productStatus !== 3 }>
+                                                                <Select disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 }>
                                                                     <Select.Option value={ 1 }>角钢塔</Select.Option>
                                                                     <Select.Option value={ 2 }>管塔</Select.Option>
                                                                     <Select.Option value={ 3 }>螺栓</Select.Option>
@@ -649,7 +654,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                                     required: true,
                                                                     message: '请输入塔型'
                                                                 }]}>
-                                                                <Input disabled={ readonly && saleOrder?.productVos[index].productStatus !== 3 }/>
+                                                                <Input disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 }/>
                                                             </Form.Item>
                                                         </li>
                                                         <li>
@@ -657,12 +662,12 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                                     required: true,
                                                                     message: '请输入杆塔号'
                                                                 }]}>
-                                                                <Input disabled={ readonly && saleOrder?.productVos[index].productStatus !== 3 }/>
+                                                                <Input disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 }/>
                                                             </Form.Item>
                                                         </li>
                                                         <li>
                                                             <Form.Item { ...field } name={[field.name, 'voltageGrade']} fieldKey={[field.fieldKey, 'voltageGrade']}>
-                                                                <Select style={{ width: '90%' }} disabled={ readonly && saleOrder?.productVos[index].productStatus !== 3 }>
+                                                                <Select style={{ width: '90%' }} disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 }>
                                                                     <Select.Option value={ 1 }>220</Select.Option>
                                                                     <Select.Option value={ 2 }>110</Select.Option>
                                                                 </Select>
@@ -675,7 +680,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                                     step="0.01"
                                                                     stringMode={ false } 
                                                                     precision={ 2 }
-                                                                    disabled={ readonly && saleOrder?.productVos[index].productStatus !== 3 }
+                                                                    disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 }
                                                                 />
                                                             </Form.Item>
                                                         </li>
@@ -692,7 +697,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                                     required: saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE,
                                                                     message: '请输入产品重量'
                                                                 }]}>
-                                                                <Input onBlur={ () => this.numBlur(index) } disabled={ readonly  }/>
+                                                                <Input onBlur={ () => this.numBlur(index) } disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3  }/>
                                                             </Form.Item>
                                                         </li>
                                                         <li>
@@ -700,7 +705,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                                     required: true,
                                                                     message: '请输入产品单价'
                                                                 }]}>
-                                                                <Input prefix="￥" disabled={ saleOrder?.contractInfoDto?.chargeType !== ChargeType.ORDER_TOTAL_WEIGHT || readonly } onBlur={ () => this.priceBlur(index) }/>
+                                                                <Input prefix="￥" disabled={ saleOrder?.contractInfoDto?.chargeType !== ChargeType.ORDER_TOTAL_WEIGHT || readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 } onBlur={ () => this.priceBlur(index) }/>
                                                             </Form.Item>
                                                         </li>
                                                         <li>
@@ -710,12 +715,12 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                         </li>
                                                         <li>
                                                             <Form.Item { ...field } name={[field.name, 'tender']} fieldKey={[field.fieldKey, 'tender']}>
-                                                                <Input disabled={ readonly && saleOrder?.productVos[index].productStatus !== 3 }/>
+                                                                <Input disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 }/>
                                                             </Form.Item>
                                                         </li>
                                                         <li>
                                                             <Form.Item { ...field } name={[field.name, 'description']} fieldKey={[field.fieldKey, 'description']}>
-                                                                <Input.TextArea maxLength={ 300 } disabled={  readonly && saleOrder?.productVos[index].productStatus !== 3 }/>
+                                                                <Input.TextArea maxLength={ 300 } disabled={  readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 }/>
                                                             </Form.Item>
                                                         </li>
                                                     </ul>
