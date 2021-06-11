@@ -126,10 +126,10 @@ export default abstract class AbstractRoleSetting<P extends RouteComponentProps,
       */
      protected expandKeysByValue(authorities: IAuthority[]):number[] {
         let data: number[]=[];
-        authorities.forEach((authority: (IAuthority)): void => {
+        authorities.forEach((authority: IAuthority): void => {
             data.push(authority.id);
             if (authority.children && authority.children.length) {
-                this.expandKeysByValue(authority.children as (IAuthority)[]);
+                this.expandKeysByValue(authority.children as IAuthority[]);
             }
         });
         return data;
