@@ -84,7 +84,6 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
       * @description Components did mount
       */
     public async componentDidMount() {
-        console.log(ApplicationContext.get().dictionaryOption);
         super.componentDidMount();
         this.fetchTableData({});
     }

@@ -32,7 +32,6 @@ export default class DictionaryFilter implements IFilter {
             dictionaryOption[dict.code] = dict.dictionaryTypes;
         });
         ApplicationContext.get({ dictionaryOption: dictionaryOption });
-        console.log(ApplicationContext.get().dictionaryOption);
         return true;
     }
 }
