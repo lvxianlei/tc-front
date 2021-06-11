@@ -11,31 +11,21 @@ import { Link } from 'react-router-dom';
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../components/AbstractMngtComponent';
 import ConfirmableButton from '../../components/ConfirmableButton';
 import { ITabItem } from '../../components/ITabableComponent';
+import { IClient } from '../../configuration/IClient';
 import RequestUtil from '../../utils/RequestUtil';
 
 export interface IClientMngtProps {}
 export interface IClientMngtWithRouteProps extends RouteComponentProps<IClientMngtProps>, WithTranslation {}
 export interface IClientMngtState extends IAbstractMngtComponentState {
-    readonly tableDataSource: ITableDataItem[];
+    readonly tableDataSource: IClient[];
     readonly name?: string;
-}
-
-interface ITableDataItem {
-    readonly id: number;
-    readonly tenantId: number;
-    readonly name: string;
-    readonly type: number;
-    readonly linkman: string;
-    readonly phone: string;
-    readonly description: string;
-    readonly createTime: string;
 }
 
 interface IResponseData {
     readonly current: number;
     readonly size: number;
     readonly total: number;
-    readonly records: ITableDataItem[]
+    readonly records: IClient[]
 }
 
 /**
@@ -96,7 +86,7 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
      * @param item 
      * @returns table data source 
      */
-    public getTableDataSource(item: ITabItem): ITableDataItem[] {
+    public getTableDataSource(item: ITabItem): IClient[] {
         return this.state.tableDataSource;
     }
 
@@ -140,13 +130,13 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
             dataIndex: 'operation',
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={ `/client/mngt/setting/${ (record as ITableDataItem).id }` }>编辑</Link>
+                    <Link to={ `/client/mngt/setting/${ (record as IClient).id }` }>编辑</Link>
                     <ConfirmableButton 
                         confirmTitle="要删除该客户吗？" 
                         type="link" 
                         placement="topRight"
                         onConfirm={ async () => {
-                            await RequestUtil.delete(`/tower-customer/customer?customerId=${ (record as ITableDataItem).id }`);
+                            await RequestUtil.delete(`/tower-customer/customer?customerId=${ (record as IClient).id }`);
                             this.fetchTableData({});
                         } }
                     >

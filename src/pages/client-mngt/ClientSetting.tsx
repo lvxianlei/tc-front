@@ -6,9 +6,10 @@ import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { IFormItemGroup } from '../../components/AbstractFillableComponent';
+import { IClient } from '../../configuration/IClient';
 
 import RequestUtil from '../../utils/RequestUtil';
-import AbstractClientSetting, { IAbstractClientSettingState, IClient } from './AbstractClientSetting';
+import AbstractClientSetting, { IAbstractClientSettingState } from './AbstractClientSetting';
 
 export interface IClientSettingProps {
     readonly id: string;
