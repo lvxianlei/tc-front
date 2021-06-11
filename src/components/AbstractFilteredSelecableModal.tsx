@@ -25,14 +25,14 @@ export default abstract class AbstractFilteredSelecableModal<P extends IAbstract
      * @description 获取列表
      * @param values 
      */
-      abstract getTable(values: Record<string, any>): void;
+    abstract getTable(values: Record<string, any>, pagination: TablePaginationConfig ): void;
 
     /**
      * @description Determines whether table change on
      * @param pagination 
      */
     public onTableChange = (pagination: TablePaginationConfig): void => {
-        this.getTable(pagination);
+        this.getTable({}, pagination);
     }
 
      /**

@@ -167,7 +167,7 @@ class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps, IProm
      * @param pagination 
      */
     public onTableChange(pagination: TablePaginationConfig): void {
-        this.fetchTableData(pagination);
+        this.fetchTableData({}, pagination);
     }
     
      
