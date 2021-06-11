@@ -25,6 +25,8 @@ export interface IAbstractRoleSettingState extends IAbstractFillableComponentSta
     readonly roles?: IRole[];
     readonly checkedFunctionKeys?: React.Key[];
     readonly roleDetail?: IRoleDetail;
+    readonly expandKeys?: React.Key[];
+    readonly autoExpandParent?: boolean;
 }
 
 /**
@@ -43,7 +45,9 @@ export default abstract class AbstractRoleSetting<P extends RouteComponentProps,
             authorities: undefined,
             roles: undefined,
             roleDetail: undefined,
-            checkedFunctionKeys: undefined
+            checkedFunctionKeys: undefined,
+            expandKeys: undefined,
+            autoExpandParent: true
         } as S;
     }
 
@@ -55,7 +59,8 @@ export default abstract class AbstractRoleSetting<P extends RouteComponentProps,
         const roles: IRole[] = await RequestUtil.get<IRole[]>('/sinzetech-system/role/tree');
         this.setState({
             authorities: authorities,
-            roles: roles
+            roles: roles,
+            expandKeys: this.expandKeysByValue(authorities)
         });
     }
 
@@ -117,6 +122,28 @@ export default abstract class AbstractRoleSetting<P extends RouteComponentProps,
     
 
     /**
+      * 获取expandKeys
+      */
+     protected expandKeysByValue(authorities: (IAuthority )[] = []):number[] {
+        let data: number[]=[];
+        authorities.forEach((authority: (IAuthority)): void => {
+            data.push(authority.id);
+            if (authority.children && authority.children.length) {
+                this.expandKeysByValue(authority.children as (IAuthority)[]);
+            }
+        });
+        return data;
+    }
+
+     //展开控制
+     protected onExpand = (expandKeys: React.Key[])=>{
+        this.setState({
+          expandKeys,
+          autoExpandParent:false,
+        })
+    }
+
+    /**
      * @implements
      * @description Gets form item groups
      * @returns form item groups 
@@ -163,7 +190,8 @@ export default abstract class AbstractRoleSetting<P extends RouteComponentProps,
             itemProps: [{
                 children: (
                     <Tree checkable={ true } treeData={ this.wrapAuthority2DataNode(this.state.authorities as (IAuthority & DataNode)[]) }
-                        onCheck={ this.onCheckAuth } checkedKeys={ this.state.checkedFunctionKeys }/>
+                        onCheck={ this.onCheckAuth } checkedKeys={ this.state.checkedFunctionKeys } expandedKeys={ this.state.expandKeys } 
+                        autoExpandParent={this.state.autoExpandParent} onExpand={this.onExpand}/>
                 )
             }, {
                 name: 'functionIdList',
