@@ -24,6 +24,7 @@ import { RuleObject } from 'antd/lib/form';
 import { StoreValue } from 'antd/lib/form/interface';
 import Modal from 'antd/lib/modal/Modal';
 import AuthUtil from '../../../utils/AuthUtil';
+import { currencyTypeOptions, productTypeOptions, saleTypeOptions, voltageGradeOptions, winBidTypeOptions } from '../../../configuration/DictionaryOptions';
 export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
     readonly tablePagination: TablePaginationConfig;
     readonly contract: IContract;
@@ -48,7 +49,7 @@ export interface IContract {
     readonly projectName?: string;
     readonly simpleProjectName?: string;
     readonly winBidType?: number;
-    readonly saleType?: number;
+    readonly saleType?: string;
     readonly customerInfoDto?: IcustomerInfoDto;
     readonly signCustomerName?: string;
     readonly signContractTime?: string;
@@ -62,7 +63,8 @@ export interface IContract {
     readonly contractAmount?: number;
     readonly currencyType?: number;
     readonly description?: string;
-    readonly productInfoDto?: IproductInfoDto;
+    readonly productType?: string;
+    readonly voltageGrade?: string;
     readonly planType?: number;
     paymentPlanDtos?: IPaymentPlanDto[];
     attachInfoDtos: IattachDTO[];
@@ -77,11 +79,6 @@ export interface IcustomerInfoDto {
     readonly customerCompany?: string;
     readonly customerLinkman?: string;
     readonly customerPhone?: string;
-}
-
-export interface IproductInfoDto {
-    readonly productType?: string;
-    readonly voltageGrade?: number;
 }
 
 export interface IPaymentPlanDto {
@@ -436,21 +433,27 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 }, {
                     label: '中标类型',
                     name: 'winBidType',
-                    initialValue: contract?.winBidType || 1,
+                    initialValue: contract?.winBidType || winBidTypeOptions && winBidTypeOptions[0].id,
                     children: (
                         <Select>
-                            <Select.Option value={ 1 }>国家电网</Select.Option>
-                            <Select.Option value={ 2 }>南方电网</Select.Option>
+                            { winBidTypeOptions && winBidTypeOptions.map(({ id, name }, index) => {
+                                return <Select.Option key={ index } value={ id }>
+                                    { name }
+                                </Select.Option>
+                            }) }
                         </Select>
                     )
                 }, {
                     label: '销售类型',
                     name: 'saleType',
-                    initialValue: contract?.saleType || 1,
+                    initialValue: contract?.saleType || saleTypeOptions && saleTypeOptions[0].id,
                     children: (
                         <Select>
-                            <Select.Option value={ 1 }>国内业务</Select.Option>
-                            <Select.Option value={ 2 }>国际业务</Select.Option>
+                            { saleTypeOptions && saleTypeOptions.map(({ id, name }, index) => {
+                                return <Select.Option key={ index } value={ id }>
+                                    { name }
+                                </Select.Option>
+                            }) }
                         </Select>
                     )
                 }, {
@@ -615,8 +618,11 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     }],
                     children: (
                         <Select>
-                            <Select.Option value={ 1 }>RMB人民币</Select.Option>
-                            <Select.Option value={ 2 }>USD美元</Select.Option>
+                            { currencyTypeOptions && currencyTypeOptions.map(({ id, name }, index) => {
+                                return <Select.Option key={ index } value={ id }>
+                                    { name }
+                                </Select.Option>
+                            }) }
                         </Select>
                     )
                 }, {
@@ -632,26 +638,28 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     itemProps: [ {
                         label: '产品类型',
                         name: 'productType',
-                        initialValue: contract?.productInfoDto?.productType,
+                        initialValue: contract?.productType,
                         children: (
                             <Select>
-                                <Select.Option value={ 1 }>角钢塔</Select.Option>
-                                <Select.Option value={ 2 }>管塔</Select.Option>
-                                <Select.Option value={ 3 }>螺栓</Select.Option>
+                                { productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                                    return <Select.Option key={ index } value={ id }>
+                                        { name }
+                                    </Select.Option>
+                                }) }
                             </Select>
                         )
                     }, {
                         label: '电压等级',
                         name: 'voltageGrade',
-                        initialValue: contract?.productInfoDto?.voltageGrade,
+                        initialValue: contract?.voltageGrade,
                         children: (
-                            <>
-                                <Select style={{ width: '90%' }}>
-                                    <Select.Option value={ 1 }>220</Select.Option>
-                                    <Select.Option value={ 2 }>110</Select.Option>
-                                </Select>
-                                <span> KV</span>
-                            </>
+                            <Select style={{ width: '90%' }}>
+                                { voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
+                                    return <Select.Option key={ index } value={ id }>
+                                        { name }KV
+                                    </Select.Option>
+                                }) }
+                            </Select>
                         )
                     }]
         }]];

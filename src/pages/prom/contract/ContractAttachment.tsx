@@ -64,12 +64,9 @@ export default class ContractAttachment extends React.Component<IContractAttachm
             title: '文件大小',
             dataIndex: 'fileSize',
         }, {
-            key: 'winBidType',
+            key: 'fileUploadTime',
             title: '上传时间',
-            dataIndex: 'winBidType',
-            render: (productType: number): React.ReactNode => {
-                return  productType === 1 ? '国家电网' : '南方电网';
-            }
+            dataIndex: 'fileUploadTime',
         }, {
             key: 'userName',
             title: '上传人员',

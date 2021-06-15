@@ -42,7 +42,8 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<IContractSettingRoutePro
                 ...saleOrder,
                 productDtos: saleOrder.productVos,
                 contractInfoDto: saleOrder.contractInfoVo
-            }
+            },
+            orderQuantity: saleOrder.orderQuantity
         })
         this.getForm()?.setFieldsValue({
             totalWeight: saleOrder.orderQuantity,

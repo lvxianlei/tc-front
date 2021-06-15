@@ -9,7 +9,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 
 import RequestUtil from '../../../utils/RequestUtil';
 import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../../../utils/SummaryRenderUtil';
-import { IProductVo } from './AbstractSaleOrderSetting';
+import { ChargeType, IProductVo } from './AbstractSaleOrderSetting';
 //  import styles from './SaleOrderSummary.module.less';
 
 interface ISaleOrderSummaryParamsProps {
@@ -46,6 +46,7 @@ export interface IContractBaseInfo {
     readonly taxAmount?: number;
     readonly taxPrice?: number;
     readonly taxRate?: number;
+    readonly taxRateName?: string;
 }
 
 export interface IContractInfoVo {
@@ -62,6 +63,7 @@ export interface IContractInfoVo {
     readonly simpleProjectName?: string;
     readonly signUserName?: string;
     readonly description?: string;
+    readonly currencyTypeName?: string;
 }
 
 export interface IContractSysInfo {
@@ -173,10 +175,10 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
             },
             rows: [[{
                 label: '计价方式',
-                value: baseInfo?.contractInfoVo?.chargeType
+                value: baseInfo?.contractInfoVo?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ? '订单总价、总重计算单价' : '产品单价、基数计算总价'
             },{
                 label: '币种',
-                value: baseInfo?.contractInfoVo?.currencyType
+                value: baseInfo?.contractInfoVo?.currencyTypeName
             }], [{
                 label: '订单总重',
                 value: baseInfo?.orderQuantity
@@ -188,7 +190,7 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
                 value: baseInfo?.taxPrice
             }, {
                 label: '税率',
-                value: baseInfo?.taxRate
+                value: baseInfo?.taxRateName
             }], [{
                 label: '不含税金额',
                 value: baseInfo?.amount
@@ -242,7 +244,7 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
             dataIndex: 'lineName'
         }, {
             title: '产品类型',
-            dataIndex: 'productType'
+            dataIndex: 'productTypeName'
         }, {
             title: '塔型',
             dataIndex: 'productShape'
@@ -251,13 +253,13 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
             dataIndex: 'productNumber'
         }, {
             title: '电压等级（KV）',
-            dataIndex: 'voltageGrade'
+            dataIndex: 'voltageGradeName'
         }, {
             title: '呼高（米）',
             dataIndex: 'productHeight'
         }, {
             title: '单位',
-            dataIndex: 'price'
+            dataIndex: 'unit'
         }, {
             title: '数量',
             dataIndex: 'num'

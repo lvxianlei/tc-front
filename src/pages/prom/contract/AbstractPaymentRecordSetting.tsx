@@ -14,6 +14,7 @@ import PaymentPlanSelectionComponent from '../../../components/PaymentPlanSelect
 import RequestUtil from '../../../utils/RequestUtil';
 import moment from 'moment';
 import { DataType } from '../../../components/AbstractSelectableModal';
+import { currencyTypeOptions, refundModeOptions } from '../../../configuration/DictionaryOptions';
 
 const { Option } = Select;
 
@@ -257,9 +258,11 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 initialValue: paymentRecord?.refundMode,
                 children:
                     <Select>
-                        <Select.Option value={ 1 }>现金</Select.Option>
-                        <Select.Option value={ 2 }>商承</Select.Option>
-                        <Select.Option value={ 3 }>银行</Select.Option>
+                        { refundModeOptions && refundModeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={ index } value={ id }>
+                                { name }
+                            </Select.Option>
+                    }) }
                     </Select>
             }, {
                 label: '来款金额（￥）',
@@ -276,8 +279,11 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 initialValue: paymentRecord?.currencyType,
                 children: 
                     <Select>
-                        <Select.Option value={ 1 }>RMB人民币</Select.Option>
-                        <Select.Option value={ 2 }>USD美元</Select.Option>
+                        { currencyTypeOptions && currencyTypeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={ index } value={ id }>
+                                { name }
+                            </Select.Option>
+                        }) }
                     </Select>
             }, {
                 label: '汇率',
