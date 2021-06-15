@@ -7,18 +7,9 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGroup } from '../../components/AbstractFillableComponent';
-
+import { IClient } from '../../configuration/IClient';
 export interface IAbstractClientSettingState extends IAbstractFillableComponentState {
     readonly client?: IClient;
-}
-
-export interface IClient {
-    readonly id?: number;
-    readonly description?: string;
-    readonly linkman?: string;
-    readonly name?: string;
-    readonly phone?: string;
-    readonly type?: number;
 }
 
 /**
