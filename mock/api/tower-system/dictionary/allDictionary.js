@@ -5,7 +5,7 @@ const Random = Mock.Random;
 const dict = [];
 for (let i = 1; i < 10; ++i) {
     dict.push({
-        "code":  Random.natural(5),
+        "id":  Random.natural(5),
         "name":  Random.cword(3,10),
     });
 }
@@ -13,7 +13,7 @@ for (let i = 1; i < 10; ++i) {
 const records = [];
 for (let i = 1; i < 10; ++i) {
     records.push({
-        "code":  Random.natural(5),
+        "id":  Random.natural(5),
         "name":  Random.cword(3,10),
         dictionaryTypes: dict
     });
@@ -23,5 +23,9 @@ for (let i = 1; i < 10; ++i) {
 module.exports = {
     msg: "",
     code: 200,
-    data: records
+    data: [{
+        "id":  101,
+        "name":  Random.cword(3,10),
+        dictionaryTypes: dict
+    }].concat(records)
 }

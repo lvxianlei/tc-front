@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../../components/AbstractMngtComponent';
 import { ITabItem } from '../../../components/ITabableComponent';
-import ApplicationContext from '../../../configuration/ApplicationContext';
+import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 import RequestUtil from '../../../utils/RequestUtil';
 
 const { Option } = Select;
@@ -274,15 +274,20 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
         {
             name: 'winBidType',
             children: 
-                <Form.Item>
-                    <Select>
-                        <Option value="0">国家电网</Option>
-                        <Option value="1">南方电网</Option>
-                    </Select>
-                </Form.Item>
+                <Select>
+                    {productTypeOptions && productTypeOptions.map(({ id, name }, index) => (
+                        <Option key={ index } value={ id }>
+                            { name }
+                        </Option>
+                    ))}
+                </Select>
             
         }];
     }
  }
  
 export default withRouter(withTranslation(['translation'])(PromContract));
+
+function DictionaryEnums(DictionaryEnums: any) {
+    throw new Error('Function not implemented.');
+}

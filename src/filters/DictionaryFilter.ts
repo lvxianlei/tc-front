@@ -12,8 +12,8 @@ import { IFilter } from './IFilter';
 
 export interface IAllDict {
     readonly name: string;
-    readonly code: string;
-    readonly dictionaryTypes?: IDict;
+    readonly id: string;
+    readonly dictionaryTypes?: IDict[];
 } 
 
 /**
@@ -31,9 +31,9 @@ export default class DictionaryFilter implements IFilter {
         accessable = !!(AuthUtil.getAuthorization() && AuthUtil.getSinzetechAuth() && AuthUtil.getTenantId());
         if (accessable) {
             const dicts: IAllDict[] = await RequestUtil.get(`/tower-system/dictionary/allDictionary`);
-            const dictionaryOption: Record<string, IDict | undefined> = {};
+            const dictionaryOption: Record<string, IDict[] | undefined> = {};
             dicts.forEach((dict: IAllDict): void => {
-                dictionaryOption[dict.code] = dict.dictionaryTypes;
+                dictionaryOption[dict.id] = dict.dictionaryTypes;
             });
             ApplicationContext.get({ dictionaryOption: dictionaryOption });
         }
