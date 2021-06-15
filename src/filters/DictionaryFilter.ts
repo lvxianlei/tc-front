@@ -13,7 +13,7 @@ import { IFilter } from './IFilter';
 export interface IAllDict {
     readonly name: string;
     readonly id: string;
-    readonly dictionaryTypes?: IDict[];
+    readonly dictionaries?: IDict[];
 } 
 
 /**
@@ -34,7 +34,7 @@ export default class DictionaryFilter implements IFilter {
                 const dicts: IAllDict[] = await RequestUtil.get(`/tower-system/dictionary/allDictionary`);
                 const dictionaryOption: Record<string, IDict[] | undefined> = {};
                 dicts.forEach((dict: IAllDict): void => {
-                    dictionaryOption[dict.id] = dict.dictionaryTypes;
+                    dictionaryOption[dict.id] = dict.dictionaries;
                 });
                 ApplicationContext.get({ dictionaryOption: dictionaryOption });
             }
