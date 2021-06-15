@@ -6,6 +6,7 @@
 import { RouteComponentProps, StaticContext } from 'react-router';
 import ApplicationContext from '../configuration/ApplicationContext';
 import { IDict } from '../configuration/IApplicationContext';
+import AuthUtil from '../utils/AuthUtil';
 import RequestUtil from '../utils/RequestUtil';
 import { IFilter } from './IFilter';
 
@@ -26,12 +27,16 @@ export default class DictionaryFilter implements IFilter {
      * @returns filter 
      */
     public async doFilter(props: RouteComponentProps<{}, StaticContext, unknown>): Promise<boolean> {
-        const dicts: IAllDict[] = await RequestUtil.get(`/tower-system/dictionary/allDictionary`);
-        const dictionaryOption: Record<string, IDict | undefined> = {};
-        dicts.forEach((dict: IAllDict): void => {
-            dictionaryOption[dict.code] = dict.dictionaryTypes;
-        });
-        ApplicationContext.get({ dictionaryOption: dictionaryOption });
+        let accessable: boolean = true;
+        accessable = !!(AuthUtil.getAuthorization() && AuthUtil.getSinzetechAuth() && AuthUtil.getTenantId());
+        if (accessable) {
+            const dicts: IAllDict[] = await RequestUtil.get(`/tower-system/dictionary/allDictionary`);
+            const dictionaryOption: Record<string, IDict | undefined> = {};
+            dicts.forEach((dict: IAllDict): void => {
+                dictionaryOption[dict.code] = dict.dictionaryTypes;
+            });
+            ApplicationContext.get({ dictionaryOption: dictionaryOption });
+        }
         return true;
     }
 }
