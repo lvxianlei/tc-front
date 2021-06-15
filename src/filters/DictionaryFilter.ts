@@ -30,7 +30,7 @@ export default class DictionaryFilter implements IFilter {
         let accessable: boolean = true;
         if (props.location.pathname !== '/login') {
             accessable = !!(AuthUtil.getAuthorization() && AuthUtil.getSinzetechAuth() && AuthUtil.getTenantId());
-            if (!accessable) {
+            if (accessable) {
                 const dicts: IAllDict[] = await RequestUtil.get(`/tower-system/dictionary/allDictionary`);
                 const dictionaryOption: Record<string, IDict[] | undefined> = {};
                 dicts.forEach((dict: IAllDict): void => {
