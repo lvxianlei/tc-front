@@ -3,7 +3,7 @@ import { IDict } from "./IApplicationContext";
 
 const dictionary: Record<string, IDict[] | undefined> | undefined = ApplicationContext.get().dictionaryOption;
 
-export enum dictionaryEnums {
+export enum DictionaryEnums {
     PRODUCT_TYPE = 101,
     VOLTAGE_GRADE = 102,
     PRICE = 103,
@@ -16,26 +16,36 @@ export enum dictionaryEnums {
     SALE_TYPE = 123,
 }
 
+let productType: IDict[] | undefined = [];
+let voltageGrade: IDict[] | undefined = [];
+let price: IDict[] | undefined = [];
+let materialStandard: IDict[] | undefined = [];
+let currencyType: IDict[] | undefined = [];
+let taxRate: IDict[] | undefined = [];
+let refundMode: IDict[] | undefined = [];
+let clientType: IDict[] | undefined = [];
+let winBidType: IDict[] | undefined = [];
+let saleType: IDict[] | undefined = [];
 if(dictionary) {
-    var product_type: IDict[] | undefined = dictionary[dictionaryEnums.PRODUCT_TYPE];
-    var voltage_grade: IDict[] | undefined = dictionary[dictionaryEnums.VOLTAGE_GRADE];
-    var price: IDict[] | undefined = dictionary[dictionaryEnums.PRICE];
-    var material_standard: IDict[] | undefined = dictionary[dictionaryEnums.MATERIAL_STANDARD];
-    var currency_type: IDict[] | undefined = dictionary[dictionaryEnums.CURRENCY_TYPE];
-    var tax_rate: IDict[] | undefined = dictionary[dictionaryEnums.TAX_RATE];
-    var refund_mode: IDict[] | undefined = dictionary[dictionaryEnums.REFUND_MODE];
-    var client_type: IDict[] | undefined = dictionary[dictionaryEnums.CLIENT_TYPE];
-    var win_bid_type: IDict[] | undefined = dictionary[dictionaryEnums.WIN_BID_TYPE];
-    var sale_type: IDict[] | undefined = dictionary[dictionaryEnums.SALE_TYPE];
+    productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
+    voltageGrade = dictionary[DictionaryEnums.VOLTAGE_GRADE];
+    price = dictionary[DictionaryEnums.PRICE];
+    materialStandard = dictionary[DictionaryEnums.MATERIAL_STANDARD];
+    currencyType = dictionary[DictionaryEnums.CURRENCY_TYPE];
+    taxRate = dictionary[DictionaryEnums.TAX_RATE];
+    refundMode = dictionary[DictionaryEnums.REFUND_MODE];
+    clientType = dictionary[DictionaryEnums.CLIENT_TYPE];
+    winBidType = dictionary[DictionaryEnums.WIN_BID_TYPE];
+    saleType = dictionary[DictionaryEnums.SALE_TYPE];
 }
 
-export const productTypeOptions = product_type;
-export const voltageGradeOptions = voltage_grade;
+export const productTypeOptions = productType;
+export const voltageGradeOptions = voltageGrade;
 export const priceOptions = price;
-export const materialStandardOptions = material_standard;
-export const currencyTypeOptions = currency_type;
-export const taxrateOptions = tax_rate;
-export const refundModeOptions = refund_mode;
-export const clientTypeOptions = client_type;
-export const winBidTypeOptions = win_bid_type;
-export const saleTypeOptions = sale_type;
+export const materialStandardOptions = materialStandard;
+export const currencyTypeOptions = currencyType;
+export const taxrateOptions = taxRate;
+export const refundModeOptions = refundMode;
+export const clientTypeOptions = clientType;
+export const winBidTypeOptions = winBidType;
+export const saleTypeOptions = saleType;
