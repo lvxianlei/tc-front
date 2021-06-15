@@ -28,14 +28,16 @@ export default class DictionaryFilter implements IFilter {
      */
     public async doFilter(props: RouteComponentProps<{}, StaticContext, unknown>): Promise<boolean> {
         let accessable: boolean = true;
-        accessable = !!(AuthUtil.getAuthorization() && AuthUtil.getSinzetechAuth() && AuthUtil.getTenantId());
-        if (accessable) {
-            const dicts: IAllDict[] = await RequestUtil.get(`/tower-system/dictionary/allDictionary`);
-            const dictionaryOption: Record<string, IDict[] | undefined> = {};
-            dicts.forEach((dict: IAllDict): void => {
-                dictionaryOption[dict.id] = dict.dictionaryTypes;
-            });
-            ApplicationContext.get({ dictionaryOption: dictionaryOption });
+        if (props.location.pathname !== '/login') {
+            accessable = !!(AuthUtil.getAuthorization() && AuthUtil.getSinzetechAuth() && AuthUtil.getTenantId());
+            if (!accessable) {
+                const dicts: IAllDict[] = await RequestUtil.get(`/tower-system/dictionary/allDictionary`);
+                const dictionaryOption: Record<string, IDict[] | undefined> = {};
+                dicts.forEach((dict: IAllDict): void => {
+                    dictionaryOption[dict.id] = dict.dictionaryTypes;
+                });
+                ApplicationContext.get({ dictionaryOption: dictionaryOption });
+            }
         }
         return true;
     }
