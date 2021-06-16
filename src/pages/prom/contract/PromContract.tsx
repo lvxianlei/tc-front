@@ -279,7 +279,3 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
  }
  
 export default withRouter(withTranslation(['translation'])(PromContract));
-
-function DictionaryEnums(DictionaryEnums: any) {
-    throw new Error('Function not implemented.');
-}
