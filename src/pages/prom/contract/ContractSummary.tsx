@@ -30,6 +30,7 @@ export interface IContractBaseInfo {
     readonly projectName?: string;
     readonly simpleProjectName?: string;
     readonly winBidType?: number;
+    readonly winBidTypeName?: string;
 }
 
 export interface IOrderItem {
@@ -124,7 +125,7 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
                 value: baseInfo?.simpleProjectName
             }], [{
                 label: '中标类型',
-                value: baseInfo?.winBidType == 1 ? '国家电网': '南方电网'
+                value: baseInfo?.winBidTypeName
             }]]
         };
     }
@@ -145,7 +146,7 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
             dataIndex: 'lineName'
         }, {
             title: '产品类型',
-            dataIndex: 'productType'
+            dataIndex: 'productTypeName'
         }, {
             title: '塔型',
             dataIndex: 'productShape'
@@ -154,13 +155,13 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
             dataIndex: 'productNumber'
         }, {
             title: '电压等级（KV）',
-            dataIndex: 'voltageGrade'
+            dataIndex: 'voltageGradeName'
         }, {
             title: '呼高（米）',
             dataIndex: 'productHeight'
         }, {
             title: '单位',
-            dataIndex: 'price'
+            dataIndex: 'unit'
         }, {
             title: '数量',
             dataIndex: 'num'

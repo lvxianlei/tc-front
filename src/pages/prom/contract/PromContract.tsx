@@ -26,6 +26,10 @@ interface ITableDataItem {
     readonly winBidType: number;
     readonly productType: number;
     readonly voltageGrade: number;
+    readonly saleTypeName: string;
+    readonly winBidTypeName: string;
+    readonly productTypeName: string;
+    readonly voltageGradeName: string;
     readonly customerCompany: string;
     readonly signCustomerName: string;
     readonly deliveryTime: string;
@@ -124,33 +128,21 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
             title: '工程名称',
             dataIndex: 'projectName'
         }, {
-            key: 'saleType',
+            key: 'saleTypeName',
             title: '销售类型',
-            dataIndex: 'saleType',
-            render: (saleType: number): React.ReactNode => {
-            return  saleType === 1 ? '国内客户' : '国际客户';
-        }
+            dataIndex: 'saleTypeName'
         }, {
-            key: 'winBidType',
+            key: 'winBidTypeName',
             title: '中标类型',
-            dataIndex: 'winBidType',
-            render: (winBidType: number): React.ReactNode => {
-            return  winBidType === 1 ? '国家电网' : '南方电网';
-            }
+            dataIndex: 'winBidTypeName',
         }, {
-            key: 'productType',
+            key: 'productTypeName',
             title: '产品类型',
-            dataIndex: 'productType',
-            render: (productType: number): React.ReactNode => {
-            return  productType === 1 ? '角钢塔' : '管塔';
-            }
+            dataIndex: 'productTypeName',
         },  {
-            key: 'voltageGrade',
+            key: 'voltageGradeName',
             title: '电压等级（KV）',
-            dataIndex: 'voltageGrade',
-            render: (voltageGrade: number): React.ReactNode => {
-                return  voltageGrade === 1 ? '220' : '110';
-            }
+            dataIndex: 'voltageGradeName',
         },  {
             key: 'customerCompany',
             title: '业主单位',
@@ -275,11 +267,11 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
             name: 'winBidType',
             children: 
                 <Select>
-                    {productTypeOptions && productTypeOptions.map(({ id, name }, index) => (
-                        <Option key={ index } value={ id }>
+                    { productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                        return <Option key={ index } value={ id }>
                             { name }
                         </Option>
-                    ))}
+                    }) }
                 </Select>
             
         }];
@@ -287,7 +279,3 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
  }
  
 export default withRouter(withTranslation(['translation'])(PromContract));
-
-function DictionaryEnums(DictionaryEnums: any) {
-    throw new Error('Function not implemented.');
-}

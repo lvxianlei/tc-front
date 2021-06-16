@@ -12,6 +12,7 @@ import moment from 'moment';
 import { DataType } from '../../../components/AbstractSelectableModal';
 import styles from './ContractRefundRecord.module.less';
 import ClientSelectionComponent from '../../../components/ClientSelectionModal';
+import { currencyTypeOptions, refundModeOptions } from '../../../configuration/DictionaryOptions';
 
 export interface IContractRefundRecord {
     readonly paymentPlanVos: IPaymentPlanVo[];
@@ -301,9 +302,11 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             editable: true,
             type: (
                 <Select>
-                    <Select.Option value={ 1 }>现金</Select.Option>
-                    <Select.Option value={ 2 }>商承</Select.Option>
-                    <Select.Option value={ 3 }>银行</Select.Option>
+                    { refundModeOptions && refundModeOptions.map(({ id, name }, index) => {
+                        return <Select.Option key={ index } value={ id }>
+                            { name }
+                        </Select.Option>
+                    }) }
                 </Select>
             ),
             render: (refundMode: number): React.ReactNode => {
@@ -320,8 +323,11 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             editable: true,
             type: (
                 <Select>
-                    <Select.Option value={ 1 }>RMB人民币</Select.Option>
-                    <Select.Option value={ 2 }>USD美元</Select.Option>
+                    { currencyTypeOptions && currencyTypeOptions.map(({ id, name }, index) => {
+                        return <Select.Option key={ index } value={ id }>
+                            { name }
+                        </Select.Option>
+                    }) }
                 </Select>
             ),
             render: (currencyType: number): React.ReactNode => {

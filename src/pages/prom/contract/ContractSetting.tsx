@@ -75,7 +75,9 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
             attachInfoDtos: contract?.attachInfoDtos,
             customerCompany: contract.customerInfoVo?.customerCompany,
             customerLinkman: contract.customerInfoVo?.customerLinkman,
-            customerPhone: contract.customerInfoVo?.customerPhone
+            customerPhone: contract.customerInfoVo?.customerPhone,
+            productType: contract?.productType,
+            voltageGrade: contract?.voltageGrade
         });
         const region: string[] = this.state.contract.region;
         let regionInfoData: IRegion[] =  this.state.regionInfoData;

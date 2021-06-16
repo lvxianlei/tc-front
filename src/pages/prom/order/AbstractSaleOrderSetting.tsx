@@ -15,10 +15,11 @@ import moment from 'moment';
 import styles from './AbstractSaleOrderSetting.module.less'
 import ContractSelectionComponent from '../../../components/ContractSelectionModal';
 import { DataType } from '../../../components/AbstractSelectableModal';
+import { currencyTypeOptions, productTypeOptions, taxRateOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
 
 export interface IAbstractSaleOrderSettingState extends IAbstractFillableComponentState {
     readonly saleOrder?: ISaleOrder;
-    readonly orderQuantity: number;
+    readonly orderQuantity?: number;
     readonly newOption: IOption;
     readonly isChangeProduct: boolean;
     
@@ -95,8 +96,8 @@ interface IOption {
 }
 
 export enum ChargeType {
-    UNIT_PRICE = 0,   //产品单价
-    ORDER_TOTAL_WEIGHT = 1,   //订单总重
+    ORDER_TOTAL_WEIGHT = 0,   //订单总重
+    UNIT_PRICE = 1,   //产品单价
 }
 /**
  * Abstract SaleOrder Setting
@@ -134,8 +135,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
     }
 
     public componentDidUpdate(): void {
-        const orderQuantity: number = this.state.orderQuantity;
-        this.getForm()?.setFieldsValue({ orderQuantity: orderQuantity })
+        const orderQuantity: number | undefined  = this.state.orderQuantity;
+        this.getForm()?.setFieldsValue({ orderQuantity: orderQuantity });
     }
     
     /**
@@ -169,24 +170,32 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                     contractInfoDto: modalSelectedValue
                 },
             })
-            this.getForm()?.setFieldsValue({ ...modalSelectedValue, price: 0  })
+            this.getForm()?.setFieldsValue({ ...modalSelectedValue, price: 0  });
+            this.getUnitByChargeType();
         }   
     }
 
     /**
-     * @description 税率select-Option
+     * @description 计价方式判断单位
      */
-    public getTaxRateOption(): IOption[] {
-        return [
-            {
-                label: 0.64,
-                value: 1
-            }, {
-                label: 0.007,
-                value: 2
+    public getUnitByChargeType = () : void => {
+        const saleOrder: ISaleOrder | undefined = this.getForm()?.getFieldsValue(true);
+        let productDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).productDtos;
+        productDtos = productDtos.map(items => {
+            if(saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE) {
+                return items ={
+                    ...items,
+                    unit:  '基'
+                }
+            } else {
+                return items ={
+                    ...items,
+                    unit:  '吨'
+                }
             }
-        ]
-    }
+        })
+        this.getForm()?.setFieldsValue({ productDtos: productDtos });
+    } 
 
     /**
      * @description 税率自定义option
@@ -298,7 +307,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             let totalPrice: number = 0;
             let amount: number = 0;
             
-            if(saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT) {
+            if(saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE) {
                 amount = price * 1; 
             }
             productDtos.map<void>((items: IProductVo): void => {
@@ -333,17 +342,19 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const saleOrderValue: ISaleOrder = this.getForm()?.getFieldsValue(true);
         const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
         const productDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).productDtos;
-        const orderQuantity: number = this.state.orderQuantity;
-        this.setState({
-            orderQuantity: orderQuantity - 1
-        })
-        if( saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ) {
+        const orderQuantity: number | undefined = this.state.orderQuantity;
+        if(orderQuantity) {
+            this.setState({
+                orderQuantity: orderQuantity - 1
+            })
+        }
+        if( saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ) {
             const num: number = productDtos[index].num;
             let totalWeight: number = saleOrderValue.totalWeight;
             totalWeight = totalWeight - num;
             this.getForm()?.setFieldsValue({ totalWeight: totalWeight });
             this.getPrice();
-        } else if( saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ) {
+        } else if( saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ) {
             const price: number = productDtos[index].price;
             const amount: number = productDtos[index].totalAmount;
             let totalPrice: number = this.getForm()?.getFieldsValue(true).totalPrice;
@@ -361,7 +372,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      */
     public getFormItemGroups(): IFormItemGroup[][] {
         const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
-        const orderQuantity: number = this.state.orderQuantity;
+        const orderQuantity: number | undefined = this.state.orderQuantity;
         const readonly: boolean = this.state.isChangeProduct;
         return [[{
             title: '基础信息',
@@ -443,15 +454,18 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 initialValue: saleOrder?.contractInfoDto?.currencyType,
                 children: (
                     <Select disabled>
-                        <Select.Option value={ 1 }>RMB人民币</Select.Option>
-                        <Select.Option value={ 2 }>USD美元</Select.Option>
+                        { currencyTypeOptions && currencyTypeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={ index } value={ id }>
+                                { name }
+                            </Select.Option>
+                        }) }
                     </Select>
                 )
             }, {
                 label: '订单数量',
                 name: 'orderQuantity',
                 initialValue: saleOrder?.orderQuantity || orderQuantity,
-                children: <Input disabled suffix={ saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ? "基" : "吨" }/>
+                children: <Input disabled suffix={ saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? "基" : "吨" }/>
             }, {
                 label: '含税金额',
                 name: 'taxAmount',
@@ -465,7 +479,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                     step="0.01"
                     stringMode={ false } 
                     precision={ 2 }  
-                    disabled={ saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT || readonly } 
+                    disabled={ saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE || readonly } 
                     onBlur={ this.amountBlur }/>
             }, {
                 label: '含税单价',
@@ -483,8 +497,10 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             <Select.Option key={ this.state.newOption.value } value={ this.state.newOption.label }>{ this.state.newOption.value }</Select.Option> 
                             : ""
                         }
-                        { this.getTaxRateOption().map<React.ReactNode>((items: IOption): React.ReactNode => {
-                            return <Select.Option key={ items.value } value={items.label}>{items.label}</Select.Option>;
+                        { taxRateOptions && taxRateOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={ index } value={ id }>
+                                { name }
+                            </Select.Option>
                         }) }
                     </Select>
             }, {
@@ -579,18 +595,22 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                         <>
                                             <Button type="primary" onClick={ () => {
                                                 operation.add();
-                                                const orderQuantity: number = this.state.orderQuantity;
-                                                console.log( saleOrder?.contractInfoDto?.chargeType)
-                                                if( saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ) {
+                                                const orderQuantity: number | undefined = this.state.orderQuantity;
+                                                if(saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ) {
                                                     const saleOrderValue: ISaleOrder = this.getForm()?.getFieldsValue(true);
-                                                    this.setState({
-                                                        orderQuantity: saleOrderValue.totalWeight
-                                                    })
+                                                    if(orderQuantity) {
+                                                        this.setState({
+                                                            orderQuantity: saleOrderValue.totalWeight
+                                                        })
+                                                    }
                                                 } else {
-                                                    this.setState({
-                                                        orderQuantity: orderQuantity + 1
-                                                    })
+                                                    if(orderQuantity) {
+                                                        this.setState({
+                                                            orderQuantity: orderQuantity + 1
+                                                        })
+                                                    }
                                                 }
+                                                this.getUnitByChargeType();
                                             } } className={ readonly? styles.isShow : styles.addBtn }>新增</Button>
                                                 <ul className={ styles.FormItem }>
                                                     <li className={ styles.headerItem }>操作</li>
@@ -600,10 +620,10 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                     <li  className={ styles.headerItem }>产品类型</li>
                                                     <li  className={ styles.headerItem }>* 塔型</li>
                                                     <li  className={ styles.headerItem }>* 杆塔号</li>
-                                                    <li  className={ styles.headerItem }>* 电压等级</li>
+                                                    <li  className={ styles.headerItem }>电压等级</li>
                                                     <li  className={ styles.headerItem }>呼高（米）</li>
-                                                    <li  className={ saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ? styles.isShow : styles.headerItem }>单位</li>
-                                                    <li  className={ saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ? styles.isShow : styles.headerItem }>* 重量（吨）</li>
+                                                    <li  className={ styles.headerItem }>单位</li>
+                                                    <li  className={ saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? styles.isShow : styles.headerItem }>* 数量</li>
                                                     <li  className={ styles.headerItem }>单价</li>
                                                     <li  className={ styles.headerItem }>金额</li>
                                                     <li  className={ styles.headerItem }>标段</li>
@@ -643,9 +663,11 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                         <li>
                                                             <Form.Item { ...field } name={[field.name, 'productType']} fieldKey={[field.fieldKey, 'productType']}>
                                                                 <Select disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 }>
-                                                                    <Select.Option value={ 1 }>角钢塔</Select.Option>
-                                                                    <Select.Option value={ 2 }>管塔</Select.Option>
-                                                                    <Select.Option value={ 3 }>螺栓</Select.Option>
+                                                                    { productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                                                                        return <Select.Option key={ index } value={ id }>
+                                                                            { name }
+                                                                        </Select.Option>
+                                                                    }) }
                                                                 </Select>
                                                             </Form.Item>
                                                         </li>
@@ -668,8 +690,11 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                         <li>
                                                             <Form.Item { ...field } name={[field.name, 'voltageGrade']} fieldKey={[field.fieldKey, 'voltageGrade']}>
                                                                 <Select style={{ width: '90%' }} disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 }>
-                                                                    <Select.Option value={ 1 }>220</Select.Option>
-                                                                    <Select.Option value={ 2 }>110</Select.Option>
+                                                                    { voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
+                                                                        return <Select.Option key={ index } value={ id }>
+                                                                            { name }
+                                                                        </Select.Option>
+                                                                    }) }
                                                                 </Select>
                                                             </Form.Item>
                                                         </li>
@@ -684,17 +709,17 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                                 />
                                                             </Form.Item>
                                                         </li>
-                                                        <li className={ saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ? styles.isShow : styles.item }>
+                                                        <li>
                                                             <Form.Item { ...field } name={[field.name, 'unit']} fieldKey={[field.fieldKey, 'unit']} rules= {[{
                                                                     required: true,
                                                                     message: '请输入单位'
-                                                                }]} initialValue="吨">
-                                                                <Input disabled={ saleOrder?.contractInfoDto?.chargeType !== ChargeType.ORDER_TOTAL_WEIGHT || readonly } value="吨" />
+                                                                }]} >
+                                                                <Input disabled/>
                                                             </Form.Item>
                                                         </li>
-                                                        <li className={ saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ? styles.isShow : styles.item }>
+                                                        <li className={ saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? styles.isShow : styles.item }>
                                                             <Form.Item { ...field } name={[field.name, 'num']} fieldKey={[field.fieldKey, 'num']} rules= {[{
-                                                                    required: saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE,
+                                                                    required: saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT,
                                                                     message: '请输入产品重量'
                                                                 }]}>
                                                                 <Input onBlur={ () => this.numBlur(index) } disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3  }/>
@@ -705,7 +730,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                                     required: true,
                                                                     message: '请输入产品单价'
                                                                 }]}>
-                                                                <Input prefix="￥" disabled={ saleOrder?.contractInfoDto?.chargeType !== ChargeType.ORDER_TOTAL_WEIGHT || readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 } onBlur={ () => this.priceBlur(index) }/>
+                                                                <Input prefix="￥" disabled={ saleOrder?.contractInfoDto?.chargeType !== ChargeType.UNIT_PRICE || readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 } onBlur={ () => this.priceBlur(index) }/>
                                                             </Form.Item>
                                                         </li>
                                                         <li>
@@ -736,8 +761,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             <li>
                                 总计
                             </li>
-                            <li className={ saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ? styles.leftBlank120 : styles.leftBlank }></li>
-                            <li className={ saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ? styles.isShow : '' }>
+                            <li className={ styles.leftBlank }></li>
+                            <li className={ saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? styles.isShow : '' }>
                                 <Form.Item name="totalWeight">
                                     <Input disabled/>
                                 </Form.Item>
