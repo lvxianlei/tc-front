@@ -46,7 +46,6 @@ export interface IContractBaseInfo {
     readonly taxAmount?: number;
     readonly taxPrice?: number;
     readonly taxRate?: number;
-    readonly taxRateName?: string;
 }
 
 export interface IContractInfoVo {
@@ -190,7 +189,7 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
                 value: baseInfo?.taxPrice
             }, {
                 label: '税率',
-                value: baseInfo?.taxRateName
+                value: baseInfo?.taxRate
             }], [{
                 label: '不含税金额',
                 value: baseInfo?.amount
