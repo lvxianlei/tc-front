@@ -140,7 +140,10 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
             dataIndex: 'index'
         }, {
             title: '状态',
-            dataIndex: 'productStatus'
+            dataIndex: 'productStatus',
+            render: (productStatus: number): React.ReactNode => {
+                return productStatus === 1 ? '待下发' : productStatus === 2 ? '审批中' : '已下发'
+            }
         }, {
             title: '线路名称',
             dataIndex: 'lineName'
@@ -187,7 +190,6 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
     private getOrderSummariableItems(): IRenderdSummariableItem[] {
         const orderItems: IOrderItem[] = this.state.orderItems || [];
         return orderItems.map<IRenderdSummariableItem>((item: IOrderItem): IRenderdSummariableItem => {
-            console.log(item)
             return {
                 fieldItems: [{
                     label: '订单编号',
