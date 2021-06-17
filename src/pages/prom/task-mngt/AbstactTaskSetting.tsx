@@ -528,7 +528,7 @@ enum StepTitleItem {
                             name: 'materialStandard',
                             initialValue: task?.materialStandard || materialStandardOptions && materialStandardOptions[0].id,
                             children: (
-                                <Select>
+                                <Select disabled>
                                     { materialStandardOptions && materialStandardOptions.map(({ id, name }, index) => {
                                         console.log(materialStandardOptions)
                                         return <Select.Option key={ index } value={ id }>
