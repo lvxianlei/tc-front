@@ -8,17 +8,13 @@ import {
 } from "antd";
 import React from "react";
 import { WithTranslation, withTranslation } from "react-i18next";
-//引入路由
 import { RouteComponentProps, withRouter } from "react-router";
-//引入Link
-//引入css
 import styles from "./ApprovalList.module.less";
 import AbstractMngtComponent, {
     IAbstractMngtComponentState,
 } from "../../components/AbstractMngtComponent";
 import { ITabItem } from "../../components/ITabableComponent";
 import RequestUtil from "../../utils/RequestUtil";
-// import { ITaskapprovalState } from './task/TaskApproval';
 
 export interface IApprovalallProps { }
 export interface IApprovalallRouteProps
@@ -193,7 +189,7 @@ class ApprovalAll extends AbstractMngtComponent<
                             {(records as ITaskTableDataItem).auditStatus ===
                                 AuditStatus.PENDING_APPROVAL ?
                                 (
-                                    (records as ITaskTableDataItem).auditStatus === AuditStatus.PENDING_APPROVAL ?
+                                    (records as ITaskTableDataItem).type === "SALE_ORDER_AUDIT" ?
                                         <Button href={`/approval/task/product-change/
                                     ${(records as ITaskTableDataItem).id}`} type="link" >审批</Button>
                                         :
@@ -266,7 +262,6 @@ class ApprovalAll extends AbstractMngtComponent<
      * @returns filter components
      */
     public getFilterFormItemProps(item: ITabItem): FormItemProps[] {
-        console.log(this.state);
         return [
             {
                 name: "type",

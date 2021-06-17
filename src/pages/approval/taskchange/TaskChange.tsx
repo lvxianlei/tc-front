@@ -4,6 +4,7 @@ import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
+import { materialStandardOptions } from '../../../configuration/DictionaryOptions';
 import RequestUtil from '../../../utils/RequestUtil';
 import AbstractTaskChange, { IAbstractTaxkchangeState, IContract } from './AbstractTaskchange';
 
@@ -100,11 +101,14 @@ class TaskChange extends AbstractTaskChange<ITaxkChangeRouteProps, ITaxkchangeSt
             itemProps: [{
                 label: '原材料标准',
                 name: 'materialStandard',
-                initialValue: contract?.materialStandard || 1,
+                initialValue: contract?.materialStandard || materialStandardOptions && materialStandardOptions[0].id,
                 children: (
                     <Select disabled>
-                        <Select.Option value={1}>国家电网</Select.Option>
-                        <Select.Option value={2}>南方电网</Select.Option>
+                        { materialStandardOptions && materialStandardOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={ index } value={ id }>
+                                { name }
+                            </Select.Option>
+                        }) }
                     </Select>
                 )
             }, {
@@ -223,17 +227,7 @@ class TaskChange extends AbstractTaskChange<ITaxkChangeRouteProps, ITaxkchangeSt
         }, {
             title: '产品类型',
             align: "center",
-            dataIndex: 'productType',
-            render: (productType: number): React.ReactNode => {
-                switch (productType) {
-                    case ProductType.ANGLE_STEEL_TOWER:
-                        return "角钢塔"
-                    case ProductType.TUBE_TOWER:
-                        return "管塔"
-                    case ProductType.BOLT:
-                        return "螺栓"
-                }
-            }
+            dataIndex: 'productTypeName'
         }, {
             title: '塔型',
             align: "center",
@@ -245,15 +239,7 @@ class TaskChange extends AbstractTaskChange<ITaxkChangeRouteProps, ITaxkchangeSt
         }, {
             title: '电压等级',
             align: "center",
-            dataIndex: 'voltageGrade',
-            render: (voltageGrade: number): React.ReactNode => {
-                switch (voltageGrade) {
-                    case 1:
-                        return <span>220 KV</span>
-                    case 2:
-                        return <span>110 KV</span>
-                }
-            }
+            dataIndex: 'voltageGradeName'
         }, {
             title: '呼高（米）',
             align: "center",
