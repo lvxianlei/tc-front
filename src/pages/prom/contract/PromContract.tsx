@@ -4,9 +4,10 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 
+import styles from '../../../components/AbstractSelectableModal.module.less';
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../../components/AbstractMngtComponent';
 import { ITabItem } from '../../../components/ITabableComponent';
-import { productTypeOptions } from '../../../configuration/DictionaryOptions';
+import { winBidTypeOptions } from '../../../configuration/DictionaryOptions';
 import RequestUtil from '../../../utils/RequestUtil';
 
 const { Option } = Select;
@@ -34,6 +35,7 @@ interface ITableDataItem {
     readonly signCustomerName: string;
     readonly deliveryTime: string;
     readonly status: number;
+    readonly signCustomerId?: string;
 }
 
 export interface IResponseData {
@@ -180,7 +182,7 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
                             删除
                         </Button>
                     </Popconfirm>
-                    <Button type="link" href={ `/prom/contract/paymentRecord` } disabled={ (record as ITableDataItem).status === 0 }>添加回款记录</Button>
+                    <Button type="link" href={ `/prom/contract/paymentRecord/${ (record as ITableDataItem).id }/${ (record as ITableDataItem).projectName }/${ (record as ITableDataItem).signCustomerId }/${ (record as ITableDataItem).signCustomerName }` } disabled={ (record as ITableDataItem).status === 0 }>{ console.log(record) }添加回款记录</Button>
                 </Space>
             )
         }];
@@ -266,8 +268,8 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
         {
             name: 'winBidType',
             children: 
-                <Select>
-                    { productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                <Select placeholder="请选择中标类型" className={ styles.select_width }>
+                    { winBidTypeOptions && winBidTypeOptions.map(({ id, name }, index) => {
                         return <Option key={ index } value={ id }>
                             { name }
                         </Option>

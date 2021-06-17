@@ -8,7 +8,7 @@ import PopModalButton from './PopModalButton';
 
 export interface IAbstractSelectableModalProps {
     readonly onSelect: (selectedRows: DataType[]) => void;
-    readonly id?: number;
+    readonly id?: number | string;
 }
 
 export interface IAbstractSelectableModalState {

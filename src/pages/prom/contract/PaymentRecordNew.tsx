@@ -6,19 +6,45 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 
 import RequestUtil from '../../../utils/RequestUtil';
-import AbstractPaymentRecordSetting, { IAbstractPaymentRecordSettingState } from './AbstractPaymentRecordSetting';
+import AbstractPaymentRecordSetting, { IAbstractPaymentRecordSettingState, IPaymentRecord } from './AbstractPaymentRecordSetting';
 import moment from 'moment'
-import Form from 'antd/lib/form/Form';
-import { stringify } from 'query-string';
+import { IContract } from '../../../configuration/IContract';
 
-export interface IContractNewProps {}
-export interface IContractNewRouteProps extends RouteComponentProps<IContractNewProps>, WithTranslation {}
-export interface IContractNewState extends IAbstractPaymentRecordSettingState {}
+export interface IPaymentRecordNewProps {
+    readonly id: string;
+    readonly projectName: string;
+    readonly signCustomerId: string;
+    readonly signCustomerName: string;
+}
+export interface IPaymentRecordNewRouteProps extends RouteComponentProps<IPaymentRecordNewProps>, WithTranslation {}
+export interface IPaymentRecordNewState extends IAbstractPaymentRecordSettingState {}
 
  /**
   * Create a new paymentRecord.
   */
-class PaymentRecordNew extends AbstractPaymentRecordSetting<IContractNewRouteProps, IContractNewState> {
+class PaymentRecordNew extends AbstractPaymentRecordSetting<IPaymentRecordNewRouteProps, IPaymentRecordNewState> {
+
+    /**
+     * @description Components did mount
+     */
+     public async componentDidMount() {
+        super.componentDidMount();
+        const paymentRecord: IPaymentRecord | undefined = this.state.paymentRecord;
+        this.setState({
+            paymentRecord: {
+                ...paymentRecord,
+                contractId: this.props.match.params.id,
+                projectName: this.props.match.params.projectName,
+                customerId: this.props.match.params.signCustomerId,
+                customerName: this.props.match.params.signCustomerName,
+            },
+            id: this.props.match.params.id
+        });
+        this.getForm()?.setFieldsValue({ contractId: this.props.match.params.id,
+            projectName: this.props.match.params.projectName,
+            customerId: this.props.match.params.signCustomerId,
+            customerName: this.props.match.params.signCustomerName, })
+    }
 
     /**
      * @implements
