@@ -237,7 +237,10 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
             dataIndex: 'index'
         }, {
             title: '状态',
-            dataIndex: 'productStatus'
+            dataIndex: 'productStatus',
+            render: (productStatus: number): React.ReactNode => {
+                return productStatus === 1 ? '待下发' : productStatus === 2 ? '审批中' : '已下发'
+            }
         }, {
             title: '线路名称',
             dataIndex: 'lineName'
@@ -343,8 +346,14 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
             render: this.renderAmountInfoSection
         }, {
             title: '产品信息',
-        //  className: styles.orderSection,
-            render: (): React.ReactNode => <Table rowKey="index"  dataSource={ this.state.baseInfo?.productVos } pagination={ false } bordered={ true } columns={ this.getOrderColumns() }/>
+            render: (): React.ReactNode => <Table rowKey="index"  dataSource={ this.state.baseInfo?.productVos?.map<IProductVo>(
+                (productVos: IProductVo, index: number): IProductVo => (
+                    {
+                        ...productVos,
+                        index: index + 1
+                    }
+                )
+            ) } pagination={ false } bordered={ true } columns={ this.getOrderColumns() }/>
         }, {
             title: '系统信息',
             render: this.renderSysInfoSection
