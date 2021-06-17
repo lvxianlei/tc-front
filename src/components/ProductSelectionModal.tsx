@@ -35,6 +35,7 @@ import styles from './AbstractSelectableModal.module.less';
     readonly productShape: string;
     readonly productStatus: number;
     readonly productType: number;
+    readonly productTypeName: string;
     readonly saleOrderId: number;
     readonly taskNoticeId: string;	
     readonly tender: string;
@@ -107,8 +108,8 @@ import styles from './AbstractSelectableModal.module.less';
             },
             { 
                 title: '产品类型', 
-                dataIndex: 'productType', 
-                key: 'productType' 
+                dataIndex: 'productTypeName', 
+                key: 'productTypeName' 
             },
             { 
                 title: '塔型', 
@@ -121,7 +122,7 @@ import styles from './AbstractSelectableModal.module.less';
                 key: 'productNumber' 
             },
             { 
-                title: '电压等级', 
+                title: '电压等级（KV）', 
                 dataIndex: 'voltageGradeName', 
                 key: 'voltageGradeName' 
             },

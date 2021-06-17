@@ -20,6 +20,7 @@ import RequestUtil from '../../../utils/RequestUtil';
      readonly internalNumber: string;
      readonly materialDemand: string;
      readonly materialStandard: number;
+     readonly materialStandardName: string;
      readonly planDeliveryTime: number;
      readonly deliveryTime: string;
      readonly projectName: string;
@@ -129,9 +130,9 @@ import RequestUtil from '../../../utils/RequestUtil';
             title: '工程名称',
             dataIndex: 'projectName'
         },  {
-            key: 'materialStandard',
+            key: 'materialStandardName',
             title: '原材料标准',
-            dataIndex: 'materialStandard'
+            dataIndex: 'materialStandardName'
         },  {
             key: 'materialDemand',
             title: '原材料要求',

@@ -37,7 +37,8 @@
  import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
  import { DataType } from '../../../components/AbstractSelectableModal';
  import styles from './AbstractTaskSetting.module.less';
-import RequestUtil from '../../../utils/RequestUtil';
+ import RequestUtil from '../../../utils/RequestUtil';
+ import { materialStandardOptions } from '../../../configuration/DictionaryOptions';
  const { Step } = Steps
   
  export interface IAbstractTaskSettingState extends IAbstractFillableComponentState {
@@ -403,11 +404,14 @@ enum StepTitleItem {
                         itemProps: [{
                             label: '原材料标准',
                             name: 'materialStandard',
-                            initialValue: task?.materialStandard || 1,
+                            initialValue: task?.materialStandard || materialStandardOptions && materialStandardOptions[0].id,
                             children: (
                                 <Select>
-                                    <Select.Option value={ 1 }>国家电网</Select.Option>
-                                    <Select.Option value={ 2 }>南方电网</Select.Option>
+                                    { materialStandardOptions && materialStandardOptions.map(({ id, name }, index) => {
+                                        return <Select.Option key={ index } value={ id }>
+                                            { name }
+                                        </Select.Option>
+                                    }) }
                                 </Select>
                             )
                         }, {
@@ -522,11 +526,15 @@ enum StepTitleItem {
                         itemProps: [{
                             label: '原材料标准',
                             name: 'materialStandard',
-                            initialValue: task?.materialStandard || 1,
+                            initialValue: task?.materialStandard || materialStandardOptions && materialStandardOptions[0].id,
                             children: (
-                                <Select disabled>
-                                    <Select.Option value={ 1 }>国家电网</Select.Option>
-                                    <Select.Option value={ 2 }>南方电网</Select.Option>
+                                <Select>
+                                    { materialStandardOptions && materialStandardOptions.map(({ id, name }, index) => {
+                                        console.log(materialStandardOptions)
+                                        return <Select.Option key={ index } value={ id }>
+                                            { name }
+                                        </Select.Option>
+                                    }) }
                                 </Select>
                             )
                         }, {
@@ -724,9 +732,10 @@ enum StepTitleItem {
                 key: 'productNumber' 
             },
             { 
-                title: '电压等级', 
+                title: '电压等级（KV）', 
                 dataIndex: 'voltageGradeName', 
-                key: 'voltageGradeName' 
+                key: 'voltageGradeName',
+                width: 150 
             },
             { 
                 title: '呼高（米）',
