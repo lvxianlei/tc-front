@@ -498,7 +498,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             : ""
                         }
                         { taxRateOptions && taxRateOptions.map(({ id, name }, index) => {
-                            return <Select.Option key={ index } value={ id }>
+                            return <Select.Option key={ index } value={ name }>
                                 { name }
                             </Select.Option>
                         }) }
