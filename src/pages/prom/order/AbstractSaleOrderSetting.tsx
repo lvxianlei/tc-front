@@ -383,7 +383,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 label: '订单编号',
                 name: 'saleOrderNumber',
                 initialValue: saleOrder?.saleOrderNumber,
-                children: <Input disabled/>
+                children: <Input disabled placeholder="订单编号自动生成"/>
             }, {
                 label: '采购订单号',
                 name: 'purchaseOrderNumber',
