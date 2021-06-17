@@ -15,6 +15,8 @@ import RequestUtil from '../../../utils/RequestUtil';
  }
 
  interface ITaskTableDataItem {
+     readonly contractId: string;
+     readonly saleOrderId: string;
      readonly status: number;
      readonly id: number;
      readonly internalNumber: string;
@@ -115,15 +117,15 @@ import RequestUtil from '../../../utils/RequestUtil';
             key: 'saleOrderNumber',
             title: '订单编号',
             dataIndex: 'saleOrderNumber',
-            render: (saleOrderNumber: number): React.ReactNode => {
-                 return <Link to= {`/prom/order/detail/${ saleOrderNumber }` }>{saleOrderNumber}</Link>
+            render: (saleOrderNumber: number, record: object): React.ReactNode => {
+                 return <Link to= {`/prom/order/detail/${ (record as ITaskTableDataItem).saleOrderId }` }>{saleOrderNumber}</Link>
             } 
         },  {
             key: 'internalNumber',
             title: '合同编号',
             dataIndex: 'internalNumber',
-            render: (internalNumber: number): React.ReactNode => {
-                 return <Link to={ `/prom/contract/detail/${ internalNumber }` }>{ internalNumber}</Link>
+            render: (internalNumber: number,record: object): React.ReactNode => {
+                 return <Link to={ `/prom/contract/detail/${ (record as ITaskTableDataItem).contractId }` }>{ internalNumber}</Link>
             }
         },  {
             key: 'projectName',
