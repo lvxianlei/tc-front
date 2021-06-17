@@ -42,7 +42,7 @@ export interface IPaymentRecord {
     readonly returnedRate?: number;
     readonly returnedAmount?: number;
     readonly refundNumber?: number;
-    readonly signCustomerId?: string | number;
+    readonly customerId?: string | number;
 }
 
 export interface IResponseData {
@@ -94,7 +94,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 paymentRecord: {
                     ...(paymentRecord || {}),
                     customerName: selectedRows[0].name,
-                    signCustomerId: selectedRows[0].id
+                    customerId: selectedRows[0].id
                 }
             })
             this.getForm()?.setFieldsValue({ customerName: selectedRows[0].name })
@@ -112,16 +112,16 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
             this.setState({
                 paymentRecord: {
                     ...(paymentRecord || {}),
-                    signCustomerId: selectedRows[0].signCustomerId,
+                    customerId: selectedRows[0].signCustomerId,
                     projectName: selectedRows[0].projectName, 
-                    contractId: selectedRows[0].contractNumber,
+                    contractId: selectedRows[0].id,
                     customerName: selectedRows[0].signCustomerName
                 },
                 id: selectedRows[0].id
             })
             this.getForm()?.setFieldsValue({ 
                 projectName: selectedRows[0].projectName, 
-                contractId: selectedRows[0].contractNumber,
+                contractId: selectedRows[0].id,
                 customerName: selectedRows[0].signCustomerName })
         }
     }
@@ -137,7 +137,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
             this.setState({
                 paymentRecord: {
                     ...(paymentRecord || {}),
-                    paymentPlanId: selectedRows[0].period,
+                    paymentPlanId: selectedRows[0].id,
                     returnedTime: selectedRows[0].returnedTime,
                     returnedRate: selectedRows[0].returnedRate,
                     returnedAmount: selectedRows[0].returnedAmount,
@@ -145,7 +145,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 id: selectedRows[0].id
             })
             this.getForm()?.setFieldsValue({ 
-                paymentPlanId: selectedRows[0].period,
+                paymentPlanId: selectedRows[0].id,
                 returnedTime: moment(selectedRows[0].returnedTime),
                 returnedRate: selectedRows[0].returnedRate,
                 returnedAmount: selectedRows[0].returnedAmount, })
@@ -235,15 +235,6 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
             span: 8
         },
             itemProps: [{
-                label: '编号',
-                name: 'refundNumber',
-                initialValue: paymentRecord?.refundNumber,
-                rules: [{
-                required: true,
-                message: '请输入编号'
-            }],
-                children: <Input disabled/>
-            }, {
                 label: '来款时间',
                 name: 'refundTime',
                 initialValue: paymentRecord?.refundTime,

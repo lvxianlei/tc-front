@@ -32,9 +32,8 @@ class PaymentRecordNew extends AbstractPaymentRecordSetting<IContractNewRoutePro
         //  return Promise.resolve();
         const confirmValues: Record<string, any> = {
             ...values,
-            signCustomerId: this.state?.paymentRecord?.signCustomerId
+            customerId: this.state?.paymentRecord?.customerId
         }
-        console.log(confirmValues)
         return await RequestUtil.post('/tower-market/paymentRecord', confirmValues);
     }
 
