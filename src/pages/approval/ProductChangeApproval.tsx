@@ -22,24 +22,12 @@ export interface IProductChangeApprovalProps {
 }
 export interface IProductChangeApprovalRouteProps extends RouteComponentProps<IProductChangeApprovalProps>, WithTranslation { }
 export interface IProductChangeApprovalState extends IAbstractSaleOrderSettingState { }
-//产品类型
-enum ProductType {
-    ANGLE_STEEL_TOWER = 0,  //"角钢塔" 
-    TUBE_TOWER = 1,        //"管塔"
-    BOLT = 2              //"螺栓"
-}
 //类型
 enum StateType {
     UNCHANGED = 0,              //未变更
     NEWREFERENCE = 1,         //新增引用
     QUOTE = 2,                //删除引用
     MODIFYREFERENCE = 3     //修改引用内容         
-}
-//状态
-enum ProductStatus {
-    UTO_BEISSUED = 0,         // 待下发
-    UNDER_APPROVAL = 1,      // 审批中
-    ISSUED = 2             // 已下发
 }
 /**
  * Product change approval
@@ -186,17 +174,7 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
             dataIndex: 'lineName'
         }, {
             title: '产品类型',
-            dataIndex: 'productType',
-            render: (productType: number): React.ReactNode => {
-                switch (productType) {
-                    case ProductType.ANGLE_STEEL_TOWER:
-                        return "角钢塔"
-                    case ProductType.TUBE_TOWER:
-                        return "管塔"
-                    case ProductType.BOLT:
-                        return "螺栓"
-                }
-            }
+            dataIndex: 'productTypeName'
         }, {
             title: '塔型',
             dataIndex: 'productShape'
@@ -205,15 +183,7 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
             dataIndex: 'productNumber'
         }, {
             title: '电压等级',
-            dataIndex: 'voltageGrade',
-            render: (voltageGrade: number): React.ReactNode => {
-                switch (voltageGrade) {
-                    case 1:
-                        return <span>220 KV</span>
-                    case 2:
-                        return <span>110 KV</span>
-                }
-            }
+            dataIndex: 'voltageGradeName'
         }, {
             title: '呼高（米）',
             dataIndex: 'productHeight'
