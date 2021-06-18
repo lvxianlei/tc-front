@@ -451,7 +451,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             }, {
                 label: '币种',
                 name: 'currencyType',
-                initialValue: saleOrder?.contractInfoDto?.currencyType,
+                initialValue: saleOrder?.contractInfoDto?.currencyType || currencyTypeOptions && currencyTypeOptions.length > 0 && currencyTypeOptions[0].id,
                 children: (
                     <Select disabled>
                         { currencyTypeOptions && currencyTypeOptions.map(({ id, name }, index) => {
