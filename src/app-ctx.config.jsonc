@@ -43,10 +43,12 @@
                 },{
                     "label": "系统管理",
                     "path": "/sys",
-                    "items": [{
+                    "items": [
+                        {
                         "label": "用户管理",
                         "path": "/sys/users"
-                    }, {
+                    }, 
+                    {
                         "label": "字典管理",
                         "path": "/sys/dxnry"
                     }]
@@ -56,6 +58,13 @@
                     "items": [{
                         "label": "角色管理",
                         "path": "/auth/roles"
+                    }]
+                }, {
+                    "label": "放样外协服务",
+                    "path": "/outsource",
+                    "items": [{
+                        "label": "委托列表",
+                        "path": "/outsource/entrust"
                     }]
                 }]
             }
