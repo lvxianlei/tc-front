@@ -21,7 +21,7 @@ const { Option } = Select;
 export interface IAbstractPaymentRecordSettingState extends IAbstractFillableComponentState {
     readonly paymentRecord?: IPaymentRecord;
     readonly tableDataSource: [];
-    readonly id: number;
+    readonly id: number | string;
 }
 
 export interface IPaymentRecord {

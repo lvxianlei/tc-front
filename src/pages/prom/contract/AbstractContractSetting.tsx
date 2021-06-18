@@ -92,7 +92,7 @@ export interface IPaymentPlanDto {
 
 export interface IattachDTO {
     readonly name?: string;
-    readonly username?: string;
+    readonly userName?: string;
     readonly fileSize?: string;
     readonly description?: string;
     readonly keyType?: string;
@@ -415,7 +415,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     label: '内部合同编号',
                     name: 'internalNumber',
                     initialValue: contract?.internalNumber,
-                    children: <Input disabled/>
+                    children: <Input placeholder="内部合同编号自动生成" disabled/>
                 }, {
                     label: '工程名称',
                     name: 'projectName',
@@ -829,7 +829,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                             let attachInfoDtos: IattachDTO[] = contract.attachInfoDtos;
                                                             const attachInfoItem: IattachDTO = {
                                                                 name: info.file.response.data.originalName,
-                                                                username: info.file.response.data.username,
+                                                                userName: info.file.response.data.userName,
                                                                 fileSize: info.file.response.data.size,
                                                                 description: '',
                                                                 filePath: info.file.response.data.link,
@@ -898,7 +898,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={ 4 }>
-                                                            <Form.Item { ...field } name={[field.name, 'username']} fieldKey={[field.fieldKey, 'userName']}>
+                                                            <Form.Item { ...field } name={[field.name, 'userName']} fieldKey={[field.fieldKey, 'userName']}>
                                                                 <Input disabled  className={ styles.Input }/>
                                                             </Form.Item>
                                                         </Col>

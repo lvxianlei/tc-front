@@ -7,6 +7,7 @@ import Table, { ColumnType, TablePaginationConfig } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
+import styles from './AbstractSelectableModal.module.less';
 import RequestUtil from '../utils/RequestUtil';
 import AbstractFilteredSelectionModal from './AbstractFilteredSelecableModal';
 import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from './AbstractSelectableModal';
@@ -78,7 +79,7 @@ export default class ClientSelectionComponent extends AbstractFilteredSelectionM
         return [{
                 name: 'type',
                 children:
-                    <Select>
+                    <Select placeholder="请选择客户类型" className={ styles.select_width }>
                         <Option value="0">国内</Option>
                         <Option value="1">国际</Option>
                     </Select>

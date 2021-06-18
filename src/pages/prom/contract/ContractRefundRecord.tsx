@@ -40,6 +40,8 @@ interface IPaymentPlanVo {
     readonly updateTime?: string;
     readonly updateUser?: string; 
     readonly paymentPlanId?: string;
+    readonly uncollectedPayment?: number;
+    readonly paymentReceived?: number;
 }
 
 interface IPaymentRecordVo {
@@ -181,16 +183,20 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
      */
     private deletePlan(record: Record<string, any>, index: number): (e?: React.MouseEvent<HTMLElement>) => void {       
         return async () => {
+            const paymentPlanVos: IPaymentPlanVo[] = (this.state.paymentPlanVos || []);
+            const paymentPlanVo: IPaymentPlanVo = paymentPlanVos.filter(item => item.id === record.paymentPlanId)[0];
+            let paymentRecordVos: IPaymentRecordVo[] = paymentPlanVo.paymentRecordVos;
             if(record.id) {
                 const data: boolean = await RequestUtil.delete<boolean>(`/tower-market/paymentRecord/${ record.id }`);
                 if(data && this.props.onDeleted) {
                     this.props.onDeleted();
                 }
+                paymentRecordVos.splice(index, 1);
+                this.setState({
+                    paymentPlanVos: [ ...paymentPlanVos ]
+                });
             } else {
-                const paymentPlanVos: IPaymentPlanVo[] = (this.state.paymentPlanVos || []);
-                const paymentPlanVo: IPaymentPlanVo = paymentPlanVos.filter(item => item.id === record.paymentPlanId)[0];
-                let paymentRecordVos: IPaymentRecordVo[] = paymentPlanVo.paymentRecordVos;
-                paymentRecordVos.splice(index);
+                paymentRecordVos.splice(index, 1);
                 this.setState({
                     paymentPlanVos: [ ...paymentPlanVos ]
                 });
@@ -495,10 +501,10 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                     value: item.returnedAmount
                 }, {
                     label: '已回款金额',
-                    value: item.returnedRate
+                    value: item.paymentReceived
                 }, {
                     label: '未回款金额',
-                    value: item.returnedRate
+                    value: item.uncollectedPayment
                 }],
                 renderExtraInBar: (): React.ReactNode => this.renderExtraInBar(index),
                 render: (): React.ReactNode => (
