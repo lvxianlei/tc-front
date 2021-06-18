@@ -21,6 +21,7 @@ import {
     ColProps,
     message,
     DatePicker,
+    Progress,
 } from 'antd';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -67,16 +68,23 @@ export interface IEntrust {
     readonly projectNum?: string;
     readonly projectStartTime?: string;	
     readonly splitTime?: string;
-    readonly updateTime?:	string;
+    readonly updateTime?: string;
     readonly attachVoList?: IAttachVo[];	
     readonly entrustMessageVoList?: IEntrustMessageVo[];
-    readonly status?: number ;
+    readonly status?: number;
+    readonly towerModelVoList?: ITowerModelVO[];
 }
  
 export interface IEntrustMessageVo {
     readonly createTime?: string;	
     readonly message?:	string;
     readonly userName?:	string;
+}
+export interface ITowerModelVO{
+    readonly towerName: string;
+    readonly sectionNum: number;
+    readonly examineSectionNum: number;
+    readonly examineName: string;
 }
 
 export interface IAttachVo {
@@ -174,15 +182,13 @@ export interface IAttachVo {
                         children: <Input disabled value={entrust?.projectName}/>
                     },  {
                         label: '工程周期',
-                        name: 'projectStartTime',
+                        name: 'projectTime',
                         initialValue: [moment(entrust?.projectStartTime), moment(entrust?.projectEndTime)],
-                        rules: [
-                            {
-                                required: true,
-                                message: '请输入工程周期'
-                            }
-                        ],
-                        children: <DatePicker.RangePicker />
+                        rules: [{
+                            required: true,
+                            message: '请选择工程周期'
+                        }],
+                        children: <DatePicker.RangePicker disabled/>
                     }, {
                         label: '工程状态',
                         name: 'status',
@@ -212,7 +218,23 @@ export interface IAttachVo {
                     />
                 )
             }
-        }, ]
+        }, {
+            title:'塔进度信息',
+            render:():React.ReactNode => {
+                return this.state.entrust && this.state.entrust.towerModelVoList && this.state.entrust.towerModelVoList.map((item:ITowerModelVO)=>{
+                    return (
+                        <div className={ entrustStyles.tower }>
+                            <div className={ entrustStyles.tower_title }>
+                                <div>{item.towerName}</div>
+                                <div>({item.examineName})</div>
+                            </div>
+                            <Progress percent={Math.round((item.examineSectionNum/item.sectionNum)*100)/100} status="active" />
+                        </div>
+                    )
+                })
+                
+            }
+        },]
 
     }
 
