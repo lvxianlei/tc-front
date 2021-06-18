@@ -1,0 +1,21 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "deliverTime": "2021-01-02",
+            "entrustId": "22254545",
+            "examineName": "admin",
+            "examineNum": 10,
+            "examineSectionNum": 100,
+            "examineUser": "admin",
+            "id": "11212120",
+            "passedTime": "2021-05-25",
+            "projectName": "什么什么工程",
+            "projectNum": "21202352521",
+            "sectionNum": 100,
+            "towerName": "什么什么塔"
+        }
+    ],
+    "msg": "",
+    "success": true	
+}
