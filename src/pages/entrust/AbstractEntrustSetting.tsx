@@ -10,10 +10,10 @@ import { RouteComponentProps } from 'react-router';
 import AsyncComponent from '../../components/AsyncComponent';
 import { IRenderedSection, ISection } from '../../utils/SummaryRenderUtil';
 import styles from './AbstractEntrustSetting.module.less';
-import { IAttachData } from './TowerShape';
 import { InboxOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import RequestUtil from '../../utils/RequestUtil';
+import { IAttachVo } from './EntrustDetail';
 
 interface IAuthoritableFormItemProps extends FormItemProps {
 
@@ -27,7 +27,7 @@ export interface IFormItemGroup extends ISection {
 export interface IAbstractEntrustSettingState {
     readonly entrust?: IEntrust;
     readonly isVisible?: boolean;
-    readonly attachList?: IAttachData[];
+    readonly attachList?: IAttachVo[];
     readonly entrustSubmitType?: number;
 }
 
@@ -35,7 +35,7 @@ export interface IEntrust {
     readonly projectName?: string;
     readonly projectStartTime?: string;
     readonly projectEndTime?: string;
-    readonly attachVoList?: IAttachData[];
+    readonly attachVoList?: IAttachVo[];
 }
 
 export enum SubmitType {
@@ -124,7 +124,7 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
                         onChange={ (info) => {const { status } = info.file;
                             if (status === 'done') {
                                 message.success(`${info.file.name} file uploaded successfully.`);
-                                let attachList: IAttachData[] | undefined = this.state.attachList || [];
+                                let attachList: IAttachVo[] | undefined = this.state.attachList || [];
                                 attachList.push(info.file.response)
                                 this.setState({
                                     attachList: attachList
@@ -192,7 +192,7 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
 
     public deleteAttach = async (values: Record<string, any>, index: number): Promise<void> => {
         await RequestUtil.delete(`/tower-system/attach?ids=${ values.attachId }`);
-        const attachList: IAttachData[] | undefined= this.state?.attachList;
+        const attachList: IAttachVo[] | undefined= this.state?.attachList;
         attachList && attachList.splice(index, 1);
         this.setState({
             attachList: attachList
@@ -257,7 +257,7 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
                 return (
                     <>
                         { this.state.attachList ? 
-                            <>{ this.state.attachList.map<React.ReactNode>((items: IAttachData, index: number): React.ReactNode => {
+                            <>{ this.state.attachList.map<React.ReactNode>((items: IAttachVo, index: number): React.ReactNode => {
                                     return <Row justify="center" gutter={24} key={ index }>
                                         <Col span={6}>{ items.name }</Col>
                                         <Col span={6}>{ items.fileUploadTime }</Col>
