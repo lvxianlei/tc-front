@@ -1,6 +1,6 @@
 /**
- * @author Cory(coryisbest0728#gmail.com)
- * @copyright © 2021 Cory. All rights reserved
+ * @author lxy
+ * @copyright © 2021 lxy. All rights reserved
  */
  import { FormItemProps, Input, Card, TableColumnType, TablePaginationConfig, Table, Space, List, Row, Col, Pagination, Progress, Button } from 'antd';
  import React from 'react';
@@ -291,7 +291,7 @@ import EntrustSetting from './EntrustSetting';
         );
     }
 
-
+    //页面变化
     public onChange = (page: number)=> {
         let tablePagination ={
             ...this.state.tablePagination,

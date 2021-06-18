@@ -20,13 +20,12 @@ import {
     FormItemProps,
     ColProps,
     message,
+    DatePicker,
 } from 'antd';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { Link, withRouter } from 'react-router-dom';
-
 import { IRenderedSection, ISection } from '../../utils/SummaryRenderUtil';
-//  import styles from './AbstactEntrustDetail.module.less';
 import styles from '../../components/AbstractFillableComponent.module.less';
 import layoutStyles from '../../layout/Layout.module.less';
 import entrustStyles from './Entrust.module.less';
@@ -34,6 +33,7 @@ import RequestUtil from '../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import AbstractTitledRouteComponent from '../../components/AbstractTitledRouteComponent';
+import moment from 'moment';
 const { Step } = Steps
   
 export interface IAbstractEntrustSettingState {
@@ -175,14 +175,14 @@ export interface IAttachVo {
                     },  {
                         label: '工程周期',
                         name: 'projectStartTime',
-                        initialValue: entrust?.projectStartTime,
+                        initialValue: [moment(entrust?.projectStartTime), moment(entrust?.projectEndTime)],
                         rules: [
                             {
                                 required: true,
                                 message: '请输入工程周期'
                             }
                         ],
-                        children: <Input disabled/>
+                        children: <DatePicker.RangePicker />
                     }, {
                         label: '工程状态',
                         name: 'status',
