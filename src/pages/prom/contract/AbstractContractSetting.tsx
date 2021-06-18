@@ -432,8 +432,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     children: <Input maxLength={ 50 }/>
                 }, {
                     label: '中标类型',
-                    name: 'winBidType',
-                    initialValue: contract?.winBidType || winBidTypeOptions && winBidTypeOptions[0].id,
+                    name: 'winBidType', 
+                    initialValue: contract?.winBidType || winBidTypeOptions && winBidTypeOptions.length > 0 && winBidTypeOptions[0].id,
                     children: (
                         <Select>
                             { winBidTypeOptions && winBidTypeOptions.map(({ id, name }, index) => {
@@ -446,7 +446,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 }, {
                     label: '销售类型',
                     name: 'saleType',
-                    initialValue: contract?.saleType || saleTypeOptions && saleTypeOptions[0].id,
+                    initialValue: contract?.saleType || saleTypeOptions && saleTypeOptions.length > 0 && saleTypeOptions[0].id,
                     children: (
                         <Select>
                             { saleTypeOptions && saleTypeOptions.map(({ id, name }, index) => {
