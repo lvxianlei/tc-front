@@ -19,6 +19,7 @@ import {
     List,
     FormItemProps,
     ColProps,
+    message,
 } from 'antd';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -36,9 +37,8 @@ import AbstractTitledRouteComponent from '../../components/AbstractTitledRouteCo
 const { Step } = Steps
   
 export interface IAbstractEntrustSettingState {
+    message: string;
     readonly entrust?: IEntrust;
-    readonly contractInfoDTO : IEntrust;
-     
 }
 interface IAuthoritableFormItemProps extends FormItemProps {
     readonly authority?: string;
@@ -55,7 +55,7 @@ export interface IEntrustSettingRouteProps extends RouteComponentProps<IAbstract
  
  
 export interface IEntrust {
-    id?: number;
+    readonly id?: number;
     readonly createUser?: number;	
     readonly confirmationTime?: string;
     readonly createTime?: string;
@@ -101,6 +101,7 @@ export interface IAttachVo {
     
     public state: IAbstractEntrustSettingState = {
         entrust: {},
+        message: '',
     }  as IAbstractEntrustSettingState;
 
     constructor(props: IEntrustSettingRouteProps) {
@@ -113,19 +114,9 @@ export interface IAttachVo {
         super.componentDidMount();
         const entrust: IEntrust = await RequestUtil.get<IEntrust>(`/entrust/${ this.props.match.params.id }`);
         this.setState({
-            entrust: entrust
+            entrust
         });
         this.formRef?.current?.setFieldsValue(entrust)
-        // let a = document.getElementById('card1');
-        // let element = document.getElementById('card1')?.scrollHeight.toString();
-        // let element1 = document.getElementById('card2');
-        // if(element1 && a){
-        //     element1.style.height = element+'px' || '';
-        //     a.style.height = element+'px' || '';
-        // }
-        // console.log(a?.scrollHeight)
-        // console.log(element)
-        // console.log(element1?.clientHeight)
     }
     /**
      * @override
@@ -133,7 +124,7 @@ export interface IAttachVo {
      * @returns return path 
      */
     protected getReturnPath(): string {
-        return '/prom/Entrust';
+        return '/outsource/entrust';
     }
  
     /**
@@ -298,7 +289,9 @@ export interface IAttachVo {
 
     //留言
     public onChange = (e: { target: { value: string; }; }) => {
-        console.log('Change:', e.target.value);
+        this.setState({
+            message: e.target.value
+        })
     };
 
 
@@ -359,7 +352,29 @@ export interface IAttachVo {
                             <TextArea rows={ 5 } onChange={this.onChange} className={ entrustStyles.text }/>
                         </Row>
                         <Row>
-                            <Button type="primary" className={ entrustStyles.text_button }>留言</Button>
+                            <Button 
+                                type="primary" 
+                                className={ entrustStyles.text_button } 
+                                onClick={async ()=>{
+                                    if(this.state.message){
+                                        let values = {
+                                            message: this.state.message,
+                                            entrustid: this.props.match.params.id
+                                        }
+                                        await RequestUtil.post('/entrustMessage', values).then(async ()=>{
+                                            const entrust: IEntrust = await RequestUtil.get<IEntrust>(`/entrust/${ this.props.match.params.id }`);
+                                            this.setState({
+                                                entrust
+                                            });
+                                        });
+                                    }
+                                    else{
+                                        message.error('请填写客户留言')
+                                    }
+                                }}
+                            >
+                                留言
+                            </Button>
                         </Row>
                         <Row>
                             <List
