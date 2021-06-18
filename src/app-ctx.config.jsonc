@@ -65,6 +65,9 @@
                     "items": [{
                         "label": "委托列表",
                         "path": "/outsource/entrust"
+                    }, {
+                        "label": "已完成塔型",
+                        "path": "/outsource/towershape"
                     }]
                 }]
             }

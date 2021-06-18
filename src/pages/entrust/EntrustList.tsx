@@ -12,7 +12,10 @@
  import ConfirmableButton from '../../components/ConfirmableButton';
  import { ITabItem } from '../../components/ITabableComponent';
  import RequestUtil from '../../utils/RequestUtil';
+import DeliveryAcceptance from './DeliveryAcceptance';
  import styles from './Entrust.module.less';
+import EntrustNew from './EntrustNew';
+import EntrustSetting from './EntrustSetting';
  
  export interface IEntrustListProps {}
  export interface IEntrustListWithRouteProps extends RouteComponentProps<IEntrustListProps>, WithTranslation {}
@@ -22,7 +25,7 @@
  }
  
  interface IEntrustDataItem {
-     readonly id: number | string;
+     readonly id?: string;
      readonly checkNum: number;
      readonly conductNum: number;
      readonly finishNum: number;
@@ -132,7 +135,7 @@
         dataIndex: 'operation',
         render: (_: undefined, record: object): React.ReactNode => (
             <Space direction="horizontal" size="small">
-                <Link to={ `/client/mngt/setting/${ (record as IEntrustDataItem).id }` }>交付验收</Link>
+                <DeliveryAcceptance data={ record }/>
             </Space>
         )
     }];
@@ -226,7 +229,7 @@
                                                                     <Button type="primary" ghost href={ `/outsource/entrust/detail/${ (item as IEntrustDataItem).id }`}>详情</Button>
                                                                 </div>
                                                                 :<div>
-                                                                    <Button type="primary" href={ `/outsource/entrust/detail/${ (item as IEntrustDataItem).id }`}>编辑</Button>
+                                                                    <EntrustSetting data={ item }/>
                                                                     <Button type="primary" ghost>删除</Button>
                                                                 </div>
                                                             }
@@ -349,9 +352,7 @@
       * @description Determines whether new click on
       * @param event 
       */
-     public onNewClick(event: React.MouseEvent<HTMLButtonElement>): void {
-         this.props.history.push('/client/mngt/new');
-     }
+     public onNewClick(event: React.MouseEvent<HTMLButtonElement>): void {}
  
      /**
       * @implements
@@ -370,6 +371,15 @@
             }
         ];
      }
+
+    /**
+     * @implements
+     * @description 新增按钮
+     * @param event 
+     */
+    public renderExtraOperationContent(): React.ReactNode {
+        return <EntrustNew/>;
+    }
  }
  
  export default withRouter(withTranslation(['translation'])(EntrustList));

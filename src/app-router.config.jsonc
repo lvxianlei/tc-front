@@ -164,5 +164,10 @@
         "path": "/outsource/entrust/detail/:id",
         "module": "./pages/entrust/EntrustDetail",
         "exact": true
+    }, { // 已完成塔型
+        "name": "已完成塔型",
+        "path": "/outsource/towershape",
+        "module": "./pages/entrust/TowerShape",
+        "exact": true
     }]
 }
