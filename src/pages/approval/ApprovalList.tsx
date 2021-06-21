@@ -190,12 +190,9 @@ class ApprovalAll extends AbstractMngtComponent<
                                 AuditStatus.PENDING_APPROVAL ?
                                 (
                                     (records as ITaskTableDataItem).type === "SALE_ORDER_AUDIT" ?
-                                        <Button href={`/approval/task/product-change/
-                                    ${(records as ITaskTableDataItem).id}`} type="link" >审批</Button>
+                                        <Button href={`/approval/task/product-change/${(records as ITaskTableDataItem).id}`} type="link" >审批</Button>
                                         :
-                                        <Button href={`/approval/task/change/
-                                    ${(records as ITaskTableDataItem).id}&
-                                    ${(records as ITaskTableDataItem).businessId}`} type="link" >审批</Button>
+                                        <Button href={`/approval/task/change/${(records as ITaskTableDataItem).id} & ${(records as ITaskTableDataItem).businessId}`} type="link" >审批</Button>
 
                                 ) : (
                                     <Button type="link" disabled>
@@ -213,7 +210,13 @@ class ApprovalAll extends AbstractMngtComponent<
      * @param values 
      */
     public async onFilterSubmit(values: Record<string, any>) {
-        this.fetchTableData(values);
+        const tablePagination:TablePaginationConfig = {
+            current: 1,
+            pageSize: 10,
+            total: 0,
+            showSizeChanger: false
+        }
+        this.fetchTableData(values, tablePagination);
     }
     /**
      * Determines whether table change on

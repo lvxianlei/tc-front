@@ -59,6 +59,14 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
             size: pagination.pageSize ||this.state.tablePagination?.pageSize,
             type: this.state.selectedTabKey
         });
+        if(resData.records.length == 0 && resData.current>1){
+            this.fetchTableData({},{
+                current: resData.current - 1,
+                pageSize: 10,
+                total: 0,
+                showSizeChanger: false
+            });
+        }
         this.setState({
             ...filterValues,
             tableDataSource: resData.records,
@@ -106,7 +114,7 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
             title: '客户类型',
             dataIndex: 'type',
             render: (type: number): React.ReactNode => {
-                return  type === 1 ? '国内客户' : '国际客户';
+                return  type == 1 ? '国内客户' : '国际客户';
             }
         }, {
             key: 'linkman',
@@ -162,7 +170,13 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
      * @param values 
      */
     public async onFilterSubmit(values: Record<string, any>) {
-        this.fetchTableData(values);
+        const tablePagination:TablePaginationConfig = {
+            current: 1,
+            pageSize: 10,
+            total: 0,
+            showSizeChanger: false
+        }
+        this.fetchTableData(values, tablePagination);
     }
 
     /**

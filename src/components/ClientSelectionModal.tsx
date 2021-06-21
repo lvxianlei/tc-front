@@ -102,6 +102,7 @@ export default class ClientSelectionComponent extends AbstractFilteredSelectionM
         return [{
             key: 'type',
             title: '客户类型',
+            width: '25%',
             dataIndex: 'type',
             render: (type: number): React.ReactNode => {
                 return  type === 1 ? '国内客户' : '国际客户';
@@ -109,14 +110,17 @@ export default class ClientSelectionComponent extends AbstractFilteredSelectionM
         }, {
             key: 'name',
             title: '客户名称',
+            width: '25%',
             dataIndex: 'name'
         }, {
             key: 'linkman',
             title: '首要联系人',
+            width: '25%',
             dataIndex: 'linkman'
         }, {
             key: 'phone',
             title: '联系电话',
+            width: '25%',
             dataIndex: 'phone'
         }];
     }

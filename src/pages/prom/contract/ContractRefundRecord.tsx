@@ -315,8 +315,14 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                     }) }
                 </Select>
             ),
-            render: (refundMode: number): React.ReactNode => {
-                return  refundMode === 1 ? '现金' : refundMode === 2 ? '商承' : '银行';
+            render: (refundMode: number | string): React.ReactNode => {
+                return refundModeOptions && refundModeOptions.map(({ id, name }, index) => {
+                    if(id === refundMode) {
+                        return name
+                    } else {
+                        return ""
+                    }
+                })
             }
         }, {
             title: '来款金额（￥）',
@@ -336,8 +342,14 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                     }) }
                 </Select>
             ),
-            render: (currencyType: number): React.ReactNode => {
-                return  currencyType === 1 ? 'RMB人民币' : 'USD美元';
+            render: (currencyType: number | string): React.ReactNode => {
+                return  currencyTypeOptions && currencyTypeOptions.map(({ id, name }, index) => {
+                    if(id === currencyType) {
+                        return name
+                    } else {
+                        return ""
+                    }
+                })
             }
         }, {
             title: '汇率',

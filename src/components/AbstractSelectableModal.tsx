@@ -137,13 +137,10 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
      */
     protected renderTableContent(): React.ReactNode {
         return (
-            <Card className={ styles.tableCard }>
-                <Space direction="vertical" size="large" >
-                    <Table 
-                        { ...this.getTableProps() }
-                    />
-                </Space>
-            </Card>
+            <Table 
+                { ...this.getTableProps() }
+                className={ styles.tableWidth }
+            />
         );
     }
 
@@ -165,7 +162,7 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
                         }
                     } 
                     onCancel={this.handleCancel}
-                    width="60%"
+                    width="50%"
                 >
                     <Space direction="vertical" className={ styles.modalTable } >
                         {this.renderTableContent()}  

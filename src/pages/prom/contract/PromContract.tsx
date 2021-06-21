@@ -73,6 +73,14 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
             size: pagination.pageSize ||this.state.tablePagination?.pageSize,
             countryCode: this.state.selectedTabKey
         });
+        if(resData.records.length == 0 && resData.current>1){
+            this.fetchTableData({},{
+                current: resData.current - 1,
+                pageSize: 10,
+                total: 0,
+                showSizeChanger: false
+            });
+        }
         this.setState({
             ...filterValues,
             tableDataSource: resData.records,
@@ -203,7 +211,13 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
      * @param values 
      */
     public async onFilterSubmit(values: Record<string, any>) {
-        this.fetchTableData(values);
+        const tablePagination:TablePaginationConfig = {
+            current: 1,
+            pageSize: 10,
+            total: 0,
+            showSizeChanger: false
+        }
+        this.fetchTableData(values, tablePagination);
     }
 
     /**
