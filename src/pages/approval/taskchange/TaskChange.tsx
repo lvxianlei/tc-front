@@ -167,10 +167,10 @@ class TaskChange extends AbstractTaskChange<ITaxkChangeRouteProps, ITaxkchangeSt
      */
     public onSubmit(values: Record<string, any>): Promise<void> {
         return RequestUtil.post('/tower-market/audit/adopt', {
-            auditId: values.contractId,
+            auditId: this.props.match.params.id,
             description: "通过"
         }).then((): void => {
-            message.success('操作已成功！任务单 产品变更审批 已通过审批。');
+            message.success('操作已成功！任务单已通过审批。');
             this.props.history.push(this.getReturnPath());
 
         })
