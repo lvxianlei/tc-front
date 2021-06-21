@@ -9,6 +9,7 @@
  import AbstractTaskSetting, { IAbstractTaskSettingState, ITask, StepItem } from './AbstactTaskSetting';
  import moment from 'moment'
 import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
+import { message } from 'antd';
  
  export interface ITaskSpecialProps {
     readonly id: string;
@@ -61,7 +62,13 @@ import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
         values.contractInfoDTO = this.state.contractInfoDTO;
         values.saleOrderId = this.state?.task?.saleOrderId;
         values.id = this.state?.task?.id;
-        return this.state.checkStep === StepItem.COMPLETE_PRODUCT_INFO ? await RequestUtil.post('/tower-market/taskNotice/saveAndSubApprove', values):await RequestUtil.post('/tower-market/taskNotice', values);
+        if(this.state.checkStep === StepItem.COMPLETE_PRODUCT_INFO && values.productIds == 0){
+            message.error("未选择产品信息，不可提交审批！")
+            return Promise.reject(false)
+        }
+        else {
+            return this.state.checkStep === StepItem.COMPLETE_PRODUCT_INFO ? await RequestUtil.post('/tower-market/taskNotice/saveAndSubApprove', values):await RequestUtil.post('/tower-market/taskNotice', values)
+        }
      }
  }
  
