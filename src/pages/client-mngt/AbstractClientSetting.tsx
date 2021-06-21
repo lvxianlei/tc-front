@@ -3,6 +3,8 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 import { Input, Select } from 'antd';
+import { RuleObject } from 'antd/lib/form';
+import { StoreValue } from 'antd/lib/form/interface';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -31,6 +33,22 @@ export default abstract class AbstractClientSetting<P extends RouteComponentProp
     }
 
     /**
+     * @description 验证业主联系电话格式
+     */
+     public checkcustomerPhone = (value: StoreValue): Promise<void | any> =>{
+        return new Promise(async (resolve, reject) => {  // 返回一个promise
+            const regPhone: RegExp = /^1[3|4|5|8][0-9]\d{8}$/;
+            const regTel: RegExp = /^\d{3}-\d{8}|\d{4}-\d{7}$/;
+            if(regPhone.test(value) || regTel.test(value) ) {
+                resolve(true)
+            } else 
+                resolve(false)
+        }).catch(error => {
+            Promise.reject(error)
+        })
+    }
+
+    /**
      * @implements
      * @description Gets form item groups
      * @returns form item groups 
@@ -52,6 +70,10 @@ export default abstract class AbstractClientSetting<P extends RouteComponentProp
                 label: '客户类型',
                 name: 'type',
                 initialValue: client?.type,
+                rules: [{
+                    required: true,
+                    message: '请选择客户类型'
+                }],
                 children: (
                     <Select>
                         <Select.Option value={ '1' }>国内客户</Select.Option>
@@ -70,10 +92,26 @@ export default abstract class AbstractClientSetting<P extends RouteComponentProp
                 label: '联系人姓名',
                 name: 'linkman',
                 initialValue: client?.linkman,
+                rules: [{
+                    required: true,
+                    message: '请输入联系人姓名'
+                }],
                 children: <Input/>
             }, {
                 label: '手机号码',
                 name: 'phone',
+                rules: [{
+                    required: true,
+                    validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                        this.checkcustomerPhone(value).then(res => {
+                            if (res) {
+                                callback()
+                            } else {
+                                callback('手机号码格式有误')
+                            }
+                        })
+                    }
+                }],
                 initialValue: client?.phone,
                 children: <Input/>
             }]
