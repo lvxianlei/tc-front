@@ -210,7 +210,13 @@ class ApprovalAll extends AbstractMngtComponent<
      * @param values 
      */
     public async onFilterSubmit(values: Record<string, any>) {
-        this.fetchTableData(values);
+        const tablePagination:TablePaginationConfig = {
+            current: 1,
+            pageSize: 10,
+            total: 0,
+            showSizeChanger: false
+        }
+        this.fetchTableData(values, tablePagination);
     }
     /**
      * Determines whether table change on
