@@ -13,6 +13,7 @@ import styles from './AbstractEntrustSetting.module.less';
 export interface IDeliveryAcceptanceProps {}
 export interface IDeliveryAcceptanceRouteProps extends RouteComponentProps<IDeliveryAcceptanceProps>, WithTranslation {
     readonly data: IEntrust;
+    readonly getTable:() => void;
 }
 export interface IDeliveryAcceptanceState {
     readonly isVisible?: boolean;
@@ -98,8 +99,14 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
     public onFinishSubmit = async (values: Record<string, any>): Promise<void> => {
         const entrust: IEntrust | undefined = this.state.entrust;
         values = { ...entrust, ...values };
-        console.log(values)
-        return await RequestUtil.put('/tower-outsource/towerModel/accept', values);
+        return await RequestUtil.put('/tower-outsource/towerModel/accept', values).then((res) => {
+            if(res) {
+                this.setState({
+                    isVisible: false
+                })
+                this.props.getTable();
+            }
+        });
     }
 
     /**
@@ -112,8 +119,14 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
         const entrust: IEntrust | undefined = this.state.entrust;
         let values: IEntrust = this.getForm()?.getFieldsValue(true);
         values = { ...entrust, description: this.getForm()?.getFieldValue('description') };
-        console.log(values)
-        return await RequestUtil.put('/tower-outsource/towerModel/reject', values);
+        return await RequestUtil.put('/tower-outsource/towerModel/reject', values).then((res) => {
+            if(res) {
+                this.setState({
+                    isVisible: false
+                })
+                this.props.getTable();
+            }
+        });
     }
 
     public uploadAttach = (value: Record<string, any>): void => {
