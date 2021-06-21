@@ -5,8 +5,7 @@
 import { FormItemProps, Input, Select } from 'antd';
 import Table, { ColumnType, TablePaginationConfig } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
-import React from 'react';
-
+import styles from './AbstractSelectableModal.module.less';
 import RequestUtil from '../utils/RequestUtil';
 import AbstractFilteredSelectionModal from './AbstractFilteredSelecableModal';
 import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from './AbstractSelectableModal';
@@ -79,8 +78,15 @@ import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponse
      //查询字段
      public getFilterFormItemProps(): FormItemProps[]  {
          return [{
-                 name: 'projectName',
-                 children: <Input placeholder="工程名称关键字"/>
+                name: 'type',
+                children: 
+                <Select placeholder="请选择业务类型" className={ styles.select_width }>
+                    <Option value="0" >国内业务</Option>
+                    <Option value="1">国际业务</Option>
+                </Select>
+            },{
+                name: 'projectName',
+                children: <Input placeholder="工程名称关键字"/>
              },{
                 name: 'customerCompany',
                 children: <Input placeholder="业主单位关键字"/>
@@ -111,6 +117,10 @@ import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponse
                 key: 'projectName',
                 title: '工程名称',
                 dataIndex: 'projectName',
+            },  {
+                key: 'saleTypeName',
+                title: '销售类型',
+                dataIndex: 'saleTypeName',
             },  {
                 key: 'customerCompany',
                 title: '业主单位',
