@@ -13,10 +13,10 @@ import styles from './AbstractEntrustSetting.module.less';
 import { InboxOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import RequestUtil from '../../utils/RequestUtil';
-import { IAttachVo } from './EntrustDetail';
+import AuthUtil from '../../utils/AuthUtil';
 
 interface IAuthoritableFormItemProps extends FormItemProps {
-
+    
 }
 
 export interface IFormItemGroup extends ISection {
@@ -36,6 +36,16 @@ export interface IEntrust {
     readonly projectStartTime?: string;
     readonly projectEndTime?: string;
     readonly attachVoList?: IAttachVo[];
+}
+
+export interface IAttachVo {
+    readonly id?: number | string;
+    readonly originalName?:	string;
+    readonly fileUploadTime?: string;
+    readonly fileSuffix?: string;
+    readonly fileSize?: number;	
+    readonly filePath?:	string;
+    readonly description?: string;
 }
 
 export enum SubmitType {
@@ -118,14 +128,24 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
                     <Dragger 
                         name='file' 
                         multiple={ true } 
-                        action= 'https://www.mocky.io/v2/5cc8019d300000980a055e76' 
+                        action= { () => {
+                            const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                            return baseUrl+'sinzetech-resource/oss/put-file'
+                        } } 
+                        headers={
+                            {
+                                'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                                'Tenant-Id': AuthUtil.getTenantId(),
+                                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                            }
+                        }
                         className={ styles.upload_section } 
                         showUploadList={ false }
                         onChange={ (info) => {const { status } = info.file;
                             if (status === 'done') {
                                 message.success(`${info.file.name} file uploaded successfully.`);
                                 let attachList: IAttachVo[] | undefined = this.state.attachList || [];
-                                attachList.push(info.file.response)
+                                attachList.push(info.file.response.data)
                                 this.setState({
                                     attachList: attachList
                                 })
@@ -159,7 +179,6 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
     }
 
     /**
-     * @abstract
      * @description Determines whether save on
      * @param values 
      * @returns save 
@@ -175,7 +194,6 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
     }
 
     /**
-     * @abstract
      * @description Determines whether submit on
      * @param values 
      * @returns submit 
@@ -191,8 +209,10 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
     }
 
     public deleteAttach = async (values: Record<string, any>, index: number): Promise<void> => {
-        await RequestUtil.delete(`/tower-system/attach?ids=${ values.attachId }`);
         const attachList: IAttachVo[] | undefined= this.state?.attachList;
+        if(values.id) {
+            await RequestUtil.delete(`/tower-system/attach?ids=${ values.attachId }`);
+        }
         attachList && attachList.splice(index, 1);
         this.setState({
             attachList: attachList
@@ -253,7 +273,7 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
                         { this.state.attachList ? 
                             <>{ this.state.attachList.map<React.ReactNode>((items: IAttachVo, index: number): React.ReactNode => {
                                     return <Row justify="center" gutter={24} key={ index }>
-                                        <Col span={6}>{ items.name }</Col>
+                                        <Col span={6}>{ items.originalName }</Col>
                                         <Col span={6}>{ items.fileUploadTime }</Col>
                                         <Col span={6}>
                                             <Button type="link" onClick={ () => this.deleteAttach(items, index) }>

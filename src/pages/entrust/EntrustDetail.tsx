@@ -120,7 +120,7 @@ export interface IAttachVo {
          */
     public async componentDidMount() {
         super.componentDidMount();
-        const entrust: IEntrust = await RequestUtil.get<IEntrust>(`/entrust/${ this.props.match.params.id }`);
+        const entrust: IEntrust = await RequestUtil.get<IEntrust>(`/tower-outsource/entrust/${ this.props.match.params.id }`);
         this.setState({
             entrust
         });
@@ -381,7 +381,7 @@ export interface IAttachVo {
                                     if(this.state.message){
                                         let values = {
                                             message: this.state.message,
-                                            entrustid: this.props.match.params.id
+                                            entrustId: this.props.match.params.id
                                         }
                                         await RequestUtil.post('/tower-outsource/entrustMessage', values).then(async ()=>{
                                             const entrust: IEntrust = await RequestUtil.get<IEntrust>(`/tower-outsource/entrust/${ this.props.match.params.id }`);

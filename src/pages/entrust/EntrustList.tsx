@@ -237,7 +237,7 @@ import EntrustSetting from './EntrustSetting';
                                                                     <Button type="primary" ghost href={ `/outsource/entrust/detail/${ (item as IEntrustDataItem).id }`}>详情</Button>
                                                                 </div>
                                                                 :<div>
-                                                                    <EntrustSetting data={ item }/>
+                                                                    <EntrustSetting data={ item } getTable={ () => this.fetchTableData({}) }/>
                                                                     <ConfirmableButton 
                                                                         confirmTitle="是否删除该委托吗？" 
                                                                         type="primary"
@@ -403,7 +403,7 @@ import EntrustSetting from './EntrustSetting';
      * @param event 
      */
     public renderExtraOperationContent(): React.ReactNode {
-        return <EntrustNew/>;
+        return <EntrustNew getTable={ () => this.fetchTableData({}) }/>;
     }
  }
  

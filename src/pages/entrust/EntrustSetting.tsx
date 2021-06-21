@@ -15,6 +15,7 @@ export interface IEntrustSettingProps {
 }
 export interface IEntrustSettingRouteProps extends RouteComponentProps<IEntrustSettingProps>, WithTranslation {
     readonly data: IEntrustSettingProps;
+    readonly getTable:() => void;
 }
 export interface IEntrustSettingState extends IAbstractEntrustSettingState {}
 
@@ -66,6 +67,7 @@ class EntrustSetting extends AbstractEntrustSetting<IEntrustSettingRouteProps, I
                 this.setState({
                     isVisible: false
                 })
+                this.props.getTable();
             });
         } else {
             message.error("请上传资料包！")

@@ -11,7 +11,9 @@ import { Button, message } from 'antd';
 import moment from 'moment';
 
 export interface IEntrustNewProps {}
-export interface IEntrustNewRouteProps extends RouteComponentProps<IEntrustNewProps>, WithTranslation {}
+export interface IEntrustNewRouteProps extends RouteComponentProps<IEntrustNewProps>, WithTranslation {
+    readonly getTable:() => void;
+}
 export interface IEntrustNewState extends IAbstractEntrustSettingState {}
 
 /**
@@ -39,8 +41,9 @@ class EntrustNew extends AbstractEntrustSetting<IEntrustNewRouteProps, IEntrustN
         if(values.attachInfoDtoList) {
             return await RequestUtil.post('/tower-outsource/entrust', values).then(() => {
                 this.setState({
-                    isVisible: false
+                    isVisible: false,
                 })
+                this.props.getTable();
             })
         } else {
             message.error("请上传资料包！")
