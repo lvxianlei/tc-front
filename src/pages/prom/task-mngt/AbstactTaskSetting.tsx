@@ -301,21 +301,21 @@ enum StepTitleItem {
                         }, {
                             label: '订单交货日期',
                             name: 'signContractTime',
-                            initialValue: moment(task?.signContractTime),
+                            initialValue: task?.signContractTime ? moment(task?.signContractTime) : '',
                             rules: [{
                                 required: true,
                                 message: '请选择订单交货日期'
                             }],
-                            children:  <DatePicker disabled showTime format='YYYY-MM-DD HH:mm:ss'/>
+                            children:  <DatePicker disabled  format='YYYY-MM-DD HH:mm:ss'/>
                         }, {
                             label: '客户交货日期',
                             name: 'deliveryTime',
-                            initialValue: moment(task?.deliveryTime),
+                            initialValue: task?.deliveryTime ? moment(task?.deliveryTime) : '',
                             children:  <DatePicker disabledDate={(current)=>{return current && current > moment(task?.signContractTime)}} format="YYYY-MM-DD"/>
                         }, {
                             label: '计划交货日期',
                             name: 'planDeliveryTime',
-                            initialValue: moment(task?.planDeliveryTime),
+                            initialValue: task?.planDeliveryTime ? moment(task?.planDeliveryTime) : '',
                             rules: [{
                                 required: true,
                                 message: '计划交货日期'
@@ -376,7 +376,7 @@ enum StepTitleItem {
                                 required: true,
                                 message: '请选择订单交货日期'
                             }],
-                            children: <DatePicker disabled showTime format='YYYY-MM-DD HH:mm:ss'/>
+                            children: <DatePicker disabled format='YYYY-MM-DD HH:mm:ss'/>
                         }, {
                             label: '客户交货日期',
                             name: 'deliveryTime',
@@ -498,7 +498,7 @@ enum StepTitleItem {
                                 required: true,
                                 message: '请选择订单交货日期'
                             }],
-                            children:  <DatePicker disabled showTime format='YYYY-MM-DD HH:mm:ss'/>
+                            children:  <DatePicker disabled format='YYYY-MM-DD HH:mm:ss'/>
                         }, {
                             label: '客户交货日期',
                             name: 'deliveryTime',
@@ -621,27 +621,35 @@ enum StepTitleItem {
 
     //下一步
     public async onSubmitAndContinue() {
-        const{ checkStep, task } = this.state;
-        this.setState({
-            checkStep: checkStep + 1,
+       
+        this.getForm()?.validateFields().then(async ()=>{
+            // if(!err.errorFields.length){
+                const{ checkStep, task } = this.state;
+                this.setState({
+                    checkStep: checkStep + 1,
+                })
+                let data = task || {};
+                const values = this.getForm()?.getFieldsValue(true);
+                values.productIds = this.state.selectedKeys.length > 0 ? this.state.selectedKeys : [];
+                values.contractInfoDTO = this.state.contractInfoDTO;
+                values.saleOrderId = this.state?.task?.saleOrderId;
+                console.log(values.deliverTime)
+                const taskId: number = await RequestUtil.post('/tower-market/taskNotice/saveToNextStep', {
+                    ...values,
+                    id:this.state?.task?.id,
+                    planDeliveryTime:moment(values.planDeliveryTime).format('YYYY-MM-DD'),
+                    deliveryTime: values.deliveryTime && moment(values.deliveryTime).format('YYYY-MM-DD') || '',
+                    signContractTime: moment(values.signContractTime).format('YYYY-MM-DD') || '',
+                });
+                data.id = taskId
+                this.setState({
+                    task: data
+                })
+            // }
+        }).catch(err => {
+            console.log(err)
         })
-        let data = task || {};
-        const values = this.getForm()?.getFieldsValue(true)
-        values.productIds = this.state.selectedKeys.length > 0 ? this.state.selectedKeys : [];
-        values.contractInfoDTO = this.state.contractInfoDTO;
-        values.saleOrderId = this.state?.task?.saleOrderId;
         
-        const taskId: number = await RequestUtil.post('/tower-market/taskNotice/saveToNextStep', {
-            ...values,
-            id:this.state?.task?.id,
-            planDeliveryTime:moment(values.planDeliveryTime).format('YYYY-MM-DD'),
-            deliveryTim: moment(values.deliveryTime).format('YYYY-MM-DD'),
-            signContractTime: moment(values.signContractTime).format('YYYY-MM-DD'),
-        });
-        data.id = taskId
-        this.setState({
-            task: data
-        })
         
     }
     
@@ -814,3 +822,7 @@ enum StepTitleItem {
         
     }
   }
+
+function saleOrderNumber(saleOrderNumber: any): any {
+    throw new Error('Function not implemented.');
+}
