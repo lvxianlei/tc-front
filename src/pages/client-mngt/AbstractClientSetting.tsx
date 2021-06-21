@@ -54,8 +54,8 @@ export default abstract class AbstractClientSetting<P extends RouteComponentProp
                 initialValue: client?.type,
                 children: (
                     <Select>
-                        <Select.Option value={ 1 }>国内客户</Select.Option>
-                        <Select.Option value={ 2 }>国际客户</Select.Option>
+                        <Select.Option value={ '1' }>国内客户</Select.Option>
+                        <Select.Option value={ '2' }>国际客户</Select.Option>
                     </Select>
                 )
             }, {
