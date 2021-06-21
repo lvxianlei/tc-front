@@ -380,7 +380,7 @@ export interface IAttachVo {
                 <Col span={6}>
                     <Card className={entrustStyles.card_part_right} title="客户留言" id='card2' >
                         <Row id='row1'>
-                            <TextArea rows={ 5 } onChange={this.onChange} className={ entrustStyles.text }/>
+                            <TextArea rows={ 5 } onChange={this.onChange} className={ entrustStyles.text } value={this.state.message}/>
                         </Row>
                         <Row>
                             <Button 
@@ -395,7 +395,8 @@ export interface IAttachVo {
                                         await RequestUtil.post('/tower-outsource/entrustMessage', values).then(async ()=>{
                                             const entrust: IEntrust = await RequestUtil.get<IEntrust>(`/tower-outsource/entrust/${ this.props.match.params.id }`);
                                             this.setState({
-                                                entrust
+                                                entrust,
+                                                message:''
                                             });
                                         });
                                     }
