@@ -79,10 +79,10 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
             productType: contract?.productType,
             voltageGrade: contract?.voltageGrade
         });
-        const region: string[] = this.state.contract.region;
+        const region: string[] | undefined = this.state.contract.region;
         let regionInfoData: IRegion[] =  this.state.regionInfoData;
         if(this.state.contract.countryCode === 0) {
-            if(region.length > 0) {
+            if(region && region.length > 0) {
                 const index: number = regionInfoData.findIndex((regionInfo: IRegion) => regionInfo.code == region[0]);
                 const resData: IRegion[] = await RequestUtil.get(`/tower-system/region/${ region[0] }`);
                 regionInfoData[index] ={

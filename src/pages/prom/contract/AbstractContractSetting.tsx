@@ -58,7 +58,7 @@ export interface IContract {
     readonly reviewTime?: string;
     readonly chargeType?: string;
     readonly salesman?: string;
-    readonly region: [];
+    readonly region?: [];
     readonly countryCode?: number;
     readonly contractAmount?: number;
     readonly currencyType?: number;
