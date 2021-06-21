@@ -11,7 +11,7 @@ import AbstractDetailComponent from '../../../components/AbstractDetailComponent
 import ConfirmableButton from '../../../components/ConfirmableButton';
 import { ITabItem } from '../../../components/ITabableComponent';
 import RequestUtil from '../../../utils/RequestUtil';
-import { IResponseData } from './AbstractContractSetting';
+import { IRegion, IResponseData } from './AbstractContractSetting';
 import ContractAttachment, { IContractAttachment } from './ContractAttachment';
 import ContractRefundRecord, { IContractRefundRecord } from './ContractRefundRecord';
 import ContractSummary, { IContractBaseInfo, IContractSysInfo } from './ContractSummary';
@@ -27,6 +27,7 @@ export interface IContractDetailState {
 interface IDetail extends IContractBaseInfo, IContractSysInfo, IContractAttachment, IContractRefundRecord {
     readonly id?: number;
     readonly deliveryTime?: string;
+    readonly regionName?: string;
 }
 
 /**
@@ -49,6 +50,42 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
         this.setState({
             detail: resData
         });
+        this.getRegionName();
+    }
+
+    public async getRegionName(): Promise<void> {
+        const detail: IContractBaseInfo | undefined = this.state.detail;
+        const region: string[] | undefined = detail?.region;
+        let resData: [] = await RequestUtil.get(`/tower-system/region/${ '00' }`);
+        let regionName: string = '';
+        if(region && detail?.countryCode === 0) {
+            resData.filter((items: IRegion) => {
+                if(items.code == region[0]) {
+                    regionName = items.name;
+                }
+            })
+            const secondData: IRegion[] = await RequestUtil.get(`/tower-system/region/${ region[0] }`);
+            if(region[1]) {
+                secondData.filter((items: IRegion) => {
+                    if(items.code == region[1]) {
+                        regionName = regionName + '/' + items.name;
+                    }
+                })
+                const thiedData: IRegion[] = await RequestUtil.get(`/tower-system/region/${ region[1] }`);
+                thiedData.filter((items: IRegion) => {
+                    if(items.code == region[2]) {
+                        regionName = regionName + '/' + items.name;
+                    }
+                })
+            }
+        }
+        this.setState({
+            detail: {
+                ...detail,
+                paymentPlanVos: [],
+                regionName: regionName
+            }
+        })
     }
 
     public async componentDidMount() {

@@ -3,12 +3,14 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 import { Table, TableColumnType } from 'antd';
+import moment from 'moment';
 import React from 'react';
 import isEqual from 'react-fast-compare';
 import { RouteComponentProps, withRouter } from 'react-router';
 
 import RequestUtil from '../../../utils/RequestUtil';
 import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../../../utils/SummaryRenderUtil';
+import { IContract, IcustomerInfoDto, IRegion } from './AbstractContractSetting';
 import styles from './ContractSummary.module.less';
 
 interface IContractSummaryParamsProps {
@@ -31,6 +33,20 @@ export interface IContractBaseInfo {
     readonly simpleProjectName?: string;
     readonly winBidType?: number;
     readonly winBidTypeName?: string;
+    readonly saleTypeName?: string;
+    readonly customerInfoVo?: IcustomerInfoDto;
+    readonly signCustomerName?: string;
+    readonly signContractTime?: string;
+    readonly signUserName?: string;
+    readonly deliveryTime?: string;
+    readonly reviewTime?: string;
+    readonly chargeType?: string;
+    readonly region?: [];
+    readonly countryCode?: number;
+    readonly contractAmount?: number;
+    readonly description?: string;
+    readonly currencyTypeName?: string;
+    readonly regionName?: string;
 }
 
 export interface IOrderItem {
@@ -126,6 +142,51 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
             }], [{
                 label: '中标类型',
                 value: baseInfo?.winBidTypeName
+            }, {
+                label: '销售类型',
+                value: baseInfo?.saleTypeName
+            }], [{
+                label: '业主单位',
+                value: baseInfo?.customerInfoVo?.customerCompany
+            }, {
+                label: '业主联系人',
+                value: baseInfo?.customerInfoVo?.customerLinkman
+            }], [{
+                label: '业主联系电话',
+                value: baseInfo?.customerInfoVo?.customerPhone
+            }, {
+                label: '合同签订单位',
+                value: baseInfo?.signCustomerName
+            }], [{
+                label: '合同签订日期',
+                value: baseInfo?.signContractTime
+            }, {
+                label: '签订人',
+                value: baseInfo?.signUserName
+            }], [{
+                label: '要求交货日期',
+                value: baseInfo?.deliveryTime
+            }, {
+                label: '评审时间',
+                value: baseInfo?.reviewTime
+            }], [{
+                label: '所属国家',
+                value: baseInfo?.countryCode === 0 ? '中国' : '海外'
+            }, {
+                label: '所属区域',
+                value: baseInfo?.regionName
+            }], [{
+                label: '计价方式',
+                value: baseInfo?.chargeType === '0' ? '订单总价、总重计算单价' : '产品单价、基数计算总价'
+            }, {
+                label: '合同总价',
+                value: baseInfo?.contractAmount
+            }], [{
+                label: '币种',
+                value: baseInfo?.currencyTypeName
+            }], [{
+                label: '备注',
+                value: baseInfo?.description
             }]]
         };
     }
