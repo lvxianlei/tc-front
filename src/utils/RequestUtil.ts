@@ -72,8 +72,7 @@ export default abstract class RequestUtil {
                 NProgress.done();
                 if(path === '/sinzetech-auth/oauth/token') {
                     resolve(res);
-                }
-                if (res.code === 200) {
+                } else if (res.code === 200) {
                     resolve(res.data);
                 } else if (res.code === 401) {
                     setTimeout(this.backToLogin, 10);
