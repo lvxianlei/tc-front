@@ -37,7 +37,7 @@ class EntrustNew extends AbstractEntrustSetting<IEntrustNewRouteProps, IEntrustN
         values.attachInfoDtoList = this.state.attachList;
         values.entrustSubmitType = this.state.entrustSubmitType;
         if(values.attachInfoDtoList) {
-            return await RequestUtil.post('/entrust', values).then(() => {
+            return await RequestUtil.post('/tower-outsource/entrust', values).then(() => {
                 this.setState({
                     isVisible: false
                 })

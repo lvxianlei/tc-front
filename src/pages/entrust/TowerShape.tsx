@@ -57,7 +57,7 @@ class TowerShape extends AbstractMngtComponent<ITowerShapeWithRouteProps, ITower
      * @param filterValues 
      */
      protected async fetchTableData(filterValues: Record<string, any>,pagination: TablePaginationConfig = {}) {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>('/towerModel', {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-outsource/towerModel', {
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize ||this.state.tablePagination?.pageSize,
@@ -97,7 +97,7 @@ class TowerShape extends AbstractMngtComponent<ITowerShapeWithRouteProps, ITower
      * @description 查看
      */
     public showTowerModal = async (record: Record<string, any>): Promise<void> => {
-        const attachList: IAttachData[] = await RequestUtil.get<IAttachData[]>(`/towerModel/${ record.id }`);
+        const attachList: IAttachData[] = await RequestUtil.get<IAttachData[]>(`/tower-outsource/towerModel/${ record.id }`);
         this.setState({
             isVisible: true,
             attachData: attachList

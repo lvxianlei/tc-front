@@ -94,7 +94,7 @@ import EntrustSetting from './EntrustSetting';
       * @param [pagination] 
       */
      protected async fetchTableData(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-         const resData: IResponseData = await RequestUtil.get<IResponseData>('/entrust', {
+         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-outsource/entrust', {
              ...filterValues,
              current: pagination.current || this.state.tablePagination?.current,
              size: pagination.pageSize ||this.state.tablePagination?.pageSize,

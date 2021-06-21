@@ -61,7 +61,7 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
         this.setState({
             isVisible: true
         })
-        const entrust: IEntrust = await RequestUtil.get<IEntrust>(`/towerModel/detail/${ this.props.data.id }`);
+        const entrust: IEntrust = await RequestUtil.get<IEntrust>(`/tower-outsource/towerModel/detail/${ this.props.data.id }`);
         this.setState({
             entrust: entrust
         });
@@ -99,7 +99,7 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
         const entrust: IEntrust | undefined = this.state.entrust;
         values = { ...entrust, ...values };
         console.log(values)
-        return await RequestUtil.put('/towerModel/accept', values);
+        return await RequestUtil.put('/tower-outsource/towerModel/accept', values);
     }
 
     /**
@@ -113,7 +113,7 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
         let values: IEntrust = this.getForm()?.getFieldsValue(true);
         values = { ...entrust, description: this.getForm()?.getFieldValue('description') };
         console.log(values)
-        return await RequestUtil.put('/towerModel/reject', values);
+        return await RequestUtil.put('/tower-outsource/towerModel/reject', values);
     }
 
     public uploadAttach = (value: Record<string, any>): void => {

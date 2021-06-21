@@ -32,7 +32,7 @@ class EntrustSetting extends AbstractEntrustSetting<IEntrustSettingRouteProps, I
         this.setState({
             isVisible: true
         })
-        const entrust: IEntrust = await RequestUtil.get<IEntrust>(`/entrust/${ this.props.data.id }`);
+        const entrust: IEntrust = await RequestUtil.get<IEntrust>(`/tower-outsource/entrust/${ this.props.data.id }`);
         this.setState({
             entrust: entrust,
             attachList: entrust.attachVoList
@@ -62,7 +62,7 @@ class EntrustSetting extends AbstractEntrustSetting<IEntrustSettingRouteProps, I
         values.entrustSubmitType = this.state.entrustSubmitType;
         values.id = this.props.data.id;
         if(values.attachInfoDtoList) {
-            return await RequestUtil.put('/entrust', values).then(() => {
+            return await RequestUtil.put('/tower-outsource/entrust', values).then(() => {
                 this.setState({
                     isVisible: false
                 })
