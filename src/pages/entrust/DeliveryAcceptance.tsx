@@ -132,50 +132,50 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
                 <Modal title={ this.state.isBack ? "退回确认" : "交付文件" } width="50%" footer={ null } visible={ this.state.isVisible } onCancel={ this.onCancel }>
                      <Form onFinish={ this.onFinishSubmit } ref={ this.form } style={ { width: '100%' } }>
                         { this.state.isBack ? 
-                        <Space size="middle" direction="vertical" className={ styles.modal_center }>
-                            <Form.Item 
-                                name="description"  
-                                rules={[{ required: true,
-                                message: '请输入退回原因（必填）' }]}
-                                wrapperCol={{ span: 10 }}
-                                labelCol={{ offset: 7 }}
+                            <Space size="middle" direction="vertical" className={ styles.modal_center }>
+                                <Form.Item 
+                                    name="description"  
+                                    rules={[{ required: true,
+                                    message: '请输入退回原因' }]}
+                                    wrapperCol={{ offset: 7, span: 10 }}
                                 >
-                                <Input />
-                            </Form.Item>
-                            <Space size="large" direction="horizontal">
-                                <Button type="primary" htmlType="button" onClick={ this.onBackSubmit }>确认退回</Button>
+                                    <Input.TextArea placeholder={ "请输入退回原因（必填）" }/>
+                                </Form.Item>
+                                <Space size="large" direction="horizontal">
+                                    <Button type="primary" htmlType="button" onClick={ this.onBackSubmit }>确认退回</Button>
+                                </Space>
                             </Space>
-                        </Space>
-                        :<Space size="middle" direction="vertical" className={ styles.modal_center }>
-                            <Form.Item 
-                                label="审核件数" 
-                                name="examineNum" 
-                                initialValue={ entrust?.examineNum } 
-                                rules={[{ required: true,
-                                message: '请输入审核件数' }]}
-                                wrapperCol={{ span: 10 }}
-                                labelCol={{ offset: 7 }}
-                                >
-                                <Input />
-                            </Form.Item>
-                            { entrust?.attachInfoVOs && entrust?.attachInfoVOs.map<React.ReactNode>((items: IAttachVo, index: number): React.ReactNode => {
-                                    return <Row justify="center" key={ index }>
-                                        <Col span={6}>{ items.name }</Col>
-                                        <Col span={6}>{ items.fileUploadTime }</Col>
-                                        <Col span={6}>
-                                            <Button type="link" onClick={ () => this.uploadAttach(items) }>
-                                                下载
-                                            </Button>
-                                        </Col>
-                                    </Row>
-                                })
-                            }
-                            <Space size="large" direction="horizontal">
-                                <Button type="default" htmlType="button" onClick={ this.onCancel }>关闭</Button>
-                                <Button type="default" htmlType="button" onClick={ this.onBack }>退回</Button>
-                                <Button type="primary" htmlType="submit">验收通过</Button>
-                            </Space>
-                        </Space> }
+                            :<Space size="middle" direction="vertical" className={ styles.modal_center }>
+                                <Form.Item 
+                                    label="审核件数" 
+                                    name="examineNum" 
+                                    initialValue={ entrust?.examineNum } 
+                                    rules={[{ required: true,
+                                    message: '请输入审核件数' }]}
+                                    wrapperCol={{ span: 10 }}
+                                    labelCol={{ offset: 7 }}
+                                    >
+                                    <Input />
+                                </Form.Item>
+                                { entrust?.attachInfoVOs && entrust?.attachInfoVOs.map<React.ReactNode>((items: IAttachVo, index: number): React.ReactNode => {
+                                        return <Row justify="center" key={ index }>
+                                            <Col span={6}>{ items.name }</Col>
+                                            <Col span={6}>{ items.fileUploadTime }</Col>
+                                            <Col span={6}>
+                                                <Button type="link" onClick={ () => this.uploadAttach(items) }>
+                                                    下载
+                                                </Button>
+                                            </Col>
+                                        </Row>
+                                    })
+                                }
+                                <Space size="large" direction="horizontal">
+                                    <Button type="default" htmlType="button" onClick={ this.onCancel }>关闭</Button>
+                                    <Button type="default" htmlType="button" onClick={ this.onBack }>退回</Button>
+                                    <Button type="primary" htmlType="submit">验收通过</Button>
+                                </Space>
+                            </Space> 
+                        }
                     </Form>
                 </Modal>
                 { this.backModal() }

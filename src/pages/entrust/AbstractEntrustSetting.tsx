@@ -240,12 +240,6 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
     abstract popModalButton(): React.ReactNode;
 
     /**
-     * @description Renders extra operation area
-     * @returns 额外的删除按钮
-     */
-    abstract renderExtraDeleteButton(): React.ReactNode;
-
-    /**
      * @protected
      * @description Renders extra sections
      * @returns extra sections 
@@ -347,7 +341,6 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
                             </Row>
                         </Space>
                         <Space size="large" direction="horizontal" className={ styles.footer_btn }>
-                            { this.renderExtraDeleteButton() }
                             <Button type="default" htmlType="button" onClick={ this.onCancel }>关闭</Button>
                             <Button type="default" htmlType="button" onClick={ this.onSave }>保存</Button>
                             <Button type="primary" htmlType="button" onClick={ this.onSubmit }>提交</Button>

@@ -2,19 +2,29 @@
     "code": 200,
     "data": [
         {
-            "deliverTime": "2021-01-02",
-            "entrustId": "22254545",
-            "examineName": "admin",
-            "examineNum": 10,
-            "examineSectionNum": 100,
-            "examineUser": "admin",
+            "description": "55555",
+            "filePath": "1111",
+            "fileSize": 25,
+            "fileSuffix": ".doc",
+            "fileUploadTime": "2021-02-02",
             "id": "11212120",
-            "passedTime": "2021-05-25",
-            "projectName": "什么什么工程",
-            "projectNum": "21202352521",
-            "sectionNum": 100,
-            "towerName": "什么什么塔"
+            "keyId": "112",
+            "keyType": 1,
+            "name": "1212",
+            "userName": "aaaa"
+        }, {
+            "description": "rgdfgdfg",
+            "filePath": "111334431",
+            "fileSize": 25,
+            "fileSuffix": ".doc",
+            "fileUploadTime": "2021-02-02",
+            "id": "112445345312120",
+            "keyId": "1132",
+            "keyType": 1,
+            "name": "1213432",
+            "userName": "aa444aa"
         }
+
     ],
     "msg": "",
     "success": true	

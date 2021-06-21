@@ -72,31 +72,6 @@ class EntrustSetting extends AbstractEntrustSetting<IEntrustSettingRouteProps, I
             return Promise.reject(false)
         }
     }
-
-    /**
-     * @implements
-     * @description Determines whether delete on
-     * @param values 
-     * @returns delete 
-     */
-    public onDelete = async (values: Record<string, any>): Promise<void> => {
-        return await RequestUtil.delete(`/entrust?id= ${ this.props.data.id }`).then((res) => {
-            this.setState({
-                isVisible: false
-            })
-        });
-        
-    }
-
-    /**
-     * @description Renders extra operation area
-     * @returns 显示删除按钮
-     */
-    public renderExtraDeleteButton(): React.ReactNode {
-        return <>
-            <Button type="ghost" htmlType="button" onClick={ this.onDelete } danger>删除</Button>
-        </>
-    }
 }
 
 export default withRouter(withTranslation()(EntrustSetting));
