@@ -78,14 +78,16 @@ import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponse
      }
      //查询字段
      public getFilterFormItemProps(): FormItemProps[]  {
-         return [{
-                name: 'type',
-                children: 
-                <Select placeholder="请选择业务类型" className={ styles.select_width }>
-                    <Option value="0" >国内业务</Option>
-                    <Option value="1">国际业务</Option>
-                </Select>
-            },{
+         return [
+            //  {
+            //     name: 'type',
+            //     children: 
+            //     <Select placeholder="请选择业务类型" className={ styles.select_width }>
+            //         <Option value="0" >国内业务</Option>
+            //         <Option value="1">国际业务</Option>
+            //     </Select>
+            // },
+             {
                 name: 'projectName',
                 children: <Input placeholder="工程名称关键字"/>
              },{
@@ -118,11 +120,13 @@ import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponse
                 key: 'projectName',
                 title: '工程名称',
                 dataIndex: 'projectName',
-            },  {
-                key: 'saleTypeName',
-                title: '销售类型',
-                dataIndex: 'saleTypeName',
-            },  {
+            },  
+            // {
+            //     key: 'saleTypeName',
+            //     title: '销售类型',
+            //     dataIndex: 'saleTypeName',
+            // }, 
+            {
                 key: 'customerCompany',
                 title: '业主单位',
                 dataIndex: 'customerCompany',
