@@ -230,7 +230,18 @@ import EntrustSetting from './EntrustSetting';
                                                                 </div>
                                                                 :<div>
                                                                     <EntrustSetting data={ item }/>
-                                                                    <Button type="primary" ghost>删除</Button>
+                                                                    <ConfirmableButton 
+                                                                        confirmTitle="是否删除该委托吗？" 
+                                                                        type="primary"
+                                                                        ghost
+                                                                        placement="topRight"
+                                                                        onConfirm={ async () => {
+                                                                            await RequestUtil.delete(`/tower-outsource/entrust?id=${ (item as IEntrustDataItem).id }`);
+                                                                            this.fetchTableData({});
+                                                                        } }
+                                                                    >
+                                                                        删除
+                                                                    </ConfirmableButton>
                                                                 </div>
                                                             }
                                                         </div>
