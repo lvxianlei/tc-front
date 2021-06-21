@@ -58,7 +58,7 @@ export interface IContract {
     readonly reviewTime?: string;
     readonly chargeType?: string;
     readonly salesman?: string;
-    readonly region: [];
+    readonly region?: [];
     readonly countryCode?: number;
     readonly contractAmount?: number;
     readonly currencyType?: number;
@@ -433,7 +433,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 }, {
                     label: '中标类型',
                     name: 'winBidType', 
-                    initialValue: contract?.winBidType || winBidTypeOptions && winBidTypeOptions.length > 0 && winBidTypeOptions[0].id,
+                    initialValue: contract?.winBidType,
                     children: (
                         <Select>
                             { winBidTypeOptions && winBidTypeOptions.map(({ id, name }, index) => {
@@ -446,7 +446,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 }, {
                     label: '销售类型',
                     name: 'saleType',
-                    initialValue: contract?.saleType || saleTypeOptions && saleTypeOptions.length > 0 && saleTypeOptions[0].id,
+                    initialValue: contract?.saleType,
                     children: (
                         <Select>
                             { saleTypeOptions && saleTypeOptions.map(({ id, name }, index) => {
@@ -508,7 +508,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 }, {
                     label: '合同签订日期',
                     name: 'signContractTime',
-                    initialValue: moment(contract?.signContractTime),
+                    initialValue: contract?.signContractTime ? moment(contract?.signContractTime) : '',
                     rules: [{
                         required: true,
                         message: '请选择合同签订日期'
@@ -526,7 +526,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 }, {
                     label: '要求交货日期',
                     name: 'deliveryTime',
-                    initialValue: moment(contract?.deliveryTime),
+                    initialValue: contract?.deliveryTime ? moment(contract?.deliveryTime) : '',
                     rules: [{
                         required: true,
                         message: '请选择要求交货日期'
@@ -535,7 +535,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 }, {
                     label: '评审时间',
                     name: 'reviewTime',
-                    initialValue: moment(contract?.reviewTime),
+                    initialValue: contract?.reviewTime ? moment(contract?.reviewTime) : '',
                     children:  <DatePicker showTime format="YYYY-MM-DD HH:mm" />
                 }, {
                     label: '所属国家',
