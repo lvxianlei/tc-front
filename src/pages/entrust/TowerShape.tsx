@@ -63,6 +63,14 @@ class TowerShape extends AbstractMngtComponent<ITowerShapeWithRouteProps, ITower
             size: pagination.pageSize ||this.state.tablePagination?.pageSize,
             countryCode: this.state.selectedTabKey
         });
+        if(resData.records.length == 0 && resData.current>1){
+            this.fetchTableData({},{
+                current: resData.current - 1,
+                pageSize: 10,
+                total: 0,
+                showSizeChanger: false
+            });
+        }
         this.setState({
             ...filterValues,
             tableDataSource: resData.records,
@@ -205,8 +213,13 @@ class TowerShape extends AbstractMngtComponent<ITowerShapeWithRouteProps, ITower
      * @param values 
      */
      public async onFilterSubmit(values: Record<string, any>) {
-         console.log(values)
-        this.fetchTableData(values);
+        const tablePagination:TablePaginationConfig = {
+            current: 1,
+            pageSize: 10,
+            total: 0,
+            showSizeChanger: false
+        }
+        this.fetchTableData(values, tablePagination);
     }
 
     /**
