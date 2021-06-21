@@ -132,7 +132,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                 } } 
                 disabled = { this.state.detail.contractStatus === 1 }
             >
-                <Button type="link" disabled = { this.state.detail.contractStatus === 1 }>
+                <Button type="default" disabled = { this.state.detail.contractStatus === 1 }>
                     删除
                 </Button>
             </Popconfirm>
