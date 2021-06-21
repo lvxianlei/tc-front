@@ -41,11 +41,15 @@ export interface IEntrust {
 export interface IAttachVo {
     readonly id?: number | string;
     readonly originalName?:	string;
+    readonly name?:	string;
     readonly fileUploadTime?: string;
     readonly fileSuffix?: string;
     readonly fileSize?: number;	
+    readonly size?: number;	
     readonly filePath?:	string;
+    readonly link?:	string;
     readonly description?: string;
+    readonly userName?: string;
 }
 
 export enum SubmitType {
@@ -145,7 +149,14 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
                             if (status === 'done') {
                                 message.success(`${info.file.name} file uploaded successfully.`);
                                 let attachList: IAttachVo[] | undefined = this.state.attachList || [];
-                                attachList.push(info.file.response.data)
+                                const resData: IAttachVo | undefined = info.file.response.data;
+                                attachList.push({ 
+                                    filePath: resData?.link,
+                                    fileSize: resData?.size,
+                                    fileSuffix: resData?.name?.slice(resData?.name?.lastIndexOf('.') + 1, resData?.name.length),
+                                    fileUploadTime: resData?.fileUploadTime,
+                                    name: resData?.originalName,	
+                                    userName: resData?.userName })
                                 this.setState({
                                     attachList: attachList
                                 })
@@ -273,7 +284,7 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
                         { this.state.attachList ? 
                             <>{ this.state.attachList.map<React.ReactNode>((items: IAttachVo, index: number): React.ReactNode => {
                                     return <Row justify="center" gutter={24} key={ index }>
-                                        <Col span={6}>{ items.originalName }</Col>
+                                        <Col span={6}>{ items.name }</Col>
                                         <Col span={6}>{ items.fileUploadTime }</Col>
                                         <Col span={6}>
                                             <Button type="link" onClick={ () => this.deleteAttach(items, index) }>
