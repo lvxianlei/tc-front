@@ -190,12 +190,9 @@ class ApprovalAll extends AbstractMngtComponent<
                                 AuditStatus.PENDING_APPROVAL ?
                                 (
                                     (records as ITaskTableDataItem).type === "SALE_ORDER_AUDIT" ?
-                                        <Button href={`/approval/task/product-change/
-                                    ${(records as ITaskTableDataItem).id}`} type="link" >审批</Button>
+                                        <Button href={`/approval/task/product-change/${(records as ITaskTableDataItem).id}`} type="link" >审批</Button>
                                         :
-                                        <Button href={`/approval/task/change/
-                                    ${(records as ITaskTableDataItem).id}&
-                                    ${(records as ITaskTableDataItem).businessId}`} type="link" >审批</Button>
+                                        <Button href={`/approval/task/change/${(records as ITaskTableDataItem).id} & ${(records as ITaskTableDataItem).businessId}`} type="link" >审批</Button>
 
                                 ) : (
                                     <Button type="link" disabled>
