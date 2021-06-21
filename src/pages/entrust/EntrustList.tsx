@@ -222,9 +222,9 @@ import EntrustSetting from './EntrustSetting';
                                                                 '100%': '#4F53FF',
                                                                 // '100%': '#373bfd',
                                                             }}
-                                                            trailColor = { item.status === EntrustStatus.HAVE_IN_HAND ? "#dcdcdc" : "#1890FF" }
+                                                            trailColor = { "#dcdcdc" }
                                                             width = { 80 }
-                                                            percent = { item.status === EntrustStatus.HAVE_IN_HAND ? Math.round((item.finishNum / (item.checkNum + item.conductNum) * 100) * 100) / 100: 0 }
+                                                            percent = { item.status === EntrustStatus.HAVE_IN_HAND ? Math.round((item.finishNum / (item.checkNum + item.conductNum) * 100) * 100) / 100 : item.status === EntrustStatus.COMPLETED ? 100 : 0 }
                                                             // format = {(percent)=>percent + '%'}
                                                             className= { styles.left_top_left }
                                                         />
