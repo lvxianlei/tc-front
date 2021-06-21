@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Button, ColProps } from 'antd';
+import { Button, ColProps, Popconfirm } from 'antd';
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -28,6 +28,7 @@ interface IDetail extends IContractBaseInfo, IContractSysInfo, IContractAttachme
     readonly id?: number;
     readonly deliveryTime?: string;
     readonly regionName?: string;
+    readonly contractStatus?: number;
 }
 
 /**
@@ -120,10 +121,21 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
     public renderOperationArea(): React.ReactNode | React.ReactNode[] {
         return [
             <Button key="new" href="/prom/contract/new">新增</Button>,
-            <Button key="setting" href={ `/prom/contract/setting/${ this.props.match.params.id }`}>编辑</Button>,
-            <ConfirmableButton key="delete" confirmTitle="要删除该合同吗？" onConfirm={ async () => {
-                const resData: IResponseData = await RequestUtil.delete('/tower-market/contract', {id: this.props.match.params.id})
-            } }>删除</ConfirmableButton>
+            <Button key="setting" href={ `/prom/contract/setting/${ this.props.match.params.id }`} disabled = { this.state.detail.contractStatus === 1 }>编辑</Button>,
+            <Popconfirm 
+                key="delete" 
+                title="要删除该合同吗？"
+                okText="确认"
+                cancelText="取消" 
+                onConfirm={ async () => {
+                    const resData: IResponseData = await RequestUtil.delete('/tower-market/contract', {id: this.props.match.params.id})
+                } } 
+                disabled = { this.state.detail.contractStatus === 1 }
+            >
+                <Button type="link" disabled = { this.state.detail.contractStatus === 1 }>
+                    删除
+                </Button>
+            </Popconfirm>
         ];
     }
 
