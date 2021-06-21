@@ -143,7 +143,7 @@ import EntrustSetting from './EntrustSetting';
         dataIndex: 'operation',
         render: (_: undefined, record: object): React.ReactNode => (
             <Space direction="horizontal" size="small">
-                <DeliveryAcceptance data={ record }/>
+                <DeliveryAcceptance data={ record } getTable={ () => this.fetchTableData({}) }/>
             </Space>
         )
     }];
