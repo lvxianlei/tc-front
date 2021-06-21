@@ -2,7 +2,7 @@
  * @author lxy
  * @copyright © 2021 lxy. All rights reserved
  */
- import { FormItemProps, Input, Card, TableColumnType, TablePaginationConfig, Table, Space, List, Row, Col, Pagination, Progress, Button } from 'antd';
+ import { FormItemProps, Input, Card, TableColumnType, TablePaginationConfig, Table, Space, List, Row, Col, Pagination, Progress, Button, Select } from 'antd';
  import React from 'react';
  import { WithTranslation, withTranslation } from 'react-i18next';
  import { RouteComponentProps, withRouter } from 'react-router';
@@ -393,6 +393,17 @@ import EntrustSetting from './EntrustSetting';
             },{
                 name: 'projectName',
                 children: <Input placeholder="工程名称关键字"/>
+            },{
+                name: 'status',
+                children: 
+                    <Select placeholder="请选择工程状态" className={ styles.select_width }>
+                        <Select.Option value="1">待发布</Select.Option>
+                        <Select.Option value="2">待接收</Select.Option>
+                        <Select.Option value="3">待立项</Select.Option>
+                        <Select.Option value="4">审核中</Select.Option>
+                        <Select.Option value="5">进行中</Select.Option>
+                        <Select.Option value="6">已完成</Select.Option>
+                    </Select>
             }
         ];
      }

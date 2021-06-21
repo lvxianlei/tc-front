@@ -22,6 +22,7 @@ import {
     message,
     DatePicker,
     Progress,
+    Select,
 } from 'antd';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -193,7 +194,15 @@ export interface IAttachVo {
                         label: '工程状态',
                         name: 'status',
                         initialValue: entrust?.status,
-                        children: <Input disabled/>
+                        children: 
+                                <Select disabled>
+                                    <Select.Option value={ 1 }>待发布</Select.Option>
+                                    <Select.Option value={ 2 }>待接收</Select.Option>
+                                    <Select.Option value={ 3 }>待立项</Select.Option>
+                                    <Select.Option value={ 4 }>审核中</Select.Option>
+                                    <Select.Option value={ 5 }>进行中</Select.Option>
+                                    <Select.Option value={ 6 }>已完成</Select.Option>
+                                </Select>
                     }
                 ]
             }]
