@@ -90,7 +90,9 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
         AuthUtil.setSinzetechAuth(access_token, {
             expires: 7
         });
-        const gotoPath: string = decodeURIComponent(new URLSearchParams(this.props.location.search).get('goto') || '');
+        let gotoPath: string = decodeURIComponent(new URLSearchParams(this.props.location.search).get('goto') || '');
+        const index: number = gotoPath.lastIndexOf("=");
+        gotoPath = gotoPath.slice(index + 1, gotoPath.length);
         this.props.history.push(gotoPath || ApplicationContext.get().home || '/');
     }
 
