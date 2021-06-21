@@ -56,14 +56,14 @@ export default abstract class AbstractFilteredSelecableModal<P extends IAbstract
     protected renderTableContent(): React.ReactNode {
         return (
             <Space direction="vertical" className={ styles.modalTable } >
-                <Card className={ styles.tableCard }>
+                {/* <Card className={ styles.tableCard }> */}
                     {  this.renderFilterContent() }
-                </Card>
-                <Card className={ styles.tableCard }>
+                {/* </Card> */}
+                {/* // <Card className={ styles.tableCard }> */}
                 <Space direction="vertical" size="large" >
                     { super.renderTableContent() }
                 </Space>
-            </Card>
+            {/* </Card> */}
             </Space>
         );
     }

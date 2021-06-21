@@ -217,7 +217,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const taxAmount: number = saleOrderValue.taxAmount;
         const taxRate: number = saleOrderValue.taxRate;
         let amount: number = 0;
-        amount = taxAmount / (1 + taxRate);
+        amount = taxAmount / (1 + taxRate) || 0;
         amount = parseFloat(amount.toFixed(2));
         this.getForm()?.setFieldsValue({ amount: amount });
         this.getPriceAccordTaxRate();
@@ -262,7 +262,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const amount: number = this.getForm()?.getFieldsValue(true).amount;
         const totalWeight: number = saleOrder.totalWeight;
         let price: number = 0;
-        price = amount / totalWeight;
+        price = amount / totalWeight || 0;
         price = parseFloat(price.toFixed(4));
         this.getForm()?.setFieldsValue({ price: price });
     }
@@ -480,7 +480,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                     stringMode={ false } 
                     precision={ 2 }  
                     disabled={ saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE || readonly } 
-                    onBlur={ this.amountBlur }/>
+                    onChange={ this.amountBlur }/>
             }, {
                 label: '含税单价',
                 name: 'taxPrice',
@@ -722,7 +722,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                                     required: saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT,
                                                                     message: '请输入产品重量'
                                                                 }]}>
-                                                                <Input onBlur={ () => this.numBlur(index) } disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3  }/>
+                                                                <Input onChange={ () => this.numBlur(index) } disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3  }/>
                                                             </Form.Item>
                                                         </li>
                                                         <li>
@@ -730,7 +730,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                                     required: true,
                                                                     message: '请输入产品单价'
                                                                 }]}>
-                                                                <Input prefix="￥" disabled={ saleOrder?.contractInfoDto?.chargeType !== ChargeType.UNIT_PRICE || readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 } onBlur={ () => this.priceBlur(index) }/>
+                                                                <Input prefix="￥" disabled={ saleOrder?.contractInfoDto?.chargeType !== ChargeType.UNIT_PRICE || readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 } onChange={ () => this.priceBlur(index) }/>
                                                             </Form.Item>
                                                         </li>
                                                         <li>
