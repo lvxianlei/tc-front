@@ -363,10 +363,10 @@ import EntrustSetting from './EntrustSetting';
      public getFilterFormItemProps(item: ITabItem): FormItemProps[] {
         return [
             {
-                name: 'name',
+                name: 'projectNum',
                 children: <Input placeholder="工程编号关键字"/>
             },{
-                name: 'name',
+                name: 'projectName',
                 children: <Input placeholder="工程名称关键字"/>
             }
         ];
