@@ -870,10 +870,15 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                     checked.map((item: any) => {
                                                         batchId.push(attachInfoDtos[item].id)
                                                     })
-                                                    const resData: IResponseData = await RequestUtil.delete(`/tower-system/attach?ids=${ batchId.join(',') }`)
-                                                    if(resData) {
+                                                    if(batchId) {
+                                                        const resData: IResponseData = await RequestUtil.delete(`/tower-system/attach?ids=${ batchId.join(',') }`)
+                                                        if(resData) {
+                                                            operation.remove(this.state.checkList)
+                                                        }
+                                                    } else {
                                                         operation.remove(this.state.checkList)
                                                     }
+                                                    
                                                 } }>删除</Button>
                                             </Space>
                                             {
@@ -932,10 +937,15 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                     type="link" placement="topRight"
                                                                     onConfirm={ async () => { 
                                                                         let attachInfoDtos =  this.getForm()?.getFieldValue("attachInfoDtos");
-                                                                        const resData: IResponseData = await RequestUtil.delete(`/tower-system/attach?ids=${ attachInfoDtos[index].id }`)
-                                                                        if(resData) {
+                                                                        if(attachInfoDtos[index].id) {
+                                                                            const resData: IResponseData = await RequestUtil.delete(`/tower-system/attach?ids=${ attachInfoDtos[index].id }`)
+                                                                            if(resData) {
+                                                                                operation.remove(index);
+                                                                            }
+                                                                        } else {
                                                                             operation.remove(index);
                                                                         }
+                                                                        
                                                                     }}>
                                                                     <DeleteOutlined />
                                                                 </ConfirmableButton>
