@@ -219,6 +219,7 @@ class TowerShape extends AbstractMngtComponent<ITowerShapeWithRouteProps, ITower
             total: 0,
             showSizeChanger: false
         }
+        console.log(values)
         this.fetchTableData(values, tablePagination);
     }
 
@@ -259,7 +260,7 @@ class TowerShape extends AbstractMngtComponent<ITowerShapeWithRouteProps, ITower
 
     public getFilterFormItemProps(): FormItemProps[] {
         return [{
-            name: 'internalNumber',
+            name: 'towerName',
             label: '塔型名称',
             children: <Input placeholder="请输入塔型名称"/>
         },
