@@ -68,6 +68,14 @@ import RequestUtil from '../../../utils/RequestUtil';
              size: pagination.pageSize ||this.state?.tablePagination?.pageSize,
              taskReviewStatus: this.state.selectedTabKey
          });
+         if(resData.records.length == 0 && resData.current>1){
+            this.fetchTableData({},{
+                current: resData.current - 1,
+                pageSize: 10,
+                total: 0,
+                showSizeChanger: false
+            });
+        }
          this.setState({
             ...filterValues,
             tableDataSource: resData.records,
