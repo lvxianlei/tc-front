@@ -162,7 +162,6 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
                                 <Form.Item 
                                     label="审核件数" 
                                     name="examineNum" 
-                                    initialValue={ entrust?.examineNum } 
                                     rules={[{ required: true,
                                     message: '请输入审核件数' }]}
                                     wrapperCol={{ span: 10 }}
