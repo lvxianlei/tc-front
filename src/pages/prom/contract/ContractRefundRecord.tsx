@@ -51,12 +51,12 @@ interface IPaymentRecordVo {
     readonly customerName?: string;
     readonly customerId?: string | number;
     readonly refundAmount?: number;
-    readonly currencyType?: number;
+    readonly currencyType?: number | string;
     readonly exchangeRate?: number;
     readonly foreignExchangeAmount?: number;
     readonly refundBank?: string;
     readonly description?: string;
-    readonly refundMode?: number;
+    readonly refundMode?: number | string;
     readonly contractId?: string | number;
     readonly refundNumber?: number;
     readonly paymentPlanId?: string;
@@ -116,11 +116,11 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             const paymentPlanVos: IPaymentPlanVo[] = this.state.paymentPlanVos || [];
             const paymentRecordVos: IPaymentRecordVo[] = paymentPlanVos[index].paymentRecordVos;
             paymentRecordVos.push({
-                refundTime: moment('2021-01-01'),
+                refundTime: moment('2021-01-01 00:00'),
                 customerName: '',
-                refundMode: 1,
+                refundMode: '',
                 refundAmount: 0,
-                currencyType: 1,
+                currencyType: '',
                 exchangeRate: 0,
                 foreignExchangeAmount: 0,
                 refundBank: '',

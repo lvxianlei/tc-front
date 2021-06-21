@@ -216,8 +216,8 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
         }, {
             label: '计划回款日期',
             name: 'returnedTime',
-            initialValue: moment(paymentRecord?.returnedTime),
-            children: <DatePicker />
+            initialValue: paymentRecord?.returnedTime ? moment(paymentRecord?.returnedTime) : '',
+            children: <DatePicker disabled />
         }, {
             label: '计划回款占比',
             name: 'returnedRate',

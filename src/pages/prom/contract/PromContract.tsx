@@ -190,7 +190,7 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
                             删除
                         </Button>
                     </Popconfirm>
-                    <Button type="link" href={ `/prom/contract/paymentRecord/${ (record as ITableDataItem).id }/${ (record as ITableDataItem).projectName }/${ (record as ITableDataItem).signCustomerId }/${ (record as ITableDataItem).signCustomerName }` } disabled={ (record as ITableDataItem).status === 0 }>{ console.log(record) }添加回款记录</Button>
+                    <Button type="link" href={ `/prom/contract/paymentRecord/${ (record as ITableDataItem).id }/${ (record as ITableDataItem).projectName }/${ (record as ITableDataItem).signCustomerId }/${ (record as ITableDataItem).signCustomerName }` } disabled={ (record as ITableDataItem).status === 0 }>添加回款记录</Button>
                 </Space>
             )
         }];

@@ -167,10 +167,10 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             this.setState({
                 saleOrder: {
                     ...(saleOrder || { taxAmount: 0, taxRate: 0, totalWeight: 0, totalAmount: 0,productVos: [] }),
-                    contractInfoDto: modalSelectedValue
+                    contractInfoDto: { ...modalSelectedValue }
                 },
             })
-            this.getForm()?.setFieldsValue({ ...modalSelectedValue, price: 0  });
+            this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, price: 0  });
             this.getUnitByChargeType();
         }   
     }
@@ -242,7 +242,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const productDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).productDtos;
         if(productDtos.length > 0) {
             let totalPrice: number = 0;
-            totalPrice = saleOrder.taxAmount / saleOrder.totalWeight;
+            totalPrice = saleOrder.taxAmount / saleOrder.totalWeight || 0;
             totalPrice = parseFloat(totalPrice.toFixed(4));
             productDtos.map<void>((items: IProductVo, ind: number): void => {
                 productDtos[ind] = {
@@ -276,7 +276,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         if(productDtos[index] && productDtos[index].num) {
             let totalNum: number = 0;
             productDtos.map<void>((items: IProductVo): void => {
-                totalNum = Number(totalNum) + Number(items.num);
+                totalNum = Number(totalNum) + Number(items.num) || 0;
             })
             this.getForm()?.setFieldsValue({ totalWeight: totalNum });
             this.setState({
@@ -289,7 +289,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 const price: number = productDtos[ind].price;
                 productDtos[ind] = {
                     ...productDtos[ind],
-                    totalAmount: num * price
+                    totalAmount: num * price || 0
                 }
             })
             this.getForm()?.setFieldsValue({ productDtos: productDtos });
@@ -388,7 +388,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 label: '采购订单号',
                 name: 'purchaseOrderNumber',
                 initialValue: saleOrder?.purchaseOrderNumber,
-                children: <Input disabled={ readonly }/>
+                children: <Input maxLength={ 50 } disabled={ readonly }/>
             }, {
                 label: '关联合同',
                 name: 'contractId',
@@ -532,7 +532,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 label: '保函类型',
                 name: 'guaranteeType',
                 initialValue: saleOrder?.guaranteeType,
-                children:  <Input disabled={ readonly }/>
+                children:  <Input disabled={ readonly } maxLength={ 50 }/>
             }, {
                 label: '保函金额',
                 name: 'guaranteeAmount',
@@ -561,7 +561,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             }, {
                 label: '订单交货日期',
                 name: 'orderDeliveryTime',
-                initialValue: moment(saleOrder?.orderDeliveryTime),
+                initialValue: saleOrder?.orderDeliveryTime ? moment(saleOrder?.orderDeliveryTime) : '',
                 rules: [{
                     required: true,
                     message: '请选择订单交货日期'
@@ -657,7 +657,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                                     required: true,
                                                                     message: '请输入线路名称'
                                                                 }]}>
-                                                                <Input disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 }/>
+                                                                <Input disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 }  maxLength={ 100 }/>
                                                             </Form.Item>
                                                         </li>
                                                         <li>
@@ -676,7 +676,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                                     required: true,
                                                                     message: '请输入塔型'
                                                                 }]}>
-                                                                <Input disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 }/>
+                                                                <Input disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 } maxLength={ 50 }/>
                                                             </Form.Item>
                                                         </li>
                                                         <li>
@@ -684,7 +684,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                                     required: true,
                                                                     message: '请输入杆塔号'
                                                                 }]}>
-                                                                <Input disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 }/>
+                                                                <Input disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 } maxLength={ 50 }/>
                                                             </Form.Item>
                                                         </li>
                                                         <li>
@@ -722,7 +722,13 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                                     required: saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT,
                                                                     message: '请输入产品重量'
                                                                 }]}>
-                                                                <Input onChange={ () => this.numBlur(index) } disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3  }/>
+                                                                <InputNumber
+                                                                    min="1"
+                                                                    step="0.0001"
+                                                                    stringMode={ false } 
+                                                                    precision={ 4 }
+                                                                    onChange={ () => this.numBlur(index) } 
+                                                                    disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 } />
                                                             </Form.Item>
                                                         </li>
                                                         <li>
@@ -730,7 +736,13 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                                     required: true,
                                                                     message: '请输入产品单价'
                                                                 }]}>
-                                                                <Input prefix="￥" disabled={ saleOrder?.contractInfoDto?.chargeType !== ChargeType.UNIT_PRICE || readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 } onChange={ () => this.priceBlur(index) }/>
+                                                                <InputNumber
+                                                                    min="1"
+                                                                    step="0.01"
+                                                                    stringMode={ false } 
+                                                                    precision={ 2 }
+                                                                    disabled={ saleOrder?.contractInfoDto?.chargeType !== ChargeType.UNIT_PRICE || readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 } 
+                                                                    onChange={ () => this.priceBlur(index) }/>
                                                             </Form.Item>
                                                         </li>
                                                         <li>
@@ -740,7 +752,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                         </li>
                                                         <li>
                                                             <Form.Item { ...field } name={[field.name, 'tender']} fieldKey={[field.fieldKey, 'tender']}>
-                                                                <Input disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 }/>
+                                                                <Input disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 } maxLength={ 100 }/>
                                                             </Form.Item>
                                                         </li>
                                                         <li>
