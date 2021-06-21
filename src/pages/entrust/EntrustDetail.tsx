@@ -216,7 +216,7 @@ export interface IAttachVo {
      */
   
     public renderExtraSections(): IRenderedSection[] {
-        return [{
+        let extra = [{
             title:'附件',
             render:():React.ReactNode => {
                 return (
@@ -227,23 +227,27 @@ export interface IAttachVo {
                     />
                 )
             }
-        }, {
-            title:'塔进度信息',
-            render:():React.ReactNode => {
-                return this.state.entrust && this.state.entrust.towerModelVoList && this.state.entrust.towerModelVoList.map((item:ITowerModelVO)=>{
-                    return (
-                        <div className={ entrustStyles.tower }>
-                            <div className={ entrustStyles.tower_title }>
-                                <div>{item.towerName}</div>
-                                <div>({item.examineName})</div>
+        }];
+        if(this.state.entrust?.status == 5 || this.state.entrust?.status == 6){
+            extra.push({
+                title:'塔进度信息',
+                render:():React.ReactNode => {
+                    return this.state.entrust && this.state.entrust.towerModelVoList && this.state.entrust.towerModelVoList.map((item:ITowerModelVO)=>{
+                        return (
+                            <div className={ entrustStyles.tower }>
+                                <div className={ entrustStyles.tower_title }>
+                                    <div>{item.towerName}</div>
+                                    <div>({item.examineName})</div>
+                                </div>
+                                <Progress percent={Math.round((item.examineSectionNum/item.sectionNum)*100)/100} status="active" />
                             </div>
-                            <Progress percent={Math.round((item.examineSectionNum/item.sectionNum)*100)/100} status="active" />
-                        </div>
-                    )
-                })
-                
-            }
-        },]
+                        )
+                    })
+                    
+                }
+            })
+        }
+        return extra
 
     }
 
@@ -379,39 +383,42 @@ export interface IAttachVo {
                 </Col>
                 <Col span={6}>
                     <Card className={entrustStyles.card_part_right} title="客户留言" id='card2' >
-                        <Row id='row1'>
-                            <TextArea rows={ 5 } onChange={this.onChange} className={ entrustStyles.text } value={this.state.message}/>
-                        </Row>
-                        <Row>
-                            <Button 
-                                type="primary" 
-                                className={ entrustStyles.text_button } 
-                                onClick={async ()=>{
-                                    if(this.state.message){
-                                        let values = {
-                                            message: this.state.message,
-                                            entrustId: this.props.match.params.id
-                                        }
-                                        await RequestUtil.post('/tower-outsource/entrustMessage', values).then(async ()=>{
-                                            const entrust: IEntrust = await RequestUtil.get<IEntrust>(`/tower-outsource/entrust/${ this.props.match.params.id }`);
-                                            this.setState({
-                                                entrust,
-                                                message:''
+                       {this.state.entrust?.status!==6?
+                       <> 
+                            <Row id='row1'>
+                                <TextArea rows={ 5 } onChange={this.onChange} className={ entrustStyles.text } value={this.state.message}/>
+                            </Row>
+                            <Row>
+                                <Button 
+                                    type="primary" 
+                                    className={ entrustStyles.text_button } 
+                                    onClick={async ()=>{
+                                        if(this.state.message){
+                                            let values = {
+                                                message: this.state.message,
+                                                entrustId: this.props.match.params.id
+                                            }
+                                            await RequestUtil.post('/tower-outsource/entrustMessage', values).then(async ()=>{
+                                                const entrust: IEntrust = await RequestUtil.get<IEntrust>(`/tower-outsource/entrust/${ this.props.match.params.id }`);
+                                                this.setState({
+                                                    entrust,
+                                                    message:''
+                                                });
                                             });
-                                        });
-                                    }
-                                    else{
-                                        message.error('请填写客户留言')
-                                    }
-                                }}
-                            >
-                                留言
-                            </Button>
-                        </Row>
+                                        }
+                                        else{
+                                            message.error('请填写客户留言')
+                                        }
+                                    }}
+                                >
+                                    留言
+                                </Button>
+                            </Row>
+                        </>:null}
                         <Row>
                             <List
                                 size="large"
-                                className={ entrustStyles.card_part_right_list }
+                                className={ this.state.entrust?.status!==6?entrustStyles.card_part_right_list:entrustStyles.card_part_right_list1 }
                                 dataSource={ entrust?.entrustMessageVoList }
                                 renderItem={ (item: IEntrustMessageVo) => 
                                     <List.Item>

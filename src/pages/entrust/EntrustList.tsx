@@ -232,7 +232,9 @@ import EntrustSetting from './EntrustSetting';
                                                             <div>工程编号：{ item.projectNum }</div>
                                                             <div className = { styles.left_top_right_middle}>工程名称：{ item.projectName }</div>
                                                             <div>工程周期：{ item.projectStartTime } 至 { item.projectEndTime }</div>
-                                                            { item.status !== EntrustStatus.TO_BE_RELEASED ?
+                                                            { item.status !== EntrustStatus.TO_BE_RELEASED ? 
+                                                                item.status !== EntrustStatus.COMPLETED && item.status !== EntrustStatus.HAVE_IN_HAND?
+                                                                <Button type="primary" ghost href={ `/outsource/entrust/detail/${ (item as IEntrustDataItem).id }`}>前往留言</Button>:
                                                                 <div>
                                                                     <Button type="primary" ghost href={ `/outsource/entrust/detail/${ (item as IEntrustDataItem).id }`}>详情</Button>
                                                                 </div>
