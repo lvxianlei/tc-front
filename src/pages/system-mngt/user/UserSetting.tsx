@@ -52,6 +52,7 @@ class UserSetting extends AbstractUserSetting<IUserSettingRouteProps, IUserSetti
      * @returns submit 
      */
     public async onSubmit(values: Record<string, any>): Promise<void> {
+        values.roleIds = values?.roleIds?.join(',')
         await RequestUtil.put('/sinzetech-user/user', values);
     }
 
