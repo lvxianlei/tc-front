@@ -261,15 +261,15 @@ import EntrustSetting from './EntrustSetting';
                                                             <div className = { styles.left_middle }>塔型统计</div>
                                                             <div className = { styles.left_middle_bottom }></div>
                                                             <div className = { styles.left_bottom }>
-                                                                <div className = { styles.left_bottom_align}>
+                                                                <div className = { styles.left_bottom_left}>
                                                                     <div>{ item.checkNum }</div>
                                                                     <div>待验收</div>
                                                                 </div>
-                                                                <div className = { styles.left_bottom_align}>
+                                                                <div className = { styles.left_bottom_middle}>
                                                                     <div>{ item.conductNum }</div>
                                                                     <div>进行中</div>
                                                                 </div>
-                                                                <div className = { styles.left_bottom_align}> 
+                                                                <div className = { styles.left_bottom_right}> 
                                                                     <div>{ item.finishNum }</div>
                                                                     <div>已完成</div>
                                                                 </div>
