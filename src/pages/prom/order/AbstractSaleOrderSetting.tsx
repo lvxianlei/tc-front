@@ -217,7 +217,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const taxAmount: number = saleOrderValue.taxAmount;
         const taxRate: number = saleOrderValue.taxRate;
         let amount: number = 0;
-        amount = taxAmount / (1 + taxRate) || 0;
+        amount = taxAmount / (1 + Number(taxRate)) || 0;
         amount = parseFloat(amount.toFixed(2));
         this.getForm()?.setFieldsValue({ amount: amount });
         this.getPriceAccordTaxRate();
