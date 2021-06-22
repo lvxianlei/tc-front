@@ -55,7 +55,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
     }
 
     public async getRegionName(): Promise<void> {
-        const detail: IContractBaseInfo | undefined = this.state.detail;
+        const detail: IDetail | undefined = this.state.detail;
         const region: string[] | undefined = detail?.region;
         let resData: [] = await RequestUtil.get(`/tower-system/region/${ '00' }`);
         let regionName: string = '';
@@ -83,7 +83,6 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
         this.setState({
             detail: {
                 ...detail,
-                paymentPlanVos: [],
                 regionName: regionName
             }
         })
