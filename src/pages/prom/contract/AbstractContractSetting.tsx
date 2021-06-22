@@ -242,22 +242,6 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     }
 
     /**
-     * @description 验证业主联系电话格式
-     */
-    public checkcustomerPhone = (value: StoreValue): Promise<void | any> =>{
-        return new Promise(async (resolve, reject) => {  // 返回一个promise
-            const regPhone: RegExp = /^1[3|4|5|8][0-9]\d{8}$/;
-            const regTel: RegExp = /^\d{3}-\d{8}|\d{4}-\d{7}$/;
-            if(regPhone.test(value) || regTel.test(value) ) {
-                resolve(true)
-            } else 
-                resolve(false)
-        }).catch(error => {
-            Promise.reject(error)
-        })
-    }
-
-    /**
      * @description 验证合同编号是否重复
      */
     public checkContractNumber = (value: StoreValue): Promise<void | any> =>{
@@ -479,18 +463,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     label: '业主联系电话',
                     name: 'customerPhone',
                     initialValue: contract?.customerInfoDto?.customerPhone,
-                    children: <Input value={ contract?.customerInfoDto?.customerPhone } maxLength={ 30 }/>,
-                    rules: [{
-                        validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
-                            this.checkcustomerPhone(value).then(res => {
-                                if (res) {
-                                    callback()
-                                } else {
-                                    callback('业主联系电话格式有误')
-                                }
-                            })
-                        }
-                    }],
+                    children: <Input value={ contract?.customerInfoDto?.customerPhone } maxLength={ 30 }/>
                 }, {
                     label: '合同签订单位',
                     name: 'signCustomerName',
