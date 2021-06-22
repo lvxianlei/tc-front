@@ -394,7 +394,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                             }
                         }
                     }],
-                    children: <Input value={ contract?.contractNumber }/>
+                    children: <Input value={ contract?.contractNumber } maxLength={ 50 }/>
                 }, {
                     label: '内部合同编号',
                     name: 'internalNumber',
