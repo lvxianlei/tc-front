@@ -113,7 +113,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
     protected getState(): S {
         return {
             saleOrder: undefined,
-            isChangeProduct: false
+            isChangeProduct: false,
+            orderQuantity: 0
         } as S;
     }
 
@@ -247,6 +248,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             productDtos.map<void>((items: IProductVo, ind: number): void => {
                 productDtos[ind] = {
                     ...productDtos[ind],
+                    totalAmount: totalPrice * productDtos[ind].num || 0,
                     price: totalPrice
                 }
             })
@@ -302,14 +304,12 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
     public priceBlur(index: number): void {
         const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
         const productDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).productDtos;
-        if(productDtos[0] && productDtos[index].price) {
+        const orderQuantity: number | undefined = this.state.orderQuantity;
+        if(orderQuantity && productDtos[0] && productDtos[index].price) {
             const price: number = productDtos[index].price;
             let totalPrice: number = 0;
             let amount: number = 0;
-            
-            if(saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE) {
-                amount = price * 1; 
-            }
+            amount = price * 1; 
             productDtos.map<void>((items: IProductVo): void => {
                 totalPrice = Number(totalPrice) + Number(items.price);
             })
@@ -317,7 +317,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 ...productDtos[index],
                 totalAmount: amount
             }
-            this.getForm()?.setFieldsValue({ taxPrice: totalPrice, totalPrice: totalPrice, productDtos: productDtos });
+            this.getForm()?.setFieldsValue({ taxPrice: parseFloat((totalPrice/orderQuantity).toFixed(4)), totalPrice: parseFloat((totalPrice/orderQuantity).toFixed(4)), productDtos: productDtos });
             this.getTotalAmount();
             this.getAmount();
         }                                                       
@@ -354,6 +354,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             totalWeight = totalWeight - num;
             this.getForm()?.setFieldsValue({ totalWeight: totalWeight });
             this.getPrice();
+            this.getPriceAccordTaxRate();
         } else if( saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ) {
             const price: number = productDtos[index].price;
             const amount: number = productDtos[index].totalAmount;
@@ -595,20 +596,22 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                         <>
                                             <Button type="primary" onClick={ () => {
                                                 operation.add();
-                                                const orderQuantity: number | undefined = this.state.orderQuantity;
-                                                if(saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ) {
+                                                let orderQuantity: number | undefined = this.state.orderQuantity;
+                                                if(saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ) {
+                                                    if(orderQuantity !== undefined) {
+                                                        orderQuantity = orderQuantity + 1;
+                                                        this.setState({
+                                                            orderQuantity: orderQuantity
+                                                        })
+                                                    }
+                                                } else {
                                                     const saleOrderValue: ISaleOrder = this.getForm()?.getFieldsValue(true);
-                                                    if(orderQuantity) {
+                                                    if(orderQuantity !== undefined) {
                                                         this.setState({
                                                             orderQuantity: saleOrderValue.totalWeight
                                                         })
                                                     }
-                                                } else {
-                                                    if(orderQuantity) {
-                                                        this.setState({
-                                                            orderQuantity: orderQuantity + 1
-                                                        })
-                                                    }
+                                                   
                                                 }
                                                 this.getUnitByChargeType();
                                             } } className={ readonly? styles.isShow : styles.addBtn }>新增</Button>
@@ -737,7 +740,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                                     message: '请输入产品单价'
                                                                 }]}>
                                                                 <InputNumber
-                                                                    min="1"
+                                                                    min="0.01"
                                                                     step="0.01"
                                                                     stringMode={ false } 
                                                                     precision={ 2 }
