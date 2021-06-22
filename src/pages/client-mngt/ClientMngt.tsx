@@ -7,7 +7,7 @@ import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
-
+import { clientTypeOptions } from '../../configuration/DictionaryOptions';
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../components/AbstractMngtComponent';
 import ConfirmableButton from '../../components/ConfirmableButton';
 import { ITabItem } from '../../components/ITabableComponent';
@@ -185,16 +185,20 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
      * @returns tab items 
      */
     public getTabItems(): ITabItem[] {
-        return [{
+        let tab = [{
             label: '全部客户',
             key: ''
-        }, {
-            label: '国内客户',
-            key: 1
-        }, {
-            label: '国际客户',
-            key: 2
         }];
+        if(clientTypeOptions){
+            clientTypeOptions.map(item =>{
+                 tab.push({
+                    key: item.id,
+                    label: item.name,
+                }) 
+            })
+        }
+
+        return tab;
     }
 
     /**
