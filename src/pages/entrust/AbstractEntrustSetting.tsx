@@ -350,31 +350,33 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
                 { this.popModalButton() }
                 <Modal title="新建委托" width="60%" footer={ null } visible={ this.state.isVisible } onCancel={ this.onCancel }>
                     <Form { ...this.getFormProps() } ref={ this.form }>
-                        <Space size="large" direction="horizontal">
-                            <Row>
-                                <Col span={ 12 }>
-                                    <Space size="middle" direction="horizontal">
+                        <Space size="large" direction="vertical">
+                            <Space size="large" direction="horizontal">
+                                <Row>
+                                    <Col span={ 12 }>
+                                        <Space size="middle" direction="horizontal">
+                                            {
+                                                this.state.isVisible && this.getFormItemGroups().map<React.ReactNode>((items: IFormItemGroup[], itemIndex: number): React.ReactNode => this.renderFormItems(items, itemIndex))
+                                            }
+                                        </Space>
+                                    </Col>
+                                    <Col span={ 12 }>
                                         {
-                                            this.state.isVisible && this.getFormItemGroups().map<React.ReactNode>((items: IFormItemGroup[], itemIndex: number): React.ReactNode => this.renderFormItems(items, itemIndex))
+                                            this.state.isVisible && this.renderExtraSections().map<React.ReactNode>((section: IRenderedSection): React.ReactNode => (
+                                                <React.Fragment key={ section.title }>
+                                                    <div className={ styles.title }>{ section.title }</div>
+                                                    { section.render.call(this) }
+                                                </React.Fragment>
+                                            ))
                                         }
-                                    </Space>
-                                </Col>
-                                <Col span={ 12 }>
-                                    {
-                                        this.state.isVisible && this.renderExtraSections().map<React.ReactNode>((section: IRenderedSection): React.ReactNode => (
-                                            <React.Fragment key={ section.title }>
-                                                <div className={ styles.title }>{ section.title }</div>
-                                                { section.render.call(this) }
-                                            </React.Fragment>
-                                        ))
-                                    }
-                                </Col>
-                            </Row>
-                        </Space>
-                        <Space size="large" direction="horizontal" className={ styles.footer_btn }>
-                            <Button type="default" htmlType="button" onClick={ this.onCancel }>关闭</Button>
-                            <Button type="default" htmlType="button" onClick={ this.onSave }>保存</Button>
-                            <Button type="primary" htmlType="button" onClick={ this.onSubmit }>提交</Button>
+                                    </Col>
+                                </Row>
+                            </Space>
+                            <Space size="large" direction="horizontal" className={ styles.footer_btn }>
+                                <Button type="default" htmlType="button" onClick={ this.onCancel }>关闭</Button>
+                                <Button type="default" htmlType="button" onClick={ this.onSave }>保存</Button>
+                                <Button type="primary" htmlType="button" onClick={ this.onSubmit }>提交</Button>
+                            </Space>
                         </Space>
                     </Form>
                 </Modal>
