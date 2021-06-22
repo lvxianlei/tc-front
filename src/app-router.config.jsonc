@@ -154,5 +154,20 @@
         "path": "/approval/task/product-change/:id",
         "module": "./pages/approval/ProductChangeApproval",
         "exact": true
+    }, { // 委托列表
+        "name": "委托列表",
+        "path": "/outsource/entrust",
+        "module": "./pages/entrust/EntrustList",
+        "exact": true
+    }, { // 委托详情
+        "name": "委托详情",
+        "path": "/outsource/entrust/detail/:id",
+        "module": "./pages/entrust/EntrustDetail",
+        "exact": true
+    }, { // 已完成塔型
+        "name": "已完成塔型",
+        "path": "/outsource/towershape",
+        "module": "./pages/entrust/TowerShape",
+        "exact": true
     }]
 }
