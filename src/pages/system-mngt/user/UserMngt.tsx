@@ -91,7 +91,7 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
      */
     private onDelete(items: IUser[]): () => void {
         return async () => {
-            await RequestUtil.delete('/sinzetech-user/user', { ids: items.map<number>((item: IUser): number => item?.id as number) });
+            await RequestUtil.delete(`/sinzetech-user/user?ids=${items.map<number>((item: IUser): number => item?.id as number) }`);
             this.setState({
                 selectedUsers: [],
                 selectedUserKeys: []
