@@ -479,18 +479,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     label: '业主联系电话',
                     name: 'customerPhone',
                     initialValue: contract?.customerInfoDto?.customerPhone,
-                    children: <Input value={ contract?.customerInfoDto?.customerPhone } maxLength={ 30 }/>,
-                    rules: [{
-                        validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
-                            this.checkcustomerPhone(value).then(res => {
-                                if (res) {
-                                    callback()
-                                } else {
-                                    callback('业主联系电话格式有误')
-                                }
-                            })
-                        }
-                    }],
+                    children: <Input value={ contract?.customerInfoDto?.customerPhone } maxLength={ 30 }/>
                 }, {
                     label: '合同签订单位',
                     name: 'signCustomerName',
