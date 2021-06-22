@@ -8,8 +8,9 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
 
 import RequestUtil from '../../../utils/RequestUtil';
-import AbstractContractSetting, { IAbstractContractSettingState, IattachDTO, IContract, IPaymentPlanDto, IRegion } from './AbstractContractSetting';
+import AbstractContractSetting, { IAbstractContractSettingState, IattachDTO, IContract, IPaymentPlanDto, IRegion, planType } from './AbstractContractSetting';
 import moment from 'moment'
+import { message } from 'antd';
 
 export interface IContractSettingProps {
     readonly id: string;
@@ -59,10 +60,10 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
             winBidType: contract.winBidType,
             saleType: contract.saleType,
             signCustomerName: contract.signCustomerName,
-            signContractTime: moment(contract.signContractTime),
+            signContractTime: contract.signContractTime && moment(contract.signContractTime),
             signUserName: contract.signUserName,
-            deliveryTime: moment(contract.deliveryTime),
-            reviewTime: moment(contract.reviewTime),
+            deliveryTime: contract.deliveryTime && moment(contract.deliveryTime),
+            reviewTime: contract.reviewTime && moment(contract.reviewTime),
             chargeType: contract.chargeType,
             salesman: contract.salesman,
             region: contract.region || [],
@@ -123,10 +124,23 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
      * @returns submit 
      */
     public async onSubmit(values: Record<string, any>): Promise<void> {
-        values.customerInfoDto = this.state.contract?.customerInfoDto;
-        values.signContractTime = moment(values.signContractTime).format('YYYY-MM-DD');
-        values.deliveryTime = moment(values.deliveryTime).format('YYYY-MM-DD');
-        values.reviewTime = moment(values.reviewTime).format('YYYY-MM-DD HH:mm');
+        const planValue: IPaymentPlanDto[] = this.getForm()?.getFieldsValue(true).paymentPlanDtos;
+        let totalRate: number = 0;
+        planValue.map<number>((item: IPaymentPlanDto): number => {
+            return totalRate = Number(item.returnedRate) + Number(totalRate);
+        })
+        let totalAmount: number = 0;
+        planValue.map<number>((item: IPaymentPlanDto): number => {
+            return  totalAmount = Number(item.returnedAmount) + Number(totalAmount);
+        })
+        values.customerInfoDto = {
+            ...(this.state.contract?.customerInfoDto),
+            customerLinkman: values.customerLinkman,
+            customerPhone: values.customerPhone
+        };
+        values.signContractTime = values.signContractTime && moment(values.signContractTime).format('YYYY-MM-DD');
+        values.deliveryTime = values.deliveryTime && moment(values.deliveryTime).format('YYYY-MM-DD');
+        values.reviewTime = values.reviewTime && moment(values.reviewTime).format('YYYY-MM-DD HH:mm');
         values.paymentPlanDtos = values.paymentPlanDtos?.map((plan: IPaymentPlanDto, index: number): IPaymentPlanDto => {
             return {
                 ...plan,
@@ -134,10 +148,18 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
                 index: index + 1
             };
         });
-        return await RequestUtil.put('/tower-market/contract', {
-            ...values,
-            id: this.props.match.params.id
-        });
+        if( values.planType === planType.PROPORTION && totalRate < 100) {
+            message.error('计划回款总占比必须等于100');
+            return Promise.reject(false);
+        } else if( values.planType === planType.AMOUNT && totalAmount < values.contractAmount ) {
+            message.error('计划回款总金额必须等于合同总价');
+            return Promise.reject(false);
+        } else {
+            return await RequestUtil.put('/tower-market/contract', {
+                ...values,
+                id: this.props.match.params.id
+            });
+        }
     }
 
     /**
