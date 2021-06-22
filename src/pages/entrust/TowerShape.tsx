@@ -63,7 +63,7 @@ class TowerShape extends AbstractMngtComponent<ITowerShapeWithRouteProps, ITower
             size: pagination.pageSize ||this.state.tablePagination?.pageSize,
             countryCode: this.state.selectedTabKey
         });
-        if(resData.records.length == 0 && resData.current>1){
+        if(resData?.records?.length == 0 && resData?.current>1){
             this.fetchTableData({},{
                 current: resData.current - 1,
                 pageSize: 10,
