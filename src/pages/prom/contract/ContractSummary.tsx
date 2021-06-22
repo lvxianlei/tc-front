@@ -54,6 +54,8 @@ export interface IOrderItem {
     readonly orderQuantity?: number;
     readonly internalNumber?: string;
     readonly productVos?: IProduct[];
+    readonly purchaseOrderNumber?: string;
+    readonly saleOrderNumber?: string;
 }
 
 export interface IProduct {
@@ -254,10 +256,10 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
             return {
                 fieldItems: [{
                     label: '订单编号',
-                    value: item.internalNumber
+                    value: item.saleOrderNumber
                 }, {
                     label: '采购订单号',
-                    value: item.internalNumber
+                    value: item.purchaseOrderNumber
                 }, {
                     label: '订单数量',
                     value: item.orderQuantity
