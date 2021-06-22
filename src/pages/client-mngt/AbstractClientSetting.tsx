@@ -65,7 +65,7 @@ export default abstract class AbstractClientSetting<P extends RouteComponentProp
                     required: true,
                     message: '请输入客户名称'
                 }],
-                children: <Input/>
+                children: <Input maxLength={100}/>
             }, {
                 label: '客户类型',
                 name: 'type',
@@ -96,24 +96,24 @@ export default abstract class AbstractClientSetting<P extends RouteComponentProp
                     required: true,
                     message: '请输入联系人姓名'
                 }],
-                children: <Input/>
+                children: <Input maxLength={20}/>
             }, {
                 label: '手机号码',
                 name: 'phone',
                 rules: [{
                     required: true,
-                    validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
-                        this.checkcustomerPhone(value).then(res => {
-                            if (res) {
-                                callback()
-                            } else {
-                                callback('手机号码格式有误')
-                            }
-                        })
-                    }
+                    // validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                    //     this.checkcustomerPhone(value).then(res => {
+                    //         if (res) {
+                    //             callback()
+                    //         } else {
+                    //             callback('手机号码格式有误')
+                    //         }
+                    //     })
+                    // }
                 }],
                 initialValue: client?.phone,
-                children: <Input/>
+                children: <Input maxLength={20}/>
             }]
         }]];
     }
