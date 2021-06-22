@@ -25,6 +25,7 @@ import { StoreValue } from 'antd/lib/form/interface';
 import Modal from 'antd/lib/modal/Modal';
 import AuthUtil from '../../../utils/AuthUtil';
 import { currencyTypeOptions, productTypeOptions, saleTypeOptions, voltageGradeOptions, winBidTypeOptions } from '../../../configuration/DictionaryOptions';
+import { IAttachVo } from './ContractAttachment';
 export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
     readonly tablePagination: TablePaginationConfig;
     readonly contract: IContract;
@@ -580,7 +581,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                         required: true,
                         message: '请输入合同总价'
                     }],
-                    children: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } prefix="￥" onBlur={ () => this.contractAmountBlur() }/>
+                    children: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } prefix="￥" onChange={ () => this.contractAmountBlur() }/>
                 }, {
                     label: '币种',
                     name: 'currencyType',
@@ -718,7 +719,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                     min="0"
                                                                     step="0.01"
                                                                     precision={ 2 }
-                                                                    onBlur={ () => this.checkReturnedRate(index) } 
+                                                                    onChange={ () => this.checkReturnedRate(index) } 
                                                                     disabled={ this.state.contract?.planType === planType.AMOUNT }/>
                                                             </Form.Item>
                                                         </Col>
@@ -732,7 +733,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                     min="0"
                                                                     step="0.01"
                                                                     precision={ 2 }
-                                                                    onBlur={ () => this.checkReturnedAmount(index) }
+                                                                    onChange={ () => this.checkReturnedAmount(index) }
                                                                     disabled={ this.state.contract?.planType === planType.PROPORTION || this.state.contract?.planType === undefined}/>
                                                             </Form.Item>
                                                         </Col>
@@ -779,7 +780,10 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                     return (
                                         <>
                                             <Space size="small" className={ styles.attachBtn }>
-                                                <Upload  action={ () => {
+                                                <Upload
+                                                    maxCount = { 10 }
+                                                    accept=".doc,.docx,.pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/png,image/jpeg,.txt,.xls,.xlsx"
+                                                    action={ () => {
                                                         const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
                                                         return baseUrl+'sinzetech-resource/oss/put-file'
                                                     } } 
@@ -788,6 +792,19 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                             'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
                                                             'Tenant-Id': AuthUtil.getTenantId(),
                                                             'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                                                        }
+                                                    }
+                                                    beforeUpload = { 
+                                                        (file) => {
+                                                            const isLt10M = file.size / 1024 / 1024 > 10;
+                                                            return new Promise((resolve, reject) => {
+                                                                if (isLt10M) {
+                                                                    message.error('上传文件不能大于10M')
+                                                                    reject()
+                                                                } else {
+                                                                    resolve()
+                                                                }
+                                                            })
                                                         }
                                                     }
                                                     onChange={ (info)=>{
@@ -841,17 +858,23 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                     let checked: any[] = this.state.checkList;
                                                     let batchId: any[] = [];
                                                     checked.map((item: any) => {
-                                                        batchId.push(attachInfoDtos[item].id)
+                                                        batchId.push(attachInfoDtos[item].id);
+                                                        contract.attachInfoDtos.splice(item, 1);
                                                     })
-                                                    if(batchId) {
+                                                    if(batchId[0]) {
                                                         const resData: IResponseData = await RequestUtil.delete(`/tower-system/attach?ids=${ batchId.join(',') }`)
                                                         if(resData) {
-                                                            operation.remove(this.state.checkList)
+                                                            operation.remove(checked)
                                                         }
                                                     } else {
-                                                        operation.remove(this.state.checkList)
+                                                        operation.remove(checked)
                                                     }
-                                                    
+                                                    this.setState({
+                                                        contract: {
+                                                            ...contract,
+                                                            attachInfoDtos: contract.attachInfoDtos
+                                                        }
+                                                    })
                                                 } }>删除</Button>
                                             </Space>
                                             {
@@ -908,7 +931,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                 }>下载</Button>
                                                                 <ConfirmableButton confirmTitle="要删除该附件吗？"
                                                                     type="link" placement="topRight"
-                                                                    onConfirm={ async () => { 
+                                                                    onConfirm={ async () => {
                                                                         let attachInfoDtos =  this.getForm()?.getFieldValue("attachInfoDtos");
                                                                         if(attachInfoDtos[index].id) {
                                                                             const resData: IResponseData = await RequestUtil.delete(`/tower-system/attach?ids=${ attachInfoDtos[index].id }`)
@@ -918,7 +941,13 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                         } else {
                                                                             operation.remove(index);
                                                                         }
-                                                                        
+                                                                        contract.attachInfoDtos.splice(index , 1);
+                                                                        this.setState({
+                                                                            contract: {
+                                                                                ...contract,
+                                                                                attachInfoDtos: contract.attachInfoDtos
+                                                                            }
+                                                                        })
                                                                     }}>
                                                                     <DeleteOutlined />
                                                                 </ConfirmableButton>
