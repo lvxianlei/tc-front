@@ -3,11 +3,12 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 import React from 'react';
-import { BrowserRouter as Router, Route, RouteComponentProps, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Route, RouteComponentProps, Switch } from 'react-router-dom';
 import AsyncPanel from './AsyncPanel';
 
 import ApplicationContext from './configuration/ApplicationContext';
 import { ComponentClazz, IRouterItem } from './configuration/IApplicationContext';
+import AuthUtil from './utils/AuthUtil';
 
 interface IAppState {
   readonly shouldRender: boolean | undefined;
@@ -60,10 +61,11 @@ export default class App extends React.Component<{}, IAppState> {
   public render(): React.ReactNode {
     const frame: ComponentClazz | undefined = ApplicationContext.get().layout?.frame;
     const Frame: React.ComponentClass | undefined = frame?.componentClass;
+    const accessable = !!(AuthUtil.getAuthorization() && AuthUtil.getSinzetechAuth() && AuthUtil.getTenantId());
     return (
       <Router>
         <Switch>
-          {
+          { 
             ApplicationContext.get().globalRouters?.map<React.ReactNode>((router: IRouterItem): React.ReactNode => (
               router.path
               ?
@@ -72,6 +74,9 @@ export default class App extends React.Component<{}, IAppState> {
               :
               null
             ))
+          } 
+          {
+            window.location.pathname === '/'&& !accessable ? <Redirect to='./login'/> : null
           }
           {
             Frame
