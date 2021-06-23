@@ -267,7 +267,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     public checkReturnedRate(index: number): void {
         const planValue: IPaymentPlanDto[] = this.getForm()?.getFieldsValue(true).paymentPlanDtos;
         const contractAmount: number = this.getForm()?.getFieldValue("contractAmount");
-        if(this.getForm()?.getFieldValue("contractAmount") && planValue[index] && planValue[index].returnedRate) {
+        if(this.getForm()?.getFieldValue("contractAmount") && planValue[index] && planValue[index].returnedRate !== undefined ) {
             planValue[index] = {
                 ...planValue[index],
                 returnedAmount:  parseFloat((contractAmount * planValue[index].returnedRate * 0.01).toFixed(2))
@@ -277,7 +277,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             })
             let totalRate: number = 0;
             planValue.map<number>((item: IPaymentPlanDto): number => {
-                return  totalRate = Number(item.returnedRate) + Number(totalRate);
+                return totalRate = Number(item.returnedRate) + Number(totalRate);  
             })
             let totalAmount: number = 0;
             planValue.map<number>((item: IPaymentPlanDto): number => {
@@ -303,7 +303,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
      public checkReturnedAmount(index: number): void {
         const planValue: IPaymentPlanDto[] = this.getForm()?.getFieldsValue(true).paymentPlanDtos;
         const contractAmount: number = this.getForm()?.getFieldValue("contractAmount");
-        if(this.getForm()?.getFieldValue("contractAmount") && planValue[index] && planValue[index].returnedAmount) {
+        if(this.getForm()?.getFieldValue("contractAmount") && planValue[index] && planValue[index].returnedAmount !== undefined ) {
             planValue[index] = {
                 ...planValue[index],
                 returnedRate:  parseFloat((planValue[index].returnedAmount / contractAmount * 100).toFixed(2))
@@ -683,7 +683,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                 (fields: FormListFieldData[], operation: FormListOperation): React.ReactNode => {
                                     return (
                                         <>
-                                            <Button type="primary" onClick={ () => ( operation.add() ) } className={ styles.btn }>新增</Button>
+                                            <Button type="primary" onClick={ () => ( operation.add({ returnedRate: 0, returnedAmount: 0 }) ) } className={ styles.btn }>新增</Button>
                                             <Row className={ styles.FormHeader }>
                                                 <Col span={ 2 }>期次</Col>
                                                 <Col span={ 5 }>计划回款日期</Col>
