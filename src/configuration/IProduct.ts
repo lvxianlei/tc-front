@@ -17,4 +17,7 @@ export interface IProduct {
     readonly voltageGrade?: number | string;
     readonly voltageGradeName?: string;
     readonly productTypeName?: string;
+    readonly index?: number;
+    readonly changeType?: number;
+    readonly createTime?: string;
 }

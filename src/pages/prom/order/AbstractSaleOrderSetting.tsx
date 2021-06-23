@@ -59,7 +59,6 @@ export interface ISaleOrder {
 }
 
 export interface IProductVo extends IProduct {
-    readonly index?: number;
     readonly num: number;
 }
 

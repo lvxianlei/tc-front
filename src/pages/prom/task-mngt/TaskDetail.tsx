@@ -10,7 +10,6 @@
  import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../../../utils/SummaryRenderUtil';
  import RequestUtil from '../../../utils/RequestUtil';
 import { IProduct } from '../../../configuration/IProduct';
-import { IProductChangeInfoVO } from './AbstactTaskSetting';
 import { ITask } from '../../../configuration/ITask';
  
  export interface ITaskDetailProps {
@@ -25,7 +24,7 @@ import { ITask } from '../../../configuration/ITask';
     readonly createTime?: string;
     readonly createUserName?: string;
     readonly customerCompany?: string;	
-    readonly productChangeInfoVOList?: IProductChangeInfoVO [];	
+    readonly productChangeInfoVOList?: IProduct [];	
     readonly productInfoVOList?: IProduct [];
     readonly signContractTime?:	string;	
     readonly signCustomerName?:	string;		

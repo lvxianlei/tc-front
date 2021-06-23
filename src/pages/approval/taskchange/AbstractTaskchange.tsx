@@ -16,7 +16,7 @@ import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 export interface IAbstractTaxkchangeState extends IAbstractFillableComponentState {
     readonly contract: IContract,
     readonly productInfoVOList?: IProductInfoVOList[],
-    readonly productChangeInfoVOList?: IProductChangeInfoVOList[]
+    readonly productChangeInfoVOList?: IProduct[];
 }
 /**
  * Icontract
@@ -31,13 +31,8 @@ export interface IContract extends ITask {
     readonly signContractTime?: string;
     //订单交货日期
     readonly orderDeliveryTime?: string;
-    readonly productChangeInfoVOList?: IProductChangeInfoVOList[];
+    readonly productChangeInfoVOList?: IProduct[];
     readonly productInfoVOList: IProductInfoVOList[];
-}
-
-//变更明细
-export interface IProductChangeInfoVOList extends IProduct {
-    readonly index?: number;
 }
 
 export interface IProductInfoVOList {

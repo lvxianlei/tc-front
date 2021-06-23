@@ -78,18 +78,12 @@ import { ITask } from '../../../configuration/ITask';
     readonly createTime?: string;
     readonly createUserName?: string;
     readonly customerCompany?: string;	
-    readonly productChangeInfoVOList?: IProductChangeInfoVO [];	
+    readonly productChangeInfoVOList?: IProduct [];	
     readonly productInfoVOList?: IProduct [];
     readonly signContractTime?:	string;	
     readonly signCustomerName?:	string;		
     readonly simpleProjectName?: string;	
  }
-
-export interface IProductChangeInfoVO extends IProduct {
-    readonly index?: number;
-    readonly changeType?: number;
-    readonly createTime?: string;
-}
  
 export interface IproductInfoDto {
     readonly productType?: string;

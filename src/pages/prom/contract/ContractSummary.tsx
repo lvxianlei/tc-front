@@ -37,14 +37,9 @@ export interface IOrderItem {
     readonly taxAmount?: number;
     readonly orderQuantity?: number;
     readonly internalNumber?: string;
-    readonly productVos?: IProductInfo[];
+    readonly productVos?: IProduct[];
     readonly purchaseOrderNumber?: string;
     readonly saleOrderNumber?: string;
-}
-
-export interface IProductInfo extends IProduct {
-    readonly index?: number;
-    readonly saleOrderId: number;
 }
 
 /**
@@ -244,8 +239,8 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
                 }],
                 render: (): React.ReactNode => (
                     <Table rowKey="index"  dataSource={
-                        item.productVos?.map<IProductInfo>(
-                            (productVos: IProductInfo, index: number): IProductInfo => (
+                        item.productVos?.map<IProduct>(
+                            (productVos: IProduct, index: number): IProduct => (
                                 {
                                     ...productVos,
                                     index: index + 1
