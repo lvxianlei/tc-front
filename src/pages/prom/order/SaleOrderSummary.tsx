@@ -6,6 +6,7 @@ import { Table, TableColumnType } from 'antd';
 import React from 'react';
 import isEqual from 'react-fast-compare';
 import { RouteComponentProps, withRouter } from 'react-router';
+import { IContract } from '../../../configuration/IContract';
 
 import RequestUtil from '../../../utils/RequestUtil';
 import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../../../utils/SummaryRenderUtil';
@@ -17,15 +18,15 @@ interface ISaleOrderSummaryParamsProps {
 }
 
 interface ISaleOrderSummaryProps {
-    readonly baseInfo?: IContractBaseInfo;
+    readonly baseInfo?: ISaleOrderBaseInfo;
     readonly productData?: IProductVo[];
-    readonly sysInfo?: IContractSysInfo;
+    readonly sysInfo?: ISaleOrderSysInfo;
 }
 
 interface ISaleOrderSummaryRouteProps extends RouteComponentProps<ISaleOrderSummaryParamsProps>, ISaleOrderSummaryProps {}
 interface ISaleOrderSummaryState extends ISaleOrderSummaryProps {}
 
-export interface IContractBaseInfo {
+export interface ISaleOrderBaseInfo {
     readonly contractInfoVo?: IContractInfoVo;
     readonly purchaseOrderNumber?: string;
     readonly saleOrderNumber?: string;
@@ -48,24 +49,11 @@ export interface IContractBaseInfo {
     readonly taxRate?: number;
 }
 
-export interface IContractInfoVo {
-    readonly deliveryTime?: string;
-    readonly internalNumber?: string;
-    readonly chargeType?: number;
+export interface IContractInfoVo extends IContract {
     readonly contractId?: number;
-    readonly currencyType?: number;
-    readonly customerCompany?: string;
-    readonly signContractTime?: string;
-    readonly projectName?: string;
-    readonly signCustomerId?: number;
-    readonly signCustomerName?: string;
-    readonly simpleProjectName?: string;
-    readonly signUserName?: string;
-    readonly description?: string;
-    readonly currencyTypeName?: string;
 }
 
-export interface IContractSysInfo {
+export interface ISaleOrderSysInfo {
     readonly updateUser?: string;
     readonly updateUserName?: string;
     readonly updateTime?: string;
@@ -111,7 +99,7 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
      * @returns base info grid 
      */
     private getBaseInfoGrid(): IRenderedGrid {
-        const baseInfo: IContractBaseInfo | undefined = this.state.baseInfo;
+        const baseInfo: ISaleOrderBaseInfo | undefined = this.state.baseInfo;
         return {
             labelCol: {
                 span: 4
@@ -164,7 +152,7 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
      * @returns base info grid 
      */
      private getAmountInfoGrid(): IRenderedGrid {
-        const baseInfo: IContractBaseInfo | undefined = this.state.baseInfo;
+        const baseInfo: ISaleOrderBaseInfo | undefined = this.state.baseInfo;
         return {
             labelCol: {
                 span: 4
@@ -285,7 +273,7 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
      * @returns sys info grid 
      */
     private getSysInfoGrid(): IRenderedGrid {
-        const sysInfo: IContractSysInfo | undefined = this.state.sysInfo;
+        const sysInfo: ISaleOrderSysInfo | undefined = this.state.sysInfo;
         return {
             labelCol: {
                 span: 4

@@ -16,6 +16,8 @@ import styles from './AbstractSaleOrderSetting.module.less'
 import ContractSelectionComponent from '../../../components/ContractSelectionModal';
 import { DataType } from '../../../components/AbstractSelectableModal';
 import { currencyTypeOptions, productTypeOptions, taxRateOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
+import { IProduct } from '../../../configuration/IProduct';
+import { IContract } from '../../../configuration/IContract';
 
 export interface IAbstractSaleOrderSettingState extends IAbstractFillableComponentState {
     readonly saleOrder?: ISaleOrder;
@@ -56,38 +58,14 @@ export interface ISaleOrder {
     readonly contractInfoVo?: IContractInfoDto;
 }
 
-export interface IProductVo {
+export interface IProductVo extends IProduct {
     readonly index?: number;
-    readonly productStatus?: number;
-    readonly description?: string;	
-    readonly id?: number;
-    readonly lineName?: string;
     readonly num: number;
-    readonly price: number;
-    readonly productHeight?: number;
-    readonly productNumber?: string;
-    readonly productShape?: string;	
-    readonly productType?: number;
-    readonly saleOrderId?: number;
-    readonly taskNoticeId?: number;
-    readonly tender?: string;
-    readonly totalAmount: number;
-    readonly unit?: string;
-    readonly voltageGrade?: number;
 }
 
-export interface IContractInfoDto {
-    readonly internalNumber?: string;
-    readonly projectName?: string;
-    readonly customerCompany?: string;
-    readonly signCustomerName?: string;
-    readonly signContractTime?: string;
-    readonly deliveryTime?: string;
-    readonly currencyType?: number;
-    readonly chargeType?: number;
+export interface IContractInfoDto extends IContract {
     readonly orderDeliveryTime?: object;
     readonly contractId?: string;
-    readonly signCustomerId?: number;
 }
 
 interface IOption {
@@ -288,10 +266,12 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             this.getPriceAccordTaxRate();
             productDtos.map<void>((items: IProductVo, ind: number): void => {
                 const num: number = productDtos[ind].num;
-                const price: number = productDtos[ind].price;
-                productDtos[ind] = {
-                    ...productDtos[ind],
-                    totalAmount: num * price || 0
+                const price: number | undefined = productDtos[ind].price;
+                if(price) {
+                    productDtos[ind] = {
+                        ...productDtos[ind],
+                        totalAmount: num * price || 0
+                    }
                 }
             })
             this.getForm()?.setFieldsValue({ productDtos: productDtos });
@@ -306,10 +286,12 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const productDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).productDtos;
         const orderQuantity: number | undefined = this.state.orderQuantity;
         if(orderQuantity && productDtos[0] && productDtos[index].price) {
-            const price: number = productDtos[index].price;
+            const price: number | undefined = productDtos[index].price;
             let totalPrice: number = 0;
             let amount: number = 0;
-            amount = price * 1; 
+            if(price) {
+                amount = price * 1; 
+            }
             productDtos.map<void>((items: IProductVo): void => {
                 totalPrice = Number(totalPrice) + Number(items.price);
             })
@@ -356,12 +338,14 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             this.getPrice();
             this.getPriceAccordTaxRate();
         } else if( saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ) {
-            const price: number = productDtos[index].price;
-            const amount: number = productDtos[index].totalAmount;
+            const price: number | undefined = productDtos[index].price;
+            const amount: number | undefined = productDtos[index].totalAmount;
             let totalPrice: number = this.getForm()?.getFieldsValue(true).totalPrice;
             let totalAmount: number = this.getForm()?.getFieldsValue(true).totalAmount;
-            totalPrice = totalPrice - price;
-            totalAmount = totalAmount - amount;
+            if(price && amount) {
+                totalPrice = totalPrice - price;
+                totalAmount = totalAmount - amount;
+            }
             this.getForm()?.setFieldsValue({  taxPrice: totalPrice, totalPrice: totalPrice,  taxAmount: totalAmount, totalAmount: totalAmount  });
         }   
     }

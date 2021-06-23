@@ -39,14 +39,16 @@
  import styles from './AbstractTaskSetting.module.less';
  import RequestUtil from '../../../utils/RequestUtil';
  import { materialStandardOptions } from '../../../configuration/DictionaryOptions';
+import { IProduct } from '../../../configuration/IProduct';
+import { ITask } from '../../../configuration/ITask';
  const { Step } = Steps
   
  export interface IAbstractTaskSettingState extends IAbstractFillableComponentState {
      checkStep: StepItem;
-     productDataSource: IProductInfoVO[];
+     productDataSource: IProduct[];
      selectedKeys: React.Key[];
-     readonly task?: ITask;
-     readonly contractInfoDTO : ITask;
+     readonly task?: ITaskInfo;
+     readonly contractInfoDTO : ITaskInfo;
      
  }
  export interface DataTypeMore extends DataType {
@@ -71,72 +73,22 @@
     readonly voltageGrade?: number;
  }
  
- export interface ITask {
-    id?: number;
-    readonly contractId?: number;	
+ export interface ITaskInfo extends ITask {
+    id?: string | number;
     readonly createTime?: string;
     readonly createUserName?: string;
     readonly customerCompany?: string;	
-    readonly deliveryTime?:	string;	
-    readonly description?: string;		
-    readonly galvanizeDemand?:string;	
-    readonly internalNumber?: string;	
-    readonly materialDemand?: string;
-    readonly materialStandard?:	number | string;
-    readonly materialStandardName?: string;
-    readonly packDemand?: string;	
-    readonly peculiarDescription?: string;
-    readonly planDeliveryTime?:	string;
     readonly productChangeInfoVOList?: IProductChangeInfoVO [];	
-    readonly productInfoVOList?: IProductInfoVO [];
-    readonly projectName?: string;
-    readonly saleOrderNumber?: string;	
+    readonly productInfoVOList?: IProduct [];
     readonly signContractTime?:	string;	
     readonly signCustomerName?:	string;		
     readonly simpleProjectName?: string;	
-    readonly taskNumber?: string;		
-    readonly weldingDemand?: string;
-    readonly saleOrderId?: number | string;
  }
- 
-export interface IProductInfoVO {
-    readonly description?: string;	
-    readonly lineName?:	string;
-    readonly num?: number;
-    readonly price?: number;
-    readonly productHeight?: number;
-    readonly productNumber?: string;	
-    readonly productShape?:	string;
-    readonly productStatus?: number;
-    readonly productTypeName?: string;
-    readonly saleOrderId?: number;
-    readonly taskNoticeId?: number;
-    readonly tender?: string;
-    readonly totalAmount?: number	
-    readonly unit?:	string;
-    readonly voltageGradeName?:	string;
-    readonly id?: number;
-}
 
-export interface IProductChangeInfoVO {
+export interface IProductChangeInfoVO extends IProduct {
     readonly index?: number;
     readonly changeType?: number;
     readonly createTime?: string;
-    readonly description?:	string;
-    readonly lineName?:	string;
-    readonly num?: number;
-    readonly price?: number;
-    readonly productHeight?: number;
-    readonly productNumber?: string;
-    readonly productShape?:	string;
-    readonly productStatus?: number;	
-    readonly productTypeName?: string;
-    readonly saleOrderId?: number;	
-    readonly taskNoticeId?: number;
-    readonly tender?: string;
-    readonly totalAmount?: number;	
-    readonly unit?:	string;
-    readonly voltageGradeName?:	string;
 }
  
 export interface IproductInfoDto {
@@ -204,7 +156,7 @@ enum StepTitleItem {
     //订单选择
     public onOrderSelect = (selectedRows: DataTypeMore[]):void => {
         if(selectedRows.length > 0 ) {
-            const task:ITask = {
+            const task:ITaskInfo = {
                 contractId: selectedRows[0].contractId,
                 customerCompany: selectedRows[0].customerCompany,
                 internalNumber: selectedRows[0].internalNumber,
@@ -233,7 +185,7 @@ enum StepTitleItem {
     public onProductSelect = (selectedRows: DataType[]):void => {
         const { productDataSource } = this.state;
         if(selectedRows.length > 0 ) {
-            const task:IProductInfoVO[] = productDataSource || [];
+            const task:IProduct[] = productDataSource || [];
             task.push(selectedRows[0])
             this.setState({
                 productDataSource:[...task]
@@ -250,7 +202,7 @@ enum StepTitleItem {
       * @returns form item groups 
       */
      public getFormItemGroups(): IFormItemGroup[][] {
-          const task: ITask | undefined = this.state.task;
+          const task: ITaskInfo | undefined = this.state.task;
           const { checkStep } = this.state;
           let module: IFormItemGroup[][] = [];
           switch(checkStep){
@@ -685,7 +637,7 @@ enum StepTitleItem {
                                 columns={this.columns()} 
                                 dataSource={ [...productDataSource] } 
                                 scroll={{ x: 1300 }} 
-                                rowKey={( record: IProductInfoVO ) => record?.id? record?.id : ''}
+                                rowKey={( record: IProduct ) => record?.id? record?.id : ''}
                                 rowSelection={{
                                     type:'checkbox',
                                     onChange:( selectedKeys: React.Key[] )=>{
@@ -705,7 +657,7 @@ enum StepTitleItem {
     }
 
     //table-column
-    public columns(): TableColumnType<IProductInfoVO>[] {
+    public columns(): TableColumnType<IProduct>[] {
 
         const { productDataSource } = this.state;
 
@@ -776,7 +728,7 @@ enum StepTitleItem {
                 key: 'operation',
                 fixed: 'right',
                 width: 100,
-                render: ( record: IProductInfoVO ): React.ReactNode => 
+                render: ( record: IProduct ): React.ReactNode => 
                         <ConfirmableButton 
                             confirmTitle="要删除该条数据吗？"
                             type="link" 

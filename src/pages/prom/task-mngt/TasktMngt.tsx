@@ -7,28 +7,12 @@ import ConfirmableButton from '../../../components/ConfirmableButton';
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../../components/AbstractMngtComponent';
 import { ITabItem } from '../../../components/ITabableComponent';
 import RequestUtil from '../../../utils/RequestUtil';
+import { ITask } from '../../../configuration/ITask';
 
  export interface ITaskMngtProps {}
  export interface ITaskMngtWithRouteProps extends RouteComponentProps<ITaskMngtProps>, WithTranslation {}
  export interface ITaskMngtState extends IAbstractMngtComponentState {
-     readonly tableDataSource: ITaskTableDataItem[];
- }
-
- interface ITaskTableDataItem {
-     readonly contractId: string;
-     readonly saleOrderId: string;
-     readonly status: number;
-     readonly id: number;
-     readonly internalNumber: string;
-     readonly materialDemand: string;
-     readonly materialStandard: number;
-     readonly materialStandardName: string;
-     readonly planDeliveryTime: number;
-     readonly deliveryTime: string;
-     readonly projectName: string;
-     readonly saleOrderNumber: string;
-     readonly taskNumber: string;
-     readonly taskReviewStatus: number;
+     readonly tableDataSource: ITask[];
  }
  
  interface IResponseData {
@@ -37,7 +21,7 @@ import RequestUtil from '../../../utils/RequestUtil';
     readonly total: number;
     readonly hitCount: boolean;
     readonly pages: number;
-    readonly records: ITaskTableDataItem[];
+    readonly records: ITask[];
  }
 
  /**
@@ -119,21 +103,21 @@ import RequestUtil from '../../../utils/RequestUtil';
             title: '任务编号',
             dataIndex: 'taskNumber',
             render: (taskNumber:number, record: object): React.ReactNode => {
-                 return <Link to= {`/prom/task/view/${ (record as ITaskTableDataItem).id }` }>{taskNumber}</Link>
+                 return <Link to= {`/prom/task/view/${ (record as ITask).id }` }>{taskNumber}</Link>
             }
         },  {
             key: 'saleOrderNumber',
             title: '订单编号',
             dataIndex: 'saleOrderNumber',
             render: (saleOrderNumber: number, record: object): React.ReactNode => {
-                 return <Link to= {`/prom/order/detail/${ (record as ITaskTableDataItem).saleOrderId }` }>{saleOrderNumber}</Link>
+                 return <Link to= {`/prom/order/detail/${ (record as ITask).saleOrderId }` }>{saleOrderNumber}</Link>
             } 
         },  {
             key: 'internalNumber',
             title: '合同编号',
             dataIndex: 'internalNumber',
             render: (internalNumber: number,record: object): React.ReactNode => {
-                 return <Link to={ `/prom/contract/detail/${ (record as ITaskTableDataItem).contractId }` }>{ internalNumber}</Link>
+                 return <Link to={ `/prom/contract/detail/${ (record as ITask).contractId }` }>{ internalNumber}</Link>
             }
         },  {
             key: 'projectName',
@@ -168,23 +152,23 @@ import RequestUtil from '../../../utils/RequestUtil';
              dataIndex: 'operation',
              render: (_: undefined, record: object): React.ReactNode => (
                  <Space direction="horizontal" size="small">
-                    <Button type="link"  href={ `/prom/task/edit/${ (record as ITaskTableDataItem).id }` } disabled={ (record as ITaskTableDataItem).status !== 1 }>
+                    <Button type="link"  href={ `/prom/task/edit/${ (record as ITask).id }` } disabled={ (record as ITask).status !== 1 }>
                         编辑
                     </Button>
                     <ConfirmableButton confirmTitle="要删除该数据吗？" type="link" placement="topRight" onConfirm={() => this.handleDelete(record)} >
-                        <Button type="link" disabled={ (record as ITaskTableDataItem).status !== 1 }>
+                        <Button type="link" disabled={ (record as ITask).status !== 1 }>
                             删除
                         </Button>
                     </ConfirmableButton>
-                    <Button type="link"  href={ `/prom/task/special/${ (record as ITaskTableDataItem).id }` } disabled={ (record as ITaskTableDataItem).status !== 2 }>
+                    <Button type="link"  href={ `/prom/task/special/${ (record as ITask).id }` } disabled={ (record as ITask).status !== 2 }>
                         完善特殊要求
                     </Button>
                      {
-                        (record as ITaskTableDataItem).status !==4 ? 
-                        <Button type="link"  href={ `/prom/task/product/${ (record as ITaskTableDataItem).id }` } disabled={ (record as ITaskTableDataItem).status !== 3 || (record as ITaskTableDataItem).taskReviewStatus === 0 }>
+                        (record as ITask).status !==4 ? 
+                        <Button type="link"  href={ `/prom/task/product/${ (record as ITask).id }` } disabled={ (record as ITask).status !== 3 || (record as ITask).taskReviewStatus === 0 }>
                             完善产品信息
                         </Button>
-                        :<Button type="link"  href={ `/prom/task/product/${ (record as ITaskTableDataItem).id }` } disabled={ (record as ITaskTableDataItem).taskReviewStatus === 0 }>
+                        :<Button type="link"  href={ `/prom/task/product/${ (record as ITask).id }` } disabled={ (record as ITask).taskReviewStatus === 0 }>
                             变更产品信息
                         </Button>
                      }

@@ -8,7 +8,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
 
 import RequestUtil from '../../../utils/RequestUtil';
-import AbstractContractSetting, { IAbstractContractSettingState, IattachDTO, IContract, IPaymentPlanDto, IRegion, planType } from './AbstractContractSetting';
+import AbstractContractSetting, { IAbstractContractSettingState, IAttachDTO, IContractInfo, IPaymentPlanDto, IRegion, planType } from './AbstractContractSetting';
 import moment from 'moment'
 import { message } from 'antd';
 
@@ -28,7 +28,7 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const contract: IContract = await RequestUtil.get<IContract>(`/tower-market/contract/${ this.props.match.params.id }`);
+        const contract: IContractInfo = await RequestUtil.get<IContractInfo>(`/tower-market/contract/${ this.props.match.params.id }`);
         this.setState({
             contract: contract
         });
@@ -39,7 +39,7 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
                 index: index + 1
             };
         });
-        contract.attachInfoDtos = contract.attachVos?.map<IattachDTO>((attach: IattachDTO, index: number): IattachDTO => {
+        contract.attachInfoDtos = contract.attachVos?.map<IAttachDTO>((attach: IAttachDTO, index: number): IAttachDTO => {
             return {
                 ...attach,
                 index: index + 1

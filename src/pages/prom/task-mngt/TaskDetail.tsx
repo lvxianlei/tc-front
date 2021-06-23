@@ -9,79 +9,29 @@
  import { ITabItem } from '../../../components/ITabableComponent';
  import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../../../utils/SummaryRenderUtil';
  import RequestUtil from '../../../utils/RequestUtil';
+import { IProduct } from '../../../configuration/IProduct';
+import { IProductChangeInfoVO } from './AbstactTaskSetting';
+import { ITask } from '../../../configuration/ITask';
  
  export interface ITaskDetailProps {
      readonly id: string;
  }
  export interface ITaskDetailRouteProps extends RouteComponentProps<ITaskDetailProps> {}
  export interface ITaskDetailState {
-    readonly task?:ITask
+    readonly task?:ITaskInfo
  }
  
- export interface ITask {
-    readonly contractId?: number;	
+ export interface ITaskInfo extends ITask {
     readonly createTime?: string;
     readonly createUserName?: string;
     readonly customerCompany?: string;	
-    readonly deliveryTime?:	string;	
-    readonly description?: string;		
-    readonly galvanizeDemand?:string;	
-    readonly internalNumber?: string;	
-    readonly materialDemand?: string;
-    readonly materialStandard?:	number | string;
-    readonly packDemand?: string;	
-    readonly peculiarDescription?:	string;
-    readonly planDeliveryTime?:	string;
     readonly productChangeInfoVOList?: IProductChangeInfoVO [];	
-    readonly productInfoVOList?: IProductInfoVO [];
-    readonly projectName?: string;
-    readonly saleOrderNumber?: string;	
+    readonly productInfoVOList?: IProduct [];
     readonly signContractTime?:	string;	
     readonly signCustomerName?:	string;		
-    readonly simpleProjectName?: string;	
-    readonly taskNumber?: string;		
-    readonly weldingDemand?: string;
+    readonly simpleProjectName?: string;
     readonly updateUserName?: string;
     readonly updateTime?: string;
- }
- 
- export interface IProductInfoVO {
-    readonly description?:	string;	
-    readonly lineName?:	string;	
-    readonly num?: number;		
-    readonly price?: number;	
-    readonly productHeight?: number;
-    readonly productNumber?: string;	
-    readonly productShape?:	string;	
-    readonly productStatus?: number;	
-    readonly productTypeName?: string;
-    readonly saleOrderId?: number;	
-    readonly taskNoticeId?: number;	
-    readonly tender?: string;	
-    readonly totalAmount?: number;	
-    readonly unit?:	string;
-    readonly voltageGradeName?:	string;
- }
-
- export interface IProductChangeInfoVO {
-    readonly index?: number;
-    readonly changeType?: number;
-    readonly createTime?: string;
-    readonly description?:	string;	
-    readonly lineName?:	string;	
-    readonly num?: number;		
-    readonly price?: number;	
-    readonly productHeight?: number;
-    readonly productNumber?: string;	
-    readonly productShape?:	string;	
-    readonly productStatus?: number;	
-    readonly productTypeName?: string;
-    readonly saleOrderId?: number;	
-    readonly taskNoticeId?: number;	
-    readonly tender?: string;	
-    readonly totalAmount?: number;	
-    readonly unit?:	string;
-    readonly voltageGradeName?:	string;
  }
  /**
   * Contract detail page component.
@@ -101,7 +51,7 @@
      * @description Components did mount
      */
     public async fetchTableData() {
-        const task: ITask = await RequestUtil.get<ITask>(`/tower-market/taskNotice/${ this.props.match.params.id }`);
+        const task: ITaskInfo = await RequestUtil.get<ITaskInfo>(`/tower-market/taskNotice/${ this.props.match.params.id }`);
         this.setState({
             task,
         });
@@ -153,7 +103,7 @@
       * @returns base info grid 
       */
      private getBaseInfoGrid(): IRenderedGrid {
-         const task: ITask | undefined = this.state?.task;
+         const task: ITaskInfo | undefined = this.state?.task;
          return {
              labelCol: {
                  span: 4
@@ -200,7 +150,7 @@
       * @returns special info grid 
       */
       private getSpecialInfoGrid(): IRenderedGrid {
-        const task: ITask | undefined = this.state?.task;
+        const task: ITaskInfo | undefined = this.state?.task;
         return {
             labelCol: {
                 span: 4
@@ -236,7 +186,7 @@
       * @returns sys info grid 
       */
      private getSysInfoGrid(): IRenderedGrid {
-         const task: ITask | undefined = this.state?.task;
+         const task: ITaskInfo | undefined = this.state?.task;
          return {
              labelCol: {
                  span: 4

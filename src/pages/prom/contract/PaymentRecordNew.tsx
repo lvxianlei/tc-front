@@ -8,7 +8,6 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import RequestUtil from '../../../utils/RequestUtil';
 import AbstractPaymentRecordSetting, { IAbstractPaymentRecordSettingState, IPaymentRecord } from './AbstractPaymentRecordSetting';
 import moment from 'moment'
-import { IContract } from '../../../configuration/IContract';
 
 export interface IPaymentRecordNewProps {
     readonly id: string;
