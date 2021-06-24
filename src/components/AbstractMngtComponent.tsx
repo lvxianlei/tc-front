@@ -219,7 +219,7 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      * @param item 
      * @returns table content 
      */
-    public renderTableContent(item: ITabItem): React.ReactNode {
+    protected renderTableContent(item: ITabItem): React.ReactNode {
         return (
             <Table { ...this.getTableProps(item) }/>
         );
