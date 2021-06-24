@@ -400,12 +400,12 @@ import EntrustSetting from './EntrustSetting';
                 name: 'status',
                 children: 
                     <Select placeholder="请选择工程状态" className={ styles.select_width }>
-                        <Select.Option value="1">待发布</Select.Option>
-                        <Select.Option value="2">待接收</Select.Option>
-                        <Select.Option value="3">待立项</Select.Option>
-                        <Select.Option value="4">审核中</Select.Option>
-                        <Select.Option value="5">进行中</Select.Option>
-                        <Select.Option value="6">已完成</Select.Option>
+                        <Select.Option value={ EntrustStatus.TO_BE_RELEASED }>待发布</Select.Option>
+                        <Select.Option value={ EntrustStatus.TO_BE_RECEIVED }>待接收</Select.Option>
+                        <Select.Option value={ EntrustStatus.TO_BE_APPROVAL }>待立项</Select.Option>
+                        <Select.Option value={ EntrustStatus.UNDER_REVIEW }>审核中</Select.Option>
+                        <Select.Option value={ EntrustStatus.HAVE_IN_HAND }>进行中</Select.Option>
+                        <Select.Option value={ EntrustStatus.COMPLETED }>已完成</Select.Option>
                     </Select>
             }
         ];
