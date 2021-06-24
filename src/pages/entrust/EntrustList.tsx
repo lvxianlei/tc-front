@@ -130,12 +130,11 @@ import EntrustSetting from './EntrustSetting';
         key: 'towerName',
         title: '塔型',
         dataIndex: 'towerName',
-        width: 150,
     }, {
         key: 'deliverTime',
         title: '交付日期',
+        width: 200,
         dataIndex: 'deliverTime',
-        width: 150,
     }, {
         key: 'operation',
         title: '操作',
@@ -210,6 +209,7 @@ import EntrustSetting from './EntrustSetting';
                                     <Card className={styles.cardBorder}>
                                         <Row >
                                             <Col span={ item.status === EntrustStatus.HAVE_IN_HAND ?12:24} >
+
                                                 <div className = { item.status === EntrustStatus.HAVE_IN_HAND ? styles.left : styles.left1 }>
                                                     <div className = { styles.top_left }>
                                                         {this.getStatus(item.status)}
@@ -234,7 +234,9 @@ import EntrustSetting from './EntrustSetting';
                                                             <div>工程周期：{ item.projectStartTime } 至 { item.projectEndTime }</div>
                                                             { item.status !== EntrustStatus.TO_BE_RELEASED ? 
                                                                 item.status !== EntrustStatus.COMPLETED && item.status !== EntrustStatus.HAVE_IN_HAND?
-                                                                <Button type="primary" ghost href={ `/outsource/entrust/detail/${ (item as IEntrustDataItem).id }`}>前往留言</Button>:
+                                                                <div>
+                                                                <Button type="primary" ghost href={ `/outsource/entrust/detail/${ (item as IEntrustDataItem).id }`}>前往留言</Button>
+                                                                </div>:
                                                                 <div>
                                                                     <Button type="primary" ghost href={ `/outsource/entrust/detail/${ (item as IEntrustDataItem).id }`}>详情</Button>
                                                                 </div>
@@ -261,15 +263,15 @@ import EntrustSetting from './EntrustSetting';
                                                             <div className = { styles.left_middle }>塔型统计</div>
                                                             <div className = { styles.left_middle_bottom }></div>
                                                             <div className = { styles.left_bottom }>
-                                                                <div className = { styles.left_bottom_align}>
+                                                                <div className = { styles.left_bottom_left}>
                                                                     <div>{ item.checkNum }</div>
                                                                     <div>待验收</div>
                                                                 </div>
-                                                                <div className = { styles.left_bottom_align}>
+                                                                <div className = { styles.left_bottom_middle}>
                                                                     <div>{ item.conductNum }</div>
                                                                     <div>进行中</div>
                                                                 </div>
-                                                                <div className = { styles.left_bottom_align}> 
+                                                                <div className = { styles.left_bottom_right}> 
                                                                     <div>{ item.finishNum }</div>
                                                                     <div>已完成</div>
                                                                 </div>
@@ -281,19 +283,22 @@ import EntrustSetting from './EntrustSetting';
                                             { item.status === EntrustStatus.HAVE_IN_HAND?
                                           
                                                 <Col span={12}>
+                                                    <div className = { styles.card_right }>
                                                     <Table 
                                                         dataSource = {item.towerModelVoList}
                                                         rowKey = { this.getTableRowKey() }
-                                                        bordered= {true}
-                                                        onChange={ this.onTableChange }
-                                                        columns= {this.getTableColumns(data)}
-                                                        scroll = {{ y: 322 }}  
+                                                        bordered = {true}
+                                                        onChange = { this.onTableChange }
+                                                        style = {{ height: '380px' }}
+                                                        columns = {this.getTableColumns(data)}
+                                                        scroll = {item.towerModelVoList.length>10?{ y: 322 }:{}}  
                                                         pagination = {false}
                                                         size = 'small'
                                                         rowClassName = {(record: object, index: number) => {
                                                             return  index % 2 == 0 ? styles.singer : styles.double
                                                         }}
                                                     />
+                                                    </div>
                                                 </Col>
                                             : null }
                                         </Row>

@@ -7,7 +7,7 @@ import { RuleObject } from 'antd/lib/form';
 import { StoreValue } from 'antd/lib/form/interface';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
-
+import { clientTypeOptions } from '../../configuration/DictionaryOptions';
 import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGroup } from '../../components/AbstractFillableComponent';
 import { IClient } from '../../configuration/IClient';
 export interface IAbstractClientSettingState extends IAbstractFillableComponentState {
@@ -69,15 +69,18 @@ export default abstract class AbstractClientSetting<P extends RouteComponentProp
             }, {
                 label: '客户类型',
                 name: 'type',
-                initialValue: client?.type,
+                initialValue: client?.type || clientTypeOptions && clientTypeOptions.length > 0 && clientTypeOptions[0].id,
                 rules: [{
                     required: true,
                     message: '请选择客户类型'
                 }],
                 children: (
                     <Select>
-                        <Select.Option value={ '1' }>国内客户</Select.Option>
-                        <Select.Option value={ '2' }>国际客户</Select.Option>
+                        { clientTypeOptions && clientTypeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={ index } value={ id }>
+                                { name }
+                            </Select.Option>
+                        }) }
                     </Select>
                 )
             }, {
