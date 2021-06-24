@@ -201,14 +201,8 @@ class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps, IProm
      */
     public getTabItems(): ITabItem[] {
         return [{
-            label: '全部',
+            label: '销售订单列表',
             key: ""
-        }, {
-            label: '国内业务',
-            key: 0
-        }, {
-            label: '国际业务',
-            key: 1
         }];
     }
  
@@ -239,23 +233,23 @@ class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps, IProm
     public getFilterFormItemProps(item: ITabItem): FormItemProps[] {
         return [{
             name: 'ordersNumber',
-            children: <Input placeholder="订单编号关键词"/>
+            children: <Input placeholder="订单编号关键词" maxLength={ 200 }/>
         },
         {
             name: 'internalNumber',
-            children: <Input placeholder="内部合同编号关键词"/>
+            children: <Input placeholder="内部合同编号关键词" maxLength={ 200 }/>
         },
         {
             name: 'projectName',
-            children: <Input placeholder="工程名称关键词"/>
+            children: <Input placeholder="工程名称关键词" maxLength={ 200 }/>
         },
         {
             name: 'customerCompany',
-            children: <Input placeholder="业主单位关键词"/>
+            children: <Input placeholder="业主单位关键词" maxLength={ 200 }/>
         },
         {
             name: 'signCustomerName',
-            children: <Input placeholder="合同签订单位关键词"/>
+            children: <Input placeholder="合同签订单位关键词" maxLength={ 200 }/>
         }];
     }
 }

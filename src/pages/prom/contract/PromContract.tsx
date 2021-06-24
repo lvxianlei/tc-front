@@ -265,19 +265,19 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
     public getFilterFormItemProps(item: ITabItem): FormItemProps[] {
         return [{
             name: 'internalNumber',
-            children: <Input placeholder="内部合同编号关键词"/>
+            children: <Input placeholder="内部合同编号关键词" maxLength={ 200 }/>
         },
         {
             name: 'projectName',
-            children: <Input placeholder="工程名称关键词"/>
+            children: <Input placeholder="工程名称关键词" maxLength={ 200 }/>
         },
         {
             name: 'customerCompany',
-            children: <Input placeholder="业主单位关键词"/>
+            children: <Input placeholder="业主单位关键词" maxLength={ 200 }/>
         },
         {
             name: 'signCustomerName',
-            children: <Input placeholder="合同签订单位关键词"/>
+            children: <Input placeholder="合同签订单位关键词" maxLength={ 200 }/>
         },
         {
             name: 'winBidType',

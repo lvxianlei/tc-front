@@ -26,6 +26,7 @@ import Modal from 'antd/lib/modal/Modal';
 import AuthUtil from '../../../utils/AuthUtil';
 import { currencyTypeOptions, productTypeOptions, saleTypeOptions, voltageGradeOptions, winBidTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IAttachVo } from './ContractAttachment';
+import layoutStyles from '../../../layout/Layout.module.less';
 export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
     readonly tablePagination: TablePaginationConfig;
     readonly contract: IContract;
@@ -163,7 +164,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 span: 8
             },
             wrapperCol: {
-                span: 16
+                span: 16,
+                offset: 1
             }
         };
     }
@@ -581,7 +583,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                         required: true,
                         message: '请输入合同总价'
                     }],
-                    children: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } prefix="￥" onChange={ () => this.contractAmountBlur() }/>
+                    children: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } prefix="￥" onChange={ () => this.contractAmountBlur() } className={ layoutStyles.width100 }/>
                 }, {
                     label: '币种',
                     name: 'currencyType',
@@ -720,7 +722,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                     step="0.01"
                                                                     precision={ 2 }
                                                                     onChange={ () => this.checkReturnedRate(index) } 
-                                                                    disabled={ this.state.contract?.planType === planType.AMOUNT }/>
+                                                                    disabled={ this.state.contract?.planType === planType.AMOUNT }
+                                                                    className={ layoutStyles.width100 }/>
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={ 5 }>
@@ -734,7 +737,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                     step="0.01"
                                                                     precision={ 2 }
                                                                     onChange={ () => this.checkReturnedAmount(index) }
-                                                                    disabled={ this.state.contract?.planType === planType.PROPORTION || this.state.contract?.planType === undefined}/>
+                                                                    disabled={ this.state.contract?.planType === planType.PROPORTION || this.state.contract?.planType === undefined}
+                                                                    className={ layoutStyles.width100 }/>
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={ 5 }>

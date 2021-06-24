@@ -121,11 +121,11 @@ class RoleMngt extends AbstractMngtComponent<IRoleRouteProps, IRoleMngtState> {
         return [{
             label: '角色名称',
             name: 'name',
-            children: <Input placeholder="请输入角色名称"/>
+            children: <Input placeholder="请输入角色名称" maxLength={ 200 }/>
         }, {
             label: '角色编码',
             name: 'code',
-            children: <Input placeholder="请输入角色编码"/>
+            children: <Input placeholder="请输入角色编码" maxLength={ 200 }/>
         }];
     }
 
