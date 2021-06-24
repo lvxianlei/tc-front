@@ -221,7 +221,7 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      */
     public renderTableContent(item: ITabItem): React.ReactNode {
         return (
-            <Table { ...this.getTableProps(item) }/>
+            <Table { ...this.getTableProps(item) } className={ styles.table_overflow }/>
         );
     }
 
