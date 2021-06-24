@@ -16,6 +16,7 @@ import styles from './AbstractSaleOrderSetting.module.less'
 import ContractSelectionComponent from '../../../components/ContractSelectionModal';
 import { DataType } from '../../../components/AbstractSelectableModal';
 import { currencyTypeOptions, productTypeOptions, taxRateOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
+import layoutStyles from '../../../layout/Layout.module.less';
 
 export interface IAbstractSaleOrderSettingState extends IAbstractFillableComponentState {
     readonly saleOrder?: ISaleOrder;
@@ -482,7 +483,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                     stringMode={ false } 
                     precision={ 2 }  
                     disabled={ saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE || readonly } 
-                    onChange={ this.amountBlur }/>
+                    onChange={ this.amountBlur }
+                    className={ layoutStyles.width100 }/>
             }, {
                 label: '含税单价',
                 name: 'taxPrice',
@@ -519,47 +521,47 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 label: '汇率',
                 name: 'exchangeRate',
                 initialValue: saleOrder?.exchangeRate,
-                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } disabled={ readonly }/>
+                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } disabled={ readonly } className={ layoutStyles.width100 }/>
             }, {
                 label: '外汇金额',
                 name: 'foreignExchangeAmount',
                 initialValue: saleOrder?.foreignExchangeAmount,
-                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 2 } disabled={ readonly }/>
+                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 2 } disabled={ readonly } className={ layoutStyles.width100 }/>
             }, {
                 label: '外汇单价',
                 name: 'foreignPrice',
                 initialValue: saleOrder?.foreignPrice,
-                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } disabled={ readonly }/>
+                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } disabled={ readonly } className={ layoutStyles.width100 }/>
             }, {
                 label: '保函类型',
                 name: 'guaranteeType',
                 initialValue: saleOrder?.guaranteeType,
-                children:  <Input disabled={ readonly } maxLength={ 50 }/>
+                children:  <Input disabled={ readonly } maxLength={ 50 } className={ layoutStyles.width100 }/>
             }, {
                 label: '保函金额',
                 name: 'guaranteeAmount',
                 initialValue: saleOrder?.guaranteeAmount,
-                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 2 } disabled={ readonly }/>
+                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 2 } disabled={ readonly } className={ layoutStyles.width100 }/>
             }, {
                 label: '港口费用',
                 name: 'portCharge',
                 initialValue: saleOrder?.portCharge,
-                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } disabled={ readonly }/>
+                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } disabled={ readonly } className={ layoutStyles.width100 }/>
             }, {
                 label: '海运及保险费',
                 name: 'insuranceCharge',
                 initialValue: saleOrder?.insuranceCharge,
-                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } disabled={ readonly }/>
+                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } disabled={ readonly } className={ layoutStyles.width100 }/>
             }, {
                 label: '佣金',
                 name: 'commissionCharge',
                 initialValue: saleOrder?.commissionCharge,
-                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } disabled={ readonly }/>
+                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } disabled={ readonly } className={ layoutStyles.width100 }/>
             }, {
                 label: '出口信用保险',
                 name: 'creditInsurance',
                 initialValue: saleOrder?.creditInsurance,
-                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } disabled={ readonly }/>
+                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } disabled={ readonly } className={ layoutStyles.width100 }/>
             }, {
                 label: '订单交货日期',
                 name: 'orderDeliveryTime',
