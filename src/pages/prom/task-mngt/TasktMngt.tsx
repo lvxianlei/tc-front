@@ -258,19 +258,19 @@ import { ITask } from '../../../configuration/ITask';
         return [
             {
                 name: 'taskNumber',
-                children: <Input placeholder="任务单编号关键字"/>
+                children: <Input placeholder="任务单编号关键字" maxLength={ 200 }/>
             },
             {
                name: 'internalNumber',
-               children: <Input placeholder="内部合同编号关键字"/>
+               children: <Input placeholder="内部合同编号关键字" maxLength={ 200 }/>
            },
            {
                name: 'saleOrderNumber',
-               children: <Input placeholder="订单编号关键字"/>
+               children: <Input placeholder="订单编号关键字" maxLength={ 200 }/>
            },
            {
                name: 'projectName',
-               children: <Input placeholder="工程名称关键字"/>
+               children: <Input placeholder="工程名称关键字" maxLength={ 200 }/>
            },
         ];
      }

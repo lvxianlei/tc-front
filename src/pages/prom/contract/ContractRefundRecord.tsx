@@ -13,6 +13,7 @@ import { DataType } from '../../../components/AbstractSelectableModal';
 import styles from './ContractRefundRecord.module.less';
 import ClientSelectionComponent from '../../../components/ClientSelectionModal';
 import { currencyTypeOptions, refundModeOptions } from '../../../configuration/DictionaryOptions';
+import layoutStyles from '../../../layout/Layout.module.less';
 
 export interface IContractRefundRecord {
     readonly paymentPlanVos: IPaymentPlanVo[];
@@ -355,12 +356,12 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             title: '汇率',
             dataIndex: 'exchangeRate',
             editable: true,
-            type: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 }/>
+            type: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } className={ layoutStyles.width100 }/>
         }, {
             title: '外币金额',
             dataIndex: 'foreignExchangeAmount',
             editable: true,
-            type: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 }/>
+            type: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } className={ layoutStyles.width100 }/>
         }, {
             title: '收款银行',
             dataIndex: 'refundBank',

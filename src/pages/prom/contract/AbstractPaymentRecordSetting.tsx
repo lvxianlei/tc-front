@@ -15,6 +15,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import moment from 'moment';
 import { DataType } from '../../../components/AbstractSelectableModal';
 import { currencyTypeOptions, refundModeOptions } from '../../../configuration/DictionaryOptions';
+import layoutStyles from '../../../layout/Layout.module.less';
 
 const { Option } = Select;
 
@@ -263,7 +264,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                     required: true,
                     message: '请输入来款金额'
                 }],
-                children: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 }/>
+                children: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } className={ layoutStyles.width100 }/>
             }, {
                 label: '币种',
                 name: 'currencyType',
@@ -280,7 +281,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 label: '汇率',
                 name: 'exchangeRate',
                 initialValue: paymentRecord?.exchangeRate,
-                children: <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 }/>
+                children: <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } className={ layoutStyles.width100 }/>
             }, {
                 label: '外币金额',
                 name: 'foreignExchangeAmount',
@@ -289,7 +290,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                     required: true,
                     message: '请输入外币金额'
                 }],
-                children: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 }/>
+                children: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } className={ layoutStyles.width100 }/>
             }, {
                 label: '收款银行',
                 name: 'refundBank',

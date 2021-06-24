@@ -228,7 +228,7 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
     public getFilterFormItemProps(item: ITabItem): FormItemProps[] {
         return [{
             name: 'name',
-            children: <Input placeholder="搜索客户名称关键词"/>
+            children: <Input placeholder="搜索客户名称关键词" maxLength={ 200 }/>
         }];
     }
 }

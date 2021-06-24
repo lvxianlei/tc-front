@@ -3,7 +3,7 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 import { Input, Select } from 'antd';
-import { RuleObject } from 'antd/lib/form';
+import { FormProps, RuleObject } from 'antd/lib/form';
 import { StoreValue } from 'antd/lib/form/interface';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -46,6 +46,23 @@ export default abstract class AbstractClientSetting<P extends RouteComponentProp
         }).catch(error => {
             Promise.reject(error)
         })
+    }
+
+    /**
+     * @override
+     * @description Gets form props
+     * @returns form props 
+     */
+     protected getFormProps(): FormProps {
+        return {
+            ...super.getFormProps(),
+            labelCol:{ 
+                span: 6 
+            },
+            wrapperCol: {
+                offset: 1
+            }
+        };
     }
 
     /**

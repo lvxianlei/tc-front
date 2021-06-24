@@ -26,6 +26,7 @@ import Modal from 'antd/lib/modal/Modal';
 import AuthUtil from '../../../utils/AuthUtil';
 import { currencyTypeOptions, productTypeOptions, saleTypeOptions, voltageGradeOptions, winBidTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IContract } from '../../../configuration/IContract';
+import layoutStyles from '../../../layout/Layout.module.less';
 export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
     readonly tablePagination: TablePaginationConfig;
     readonly contract: IContractInfo;
@@ -140,7 +141,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 span: 8
             },
             wrapperCol: {
-                span: 16
+                span: 16,
+                offset: 1
             }
         };
     }
@@ -244,7 +246,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     public checkReturnedRate(index: number): void {
         const planValue: IPaymentPlanDto[] = this.getForm()?.getFieldsValue(true).paymentPlanDtos;
         const contractAmount: number = this.getForm()?.getFieldValue("contractAmount");
-        if(this.getForm()?.getFieldValue("contractAmount") && planValue[index] && planValue[index].returnedRate) {
+        if(this.getForm()?.getFieldValue("contractAmount") && planValue[index] && planValue[index].returnedRate !== undefined ) {
             planValue[index] = {
                 ...planValue[index],
                 returnedAmount:  parseFloat((contractAmount * planValue[index].returnedRate * 0.01).toFixed(2))
@@ -254,7 +256,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             })
             let totalRate: number = 0;
             planValue.map<number>((item: IPaymentPlanDto): number => {
-                return  totalRate = Number(item.returnedRate) + Number(totalRate);
+                return totalRate = Number(item.returnedRate) + Number(totalRate);  
             })
             let totalAmount: number = 0;
             planValue.map<number>((item: IPaymentPlanDto): number => {
@@ -280,7 +282,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
      public checkReturnedAmount(index: number): void {
         const planValue: IPaymentPlanDto[] = this.getForm()?.getFieldsValue(true).paymentPlanDtos;
         const contractAmount: number = this.getForm()?.getFieldValue("contractAmount");
-        if(this.getForm()?.getFieldValue("contractAmount") && planValue[index] && planValue[index].returnedAmount) {
+        if(this.getForm()?.getFieldValue("contractAmount") && planValue[index] && planValue[index].returnedAmount !== undefined ) {
             planValue[index] = {
                 ...planValue[index],
                 returnedRate:  parseFloat((planValue[index].returnedAmount / contractAmount * 100).toFixed(2))
@@ -558,7 +560,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                         required: true,
                         message: '请输入合同总价'
                     }],
-                    children: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } prefix="￥" onChange={ () => this.contractAmountBlur() }/>
+                    children: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } prefix="￥" onChange={ () => this.contractAmountBlur() } className={ layoutStyles.width100 }/>
                 }, {
                     label: '币种',
                     name: 'currencyType',
@@ -660,7 +662,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                 (fields: FormListFieldData[], operation: FormListOperation): React.ReactNode => {
                                     return (
                                         <>
-                                            <Button type="primary" onClick={ () => ( operation.add() ) } className={ styles.btn }>新增</Button>
+                                            <Button type="primary" onClick={ () => ( operation.add({ returnedRate: 0, returnedAmount: 0 }) ) } className={ styles.btn }>新增</Button>
                                             <Row className={ styles.FormHeader }>
                                                 <Col span={ 2 }>期次</Col>
                                                 <Col span={ 5 }>计划回款日期</Col>
@@ -697,7 +699,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                     step="0.01"
                                                                     precision={ 2 }
                                                                     onChange={ () => this.checkReturnedRate(index) } 
-                                                                    disabled={ this.state.contract?.planType === planType.AMOUNT }/>
+                                                                    disabled={ this.state.contract?.planType === planType.AMOUNT }
+                                                                    className={ layoutStyles.width100 }/>
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={ 5 }>
@@ -711,7 +714,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                     step="0.01"
                                                                     precision={ 2 }
                                                                     onChange={ () => this.checkReturnedAmount(index) }
-                                                                    disabled={ this.state.contract?.planType === planType.PROPORTION || this.state.contract?.planType === undefined}/>
+                                                                    disabled={ this.state.contract?.planType === planType.PROPORTION || this.state.contract?.planType === undefined}
+                                                                    className={ layoutStyles.width100 }/>
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={ 5 }>
@@ -775,6 +779,12 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                         (file) => {
                                                             const isLt10M = file.size / 1024 / 1024 > 10;
                                                             return new Promise((resolve, reject) => {
+                                                                if(this.state.contract.attachInfoDtos.length >= 10 ) {
+                                                                    message.error('文件最多上传10个！')
+                                                                    reject()
+                                                                } else {
+                                                                    resolve()
+                                                                }
                                                                 if (isLt10M) {
                                                                     message.error('上传文件不能大于10M')
                                                                     reject()
