@@ -798,6 +798,12 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                         (file) => {
                                                             const isLt10M = file.size / 1024 / 1024 > 10;
                                                             return new Promise((resolve, reject) => {
+                                                                if(this.state.contract.attachInfoDtos.length >= 10 ) {
+                                                                    message.error('文件最多上传10个！')
+                                                                    reject()
+                                                                } else {
+                                                                    resolve()
+                                                                }
                                                                 if (isLt10M) {
                                                                     message.error('上传文件不能大于10M')
                                                                     reject()
