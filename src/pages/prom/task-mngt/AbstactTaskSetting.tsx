@@ -257,7 +257,7 @@ enum StepTitleItem {
                             label: '客户交货日期',
                             name: 'deliveryTime',
                             initialValue: task?.deliveryTime ? moment(task?.deliveryTime) : '',
-                            children:  <DatePicker disabledDate={(current)=>{return current && current > moment(task?.signContractTime)}} format="YYYY-MM-DD"/>
+                            children:  <DatePicker disabledDate={(current)=>{return current > moment(task?.signContractTime).add(1, 'days')}} format="YYYY-MM-DD"/>
                         }, {
                             label: '计划交货日期',
                             name: 'planDeliveryTime',
@@ -365,19 +365,11 @@ enum StepTitleItem {
                             label: '原材料要求',
                             name: 'materialDemand',
                             initialValue: task?.materialDemand,
-                            rules: [{
-                                required: true,
-                                message: '请输入原材料要求'
-                            }],
                             children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息"/>
                         },  {
                             label: '焊接要求',
                             name: 'weldingDemand',
                             initialValue: task?.weldingDemand,
-                            rules: [{
-                                required: true,
-                                message: '请输入焊接要求'
-                            }],
                             children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息"/>
                         }, {
                             label: '包装要求',
@@ -488,19 +480,11 @@ enum StepTitleItem {
                             label: '原材料要求',
                             name: 'materialDemand',
                             initialValue: task?.materialDemand,
-                            rules: [{
-                                required: true,
-                                message: '请输入原材料要求'
-                            }],
                             children: <Input disabled/>
                         },  {
                             label: '焊接要求',
                             name: 'weldingDemand',
                             initialValue: task?.weldingDemand,
-                            rules: [{
-                                required: true,
-                                message: '请输入焊接要求'
-                            }],
                             children: <Input disabled/>
                         }, {
                             label: '包装要求',
@@ -571,9 +555,6 @@ enum StepTitleItem {
         this.getForm()?.validateFields().then(async ()=>{
             // if(!err.errorFields.length){
                 const{ checkStep, task } = this.state;
-                this.setState({
-                    checkStep: checkStep + 1,
-                })
                 let data = task || {};
                 const values = this.getForm()?.getFieldsValue(true);
                 values.productIds = this.state.selectedKeys.length > 0 ? this.state.selectedKeys : [];
@@ -589,7 +570,8 @@ enum StepTitleItem {
                 });
                 data.id = taskId
                 this.setState({
-                    task: data
+                    task: data,
+                    checkStep: checkStep + 1,
                 })
             // }
         }).catch(err => {
