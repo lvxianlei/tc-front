@@ -6,7 +6,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
 import { materialStandardOptions } from '../../../configuration/DictionaryOptions';
 import RequestUtil from '../../../utils/RequestUtil';
-import AbstractTaskChange, { IAbstractTaxkchangeState, IContract } from './AbstractTaskchange';
+import AbstractTaskChange, { IAbstractTaxkchangeState, ITaskChange } from './AbstractTaskchange';
 
 
 export interface ITaxkChangeProps {
@@ -31,7 +31,7 @@ export interface ITaxkchangeState extends IAbstractTaxkchangeState { }
 
 class TaskChange extends AbstractTaskChange<ITaxkChangeRouteProps, ITaxkchangeState> {
     getFormItemGroups(): IFormItemGroup[][] {
-        const contract: IContract | undefined = this.state.contract;
+        const contract: ITaskChange | undefined = this.state.contract;
         return [[{
             title: '基础信息',
             itemCol: {
@@ -140,7 +140,7 @@ class TaskChange extends AbstractTaskChange<ITaxkChangeRouteProps, ITaxkchangeSt
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const contract: IContract = await RequestUtil.get<IContract>(
+        const contract: ITaskChange = await RequestUtil.get<ITaskChange>(
             `/tower-market/taskNotice/auditDetail`,
             {
                 auditId: this.props.match.params.id,
@@ -179,7 +179,7 @@ class TaskChange extends AbstractTaskChange<ITaxkChangeRouteProps, ITaxkchangeSt
      * Determines whether reject on
      */
     public onReject = (): Promise<void> => {
-        const contract: IContract | undefined = this.state.contract;
+        const contract: ITaskChange | undefined = this.state.contract;
         return RequestUtil.post('/tower-market/audit/reject', {
             auditId: contract.id,
             description: "驳回"

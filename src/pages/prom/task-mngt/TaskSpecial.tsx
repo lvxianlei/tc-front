@@ -6,7 +6,7 @@
  import { RouteComponentProps, withRouter } from 'react-router';
  
  import RequestUtil from '../../../utils/RequestUtil';
- import AbstractTaskSetting, { IAbstractTaskSettingState, ITask, StepItem } from './AbstactTaskSetting';
+ import AbstractTaskSetting, { IAbstractTaskSettingState, ITaskInfo, StepItem } from './AbstactTaskSetting';
  import moment from 'moment'
 import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
 import { message } from 'antd';
@@ -26,7 +26,7 @@ import { message } from 'antd';
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const task: ITask = await RequestUtil.get<ITask>(`/tower-market/taskNotice/edit`,{id: this.props.match.params.id });
+        const task: ITaskInfo = await RequestUtil.get<ITaskInfo>(`/tower-market/taskNotice/edit`,{id: this.props.match.params.id });
         this.setState({
             task,
             productDataSource: task?.productInfoVOList || [],
@@ -59,7 +59,7 @@ import { message } from 'antd';
         values.deliveryTime = moment(values.deliveryTime).format('YYYY-MM-DD');
         values.signContractTime = moment(values.signContractTime).format('YYYY-MM-DD');
         values.productIds = this.state.selectedKeys.length > 0 ? this.state.selectedKeys : [];
-        values.contractInfoDTO = this.state.contractInfoDTO;
+        values.contractInfoDTO = this.state.taskInfoDTO;
         values.saleOrderId = this.state?.task?.saleOrderId;
         values.id = this.state?.task?.id;
         if(this.state.checkStep === StepItem.COMPLETE_PRODUCT_INFO && values.productIds == 0){

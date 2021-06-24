@@ -5,6 +5,8 @@ import AbstractFillableComponent, {
     IAbstractFillableComponentState,
     IFormItemGroup
 } from '../../../components/AbstractFillableComponent';
+import { IProduct } from '../../IProduct';
+import { ITask } from '../../ITask';
 import RequestUtil from '../../../utils/RequestUtil';
 import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 
@@ -12,87 +14,25 @@ import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
  * Iabstract contract setting state
  */
 export interface IAbstractTaxkchangeState extends IAbstractFillableComponentState {
-    readonly contract: IContract,
+    readonly contract: ITaskChange,
     readonly productInfoVOList?: IProductInfoVOList[],
-    readonly productChangeInfoVOList?: IProductChangeInfoVOList[]
+    readonly productChangeInfoVOList?: IProduct[];
 }
 /**
- * Icontract
+ * ITaskChange
  */
-export interface IContract {
-    //原材料标准
-    readonly materialStandard: number;
+export interface ITaskChange extends ITask {
     readonly auditStatus: number;
-    readonly id?: number;
-    //任务编号
-    readonly taskNumber: number;
-    //关联订单
-    readonly saleOrderNumber: number;
-    //合同编号
-    readonly contractId: number;
-    //工程名称
-    readonly projectName?: string;
     //业主单位
     readonly customerCompany?: string;
     //合同签订单位
     readonly signCustomerName?: string;
     //签订日期
     readonly signContractTime?: string;
-    //客户交货日期
-    readonly deliveryTime?: string;
     //订单交货日期
     readonly orderDeliveryTime?: string;
-    //计划交货日期
-    readonly planDeliveryTime: string;
-    //计划备注
-    readonly description?: string;
-    //原材料标准
-    readonly materialDemand?: string;
-    //焊接要求
-    readonly weldingDemand?: string;
-    //包装要求
-    readonly packDemand?: string;
-    //镀锌要求
-    readonly galvanizeDemand?: string;
-    //特殊要求备注
-    readonly peculiarDescription?: string;
-
-    readonly productChangeInfoVOList?: IProductChangeInfoVOList[];
+    readonly productChangeInfoVOList?: IProduct[];
     readonly productInfoVOList: IProductInfoVOList[];
-}
-;
-
-
-//变更明细
-export interface IProductChangeInfoVOList {
-    readonly index?: number;
-    readonly productStatus?: number;
-    //备注
-    readonly description?: string;
-    readonly id?: number;
-    //线路名称
-    readonly lineName?: string;
-    readonly productTypeName: string;
-    //数量
-    readonly num: number;
-    readonly price: number;
-    //呼高
-    readonly productHeight?: number;
-    //塔杆号
-    readonly productNumber?: string;
-    //塔型
-    readonly productShape?: string;
-    readonly productType?: number;
-    readonly saleOrderId?: number;
-    //标段
-    readonly tender?: string;
-    readonly totalAmount: number;
-    //单位
-    readonly unit?: string;
-    //电压等级名称
-    readonly voltageGradeName?: string;
-    //电压等级id
-    readonly voltageGrade?: number;
 }
 
 export interface IProductInfoVOList {
@@ -169,7 +109,7 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
      * Determines whether reject on
      */
     abstract onReject = (): Promise<void> => {
-        const contract: IContract | undefined = this.state.contract;
+        const contract: ITaskChange | undefined = this.state.contract;
         return RequestUtil.post('/tower-market/audit/reject', {
             auditId: contract.id,
             description: "驳回"

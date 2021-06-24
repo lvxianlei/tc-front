@@ -8,6 +8,7 @@ import styles from '../../../components/AbstractSelectableModal.module.less';
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../../components/AbstractMngtComponent';
 import { ITabItem } from '../../../components/ITabableComponent';
 import { winBidTypeOptions } from '../../../configuration/DictionaryOptions';
+import { IContract } from '../../IContract';
 import RequestUtil from '../../../utils/RequestUtil';
 
 const { Option } = Select;
@@ -15,27 +16,7 @@ const { Option } = Select;
 export interface IPromContractProps {}
 export interface IPromContractWithRouteProps extends RouteComponentProps<IPromContractProps>, WithTranslation {}
 export interface IPromContractState extends IAbstractMngtComponentState {
-    readonly tableDataSource: ITableDataItem[];
-}
-
-interface ITableDataItem {
-    readonly id: number;
-    readonly contractNumber: string;
-    readonly internalNumber: string;
-    readonly projectName: string;
-    readonly saleType: number;
-    readonly winBidType: number;
-    readonly productType: number;
-    readonly voltageGrade: number;
-    readonly saleTypeName: string;
-    readonly winBidTypeName: string;
-    readonly productTypeName: string;
-    readonly voltageGradeName: string;
-    readonly customerCompany: string;
-    readonly signCustomerName: string;
-    readonly deliveryTime: string;
-    readonly status: number;
-    readonly signCustomerId?: string;
+    readonly tableDataSource: IContract[];
 }
 
 export interface IResponseData {
@@ -43,7 +24,7 @@ export interface IResponseData {
     readonly size: number;
     readonly current: number;
     readonly total: number;
-    readonly records: ITableDataItem[];
+    readonly records: IContract[];
 }
 
  /**
@@ -124,14 +105,14 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
             title: '合同编号',
             dataIndex: 'contractNumber',
             render: (_: undefined, record: object): React.ReactNode => {
-                return <Link to={ `/prom/contract/detail/${ (record as ITableDataItem).id }` }>{ (record as ITableDataItem).contractNumber }</Link>
+                return <Link to={ `/prom/contract/detail/${ (record as IContract).id }` }>{ (record as IContract).contractNumber }</Link>
             }
         }, {
             key: 'internalNumber',
             title: '内部合同编号',
             dataIndex: 'internalNumber',
             render: (_: undefined, record: object): React.ReactNode => {
-            return <Link to={ `/prom/contract/detail/${ (record as ITableDataItem).id }` }>{ (record as ITableDataItem).internalNumber }</Link>
+            return <Link to={ `/prom/contract/detail/${ (record as IContract).id }` }>{ (record as IContract).internalNumber }</Link>
         }
         }, {
             key: 'projectName',
@@ -171,7 +152,7 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
             dataIndex: 'operation',
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type="link"  href={ `/prom/contract/setting/${ (record as ITableDataItem).id }` } disabled={ (record as ITableDataItem).status === 1 }>
+                    <Button type="link"  href={ `/prom/contract/setting/${ (record as IContract).id }` } disabled={ (record as IContract).status === 1 }>
                         编辑
                     </Button>
                     <Popconfirm 
@@ -180,17 +161,17 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
                         okText="确认"
                         cancelText="取消"
                         onConfirm={ async () => {
-                            let id = (record as ITableDataItem).id;
+                            let id = (record as IContract).id;
                             const resData:IResponseData = await RequestUtil.delete(`/tower-market/contract?id=${ id }`);
                             this.fetchTableData({});
                         } }
-                        disabled={ (record as ITableDataItem).status === 1 }
+                        disabled={ (record as IContract).status === 1 }
                     >
-                        <Button type="link" disabled={ (record as ITableDataItem).status === 1 }>
+                        <Button type="link" disabled={ (record as IContract).status === 1 }>
                             删除
                         </Button>
                     </Popconfirm>
-                    <Button type="link" href={ `/prom/contract/paymentRecord/${ (record as ITableDataItem).id }/${ (record as ITableDataItem).projectName }/${ (record as ITableDataItem).signCustomerId }/${ (record as ITableDataItem).signCustomerName }` } disabled={ (record as ITableDataItem).status === 0 }>添加回款记录</Button>
+                    <Button type="link" href={ `/prom/contract/paymentRecord/${ (record as IContract).id }/${ (record as IContract).projectName }/${ (record as IContract).signCustomerId }/${ (record as IContract).signCustomerName }` } disabled={ (record as IContract).status === 0 }>添加回款记录</Button>
                 </Space>
             )
         }];

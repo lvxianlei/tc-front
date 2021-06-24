@@ -25,11 +25,11 @@ import { StoreValue } from 'antd/lib/form/interface';
 import Modal from 'antd/lib/modal/Modal';
 import AuthUtil from '../../../utils/AuthUtil';
 import { currencyTypeOptions, productTypeOptions, saleTypeOptions, voltageGradeOptions, winBidTypeOptions } from '../../../configuration/DictionaryOptions';
-import { IAttachVo } from './ContractAttachment';
+import { IContract } from '../../IContract';
 import layoutStyles from '../../../layout/Layout.module.less';
 export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
     readonly tablePagination: TablePaginationConfig;
-    readonly contract: IContract;
+    readonly contract: IContractInfo;
     readonly checkList: [];
     readonly tableDataSource: [];
     readonly regionInfoData: [] | IRegion[];
@@ -44,39 +44,16 @@ export interface ITabItem {
     readonly key: string | number;
 }
 
-export interface IContract {
-    readonly id?: string | number;
-    readonly contractNumber?: string;
-    readonly internalNumber?: string;
-    readonly projectName?: string;
-    readonly simpleProjectName?: string;
-    readonly winBidType?: number;
-    readonly saleType?: string;
-    readonly customerInfoDto?: IcustomerInfoDto;
-    readonly signCustomerName?: string;
-    readonly signContractTime?: string;
-    readonly signUserName?: string;
-    readonly deliveryTime?: string;
-    readonly reviewTime?: string;
-    readonly chargeType?: string;
-    readonly salesman?: string;
-    readonly region?: [];
-    readonly countryCode?: number;
-    readonly contractAmount?: number;
-    readonly currencyType?: number;
-    readonly description?: string;
-    readonly productType?: string;
-    readonly voltageGrade?: string;
-    readonly planType?: number;
+export interface IContractInfo extends IContract {
+    readonly customerInfoDto?: ICustomerInfoDto;
     paymentPlanDtos?: IPaymentPlanDto[];
-    attachInfoDtos: IattachDTO[];
-    readonly signCustomerId?: string | number;
-    readonly customerInfoVo?: IcustomerInfoDto;
-    readonly attachVos: IattachDTO[];
+    attachInfoDtos: IAttachDTO[];
+    readonly customerInfoVo?: ICustomerInfoDto;
+    readonly attachVos: IAttachDTO[];
     readonly paymentPlanVos?: IPaymentPlanDto[];
 }
 
-export interface IcustomerInfoDto {
+export interface ICustomerInfoDto {
     readonly customerId?: string | number;
     readonly customerCompany?: string;
     readonly customerLinkman?: string;
@@ -92,7 +69,7 @@ export interface IPaymentPlanDto {
     readonly description?: string;
 }
 
-export interface IattachDTO {
+export interface IAttachDTO {
     readonly name?: string;
     readonly userName?: string;
     readonly fileSize?: string;
@@ -209,7 +186,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
      * @returns 
      */
     public onSelect = (selectedRows: DataType[]):void => {
-        const contract: IContract | undefined = this.state.contract;
+        const contract: IContractInfo | undefined = this.state.contract;
         if(selectedRows.length > 0 ) {
             this.setState({
                 contract: {
@@ -223,7 +200,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     }
 
     public onCustomerCompanySelect = (selectedRows: DataType[]):void => {
-        const contract: IContract | undefined = this.state.contract;
+        const contract: IContractInfo | undefined = this.state.contract;
         if(selectedRows.length > 0 ) {
             const select = {
                 customerId: selectedRows[0].id,
@@ -371,7 +348,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
      * @returns form item groups 
      */
     public getFormItemGroups(): IFormItemGroup[][] {
-            const contract: IContract | undefined = this.state.contract;
+            const contract: IContractInfo | undefined = this.state.contract;
             return [[{
                 title: '基础信息',
                 itemCol: {
@@ -661,7 +638,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
      * @returns extra sections 
      */
     public renderExtraSections(): IRenderedSection[] {
-        const contract: IContract | undefined = this.state.contract;
+        const contract: IContractInfo | undefined = this.state.contract;
         return [{
             title: '回款计划',
             render: (): React.ReactNode => {
@@ -825,9 +802,9 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                             } else {
                                                                 index = 1;
                                                             } 
-                                                            const contract: IContract = this.state.contract;
-                                                            let attachInfoDtos: IattachDTO[] = contract.attachInfoDtos;
-                                                            const attachInfoItem: IattachDTO = {
+                                                            const contract: IContractInfo = this.state.contract;
+                                                            let attachInfoDtos: IAttachDTO[] = contract.attachInfoDtos;
+                                                            const attachInfoItem: IAttachDTO = {
                                                                 name: info.file.response.data.originalName,
                                                                 userName: info.file.response.data.userName,
                                                                 fileSize: info.file.response.data.size,
@@ -856,8 +833,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                 </Upload>
                                                 <Button type="primary" onClick={ ()=> {
                                                     let checked: any[] = this.state.checkList;
-                                                    let attachInfoDtos: IattachDTO[] =  this.state.contract?.attachInfoDtos;
-                                                    attachInfoDtos.map<IattachDTO>((items: IattachDTO, index: number): IattachDTO | any=> {
+                                                    let attachInfoDtos: IAttachDTO[] =  this.state.contract?.attachInfoDtos;
+                                                    attachInfoDtos.map<IAttachDTO>((items: IAttachDTO, index: number): IAttachDTO | any=> {
                                                         if(checked.includes(index)){
                                                             window.open(items.filePath)
                                                         }
@@ -921,7 +898,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                         <Col span={ 3 }>
                                                             <Space direction="horizontal" size="small">
                                                                 <Button type="link" onClick={ async () => {
-                                                                    let attachInfoDtos: IattachDTO =  this.state.contract?.attachInfoDtos[index];
+                                                                    let attachInfoDtos: IAttachDTO =  this.state.contract?.attachInfoDtos[index];
                                                                     const suffix: string = attachInfoDtos.filePath.substr((attachInfoDtos.filePath.lastIndexOf(".")) + 1);
                                                                     if(suffix === 'jpg' || suffix === 'pdf' || suffix ===  'jpeg' || suffix === 'png') {
                                                                        this.setState({
@@ -935,7 +912,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                 } }>预览</Button>
                                                                 <Button type="link" onClick={
                                                                     () => {
-                                                                        let attachInfoDtos: IattachDTO =  this.state.contract?.attachInfoDtos[index];
+                                                                        let attachInfoDtos: IAttachDTO =  this.state.contract?.attachInfoDtos[index];
                                                                         window.open(attachInfoDtos.filePath);
                                                                     }
                                                                 }>下载</Button>

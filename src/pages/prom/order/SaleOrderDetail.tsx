@@ -12,26 +12,26 @@ import ConfirmableButton from '../../../components/ConfirmableButton';
 import { ITabItem } from '../../../components/ITabableComponent';
 import RequestUtil from '../../../utils/RequestUtil';
 import { IResponseData } from './SaleOrder';
-import SaleOrderSummary, { IContractBaseInfo, IContractSysInfo } from './SaleOrderSummary';
+import SaleOrderSummary, { ISaleOrderBaseInfo, ISaleOrderSysInfo } from './SaleOrderSummary';
 
-export interface IContractDetailProps {
+export interface ISaleOrderDetailProps {
     readonly id: string;
 }
-export interface IContractDetailRouteProps extends RouteComponentProps<IContractDetailProps> {}
-export interface IContractDetailState {
+export interface IContractDetailRouteProps extends RouteComponentProps<ISaleOrderDetailProps> {}
+export interface ISaleOrderDetailState {
     readonly detail: IDetail;
 }
 
-interface IDetail extends IContractBaseInfo, IContractSysInfo {
+interface IDetail extends ISaleOrderBaseInfo, ISaleOrderSysInfo {
     readonly id?: number;
 }
 
 /**
- * Contract detail page component.
+ * SaleOrder detail page component.
  */
-class SaleOrderDetail extends AbstractDetailComponent<IContractDetailRouteProps, IContractDetailState> {
+class SaleOrderDetail extends AbstractDetailComponent<IContractDetailRouteProps, ISaleOrderDetailState> {
 
-    public state: IContractDetailState = {
+    public state: ISaleOrderDetailState = {
         detail: {}
     }
 

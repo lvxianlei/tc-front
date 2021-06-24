@@ -7,10 +7,12 @@ import moment from 'moment';
 import React from 'react';
 import isEqual from 'react-fast-compare';
 import { RouteComponentProps, withRouter } from 'react-router';
+import { IContract } from '../../IContract';
+import { IProduct } from '../../IProduct';
 
 import RequestUtil from '../../../utils/RequestUtil';
 import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../../../utils/SummaryRenderUtil';
-import { IContract, IcustomerInfoDto, IRegion } from './AbstractContractSetting';
+import { ICustomerInfoDto } from './AbstractContractSetting';
 import styles from './ContractSummary.module.less';
 
 interface IContractSummaryParamsProps {
@@ -18,34 +20,16 @@ interface IContractSummaryParamsProps {
 }
 
 interface IContractSummaryProps {
-    readonly baseInfo?: IContractBaseInfo;
+    readonly baseInfo?: IContractGeneral;
     readonly orderItems?: IOrderItem[];
-    readonly sysInfo?: IContractSysInfo;
+    readonly sysInfo?: IContract;
 }
 
 interface IContractSummaryRouteProps extends RouteComponentProps<IContractSummaryParamsProps>, IContractSummaryProps {}
 interface IContractSummaryState extends IContractSummaryProps {}
 
-export interface IContractBaseInfo {
-    readonly contractNumber?: string;
-    readonly internalNumber?: string;
-    readonly projectName?: string;
-    readonly simpleProjectName?: string;
-    readonly winBidType?: number;
-    readonly winBidTypeName?: string;
-    readonly saleTypeName?: string;
-    readonly customerInfoVo?: IcustomerInfoDto;
-    readonly signCustomerName?: string;
-    readonly signContractTime?: string;
-    readonly signUserName?: string;
-    readonly deliveryTime?: string;
-    readonly reviewTime?: string;
-    readonly chargeType?: string;
-    readonly region?: [];
-    readonly countryCode?: number;
-    readonly contractAmount?: number;
-    readonly description?: string;
-    readonly currencyTypeName?: string;
+export interface IContractGeneral extends IContract {
+    readonly customerInfoVo?: ICustomerInfoDto;
     readonly regionName?: string;
 }
 
@@ -56,20 +40,6 @@ export interface IOrderItem {
     readonly productVos?: IProduct[];
     readonly purchaseOrderNumber?: string;
     readonly saleOrderNumber?: string;
-}
-
-export interface IProduct {
-    readonly index?: number;
-    readonly saleOrderId: number;
-}
-
-export interface IContractSysInfo {
-    readonly updateUser?: string;
-    readonly updateUserName?: string;
-    readonly updateTime?: string;
-    readonly createUser?: string;
-    readonly createUserName?: string;
-    readonly createTime?: string;
 }
 
 /**
@@ -121,7 +91,7 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
      * @returns base info grid 
      */
     private getBaseInfoGrid(): IRenderedGrid {
-        const baseInfo: IContractBaseInfo | undefined = this.state.baseInfo;
+        const baseInfo: IContractGeneral | undefined = this.state.baseInfo;
         return {
             labelCol: {
                 span: 4
@@ -288,7 +258,7 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
      * @returns sys info grid 
      */
     private getSysInfoGrid(): IRenderedGrid {
-        const sysInfo: IContractSysInfo | undefined = this.state.sysInfo;
+        const sysInfo: IContract | undefined = this.state.sysInfo;
         return {
             labelCol: {
                 span: 4

@@ -6,7 +6,7 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 
 import RequestUtil from '../../../utils/RequestUtil';
-import AbstractContractSetting, { IAbstractContractSettingState, IPaymentPlanDto, IContract, planType } from './AbstractContractSetting';
+import AbstractContractSetting, { IAbstractContractSettingState, IPaymentPlanDto, planType } from './AbstractContractSetting';
 import moment from 'moment'
 import { message } from 'antd';
 

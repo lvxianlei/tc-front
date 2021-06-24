@@ -10,11 +10,12 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import AbstractDetailComponent from '../../../components/AbstractDetailComponent';
 import ConfirmableButton from '../../../components/ConfirmableButton';
 import { ITabItem } from '../../../components/ITabableComponent';
+import { IContract } from '../../IContract';
 import RequestUtil from '../../../utils/RequestUtil';
 import { IRegion, IResponseData } from './AbstractContractSetting';
 import ContractAttachment, { IContractAttachment } from './ContractAttachment';
 import ContractRefundRecord, { IContractRefundRecord } from './ContractRefundRecord';
-import ContractSummary, { IContractBaseInfo, IContractSysInfo } from './ContractSummary';
+import ContractSummary, { IContractGeneral } from './ContractSummary';
 
 export interface IContractDetailProps {
     readonly id: string;
@@ -24,9 +25,7 @@ export interface IContractDetailState {
     readonly detail: IDetail;
 }
 
-interface IDetail extends IContractBaseInfo, IContractSysInfo, IContractAttachment, IContractRefundRecord {
-    readonly id?: number;
-    readonly deliveryTime?: string;
+interface IDetail extends IContractGeneral, IContract, IContractAttachment, IContractRefundRecord {
     readonly regionName?: string;
     readonly contractStatus?: number;
 }

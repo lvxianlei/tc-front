@@ -11,7 +11,7 @@ import { clientTypeOptions } from '../../configuration/DictionaryOptions';
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../components/AbstractMngtComponent';
 import ConfirmableButton from '../../components/ConfirmableButton';
 import { ITabItem } from '../../components/ITabableComponent';
-import { IClient } from '../../configuration/IClient';
+import { IClient } from '../IClient';
 import RequestUtil from '../../utils/RequestUtil';
 
 export interface IClientMngtProps {}
