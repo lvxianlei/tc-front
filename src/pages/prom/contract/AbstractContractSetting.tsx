@@ -163,7 +163,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 span: 8
             },
             wrapperCol: {
-                span: 16
+                span: 16,
+                offset: 1
             }
         };
     }

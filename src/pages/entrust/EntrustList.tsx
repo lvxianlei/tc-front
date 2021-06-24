@@ -396,10 +396,10 @@ import EntrustSetting from './EntrustSetting';
         return [
             {
                 name: 'projectNum',
-                children: <Input placeholder="工程编号关键字"/>
+                children: <Input placeholder="工程编号关键字" maxLength={ 200 }/>
             },{
                 name: 'projectName',
-                children: <Input placeholder="工程名称关键字"/>
+                children: <Input placeholder="工程名称关键字" maxLength={ 200 }/>
             },{
                 name: 'status',
                 children: 

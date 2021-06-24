@@ -262,12 +262,12 @@ class TowerShape extends AbstractMngtComponent<ITowerShapeWithRouteProps, ITower
         return [{
             name: 'towerName',
             label: '塔型名称',
-            children: <Input placeholder="请输入塔型名称"/>
+            children: <Input placeholder="请输入塔型名称" maxLength={ 200 }/>
         },
         {
             name: 'projectName',
             label: '工程名称',
-            children: <Input placeholder="工程名称/工程编号关键词"/>
+            children: <Input placeholder="工程名称/工程编号关键词" maxLength={ 200 }/>
         }];
     }
 }

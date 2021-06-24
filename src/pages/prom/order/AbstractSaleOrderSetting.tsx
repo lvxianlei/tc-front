@@ -130,7 +130,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 span: 8
             },
             wrapperCol: {
-                span: 16
+                span: 16,
+                offset: 1
             }
         };
     }

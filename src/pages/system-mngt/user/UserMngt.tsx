@@ -141,11 +141,11 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
         return [{
             label: '账号',
             name: 'account',
-            children: <Input placeholder="请输入账号"/>
+            children: <Input placeholder="请输入账号" maxLength={ 200 }/>
         }, {
             label: '姓名',
             name: 'name',
-            children: <Input placeholder="请输入姓名"/>
+            children: <Input placeholder="请输入姓名" maxLength={ 200 }/>
         }];
     }
 
