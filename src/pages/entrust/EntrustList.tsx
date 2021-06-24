@@ -196,13 +196,11 @@ import EntrustSetting from './EntrustSetting';
      * @param item 
      * @returns table content 
      */
-    public renderTableContent(data: ITabItem): React.ReactNode {
+    protected renderTableContent(data: ITabItem): React.ReactNode {
         const { tableDataSource }= this.state;
         return (
-            //第一种
             <>
                 <Row gutter={[16, 16]}>
-                
                         {tableDataSource.map( (item: IEntrustDataItem) =>{
                             return(
                                 <Col span={ item.status === EntrustStatus.HAVE_IN_HAND ? 24 : 12 } >
@@ -220,12 +218,10 @@ import EntrustSetting from './EntrustSetting';
                                                             strokeColor={{
                                                                 '0%': '#1890FF',
                                                                 '100%': '#4F53FF',
-                                                                // '100%': '#373bfd',
                                                             }}
                                                             trailColor = { "#dcdcdc" }
                                                             width = { 80 }
                                                             percent = { item.status === EntrustStatus.HAVE_IN_HAND ? Math.round((item.finishNum / (item.checkNum + item.conductNum) * 100) * 100) / 100 : item.status === EntrustStatus.COMPLETED ? 100 : 0 }
-                                                            // format = {(percent)=>percent + '%'}
                                                             className= { styles.left_top_left }
                                                         />
                                                         <div className = { styles.left_top_right }>
