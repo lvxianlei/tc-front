@@ -257,6 +257,10 @@ enum StepTitleItem {
                             label: '客户交货日期',
                             name: 'deliveryTime',
                             initialValue: task?.deliveryTime ? moment(task?.deliveryTime) : '',
+                            rules: [{
+                                required: true,
+                                message: '请选择客户交货日期'
+                            }],
                             children:  <DatePicker disabledDate={(current)=>{return current > moment(task?.signContractTime).add(1, 'days')}} format="YYYY-MM-DD"/>
                         }, {
                             label: '计划交货日期',
@@ -264,7 +268,7 @@ enum StepTitleItem {
                             initialValue: task?.planDeliveryTime ? moment(task?.planDeliveryTime) : '',
                             rules: [{
                                 required: true,
-                                message: '计划交货日期'
+                                message: '请选择计划交货日期'
                             }],
                             children:  <DatePicker/>
                         }, {
@@ -327,6 +331,10 @@ enum StepTitleItem {
                             label: '客户交货日期',
                             name: 'deliveryTime',
                             initialValue: moment(task?.deliveryTime),
+                            rules: [{
+                                required: true,
+                                message: '请选择客户交货日期'
+                            }],
                             children:  <DatePicker disabled/>
                         }, {
                             label: '计划交货日期',
@@ -334,7 +342,7 @@ enum StepTitleItem {
                             initialValue: moment(task?.planDeliveryTime),
                             rules: [{
                                 required: true,
-                                message: '计划交货日期'
+                                message: '请选择计划交货日期'
                             }],
                             children:  <DatePicker disabled/>
                         }, {
@@ -441,6 +449,10 @@ enum StepTitleItem {
                             label: '客户交货日期',
                             name: 'deliveryTime',
                             initialValue: moment(task?.deliveryTime),
+                            rules: [{
+                                required: true,
+                                message: '请选择客户交货日期'
+                            }],
                             children:  <DatePicker disabled/>
                         }, {
                             label: '计划交货日期',
@@ -448,7 +460,7 @@ enum StepTitleItem {
                             initialValue: moment(task?.planDeliveryTime),
                             rules: [{
                                 required: true,
-                                message: '计划交货日期'
+                                message: '请选择计划交货日期'
                             }],
                             children:  <DatePicker disabled/>
                         }, {
