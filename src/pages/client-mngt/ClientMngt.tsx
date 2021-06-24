@@ -113,8 +113,14 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
             key: 'type',
             title: '客户类型',
             dataIndex: 'type',
-            render: (type: number): React.ReactNode => {
-                return  type == 1 ? '国内客户' : '国际客户';
+            render: (type: number | string): React.ReactNode => {
+                return  clientTypeOptions && clientTypeOptions.map(({ id, name }, index) => {
+                    if(id === type) {
+                        return name
+                    } else {
+                        return ""
+                    }
+                })
             }
         }, {
             key: 'linkman',

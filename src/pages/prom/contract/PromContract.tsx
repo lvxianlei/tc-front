@@ -263,7 +263,7 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
         {
             name: 'winBidType',
             children: 
-                <Select placeholder="请选择中标类型" className={ styles.select_width }>
+                <Select placeholder="请选择中标类型" className={ styles.select_width } getPopupContainer={ triggerNode => triggerNode.parentNode }>
                     { winBidTypeOptions && winBidTypeOptions.map(({ id, name }, index) => {
                         return <Option key={ index } value={ id }>
                             { name }
