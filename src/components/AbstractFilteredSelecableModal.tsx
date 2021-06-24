@@ -1,4 +1,4 @@
-import { Button, Card, Form, FormItemProps, Space } from 'antd';
+import { Button, Card, Form, FormInstance, FormItemProps, Space } from 'antd';
 import { TablePaginationConfig } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
@@ -13,6 +13,17 @@ export interface IAbstractSelectableModalProps {
 
 
 export default abstract class AbstractFilteredSelecableModal<P extends IAbstractSelectableModalProps, S extends IAbstractSelectableModalState> extends AbstractSelectionModal<P,S> {
+    private form: React.RefObject<FormInstance> = React.createRef<FormInstance>();
+    
+    /**
+     * @protected
+     * @description Gets form
+     * @returns form 
+     */
+     protected getForm(): FormInstance | null {
+        return this.form?.current;
+    }
+
      /**
      * @abstract
      * @description Determines whether filter submit on
@@ -33,6 +44,10 @@ export default abstract class AbstractFilteredSelecableModal<P extends IAbstract
      */
     public onTableChange = (pagination: TablePaginationConfig): void => {
         this.getTable({}, pagination);
+    }
+
+    protected onReset = (): void => {
+        this.getForm()?.resetFields();
     }
 
      /**
@@ -69,7 +84,7 @@ export default abstract class AbstractFilteredSelecableModal<P extends IAbstract
      */
     protected renderFilterContent(): React.ReactNode {
         return (
-            <Form layout="inline" onFinish={ this.onFilterSubmit }>        
+            <Form layout="inline" onFinish={ this.onFilterSubmit } ref={ this.form }>        
                 {
                     this.getFilterFormItemProps().map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
                         <Form.Item key={ `${ props.name }_${ index }` } { ...props }/>
@@ -79,7 +94,7 @@ export default abstract class AbstractFilteredSelecableModal<P extends IAbstract
                     <Button type="primary" htmlType="submit">查询</Button>
                 </Form.Item>
                 <Form.Item>
-                    <Button htmlType="reset">重置</Button>
+                    <Button htmlType="button" onClick={ this.onReset }>重置</Button>
                 </Form.Item>
             </Form>
         );
