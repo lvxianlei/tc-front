@@ -7,8 +7,8 @@ import moment from 'moment';
 import React from 'react';
 import isEqual from 'react-fast-compare';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { IContract } from './IContract';
-import { IProduct } from '../order/IProduct';
+import { IContract } from '../../IContract';
+import { IProduct } from '../../IProduct';
 
 import RequestUtil from '../../../utils/RequestUtil';
 import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../../../utils/SummaryRenderUtil';

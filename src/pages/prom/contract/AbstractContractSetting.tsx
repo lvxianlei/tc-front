@@ -25,7 +25,7 @@ import { StoreValue } from 'antd/lib/form/interface';
 import Modal from 'antd/lib/modal/Modal';
 import AuthUtil from '../../../utils/AuthUtil';
 import { currencyTypeOptions, productTypeOptions, saleTypeOptions, voltageGradeOptions, winBidTypeOptions } from '../../../configuration/DictionaryOptions';
-import { IContract } from './IContract';
+import { IContract } from '../../IContract';
 import layoutStyles from '../../../layout/Layout.module.less';
 export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
     readonly tablePagination: TablePaginationConfig;

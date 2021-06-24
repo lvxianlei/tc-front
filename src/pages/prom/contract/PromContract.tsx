@@ -8,7 +8,7 @@ import styles from '../../../components/AbstractSelectableModal.module.less';
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../../components/AbstractMngtComponent';
 import { ITabItem } from '../../../components/ITabableComponent';
 import { winBidTypeOptions } from '../../../configuration/DictionaryOptions';
-import { IContract } from './IContract';
+import { IContract } from '../../IContract';
 import RequestUtil from '../../../utils/RequestUtil';
 
 const { Option } = Select;

@@ -7,7 +7,7 @@ import ConfirmableButton from '../../../components/ConfirmableButton';
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../../components/AbstractMngtComponent';
 import { ITabItem } from '../../../components/ITabableComponent';
 import RequestUtil from '../../../utils/RequestUtil';
-import { ITask } from './ITask';
+import { ITask } from '../../ITask';
 
  export interface ITaskMngtProps {}
  export interface ITaskMngtWithRouteProps extends RouteComponentProps<ITaskMngtProps>, WithTranslation {}

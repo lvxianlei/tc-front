@@ -5,8 +5,8 @@ import AbstractFillableComponent, {
     IAbstractFillableComponentState,
     IFormItemGroup
 } from '../../../components/AbstractFillableComponent';
-import { IProduct } from '../../prom/order/IProduct';
-import { ITask } from '../../prom/task-mngt/ITask';
+import { IProduct } from '../../IProduct';
+import { ITask } from '../../ITask';
 import RequestUtil from '../../../utils/RequestUtil';
 import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 

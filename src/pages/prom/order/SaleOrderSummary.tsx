@@ -6,7 +6,7 @@ import { Table, TableColumnType } from 'antd';
 import React from 'react';
 import isEqual from 'react-fast-compare';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { IContract } from '../contract/IContract';
+import { IContract } from '../../IContract';
 
 import RequestUtil from '../../../utils/RequestUtil';
 import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../../../utils/SummaryRenderUtil';

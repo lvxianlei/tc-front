@@ -10,7 +10,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import AbstractDetailComponent from '../../../components/AbstractDetailComponent';
 import ConfirmableButton from '../../../components/ConfirmableButton';
 import { ITabItem } from '../../../components/ITabableComponent';
-import { IContract } from './IContract';
+import { IContract } from '../../IContract';
 import RequestUtil from '../../../utils/RequestUtil';
 import { IRegion, IResponseData } from './AbstractContractSetting';
 import ContractAttachment, { IContractAttachment } from './ContractAttachment';

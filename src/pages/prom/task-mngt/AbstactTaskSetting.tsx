@@ -39,8 +39,8 @@
  import styles from './AbstractTaskSetting.module.less';
  import RequestUtil from '../../../utils/RequestUtil';
  import { materialStandardOptions } from '../../../configuration/DictionaryOptions';
-import { IProduct } from '../order/IProduct';
-import { ITask } from './ITask';
+import { IProduct } from '../../IProduct';
+import { ITask } from '../../ITask';
  const { Step } = Steps
   
  export interface IAbstractTaskSettingState extends IAbstractFillableComponentState {
