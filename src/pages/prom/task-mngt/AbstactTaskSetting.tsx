@@ -39,8 +39,8 @@
  import styles from './AbstractTaskSetting.module.less';
  import RequestUtil from '../../../utils/RequestUtil';
  import { materialStandardOptions } from '../../../configuration/DictionaryOptions';
-import { IProduct } from '../../../configuration/IProduct';
-import { ITask } from '../../../configuration/ITask';
+import { IProduct } from '../order/IProduct';
+import { ITask } from './ITask';
  const { Step } = Steps
   
  export interface IAbstractTaskSettingState extends IAbstractFillableComponentState {
@@ -48,7 +48,7 @@ import { ITask } from '../../../configuration/ITask';
      productDataSource: IProduct[];
      selectedKeys: React.Key[];
      readonly task?: ITaskInfo;
-     readonly contractInfoDTO : ITaskInfo;
+     readonly taskInfoDTO : ITaskInfo;
      
  }
  export interface DataTypeMore extends DataType {
@@ -114,7 +114,7 @@ enum StepTitleItem {
          task: undefined,
          checkStep: StepItem.NEW_TASK, 
          selectedKeys: {},
-         contractInfoDTO:{},
+         taskInfoDTO:{},
      }  as S;
  
      constructor(props: P) {
@@ -170,7 +170,7 @@ enum StepTitleItem {
             });
             this.setState({
                 task,
-                contractInfoDTO:task
+                taskInfoDTO:task
             })
         }
     }
@@ -577,7 +577,7 @@ enum StepTitleItem {
                 let data = task || {};
                 const values = this.getForm()?.getFieldsValue(true);
                 values.productIds = this.state.selectedKeys.length > 0 ? this.state.selectedKeys : [];
-                values.contractInfoDTO = this.state.contractInfoDTO;
+                values.taskInfoDTO = this.state.taskInfoDTO;
                 values.saleOrderId = this.state?.task?.saleOrderId;
                 console.log(values.deliverTime)
                 const taskId: number = await RequestUtil.post('/tower-market/taskNotice/saveToNextStep', {

@@ -9,8 +9,8 @@
  import { ITabItem } from '../../../components/ITabableComponent';
  import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../../../utils/SummaryRenderUtil';
  import RequestUtil from '../../../utils/RequestUtil';
-import { IProduct } from '../../../configuration/IProduct';
-import { ITask } from '../../../configuration/ITask';
+import { IProduct } from '../order/IProduct';
+import { ITask } from './ITask';
  
  export interface ITaskDetailProps {
      readonly id: string;

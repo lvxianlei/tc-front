@@ -5,8 +5,8 @@ import AbstractFillableComponent, {
     IAbstractFillableComponentState,
     IFormItemGroup
 } from '../../../components/AbstractFillableComponent';
-import { IProduct } from '../../../configuration/IProduct';
-import { ITask } from '../../../configuration/ITask';
+import { IProduct } from '../../prom/order/IProduct';
+import { ITask } from '../../prom/task-mngt/ITask';
 import RequestUtil from '../../../utils/RequestUtil';
 import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 
@@ -14,14 +14,14 @@ import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
  * Iabstract contract setting state
  */
 export interface IAbstractTaxkchangeState extends IAbstractFillableComponentState {
-    readonly contract: IContract,
+    readonly contract: ITaskChange,
     readonly productInfoVOList?: IProductInfoVOList[],
     readonly productChangeInfoVOList?: IProduct[];
 }
 /**
- * Icontract
+ * ITaskChange
  */
-export interface IContract extends ITask {
+export interface ITaskChange extends ITask {
     readonly auditStatus: number;
     //业主单位
     readonly customerCompany?: string;
@@ -109,7 +109,7 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
      * Determines whether reject on
      */
     abstract onReject = (): Promise<void> => {
-        const contract: IContract | undefined = this.state.contract;
+        const contract: ITaskChange | undefined = this.state.contract;
         return RequestUtil.post('/tower-market/audit/reject', {
             auditId: contract.id,
             description: "驳回"

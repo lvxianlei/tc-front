@@ -59,7 +59,7 @@ import { message } from 'antd';
         values.deliveryTime = moment(values.deliveryTime).format('YYYY-MM-DD');
         values.signContractTime = moment(values.signContractTime).format('YYYY-MM-DD');
         values.productIds = this.state.selectedKeys.length > 0 ? this.state.selectedKeys : [];
-        values.contractInfoDTO = this.state.contractInfoDTO;
+        values.contractInfoDTO = this.state.taskInfoDTO;
         values.saleOrderId = this.state?.task?.saleOrderId;
         values.id = this.state?.task?.id;
         if(this.state.checkStep === StepItem.COMPLETE_PRODUCT_INFO && values.productIds == 0){

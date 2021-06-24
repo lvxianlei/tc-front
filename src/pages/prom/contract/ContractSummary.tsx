@@ -7,8 +7,8 @@ import moment from 'moment';
 import React from 'react';
 import isEqual from 'react-fast-compare';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { IContract } from '../../../configuration/IContract';
-import { IProduct } from '../../../configuration/IProduct';
+import { IContract } from './IContract';
+import { IProduct } from '../order/IProduct';
 
 import RequestUtil from '../../../utils/RequestUtil';
 import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../../../utils/SummaryRenderUtil';
@@ -20,7 +20,7 @@ interface IContractSummaryParamsProps {
 }
 
 interface IContractSummaryProps {
-    readonly baseInfo?: IContractBaseInfo;
+    readonly baseInfo?: IContractGeneral;
     readonly orderItems?: IOrderItem[];
     readonly sysInfo?: IContract;
 }
@@ -28,7 +28,7 @@ interface IContractSummaryProps {
 interface IContractSummaryRouteProps extends RouteComponentProps<IContractSummaryParamsProps>, IContractSummaryProps {}
 interface IContractSummaryState extends IContractSummaryProps {}
 
-export interface IContractBaseInfo extends IContract {
+export interface IContractGeneral extends IContract {
     readonly customerInfoVo?: ICustomerInfoDto;
     readonly regionName?: string;
 }
@@ -91,7 +91,7 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
      * @returns base info grid 
      */
     private getBaseInfoGrid(): IRenderedGrid {
-        const baseInfo: IContractBaseInfo | undefined = this.state.baseInfo;
+        const baseInfo: IContractGeneral | undefined = this.state.baseInfo;
         return {
             labelCol: {
                 span: 4

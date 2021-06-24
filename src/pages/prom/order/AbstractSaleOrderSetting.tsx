@@ -16,8 +16,8 @@ import styles from './AbstractSaleOrderSetting.module.less'
 import ContractSelectionComponent from '../../../components/ContractSelectionModal';
 import { DataType } from '../../../components/AbstractSelectableModal';
 import { currencyTypeOptions, productTypeOptions, taxRateOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
-import { IProduct } from '../../../configuration/IProduct';
-import { IContract } from '../../../configuration/IContract';
+import { IProduct } from './IProduct';
+import { IContract } from '../contract/IContract';
 import layoutStyles from '../../../layout/Layout.module.less';
 
 export interface IAbstractSaleOrderSettingState extends IAbstractFillableComponentState {

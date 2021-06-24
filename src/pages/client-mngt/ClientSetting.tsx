@@ -6,7 +6,7 @@ import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { IFormItemGroup } from '../../components/AbstractFillableComponent';
-import { IClient } from '../../configuration/IClient';
+import { IClient } from './IClient';
 
 import RequestUtil from '../../utils/RequestUtil';
 import AbstractClientSetting, { IAbstractClientSettingState } from './AbstractClientSetting';
