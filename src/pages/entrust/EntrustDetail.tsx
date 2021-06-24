@@ -98,6 +98,14 @@ export interface IAttachVo {
     readonly description?: string;
 }
  
+enum EntrustStatus {
+    TO_BE_RELEASED = 1, //待发布
+    TO_BE_RECEIVED = 2, //待接收
+    TO_BE_APPROVAL = 3, //待立项
+    UNDER_REVIEW = 4, //审核中
+    HAVE_IN_HAND = 5, //进行中
+    COMPLETED = 6, //已完成
+}
 
 
 
@@ -228,7 +236,7 @@ export interface IAttachVo {
                 )
             }
         }];
-        if(this.state.entrust?.status == 5 || this.state.entrust?.status == 6){
+        if(this.state.entrust?.status == EntrustStatus.HAVE_IN_HAND || this.state.entrust?.status == EntrustStatus.COMPLETED){
             extra.push({
                 title:'塔进度信息',
                 render:():React.ReactNode => {
@@ -418,7 +426,7 @@ export interface IAttachVo {
                         <Row>
                             <List
                                 size="large"
-                                className={ this.state.entrust?.status!==6?entrustStyles.card_part_right_list:entrustStyles.card_part_right_list1 }
+                                className={ this.state.entrust?.status !== EntrustStatus.COMPLETED ? entrustStyles.card_part_right_list : entrustStyles.card_part_right_list1 }
                                 dataSource={ entrust?.entrustMessageVoList }
                                 renderItem={ (item: IEntrustMessageVo) => 
                                     <List.Item>
