@@ -81,7 +81,12 @@ export default abstract class AbstractClientSetting<P extends RouteComponentProp
                 rules: [{
                     required: true,
                     message: '请输入客户名称'
-                }],
+                },
+                {
+                  pattern: /^[^\s]*$/,
+                  message: '禁止输入空格',
+                }
+        ],
                 children: <Input maxLength={100}/>
             }, {
                 label: '客户类型',
@@ -115,6 +120,10 @@ export default abstract class AbstractClientSetting<P extends RouteComponentProp
                 rules: [{
                     required: true,
                     message: '请输入联系人姓名'
+                },
+                {
+                  pattern: /^[^\s]*$/,
+                  message: '禁止输入空格',
                 }],
                 children: <Input maxLength={20}/>
             }, {
@@ -122,6 +131,7 @@ export default abstract class AbstractClientSetting<P extends RouteComponentProp
                 name: 'phone',
                 rules: [{
                     required: true,
+                    message: '请输入手机号'
                     // validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
                     //     this.checkcustomerPhone(value).then(res => {
                     //         if (res) {
@@ -131,6 +141,10 @@ export default abstract class AbstractClientSetting<P extends RouteComponentProp
                     //         }
                     //     })
                     // }
+                },
+                {
+                  pattern: /^[^\s]*$/,
+                  message: '禁止输入空格',
                 }],
                 initialValue: client?.phone,
                 children: <Input maxLength={20}/>
