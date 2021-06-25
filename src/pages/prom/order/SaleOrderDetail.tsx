@@ -71,7 +71,7 @@ class SaleOrderDetail extends AbstractDetailComponent<IContractDetailRouteProps,
     }
 
     public deleteOrder = async (): Promise<void> => {
-        const resData: IResponseData = await RequestUtil.delete('/tower-market/saleOrder', {id: this.props.match.params.id})
+        const resData: IResponseData = await RequestUtil.delete(`/tower-market/saleOrder?id=${ this.props.match.params.id }`)
         if(resData) {
             this.props.history.push(`/prom/order`);
         }
