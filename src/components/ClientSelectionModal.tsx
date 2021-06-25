@@ -11,6 +11,7 @@ import styles from './AbstractSelectableModal.module.less';
 import RequestUtil from '../utils/RequestUtil';
 import AbstractFilteredSelectionModal from './AbstractFilteredSelecableModal';
 import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from './AbstractSelectableModal';
+import { clientTypeOptions } from '../configuration/DictionaryOptions';
 
 const { Option } = Select;
 
@@ -80,8 +81,11 @@ export default class ClientSelectionComponent extends AbstractFilteredSelectionM
                 name: 'type',
                 children:
                     <Select placeholder="请选择客户类型" className={ styles.select_width }>
-                        <Option value="0">国内</Option>
-                        <Option value="1">国际</Option>
+                        { clientTypeOptions && clientTypeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={ index } value={ id }>
+                                { name }
+                            </Select.Option>
+                        }) }
                     </Select>
             },{
                 name: 'name',
@@ -104,8 +108,14 @@ export default class ClientSelectionComponent extends AbstractFilteredSelectionM
             title: '客户类型',
             width: '25%',
             dataIndex: 'type',
-            render: (type: number): React.ReactNode => {
-                return  type === 1 ? '国内客户' : '国际客户';
+            render: (type: number | string): React.ReactNode => {
+                return  clientTypeOptions && clientTypeOptions.map(({ id, name }, index) => {
+                    if(id === type) {
+                        return name
+                    } else {
+                        return ""
+                    }
+                })
             }
         }, {
             key: 'name',

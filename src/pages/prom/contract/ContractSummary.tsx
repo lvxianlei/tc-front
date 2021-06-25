@@ -14,6 +14,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import SummaryRenderUtil, { IRenderdSummariableItem, IRenderedGrid } from '../../../utils/SummaryRenderUtil';
 import { ICustomerInfoDto } from './AbstractContractSetting';
 import styles from './ContractSummary.module.less';
+import { ChargeType } from '../order/AbstractSaleOrderSetting';
 
 interface IContractSummaryParamsProps {
     readonly id: string;
@@ -149,7 +150,7 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
                 value: baseInfo?.regionName
             }], [{
                 label: '计价方式',
-                value: baseInfo?.chargeType === '0' ? '订单总价、总重计算单价' : '产品单价、基数计算总价'
+                value: baseInfo?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ? '订单总价、总重计算单价' : '产品单价、基数计算总价'
             }, {
                 label: '合同总价',
                 value: baseInfo?.contractAmount
