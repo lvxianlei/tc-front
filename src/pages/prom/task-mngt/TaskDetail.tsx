@@ -14,10 +14,12 @@ import { ITask } from '../../ITask';
  
  export interface ITaskDetailProps {
      readonly id: string;
+     readonly status: string;
  }
  export interface ITaskDetailRouteProps extends RouteComponentProps<ITaskDetailProps> {}
  export interface ITaskDetailState {
-    readonly task?:ITaskInfo
+    readonly task?:ITaskInfo,
+    
  }
  
  export interface ITaskInfo extends ITask {
@@ -80,20 +82,30 @@ import { ITask } from '../../ITask';
          }];
      }
  
-     
+     //delete-row
+     public handleDelete = async(id: string) => {
+        //接口
+        await RequestUtil.delete(`/tower-market/taskNotice?id=${id}`);
+        this.props.history.push('/prom/task');
+     };
      /**
       * @implements
       * @description Renders operation area
       * @returns operation area 
       */
      public renderOperationArea(): React.ReactNode | React.ReactNode[] {
+         const { status } = this.props.match.params;
          return [
              <Button key="new" href="/prom/task/new">新增</Button>,
-             <Button key="edit" href={ `/prom/task/edit/${ this.props.match.params.id }`}>编辑</Button>,
-             <ConfirmableButton key="delete" confirmTitle="要删除该合同吗？">删除</ConfirmableButton>,
-             <Button key="special" href={ `/prom/task/special/${ this.props.match.params.id }`}>完善特殊要求</Button>,
-             <Button key="product" href={ `/prom/task/product/${ this.props.match.params.id }`}>完善产品信息</Button>,
-             <Button key="new" href={ `/prom/task/edit/${ this.props.match.params.id }`}>变更产品信息</Button>,
+             <Button key="edit" href={ `/prom/task/edit/${ this.props.match.params.id }`} disabled={ status !== '1' }>编辑</Button>,
+             <ConfirmableButton confirmTitle="要删除该数据吗？" type="link" placement="topRight" onConfirm={() => this.handleDelete(this.props.match.params.id)} >
+                <Button disabled={ status !== '1' }>
+                    删除
+                </Button>
+             </ConfirmableButton>,
+             <Button key="special" href={ `/prom/task/special/${ this.props.match.params.id }`} disabled={ status !== '2' }>完善特殊要求</Button>,
+             status !=='4' ? <Button key="product" href={ `/prom/task/product/${ this.props.match.params.id }`} disabled={ status !== '3' }>完善产品信息</Button>:<Button key="change" href={ `/prom/task/product/${ this.props.match.params.id }`}>变更产品信息</Button>,
+             
          ];
      }
  
