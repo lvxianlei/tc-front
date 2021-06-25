@@ -498,11 +498,12 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     }],
                     children: (
                         <Select onChange={ (value: number) => {
-                            this.getForm()?.setFieldsValue({ countryCode: value, regionInfoDTO: [] })
+                            this.getForm()?.setFieldsValue({ countryCode: value, regionInfoDTO: [], region: [] })
                             this.setState({
                                 contract: {
                                     ...(contract || {}),
-                                    countryCode: value
+                                    countryCode: value,
+                                    region: []
                                 }
                             })
                         } }>
