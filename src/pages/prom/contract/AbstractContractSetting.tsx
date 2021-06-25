@@ -266,8 +266,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 message.info('计划回款总占比不得大于100%！');
                 planValue[index] = {
                     ...planValue[index],
-                    returnedRate: 100 - (totalRate - planValue[index].returnedRate),
-                    returnedAmount: contractAmount - (totalAmount - planValue[index].returnedAmount ) 
+                    returnedRate: parseFloat((100 - (totalRate - planValue[index].returnedRate)).toFixed(2)),
+                    returnedAmount: parseFloat((contractAmount - (totalAmount - planValue[index].returnedAmount )).toFixed(2)) 
                 }
                 this.getForm()?.setFieldsValue({
                     planValue: planValue
@@ -308,6 +308,15 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 this.getForm()?.setFieldsValue({
                     planValue: planValue
                 })
+            } else if(totalAmount === contractAmount) {
+                planValue[index] = {
+                    ...planValue[index],
+                    returnedRate: parseFloat((100 - (totalRate - planValue[index].returnedRate)).toFixed(2)),
+                    returnedAmount: contractAmount - (totalAmount - planValue[index].returnedAmount ) 
+                }
+                this.getForm()?.setFieldsValue({
+                    planValue: planValue
+                })
             }
         }
     }
@@ -318,25 +327,14 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     public contractAmountBlur(): void  {
         let planValue: IPaymentPlanDto[] = this.getForm()?.getFieldsValue(true).paymentPlanDtos;
         const contractAmount: number = this.getForm()?.getFieldValue("contractAmount");
-        if(this.state.contract.planType === planType.AMOUNT) {
-            planValue.map<void>((item: IPaymentPlanDto, index: number): void => {
-                if(this.getForm()?.getFieldValue("contractAmount") && planValue[index] && planValue[index].returnedAmount) {
-                    planValue[index] = {
-                        ...planValue[index],
-                        returnedRate: parseFloat((planValue[index].returnedAmount / contractAmount * 100).toFixed(2))
-                    }
+        planValue.map<void>((item: IPaymentPlanDto, index: number): void => {
+            if(this.getForm()?.getFieldValue("contractAmount") && planValue[index] && planValue[index].returnedRate) {
+                planValue[index] = {
+                    ...planValue[index],
+                    returnedAmount: parseFloat((contractAmount * planValue[index].returnedRate * 0.01).toFixed(2))
                 }
-            })
-        } else {
-            planValue.map<void>((item: IPaymentPlanDto, index: number): void => {
-                if(this.getForm()?.getFieldValue("contractAmount") && planValue[index] && planValue[index].returnedRate) {
-                    planValue[index] = {
-                        ...planValue[index],
-                        returnedAmount: parseFloat((contractAmount * planValue[index].returnedRate * 0.01).toFixed(2))
-                    }
-                }  
-            })
-        }
+            }  
+        })
         this.getForm()?.setFieldsValue({
             planValue: planValue
         })
