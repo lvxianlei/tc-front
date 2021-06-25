@@ -121,7 +121,7 @@
         "exact": true
     }, { // 查看任务单
         "name": "查看任务单",
-        "path": "/prom/task/view/:id",
+        "path": "/prom/task/view/:id&:status",
         "module": "./pages/prom/task-mngt/TaskDetail",
         "exact": true
     }, { // 用户管理
