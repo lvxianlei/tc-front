@@ -429,7 +429,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     children: 
                         <>
                             <Input value={ contract?.customerInfoDto?.customerCompany } suffix={ 
-                                <ClientSelectionComponent onSelect={ this.onCustomerCompanySelect } />
+                                <ClientSelectionComponent onSelect={ this.onCustomerCompanySelect } selectKey={ [contract.customerInfoDto?.customerId] }/>
                             }/>
                         </>
                 }, {
@@ -453,7 +453,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     children:
                         <>
                             <Input value={ contract?.signCustomerName } suffix={ 
-                                <ClientSelectionComponent onSelect={ this.onSelect } />
+                                <ClientSelectionComponent onSelect={ this.onSelect } selectKey={ [contract.signCustomerId] }/>
                             }/>
                         </>
                 }, {
@@ -834,11 +834,13 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                 <Button type="primary" onClick={ ()=> {
                                                     let checked: any[] = this.state.checkList;
                                                     let attachInfoDtos: IAttachDTO[] =  this.state.contract?.attachInfoDtos;
-                                                    attachInfoDtos.map<IAttachDTO>((items: IAttachDTO, index: number): IAttachDTO | any=> {
-                                                        if(checked.includes(index)){
-                                                            window.open(items.filePath)
-                                                        }
-                                                    })
+                                                    if(attachInfoDtos) {
+                                                        attachInfoDtos.map<IAttachDTO>((items: IAttachDTO, index: number): IAttachDTO | any=> {
+                                                            if(checked.includes(index)){
+                                                                window.open(items.filePath)
+                                                            }
+                                                        })
+                                                    }
                                                 } }>下载</Button>
                                                 <Button type="primary" onClick={ async ()=> {
                                                     let attachInfoDtos: any[] =  this.getForm()?.getFieldValue("attachInfoDtos");

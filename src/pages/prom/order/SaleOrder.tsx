@@ -13,6 +13,11 @@ export interface IPromContractProps {}
 export interface IPromContractWithRouteProps extends RouteComponentProps<IPromContractProps>, WithTranslation {}
 export interface IPromContractState extends IAbstractMngtComponentState {
     readonly tableDataSource: ITableDataItem[];
+    readonly ordersNumber?: string;
+    readonly internalNumber?: string;
+    readonly projectName?: string;
+    readonly customerCompany?: string;
+    readonly signCustomerName?: string;
 }
 
 interface ITableDataItem {
@@ -175,7 +180,13 @@ class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps, IProm
      * @param pagination 
      */
     public onTableChange(pagination: TablePaginationConfig): void {
-        this.fetchTableData({}, pagination);
+        this.fetchTableData({
+            ordersNumber: this.state.ordersNumber,
+            internalNumber: this.state.internalNumber,
+            projectName: this.state.projectName,
+            customerCompany: this.state.customerCompany,
+            signCustomerName: this.state.signCustomerName
+        }, pagination);
     }
     
      

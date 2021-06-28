@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import styles from '../../../components/AbstractSelectableModal.module.less';
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../../components/AbstractMngtComponent';
 import { ITabItem } from '../../../components/ITabableComponent';
-import { winBidTypeOptions } from '../../../configuration/DictionaryOptions';
+import { saleTypeOptions, winBidTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IContract } from '../../IContract';
 import RequestUtil from '../../../utils/RequestUtil';
 
@@ -17,6 +17,11 @@ export interface IPromContractProps {}
 export interface IPromContractWithRouteProps extends RouteComponentProps<IPromContractProps>, WithTranslation {}
 export interface IPromContractState extends IAbstractMngtComponentState {
     readonly tableDataSource: IContract[];
+    readonly internalNumber?: string;
+    readonly projectName?: string;
+    readonly customerCompany?: string;
+    readonly signCustomerName?: string;
+    readonly winBidType?: string;
 }
 
 export interface IResponseData {
@@ -52,7 +57,7 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize ||this.state.tablePagination?.pageSize,
-            countryCode: this.state.selectedTabKey
+            saleType: this.state.selectedTabKey === 'item_0' ? '' : this.state.selectedTabKey
         });
         if(resData?.records?.length == 0 && resData?.current>1){
             this.fetchTableData({},{
@@ -183,7 +188,13 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
      * @param pagination 
      */
     public onTableChange(pagination: TablePaginationConfig): void {
-        this.fetchTableData({}, pagination);
+        this.fetchTableData({ 
+            internalNumber: this.state.internalNumber, 
+            projectName: this.state.projectName,
+            customerCompany: this.state.customerCompany,
+            signCustomerName: this.state.signCustomerName,
+            winBidType: this.state.winBidType
+        }, pagination);
     }
      
     /**
@@ -207,16 +218,19 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
      * @returns tab items 
      */
     public getTabItems(): ITabItem[] {
-        return [{
+        let tab = [{
             label: '全部',
-            key: ""
-        }, {
-            label: '国内业务',
-            key: 0
-        }, {
-            label: '国际业务',
-            key: 1
+            key: 'item_0'
         }];
+        if(saleTypeOptions){
+            saleTypeOptions.map(item =>{
+                 tab.push({
+                    key: item.id,
+                    label: item.name,
+                }) 
+            })
+        }
+        return tab;
     }
 
     /**

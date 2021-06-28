@@ -57,14 +57,14 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
             internalNumber: contract.internalNumber,
             projectName: contract.projectName,
             simpleProjectName: contract.simpleProjectName,
-            winBidType: contract.winBidType,
-            saleType: contract.saleType,
+            winBidType: contract.winBidType === -1 ? '' : contract.winBidType,
+            saleType: contract.saleType === -1 ? '' : contract.saleType,
             signCustomerName: contract.signCustomerName,
             signContractTime: contract.signContractTime && moment(contract.signContractTime),
             signUserName: contract.signUserName,
             deliveryTime: contract.deliveryTime && moment(contract.deliveryTime),
             reviewTime: contract.reviewTime && moment(contract.reviewTime),
-            chargeType: contract.chargeType,
+            chargeType: contract.chargeType === -1 ? '' : contract.chargeType,
             salesman: contract.salesman,
             region: contract.region || [],
             countryCode: contract.countryCode,
@@ -77,8 +77,8 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
             customerCompany: contract.customerInfoVo?.customerCompany,
             customerLinkman: contract.customerInfoVo?.customerLinkman,
             customerPhone: contract.customerInfoVo?.customerPhone,
-            productType: contract?.productType,
-            voltageGrade: contract?.voltageGrade
+            productType: contract?.productType == -1 ? '' : contract?.productType,
+            voltageGrade: contract?.voltageGrade === -1 ? '' : contract?.voltageGrade
         });
         const region: string[] | undefined = this.state.contract.region;
         let regionInfoData: IRegion[] =  this.state.regionInfoData;

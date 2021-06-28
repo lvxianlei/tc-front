@@ -57,7 +57,7 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize ||this.state.tablePagination?.pageSize,
-            type: this.state.selectedTabKey
+            type: this.state.selectedTabKey === 'item_0' ? '' : this.state.selectedTabKey
         });
         if(resData?.records?.length == 0 && resData?.current>1){
             this.fetchTableData({},{
@@ -184,7 +184,7 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
     public getTabItems(): ITabItem[] {
         let tab = [{
             label: '全部客户',
-            key: ''
+            key: 'item_0'
         }];
         if(clientTypeOptions){
             clientTypeOptions.map(item =>{
