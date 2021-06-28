@@ -143,7 +143,12 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
                                     sort: record.sort,
                                     status: e.target.checked ? 1 : 2
                                 }
-                                await RequestUtil.put(`/tower-system/dictionary/updateSortOrEnable`,[values]);
+                                if(e.target.checked!==e.target.defaultChecked){
+                                    await RequestUtil.put(`/tower-system/dictionary/updateSortOrEnable`,[values]);
+                                    this.getDataSourceFromTab(this.state.selectedTab);
+                                }
+                                
+                        
                             }} 
                             defaultChecked={ text === 1 }
                         />;
