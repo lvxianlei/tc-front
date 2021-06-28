@@ -766,7 +766,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                     accept=".doc,.docx,.pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/png,image/jpeg,.txt,.xls,.xlsx"
                                                     action={ () => {
                                                         const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                                                        return baseUrl+'sinzetech-resource/oss/put-file'
+                                                        return baseUrl+'/sinzetech-resource/oss/put-file'
                                                     } } 
                                                     headers={
                                                         {
