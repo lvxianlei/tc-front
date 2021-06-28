@@ -560,7 +560,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                         required: true,
                         message: '请输入合同总价'
                     }],
-                    children: <InputNumber min="0.01" step="0.01" stringMode={ false } precision={ 2 } prefix="￥" onChange={ () => this.contractAmountBlur() } className={ layoutStyles.width100 }/>
+                    children: <InputNumber min="0.01" max="10000000000.00" step="0.01" stringMode={ false } precision={ 2 } prefix="￥" onChange={ () => this.contractAmountBlur() } className={ layoutStyles.width100 }/>
                 }, {
                     label: '币种',
                     name: 'currencyType',
