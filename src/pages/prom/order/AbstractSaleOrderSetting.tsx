@@ -478,7 +478,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 name: 'taxRate',
                 initialValue: saleOrder?.taxRate,
                 children: 
-                    <Select showSearch onSearch={ this.addNewOption } onChange={ this.getAmount }  disabled={ readonly }>
+                    <Select showSearch onSearch={ this.addNewOption } onChange={ this.getAmount }  disabled={ readonly } getPopupContainer={ triggerNode => triggerNode.parentNode }>
                         {
                             this.state.newOption ? 
                             <Select.Option key={ this.state.newOption.value } value={ this.state.newOption.label }>{ this.state.newOption.value }</Select.Option> 
@@ -651,7 +651,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                         </li>
                                                         <li>
                                                             <Form.Item { ...field } name={[field.name, 'productType']} fieldKey={[field.fieldKey, 'productType']}>
-                                                                <Select disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 }>
+                                                                <Select disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 } getPopupContainer={ triggerNode => triggerNode.parentNode }>
                                                                     { productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                                                                         return <Select.Option key={ index } value={ id }>
                                                                             { name }
@@ -678,7 +678,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                                         </li>
                                                         <li>
                                                             <Form.Item { ...field } name={[field.name, 'voltageGrade']} fieldKey={[field.fieldKey, 'voltageGrade']}>
-                                                                <Select style={{ width: '90%' }} disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 }>
+                                                                <Select style={{ width: '90%' }} disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 } getPopupContainer={ triggerNode => triggerNode.parentNode }>
                                                                     { voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
                                                                         return <Select.Option key={ index } value={ id }>
                                                                             { name }

@@ -397,7 +397,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     name: 'winBidType', 
                     initialValue: contract?.winBidType,
                     children: (
-                        <Select>
+                        <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
                             { winBidTypeOptions && winBidTypeOptions.map(({ id, name }, index) => {
                                 return <Select.Option key={ index } value={ id }>
                                     { name }
@@ -410,7 +410,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     name: 'saleType',
                     initialValue: contract?.saleType,
                     children: (
-                        <Select>
+                        <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
                             { saleTypeOptions && saleTypeOptions.map(({ id, name }, index) => {
                                 return <Select.Option key={ index } value={ id }>
                                     { name }
@@ -506,7 +506,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                     region: []
                                 }
                             })
-                        } }>
+                        } }
+                        getPopupContainer={ triggerNode => triggerNode.parentNode }>
                             <Select.Option value={ 0 }>中国</Select.Option>
                             <Select.Option value={ 1 }>海外</Select.Option>
                         </Select>
@@ -529,7 +530,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                         message: '请选择选择计价方式'
                     }],
                     children: (
-                        <Select>
+                        <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
                             <Select.Option value={ 0 }>订单总价、总重计算单价</Select.Option>
                             <Select.Option value={ 1 }>产品单价、基数计算总价</Select.Option>
                         </Select>
@@ -569,7 +570,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                         message: '请选择币种'
                     }],
                     children: (
-                        <Select>
+                        <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
                             { currencyTypeOptions && currencyTypeOptions.map(({ id, name }, index) => {
                                 return <Select.Option key={ index } value={ id }>
                                     { name }
@@ -592,7 +593,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                         name: 'productType',
                         initialValue: contract?.productType,
                         children: (
-                            <Select>
+                            <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
                                 { productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                                     return <Select.Option key={ index } value={ id }>
                                         { name }
@@ -605,7 +606,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                         name: 'voltageGrade',
                         initialValue: contract?.voltageGrade,
                         children: (
-                            <Select style={{ width: '90%' }}>
+                            <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
                                 { voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
                                     return <Select.Option key={ index } value={ id }>
                                         { name }KV
@@ -778,7 +779,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                         (file) => {
                                                             const isLt10M = file.size / 1024 / 1024 > 10;
                                                             return new Promise((resolve, reject) => {
-                                                                if(this.state.contract.attachInfoDtos.length >= 10 ) {
+                                                                if(this.state.contract.attachInfoDtos && this.state.contract.attachInfoDtos.length >= 10 ) {
                                                                     message.error('文件最多上传10个！')
                                                                     reject()
                                                                 } else {

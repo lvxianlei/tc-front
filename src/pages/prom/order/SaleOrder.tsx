@@ -233,23 +233,23 @@ class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps, IProm
     public getFilterFormItemProps(item: ITabItem): FormItemProps[] {
         return [{
             name: 'ordersNumber',
-            children: <Input placeholder="订单编号关键词" maxLength={ 200 }/>
+            children: <Input placeholder="订单编号关键词" maxLength={ 200 } autoComplete="off"/>
         },
         {
             name: 'internalNumber',
-            children: <Input placeholder="内部合同编号关键词" maxLength={ 200 }/>
+            children: <Input placeholder="内部合同编号关键词" maxLength={ 200 } autoComplete="off"/>
         },
         {
             name: 'projectName',
-            children: <Input placeholder="工程名称关键词" maxLength={ 200 }/>
+            children: <Input placeholder="工程名称关键词" maxLength={ 200 } autoComplete="off"/>
         },
         {
             name: 'customerCompany',
-            children: <Input placeholder="业主单位关键词" maxLength={ 200 }/>
+            children: <Input placeholder="业主单位关键词" maxLength={ 200 } autoComplete="off"/>
         },
         {
             name: 'signCustomerName',
-            children: <Input placeholder="合同签订单位关键词" maxLength={ 200 }/>
+            children: <Input placeholder="合同签订单位关键词" maxLength={ 200 } autoComplete="off"/>
         }];
     }
 }
