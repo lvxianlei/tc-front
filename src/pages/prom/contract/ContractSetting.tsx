@@ -127,11 +127,11 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
         const planValue: IPaymentPlanDto[] = this.getForm()?.getFieldsValue(true).paymentPlanDtos;
         let totalRate: number = 0;
         planValue.map<number>((item: IPaymentPlanDto): number => {
-            return totalRate = Number(item.returnedRate) + Number(totalRate);
+            return totalRate = Number(item.returnedRate) + Number(totalRate.toFixed(2));
         })
         let totalAmount: number = 0;
         planValue.map<number>((item: IPaymentPlanDto): number => {
-            return  totalAmount = Number(item.returnedAmount) + Number(totalAmount);
+            return  totalAmount = Number(item.returnedAmount) + Number(totalAmount.toFixed(2));
         })
         values.customerInfoDto = {
             ...(this.state.contract?.customerInfoDto),
@@ -149,10 +149,10 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
             };
         });
         values.signCustomerId = this.state.contract?.signCustomerId;
-        if( values.planType === planType.PROPORTION && totalRate < 100 && totalRate > 100) {
+        if( values.planType === planType.PROPORTION && totalRate < 100 || totalRate > 100) {
             message.error('计划回款总占比必须等于100');
             return Promise.reject(false);
-        } else if( values.planType === planType.AMOUNT && totalAmount < values.contractAmount && totalAmount > values.contractAmount ) {
+        } else if( values.planType === planType.AMOUNT && totalAmount < values.contractAmount || totalAmount > values.contractAmount ) {
             message.error('计划回款总金额必须等于合同总价');
             return Promise.reject(false);
         } else {
