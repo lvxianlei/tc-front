@@ -13,6 +13,10 @@ import { ITask } from '../../ITask';
  export interface ITaskMngtWithRouteProps extends RouteComponentProps<ITaskMngtProps>, WithTranslation {}
  export interface ITaskMngtState extends IAbstractMngtComponentState {
      readonly tableDataSource: ITask[];
+     readonly internalNumber: string;
+     readonly taskNumber: string;
+     readonly projectName: string;
+     readonly saleOrderNumber: string;
  }
  
  interface IResponseData {
@@ -184,7 +188,13 @@ import { ITask } from '../../ITask';
      * @param pagination 
      */
     public onTableChange(pagination: TablePaginationConfig): void {
-        this.fetchTableData({},pagination);
+        const { internalNumber, projectName, saleOrderNumber, taskNumber } = this.state;
+        this.fetchTableData({
+            internalNumber,
+            projectName, 
+            saleOrderNumber, 
+            taskNumber
+        }, pagination);
     }
     
      //delete-row
@@ -200,7 +210,12 @@ import { ITask } from '../../ITask';
       * @param values 
       */
      public async onFilterSubmit(values: Record<string, any>) {
-         this.fetchTableData(values);
+         this.fetchTableData(values,{
+            current: 1,
+            pageSize: 10,
+            total: 0,
+            showSizeChanger: false
+        });
      }
  
      /**
