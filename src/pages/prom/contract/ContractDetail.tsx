@@ -126,7 +126,10 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
                 okText="确认"
                 cancelText="取消" 
                 onConfirm={ async () => {
-                    const resData: IResponseData = await RequestUtil.delete(`/tower-market/contract?id=${ this.props.match.params.id }`)
+                    const resData: IResponseData = await RequestUtil.delete(`/tower-market/contract?id=${ this.props.match.params.id }`);
+                    if(resData) {
+                        this.props.history.push(`/prom/contract`);
+                    }
                 } } 
                 disabled = { this.state.detail.contractStatus === 1 }
             >
