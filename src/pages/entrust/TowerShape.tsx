@@ -13,6 +13,8 @@ export interface ITowerShapeState extends IAbstractMngtComponentState {
     readonly tableDataSource: ITableDataItem[];
     readonly isVisible?: boolean;
     readonly attachData?: IAttachData[];
+    readonly towerName?: string;
+    readonly projectName?: string;
 }
 
 interface ITableDataItem {
@@ -204,7 +206,10 @@ class TowerShape extends AbstractMngtComponent<ITowerShapeWithRouteProps, ITower
      * @param pagination 
      */
     public onTableChange(pagination: TablePaginationConfig): void {
-        this.fetchTableData({}, pagination);
+        this.fetchTableData({
+            projectName: this.state.projectName,
+            towerName: this.state.towerName
+        }, pagination);
     }
 
     /**

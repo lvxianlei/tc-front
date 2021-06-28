@@ -22,6 +22,9 @@ import EntrustSetting from './EntrustSetting';
  export interface IEntrustListState extends IAbstractMngtComponentState {
      readonly tableDataSource: IEntrustDataItem[];
      readonly name?: string;
+     readonly projectNum?: string;
+     readonly projectName?: string;
+     readonly status?: string | number;
  }
  
  interface IEntrustDataItem {
@@ -332,7 +335,10 @@ import EntrustSetting from './EntrustSetting';
       * @param pagination 
       */
      public onTableChange(pagination: TablePaginationConfig): void {
-         this.fetchTableData({ name: this.state.name }, pagination);
+         this.fetchTableData({ 
+            projectNum: this.state.projectNum,
+            projectName: this.state.projectName,
+            status: this.state.status }, pagination);
      }
      
      /**
