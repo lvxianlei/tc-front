@@ -97,7 +97,7 @@ export default abstract class AbstractClientSetting<P extends RouteComponentProp
                     message: '请选择客户类型'
                 }],
                 children: (
-                    <Select>
+                    <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
                         { clientTypeOptions && clientTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={ index } value={ id }>
                                 { name }

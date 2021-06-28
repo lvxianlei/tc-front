@@ -249,7 +249,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 name: 'refundMode',
                 initialValue: paymentRecord?.refundMode,
                 children:
-                    <Select>
+                    <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
                         { refundModeOptions && refundModeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={ index } value={ id }>
                                 { name }
@@ -270,7 +270,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 name: 'currencyType',
                 initialValue: paymentRecord?.currencyType,
                 children: 
-                    <Select>
+                    <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
                         { currencyTypeOptions && currencyTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={ index } value={ id }>
                                 { name }

@@ -308,7 +308,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             dataIndex: 'refundMode',
             editable: true,
             type: (
-                <Select>
+                <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
                     { refundModeOptions && refundModeOptions.map(({ id, name }, index) => {
                         return <Select.Option key={ index } value={ id }>
                             { name }
@@ -335,7 +335,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             dataIndex: 'currencyType',
             editable: true,
             type: (
-                <Select>
+                <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
                     { currencyTypeOptions && currencyTypeOptions.map(({ id, name }, index) => {
                         return <Select.Option key={ index } value={ id }>
                             { name }
