@@ -9,6 +9,7 @@ import PopModalButton from './PopModalButton';
 export interface IAbstractSelectableModalProps {
     readonly onSelect: (selectedRows: DataType[]) => void;
     readonly id?: number | string;
+    readonly selectKey?:  React.Key[] | any;
 }
 
 export interface IAbstractSelectableModalState {
@@ -92,6 +93,7 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
     public showModal =  (): void => {
         this.setState({
             isModalVisible: true,
+            selectedRowKeys: this.props.selectKey
         })
     }
 
@@ -156,7 +158,8 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
                     onOk={ 
                         () => {
                             this.setState ({
-                                isModalVisible: false
+                                isModalVisible: false,
+                                selectedRowKeys: []
                             })
                            { this.props.onSelect(this.state.selectedRows) }
                         }
