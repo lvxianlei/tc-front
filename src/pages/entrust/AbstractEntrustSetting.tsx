@@ -134,7 +134,7 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
                         multiple={ true } 
                         action= { () => {
                             const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                            return baseUrl+'sinzetech-resource/oss/put-file'
+                            return baseUrl+'/sinzetech-resource/oss/put-file'
                         } } 
                         headers={
                             {
