@@ -43,7 +43,7 @@ export default abstract class AbstractFilteredSelecableModal<P extends IAbstract
      * @param pagination 
      */
     public onTableChange = (pagination: TablePaginationConfig): void => {
-        this.getTable({}, pagination);
+        this.getTable({ ...this.getForm()?.getFieldsValue(true) }, pagination);
     }
 
     protected onReset = (): void => {

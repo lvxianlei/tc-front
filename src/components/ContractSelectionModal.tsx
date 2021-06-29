@@ -11,6 +11,7 @@ import styles from './AbstractSelectableModal.module.less';
 import RequestUtil from '../utils/RequestUtil';
 import AbstractFilteredSelectionModal from './AbstractFilteredSelecableModal';
 import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from './AbstractSelectableModal';
+import { saleTypeOptions } from '../configuration/DictionaryOptions';
 
 const { Option } = Select;
 
@@ -71,17 +72,21 @@ export default class ContractSelectionComponent extends AbstractFilteredSelectio
  
     public getFilterFormItemProps(): FormItemProps[]  {
         return [{
-                name: 'type',
-                children: 
-                <Select placeholder="请选择业务类型" className={ styles.select_width }>
-                    <Option value="0" >国内业务</Option>
-                    <Option value="1">国际业务</Option>
+            name: 'saleType',
+            children: 
+                <Select placeholder="请选择中标类型" className={ styles.select_width } getPopupContainer={ triggerNode => triggerNode.parentNode }>
+                    { saleTypeOptions && saleTypeOptions.map(({ id, name }, index) => {
+                        return <Option key={ index } value={ id }>
+                            { name }
+                        </Option>
+                    }) }
                 </Select>
-            },{
-                name: 'name',
+            
+        },{
+                name: 'projectName',
                 children: <Input placeholder="工程名称关键字"/>
             }, {
-                name: 'name',
+                name: 'customerCompany',
                 children: <Input placeholder="业主单位关键字"/>
             }];
     }
@@ -104,12 +109,9 @@ export default class ContractSelectionComponent extends AbstractFilteredSelectio
             title: '工程名称',
             dataIndex: 'projectName'
         }, {
-            key: 'saleType',
+            key: 'saleTypeName',
             title: '销售类型',
-            dataIndex: 'saleType',
-            render: (saleType: number): React.ReactNode => {
-                return  saleType === 1 ? '国内客户' : '国际客户';
-            }
+            dataIndex: 'saleTypeName'
         }, {
             key: 'customerCompany',
             title: '业主单位',
