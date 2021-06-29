@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Button, DatePicker, Form, FormInstance, Input, InputNumber, message, Select, Space, Table, TableColumnType } from 'antd';
+import { Button, DatePicker, Form, FormInstance, Input, InputNumber, message, Popconfirm, Select, Space, Table, TableColumnType } from 'antd';
 import React from 'react';
 // import ClientSelectionComponent from '../../../components/ClientSelectionModal';
 import ConfirmableButton from '../../../components/ConfirmableButton';
@@ -398,12 +398,19 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                     </Space>
                     :
                     <Space direction="horizontal" size="small">
-                        <Button type="link" htmlType="button" disabled={ this.state.editingKey !== '' } onClick={ this.editRow(record, index) }>编辑</Button>
-                        <ConfirmableButton confirmTitle="要删除该条回款计划吗？"
-                            type="link" placement="topRight"
-                            onConfirm={ this.deletePlan(record, index) }>
-                            删除
-                        </ConfirmableButton>
+                        <Button type="link" htmlType="button" disabled={ this.state.editingKey !== '' || this.props.contractStatus === 0  } onClick={ this.editRow(record, index) }>编辑</Button>
+                        <Popconfirm 
+                            title="要删除该条回款计划吗？" 
+                            placement="topRight" 
+                            okText="确认"
+                            cancelText="取消"
+                            onConfirm={ this.deletePlan(record, index) } 
+                            disabled={ this.props.contractStatus === 0 }
+                        >
+                            <Button type="link" disabled={ this.props.contractStatus === 0 }>
+                                删除
+                            </Button>
+                        </Popconfirm>
                     </Space>
                 )
             }   
