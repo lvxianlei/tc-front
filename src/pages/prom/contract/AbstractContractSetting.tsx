@@ -272,6 +272,15 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 this.getForm()?.setFieldsValue({
                     planValue: planValue
                 })
+            } else if(totalRate === 100) {
+                planValue[index] = {
+                    ...planValue[index],
+                    returnedRate: parseFloat((100 - (totalRate - planValue[index].returnedRate)).toFixed(2)),
+                    returnedAmount: parseFloat((contractAmount - (totalAmount - planValue[index].returnedAmount )).toFixed(2)) 
+                }
+                this.getForm()?.setFieldsValue({
+                    planValue: planValue
+                })
             }
         }
     }
