@@ -51,10 +51,16 @@ class ContractNew extends AbstractContractSetting<IContractNewRouteProps, IContr
             customerPhone: values.customerPhone
         };
         values.signCustomerId = this.state.contract?.signCustomerId;
-        if( values.planType === planType.PROPORTION && totalRate < 100 || totalRate > 100) {
+        if( totalRate < 100) {
             message.error('计划回款总占比必须等于100');
             return Promise.reject(false);
-        } else if( values.planType === planType.AMOUNT && totalAmount < values.contractAmount || totalAmount > values.contractAmount ) {
+        } else if( totalRate > 100 ) {
+            message.error('计划回款总占比必须等于100');
+            return Promise.reject(false);
+        } else if( totalAmount < values.contractAmount ) {
+            message.error('计划回款总金额必须等于合同总价');
+            return Promise.reject(false);
+        } else if( totalAmount > values.contractAmount ) {
             message.error('计划回款总金额必须等于合同总价');
             return Promise.reject(false);
         } else {
