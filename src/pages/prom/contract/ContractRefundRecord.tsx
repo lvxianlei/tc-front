@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Button, DatePicker, Form, FormInstance, Input, InputNumber, Select, Space, Table, TableColumnType } from 'antd';
+import { Button, DatePicker, Form, FormInstance, Input, InputNumber, message, Select, Space, Table, TableColumnType } from 'antd';
 import React from 'react';
 // import ClientSelectionComponent from '../../../components/ClientSelectionModal';
 import ConfirmableButton from '../../../components/ConfirmableButton';
@@ -21,6 +21,7 @@ export interface IContractRefundRecord {
 
 export interface IContractRefundRecordProps extends IContractRefundRecord {
     onDeleted?: () => void;
+    readonly contractStatus?: number;
 }
 export interface IContractRefundRecordState extends IContractRefundRecord {
     readonly editingKey?: string;
@@ -142,7 +143,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
      */
     private renderExtraInBar(index: number): React.ReactNode {
         return (
-            <Button type="primary" onClick={ this.addRecord(index) }>添加</Button>
+            <Button type="primary" onClick={ this.addRecord(index) } disabled={ this.props.contractStatus === 0 }>添加</Button>
         );
     }
 
@@ -294,17 +295,17 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
      */
     private getChargingRecordColumns(): EditTableColumnType<object>[] {
         return [{
-            title: '来款时间',
+            title: '* 来款时间',
             dataIndex: 'refundTime',
             editable: true,
             type: <DatePicker showTime format="YYYY-MM-DD HH:mm" />
         }, {
-            title: '来款单位',
+            title: '* 来款单位',
             dataIndex: 'customerName',
             editable: true,
             type: <Input suffix={ <ClientSelectionComponent onSelect={ this.onSelect } />} />
         }, {
-            title: '来款方式',
+            title: '* 来款方式',
             dataIndex: 'refundMode',
             editable: true,
             type: (
@@ -326,12 +327,12 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                 })
             }
         }, {
-            title: '来款金额（￥）',
+            title: '* 来款金额（￥）',
             dataIndex: 'refundAmount',
             editable: true,
             type: <Input />
         }, {
-            title: '币种',
+            title: '* 币种',
             dataIndex: 'currencyType',
             editable: true,
             type: (
@@ -356,7 +357,10 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             title: '汇率',
             dataIndex: 'exchangeRate',
             editable: true,
-            type: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } className={ layoutStyles.width100 }/>
+            type: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } className={ layoutStyles.width100 }/>,
+            render: (exchangeRate: number | string): React.ReactNode => {
+                return exchangeRate === -1 ? '' : exchangeRate
+            }
         }, {
             title: '外币金额',
             dataIndex: 'foreignExchangeAmount',
@@ -402,8 +406,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                         </ConfirmableButton>
                     </Space>
                 )
-            }
-                
+            }   
         }];
     }
 
@@ -521,7 +524,22 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                 }],
                 renderExtraInBar: (): React.ReactNode => this.renderExtraInBar(index),
                 render: (): React.ReactNode => (
-                    <Form ref={ this.form } key={ Math.random() } onFinish={ this.save }>
+                    <Form ref={ this.form } key={ Math.random() } onFinish={ () => {
+                        const values = this.getForm()?.getFieldsValue(true);
+                        if(!values.customerName) {
+                            message.warning('请选择来款单位')
+                        } else if ( !values.refundTime) {
+                            message.warning('请选择来款时间')
+                        } else if ( !values.refundMode) {
+                            message.warning('请选择来款方式') 
+                        } else if ( values.refundAmount === undefined) {
+                            message.warning('请选择来款金额')
+                        } else if ( !values.currencyType) {
+                            message.warning('请选择币种')
+                        } else {
+                            this.save(values)
+                        }
+                    }}>
                         <Table
                             rowKey="id"
                             dataSource={ item.paymentRecordVos }
