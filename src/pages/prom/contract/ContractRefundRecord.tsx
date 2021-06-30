@@ -25,6 +25,7 @@ export interface IContractRefundRecordProps extends IContractRefundRecord {
 }
 export interface IContractRefundRecordState extends IContractRefundRecord {
     readonly editingKey?: string;
+    readonly isUpdate?: boolean;
 }
 
 interface IPaymentPlanVo {
@@ -89,7 +90,8 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
      */
     public state: IContractRefundRecordState = {
         paymentPlanVos: [],
-        editingKey: ''
+        editingKey: '',
+        isUpdate: false
     };
 
     /**
@@ -100,12 +102,12 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
      * @returns derived state from props 
      */
     static getDerivedStateFromProps(props: IContractRefundRecordProps, prevState: IContractRefundRecordState): IContractRefundRecordState | null {
-        // if (!prevState.paymentPlanVos || !prevState.paymentPlanVos.length) {
+        if (!prevState.paymentPlanVos || !prevState.paymentPlanVos.length || prevState.isUpdate) {
             return {
                 paymentPlanVos: [ ...(props.paymentPlanVos || []) ]
             }
-        // }
-        // return null;
+        }
+        return null;
     }
 
     /**
@@ -131,7 +133,8 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                 paymentPlanId: this.state.paymentPlanVos[index].id
             });
             this.setState({
-                paymentPlanVos: [ ...paymentPlanVos ]
+                paymentPlanVos: [ ...paymentPlanVos ],
+                isUpdate: false
             });
         }
     }
@@ -173,7 +176,8 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
         return (e: React.MouseEvent<HTMLButtonElement>): void => {
             e.preventDefault();
             this.setState({
-                editingKey: record.paymentPlanId + '-' + index
+                editingKey: record.paymentPlanId + '-' + index,
+                isUpdate: false
             });
         };
     }
@@ -192,6 +196,9 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                 const data: boolean = await RequestUtil.delete<boolean>(`/tower-market/paymentRecord/${ record.id }`);
                 if(data && this.props.onDeleted) {
                     this.props.onDeleted();
+                    this.setState({
+                        isUpdate: true
+                    })
                 }
                 paymentRecordVos.splice(index, 1);
                 this.setState({
@@ -214,7 +221,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
         const keyParts: string [] = (this.state.editingKey || '').split('-');
         const paymentPlanId: string = keyParts[0];
         const tableIndex: string = keyParts[1];
-        if( selectedRows.length > 0 ) {
+        if( selectedRows && selectedRows.length > 0 ) {
             paymentPlanVos = paymentPlanVos.map<IPaymentPlanVo>((items: IPaymentPlanVo): IPaymentPlanVo => {
                 if(items.id === paymentPlanId) {
                     return {
@@ -261,7 +268,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                 message.warning('请选择来款方式') 
                 return Promise.reject(false);
             } else if ( !values.refundAmount) {
-                message.warning('请选择来款金额')
+                message.warning('请输入来款金额')
                 return Promise.reject(false);
             } else if ( !values.currencyType) {
                 message.warning('请选择币种')
@@ -301,6 +308,9 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                 });
                 if(this.props.onDeleted) {
                     this.props.onDeleted();
+                    this.setState({
+                        isUpdate: true
+                    })
                 }
             }
         } catch(e) {}   
@@ -562,7 +572,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                     <Form ref={ this.form } key={ Math.random() } onFinish={ this.save }>
                         <Table
                             rowKey="id"
-                            dataSource={ item.paymentRecordVos }
+                            dataSource={ [...item.paymentRecordVos] }
                             columns={ this.getMergedColumns() } 
                             bordered={ true }
                             pagination={ false }
