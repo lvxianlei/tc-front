@@ -269,10 +269,6 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 label: '外币金额',
                 name: 'foreignExchangeAmount',
                 initialValue: paymentRecord?.foreignExchangeAmount,
-                rules: [{
-                    required: true,
-                    message: '请输入外币金额'
-                }],
                 children: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } className={ layoutStyles.width100 }/>
             }, {
                 label: '收款银行',
