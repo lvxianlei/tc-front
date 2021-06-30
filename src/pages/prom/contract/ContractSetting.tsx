@@ -127,11 +127,11 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
         const planValue: IPaymentPlanDto[] = this.getForm()?.getFieldsValue(true).paymentPlanDtos;
         let totalRate: number = 0;
         planValue.map<number>((item: IPaymentPlanDto): number => {
-            return totalRate = Number(item.returnedRate) + Number(totalRate.toFixed(2));
+            return totalRate = parseFloat((Number(item.returnedRate) + Number(totalRate)).toFixed(2));
         })
         let totalAmount: number = 0;
         planValue.map<number>((item: IPaymentPlanDto): number => {
-            return  totalAmount = Number(item.returnedAmount) + Number(totalAmount.toFixed(2));
+            return  totalAmount = parseFloat((Number(item.returnedAmount) + Number(totalAmount)).toFixed(2));
         })
         values.customerInfoDto = {
             ...(this.state.contract?.customerInfoDto),
@@ -149,6 +149,7 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
             };
         });
         values.signCustomerId = this.state.contract?.signCustomerId;
+        console.log(totalAmount,values.contractAmount)
         if( totalRate < 100) {
             message.error('计划回款总占比必须等于100');
             return Promise.reject(false);

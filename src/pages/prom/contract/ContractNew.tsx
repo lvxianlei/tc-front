@@ -29,11 +29,11 @@ class ContractNew extends AbstractContractSetting<IContractNewRouteProps, IContr
         const planValue: IPaymentPlanDto[] = this.getForm()?.getFieldsValue(true).paymentPlanDtos;
         let totalRate: number = 0;
         planValue.map<number>((item: IPaymentPlanDto): number => {
-            return totalRate = Number(item.returnedRate) + Number(totalRate.toFixed(2));
+            return totalRate = parseFloat((Number(item.returnedRate) + Number(totalRate)).toFixed(2));
         })
         let totalAmount: number = 0;
             planValue.map<number>((item: IPaymentPlanDto): number => {
-                return  totalAmount = Number(item.returnedAmount) + Number(totalAmount.toFixed(2));
+                return  totalAmount = parseFloat((Number(item.returnedAmount) + Number(totalAmount)).toFixed(2));
             })
         values.signContractTime = values.signContractTime && moment(values.signContractTime).format('YYYY-MM-DD');
         values.deliveryTime = values.deliveryTime && moment(values.deliveryTime).format('YYYY-MM-DD');
