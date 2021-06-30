@@ -100,12 +100,12 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
      * @returns derived state from props 
      */
     static getDerivedStateFromProps(props: IContractRefundRecordProps, prevState: IContractRefundRecordState): IContractRefundRecordState | null {
-        if (!prevState.paymentPlanVos || !prevState.paymentPlanVos.length) {
+        // if (!prevState.paymentPlanVos || !prevState.paymentPlanVos.length) {
             return {
                 paymentPlanVos: [ ...(props.paymentPlanVos || []) ]
             }
-        }
-        return null;
+        // }
+        // return null;
     }
 
     /**
@@ -251,40 +251,57 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
      */
     public save = async (values: Record<string, any>) => {
         try {
-            const keyParts: string [] = (this.state.editingKey || '').split('-');
-            const paymentPlanId: string = keyParts[0];
-            const paymentPlanVos: IPaymentPlanVo[] = (this.state.paymentPlanVos || []);
-            const paymentPlanVo: IPaymentPlanVo = paymentPlanVos.filter(item => item.id === paymentPlanId)[0];
-            let paymentRecordVos: IPaymentRecordVo[] = paymentPlanVo.paymentRecordVos;
-            const customerId: string| number | undefined = paymentRecordVos[ values.index as number ].customerId;
-            values = {
-                ...values,
-                refundTime: moment(values.refundTime).format('YYYY-MM-DD HH:mm'),
-                customerId: customerId,
-                contractId: paymentPlanVo.contractId,
-                paymentPlanId: paymentPlanVo.id,
-            }
-            if (values.id) { // edit
-                await RequestUtil.put<boolean>('/tower-market/paymentRecord', values);
-                paymentPlanVo.paymentRecordVos = paymentRecordVos.map<IPaymentRecordVo>((paymentRecordVo: IPaymentRecordVo): IPaymentRecordVo => {
-                    if (paymentRecordVo.id === values.id) {
-                        return {
-                            ...paymentRecordVo,
-                            ...values
-                        };
-                    }
-                    return paymentRecordVo;
+            if(!values.customerName) {
+                message.warning('请选择来款单位')
+                return Promise.reject(false);
+            } else if ( !values.refundTime) {
+                message.warning('请选择来款时间')
+                return Promise.reject(false);
+            } else if ( !values.refundMode) {
+                message.warning('请选择来款方式') 
+                return Promise.reject(false);
+            } else if ( !values.refundAmount) {
+                message.warning('请选择来款金额')
+                return Promise.reject(false);
+            } else if ( !values.currencyType) {
+                message.warning('请选择币种')
+                return Promise.reject(false);
+            } else {
+                const keyParts: string [] = (this.state.editingKey || '').split('-');
+                const paymentPlanId: string = keyParts[0];
+                const paymentPlanVos: IPaymentPlanVo[] = (this.state.paymentPlanVos || []);
+                const paymentPlanVo: IPaymentPlanVo = paymentPlanVos.filter(item => item.id === paymentPlanId)[0];
+                let paymentRecordVos: IPaymentRecordVo[] = paymentPlanVo.paymentRecordVos;
+                const customerId: string| number | undefined = paymentRecordVos[ values.index as number ].customerId;
+                values = {
+                    ...values,
+                    refundTime: moment(values.refundTime).format('YYYY-MM-DD HH:mm'),
+                    customerId: customerId,
+                    contractId: paymentPlanVo.contractId,
+                    paymentPlanId: paymentPlanVo.id,
+                }
+                if (values.id) { // edit
+                    await RequestUtil.put<boolean>('/tower-market/paymentRecord', values);
+                    paymentPlanVo.paymentRecordVos = paymentRecordVos.map<IPaymentRecordVo>((paymentRecordVo: IPaymentRecordVo): IPaymentRecordVo => {
+                        if (paymentRecordVo.id === values.id) {
+                            return {
+                                ...paymentRecordVo,
+                                ...values
+                            };
+                        }
+                        return paymentRecordVo;
+                    });
+                } else { // add a new
+                    const newPlan: IPaymentPlanVo = await RequestUtil.post<IPaymentPlanVo>('/tower-market/paymentRecord', values);
+                    paymentRecordVos[values.index as number] = newPlan;
+                }
+                this.setState({
+                    paymentPlanVos: [ ...paymentPlanVos ],
+                    editingKey: ''
                 });
-            } else { // add a new
-                const newPlan: IPaymentPlanVo = await RequestUtil.post<IPaymentPlanVo>('/tower-market/paymentRecord', values);
-                paymentRecordVos[values.index as number] = newPlan;
-            }
-            this.setState({
-                paymentPlanVos: [ ...paymentPlanVos ],
-                editingKey: ''
-            });
-            if(this.props.onDeleted) {
-                this.props.onDeleted();
+                if(this.props.onDeleted) {
+                    this.props.onDeleted();
+                }
             }
         } catch(e) {}   
     }
@@ -298,16 +315,19 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             title: '* 来款时间',
             dataIndex: 'refundTime',
             editable: true,
+            width: 150,
             type: <DatePicker showTime format="YYYY-MM-DD HH:mm" />
         }, {
             title: '* 来款单位',
             dataIndex: 'customerName',
             editable: true,
+            width: 200,
             type: <Input suffix={ <ClientSelectionComponent onSelect={ this.onSelect } />} />
         }, {
             title: '* 来款方式',
             dataIndex: 'refundMode',
             editable: true,
+            width: 150,
             type: (
                 <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
                     { refundModeOptions && refundModeOptions.map(({ id, name }, index) => {
@@ -330,11 +350,13 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             title: '* 来款金额（￥）',
             dataIndex: 'refundAmount',
             editable: true,
-            type: <Input />
+            width: 150,
+            type: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } className={ layoutStyles.width100 }/>
         }, {
             title: '* 币种',
             dataIndex: 'currencyType',
             editable: true,
+            width: 200,
             type: (
                 <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
                     { currencyTypeOptions && currencyTypeOptions.map(({ id, name }, index) => {
@@ -357,6 +379,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             title: '汇率',
             dataIndex: 'exchangeRate',
             editable: true,
+            width: 150,
             type: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } className={ layoutStyles.width100 }/>,
             render: (exchangeRate: number | string): React.ReactNode => {
                 return exchangeRate === -1 ? '' : exchangeRate
@@ -365,20 +388,25 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             title: '外币金额',
             dataIndex: 'foreignExchangeAmount',
             editable: true,
+            width: 150,
             type: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } className={ layoutStyles.width100 }/>
         }, {
             title: '收款银行',
             dataIndex: 'refundBank',
             editable: true,
+            width: 200,
             type: <Input/>
         }, {
             title: '备注',
             dataIndex: 'description',
             editable: true,
+            width: 200,
             type: <Input.TextArea rows={ 5 } maxLength={ 300 }/>
         }, {
             title: '操作',
             dataIndex: 'operation',
+            width: 200,
+            fixed: 'right',
             render: (oper: undefined, record: Record<string, any>, index: number) =>{
                 const editing: boolean = this.isEditing(record.paymentPlanId + '-' + index);
                 return (
@@ -531,22 +559,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                 }],
                 renderExtraInBar: (): React.ReactNode => this.renderExtraInBar(index),
                 render: (): React.ReactNode => (
-                    <Form ref={ this.form } key={ Math.random() } onFinish={ () => {
-                        const values = this.getForm()?.getFieldsValue(true);
-                        if(!values.customerName) {
-                            message.warning('请选择来款单位')
-                        } else if ( !values.refundTime) {
-                            message.warning('请选择来款时间')
-                        } else if ( !values.refundMode) {
-                            message.warning('请选择来款方式') 
-                        } else if ( values.refundAmount === undefined) {
-                            message.warning('请选择来款金额')
-                        } else if ( !values.currencyType) {
-                            message.warning('请选择币种')
-                        } else {
-                            this.save(values)
-                        }
-                    }}>
+                    <Form ref={ this.form } key={ Math.random() } onFinish={ this.save }>
                         <Table
                             rowKey="id"
                             dataSource={ item.paymentRecordVos }
@@ -558,6 +571,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                                     cell: this.getEditableCell
                                 }
                             }}
+                            scroll={{ x: 1500 }}
                         />
                     </Form>
                 )
