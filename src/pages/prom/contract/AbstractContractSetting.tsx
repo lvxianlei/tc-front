@@ -342,7 +342,33 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     ...planValue[index],
                     returnedAmount: parseFloat((contractAmount * planValue[index].returnedRate * 0.01).toFixed(2))
                 }
-            }  
+                let totalRate: number = 0;
+                planValue.map<number>((item: IPaymentPlanDto): number => {
+                    return totalRate = Number(item.returnedRate) + Number(totalRate.toFixed(2));
+                })
+                let totalAmount: number = 0;
+                planValue.map<number>((item: IPaymentPlanDto): number => {
+                    return totalAmount = Number(item.returnedAmount) + Number(totalAmount.toFixed(2));
+                })
+                if(totalAmount > contractAmount) {
+                    planValue[index] = {
+                        ...planValue[index],
+                        returnedAmount: parseFloat((contractAmount - (totalAmount - planValue[index].returnedAmount )).toFixed(2)) 
+                    }
+                    this.getForm()?.setFieldsValue({
+                        planValue: planValue
+                    })
+                } else if(totalAmount === contractAmount) {
+                    planValue[index] = {
+                        ...planValue[index],
+                        returnedAmount: parseFloat((contractAmount - (totalAmount - planValue[index].returnedAmount )).toFixed(2)) 
+                    }
+                    this.getForm()?.setFieldsValue({
+                        planValue: planValue
+                    })
+                }
+            } 
+
         })
         this.getForm()?.setFieldsValue({
             planValue: planValue
