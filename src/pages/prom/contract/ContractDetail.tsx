@@ -157,7 +157,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
         }, {
             label: '回款记录',
             key: 3,
-            content: <ContractRefundRecord paymentPlanVos={ this.state.detail.paymentPlanVos } onDeleted={ () => this.fetchTableData() } />
+            content: <ContractRefundRecord paymentPlanVos={ [...this.state.detail.paymentPlanVos] } contractStatus={ this.state.detail.contractStatus } onDeleted={ () => this.fetchTableData() } />
         }];
     }
 }

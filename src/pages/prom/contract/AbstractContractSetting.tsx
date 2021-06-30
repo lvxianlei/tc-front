@@ -276,7 +276,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 planValue[index] = {
                     ...planValue[index],
                     returnedRate: parseFloat((100 - (totalRate - planValue[index].returnedRate)).toFixed(2)),
-                    returnedAmount: parseFloat((contractAmount - (totalAmount - planValue[index].returnedAmount )).toFixed(2)) 
+                    returnedAmount: parseFloat((contractAmount - (totalAmount - planValue[index].returnedAmount )).toFixed(2))
                 }
                 this.getForm()?.setFieldsValue({
                     planValue: planValue
@@ -301,18 +301,18 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             })
             let totalRate: number = 0;
             planValue.map<number>((item: IPaymentPlanDto): number => {
-                return totalRate = Number(item.returnedRate) + Number(totalRate);
+                return totalRate = Number(item.returnedRate) + Number(totalRate.toFixed(2));
             })
             let totalAmount: number = 0;
             planValue.map<number>((item: IPaymentPlanDto): number => {
-                return totalAmount = Number(item.returnedAmount) + Number(totalAmount);
+                return totalAmount = Number(item.returnedAmount) + Number(totalAmount.toFixed(2));
             })
             if(totalAmount > contractAmount) {
                 message.info('计划回款总金额不得大于合同总价！');
                 planValue[index] = {
                     ...planValue[index],
-                    returnedRate: 100 - (totalRate - planValue[index].returnedRate),
-                    returnedAmount: contractAmount - (totalAmount - planValue[index].returnedAmount ) 
+                    returnedRate: parseFloat((100 - (totalRate - planValue[index].returnedRate)).toFixed(2)),
+                    returnedAmount: parseFloat((contractAmount - (totalAmount - planValue[index].returnedAmount )).toFixed(2)) 
                 }
                 this.getForm()?.setFieldsValue({
                     planValue: planValue
@@ -321,7 +321,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 planValue[index] = {
                     ...planValue[index],
                     returnedRate: parseFloat((100 - (totalRate - planValue[index].returnedRate)).toFixed(2)),
-                    returnedAmount: contractAmount - (totalAmount - planValue[index].returnedAmount ) 
+                    returnedAmount: parseFloat((contractAmount - (totalAmount - planValue[index].returnedAmount )).toFixed(2)) 
                 }
                 this.getForm()?.setFieldsValue({
                     planValue: planValue
@@ -701,6 +701,14 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                             <Form.Item { ...field } name={[field.name, 'returnedRate']} fieldKey={[field.fieldKey, 'returnedRate']} rules={[{
                                                                 required: this.state.contract?.planType === planType.PROPORTION || this.state.contract?.planType === undefined,
                                                                 message: '请输入计划回款占比'
+                                                            }, {
+                                                                validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                                                                    if ( value > 0) {
+                                                                        callback()
+                                                                    } else {
+                                                                        callback('计划回款占比需大于0')
+                                                                    }
+                                                                }
                                                             }]}>
                                                                 <InputNumber 
                                                                     stringMode={ false } 
@@ -716,6 +724,14 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                             <Form.Item { ...field } name={[field.name, 'returnedAmount']} fieldKey={[field.fieldKey, 'returnedAmount']} rules={[{
                                                                 required: this.state.contract?.planType === planType.AMOUNT,
                                                                 message: '请输入计划回款金额'
+                                                            }, {
+                                                                validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                                                                    if (this.state.contract?.planType === planType.AMOUNT && value > 0) {
+                                                                        callback()
+                                                                    } else {
+                                                                        callback('计划回款金额需大于0')
+                                                                    }
+                                                                }
                                                             }]}>
                                                                 <InputNumber 
                                                                     stringMode={ false } 
