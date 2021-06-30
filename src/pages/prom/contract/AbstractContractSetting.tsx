@@ -703,7 +703,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                 message: '请输入计划回款占比'
                                                             }, {
                                                                 validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
-                                                                    if ( value > 0) {
+                                                                    if (value > 0) {
                                                                         callback()
                                                                     } else {
                                                                         callback('计划回款占比需大于0')
@@ -726,7 +726,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                 message: '请输入计划回款金额'
                                                             }, {
                                                                 validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
-                                                                    if (this.state.contract?.planType === planType.AMOUNT && value > 0) {
+                                                                    if (value > 0) {
                                                                         callback()
                                                                     } else {
                                                                         callback('计划回款金额需大于0')
