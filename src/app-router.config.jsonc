@@ -40,7 +40,7 @@
         "module": "./pages/prom/contract/ContractSetting",
         "exact": true
     }, { // 新增回款计划
-        "name": "新增回款计划",
+        "name": "新增回款记录",
         "path": "/prom/contract/paymentRecord/:id/:projectName/:signCustomerId/:signCustomerName",
         "module": "./pages/prom/contract/PaymentRecordNew",
         "exact": true

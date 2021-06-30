@@ -44,6 +44,7 @@ export interface IPaymentRecord {
     readonly returnedAmount?: number;
     readonly refundNumber?: number;
     readonly customerId?: string | number;
+    readonly period?: string | number;
 }
 
 export interface IResponseData {
@@ -101,31 +102,6 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
             this.getForm()?.setFieldsValue({ customerName: selectedRows[0].name })
         }
     }
-
-    /**
-     * @override
-     * @description 合同弹窗
-     * @returns 
-     */
-     public onContractSelect = (selectedRows: DataType[] | any):void => {
-        const paymentRecord: IPaymentRecord | undefined = this.state.paymentRecord;
-        if(selectedRows.length > 0 ) {
-            this.setState({
-                paymentRecord: {
-                    ...(paymentRecord || {}),
-                    customerId: selectedRows[0].signCustomerId,
-                    projectName: selectedRows[0].projectName, 
-                    contractId: selectedRows[0].id,
-                    customerName: selectedRows[0].signCustomerName
-                },
-                id: selectedRows[0].id
-            })
-            this.getForm()?.setFieldsValue({ 
-                projectName: selectedRows[0].projectName, 
-                contractId: selectedRows[0].id,
-                customerName: selectedRows[0].signCustomerName })
-        }
-    }
     
     /**
      * @override
@@ -142,14 +118,15 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                     returnedTime: selectedRows[0].returnedTime,
                     returnedRate: selectedRows[0].returnedRate,
                     returnedAmount: selectedRows[0].returnedAmount,
+                    period: selectedRows[0].period
                 },
-                id: selectedRows[0].id
             })
             this.getForm()?.setFieldsValue({ 
                 paymentPlanId: selectedRows[0].id,
                 returnedTime: moment(selectedRows[0].returnedTime),
                 returnedRate: selectedRows[0].returnedRate,
-                returnedAmount: selectedRows[0].returnedAmount, })
+                returnedAmount: selectedRows[0].returnedAmount,
+                period: selectedRows[0].period })
         }
     }
 
@@ -175,9 +152,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 }],
                 children: 
                     <>
-                        <Input value={ paymentRecord?.contractId } suffix={ 
-                            <ContractSelectionComponent onSelect={ this.onContractSelect }/>
-                        }/>
+                        <Input value={ paymentRecord?.contractId } disabled/>
                     </>
             }, {
                 label: '工程名称',
@@ -197,21 +172,21 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
             children: 
                 <>
                     <Input value={ paymentRecord?.customerName } suffix={ 
-                        <ClientSelectionComponent onSelect={ this.onSelect }/>
+                        <ClientSelectionComponent onSelect={ this.onSelect } selectKey={ [paymentRecord?.customerId]}/>
                     }/>
                 </>
         },  {
             label: '回款计划',
-            name: 'paymentPlanId',
-            initialValue: paymentRecord?.paymentPlanId,
+            name: 'period',
+            initialValue: paymentRecord?.period,
             rules: [{
                 required: true,
                 message: '请选择回款计划'
             }],
             children: 
                 <>
-                    <Input value={ paymentRecord?.paymentPlanId } suffix={ 
-                        <PaymentPlanSelectionComponent onSelect={ this.onPlanSelect } id={ this.state.id }/>
+                    <Input value={ paymentRecord?.period } suffix={ 
+                        <PaymentPlanSelectionComponent onSelect={ this.onPlanSelect } id={ this.state.id } selectKey={ [paymentRecord?.paymentPlanId]}/>
                     }/>
                 </>
         }, {
@@ -269,6 +244,10 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 label: '币种',
                 name: 'currencyType',
                 initialValue: paymentRecord?.currencyType,
+                rules: [{
+                    required: true,
+                    message: '请选择币种'
+                }],
                 children: 
                     <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
                         { currencyTypeOptions && currencyTypeOptions.map(({ id, name }, index) => {

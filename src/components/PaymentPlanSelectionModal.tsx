@@ -37,6 +37,7 @@ export default class PaymentPlanSelectionComponent extends AbstractSelectableMod
     public showModal =  (): void => {
         this.setState({
             isModalVisible: true,
+            selectedRowKeys: this.props.selectKey
         })
         this.getTable()
     }
@@ -76,6 +77,6 @@ export default class PaymentPlanSelectionComponent extends AbstractSelectableMod
     }
 
     protected getTableRowKey(): string | GetRowKey<object> {
-        return 'period';
+        return 'id';
     }
 }
