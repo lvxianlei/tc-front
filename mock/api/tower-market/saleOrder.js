@@ -6,7 +6,7 @@ const records = [];
 for (let i = 1; i < 10; ++i) {
     records.push({
         "id": Random.increment(),
-        "ordersNumber":  Random.natural(15),
+        "saleOrderNumber":  Random.natural(15),
         "internalNumber":  Random.natural(11),
         "projectName": Random.cword(5,10),
         "chargeType|1-2": 1,
@@ -24,7 +24,7 @@ module.exports = {
     data: {
         records: [{
             "id": 5,
-            "ordersNumber":  Random.natural(15),
+            "saleOrderNumber":  Random.natural(15),
             "internalNumber":  Random.natural(11),
             "projectName": Random.cword(5,10),
             "chargeType|1-2": 1,

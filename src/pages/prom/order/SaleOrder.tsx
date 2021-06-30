@@ -13,7 +13,7 @@ export interface IPromContractProps {}
 export interface IPromContractWithRouteProps extends RouteComponentProps<IPromContractProps>, WithTranslation {}
 export interface IPromContractState extends IAbstractMngtComponentState {
     readonly tableDataSource: ITableDataItem[];
-    readonly ordersNumber?: string;
+    readonly saleOrderNumber?: string;
     readonly internalNumber?: string;
     readonly projectName?: string;
     readonly customerCompany?: string;
@@ -22,7 +22,7 @@ export interface IPromContractState extends IAbstractMngtComponentState {
 
 interface ITableDataItem {
     readonly id: number;
-    readonly ordersNumber: string;
+    readonly saleOrderNumber: string;
     readonly internalNumber: string;
     readonly projectName: string;
     readonly chargeType: number;
@@ -116,11 +116,11 @@ class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps, IProm
      */
     public getTableColumns(item: ITabItem): TableColumnType<object>[] {
         return [{
-            key: 'ordersNumber',
+            key: 'saleOrderNumber',
             title: '订单编号',
-            dataIndex: 'ordersNumber',
+            dataIndex: 'saleOrderNumber',
             render: (_: undefined, record: object): React.ReactNode => {
-                    return <Link to={ `/prom/order/detail/${ (record as ITableDataItem).id }` }>{ (record as ITableDataItem).id }</Link>
+                    return <Link to={ `/prom/order/detail/${ (record as ITableDataItem).id }` }>{ (record as ITableDataItem).saleOrderNumber }</Link>
             }
         }, {
             key: 'internalNumber',
@@ -181,7 +181,7 @@ class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps, IProm
      */
     public onTableChange(pagination: TablePaginationConfig): void {
         this.fetchTableData({
-            ordersNumber: this.state.ordersNumber,
+            saleOrderNumber: this.state.saleOrderNumber,
             internalNumber: this.state.internalNumber,
             projectName: this.state.projectName,
             customerCompany: this.state.customerCompany,

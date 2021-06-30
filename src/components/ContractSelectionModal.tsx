@@ -74,7 +74,7 @@ export default class ContractSelectionComponent extends AbstractFilteredSelectio
         return [{
             name: 'saleType',
             children: 
-                <Select placeholder="请选择中标类型" className={ styles.select_width } getPopupContainer={ triggerNode => triggerNode.parentNode }>
+                <Select placeholder="请选择销售类型" className={ styles.select_width } getPopupContainer={ triggerNode => triggerNode.parentNode }>
                     { saleTypeOptions && saleTypeOptions.map(({ id, name }, index) => {
                         return <Option key={ index } value={ id }>
                             { name }
