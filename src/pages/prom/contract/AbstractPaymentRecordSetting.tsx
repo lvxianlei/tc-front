@@ -223,6 +223,10 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 label: '来款方式',
                 name: 'refundMode',
                 initialValue: paymentRecord?.refundMode,
+                rules: [{
+                    required: true,
+                    message: '请输入来款方式'
+                }],
                 children:
                     <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
                         { refundModeOptions && refundModeOptions.map(({ id, name }, index) => {
