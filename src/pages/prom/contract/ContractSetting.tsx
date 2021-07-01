@@ -145,7 +145,7 @@ class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps
             return {
                 ...plan,
                 returnedTime: moment(plan.returnedTime).format('YYYY-MM-DD'),
-                index: index + 1
+                period: index + 1
             };
         });
         values.signCustomerId = this.state.contract?.signCustomerId;
