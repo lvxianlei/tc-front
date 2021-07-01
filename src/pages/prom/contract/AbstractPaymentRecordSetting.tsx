@@ -2,7 +2,7 @@
  * @author zyc
  * @copyright © 2021 zyc
  */
-import { DatePicker, FormProps, Input, InputNumber, Select } from 'antd';
+import { Button, DatePicker, FormProps, Input, InputNumber, Select } from 'antd';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -23,6 +23,7 @@ export interface IAbstractPaymentRecordSettingState extends IAbstractFillableCom
     readonly paymentRecord?: IPaymentRecord;
     readonly tableDataSource: [];
     readonly id: number | string;
+    readonly loading?: boolean;
 }
 
 export interface IPaymentRecord {
@@ -61,6 +62,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
 
     public state: S = {
         paymentRecord: undefined,
+        loading: false
     } as S;
 
     protected getFormProps(): FormProps {
@@ -128,6 +130,25 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 returnedAmount: selectedRows[0].returnedAmount,
                 period: selectedRows[0].period })
         }
+    }
+
+    public enterLoading(): void {
+        this.setState({
+            loading: true
+        });
+        setTimeout(() => {
+        this.setState({
+            loading: false
+        });
+        }, 6000);
+    }
+
+    /**
+     * @description Gets primary operation button
+     * @returns primary operation button
+     */
+     protected getPrimaryOperationButton(): React.ReactNode {
+        return <Button type="primary" htmlType="submit" loading={ this.state.loading }>保存</Button>;
     }
 
     /**

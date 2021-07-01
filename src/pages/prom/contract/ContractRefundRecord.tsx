@@ -26,6 +26,7 @@ export interface IContractRefundRecordProps extends IContractRefundRecord {
 export interface IContractRefundRecordState extends IContractRefundRecord {
     readonly editingKey?: string;
     readonly isUpdate?: boolean;
+    readonly loading?: boolean;
 }
 
 interface IPaymentPlanVo {
@@ -91,7 +92,8 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
     public state: IContractRefundRecordState = {
         paymentPlanVos: [],
         editingKey: '',
-        isUpdate: false
+        isUpdate: false,
+        loading: false
     };
 
     /**
@@ -177,7 +179,8 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             e.preventDefault();
             this.setState({
                 editingKey: record.paymentPlanId + '-' + index,
-                isUpdate: false
+                isUpdate: false,
+                loading: false
             });
         };
     }
@@ -251,6 +254,17 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
         }
     }
 
+    public enterLoading(): void {
+        this.setState({
+            loading: true
+        });
+        setTimeout(() => {
+            this.setState({
+                loading: false
+            });
+        }, 6000);
+    }
+
     /**
      * @description Saves contract refund record
      * @param values 
@@ -274,6 +288,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                 message.warning('请选择币种')
                 return Promise.reject(false);
             } else {
+                this.enterLoading();
                 const keyParts: string [] = (this.state.editingKey || '').split('-');
                 const paymentPlanId: string = keyParts[0];
                 const paymentPlanVos: IPaymentPlanVo[] = (this.state.paymentPlanVos || []);
@@ -426,7 +441,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                     editing
                     ?
                     <Space direction="horizontal" size="small">
-                        <Button type="link" htmlType="submit">保存</Button>
+                        <Button type="link" htmlType="submit" loading={ this.state.loading }>保存</Button>
                         <ConfirmableButton confirmTitle="要取消编辑吗？"
                             type="link" placement="topRight"
                             onConfirm={ () => { 
