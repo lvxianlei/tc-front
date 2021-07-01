@@ -141,11 +141,11 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
     }
 
     /**
-     * @description Gets primary operation button label
-     * @returns primary operation button label 
+     * @description Gets primary operation button
+     * @returns primary operation button
      */
-    protected getPrimaryOperationButtonLabel(): string {
-        return '保存';
+    protected getPrimaryOperationButton(): React.ReactNode {
+        return <Button type="primary" htmlType="submit">保存</Button>;
     }
 
     /**
@@ -211,7 +211,7 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
                         }
                         <div className={ styles.btnOperationContainer }>
                             <Space direction="horizontal" size="large">
-                                <Button type="primary" htmlType="submit">{ this.getPrimaryOperationButtonLabel() }</Button>
+                                { this.getPrimaryOperationButton() }
                                 { this.renderExtraOperationArea() }
                                 <Button type="ghost" htmlType="reset" onClick={ this.onCancel }>取消</Button>
                             </Space>

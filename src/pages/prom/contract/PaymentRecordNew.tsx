@@ -52,6 +52,7 @@ class PaymentRecordNew extends AbstractPaymentRecordSetting<IPaymentRecordNewRou
      * @returns submit 
      */
     public async onSubmit(values: Record<string, any>): Promise<void> {
+        this.enterLoading();
         values.refundTime = moment(values.refundTime).format('YYYY-MM-DD HH:mm');
         values.returnedTime =  moment(values.returnedTime).format('YYYY-MM-DD HH:mm');
         //  return Promise.resolve();

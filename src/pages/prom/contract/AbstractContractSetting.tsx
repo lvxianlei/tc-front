@@ -576,14 +576,17 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     initialValue: contract?.region,
                     rules: [{
                         required: this.getForm()?.getFieldValue('countryCode') === 1 || contract?.countryCode === 1 ? false : true,
-                        message: '请选择所属区域',
+                        message: '请选择所属区域'
+                    },{
                         validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
-                            console.log(value.length)
-                            if (value.length >= 2) {
-                                callback();
+                            if(!(this.getForm()?.getFieldValue('countryCode') === 1 || contract?.countryCode === 1)) {
+                                if (value.length >= 2) {
+                                    callback();
+                                }else {
+                                    callback('所属区域需选择到市级');
+                                }
                             } else {
-                                callback('请选择所属区域');
-                                Promise.reject('请选择所属区域');
+                                callback();
                             }
                         }
                     }],
