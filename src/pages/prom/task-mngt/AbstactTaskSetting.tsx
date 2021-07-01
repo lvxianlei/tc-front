@@ -149,7 +149,7 @@ enum StepTitleItem {
     
     //订单选择
     public onOrderSelect = (selectedRows: DataTypeMore[]):void => {
-        if(selectedRows.length > 0 ) {
+        if(selectedRows && selectedRows.length > 0 ) {
             const task:ITaskInfo = {
                 contractId: selectedRows[0].contractId,
                 customerCompany: selectedRows[0].customerCompany,
@@ -178,7 +178,7 @@ enum StepTitleItem {
     //产品选择
     public onProductSelect = (selectedRows: DataType[]):void => {
         const { productDataSource } = this.state;
-        if(selectedRows.length > 0 ) {
+        if(selectedRows && selectedRows.length > 0 ) {
             const task:IProduct[] = productDataSource || [];
             task.push(selectedRows[0])
             this.setState({

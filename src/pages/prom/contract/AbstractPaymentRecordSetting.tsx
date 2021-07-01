@@ -91,7 +91,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
      */
     public onSelect = (selectedRows: DataType[]):void => {
         const paymentRecord: IPaymentRecord | undefined = this.state.paymentRecord;
-        if(selectedRows.length > 0 ) {
+        if(selectedRows && selectedRows.length > 0 ) {
             this.setState({
                 paymentRecord: {
                     ...(paymentRecord || {}),
@@ -110,7 +110,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
      */
      public onPlanSelect = (selectedRows: DataType[] | any):void => {
         const paymentRecord: IPaymentRecord | undefined = this.state.paymentRecord;
-        if(selectedRows.length > 0 ) {
+        if(selectedRows && selectedRows.length > 0 ) {
             this.setState({
                 paymentRecord: {
                     ...(paymentRecord || {}),
