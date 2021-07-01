@@ -399,7 +399,10 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             dataIndex: 'foreignExchangeAmount',
             editable: true,
             width: 150,
-            type: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } className={ layoutStyles.width100 }/>
+            type: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } className={ layoutStyles.width100 }/>,
+            render: (foreignExchangeAmount: number | string): React.ReactNode => {
+                return foreignExchangeAmount === -1 ? '' : foreignExchangeAmount
+            }
         }, {
             title: '收款银行',
             dataIndex: 'refundBank',
@@ -529,6 +532,10 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                                 (dataIndex === 'refundTime')
                                 ? 
                                 moment(record[dataIndex])
+                                :
+                                (record[dataIndex] == -1)
+                                ?
+                                ''
                                 :
                                 record[dataIndex]
                             } 

@@ -201,7 +201,10 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
             dataIndex: 'unit'
         }, {
             title: '数量',
-            dataIndex: 'num'
+            dataIndex: 'num',
+            render: (num: number | string): React.ReactNode => {
+                return num == -1 ? '' : num;
+            }
         }, {
             title: '单价',
             dataIndex: 'price'
