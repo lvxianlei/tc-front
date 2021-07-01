@@ -122,13 +122,13 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             const paymentPlanVos: IPaymentPlanVo[] = this.state.paymentPlanVos || [];
             const paymentRecordVos: IPaymentRecordVo[] = paymentPlanVos[index].paymentRecordVos;
             paymentRecordVos.push({
-                refundTime: moment('2021-01-01 00:00'),
+                refundTime: undefined,
                 customerName: '',
                 refundMode: '',
-                refundAmount: 0,
+                refundAmount: undefined,
                 currencyType: '',
-                exchangeRate: 0,
-                foreignExchangeAmount: 0,
+                exchangeRate: undefined,
+                foreignExchangeAmount: undefined,
                 refundBank: '',
                 description: '',
                 customerId: '',
@@ -341,7 +341,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             dataIndex: 'refundTime',
             editable: true,
             width: 150,
-            type: <DatePicker showTime format="YYYY-MM-DD HH:mm" />
+            type: <DatePicker showTime/>
         }, {
             title: '* 来款单位',
             dataIndex: 'customerName',
@@ -445,8 +445,39 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                         <ConfirmableButton confirmTitle="要取消编辑吗？"
                             type="link" placement="topRight"
                             onConfirm={ () => { 
+                                let paymentPlanVos: IPaymentPlanVo[] = this.state.paymentPlanVos || [];
+                                const keyParts: string [] = (this.state.editingKey || '').split('-');
+                                const paymentPlanId: string = keyParts[0];
+                                paymentPlanVos = paymentPlanVos.map<IPaymentPlanVo>((items: IPaymentPlanVo, planIndex: number): IPaymentPlanVo => {
+                                    if(items.id === paymentPlanId) {
+                                        return {
+                                            ...items,
+                                            paymentRecordVos: items.paymentRecordVos.map<IPaymentRecordVo>((item: IPaymentRecordVo, ind: number): IPaymentRecordVo => {
+                                                if(item.id){
+                                                    return {
+                                                        ...item,
+                                                        customerName: this.props.paymentPlanVos[planIndex].paymentRecordVos[ind].customerName,
+                                                        customerId:  this.props.paymentPlanVos[planIndex].paymentRecordVos[ind].customerId
+                                                    };
+                                                } else {
+                                                    return {
+                                                        ...item,
+                                                        customerName: '',
+                                                        customerId: ''
+                                                    };
+                                                }
+                                            })
+                                        }
+                                    } else {
+                                        return items;
+                                    }
+                                });
+                                this.getForm()?.setFieldsValue({
+                                    customerName: ''
+                                });
                                 this.setState({
-                                    editingKey: ''
+                                    editingKey: '',
+                                    paymentPlanVos: [ ...paymentPlanVos ]
                                 })
                             } }>
                             取消
