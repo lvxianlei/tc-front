@@ -130,7 +130,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
 
     public onSelect = (selectedRows: DataType[] | any): void => {
         const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
-        if(selectedRows.length > 0 ) {
+        if(selectedRows && selectedRows.length > 0 ) {
             const modalSelectedValue: IContractInfoDto = {
                 internalNumber: selectedRows[0].internalNumber,
                 projectName: selectedRows[0].projectName,

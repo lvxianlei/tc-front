@@ -187,7 +187,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
      */
     public onSelect = (selectedRows: DataType[]):void => {
         const contract: IContractInfo | undefined = this.state.contract;
-        if(selectedRows.length > 0 ) {
+        if(selectedRows && selectedRows.length > 0 ) {
             this.setState({
                 contract: {
                     ...(contract || {}),
@@ -201,7 +201,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
 
     public onCustomerCompanySelect = (selectedRows: DataType[]):void => {
         const contract: IContractInfo | undefined = this.state.contract;
-        if(selectedRows.length > 0 ) {
+        if(selectedRows && selectedRows.length > 0 ) {
             const select = {
                 customerId: selectedRows[0].id,
                 customerCompany: selectedRows[0].name,
