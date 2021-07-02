@@ -186,7 +186,7 @@
         "exact": true
     }, { // 编辑原材料
         "name": "编辑原材料",
-        "path": "/sys/materialiew/:id",
+        "path": "/sys/material/view/:id",
         "module": "./pages/system-mngt/material/MaterialView",
         "exact": true
     }]
