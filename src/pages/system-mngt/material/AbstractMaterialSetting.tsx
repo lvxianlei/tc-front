@@ -282,6 +282,15 @@ const titleC = {
              }
          };
      }
+
+
+     /**
+     * @description Renders extra operation area
+     * @returns extra operation area 
+     */
+    protected renderExtraOperationArea(): React.ReactNode {
+        return null;
+    }
  
      /**
       * @implements

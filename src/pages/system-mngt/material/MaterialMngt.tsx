@@ -22,7 +22,7 @@ import { DataNode } from 'antd/lib/tree';
  interface IMaterialRouteProps extends RouteComponentProps<IMaterialMngtProps>, WithTranslation {}
  interface IMaterialMngtState extends IAbstractMngtComponentState, IFIlterValue {
      readonly materials: IMaterial[];
-     readonly treeData: any;
+     readonly treeData: IMaterialTree[];
      readonly selectedMaterialKeys: React.Key[];
      readonly selectedMaterials: IMaterial[];
      readonly expandKeys: React.Key[];
