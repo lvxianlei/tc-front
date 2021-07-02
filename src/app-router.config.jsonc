@@ -169,5 +169,25 @@
         "path": "/outsource/towershape",
         "module": "./pages/entrust/TowerShape",
         "exact": true
+    }, { // 原材料类型管理
+        "name": "原材料类型管理",
+        "path": "/sys/materialType",
+        "module": "./pages/system-mngt/material/MaterialTypeMngt",
+        "exact": true
+    }, { // 原材料管理
+        "name": "原材料管理",
+        "path": "/sys/material",
+        "module": "./pages/system-mngt/material/MaterialMngt",
+        "exact": true
+    }, { // 新增原材料
+        "name": "新增原材料",
+        "path": "/sys/material/new",
+        "module": "./pages/system-mngt/material/MaterialNew",
+        "exact": true
+    }, { // 编辑原材料
+        "name": "编辑原材料",
+        "path": "/sys/materialiew/:id",
+        "module": "./pages/system-mngt/material/MaterialView",
+        "exact": true
     }]
 }

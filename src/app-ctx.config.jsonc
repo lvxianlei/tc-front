@@ -51,6 +51,14 @@
                     {
                         "label": "字典管理",
                         "path": "/sys/dxnry"
+                    }, 
+                    {
+                        "label": "原材料类型管理",
+                        "path": "/sys/materialType"
+                    }, 
+                    {
+                        "label": "原材料管理",
+                        "path": "/sys/material"
                     }]
                 }, {
                     "label": "权限管理",

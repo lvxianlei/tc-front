@@ -1,0 +1,48 @@
+{
+	"code": 200,
+	"msg": "",
+	"success": true,
+	"data": [{
+		"bigCategory": "laboris incididunt",
+		"materialCategory": 68672345,
+		"materialCode": "aliqua sit in reprehenderi",
+		"materialTexture": "sunt e",
+		"middleCategory": "ut",
+		"productName": "in ex sunt",
+		"proportion": 25720171.31555842,
+		"rowMaterial": "est Lorem et",
+		"shortcutCode": "consequat dolor",
+		"smallCategory": "aliquip",
+		"spec": "laborum commodo mollit consectetur quis",
+		"unit": -87618066,
+		"weightAlgorithm": "aliquip officia cillum nostrud"
+	},{
+		"bigCategory": "laboris incididunt",
+		"materialCategory": 68672345,
+		"materialCode": "aliqua sit in reprehenderi",
+		"materialTexture": "sunt e",
+		"middleCategory": "ut",
+		"productName": "in ex sunt",
+		"proportion": 25720171.31555842,
+		"rowMaterial": "est Lorem et",
+		"shortcutCode": "consequat dolor",
+		"smallCategory": "aliquip",
+		"spec": "laborum commodo mollit consectetur quis",
+		"unit": -87618066,
+		"weightAlgorithm": "aliquip officia cillum nostrud"
+	},{
+		"bigCategory": "laboris incididunt",
+		"materialCategory": 68672345,
+		"materialCode": "aliqua sit in reprehenderi",
+		"materialTexture": "sunt e",
+		"middleCategory": "ut",
+		"productName": "in ex sunt",
+		"proportion": 25720171.31555842,
+		"rowMaterial": "est Lorem et",
+		"shortcutCode": "consequat dolor",
+		"smallCategory": "aliquip",
+		"spec": "laborum commodo mollit consectetur quis",
+		"unit": -87618066,
+		"weightAlgorithm": "aliquip officia cillum nostrud"
+	}]
+}
