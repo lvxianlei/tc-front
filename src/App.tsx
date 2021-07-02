@@ -61,7 +61,7 @@ export default class App extends React.Component<{}, IAppState> {
   }
 
   protected effectivelyInfo(): Promise<boolean> {
-    return fetch(`${process.env.REQUEST_API_PATH_PREFIX || ''.replace(/\/*$/, '/')}${`/sinzetech-user/user/info`.replace(/^\/*/, '')}`, {
+    return fetch(`${process.env.REQUEST_API_PATH_PREFIX?.replace(/\/*$/, '/') || ''.replace(/\/*$/, '/')}${`/sinzetech-user/user/info`.replace(/^\/*/, '')}`, {
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',

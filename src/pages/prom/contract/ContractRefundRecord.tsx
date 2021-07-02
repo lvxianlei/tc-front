@@ -223,6 +223,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
         let paymentPlanVos: IPaymentPlanVo[] = this.state.paymentPlanVos || [];
         const keyParts: string [] = (this.state.editingKey || '').split('-');
         const paymentPlanId: string = keyParts[0];
+        const record: IPaymentRecordVo = this.getForm()?.getFieldsValue(true);
         const tableIndex: string = keyParts[1];
         if( selectedRows && selectedRows.length > 0 ) {
             paymentPlanVos = paymentPlanVos.map<IPaymentPlanVo>((items: IPaymentPlanVo): IPaymentPlanVo => {
@@ -233,6 +234,14 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                             if(index === Number(tableIndex) ) {
                                 return {
                                     ...item,
+                                    refundTime: record.refundTime,
+                                    refundMode: record.refundMode,
+                                    refundAmount: record.refundAmount,
+                                    currencyType: record.currencyType,
+                                    exchangeRate: record.exchangeRate,
+                                    foreignExchangeAmount: record.foreignExchangeAmount,
+                                    refundBank: record.refundBank,
+                                    description: record.description,
                                     customerName: selectedRows[0].name,
                                     customerId: selectedRows[0].id
                                 };
@@ -262,7 +271,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             this.setState({
                 loading: false
             });
-        }, 6000);
+        }, 20000);
     }
 
     /**
@@ -622,7 +631,9 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                 }],
                 renderExtraInBar: (): React.ReactNode => this.renderExtraInBar(index),
                 render: (): React.ReactNode => (
-                    <Form ref={ this.form } key={ Math.random() } onFinish={ this.save }>
+                    <Form ref={ this.form } key={ Math.random() } onFinish={ this.save } onValuesChange={ (changedValues, allValues) => {
+                        this.getForm()?.setFieldsValue({ ...allValues })
+                    } }>
                         <Table
                             rowKey="id"
                             dataSource={ [...item.paymentRecordVos] }
