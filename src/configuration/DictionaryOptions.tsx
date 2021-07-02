@@ -6,7 +6,7 @@ const dictionary: Record<string, IDict[] | undefined> | undefined = ApplicationC
 export enum DictionaryEnums {
     PRODUCT_TYPE = 101,
     VOLTAGE_GRADE = 102,
-    PRICE = 103,
+    UNIT = 103,
     MATERIAL_STANDARD = 104,
     CURRENCY_TYPE = 111,
     TAX_RATE = 112,
@@ -18,7 +18,7 @@ export enum DictionaryEnums {
 
 let productType: IDict[] | undefined = [];
 let voltageGrade: IDict[] | undefined = [];
-let price: IDict[] | undefined = [];
+let unit: IDict[] | undefined = [];
 let materialStandard: IDict[] | undefined = [];
 let currencyType: IDict[] | undefined = [];
 let taxRate: IDict[] | undefined = [];
@@ -29,7 +29,7 @@ let saleType: IDict[] | undefined = [];
 if(dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
     voltageGrade = dictionary[DictionaryEnums.VOLTAGE_GRADE];
-    price = dictionary[DictionaryEnums.PRICE];
+    unit = dictionary[DictionaryEnums.UNIT];
     materialStandard = dictionary[DictionaryEnums.MATERIAL_STANDARD];
     currencyType = dictionary[DictionaryEnums.CURRENCY_TYPE];
     taxRate = dictionary[DictionaryEnums.TAX_RATE];
@@ -39,13 +39,13 @@ if(dictionary) {
     saleType = dictionary[DictionaryEnums.SALE_TYPE];
 }
 
-export const productTypeOptions = productType;
-export const voltageGradeOptions = voltageGrade;
-export const priceOptions = price;
-export const materialStandardOptions = materialStandard;
-export const currencyTypeOptions = currencyType;
-export const taxRateOptions = taxRate;
-export const refundModeOptions = refundMode;
-export const clientTypeOptions = clientType;
-export const winBidTypeOptions = winBidType;
-export const saleTypeOptions = saleType;
+export const productTypeOptions = productType;  //产品类型
+export const voltageGradeOptions = voltageGrade;  //电压等级
+export const unitOptions = unit; //计量单位
+export const materialStandardOptions = materialStandard; //材料标准
+export const currencyTypeOptions = currencyType; //币种
+export const taxRateOptions = taxRate; //税率
+export const refundModeOptions = refundMode; //来款方式
+export const clientTypeOptions = clientType; //客户类型
+export const winBidTypeOptions = winBidType; //中标类型
+export const saleTypeOptions = saleType; //销售类型
