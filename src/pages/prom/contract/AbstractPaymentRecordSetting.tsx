@@ -140,7 +140,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
         this.setState({
             loading: false
         });
-        }, 6000);
+        }, 20000);
     }
 
     /**
