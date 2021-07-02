@@ -103,7 +103,7 @@ import { DataNode } from 'antd/lib/tree';
             align: "center",
             width: 400,
             render:(text, record, index)=>{
-                return text == 0? <span>比重*体积（钢板类）</span> : <span>比重*长度（角板类）</span>
+                return text? text == 0? <span>比重*体积（钢板类）</span> : <span>比重*长度（角板类）</span> :<div></div>
             }
         },{
             key: 'description',
