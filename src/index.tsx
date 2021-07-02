@@ -14,6 +14,9 @@ import { initReactI18next } from 'react-i18next';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import LangUtil, { Lang } from './utils/LangUtil';
+import { ConfigProvider } from 'antd';
+import zhCN from 'antd/es/locale/zh_CN';
+import 'moment/locale/zh-cn';
 
 const lang: Lang = LangUtil.getLang();
 
@@ -37,9 +40,11 @@ i18n
   });
 
 
-ReactDOM.render(
+ReactDOM.render( 
   <React.StrictMode>
-    <App />
+      <ConfigProvider locale={zhCN}>
+        <App />
+    </ConfigProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
