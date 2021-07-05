@@ -154,7 +154,7 @@ import { DataNode } from 'antd/lib/tree';
       * @param [filterValues] 
       */
      protected async fetchMaterials(filterValues: IFIlterValue = {}, pagination: TablePaginationConfig = {}) {
-         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-system/material', {
+         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-system/materialCategory', {
              ...filterValues,
              current: pagination.current || this.state.tablePagination?.current,
              size: pagination.pageSize ||this.state.tablePagination?.pageSize,
