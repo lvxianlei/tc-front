@@ -17,7 +17,7 @@ for (let i = 1; i < 10; ++i) {
         "smallCategory": Random.increment(),
         "spec": Random.increment(),
         "unit": Random.increment(),
-        "weightAlgorithm": `${ Random.ctitle(7, 10) }`,
+        "weightAlgorithm": Random.ctitle(7, 10),
         "field_3": 1,
     });
 }
@@ -39,7 +39,7 @@ module.exports = {
             "smallCategory": Random.increment(),
             "spec": Random.increment(),
             "unit": Random.increment(),
-            "weightAlgorithm": `${ Random.ctitle(7, 10) }`,
+            "weightAlgorithm": Random.ctitle(7, 10),
             "field_3": 1,
         }].concat(records),
         current: Random.natural(1, 20),
