@@ -18,12 +18,12 @@ module.exports = {
     data: [{
         "id": 10,
         "code": Random.increment(),
-        "name": `${ Random.ctitle(7, 10) }`,
+        "name": Random.ctitle(7, 10),
         "level|1-3": 1,
         "children":[{
             "id": 101,
             "code": Random.increment(),
-            "name": `${ Random.ctitle(7, 10) }`,
+            "name": Random.ctitle(7, 10),
             "level|1-3": 1,
         }].concat(records)
     }].concat(records),
