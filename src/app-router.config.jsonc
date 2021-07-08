@@ -188,6 +188,20 @@
         "name": "编辑原材料",
         "path": "/sys/material/view/:id",
         "module": "./pages/system-mngt/material/MaterialView",
+    }, { //塔型管理
+        "name": "塔型管理",
+        "path": "/product/towershape",
+        "module": "./pages/product/TowerShape/TowerShapeMngt",
+        "exact": true
+    }, { //新增塔型
+        "name": "新增塔型",
+        "path": "/product/towershape/new",
+        "module": "./pages/product/TowerShape/TowerShapeNew",
+        "exact": true
+    }, { //编辑塔型
+        "name": "编辑塔型",
+        "path": "/product/towershape/setting/:id",
+        "module": "./pages/product/TowerShape/TowerShapeSetting",
         "exact": true
     }]
 }
