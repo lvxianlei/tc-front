@@ -19,6 +19,7 @@ export interface ITowerSectionModalProps {
 export interface ITowerSectionModalState {
     readonly isModalVisible: boolean;
     readonly towerSection: ITowerSection[];
+    readonly oldTowerSection: ITowerSection[];
     readonly isBodyVisible?: boolean;
     readonly bodyIndex: number;
 }
@@ -93,6 +94,7 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
             isModalVisible: true,
             towerSection: towerSection,
         })
+        this.getForm()?.setFieldsValue(towerSection);
     }
 
     /**
@@ -237,7 +239,8 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
                     <Input suffix={ <FormOutlined onClick={ () => {
                         this.setState({
                             isBodyVisible: true,
-                            bodyIndex: index
+                            bodyIndex: index,
+                            oldTowerSection: this.getForm()?.getFieldsValue(true)
                         })
                     } }/> }/>
                 </Form.Item> 
@@ -365,56 +368,103 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
         }];
     }
 
+    /**
+     * @description 配段弹窗删除行
+     * @param event 
+     */
     private onDelete = (index: number, ind: number): void => {
         const towerSection: ITowerSection[] | undefined = Object.values(this.getForm()?.getFieldsValue(true));
-        const bodySection: IBodySection[] | undefined = towerSection[index].bodySection;
+        const bodySection: IBodySection[] | undefined = towerSection[index].bodySection;     
         bodySection && bodySection.splice(ind, 1);
         this.setState({
             towerSection: [...towerSection]
-        })
+        }) 
         this.getForm()?.setFieldsValue([...towerSection])
     }
 
+    /**
+     * @description 弹窗关闭
+     * @param event 
+     */
     public onModalClose = (): void => {
-        const bodyIndex: number = this.state.bodyIndex;
-        const towerSection: ITowerSection[] = this.state.towerSection;
         this.setState({
-            isBodyVisible: false
+            isBodyVisible: false,
+            towerSection: Object.values(this.state.oldTowerSection)
         })
+        this.getForm()?.setFieldsValue({...Object.values(this.state.oldTowerSection)});
     } 
 
+    /**
+     * @description 弹窗确定
+     * @param event 
+     */
+    public onBodyModalSubmit = (): void => {
+        const bodyIndex: number = this.state.bodyIndex;
+        let towerSection: ITowerSection[] = this.state.towerSection;
+        const values = this.getForm()?.getFieldsValue(true);
+        values[bodyIndex].bodySection.map((items: any,ind: number) => {
+            this.getForm()?.validateFields([[bodyIndex,'bodySection',ind,'item'], [bodyIndex,'bodySection',ind,'weight']]).then((res) => {
+                const a: [] = values[bodyIndex].bodySection.map((items: IBodySection) => {
+                    return items.item+'*'+items.weight
+                })
+                towerSection[bodyIndex] = {
+                    ...this.getForm()?.getFieldsValue(true)[bodyIndex],
+                    projectName: a.join('+'),
+                    bodySection: values[bodyIndex].bodySection
+                };
+                this.setState({
+                    isBodyVisible: false,
+                    towerSection: towerSection,
+                    oldTowerSection: towerSection
+                })
+                this.getForm()?.setFieldsValue({...Object.values(towerSection)});
+            }).catch(error => {
+                // return error.errorFields[0].errors
+            })
+        })
+    }
+    
+    /**
+     * @description 弹窗列表新增行
+     * @param event 
+     */
+    public addBodyRow = (): void => {
+        const bodyIndex: number = this.state.bodyIndex;
+        let towerSection: ITowerSection[] = this.state.towerSection;
+        let bodySection: IBodySection[] | undefined = towerSection && towerSection[bodyIndex || 0]?.bodySection || [];
+        let item: IBodySection = {
+            id: Math.random(),
+            item: '',
+            weight: ''
+        }
+        if(towerSection && bodyIndex !== undefined) {
+            towerSection[bodyIndex] = {
+                ...towerSection[bodyIndex],
+                bodySection: [ 
+                    ...bodySection || [],
+                    item
+                ]
+            };
+            this.setState({
+                towerSection: towerSection
+            })
+        }
+    }
+
+    /**
+     * @description 配段弹窗
+     * @param event 
+     */
     public bodySectionModal(): React.ReactNode {
         const bodyIndex: number = this.state.bodyIndex;
         let towerSection: ITowerSection[] = this.state.towerSection;
         let bodySection: IBodySection[] | undefined = towerSection && towerSection[bodyIndex || 0]?.bodySection || [];
-        return <Modal visible={ this.state.isBodyVisible } title="配段" onCancel={ this.onModalClose } width={ "30%" } okText="确定" cancelText="取消" onOk={ () => {
-            towerSection[bodyIndex] = this.getForm()?.getFieldsValue(true)[bodyIndex];
-            this.setState({
-                isBodyVisible: false,
-                towerSection: towerSection
-            })
-            
-        } }>
-            <Button type="primary" onClick={ () => {
-                let item: IBodySection = {
-                    id: Math.random(),
-                    item: '',
-                    weight: ''
-                }
-                if(towerSection && bodyIndex !== undefined) {
-                    towerSection[bodyIndex] = {
-                        ...towerSection[bodyIndex],
-                        bodySection: [ 
-                            ...bodySection || [],
-                            item
-                        ]
-                    };
-                    this.setState({
-                        towerSection: towerSection
-                    })
-                }
-            } }>添加行</Button>
-            <Table rowKey="id" bordered={ true } dataSource = { bodySection } columns={ this.getItemColumns(bodyIndex || 0) } pagination = { false }/>
+        return <Modal visible={ this.state.isBodyVisible } title="配段" onCancel={ this.onModalClose } width={ "30%" } footer={ null }>
+            <Button type="primary" onClick={ this.addBodyRow }>添加行</Button>
+            <Table rowKey="id" bordered={ true } dataSource = { [...bodySection] } columns={ this.getItemColumns(bodyIndex || 0) } pagination = { false }/>
+            <Space direction="horizontal" size="small">
+                <Button type="primary" htmlType="submit" onClick={ this.onBodyModalSubmit }>确定</Button>
+            </Space>
         </Modal>
     }
 

@@ -3,13 +3,13 @@
  * @copyright © 2021
  */
 
-import { Button, Form, FormInstance, Input, Modal, Popconfirm, Space, Table, TableColumnType } from 'antd';
+import { Button, Form, FormInstance, Input, InputNumber, Modal, Popconfirm, Space, Table, TableColumnType } from 'antd';
 import { ColumnType, TableProps } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 import RequestUtil from '../../../utils/RequestUtil';
-import { IProduct } from '../../IProduct';
 import { FormOutlined, DeleteOutlined } from '@ant-design/icons';
+import layoutStyles from '../../../layout/Layout.module.less';
 
 // import styles from './ComponentDetailsModal.module.less';
 
@@ -23,6 +23,7 @@ export interface IComponentDetailsModalState {
 }
 
 interface ITowerSection {
+    readonly a?: ITowerSection[];
     readonly id?: number | string;
     readonly name?: string;
     readonly phone?: string;
@@ -66,7 +67,9 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
      */
     public showModal = async (): Promise<void> => {
         let towerSection: ITowerSection[] = await RequestUtil.get(`/tower-market/${ this.props.id }`);
-        console.log(towerSection)
+        towerSection = towerSection.map((items: ITowerSection) => {
+            return items = {...items, a: towerSection}
+        })
         this.setState({
             isModalVisible: true,
             towerSection: towerSection,
@@ -87,9 +90,7 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
      * @param event 
      */
     public towerSectionSubmit = (values: Record<string, any>): void => {
-        const towerSection: ITowerSection[] = this.getForm()?.getFieldsValue(true);
-        values = Object.values(values);
-        console.log(values)
+        console.log(values.a)
         this.setState ({
             isModalVisible: false
         })
@@ -109,8 +110,11 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
             width: 120,
             dataIndex: 'name',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
-                <Form.Item initialValue={ record.name } name={[index, 'name']}>
-                    <Input/>
+                <Form.Item initialValue={ record.name } name={['a',index,'name']} rules= {[{
+                    required: true,
+                    message: '请输入段号'
+                }]}>
+                    <Input maxLength={ 10 }/>
                 </Form.Item> 
             )
         }, {
@@ -119,8 +123,11 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
             width: 150,
             dataIndex: 'name',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
-                <Form.Item initialValue={ record.name } name={[index, 'name']}>
-                    <Input/>
+                <Form.Item initialValue={ record.name } name={['a',index,'name']} rules= {[{
+                    required: true,
+                    message: '请输入构件编号'
+                }]}>
+                    <Input maxLength={ 10 }/>
                 </Form.Item> 
             )
         }, {
@@ -129,7 +136,7 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
             width: 150,
             dataIndex: 'name',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
-                <Form.Item initialValue={ record.name } name={[index, 'name']}>
+                <Form.Item initialValue={ record.name } name={['a',index,'name']}>
                     <Input/>
                 </Form.Item> 
             )
@@ -139,7 +146,7 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
             width: 150,
             dataIndex: 'name',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
-                <Form.Item initialValue={ record.name } name={[index, 'name']}>
+                <Form.Item initialValue={ record.name } name={['a',index,'name']}>
                     <Input/>
                 </Form.Item> 
             )
@@ -149,8 +156,11 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
             width: 120,
             dataIndex: 'name',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
-                <Form.Item initialValue={ record.name } name={[index, 'name']}>
-                    <Input/>
+                <Form.Item initialValue={ record.name } name={['a',index,'name']} rules= {[{
+                    required: true,
+                    message: '请输入规格'
+                }]}>
+                    <Input maxLength={ 20 }/>
                 </Form.Item> 
             )
         }, {
@@ -159,7 +169,7 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
             width: 120,
             dataIndex: 'name',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
-                <Form.Item initialValue={ record.name } name={[index, 'name']}>
+                <Form.Item initialValue={ record.name } name={['a',index,'name']}>
                     <Input/>
                 </Form.Item> 
             )
@@ -169,7 +179,7 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
             width: 150,
             dataIndex: 'name',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
-                <Form.Item initialValue={ record.name } name={[index, 'name']}>
+                <Form.Item initialValue={ record.name } name={['a',index,'name']}>
                     <Input/>
                 </Form.Item> 
             )
@@ -179,8 +189,16 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
             width: 150,
             dataIndex: 'name',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
-                <Form.Item initialValue={ record.name } name={[index, 'name']}>
-                    <Input/>
+                <Form.Item initialValue={ record.name } name={['a',index,'name']} rules= {[{
+                    required: true,
+                    message: '请输入长度'
+                }]}>
+                    <InputNumber 
+                        stringMode={ false } 
+                        min="0"
+                        step="0.01"
+                        precision={ 2 }
+                        className={ layoutStyles.width100 }/>
                 </Form.Item> 
             )
         }, {
@@ -189,8 +207,16 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
             width: 150,
             dataIndex: 'name',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
-                <Form.Item initialValue={ record.name } name={[index, 'name']}>
-                    <Input/>
+                <Form.Item initialValue={ record.name } name={['a',index,'name']} rules= {[{
+                    required: true,
+                    message: '请输入数量'
+                }]}>
+                    <InputNumber 
+                        stringMode={ false } 
+                        min="0"
+                        step="1"
+                        precision={ 0 }
+                        className={ layoutStyles.width100 }/>
                 </Form.Item> 
             )
         }, {
@@ -199,7 +225,7 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
             width: 150,
             dataIndex: 'name',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
-                <Form.Item initialValue={ record.name } name={[index, 'name']}>
+                <Form.Item initialValue={ record.name } name={['a',index,'name']}>
                     <Input/>
                 </Form.Item> 
             )
@@ -209,8 +235,16 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
             width: 150,
             dataIndex: 'name',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
-                <Form.Item initialValue={ record.name } name={[index, 'name']}>
-                    <Input/>
+                <Form.Item initialValue={ record.name } name={['a',index,'name']} rules= {[{
+                    required: true,
+                    message: '请输入单件重量'
+                }]}>
+                    <InputNumber 
+                        stringMode={ false } 
+                        min="0"
+                        step="0.01"
+                        precision={ 2 }
+                        className={ layoutStyles.width100 }/>
                 </Form.Item> 
             )
         }, {
@@ -219,7 +253,7 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
             width: 150,
             dataIndex: 'name',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
-                <Form.Item initialValue={ record.name } name={[index, 'name']}>
+                <Form.Item initialValue={ record.name } name={['a',index,'name']}>
                     <Input/>
                 </Form.Item> 
             )
@@ -229,8 +263,8 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
             width: 150,
             dataIndex: 'phone',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
-                <Form.Item initialValue={ record.phone } name={[index, 'phone']}>
-                    <Input/>
+                <Form.Item initialValue={ record.phone } name={['a',index, 'phone']}>
+                    <Input maxLength={ 300 }/>
                 </Form.Item> 
             )
         }, {
@@ -255,17 +289,17 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
         }];
     };
 
-    private onDelete = (ind: number): void => {
-        const towerSection: ITowerSection[] | undefined = Object.values(this.getForm()?.getFieldsValue(true));
-        towerSection && towerSection.splice(ind, 1);
+    private onDelete = (index: number): void => {
+        const towerSection: ITowerSection[] | undefined = Object.values(this.getForm()?.getFieldsValue(true).a);
+        towerSection && towerSection.splice(index, 1);
         this.setState({
             towerSection: [...towerSection]
         })
-        this.getForm()?.setFieldsValue([...towerSection])
+        this.getForm()?.setFieldsValue({a:[...towerSection]});
     } 
     
     public addRow = (): void => {
-        let towerSection: ITowerSection[] | undefined = this.state.towerSection;
+        let towerSection: ITowerSection[] | undefined = Object.values(this.getForm()?.getFieldsValue(true).a);
         let item: ITowerSection = {
             id: Math.random(),
             name: '',
@@ -278,6 +312,7 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
         this.setState({
             towerSection: [...towerSection]
         })
+        this.getForm()?.setFieldsValue({a:[...towerSection]});
     }
     
     /**
