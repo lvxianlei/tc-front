@@ -189,5 +189,15 @@
         "path": "/sys/material/view/:id",
         "module": "./pages/system-mngt/material/MaterialView",
         "exact": true
+    }, { // 提料管理
+        "name": "提料管理",
+        "path": "/technology/materialExtraction",
+        "module": "./pages/technology/materialExtraction/materialExtractionMngt",
+        "exact": true
+    }, { // 新增提料管理
+        "name": "提料管理",
+        "path": "/technology/materialExtraction/new",
+        "module": "./pages/technology/materialExtraction/materialExtractionNew",
+        "exact": true
     }]
 }
