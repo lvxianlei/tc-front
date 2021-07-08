@@ -1,5 +1,5 @@
 /**
- * @author Cory(coryisbest0728#gmail.com)
+ * @author lixy
  * @copyright © 2021 Cory. All rights reserved
  */
  import { DeleteOutlined } from '@ant-design/icons';
