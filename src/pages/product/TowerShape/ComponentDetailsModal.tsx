@@ -11,7 +11,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import { FormOutlined, DeleteOutlined } from '@ant-design/icons';
 import layoutStyles from '../../../layout/Layout.module.less';
 
-// import styles from './ComponentDetailsModal.module.less';
+import styles from './AbstractTowerShapeSetting.module.less';
 
 export interface IComponentDetailsModalProps {
     readonly id?: number | string;
@@ -27,6 +27,10 @@ interface ITowerSection {
     readonly id?: number | string;
     readonly name?: string;
     readonly phone?: string;
+    readonly guige?: string;
+    readonly num?: number;
+    readonly unitWeight?: number;
+    readonly subtotalWeight?: number;
 }
 
 export default abstract class ComponentDetailsModal<P extends IComponentDetailsModalProps, S extends IComponentDetailsModalState> extends React.Component<P,S> {
@@ -106,7 +110,7 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
     public getTableColumns(): ColumnType<object>[] {
         return [{
             key: 'name',
-            title: '段号',
+            title: '* 段号',
             width: 120,
             dataIndex: 'name',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
@@ -119,7 +123,7 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
             )
         }, {
             key: 'name',
-            title: '构件编号',
+            title: '* 构件编号',
             width: 150,
             dataIndex: 'name',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
@@ -137,7 +141,11 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
             dataIndex: 'name',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
                 <Form.Item initialValue={ record.name } name={['a',index,'name']}>
-                    <Input/>
+                    <Input onChange={(e) => {
+                        const value: string = e.target.value;
+                        const towerSection: ITowerSection[] | undefined = Object.values(this.getForm()?.getFieldsValue(true).a);
+                        const unitWeight: number = towerSection[index].unitWeight || 0;
+                    }}/>
                 </Form.Item> 
             )
         }, {
@@ -151,12 +159,12 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
                 </Form.Item> 
             )
         }, {
-            key: 'name',
-            title: '规格',
+            key: 'guige',
+            title: '* 规格',
             width: 120,
-            dataIndex: 'name',
+            dataIndex: 'guige',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
-                <Form.Item initialValue={ record.name } name={['a',index,'name']} rules= {[{
+                <Form.Item initialValue={ record.guige } name={['a',index,'guige']} rules= {[{
                     required: true,
                     message: '请输入规格'
                 }]}>
@@ -189,10 +197,7 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
             width: 150,
             dataIndex: 'name',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
-                <Form.Item initialValue={ record.name } name={['a',index,'name']} rules= {[{
-                    required: true,
-                    message: '请输入长度'
-                }]}>
+                <Form.Item initialValue={ record.name } name={['a',index,'name']}>
                     <InputNumber 
                         stringMode={ false } 
                         min="0"
@@ -202,21 +207,28 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
                 </Form.Item> 
             )
         }, {
-            key: 'name',
+            key: 'num',
             title: '数量',
             width: 150,
-            dataIndex: 'name',
+            dataIndex: 'num',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
-                <Form.Item initialValue={ record.name } name={['a',index,'name']} rules= {[{
-                    required: true,
-                    message: '请输入数量'
-                }]}>
+                <Form.Item initialValue={ record.num } name={['a',index,'num']}>
                     <InputNumber 
                         stringMode={ false } 
                         min="0"
                         step="1"
                         precision={ 0 }
-                        className={ layoutStyles.width100 }/>
+                        className={ layoutStyles.width100 }
+                        onChange={(e) => {
+                            const towerSection: ITowerSection[] | undefined = Object.values(this.getForm()?.getFieldsValue(true).a);
+                            const unitWeight: number = towerSection[index].unitWeight || 0;
+                            const subtotalWeight: number = Number(e)*unitWeight;
+                            towerSection[index] = {
+                                ...towerSection[index],
+                                subtotalWeight: subtotalWeight
+                            }
+                            this.getForm()?.setFieldsValue({ a: [...towerSection]});
+                        }}/>
                 </Form.Item> 
             )
         }, {
@@ -226,16 +238,16 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
             dataIndex: 'name',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
                 <Form.Item initialValue={ record.name } name={['a',index,'name']}>
-                    <Input/>
+                    <Input className={ styles.inputRed }/>
                 </Form.Item> 
             )
         }, {
-            key: 'name',
-            title: '单件重量（kg）',
+            key: 'unitWeight',
+            title: '* 单件重量（kg）',
             width: 150,
-            dataIndex: 'name',
+            dataIndex: 'unitWeight',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
-                <Form.Item initialValue={ record.name } name={['a',index,'name']} rules= {[{
+                <Form.Item initialValue={ record.unitWeight } name={['a',index,'unitWeight']} rules= {[{
                     required: true,
                     message: '请输入单件重量'
                 }]}>
@@ -244,16 +256,26 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
                         min="0"
                         step="0.01"
                         precision={ 2 }
-                        className={ layoutStyles.width100 }/>
+                        className={ `${layoutStyles.width100} ${styles.inputRed}` }
+                        onChange={(e) => {
+                            const towerSection: ITowerSection[] | undefined = Object.values(this.getForm()?.getFieldsValue(true).a);
+                            const num: number = towerSection[index].num || 0;
+                            const subtotalWeight: number = Number(e)*num;
+                            towerSection[index] = {
+                                ...towerSection[index],
+                                subtotalWeight: subtotalWeight
+                            }
+                            this.getForm()?.setFieldsValue({ a: [...towerSection]});
+                        }}/>
                 </Form.Item> 
             )
         }, {
-            key: 'name',
+            key: 'subtotalWeight',
             title: '小计重量（kg）',
             width: 150,
-            dataIndex: 'name',
+            dataIndex: 'subtotalWeight',
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
-                <Form.Item initialValue={ record.name } name={['a',index,'name']}>
+                <Form.Item initialValue={ record.subtotalWeight } name={['a',index,'subtotalWeight']}>
                     <Input/>
                 </Form.Item> 
             )

@@ -35,11 +35,21 @@ export interface ITowerShape {
 interface ITower {
     readonly projectName?: string;
     readonly internalNumber?: string;
+    readonly bodyWeight?: number;
+    readonly weightOne?: number;
+    readonly weightTwo?: number;
+    readonly weightThree?: number;
+    readonly weightFour?: number;
+    readonly towerFootWeight?: number;
+    readonly weight?: number;
     readonly itemWeight?: IItemWeight[];
+    readonly state?: number;
 }
 
 interface IItemWeight {
-
+    readonly id?: number | string;
+    readonly item?: string;
+    readonly weight?: number;
 }
 
 /**
@@ -159,8 +169,21 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
       */
      public getColumns(): TableColumnType<object>[] {        
         return [{
+            key: 'state',
+            title: '* 线路名称',
+            dataIndex: 'state',
+            width: 150,
+            render: (_: undefined, record: ITower, index: number): React.ReactNode => (
+                <Form.Item initialValue={ record.state } name={['productDtos', index,'state']} rules= {[{
+                    required: true,
+                    message: '请输入线路名称'
+                }]}>
+                    <Input disabled/>
+                </Form.Item> 
+            )
+        }, {
             key: 'projectName',
-            title: '线路名称',
+            title: '* 线路名称',
             dataIndex: 'projectName',
             width: 150,
             render: (_: undefined, record: object, index: number): React.ReactNode => (
@@ -173,7 +196,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             )
         }, {
             key: 'projectName',
-            title: '杆塔号',
+            title: '* 杆塔号',
             dataIndex: 'projectName',
             width: 150,
             render: (_: undefined, record: object, index: number): React.ReactNode => (
@@ -186,7 +209,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             )
         }, {
             key: 'projectName',
-            title: '产品类型',
+            title: '* 产品类型',
             dataIndex: 'projectName',
             width: 150,
             render: (_: undefined, record: object, index: number): React.ReactNode => (
@@ -202,7 +225,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             )
         }, {
             key: 'internalNumber',
-            title: '电压等级',
+            title: '* 电压等级',
             dataIndex: 'internalNumber',
             width: 150,
             render: (_: undefined, record: object, index: number): React.ReactNode => (
@@ -218,7 +241,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             )
         }, {
             key: 'projectName',
-            title: '呼高（m）',
+            title: '* 呼高（m）',
             dataIndex: 'projectName',
             width: 150,
             render: (_: undefined, record: object, index: number): React.ReactNode => (
@@ -235,12 +258,12 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                 </Form.Item> 
             )
         }, {
-            key: 'deliveryTime',
-            title: '身部重量（kg）',
-            dataIndex: 'deliveryTime',
+            key: 'bodyWeight',
+            title: '* 身部重量（kg）',
+            dataIndex: 'bodyWeight',
             width: 150,
             render: (_: undefined, record: object, index: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index,'projectName']} rules= {[{
+                <Form.Item name={['productDtos', index,'bodyWeight']} rules= {[{
                     required: true,
                     message: '请输入身部重量'
                 }]}>
@@ -249,7 +272,24 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         min="0"
                         step="0.01"
                         precision={ 2 }
-                        className={ layoutStyles.width100 }/>
+                        className={ layoutStyles.width100 }
+                        onChange={ (value) => {
+                            const towerShape: ITowerShape | undefined = this.getForm()?.getFieldsValue(true);
+                            const productDtos: ITower[] = towerShape?.productDtos || [];
+                            const itemWeight: IItemWeight[] = productDtos[index]?.itemWeight || [];
+                            const weightOne: number = productDtos[index].weightOne || 0;
+                            const weightTwo: number = productDtos[index].weightTwo || 0;
+                            const weightThree: number = productDtos[index].weightThree || 0;
+                            const weightFour: number = productDtos[index].weightFour || 0;
+                            const towerFootWeight: number = productDtos[index].towerFootWeight || 0;
+                            let itemTotalWeight: number = 0;
+                            itemWeight.map((items: IItemWeight): number => {
+                                return itemTotalWeight = itemTotalWeight + (items.weight || 0);
+                            })
+                            let weight: number = 0;
+                            weight = Number(value) + weightOne + weightTwo + weightThree + weightFour + towerFootWeight + itemTotalWeight;
+                            console.log(weight,itemTotalWeight)
+                        } }/>
                 </Form.Item> 
             )
         }, {
@@ -268,12 +308,12 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                 </Form.Item> 
             )
         }, {
-            key: 'deliveryTime',
+            key: 'weightOne',
             title: '接腿1#重量（kg）',
-            dataIndex: 'deliveryTime',
+            dataIndex: 'weightOne',
             width: 150,
             render: (_: undefined, record: object, index: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index,'projectName']}>
+                <Form.Item name={['productDtos', index,'weightOne']}>
                     <InputNumber 
                         stringMode={ false } 
                         min="0"
@@ -298,12 +338,12 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                 </Form.Item> 
             )
         }, {
-            key: 'deliveryTime',
+            key: 'weightTwo',
             title: '接腿2#重量（kg）',
-            dataIndex: 'deliveryTime',
+            dataIndex: 'weightTwo',
             width: 150,
             render: (_: undefined, record: object, index: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index,'projectName']}>
+                <Form.Item name={['productDtos', index,'weightTwo']}>
                     <InputNumber 
                         stringMode={ false } 
                         min="0"
@@ -328,12 +368,12 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                 </Form.Item> 
             )
         }, {
-            key: 'deliveryTime',
+            key: 'weightThree',
             title: '接腿3#重量（kg）',
-            dataIndex: 'deliveryTime',
+            dataIndex: 'weightThree',
             width: 150,
             render: (_: undefined, record: object, index: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index,'projectName']}>
+                <Form.Item name={['productDtos', index,'weightThree']}>
                     <InputNumber 
                         stringMode={ false } 
                         min="0"
@@ -358,12 +398,12 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                 </Form.Item> 
             )
         }, {
-            key: 'deliveryTime',
+            key: 'weightFour',
             title: '接腿#4重量（kg）',
-            dataIndex: 'deliveryTime',
+            dataIndex: 'weightFour',
             width: 150,
             render: (_: undefined, record: object, index: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index,'projectName']}>
+                <Form.Item name={['productDtos', index,'weightFour']}>
                     <InputNumber 
                         stringMode={ false } 
                         min="0"
@@ -373,12 +413,12 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                 </Form.Item> 
             )
         },  {
-            key: 'deliveryTime',
+            key: 'towerFootWeight',
             title: '塔脚板重量（kg）',
-            dataIndex: 'deliveryTime',
+            dataIndex: 'towerFootWeight',
             width: 150,
             render: (_: undefined, record: object, index: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index,'projectName']}>
+                <Form.Item name={['productDtos', index,'towerFootWeight']}>
                     <InputNumber 
                         stringMode={ false } 
                         min="0"
@@ -388,12 +428,12 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                 </Form.Item> 
             )
         },  {
-            key: 'deliveryTime',
+            key: 'weight',
             title: '杆塔重量（kg）',
-            dataIndex: 'deliveryTime',
+            dataIndex: 'weight',
             width: 150,
             render: (_: undefined, record: object, index: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index,'projectName']}>
+                <Form.Item name={['productDtos', index,'weight']}>
                     <Input disabled/>
                 </Form.Item> 
             )
@@ -415,7 +455,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             fixed: 'right',
             render: (_: undefined, record: object, index: number): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type="link" onClick={ () => { this.setState({ isVisible: true, index: index, oldTowerShape: this.getForm()?.getFieldsValue(true) }) } }>
+                    <Button type="link" onClick={ () => this.itemWeightClick(index) }>
                         增重项
                     </Button>
                     <Popconfirm 
@@ -434,20 +474,79 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
         }];
     }
 
+    /**
+     * @description 点击增重项事件
+     * @param event 
+     */
+    public itemWeightClick = (index: number): void => {
+        let itemWeight: IItemWeight[] = this.getForm()?.getFieldsValue(true).productDtos[index].itemWeight;
+        itemWeight && itemWeight.map((item: IItemWeight, index: number) => {
+            if(item.item && item.item !== "") {
+                itemWeight = itemWeight;
+            } else {
+                itemWeight.splice(index, 1);
+            }
+        })
+        const productDtos: ITower[] = this.getForm()?.getFieldsValue(true).productDtos || [];
+        productDtos[index] = {
+            ...productDtos[index],
+            itemWeight: itemWeight
+        }
+        let fieldsValue = {
+            ...this.getForm()?.getFieldsValue(true),
+            productDtos: [...productDtos]
+        }
+        this.setState({ isVisible: true, index: index, oldTowerShape: fieldsValue })
+        this.getForm()?.setFieldsValue({ ...fieldsValue })
+    }
+
+    /**
+     * @description 弹窗关闭
+     * @param event 
+     */
     public onModalClose = (): void => {
         const oldTowerShape: ITowerShape | undefined = this.state.oldTowerShape;
         this.setState({
             isVisible: false,
             towerShape: oldTowerShape
         })
-        this.getForm()?.setFieldsValue({ ...oldTowerShape });
+        this.getForm()?.setFieldsValue({ ...this.state.oldTowerShape });
     } 
 
-    public onModalOk = (): void => {
-        this.setState({
-            isVisible: false,
-            oldTowerShape: this.getForm()?.getFieldsValue(true)
+    /**
+     * @description 弹窗确定
+     * @param event 
+     */
+    public onModalOk = async (): Promise<void> => {
+        const index: number = this.state.index || 0;
+        const towerShape: ITowerShape | undefined = this.getForm()?.getFieldsValue(true);
+        const productDtos: ITower[] = towerShape?.productDtos || [];
+        const itemWeight: IItemWeight[] = productDtos[index]?.itemWeight || [];
+        let itemTotalWeight: number = 0;
+        let a: boolean[] = itemWeight.map((items: IItemWeight, ind: number): boolean => {
+            const b = this.getForm()?.validateFields([['productDtos', index, "itemWeight", ind ,'item'], ['productDtos', index, "itemWeight", ind ,'weight']])
+            .then(() => {
+                // itemTotalWeight = itemTotalWeight + (items.weight || 0);
+                // this.setState({
+                //     isVisible: false,
+                //     oldTowerShape: this.getForm()?.getFieldsValue(true)
+                // })
+                return true;
+            }).catch((error) => {
+                return false;
+            })
+            console.log(b)
+            return false
         })
+        // const bodyWeight: number = productDtos[index].bodyWeight || 0;
+        // const weightOne: number = productDtos[index].weightOne || 0;
+        // const weightTwo: number = productDtos[index].weightTwo || 0;
+        // const weightThree: number = productDtos[index].weightThree || 0;
+        // const weightFour: number = productDtos[index].weightFour || 0;
+        // const towerFootWeight: number = productDtos[index].towerFootWeight || 0;
+        // let weight: number = 0;
+        // weight = bodyWeight + weightOne + weightTwo + weightThree + weightFour + towerFootWeight + itemTotalWeight;
+        // console.log(itemTotalWeight)
     }
 
     /**
@@ -462,8 +561,8 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             title: '* 增重项',
             dataIndex: 'item',
             width: 150,
-            render: (_: undefined, record: object, ind: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index, "itemWeight", ind ,'item']} rules= {[{
+            render: (_: undefined, record: IItemWeight, ind: number): React.ReactNode => (
+                <Form.Item initialValue={ record.item } name={['productDtos', index, "itemWeight", ind ,'item']} rules= {[{
                     required: true,
                     message: '请输入增重项'
                 }]}>
@@ -475,8 +574,8 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             title: '* 增重（kg）',
             dataIndex: 'weight',
             width: 150,
-            render: (_: undefined, record: object, ind: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index, "itemWeight", ind,'weight']} rules= {[{
+            render: (_: undefined, record: IItemWeight, ind: number): React.ReactNode => (
+                <Form.Item initialValue={ record.weight } name={['productDtos', index, "itemWeight", ind,'weight']} rules= {[{
                     required: true,
                     message: '请输入增重'
                 }]}>
@@ -510,6 +609,48 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
         }];
     }
 
+    /**
+     * @description 增重项添加行
+     * @param event 
+     */
+    public itemWeightAddRow = (): void =>  {
+        const index: number = this.state.index || 0;
+        const towerShape: ITowerShape | undefined = this.state.towerShape;
+        const productDtos: ITower[] = towerShape?.productDtos || [];
+        const itemWeight: IItemWeight[] = productDtos[index]?.itemWeight || [];
+        let item: IItemWeight = {
+            id: Math.random(),
+            item: '',
+            weight: undefined
+        }
+        productDtos[index] = {
+            ...productDtos[index],
+            itemWeight:[ 
+                ...itemWeight || [],
+                item
+            ]
+        }
+        this.setState({
+            towerShape: towerShape
+        })
+        const productDtosVlue: ITower[] = this.getForm()?.getFieldsValue(true).productDtos || [];
+        productDtosVlue[index] = {
+            ...productDtosVlue[index],
+            itemWeight:[ 
+                ...(productDtosVlue[index].itemWeight || []),
+                item
+            ]
+        }
+        let fieldsValue = {
+            ...this.getForm()?.getFieldsValue(true),
+            productDtos: [...productDtosVlue]
+        }
+        this.getForm()?.setFieldsValue({ ...fieldsValue })
+    }
+    /**
+     * @description 增重项弹窗
+     * @param event 
+     */
     public itemWeightModal = (): React.ReactNode => {
         const index: number = this.state.index || 0;
         const towerShape: ITowerShape | undefined = this.state.towerShape;
@@ -517,35 +658,17 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
         const itemWeight: IItemWeight[] = productDtos[index]?.itemWeight || [];
         return <>
             {this.state.isVisible ? <Modal title="增重项" visible={ this.state.isVisible } onCancel={ this.onModalClose } width={ "30%" } okText="确定" cancelText="取消" onOk={ this.onModalOk }>
-                <Button type="primary" onClick={ () => {
-                    this.setState({
-                        oldTowerShape: this.getForm()?.getFieldsValue(true)
-                    })
-                    let item: IItemWeight = {
-                        id: Math.random(),
-                        item: '',
-                        weight: ''
-                    }
-                    productDtos[index] = {
-                        ...productDtos[index],
-                        itemWeight:[ 
-                            ...itemWeight || [],
-                            item
-                        ]
-                    }
-                    this.setState({
-                        towerShape: {
-                            ...towerShape,
-                            productDtos: productDtos
-                        }
-                    })
-                } } className={ styles.btn }>添加行</Button>
-                <Table rowKey= {this.getTableRowKey()} bordered={ true } dataSource = { itemWeight } columns={ this.getItemColumns(index) } pagination = { false }/>
+                <Button type="primary" onClick={ this.itemWeightAddRow } className={ styles.btn }>添加行</Button>
+                <Table rowKey= {this.getTableRowKey()} bordered={ true } dataSource = { [...itemWeight] } columns={ this.getItemColumns(index) } pagination = { false }/>
             </Modal>
             : null}
         </> 
     }
 
+    /**
+     * @description 产品信息删除行
+     * @param event 
+     */
     private onDelete = (index: number): void => {
         const towerShape: ITowerShape | undefined = this.getForm()?.getFieldsValue(true);
         const productDtos: ITower[] = towerShape?.productDtos || [];
@@ -558,6 +681,10 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
         })
     }
 
+    /**
+     * @description 弹窗删除行
+     * @param event 
+     */
     private onModalDelete = (index: number, ind: number): void => {
         const towerShape: ITowerShape | undefined = this.getForm()?.getFieldsValue(true);
         const productDtos: ITower[] = towerShape?.productDtos || [];
@@ -610,6 +737,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         <Button type="primary" onClick={ () => { 
                             const productDtos: ITower[] = towerShape?.productDtos || [];
                             let product: ITower = {
+                                state: 0,
                                 projectName: '',
                                 internalNumber: '',
                                 itemWeight: []
