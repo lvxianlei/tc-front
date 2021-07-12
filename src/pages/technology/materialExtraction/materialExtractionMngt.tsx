@@ -7,8 +7,8 @@ import { Link } from 'react-router-dom';
 import styles from '../../../components/AbstractSelectableModal.module.less';
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../../components/AbstractMngtComponent';
 import { ITabItem } from '../../../components/ITabableComponent';
-import { saleTypeOptions, winBidTypeOptions } from '../../../configuration/DictionaryOptions';
-import { IContract } from '../../IContract';
+import { materialStandardOptions } from '../../../configuration/DictionaryOptions';
+import { IMaterialExtraction, IParagraph, IDetail } from './IMaterialExtraction'
 import RequestUtil from '../../../utils/RequestUtil';
 
 const { Option } = Select;
@@ -16,14 +16,16 @@ const { Option } = Select;
 export interface ImaterialExtractionMngtProps {}
 export interface ImaterialExtractionMngtWithRouteProps extends RouteComponentProps<ImaterialExtractionMngtProps>, WithTranslation {}
 export interface ImaterialExtractionMngtState extends IAbstractMngtComponentState {
-    readonly tableDataSource: IContract[];
+    readonly tableDataSource: IMaterialExtraction[];
     readonly internalNumber?: string;
     readonly projectName?: string;
     readonly customerCompany?: string;
     readonly signCustomerName?: string;
     readonly winBidType?: string;
     readonly paragraphVisible: boolean;
+    readonly paragraphDataSource: IParagraph[];
     readonly detailVisible: boolean;
+    readonly detailDataSource: IDetail[];
 }
 
 export interface IResponseData {
@@ -31,7 +33,7 @@ export interface IResponseData {
     readonly size: number;
     readonly current: number;
     readonly total: number;
-    readonly records: IContract[];
+    readonly records: IMaterialExtraction[];
 }
 
  /**
@@ -48,7 +50,9 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
             ...super.getState(),
             tableDataSource: [],
             paragraphVisible: false,
+            paragraphDataSource: [],
             detailVisible: false,
+            detailDataSource: []
         };
     }
  
@@ -57,7 +61,7 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
      * @param filterValues 
      */
     protected async fetchTableData(filterValues: Record<string, any>,pagination: TablePaginationConfig = {}) {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/contract', {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/extractionMaterial', {
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize ||this.state.tablePagination?.pageSize,
@@ -110,53 +114,47 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
       */
     public getTableColumns(item: ITabItem): TableColumnType<object>[] {
         return [{
-            key: 'contractNumber',
+            key: 'batchSn',
             title: '批次号',
-            dataIndex: 'contractNumber',
-            render: (_: undefined, record: object): React.ReactNode => {
-                return <Link to={ `/prom/contract/detail/${ (record as IContract).id }` }>{ (record as IContract).contractNumber }</Link>
-            }
+            dataIndex: 'batchSn',
         }, {
-            key: 'internalNumber',
+            key: 'materialStandardName',
             title: '材料标准',
-            dataIndex: 'internalNumber',
-            render: (_: undefined, record: object): React.ReactNode => {
-            return <Link to={ `/prom/contract/detail/${ (record as IContract).id }` }>{ (record as IContract).internalNumber }</Link>
-        }
+            dataIndex: 'materialStandardName',
+        }, {
+            key: 'productShape',
+            title: '塔型',
+            dataIndex: 'productShape'
+        }, {
+            key: 'embossedStamp',
+            title: '钢印塔型',
+            dataIndex: 'embossedStamp'
         }, {
             key: 'projectName',
-            title: '塔型',
-            dataIndex: 'projectName'
-        }, {
-            key: 'saleTypeName',
-            title: '钢印塔型',
-            dataIndex: 'saleTypeName'
-        }, {
-            key: 'winBidTypeName',
             title: '工程名称',
-            dataIndex: 'winBidTypeName',
+            dataIndex: 'projectName',
         }, {
-            key: 'productTypeName',
+            key: 'createUser',
             title: '创建人',
-            dataIndex: 'productTypeName',
+            dataIndex: 'createUser',
         },  {
-            key: 'voltageGradeName',
+            key: 'createTime',
             title: '创建时间',
-            dataIndex: 'voltageGradeName',
+            dataIndex: 'createTime',
         },  {
-            key: 'customerCompany',
+            key: 'description',
             title: '备注',
-            dataIndex: 'customerCompany'
+            dataIndex: 'description'
         },  {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type="link"  onClick={this.paragraphShow}>
+                    <Button type="link"  onClick={()=>this.paragraphShow((record as IMaterialExtraction).id)}>
                         提料段落
                     </Button>
-                    <Button type="link"  onClick={this.detailShow}>
+                    <Button type="link"  onClick={()=>this.detailShow((record as IMaterialExtraction).id)}>
                         构件明细
                     </Button>
                 </Space>
@@ -165,9 +163,11 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
     }
 
     //paragraphModalShow
-    protected paragraphShow=()=>{
+    protected paragraphShow = async(id: string)=>{
+        const resData: IParagraph[] = await RequestUtil.get<IParagraph[]>(`/tower-market/extractionMaterial/getExtractionMaterialSection/${id}`);
         this.setState({
-            paragraphVisible: true
+            paragraphVisible: true,
+            paragraphDataSource: resData || []
         })
     }
     protected onModalParagraphClose=()=>{
@@ -176,9 +176,11 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
         })
     }
     //detailModalShow
-    protected detailShow=()=>{
+    protected detailShow = async(id: string)=>{
+        const resData: IDetail[] = await RequestUtil.get<IDetail[]>(`/tower-market/extractionMaterial/getExtractionMaterialComponent/${id}`);
         this.setState({
-            detailVisible: true
+            detailVisible: true,
+            detailDataSource: resData || []
         })
     }
     protected onModalDetailClose=()=>{
@@ -254,45 +256,46 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
       */
     public getFilterFormItemProps(item: ITabItem): FormItemProps[] {
         return [{
-            name: 'internalNumber',
+            name: 'batchSn',
             children: <Input placeholder="批次号关键字" maxLength={ 200 } autoComplete="off"/>
         },
         {
-            name: 'projectName',
-            children: <Input placeholder="全部材料标准" maxLength={ 200 } autoComplete="off"/>
-        },
-        {
-            name: 'customerCompany',
-            children: <Input placeholder="塔型关键字" maxLength={ 200 } autoComplete="off"/>
-        },
-        {
-            name: 'signCustomerName',
-            children: <Input placeholder="钢印塔型关键字" maxLength={ 200 } autoComplete="off"/>
-        },
-        {
-            name: 'winBidType',
+            name: 'materialStandard',
             children: 
-                <Select placeholder="工程名称关键字" className={ styles.select_width } getPopupContainer={ triggerNode => triggerNode.parentNode }>
-                    { winBidTypeOptions && winBidTypeOptions.map(({ id, name }, index) => {
+                <Select placeholder="全部材料标准" className={ styles.select_width } getPopupContainer={ triggerNode => triggerNode.parentNode }>
+                    { materialStandardOptions && materialStandardOptions.map(({ id, name }, index) => {
                         return <Option key={ index } value={ id }>
                             { name }
                         </Option>
                     }) }
                 </Select>
             
+        },
+        {
+            name: 'productShape',
+            children: <Input placeholder="塔型关键字" maxLength={ 200 } autoComplete="off"/>
+        },
+        {
+            name: 'embossedStamp',
+            children: <Input placeholder="钢印塔型关键字" maxLength={ 200 } autoComplete="off"/>
+        },
+        {
+            name: 'projectName',
+            children: <Input placeholder="工程名称关键字" maxLength={ 200 } autoComplete="off"/>
+            
         }];
     }
     public getComponentColumns(): TableColumnType<object>[] {
         return [{
-           key: 'materialCode',
+           key: 'partNum',
            title: '序号',
-           dataIndex: 'materialCode',
+           dataIndex: 'partNum',
            align: "center",
            width: 50,
         },{
-           key: 'productName',
+           key: 'componentCode',
            title: '构件编号',
-           dataIndex: 'productName',
+           dataIndex: 'componentCode',
            align: "center",
            width: 200,
         },{
@@ -314,57 +317,57 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
            align: "center",
            width: 200,
         },{
-           key: 'unitName',
+           key: 'width',
            title: '宽度（mm）',
-           dataIndex: 'unitName',
+           dataIndex: 'width',
            align: "center",
            width: 200,
         },{
-           key: 'proportion',
+           key: 'thickness',
            title: '厚度（mm）',
-           dataIndex: 'proportion',
+           dataIndex: 'thickness',
            align: "center",
            width: 200,
         },{
-           key: 'weightAlgorithm',
+           key: 'length',
            title: '长度（mm）',
-           dataIndex: 'weightAlgorithm',
+           dataIndex: 'length',
            align: "center",
            width: 200,
         },{
-           key: 'description',
+           key: 'number',
            title: '单段数量',
-           dataIndex: 'description',
+           dataIndex: 'number',
            align: "center",
            width: 200,
         },{
-            key: 'description',
+            key: 'totalQuantity',
             title: '合计数量',
-            dataIndex: 'description',
+            dataIndex: 'totalQuantity',
             align: "center",
             width: 200,
         },{
-            key: 'description',
+            key: 'accurateWeight',
             title: '理算重量（kg）',
-            dataIndex: 'description',
+            dataIndex: 'accurateWeight',
             align: "center",
             width: 200,
         },{
-            key: 'description',
+            key: 'singleWeight',
             title: '单件重量（kg）',
-            dataIndex: 'description',
+            dataIndex: 'singleWeight',
             align: "center",
             width: 200,
         },{
-            key: 'description',
+            key: 'subtotalWeight',
             title: '单段小计重量（kg）',
-            dataIndex: 'description',
+            dataIndex: 'subtotalWeight',
             align: "center",
             width: 200,
         },{
-            key: 'description',
+            key: 'totalQuantity',
             title: '合计重量（kg）',
-            dataIndex: 'description',
+            dataIndex: 'totalQuantity',
             align: "center",
             width: 200,
         },{
@@ -379,19 +382,19 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
 
     public getSegmentColumns(): TableColumnType<object>[] {
         return [{
-           key: 'materialCode',
+           key: 'sectionSn',
            title: '段号',
-           dataIndex: 'materialCode',
+           dataIndex: 'sectionSn',
            align: "center",
         },{
-           key: 'productName',
+           key: 'sectionCount',
            title: '本次提料段数',
-           dataIndex: 'productName',
+           dataIndex: 'sectionCount',
            align: "center",
         },{
-           key: 'shortcutCode',
+           key: 'sectionTotalCount',
            title: '已提料段数',
-           dataIndex: 'shortcutCode',
+           dataIndex: 'sectionTotalCount',
            align: "center",
         }]
     };
@@ -404,10 +407,10 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
             <>
             { super.render() }
             <Modal title="提料段落" visible={ this.state.paragraphVisible } onCancel={ this.onModalParagraphClose } footer={ null } width={1000}>
-                <Table columns={this.getSegmentColumns()} dataSource={[{},{},{}]}/>
+                <Table columns={this.getSegmentColumns()} dataSource={ this.state.paragraphDataSource }/>
             </Modal>
             <Modal title="提料构件明细" visible={ this.state.detailVisible } onCancel={ this.onModalDetailClose } footer={ null }  width={1300}>
-                <Table columns={this.getComponentColumns()} scroll={{ x:1200 }}/>
+                <Table columns={this.getComponentColumns()} scroll={{ x:1200 }} dataSource={ this.state.detailDataSource }/>
             </Modal>
         </>
 

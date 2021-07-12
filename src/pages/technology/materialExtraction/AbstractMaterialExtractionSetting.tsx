@@ -11,15 +11,16 @@
      IFormItemGroup,
  } from '../../../components/AbstractFillableComponent';
  import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
- import ClientSelectionComponent from '../../../components/ClientSelectionModal';
+ import TaskSelectionComponent from '../../../components/TaskSelectionModal';
+ import TowerSelectionComponent from '../../../components/TowerSelectionModal';
  import RequestUtil from '../../../utils/RequestUtil';
  import { DataType } from '../../../components/AbstractSelectableModal';
- import { winBidTypeOptions } from '../../../configuration/DictionaryOptions';
- import { IContract } from '../../IContract';
+ import { materialStandardOptions } from '../../../configuration/DictionaryOptions';
+ import { IMaterialExtraction } from './IMaterialExtraction';
  const { TabPane } = Tabs;
  export interface IAbstractMaterialExtractionSettingState extends IAbstractFillableComponentState {
      readonly tablePagination: TablePaginationConfig;
-     readonly contract: IContractInfo;
+     readonly materialExtraction: IMaterialExtractionInfo;
      readonly tableDataSource: [];
      readonly regionInfoData: [] | IRegion[];
      readonly childData: [] | undefined;
@@ -31,7 +32,8 @@
      readonly key: string | number;
  }
  
- export interface IContractInfo extends IContract {
+ export interface IMaterialExtractionInfo extends IMaterialExtraction {
+     readonly taskNoticeId: string;
      readonly customerInfoDto?: ICustomerInfoDto;
      paymentPlanDtos?: IPaymentPlanDto[];
      attachInfoDtos: IAttachDTO[];
@@ -89,6 +91,15 @@
      AMOUNT = 1,   //金额
  }
  
+ const title = {
+     border:'1px solid #d9d9d9',
+     width: '100%'
+ }
+
+ const titleC = {
+     border:'1px solid red',
+     width: '100%'
+ }
  //tab分页
  enum tabStep {
      SEGMENT_NUMBER_SETTING = '1',              //未变更
@@ -100,7 +111,7 @@
  export default abstract class AbstractMaterialExtractionSetting<P extends RouteComponentProps, S extends IAbstractMaterialExtractionSettingState> extends AbstractFillableComponent<P, S> {
  
      public state: S = {
-         contract: {},
+         materialExtraction: {},
      } as S;
  
      public async componentDidMount() {
@@ -114,7 +125,7 @@
       * @returns return path 
       */
      protected getReturnPath(): string {
-         return '/prom/contract';
+         return '/prom/materialExtraction';
      }
  
       /**
@@ -154,16 +165,16 @@
       * @returns 
       */
      public onSelect = (selectedRows: DataType[]):void => {
-         const contract: IContractInfo | undefined = this.state.contract;
+         const materialExtraction: IMaterialExtractionInfo | undefined = this.state.materialExtraction;
          if(selectedRows && selectedRows.length > 0 ) {
-             this.setState({
-                 contract: {
-                     ...(contract || {}),
-                     signCustomerName: selectedRows[0].name,
-                     signCustomerId: selectedRows[0].id?.toString()
-                 }
-             })
-             this.getForm()?.setFieldsValue({ signCustomerName: selectedRows[0].name });
+            //  this.setState({
+            //      materialExtraction: {
+            //          ...(materialExtraction || {}),
+            //          signCustomerName: selectedRows[0].name,
+            //          signCustomerId: selectedRows[0].id?.toString()
+            //      }
+            //  })
+            //  this.getForm()?.setFieldsValue({ signCustomerName: selectedRows[0].name });
          }
      }
  
@@ -181,7 +192,7 @@
       * @returns form item groups 
       */
      public getFormItemGroups(): IFormItemGroup[][] {
-             const contract: IContractInfo | undefined = this.state.contract;
+             const materialExtraction: IMaterialExtractionInfo | undefined = this.state.materialExtraction;
              return [[{
                  title: '基础信息',
                  itemCol: {
@@ -189,68 +200,64 @@
                  },
                  itemProps: [{
                      label: '批次号',
-                     name: 'simpleProjectName',
-                     initialValue: contract?.simpleProjectName,
+                     name: 'batchSn',
+                     initialValue: materialExtraction?.batchSn,
                      rules: [{
                         required: true,
                         message: '请填写批次号'
                     }],
-                     children: <Input maxLength={ 50 }/>
+                     children: <Input maxLength={ 20 }/>
                  }, {
                      label: '材料标准',
-                     name: 'winBidType', 
-                     initialValue: contract?.winBidType,
+                     name: 'materialStandard', 
+                     initialValue: '' || materialStandardOptions && materialStandardOptions.length > 0 && materialStandardOptions[0].id,
                      rules: [{
                         required: true,
                         message: '请选择材料标准'
                      }],
                      children: (
-                         <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
-                             { winBidTypeOptions && winBidTypeOptions.map(({ id, name }, index) => {
-                                 return <Select.Option key={ index } value={ id }>
-                                     { name }
-                                 </Select.Option>
-                             }) }
-                         </Select>
+                        <Select >
+                            { materialStandardOptions && materialStandardOptions.map(({ id, name }, index) => {
+                                return <Select.Option key={ index } value={ id }>
+                                    { name }
+                                </Select.Option>
+                            }) }
+                        </Select>
                      )
                  }, {
                      label: '任务单编号',
-                     name: 'signCustomerName',
-                     initialValue: contract?.signCustomerName,
+                     name: 'taskNumber',
+                     initialValue: materialExtraction?.taskNumber,
                      rules: [{
                          required: true,
                          message: '请选择任务单编号'
                      }],
                      children:
-                        <>
-                            <Input value={ contract?.signCustomerName } suffix={ 
-                                <ClientSelectionComponent onSelect={ this.onSelect } selectKey={ [contract.signCustomerId] }/>
-                            }/>
-                        </>
+                        <Input value={ materialExtraction?.taskNumber } suffix={ 
+                            <TaskSelectionComponent onSelect={ this.onSelect } selectKey={ [materialExtraction] }/>
+                        }/>
                  }, {
                     label: '塔型',
                     name: 'customerLinkman',
-                    initialValue: contract?.customerInfoDto?.customerLinkman,
+                    initialValue: materialExtraction?.productShape,
                     children:   
-                        <>
-                            <Input value={ contract?.signCustomerName } suffix={ 
-                                <ClientSelectionComponent onSelect={ this.onSelect } selectKey={ [contract.signCustomerId] }/>
-                            }/>
-                        </>
+                        <Input value={ materialExtraction?.productShape } suffix={ 
+                            <TowerSelectionComponent onSelect={ this.onSelect } selectKey={ [materialExtraction.taskNoticeId] }/>
+                        }/>
                  }, {
                     label: '钢印塔型',
-                    name: 'customerPhone',
-                    initialValue: contract?.customerInfoDto?.customerPhone,
-                    children: <Input value={ contract?.customerInfoDto?.customerPhone } disabled/>
+                    name: 'embossedStamp',
+                    initialValue: materialExtraction?.embossedStamp,
+                    children: <Input value={ materialExtraction?.embossedStamp } disabled/>
                  }, {
                     label: '工程名称',
-                    name: 'customerPhone',
-                    initialValue: contract?.customerInfoDto?.customerPhone,
-                    children: <Input value={ contract?.customerInfoDto?.customerPhone } disabled/>
+                    name: 'projectName',
+                    initialValue: materialExtraction?.projectName,
+                    children: <Input value={ materialExtraction?.projectName } disabled/>
                  }, {
                      label: '备注',
                      name: 'description',
-                     initialValue: contract?.description,
+                     initialValue: materialExtraction?.description,
                      children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息"/>
                  }]}
         ]];
@@ -258,15 +265,15 @@
  
     public getComponentColumns(): TableColumnType<object>[] {
         return [{
-           key: 'materialCode',
+           key: 'partNum',
            title: '序号',
-           dataIndex: 'materialCode',
+           dataIndex: 'partNum',
            align: "center",
            width: 50,
         },{
-           key: 'productName',
+           key: 'componentCode',
            title: '构件编号',
-           dataIndex: 'productName',
+           dataIndex: 'componentCode',
            align: "center",
            width: 200,
         },{
@@ -288,57 +295,57 @@
            align: "center",
            width: 200,
         },{
-           key: 'unitName',
+           key: 'width',
            title: '宽度（mm）',
-           dataIndex: 'unitName',
+           dataIndex: 'width',
            align: "center",
            width: 200,
         },{
-           key: 'proportion',
+           key: 'thickness',
            title: '厚度（mm）',
-           dataIndex: 'proportion',
+           dataIndex: 'thickness',
            align: "center",
            width: 200,
         },{
-           key: 'weightAlgorithm',
+           key: 'length',
            title: '长度（mm）',
-           dataIndex: 'weightAlgorithm',
+           dataIndex: 'length',
            align: "center",
            width: 200,
         },{
-           key: 'description',
+           key: 'number',
            title: '单段数量',
-           dataIndex: 'description',
+           dataIndex: 'number',
            align: "center",
            width: 200,
         },{
-            key: 'description',
+            key: 'totalQuantity',
             title: '合计数量',
-            dataIndex: 'description',
+            dataIndex: 'totalQuantity',
             align: "center",
             width: 200,
         },{
-            key: 'description',
+            key: 'accurateWeight',
             title: '理算重量（kg）',
-            dataIndex: 'description',
+            dataIndex: 'accurateWeight',
             align: "center",
             width: 200,
         },{
-            key: 'description',
+            key: 'singleWeight',
             title: '单件重量（kg）',
-            dataIndex: 'description',
+            dataIndex: 'singleWeight',
             align: "center",
             width: 200,
         },{
-            key: 'description',
+            key: 'subtotalWeight',
             title: '单段小计重量（kg）',
-            dataIndex: 'description',
+            dataIndex: 'subtotalWeight',
             align: "center",
             width: 200,
         },{
-            key: 'description',
+            key: 'totalWeight',
             title: '合计重量（kg）',
-            dataIndex: 'description',
+            dataIndex: 'totalWeight',
             align: "center",
             width: 200,
         },{
@@ -353,35 +360,34 @@
 
     public getSegmentColumns(): TableColumnType<object>[] {
         return [{
-           key: 'materialCode',
+           key: 'sectionSn',
            title: '段号',
-           dataIndex: 'materialCode',
+           dataIndex: 'sectionSn',
            align: "center",
         },{
-           key: 'productName',
-           title: '本次提料段数',
-           dataIndex: 'productName',
+           key: 'sectionCount',
+           title: '* 本次提料段数',
+           dataIndex: 'sectionCount',
            align: "center",
            render:(text, record, index)=>{
-                return  <Input  defaultValue={text} onChange={e => this.handleFields(index, 'materialCode', e.target.value)}/>
+                return  <Input  defaultValue={text} onChange={e => this.handleFields(index, e.target.value)} style={ text? title : titleC } bordered={false}/>
            }
         },{
-           key: 'shortcutCode',
+           key: 'sectionTotalCount',
            title: '已提料段数',
-           dataIndex: 'shortcutCode',
+           dataIndex: 'sectionTotalCount',
            align: "center",
         }]
     };
  
-    public handleFields = (index:number, fieldKey:string, value:string) => {
+    public handleFields = (index:number, value:string) => {
         // let data = this.state?.materialData;
         // if(data){
         //     let row = data[index];
-        //     console.log(row)
-        //     row[fieldKey]= value;
-        //     // this.setState({
-        //     //     materialData:data
-        //     // })
+        //     row.sectionCount= value;
+            // this.setState({
+            //     materialData:data
+            // })
         // };
     }
  
@@ -390,7 +396,7 @@
       * @returns extra sections 
       */
      public renderExtraSections(): IRenderedSection[] {
-         const contract: IContractInfo | undefined = this.state.contract;
+         const materialExtraction: IMaterialExtractionInfo | undefined = this.state.materialExtraction;
          return [{
              title: '其他信息',
              render: (): React.ReactNode => {
