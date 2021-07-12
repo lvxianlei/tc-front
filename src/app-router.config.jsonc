@@ -203,5 +203,10 @@
         "path": "/product/towershape/setting/:id",
         "module": "./pages/product/TowerShape/TowerShapeSetting",
         "exact": true
+    }, { //变更塔型
+        "name": "变更塔型",
+        "path": "/product/towershape/change/:id",
+        "module": "./pages/product/TowerShape/TowerShapeChange",
+        "exact": true
     }]
 }
