@@ -1,0 +1,22 @@
+{
+    "code": 200,
+    "data": [{
+        "id": "1",
+        "towerSectionFieldsValue": 20,
+        "accurateWeight":  "12120.12",
+        "componentCode": "1212124548787",
+        "description": "描述",
+        "length": 1500,
+        "materialTexture": "L25*25",
+        "number":  4,
+        "partNum": "1",
+        "productCategoryId": "111",
+        "rowMaterial": "角钢",
+        "singleWeight": "1220.245",
+        "spec": "Q235",
+        "subtotalWeight": "4000",
+        "thickness": "25",
+        "width": "25"
+    }],
+    "msg": ""
+}

@@ -3,11 +3,10 @@
  * @copyright © 2021
  */
 
-import { Button, FormItemProps, Input, Popconfirm, Space, TableColumnType, TablePaginationConfig, TableProps } from 'antd';
+import { Button, Dropdown, FormItemProps, Input, Menu, Popconfirm, Space, TableColumnType, TablePaginationConfig, TableProps } from 'antd';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { Link } from 'react-router-dom';
 
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../../components/AbstractMngtComponent';
 import { ITabItem } from '../../../components/ITabableComponent';
@@ -21,6 +20,10 @@ export interface ITowerShapeMngtState extends IAbstractMngtComponentState {
     readonly tableDataSource: ITowerShape[];
     readonly selectedTowerKeys: React.Key[];
     readonly selectedTower: ITowerShape[];
+    readonly internalNumber?: string | number;
+    readonly projectName?: string;
+    readonly steelProductShape?: string;
+    readonly productShape?: string;
 }
 
 export interface IResponseData {
@@ -33,8 +36,19 @@ export interface IResponseData {
 
 interface ITowerShape {
     readonly id?: number | string;
-    readonly status?: number;
-    readonly internalNumber?: number | string;
+    readonly description?: string;
+    readonly internalNumber?: string | number;
+    readonly label?: string;
+    readonly materialTexture?: string;
+    readonly operateStatus?: number;
+    readonly partNumber?: number;
+    readonly productShape?: string;
+    readonly productShapeName?: string;
+    readonly productType?: number | string;
+    readonly projectName?: string;
+    readonly steelProductShape?: string;
+    readonly voltageGrade?: string | number;
+    readonly weight?: number;
 }
 
  /**
@@ -59,13 +73,13 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
      * @param filterValues 
      */
     protected async fetchTableData(filterValues: Record<string, any>,pagination: TablePaginationConfig = {}) {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/contract', {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-data-archive/productCategory', {
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize ||this.state.tablePagination?.pageSize,
             countryCode: this.state.selectedTabKey
         });
-        if(resData?.records?.length == 0 && resData?.current>1){
+        if(resData?.records?.length == 0 && resData?.current > 1){
             this.fetchTableData({},{
                 current: resData.current - 1,
                 pageSize: 10,
@@ -103,6 +117,30 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
     public getTableDataSource(item: ITabItem): object[] {
         return this.state.tableDataSource;
     }
+    
+    public menu(record: object) :React.ReactElement<any, string> {
+        return <Menu>
+            <Menu.Item>
+                <Button type="link"  href={ `/product/towershape/setting/${ (record as ITowerShape).id }` }> 编辑</Button>
+            </Menu.Item>
+            <Menu.Item>
+                <Popconfirm 
+                    title="要删除该客户吗？" 
+                    placement="topRight" 
+                    okText="确认"
+                    cancelText="取消"
+                    onConfirm={ this.onDelete([record as ITowerShape]) }
+                >
+                    <Button type="link">
+                        删除
+                    </Button>
+                </Popconfirm>
+            </Menu.Item>
+            <Menu.Item>
+                <Button type="link" href={ `/product/towershape/change/${ (record as ITowerShape).id }` }>变更</Button>
+            </Menu.Item>
+        </Menu>
+    }
 
      /**
       * @implements
@@ -112,60 +150,39 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
       */
     public getTableColumns(item: ITabItem): TableColumnType<object>[] {
         return [{
-            key: 'projectName',
+            key: 'productShape',
             title: '塔型',
-            dataIndex: 'projectName'
+            dataIndex: 'productShape'
         }, {
-            key: 'projectName',
-            title: '钢印号',
-            dataIndex: 'projectName'
-        }, {
-            key: 'projectName',
-            title: '合同编号',
-            dataIndex: 'projectName'
+            key: 'steelProductShape',
+            title: '钢印塔型',
+            dataIndex: 'steelProductShape'
         }, {
             key: 'internalNumber',
             title: '内部合同编号',
-            dataIndex: 'internalNumber',
-            render: (_: undefined, record: object): React.ReactNode => {
-            return <Link to={ `/prom/contract/detail/${ (record as ITowerShape).id }` }>{ (record as ITowerShape).internalNumber }</Link>
-        }
+            dataIndex: 'internalNumber'
         }, {
             key: 'projectName',
             title: '工程名称',
             dataIndex: 'projectName'
         }, {
-            key: 'deliveryTime',
+            key: 'description',
             title: '备注',
-            dataIndex: 'deliveryTime'
+            dataIndex: 'description'
         }, {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type="link"  href={ `/product/towershape/setting/${ (record as ITowerShape).id }` } disabled={ (record as ITowerShape).status === 1 }>
-                        编辑
-                    </Button>
-                    <Popconfirm 
-                        title="要删除该客户吗？" 
-                        placement="topRight" 
-                        okText="确认"
-                        cancelText="取消"
-                        onConfirm={ this.onDelete([record as ITowerShape]) }
-                        disabled={ (record as ITowerShape).status === 1 }
-                    >
-                        <Button type="link" disabled={ (record as ITowerShape).status === 1 }>
-                            删除
-                        </Button>
-                    </Popconfirm>
-                    <Button type="link"  href={ `/prom/contract/setting/${ (record as ITowerShape).id }` } disabled={ (record as ITowerShape).status === 1 }>
-                        变更
-                    </Button>
                     <TowerSectionModal id={ (record as ITowerShape).id }/>
-                    <Button type="link" href={ `/prom/contract/paymentRecord/${ (record as ITowerShape).id }` } disabled={ (record as ITowerShape).status === 0 }>导入图纸构建明细</Button>
-                    <ComponentDetailsModal id={ (record as ITowerShape).id }
-                    />
+                    <Button type="link" href={ `/prom/contract/paymentRecord/${ (record as ITowerShape).id }` }>导入图纸构建明细</Button>
+                    <ComponentDetailsModal id={ (record as ITowerShape).id } />
+                    <Dropdown overlay={ this.menu(record) } trigger={['click']}>
+                        <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                            ···
+                        </a>
+                    </Dropdown>
                 </Space>
             )
         }];
@@ -177,7 +194,12 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
      * @param pagination 
      */
     public onTableChange(pagination: TablePaginationConfig): void {
-        this.fetchTableData({}, pagination);
+        this.fetchTableData({
+            internalNumber: this.state.internalNumber,
+            projectName: this.state.projectName,
+            steelProductShape: this.state.steelProductShape,
+            productShape: this.state.productShape,
+        }, pagination);
     }
      
     /**
@@ -290,9 +312,6 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
     public getFilterFormItemProps(): FormItemProps[] {
         return [{
             name: 'internalNumber',
-            children: <Input placeholder="合同编号关键字" maxLength={ 200 }/>
-        },{
-            name: 'internalNumber',
             children: <Input placeholder="内部合同编号关键字" maxLength={ 200 }/>
         },
         {
@@ -300,11 +319,11 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
             children: <Input placeholder="工程名称关键字" maxLength={ 200 }/>
         },
         {
-            name: 'customerCompany',
+            name: 'productShape',
             children: <Input placeholder="塔型关键字" maxLength={ 200 }/>
         },
         {
-            name: 'signCustomerName',
+            name: 'steelProductShape',
             children: <Input placeholder="钢印号关键字" maxLength={ 200 }/>
         }];
     }

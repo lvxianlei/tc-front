@@ -237,10 +237,23 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
             render: (_: undefined, record: ITowerSection, index: number): React.ReactNode => (
                 <Form.Item initialValue={ record.projectName } name={[index, 'projectName']}>
                     <Input suffix={ <FormOutlined onClick={ () => {
+                        let bodySection: IBodySection[] = this.getForm()?.getFieldsValue(true)[index].bodySection;
+                        bodySection && bodySection.map((item: IBodySection, index: number) => {
+                            if(item.item && item.item !== "") {
+                                bodySection = bodySection;
+                            } else {
+                                bodySection.splice(index, 1);
+                            }
+                        })
+                        const towerSection: ITowerSection[] = this.getForm()?.getFieldsValue(true) || [];
+                        towerSection[index] = {
+                            ...towerSection[index],
+                            bodySection: bodySection
+                        }
                         this.setState({
                             isBodyVisible: true,
                             bodyIndex: index,
-                            oldTowerSection: this.getForm()?.getFieldsValue(true)
+                            oldTowerSection: towerSection
                         })
                     } }/> }/>
                 </Form.Item> 
