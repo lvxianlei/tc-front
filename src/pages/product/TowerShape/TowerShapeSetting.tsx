@@ -27,7 +27,8 @@
         const towerShape: ITowerShape = await RequestUtil.get<ITowerShape>(`/tower-market/contract/${ this.props.match.params.id }`);
         console.log(towerShape)
         this.setState({
-            towerShape: towerShape
+            towerShape: towerShape,
+            isReference: towerShape.state
         });
         this.getForm()?.setFieldsValue({
             ...towerShape
