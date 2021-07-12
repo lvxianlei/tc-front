@@ -3,7 +3,7 @@
  * @copyright © 2021 
  */
 
- import { FormProps, Input,  Select, TablePaginationConfig, Tabs, Table, TableColumnType } from 'antd';
+ import { FormProps, Input,  Select, TablePaginationConfig, Tabs, Table, TableColumnType, InputNumber } from 'antd';
  import React from 'react';
  import { RouteComponentProps } from 'react-router';
  import AbstractFillableComponent, {
@@ -16,15 +16,14 @@
  import RequestUtil from '../../../utils/RequestUtil';
  import { DataType } from '../../../components/AbstractSelectableModal';
  import { materialStandardOptions } from '../../../configuration/DictionaryOptions';
- import { IMaterialExtraction } from './IMaterialExtraction';
+ import { IDetail, IMaterialExtraction, IParagraph } from './IMaterialExtraction';
  const { TabPane } = Tabs;
  export interface IAbstractMaterialExtractionSettingState extends IAbstractFillableComponentState {
      readonly tablePagination: TablePaginationConfig;
      readonly materialExtraction: IMaterialExtractionInfo;
+     readonly paragraphDataSource: [] | IParagraph[];
+     readonly detailDataSource:  [] | IDetail[];
      readonly tableDataSource: [];
-     readonly regionInfoData: [] | IRegion[];
-     readonly childData: [] | undefined;
-     readonly col: [];
  }
  
  export interface ITabItem {
@@ -112,6 +111,8 @@
  
      public state: S = {
          materialExtraction: {},
+         paragraphDataSource: [],
+         detailDataSource: [],
      } as S;
  
      public async componentDidMount() {
@@ -370,8 +371,8 @@
            dataIndex: 'sectionCount',
            align: "center",
            render:(text, record, index)=>{
-                return  <Input  defaultValue={text} onChange={e => this.handleFields(index, e.target.value)} style={ text? title : titleC } bordered={false}/>
-           }
+                return  <InputNumber min={0} defaultValue={text} onChange={value => this.handleFields(index,value)} style={ text? title : titleC } bordered={false} precision={0} max={(record as IParagraph).sectionTotalCount}/>
+            }
         },{
            key: 'sectionTotalCount',
            title: '已提料段数',
@@ -396,17 +397,17 @@
       * @returns extra sections 
       */
      public renderExtraSections(): IRenderedSection[] {
-         const materialExtraction: IMaterialExtractionInfo | undefined = this.state.materialExtraction;
+         const { paragraphDataSource, detailDataSource } = this.state;
          return [{
              title: '其他信息',
              render: (): React.ReactNode => {
                  return (
                     <Tabs defaultActiveKey={ tabStep.SEGMENT_NUMBER_SETTING } >
                         <TabPane tab="段数设置" key={ tabStep.SEGMENT_NUMBER_SETTING }>
-                            <Table columns={this.getSegmentColumns()} dataSource={[{},{},{}]}/>
+                            <Table columns={this.getSegmentColumns()} dataSource={ paragraphDataSource }/>
                         </TabPane>
                         <TabPane tab="查看构建明细" key={ tabStep.COMPONENT_DETAILS } >
-                            <Table columns={this.getComponentColumns()} scroll={{ x:1200 }}/>
+                            <Table columns={this.getComponentColumns()} scroll={{ x:1200 }} dataSource={ detailDataSource }/>
                         </TabPane>
                   </Tabs>
                  );

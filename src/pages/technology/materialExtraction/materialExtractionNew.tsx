@@ -26,46 +26,12 @@
       * @returns submit 
       */
      public async onSubmit(values: Record<string, any>): Promise<void> {
-         const planValue: IPaymentPlanDto[] = this.getForm()?.getFieldsValue(true).paymentPlanDtos;
-         let totalRate: number = 0;
-         planValue.map<number>((item: IPaymentPlanDto): number => {
-             return totalRate = parseFloat((Number(item.returnedRate) + Number(totalRate)).toFixed(2));
-         })
-         let totalAmount: number = 0;
-             planValue.map<number>((item: IPaymentPlanDto): number => {
-                 return  totalAmount = parseFloat((Number(item.returnedAmount) + Number(totalAmount)).toFixed(2));
-             })
-         values.signContractTime = values.signContractTime && moment(values.signContractTime).format('YYYY-MM-DD');
-         values.deliveryTime = values.deliveryTime && moment(values.deliveryTime).format('YYYY-MM-DD');
-         values.reviewTime = values.reviewTime && moment(values.reviewTime).format('YYYY-MM-DD HH:mm');
-         values.paymentPlanDtos = values.paymentPlanDtos?.map((plan: IPaymentPlanDto, index: number): IPaymentPlanDto => {
-             return {
-                 ...plan,
-                 returnedTime: moment(plan.returnedTime).format('YYYY-MM-DD'),
-                 period: index + 1
-             };
-         });
-         values.customerInfoDto = {
-             ...(this.state.contract?.customerInfoDto),
-             customerLinkman: values.customerLinkman,
-             customerPhone: values.customerPhone
-         };
-         values.signCustomerId = this.state.contract?.signCustomerId;
-         if( totalRate < 100) {
-             message.error('计划回款总占比必须等于100');
-             return Promise.reject(false);
-         } else if( totalRate > 100 ) {
-             message.error('计划回款总占比必须等于100');
-             return Promise.reject(false);
-         } else if( totalAmount < values.contractAmount ) {
-             message.error('计划回款总金额必须等于合同总价');
-             return Promise.reject(false);
-         } else if( totalAmount > values.contractAmount ) {
-             message.error('计划回款总金额必须等于合同总价');
-             return Promise.reject(false);
-         } else {
-             return await RequestUtil.post('/tower-market/contract', values);
-         }
+        // this.getForm()?.getFieldsValue(true).paymentPlanDtos;
+        //  if( ) {
+        //      return Promise.reject(false);
+        //  } else {
+        //      return await RequestUtil.post('/tower-market/contract', values);
+        //  }
      }
  }
  
