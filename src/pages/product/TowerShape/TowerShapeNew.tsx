@@ -26,8 +26,7 @@ class TowerShapeNew extends AbstractTowerShapeSetting<ITowerShapeNewRouteProps, 
     public async onSubmit(values: Record<string, any>): Promise<void> {
         values.productDtos = this.getForm()?.getFieldsValue(true).productDtos;
         console.log(values)
-        return Promise.reject();
-        // return await RequestUtil.post('/tower-market/contract', values);
+        return await RequestUtil.post('/tower-data-archive/productCategory', values);
     }
 }
 

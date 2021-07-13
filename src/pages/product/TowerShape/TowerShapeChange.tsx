@@ -28,7 +28,7 @@
         console.log(towerShape)
         this.setState({
             towerShape: towerShape,
-            isReference: towerShape.state
+            // isReference: towerShape.operateStatus
         });
         this.getForm()?.setFieldsValue({
             ...towerShape
