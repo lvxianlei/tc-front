@@ -141,7 +141,7 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
         return (
             <Table 
                 { ...this.getTableProps() }
-                className={ styles.tableWidth }
+                scroll={{ x: 1500 }}
             />
         );
     }
