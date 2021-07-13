@@ -2,7 +2,7 @@
  * @author zyc
  * @copyright © 2021
  */
-import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Row, Select } from 'antd';
+import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Row, Select, Table, TableColumnType, TableProps } from 'antd';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { DeleteOutlined } from '@ant-design/icons';
@@ -19,6 +19,8 @@ import { currencyTypeOptions, productTypeOptions, taxRateOptions, voltageGradeOp
 import { IProduct } from '../../IProduct';
 import { IContract } from '../../IContract';
 import layoutStyles from '../../../layout/Layout.module.less';
+import TowerSelectionModal from './TowerSelectionModal';
+import { GetRowKey } from 'rc-table/lib/interface';
 
 export interface IAbstractSaleOrderSettingState extends IAbstractFillableComponentState {
     readonly saleOrder?: ISaleOrder;
@@ -54,13 +56,14 @@ export interface ISaleOrder {
     readonly guaranteeType?: string;
     readonly totalWeight: number;
     readonly totalAmount: number;
+    readonly totalPrice?: number;
     readonly productVos: IProductVo[];
     readonly productChangeRecordVos?: IProductVo[];
     readonly contractInfoVo?: IContractInfoDto;
 }
 
 export interface IProductVo extends IProduct {
-    readonly num: number;
+    readonly num?: number;
 }
 
 export interface IContractInfoDto extends IContract {
@@ -147,10 +150,12 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             this.setState({
                 saleOrder: {
                     ...(saleOrder || { taxAmount: 0, taxRate: 0, totalWeight: 0, totalAmount: 0,productVos: [] }),
-                    contractInfoDto: { ...modalSelectedValue }
+                    contractInfoDto: { ...modalSelectedValue },
+                    productDtos: []
                 },
+                orderQuantity: 0
             })
-            this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, price: 0  });
+            this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, price: 0, productDtos: [], totalWeight: '', totalPrice: '', totalAmount: '', taxAmount: undefined, taxPrice: '', amount: '', orderQuantity: ''});
             this.getUnitByChargeType();
         }   
     }
@@ -161,7 +166,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
     public getUnitByChargeType = () : void => {
         const saleOrder: ISaleOrder | undefined = this.getForm()?.getFieldsValue(true);
         let productDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).productDtos;
-        productDtos = productDtos.map(items => {
+        productDtos = productDtos && productDtos.map(items => {
             if(saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE) {
                 return items ={
                     ...items,
@@ -170,7 +175,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             } else {
                 return items ={
                     ...items,
-                    unit:  '吨'
+                    unit:  'kg'
                 }
             }
         })
@@ -204,38 +209,6 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
     }
 
     /**
-     * @description 订单总重失去焦点时总计金额同步&根据税率计算不含税金额
-     */
-    public amountBlur = (): void => {
-        const saleOrderValue: ISaleOrder = this.getForm()?.getFieldsValue(true);
-        const taxAmount: number = saleOrderValue.taxAmount;
-        this.getPrice();
-        this.getForm()?.setFieldsValue({ totalAmount: taxAmount });
-        this.getAmount();
-    }
-    
-    /**
-     * @description 订单总重-计算含税单价
-     */
-    public getPrice = (): void => {
-        const saleOrder: ISaleOrder = this.getForm()?.getFieldsValue(true);
-        const productDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).productDtos;
-        if(productDtos.length > 0) {
-            let totalPrice: number = 0;
-            totalPrice = saleOrder.taxAmount / saleOrder.totalWeight || 0;
-            totalPrice = parseFloat(totalPrice.toFixed(4));
-            productDtos.map<void>((items: IProductVo, ind: number): void => {
-                productDtos[ind] = {
-                    ...productDtos[ind],
-                    totalAmount: totalPrice * productDtos[ind].num || 0,
-                    price: totalPrice
-                }
-            })
-            this.getForm()?.setFieldsValue({ totalPrice: totalPrice, taxPrice: totalPrice, productDtos: productDtos });
-        }
-    }
-
-    /**
      * @description 根据税率计算不含税单价
      */
      public getPriceAccordTaxRate = (): void => {
@@ -249,34 +222,57 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
     }
 
     /**
-     * @description 订单总重-输入产品重量计算总计重量
+     * @description 订单总重改变时总计金额同步&根据税率计算不含税金额
      */
-    public numBlur(index: number): void {
+    public amountBlur = (): void => {
+        const saleOrderValue: ISaleOrder = this.getForm()?.getFieldsValue(true);
+        const taxAmount: number = saleOrderValue.taxAmount;
+        this.getPrice();
+        this.getForm()?.setFieldsValue({ totalAmount: taxAmount });
+        this.getAmount();
+        this.getPriceAfterChangeAmount();
+    }
+
+    /**
+     * @description 订单总重-改变含税金额计算改变单行金额
+     */
+    public getPriceAfterChangeAmount = () : void => {
+        const saleOrder: ISaleOrder | undefined = this.getForm()?.getFieldsValue(true);
         let productDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).productDtos;
-        // 判断productDtos是否有值
-        if(productDtos[index] && productDtos[index].num) {
-            let totalNum: number = 0;
-            productDtos.map<void>((items: IProductVo): void => {
-                totalNum = Number(totalNum) + Number(items.num) || 0;
-            })
-            this.getForm()?.setFieldsValue({ totalWeight: totalNum });
-            this.setState({
-                orderQuantity: totalNum
-            })
-            this.getPrice();
-            this.getPriceAccordTaxRate();
+        productDtos = productDtos && productDtos.map(items => {
+            return items ={
+                ...items,
+                price: saleOrder?.totalPrice || 0
+            }
+        })
+        this.setState({
+            saleOrder: {
+                ...(saleOrder || { taxAmount: 0, taxRate: 0, totalWeight: 0, totalAmount: 0, productVos: [] }),
+                productDtos: [...(productDtos || [])]
+            }
+        })
+        this.getForm()?.setFieldsValue({ productDtos: [...(productDtos || [])] });
+    } 
+    
+    /**
+     * @description 订单总重-计算含税单价
+     */
+    public getPrice = (): void => {
+        const saleOrder: ISaleOrder = this.getForm()?.getFieldsValue(true);
+        const productDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).productDtos || [];
+        if(productDtos.length > 0) {
+            let totalPrice: number = 0;
+            totalPrice = saleOrder.taxAmount / saleOrder.totalWeight || 0;
+            totalPrice = parseFloat(totalPrice.toFixed(4));
             productDtos.map<void>((items: IProductVo, ind: number): void => {
-                const num: number = productDtos[ind].num;
-                const price: number | undefined = productDtos[ind].price;
-                if(price) {
-                    productDtos[ind] = {
-                        ...productDtos[ind],
-                        totalAmount: num * price || 0
-                    }
+                productDtos[ind] = {
+                    ...productDtos[ind],
+                    totalAmount: totalPrice * (productDtos[ind].num || 0) || 0,
+                    price: totalPrice
                 }
             })
-            this.getForm()?.setFieldsValue({ productDtos: productDtos });
-        }                                                              
+            this.getForm()?.setFieldsValue({ totalPrice: totalPrice, taxPrice: totalPrice, productDtos: productDtos });
+        }
     }
 
     /**
@@ -300,7 +296,13 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 ...productDtos[index],
                 totalAmount: amount
             }
-            this.getForm()?.setFieldsValue({ taxPrice: parseFloat((totalPrice/orderQuantity).toFixed(4)), totalPrice: parseFloat((totalPrice/orderQuantity).toFixed(4)), productDtos: productDtos });
+            this.setState({
+                saleOrder: {
+                    ...(saleOrder || { taxAmount: 0, taxRate: 0, totalWeight: 0, totalAmount: 0,productVos: [] }),
+                    productDtos: [...productDtos]
+                }
+            })
+            this.getForm()?.setFieldsValue({ taxPrice: parseFloat((totalPrice/orderQuantity).toFixed(4)), totalPrice: parseFloat((totalPrice/orderQuantity || 0).toFixed(4)), productDtos: [...productDtos] });
             this.getTotalAmount();
             this.getAmount();
         }                                                       
@@ -332,7 +334,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             })
         }
         if( saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ) {
-            const num: number = productDtos[index].num;
+            const num: number = productDtos[index].num || 0;
             let totalWeight: number = saleOrderValue.totalWeight;
             totalWeight = totalWeight - num;
             this.getForm()?.setFieldsValue({ totalWeight: totalWeight });
@@ -388,7 +390,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                         {
                             readonly ? <Input value={ saleOrder?.contractInfoDto?.contractId }
                             disabled={ readonly }/> : <Input value={ saleOrder?.contractInfoDto?.contractId } suffix={ 
-                                <ContractSelectionComponent onSelect={ this.onSelect }/>
+                                <ContractSelectionComponent onSelect={ this.onSelect } selectKey={ [saleOrder?.contractInfoDto?.contractId] }/>
                             } disabled={ readonly }/>
                         }
                     </>
@@ -429,8 +431,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 initialValue: saleOrder?.contractInfoDto?.chargeType,
                 children: (
                     <Select disabled>
-                        <Select.Option value={ 0 }>订单总价、总重计算单价</Select.Option>
-                        <Select.Option value={ 1 }>产品单价、基数计算总价</Select.Option>
+                        <Select.Option value={ ChargeType.ORDER_TOTAL_WEIGHT }>订单总价、总重计算单价</Select.Option>
+                        <Select.Option value={ ChargeType.UNIT_PRICE }>产品单价、基数计算总价</Select.Option>
                     </Select>
                 )
                         
@@ -451,7 +453,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 label: '订单数量',
                 name: 'orderQuantity',
                 initialValue: saleOrder?.orderQuantity || orderQuantity,
-                children: <Input disabled suffix={ saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? "基" : "吨" }/>
+                children: <Input disabled suffix={ saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? "基" : "kg" }/>
             }, {
                 label: '含税金额',
                 name: 'taxAmount',
@@ -564,224 +566,327 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
     }
 
     /**
+      * @implements
+      * @description Gets table columns
+      * @param item 
+      * @returns table columns 
+      */
+     public getColumns(): TableColumnType<object>[] {    
+        const readonly: boolean = this.state.isChangeProduct;
+        const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
+        return [{
+            key: 'index',
+            title: '序号',
+            dataIndex: 'index',
+            width: 100,
+            render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
+                <>
+                    { index + 1 }
+                </>
+            )
+        }, {
+            key: 'productStatus',
+            title: '状态',
+            dataIndex: 'productStatus',
+            width: 150,
+            render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
+                <Form.Item name={['productDtos', index,'productStatus']}>
+                    { record.productStatus === 3 ? '已下发' : record.productStatus === 2 ? '审批中' : '待下发' }
+                    {/* { this.getForm()?.getFieldsValue(true).productDtos[index]?.productStatus && this.getForm()?.getFieldsValue(true).productDtos[index]?.productStatus === 3 ? '已下发' : this.getForm()?.getFieldsValue(true).productDtos[index]?.productStatus === 2 ? '审批中' : '待下发' } */}
+                </Form.Item>
+            )
+        }, {
+            key: 'lineName',
+            title: '线路名称',
+            dataIndex: 'lineName',
+            width: 150,
+            render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
+                <Form.Item name={['productDtos', index,'lineName']}>
+                    <Input maxLength={ 100 } disabled/>
+                </Form.Item> 
+            )
+        }, {
+            key: 'productType',
+            title: '产品类型',
+            dataIndex: 'productType',
+            width: 150,
+            render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
+                <Form.Item name={['productDtos', index,'productType']}>
+                    <Select disabled getPopupContainer={ triggerNode => triggerNode.parentNode }>
+                        { productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={ index } value={ id }>
+                                { name }
+                            </Select.Option>
+                        }) }
+                    </Select>
+                </Form.Item> 
+            )
+        }, {
+            key: 'productShape',
+            title: '塔型',
+            dataIndex: 'productShape',
+            width: 150,
+            render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
+                <Form.Item name={['productDtos', index,'productShape']}>
+                    <Input disabled maxLength={ 50 }/>
+                </Form.Item> 
+            )
+        }, {
+            key: 'productNumber',
+            title: '杆塔号',
+            dataIndex: 'productNumber',
+            width: 150,
+            render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
+                <Form.Item name={['productDtos', index,'productNumber']}>
+                    <Input maxLength={ 50 } disabled/>
+                </Form.Item> 
+            )
+        }, {
+            key: 'voltageGrade',
+            title: '电压等级',
+            dataIndex: 'voltageGrade',
+            width: 150,
+            render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
+                <Form.Item name={['productDtos', index,'voltageGrade']}>
+                    <Select style={{ width: '90%' }} disabled getPopupContainer={ triggerNode => triggerNode.parentNode }>
+                        { voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={ index } value={ id }>
+                                { name }
+                            </Select.Option>
+                        }) }
+                    </Select>
+                </Form.Item> 
+            )
+        }, {
+            key: 'productHeight',
+            title: '呼高（m）',
+            dataIndex: 'productHeight',
+            width: 150,
+            render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
+                <Form.Item name={['productDtos', index,'productHeight']}>
+                    <InputNumber
+                        min="0"
+                        step="0.01"
+                        stringMode={ false } 
+                        precision={ 2 }
+                        disabled
+                    />
+                </Form.Item> 
+            )
+        }, {
+            key: 'unit',
+            title: '单位',
+            dataIndex: 'unit',
+            width: 150,
+            render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
+                <Form.Item name={['productDtos', index, 'unit']} rules= {[{
+                    required: true,
+                    message: '请输入单位'
+                }]} >
+                <Input disabled/>
+            </Form.Item>
+            )
+        }, {
+            key: 'num',
+            title: '数量',
+            dataIndex: 'num',
+            width: 150,
+            render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
+                <Form.Item name={['productDtos', index,'num']}>
+                    <InputNumber 
+                        stringMode={ false } 
+                        min="0"
+                        step="0.01"
+                        precision={ 2 }
+                        disabled
+                        className={ layoutStyles.width100 }/>
+                </Form.Item> 
+            )
+        },  {
+            key: 'price',
+            title: '单价',
+            dataIndex: 'price',
+            width: 150,
+            render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
+                <Form.Item name={['productDtos', index,'price']} rules= {[{
+                    required: true,
+                    message: '请输入产品单价'
+                }]}>
+                    <InputNumber
+                        min="0.01"
+                        step="0.01"
+                        stringMode={ false } 
+                        precision={ 2 }
+                        disabled={ saleOrder?.contractInfoDto?.chargeType !== ChargeType.UNIT_PRICE || readonly || record.productStatus === 2 || record.productStatus === 3 } 
+                        onChange={ () => this.priceBlur(index) }
+                    />
+                </Form.Item>
+            )
+        }, {
+            key: 'totalAmount',
+            title: '金额',
+            dataIndex: 'totalAmount',
+            width: 150,
+            render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
+                <Form.Item name={['productDtos', index,'totalAmount']}>
+                    <Input disabled/>
+                </Form.Item>
+            )
+        }, {
+            key: 'tender',
+            title: '标段',
+            dataIndex: 'tender',
+            width: 150,
+            render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
+                <Form.Item name={['productDtos', index, 'tender']}>
+                    <Input disabled={ record.productStatus === 2 || record.productStatus === 3 } maxLength={ 100 }/>
+                </Form.Item>
+            )
+        }, {
+            key: 'description',
+            title: '备注',
+            dataIndex: 'description',
+            width: 150,
+            render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
+                <Form.Item name={['productDtos', index, 'description']}>
+                    <Input maxLength={ 50 }/>
+                </Form.Item> 
+            )
+        }, {
+            key: 'operation',
+            title: '操作',
+            dataIndex: 'operation',
+            width: 180,
+            fixed: 'right',
+            render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
+                <ConfirmableButton confirmTitle="要删除该条回款计划吗？"
+                    type="link" placement="topRight"
+                    onConfirm={ () => { 
+                        this.tableDelete(index);
+                    } }>
+                    <DeleteOutlined />
+                </ConfirmableButton>
+            )
+        }];
+    }
+
+    /**
+     * @description Gets table props
+     * @param item 
+     * @returns table props 
+     */
+     protected getTableProps(): TableProps<object> {
+        return {
+            rowKey: this.getTableRowKey(),
+            bordered: true,
+            dataSource: [...(this.state.saleOrder?.productDtos || []) ] ,
+            columns: this.getColumns(),
+            pagination: false,
+            scroll: { x: 1200 }
+        };
+    }
+
+    public selectAddRow = (selectedRows: DataType[] | any) => {
+        const saleOrder: ISaleOrder | undefined = this.getForm()?.getFieldsValue(true);
+        let productDtos: IProductVo[] | undefined = saleOrder?.productDtos || [];
+        let totalWeight: number | undefined = saleOrder?.totalWeight || 0;
+        if(selectedRows && selectedRows.length > 0 ) {
+            const product: IProductVo = {
+                productStatus: 0,
+                lineName: selectedRows[0].lineName,
+                productType: selectedRows[0].productType,
+                productShape: selectedRows[0].productShape,
+                productNumber: selectedRows[0].productNumber,
+                voltageGrade: selectedRows[0].voltageGrade,
+                productHeight: selectedRows[0].productHeight,
+                num: selectedRows[0].productWeight,
+                unit: selectedRows[0].unit,
+                price: saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? undefined : saleOrder?.totalPrice,
+                totalAmount: saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? undefined : Number.parseFloat(((saleOrder?.totalPrice || 0 ) * selectedRows[0].productWeight).toFixed(2)),
+                tender: selectedRows[0].tender,
+                description: selectedRows[0].description,
+            };
+            productDtos.push(product);
+            totalWeight = totalWeight + selectedRows[0].productWeight; 
+            this.setState({
+                saleOrder: {
+                    ...(saleOrder || { taxAmount: 0, taxRate: 0, totalWeight: 0, totalAmount: 0,productVos: [] }),
+                    productDtos: productDtos
+                }
+            })
+            this.getForm()?.setFieldsValue({ ...saleOrder, productDtos: [...(productDtos || [])], totalWeight: totalWeight });
+            this.getUnitByChargeType();
+        }   
+        let orderQuantity: number | undefined = this.state.orderQuantity;
+        if(saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE) {
+            if(orderQuantity !== undefined) {
+                orderQuantity = orderQuantity + 1;
+                this.setState({
+                    orderQuantity: orderQuantity
+                })
+            }
+        } else {
+            this.getPrice();
+            this.getPriceAfterChangeAmount();
+            const saleOrderValue: ISaleOrder = this.getForm()?.getFieldsValue(true);
+            if(orderQuantity !== undefined) {
+                this.setState({
+                    orderQuantity: saleOrderValue.totalWeight
+                })
+            }
+        }
+        this.getUnitByChargeType();
+    }
+
+    /**
      * @description Renders extra sections
      * @returns extra sections 
      */
     public renderExtraSections(): IRenderedSection[] {
         const readonly: boolean = this.state.isChangeProduct;
-        const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
+        
         return [{
             title: '产品信息',
             render: (): React.ReactNode => {
                 return (
-                    <div className={ styles.product }>
-                        <Form.List name="productDtos" initialValue={ saleOrder?.productDtos || [] }> 
-                            {
-                                (fields: FormListFieldData[], operation: FormListOperation): React.ReactNode => {
-                                    return (
-                                        <>
-                                            <Button type="primary" onClick={ () => {
-                                                operation.add();
-                                                let orderQuantity: number | undefined = this.state.orderQuantity;
-                                                if(saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ) {
-                                                    if(orderQuantity !== undefined) {
-                                                        orderQuantity = orderQuantity + 1;
-                                                        this.setState({
-                                                            orderQuantity: orderQuantity
-                                                        })
-                                                    }
-                                                } else {
-                                                    const saleOrderValue: ISaleOrder = this.getForm()?.getFieldsValue(true);
-                                                    if(orderQuantity !== undefined) {
-                                                        this.setState({
-                                                            orderQuantity: saleOrderValue.totalWeight
-                                                        })
-                                                    }
-                                                   
-                                                }
-                                                this.getUnitByChargeType();
-                                            } } className={ readonly? styles.isShow : styles.addBtn }>新增</Button>
-                                                <ul className={ styles.FormItem }>
-                                                    <li className={ styles.headerItem }>操作</li>
-                                                    <li  className={ styles.headerItem }>序号</li>
-                                                    <li  className={ styles.headerItem }>状态</li>
-                                                    <li  className={ styles.headerItem }>* 线路名称</li>
-                                                    <li  className={ styles.headerItem }>产品类型</li>
-                                                    <li  className={ styles.headerItem }>* 塔型</li>
-                                                    <li  className={ styles.headerItem }>* 杆塔号</li>
-                                                    <li  className={ styles.headerItem }>电压等级</li>
-                                                    <li  className={ styles.headerItem }>呼高（米）</li>
-                                                    <li  className={ styles.headerItem }>单位</li>
-                                                    <li  className={ saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? styles.isShow : styles.headerItem }>* 数量</li>
-                                                    <li  className={ styles.headerItem }>单价</li>
-                                                    <li  className={ styles.headerItem }>金额</li>
-                                                    <li  className={ styles.headerItem }>标段</li>
-                                                    <li  className={ styles.headerItem }>备注</li>
-                                                </ul>
-                                            {
-                                                fields.map<React.ReactNode>((field: FormListFieldData, index: number): React.ReactNode => (
-                                                    <ul key={ `${ field.name }_${ index }` } className={ styles.FormItem }>
-                                                        <li>
-                                                            <ConfirmableButton confirmTitle="要删除该条回款计划吗？"
-                                                                type="link" placement="topRight"
-                                                                onConfirm={ () => { 
-                                                                    this.tableDelete(index);
-                                                                    operation.remove(index); 
-                                                                } }>
-                                                                <DeleteOutlined />
-                                                            </ConfirmableButton>
-                                                        </li>
-                                                        <li>{ index + 1 }</li>
-                                                        <li>
-                                                            <Form.Item { ...field } name={[field.name, 'productStatus']} fieldKey={[field.fieldKey, 'productStatus']} initialValue={ this.getForm()?.getFieldsValue(true).productDtos[index]?.productStatus || 1 }>
-                                                                { this.getForm()?.getFieldsValue(true).productDtos[index]?.productStatus && this.getForm()?.getFieldsValue(true).productDtos[index]?.productStatus === 3 ? '已下发' : this.getForm()?.getFieldsValue(true).productDtos[index]?.productStatus === 2 ? '审批中' : '待下发' }
-                                                            </Form.Item>
-                                                        </li>
-                                                        <li>
-                                                            <Form.Item 
-                                                                { ...field } 
-                                                                name={[field.name, 'lineName']} 
-                                                                fieldKey={[field.fieldKey, 'lineName']} 
-                                                                rules= {[{
-                                                                    required: true,
-                                                                    message: '请输入线路名称'
-                                                                }]}>
-                                                                <Input disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 }  maxLength={ 100 }/>
-                                                            </Form.Item>
-                                                        </li>
-                                                        <li>
-                                                            <Form.Item { ...field } name={[field.name, 'productType']} fieldKey={[field.fieldKey, 'productType']}>
-                                                                <Select disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 } getPopupContainer={ triggerNode => triggerNode.parentNode }>
-                                                                    { productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                                                                        return <Select.Option key={ index } value={ id }>
-                                                                            { name }
-                                                                        </Select.Option>
-                                                                    }) }
-                                                                </Select>
-                                                            </Form.Item>
-                                                        </li>
-                                                        <li>
-                                                            <Form.Item { ...field } name={[field.name, 'productShape']} fieldKey={[field.fieldKey, 'productShape']} rules= {[{
-                                                                    required: true,
-                                                                    message: '请输入塔型'
-                                                                }]}>
-                                                                <Input disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 } maxLength={ 50 }/>
-                                                            </Form.Item>
-                                                        </li>
-                                                        <li>
-                                                            <Form.Item { ...field } name={[field.name, 'productNumber']} fieldKey={[field.fieldKey, 'productNumber']} rules= {[{
-                                                                    required: true,
-                                                                    message: '请输入杆塔号'
-                                                                }]}>
-                                                                <Input disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 } maxLength={ 50 }/>
-                                                            </Form.Item>
-                                                        </li>
-                                                        <li>
-                                                            <Form.Item { ...field } name={[field.name, 'voltageGrade']} fieldKey={[field.fieldKey, 'voltageGrade']}>
-                                                                <Select style={{ width: '90%' }} disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 } getPopupContainer={ triggerNode => triggerNode.parentNode }>
-                                                                    { voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
-                                                                        return <Select.Option key={ index } value={ id }>
-                                                                            { name }
-                                                                        </Select.Option>
-                                                                    }) }
-                                                                </Select>
-                                                            </Form.Item>
-                                                        </li>
-                                                        <li>
-                                                            <Form.Item { ...field } name={[field.name, 'productHeight']} fieldKey={[field.fieldKey, 'productHeight']}>
-                                                                <InputNumber
-                                                                    min="0"
-                                                                    step="0.01"
-                                                                    stringMode={ false } 
-                                                                    precision={ 2 }
-                                                                    disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 }
-                                                                />
-                                                            </Form.Item>
-                                                        </li>
-                                                        <li>
-                                                            <Form.Item { ...field } name={[field.name, 'unit']} fieldKey={[field.fieldKey, 'unit']} rules= {[{
-                                                                    required: true,
-                                                                    message: '请输入单位'
-                                                                }]} >
-                                                                <Input disabled/>
-                                                            </Form.Item>
-                                                        </li>
-                                                        <li className={ saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? styles.isShow : styles.item }>
-                                                            <Form.Item { ...field } name={[field.name, 'num']} fieldKey={[field.fieldKey, 'num']} rules= {[{
-                                                                    required: saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT,
-                                                                    message: '请输入产品重量'
-                                                                }]}>
-                                                                <InputNumber
-                                                                    min="1"
-                                                                    step="0.0001"
-                                                                    stringMode={ false } 
-                                                                    precision={ 4 }
-                                                                    onChange={ () => this.numBlur(index) } 
-                                                                    disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 } />
-                                                            </Form.Item>
-                                                        </li>
-                                                        <li>
-                                                            <Form.Item { ...field } name={[field.name, 'price']} fieldKey={[field.fieldKey, 'price']} rules= {[{
-                                                                    required: true,
-                                                                    message: '请输入产品单价'
-                                                                }]}>
-                                                                <InputNumber
-                                                                    min="0.01"
-                                                                    step="0.01"
-                                                                    stringMode={ false } 
-                                                                    precision={ 2 }
-                                                                    disabled={ saleOrder?.contractInfoDto?.chargeType !== ChargeType.UNIT_PRICE || readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 } 
-                                                                    onChange={ () => this.priceBlur(index) }/>
-                                                            </Form.Item>
-                                                        </li>
-                                                        <li>
-                                                            <Form.Item { ...field } name={[field.name, 'totalAmount']} fieldKey={[field.fieldKey, 'totalAmount']}>
-                                                                <Input prefix="￥" disabled/>
-                                                            </Form.Item>
-                                                        </li>
-                                                        <li>
-                                                            <Form.Item { ...field } name={[field.name, 'tender']} fieldKey={[field.fieldKey, 'tender']}>
-                                                                <Input disabled={ readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 } maxLength={ 100 }/>
-                                                            </Form.Item>
-                                                        </li>
-                                                        <li>
-                                                            <Form.Item { ...field } name={[field.name, 'description']} fieldKey={[field.fieldKey, 'description']}>
-                                                                <Input.TextArea maxLength={ 300 } disabled={  readonly || saleOrder?.productVos[index]?.productStatus === 2 || saleOrder?.productVos[index]?.productStatus === 3 }/>
-                                                            </Form.Item>
-                                                        </li>
-                                                    </ul>
-                                                ))
-                                            }
-                                        </>
-                                    );
-                                }
-                            }
-                            
-                        </Form.List>
-                        <ul className={ styles.FormItem }>
-                            <li>
-                                总计
-                            </li>
-                            <li className={ styles.leftBlank }></li>
-                            <li className={ saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? styles.isShow : '' }>
-                                <Form.Item name="totalWeight">
-                                    <Input disabled/>
-                                </Form.Item>
-                            </li>
-                            <li>
-                                <Form.Item name="totalPrice">
-                                    <Input disabled/>
-                                </Form.Item>
-                            </li>
-                            <li>
-                                <Form.Item name="totalAmount">
-                                    <Input disabled/>
-                                </Form.Item>
-                            </li>
-                        </ul>
-                    </div>
+                    <>
+                        <TowerSelectionModal onSelect={ this.selectAddRow } readonly={ readonly }/>
+                        <Table { ...this.getTableProps() } summary={pageData => {
+                            return (
+                                <>
+                                    <Table.Summary.Row>
+                                        <Table.Summary.Cell colSpan={ 9 } index={ 1 }>总结</Table.Summary.Cell>
+                                        <Table.Summary.Cell index={ 2 }>
+                                            <Form.Item name="totalWeight">
+                                                <Input disabled/>
+                                            </Form.Item>
+                                        </Table.Summary.Cell>
+                                        <Table.Summary.Cell index={ 3 }>  
+                                            <Form.Item name="totalPrice">
+                                                <Input disabled/>
+                                            </Form.Item>
+                                        </Table.Summary.Cell>
+                                        <Table.Summary.Cell index={ 4 }>  
+                                            <Form.Item name="totalAmount">
+                                                <Input disabled/>
+                                            </Form.Item>
+                                        </Table.Summary.Cell>
+                                    </Table.Summary.Row>
+                                </>
+                            );
+                        }}></Table>
+                    </>
                 );
             }
         }];
+    }
+    
+    /**
+     * @protected
+     * @description Gets table row key
+     * @returns table row key 
+     */
+     protected getTableRowKey(): string | GetRowKey<object> {
+        return 'num';
     }
 }
