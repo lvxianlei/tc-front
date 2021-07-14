@@ -325,31 +325,43 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      */
      public tableDelete(index: number): void {
         const saleOrderValue: ISaleOrder = this.getForm()?.getFieldsValue(true);
+        const productDtos: IProductVo[] | undefined = this.getForm()?.getFieldsValue(true).productDtos;
         const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
-        const productDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).productDtos;
         const orderQuantity: number | undefined = this.state.orderQuantity;
-        if(orderQuantity) {
-            this.setState({
-                orderQuantity: orderQuantity - 1
-            })
-        }
-        if( saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ) {
+        if( productDtos && saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ) {
             const num: number = productDtos[index].num || 0;
             let totalWeight: number = saleOrderValue.totalWeight;
             totalWeight = totalWeight - num;
-            this.getForm()?.setFieldsValue({ totalWeight: totalWeight });
+            productDtos?.splice(index, 1);
+            if(orderQuantity) {
+                this.setState({
+                    orderQuantity: totalWeight,
+                    saleOrder: {
+                        ...saleOrderValue,
+                        productDtos: [ ...productDtos ]
+                    }
+                })
+            }
+            this.getForm()?.setFieldsValue({ totalWeight: totalWeight, productDtos: [...productDtos] });
             this.getPrice();
             this.getPriceAccordTaxRate();
-        } else if( saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ) {
-            const price: number | undefined = productDtos[index].price;
+        } else if( productDtos && saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ) {
+            const price: number | undefined = productDtos[index].price || 0;
             const amount: number | undefined = productDtos[index].totalAmount;
             let totalPrice: number = this.getForm()?.getFieldsValue(true).totalPrice;
             let totalAmount: number = this.getForm()?.getFieldsValue(true).totalAmount;
+            productDtos?.splice(index, 1);
             if(price && amount) {
                 totalPrice = totalPrice - price;
                 totalAmount = totalAmount - amount;
             }
-            this.getForm()?.setFieldsValue({  taxPrice: totalPrice, totalPrice: totalPrice,  taxAmount: totalAmount, totalAmount: totalAmount  });
+            if(orderQuantity) {
+                this.setState({
+                    orderQuantity: orderQuantity - 1,
+                    saleOrder: saleOrderValue
+                })
+            }
+            this.getForm()?.setFieldsValue({  taxPrice: totalPrice, totalPrice: totalPrice,  taxAmount: totalAmount, totalAmount: totalAmount, productDtos: [...productDtos]  });
         }   
     }
 
@@ -850,7 +862,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             render: (): React.ReactNode => {
                 return (
                     <>
-                        <TowerSelectionModal onSelect={ this.selectAddRow } readonly={ readonly }/>
+                        <TowerSelectionModal onSelect={ this.selectAddRow } readonly={ readonly } id={ this.state.saleOrder?.contractInfoDto?.contractId }/>
                         <Table { ...this.getTableProps() } summary={pageData => {
                             return (
                                 <>

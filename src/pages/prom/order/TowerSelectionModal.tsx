@@ -2,7 +2,7 @@
  * @author zyc
  * @copyright © 2021
  */
-import { Button, FormItemProps, Input, Modal, Select, Space, TableColumnType } from 'antd';
+import { Button,  Modal, Space, TableColumnType } from 'antd';
 import { TablePaginationConfig } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
@@ -13,10 +13,9 @@ import AbstractSelectableModal from '../../../components/AbstractSelectableModal
 import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from '../../../components/AbstractSelectableModal';
 import RequestUtil from '../../../utils/RequestUtil';
 
-const { Option } = Select;
-
 export interface ITowerSelectionModalProps extends IAbstractSelectableModalProps {
     readonly readonly?: boolean; 
+    readonly id?: string | number;
 }
 export interface ITowerSelectionModalState extends IAbstractSelectableModalState {
     readonly tableDataSource: [];
@@ -49,16 +48,14 @@ export default class TowerSelectionModal extends AbstractSelectableModal<ITowerS
         this.setState({
             isModalVisible: true,
         })
-    }
-
-    public componentDidMount(): void {
         this.getTable({})
     }
     
     public async getTable(pagination: TablePaginationConfig = {}) {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-data-archive/productCategoryById', {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-data-archive/productCategoryById`, {
             current: pagination.current || this.state.tablePagination?.current,
-            size: pagination.pageSize ||this.state.tablePagination?.pageSize
+            size: pagination.pageSize ||this.state.tablePagination?.pageSize,
+            id: this.props.id
         });
         this.setState({
             tableDataSource: resData.records,
