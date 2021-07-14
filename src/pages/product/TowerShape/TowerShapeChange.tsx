@@ -6,7 +6,8 @@
  import { RouteComponentProps, withRouter } from 'react-router';
  
  import RequestUtil from '../../../utils/RequestUtil';
- import AbstractTowerShapeSetting, { IAbstractTowerShapeSettingState, ITowerShape } from './AbstractTowerShapeSetting';
+ import AbstractTowerShapeSetting, { IAbstractTowerShapeSettingState } from './AbstractTowerShapeSetting';
+import { ITowerShape } from './ITowerShape';
  
  export interface ITowerShapeChangeProps {
     readonly id: string;

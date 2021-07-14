@@ -14,6 +14,7 @@ import styles from './AbstractTowerShapeSetting.module.less';
 import { DeleteOutlined } from '@ant-design/icons';
 import { GetRowKey } from 'antd/lib/table/interface';
 import layoutStyles from '../../../layout/Layout.module.less';
+import { IProductAdditionalDTOList, IProductDTOList, ITowerShape } from './ITowerShape';
  
 export interface IAbstractTowerShapeSettingState extends IAbstractFillableComponentState {
     readonly towerShape: ITowerShape;
@@ -21,54 +22,6 @@ export interface IAbstractTowerShapeSettingState extends IAbstractFillableCompon
     readonly index?: number;
     readonly oldTowerShape: ITowerShape;
     readonly isReference?: boolean;
-}
-
-export interface ITowerShape {
-    readonly id?: string;
-    readonly description?: string;
-    readonly internalNumber?: string;
-    readonly operateStatus?: number;
-    readonly productShape?: string;
-    readonly projectName?: string;
-    readonly steelProductShape?: string;
-    readonly contractId?: string;
-    readonly productDTOList?: IProductDTOList[];
-}
-
-interface IProductDTOList {
-    readonly bodyWeight?: number;
-    readonly description?: string;
-    readonly id?: string | number;
-    readonly lineName?: string;
-    readonly productAdditionalDTOList?: IProductAdditionalDTOList[];
-    readonly productHeight?: number;
-    readonly productNumber?: string;
-    readonly productShape?: string;
-    readonly productShapeId?: number;
-    readonly productType?: string | number;
-    readonly productWeight?: number;
-    readonly towerFootWeight?: number;
-    readonly towerLeg1Length?: number;
-    readonly towerLeg1Num?: number;
-    readonly towerLeg1Weight?: number;
-    readonly towerLeg2Length?: number;
-    readonly towerLeg2Num?: number;
-    readonly towerLeg2Weight?: number;
-    readonly towerLeg3Length?: number;
-    readonly towerLeg3Num?: number;
-    readonly towerLeg3Weight?: number;
-    readonly towerLeg4Length?: number;
-    readonly towerLeg4Num?: number;
-    readonly towerLeg4Weight?: number;
-    readonly voltageGrade?: string | number;
-    readonly state?: number;
-}
-
-interface IProductAdditionalDTOList {
-    readonly id?: number | string;
-    readonly additionalItem?: string;
-    readonly towerDetailId?: string | number;
-    readonly weight?: number;
 }
 
 /**
@@ -191,12 +144,12 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
      public getColumns(): TableColumnType<object>[] {    
         const isReference: boolean | undefined = this.state.isReference;    
         return [{
-            key: 'state',
+            key: 'status',
             title: '* 状态',
-            dataIndex: 'state',
+            dataIndex: 'status',
             width: 150,
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
-                <Form.Item initialValue={ record.state } name={['productDTOList', index,'state']} rules= {[{
+                <Form.Item initialValue={ record.status } name={['productDTOList', index,'status']} rules= {[{
                     required: true,
                     message: '请输入线路名称'
                 }]}>
@@ -213,7 +166,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                     required: true,
                     message: '请输入线路名称'
                 }]}>
-                    <Input maxLength={ 100 }  disabled={ isReference || record.state === 1 }/>
+                    <Input maxLength={ 100 }  disabled={ isReference || record.status === 1 }/>
                 </Form.Item> 
             )
         }, {
@@ -882,7 +835,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         <Button type="primary" onClick={ () => { 
                             const productDTOList: IProductDTOList[] = towerShape?.productDTOList || [];
                             let product: IProductDTOList = {
-                                state: 0,
+                                status: 0,
                                 bodyWeight: undefined,
                                 description: '',
                                 id: '',

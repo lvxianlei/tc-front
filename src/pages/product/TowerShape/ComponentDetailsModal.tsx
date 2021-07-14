@@ -369,8 +369,8 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
             width:  undefined
         }
         towerSection = [
-            ...towerSection,
-            item
+            item,
+            ...towerSection
         ];
         this.setState({
             towerSection: [...towerSection]
@@ -414,9 +414,9 @@ export default abstract class ComponentDetailsModal<P extends IComponentDetailsM
     public render(): React.ReactNode {
         return (
             <>
-                <Button onClick={ this.showModal } type="link">编辑图纸构建明细</Button>
+                <Button onClick={ this.showModal } type="link">编辑图纸构件明细</Button>
                     <Modal 
-                        title="构建明细" 
+                        title="构件明细" 
                         visible={ this.state.isModalVisible } 
                         footer={ false }
                         onCancel={ this.handleCancel }
