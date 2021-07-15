@@ -25,11 +25,12 @@ import { ITowerShape } from './ITowerShape';
      */
      public async componentDidMount() {
         super.componentDidMount();
-        const towerShape: ITowerShape = await RequestUtil.get<ITowerShape>(`/tower-market/contract/${ this.props.match.params.id }`);
+        const towerShape: ITowerShape = await RequestUtil.get<ITowerShape>(`/tower-data-archive/productCategory/${ this.props.match.params.id }`);
         console.log(towerShape)
         this.setState({
             towerShape: towerShape,
-            // isReference: towerShape.operateStatus
+            isChange: true,
+            isReference: true
         });
         this.getForm()?.setFieldsValue({
             ...towerShape
