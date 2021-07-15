@@ -33,43 +33,12 @@
  
  export interface IMaterialExtractionInfo extends IMaterialExtraction {
      readonly taskNoticeId: string;
-     readonly customerInfoDto?: ICustomerInfoDto;
-     paymentPlanDtos?: IPaymentPlanDto[];
-     attachInfoDtos: IAttachDTO[];
-     readonly customerInfoVo?: ICustomerInfoDto;
-     readonly attachVos: IAttachDTO[];
-     readonly paymentPlanVos?: IPaymentPlanDto[];
  }
  
- export interface ICustomerInfoDto {
-     readonly customerId?: string | number;
-     readonly customerCompany?: string;
-     readonly customerLinkman?: string;
-     readonly customerPhone?: string;
- }
+
  
- export interface IPaymentPlanDto {
-     readonly index?: number;
-     readonly period?: number;
-     readonly returnedTime?: any;
-     readonly returnedRate: number;
-     readonly returnedAmount: number;
-     readonly description?: string;
- }
  
- export interface IAttachDTO {
-     readonly name?: string;
-     readonly userName?: string;
-     readonly fileSize?: string;
-     readonly description?: string;
-     readonly keyType?: string;
-     readonly keyId?: number;
-     readonly id?: string;
-     readonly fileSuffix?: string;
-     readonly filePath: string;
-     readonly fileUploadTime?: string;
-     readonly index?: number;
- }
+
  
  export interface IResponseData {
      readonly total: number | undefined;
@@ -79,16 +48,7 @@
      readonly records: [];
  }
  
- export interface IRegion {
-     readonly name: string;
-     readonly code: string;
-     children: IRegion[];
- }
- 
- export enum planType {
-     PROPORTION = 0,   //占比
-     AMOUNT = 1,   //金额
- }
+
  
  const title = {
      border:'1px solid #d9d9d9',
@@ -266,9 +226,9 @@
  
     public getComponentColumns(): TableColumnType<object>[] {
         return [{
-           key: 'partNum',
-           title: '序号',
-           dataIndex: 'partNum',
+           key: 'sectionSn',
+           title: '段号',
+           dataIndex: 'sectionSn',
            align: "center",
            width: 50,
         },{
@@ -381,15 +341,24 @@
         }]
     };
  
-    public handleFields = (index:number, value:string) => {
-        // let data = this.state?.materialData;
-        // if(data){
-        //     let row = data[index];
-        //     row.sectionCount= value;
-            // this.setState({
-            //     materialData:data
-            // })
-        // };
+    public handleFields = (index:number, value:number) => {
+        let paragraphData = this.state?.paragraphDataSource;
+        let detailData = this.state?.detailDataSource;
+        if(paragraphData){
+            let row = paragraphData[index];
+            const dataSource: IDetail[] | undefined = detailData && detailData.map((item: IDetail)=>{
+                if(item.sectionSn === row.sectionSn){
+                    item.totalQuantity = value;
+                    item.totalWeight = value*item.subtotalWeight;
+                }
+                return item;
+            })
+            row.sectionCount= value;
+            this.setState({
+                paragraphDataSource: paragraphData,
+                detailDataSource: dataSource || []
+            })
+        };
     }
  
      /**
@@ -407,7 +376,7 @@
                             <Table columns={this.getSegmentColumns()} dataSource={ paragraphDataSource }/>
                         </TabPane>
                         <TabPane tab="查看构建明细" key={ tabStep.COMPONENT_DETAILS } >
-                            <Table columns={this.getComponentColumns()} scroll={{ x:1200 }} dataSource={ detailDataSource }/>
+                            <Table columns={this.getComponentColumns()} scroll={{ x:1200 }}  dataSource={ detailDataSource }/>
                         </TabPane>
                   </Tabs>
                  );

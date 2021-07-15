@@ -6,7 +6,7 @@
  import { RouteComponentProps, withRouter } from 'react-router';
  
  import RequestUtil from '../../../utils/RequestUtil';
- import AbstractMaterialExtractionSetting, { IAbstractMaterialExtractionSettingState, IPaymentPlanDto, planType } from './AbstractMaterialExtractionSetting';
+ import AbstractMaterialExtractionSetting, { IAbstractMaterialExtractionSettingState } from './AbstractMaterialExtractionSetting';
  import moment from 'moment'
  import { message } from 'antd';
  
@@ -26,6 +26,9 @@
       * @returns submit 
       */
      public async onSubmit(values: Record<string, any>): Promise<void> {
+         console.log(this.state.paragraphDataSource)
+         console.log(this.state.detailDataSource)
+         console.log(values)
         // this.getForm()?.getFieldsValue(true).paymentPlanDtos;
         //  if( ) {
         //      return Promise.reject(false);

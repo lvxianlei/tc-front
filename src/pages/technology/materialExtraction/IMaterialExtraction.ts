@@ -16,8 +16,6 @@ export interface IMaterialExtraction {
 export interface IDetail {
     readonly id?: number | string;
     readonly thickness?: number;
-    readonly totalQuantity?: number;
-    readonly totalWeight?: number;
     readonly width?: number;
     readonly subtotalWeight: number;
     readonly spec?: string;
@@ -31,14 +29,17 @@ export interface IDetail {
     readonly description?: string;
     readonly componentCode?: string;
     readonly accurateWeight?: number;
+    readonly sectionSn?: number;
+    totalQuantity: number;
+    totalWeight: number;
 }
 
 
 export interface IParagraph {
     readonly id?: number | string;
     readonly extractionMaterialId?: string;
-    readonly sectionCount?: number;
     readonly sectionSn?: string;
     readonly sectionTotalCount?: string;
     readonly towerProductId?: string;
+    sectionCount: number;
 }
