@@ -26,8 +26,8 @@ export interface IAbstractSaleOrderSettingState extends IAbstractFillableCompone
     readonly saleOrder?: ISaleOrder;
     readonly orderQuantity?: number;
     readonly newOption: IOption;
-    readonly isChangeProduct: boolean;
-    
+    readonly isChangeProduct?: boolean;
+    readonly columns?: TableColumnType<object>[];
 }
 
 export interface ISaleOrder {
@@ -95,7 +95,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         return {
             saleOrder: undefined,
             isChangeProduct: false,
-            orderQuantity: 0
+            orderQuantity: 0,
+            columns: this.getColumns()
         } as S;
     }
 
@@ -157,7 +158,18 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             })
             this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, price: 0, productDtos: [], totalWeight: '', totalPrice: '', totalAmount: '', taxAmount: undefined, taxPrice: '', amount: '', orderQuantity: ''});
             this.getUnitByChargeType();
+            this.getColumnsChange(selectedRows[0].chargeType);
         }   
+    }
+
+    public getColumnsChange(value: number): void {
+        const columns: TableColumnType<object>[] = this.getColumns();
+        if(value === ChargeType.UNIT_PRICE) {
+            columns.splice(9, 1);
+        }
+        this.setState({
+            columns: columns
+        })
     }
 
     /**
@@ -373,7 +385,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
     public getFormItemGroups(): IFormItemGroup[][] {
         const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
         const orderQuantity: number | undefined = this.state.orderQuantity;
-        const readonly: boolean = this.state.isChangeProduct;
+        const readonly: boolean | undefined = this.state?.isChangeProduct;
         return [[{
             title: '基础信息',
             itemCol: {
@@ -584,8 +596,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
       * @returns table columns 
       */
      public getColumns(): TableColumnType<object>[] {    
-        const readonly: boolean = this.state.isChangeProduct;
-        const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
+        const readonly: boolean | undefined = this.state?.isChangeProduct;
         return [{
             key: 'index',
             title: '序号',
@@ -729,7 +740,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                         step="0.01"
                         stringMode={ false } 
                         precision={ 2 }
-                        disabled={ saleOrder?.contractInfoDto?.chargeType !== ChargeType.UNIT_PRICE || readonly || record.productStatus === 2 || record.productStatus === 3 } 
+                        disabled={ this.state?.saleOrder?.contractInfoDto?.chargeType !== ChargeType.UNIT_PRICE  } 
                         onChange={ () => this.priceBlur(index) }
                     />
                 </Form.Item>
@@ -792,7 +803,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             rowKey: this.getTableRowKey(),
             bordered: true,
             dataSource: [...(this.state.saleOrder?.productDtos || []) ] ,
-            columns: this.getColumns(),
+            columns: this.state.columns,
             pagination: false,
             scroll: { x: 1200 }
         };
@@ -855,11 +866,11 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      * @returns extra sections 
      */
     public renderExtraSections(): IRenderedSection[] {
-        const readonly: boolean = this.state.isChangeProduct;
-        
+        const readonly: boolean | undefined = this.state?.isChangeProduct;
         return [{
             title: '产品信息',
             render: (): React.ReactNode => {
+                const chargeType: string | number | undefined = this.state.saleOrder?.contractInfoDto?.chargeType;
                 return (
                     <>
                         <TowerSelectionModal onSelect={ this.selectAddRow } readonly={ readonly } id={ this.state.saleOrder?.contractInfoDto?.contractId }/>
@@ -868,7 +879,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                 <>
                                     <Table.Summary.Row>
                                         <Table.Summary.Cell colSpan={ 9 } index={ 1 }>总结</Table.Summary.Cell>
-                                        <Table.Summary.Cell index={ 2 }>
+                                        <Table.Summary.Cell index={ 2 } className={ chargeType===ChargeType.UNIT_PRICE ? styles.ishidden : undefined }>
                                             <Form.Item name="totalWeight">
                                                 <Input disabled/>
                                             </Form.Item>
