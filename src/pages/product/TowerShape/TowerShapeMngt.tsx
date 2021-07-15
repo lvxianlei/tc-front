@@ -11,7 +11,6 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../../components/AbstractMngtComponent';
 import { ITabItem } from '../../../components/ITabableComponent';
 import RequestUtil from '../../../utils/RequestUtil';
-import ComponentDetailsModal from './ComponentDetailsModal';
 import TowerSectionModal from './TowerSectionModal';
 
 export interface ITowerShapeMngtProps {}
@@ -176,8 +175,8 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <TowerSectionModal id={ (record as ITowerShape).id }/>
-                    <Button type="link" href={ `/prom/contract/paymentRecord/${ (record as ITowerShape).id }` }>导入图纸构建明细</Button>
-                    <ComponentDetailsModal id={ (record as ITowerShape).id } />
+                    <Button type="link" href={ `/prom/contract/paymentRecord/${ (record as ITowerShape).id }` }>导入图纸构件明细</Button>
+                    <Button type="link" href={ `/product/towershape/componentDetails/${ (record as ITowerShape).id }` }>编辑图纸构件明细</Button>
                     <Dropdown overlay={ this.menu(record) } trigger={['click']}>
                         <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                             ···

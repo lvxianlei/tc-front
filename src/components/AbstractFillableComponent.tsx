@@ -141,6 +141,14 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
     }
 
     /**
+     * @description Renders extra operation area
+     * @returns extra operation area 
+     */
+     protected cancelOperationButton(): React.ReactNode {
+        return <Button type="ghost" htmlType="reset" onClick={ this.onCancel }>取消</Button>;
+    }
+
+    /**
      * @description Gets primary operation button
      * @returns primary operation button
      */
@@ -213,7 +221,7 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
                             <Space direction="horizontal" size="large">
                                 { this.getPrimaryOperationButton() }
                                 { this.renderExtraOperationArea() }
-                                <Button type="ghost" htmlType="reset" onClick={ this.onCancel }>取消</Button>
+                                { this.cancelOperationButton() }
                             </Space>
                         </div>
                     </Space>

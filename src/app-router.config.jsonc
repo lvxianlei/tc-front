@@ -203,5 +203,10 @@
         "path": "/product/towershape/change/:id",
         "module": "./pages/product/TowerShape/TowerShapeChange",
         "exact": true
+    }, { //编辑图纸构件明细
+        "name": "编辑图纸构件明细",
+        "path": "/product/towershape/componentDetails/:id",
+        "module": "./pages/product/TowerShape/ComponentDetailsSetting",
+        "exact": true
     }]
 }
