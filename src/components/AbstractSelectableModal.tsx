@@ -25,7 +25,7 @@ export interface IAbstractSelectableModalState {
 export interface DataType{
     readonly linkman?: string;
     readonly name?: string;
-    readonly id?: number;
+    readonly id?: number | string;
     readonly type?: number;
     readonly phone?: string;
     readonly signCustomerId?: number;
