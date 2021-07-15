@@ -7,7 +7,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 
 import RequestUtil from '../../../utils/RequestUtil';
 import AbstractTowerShapeSetting, { IAbstractTowerShapeSettingState } from './AbstractTowerShapeSetting';
-import { ITowerShape } from './ITowerShape';
+import { IProductDTOList, ITowerShape } from './ITowerShape';
 
 export interface ITowerShapeSettingProps {
     readonly id: string;
@@ -25,11 +25,17 @@ class TowerShapeSetting extends AbstractTowerShapeSetting<ITowerShapeSettingRout
  */
     public async componentDidMount() {
         super.componentDidMount();
-        const towerShape: ITowerShape = await RequestUtil.get<ITowerShape>(`/tower-data-archive/productCategory/${ this.props.match.params.id }`);
-        console.log(towerShape)     
+        const towerShape: ITowerShape = await RequestUtil.get<ITowerShape>(`/tower-data-archive/productCategory/${ this.props.match.params.id }`);   
+        const isReference: boolean | undefined = towerShape.productDTOList?.some((item: IProductDTOList): boolean => {
+            if(item.status === 1) {
+                return false
+            } else {
+                return true
+            }
+        })
         this.setState({
             towerShape: towerShape,
-            // isReference: towerShape.state
+            isReference: isReference
         });
         this.getForm()?.setFieldsValue({
             ...towerShape

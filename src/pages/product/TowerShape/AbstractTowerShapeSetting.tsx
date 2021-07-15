@@ -21,6 +21,7 @@ export interface IAbstractTowerShapeSettingState extends IAbstractFillableCompon
     readonly isVisible?: boolean;
     readonly index?: number;
     readonly oldTowerShape: ITowerShape;
+    readonly isChange?: boolean;
     readonly isReference?: boolean;
 }
 
@@ -32,7 +33,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
     public state: S = {
         towerShape: {},
         isVisible: false,
-        isReference: false
+        isChange: false
     } as S;
 
     /**
@@ -86,6 +87,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
      */
     public getFormItemGroups(): IFormItemGroup[][] {
         const towerShape: ITowerShape | undefined = this.state.towerShape;
+        const isChange: boolean | undefined = this.state.isChange;
         const isReference: boolean | undefined = this.state.isReference;
         return [[{
             title: '塔型信息',
@@ -142,7 +144,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
       * @returns table columns 
       */
      public getColumns(): TableColumnType<object>[] {    
-        const isReference: boolean | undefined = this.state.isReference;    
+        const isChange: boolean | undefined = this.state.isChange;      
         return [{
             key: 'status',
             title: '* 状态',
@@ -153,7 +155,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                     required: true,
                     message: '请输入线路名称'
                 }]}>
-                    <Input disabled/>
+                    { record.status === 1 ? '新建' : record.status === 2 ? '待下发' : record.status === 3 ? '审批中' : '已下发' }
                 </Form.Item> 
             )
         }, {
@@ -166,7 +168,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                     required: true,
                     message: '请输入线路名称'
                 }]}>
-                    <Input maxLength={ 100 }  disabled={ isReference || record.status === 1 }/>
+                    <Input maxLength={ 100 } disabled={ record.status === 3 || (isChange && record.status == 1 ) || (isChange && record.status === 2) || (!isChange && record.status == 4 ) }/>
                 </Form.Item> 
             )
         }, {
@@ -179,7 +181,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                     required: true,
                     message: '请输入杆塔号'
                 }]}>
-                    <Input maxLength={ 50 }/>
+                    <Input maxLength={ 50 } disabled={ record.status === 3 || (isChange && record.status == 1 ) || (isChange && record.status === 2) || (!isChange && record.status == 4 ) }/>
                 </Form.Item> 
             )
         }, {
@@ -192,7 +194,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                     required: true,
                     message: '请选择产品类型'
                 }]}>
-                    <Select placeholder="请选择电压等级" className={ styles.select_width }>
+                    <Select placeholder="请选择电压等级" className={ styles.select_width } disabled={ record.status === 3 || (isChange && record.status == 1 ) || (isChange && record.status === 2) || (!isChange && record.status == 4 ) }>
                         <Select.Option value="0" >国内业务</Select.Option>
                         <Select.Option value="1">国际业务</Select.Option>
                     </Select>
@@ -208,7 +210,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                     required: true,
                     message: '请选择电压等级'
                 }]}>
-                    <Select placeholder="请选择电压等级" className={ styles.select_width }>
+                    <Select placeholder="请选择电压等级" className={ styles.select_width } disabled={ record.status === 3 || (isChange && record.status == 1 ) || (isChange && record.status === 2) || (!isChange && record.status == 4 ) }>
                         <Select.Option value="0" >国内业务</Select.Option>
                         <Select.Option value="1">国际业务</Select.Option>
                     </Select>
@@ -229,7 +231,8 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         min="0"
                         step="0.01"
                         precision={ 2 }
-                        className={ layoutStyles.width100 }/>
+                        className={ layoutStyles.width100 }
+                        disabled={ record.status === 3 || (isChange && record.status == 1 ) || (isChange && record.status === 2) || (!isChange && record.status == 4 ) }/>
                 </Form.Item> 
             )
         }, {
@@ -248,6 +251,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         step="0.01"
                         precision={ 2 }
                         className={ layoutStyles.width100 }
+                        disabled={ record.status === 3 || (isChange && record.status == 1 ) || (isChange && record.status === 2) || (!isChange && record.status == 4 ) }
                         onChange={ (value) => {
                             const towerShape: ITowerShape | undefined = this.getForm()?.getFieldsValue(true);
                             const productDtos: IProductDTOList[] = towerShape?.productDTOList || [];
@@ -285,7 +289,8 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         min="0"
                         step="0.01"
                         precision={ 2 }
-                        className={ layoutStyles.width100 }/>
+                        className={ layoutStyles.width100 }
+                        disabled={ record.status === 3 || (isChange && record.status == 1 ) || (isChange && record.status === 2) || (!isChange && record.status == 4 ) }/>
                 </Form.Item> 
             )
         }, {
@@ -301,6 +306,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         step="0.01"
                         precision={ 2 }
                         className={ layoutStyles.width100 }
+                        disabled={ record.status === 3 || (isChange && record.status == 1 ) || (isChange && record.status === 2) || (!isChange && record.status == 4 ) }
                         onChange={ (value) => {
                             const towerShape: ITowerShape | undefined = this.getForm()?.getFieldsValue(true);
                             const productDtos: IProductDTOList[] = towerShape?.productDTOList || [];
@@ -338,7 +344,8 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         min="0"
                         step="0.01"
                         precision={ 2 }
-                        className={ layoutStyles.width100 }/>
+                        className={ layoutStyles.width100 }
+                        disabled={ record.status === 3 || (isChange && record.status == 1 ) || (isChange && record.status === 2) || (!isChange && record.status == 4 ) }/>
                 </Form.Item> 
             )
         }, {
@@ -354,6 +361,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         step="0.01"
                         precision={ 2 }
                         className={ layoutStyles.width100 }
+                        disabled={ record.status === 3 || (isChange && record.status == 1 ) || (isChange && record.status === 2) || (!isChange && record.status == 4 ) }
                         onChange={ (value) => {
                             const towerShape: ITowerShape | undefined = this.getForm()?.getFieldsValue(true);
                             const productDtos: IProductDTOList[] = towerShape?.productDTOList || [];
@@ -391,7 +399,8 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         min="0"
                         step="0.01"
                         precision={ 2 }
-                        className={ layoutStyles.width100 }/>
+                        className={ layoutStyles.width100 }
+                        disabled={ record.status === 3 || (isChange && record.status == 1 ) || (isChange && record.status === 2) || (!isChange && record.status == 4 ) }/>
                 </Form.Item> 
             )
         }, {
@@ -407,6 +416,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         step="0.01"
                         precision={ 2 }
                         className={ layoutStyles.width100 }
+                        disabled={ record.status === 3 || (isChange && record.status == 1 ) || (isChange && record.status === 2) || (!isChange && record.status == 4 ) }
                         onChange={ (value) => {
                             const towerShape: ITowerShape | undefined = this.getForm()?.getFieldsValue(true);
                             const productDtos: IProductDTOList[] = towerShape?.productDTOList || [];
@@ -444,7 +454,8 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         min="0"
                         step="0.01"
                         precision={ 2 }
-                        className={ layoutStyles.width100 }/>
+                        className={ layoutStyles.width100 }
+                        disabled={ record.status === 3 || (isChange && record.status == 1 ) || (isChange && record.status === 2) || (!isChange && record.status == 4 ) }/>
                 </Form.Item> 
             )
         }, {
@@ -460,6 +471,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         step="0.01"
                         precision={ 2 }
                         className={ layoutStyles.width100 }
+                        disabled={ record.status === 3 || (isChange && record.status == 1 ) || (isChange && record.status === 2) || (!isChange && record.status == 4 ) }
                         onChange={ (value) => {
                             const towerShape: ITowerShape | undefined = this.getForm()?.getFieldsValue(true);
                             const productDtos: IProductDTOList[] = towerShape?.productDTOList || [];
@@ -498,6 +510,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         step="0.01"
                         precision={ 2 }
                         className={ layoutStyles.width100 }
+                        disabled={ record.status === 3 || (isChange && record.status == 1 ) || (isChange && record.status === 2) || (!isChange && record.status == 4 ) }
                         onChange={ (value) => {
                             const towerShape: ITowerShape | undefined = this.getForm()?.getFieldsValue(true);
                             const productDtos: IProductDTOList[] = towerShape?.productDTOList || [];
@@ -540,7 +553,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             width: 150,
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
                 <Form.Item name={['productDTOList', index,'description']}>
-                    <Input maxLength={ 50 }/>
+                    <Input maxLength={ 50 } disabled={ record.status === 3 || (isChange && record.status == 1 ) || (isChange && record.status === 2) || (!isChange && record.status == 4 ) }/>
                 </Form.Item> 
             )
         }, {
@@ -551,7 +564,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             fixed: 'right',
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type="link" onClick={ () => this.itemWeightClick(index) }>
+                    <Button type="link" onClick={ () => this.itemWeightClick(index) } disabled={ record.status === 3 || (isChange && record.status == 1 ) || (isChange && record.status === 2) || (!isChange && record.status == 4 ) }>
                         增重项
                     </Button>
                     <Popconfirm 
@@ -560,8 +573,9 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         okText="确认"
                         cancelText="取消"
                         onConfirm={ () => { this.onDelete(index) } }
+                        disabled={ record.status === 3 || (isChange && record.status == 1 ) || (isChange && record.status === 2) || (!isChange && record.status == 4 ) }
                     >
-                        <Button type="link">
+                        <Button type="link"  disabled={ record.status === 3 || (isChange && record.status == 1 ) || (isChange && record.status === 2) || (!isChange && record.status == 4 ) }>
                             删除
                         </Button>
                     </Popconfirm>
@@ -835,7 +849,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         <Button type="primary" onClick={ () => { 
                             const productDTOList: IProductDTOList[] = towerShape?.productDTOList || [];
                             let product: IProductDTOList = {
-                                status: 0,
+                                status: 1,
                                 bodyWeight: undefined,
                                 description: '',
                                 id: '',
