@@ -38,7 +38,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development GENERATE_SOURCEMAP=false react-app-rewired start",
     "intg": "cross-env NODE_ENV=integration GENERATE_SOURCEMAP=false react-app-rewired start",
-    "build": "cross-env NODE_ENV=production GENERATE_SOURCEMAP=true react-app-rewired build",
+    "build": "cross-env NODE_ENV=production GENERATE_SOURCEMAP=true CI=false&&react-app-rewired build",
     "test": "cross-env NODE_ENV=development GENERATE_SOURCEMAP=false react-app-rewired test",
     "eject": "cross-env NODE_ENV=development GENERATE_SOURCEMAP=false react-app-rewired eject"
   },
