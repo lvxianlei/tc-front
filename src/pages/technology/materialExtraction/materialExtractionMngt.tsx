@@ -17,11 +17,11 @@ export interface ImaterialExtractionMngtProps {}
 export interface ImaterialExtractionMngtWithRouteProps extends RouteComponentProps<ImaterialExtractionMngtProps>, WithTranslation {}
 export interface ImaterialExtractionMngtState extends IAbstractMngtComponentState {
     readonly tableDataSource: IMaterialExtraction[];
-    readonly internalNumber?: string;
+    readonly batchSn?: string;
     readonly projectName?: string;
-    readonly customerCompany?: string;
-    readonly signCustomerName?: string;
-    readonly winBidType?: string;
+    readonly productCategoryName?: string;
+    readonly steelProductShape?: string;
+    readonly materialStandard?: string;
     readonly paragraphVisible: boolean;
     readonly paragraphDataSource: IParagraph[];
     readonly detailVisible: boolean;
@@ -126,9 +126,9 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
             title: '塔型',
             dataIndex: 'productCategoryName',
         }, {
-            key: 'embossedStamp',
+            key: 'steelProductShape',
             title: '钢印塔型',
-            dataIndex: 'embossedStamp',
+            dataIndex: 'steelProductShape',
         }, {
             key: 'projectName',
             title: '工程名称',
@@ -195,11 +195,11 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
      */
     public onTableChange(pagination: TablePaginationConfig): void {
         this.fetchTableData({ 
-            internalNumber: this.state.internalNumber, 
+            batchSn: this.state.batchSn, 
             projectName: this.state.projectName,
-            customerCompany: this.state.customerCompany,
-            signCustomerName: this.state.signCustomerName,
-            winBidType: this.state.winBidType
+            productCategoryName: this.state.productCategoryName,
+            steelProductShape: this.state.steelProductShape,
+            materialStandard: this.state.materialStandard
         }, pagination);
     }
      
@@ -272,11 +272,11 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
             
         },
         {
-            name: 'productShape',
+            name: 'productCategoryName',
             children: <Input placeholder="塔型关键字" maxLength={ 200 } autoComplete="off"/>
         },
         {
-            name: 'embossedStamp',
+            name: 'steelProductShape',
             children: <Input placeholder="钢印塔型关键字" maxLength={ 200 } autoComplete="off"/>
         },
         {
