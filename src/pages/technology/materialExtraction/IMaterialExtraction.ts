@@ -1,16 +1,18 @@
 export interface IMaterialExtraction {
-    readonly id: string;
+    readonly id: string | number;
     readonly createTime?: string;
     readonly createUser?: number | string;
     readonly createUserName?: string;
-    readonly projectName?: string;
     readonly batchSn?: string;
     readonly description?: string;
-    readonly embossedStamp?: number;
     readonly materialStandard?: string;
     readonly materialStandardName?: string;
-    readonly productShape?: string;
-    readonly taskNumber?: string;
+    readonly productCategoryName?: string;
+    projectName?: string;
+    taskNumber?: string;
+    taskNoticeId?: string | number;
+    steelProductShape?: string;
+    productCategoryId?: string | number;
 }
 
 export interface IDetail {
@@ -31,7 +33,7 @@ export interface IDetail {
     readonly accurateWeight?: number;
     readonly sectionSn?: number;
     totalQuantity: number;
-    totalWeight: number;
+    totalWeight: string;
 }
 
 
@@ -41,5 +43,12 @@ export interface IParagraph {
     readonly sectionSn?: string;
     readonly sectionTotalCount?: string;
     readonly towerProductId?: string;
-    sectionCount: number;
+    sectionCount: number|string;
+}
+
+
+export interface ITower{
+    readonly id: string | number;
+    readonly productCategoryName: string;
+    readonly steelProductShape: string;
 }

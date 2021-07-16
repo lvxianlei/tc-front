@@ -61,7 +61,7 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
      * @param filterValues 
      */
     protected async fetchTableData(filterValues: Record<string, any>,pagination: TablePaginationConfig = {}) {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/extractionMaterial', {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/extractionMaterial',  {
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize ||this.state.tablePagination?.pageSize,
@@ -122,13 +122,13 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
             title: '材料标准',
             dataIndex: 'materialStandardName',
         }, {
-            key: 'productShape',
+            key: 'productCategoryName',
             title: '塔型',
-            dataIndex: 'productShape'
+            dataIndex: 'productCategoryName',
         }, {
             key: 'embossedStamp',
             title: '钢印塔型',
-            dataIndex: 'embossedStamp'
+            dataIndex: 'embossedStamp',
         }, {
             key: 'projectName',
             title: '工程名称',
@@ -144,7 +144,7 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
         },  {
             key: 'description',
             title: '备注',
-            dataIndex: 'description'
+            dataIndex: 'description',
         },  {
             key: 'operation',
             title: '操作',
@@ -163,8 +163,8 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
     }
 
     //paragraphModalShow
-    protected paragraphShow = async(id: string)=>{
-        const resData: IParagraph[] = await RequestUtil.get<IParagraph[]>(`/tower-market/extractionMaterial/getExtractionMaterialSection/${id}`);
+    protected paragraphShow = async(id: string | number)=>{
+        const resData: IParagraph[] = await RequestUtil.get<IParagraph[]>(`/tower-market/extractionMaterial/getExtractionMaterialSection?extractionMaterialId=${id}`);
         this.setState({
             paragraphVisible: true,
             paragraphDataSource: resData || []
@@ -176,8 +176,8 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
         })
     }
     //detailModalShow
-    protected detailShow = async(id: string)=>{
-        const resData: IDetail[] = await RequestUtil.get<IDetail[]>(`/tower-market/extractionMaterial/getExtractionMaterialComponent/${id}`);
+    protected detailShow = async(id: string | number)=>{
+        const resData: IDetail[] = await RequestUtil.get<IDetail[]>(`/tower-market/extractionMaterial/getExtractionMaterialComponent?extractionMaterialId=${id}`);
         this.setState({
             detailVisible: true,
             detailDataSource: resData || []
@@ -288,7 +288,7 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
     public getComponentColumns(): TableColumnType<object>[] {
         return [{
            key: 'partNum',
-           title: '序号',
+           title: '段号',
            dataIndex: 'partNum',
            align: "center",
            width: 50,
@@ -365,9 +365,9 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
             align: "center",
             width: 200,
         },{
-            key: 'totalQuantity',
+            key: 'totalWeight',
             title: '合计重量（kg）',
-            dataIndex: 'totalQuantity',
+            dataIndex: 'totalWeight',
             align: "center",
             width: 200,
         },{

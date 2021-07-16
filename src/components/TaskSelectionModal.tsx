@@ -17,7 +17,7 @@
  }
  
  export interface ITask {
-     readonly id: number;
+     readonly id: string;
      readonly internalNumber: string;
      readonly projectName: number;
      readonly taskNumber: string;
@@ -49,6 +49,7 @@
      public componentDidMount(): void {
          this.getTable({})
      }
+
      
      public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
          const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/taskNotice/getPageList', {
@@ -88,13 +89,14 @@
      public getTableDataSource(): object[]  {
          return this.state.tableDataSource;
      }
+     
  
  
      public getTableColumns(): ColumnType<object>[] {
          return [{
              key: 'internalNumber',
              title: '内部合同编号',
-             dataIndex: 'internalNumber'
+             dataIndex: 'internalNumber',
          }, {
              key: 'projectName',
              title: '工程名称',

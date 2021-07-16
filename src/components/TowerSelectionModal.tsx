@@ -16,17 +16,20 @@
  export interface ITowerSelectionComponentState extends IAbstractSelectableModalState {
      readonly tableDataSource: ITower[];
  }
+ export interface ITowerSelectionComponentProps extends IAbstractSelectableModalProps {
+     readonly dataSource: ITower[];
+ }
  
  export interface ITower {
-     readonly id: number;
-     readonly embossedStamp	: string;
-     readonly productShape: string;
+     readonly id: string | number;
+     readonly steelProductShape: string;
+     readonly productCategoryName: string;
  }
  
  /**
   * Tower Selection Component
   */
- export default class TowerSelectionComponent extends AbstractSelectionModal<IAbstractSelectableModalProps, ITowerSelectionComponentState> {
+ export default class TowerSelectionComponent extends AbstractSelectionModal<ITowerSelectionComponentProps, ITowerSelectionComponentState> {
  
      /**
       * @override
@@ -46,9 +49,9 @@
          };
      }
  
-     public componentDidMount(): void {
-         this.getTable({})
-     }
+    //  public componentDidMount(): void {
+    //      this.getTable({})
+    //  }
      
      public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
          const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/extractionMaterial/getProductShape', {
@@ -77,19 +80,19 @@
      }
  
      public getTableDataSource(): object[]  {
-         return this.state.tableDataSource;
+         return this.props.dataSource;
      }
  
  
      public getTableColumns(): ColumnType<object>[] {
          return [{
-             key: 'productShape',
+             key: 'productCategoryName',
              title: '塔型',
-             dataIndex: 'productShape'
+             dataIndex: 'productCategoryName'
          }, {
-             key: 'embossedStamp',
+             key: 'steelProductShape',
              title: '钢印塔型',
-             dataIndex: 'embossedStamp'
+             dataIndex: 'steelProductShape'
          }];
      }
  

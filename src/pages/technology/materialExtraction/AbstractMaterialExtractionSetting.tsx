@@ -16,14 +16,15 @@
  import RequestUtil from '../../../utils/RequestUtil';
  import { DataType } from '../../../components/AbstractSelectableModal';
  import { materialStandardOptions } from '../../../configuration/DictionaryOptions';
- import { IDetail, IMaterialExtraction, IParagraph } from './IMaterialExtraction';
+ import { IDetail, IMaterialExtraction, IParagraph, ITower } from './IMaterialExtraction';
  const { TabPane } = Tabs;
  export interface IAbstractMaterialExtractionSettingState extends IAbstractFillableComponentState {
      readonly tablePagination: TablePaginationConfig;
-     readonly materialExtraction: IMaterialExtractionInfo;
+     readonly materialExtraction: IMaterialExtraction;
      readonly paragraphDataSource: [] | IParagraph[];
      readonly detailDataSource:  [] | IDetail[];
      readonly tableDataSource: [];
+     readonly dataSource: []| ITower[];
  }
  
  export interface ITabItem {
@@ -31,13 +32,18 @@
      readonly key: string | number;
  }
  
- export interface IMaterialExtractionInfo extends IMaterialExtraction {
-     readonly taskNoticeId: string;
- }
- 
 
  
+ export  interface DataTypeMore extends DataType{
+   readonly productCategoryName?: string;
+   readonly taskNumber?: string;
+   readonly steelProductShape?: string;
+ }
  
+ export interface IResponseProduct{
+     readonly extractionMaterialComponentVO: IDetail[];
+     readonly extractionMaterialSectionVO: IParagraph[];
+ }
 
  
  export interface IResponseData {
@@ -71,6 +77,7 @@
  
      public state: S = {
          materialExtraction: {},
+         dataSource:[],
          paragraphDataSource: [],
          detailDataSource: [],
      } as S;
@@ -86,7 +93,7 @@
       * @returns return path 
       */
      protected getReturnPath(): string {
-         return '/prom/materialExtraction';
+         return '/technology/materialExtraction';
      }
  
       /**
@@ -125,19 +132,66 @@
       * @description 弹窗
       * @returns 
       */
-     public onSelect = (selectedRows: DataType[]):void => {
-         const materialExtraction: IMaterialExtractionInfo | undefined = this.state.materialExtraction;
+     public onSelect = async (selectedRows: DataTypeMore[]):Promise<void> => {
+         const materialExtraction: IMaterialExtraction | undefined = this.state.materialExtraction;
+         
          if(selectedRows && selectedRows.length > 0 ) {
-            //  this.setState({
-            //      materialExtraction: {
-            //          ...(materialExtraction || {}),
-            //          signCustomerName: selectedRows[0].name,
-            //          signCustomerId: selectedRows[0].id?.toString()
-            //      }
-            //  })
-            //  this.getForm()?.setFieldsValue({ signCustomerName: selectedRows[0].name });
+            this.setState({
+                materialExtraction: {
+                    ...materialExtraction,
+                    projectName: selectedRows[0].projectName,
+                    taskNumber: selectedRows[0].taskNumber,
+                    taskNoticeId: selectedRows[0].id
+                }
+            })
+            this.getForm()?.setFieldsValue({ 
+                 projectName: selectedRows[0].projectName, 
+                 taskNumber: selectedRows[0].taskNumber 
+            });
+            const resData: ITower[] = await RequestUtil.get<ITower[]>('/tower-market/extractionMaterial/getProductShape', {
+                taskNoticeId: selectedRows[0].id
+            });
+            this.setState({
+                dataSource: resData,
+            });
          }
      }
+
+
+     /**
+      * @override
+      * @description 弹窗
+      * @returns 
+      */
+      public onSelectTower = async (selectedRows: DataTypeMore[]) => {
+        const materialExtraction: IMaterialExtraction | undefined = this.state.materialExtraction;
+        
+        if(selectedRows && selectedRows.length > 0 ) {
+            this.setState({
+                materialExtraction: {
+                    ...materialExtraction,
+                    steelProductShape: selectedRows[0].steelProductShape,
+                    productCategoryName: selectedRows[0].productCategoryName,
+                    productCategoryId: selectedRows[0].id
+                }
+            })
+            this.getForm()?.setFieldsValue({ 
+                    steelProductShape: selectedRows[0].steelProductShape, 
+                    productCategoryName: selectedRows[0].productCategoryName,
+            });
+            const resData: IResponseProduct = await RequestUtil.get<IResponseProduct>(`/tower-market/extractionMaterial/getProduct/${selectedRows[0].id}`);
+            const paragraphData: IParagraph[] = resData.extractionMaterialSectionVO.map((item:IParagraph)=>{
+                return {
+                    ...item,
+                    sectionCount:''
+                }
+            }) 
+            this.setState({
+                paragraphDataSource: paragraphData,
+                detailDataSource: resData.extractionMaterialComponentVO
+            });
+        }
+    }
  
 
 
@@ -153,7 +207,8 @@
       * @returns form item groups 
       */
      public getFormItemGroups(): IFormItemGroup[][] {
-             const materialExtraction: IMaterialExtractionInfo | undefined = this.state.materialExtraction;
+             const materialExtraction: IMaterialExtraction | undefined = this.state.materialExtraction;
+             const dataSource: ITower[] = this.state.dataSource;
              return [[{
                  title: '基础信息',
                  itemCol: {
@@ -195,21 +250,25 @@
                      }],
                      children:
                         <Input value={ materialExtraction?.taskNumber } suffix={ 
-                            <TaskSelectionComponent onSelect={ this.onSelect } selectKey={ [materialExtraction] }/>
+                            <TaskSelectionComponent onSelect={ this.onSelect } selectKey={ [materialExtraction && materialExtraction.taskNumber] }/>
                         }/>
                  }, {
                     label: '塔型',
-                    name: 'customerLinkman',
-                    initialValue: materialExtraction?.productShape,
+                    name: 'productCategoryName',
+                    initialValue: materialExtraction?.productCategoryName,
+                    rules: [{
+                        required: true,
+                        message: '请选择塔型'
+                    }],
                     children:   
-                        <Input value={ materialExtraction?.productShape } suffix={ 
-                            <TowerSelectionComponent onSelect={ this.onSelect } selectKey={ [materialExtraction.taskNoticeId] }/>
+                        <Input value={ materialExtraction?.productCategoryName } suffix={ 
+                            <TowerSelectionComponent onSelect={ this.onSelectTower } selectKey={ [materialExtraction && materialExtraction.taskNumber] } dataSource={dataSource}/>
                         }/>
                  }, {
                     label: '钢印塔型',
-                    name: 'embossedStamp',
-                    initialValue: materialExtraction?.embossedStamp,
-                    children: <Input value={ materialExtraction?.embossedStamp } disabled/>
+                    name: 'steelProductShape',
+                    initialValue: materialExtraction?.steelProductShape,
+                    children: <Input value={ materialExtraction?.steelProductShape } disabled/>
                  }, {
                     label: '工程名称',
                     name: 'projectName',
@@ -226,9 +285,9 @@
  
     public getComponentColumns(): TableColumnType<object>[] {
         return [{
-           key: 'sectionSn',
+           key: 'partNum',
            title: '段号',
-           dataIndex: 'sectionSn',
+           dataIndex: 'partNum',
            align: "center",
            width: 50,
         },{
@@ -331,7 +390,7 @@
            dataIndex: 'sectionCount',
            align: "center",
            render:(text, record, index)=>{
-                return  <InputNumber min={0} defaultValue={text} onChange={value => this.handleFields(index,value)} style={ text? title : titleC } bordered={false} precision={0} max={(record as IParagraph).sectionTotalCount}/>
+                return  <InputNumber min={ 0 } defaultValue={ text < 0 ? '' : text } onChange={ value => this.handleFields(index,value) } style={ text? title : titleC } bordered={ false } precision={ 0 } max={ (record as IParagraph).sectionTotalCount }/>
             }
         },{
            key: 'sectionTotalCount',
@@ -347,9 +406,9 @@
         if(paragraphData){
             let row = paragraphData[index];
             const dataSource: IDetail[] | undefined = detailData && detailData.map((item: IDetail)=>{
-                if(item.sectionSn === row.sectionSn){
+                if(item.partNum === row.sectionSn){
                     item.totalQuantity = value;
-                    item.totalWeight = value*item.subtotalWeight;
+                    item.totalWeight = (value*item.subtotalWeight).toFixed(2);
                 }
                 return item;
             })
