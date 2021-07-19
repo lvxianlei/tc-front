@@ -28,7 +28,7 @@ import { ITask } from '../../ITask';
     readonly customerCompany?: string;	
     readonly productChangeInfoVOList?: IProduct [];	
     readonly productInfoVOList?: IProduct [];
-    readonly signContractTime?:	string;	
+    readonly orderDeliveryTime?:	string;	
     readonly signCustomerName?:	string;		
     readonly simpleProjectName?: string;
     readonly updateUserName?: string;
@@ -145,7 +145,7 @@ import { ITask } from '../../ITask';
                  value: task?.signCustomerName
              },  {
                  label: '订单交货日期',
-                 value: task?.signContractTime
+                 value: task?.orderDeliveryTime
              }], [{
                  label: '客户交货日期',
                  value: task?.deliveryTime
