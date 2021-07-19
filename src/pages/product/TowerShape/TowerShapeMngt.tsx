@@ -22,7 +22,7 @@ export interface ITowerShapeMngtState extends IAbstractMngtComponentState {
     readonly internalNumber?: string | number;
     readonly projectName?: string;
     readonly steelProductShape?: string;
-    readonly productShape?: string;
+    readonly productCategoryName?: string;
 }
 
 export interface IResponseData {
@@ -41,7 +41,7 @@ interface ITowerShape {
     readonly materialTexture?: string;
     readonly operateStatus?: number;
     readonly partNumber?: number;
-    readonly productShape?: string;
+    readonly productCategoryName?: string;
     readonly productShapeName?: string;
     readonly productType?: number | string;
     readonly projectName?: string;
@@ -76,7 +76,6 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize ||this.state.tablePagination?.pageSize,
-            countryCode: this.state.selectedTabKey
         });
         if(resData?.records?.length == 0 && resData?.current > 1){
             this.fetchTableData({},{
@@ -149,9 +148,9 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
       */
     public getTableColumns(item: ITabItem): TableColumnType<object>[] {
         return [{
-            key: 'productShape',
+            key: 'name',
             title: '塔型',
-            dataIndex: 'productShape'
+            dataIndex: 'name'
         }, {
             key: 'steelProductShape',
             title: '钢印塔型',
@@ -197,7 +196,7 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
             internalNumber: this.state.internalNumber,
             projectName: this.state.projectName,
             steelProductShape: this.state.steelProductShape,
-            productShape: this.state.productShape,
+            productCategoryName: this.state.productCategoryName,
         }, pagination);
     }
      
@@ -290,13 +289,16 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
      */
     private onDelete(items: ITowerShape[]): () => void {
         return async () => {
-            await RequestUtil.delete(`/sinzetech-user/user?ids=${items.map<number>((item: ITowerShape): number => item?.id as number) }`);
+            await RequestUtil.delete(`/tower-data-archive/productCategory/${items.map<number>((item: ITowerShape): number => item?.id as number) }`);
             this.setState({
                 selectedTower: [],
                 selectedTowerKeys: []
             }, () => {
                 this.fetchTableData({
-                    
+                    internalNumber: this.state.internalNumber,
+                    projectName: this.state.projectName,
+                    steelProductShape: this.state.steelProductShape,
+                    productCategoryName: this.state.productCategoryName,
                 });
             });
         };
@@ -318,7 +320,7 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
             children: <Input placeholder="工程名称关键字" maxLength={ 200 }/>
         },
         {
-            name: 'productShape',
+            name: 'productCategoryName',
             children: <Input placeholder="塔型关键字" maxLength={ 200 }/>
         },
         {

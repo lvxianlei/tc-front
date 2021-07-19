@@ -76,13 +76,22 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
         towerSection = towerSection.map((records: IProductDTOList) => {
             let productAdditional: number = 0;
             records.productAdditionalDTOList?.map((items: IProductAdditionalDTOList): number => {
-                return  productAdditional += (items.weight || 0);
+                return  productAdditional += (Number(items.weight) || 0);
             })
             const productDeployRow: string[] | undefined = records.productDeployVOList?.map((items: IProductDeployVOList) => {
                 return items.partNum + '*' + items.number;
             })
             return {
                 ...records,
+                towerLeg1Length: records.towerLeg1Length === -1 ? undefined : records.towerLeg1Length,
+                towerLeg1Weight: records.towerLeg1Weight === -1 ? undefined : records.towerLeg1Weight,
+                towerLeg2Length: records.towerLeg2Length === -1 ? undefined : records.towerLeg2Length,
+                towerLeg2Weight: records.towerLeg2Weight === -1 ? undefined : records.towerLeg2Weight,
+                towerLeg3Length: records.towerLeg3Length === -1 ? undefined : records.towerLeg3Length,
+                towerLeg3Weight: records.towerLeg3Weight === -1 ? undefined : records.towerLeg3Weight,
+                towerLeg4Length: records.towerLeg4Length === -1 ? undefined : records.towerLeg4Length,
+                towerLeg4Weight: records.towerLeg4Weight === -1 ? undefined : records.towerLeg4Weight,
+                towerFootWeight: records.towerFootWeight === -1 ? undefined : records.towerFootWeight,
                 productAdditional: productAdditional,
                 productDeploy: productDeployRow?.join('+')
             }
@@ -111,12 +120,20 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
         const towerSection: IProductDTOList[] = this.getForm()?.getFieldsValue(true);
         values = Object.values(values);
         values = values.map((items: IProductDTOList, index: number) => {
+            const productDeployDTOList: IProductDeployVOList[] | undefined = towerSection[index].productDeployDTOList?.map((item: IProductDeployVOList) => {
+                return {
+                    ...item,
+                    productId: this.state.towerSection[index]?.id,
+                }
+            })
             return {
                 ...items,
-                productDeployVOList: towerSection[index]?.productDeployVOList
+                id: this.state.towerSection[index].id,
+                productNumber: this.state.towerSection[index].productNumber,
+                productCategoryId: this.state.towerSection[index]?.productCategoryId,
+                productDeployDTOList: productDeployDTOList
             }
         })
-        console.log(values)
         await RequestUtil.post('/tower-data-archive/product', values);
         this.setState ({
             isModalVisible: false
@@ -235,18 +252,18 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
                 <Form.Item name={[index, 'productDeploy']}>
                     <Input suffix={ <FormOutlined onClick={ () => {
-                        let productDeployVOList: IProductDeployVOList[] = this.getForm()?.getFieldsValue(true)[index].productDeployVOList;
-                        productDeployVOList && productDeployVOList.map((item: IProductDeployVOList, index: number) => {
+                        let productDeployDTOList: IProductDeployVOList[] = this.getForm()?.getFieldsValue(true)[index].productDeployDTOList;
+                        productDeployDTOList && productDeployDTOList.map((item: IProductDeployVOList, index: number) => {
                             if(item.partNum && item.partNum !== "") {
-                                productDeployVOList = productDeployVOList;
+                                productDeployDTOList = productDeployDTOList;
                             } else {
-                                productDeployVOList.splice(index, 1);
+                                productDeployDTOList.splice(index, 1);
                             }
                         })
                         const towerSection: IProductDTOList[] = this.getForm()?.getFieldsValue(true) || [];
                         towerSection[index] = {
                             ...towerSection[index],
-                            productDeployVOList: productDeployVOList
+                            productDeployDTOList: productDeployDTOList
                         }
                         this.setState({
                             isBodyVisible: true,
@@ -337,7 +354,7 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
             dataIndex: 'partNum',
             width: 150,
             render: (_: undefined, record: IProductDeployVOList, ind: number): React.ReactNode => (
-                <Form.Item initialValue={ record.partNum } name={[index, 'productDeployVOList', ind ,'partNum']} rules= {[{
+                <Form.Item initialValue={ record.partNum } name={[index, 'productDeployDTOList', ind ,'partNum']} rules= {[{
                     required: true,
                     message: '请输入段号'
                 }]}>
@@ -350,7 +367,7 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
             dataIndex: 'number',
             width: 150,
             render: (_: undefined, record: IProductDeployVOList, ind: number): React.ReactNode => (
-                <Form.Item initialValue={ record.number } name={[index, 'productDeployVOList', ind,'number']} rules= {[{
+                <Form.Item initialValue={ record.number } name={[index, 'productDeployDTOList', ind,'number']} rules= {[{
                     required: true,
                     message: '请输入段号数'
                 }]}>
@@ -385,8 +402,8 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
      */
     private onDelete = (index: number, ind: number): void => {
         const towerSection: IProductDTOList[] | undefined = Object.values(this.getForm()?.getFieldsValue(true));
-        const productDeployVOList: IProductDeployVOList[] | undefined = towerSection[index].productDeployVOList;     
-        productDeployVOList && productDeployVOList.splice(ind, 1);
+        const productDeployDTOList: IProductDeployVOList[] | undefined = towerSection[index].productDeployDTOList;     
+        productDeployDTOList && productDeployDTOList.splice(ind, 1);
         this.setState({
             towerSection: [...towerSection]
         }) 
@@ -413,15 +430,15 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
         const bodyIndex: number = this.state.bodyIndex;
         let towerSection: IProductDTOList[] = this.state.towerSection;
         const values = this.getForm()?.getFieldsValue(true);
-        values[bodyIndex].productDeployVOList.map((items: any,ind: number) => {
-            this.getForm()?.validateFields([[bodyIndex,'productDeployVOList',ind,'partNum'], [bodyIndex,'productDeployVOList',ind,'number']]).then((res) => {
-                const productDeployRow: [] = values[bodyIndex].productDeployVOList.map((items: IProductDeployVOList) => {
+        values[bodyIndex].productDeployDTOList.map((items: any,ind: number) => {
+            this.getForm()?.validateFields([[bodyIndex,'productDeployDTOList',ind,'partNum'], [bodyIndex,'productDeployDTOList',ind,'number']]).then((res) => {
+                const productDeployRow: [] = values[bodyIndex].productDeployDTOList.map((items: IProductDeployVOList) => {
                     return items.partNum + '*' + items.number;
                 })
                 towerSection[bodyIndex] = {
                     ...this.getForm()?.getFieldsValue(true)[bodyIndex],
                     productDeploy: productDeployRow.join('+'),
-                    productDeployVOList: values[bodyIndex].productDeployVOList
+                    productDeployDTOList: values[bodyIndex].productDeployDTOList
                 };
                 this.setState({
                     isBodyVisible: false,
@@ -442,7 +459,7 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
     public addBodyRow = (): void => {
         const bodyIndex: number = this.state.bodyIndex;
         let towerSection: IProductDTOList[] = this.state.towerSection;
-        let productDeployVOList: IProductDeployVOList[] | undefined = towerSection && towerSection[bodyIndex || 0]?.productDeployVOList || [];
+        let productDeployDTOList: IProductDeployVOList[] | undefined = towerSection && towerSection[bodyIndex || 0]?.productDeployDTOList || [];
         let item: IProductDeployVOList = {
             id: Math.random(),
             partNum: '',
@@ -451,8 +468,8 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
         if(towerSection && bodyIndex !== undefined) {
             towerSection[bodyIndex] = {
                 ...towerSection[bodyIndex],
-                productDeployVOList: [ 
-                    ...productDeployVOList || [],
+                productDeployDTOList: [ 
+                    ...productDeployDTOList || [],
                     item
                 ]
             };
@@ -469,10 +486,10 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
     public bodySectionModal(): React.ReactNode {
         const bodyIndex: number = this.state.bodyIndex;
         let towerSection: IProductDTOList[] = this.state.towerSection;
-        let productDeployVOList: IProductDeployVOList[] | undefined = towerSection && towerSection[bodyIndex || 0]?.productDeployVOList || [];
+        let productDeployDTOList: IProductDeployVOList[] | undefined = towerSection && towerSection[bodyIndex || 0]?.productDeployDTOList || [];
         return <Modal visible={ this.state.isBodyVisible } title="配段" onCancel={ this.onModalClose } width={ "30%" } footer={ null }>
             <Button type="primary" onClick={ this.addBodyRow }>添加行</Button>
-            <Table rowKey="id" bordered={ true } dataSource = { [...productDeployVOList] } columns={ this.getItemColumns(bodyIndex || 0) } pagination = { false }/>
+            <Table rowKey="id" bordered={ true } dataSource = { [...productDeployDTOList] } columns={ this.getItemColumns(bodyIndex || 0) } pagination = { false }/>
             <Space direction="horizontal" size="small">
                 <Button type="primary" htmlType="submit" onClick={ this.onBodyModalSubmit }>确定</Button>
             </Space>
