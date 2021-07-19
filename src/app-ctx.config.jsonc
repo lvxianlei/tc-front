@@ -85,6 +85,13 @@
                         "label": "已完成塔型",
                         "path": "/outsource/towershape"
                     }]
+                }, {
+                    "label": "产品管理",
+                    "path": "/product",
+                    "items": [{
+                        "label": "塔型管理",
+                        "path": "/product/towershape"
+                    }]
                 }]
             }
         },

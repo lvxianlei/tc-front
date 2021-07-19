@@ -43,7 +43,7 @@ export interface ISaleOrderBaseInfo {
     readonly orderQuantity?: number;
     readonly portCharge?: number;
     readonly price?: number;
-    readonly productVos?: IProductVo[];
+    readonly orderProductVos?: IProductVo[];
     readonly taxAmount?: number;
     readonly taxPrice?: number;
     readonly taxRate?: number;
@@ -334,10 +334,10 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
             render: this.renderAmountInfoSection
         }, {
             title: '产品信息',
-            render: (): React.ReactNode => <Table rowKey="index"  dataSource={ this.state.baseInfo?.productVos?.map<IProductVo>(
-                (productVos: IProductVo, index: number): IProductVo => (
+            render: (): React.ReactNode => <Table rowKey="index"  dataSource={ this.state.baseInfo?.orderProductVos?.map<IProductVo>(
+                (orderProductVos: IProductVo, index: number): IProductVo => (
                     {
-                        ...productVos,
+                        ...orderProductVos,
                         index: index + 1
                     }
                 )

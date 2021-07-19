@@ -1,0 +1,144 @@
+{
+    "code": 200,
+    "data": [{
+                "bodyWeight": 40,
+                "description": "备注aaaa",
+                "id": "8465465",
+                "lineName": "线路名称啊啊啊啊",
+                "productAdditionalDTOList": [
+                    {
+                        "id": "12216456212",
+                        "additionalItem": "增重一",
+                        "towerDetailId": "8465465",
+                        "weight": 20
+                    }, {
+                        "id": "1216545",
+                        "additionalItem": "增重二",
+                        "towerDetailId": "8465465",
+                        "weight": 51
+                    }
+                ],
+                "productDeployVOList": [
+                    {
+                        "id": "121212",
+                        "partNum": "段号11111",
+                        "towerDetailId": "8465465",
+                        "number": 878
+                    }, {
+                        "id": "6556456",
+                        "partNum": "段号22222",
+                        "towerDetailId": "8465465",
+                        "number": 2
+                    }, {
+                        "id": "55334",
+                        "partNum": "段号33333",
+                        "towerDetailId": "8465465",
+                        "number": 45
+                    }
+                ],
+                "productHeight": "12",
+                "productNumber": "1",
+                "productShape": "角钢塔",
+                "productShapeId": "123",
+                "productType": "1646864654655",
+                "productTypeName": "角钢",
+                "productWeight": 12,
+                "towerFootWeight": 21,
+                "towerLeg1Length": 212,
+                "towerLeg1Weight": 545,
+                "towerLeg2Length": 6,
+                "towerLeg2Weight": 978,
+                "towerLeg3Length": 7,
+                "towerLeg3Weight": 34,
+                "towerLeg4Length": 23,
+                "towerLeg4Weight": 22,
+                "voltageGrade": "213465465456",
+                "voltageGradeName": "220KV",
+                "status": 3
+            }, 
+            {
+                "bodyWeight": 60,
+                "description": "备注312313ddsf",
+                "id": "4324256566",
+                "lineName": "线路名称咿呀咿呀哟",
+                "productAdditionalDTOList": [
+                    {
+                        "id": "4344545",
+                        "additionalItem": "增重111",
+                        "towerDetailId": "4324256566",
+                        "weight": 23
+                    }, {
+                        "id": "8768686",
+                        "additionalItem": "增重2222",
+                        "towerDetailId": "4324256566",
+                        "weight": 554
+                    }
+                ],
+                "productHeight": "54353",
+                "productNumber": "2",
+                "productShape": "角钢塔",
+                "productShapeId": "3424",
+                "productType": "6356546",
+                "productTypeName": "角钢",
+                "productWeight": 33,
+                "towerFootWeight": 6,
+                "towerLeg1Length": 76,
+                "towerLeg1Num": "788",
+                "towerLeg1Weight": 232,
+                "towerLeg2Length": 43,
+                "towerLeg2Num": "65",
+                "towerLeg2Weight": 7,
+                "towerLeg3Length": 4324,
+                "towerLeg3Num": "432",
+                "towerLeg3Weight": 423,
+                "towerLeg4Length": 324,
+                "towerLeg4Num": "67",
+                "towerLeg4Weight": 7,
+                "voltageGrade": "53452323233",
+                "voltageGradeName": "110KV",
+                "status": 2
+            },
+            {
+                "bodyWeight": 60,
+                "description": "备注31从对方水电费ddsf",
+                "id": "43543544654",
+                "lineName": "线路名称哎呀哎呀呀",
+                "productAdditionalDTOList": [
+                    {
+                        "id": "12123",
+                        "additionalItem": "增重one",
+                        "towerDetailId": "434",
+                        "weight": 33
+                    }, {
+                        "id": "3231313",
+                        "additionalItem": "增重two",
+                        "towerDetailId": "54543",
+                        "weight": 55
+                    }
+                ],
+                "productHeight": "54353",
+                "productNumber": "2",
+                "productShape": "角钢塔",
+                "productShapeId": "3424",
+                "productType": "6356546",
+                "productTypeName": "角钢",
+                "productWeight": 33,
+                "towerFootWeight": 6,
+                "towerLeg1Length": 76,
+                "towerLeg1Num": "788",
+                "towerLeg1Weight": 232,
+                "towerLeg2Length": 43,
+                "towerLeg2Num": "65",
+                "towerLeg2Weight": 7,
+                "towerLeg3Length": 4324,
+                "towerLeg3Num": "432",
+                "towerLeg3Weight": 423,
+                "towerLeg4Length": 324,
+                "towerLeg4Num": "67",
+                "towerLeg4Weight": 7,
+                "voltageGrade": "53452323233",
+                "voltageGradeName": "550KV",
+                "status": 4
+            }],
+    "msg": ""
+}

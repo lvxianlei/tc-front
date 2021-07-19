@@ -69,6 +69,7 @@ enum AuditStatusItem {
 enum BusinessType {
     SALE_ORDER_AUDIT = "产品信息变更审批",
     TASK_AUDIT = "任务单产品审批",
+    PRODUCT_AUDIT = "杆塔信息变更审批"
 }
 
 class ApprovalAll extends AbstractMngtComponent<
@@ -144,6 +145,8 @@ class ApprovalAll extends AbstractMngtComponent<
                             return BusinessType.SALE_ORDER_AUDIT
                         case "TASK_AUDIT":
                             return BusinessType.TASK_AUDIT
+                        case "PRODUCT_AUDIT":
+                            return BusinessType.PRODUCT_AUDIT
                     }
                 }
             },
@@ -189,7 +192,7 @@ class ApprovalAll extends AbstractMngtComponent<
                             {(records as ITaskTableDataItem).auditStatus ===
                                 AuditStatus.PENDING_APPROVAL ?
                                 (
-                                    (records as ITaskTableDataItem).type === "SALE_ORDER_AUDIT" ?
+                                    (records as ITaskTableDataItem).type === "PRODUCT_AUDIT" ?
                                         <Button href={`/approval/task/product-change/${(records as ITaskTableDataItem).id}`} type="link" >审批</Button>
                                         :
                                         <Button href={`/approval/task/change/${(records as ITaskTableDataItem).id} & ${(records as ITaskTableDataItem).businessId}`} type="link" >审批</Button>

@@ -31,7 +31,7 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSettingRoutePr
         this.setState({
             saleOrder: saleOrder
         });
-        saleOrder.productDtos = saleOrder.productVos?.map<IProductVo>((product: IProductVo, index: number): IProductVo => {
+        saleOrder.orderProductDtos = saleOrder.orderProductVos?.map<IProductVo>((product: IProductVo, index: number): IProductVo => {
             return {
                 ...product,
                 index: index + 1
@@ -40,7 +40,7 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSettingRoutePr
         this.setState({
             saleOrder: {
                 ...saleOrder,
-                productDtos: saleOrder.productVos,
+                orderProductDtos: saleOrder.orderProductVos,
                 contractInfoDto: saleOrder.contractInfoVo
             },
             orderQuantity: saleOrder.orderQuantity
@@ -60,7 +60,7 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSettingRoutePr
             signContractTime: saleOrder.contractInfoVo?.signContractTime,
             signCustomerId: saleOrder.contractInfoVo?.signCustomerId,
             signCustomerName: saleOrder.contractInfoVo?.signCustomerName,
-            productDtos: saleOrder.productVos,
+            orderProductDtos: saleOrder.orderProductVos,
         });
     }
 
@@ -98,6 +98,13 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSettingRoutePr
             signCustomerId: contract?.signCustomerId,
             signCustomerName: values.signCustomerName,
         }
+        values.orderProductDtos = this.state.saleOrder?.orderProductDtos && this.state.saleOrder?.orderProductDtos.map((items: IProductVo) => {
+            return {
+                ...items,
+                productCategoryId: items.productCategoryId,
+                productId: items.productId
+            }
+        })
         values = {
             ...values,
             contractInfoDto

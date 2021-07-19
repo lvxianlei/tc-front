@@ -19,7 +19,7 @@ for (let i = 1; i < 10; ++i) {
         "signCustomerId": Random.natural(2),
         "status|0-1":1,
         "currencyType|1-2": 1,
-        "chargeType|1-2": 1,
+        "chargeType|0-1": 1,
         "signContractTime": Random.date('yyyy-MM-dd'),
     });
 }

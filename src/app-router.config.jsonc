@@ -69,11 +69,6 @@
         "path": "/prom/order/detail/:id",
         "module": "./pages/prom/order/SaleOrderDetail",
         "exact": true
-    }, { // 变更产品信息
-        "name": "变更产品信息",
-        "path": "/prom/order/changeproduct/:id",
-        "module": "./pages/prom/order/ChangeProduct",
-        "exact": true
     }, { // 字典管理
         "name": "字典管理",
         "path": "/sys/dxnry",
@@ -152,7 +147,7 @@
     }, { // 审批产品信息变更
         "name": "产品信息变更审批",
         "path": "/approval/task/product-change/:id",
-        "module": "./pages/approval/ProductChangeApproval",
+        "module": "./pages/approval/TowerChangeApproval",
         "exact": true
     }, { // 委托列表
         "name": "委托列表",
@@ -188,6 +183,30 @@
         "name": "编辑原材料",
         "path": "/sys/material/view/:id",
         "module": "./pages/system-mngt/material/MaterialView",
+    }, { //塔型管理
+        "name": "塔型管理",
+        "path": "/product/towershape",
+        "module": "./pages/product/TowerShape/TowerShapeMngt",
+        "exact": true
+    }, { //新增塔型
+        "name": "新增塔型",
+        "path": "/product/towershape/new",
+        "module": "./pages/product/TowerShape/TowerShapeNew",
+        "exact": true
+    }, { //编辑塔型
+        "name": "编辑塔型",
+        "path": "/product/towershape/setting/:id",
+        "module": "./pages/product/TowerShape/TowerShapeSetting",
+        "exact": true
+    }, { //变更塔型
+        "name": "变更塔型",
+        "path": "/product/towershape/change/:id",
+        "module": "./pages/product/TowerShape/TowerShapeChange",
+        "exact": true
+    }, { //编辑图纸构件明细
+        "name": "编辑图纸构件明细",
+        "path": "/product/towershape/componentDetails/:id",
+        "module": "./pages/product/TowerShape/ComponentDetailsSetting",
         "exact": true
     }, { // 提料管理
         "name": "提料管理",
