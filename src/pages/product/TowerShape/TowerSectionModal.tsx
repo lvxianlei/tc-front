@@ -93,6 +93,7 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
                 towerLeg4Weight: records.towerLeg4Weight === -1 ? undefined : records.towerLeg4Weight,
                 towerFootWeight: records.towerFootWeight === -1 ? undefined : records.towerFootWeight,
                 productAdditional: productAdditional,
+                productDeployDTOList: records.productDeployVOList,
                 productDeploy: productDeployRow?.join('+')
             }
         })
@@ -131,6 +132,7 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
                 id: this.state.towerSection[index].id,
                 productNumber: this.state.towerSection[index].productNumber,
                 productCategoryId: this.state.towerSection[index]?.productCategoryId,
+                productDeployIdList: this.state.towerSection[index]?.productDeployIdList,
                 productDeployDTOList: productDeployDTOList
             }
         })
@@ -380,14 +382,14 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
             dataIndex: 'operation',
             width: 180,
             fixed: 'right',
-            render: (_: undefined, record: object, ind: number): React.ReactNode => (
+            render: (_: undefined, record: IProductDeployVOList, ind: number): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Popconfirm 
                         title="要删除该身部配段吗？" 
                         placement="topRight" 
                         okText="确认"
                         cancelText="取消"
-                        onConfirm={ () => { this.onDelete(index, ind) } }
+                        onConfirm={ () => { this.onDelete(index, ind, record.id) } }
                     >
                         <DeleteOutlined/>
                     </Popconfirm>
@@ -400,13 +402,22 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
      * @description 配段弹窗删除行
      * @param event 
      */
-    private onDelete = (index: number, ind: number): void => {
-        const towerSection: IProductDTOList[] | undefined = Object.values(this.getForm()?.getFieldsValue(true));
+    private onDelete = (index: number, ind: number, id?: string | number): void => {
+        let towerSection: IProductDTOList[] | undefined = Object.values(this.getForm()?.getFieldsValue(true));
         const productDeployDTOList: IProductDeployVOList[] | undefined = towerSection[index].productDeployDTOList;     
         productDeployDTOList && productDeployDTOList.splice(ind, 1);
+        const productDeployIdList: (string | number)[] = this.state.towerSection[index].productDeployIdList || [];
+        id && productDeployIdList.push(id);
+        towerSection = towerSection.map((items: IProductDTOList) => {
+            return {
+                ...items,
+                productDeployIdList: productDeployIdList
+            }
+        })
         this.setState({
-            towerSection: [...towerSection]
+            towerSection: [...towerSection],
         }) 
+        console.log(towerSection)
         this.getForm()?.setFieldsValue([...towerSection])
     }
 
@@ -430,26 +441,39 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
         const bodyIndex: number = this.state.bodyIndex;
         let towerSection: IProductDTOList[] = this.state.towerSection;
         const values = this.getForm()?.getFieldsValue(true);
-        values[bodyIndex].productDeployDTOList.map((items: any,ind: number) => {
-            this.getForm()?.validateFields([[bodyIndex,'productDeployDTOList',ind,'partNum'], [bodyIndex,'productDeployDTOList',ind,'number']]).then((res) => {
-                const productDeployRow: [] = values[bodyIndex].productDeployDTOList.map((items: IProductDeployVOList) => {
-                    return items.partNum + '*' + items.number;
+        if(values[bodyIndex].productDeployDTOList.length > 0) {
+            values[bodyIndex].productDeployDTOList.map((items: any,ind: number) => {
+                this.getForm()?.validateFields([[bodyIndex,'productDeployDTOList',ind,'partNum'], [bodyIndex,'productDeployDTOList',ind,'number']]).then((res) => {
+                    const productDeployRow: [] = values[bodyIndex].productDeployDTOList.map((items: IProductDeployVOList) => {
+                        return items.partNum + '*' + items.number;
+                    })
+                    towerSection[bodyIndex] = {
+                        ...this.getForm()?.getFieldsValue(true)[bodyIndex],
+                        productDeploy: productDeployRow.join('+'),
+                        productDeployDTOList: values[bodyIndex].productDeployDTOList
+                    };
+                    this.setState({
+                        isBodyVisible: false,
+                        towerSection: towerSection,
+                        oldTowerSection: towerSection
+                    })
+                    this.getForm()?.setFieldsValue({ ...Object.values(towerSection) });
+                }).catch(error => {
+                    // return error.errorFields[0].errors
                 })
-                towerSection[bodyIndex] = {
-                    ...this.getForm()?.getFieldsValue(true)[bodyIndex],
-                    productDeploy: productDeployRow.join('+'),
-                    productDeployDTOList: values[bodyIndex].productDeployDTOList
-                };
-                this.setState({
-                    isBodyVisible: false,
-                    towerSection: towerSection,
-                    oldTowerSection: towerSection
-                })
-                this.getForm()?.setFieldsValue({ ...Object.values(towerSection) });
-            }).catch(error => {
-                // return error.errorFields[0].errors
             })
-        })
+        } else {
+            towerSection[bodyIndex] = {
+                ...this.getForm()?.getFieldsValue(true)[bodyIndex],
+                productDeploy: '',
+            };
+            this.setState({
+                isBodyVisible: false,
+                towerSection: towerSection
+            })
+            this.getForm()?.setFieldsValue({ ...Object.values(towerSection) });
+        }
+        
     }
     
     /**

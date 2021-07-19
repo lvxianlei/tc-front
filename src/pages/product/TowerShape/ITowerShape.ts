@@ -45,6 +45,7 @@ export interface IProductDTOList {
     readonly status?: number;
     readonly productAdditional?: number;
     readonly productCategoryId?: string | number;
+    readonly productDeployIdList?: (string | number)[];
 }
 
 export interface IProductAdditionalDTOList {
