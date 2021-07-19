@@ -21,7 +21,7 @@ export interface ITowerChangeApprovalRouteProps extends RouteComponentProps<ITow
 export interface ITowerChangeApprovalState extends IAbstractTowerShapeSettingState {}
 
 interface ITowerShapeChange extends ITowerShape {
-    productDTOList?: IProductDTOList[];
+    productChangeRecordVos?: IProductDTOList[];
 } 
 
 //类型
@@ -31,22 +31,15 @@ enum StateType {
     QUOTE = 2,                //删除引用
     MODIFYREFERENCE = 3     //修改引用内容         
 }
+
+enum RecordType {
+    BEFORE_THE_CHANGE = 1,
+    AFTER_THE_CHANGE = 2       
+}
 /**
  * Product change approval
  */
 class TowerChangeApproval extends AbstractTowerShapeSetting<ITowerChangeApprovalRouteProps, ITowerChangeApprovalState> {
-
-    // /**
-    //  * @override
-    //  * @description Gets state
-    //  * @returns state 
-    //  */
-    // protected getState(): ITowerChangeApprovalState {
-    //     return {
-    //         ...super.getState(),
-    //         isChangeProduct: true
-    //     };
-    // }
 
     /**
      * @description Gets return path
@@ -62,18 +55,18 @@ class TowerChangeApproval extends AbstractTowerShapeSetting<ITowerChangeApproval
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const towerShape: ITowerShapeChange = await RequestUtil.get<ITowerShapeChange>('/tower-market/saleOrder/getSaleOrderByAuditId', {
+        const towerShape: ITowerShapeChange = await RequestUtil.get<ITowerShapeChange>('/tower-market/audit/getProductCategoryByAuditId', {
             auditId: this.props.match.params.id
         });
         this.setState({
             towerShape: {
                 ...towerShape,
-                // productChangeRecordVos: towerShape.productChangeRecordVos?.map<IProductDTOList>((product: IProductDTOList, index: number): IProductDTOList => {
-                //     return {
-                //         ...product,
-                //         index: index + 1
-                //     };
-                // })
+                productChangeRecordVos: towerShape.productChangeRecordVos?.map<IProductDTOList>((product: IProductDTOList, index: number): IProductDTOList => {
+                    return {
+                        ...product,
+                        index: index + 1
+                    };
+                })
             },
             isChange: true,
             isReference: true
@@ -130,101 +123,133 @@ class TowerChangeApproval extends AbstractTowerShapeSetting<ITowerChangeApproval
         return [{
             title: '类型',
             dataIndex: 'changeType',
+            width: 120,
             render: (changeType: number): React.ReactNode => {
                 switch (changeType) {
                     case StateType.UNCHANGED:
                         return '未变更';
                     case StateType.MODIFYREFERENCE:
-                        return '修改';
+                        return '新增引用';
                     case StateType.NEWREFERENCE:
-                        return '变更前'
+                        return '删除引用'
                     case StateType.QUOTE:
-                        return '变更后'
+                        return '修改内容'
                 }
             }
         }, {
-            title: '序号',
-            dataIndex: 'index'
+            title: '版本',
+            dataIndex: 'recordType',
+            width: 120,
+            render: (recordType: number): React.ReactNode => {
+                switch (recordType) {
+                    case RecordType.BEFORE_THE_CHANGE:
+                        return '变更前';
+                    case RecordType.AFTER_THE_CHANGE:
+                        return '变更后';
+                }
+            }
         },
         {
             title: '线路名称',
-            dataIndex: 'lineName'
+            dataIndex: 'lineName',
+            width: 120,
         }, {
             title: '产品类型',
-            dataIndex: 'productTypeName'
+            dataIndex: 'productTypeName',
+            width: 120,
         }, {
             title: '塔型',
-            dataIndex: 'productShape'
+            dataIndex: 'productShape',
+            width: 120,
         }, {
             title: '杆塔号',
-            dataIndex: 'productNumber'
+            dataIndex: 'productNumber',
+            width: 120,
         }, {
             title: '电压等级',
-            dataIndex: 'voltageGradeName'
+            dataIndex: 'voltageGradeName',
+            width: 120,
         }, {
             title: '呼高（米）',
-            dataIndex: 'productHeight'
+            dataIndex: 'productHeight',
+            width: 120,
         }, {
             title: '身部重量（kg）',
-            dataIndex: 'bodyWeight'
+            dataIndex: 'bodyWeight',
+            width: 120,
         }, {
             title: '接腿1#长度（m）',
-            dataIndex: 'towerLeg1Length'
+            dataIndex: 'towerLeg1Length',
+            width: 120,
         }, {
             title: '接腿1#重量（kg）',
-            dataIndex: 'towerLeg1Weight'
+            dataIndex: 'towerLeg1Weight',
+            width: 120,
         }, {
             title: '接腿2#长度（m）',
-            dataIndex: 'towerLeg2Length'
+            dataIndex: 'towerLeg2Length',
+            width: 120,
         }, {
             title: '接腿2#重量（kg）',
-            dataIndex: 'towerLeg2Weight'
+            dataIndex: 'towerLeg2Weight',
+            width: 120,
         }, {
             title: '接腿3#长度（m）',
-            dataIndex: 'towerLeg3Length'
+            dataIndex: 'towerLeg3Length',
+            width: 120,
         }, {
             title: '接腿3#重量（kg）',
-            dataIndex: 'towerLeg3Weight'
+            dataIndex: 'towerLeg3Weight',
+            width: 120,
         }, {
             title: '接腿4#长度（m）',
-            dataIndex: 'towerLeg4Length'
+            dataIndex: 'towerLeg4Length',
+            width: 120,
         }, {
             title: '接腿4#重量（kg）',
-            dataIndex: 'towerLeg4Weight'
+            dataIndex: 'towerLeg4Weight',
+            width: 120,
         }, {
             title: '塔脚板重量（kg）',
-            dataIndex: 'towerFootWeight'
+            dataIndex: 'towerFootWeight',
+            width: 120,
         }, {
             title: '杆塔重量（kg）',
-            dataIndex: 'productWeight'
+            dataIndex: 'productWeight',
+            width: 120,
         }, {
             title: '备注',
-            dataIndex: 'description'
+            dataIndex: 'description',
+            width: 200,
         }];
     }
 
-    // /**
-    //  * @override
-    //  * @description Renders extra sections
-    //  * @returns extra sections 
-    //  */
-    // public renderExtraSections(): IRenderedSection[] {
-    //     return [{
-    //         title: '产品信息',
-    //         render: (): React.ReactNode => {
-    //             return <Table rowKey="index" bordered={true} pagination={false}
-    //                 columns={this.getProductTableColumns()} dataSource={this.state.towerShape?.productChangeRecordVos} />;
-    //         }
-    //     }];
-    // }
+    /**
+     * @override
+     * @description Renders extra sections
+     * @returns extra sections 
+     */
+    public renderExtraSections(): IRenderedSection[] {
+        return [{
+            title: '产品信息',
+            render: (): React.ReactNode => {
+                return <Table rowKey="index" bordered={true} pagination={false}
+                    columns={this.getProductTableColumns()} dataSource={this.state.towerShape?.productChangeRecordVos} scroll={{ x: 1200 }} />;
+            }
+        }];
+    }
 
     /**
      * @override
      * @description Gets primary operation button label
      * @returns primary operation button label 
      */
-    protected getPrimaryOperationButtonLabel(): string {
-        return '通过';
+     /**
+     * @description Gets primary operation button
+     * @returns primary operation button
+     */
+      protected getPrimaryOperationButton(): React.ReactNode {
+        return <Button type="primary" htmlType="submit">通过</Button>;
     }
 
     /**

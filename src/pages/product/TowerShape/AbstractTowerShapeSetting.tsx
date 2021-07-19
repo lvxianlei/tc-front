@@ -784,10 +784,9 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
         const towerShape: ITowerShape | undefined = this.state.towerShape;
         const productDTOList: IProductDTOList[] = towerShape?.productDTOList || [];
         const productAdditionalDTOList: IProductAdditionalDTOList[] = productDTOList[index]?.productAdditionalDTOList || [];
-        const isChange: boolean | undefined = this.state.isChange;
         return <>
             { this.state.isVisible ? <Modal title="增重项" visible={ this.state.isVisible } onCancel={ this.onModalClose } width={ "30%" } okText="确定" cancelText="取消" onOk={ this.onModalOk }>
-                <Button type="primary" onClick={ this.itemWeightAddRow } className={ styles.btn } disabled={ isChange }>添加行</Button>
+                <Button type="primary" onClick={ this.itemWeightAddRow } className={ styles.btn }>添加行</Button>
                 <Table rowKey= {this.getTableRowKey()} bordered={ true } dataSource = { [...productAdditionalDTOList] } columns={ this.getItemColumns(index) } pagination = { false }/>
             </Modal>
             : null }
@@ -864,11 +863,12 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
      */
     public renderExtraSections(): IRenderedSection[] {
         const towerShape: ITowerShape | undefined = this.state.towerShape;
+        const isChange: boolean | undefined = this.state.isChange;
         return [{
             title: '杆塔信息',
             render: (): React.ReactNode => {
                 return (<>
-                        { this.itemWeightModal()}
+                        { this.itemWeightModal() }
                         <Button type="primary" onClick={ () => { 
                             const productDTOList: IProductDTOList[] = towerShape?.productDTOList || [];
                             let product: IProductDTOList = {
@@ -905,7 +905,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                                     productDTOList: [...productDTOList, product]
                                 }
                             })
-                        } } className={ styles.btn }>添加行</Button>
+                        } } className={ styles.btn } disabled={ isChange }>添加行</Button>
                         <Table { ...this.getTableProps() } />
                     </>
                 );

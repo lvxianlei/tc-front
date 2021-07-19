@@ -10,6 +10,7 @@ export interface ITowerShape {
     readonly productDTOList?: IProductDTOList[];
     readonly productVOList?: IProductDTOList[];
     readonly productCategoryName?: string;
+    readonly productChangeRecordVos?: IProductDTOList[];
 }
 
 export interface IProductDTOList {
