@@ -54,7 +54,6 @@ import { ITask } from '../../ITask';
  export interface DataTypeMore extends DataType {
     readonly contractId?: number;
     readonly internalNumber?: string;
-    readonly signContractTime?: string;
     readonly orderDeliveryTime?: string;
     readonly saleOrderNumber?: string;
     readonly lineName?: string	;
@@ -72,6 +71,12 @@ import { ITask } from '../../ITask';
     readonly unit?: string;
     readonly voltageGrade?: number;
  }
+
+
+ export interface OrderDataType extends DataType {
+    productStatus?: number;
+    readonly status?: number;
+ }
  
  export interface ITaskInfo extends ITask {
     id?: string | number;
@@ -80,7 +85,7 @@ import { ITask } from '../../ITask';
     readonly customerCompany?: string;	
     readonly productChangeInfoVOList?: IProduct [];	
     readonly productInfoVOList?: IProduct [];
-    readonly signContractTime?:	string;	
+    readonly orderDeliveryTime?:	string;	
     readonly signCustomerName?:	string;		
     readonly simpleProjectName?: string;	
  }
@@ -156,12 +161,12 @@ enum StepTitleItem {
                 internalNumber: selectedRows[0].internalNumber,
                 projectName: selectedRows[0].projectName,
                 saleOrderId: selectedRows[0].id,
-                signContractTime: selectedRows[0].orderDeliveryTime,
+                orderDeliveryTime: selectedRows[0].orderDeliveryTime,
                 signCustomerName: selectedRows[0].signCustomerName,
                 saleOrderNumber: selectedRows[0].saleOrderNumber,
             }
             this.getForm()?.setFieldsValue({
-                signContractTime: moment(selectedRows[0].orderDeliveryTime),
+                orderDeliveryTime: moment(selectedRows[0].orderDeliveryTime),
                 internalNumber: selectedRows[0].internalNumber,
                 saleOrderNumber: selectedRows[0].saleOrderNumber,
                 projectName: selectedRows[0].projectName,
@@ -176,10 +181,11 @@ enum StepTitleItem {
     }
    
     //产品选择
-    public onProductSelect = (selectedRows: DataType[]):void => {
+    public onProductSelect = (selectedRows: OrderDataType[]):void => {
         const { productDataSource } = this.state;
         if(selectedRows && selectedRows.length > 0 ) {
             const task:IProduct[] = productDataSource || [];
+            selectedRows[0].productStatus = selectedRows[0].status;
             task.push(selectedRows[0])
             this.setState({
                 productDataSource:[...task]
@@ -246,8 +252,8 @@ enum StepTitleItem {
                             children: <Input disabled/>
                         }, {
                             label: '订单交货日期',
-                            name: 'signContractTime',
-                            initialValue: task?.signContractTime ? moment(task?.signContractTime) : '',
+                            name: 'orderDeliveryTime',
+                            initialValue: task?.orderDeliveryTime ? moment(task?.orderDeliveryTime) : '',
                             rules: [{
                                 required: true,
                                 message: '请选择订单交货日期'
@@ -261,7 +267,7 @@ enum StepTitleItem {
                                 required: true,
                                 message: '请选择客户交货日期'
                             }],
-                            children:  <DatePicker disabledDate={(current)=>{return current > moment(task?.signContractTime).add(1, 'days')}} format="YYYY-MM-DD"/>
+                            children:  <DatePicker disabledDate={(current)=>{return current > moment(task?.orderDeliveryTime).add(1, 'days')}} format="YYYY-MM-DD"/>
                         }, {
                             label: '计划交货日期',
                             name: 'planDeliveryTime',
@@ -320,8 +326,8 @@ enum StepTitleItem {
                             children: <Input disabled/>
                         }, {
                             label: '订单交货日期',
-                            name: 'signContractTime',
-                            initialValue: moment(task?.signContractTime),
+                            name: 'orderDeliveryTime',
+                            initialValue: moment(task?.orderDeliveryTime),
                             rules: [{
                                 required: true,
                                 message: '请选择订单交货日期'
@@ -438,8 +444,8 @@ enum StepTitleItem {
                             children: <Input disabled/>
                         }, {
                             label: '订单交货日期',
-                            name: 'signContractTime',
-                            initialValue: moment(task?.signContractTime),
+                            name: 'orderDeliveryTime',
+                            initialValue: moment(task?.orderDeliveryTime),
                             rules: [{
                                 required: true,
                                 message: '请选择订单交货日期'
@@ -578,7 +584,7 @@ enum StepTitleItem {
                     id:this.state?.task?.id,
                     planDeliveryTime:moment(values.planDeliveryTime).format('YYYY-MM-DD'),
                     deliveryTime: values.deliveryTime && moment(values.deliveryTime).format('YYYY-MM-DD') || '',
-                    signContractTime: moment(values.signContractTime).format('YYYY-MM-DD') || '',
+                    orderDeliveryTime: moment(values.orderDeliveryTime).format('YYYY-MM-DD') || '',
                 });
                 data.id = taskId
                 this.setState({
