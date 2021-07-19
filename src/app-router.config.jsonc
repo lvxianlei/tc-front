@@ -147,7 +147,7 @@
     }, { // 审批产品信息变更
         "name": "产品信息变更审批",
         "path": "/approval/task/product-change/:id",
-        "module": "./pages/approval/ProductChangeApproval",
+        "module": "./pages/approval/TowerChangeApproval",
         "exact": true
     }, { // 委托列表
         "name": "委托列表",

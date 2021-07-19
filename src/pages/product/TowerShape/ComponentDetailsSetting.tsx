@@ -133,6 +133,10 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
         };
     }
 
+    public getAccurateWeight(): void {
+
+    }
+
     /**
      * @implements
      * @description Gets table columns
@@ -166,9 +170,15 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
             dataIndex: 'rowMaterial',
             editable: true,
             type: (
-                <Input maxLength={ 20 } onChange={(e) => {
+                <Input maxLength={ 20 } onBlur={async (e) => {
                     const value: string = e.target.value;
                     const towerSection: ITowerSection | undefined = this.getForm()?.getFieldsValue(true);
+                    if(towerSection?.spec && towerSection?.thickness && towerSection?.width && towerSection?.length) {
+                        // const resData = await RequestUtil.get(`/tower-data-archive/drawingComponent/getAccurateWeight`, {
+                        //     ...towerSection
+                        // });
+                        console.log(towerSection)
+                    }
                     console.log(value, towerSection?.spec, towerSection?.thickness, towerSection?.width, towerSection?.length)
                 }}/>
             ),
