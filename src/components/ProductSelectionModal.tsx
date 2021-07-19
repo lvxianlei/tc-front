@@ -42,6 +42,7 @@ import styles from './AbstractSelectableModal.module.less';
     readonly totalAmount:number;
     readonly unit: string;
     readonly voltageGrade: number;
+    readonly status: number;
  }
  
  /**
