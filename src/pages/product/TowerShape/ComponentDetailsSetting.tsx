@@ -5,12 +5,10 @@
 
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { Button, Form, FormInstance, Input, InputNumber, Modal, Popconfirm, Space, Table, TableColumnType } from 'antd';
-import { ColumnType, TableProps } from 'antd/lib/table';
+import { Button, Form, Input, InputNumber, Popconfirm, Space, Table, TableColumnType } from 'antd';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 import RequestUtil from '../../../utils/RequestUtil';
-import { FormOutlined, DeleteOutlined } from '@ant-design/icons';
 import layoutStyles from '../../../layout/Layout.module.less';
 
 import styles from './AbstractTowerShapeSetting.module.less';
@@ -26,7 +24,6 @@ export interface IComponentDetailsSettingRouteProps extends RouteComponentProps<
 }
 
 export interface IComponentDetailsSettingState extends IAbstractFillableComponentState {
-    readonly isModalVisible: boolean;
     readonly towerSection: ITowerSection[];
     readonly editingKey?: number;
 }
@@ -74,15 +71,18 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
      */
     protected getState(): S {
         return {
-            isModalVisible: false
+
         } as S;
     }
 
-    public async componentDidMount() {
+    public componentDidMount() {
         super.componentDidMount();
-        let towerSection: ITowerSection[] = await RequestUtil.get(`/tower-data-archive/drawingComponent/${ this.props.match.params.id }`);
+        this.getData();
+    }
+
+    public getData = async () => {
+        let towerSection: ITowerSection[] = await RequestUtil.get(`/tower-data-archive/drawComponent/${ this.props.match.params.id }`);
         this.setState({
-            isModalVisible: true,
             towerSection: towerSection,
         })
     }
@@ -98,13 +98,15 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
      * @returns submit 
      */
      public async onSubmit(values: Record<string, any>): Promise<void> {
-        console.log(values)
+        values.productCategoryId = this.props.match.params.id;
         this.setState ({
-            editingKey: undefined,
-            isModalVisible: false
+            editingKey: undefined
         })
-        return await RequestUtil.put('/tower-data-archive/drawingComponent', values.towerSectionFieldsValue);
-        // return Promise.reject();
+        await RequestUtil.put('/tower-data-archive/drawComponent', values).then(res => {
+            if(res) {
+                this.getData();
+            }
+        });
     }
 
     /**
@@ -374,7 +376,11 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
     private onDelete = async (record: Record<string, any>, index: number): Promise<void> => {
         const towerSection: ITowerSection[] | undefined = this.state.towerSection;
         if(record.id) {
-            await RequestUtil.delete(`/tower-data-archive/drawingComponent?id=${ record.id }`);
+            await RequestUtil.delete(`/tower-data-archive/drawComponent/${ record.id }`).then(res => {
+                if(res) {
+                    this.getData();
+                }
+            });
         }
         towerSection && towerSection.splice(index, 1);
         this.setState({

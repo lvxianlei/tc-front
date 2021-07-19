@@ -3,22 +3,26 @@ export interface ITowerShape {
     readonly description?: string;
     readonly internalNumber?: string;
     readonly operateStatus?: number;
-    readonly productShape?: string;
+    readonly name?: string;
     readonly projectName?: string;
     readonly steelProductShape?: string;
     readonly contractId?: string;
     readonly productDTOList?: IProductDTOList[];
+    readonly productVOList?: IProductDTOList[];
+    readonly productCategoryName?: string;
 }
 
 export interface IProductDTOList {
+    readonly index?: number;
     readonly bodyWeight?: number;
     readonly description?: string;
     readonly id?: string | number;
     readonly lineName?: string;
     readonly productAdditionalDTOList?: IProductAdditionalDTOList[];
+    readonly productAdditionalVOList?: IProductAdditionalDTOList[];
     readonly productHeight?: number;
     readonly productNumber?: string;
-    readonly productShape?: string;
+    readonly productCategoryName?: string;
     readonly productShapeId?: number;
     readonly productType?: string | number;
     readonly productWeight?: number;
@@ -37,14 +41,16 @@ export interface IProductDTOList {
     readonly towerLeg4Weight?: number;
     readonly voltageGrade?: string | number;
     readonly productDeployVOList?: IProductDeployVOList[];
+    readonly productDeployDTOList?: IProductDeployVOList[];
     readonly status?: number;
     readonly productAdditional?: number;
+    readonly productCategoryId?: string | number;
 }
 
 export interface IProductAdditionalDTOList {
     readonly id?: number | string;
     readonly additionalItem?: string;
-    readonly towerDetailId?: string | number;
+    readonly productId?: string | number;
     readonly weight?: number;
 }
 
@@ -52,5 +58,5 @@ export interface IProductDeployVOList {
     readonly id?: number | string;
     readonly number?: number;
     readonly partNum?: string;
-    readonly towerDetailId?: string | number;
+    readonly productId?: string | number;
 }

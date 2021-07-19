@@ -10,18 +10,20 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { IFormItemGroup } from '../../components/AbstractFillableComponent';
 import RequestUtil from '../../utils/RequestUtil';
 import { IRenderedSection } from '../../utils/SummaryRenderUtil';
-import AbstractSaleOrderSetting, {
-    IAbstractSaleOrderSettingState,
-    IProductVo,
-    ISaleOrder,
-} from '../prom/order/AbstractSaleOrderSetting';
+import AbstractTowerShapeSetting, { IAbstractTowerShapeSettingState } from '../product/TowerShape/AbstractTowerShapeSetting';
+import { IProductDTOList, ITowerShape } from '../product/TowerShape/ITowerShape';
 
-export interface IProductChangeApprovalProps {
+export interface ITowerChangeApprovalProps {
     readonly businessId: any;
     readonly id: string;
 }
-export interface IProductChangeApprovalRouteProps extends RouteComponentProps<IProductChangeApprovalProps>, WithTranslation { }
-export interface IProductChangeApprovalState extends IAbstractSaleOrderSettingState { }
+export interface ITowerChangeApprovalRouteProps extends RouteComponentProps<ITowerChangeApprovalProps>, WithTranslation {}
+export interface ITowerChangeApprovalState extends IAbstractTowerShapeSettingState {}
+
+interface ITowerShapeChange extends ITowerShape {
+    productDTOList?: IProductDTOList[];
+} 
+
 //类型
 enum StateType {
     UNCHANGED = 0,              //未变更
@@ -32,20 +34,19 @@ enum StateType {
 /**
  * Product change approval
  */
-class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeApprovalRouteProps, IProductChangeApprovalState> {
+class TowerChangeApproval extends AbstractTowerShapeSetting<ITowerChangeApprovalRouteProps, ITowerChangeApprovalState> {
 
-
-    /**
-     * @override
-     * @description Gets state
-     * @returns state 
-     */
-    protected getState(): IProductChangeApprovalState {
-        return {
-            ...super.getState(),
-            isChangeProduct: true
-        };
-    }
+    // /**
+    //  * @override
+    //  * @description Gets state
+    //  * @returns state 
+    //  */
+    // protected getState(): ITowerChangeApprovalState {
+    //     return {
+    //         ...super.getState(),
+    //         isChangeProduct: true
+    //     };
+    // }
 
     /**
      * @description Gets return path
@@ -61,47 +62,33 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const saleOrder: ISaleOrder = await RequestUtil.get<ISaleOrder>('/tower-market/saleOrder/getSaleOrderByAuditId', {
+        const towerShape: ITowerShapeChange = await RequestUtil.get<ITowerShapeChange>('/tower-market/saleOrder/getSaleOrderByAuditId', {
             auditId: this.props.match.params.id
         });
         this.setState({
-            saleOrder: saleOrder,
-            isChangeProduct: true
+            towerShape: towerShape,
+            isChange: true,
+            isReference: true
         });
-        saleOrder.orderProductDtos = saleOrder.orderProductDtos?.map<IProductVo>((product: IProductVo, index: number): IProductVo => {
+        towerShape.productDTOList = towerShape.productDTOList?.map<IProductDTOList>((product: IProductDTOList, index: number): IProductDTOList => {
             return {
                 ...product,
-                index: index + 1
+                // index: index + 1
             };
         });
-        this.setState({
-            saleOrder: {
-                ...saleOrder,
-                contractInfoDto: saleOrder.contractInfoVo,
-                productChangeRecordVos: saleOrder.productChangeRecordVos?.map<IProductVo>((product: IProductVo, index: number): IProductVo => {
-                    return {
-                        ...product,
-                        index: index + 1
-                    };
-                })
-            }
-        })
+        // this.setState({
+        //     towerShape: {
+        //         ...towerShape,
+        //         productChangeRecordVos: towerShape.productChangeRecordVos?.map<IProductDTOList>((product: IProductDTOList, index: number): IProductDTOList => {
+        //             return {
+        //                 ...product,
+        //                 index: index + 1
+        //             };
+        //         })
+        //     }
+        // })
         this.getForm()?.setFieldsValue({
-            totalWeight: saleOrder.orderQuantity,
-            totalPrice: saleOrder.taxPrice,
-            totalAmount: saleOrder.taxAmount,
-            orderQuantity: saleOrder.orderQuantity,
-            chargeType: saleOrder.contractInfoVo?.chargeType,
-            contractId: saleOrder.contractInfoVo?.contractId,
-            currencyType: saleOrder.contractInfoVo?.currencyType,
-            customerCompany: saleOrder.contractInfoVo?.customerCompany,
-            deliveryTime: saleOrder.contractInfoVo?.deliveryTime,
-            internalNumber: saleOrder.contractInfoVo?.internalNumber,
-            projectName: saleOrder.contractInfoVo?.projectName,
-            signContractTime: saleOrder.contractInfoVo?.signContractTime,
-            signCustomerId: saleOrder.contractInfoVo?.signCustomerId,
-            signCustomerName: saleOrder.contractInfoVo?.signCustomerName,
-            orderProductDtos: saleOrder.orderProductVos,
+            ...towerShape
         });
     }
 
@@ -111,7 +98,7 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
      * @returns form item groups 
      */
     public getFormItemGroups(): IFormItemGroup[][] {
-        if (this.state.saleOrder) {
+        if (this.state.towerShape) {
             return super.getFormItemGroups();
         }
         return [];
@@ -149,7 +136,6 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
      * @returns product table columns 
      */
     private getProductTableColumns(): TableColumnType<object>[] {
-        const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
         return [{
             title: '类型',
             dataIndex: 'changeType',
@@ -188,40 +174,58 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
             title: '呼高（米）',
             dataIndex: 'productHeight'
         }, {
-            title: '单位',
-            dataIndex: 'unit'
+            title: '身部重量（kg）',
+            dataIndex: 'bodyWeight'
         }, {
-            title: '重量（吨）',
-            dataIndex: 'num'
+            title: '接腿1#长度（m）',
+            dataIndex: 'towerLeg1Length'
         }, {
-            title: '单价',
-            dataIndex: 'price'
+            title: '接腿1#重量（kg）',
+            dataIndex: 'towerLeg1Weight'
         }, {
-            title: '金额',
-            dataIndex: 'totalAmount'
+            title: '接腿2#长度（m）',
+            dataIndex: 'towerLeg2Length'
         }, {
-            title: '标段',
-            dataIndex: 'tender'
+            title: '接腿2#重量（kg）',
+            dataIndex: 'towerLeg2Weight'
+        }, {
+            title: '接腿3#长度（m）',
+            dataIndex: 'towerLeg3Length'
+        }, {
+            title: '接腿3#重量（kg）',
+            dataIndex: 'towerLeg3Weight'
+        }, {
+            title: '接腿4#长度（m）',
+            dataIndex: 'towerLeg4Length'
+        }, {
+            title: '接腿4#重量（kg）',
+            dataIndex: 'towerLeg4Weight'
+        }, {
+            title: '塔脚板重量（kg）',
+            dataIndex: 'towerFootWeight'
+        }, {
+            title: '杆塔重量（kg）',
+            dataIndex: 'productWeight'
         }, {
             title: '备注',
             dataIndex: 'description'
         }];
     }
 
-    /**
-     * @override
-     * @description Renders extra sections
-     * @returns extra sections 
-     */
-    public renderExtraSections(): IRenderedSection[] {
-        return [{
-            title: '产品信息',
-            render: (): React.ReactNode => {
-                return <Table rowKey="index" bordered={true} pagination={false}
-                    columns={this.getProductTableColumns()} dataSource={this.state.saleOrder?.productChangeRecordVos} />;
-            }
-        }];
-    }
+    // /**
+    //  * @override
+    //  * @description Renders extra sections
+    //  * @returns extra sections 
+    //  */
+    // public renderExtraSections(): IRenderedSection[] {
+    //     return [{
+    //         title: '产品信息',
+    //         render: (): React.ReactNode => {
+    //             return <Table rowKey="index" bordered={true} pagination={false}
+    //                 columns={this.getProductTableColumns()} dataSource={this.state.towerShape?.productChangeRecordVos} />;
+    //         }
+    //     }];
+    // }
 
     /**
      * @override
@@ -242,4 +246,4 @@ class ProductChangeApproval extends AbstractSaleOrderSetting<IProductChangeAppro
     }
 }
 
-export default withRouter(withTranslation()(ProductChangeApproval));
+export default withRouter(withTranslation()(TowerChangeApproval));

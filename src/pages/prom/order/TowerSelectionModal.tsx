@@ -2,8 +2,8 @@
  * @author zyc
  * @copyright © 2021
  */
-import { Button,  Modal, Space, TableColumnType } from 'antd';
-import { TablePaginationConfig } from 'antd/lib/table';
+import { Button,  message,  Modal, Space, TableColumnType } from 'antd';
+import { TablePaginationConfig, TableProps } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
@@ -34,38 +34,42 @@ export default class TowerSelectionModal extends AbstractSelectableModal<ITowerS
     protected getState(): ITowerSelectionModalState {
         return {
             ...super.getState(),
-            tablePagination: {
-                current: 1,
-                pageSize: 10,
-                total: 0,
-                showSizeChanger: false
-            },
             confirmTitle: "选择塔型"
         };
     }
 
     public showModal =  (): void => {
-        this.setState({
-            isModalVisible: true,
-        })
-        this.getTable({})
+        if(this.props.id) {
+            this.setState({
+                isModalVisible: true,
+            })
+            this.getTable({})
+        } else {
+            message.warning('请先选择关联合同！');
+        }
+        
     }
     
     public async getTable(pagination: TablePaginationConfig = {}) {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>(`/tower-data-archive/productCategoryById`, {
-            current: pagination.current || this.state.tablePagination?.current,
-            size: pagination.pageSize ||this.state.tablePagination?.pageSize,
-            id: this.props.id
-        });
+        const resData: [] = await RequestUtil.get(`/tower-market/contract/product/${ this.props.id }`);
         this.setState({
-            tableDataSource: resData.records,
-            tablePagination: {
-                ...this.state.tablePagination,
-                current: resData.current,
-                pageSize: resData.size,
-                total: resData.total
-            }
+            tableDataSource: resData,
         });
+    }
+
+    public getTableProps(): TableProps<object> {
+        return {
+            pagination: false,
+            rowKey:  this.getTableRowKey(),
+            bordered:  true, 
+            dataSource:  this.getTableDataSource(), 
+            columns: this.getTableColumns(),
+            rowSelection: {
+                type: "radio",
+                selectedRowKeys: this.state.selectedRowKeys,
+                onChange: this.onSelectChange
+            }
+        }
     }
 
     public getTableDataSource(): object[]  {
@@ -178,6 +182,6 @@ export default class TowerSelectionModal extends AbstractSelectableModal<ITowerS
     }
 
     protected getTableRowKey(): string | GetRowKey<object> {
-        return 'id';
+        return 'productId';
     }
 }

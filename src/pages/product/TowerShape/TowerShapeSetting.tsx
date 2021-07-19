@@ -7,7 +7,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 
 import RequestUtil from '../../../utils/RequestUtil';
 import AbstractTowerShapeSetting, { IAbstractTowerShapeSettingState } from './AbstractTowerShapeSetting';
-import { IProductDTOList, ITowerShape } from './ITowerShape';
+import { IProductAdditionalDTOList, IProductDTOList, ITowerShape } from './ITowerShape';
 
 export interface ITowerShapeSettingProps {
     readonly id: string;
@@ -25,20 +25,39 @@ class TowerShapeSetting extends AbstractTowerShapeSetting<ITowerShapeSettingRout
  */
     public async componentDidMount() {
         super.componentDidMount();
-        const towerShape: ITowerShape = await RequestUtil.get<ITowerShape>(`/tower-data-archive/productCategory/${ this.props.match.params.id }`);   
-        const isReference: boolean | undefined = towerShape.productDTOList?.some((item: IProductDTOList): boolean => {
-            if(item.status === 1) {
+        let towerShape: ITowerShape = await RequestUtil.get<ITowerShape>(`/tower-data-archive/productCategory/${ this.props.match.params.id }`);   
+        const isReference: boolean | undefined = towerShape.productVOList?.some((item: IProductDTOList): boolean => {
+            if(item.status === 0) {
                 return false
             } else {
                 return true
             }
         })
+        let productVOList: IProductDTOList[] | undefined = towerShape.productVOList?.map((items: IProductDTOList) => {
+            return {
+                ...items,
+                productAdditionalDTOList: items.productAdditionalVOList,
+                towerLeg1Length: items.towerLeg1Length === -1 ? undefined : items.towerLeg1Length,
+                towerLeg1Weight: items.towerLeg1Weight === -1 ? undefined : items.towerLeg1Weight,
+                towerLeg2Length: items.towerLeg2Length === -1 ? undefined : items.towerLeg2Length,
+                towerLeg2Weight: items.towerLeg2Weight === -1 ? undefined : items.towerLeg2Weight,
+                towerLeg3Length: items.towerLeg3Length === -1 ? undefined : items.towerLeg3Length,
+                towerLeg3Weight: items.towerLeg3Weight === -1 ? undefined : items.towerLeg3Weight,
+                towerLeg4Length: items.towerLeg4Length === -1 ? undefined : items.towerLeg4Length,
+                towerLeg4Weight: items.towerLeg4Weight === -1 ? undefined : items.towerLeg4Weight,
+                towerFootWeight: items.towerFootWeight === -1 ? undefined : items.towerFootWeight,
+            }
+        })
         this.setState({
-            towerShape: towerShape,
+            towerShape: {
+                ...towerShape,
+                productDTOList: [...productVOList || []]
+            },
             isReference: isReference
         });
         this.getForm()?.setFieldsValue({
-            ...towerShape
+            ...towerShape,
+            productDTOList: [...productVOList || []]
         });
     }
 
@@ -49,10 +68,24 @@ class TowerShapeSetting extends AbstractTowerShapeSetting<ITowerShapeSettingRout
      * @returns submit 
      */
     public async onSubmit(values: Record<string, any>): Promise<void> {
-        values.productDtos = this.getForm()?.getFieldsValue(true).productDtos;
-        console.log(values)
-        return Promise.reject();
-        // return await RequestUtil.post('/tower-market/contract', values);
+        const productDTOList: IProductDTOList[] = this.getForm()?.getFieldsValue(true).productDTOList;
+        const towerShape: ITowerShape = this.state.towerShape;
+        values.productDTOList = productDTOList;
+        values.contractId = this.state.towerShape.contractId;
+        productDTOList.map((items: IProductDTOList) => {
+            items.productAdditionalDTOList?.map((item: IProductAdditionalDTOList) => {
+                return {
+                    ...item,
+                    productId: items.id
+                }
+            })
+            return {
+                ...items,
+                productShapeId: towerShape.id
+            }
+        })
+        values.id = this.getForm()?.getFieldsValue(true).id;
+        return await RequestUtil.post('/tower-data-archive/productCategory', values);
     }
 }
 

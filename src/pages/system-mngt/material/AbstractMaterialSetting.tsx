@@ -45,7 +45,7 @@ const titleC = {
 
      
     public state: S = {
-        materialData: undefined,
+        materialData: [],
         treeData: undefined,
     } as S;
      /**
@@ -316,7 +316,7 @@ const titleC = {
 
 
     public handleAddRow = () => {
-        const { materialData } = this.state;
+        const materialValue = this.state.materialData || [];
         let nRow:IMaterial = {
             description: "",
             materialCode: "",
@@ -329,7 +329,7 @@ const titleC = {
             unit: "",
             weightAlgorithm: "",
         };
-        const data = [...materialData, nRow];
+        const data = [...materialValue, nRow];
         this.setState({
             materialData: data
         })

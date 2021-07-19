@@ -33,6 +33,14 @@
                         "path": "/prom/task"
                     }]
                 },{
+                    "label": "技术中心",
+                    "path": "/technology",
+                    "items": [
+                        {
+                            "label": "提料管理",
+                            "path": "/technology/materialExtraction"
+                        }]
+                },{
                     "label": "审批",
                     "path": "/approval",
                     "items": [

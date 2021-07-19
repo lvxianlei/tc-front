@@ -51,19 +51,21 @@ export interface ISaleOrder {
     readonly creditInsurance?: number;
     readonly orderDeliveryTime?: string;
     readonly description?: string;
-    productDtos?: IProductVo[];
+    orderProductDtos?: IProductVo[];
     readonly purchaseOrderNumber?: string;
     readonly guaranteeType?: string;
     readonly totalWeight: number;
     readonly totalAmount: number;
     readonly totalPrice?: number;
-    readonly productVos: IProductVo[];
+    readonly orderProductVos: IProductVo[];
     readonly productChangeRecordVos?: IProductVo[];
     readonly contractInfoVo?: IContractInfoDto;
 }
 
 export interface IProductVo extends IProduct {
     readonly num?: number;
+    readonly productCategoryId?: string | number;
+    readonly productId?: string | number;
 }
 
 export interface IContractInfoDto extends IContract {
@@ -150,13 +152,13 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             };
             this.setState({
                 saleOrder: {
-                    ...(saleOrder || { taxAmount: 0, taxRate: 0, totalWeight: 0, totalAmount: 0,productVos: [] }),
+                    ...(saleOrder || { taxAmount: 0, taxRate: 0, totalWeight: 0, totalAmount: 0,orderProductVos: [] }),
                     contractInfoDto: { ...modalSelectedValue },
-                    productDtos: []
+                    orderProductDtos: []
                 },
                 orderQuantity: 0
             })
-            this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, price: 0, productDtos: [], totalWeight: '', totalPrice: '', totalAmount: '', taxAmount: undefined, taxPrice: '', amount: '', orderQuantity: ''});
+            this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, price: 0, orderProductDtos: [], totalWeight: undefined, totalPrice: '', totalAmount: '', taxAmount: undefined, taxPrice: '', amount: '', orderQuantity: ''});
             this.getUnitByChargeType();
             this.getColumnsChange(selectedRows[0].chargeType);
         }   
@@ -177,8 +179,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      */
     public getUnitByChargeType = () : void => {
         const saleOrder: ISaleOrder | undefined = this.getForm()?.getFieldsValue(true);
-        let productDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).productDtos;
-        productDtos = productDtos && productDtos.map(items => {
+        let orderProductDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).orderProductDtos;
+        orderProductDtos = orderProductDtos && orderProductDtos.map(items => {
             if(saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE) {
                 return items ={
                     ...items,
@@ -191,7 +193,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 }
             }
         })
-        this.getForm()?.setFieldsValue({ productDtos: productDtos });
+        this.getForm()?.setFieldsValue({ orderProductDtos: orderProductDtos });
     } 
 
     /**
@@ -250,8 +252,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      */
     public getPriceAfterChangeAmount = () : void => {
         const saleOrder: ISaleOrder | undefined = this.getForm()?.getFieldsValue(true);
-        let productDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).productDtos;
-        productDtos = productDtos && productDtos.map(items => {
+        let orderProductDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).orderProductDtos;
+        orderProductDtos = orderProductDtos && orderProductDtos.map(items => {
             return items ={
                 ...items,
                 price: saleOrder?.totalPrice || 0
@@ -259,11 +261,11 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         })
         this.setState({
             saleOrder: {
-                ...(saleOrder || { taxAmount: 0, taxRate: 0, totalWeight: 0, totalAmount: 0, productVos: [] }),
-                productDtos: [...(productDtos || [])]
+                ...(saleOrder || { taxAmount: 0, taxRate: 0, totalWeight: 0, totalAmount: 0, orderProductVos: [] }),
+                orderProductDtos: [...(orderProductDtos || [])]
             }
         })
-        this.getForm()?.setFieldsValue({ productDtos: [...(productDtos || [])] });
+        this.getForm()?.setFieldsValue({ orderProductDtos: [...(orderProductDtos || [])] });
     } 
     
     /**
@@ -271,19 +273,19 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      */
     public getPrice = (): void => {
         const saleOrder: ISaleOrder = this.getForm()?.getFieldsValue(true);
-        const productDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).productDtos || [];
-        if(productDtos.length > 0) {
+        const orderProductDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).orderProductDtos || [];
+        if(orderProductDtos.length > 0) {
             let totalPrice: number = 0;
             totalPrice = saleOrder.taxAmount / saleOrder.totalWeight || 0;
             totalPrice = parseFloat(totalPrice.toFixed(4));
-            productDtos.map<void>((items: IProductVo, ind: number): void => {
-                productDtos[ind] = {
-                    ...productDtos[ind],
-                    totalAmount: totalPrice * (productDtos[ind].num || 0) || 0,
+            orderProductDtos.map<void>((items: IProductVo, ind: number): void => {
+                orderProductDtos[ind] = {
+                    ...orderProductDtos[ind],
+                    totalAmount: totalPrice * (orderProductDtos[ind].num || 0) || 0,
                     price: totalPrice
                 }
             })
-            this.getForm()?.setFieldsValue({ totalPrice: totalPrice, taxPrice: totalPrice, productDtos: productDtos });
+            this.getForm()?.setFieldsValue({ totalPrice: totalPrice, taxPrice: totalPrice, orderProductDtos: orderProductDtos });
         }
     }
 
@@ -292,29 +294,29 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      */
     public priceBlur(index: number): void {
         const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
-        const productDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).productDtos;
+        const orderProductDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).orderProductDtos;
         const orderQuantity: number | undefined = this.state.orderQuantity;
-        if(orderQuantity && productDtos[0] && productDtos[index].price) {
-            const price: number | undefined = productDtos[index].price;
+        if(orderQuantity && orderProductDtos[0] && orderProductDtos[index].price) {
+            const price: number | undefined = orderProductDtos[index].price;
             let totalPrice: number = 0;
             let amount: number = 0;
             if(price) {
                 amount = price * 1; 
             }
-            productDtos.map<void>((items: IProductVo): void => {
+            orderProductDtos.map<void>((items: IProductVo): void => {
                 totalPrice = Number(totalPrice) + Number(items.price);
             })
-            productDtos[index] = {
-                ...productDtos[index],
+            orderProductDtos[index] = {
+                ...orderProductDtos[index],
                 totalAmount: amount
             }
             this.setState({
                 saleOrder: {
-                    ...(saleOrder || { taxAmount: 0, taxRate: 0, totalWeight: 0, totalAmount: 0,productVos: [] }),
-                    productDtos: [...productDtos]
+                    ...(saleOrder || { taxAmount: 0, taxRate: 0, totalWeight: 0, totalAmount: 0,orderProductVos: [] }),
+                    orderProductDtos: [...orderProductDtos]
                 }
             })
-            this.getForm()?.setFieldsValue({ taxPrice: parseFloat((totalPrice/orderQuantity).toFixed(4)), totalPrice: parseFloat((totalPrice/orderQuantity || 0).toFixed(4)), productDtos: [...productDtos] });
+            this.getForm()?.setFieldsValue({ taxPrice: parseFloat((totalPrice/orderQuantity).toFixed(4)), totalPrice: parseFloat((totalPrice/orderQuantity || 0).toFixed(4)), orderProductDtos: [...orderProductDtos] });
             this.getTotalAmount();
             this.getAmount();
         }                                                       
@@ -324,9 +326,9 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      * @description 产品单价-计算总计金额
      */
      public getTotalAmount(): void {
-        const productDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).productDtos;
+        const orderProductDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).orderProductDtos;
         let totalAmount: number = 0;
-        productDtos.map<number>((items: IProductVo): number => {
+        orderProductDtos.map<number>((items: IProductVo): number => {
             return totalAmount = Number(totalAmount) + Number(items.totalAmount);
         })
         this.getForm()?.setFieldsValue({ taxAmount: totalAmount, totalAmount: totalAmount });
@@ -337,32 +339,32 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      */
      public tableDelete(index: number): void {
         const saleOrderValue: ISaleOrder = this.getForm()?.getFieldsValue(true);
-        const productDtos: IProductVo[] | undefined = this.getForm()?.getFieldsValue(true).productDtos;
+        const orderProductDtos: IProductVo[] | undefined = this.getForm()?.getFieldsValue(true).orderProductDtos;
         const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
         const orderQuantity: number | undefined = this.state.orderQuantity;
-        if( productDtos && saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ) {
-            const num: number = productDtos[index].num || 0;
+        if( orderProductDtos && saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ) {
+            const num: number = orderProductDtos[index].num || 0;
             let totalWeight: number = saleOrderValue.totalWeight;
             totalWeight = totalWeight - num;
-            productDtos?.splice(index, 1);
+            orderProductDtos?.splice(index, 1);
             if(orderQuantity) {
                 this.setState({
                     orderQuantity: totalWeight,
                     saleOrder: {
                         ...saleOrderValue,
-                        productDtos: [ ...productDtos ]
+                        orderProductDtos: [ ...orderProductDtos ]
                     }
                 })
             }
-            this.getForm()?.setFieldsValue({ totalWeight: totalWeight, productDtos: [...productDtos] });
+            this.getForm()?.setFieldsValue({ totalWeight: totalWeight, orderProductDtos: [...orderProductDtos] });
             this.getPrice();
             this.getPriceAccordTaxRate();
-        } else if( productDtos && saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ) {
-            const price: number | undefined = productDtos[index].price || 0;
-            const amount: number | undefined = productDtos[index].totalAmount;
+        } else if( orderProductDtos && saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ) {
+            const price: number | undefined = orderProductDtos[index].price || 0;
+            const amount: number | undefined = orderProductDtos[index].totalAmount;
             let totalPrice: number = this.getForm()?.getFieldsValue(true).totalPrice;
             let totalAmount: number = this.getForm()?.getFieldsValue(true).totalAmount;
-            productDtos?.splice(index, 1);
+            orderProductDtos?.splice(index, 1);
             if(price && amount) {
                 totalPrice = totalPrice - price;
                 totalAmount = totalAmount - amount;
@@ -373,7 +375,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                     saleOrder: saleOrderValue
                 })
             }
-            this.getForm()?.setFieldsValue({  taxPrice: totalPrice, totalPrice: totalPrice,  taxAmount: totalAmount, totalAmount: totalAmount, productDtos: [...productDtos]  });
+            this.getForm()?.setFieldsValue({  taxPrice: totalPrice, totalPrice: totalPrice,  taxAmount: totalAmount, totalAmount: totalAmount, orderProductDtos: [...orderProductDtos]  });
         }   
     }
 
@@ -613,9 +615,9 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             dataIndex: 'productStatus',
             width: 150,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index,'productStatus']}>
+                <Form.Item name={['orderProductDtos', index,'productStatus']}>
                     { record.productStatus === 3 ? '已下发' : record.productStatus === 2 ? '审批中' : '待下发' }
-                    {/* { this.getForm()?.getFieldsValue(true).productDtos[index]?.productStatus && this.getForm()?.getFieldsValue(true).productDtos[index]?.productStatus === 3 ? '已下发' : this.getForm()?.getFieldsValue(true).productDtos[index]?.productStatus === 2 ? '审批中' : '待下发' } */}
+                    {/* { this.getForm()?.getFieldsValue(true).orderProductDtos[index]?.productStatus && this.getForm()?.getFieldsValue(true).orderProductDtos[index]?.productStatus === 3 ? '已下发' : this.getForm()?.getFieldsValue(true).orderProductDtos[index]?.productStatus === 2 ? '审批中' : '待下发' } */}
                 </Form.Item>
             )
         }, {
@@ -624,7 +626,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             dataIndex: 'lineName',
             width: 150,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index,'lineName']}>
+                <Form.Item name={['orderProductDtos', index,'lineName']}>
                     <Input maxLength={ 100 } disabled/>
                 </Form.Item> 
             )
@@ -634,7 +636,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             dataIndex: 'productType',
             width: 150,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index,'productType']}>
+                <Form.Item name={['orderProductDtos', index,'productType']}>
                     <Select disabled getPopupContainer={ triggerNode => triggerNode.parentNode }>
                         { productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={ index } value={ id }>
@@ -650,7 +652,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             dataIndex: 'productShape',
             width: 150,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index,'productShape']}>
+                <Form.Item name={['orderProductDtos', index,'productShape']}>
                     <Input disabled maxLength={ 50 }/>
                 </Form.Item> 
             )
@@ -660,7 +662,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             dataIndex: 'productNumber',
             width: 150,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index,'productNumber']}>
+                <Form.Item name={['orderProductDtos', index,'productNumber']}>
                     <Input maxLength={ 50 } disabled/>
                 </Form.Item> 
             )
@@ -670,7 +672,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             dataIndex: 'voltageGrade',
             width: 150,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index,'voltageGrade']}>
+                <Form.Item name={['orderProductDtos', index,'voltageGrade']}>
                     <Select style={{ width: '90%' }} disabled getPopupContainer={ triggerNode => triggerNode.parentNode }>
                         { voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={ index } value={ id }>
@@ -686,7 +688,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             dataIndex: 'productHeight',
             width: 150,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index,'productHeight']}>
+                <Form.Item name={['orderProductDtos', index,'productHeight']}>
                     <InputNumber
                         min="0"
                         step="0.01"
@@ -702,7 +704,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             dataIndex: 'unit',
             width: 150,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index, 'unit']} rules= {[{
+                <Form.Item name={['orderProductDtos', index, 'unit']} rules= {[{
                     required: true,
                     message: '请输入单位'
                 }]} >
@@ -715,7 +717,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             dataIndex: 'num',
             width: 150,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index,'num']}>
+                <Form.Item name={['orderProductDtos', index,'num']}>
                     <InputNumber 
                         stringMode={ false } 
                         min="0"
@@ -731,7 +733,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             dataIndex: 'price',
             width: 150,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index,'price']} rules= {[{
+                <Form.Item name={['orderProductDtos', index,'price']} rules= {[{
                     required: true,
                     message: '请输入产品单价'
                 }]}>
@@ -751,7 +753,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             dataIndex: 'totalAmount',
             width: 150,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index,'totalAmount']}>
+                <Form.Item name={['orderProductDtos', index,'totalAmount']}>
                     <Input disabled/>
                 </Form.Item>
             )
@@ -761,7 +763,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             dataIndex: 'tender',
             width: 150,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index, 'tender']}>
+                <Form.Item name={['orderProductDtos', index, 'tender']}>
                     <Input disabled={ record.productStatus === 2 || record.productStatus === 3 } maxLength={ 100 }/>
                 </Form.Item>
             )
@@ -771,7 +773,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             dataIndex: 'description',
             width: 150,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
-                <Form.Item name={['productDtos', index, 'description']}>
+                <Form.Item name={['orderProductDtos', index, 'description']}>
                     <Input maxLength={ 50 }/>
                 </Form.Item> 
             )
@@ -802,7 +804,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         return {
             rowKey: this.getTableRowKey(),
             bordered: true,
-            dataSource: [...(this.state.saleOrder?.productDtos || []) ] ,
+            dataSource: [...(this.state.saleOrder?.orderProductDtos || []) ] ,
             columns: this.state.columns,
             pagination: false,
             scroll: { x: 1200 }
@@ -811,10 +813,13 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
 
     public selectAddRow = (selectedRows: DataType[] | any) => {
         const saleOrder: ISaleOrder | undefined = this.getForm()?.getFieldsValue(true);
-        let productDtos: IProductVo[] | undefined = saleOrder?.productDtos || [];
+        let orderProductDtos: IProductVo[] | undefined = saleOrder?.orderProductDtos || [];
         let totalWeight: number | undefined = saleOrder?.totalWeight || 0;
+        console.log(selectedRows[0])
         if(selectedRows && selectedRows.length > 0 ) {
             const product: IProductVo = {
+                productId: selectedRows[0].productId,
+                productCategoryId: selectedRows[0].productCategoryId,
                 productStatus: 0,
                 lineName: selectedRows[0].lineName,
                 productType: selectedRows[0].productType,
@@ -829,15 +834,15 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 tender: selectedRows[0].tender,
                 description: selectedRows[0].description,
             };
-            productDtos.push(product);
-            totalWeight = totalWeight + selectedRows[0].productWeight; 
+            orderProductDtos.push(product);
+            totalWeight = (totalWeight + selectedRows[0].productWeight) || 0; 
             this.setState({
                 saleOrder: {
-                    ...(saleOrder || { taxAmount: 0, taxRate: 0, totalWeight: 0, totalAmount: 0,productVos: [] }),
-                    productDtos: productDtos
+                    ...(saleOrder || { taxAmount: 0, taxRate: 0, totalWeight: 0, totalAmount: 0,orderProductVos: [] }),
+                    orderProductDtos: orderProductDtos
                 }
             })
-            this.getForm()?.setFieldsValue({ ...saleOrder, productDtos: [...(productDtos || [])], totalWeight: totalWeight });
+            this.getForm()?.setFieldsValue({ ...saleOrder, orderProductDtos: [...(orderProductDtos || [])], totalWeight: totalWeight });
             this.getUnitByChargeType();
         }   
         let orderQuantity: number | undefined = this.state.orderQuantity;
