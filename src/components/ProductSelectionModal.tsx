@@ -23,7 +23,7 @@ import styles from './AbstractSelectableModal.module.less';
  }
  
  export interface IResponseDataMore extends IResponseData {
-    readonly productVos: [];
+    readonly orderProductVos: [];
  }
  export interface IOrder {
     readonly description: string;
@@ -77,7 +77,7 @@ import styles from './AbstractSelectableModal.module.less';
          const resData: IResponseDataMore = await RequestUtil.get<IResponseDataMore>(`/tower-market/saleOrder/${this.props.saleOrderId}`);
          this.setState({
              ...filterValues,
-             tableDataSource: resData.productVos,
+             tableDataSource: resData.orderProductVos,
          });
      }
     
