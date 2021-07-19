@@ -784,7 +784,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             width: 180,
             fixed: 'right',
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
-                <ConfirmableButton confirmTitle="要删除该条回款计划吗？"
+                <ConfirmableButton confirmTitle="要删除该条产品信息吗？"
                     type="link" placement="topRight"
                     onConfirm={ () => { 
                         this.tableDelete(index);
@@ -815,7 +815,6 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const saleOrder: ISaleOrder | undefined = this.getForm()?.getFieldsValue(true);
         let orderProductDtos: IProductVo[] | undefined = saleOrder?.orderProductDtos || [];
         let totalWeight: number | undefined = saleOrder?.totalWeight || 0;
-        console.log(selectedRows[0])
         if(selectedRows && selectedRows.length > 0 ) {
             const product: IProductVo = {
                 productId: selectedRows[0].productId,

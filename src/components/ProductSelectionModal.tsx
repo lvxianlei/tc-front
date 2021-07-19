@@ -23,7 +23,7 @@ import styles from './AbstractSelectableModal.module.less';
  }
  
  export interface IResponseDataMore extends IResponseData {
-    readonly productVos: [];
+    readonly orderProductVos: [];
  }
  export interface IOrder {
     readonly description: string;
@@ -32,7 +32,7 @@ import styles from './AbstractSelectableModal.module.less';
     readonly price: number;
     readonly productHeight: number;
     readonly productNumber: string;
-    readonly productShape: string;
+    readonly productCategoryName: string;
     readonly productStatus: number;
     readonly productType: number;
     readonly productTypeName: string;
@@ -77,7 +77,7 @@ import styles from './AbstractSelectableModal.module.less';
          const resData: IResponseDataMore = await RequestUtil.get<IResponseDataMore>(`/tower-market/saleOrder/${this.props.saleOrderId}`);
          this.setState({
              ...filterValues,
-             tableDataSource: resData.productVos,
+             tableDataSource: resData.orderProductVos,
          });
      }
     
@@ -113,8 +113,8 @@ import styles from './AbstractSelectableModal.module.less';
             },
             { 
                 title: '塔型', 
-                dataIndex: 'productShape', 
-                key: 'productShape' 
+                dataIndex: 'productCategoryName', 
+                key: 'productCategoryName' 
             },
             { 
                 title: '杆塔号', 

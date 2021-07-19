@@ -85,6 +85,8 @@ class TowerShapeSetting extends AbstractTowerShapeSetting<ITowerShapeSettingRout
             }
         })
         values.id = this.getForm()?.getFieldsValue(true).id;
+        values.productIdList = this.state.productIdList;
+        values.productAdditionalIdList = this.state.productAdditionalIdList;
         return await RequestUtil.post('/tower-data-archive/productCategory', values);
     }
 }
