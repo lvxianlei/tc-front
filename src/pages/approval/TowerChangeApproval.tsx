@@ -66,27 +66,18 @@ class TowerChangeApproval extends AbstractTowerShapeSetting<ITowerChangeApproval
             auditId: this.props.match.params.id
         });
         this.setState({
-            towerShape: towerShape,
+            towerShape: {
+                ...towerShape,
+                // productChangeRecordVos: towerShape.productChangeRecordVos?.map<IProductDTOList>((product: IProductDTOList, index: number): IProductDTOList => {
+                //     return {
+                //         ...product,
+                //         index: index + 1
+                //     };
+                // })
+            },
             isChange: true,
             isReference: true
-        });
-        towerShape.productDTOList = towerShape.productDTOList?.map<IProductDTOList>((product: IProductDTOList, index: number): IProductDTOList => {
-            return {
-                ...product,
-                // index: index + 1
-            };
-        });
-        // this.setState({
-        //     towerShape: {
-        //         ...towerShape,
-        //         productChangeRecordVos: towerShape.productChangeRecordVos?.map<IProductDTOList>((product: IProductDTOList, index: number): IProductDTOList => {
-        //             return {
-        //                 ...product,
-        //                 index: index + 1
-        //             };
-        //         })
-        //     }
-        // })
+        })
         this.getForm()?.setFieldsValue({
             ...towerShape
         });
