@@ -244,8 +244,8 @@ import { ITask } from '../../ITask';
             },
             { 
                 title: '塔型', 
-                dataIndex: 'productShape', 
-                key: 'productShape' 
+                dataIndex: 'productCategoryName', 
+                key: 'productCategoryName' 
             },
             { 
                 title: '杆塔号', 
@@ -313,8 +313,8 @@ import { ITask } from '../../ITask';
             key: 'productTypeName' 
         },{ 
             title: '塔型', 
-            dataIndex: 'productShape', 
-            key: 'productShape' 
+            dataIndex: 'productCategoryName', 
+            key: 'productCategoryName' 
         },{ 
             title: '杆塔号', 
             dataIndex: 'productNumber', 
