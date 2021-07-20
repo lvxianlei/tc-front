@@ -61,7 +61,7 @@ import { ITask } from '../../ITask';
     readonly price?: number;
     readonly productHeight?: number;
     readonly productNumber?: string;
-    readonly productShape?: string;
+    readonly productCategoryName?: string;
     readonly productStatus?: number;
     readonly productType?: number;
     readonly saleOrderId?: number;
@@ -678,8 +678,8 @@ enum StepTitleItem {
             },
             { 
                 title: '塔型', 
-                dataIndex: 'productShape', 
-                key: 'productShape' 
+                dataIndex: 'productCategoryName', 
+                key: 'productCategoryName' 
             },
             { 
                 title: '杆塔号', 
