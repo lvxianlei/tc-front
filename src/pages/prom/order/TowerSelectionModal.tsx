@@ -12,13 +12,15 @@ import orderStyles from './AbstractSaleOrderSetting.module.less'
 import AbstractSelectableModal from '../../../components/AbstractSelectableModal';
 import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from '../../../components/AbstractSelectableModal';
 import RequestUtil from '../../../utils/RequestUtil';
+import Item from 'antd/lib/list/Item';
+import { IProductVo } from './AbstractSaleOrderSetting';
 
 export interface ITowerSelectionModalProps extends IAbstractSelectableModalProps {
     readonly readonly?: boolean; 
     readonly id?: string | number;
 }
 export interface ITowerSelectionModalState extends IAbstractSelectableModalState {
-    readonly tableDataSource: [];
+    readonly tableDataSource: IProductVo[];
 }
 
 /**
@@ -39,9 +41,10 @@ export default class TowerSelectionModal extends AbstractSelectableModal<ITowerS
     }
 
     public showModal =  (): void => {
+        console.log(this.props.selectKey)
         if(this.props.id) {
             this.setState({
-                isModalVisible: true,
+                isModalVisible: true
             })
             this.getTable({})
         } else {
@@ -51,7 +54,11 @@ export default class TowerSelectionModal extends AbstractSelectableModal<ITowerS
     }
     
     public async getTable(pagination: TablePaginationConfig = {}) {
-        const resData: [] = await RequestUtil.get(`/tower-market/contract/product/${ this.props.id }`);
+        let resData: IProductVo[] = await RequestUtil.get(`/tower-market/contract/product/${ this.props.id }`);
+        const selectKeys: [] = this.props.selectKey;
+        selectKeys.map((item: IProductVo) => {
+            resData = resData.filter(res => res.productNumber !== item.productNumber );
+        })
         this.setState({
             tableDataSource: resData,
         });

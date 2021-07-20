@@ -1,0 +1,170 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "bodyWeight": 40,
+            "description": "备注aaaa",
+            "id": "8465465",
+            "productId": "3644",
+            "lineName": "线路名称啊啊啊啊",
+            "productAdditionalDTOList": [
+                {
+                    "id": "12216456212",
+                    "additionalItem": "增重一",
+                    "towerDetailId": "8465465",
+                    "weight": 20
+                }, {
+                    "id": "1216545",
+                    "additionalItem": "增重二",
+                    "towerDetailId": "8465465",
+                    "weight": 51
+                }
+            ],
+            "productHeight": "12",
+            "productNumber": "1",
+            "productShape": "角钢塔",
+            "productShapeId": "123",
+            "productType": "1646864654655",
+            "productWeight": 12,
+            "towerFootWeight": 21,
+            "towerLeg1Length": 212,
+            "towerLeg1Num": 234,
+            "towerLeg1Weight": 545,
+            "towerLeg2Length": 6,
+            "towerLeg2Num": 8987,
+            "towerLeg2Weight": 978,
+            "towerLeg3Length": 7,
+            "towerLeg3Num": 65,
+            "towerLeg3Weight": 34,
+            "towerLeg4Length": 23,
+            "towerLeg4Num": 32,
+            "towerLeg4Weight": 22,
+            "voltageGrade": "213465465456",
+            "status": 1
+        }, 
+        {
+            "bodyWeight": 60,
+            "description": "备注312313ddsf",
+            "id": "4324256566",
+            "productId": "798895",
+            "lineName": "线路名称咿呀咿呀哟",
+            "productAdditionalDTOList": [
+                {
+                    "id": "4344545",
+                    "additionalItem": "增重111",
+                    "towerDetailId": "4324256566",
+                    "weight": 23
+                }, {
+                    "id": "8768686",
+                    "additionalItem": "增重2222",
+                    "towerDetailId": "4324256566",
+                    "weight": 554
+                }
+            ],
+            "productHeight": "54353",
+            "productNumber": "2",
+            "productShape": "角钢塔",
+            "productShapeId": "3424",
+            "productType": "6356546",
+            "productWeight": 33,
+            "towerFootWeight": 6,
+            "towerLeg1Length": 76,
+            "towerLeg1Num": 788,
+            "towerLeg1Weight": 232,
+            "towerLeg2Length": 43,
+            "towerLeg2Num": 65,
+            "towerLeg2Weight": 7,
+            "towerLeg3Length": 4324,
+            "towerLeg3Num": 432,
+            "towerLeg3Weight": 423,
+            "towerLeg4Length": 324,
+            "towerLeg4Num": 67,
+            "towerLeg4Weight": 7,
+            "voltageGrade": "53452323233",
+            "status": 2
+        },
+        {
+            "bodyWeight": 60,
+            "description": "备注312313ddsf",
+            "id": "4324256566",
+            "productId": "545486111",
+            "lineName": "线路名称咿呀咿呀哟",
+            "productAdditionalDTOList": [
+                {
+                    "id": "4344545",
+                    "additionalItem": "增重111",
+                    "towerDetailId": "4324256566",
+                    "weight": 23
+                }, {
+                    "id": "8768686",
+                    "additionalItem": "增重2222",
+                    "towerDetailId": "4324256566",
+                    "weight": 554
+                }
+            ],
+            "productHeight": "54353",
+            "productNumber": "2",
+            "productShape": "角钢塔",
+            "productShapeId": "3424",
+            "productType": "6356546",
+            "productWeight": 33,
+            "towerFootWeight": 6,
+            "towerLeg1Length": 76,
+            "towerLeg1Num": 788,
+            "towerLeg1Weight": 232,
+            "towerLeg2Length": 43,
+            "towerLeg2Num": 65,
+            "towerLeg2Weight": 7,
+            "towerLeg3Length": 4324,
+            "towerLeg3Num": 432,
+            "towerLeg3Weight": 423,
+            "towerLeg4Length": 324,
+            "towerLeg4Num": 67,
+            "towerLeg4Weight": 7,
+            "voltageGrade": "53452323233",
+            "status": 3
+        },
+        {
+            "bodyWeight": 60,
+            "description": "备注312313ddsf",
+            "id": "4324256566",
+            "productId": "4324256566",
+            "lineName": "线路名称咿呀咿呀哟",
+            "productAdditionalDTOList": [
+                {
+                    "id": "4344545",
+                    "additionalItem": "增重111",
+                    "towerDetailId": "4324256566",
+                    "weight": 23
+                }, {
+                    "id": "8768686",
+                    "additionalItem": "增重2222",
+                    "towerDetailId": "4324256566",
+                    "weight": 554
+                }
+            ],
+            "productHeight": "54353",
+            "productNumber": "2",
+            "productShape": "角钢塔",
+            "productShapeId": "3424",
+            "productType": "6356546",
+            "productWeight": 33,
+            "towerFootWeight": 6,
+            "towerLeg1Length": 76,
+            "towerLeg1Num": 788,
+            "towerLeg1Weight": 232,
+            "towerLeg2Length": 43,
+            "towerLeg2Num": 65,
+            "towerLeg2Weight": 7,
+            "towerLeg3Length": 4324,
+            "towerLeg3Num": 432,
+            "towerLeg3Weight": 423,
+            "towerLeg4Length": 324,
+            "towerLeg4Num": 67,
+            "towerLeg4Weight": 7,
+            "voltageGrade": "53452323233",
+            "status": 4
+        }
+    ],
+    "msg": ""
+}

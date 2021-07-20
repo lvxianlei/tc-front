@@ -105,7 +105,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                     required: true,
                     message: '请选择关联合同'
                 }],
-                children: <Input value={ towerShape?.internalNumber } disabled={ isReference } suffix={ 
+                children: <Input value={ towerShape?.internalNumber } disabled suffix={ 
                     <ContractSelectionComponent onSelect={ this.onSelect }/>
                 }/>  
             }, {
@@ -505,10 +505,12 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
      */
     public onModalClose = (): void => {
         const oldTowerShape: ITowerShape | undefined = this.state.oldTowerShape;
+        const index: number = this.state.index || 0;
         this.setState({
             isVisible: false,
             towerShape: oldTowerShape
         })
+        this.getProductWeight(index);
         this.getForm()?.setFieldsValue({ ...this.state.oldTowerShape });
     }
 
@@ -550,6 +552,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                     });
             })
         } else {
+            this.getProductWeight(index);
             this.setState({
                 isVisible: false
             })
