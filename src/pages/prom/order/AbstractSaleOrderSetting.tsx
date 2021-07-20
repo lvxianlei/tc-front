@@ -616,8 +616,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             width: 150,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
                 <Form.Item name={['orderProductDtos', index,'productStatus']}>
-                    { record.productStatus === 3 ? '已下发' : record.productStatus === 2 ? '审批中' : '待下发' }
-                    {/* { this.getForm()?.getFieldsValue(true).orderProductDtos[index]?.productStatus && this.getForm()?.getFieldsValue(true).orderProductDtos[index]?.productStatus === 3 ? '已下发' : this.getForm()?.getFieldsValue(true).orderProductDtos[index]?.productStatus === 2 ? '审批中' : '待下发' } */}
+                    { record.productStatus === 3 ? '已下发' : record.productStatus === 2 ? '审批中' : record.productStatus === 1 ? '待下发' : '新建' }
                 </Form.Item>
             )
         }, {
@@ -877,7 +876,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 const chargeType: string | number | undefined = this.state.saleOrder?.contractInfoDto?.chargeType;
                 return (
                     <>
-                        <TowerSelectionModal onSelect={ this.selectAddRow } readonly={ readonly } id={ this.state.saleOrder?.contractInfoDto?.contractId }/>
+                        <TowerSelectionModal onSelect={ this.selectAddRow } readonly={ readonly } id={ this.state.saleOrder?.contractInfoDto?.contractId } selectKey={ this.state.saleOrder?.orderProductDtos }/>
                         <Table { ...this.getTableProps() } summary={pageData => {
                             return (
                                 <>
