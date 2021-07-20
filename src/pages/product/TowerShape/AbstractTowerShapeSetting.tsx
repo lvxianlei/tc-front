@@ -261,28 +261,8 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         precision={ 2 }
                         className={ layoutStyles.width100 }
                         disabled={ record.status === 2 || (isChange && record.status == 0 ) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
-                        onChange={ (value) => {
-                            const towerShape: ITowerShape | undefined = this.getForm()?.getFieldsValue(true);
-                            const productDtos: IProductDTOList[] = towerShape?.productDTOList || [];
-                            const itemWeight: IProductAdditionalDTOList[] = productDtos[index]?.productAdditionalDTOList || [];
-                            const weightOne: number = productDtos[index].towerLeg1Weight || 0;
-                            const weightTwo: number = productDtos[index].towerLeg2Weight || 0;
-                            const weightThree: number = productDtos[index].towerLeg3Weight || 0;
-                            const weightFour: number = productDtos[index].towerLeg4Weight || 0;
-                            const towerFootWeight: number = productDtos[index].towerFootWeight || 0;
-                            let itemTotalWeight: number = 0;
-                            itemWeight.map((items: IProductAdditionalDTOList): number => {
-                                return itemTotalWeight = Number(itemTotalWeight) + Number(items.weight || 0);
-                            })
-                            let weight: number = 0;
-                            weight = Number(value) + Number(weightOne) + Number(weightTwo) + Number(weightThree) + Number(weightFour) + Number(towerFootWeight) + Number(itemTotalWeight);
-                            productDtos[index] = {
-                                ...productDtos[index],
-                                productWeight: weight
-                            }
-                            this.setState({
-                                towerShape: { ...towerShape }
-                            })
+                        onChange={ () => {
+                            this.getProductWeight(index) 
                         } }/>
                 </Form.Item> 
             )
@@ -316,28 +296,8 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         precision={ 2 }
                         className={ layoutStyles.width100 }
                         disabled={ record.status === 2 || (isChange && record.status == 0 ) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
-                        onChange={ (value) => {
-                            const towerShape: ITowerShape | undefined = this.getForm()?.getFieldsValue(true);
-                            const productDtos: IProductDTOList[] = towerShape?.productDTOList || [];
-                            const itemWeight: IProductAdditionalDTOList[] = productDtos[index]?.productAdditionalDTOList || [];
-                            const bodyWeight: number = productDtos[index].bodyWeight || 0;
-                            const weightTwo: number = productDtos[index].towerLeg2Weight || 0;
-                            const weightThree: number = productDtos[index].towerLeg3Weight || 0;
-                            const weightFour: number = productDtos[index].towerLeg4Weight || 0;
-                            const towerFootWeight: number = productDtos[index].towerFootWeight || 0;
-                            let itemTotalWeight: number = 0;
-                            itemWeight.map((items: IProductAdditionalDTOList): number => {
-                                return itemTotalWeight = Number(itemTotalWeight) + Number(items.weight || 0);
-                            })
-                            let weight: number = 0;
-                            weight = Number(value) + Number(bodyWeight) + Number(weightTwo) + Number(weightThree) + Number(weightFour) + Number(towerFootWeight) + Number(itemTotalWeight);
-                            productDtos[index] = {
-                                ...productDtos[index],
-                                productWeight: weight
-                            }
-                            this.setState({
-                                towerShape: { ...towerShape }
-                            })
+                        onChange={ () => {
+                            this.getProductWeight(index)
                         } }/>
                 </Form.Item> 
             )
@@ -371,28 +331,8 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         precision={ 2 }
                         className={ layoutStyles.width100 }
                         disabled={ record.status === 2 || (isChange && record.status == 0 ) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
-                        onChange={ (value) => {
-                            const towerShape: ITowerShape | undefined = this.getForm()?.getFieldsValue(true);
-                            const productDtos: IProductDTOList[] = towerShape?.productDTOList || [];
-                            const itemWeight: IProductAdditionalDTOList[] = productDtos[index]?.productAdditionalDTOList || [];
-                            const bodyWeight: number = productDtos[index].bodyWeight || 0;
-                            const weightOne: number = productDtos[index].towerLeg1Weight || 0;
-                            const weightThree: number = productDtos[index].towerLeg3Weight || 0;
-                            const weightFour: number = productDtos[index].towerLeg4Weight || 0;
-                            const towerFootWeight: number = productDtos[index].towerFootWeight || 0;
-                            let itemTotalWeight: number = 0;
-                            itemWeight.map((items: IProductAdditionalDTOList): number => {
-                                return itemTotalWeight = Number(itemTotalWeight) + Number(items.weight || 0);
-                            })
-                            let weight: number = 0;
-                            weight = Number(value) + Number(bodyWeight) + Number(weightOne) + Number(weightThree) + Number(weightFour) + Number(towerFootWeight) + Number(itemTotalWeight);
-                            productDtos[index] = {
-                                ...productDtos[index],
-                                productWeight: weight
-                            }
-                            this.setState({
-                                towerShape: { ...towerShape }
-                            })
+                        onChange={ () => {
+                            this.getProductWeight(index)
                         } }/>
                 </Form.Item> 
             )
@@ -426,28 +366,8 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         precision={ 2 }
                         className={ layoutStyles.width100 }
                         disabled={ record.status === 2 || (isChange && record.status == 0 ) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
-                        onChange={ (value) => {
-                            const towerShape: ITowerShape | undefined = this.getForm()?.getFieldsValue(true);
-                            const productDtos: IProductDTOList[] = towerShape?.productDTOList || [];
-                            const itemWeight: IProductAdditionalDTOList[] = productDtos[index]?.productAdditionalDTOList || [];
-                            const bodyWeight: number = productDtos[index].bodyWeight || 0;
-                            const weightOne: number = productDtos[index].towerLeg1Weight || 0;
-                            const weightTwo: number = productDtos[index].towerLeg2Weight || 0;
-                            const weightFour: number = productDtos[index].towerLeg4Weight || 0;
-                            const towerFootWeight: number = productDtos[index].towerFootWeight || 0;
-                            let itemTotalWeight: number = 0;
-                            itemWeight.map((items: IProductAdditionalDTOList): number => {
-                                return itemTotalWeight = Number(itemTotalWeight) + Number(items.weight || 0);
-                            })
-                            let weight: number = 0;
-                            weight = Number(value) + Number(bodyWeight) + Number(weightOne) + Number(weightTwo) + Number(weightFour) + Number(towerFootWeight) + Number(itemTotalWeight);
-                            productDtos[index] = {
-                                ...productDtos[index],
-                                productWeight: weight
-                            }
-                            this.setState({
-                                towerShape: { ...towerShape }
-                            })
+                        onChange={ () => {
+                            this.getProductWeight(index)
                         } }/>
                 </Form.Item> 
             )
@@ -481,28 +401,8 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         precision={ 2 }
                         className={ layoutStyles.width100 }
                         disabled={ record.status === 2 || (isChange && record.status == 0 ) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
-                        onChange={ (value) => {
-                            const towerShape: ITowerShape | undefined = this.getForm()?.getFieldsValue(true);
-                            const productDtos: IProductDTOList[] = towerShape?.productDTOList || [];
-                            const itemWeight: IProductAdditionalDTOList[] = productDtos[index]?.productAdditionalDTOList || [];
-                            const bodyWeight: number = productDtos[index].bodyWeight || 0;
-                            const weightOne: number = productDtos[index].towerLeg1Weight || 0;
-                            const weightTwo: number = productDtos[index].towerLeg2Weight || 0;
-                            const weightThree: number = productDtos[index].towerLeg3Weight || 0;
-                            const towerFootWeight: number = productDtos[index].towerFootWeight || 0;
-                            let itemTotalWeight: number = 0;
-                            itemWeight.map((items: IProductAdditionalDTOList): number => {
-                                return itemTotalWeight = Number(itemTotalWeight) + Number(items.weight || 0);
-                            })
-                            let weight: number = 0;
-                            weight = Number(value) + Number(bodyWeight) + Number(weightOne) + Number(weightTwo) + Number(weightThree) + Number(towerFootWeight) + Number(itemTotalWeight);
-                            productDtos[index] = {
-                                ...productDtos[index],
-                                productWeight: weight
-                            }
-                            this.setState({
-                                towerShape: { ...towerShape }
-                            })
+                        onChange={ () => {
+                            this.getProductWeight(index)
                         } }/>
                 </Form.Item> 
             )
@@ -520,28 +420,8 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         precision={ 2 }
                         className={ layoutStyles.width100 }
                         disabled={ record.status === 2 || (isChange && record.status == 0 ) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
-                        onChange={ (value) => {
-                            const towerShape: ITowerShape | undefined = this.getForm()?.getFieldsValue(true);
-                            const productDtos: IProductDTOList[] = towerShape?.productDTOList || [];
-                            const itemWeight: IProductAdditionalDTOList[] = productDtos[index]?.productAdditionalDTOList || [];
-                            const bodyWeight: number = productDtos[index].bodyWeight || 0;
-                            const weightOne: number = productDtos[index].towerLeg1Weight || 0;
-                            const weightTwo: number = productDtos[index].towerLeg2Weight || 0;
-                            const weightThree: number = productDtos[index].towerLeg3Weight || 0;
-                            const weightFour: number = productDtos[index].towerLeg4Weight || 0;
-                            let itemTotalWeight: number = 0;
-                            itemWeight.map((items: IProductAdditionalDTOList): number => {
-                                return itemTotalWeight = Number(itemTotalWeight) + Number(items.weight || 0);
-                            })
-                            let weight: number = 0;
-                            weight = Number(value) + Number(bodyWeight) + Number(weightOne) + Number(weightTwo) + Number(weightThree) + Number(weightFour) + Number(itemTotalWeight);
-                            productDtos[index] = {
-                                ...productDtos[index],
-                                productWeight: weight
-                            }
-                            this.setState({
-                                towerShape: { ...towerShape }
-                            })
+                        onChange={ () => {
+                            this.getProductWeight(index)
                         } }/>
                 </Form.Item> 
             )
@@ -775,6 +655,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
         }
         this.getForm()?.setFieldsValue({ ...fieldsValue })
     }
+
     /**
      * @description 增重项弹窗
      * @param event 
@@ -791,6 +672,35 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             </Modal>
             : null }
         </> 
+    }
+
+    /**
+     * @description 计算杆塔重量
+     * @param event 
+     */
+    public getProductWeight = (index: number): void => {
+        const towerShape: ITowerShape | undefined = this.getForm()?.getFieldsValue(true);
+        const productDtos: IProductDTOList[] = towerShape?.productDTOList || [];
+        const itemWeight: IProductAdditionalDTOList[] = productDtos[index]?.productAdditionalDTOList || [];
+        const bodyWeight: number = productDtos[index].bodyWeight || 0;
+        const weightOne: number = productDtos[index].towerLeg1Weight || 0;
+        const weightTwo: number = productDtos[index].towerLeg2Weight || 0;
+        const weightThree: number = productDtos[index].towerLeg3Weight || 0;
+        const weightFour: number = productDtos[index].towerLeg4Weight || 0;
+        const towerFootWeight: number = productDtos[index].towerFootWeight || 0;
+        let itemTotalWeight: number = 0;
+        itemWeight.map((items: IProductAdditionalDTOList): number => {
+            return itemTotalWeight = Number(itemTotalWeight) + Number(items.weight || 0);
+        })
+        let weight: number = 0;
+        weight =  Number(bodyWeight) + Number(weightOne) + Number(weightTwo) + Number(weightThree) + Number(weightFour) + Number(towerFootWeight) + Number(itemTotalWeight);
+        productDtos[index] = {
+            ...productDtos[index],
+            productWeight: weight
+        }
+        this.setState({
+            towerShape: { ...towerShape }
+        })
     }
 
     /**
@@ -905,6 +815,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                                     productDTOList: [...productDTOList, product]
                                 }
                             })
+                            this.getForm()?.setFieldsValue({ ...towerShape, productDTOList: [...productDTOList, product] })
                         } } className={ styles.btn } disabled={ isChange }>添加行</Button>
                         <Table { ...this.getTableProps() } />
                     </>

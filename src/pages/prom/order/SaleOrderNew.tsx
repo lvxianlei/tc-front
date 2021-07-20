@@ -40,9 +40,10 @@ class SaleOrderNew extends AbstractSaleOrderSetting<ISaleOrderNewRouteProps, ISa
             signCustomerId: contract?.signCustomerId,
             signCustomerName: values.signCustomerName,
         }
-        values.orderProductDtos = this.state.saleOrder?.orderProductDtos && this.state.saleOrder?.orderProductDtos.map((items: IProductVo) => {
+        values.orderProductDtos = this.state.saleOrder?.orderProductDtos && this.state.saleOrder?.orderProductDtos.map((items: IProductVo, index: number) => {
             return {
                 ...items,
+                tender: this.getForm()?.getFieldsValue(true).orderProductDtos[index].tender,
                 productCategoryId: items.productCategoryId,
                 productId: items.productId
             }
