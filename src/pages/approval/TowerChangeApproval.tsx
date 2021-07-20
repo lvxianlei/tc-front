@@ -159,7 +159,7 @@ class TowerChangeApproval extends AbstractTowerShapeSetting<ITowerChangeApproval
             width: 120,
         }, {
             title: '塔型',
-            dataIndex: 'productShape',
+            dataIndex: 'productCategoryName',
             width: 120,
         }, {
             title: '杆塔号',
@@ -231,7 +231,7 @@ class TowerChangeApproval extends AbstractTowerShapeSetting<ITowerChangeApproval
      */
     public renderExtraSections(): IRenderedSection[] {
         return [{
-            title: '产品信息',
+            title: '杆塔信息',
             render: (): React.ReactNode => {
                 return <Table rowKey="index" bordered={true} pagination={false}
                     columns={this.getProductTableColumns()} dataSource={this.state.towerShape?.productChangeRecordVos} scroll={{ x: 1200 }} />;
