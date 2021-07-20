@@ -15,6 +15,7 @@ import { ITask } from '../../ITask';
  export interface ITaskDetailProps {
      readonly id: string;
      readonly status: string;
+     readonly taskReviewStatus: string;
  }
  export interface ITaskDetailRouteProps extends RouteComponentProps<ITaskDetailProps> {}
  export interface ITaskDetailState {
@@ -94,7 +95,7 @@ import { ITask } from '../../ITask';
       * @returns operation area 
       */
      public renderOperationArea(): React.ReactNode | React.ReactNode[] {
-         const { status } = this.props.match.params;
+         const { status, taskReviewStatus } = this.props.match.params;
          return [
              <Button key="new" href="/prom/task/new">新增</Button>,
              <Button key="edit" href={ `/prom/task/edit/${ this.props.match.params.id }`} disabled={ status !== '1' }>编辑</Button>,
@@ -104,7 +105,7 @@ import { ITask } from '../../ITask';
                 </Button>
              </ConfirmableButton>,
              <Button key="special" href={ `/prom/task/special/${ this.props.match.params.id }`} disabled={ status !== '2' }>完善特殊要求</Button>,
-             status !=='4' ? <Button key="product" href={ `/prom/task/product/${ this.props.match.params.id }`} disabled={ status !== '3' }>完善产品信息</Button>:<Button key="change" href={ `/prom/task/product/${ this.props.match.params.id }`}>变更产品信息</Button>,
+             status !=='4' ? <Button key="product" href={ `/prom/task/product/${ this.props.match.params.id }`} disabled={ status !== '3' || taskReviewStatus === '0'}>完善产品信息</Button>:<Button key="change" href={ `/prom/task/product/${ this.props.match.params.id }`} disabled={ taskReviewStatus === '0' }>变更产品信息</Button>,
              
          ];
      }
