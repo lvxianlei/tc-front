@@ -133,8 +133,15 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
         };
     }
 
-    public getAccurateWeight(): void {
-
+    public async getAccurateWeight(): Promise<void> {
+        const towerSection: ITowerSection | undefined = this.getForm()?.getFieldsValue(true);
+        const resData = await RequestUtil.get(`/tower-data-archive/drawComponent/getAccurateWeight`, {
+            ...towerSection
+        });
+        this.getForm()?.setFieldsValue({
+            ...towerSection,
+            accurateWeight: resData
+        })
     }
 
     /**
@@ -170,16 +177,11 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
             dataIndex: 'rowMaterial',
             editable: true,
             type: (
-                <Input maxLength={ 20 } onBlur={async (e) => {
-                    const value: string = e.target.value;
+                <Input maxLength={ 20 } onBlur={(e) => {
                     const towerSection: ITowerSection | undefined = this.getForm()?.getFieldsValue(true);
-                    if(towerSection?.spec && towerSection?.thickness && towerSection?.width && towerSection?.length) {
-                        // const resData = await RequestUtil.get(`/tower-data-archive/drawingComponent/getAccurateWeight`, {
-                        //     ...towerSection
-                        // });
-                        console.log(towerSection)
+                    if(towerSection?.spec && towerSection?.length) {
+                        this.getAccurateWeight();
                     }
-                    console.log(value, towerSection?.spec, towerSection?.thickness, towerSection?.width, towerSection?.length)
                 }}/>
             ),
         }, {
@@ -198,7 +200,12 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
             dataIndex: 'spec',
             editable: true,
             type: (
-                <Input maxLength={ 20 }/>
+                <Input maxLength={ 20 } onBlur={(e) => {
+                    const towerSection: ITowerSection | undefined = this.getForm()?.getFieldsValue(true);
+                    if(towerSection?.rowMaterial && towerSection?.length) {
+                        this.getAccurateWeight();
+                    }
+                }}/>
             ),
         }, {
             key: 'width',
@@ -212,7 +219,13 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
                     min="0"
                     step="0.01"
                     precision={ 2 }
-                    className={ layoutStyles.width100 }/>
+                    className={ layoutStyles.width100 } 
+                    onBlur={ (e) => {
+                        const towerSection: ITowerSection | undefined = this.getForm()?.getFieldsValue(true);
+                        if(towerSection?.rowMaterial && towerSection?.spec && towerSection?.length) {
+                            this.getAccurateWeight();
+                        }
+                    } }/>
             ),
         }, {
             key: 'thickness',
@@ -226,7 +239,13 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
                     min="0"
                     step="0.01"
                     precision={ 2 }
-                    className={ layoutStyles.width100 }/>
+                    className={ layoutStyles.width100 }
+                    onBlur={ (e) => {
+                        const towerSection: ITowerSection | undefined = this.getForm()?.getFieldsValue(true);
+                        if(towerSection?.rowMaterial && towerSection?.spec && towerSection?.length) {
+                            this.getAccurateWeight();
+                        }
+                    } }/>
             ),
         }, {
             key: 'length',
@@ -240,7 +259,13 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
                     min="0"
                     step="0.01"
                     precision={ 2 }
-                    className={ layoutStyles.width100 }/>
+                    className={ layoutStyles.width100 }
+                    onBlur={ (e) => {
+                        const towerSection: ITowerSection | undefined = this.getForm()?.getFieldsValue(true);
+                        if(towerSection?.rowMaterial && towerSection?.thickness && towerSection?.spec) {
+                            this.getAccurateWeight();
+                        }
+                    } }/>
             ),
         }, {
             key: 'number',

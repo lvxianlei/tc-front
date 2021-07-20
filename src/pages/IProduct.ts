@@ -7,7 +7,7 @@ export interface IProduct {
     readonly description?: string;	
     readonly productHeight?: number;
     readonly productNumber?: string;
-    readonly productShape?: string;	
+    readonly productCategoryName?: string;	
     readonly productType?: number | string;
     readonly saleOrderId?: number | string;
     readonly taskNoticeId?: number | string;
