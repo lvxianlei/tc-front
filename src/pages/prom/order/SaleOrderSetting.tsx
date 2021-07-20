@@ -34,13 +34,14 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSettingRoutePr
         saleOrder.orderProductDtos = saleOrder.orderProductVos?.map<IProductVo>((product: IProductVo, index: number): IProductVo => {
             return {
                 ...product,
+                num: product.num == -1 ? undefined : product.num,
                 index: index + 1
             };
         });
         this.setState({
             saleOrder: {
                 ...saleOrder,
-                orderProductDtos: saleOrder.orderProductVos,
+                orderProductDtos: saleOrder.orderProductDtos,
                 contractInfoDto: saleOrder.contractInfoVo
             },
             orderQuantity: saleOrder.orderQuantity
@@ -60,7 +61,7 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSettingRoutePr
             signContractTime: saleOrder.contractInfoVo?.signContractTime,
             signCustomerId: saleOrder.contractInfoVo?.signCustomerId,
             signCustomerName: saleOrder.contractInfoVo?.signCustomerName,
-            orderProductDtos: saleOrder.orderProductVos,
+            orderProductDtos: saleOrder.orderProductDtos,
         });
     }
 
@@ -98,9 +99,10 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSettingRoutePr
             signCustomerId: contract?.signCustomerId,
             signCustomerName: values.signCustomerName,
         }
-        values.orderProductDtos = this.state.saleOrder?.orderProductDtos && this.state.saleOrder?.orderProductDtos.map((items: IProductVo) => {
+        values.orderProductDtos = this.state.saleOrder?.orderProductDtos && this.state.saleOrder?.orderProductDtos.map((items: IProductVo, index: number) => {
             return {
                 ...items,
+                tender: this.getForm()?.getFieldsValue(true).orderProductDtos[index].tender,
                 productCategoryId: items.productCategoryId,
                 productId: items.productId
             }

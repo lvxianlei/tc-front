@@ -186,31 +186,31 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
                 value: baseInfo?.price
             }], [{
                 label: '汇率',
-                value: baseInfo?.exchangeRate
+                value: baseInfo?.exchangeRate == -1 ? undefined : baseInfo?.exchangeRate
             }, {
                 label: '外汇金额',
-                value: baseInfo?.foreignExchangeAmount
+                value: baseInfo?.foreignExchangeAmount == -1 ? undefined : baseInfo?.foreignExchangeAmount
             }], [{
                 label: '外汇单价',
-                value: baseInfo?.foreignPrice
+                value: baseInfo?.foreignPrice == -1 ? undefined : baseInfo?.foreignPrice
             }, {
                 label: '保函类型',
-                value: baseInfo?.guaranteeType
+                value: baseInfo?.guaranteeType == '-1' ? undefined : baseInfo?.guaranteeType
             }], [{
                 label: '保函金额',
-                value: baseInfo?.guaranteeAmount
+                value: baseInfo?.guaranteeAmount == -1 ? undefined : baseInfo?.guaranteeAmount
             }, {
                 label: '港口费用',
-                value: baseInfo?.portCharge
+                value: baseInfo?.portCharge == -1 ? undefined : baseInfo?.portCharge
             }], [{
                 label: '海运及保险费',
-                value: baseInfo?.insuranceCharge
+                value: baseInfo?.insuranceCharge == -1 ? undefined : baseInfo?.insuranceCharge
             }, {
                 label: '佣金',
-                value: baseInfo?.commissionCharge
+                value: baseInfo?.commissionCharge == -1 ? undefined : baseInfo?.commissionCharge
             }], [{
                 label: '出口信用保险',
-                value: baseInfo?.creditInsurance
+                value: baseInfo?.creditInsurance == -1 ? undefined : baseInfo?.creditInsurance
             }]]
         };
     }
@@ -237,7 +237,7 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
             dataIndex: 'productTypeName'
         }, {
             title: '塔型',
-            dataIndex: 'productShape'
+            dataIndex: 'productCategoryName'
         }, {
             title: '杆塔号',
             dataIndex: 'productNumber'

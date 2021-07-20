@@ -66,6 +66,7 @@ import { IProductAdditionalDTOList, IProductDTOList, ITowerShape } from './ITowe
         const towerShape: ITowerShape = this.state.towerShape;
         values.productDTOList = productDTOList;
         values.contractId = this.state.towerShape.contractId;
+        values.productShapeNumber = this.state.towerShape.productShapeNumber;
         productDTOList.map((items: IProductDTOList) => {
             items.productAdditionalDTOList?.map((item: IProductAdditionalDTOList) => {
                 return {
