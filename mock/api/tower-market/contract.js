@@ -44,7 +44,7 @@ module.exports = {
             "status": 1,
             "signContractTime": Random.date('yyyy-MM-dd'),
             "currencyType|1-2": 1,
-            "chargeType|1-2": 1 
+            "chargeType": 0 
         }].concat(records),
         current: Random.natural(1, 20),
         size: 10,

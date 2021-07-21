@@ -833,7 +833,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 description: selectedRows[0].description,
             };
             orderProductDtos.push(product);
-            totalWeight = (totalWeight + selectedRows[0].productWeight) || 0; 
+            totalWeight = (Number(totalWeight) + Number(selectedRows[0].productWeight)) || 0; 
             this.setState({
                 saleOrder: {
                     ...(saleOrder || { taxAmount: 0, taxRate: 0, totalWeight: 0, totalAmount: 0,orderProductVos: [] }),
@@ -842,11 +842,12 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             })
             this.getForm()?.setFieldsValue({ ...saleOrder, orderProductDtos: [...(orderProductDtos || [])], totalWeight: totalWeight });
             this.getUnitByChargeType();
+            this.getPriceAccordTaxRate();
         }   
         let orderQuantity: number | undefined = this.state.orderQuantity;
         if(saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE) {
             if(orderQuantity !== undefined) {
-                orderQuantity = orderQuantity + 1;
+                orderQuantity = Number(orderQuantity) + 1;
                 this.setState({
                     orderQuantity: orderQuantity
                 })
