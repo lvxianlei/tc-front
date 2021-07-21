@@ -416,7 +416,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                         {
                             readonly ? <Input value={ saleOrder?.contractInfoDto?.contractId }
                             disabled={ readonly }/> : <Input value={ saleOrder?.contractInfoDto?.contractId } suffix={ 
-                                <ContractSelectionComponent onSelect={ this.onSelect } selectKey={ [saleOrder?.contractInfoDto?.contractId] }/>
+                                <ContractSelectionComponent onSelect={ this.onSelect } selectKey={ [saleOrder?.contractInfoDto?.contractId] } status={ 1 }/>
                             } disabled={ readonly }/>
                         }
                     </>
