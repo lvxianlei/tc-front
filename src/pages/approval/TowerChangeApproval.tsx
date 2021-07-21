@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Button, message, Table, TableColumnType } from 'antd';
+import { Button, message, Modal, Table, TableColumnType } from 'antd';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -11,7 +11,7 @@ import { IFormItemGroup } from '../../components/AbstractFillableComponent';
 import RequestUtil from '../../utils/RequestUtil';
 import { IRenderedSection } from '../../utils/SummaryRenderUtil';
 import AbstractTowerShapeSetting, { IAbstractTowerShapeSettingState } from '../product/TowerShape/AbstractTowerShapeSetting';
-import { IProductDTOList, ITowerShape } from '../product/TowerShape/ITowerShape';
+import { IProductAdditionalDTOList, IProductDTOList, ITowerShape } from '../product/TowerShape/ITowerShape';
 
 export interface ITowerChangeApprovalProps {
     readonly businessId: any;
@@ -221,7 +221,83 @@ class TowerChangeApproval extends AbstractTowerShapeSetting<ITowerChangeApproval
             title: '备注',
             dataIndex: 'description',
             width: 200,
+        }, {
+            key: 'operation',
+            title: '增重项',
+            dataIndex: 'operation',
+            width: 180,
+            fixed: 'right',
+            render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
+                <Button type="link" onClick={ () => this.itemWeightClick(index) }>
+                    查看
+                </Button>
+            )
         }];
+    }
+
+    /**
+     * @description 点击增重项事件
+     * @param event 
+     */
+     public itemWeightClick = (index: number): void => {
+        let itemWeight: IProductAdditionalDTOList[] = this.getForm()?.getFieldsValue(true).productChangeRecordVos[index].productAdditionalDTOList;
+        itemWeight && itemWeight.map((item: IProductAdditionalDTOList, index: number) => {
+            if(item.additionalItem && item.additionalItem !== "") {
+                itemWeight = itemWeight;
+            } else {
+                itemWeight.splice(index, 1);
+            }
+        })
+        const productDtos: IProductDTOList[] = this.getForm()?.getFieldsValue(true).productChangeRecordVos || [];
+        productDtos[index] = {
+            ...productDtos[index],
+            productAdditionalDTOList: itemWeight
+        }
+        let fieldsValue = {
+            ...this.getForm()?.getFieldsValue(true),
+            productChangeRecordVos: [...productDtos]
+        }
+        this.setState({ isVisible: true, index: index, oldTowerShape: fieldsValue })
+        this.getForm()?.setFieldsValue({ ...fieldsValue })
+    }
+
+    /**
+      * @implements
+      * @description Gets table columns
+      * @param item 
+      * @returns table columns 
+      */
+     public getItemColumns(index: number): TableColumnType<object>[] {        
+        return [{
+            key: 'additionalItem',
+            title: '增重项',
+            dataIndex: 'additionalItem',
+            width: 150
+        }, {
+            key: 'weight',
+            title: '增重（kg）',
+            dataIndex: 'weight',
+            width: 150
+        }];
+    }
+
+      /**
+     * @description 增重项弹窗
+     * @param event 
+     */
+       public itemWeightModal = (): React.ReactNode => {
+        const index: number = this.state.index || 0;
+        const towerShape: ITowerShape | undefined = this.state.towerShape;
+        const productChangeRecordVos: IProductDTOList[] = towerShape?.productChangeRecordVos || [];
+        const productAdditionalDTOList: IProductAdditionalDTOList[] = productChangeRecordVos[index]?.productAdditionalDTOList || [];
+        return <>
+            { this.state.isVisible ? <Modal title="增重项" visible={ this.state.isVisible } onCancel={ () => {
+                this.setState({ isVisible: false })
+            } } width={ "30%" } footer={ null }>
+                <Table rowKey= {this.getTableRowKey()} bordered={ true } dataSource = { [...productAdditionalDTOList] } columns={ this.getItemColumns(index) } pagination = { false }/>
+            </Modal>
+            : null }
+        </> 
     }
 
     /**
@@ -233,8 +309,12 @@ class TowerChangeApproval extends AbstractTowerShapeSetting<ITowerChangeApproval
         return [{
             title: '杆塔信息',
             render: (): React.ReactNode => {
-                return <Table rowKey="index" bordered={true} pagination={false}
-                    columns={this.getProductTableColumns()} dataSource={this.state.towerShape?.productChangeRecordVos} scroll={{ x: 1200 }} />;
+                return (<>
+                    { this.itemWeightModal() }
+                    <Table rowKey="index" bordered={true} pagination={false}
+                        columns={this.getProductTableColumns()} dataSource={this.state.towerShape?.productChangeRecordVos} scroll={{ x: 1200 }} />
+                    </>
+                );
             }
         }];
     }

@@ -33,11 +33,11 @@ module.exports = {
                 "businessNumber": Random.natural(11),
                 "createTime": Random.datetime('yyyy年MM月dd日  HH:mm:ss'),
                 "createUser": Mock.mock('@cname()'),
-                "id": Mock.mock('@id()'),
+                "id": 111,
                 "isDeleted": Random.boolean(1, 1, true),
                 "startTime": Random.datetime('yyyy年MM月dd日  HH:mm:ss'),
                 "tenantId": Random.integer(100),
-                "type": "SALE_ORDER_AUDIT",
+                "type": "PRODUCT_AUDIT",
                 "typeName": Random.csentence(3, 5),
                 "updateTime": Random.datetime('yyyy年MM月dd日  HH:mm:ss'),
                 "updateUser": Mock.mock('@cname()')
