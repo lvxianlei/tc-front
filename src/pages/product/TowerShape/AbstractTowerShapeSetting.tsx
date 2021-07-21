@@ -18,6 +18,7 @@ import { IProductAdditionalDTOList, IProductDTOList, ITowerShape } from './ITowe
 import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
 import { StoreValue } from 'antd/lib/form/interface';
 import { idText } from 'typescript';
+import RequestUtil from '../../../utils/RequestUtil';
  
 export interface IAbstractTowerShapeSettingState extends IAbstractFillableComponentState {
     readonly towerShape: ITowerShape;
@@ -86,6 +87,30 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
         }   
     }
 
+     /**
+     * @description 验证塔型+钢印塔型是否重复
+     */
+      public checkContractNumber = (value: StoreValue): Promise<void | any> =>{
+        return new Promise(async (resolve, reject) => {  // 返回一个promise
+            if(this.getForm()?.getFieldsValue(true).name && this.getForm()?.getFieldsValue(true).steelProductShape) {
+                const resData = await RequestUtil.get('/tower-data-archive/productCategory/checkProductCategory', {
+                    name: this.getForm()?.getFieldsValue(true).name,
+                    steelProductShape: this.getForm()?.getFieldsValue(true).steelProductShape,
+                    id: this.state.towerShape.id
+                });
+                if (resData) {
+                    resolve(resData)
+                } else {
+                    resolve(false)
+                }
+            } else {
+                resolve(true)
+            }
+        }).catch(error => {
+            Promise.reject(error)
+        })
+    }
+
     /**
      * @implements
      * @description Gets form item groups
@@ -121,7 +146,19 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                 initialValue: towerShape?.name,
                 rules: [{
                     required: true,
-                    message: '请输入塔型'
+                    validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                        if(value && value != '') {
+                            this.checkContractNumber(value).then(res => {
+                                if (res) {
+                                    callback()
+                                } else {
+                                    callback('塔型+钢印塔型已存在')
+                                }
+                            })
+                        } else {
+                            callback('请输入塔型')
+                        }
+                    }
                 }],
                 children: <Input maxLength={ 50 } disabled={ isReference }/>
             }, {
@@ -130,7 +167,19 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                 initialValue: towerShape?.steelProductShape,
                 rules: [{
                     required: true,
-                    message: '请输入钢印塔型'
+                    validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                        if(value && value != '') {
+                            this.checkContractNumber(value).then(res => {
+                                if (res) {
+                                    callback()
+                                } else {
+                                    callback('塔型+钢印塔型已存在')
+                                }
+                            })
+                        } else {
+                            callback('请输入钢印塔型')
+                        }
+                    }
                 }],
                 children: <Input maxLength={ 50 } disabled={ isReference }/>
             }, {
