@@ -107,7 +107,7 @@ import { ITask } from '../../ITask';
             title: '任务编号',
             dataIndex: 'taskNumber',
             render: (taskNumber:number, record: object): React.ReactNode => {
-                 return <Link to= {`/prom/task/view/${ (record as ITask).id }&${ (record as ITask).status }` }>{taskNumber}</Link>
+                 return <Link to= {`/prom/task/view/${ (record as ITask).id }&${ (record as ITask).status }&${ (record as ITask).taskReviewStatus }` }>{taskNumber}</Link>
             }
         },  {
             key: 'saleOrderNumber',
