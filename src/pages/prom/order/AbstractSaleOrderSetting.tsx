@@ -158,7 +158,11 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 },
                 orderQuantity: 0
             })
-            this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, price: 0, orderProductDtos: [], totalWeight: undefined, totalPrice: '', totalAmount: '', taxAmount: undefined, taxPrice: '', amount: '', orderQuantity: ''});
+            if(selectedRows[0].chargeType === ChargeType.UNIT_PRICE) {
+                this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, price: '-', orderProductDtos: [], totalWeight: undefined, totalPrice: '', totalAmount: '', taxAmount: undefined, taxPrice: '', amount: '', orderQuantity: ''});
+            } else {
+                this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, price: 0, orderProductDtos: [], totalWeight: undefined, totalPrice: '', totalAmount: '', taxAmount: undefined, taxPrice: '', amount: '', orderQuantity: ''});
+            }
             this.getUnitByChargeType();
             this.getColumnsChange(selectedRows[0].chargeType);
         }   
@@ -229,10 +233,14 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const saleOrder: ISaleOrder = this.getForm()?.getFieldsValue(true);
         const amount: number = this.getForm()?.getFieldsValue(true).amount;
         const totalWeight: number = saleOrder.totalWeight;
-        let price: number = 0;
-        price = amount / totalWeight || 0;
-        price = parseFloat(price.toFixed(4));
-        this.getForm()?.setFieldsValue({ price: price });
+        if(this.state.saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE) {
+            this.getForm()?.setFieldsValue({ price: '-' });
+        } else {
+            let price: number = 0;
+            price = amount / totalWeight || 0;
+            price = parseFloat(price.toFixed(4));
+            this.getForm()?.setFieldsValue({ price: price });
+        }
     }
 
     /**
