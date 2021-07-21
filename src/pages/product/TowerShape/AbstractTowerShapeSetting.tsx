@@ -2,8 +2,8 @@
  * @author zyc
  * @copyright © 2021
  */
-import { Button, Input, InputNumber, Modal, Popconfirm, Select, Space, Table, TableColumnType, TableProps } from 'antd';
-import Form, { FormProps } from 'antd/lib/form';
+import { Button, Input, InputNumber, message, Modal, Popconfirm, Select, Space, Table, TableColumnType, TableProps } from 'antd';
+import Form, { FormProps, RuleObject } from 'antd/lib/form';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGroup } from '../../../components/AbstractFillableComponent';
@@ -16,6 +16,8 @@ import { GetRowKey } from 'antd/lib/table/interface';
 import layoutStyles from '../../../layout/Layout.module.less';
 import { IProductAdditionalDTOList, IProductDTOList, ITowerShape } from './ITowerShape';
 import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
+import { StoreValue } from 'antd/lib/form/interface';
+import { idText } from 'typescript';
  
 export interface IAbstractTowerShapeSettingState extends IAbstractFillableComponentState {
     readonly towerShape: ITowerShape;
@@ -141,6 +143,28 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
     }
 
     /**
+     * @description 验证杆塔号
+     */
+     public checkProductNumber = (value: StoreValue, index: number): Promise<void | any> =>{
+        return new Promise(async (resolve, reject) => {  // 返回一个promise
+            const productDTOList: IProductDTOList[] = this.getForm()?.getFieldsValue(true).productDTOList || [];
+            if(value) {
+                resolve(productDTOList.map((items: IProductDTOList, ind: number) => {
+                    if(index !== ind && items.productNumber === value) {
+                        return false
+                    } else {
+                        return true
+                    }
+                }).findIndex(item => item === false))
+            } else {
+                resolve(false)
+            }
+        }).catch(error => {
+            Promise.reject(error)
+        })
+    }
+
+    /**
       * @implements
       * @description Gets table columns
       * @param item 
@@ -182,7 +206,15 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
                 <Form.Item name={['productDTOList', index,'productNumber']} rules= {[{
                     required: true,
-                    message: '请输入杆塔号'
+                    validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                        this.checkProductNumber(value, index).then((res) => {
+                            if (res===-1) {
+                                callback()
+                            } else {
+                                callback('请输入杆塔号，且塔型下杆塔号唯一！');
+                            }
+                        })
+                    }
                 }]}>
                     <Input maxLength={ 50 } disabled={ record.status === 2 || (isChange && record.status == 0 ) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
                 </Form.Item> 
@@ -818,7 +850,9 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                                     productDTOList: [...productDTOList, product]
                                 }
                             })
-                            this.getForm()?.setFieldsValue({ ...towerShape, productDTOList: [...productDTOList, product] })
+                            const towerShapeValue: ITowerShape = this.getForm()?.getFieldsValue(true);
+                            const productDTOListValue: IProductDTOList[] = towerShapeValue?.productDTOList || [];
+                            this.getForm()?.setFieldsValue({ ...towerShapeValue, productDTOList: [...productDTOListValue, product] })
                         } } className={ styles.btn } disabled={ isChange }>添加行</Button>
                         <Table { ...this.getTableProps() } />
                     </>

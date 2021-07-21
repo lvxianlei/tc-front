@@ -177,7 +177,7 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
                 value: baseInfo?.taxPrice
             }, {
                 label: '税率',
-                value: baseInfo?.taxRate
+                value: baseInfo?.taxRate == -1 ? undefined : baseInfo?.taxRate
             }], [{
                 label: '不含税金额',
                 value: baseInfo?.amount
