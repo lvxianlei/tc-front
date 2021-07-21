@@ -12,7 +12,6 @@ import orderStyles from './AbstractSaleOrderSetting.module.less'
 import AbstractSelectableModal from '../../../components/AbstractSelectableModal';
 import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from '../../../components/AbstractSelectableModal';
 import RequestUtil from '../../../utils/RequestUtil';
-import Item from 'antd/lib/list/Item';
 import { IProductVo } from './AbstractSaleOrderSetting';
 
 export interface ITowerSelectionModalProps extends IAbstractSelectableModalProps {
