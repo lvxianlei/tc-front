@@ -496,7 +496,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         onConfirm={ () => { this.onDelete(index, record.id) } }
                         disabled={ isChange }
                     >
-                        <Button type="link"  disabled={ isChange }>
+                        <Button type="link"  disabled={ isChange || (record.status === 1) || (record.status === 2) || (record.status === 3) }>
                             删除
                         </Button>
                     </Popconfirm>
