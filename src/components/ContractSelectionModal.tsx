@@ -14,7 +14,9 @@ import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponse
 import { saleTypeOptions } from '../configuration/DictionaryOptions';
 
 const { Option } = Select;
-
+export interface IContractSelectionComponentProps extends IAbstractSelectableModalProps {
+    readonly status?: number;
+}
 export interface IContractSelectionComponentState extends IAbstractSelectableModalState {
     readonly tableDataSource: [];
 }
@@ -22,7 +24,7 @@ export interface IContractSelectionComponentState extends IAbstractSelectableMod
 /**
  * Contract Selection Component
  */
-export default class ContractSelectionComponent extends AbstractFilteredSelectionModal<IAbstractSelectableModalProps, IContractSelectionComponentState> {
+export default class ContractSelectionComponent extends AbstractFilteredSelectionModal<IContractSelectionComponentProps, IContractSelectionComponentState> {
 
     /**
      * @override
@@ -56,7 +58,8 @@ export default class ContractSelectionComponent extends AbstractFilteredSelectio
         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/contract', {
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
-            size: pagination.pageSize ||this.state.tablePagination?.pageSize
+            size: pagination.pageSize ||this.state.tablePagination?.pageSize,
+            status: this.props.status
         });
         this.setState({
             ...filterValues,

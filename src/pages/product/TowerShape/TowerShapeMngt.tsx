@@ -119,7 +119,7 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
     public menu(record: object) :React.ReactElement<any, string> {
         return <Menu>
             <Menu.Item>
-                <Button type="link"  href={ `/product/towershape/setting/${ (record as ITowerShape).id }` }> 编辑</Button>
+                <Button type="link"  href={ `/product/towershape/setting/${ (record as ITowerShape).id }` }>编辑</Button>
             </Menu.Item>
             <Menu.Item>
                 <Popconfirm 
@@ -174,7 +174,7 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <TowerSectionModal id={ (record as ITowerShape).id }/>
-                    <Button type="link" href={ `/prom/contract/paymentRecord/${ (record as ITowerShape).id }` }>导入图纸构件明细</Button>
+                    <Button type="link" href={ `` }>导入图纸构件明细</Button>
                     <Button type="link" href={ `/product/towershape/componentDetails/${ (record as ITowerShape).id }` }>编辑图纸构件明细</Button>
                     <Dropdown overlay={ this.menu(record) } trigger={['click']}>
                         <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
@@ -274,9 +274,9 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
     protected renderExtraOperationContent(item: ITabItem): React.ReactNode {
         return (
             <Space direction="horizontal" size="small">
-                <Button type="primary" onClick={ this.onNewClick }>导入</Button>
-                <Button type="ghost" onClick={ this.onNewClick }>导入模板下载</Button>
-                <Button type="ghost" onClick={ this.onNewClick }>导出</Button>
+                <Button type="primary">导入</Button>
+                <Button type="ghost">导入模板下载</Button>
+                <Button type="ghost">导出</Button>
                 <Button type="ghost" onClick={ this.onNewClick }>新增</Button>
             </Space>
         );

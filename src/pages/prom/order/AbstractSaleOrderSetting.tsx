@@ -158,7 +158,11 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 },
                 orderQuantity: 0
             })
-            this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, price: 0, orderProductDtos: [], totalWeight: undefined, totalPrice: '', totalAmount: '', taxAmount: undefined, taxPrice: '', amount: '', orderQuantity: ''});
+            if(selectedRows[0].chargeType === ChargeType.UNIT_PRICE) {
+                this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, price: '-', orderProductDtos: [], totalWeight: undefined, totalPrice: '', totalAmount: '', taxAmount: undefined, taxPrice: '', amount: '', orderQuantity: ''});
+            } else {
+                this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, price: 0, orderProductDtos: [], totalWeight: undefined, totalPrice: '', totalAmount: '', taxAmount: undefined, taxPrice: '', amount: '', orderQuantity: ''});
+            }
             this.getUnitByChargeType();
             this.getColumnsChange(selectedRows[0].chargeType);
         }   
@@ -229,10 +233,14 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const saleOrder: ISaleOrder = this.getForm()?.getFieldsValue(true);
         const amount: number = this.getForm()?.getFieldsValue(true).amount;
         const totalWeight: number = saleOrder.totalWeight;
-        let price: number = 0;
-        price = amount / totalWeight || 0;
-        price = parseFloat(price.toFixed(4));
-        this.getForm()?.setFieldsValue({ price: price });
+        if(this.state.saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE) {
+            this.getForm()?.setFieldsValue({ price: '-' });
+        } else {
+            let price: number = 0;
+            price = amount / totalWeight || 0;
+            price = parseFloat(price.toFixed(4));
+            this.getForm()?.setFieldsValue({ price: price });
+        }
     }
 
     /**
@@ -416,7 +424,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                         {
                             readonly ? <Input value={ saleOrder?.contractInfoDto?.contractId }
                             disabled={ readonly }/> : <Input value={ saleOrder?.contractInfoDto?.contractId } suffix={ 
-                                <ContractSelectionComponent onSelect={ this.onSelect } selectKey={ [saleOrder?.contractInfoDto?.contractId] }/>
+                                <ContractSelectionComponent onSelect={ this.onSelect } selectKey={ [saleOrder?.contractInfoDto?.contractId] } status={ 1 }/>
                             } disabled={ readonly }/>
                         }
                     </>
@@ -833,7 +841,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 description: selectedRows[0].description,
             };
             orderProductDtos.push(product);
-            totalWeight = (totalWeight + selectedRows[0].productWeight) || 0; 
+            totalWeight = (Number(totalWeight) + Number(selectedRows[0].productWeight)) || 0; 
             this.setState({
                 saleOrder: {
                     ...(saleOrder || { taxAmount: 0, taxRate: 0, totalWeight: 0, totalAmount: 0,orderProductVos: [] }),
@@ -842,11 +850,12 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             })
             this.getForm()?.setFieldsValue({ ...saleOrder, orderProductDtos: [...(orderProductDtos || [])], totalWeight: totalWeight });
             this.getUnitByChargeType();
+            this.getPriceAccordTaxRate();
         }   
         let orderQuantity: number | undefined = this.state.orderQuantity;
         if(saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE) {
             if(orderQuantity !== undefined) {
-                orderQuantity = orderQuantity + 1;
+                orderQuantity = Number(orderQuantity) + 1;
                 this.setState({
                     orderQuantity: orderQuantity
                 })

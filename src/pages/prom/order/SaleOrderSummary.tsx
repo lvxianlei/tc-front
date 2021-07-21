@@ -177,7 +177,7 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
                 value: baseInfo?.taxPrice
             }, {
                 label: '税率',
-                value: baseInfo?.taxRate
+                value: baseInfo?.taxRate == -1 ? undefined : baseInfo?.taxRate
             }], [{
                 label: '不含税金额',
                 value: baseInfo?.amount
@@ -227,7 +227,7 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
             title: '状态',
             dataIndex: 'productStatus',
             render: (productStatus: number): React.ReactNode => {
-                return productStatus === 1 ? '待下发' : productStatus === 2 ? '审批中' : '已下发'
+                return productStatus === 0 ? '新建' : productStatus === 1 ? '待下发' : productStatus === 2 ? '审批中' : '已下发'
             }
         }, {
             title: '线路名称',

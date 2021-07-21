@@ -157,7 +157,7 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
             dataIndex: 'status',
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
                 <Form.Item initialValue={ record.status } name={[index, 'status']}>
-                    { record.status === 4 ? '审批中' : record.status === 3 ? '已下发': record.status === 2 ? '待下发' : '新建' }
+                    { record.status === 0 ? '新建' : record.status === 1 ? '待下发' : record.status === 2 ? '审批中' : '已下发' }
                 </Form.Item> 
             )
         }, {
