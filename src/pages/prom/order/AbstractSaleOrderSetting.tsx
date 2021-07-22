@@ -370,9 +370,10 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         } else if( orderProductDtos && saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ) {
             const price: number | undefined = orderProductDtos[index].price || 0;
             const amount: number | undefined = orderProductDtos[index].totalAmount;
-            let totalPrice: number = this.getForm()?.getFieldsValue(true).totalPrice;
+            let totalPrice: number = this.getForm()?.getFieldsValue(true).totalPrice * (orderQuantity || 0);
             let totalAmount: number = this.getForm()?.getFieldsValue(true).totalAmount;
             orderProductDtos?.splice(index, 1);
+            console.log(totalPrice)
             if(price && amount) {
                 totalPrice = totalPrice - price;
                 totalAmount = totalAmount - amount;
@@ -385,6 +386,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             }
             this.getForm()?.setFieldsValue({  taxPrice: totalPrice, totalPrice: totalPrice,  taxAmount: totalAmount, totalAmount: totalAmount, orderProductDtos: [...orderProductDtos]  });
         }   
+        this.getAmount();
     }
 
     /**
