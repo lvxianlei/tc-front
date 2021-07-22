@@ -33,6 +33,9 @@ import { IMaterial, IMaterialTree } from './IMaterial';
             materialData: material,
             treeData: resData,
         });
+        this.getForm()?.setFieldsValue({
+            materialData: material
+        });
     }
     protected getButton(){
         return null
