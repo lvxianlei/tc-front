@@ -3,7 +3,7 @@ export interface IProduct {
     readonly lineName?: string;
     readonly num?: number;
     readonly price?: number;
-    readonly productStatus?: number | string;
+    readonly status?: number | string;
     readonly description?: string;	
     readonly productHeight?: number;
     readonly productNumber?: string;
