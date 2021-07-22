@@ -225,9 +225,9 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
             dataIndex: 'index'
         }, {
             title: '状态',
-            dataIndex: 'productStatus',
-            render: (productStatus: number): React.ReactNode => {
-                return productStatus === 0 ? '新建' : productStatus === 1 ? '待下发' : productStatus === 2 ? '审批中' : '已下发'
+            dataIndex: 'status',
+            render: (status: number): React.ReactNode => {
+                return status === 0 ? '新建' : status === 1 ? '待下发' : status === 2 ? '审批中' : '已下发'
             }
         }, {
             title: '线路名称',

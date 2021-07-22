@@ -618,13 +618,13 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 </>
             )
         }, {
-            key: 'productStatus',
+            key: 'status',
             title: '状态',
-            dataIndex: 'productStatus',
+            dataIndex: 'status',
             width: 150,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
-                <Form.Item name={['orderProductDtos', index,'productStatus']}>
-                    { record.productStatus === 3 ? '已下发' : record.productStatus === 2 ? '审批中' : record.productStatus === 1 ? '待下发' : '新建' }
+                <Form.Item name={['orderProductDtos', index,'status']}>
+                    { record.status === 3 ? '已下发' : record.status === 2 ? '审批中' : record.status === 1 ? '待下发' : '新建' }
                 </Form.Item>
             )
         }, {
@@ -771,7 +771,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             width: 150,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
                 <Form.Item name={['orderProductDtos', index, 'tender']}>
-                    <Input disabled={ record.productStatus === 2 || record.productStatus === 3 } maxLength={ 100 }/>
+                    <Input disabled={ record.status === 2 || record.status === 3 } maxLength={ 100 }/>
                 </Form.Item>
             )
         }, {
@@ -826,7 +826,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             const product: IProductVo = {
                 productId: selectedRows[0].productId,
                 productCategoryId: selectedRows[0].productCategoryId,
-                productStatus: 0,
+                status: 0,
                 lineName: selectedRows[0].lineName,
                 productType: selectedRows[0].productType,
                 productCategoryName: selectedRows[0].productCategoryName,
