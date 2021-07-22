@@ -41,7 +41,7 @@ export interface IParagraph {
     readonly id?: number | string;
     readonly extractionMaterialId?: string;
     readonly sectionSn?: string;
-    readonly sectionTotalCount?: string;
+    readonly allocatedSectionCount?: string;
     readonly towerProductId?: string;
     sectionCount: number|string;
 }
