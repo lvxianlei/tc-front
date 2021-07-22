@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Input, Select, Table, TableColumnType, TreeSelect } from 'antd';
+import { Button, Input, InputNumber, Select, Table, TableColumnType, TreeSelect } from 'antd';
 import Form, { FormInstance, FormProps, RuleObject } from 'antd/lib/form';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { RouteComponentProps } from 'react-router';
@@ -20,21 +20,9 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
 }
 
 
-type AbstractMaterialSettingProps = Parameters<typeof Table>[0];
-// type ColumnTypes = Exclude<AbstractMaterialSettingProps['columns'], undefined>;
-
-const title = {
-    border:'1px solid #d9d9d9',
-    width: '100%'
-}
-
-const titleC = {
-    border:'1px solid red',
-    width: '100%'
-}
 
  /**
-  * Abstract Client Setting
+  * Abstract Mateiral Setting
   */
  export default abstract class AbstractMaterialSetting<P extends RouteComponentProps, S extends IAbstractMaterialSettingState> extends AbstractFillableComponent<P, S> {
     // columns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[];
@@ -67,6 +55,7 @@ const titleC = {
             material.title = material.treeName;
             material.value = material.id;
             if (material.children && material.children.length) {
+                material.disabled = true;
                 this.wrapRole2DataNode(material.children);
             }
         });
@@ -79,17 +68,19 @@ const titleC = {
             dataIndex: 'materialCategory',
             align: "center",
             width: 300,
-            render:(text, record, index)=>{
-               return   <TreeSelect
-                            style={ text? title : titleC }
+            render:(text: string, record: IMaterial, index: number): React.ReactNode=>(
+                <Form.Item name={['materialData', index, 'materialCategory']} rules= {[{
+                    required: true,
+                    message: '请选择类型'
+                }]}>
+                     <TreeSelect
                             treeData={ this.wrapRole2DataNode( this.state.treeData ) } 
                             showSearch={ true }
                             allowClear
-                            bordered={ false }
-                            value= {text}
                             onChange = {(value: any, labelList: React.ReactNode[],extra: any)=>this.materialTreeChange(value,labelList,extra,index)}
                         />
-            }
+                </Form.Item>
+            )
             
         },{
             key: 'materialCode',
@@ -97,9 +88,14 @@ const titleC = {
             dataIndex: 'materialCode',
             align: "center",
             width: 300,
-            render:(text, record, index)=>{
-                return  (record as IMaterial).id?<div>{text}</div>:<Input onChange={e => this.handleFields(index, 'materialCode', e.target.value)} defaultValue={text} style={ text? title : titleC } bordered={false} />
-            }
+            render: (text: string, record: IMaterial, index: number): React.ReactNode => (
+                <Form.Item name={['materialData', index, 'materialCode']} rules= {[{
+                            required: true,
+                            message: '请输入物料编号'
+                }]}>
+                    { (record as IMaterial).id?<div>{text}</div>:<Input onChange={e => this.handleFields(index, 'materialCode', e.target.value)} defaultValue={ text }   maxLength={ 20 }/> }
+                </Form.Item>
+            )
             
         },{
             key: 'productName',
@@ -107,95 +103,124 @@ const titleC = {
             dataIndex: 'productName',
             align: "center",
             width: 200,
-            render:(text, record, index)=>{
-                return  <Input onChange={e => this.handleFields(index, 'productName', e.target.value)} defaultValue={text} style={ text? title : titleC } bordered={false}/>
-            }
+            render: (text: string, record: IMaterial, index: number): React.ReactNode => (
+                <Form.Item name={['materialData', index,'productName']} rules= {[{
+                    required: true,
+                    message: '请填写品名'
+                }]}>
+                    <Input onChange={e => this.handleFields(index, 'productName', e.target.value)}    maxLength={ 20 }/>
+                </Form.Item>
+            )
         },{
             key: 'shortcutCode',
             title: '快捷码',
             dataIndex: 'shortcutCode',
             align: "center",
             width: 200,
-            render:(text, record, index)=>{
-                return  <Input onChange={e => this.handleFields(index, 'shortcutCode', e.target.value)} defaultValue={text} />
-            }
+            render: (text: string, record: IMaterial, index: number): React.ReactNode => (
+                <Form.Item name={['materialData', index, 'shortcutCode']} >
+                    <Input onChange={e => this.handleFields(index, 'shortcutCode', e.target.value)}  maxLength={ 10 }/>
+                </Form.Item>
+            )
         },{
             key: 'rowMaterial',
             title: '* 材料',
             dataIndex: 'rowMaterial',
             align: "center",
             width: 200,
-            render:(text, record, index)=>{
-                return  <Input onChange={e => this.handleFields(index, 'rowMaterial', e.target.value)} defaultValue={text} style={ text? title : titleC } bordered={false}/>
-            }
+            render: (text: string, record: IMaterial, index: number): React.ReactNode => (
+                <Form.Item name={['materialData', index, 'rowMaterial']} rules= {[{
+                    required: true,
+                    message: '请填写材料'
+                }]}>
+                    <Input onChange={e => this.handleFields(index, 'rowMaterial', e.target.value)}    maxLength={ 20 }/>
+                </Form.Item>
+            )
         },{
             key: 'materialTexture',
             title: '* 材质',
             dataIndex: 'materialTexture',
             align: "center",
             width: 200,
-            render:(text, record, index)=>{
-                return  <Input onChange={e => this.handleFields(index, 'materialTexture', e.target.value)} defaultValue={text} style={ text? title : titleC } bordered={false}/>
-            }
+            render: (text: string, record: IMaterial, index: number): React.ReactNode => (
+                <Form.Item name={['materialData', index, 'materialTexture']} rules= {[{
+                    required: true,
+                    message: '请填写材质'
+                }]}>
+                    <Input onChange={e => this.handleFields(index, 'materialTexture', e.target.value)}   maxLength={ 20 }/>
+                </Form.Item>
+            )
         },{
             key: 'spec',
             title: '* 规格',
             dataIndex: 'spec',
             align: "center",
             width: 200,
-            render:(text, record, index)=>{
-                return  <Input onChange={e => this.handleFields(index, 'spec', e.target.value)} defaultValue={text} style={ text? title : titleC } bordered={false}/>
-            }
+            render: (text: string, record: IMaterial, index: number): React.ReactNode => (
+                <Form.Item name={['materialData', index, 'spec']} rules= {[{
+                    required: true,
+                    message: '请填写规格'
+                }]}>
+                    <Input onChange={e => this.handleFields(index, 'spec', e.target.value)} maxLength={ 20 }/>
+                </Form.Item>
+            )
         },{
             key: 'unit',
             title: '计量单位',
             dataIndex: 'unit',
             align: "center",
             width: 200,
-            render:(text, record, index)=>{
-                return <Select style={{width:'100%'}} onChange={(value:string) => this.handleFields(index, 'unit', value)} defaultValue={`${text}`}>
-                            { unitOptions && unitOptions.map(({ id, name }, index) => {
-                                return <Select.Option key={ index } value={ id }>
-                                    { name }
-                                </Select.Option>
-                            }) }
-                        </Select>
-            }
+            render: (text: string, record: IMaterial, index: number): React.ReactNode => (
+                <Form.Item name={['materialData', index, 'unit']}>
+                    <Select style={{width:'100%'}} onChange={(value:string) => this.handleFields(index, 'unit', value)} >
+                        { unitOptions && unitOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={ index } value={ id }>
+                                { name }
+                            </Select.Option>
+                        }) }
+                    </Select>
+                </Form.Item> 
+            )
         },{
             key: 'proportion',
             title: '比重',
             dataIndex: 'proportion',
             align: "center",
             width: 200,
-            render:(text, record, index)=>{
-                return  <Input onChange={e => this.handleFields(index, 'proportion', e.target.value)} defaultValue={text} />
-            }
+            render: (text: string, record: IMaterial, index: number): React.ReactNode => (
+                <Form.Item name={['materialData', index, 'proportion']}>
+                    <InputNumber onChange={e => this.handleFields(index, 'proportion', e)} precision={ 4 }/>
+                </Form.Item>
+            )
         },{
             key: 'weightAlgorithm',
             title: '重量算法',
             dataIndex: 'weightAlgorithm',
             align: "center",
             width: 300,
-            render:(text, record, index)=>{
-                return <Select style={{width:'100%'}} onChange={ (value: string) => this.handleFields(index, 'weightAlgorithm', value) } value={ text }>
-                           <Select.Option value={ '0' } >
-                                比重*体积（钢板类）
-                            </Select.Option>
-                            <Select.Option value={ '1' } >
-                                比重*长度（角板类）
-                            </Select.Option>
-                        </Select>
-            }
+            render: (text: string, record: IMaterial, index: number): React.ReactNode => (
+                <Form.Item name={['materialData', index, 'weightAlgorithm']}>
+                    <Select style={{width:'100%'}} onChange={ (value: string) => this.handleFields(index, 'weightAlgorithm', value) } >
+                        <Select.Option value={ '0' } >
+                            比重*体积（钢板类）
+                        </Select.Option>
+                        <Select.Option value={ '1' } >
+                            比重*长度（角板类）
+                        </Select.Option>
+                    </Select>
+                </Form.Item>
+            )
         },{
             key: 'description',
             title: '备注',
             dataIndex: 'description',
             align: "center",
             width: 400,
-            render:(text, record, index)=>{
-                return  <Input.TextArea onChange={e => this.handleFields(index, 'description', e.target.value)} defaultValue={text} rows={1}/>
-                        
-            }
+            render: (text: string, record: IMaterial, index: number): React.ReactNode => (
+                <Form.Item name={['materialData', index, 'description']}>
+                    <Input.TextArea onChange={e => this.handleFields(index, 'description', e.target.value)} rows={1} maxLength={ 300 }/>
+                </Form.Item>
+            )
         },{
             title: '操作',
             dataIndex: 'operation',
@@ -300,11 +325,10 @@ const titleC = {
          return []
      }
 
-     public handleFields = (index:number, fieldKey:string, value:string) => {
+     public handleFields = (index:number, fieldKey:string, value:string | number) => {
         let data = this.state?.materialData;
         if(data){
             let row = data[index];
-            console.log(row)
             row[fieldKey]= value;
             this.setState({
                 materialData:data
