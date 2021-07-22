@@ -75,10 +75,10 @@ import styles from './AbstractSelectableModal.module.less';
 
      //接口、获值
      public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-         const resData: IResponseDataMore = await RequestUtil.get<IResponseDataMore>(`/tower-market/saleOrder/orderProduct/${this.props.saleOrderId}`);
+         const resData: IOrder[] = await RequestUtil.get<IOrder[]>(`/tower-market/saleOrder/orderProduct/${this.props.saleOrderId}`);
          this.setState({
              ...filterValues,
-             tableDataSource: resData.orderProductVos,
+             tableDataSource: resData,
          });
      }
     
