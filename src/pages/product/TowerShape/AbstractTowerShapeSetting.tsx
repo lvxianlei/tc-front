@@ -132,9 +132,16 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                     required: true,
                     message: '请选择关联合同'
                 }],
-                children: <Input value={ towerShape?.internalNumber } disabled suffix={ 
-                    <ContractSelectionComponent onSelect={ this.onSelect }/>
-                }/>  
+                children: 
+                (
+                    isReference 
+                    ?
+                    <Input value={ towerShape?.internalNumber } disabled/> 
+                    :
+                    <Input value={ towerShape?.internalNumber } disabled suffix={ 
+                        <ContractSelectionComponent onSelect={ this.onSelect }/>
+                    }/> 
+                )
             }, {
                 label: '工程名称',
                 name: 'projectName',
