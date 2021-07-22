@@ -392,9 +392,9 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
            dataIndex: 'sectionCount',
            align: "center",
         },{
-           key: 'sectionTotalCount',
+           key: 'allocatedSectionCount',
            title: '已提料段数',
-           dataIndex: 'sectionTotalCount',
+           dataIndex: 'allocatedSectionCount',
            align: "center",
         }]
     };

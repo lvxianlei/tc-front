@@ -390,12 +390,12 @@
            dataIndex: 'sectionCount',
            align: "center",
            render:(text, record, index)=>{
-                return  <InputNumber min={ 0 } defaultValue={ text < 0 ? '' : text } onChange={ value => this.handleFields(index,value) } style={ text? title : titleC } bordered={ false } precision={ 0 } max={ (record as IParagraph).sectionTotalCount }/>
+                return  <InputNumber min={ 0 } defaultValue={ text < 0 ? '' : text } onChange={ value => this.handleFields(index,value) } style={ text? title : titleC } bordered={ false } precision={ 0 } max={ (record as IParagraph).allocatedSectionCount }/>
             }
         },{
-           key: 'sectionTotalCount',
+           key: 'allocatedSectionCount',
            title: '已提料段数',
-           dataIndex: 'sectionTotalCount',
+           dataIndex: 'allocatedSectionCount',
            align: "center",
         }]
     };
