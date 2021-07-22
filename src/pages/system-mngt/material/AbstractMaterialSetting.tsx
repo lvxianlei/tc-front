@@ -177,12 +177,11 @@ const titleC = {
             align: "center",
             width: 300,
             render:(text, record, index)=>{
-                // return  <Input onChange={e => this.handleFields(index, 'weightAlgorithm', e.target.value)} defaultValue={text} />
-                return <Select style={{width:'100%'}} onChange={ (value: string) => this.handleFields(index, 'weightAlgorithm', value) }>
-                           <Select.Option value={ 0 } >
+                return <Select style={{width:'100%'}} onChange={ (value: string) => this.handleFields(index, 'weightAlgorithm', value) } value={ text }>
+                           <Select.Option value={ '0' } >
                                 比重*体积（钢板类）
                             </Select.Option>
-                            <Select.Option value={ 1 } >
+                            <Select.Option value={ '1' } >
                                 比重*长度（角板类）
                             </Select.Option>
                         </Select>
