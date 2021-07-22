@@ -90,8 +90,11 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             width: 300,
             render: (text: string, record: IMaterial, index: number): React.ReactNode => (
                 <Form.Item name={['materialData', index, 'materialCode']} rules= {[{
-                            required: true,
-                            message: '请输入物料编号'
+                    required: true,
+                    message: '请输入物料编号'
+                },{
+                    pattern: /^[^\u4e00-\u9fa5]*$/,
+                    message: '禁止输入中文',
                 }]}>
                     { (record as IMaterial).id?<div>{text}</div>:<Input onChange={e => this.handleFields(index, 'materialCode', e.target.value)} defaultValue={ text }   maxLength={ 20 }/> }
                 </Form.Item>
@@ -106,8 +109,15 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             render: (text: string, record: IMaterial, index: number): React.ReactNode => (
                 <Form.Item name={['materialData', index,'productName']} rules= {[{
                     required: true,
-                    message: '请填写品名'
-                }]}>
+                    message: '请输入品名'
+                }, ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue(['materialData', index,'spec']) === value) {
+                        return Promise.reject(new Error('不可与规格相同!'));
+                      }
+                      return Promise.resolve();
+                    },
+                })]}>
                     <Input onChange={e => this.handleFields(index, 'productName', e.target.value)}    maxLength={ 20 }/>
                 </Form.Item>
             )
@@ -131,7 +141,7 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             render: (text: string, record: IMaterial, index: number): React.ReactNode => (
                 <Form.Item name={['materialData', index, 'rowMaterial']} rules= {[{
                     required: true,
-                    message: '请填写材料'
+                    message: '请输入材料'
                 }]}>
                     <Input onChange={e => this.handleFields(index, 'rowMaterial', e.target.value)}    maxLength={ 20 }/>
                 </Form.Item>
@@ -145,7 +155,7 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             render: (text: string, record: IMaterial, index: number): React.ReactNode => (
                 <Form.Item name={['materialData', index, 'materialTexture']} rules= {[{
                     required: true,
-                    message: '请填写材质'
+                    message: '请输入材质'
                 }]}>
                     <Input onChange={e => this.handleFields(index, 'materialTexture', e.target.value)}   maxLength={ 20 }/>
                 </Form.Item>
@@ -159,8 +169,15 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             render: (text: string, record: IMaterial, index: number): React.ReactNode => (
                 <Form.Item name={['materialData', index, 'spec']} rules= {[{
                     required: true,
-                    message: '请填写规格'
-                }]}>
+                    message: '请输入规格'
+                },({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue(['materialData', index,'productName']) === value) {
+                        return Promise.reject(new Error('不可与品名相同!'));
+                      }
+                      return Promise.resolve();
+                    },
+                })]}>
                     <Input onChange={e => this.handleFields(index, 'spec', e.target.value)} maxLength={ 20 }/>
                 </Form.Item>
             )
