@@ -222,11 +222,9 @@ import { DataNode } from 'antd/lib/tree';
       * @param item 
       * @returns delete 
       */
-     private onDelete(items: IMaterial[]): () => void {
-         return async () => {
+     private onDelete = async (items: IMaterial[]) => {
              await RequestUtil.delete(`/tower-system/material?id=${items.map<string>((item: IMaterial): string => item?.id as string) }`);
              this.fetchMaterials();
-         };
      }
 
     
@@ -234,7 +232,7 @@ import { DataNode } from 'antd/lib/tree';
       * @description Determines whether batch delete on
       * @returns batch delete 
       */
-     private onBatchDelete(): () => void {
+     private onBatchDelete = () => {
          return this.onDelete(this.state.selectedMaterials);
      }
  
@@ -361,7 +359,7 @@ import { DataNode } from 'antd/lib/tree';
                     disabled={ !this.state.selectedMaterials?.length }>编辑</Button>
                 <ConfirmableButton confirmTitle="确定删除这些用户吗？" danger={ true }
                     icon={ <DeleteOutlined /> }
-                    disabled={ !this.state.selectedMaterials?.length } onConfirm={ this.onBatchDelete() }>
+                    disabled={ !this.state.selectedMaterials?.length } onConfirm={ ()=> this.onBatchDelete() }>
                     删除
                 </ConfirmableButton>
             </Space>
