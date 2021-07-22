@@ -6,7 +6,7 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 
 import RequestUtil from '../../../utils/RequestUtil';
-import AbstractSaleOrderSetting, { IAbstractSaleOrderSettingState, IContractInfoDto, IProductVo } from './AbstractSaleOrderSetting';
+import AbstractSaleOrderSetting, { ChargeType, IAbstractSaleOrderSettingState, IContractInfoDto, IProductVo } from './AbstractSaleOrderSetting';
 import moment from 'moment'
 
 export interface ISaleOrderNewProps {}
@@ -39,6 +39,9 @@ class SaleOrderNew extends AbstractSaleOrderSetting<ISaleOrderNewRouteProps, ISa
             signContractTime: values.signContractTime,
             signCustomerId: contract?.signCustomerId,
             signCustomerName: values.signCustomerName,
+        }
+        if(values.chargeType === ChargeType.UNIT_PRICE) {
+            values.price = undefined;
         }
         values.orderProductDtos = this.state.saleOrder?.orderProductDtos && this.state.saleOrder?.orderProductDtos.map((items: IProductVo, index: number) => {
             return {

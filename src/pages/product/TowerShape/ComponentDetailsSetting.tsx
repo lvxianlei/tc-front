@@ -82,6 +82,12 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
 
     public getData = async () => {
         let towerSection: ITowerSection[] = await RequestUtil.get(`/tower-data-archive/drawComponent/${ this.props.match.params.id }`);
+        towerSection = towerSection.map((items: ITowerSection) => {
+            return {
+                ...items,
+                subtotalWeight: (items.number || 0) * (items.singleWeight || 0)
+            }
+        })
         this.setState({
             towerSection: towerSection,
         })
