@@ -9,7 +9,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
 
 import RequestUtil from '../../../utils/RequestUtil';
-import AbstractSaleOrderSetting, { IAbstractSaleOrderSettingState, ISaleOrder, IProductVo, IContractInfoDto } from './AbstractSaleOrderSetting';
+import AbstractSaleOrderSetting, { IAbstractSaleOrderSettingState, ISaleOrder, IProductVo, IContractInfoDto, ChargeType } from './AbstractSaleOrderSetting';
 
 export interface ISaleOrderSettingProps {
     readonly id: string;
@@ -98,6 +98,9 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSettingRoutePr
             signContractTime: values.signContractTime,
             signCustomerId: contract?.signCustomerId,
             signCustomerName: values.signCustomerName,
+        }
+        if(values.chargeType === ChargeType.UNIT_PRICE) {
+            values.price = undefined;
         }
         values.orderProductDtos = this.state.saleOrder?.orderProductDtos && this.state.saleOrder?.orderProductDtos.map((items: IProductVo, index: number) => {
             return {
