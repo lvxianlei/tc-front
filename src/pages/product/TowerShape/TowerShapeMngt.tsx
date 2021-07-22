@@ -3,14 +3,16 @@
  * @copyright © 2021
  */
 
-import { Button, Dropdown, FormItemProps, Input, Menu, Popconfirm, Space, TableColumnType, TablePaginationConfig, TableProps } from 'antd';
+import { Button, Dropdown, FormItemProps, Input, Menu, Popconfirm, Space, TableColumnType, TablePaginationConfig, TableProps, Upload } from 'antd';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../../components/AbstractMngtComponent';
 import { ITabItem } from '../../../components/ITabableComponent';
+import AuthUtil from '../../../utils/AuthUtil';
 import RequestUtil from '../../../utils/RequestUtil';
+import ImportTemplateModal from './ImportTemplateModal';
 import TowerSectionModal from './TowerSectionModal';
 
 export interface ITowerShapeMngtProps {}
@@ -174,7 +176,21 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <TowerSectionModal id={ (record as ITowerShape).id }/>
-                    <Button type="link" href={ `` }>导入图纸构件明细</Button>
+                    <Upload 
+                        action={ () => {
+                            const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                            return baseUrl+'/tower-data-archive/productCategory/drawComponent/import'
+                        } } 
+                        headers={
+                            {
+                                'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                                'Tenant-Id': AuthUtil.getTenantId(),
+                                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                            }
+                        }
+                        data={ { productCategoryId: (record as ITowerShape).id } }>
+                        <Button type="link">导入图纸构件明细</Button>
+                    </Upload>
                     <Button type="link" href={ `/product/towershape/componentDetails/${ (record as ITowerShape).id }` }>编辑图纸构件明细</Button>
                     <Dropdown overlay={ this.menu(record) } trigger={['click']}>
                         <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
@@ -275,7 +291,7 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
         return (
             <Space direction="horizontal" size="small">
                 <Button type="primary">导入</Button>
-                <Button type="ghost">导入模板下载</Button>
+                <ImportTemplateModal/>
                 <Button type="ghost">导出</Button>
                 <Button type="ghost" onClick={ this.onNewClick }>新增</Button>
             </Space>
