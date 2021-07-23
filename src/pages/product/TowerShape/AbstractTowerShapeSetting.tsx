@@ -344,7 +344,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                 }]}>
                     <InputNumber 
                         stringMode={ false } 
-                        min="0"
+                        min="0.01"
                         step="0.01"
                         precision={ 2 }
                         className={ layoutStyles.width100 }
@@ -550,9 +550,9 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         okText="确认"
                         cancelText="取消"
                         onConfirm={ () => { this.onDelete(index, record.id) } }
-                        disabled={ isChange }
+                        disabled={ record.status === 2 || (isChange && record.status == 0 ) || (!isChange && record.status === 1) || (!isChange && record.status == 3 ) }
                     >
-                        <Button type="link"  disabled={ isChange || (record.status === 1) || (record.status === 2) || (record.status === 3) }>
+                        <Button type="link" disabled={ record.status === 2 || (isChange && record.status == 0 ) || (!isChange && record.status === 1) || (!isChange && record.status == 3 ) }>
                             删除
                         </Button>
                     </Popconfirm>
