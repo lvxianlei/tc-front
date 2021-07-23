@@ -17,6 +17,7 @@
  import { DataType } from '../../../components/AbstractSelectableModal';
  import { materialStandardOptions } from '../../../configuration/DictionaryOptions';
  import { IDetail, IMaterialExtraction, IParagraph, ITower } from './IMaterialExtraction';
+import { RuleObject } from 'antd/lib/form';
  const { TabPane } = Tabs;
  export interface IAbstractMaterialExtractionSettingState extends IAbstractFillableComponentState {
      readonly tablePagination: TablePaginationConfig;
@@ -220,9 +221,21 @@
                      initialValue: materialExtraction?.batchSn,
                      rules: [{
                         required: true,
-                        message: '请填写批次号'
+                        validator: (rule: RuleObject, value: string, callback: (error?: string) => void) => {
+                            if(value && value != '') {
+                                this.checkBatchSn(value).then(res => {
+                                    if (res) {
+                                        callback()
+                                    } else {
+                                        callback('批次号重复')
+                                    }
+                                })
+                            } else {
+                                callback('请输入批次号')
+                            }
+                        }
                     }],
-                     children: <Input maxLength={ 20 }/>
+                     children: <Input maxLength={ 20 } />
                  }, {
                      label: '材料标准',
                      name: 'materialStandard', 
@@ -390,7 +403,7 @@
            dataIndex: 'sectionCount',
            align: "center",
            render:(text, record, index)=>{
-                return  <InputNumber min={ 0 } defaultValue={ text == '-1' ? '' : text } onChange={ value => this.handleFields(index,value) } style={ text? title : titleC } bordered={ false } precision={ 0 } max={ (record as IParagraph).allocatedSectionCount }/>
+                return  <InputNumber min={ 0 } defaultValue={ text == '-1' ? '' : text } onChange={ value => this.handleFields(index,value) } style={ text? title : titleC } bordered={ false } precision={ 0 } />
             }
         },{
            key: 'allocatedSectionCount',
@@ -418,6 +431,25 @@
                 detailDataSource: dataSource || []
             })
         };
+    }
+
+    /**
+     * @description 验证批次号是否重复
+     */
+     public checkBatchSn = (value: string): Promise<void | any> =>{
+        return new Promise(async (resolve, reject) => {  // 返回一个promise
+            const resData = await RequestUtil.get('/tower-market/extractionMaterial/checkBatchSn', {
+                batchSn: value
+            });
+            console.log(resData)
+            if (resData) {
+                resolve(resData)
+            } else {
+                resolve(false)
+            }
+        }).catch(error => {
+            Promise.reject(error)
+        })
     }
  
      /**
