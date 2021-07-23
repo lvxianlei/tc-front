@@ -40,7 +40,6 @@ export default class TowerSelectionModal extends AbstractSelectableModal<ITowerS
     }
 
     public showModal =  (): void => {
-        console.log(this.props.selectKey)
         if(this.props.id) {
             this.setState({
                 isModalVisible: true
@@ -56,7 +55,7 @@ export default class TowerSelectionModal extends AbstractSelectableModal<ITowerS
         let resData: IProductVo[] = await RequestUtil.get(`/tower-market/contract/product/${ this.props.id }`);
         const selectKeys: [] = this.props.selectKey;
         selectKeys.map((item: IProductVo) => {
-            resData = resData.filter(res => res.productNumber !== item.productNumber );
+            resData = resData.filter(res => res.productId !== item.productId );
         })
         this.setState({
             tableDataSource: resData,
