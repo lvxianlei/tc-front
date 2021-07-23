@@ -2,15 +2,13 @@
  * @author zyc
  * @copyright © 2021
  */
-import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Row, Select, Table, TableColumnType, TableProps } from 'antd';
+import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Popconfirm, Row, Select, Table, TableColumnType, TableProps } from 'antd';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { DeleteOutlined } from '@ant-design/icons';
 
 import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGroup } from '../../../components/AbstractFillableComponent';
 import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
-import { FormListFieldData, FormListOperation } from 'antd/lib/form/FormList';
-import ConfirmableButton from '../../../components/ConfirmableButton';
 import moment from 'moment';
 import styles from './AbstractSaleOrderSetting.module.less'
 import ContractSelectionComponent from '../../../components/ContractSelectionModal';
@@ -807,13 +805,18 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             width: 180,
             fixed: 'right',
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
-                <ConfirmableButton confirmTitle="要删除该条产品信息吗？"
-                    type="link" placement="topRight"
+                <Popconfirm 
+                    title="要删除该条产品信息吗？"
+                    placement="topRight"
+                    okText="确认"
+                    cancelText="取消"
                     onConfirm={ () => { 
                         this.tableDelete(index);
-                    } }>
-                    <DeleteOutlined />
-                </ConfirmableButton>
+                    } }
+                    disabled={ record.status === 2 || record.status === 3 }
+                >
+                    <Button type="text" disabled={ record.status === 2 || record.status === 3 } icon={ <DeleteOutlined/> } danger/>
+                </Popconfirm>
             )
         }];
     }
