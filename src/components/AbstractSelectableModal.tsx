@@ -141,7 +141,8 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
         return (
             <Table 
                 { ...this.getTableProps() }
-                scroll={{ x: 1500 }}
+                scroll={{ x: 1200 }}
+                className={ styles.modalTable }
             />
         );
     }
@@ -167,9 +168,7 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
                     onCancel={this.handleCancel}
                     width="50%"
                 >
-                    <Space direction="vertical" className={ styles.modalTable } >
-                        {this.renderTableContent()}  
-                    </Space> 
+                    {this.renderTableContent()}  
                 </Modal>  
             </>
         );

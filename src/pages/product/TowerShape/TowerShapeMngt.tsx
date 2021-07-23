@@ -137,7 +137,7 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
                 </Popconfirm>
             </Menu.Item>
             <Menu.Item>
-                <Button type="link" href={ `/product/towershape/change/${ (record as ITowerShape).id }` }>变更</Button>
+                <Button type="link" href={ `/product/towershape/change/${ (record as ITowerShape).id }` } disabled={ (record as ITowerShape).operateStatus !== 2 }>变更</Button>
             </Menu.Item>
         </Menu>
     }
