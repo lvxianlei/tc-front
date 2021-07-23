@@ -1,10 +1,9 @@
-import { Button, Card, Form, FormInstance, FormItemProps, Space } from 'antd';
+import { Button, Form, FormInstance, FormItemProps } from 'antd';
 import { TablePaginationConfig } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
 import AbstractSelectionModal, { DataType, IAbstractSelectableModalState } from './AbstractSelectableModal';
-import styles from './AbstractSelectableModal.module.less';
 
 export interface IAbstractSelectableModalProps {
     readonly onSelect: (selectedRows: DataType[]) => void;
@@ -70,12 +69,10 @@ export default abstract class AbstractFilteredSelecableModal<P extends IAbstract
      */
     protected renderTableContent(): React.ReactNode {
         return (
-            <Space direction="vertical" className={ styles.modalTable } >
+            <>
                 {  this.renderFilterContent() }
-                <Space direction="vertical" size="large"  className={ styles.modalTable }>
-                    { super.renderTableContent() }
-                </Space>
-            </Space>
+                { super.renderTableContent() }
+            </>
         );
     }
 
