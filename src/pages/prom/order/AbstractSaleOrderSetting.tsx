@@ -26,8 +26,8 @@ export interface IAbstractSaleOrderSettingState extends IAbstractFillableCompone
     readonly saleOrder?: ISaleOrder;
     readonly orderQuantity?: number;
     readonly newOption: IOption;
-    readonly isChangeProduct?: boolean;
     readonly columns?: TableColumnType<object>[];
+    readonly isSetting?: boolean;
 }
 
 export interface ISaleOrder {
@@ -96,9 +96,9 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
     protected getState(): S {
         return {
             saleOrder: undefined,
-            isChangeProduct: false,
             orderQuantity: 0,
-            columns: this.getColumns()
+            columns: this.getColumns(),
+            isSetting: false
         } as S;
     }
 
@@ -168,7 +168,10 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         }   
     }
 
-    public getColumnsChange(value: number): void {
+    /**
+     * @description 计价方式判断产品信息列表显示
+     */
+    public getColumnsChange(value: number | string): void {
         const columns: TableColumnType<object>[] = this.getColumns();
         if(value === ChargeType.UNIT_PRICE) {
             columns.splice(9, 1);
@@ -237,7 +240,9 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             this.getForm()?.setFieldsValue({ price: '-' });
         } else {
             let price: number = 0;
-            price = amount / totalWeight || 0;
+            if(totalWeight > 0) {
+                price = amount / totalWeight || 0;
+            }
             price = parseFloat(price.toFixed(4));
             this.getForm()?.setFieldsValue({ price: price });
         }
@@ -270,7 +275,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         this.setState({
             saleOrder: {
                 ...(saleOrder || { taxAmount: 0, taxRate: 0, totalWeight: 0, totalAmount: 0, orderProductVos: [] }),
-                orderProductDtos: [...(orderProductDtos || [])]
+                orderProductDtos: [...(orderProductDtos || [])],
+                contractInfoDto: this.state.saleOrder?.contractInfoDto
             }
         })
         this.getForm()?.setFieldsValue({ orderProductDtos: [...(orderProductDtos || [])] });
@@ -303,7 +309,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
     public priceBlur(index: number): void {
         const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
         const orderProductDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).orderProductDtos;
-        const orderQuantity: number | undefined = this.state.orderQuantity;
+        const orderQuantity: number | undefined = this.getForm()?.getFieldsValue(true).orderQuantity;
         if(orderQuantity && orderProductDtos[0] && orderProductDtos[index].price) {
             const price: number | undefined = orderProductDtos[index].price;
             let totalPrice: number = 0;
@@ -321,10 +327,10 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             this.setState({
                 saleOrder: {
                     ...(saleOrder || { taxAmount: 0, taxRate: 0, totalWeight: 0, totalAmount: 0,orderProductVos: [] }),
-                    orderProductDtos: [...orderProductDtos]
+                    orderProductDtos: [...orderProductDtos],
                 }
             })
-            this.getForm()?.setFieldsValue({ taxPrice: parseFloat((totalPrice/orderQuantity).toFixed(4)), totalPrice: parseFloat((totalPrice/orderQuantity || 0).toFixed(4)), orderProductDtos: [...orderProductDtos] });
+            this.getForm()?.setFieldsValue({ taxPrice: parseFloat((totalPrice/orderQuantity || 0).toFixed(4)), totalPrice: parseFloat((totalPrice/orderQuantity || 0).toFixed(4)), orderProductDtos: [...orderProductDtos] });
             this.getTotalAmount();
             this.getAmount();
         }                                                       
@@ -337,7 +343,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const orderProductDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).orderProductDtos;
         let totalAmount: number = 0;
         orderProductDtos.map<number>((items: IProductVo): number => {
-            return totalAmount = Number(totalAmount) + Number(items.totalAmount);
+            return totalAmount = Number(totalAmount) + Number(items.totalAmount || 0);
         })
         this.getForm()?.setFieldsValue({ taxAmount: totalAmount, totalAmount: totalAmount });
     }
@@ -350,41 +356,50 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const orderProductDtos: IProductVo[] | undefined = this.getForm()?.getFieldsValue(true).orderProductDtos;
         const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
         const orderQuantity: number | undefined = this.state.orderQuantity;
-        if( orderProductDtos && saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ) {
+        if(orderProductDtos && saleOrder?.contractInfoDto?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT) {
+            console.log(orderProductDtos)
             const num: number = orderProductDtos[index].num || 0;
             let totalWeight: number = saleOrderValue.totalWeight;
-            totalWeight = totalWeight - num;
+            totalWeight = parseFloat((totalWeight - num).toFixed(2));
+            
             orderProductDtos?.splice(index, 1);
             if(orderQuantity) {
                 this.setState({
                     orderQuantity: totalWeight,
                     saleOrder: {
                         ...saleOrderValue,
-                        orderProductDtos: [ ...orderProductDtos ]
+                        orderProductDtos: [...orderProductDtos],
+                        contractInfoDto: saleOrder.contractInfoDto 
                     }
                 })
             }
             this.getForm()?.setFieldsValue({ totalWeight: totalWeight, orderProductDtos: [...orderProductDtos] });
-            this.getPrice();
-            this.getPriceAccordTaxRate();
-        } else if( orderProductDtos && saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ) {
-            const price: number | undefined = orderProductDtos[index].price || 0;
-            const amount: number | undefined = orderProductDtos[index].totalAmount;
-            let totalPrice: number = this.getForm()?.getFieldsValue(true).totalPrice * (orderQuantity || 0);
-            let totalAmount: number = this.getForm()?.getFieldsValue(true).totalAmount;
-            orderProductDtos?.splice(index, 1);
-            console.log(totalPrice)
-            if(price && amount) {
-                totalPrice = totalPrice - price;
-                totalAmount = totalAmount - amount;
+            if(orderProductDtos.length > 0) {
+                this.getPrice();
+                this.getPriceAccordTaxRate();
+            } else {
+                this.getForm()?.setFieldsValue({ taxPrice: 0, totalPrice: 0, orderProductDtos: [...orderProductDtos] });
             }
+        } else if( orderProductDtos && saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ) {
+            orderProductDtos?.splice(index, 1);
             if(orderQuantity) {
                 this.setState({
                     orderQuantity: orderQuantity - 1,
-                    saleOrder: saleOrderValue
+                    saleOrder: { 
+                        ...saleOrderValue,
+                        contractInfoDto: saleOrder.contractInfoDto
+                    }
                 })
             }
-            this.getForm()?.setFieldsValue({  taxPrice: totalPrice, totalPrice: totalPrice,  taxAmount: totalAmount, totalAmount: totalAmount, orderProductDtos: [...orderProductDtos]  });
+            this.getForm()?.setFieldsValue({ orderQuantity: orderQuantity && (orderQuantity -1), orderProductDtos: [...orderProductDtos] });
+            if(orderProductDtos.length > 0) {
+                orderProductDtos.map<void>((items: IProductVo, index: number): void => {
+                    this.priceBlur(index)
+                })
+            } else {
+                this.getForm()?.setFieldsValue({ taxPrice: 0, totalPrice: 0, taxAmount: 0, totalAmount: 0, orderProductDtos: [...orderProductDtos] });
+            }
+            
         }   
         this.getAmount();
     }
@@ -397,7 +412,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
     public getFormItemGroups(): IFormItemGroup[][] {
         const saleOrder: ISaleOrder | undefined = this.state.saleOrder;
         const orderQuantity: number | undefined = this.state.orderQuantity;
-        const readonly: boolean | undefined = this.state?.isChangeProduct;
+        const setting: boolean | undefined = this.state?.isSetting;
         return [[{
             title: '基础信息',
             itemCol: {
@@ -412,7 +427,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 label: '采购订单号',
                 name: 'purchaseOrderNumber',
                 initialValue: saleOrder?.purchaseOrderNumber,
-                children: <Input maxLength={ 50 } disabled={ readonly }/>
+                children: <Input maxLength={ 50 }/>
             }, {
                 label: '关联合同',
                 name: 'contractId',
@@ -424,10 +439,10 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 children:
                     <>
                         {
-                            readonly ? <Input value={ saleOrder?.contractInfoDto?.contractId }
-                            disabled={ readonly }/> : <Input value={ saleOrder?.contractInfoDto?.contractId } suffix={ 
+                            setting ? <Input value={ saleOrder?.contractInfoDto?.contractId }
+                            disabled/> : <Input value={ saleOrder?.contractInfoDto?.contractId } suffix={ 
                                 <ContractSelectionComponent onSelect={ this.onSelect } selectKey={ [saleOrder?.contractInfoDto?.contractId] } status={ 1 }/>
-                            } disabled={ readonly }/>
+                            }/>
                         }
                     </>
                     
@@ -503,7 +518,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                     step="0.01"
                     stringMode={ false } 
                     precision={ 2 }  
-                    disabled={ saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE || readonly } 
+                    disabled={ saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE } 
                     onChange={ this.amountBlur }
                     className={ layoutStyles.width100 }/>
             }, {
@@ -516,7 +531,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 name: 'taxRate',
                 initialValue: saleOrder?.taxRate == -1 ? undefined : saleOrder?.taxRate,
                 children: 
-                    <Select showSearch onSearch={ this.addNewOption } onChange={ this.getAmount }  disabled={ readonly } getPopupContainer={ triggerNode => triggerNode.parentNode }>
+                    <Select showSearch onSearch={ this.addNewOption } onChange={ this.getAmount } getPopupContainer={ triggerNode => triggerNode.parentNode }>
                         {
                             this.state.newOption ? 
                             <Select.Option key={ this.state.newOption.value } value={ this.state.newOption.label }>{ this.state.newOption.value }</Select.Option> 
@@ -542,47 +557,47 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 label: '汇率',
                 name: 'exchangeRate',
                 initialValue: saleOrder?.exchangeRate == -1 ? undefined : saleOrder?.exchangeRate,
-                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } disabled={ readonly } className={ layoutStyles.width100 }/>
+                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } className={ layoutStyles.width100 }/>
             }, {
                 label: '外汇金额',
                 name: 'foreignExchangeAmount',
                 initialValue: saleOrder?.foreignExchangeAmount == -1 ? undefined : saleOrder?.foreignExchangeAmount,
-                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 2 } disabled={ readonly } className={ layoutStyles.width100 }/>
+                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 2 } className={ layoutStyles.width100 }/>
             }, {
                 label: '外汇单价',
                 name: 'foreignPrice',
                 initialValue: saleOrder?.foreignPrice == -1 ? undefined : saleOrder?.foreignPrice,
-                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } disabled={ readonly } className={ layoutStyles.width100 }/>
+                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } className={ layoutStyles.width100 }/>
             }, {
                 label: '保函类型',
                 name: 'guaranteeType',
                 initialValue: saleOrder?.guaranteeType == '-1' ? undefined : saleOrder?.guaranteeType,
-                children:  <Input disabled={ readonly } maxLength={ 50 } className={ layoutStyles.width100 }/>
+                children:  <Input maxLength={ 50 } className={ layoutStyles.width100 }/>
             }, {
                 label: '保函金额',
                 name: 'guaranteeAmount',
                 initialValue: saleOrder?.guaranteeAmount == -1 ? undefined : saleOrder?.guaranteeAmount,
-                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 2 } disabled={ readonly } className={ layoutStyles.width100 }/>
+                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 2 } className={ layoutStyles.width100 }/>
             }, {
                 label: '港口费用',
                 name: 'portCharge',
                 initialValue: saleOrder?.portCharge == -1 ? undefined : saleOrder?.portCharge,
-                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } disabled={ readonly } className={ layoutStyles.width100 }/>
+                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } className={ layoutStyles.width100 }/>
             }, {
                 label: '海运及保险费',
                 name: 'insuranceCharge',
                 initialValue: saleOrder?.insuranceCharge == -1 ? undefined : saleOrder?.insuranceCharge,
-                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } disabled={ readonly } className={ layoutStyles.width100 }/>
+                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } className={ layoutStyles.width100 }/>
             }, {
                 label: '佣金',
                 name: 'commissionCharge',
                 initialValue: saleOrder?.commissionCharge == -1 ? undefined :saleOrder?.commissionCharge,
-                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } disabled={ readonly } className={ layoutStyles.width100 }/>
+                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } className={ layoutStyles.width100 }/>
             }, {
                 label: '出口信用保险',
                 name: 'creditInsurance',
                 initialValue: saleOrder?.creditInsurance == -1 ? undefined : saleOrder?.creditInsurance,
-                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } disabled={ readonly } className={ layoutStyles.width100 }/>
+                children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } className={ layoutStyles.width100 }/>
             }, {
                 label: '订单交货日期',
                 name: 'orderDeliveryTime',
@@ -591,12 +606,12 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                     required: true,
                     message: '请选择订单交货日期'
                 }],
-                children:  <DatePicker format="YYYY-MM-DD"  disabled={ readonly }/>
+                children:  <DatePicker format="YYYY-MM-DD" />
             }, {
                 label: '备注',
                 name: 'description',
                 initialValue: saleOrder?.description,
-                children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息" disabled={ readonly }/>
+                children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息"/>
             }]
         }]];
     }
@@ -607,13 +622,12 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
       * @param item 
       * @returns table columns 
       */
-     public getColumns(): TableColumnType<object>[] {    
-        const readonly: boolean | undefined = this.state?.isChangeProduct;
+     public getColumns(): TableColumnType<object>[] {
         return [{
             key: 'index',
             title: '序号',
             dataIndex: 'index',
-            width: 100,
+            width: 80,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
                 <>
                     { index + 1 }
@@ -623,7 +637,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             key: 'status',
             title: '状态',
             dataIndex: 'status',
-            width: 150,
+            width: 100,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
                 <Form.Item name={['orderProductDtos', index,'status']}>
                     { record.status === 3 ? '已下发' : record.status === 2 ? '审批中' : record.status === 1 ? '待下发' : '新建' }
@@ -711,7 +725,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             key: 'unit',
             title: '单位',
             dataIndex: 'unit',
-            width: 150,
+            width: 100,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
                 <Form.Item name={['orderProductDtos', index, 'unit']} rules= {[{
                     required: true,
@@ -837,25 +851,25 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 productHeight: selectedRows[0].productHeight,
                 num: selectedRows[0].productWeight,
                 unit: selectedRows[0].unit,
-                price: saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? undefined : saleOrder?.totalPrice,
-                totalAmount: saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? undefined : Number.parseFloat(((saleOrder?.totalPrice || 0 ) * selectedRows[0].productWeight).toFixed(2)),
-                tender: selectedRows[0].tender,
-                description: selectedRows[0].description,
+                price: this.state.saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? undefined : saleOrder?.totalPrice,
+                totalAmount: this.state.saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? undefined : Number.parseFloat(((saleOrder?.totalPrice || 0 ) * selectedRows[0].productWeight).toFixed(2)),
+                tender: '',
+                description: '',
             };
             orderProductDtos.push(product);
-            totalWeight = (Number(totalWeight) + Number(selectedRows[0].productWeight)) || 0; 
+            totalWeight = (Number(totalWeight) + Number(selectedRows[0].productWeight)) || 0;   
             this.setState({
                 saleOrder: {
                     ...(saleOrder || { taxAmount: 0, taxRate: 0, totalWeight: 0, totalAmount: 0,orderProductVos: [] }),
-                    orderProductDtos: orderProductDtos
+                    orderProductDtos: orderProductDtos,
+                    contractInfoDto: this.state.saleOrder?.contractInfoDto
                 }
             })
-            this.getForm()?.setFieldsValue({ ...saleOrder, orderProductDtos: [...(orderProductDtos || [])], totalWeight: totalWeight });
-            this.getUnitByChargeType();
+            this.getForm()?.setFieldsValue({ ...saleOrder, orderProductDtos: [...(orderProductDtos || [])], totalWeight: totalWeight, contractInfoDto: this.state.saleOrder?.contractInfoDto });
             this.getPriceAccordTaxRate();
         }   
         let orderQuantity: number | undefined = this.state.orderQuantity;
-        if(saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE) {
+        if(this.state.saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE) {
             if(orderQuantity !== undefined) {
                 orderQuantity = Number(orderQuantity) + 1;
                 this.setState({
@@ -880,14 +894,13 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      * @returns extra sections 
      */
     public renderExtraSections(): IRenderedSection[] {
-        const readonly: boolean | undefined = this.state?.isChangeProduct;
         return [{
             title: '产品信息',
             render: (): React.ReactNode => {
                 const chargeType: string | number | undefined = this.state.saleOrder?.contractInfoDto?.chargeType;
                 return (
                     <>
-                        <TowerSelectionModal onSelect={ this.selectAddRow } readonly={ readonly } id={ this.state.saleOrder?.contractInfoDto?.contractId } selectKey={ this.state.saleOrder?.orderProductDtos }/>
+                        <TowerSelectionModal onSelect={ this.selectAddRow } id={ this.state.saleOrder?.contractInfoDto?.contractId } selectKey={ this.state.saleOrder?.orderProductDtos }/>
                         <Table { ...this.getTableProps() } summary={pageData => {
                             return (
                                 <>

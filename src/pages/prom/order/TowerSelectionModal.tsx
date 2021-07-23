@@ -15,7 +15,6 @@ import RequestUtil from '../../../utils/RequestUtil';
 import { IProductVo } from './AbstractSaleOrderSetting';
 
 export interface ITowerSelectionModalProps extends IAbstractSelectableModalProps {
-    readonly readonly?: boolean; 
     readonly id?: string | number;
 }
 export interface ITowerSelectionModalState extends IAbstractSelectableModalState {
@@ -160,7 +159,7 @@ export default class TowerSelectionModal extends AbstractSelectableModal<ITowerS
     public render(): React.ReactNode {
         return (
             <>
-                <Button onClick={ this.showModal } type="primary" className={ this.props.readonly? orderStyles.isShow : orderStyles.addBtn }>新增行</Button>
+                <Button onClick={ this.showModal } type="primary" className={ orderStyles.addBtn }>新增行</Button>
                 <Modal 
                     title={ this.state.confirmTitle } 
                     visible={this.state.isModalVisible} 

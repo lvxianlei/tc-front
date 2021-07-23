@@ -28,9 +28,6 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSettingRoutePr
     public async componentDidMount() {
         super.componentDidMount();
         const saleOrder: ISaleOrder = await RequestUtil.get<ISaleOrder>(`/tower-market/saleOrder/${ this.props.match.params.id }`);
-        this.setState({
-            saleOrder: saleOrder
-        });
         saleOrder.orderProductDtos = saleOrder.orderProductVos?.map<IProductVo>((product: IProductVo, index: number): IProductVo => {
             return {
                 ...product,
@@ -41,10 +38,12 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSettingRoutePr
         this.setState({
             saleOrder: {
                 ...saleOrder,
+                price: saleOrder.price == -1 ? undefined : saleOrder.price,
                 orderProductDtos: saleOrder.orderProductDtos,
                 contractInfoDto: saleOrder.contractInfoVo
             },
-            orderQuantity: saleOrder.orderQuantity
+            orderQuantity: saleOrder.orderQuantity,
+            isSetting: true
         })
         this.getForm()?.setFieldsValue({
             totalWeight: saleOrder.orderQuantity,
@@ -62,7 +61,9 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSettingRoutePr
             signCustomerId: saleOrder.contractInfoVo?.signCustomerId,
             signCustomerName: saleOrder.contractInfoVo?.signCustomerName,
             orderProductDtos: saleOrder.orderProductDtos,
+            price: saleOrder.price == -1 ? '-' : saleOrder.price,
         });
+        this.getColumnsChange(saleOrder.contractInfoVo?.chargeType || 0);
     }
 
     /**
