@@ -390,7 +390,7 @@
            dataIndex: 'sectionCount',
            align: "center",
            render:(text, record, index)=>{
-                return  <InputNumber min={ 0 } defaultValue={ text < 0 ? '' : text } onChange={ value => this.handleFields(index,value) } style={ text? title : titleC } bordered={ false } precision={ 0 } max={ (record as IParagraph).allocatedSectionCount }/>
+                return  <InputNumber min={ 0 } defaultValue={ text == '-1' ? '' : text } onChange={ value => this.handleFields(index,value) } style={ text? title : titleC } bordered={ false } precision={ 0 } max={ (record as IParagraph).allocatedSectionCount }/>
             }
         },{
            key: 'allocatedSectionCount',

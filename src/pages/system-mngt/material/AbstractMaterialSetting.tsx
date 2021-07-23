@@ -282,7 +282,7 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
                             </Button>
                         </Popconfirm>
                  
-        }
+            }   
       }]
     }
 
@@ -292,9 +292,10 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
      private onDelete(item: IMaterial, index: number): () => void {
         const { materialData } = this.state;
         return async () => {
-            materialData&&materialData.splice(index, 1);
+            materialData && materialData.splice(index, 1);
+            this.getForm()?.setFieldsValue({ materialData: [...materialData] });
             this.setState({
-                materialData,
+                materialData:[...materialData],
             })
         };
     }
@@ -400,32 +401,6 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
      public getFormItemGroups(): IFormItemGroup[][] {
          return []
      }
-
-    //  public handleFields = (index:number, fieldKey:string, value:string | number) => {
-    //     let data = this.state?.materialData;
-    //     let repeat = false;
-    //     if(data){
-    //         if(fieldKey === 'materialCode'){
-    //             data.filter((item:IMaterial) => { 
-    //                 return item.materialCategory === data[index].materialCategory 
-    //             }).map((item:IMaterial)=>{
-    //                 if(item.materialCode === value){
-    //                     repeat = true;
-    //                 }
-    //             })
-    //         }
-    //         let row = data[index];
-    //         row[fieldKey]= value;
-    //         if(repeat){
-    //             message.error('相同类型的物料编号保持唯一性，请修复！');
-    //         }
-    //         this.setState({
-    //             materialData:data,
-    //             repeat
-    //         })
-            
-    //     };
-    // }
         
 
 
@@ -444,6 +419,7 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             weightAlgorithm: "",
         };
         const data = [...materialValue, nRow];
+        console.log(data)
         this.setState({
             materialData: data
         })

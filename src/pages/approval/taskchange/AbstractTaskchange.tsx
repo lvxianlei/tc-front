@@ -125,13 +125,12 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
     protected getReturnPath(): string {
         return "/approval/task";
     }
-    /**
-     * @override
-     * @description Gets primary operation button label
-     * @returns primary operation button label 
+     /**
+     * @description Gets primary operation button
+     * @returns primary operation button
      */
-    protected getPrimaryOperationButtonLabel(): string {
-        return '通过'
+    protected getPrimaryOperationButton(): React.ReactNode {
+        return <Button type="primary" htmlType="submit">通过</Button>;
     }
     protected renderExtraOperationArea(): React.ReactNode {
         return <Button type="primary" htmlType="button" onClick={this.onReject}>驳回</Button>

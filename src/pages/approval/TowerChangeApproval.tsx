@@ -324,11 +324,7 @@ class TowerChangeApproval extends AbstractTowerShapeSetting<ITowerChangeApproval
      * @description Gets primary operation button label
      * @returns primary operation button label 
      */
-     /**
-     * @description Gets primary operation button
-     * @returns primary operation button
-     */
-      protected getPrimaryOperationButton(): React.ReactNode {
+    protected getPrimaryOperationButton(): React.ReactNode {
         return <Button type="primary" htmlType="submit">通过</Button>;
     }
 
