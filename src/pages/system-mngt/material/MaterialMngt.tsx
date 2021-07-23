@@ -96,6 +96,9 @@ import { DataNode } from 'antd/lib/tree';
             dataIndex: 'proportion',
             align: "center",
             width: 200,
+            render:(text)=>{
+                return text=='-1'?'':text
+            }
         },{
             key: 'weightAlgorithm',
             title: '重量算法',
