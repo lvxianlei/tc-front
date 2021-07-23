@@ -15,7 +15,6 @@ import RequestUtil from '../../../utils/RequestUtil';
 import { IProductVo } from './AbstractSaleOrderSetting';
 
 export interface ITowerSelectionModalProps extends IAbstractSelectableModalProps {
-    readonly readonly?: boolean; 
     readonly id?: string | number;
 }
 export interface ITowerSelectionModalState extends IAbstractSelectableModalState {
@@ -40,7 +39,6 @@ export default class TowerSelectionModal extends AbstractSelectableModal<ITowerS
     }
 
     public showModal =  (): void => {
-        console.log(this.props.selectKey)
         if(this.props.id) {
             this.setState({
                 isModalVisible: true
@@ -56,7 +54,7 @@ export default class TowerSelectionModal extends AbstractSelectableModal<ITowerS
         let resData: IProductVo[] = await RequestUtil.get(`/tower-market/contract/product/${ this.props.id }`);
         const selectKeys: [] = this.props.selectKey;
         selectKeys.map((item: IProductVo) => {
-            resData = resData.filter(res => res.productNumber !== item.productNumber );
+            resData = resData.filter(res => res.productId !== item.productId );
         })
         this.setState({
             tableDataSource: resData,
@@ -161,7 +159,7 @@ export default class TowerSelectionModal extends AbstractSelectableModal<ITowerS
     public render(): React.ReactNode {
         return (
             <>
-                <Button onClick={ this.showModal } type="primary" className={ this.props.readonly? orderStyles.isShow : orderStyles.addBtn }>新增行</Button>
+                <Button onClick={ this.showModal } type="primary" className={ orderStyles.addBtn }>新增行</Button>
                 <Modal 
                     title={ this.state.confirmTitle } 
                     visible={this.state.isModalVisible} 
