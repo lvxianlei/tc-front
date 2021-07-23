@@ -625,7 +625,7 @@ enum StepTitleItem {
                         <>
                             <div className={styles.column_to_row}>
                                 <div className={styles.title}>产品信息</div>
-                                <ProductSelectionComponent onSelect={ this.onProductSelect }  saleOrderId={ this.state?.task?.saleOrderId }/>
+                                <ProductSelectionComponent onSelect={ this.onProductSelect }  saleOrderId={ this.state?.task?.saleOrderId } selectKey={this.state.productDataSource}/>
                             </div>
                             <Table 
                                 columns={this.columns()} 
