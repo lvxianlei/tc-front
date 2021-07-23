@@ -280,12 +280,8 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                             message: '请填写编号！' 
                         },
                         {
-                            pattern: /^[^\s]*$/,
-                            message: '禁止输入空格',
-                        },
-                        {
-                            pattern: /^[^\u4e00-\u9fa5]*$/,
-                            message: '禁止输入中文',
+                            pattern: /^[^(\s)|(\u4e00-\u9fa5)]*$/,
+                            message: '禁止输入中文或空格',
                         }]} 
                         initialValue={ defaultCode }
                     >

@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Input, InputNumber, Select, Table, TableColumnType, TreeSelect } from 'antd';
+import { Button, Input, InputNumber, message, Popconfirm, Select, Table, TableColumnType, TreeSelect } from 'antd';
 import Form, { FormInstance, FormProps, RuleObject } from 'antd/lib/form';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { RouteComponentProps } from 'react-router';
@@ -16,6 +16,7 @@ import { unitOptions } from '../../../configuration/DictionaryOptions';
 
 export interface IAbstractMaterialSettingState extends IAbstractFillableComponentState {
     readonly materialData?: any;
+    readonly repeat?: boolean;
     readonly treeData?: IMaterialTree[];
 }
 
@@ -76,7 +77,6 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
                      <TreeSelect
                             treeData={ this.wrapRole2DataNode( this.state.treeData ) } 
                             showSearch={ true }
-                            allowClear
                             onChange = {(value: any, labelList: React.ReactNode[],extra: any)=>this.materialTreeChange(value,labelList,extra,index)}
                         />
                 </Form.Item>
@@ -93,10 +93,21 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
                     required: true,
                     message: '请输入物料编号'
                 },{
-                    pattern: /^[^\u4e00-\u9fa5]*$/,
-                    message: '禁止输入中文',
+                    pattern: /^[^(\u4e00-\u9fa5)|(\s)]*$/,
+                    message: '禁止输入中文或空格',
+                },{
+                    validator: (rule: RuleObject, value: IMaterial, callback: (error?: string) => void) => {
+                        this.checkMaterialCode(value, index).then(res => {
+                            console.log(res)
+                            if (res === -1) {
+                                callback()
+                            } else {
+                                callback('相同类型的物料编号保持唯一性！');
+                            }
+                        })
+                    }
                 }]}>
-                    { (record as IMaterial).id?<div>{text}</div>:<Input onChange={e => this.handleFields(index, 'materialCode', e.target.value)} defaultValue={ text }   maxLength={ 20 }/> }
+                    { (record as IMaterial).id?<div>{text}</div>:<Input  defaultValue={ text }   maxLength={ 20 }/> }
                 </Form.Item>
             )
             
@@ -117,8 +128,11 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
                       }
                       return Promise.resolve();
                     },
-                })]}>
-                    <Input onChange={e => this.handleFields(index, 'productName', e.target.value)}    maxLength={ 20 }/>
+                }),{
+                    pattern: /^[^\s]*$/,
+                    message: '禁止输入空格',
+                },]}>
+                    <Input maxLength={ 20 }/>
                 </Form.Item>
             )
         },{
@@ -129,7 +143,7 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             width: 200,
             render: (text: string, record: IMaterial, index: number): React.ReactNode => (
                 <Form.Item name={['materialData', index, 'shortcutCode']} >
-                    <Input onChange={e => this.handleFields(index, 'shortcutCode', e.target.value)}  maxLength={ 10 }/>
+                    <Input   maxLength={ 10 }/>
                 </Form.Item>
             )
         },{
@@ -142,8 +156,11 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
                 <Form.Item name={['materialData', index, 'rowMaterial']} rules= {[{
                     required: true,
                     message: '请输入材料'
+                },{
+                    pattern: /^[^\s]*$/,
+                    message: '禁止输入空格',
                 }]}>
-                    <Input onChange={e => this.handleFields(index, 'rowMaterial', e.target.value)}    maxLength={ 20 }/>
+                    <Input     maxLength={ 20 }/>
                 </Form.Item>
             )
         },{
@@ -156,8 +173,11 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
                 <Form.Item name={['materialData', index, 'materialTexture']} rules= {[{
                     required: true,
                     message: '请输入材质'
+                },{
+                    pattern: /^[^\s]*$/,
+                    message: '禁止输入空格',
                 }]}>
-                    <Input onChange={e => this.handleFields(index, 'materialTexture', e.target.value)}   maxLength={ 20 }/>
+                    <Input    maxLength={ 20 }/>
                 </Form.Item>
             )
         },{
@@ -177,21 +197,27 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
                       }
                       return Promise.resolve();
                     },
-                })]}>
-                    <Input onChange={e => this.handleFields(index, 'spec', e.target.value)} maxLength={ 20 }/>
+                }),{
+                    pattern: /^[^\s]*$/,
+                    message: '禁止输入空格',
+                }]}>
+                    <Input  maxLength={ 20 }/>
                 </Form.Item>
             )
         },{
             key: 'unit',
-            title: '计量单位',
+            title: '* 计量单位',
             dataIndex: 'unit',
             align: "center",
             width: 200,
             render: (text: string, record: IMaterial, index: number): React.ReactNode => (
-                <Form.Item name={['materialData', index, 'unit']}>
-                    <Select style={{width:'100%'}} onChange={(value:string) => this.handleFields(index, 'unit', value)} >
+                <Form.Item name={['materialData', index, 'unit']} rules= {[{
+                    required: true,
+                    message: '请输入计量单位'
+                }]}>
+                    <Select style={{width:'100%'}}  >
                         { unitOptions && unitOptions.map(({ id, name }, index) => {
-                            return <Select.Option key={ index } value={ id }>
+                            return <Select.Option key={ index } value={ `${id}` }>
                                 { name }
                             </Select.Option>
                         }) }
@@ -206,7 +232,7 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             width: 200,
             render: (text: string, record: IMaterial, index: number): React.ReactNode => (
                 <Form.Item name={['materialData', index, 'proportion']}>
-                    <InputNumber onChange={e => this.handleFields(index, 'proportion', e)} precision={ 4 }/>
+                    <InputNumber precision={ 4 } value={ text=='-1' ? '' : '' }/>
                 </Form.Item>
             )
         },{
@@ -217,7 +243,7 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             width: 300,
             render: (text: string, record: IMaterial, index: number): React.ReactNode => (
                 <Form.Item name={['materialData', index, 'weightAlgorithm']}>
-                    <Select style={{width:'100%'}} onChange={ (value: string) => this.handleFields(index, 'weightAlgorithm', value) } >
+                    <Select style={{width:'100%'}} >
                         <Select.Option value={ '0' } >
                             比重*体积（钢板类）
                         </Select.Option>
@@ -235,7 +261,7 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             width: 400,
             render: (text: string, record: IMaterial, index: number): React.ReactNode => (
                 <Form.Item name={['materialData', index, 'description']}>
-                    <Input.TextArea onChange={e => this.handleFields(index, 'description', e.target.value)} rows={1} maxLength={ 300 }/>
+                    <Input.TextArea  rows={1} maxLength={ 300 }/>
                 </Form.Item>
             )
         },{
@@ -245,11 +271,17 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             align: "center",
             width: 100,
             render: (_, record,index) =>{
-                return <ConfirmableButton confirmTitle="确定删除这条数据吗？" 
-                            icon={ <DeleteOutlined /> }
-                            onConfirm={ this.onDelete(record, index) } disabled={(record as IMaterial).id? true : false}>
-                            删除
-                        </ConfirmableButton>
+                return  <Popconfirm 
+                            title="确定删除这条数据吗？" 
+                            placement="topRight" 
+                            onConfirm={ this.onDelete(record, index) } 
+                            disabled={ (record as IMaterial).id? true : false }
+                        >
+                            <Button disabled={ (record as IMaterial).id? true : false} icon={<DeleteOutlined />} type="primary" ghost>
+                                删除
+                            </Button>
+                        </Popconfirm>
+                 
         }
       }]
     }
@@ -266,9 +298,36 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             })
         };
     }
+
+
     /**
-         * 遍历treeArray
-         */
+     * @description 验证杆塔号
+     */
+    public checkMaterialCode = (value: IMaterial, index: number): Promise<void | any> =>{
+        return new Promise(async (resolve, reject) => {  // 返回一个promise
+            const materialDataList: IMaterial[] = this.getForm()?.getFieldsValue(true).materialData || [];
+            if(value) {
+                const material = materialDataList.filter((item:IMaterial) => { 
+                    return item.materialCategory&&materialDataList[index]&&materialDataList[index].materialCategory&&item.materialCategory === materialDataList[index].materialCategory 
+                })
+                resolve(material.map((items: IMaterial, ind: number) => {
+                    if(index !== ind && items.materialCode && items.materialCode === value){
+                        return false
+                    }else {
+                        return true
+                    }
+                }).findIndex(item => item === false))
+            } else {
+                resolve(false)
+            }
+        }).catch(error => {
+            Promise.reject(error)
+        })
+    }
+
+    /**
+     * 遍历treeArray
+     */
     protected expandKeysByValue(materialTrees: IMaterialTree[]) {
         let data: IMaterialTree[] = [];
         data = this.expandKeysId(materialTrees,data);
@@ -342,16 +401,31 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
          return []
      }
 
-     public handleFields = (index:number, fieldKey:string, value:string | number) => {
-        let data = this.state?.materialData;
-        if(data){
-            let row = data[index];
-            row[fieldKey]= value;
-            this.setState({
-                materialData:data
-            })
-        };
-    }
+    //  public handleFields = (index:number, fieldKey:string, value:string | number) => {
+    //     let data = this.state?.materialData;
+    //     let repeat = false;
+    //     if(data){
+    //         if(fieldKey === 'materialCode'){
+    //             data.filter((item:IMaterial) => { 
+    //                 return item.materialCategory === data[index].materialCategory 
+    //             }).map((item:IMaterial)=>{
+    //                 if(item.materialCode === value){
+    //                     repeat = true;
+    //                 }
+    //             })
+    //         }
+    //         let row = data[index];
+    //         row[fieldKey]= value;
+    //         if(repeat){
+    //             message.error('相同类型的物料编号保持唯一性，请修复！');
+    //         }
+    //         this.setState({
+    //             materialData:data,
+    //             repeat
+    //         })
+            
+    //     };
+    // }
         
 
 
