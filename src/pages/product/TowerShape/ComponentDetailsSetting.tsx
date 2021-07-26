@@ -282,7 +282,7 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
             type: (
                 <InputNumber 
                     stringMode={ false } 
-                    min="0"
+                    min="1"
                     step="1"
                     precision={ 0 }
                     className={ layoutStyles.width100 }
