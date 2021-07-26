@@ -27,26 +27,26 @@ import { IMaterial, IMaterialTree } from './IMaterial';
      */
      public async componentDidMount() {
         super.componentDidMount();
-        const material: IMaterial = await RequestUtil.get<IMaterial>(`/tower-system/material/detail/${ this.props.match.params.id }`);
+        const material: IMaterial[] = await RequestUtil.get<IMaterial[]>(`/tower-system/material/detail/${ this.props.match.params.id }`);
         const resData: IMaterialTree[] = await RequestUtil.get<IMaterialTree[]>('/tower-system/materialCategory/tree');
+        const materialValue = material.map((item:IMaterial)=>{
+            return {
+                ...item,
+                proportion: item.proportion == '-1' ? undefined : item.proportion
+            }
+        })
         this.setState({
-            materialData: material,
+            materialData: [ ...materialValue ],
             treeData: resData,
         });
         this.getForm()?.setFieldsValue({
-            materialData: material
+            materialData: materialValue
         });
     }
     protected getButton(){
         return null
     }
 
-    public async updateV(){
-        const material: IMaterial = await RequestUtil.get<IMaterial>(`/tower-system/material/detail/${ this.props.match.params.id }`);
-        this.setState({
-            materialData: material,
-        });
-    }
  
      /**
       * @implements
