@@ -37,7 +37,13 @@ import { IMaterial, IMaterialTree } from './IMaterial';
       */
      public async onSubmit(values: Record<string, any>): Promise<void> {
         values = this.getForm()?.getFieldsValue(true).materialData;
-        return await RequestUtil.post('/tower-system/material', values);
+        if(values){
+            return await RequestUtil.post('/tower-system/material', values);
+        }
+        else{
+            message.error('当前没有新增数据，不可保存！');
+            return Promise.reject(false)
+        }
          
      }
  }
