@@ -43,6 +43,7 @@ import styles from './AbstractSelectableModal.module.less';
     readonly unit: string;
     readonly voltageGrade: number;
     readonly status: number;
+    readonly id: string;
  }
  
  /**
@@ -73,14 +74,18 @@ import styles from './AbstractSelectableModal.module.less';
          this.getTable({})
      }
 
-     //接口、获值
-     public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-         const resData: IOrder[] = await RequestUtil.get<IOrder[]>(`/tower-market/saleOrder/orderProduct/${this.props.saleOrderId}`);
-         this.setState({
-             ...filterValues,
-             tableDataSource: resData,
-         });
-     }
+    //接口、获值
+    public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
+        let resData: IOrder[] = await RequestUtil.get<IOrder[]>(`/tower-market/saleOrder/orderProduct/${this.props.saleOrderId}`);
+        const selectKeys: [] = this.props.selectKey;
+        selectKeys.map((item: IOrder) => {
+            resData = resData.filter(res => res.id !== item.id );
+        })
+        this.setState({
+            ...filterValues,
+            tableDataSource: resData,
+        });
+    }
     
      //查询字段
      public getFilterFormItemProps(): FormItemProps[]  {
@@ -159,6 +164,17 @@ import styles from './AbstractSelectableModal.module.less';
      protected getTableRowKey(): string | GetRowKey<object> {
          return 'id';
      }
+
+
+     public showModal =  (): void => {
+        if(this.props.saleOrderId) {
+            this.setState({
+                isModalVisible: true
+            })
+            this.getTable({})
+        }
+        
+    }
 
      public render(): React.ReactNode {
         return (

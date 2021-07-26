@@ -231,8 +231,8 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             align: "center",
             width: 200,
             render: (text: string, record: IMaterial, index: number): React.ReactNode => (
-                <Form.Item name={['materialData', index, 'proportion']}>
-                    <InputNumber precision={ 4 } value={ text == '-1' ? '' : text } min='0'/>
+                <Form.Item name={['materialData', index, 'proportion']} >
+                    <InputNumber precision={ 4 }  min='0.0001' value={text}/>
                 </Form.Item>
             )
         },{
@@ -274,7 +274,7 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
                 return  <Popconfirm 
                             title="确定删除这条数据吗？" 
                             placement="topRight" 
-                            onConfirm={ this.onDelete(record, index) } 
+                            onConfirm={ () => this.onDelete(record, index) } 
                             disabled={ (record as IMaterial).id? true : false }
                         >
                             <Button disabled={ (record as IMaterial).id? true : false} icon={<DeleteOutlined />} type="primary" ghost>
@@ -289,15 +289,13 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
 
 
 
-     private onDelete(item: IMaterial, index: number): () => void {
-        const { materialData } = this.state;
-        return async () => {
-            materialData && materialData.splice(index, 1);
-            this.getForm()?.setFieldsValue({ materialData: [...materialData] });
-            this.setState({
-                materialData:[...materialData],
-            })
-        };
+     private onDelete(item: IMaterial, index: number){
+        const materialValue = this.getForm()?.getFieldsValue(true).materialData;
+        materialValue && materialValue.splice(index, 1);
+        this.getForm()?.setFieldsValue({ materialData: [...materialValue] });
+        this.setState({
+            materialData:[...materialValue],
+        })
     }
 
 
@@ -439,13 +437,13 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             render: (): React.ReactNode => {
                 return (
                     <>
-                       
-                        {this.getButton()}
+                        { this.getButton() }
                         <Table
                             bordered
-                            dataSource={[...tableData]}
-                            columns={this.getColumn()}
+                            dataSource={ [...tableData] }
+                            columns={ this.getColumn() }
                             scroll={{ x: 1300 }}
+                            pagination={ false }
                             />
                     </>
                 );
