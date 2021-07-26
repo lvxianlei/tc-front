@@ -625,6 +625,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         const weightFour: number = productDTOList[index].towerLeg4Weight || 0;
                         const towerFootWeight: number = productDTOList[index].towerFootWeight || 0;
                         weight = Number(bodyWeight) + Number(weightOne) + Number(weightTwo) + Number(weightThree) + Number(weightFour) + Number(towerFootWeight) + Number(itemTotalWeight);
+                        weight = parseFloat(weight.toFixed(2));
                         productDTOList[index] = {
                             ...productDTOList[index],
                             productWeight: weight
@@ -785,6 +786,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
         })
         let weight: number = 0;
         weight =  Number(bodyWeight) + Number(weightOne) + Number(weightTwo) + Number(weightThree) + Number(weightFour) + Number(towerFootWeight) + Number(itemTotalWeight);
+        weight = parseFloat(weight.toFixed(2));
         productDtos[index] = {
             ...productDtos[index],
             productWeight: weight
