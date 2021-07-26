@@ -62,4 +62,5 @@ export interface IProductDeployVOList {
     readonly number?: number;
     readonly partNum?: string;
     readonly productId?: string | number;
+    readonly status?: number; //等于2时不可编辑 
 }
