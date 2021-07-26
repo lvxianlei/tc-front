@@ -232,7 +232,7 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             width: 200,
             render: (text: string, record: IMaterial, index: number): React.ReactNode => (
                 <Form.Item name={['materialData', index, 'proportion']} >
-                    <InputNumber precision={ 4 }  min='0' value={text}/>
+                    <InputNumber precision={ 4 }  min='0.0001' value={text}/>
                 </Form.Item>
             )
         },{
