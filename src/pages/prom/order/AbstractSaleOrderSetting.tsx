@@ -857,7 +857,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 price: this.state.saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? undefined : saleOrder?.totalPrice,
                 totalAmount: this.state.saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? undefined : Number.parseFloat(((saleOrder?.totalPrice || 0 ) * selectedRows[0].productWeight).toFixed(2)),
                 tender: '',
-                description: '',
+                description: selectedRows[0].description
             };
             orderProductDtos.push(product);
             totalWeight = (Number(totalWeight) + Number(selectedRows[0].productWeight)) || 0;   
