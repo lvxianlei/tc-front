@@ -24,7 +24,7 @@ export interface IDetail {
     readonly singleWeight?: number;
     readonly rowMaterial?: string;
     readonly partNum?: string;
-    readonly number?: number;
+    readonly number: number;
     readonly materialTexture?: string;
     readonly length?: number;
     readonly drawingComponentId?: string | number;
