@@ -3,7 +3,7 @@
  * @copyright © 2021 Cory. All rights reserved
  */
  import { DeleteOutlined } from '@ant-design/icons';
- import { Button, Card, Col, FormItemProps, Input, Row, Select, Space, Table, TableColumnType, TablePaginationConfig, TableProps, Tree } from 'antd';
+ import { Button, Card, Col, FormItemProps, Input, Popconfirm, Row, Select, Space, Table, TableColumnType, TablePaginationConfig, TableProps, Tree } from 'antd';
  import { GetRowKey } from 'antd/lib/table/interface';
  import React from 'react';
  import { WithTranslation, withTranslation } from 'react-i18next';
@@ -162,6 +162,17 @@ import { DataNode } from 'antd/lib/tree';
              current: pagination.current || this.state.tablePagination?.current,
              size: pagination.pageSize ||this.state.tablePagination?.pageSize,
          });
+         if(resData?.records?.length == 0 && resData?.current>1){
+            this.fetchMaterials({},{
+                current: resData.current - 1,
+                pageSize: 10,
+                total: 0,
+                showSizeChanger: false
+            });
+            this.setState({
+                selectedMaterials:[]
+            })
+        }
          this.setState({
              ...filterValues,
              materials: resData.records,
@@ -229,6 +240,18 @@ import { DataNode } from 'antd/lib/tree';
              await RequestUtil.delete(`/tower-system/material?id=${items.map<string>((item: IMaterial): string => item?.id as string) }`);
              this.fetchMaterials();
      }
+     /**
+      * @description Determines whether delete on
+      * @param item 
+      * @returns delete 
+      */
+      private onDeleteAll = async (items: IMaterial[]) => {
+        await RequestUtil.delete(`/tower-system/material?id=${items.map<string>((item: IMaterial): string => item?.id as string) }`);
+        this.setState({
+           selectedMaterials:[]
+        })
+        this.fetchMaterials();
+}
 
     
      /**
@@ -236,7 +259,7 @@ import { DataNode } from 'antd/lib/tree';
       * @returns batch delete 
       */
      private onBatchDelete = () => {
-         return this.onDelete(this.state.selectedMaterials);
+         return this.onDeleteAll(this.state.selectedMaterials);
      }
  
      /**
@@ -360,11 +383,16 @@ import { DataNode } from 'antd/lib/tree';
                 <Button 
                     href={ `/sys/material/view/${this.state.selectedMaterials && this.state.selectedMaterials.map<string>((item: IMaterial): string => item?.id as string) }` } 
                     disabled={ !this.state.selectedMaterials?.length }>编辑</Button>
-                <ConfirmableButton confirmTitle="确定删除这些用户吗？" danger={ true }
-                    icon={ <DeleteOutlined /> }
-                    disabled={ !this.state.selectedMaterials?.length } onConfirm={ ()=> this.onBatchDelete() }>
-                    删除
-                </ConfirmableButton>
+                <Popconfirm 
+                    title="确定删除这条数据吗？" 
+                    placement="topRight" 
+                    onConfirm={ ()=> this.onBatchDelete() }
+                    disabled={ !this.state.selectedMaterials?.length }
+                >
+                    <Button disabled={ !this.state.selectedMaterials?.length } icon={<DeleteOutlined />} danger>
+                        删除
+                    </Button>
+                </Popconfirm>
             </Space>
         );
     }
