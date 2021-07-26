@@ -29,6 +29,7 @@ class MaterialExtractionNew extends AbstractMaterialExtractionSetting<IMaterialE
     public async onSubmit(values: Record<string, any>): Promise<void> {
         let value = {
             ...values,
+            ...this.state.materialExtraction,
             extractionMaterialSectionDTOList: this.state.paragraphDataSource,
             extractionMaterialComponentDTOList: this.state.detailDataSource
         };
