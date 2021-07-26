@@ -76,7 +76,7 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
         towerSection = towerSection.map((records: IProductDTOList) => {
             let productAdditional: number = 0;
             records.productAdditionalDTOList?.map((items: IProductAdditionalDTOList): number => {
-                return  productAdditional += (Number(items.weight) || 0);
+                return productAdditional += (Number(items.weight) || 0);
             })
             const productDeployRow: string[] | undefined = records.productDeployVOList?.map((items: IProductDeployVOList) => {
                 return items.partNum + '*' + items.number;
@@ -92,7 +92,7 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
                 towerLeg4Length: records.towerLeg4Length === -1 ? undefined : records.towerLeg4Length,
                 towerLeg4Weight: records.towerLeg4Weight === -1 ? undefined : records.towerLeg4Weight,
                 towerFootWeight: records.towerFootWeight === -1 ? undefined : records.towerFootWeight,
-                productAdditional: productAdditional,
+                productAdditional: parseFloat(productAdditional.toFixed(2)),
                 productDeployDTOList: records.productDeployVOList,
                 productDeploy: productDeployRow?.join('+')
             }
