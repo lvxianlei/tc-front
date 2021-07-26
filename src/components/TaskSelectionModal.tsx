@@ -52,8 +52,9 @@
 
      
      public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/taskNotice/getPageList', {
+         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/taskNotice', {
              ...filterValues,
+             taskReviewStatus: 1,
              current: pagination.current || this.state.tablePagination.current,
              size: pagination.pageSize ||this.state.tablePagination.pageSize
          });
