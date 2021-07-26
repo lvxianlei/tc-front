@@ -15,6 +15,8 @@
  export interface ITaskSelectionComponentState extends IAbstractSelectableModalState {
      readonly tableDataSource: ITask[];
  }
+
+
  
  export interface ITask {
      readonly id: string;
@@ -58,6 +60,13 @@
              current: pagination.current || this.state.tablePagination.current,
              size: pagination.pageSize ||this.state.tablePagination.pageSize
          });
+         if(resData?.records?.length == 0 && resData?.current && resData?.current>1){
+            this.getTable({},{
+                current: resData.current - 1,
+                pageSize: 10,
+                total: 0,
+            });
+        }
          this.setState({
              ...filterValues,
              tableDataSource: resData.records,
