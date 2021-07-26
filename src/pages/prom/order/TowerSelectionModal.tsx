@@ -87,6 +87,11 @@ export default class TowerSelectionModal extends AbstractSelectableModal<ITowerS
             dataIndex: 'lineName',
             width: 120
         }, {
+            key: 'productCategoryName',
+            title: '塔型',
+            dataIndex: 'productCategoryName',
+            width: 120
+        }, {
             key: 'productNumber',
             title: '杆塔号',
             dataIndex: 'productNumber',
@@ -105,46 +110,6 @@ export default class TowerSelectionModal extends AbstractSelectableModal<ITowerS
             key: 'productHeight',
             title: ' 呼高（m）',
             dataIndex: 'productHeight'
-        }, {
-            key: 'bodyWeight',
-            title: '身部重量（kg）',
-            dataIndex: 'bodyWeight'
-        }, {
-            key: 'towerLeg1Length',
-            title: '接腿1#长度（m）',
-            dataIndex: 'towerLeg1Length'
-        }, {
-            key: 'towerLeg1Weight',
-            title: '接腿1#重量（kg）',
-            dataIndex: 'towerLeg1Weight'
-        }, {
-            key: 'towerLeg2Length',
-            title: '接腿2#长度（m）',
-            dataIndex: 'towerLeg2Length'
-        }, {
-            key: 'towerLeg2Weight',
-            title: '接腿2#重量（kg）',
-            dataIndex: 'towerLeg2Weight'
-        }, {
-            key: 'towerLeg3Length',
-            title: '接腿3#长度（m）',
-            dataIndex: 'towerLeg3Length'
-        }, {
-            key: 'towerLeg3Weight',
-            title: '接腿3#重量（kg）',
-            dataIndex: 'towerLeg3Weight'
-        }, {
-            key: 'towerLeg4Length',
-            title: '接腿4#长度（m）',
-            dataIndex: 'towerLeg4Length'
-        }, {
-            key: 'towerLeg4Weight',
-            title: '接腿4#重量（kg）',
-            dataIndex: 'towerLeg4Weight'
-        }, {
-            key: 'towerFootWeight',
-            title: '塔脚板重量（kg）',
-            dataIndex: 'towerFootWeight'
         }, {
             key: 'productWeight',
             title: '杆塔重量（kg）',
