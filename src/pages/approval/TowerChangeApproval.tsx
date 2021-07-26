@@ -27,9 +27,9 @@ interface ITowerShapeChange extends ITowerShape {
 //类型
 enum StateType {
     UNCHANGED = 0,              //未变更
-    NEWREFERENCE = 1,         //新增引用
+    NEW_REFERENCE = 1,         //新增引用
     QUOTE = 2,                //删除引用
-    MODIFYREFERENCE = 3     //修改引用内容         
+    MODIFYR_EFERENCE = 3     //修改引用内容         
 }
 
 enum RecordType {
@@ -128,11 +128,11 @@ class TowerChangeApproval extends AbstractTowerShapeSetting<ITowerChangeApproval
                 switch (changeType) {
                     case StateType.UNCHANGED:
                         return '未变更';
-                    case StateType.MODIFYREFERENCE:
+                    case StateType.NEW_REFERENCE:
                         return '新增引用';
-                    case StateType.NEWREFERENCE:
-                        return '删除引用'
                     case StateType.QUOTE:
+                        return '删除引用'
+                    case StateType.MODIFYR_EFERENCE:
                         return '修改内容'
                 }
             }

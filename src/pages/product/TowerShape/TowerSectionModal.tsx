@@ -125,6 +125,7 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
                 return {
                     ...item,
                     productId: this.state.towerSection[index]?.id,
+                    status: this.state.towerSection[index]?.status
                 }
             })
             return {
@@ -360,7 +361,7 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
                     required: true,
                     message: '请输入段号'
                 }]}>
-                    <Input/>
+                    <Input disabled={ record.status === 2 }/>
                 </Form.Item> 
             )
         }, {
@@ -373,7 +374,7 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
                     required: true,
                     message: '请输入段号数'
                 }]}>
-                    <Input/>
+                    <Input disabled={ record.status === 2 }/>
                 </Form.Item> 
             )
         }, {
@@ -390,6 +391,7 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
                         okText="确认"
                         cancelText="取消"
                         onConfirm={ () => { this.onDelete(index, ind, record.id) } }
+                        disabled={ record.status === 2 }
                     >
                         <DeleteOutlined/>
                     </Popconfirm>

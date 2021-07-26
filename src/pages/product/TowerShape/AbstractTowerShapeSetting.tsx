@@ -29,6 +29,8 @@ export interface IAbstractTowerShapeSettingState extends IAbstractFillableCompon
     readonly isReference?: boolean;
     readonly productIdList?: (string| Number)[];
     readonly productAdditionalIdList?: (string| Number)[];
+    readonly productDeleteList?: IProductDTOList[];
+    readonly productAdditionalDeleteList?: IProductAdditionalDTOList[];
 }
 
 /**
@@ -549,10 +551,10 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         placement="topRight" 
                         okText="确认"
                         cancelText="取消"
-                        onConfirm={ () => { this.onDelete(index, record.id) } }
-                        disabled={ record.status === 2 || (isChange && record.status == 0 ) || (!isChange && record.status === 1) || (!isChange && record.status == 3 ) }
+                        onConfirm={ () => { this.onDelete(index, record) } }
+                        disabled={ record.status === 2 || (!isChange && record.status == 0 ) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
                     >
-                        <Button type="text" disabled={ record.status === 2 || (isChange && record.status == 0 ) || (!isChange && record.status === 1) || (!isChange && record.status == 3 ) }>
+                        <Button type="text" disabled={ record.status === 2 || (!isChange && record.status == 0 ) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }>
                             删除
                         </Button>
                     </Popconfirm>
@@ -700,7 +702,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         placement="topRight" 
                         okText="确认"
                         cancelText="取消"
-                        onConfirm={ () => { this.onModalDelete(index, ind, record.id) } }
+                        onConfirm={ () => { this.onModalDelete(index, ind, record) } }
                     >
                         <DeleteOutlined/>
                     </Popconfirm>
@@ -800,18 +802,21 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
      * @description 产品信息删除行
      * @param event 
      */
-    private onDelete = (index: number, id?: number | string): void => {
+    private onDelete = (index: number, record?: IProductDTOList): void => {
         const towerShape: ITowerShape | undefined = this.getForm()?.getFieldsValue(true);
         const productDTOList: IProductDTOList[] = towerShape?.productDTOList || [];
         productDTOList.splice(index, 1);
         const productIdList: (string| Number)[]  = this.state.productIdList || [];
-        id && productIdList.push(id);
+        const productDeleteList: IProductDTOList[] = this.state.productDeleteList || [];
+        record && record.id && productIdList.push(record.id);
+        record && record.id &&productDeleteList.push(record);
         this.setState({
             towerShape: {
                 ...towerShape,
                 productDTOList: [...productDTOList]
             },
-            productIdList: productIdList
+            productIdList: productIdList,
+            productDeleteList: productDeleteList
         })
     }
 
@@ -819,19 +824,22 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
      * @description 弹窗删除行
      * @param event 
      */
-    private onModalDelete = (index: number, ind: number, id?: number | string): void => {
+    private onModalDelete = (index: number, ind: number, record?: IProductAdditionalDTOList): void => {
         const towerShape: ITowerShape | undefined = this.getForm()?.getFieldsValue(true);
         const productDTOList: IProductDTOList[] = towerShape?.productDTOList || [];
         const productAdditionalDTOList: IProductAdditionalDTOList[] = productDTOList && productDTOList[index]?.productAdditionalDTOList || [];
         productAdditionalDTOList.splice(ind, 1);
         const productAdditionalIdList: (string| Number)[]  = this.state.productAdditionalIdList || [];
-        id && productAdditionalIdList.push(id);
+        const productAdditionalDeleteList: IProductAdditionalDTOList[] = this.state.productAdditionalDeleteList || [];
+        record && record.id && productAdditionalIdList.push(record.id);
+        record && record.id &&productAdditionalDeleteList.push(record);
         this.setState({
             towerShape: {
                 ...towerShape,
-                productDTOList: [...productDTOList] 
+                productDTOList: [...productDTOList]
             },
-            productAdditionalIdList: productAdditionalIdList
+            productAdditionalIdList: productAdditionalIdList,
+            productAdditionalDeleteList: productAdditionalDeleteList
         })
     }
 
