@@ -420,7 +420,7 @@ import { RuleObject } from 'antd/lib/form';
             let row = paragraphData[index];
             const dataSource: IDetail[] | undefined = detailData && detailData.map((item: IDetail)=>{
                 if(item.partNum === row.sectionSn){
-                    item.totalQuantity = value;
+                    item.totalQuantity = value*item.number;
                     item.totalWeight = (value*item.subtotalWeight).toFixed(2);
                 }
                 return item;
