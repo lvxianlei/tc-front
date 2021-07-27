@@ -161,12 +161,14 @@ enum StepTitleItem {
                 internalNumber: selectedRows[0].internalNumber,
                 projectName: selectedRows[0].projectName,
                 saleOrderId: selectedRows[0].id,
+                deliveryTime: '',
                 orderDeliveryTime: selectedRows[0].orderDeliveryTime,
                 signCustomerName: selectedRows[0].signCustomerName,
                 saleOrderNumber: selectedRows[0].saleOrderNumber,
             }
             this.getForm()?.setFieldsValue({
                 orderDeliveryTime: moment(selectedRows[0].orderDeliveryTime),
+                deliveryTime: '',
                 internalNumber: selectedRows[0].internalNumber,
                 saleOrderNumber: selectedRows[0].saleOrderNumber,
                 projectName: selectedRows[0].projectName,
