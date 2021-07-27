@@ -62,23 +62,29 @@ import { IProductAdditionalDTOList, IProductDTOList, ITowerShape } from './ITowe
       * @returns submit 
       */
      public async onSubmit(values: Record<string, any>): Promise<void> {
-        const productDTOList: IProductDTOList[] = this.getForm()?.getFieldsValue(true).productDTOList;
+        let productDTOList: IProductDTOList[] = this.getForm()?.getFieldsValue(true).productDTOList;
         const towerShape: ITowerShape = this.state.towerShape;
-        values.productDTOList = productDTOList;
         values.contractId = this.state.towerShape.contractId;
         values.productShapeNumber = this.state.towerShape.productShapeNumber;
-        productDTOList.map((items: IProductDTOList) => {
-            items.productAdditionalDTOList?.map((item: IProductAdditionalDTOList) => {
-                return {
-                    ...item,
-                    productId: items.id
+        productDTOList = productDTOList.map((items: IProductDTOList) => {
+            let productAdditionalDTOList: IProductAdditionalDTOList[] = items.productAdditionalDTOList || [];
+            productAdditionalDTOList?.forEach((item: IProductAdditionalDTOList, index: number) => {
+                if(item && item.additionalItem !== '' && item.weight) {
+                    productAdditionalDTOList[index] = {
+                        ...item,
+                        productId: items.id
+                    } 
+                } else {
+                    productAdditionalDTOList?.splice(index, 1);
                 }
             })
             return {
                 ...items,
-                productShapeId: towerShape.id
+                productAdditionalDTOList: productAdditionalDTOList,
+                productCategoryId: towerShape.id
             }
         })
+        values.productDTOList = productDTOList;
         values.id = this.getForm()?.getFieldsValue(true).id;
         values.productDeleteList = this.state.productDeleteList;
         values.productAdditionalDeleteList = this.state.productAdditionalDeleteList;
