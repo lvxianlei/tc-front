@@ -290,7 +290,7 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
 
 
      private onDelete(item: IMaterial, index: number){
-        const materialValue = this.getForm()?.getFieldsValue(true).materialData;
+        const materialValue = this.getForm()?.getFieldsValue(true).materialData || [];
         materialValue && materialValue.splice(index, 1);
         this.getForm()?.setFieldsValue({ materialData: [...materialValue] });
         this.setState({
