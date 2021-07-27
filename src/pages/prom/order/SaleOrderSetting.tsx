@@ -106,6 +106,7 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSettingRoutePr
         values.orderProductDtos = this.state.saleOrder?.orderProductDtos && this.state.saleOrder?.orderProductDtos.map((items: IProductVo, index: number) => {
             return {
                 ...items,
+                taskNoticeId: items.taskNoticeId == -1 ? '' : items.taskNoticeId,
                 tender: this.getForm()?.getFieldsValue(true).orderProductDtos[index].tender,
                 productCategoryId: items.productCategoryId,
                 productId: items.productId
