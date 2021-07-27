@@ -400,15 +400,16 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
                     </Space>
                     :
                     <Space direction="horizontal" size="small">
-                        <Button type="link" htmlType="button" disabled={ this.state.editingKey !== undefined }onClick={ this.editRow(record, ind) }>编辑</Button>
+                        <Button type="link" htmlType="button" disabled={ this.state.editingKey !== undefined } onClick={ this.editRow(record, ind) }>编辑</Button>
                         <Popconfirm 
                             title="要删除该条回款计划吗？" 
                             placement="topRight" 
                             okText="确认"
                             cancelText="取消"
                             onConfirm={ () => this.onDelete(record, ind) }
+                            disabled={ this.state.editingKey !== undefined } 
                         >
-                            <Button type="link">
+                            <Button type="link"  disabled={ this.state.editingKey !== undefined } >
                                 删除
                             </Button>
                         </Popconfirm>
