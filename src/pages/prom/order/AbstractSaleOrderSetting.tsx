@@ -293,10 +293,11 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             orderProductDtos.map<void>((items: IProductVo, ind: number): void => {
                 orderProductDtos[ind] = {
                     ...orderProductDtos[ind],
-                    totalAmount: totalPrice * (orderProductDtos[ind].num || 0) || 0,
+                    totalAmount: parseFloat((totalPrice * (orderProductDtos[ind].num || 0) || 0).toFixed(2)),
                     price: totalPrice
                 }
             })
+            console.log(orderProductDtos)
             this.getForm()?.setFieldsValue({ totalPrice: totalPrice, taxPrice: totalPrice, orderProductDtos: orderProductDtos });
         }
     }
