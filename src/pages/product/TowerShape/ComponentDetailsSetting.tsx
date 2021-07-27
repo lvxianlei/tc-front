@@ -85,6 +85,10 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
         towerSection = towerSection.map((items: ITowerSection) => {
             return {
                 ...items,
+                width: items.width == -1 ? undefined : items.width,
+                thickness: items.thickness == -1 ? undefined : items.thickness,
+                length: items.length == -1 ? undefined : items.length,
+                accurateWeight: items.accurateWeight == -1 ? undefined : items.accurateWeight,
                 subtotalWeight: (items.number || 0) * (items.singleWeight || 0)
             }
         })
