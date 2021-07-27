@@ -243,11 +243,11 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             width: 300,
             render: (text: string, record: IMaterial, index: number): React.ReactNode => (
                 <Form.Item name={['materialData', index, 'weightAlgorithm']}>
-                    <Select style={{width:'100%'}} >
-                        <Select.Option value={ '0' } >
+                    <Select style={{width:'100%'}} value={ text }>
+                        <Select.Option value={ '0' } id='0'>
                             比重*体积（钢板类）
                         </Select.Option>
-                        <Select.Option value={ '1' } >
+                        <Select.Option value={ '1' } id='1' >
                             比重*长度（角板类）
                         </Select.Option>
                     </Select>
