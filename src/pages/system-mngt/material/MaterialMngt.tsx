@@ -163,7 +163,9 @@ import { DataNode } from 'antd/lib/tree';
              size: pagination.pageSize ||this.state.tablePagination?.pageSize,
          });
          if(resData?.records?.length == 0 && resData?.current>1){
-            this.fetchMaterials({},{
+            this.fetchMaterials({
+                ...filterValues
+            },{
                 current: resData.current - 1,
                 pageSize: 10,
                 total: 0,
