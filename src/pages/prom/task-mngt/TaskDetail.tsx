@@ -124,8 +124,8 @@ import { ITask } from '../../ITask';
                  span: 8
              },
              rows: [[{
-                 label: '合同编号',
-                 value: task?.internalNumber
+                 label: '任务编号',
+                 value: this.props.match.params.id
              },  {
                  label: '关联订单',
                  value: task?.saleOrderNumber
@@ -172,7 +172,7 @@ import { ITask } from '../../ITask';
             },
             rows: [[{
                 label: '原材料标准',
-                value: task?.materialStandard
+                value: task?.materialStandardName == '-1' ? '': task?.materialStandardName
             },  {
                 label: '原材料要求',
                 value: task?.materialDemand

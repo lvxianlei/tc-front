@@ -58,7 +58,7 @@ import { message } from 'antd';
         values.productIds = this.state.selectedKeys.length > 0 ? this.state.selectedKeys : [];
         values.contractInfoDTO = this.state?.taskInfoDTO;
         values.saleOrderId = this.state?.task?.saleOrderId;
-        values.id = this.state?.task?.id;
+        values.id =  this.props.match.params.id;
         if(values.deliveryTime > values.orderDeliveryTime) {
             message.error("客户交货日期应小于订单交货日期！")
             return Promise.reject(false)
