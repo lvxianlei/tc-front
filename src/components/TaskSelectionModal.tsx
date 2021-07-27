@@ -61,7 +61,9 @@
              size: pagination.pageSize ||this.state.tablePagination.pageSize
          });
          if(resData?.records?.length == 0 && resData?.current && resData?.current>1){
-            this.getTable({},{
+            this.getTable({
+                ...filterValues,
+            },{
                 current: resData.current - 1,
                 pageSize: 10,
                 total: 0,

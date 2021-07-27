@@ -34,14 +34,11 @@ class MaterialExtractionNew extends AbstractMaterialExtractionSetting<IMaterialE
             extractionMaterialComponentDTOList: this.state.detailDataSource
         };
         if(this.state.paragraphDataSource && this.state.paragraphDataSource.length > 0) {
-            let submit:boolean = false;
-            this.state.paragraphDataSource.map((item:IParagraph)=>{
-                if(!item.sectionCount){
-                    submit = true;
-                }
+            const paragraphValue = this.state.paragraphDataSource.filter((item:IParagraph)=>{
+                return item.sectionCount == 0
             })
-            if(submit){
-                message.error("本次提料段数未填！")
+            if(paragraphValue.length === this.state.paragraphDataSource.length){
+                message.error("未提任何段，不可保存！")
                 return Promise.reject(false);
             }
             else{

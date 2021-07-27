@@ -402,9 +402,9 @@ import { RuleObject } from 'antd/lib/form';
            title: '* 本次提料段数',
            dataIndex: 'sectionCount',
            align: "center",
-           render:(text, record, index)=>{
-                return  <InputNumber min={ 0 } defaultValue={ text == '-1' ? '' : text } onChange={ value => this.handleFields(index,value) } style={ text? title : titleC } bordered={ false } precision={ 0 } />
-            }
+           render:(text, record, index)=>(
+               <InputNumber  defaultValue={ 0 } onChange={ value => this.handleFields(index,value) } style={{width:'100%'}} precision={ 0 } min={ 0 }/>
+           )
         },{
            key: 'allocatedSectionCount',
            title: '已提料段数',
@@ -414,7 +414,7 @@ import { RuleObject } from 'antd/lib/form';
     };
  
     public handleFields = (index:number, value:number) => {
-        let paragraphData = this.state?.paragraphDataSource;
+        let paragraphData = this.state.paragraphDataSource;
         let detailData = this.state?.detailDataSource;
         if(paragraphData){
             let row = paragraphData[index];
