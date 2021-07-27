@@ -55,18 +55,14 @@ import { IMaterial, IMaterialTree } from './IMaterial';
       * @returns submit 
       */
      public async onSubmit(values: Record<string, any>): Promise<void> {
-         let error = false;
-         this.state.materialData.map((item:IMaterial)=>{
-             if(!item.materialCategory || !item.materialCode || !item.productName || !item.rowMaterial || !item.materialTexture || !item.spec){
-                 error = true;
-             }
-         })
-         if(error){
-             message.error('必填项未填，请填写！');
-             return Promise.reject(false)
-         }else{
-            return await RequestUtil.put('/tower-system/material', this.state.materialData);
-         }
+        values = this.getForm()?.getFieldsValue(true).materialData;
+        if(values){
+            return await RequestUtil.post('/tower-system/material', values);
+        }
+        else{
+            message.error('当前没有新增数据，不可保存！');
+            return Promise.reject(false)
+        }
      }
  }
  
