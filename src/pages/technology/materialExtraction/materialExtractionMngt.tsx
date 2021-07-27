@@ -68,7 +68,9 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
             saleType: this.state.selectedTabKey === 'item_0' ? '' : this.state.selectedTabKey
         });
         if(resData?.records?.length == 0 && resData?.current>1){
-            this.fetchTableData({},{
+            this.fetchTableData({
+                ...filterValues,
+            },{
                 current: resData.current - 1,
                 pageSize: 10,
                 total: 0,
