@@ -367,7 +367,7 @@ enum StepTitleItem {
                         itemProps: [{
                             label: '原材料标准',
                             name: 'materialStandard',
-                            initialValue: '' || materialStandardOptions && materialStandardOptions.length > 0 && materialStandardOptions[0].id,
+                            initialValue: task?.materialStandard&&task?.materialStandard!=='-1'? task?.materialStandard : ('' || materialStandardOptions && materialStandardOptions.length > 0 && materialStandardOptions[0].id),
                             children: (
                                 <Select>
                                     { materialStandardOptions && materialStandardOptions.map(({ id, name }, index) => {
@@ -485,7 +485,7 @@ enum StepTitleItem {
                         itemProps: [{
                             label: '原材料标准',
                             name: 'materialStandard',
-                            initialValue: '' || materialStandardOptions && materialStandardOptions.length > 0 && materialStandardOptions[0].id,
+                            initialValue: task?.materialStandard&&task?.materialStandard!=='-1'?task?.materialStandard:'',
                             children: (
                                 <Select disabled>
                                     { materialStandardOptions && materialStandardOptions.map(({ id, name }, index) => {
