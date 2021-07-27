@@ -403,7 +403,7 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
 
 
     public handleAddRow = () => {
-        const materialValue = this.state.materialData || [];
+        const materialValue = this.getForm()?.getFieldsValue(true).materialData||[];
         let nRow:IMaterial = {
             description: "",
             materialCode: "",
