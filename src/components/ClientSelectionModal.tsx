@@ -94,7 +94,12 @@ export default class ClientSelectionComponent extends AbstractFilteredSelectionM
     }
 
     public onFilterSubmit = async (values: Record<string, any>) => {
-        this.getTable(values);
+        this.getTable(values, {
+            current: 1,
+            pageSize: 10,
+            total: 0,
+            showSizeChanger: false
+        });
     }
 
     public getTableDataSource(): object[]  {
