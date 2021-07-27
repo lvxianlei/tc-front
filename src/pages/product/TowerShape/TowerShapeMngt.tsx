@@ -24,7 +24,7 @@ export interface ITowerShapeMngtState extends IAbstractMngtComponentState {
     readonly internalNumber?: string | number;
     readonly projectName?: string;
     readonly steelProductShape?: string;
-    readonly productCategoryName?: string;
+    readonly name?: string;
 }
 
 export interface IResponseData {
@@ -43,7 +43,7 @@ interface ITowerShape {
     readonly materialTexture?: string;
     readonly operateStatus?: number;
     readonly partNumber?: number;
-    readonly productCategoryName?: string;
+    readonly name?: string;
     readonly productShapeName?: string;
     readonly productType?: number | string;
     readonly projectName?: string;
@@ -212,7 +212,7 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
             internalNumber: this.state.internalNumber,
             projectName: this.state.projectName,
             steelProductShape: this.state.steelProductShape,
-            productCategoryName: this.state.productCategoryName,
+            name: this.state.name,
         }, pagination);
     }
      
@@ -314,7 +314,7 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
                     internalNumber: this.state.internalNumber,
                     projectName: this.state.projectName,
                     steelProductShape: this.state.steelProductShape,
-                    productCategoryName: this.state.productCategoryName,
+                    name: this.state.name,
                 });
             });
         };
@@ -336,7 +336,7 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
             children: <Input placeholder="工程名称关键字" maxLength={ 200 }/>
         },
         {
-            name: 'productCategoryName',
+            name: 'name',
             children: <Input placeholder="塔型关键字" maxLength={ 200 }/>
         },
         {
