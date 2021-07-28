@@ -11,6 +11,8 @@ import RequestUtil from '../../../utils/RequestUtil';
 import { FormOutlined, DeleteOutlined } from '@ant-design/icons';
 import { IProductAdditionalDTOList, IProductDeployVOList, IProductDTOList } from './ITowerShape';
 import layoutStyles from '../../../layout/Layout.module.less';
+import { RuleObject } from 'antd/lib/form';
+import { StoreValue } from 'antd/lib/form/interface';
 
 export interface ITowerSectionModalProps {
     readonly id?: number | string;
@@ -347,6 +349,28 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
     }
 
     /**
+     * @description 验证杆塔号
+     */
+     public checkPartNum = (value: StoreValue, index: number, ind: number): Promise<void | any> =>{
+        return new Promise(async (resolve, reject) => {  // 返回一个promise
+            const productDeployDTOList: IProductDeployVOList[] = this.getForm()?.getFieldsValue(true)[index].productDeployDTOList || [];
+            if(value) {
+                resolve(productDeployDTOList.map((items: IProductDeployVOList, itemInd: number) => {
+                    if(ind !== itemInd && items.partNum === value) {
+                        return false
+                    } else {
+                        return true
+                    }
+                }).findIndex(item => item === false))
+            } else {
+                resolve(false)
+            }
+        }).catch(error => {
+            Promise.reject(error)
+        })
+    }
+
+    /**
       * @implements
       * @description Gets table columns
       * @param item 
@@ -361,7 +385,21 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
             render: (_: undefined, record: IProductDeployVOList, ind: number): React.ReactNode => (
                 <Form.Item initialValue={ record.partNum } name={[index, 'productDeployDTOList', ind ,'partNum']} rules= {[{
                     required: true,
-                    message: '请输入段号'
+                    validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                        if(value !== undefined) {
+                            this.checkPartNum(value, index, ind).then((res) => {
+                                console.log(res)
+                                if (res===-1) {
+                                    callback()
+                                } else {
+                                    callback('杆塔下段号唯一！');
+                                }
+                            })
+                        } else {
+                            callback('请输入段号');
+                        }
+                        
+                    }
                 }]}>
                     <Input disabled={ record.status === 2 }/>
                 </Form.Item> 
