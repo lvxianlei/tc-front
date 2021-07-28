@@ -618,6 +618,7 @@ enum StepTitleItem {
   
     public renderExtraSections(): IRenderedSection[] {
         const { checkStep, productDataSource } = this.state;
+        console.log(productDataSource)
         return [{
             title:'',
             render:():React.ReactNode => {
@@ -633,15 +634,15 @@ enum StepTitleItem {
                                 columns={this.columns()} 
                                 dataSource={ [...productDataSource] } 
                                 scroll={{ x: 1300 }} 
-                                rowKey={( record: IProduct ) => record?.id? record?.id : ''}
-                                rowSelection={{
-                                    type:'checkbox',
-                                    onChange:( selectedKeys: React.Key[] )=>{
-                                        this.setState({
-                                            selectedKeys
-                                        })
-                                    }
-                                }}
+                                // rowKey={( record: IProduct ) => record?.id? record?.id : ''}
+                                // rowSelection={{
+                                //     type:'checkbox',
+                                //     onChange:( selectedKeys: React.Key[] )=>{
+                                //         this.setState({
+                                //             selectedKeys
+                                //         })
+                                //     }
+                                // }}
                             />
                         </>
                     :null}

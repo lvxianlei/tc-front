@@ -48,10 +48,10 @@ import { message } from 'antd';
             message.error("客户交货日期应小于订单交货日期！")
             return Promise.reject(false)
         } 
-        else if(this.state.checkStep === StepItem.COMPLETE_PRODUCT_INFO && values.productIds == 0){
-            message.error("未选择产品信息，不可提交审批！")
-            return Promise.reject(false)
-        }
+        // else if(this.state.checkStep === StepItem.COMPLETE_PRODUCT_INFO && values.productIds == 0){
+        //     message.error("未选择产品信息，不可提交审批！")
+        //     return Promise.reject(false)
+        // }
         else {
             return this.state.checkStep === StepItem.COMPLETE_PRODUCT_INFO ? await RequestUtil.post('/tower-market/taskNotice/saveAndSubApprove', values):await RequestUtil.post('/tower-market/taskNotice', values)
         }
