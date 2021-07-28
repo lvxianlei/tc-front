@@ -122,10 +122,12 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
         const towerSection: IProductDTOList[] = this.getForm()?.getFieldsValue(true);
         values = Object.values(values);
         values = values.map((items: IProductDTOList, index: number) => {
-            const productDeployDTOList: IProductDeployVOList[] | undefined = towerSection[index].productDeployDTOList?.map((item: IProductDeployVOList) => {
+            const productDeploy: IProductDeployVOList[] | undefined = this.state.towerSection[index]?.productDeployDTOList || [];
+            const productDeployDTOList: IProductDeployVOList[] | undefined = towerSection[index].productDeployDTOList?.map((item: IProductDeployVOList, ind: number) => {
                 return {
                     ...item,
-                    productId: this.state.towerSection[index]?.id
+                    productId: this.state.towerSection[index]?.id,
+                    status: productDeploy[ind].status || 1 
                 }
             })
             return {
