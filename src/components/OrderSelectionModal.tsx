@@ -65,6 +65,15 @@ import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponse
              current: pagination.current || this.state.tablePagination.current,
              size: pagination.pageSize ||this.state.tablePagination.pageSize
          });
+         if(resData?.records?.length == 0 && resData?.current && resData?.current>1){
+            this.getTable({
+                ...filterValues,
+            },{
+                current: resData.current - 1,
+                pageSize: 10,
+                total: 0,
+            });
+        }
          this.setState({
              ...filterValues,
              tableDataSource: resData.records,
