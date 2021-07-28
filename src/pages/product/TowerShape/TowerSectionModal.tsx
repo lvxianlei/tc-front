@@ -124,8 +124,7 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
             const productDeployDTOList: IProductDeployVOList[] | undefined = towerSection[index].productDeployDTOList?.map((item: IProductDeployVOList) => {
                 return {
                     ...item,
-                    productId: this.state.towerSection[index]?.id,
-                    status: this.state.towerSection[index]?.status
+                    productId: this.state.towerSection[index]?.id
                 }
             })
             return {
