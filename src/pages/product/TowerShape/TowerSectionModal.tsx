@@ -3,13 +3,14 @@
  * @copyright © 2021
  */
 
-import { Button, Form, FormInstance, Input, Modal, Popconfirm, Space, Table, TableColumnType } from 'antd';
+import { Button, Form, FormInstance, Input, InputNumber, Modal, Popconfirm, Space, Table, TableColumnType } from 'antd';
 import { ColumnType} from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 import RequestUtil from '../../../utils/RequestUtil';
 import { FormOutlined, DeleteOutlined } from '@ant-design/icons';
 import { IProductAdditionalDTOList, IProductDeployVOList, IProductDTOList } from './ITowerShape';
+import layoutStyles from '../../../layout/Layout.module.less';
 
 export interface ITowerSectionModalProps {
     readonly id?: number | string;
@@ -373,7 +374,14 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
                     required: true,
                     message: '请输入段号数'
                 }]}>
-                    <Input disabled={ record.status === 2 }/>
+                    <InputNumber 
+                        stringMode={ false }
+                        min="1"
+                        max="10"
+                        step="1"
+                        precision={ 0 }
+                        className={ layoutStyles.width100 } 
+                        disabled={ record.status === 2 }/>
                 </Form.Item> 
             )
         }, {
