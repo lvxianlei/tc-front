@@ -114,6 +114,15 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSettingRoutePr
         })
         values = {
             ...values,
+            exchangeRate: values.exchangeRate === null ? 0 : values.exchangeRate,
+            foreignExchangeAmount: values.foreignExchangeAmount === null ? 0 : values.foreignExchangeAmount,
+            foreignPrice: values.foreignPrice === null ? 0 : values.foreignPrice,
+            guaranteeType: values.guaranteeType === null ? 0 : values.guaranteeType,
+            guaranteeAmount: values.guaranteeAmount === null ? 0 : values.guaranteeAmount,
+            portCharge: values.portCharge === null ? 0 : values.portCharge,
+            insuranceCharge: values.insuranceCharge === null ? 0 : values.insuranceCharge,
+            commissionCharge: values.commissionCharge === null ? 0 : values.commissionCharge,
+            creditInsurance: values.creditInsurance === null ? 0 : values.creditInsurance,
             contractInfoDto
         }
         return await RequestUtil.put('/tower-market/saleOrder', {
