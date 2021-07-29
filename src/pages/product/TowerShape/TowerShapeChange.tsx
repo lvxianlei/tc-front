@@ -86,8 +86,8 @@ import { IProductAdditionalDTOList, IProductDTOList, ITowerShape } from './ITowe
         })
         values.productDTOList = productDTOList;
         values.id = this.getForm()?.getFieldsValue(true).id;
-        values.productDeleteList = this.state.productDeleteList;
-        values.productAdditionalDeleteList = this.state.productAdditionalDeleteList;
+        values.productDeleteList = this.state.productDeleteList || [];
+        values.productAdditionalDeleteList = this.state.productAdditionalDeleteList || [];
         return await RequestUtil.post('/tower-data-archive/productCategory/submitProductChange', values);
      }
  }
