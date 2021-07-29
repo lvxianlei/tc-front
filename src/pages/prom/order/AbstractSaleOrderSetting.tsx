@@ -545,12 +545,12 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             }, {
                 label: '不含税金额',
                 name: 'amount',
-                initialValue: saleOrder?.amount,
+                initialValue: saleOrder?.amount === 0 ? undefined : saleOrder?.amount,
                 children: <Input  prefix="￥" disabled/>
             }, {
                 label: '不含税单价',
                 name: 'price',
-                initialValue: saleOrder?.price,
+                initialValue: saleOrder?.price === 0 ? undefined : saleOrder?.price,
                 children: <Input  prefix="￥" disabled/>
             }, {
                 label: '汇率',
