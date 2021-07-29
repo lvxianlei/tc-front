@@ -221,9 +221,9 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const saleOrderValue: ISaleOrder = this.getForm()?.getFieldsValue(true);
         const taxAmount: number = saleOrderValue.taxAmount;
         const taxRate: number = saleOrderValue.taxRate;
-        let amount: number = 0;
-        amount = taxAmount / (1 + Number(taxRate)) || 0;
-        amount = parseFloat(amount.toFixed(2));
+        let amount: number | undefined = 0;
+        amount = taxAmount / (1 + Number(taxRate)) || undefined;
+        amount = amount && parseFloat(amount.toFixed(4));
         this.getForm()?.setFieldsValue({ amount: amount });
         this.getPriceAccordTaxRate();
     }
@@ -233,16 +233,18 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      */
      public getPriceAccordTaxRate = (): void => {
         const saleOrder: ISaleOrder = this.getForm()?.getFieldsValue(true);
-        const amount: number = this.getForm()?.getFieldsValue(true).amount;
+        const amount: number | undefined = this.getForm()?.getFieldsValue(true).amount;
         const totalWeight: number = saleOrder.totalWeight;
         if(this.state.saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE) {
             this.getForm()?.setFieldsValue({ price: '-' });
         } else {
-            let price: number = 0;
-            if(totalWeight > 0) {
-                price = amount / totalWeight || 0;
+            let price: number | undefined = 0;
+            if(amount && totalWeight > 0) {
+                price = amount / totalWeight || undefined;
+            } else {
+                price = undefined;
             }
-            price = parseFloat(price.toFixed(4));
+            price = price && parseFloat(price.toFixed(4));
             this.getForm()?.setFieldsValue({ price: price });
         }
     }
@@ -268,7 +270,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         orderProductDtos = orderProductDtos && orderProductDtos.map(items => {
             return items ={
                 ...items,
-                price: saleOrder?.totalPrice || 0
+                price: saleOrder?.totalPrice || undefined
             }
         })
         this.setState({
@@ -288,13 +290,13 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const saleOrder: ISaleOrder = this.getForm()?.getFieldsValue(true);
         const orderProductDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).orderProductDtos || [];
         if(orderProductDtos.length > 0) {
-            let totalPrice: number = 0;
-            totalPrice = saleOrder.taxAmount / saleOrder.totalWeight || 0;
-            totalPrice = parseFloat(totalPrice.toFixed(4));
+            let totalPrice: number | undefined = 0;
+            totalPrice = saleOrder.taxAmount / saleOrder.totalWeight || undefined;
+            totalPrice = totalPrice && parseFloat(totalPrice.toFixed(4));
             orderProductDtos.map<void>((items: IProductVo, ind: number): void => {
                 orderProductDtos[ind] = {
                     ...orderProductDtos[ind],
-                    totalAmount: parseFloat((totalPrice * (orderProductDtos[ind].num || 0) || 0).toFixed(2)),
+                    totalAmount: totalPrice && parseFloat((totalPrice * (orderProductDtos[ind].num || 0) || 0).toFixed(4)),
                     price: totalPrice
                 }
             })
@@ -359,7 +361,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             console.log(orderProductDtos)
             const num: number = orderProductDtos[index].num || 0;
             let totalWeight: number = saleOrderValue.totalWeight;
-            totalWeight = parseFloat((totalWeight - num).toFixed(2));
+            totalWeight = parseFloat((totalWeight - num).toFixed(4));
             
             orderProductDtos?.splice(index, 1);
             if(orderQuantity) {
@@ -514,9 +516,9 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 }],
                 children: <InputNumber
                     min="0"
-                    step="0.01"
+                    step="0.0001"
                     stringMode={ false } 
-                    precision={ 2 }  
+                    precision={ 4 }  
                     disabled={ saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE } 
                     onChange={ this.amountBlur }
                     className={ layoutStyles.width100 }/>
@@ -524,7 +526,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 label: '含税单价',
                 name: 'taxPrice',
                 initialValue: saleOrder?.taxPrice,
-                children: <Input  prefix="￥" disabled/>
+                children: <Input prefix="￥" disabled/>
             }, {
                 label: '税率',
                 name: 'taxRate',
@@ -545,12 +547,12 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             }, {
                 label: '不含税金额',
                 name: 'amount',
-                initialValue: saleOrder?.amount === 0 ? undefined : saleOrder?.amount,
+                initialValue: saleOrder?.amount == 0 ? undefined : saleOrder?.amount,
                 children: <Input  prefix="￥" disabled/>
             }, {
                 label: '不含税单价',
                 name: 'price',
-                initialValue: saleOrder?.price === 0 ? undefined : saleOrder?.price,
+                initialValue: saleOrder?.price == 0 ? undefined : saleOrder?.price,
                 children: <Input  prefix="￥" disabled/>
             }, {
                 label: '汇率',
@@ -743,8 +745,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                     <InputNumber 
                         stringMode={ false } 
                         min="0"
-                        step="0.01"
-                        precision={ 2 }
+                        step="0.0001"
+                        precision={ 4 }
                         disabled
                         className={ layoutStyles.width100 }/>
                 </Form.Item> 
@@ -760,10 +762,10 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                     message: '请输入产品单价'
                 }]}>
                     <InputNumber
-                        min="0.01"
-                        step="0.01"
+                        min="0.0001"
+                        step="0.0001"
                         stringMode={ false } 
-                        precision={ 2 }
+                        precision={ 4 }
                         disabled={ this.state?.saleOrder?.contractInfoDto?.chargeType !== ChargeType.UNIT_PRICE  } 
                         onChange={ () => this.priceBlur(index) }
                     />
@@ -856,7 +858,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 num: selectedRows[0].productWeight,
                 unit: this.state.saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? '基' : 'kg',
                 price: this.state.saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? undefined : saleOrder?.totalPrice,
-                totalAmount: this.state.saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? undefined : Number.parseFloat(((saleOrder?.totalPrice || 0 ) * selectedRows[0].productWeight).toFixed(2)),
+                totalAmount: this.state.saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? undefined : Number.parseFloat(((saleOrder?.totalPrice || 0 ) * selectedRows[0].productWeight).toFixed(4)),
                 tender: '',
                 description: selectedRows[0].description
             };
