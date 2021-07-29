@@ -13,6 +13,7 @@ import ConfirmableButton from '../../../components/ConfirmableButton';
 import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 import { IMaterial, IMaterialTree } from './IMaterial';
 import { unitOptions } from '../../../configuration/DictionaryOptions';
+import RequestUtil from '../../../utils/RequestUtil';
 
 export interface IAbstractMaterialSettingState extends IAbstractFillableComponentState {
     readonly materialData?: any;
@@ -91,7 +92,19 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             render: (text: string, record: IMaterial, index: number): React.ReactNode => (
                 <Form.Item name={['materialData', index, 'materialCode']} rules= {[{
                     required: true,
-                    message: '请输入物料编号'
+                    validator: (rule: RuleObject, value: string, callback: (error?: string) => void) => {
+                        if(value && value != '') {
+                            this.checkBatchSn(value, record.materialCategory).then(res => {
+                                if (res) {
+                                    callback()
+                                } else {
+                                    callback('物料编号重复')
+                                }
+                            })
+                        } else {
+                            callback('请输入物料编号')
+                        }
+                    }
                 },{
                     pattern: /^[^(\u4e00-\u9fa5)|(\s)]*$/,
                     message: '禁止输入中文或空格',
@@ -106,7 +119,8 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
                             }
                         })
                     }
-                }]}>
+                }]}
+                >
                     { (record as IMaterial).id?<div>{text}</div>:<Input  defaultValue={ text }   maxLength={ 20 }/> }
                 </Form.Item>
             )
@@ -285,7 +299,25 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             }   
       }]
     }
-
+    /**
+         * @description 验证物料编号是否重复
+         */
+    public checkBatchSn = (value: string,type: any): Promise<void | any> =>{
+        return new Promise(async (resolve, reject) => {  // 返回一个promise
+            const resData = await RequestUtil.get('/tower-system/material/checkMaterialCode', {
+                materialCode: value,
+                materialCategory: type,
+            });
+            console.log(resData)
+            if (resData) {
+                resolve(resData)
+            } else {
+                resolve(false)
+            }
+        }).catch(error => {
+            Promise.reject(error)
+        })
+    }
 
 
 
