@@ -115,12 +115,6 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
         this.setState ({
             editingKey: undefined
         })
-        values = {
-            ...values,
-            width: values.width === null ? 0 : values.width,
-            thickness: values.thickness === null ? 0 : values.thickness,
-            length: values.length === null ? 0 : values.length
-        }
         await RequestUtil.put('/tower-data-archive/drawComponent', values).then(res => {
             if(res) {
                 this.getData();
@@ -235,7 +229,7 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
             type: (
                 <InputNumber 
                     stringMode={ false } 
-                    min="0"
+                    min="0.01"
                     step="0.01"
                     precision={ 2 }
                     className={ layoutStyles.width100 } 
@@ -255,7 +249,7 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
             type: (
                 <InputNumber 
                     stringMode={ false } 
-                    min="0"
+                    min="0.01"
                     step="0.01"
                     precision={ 2 }
                     className={ layoutStyles.width100 }
@@ -275,7 +269,7 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
             type: (
                 <InputNumber 
                     stringMode={ false } 
-                    min="0"
+                    min="0.01"
                     step="0.01"
                     precision={ 2 }
                     className={ layoutStyles.width100 }
