@@ -115,6 +115,12 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
         this.setState ({
             editingKey: undefined
         })
+        values = {
+            ...values,
+            width: values.width == null ? -1 : values.width,
+            thickness: values.thickness == null ? -1 : values.thickness,
+            length: values.length == null ? -1 : values.length,
+        }
         await RequestUtil.put('/tower-data-archive/drawComponent', values).then(res => {
             if(res) {
                 this.getData();
