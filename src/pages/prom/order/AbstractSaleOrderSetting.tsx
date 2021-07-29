@@ -297,7 +297,6 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                     price: totalPrice
                 }
             })
-            console.log(orderProductDtos)
             this.getForm()?.setFieldsValue({ totalPrice: totalPrice, taxPrice: totalPrice, orderProductDtos: orderProductDtos });
         }
     }
