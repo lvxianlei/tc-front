@@ -94,7 +94,7 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
                     required: true,
                     validator: (rule: RuleObject, value: string, callback: (error?: string) => void) => {
                         if(value && value != '') {
-                            this.checkBatchSn(value, record.materialCategory).then(res => {
+                            this.checkBatchSn(value, record).then(res => {
                                 if (res) {
                                     callback()
                                 } else {
@@ -302,13 +302,13 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
     /**
          * @description 验证物料编号是否重复
          */
-    public checkBatchSn = (value: string,type: any): Promise<void | any> =>{
+    public checkBatchSn = (value: string, values: IMaterial): Promise<void | any> =>{
         return new Promise(async (resolve, reject) => {  // 返回一个promise
             const resData = await RequestUtil.get('/tower-system/material/checkMaterialCode', {
                 materialCode: value,
-                materialCategory: type,
+                materialCategory: values.materialCategory,
+                id: values.id,
             });
-            console.log(resData)
             if (resData) {
                 resolve(resData)
             } else {

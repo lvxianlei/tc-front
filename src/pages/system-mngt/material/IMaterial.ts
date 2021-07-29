@@ -44,7 +44,7 @@ export interface IMaterialTree {
     readonly treeName: string;
     readonly checked: boolean;
     readonly level: string;
-    readonly code: string;
+    readonly code: number;
     readonly name: string;
     readonly children: IMaterialTree[];
 }

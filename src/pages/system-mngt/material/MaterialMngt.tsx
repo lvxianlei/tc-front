@@ -216,7 +216,7 @@ import { DataNode } from 'antd/lib/tree';
     //获取childrenID 
     protected expandKeysId(materialTrees: IMaterialTree[], data: number[]):number[] {
         materialTrees.forEach((item: IMaterialTree): void => {
-            data.push(item.id)
+            data.push(item.code)
             if (item.children && item.children.length) {
                 this.expandKeysId(item.children as IMaterialTree[], data);
             }
@@ -440,7 +440,7 @@ import { DataNode } from 'antd/lib/tree';
      protected wrapMaterialTree2DataNode(materials: (IMaterialTree & DataNode)[] = []): DataNode[] {
           materials.forEach((material: (IMaterialTree & DataNode)): void => {
                 material.title = material.treeName;
-                material.key = material.id;
+                material.key = material.code;
                 if (material.children && material?.children.length) {
                     this.wrapMaterialTree2DataNode(material.children as (IMaterialTree & DataNode)[]);
                 }
