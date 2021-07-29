@@ -15,6 +15,9 @@ import styles from './AbstractTowerShapeSetting.module.less';
 import ConfirmableButton from '../../../components/ConfirmableButton';
 import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGroup } from '../../../components/AbstractFillableComponent';
 import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
+import { RuleObject } from 'antd/lib/form';
+import { StoreValue } from 'antd/lib/form/interface';
+import { IProductDeployVOList } from './ITowerShape';
 
 export interface IComponentDetailsSettingProps {
     readonly id: string;
@@ -498,6 +501,28 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
     }
 
     /**
+     * @description 验证杆塔号
+     */
+     public checkPartNum = (value: StoreValue, index: number): Promise<void | any> =>{
+        return new Promise(async (resolve, reject) => {  // 返回一个promise
+            const productDeployDTOList: IProductDeployVOList[] = this.state.towerSection || [];
+            if(value) {
+                resolve(productDeployDTOList.map((items: IProductDeployVOList, itemInd: number) => {
+                    if(index !== itemInd && items.partNum === value) {
+                        return false
+                    } else {
+                        return true
+                    }
+                }).findIndex(item => item === false))
+            } else {
+                resolve(false)
+            }
+        }).catch(error => {
+            Promise.reject(error)
+        })
+    }
+
+    /**
      * @description Get editable cell of contract refund record
      */
     private getEditableCell = (recordItem: Record<string, any>) => {
@@ -533,7 +558,19 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
                                 rules={[
                                     {
                                       required: true,
-                                      message: `请输入${ title }`,
+                                      validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                                            if(value !== undefined) {
+                                                this.checkPartNum(value, index).then((res) => {
+                                                    if (res===-1) {
+                                                        callback()
+                                                    } else {
+                                                        callback('杆塔下段号唯一！');
+                                                    }
+                                                })
+                                            } else {
+                                                callback('请输入段号');
+                                            }
+                                        }
                                     },
                                 ]}
                             >
@@ -546,7 +583,7 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
                             initialValue={ record[dataIndex] } 
                             rules={[
                                 {
-                                  required: dataIndex === 'partNum' || dataIndex === 'componentCode' ||  dataIndex === 'rowMaterial' || dataIndex ===  'materialTexture' || dataIndex ===  'spec' || dataIndex ===  'number' || dataIndex ===  'singleWeight',
+                                  required: dataIndex === 'componentCode' ||  dataIndex === 'rowMaterial' || dataIndex ===  'materialTexture' || dataIndex ===  'spec' || dataIndex ===  'number' || dataIndex ===  'singleWeight',
                                   message: `请输入${ title }`,
                                 },
                             ]}

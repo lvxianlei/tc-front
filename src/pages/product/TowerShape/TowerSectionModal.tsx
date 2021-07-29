@@ -351,7 +351,7 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
     /**
      * @description 验证杆塔号
      */
-     public checkPartNum = (value: StoreValue, index: number, ind: number): Promise<void | any> =>{
+    public checkPartNum = (value: StoreValue, index: number, ind: number): Promise<void | any> =>{
         return new Promise(async (resolve, reject) => {  // 返回一个promise
             const productDeployDTOList: IProductDeployVOList[] = this.getForm()?.getFieldsValue(true)[index].productDeployDTOList || [];
             if(value) {
@@ -388,7 +388,6 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
                     validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
                         if(value !== undefined) {
                             this.checkPartNum(value, index, ind).then((res) => {
-                                console.log(res)
                                 if (res===-1) {
                                     callback()
                                 } else {
