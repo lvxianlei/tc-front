@@ -146,7 +146,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 chargeType: selectedRows[0].chargeType,
                 orderDeliveryTime: moment(selectedRows[0].deliveryTime),
                 contractId: selectedRows[0].id,
-                signCustomerId: selectedRows[0].signCustomerId
+                signCustomerId: selectedRows[0].signCustomerId,
+                contractNumber: selectedRows[0].contractNumber
             };
             this.setState({
                 saleOrder: {
@@ -428,8 +429,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 children: <Input maxLength={ 50 }/>
             }, {
                 label: '关联合同',
-                name: 'contractId',
-                initialValue: saleOrder?.contractInfoDto?.contractId,
+                name: 'contractNumber',
+                initialValue: saleOrder?.contractInfoDto?.contractNumber,
                 rules: [{
                     required: true,
                     message: '请选择关联合同'
@@ -437,8 +438,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 children:
                     <>
                         {
-                            setting ? <Input value={ saleOrder?.contractInfoDto?.contractId }
-                            disabled/> : <Input value={ saleOrder?.contractInfoDto?.contractId } suffix={ 
+                            setting ? <Input value={ saleOrder?.contractInfoDto?.contractNumber }
+                            disabled/> : <Input value={ saleOrder?.contractInfoDto?.contractNumber } suffix={ 
                                 <ContractSelectionComponent onSelect={ this.onSelect } selectKey={ [saleOrder?.contractInfoDto?.contractId] } status={ 1 }/>
                             }/>
                         }

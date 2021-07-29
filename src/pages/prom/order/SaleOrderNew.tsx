@@ -39,6 +39,7 @@ class SaleOrderNew extends AbstractSaleOrderSetting<ISaleOrderNewRouteProps, ISa
             signContractTime: values.signContractTime,
             signCustomerId: contract?.signCustomerId,
             signCustomerName: values.signCustomerName,
+            contractNumber: values.contractNumber
         }
         if(values.chargeType === ChargeType.UNIT_PRICE) {
             values.price = undefined;
