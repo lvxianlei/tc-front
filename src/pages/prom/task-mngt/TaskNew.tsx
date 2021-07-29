@@ -40,7 +40,9 @@ import { message } from 'antd';
         values.planDeliveryTime = moment(values.planDeliveryTime).format('YYYY-MM-DD');
         values.delproductIdsiveryTime = moment(values.deliveryTime).format('YYYY-MM-DD');
         values.orderDeliveryTime = moment(values.orderDeliveryTime).format('YYYY-MM-DD');
-        values.productIds = this.state.selectedKeys.length > 0 ? this.state.selectedKeys : [];
+        values.productIds = this.state.productDataSource.map(item=>{
+            return item.id
+        });
         values.contractInfoDTO = this.state.taskInfoDTO;
         values.saleOrderId = this.state?.task?.saleOrderId;
         values.id = this.state?.task?.id;

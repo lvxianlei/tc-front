@@ -732,8 +732,8 @@ enum StepTitleItem {
                             placement="topRight"
                             onConfirm={ () => {
                                 let num:number = 0;
-                                productDataSource.map(({ taskNoticeId }, index: number)=>{
-                                    if( taskNoticeId == record.taskNoticeId ){
+                                productDataSource.map(({ id }, index: number)=>{
+                                    if( id == record.id ){
                                         num = index;
                                     }
                                 })
