@@ -918,7 +918,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                             const towerShapeValue: ITowerShape = this.getForm()?.getFieldsValue(true);
                             const productDTOListValue: IProductDTOList[] = towerShapeValue?.productDTOList || [];
                             this.getForm()?.setFieldsValue({ ...towerShapeValue, productDTOList: [...productDTOListValue, product] })
-                        } } className={ styles.btn }>添加行</Button>
+                        } } className={ styles.btn } disabled={ isChange }>添加行</Button>
                         <Table { ...this.getTableProps() } />
                     </>
                 );
