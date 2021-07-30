@@ -97,7 +97,7 @@ import { DataNode } from 'antd/lib/tree';
             align: "center",
             width: 200,
             render:(text)=>{
-                return text=='-1'?'':text
+                return text==-1?'':text
             }
         },{
             key: 'weightAlgorithm',
