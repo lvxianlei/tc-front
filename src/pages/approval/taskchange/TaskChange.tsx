@@ -230,7 +230,7 @@ class TaskChange extends AbstractTaskChange<ITaxkChangeRouteProps, ITaxkchangeSt
         }, {
             title: '塔型',
             align: "center",
-            dataIndex: 'productShape'
+            dataIndex: 'productCategoryName'
         }, {
             title: '杆塔号',
             align: "center",
