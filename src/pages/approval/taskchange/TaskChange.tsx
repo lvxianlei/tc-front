@@ -101,7 +101,7 @@ class TaskChange extends AbstractTaskChange<ITaxkChangeRouteProps, ITaxkchangeSt
             itemProps: [{
                 label: '原材料标准',
                 name: 'materialStandard',
-                initialValue: contract?.materialStandard || materialStandardOptions && materialStandardOptions.length > 0 && materialStandardOptions[0].id,
+                initialValue: contract?.materialStandard && contract?.materialStandard =='-1'?  '' : contract?.materialStandard,
                 children: (
                     <Select disabled>
                         { materialStandardOptions && materialStandardOptions.map(({ id, name }, index) => {
