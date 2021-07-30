@@ -30,7 +30,7 @@ export interface ITaxkChangeRouteProps extends RouteComponentProps<ITaxkChangePr
 export interface ITaxkchangeState extends IAbstractTaxkchangeState { }
 
 class TaskChange extends AbstractTaskChange<ITaxkChangeRouteProps, ITaxkchangeState> {
-    getFormItemGroups(): IFormItemGroup[][] {
+    public getFormItemGroups(): IFormItemGroup[][] {
         const contract: ITaskChange | undefined = this.state.contract;
         return [[{
             title: '基础信息',
@@ -100,16 +100,10 @@ class TaskChange extends AbstractTaskChange<ITaxkChangeRouteProps, ITaxkchangeSt
             },
             itemProps: [{
                 label: '原材料标准',
-                name: 'materialStandard',
-                initialValue: contract?.materialStandard && contract?.materialStandard =='-1'?  '' : contract?.materialStandard,
+                name: 'materialStandardName',
+                initialValue:contract?.materialStandardName,
                 children: (
-                    <Select disabled>
-                        { materialStandardOptions && materialStandardOptions.map(({ id, name }, index) => {
-                            return <Select.Option key={ index } value={ id }>
-                                { name }
-                            </Select.Option>
-                        }) }
-                    </Select>
+                   <Input disabled value={contract?.materialStandardName}/>
                 )
             }, {
                 label: '焊接要求',
