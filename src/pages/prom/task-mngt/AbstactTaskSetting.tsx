@@ -260,7 +260,7 @@ enum StepTitleItem {
                                 required: true,
                                 message: '请选择订单交货日期'
                             }],
-                            children:  <DatePicker disabled  format='YYYY-MM-DD HH:mm:ss'/>
+                            children:  <DatePicker disabled  format='YYYY-MM-DD'/>
                         }, {
                             label: '客户交货日期',
                             name: 'deliveryTime',
@@ -334,7 +334,7 @@ enum StepTitleItem {
                                 required: true,
                                 message: '请选择订单交货日期'
                             }],
-                            children: <DatePicker disabled format='YYYY-MM-DD HH:mm:ss'/>
+                            children: <DatePicker disabled format='YYYY-MM-DD'/>
                         }, {
                             label: '客户交货日期',
                             name: 'deliveryTime',
@@ -452,7 +452,7 @@ enum StepTitleItem {
                                 required: true,
                                 message: '请选择订单交货日期'
                             }],
-                            children:  <DatePicker disabled format='YYYY-MM-DD HH:mm:ss'/>
+                            children:  <DatePicker disabled format='YYYY-MM-DD'/>
                         }, {
                             label: '客户交货日期',
                             name: 'deliveryTime',

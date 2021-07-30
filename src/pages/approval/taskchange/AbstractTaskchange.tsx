@@ -9,6 +9,7 @@ import { IProduct } from '../../IProduct';
 import { ITask } from '../../ITask';
 import RequestUtil from '../../../utils/RequestUtil';
 import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
+import { WithTranslation } from 'react-i18next';
 
 /**
  * Iabstract contract setting state
@@ -49,11 +50,15 @@ export interface IProductInfoVOList {
     readonly contractId?: number;
     readonly signCustomerId?: number;
 }
-
+export interface ITaskChangeApprovalProps {
+    readonly businessId: any;
+    readonly id: string;
+}
+export interface ITaskChangeApprovalRouteProps extends RouteComponentProps<ITaskChangeApprovalProps>, WithTranslation {}
 /**
  * Abstract Contract Setting
  */
-export default abstract class AbstractTaskChange<P extends RouteComponentProps, S extends IAbstractTaxkchangeState> extends AbstractFillableComponent<P, S> {
+export default abstract class AbstractTaskChange<P extends ITaskChangeApprovalRouteProps, S extends IAbstractTaxkchangeState> extends AbstractFillableComponent<P, S> {
     /**
      * State  of abstract taxkchange
      */
@@ -111,7 +116,7 @@ export default abstract class AbstractTaskChange<P extends RouteComponentProps, 
     abstract onReject = (): Promise<void> => {
         const contract: ITaskChange | undefined = this.state.contract;
         return RequestUtil.post('/tower-market/audit/reject', {
-            auditId: contract.id,
+            auditId: this.props.match.params.id,
             description: "驳回"
         }).then((): void => {
             message.warning('已驳回任务单  审批的申请！');

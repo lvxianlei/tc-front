@@ -49,8 +49,8 @@ class TaskChange extends AbstractTaskChange<ITaxkChangeRouteProps, ITaxkchangeSt
                 children: <Input disabled />
             }, {
                 label: '合同编号',
-                name: 'contractId',
-                initialValue: contract?.contractId,
+                name: 'internalNumber',
+                initialValue: contract?.internalNumber,
                 children: <Input disabled />,
             }, {
                 label: '工程名称',
@@ -179,9 +179,8 @@ class TaskChange extends AbstractTaskChange<ITaxkChangeRouteProps, ITaxkchangeSt
      * Determines whether reject on
      */
     public onReject = (): Promise<void> => {
-        const contract: ITaskChange | undefined = this.state.contract;
         return RequestUtil.post('/tower-market/audit/reject', {
-            auditId: contract.id,
+            auditId: this.props.match.params.id,
             description: "驳回"
         }).then((): void => {
             message.warning('已驳回任务单 产品 变更 审批的申请！');
