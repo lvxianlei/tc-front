@@ -46,7 +46,7 @@ import { ITask } from '../../ITask';
      
     //title
     protected getTitle(): string {
-        return `${ super.getTitle() }（${ this.props.match.params.id }）`;
+        return `${ super.getTitle() }（${ this.state?.task?.taskNumber }）`;
     }
 
     /**
@@ -125,7 +125,7 @@ import { ITask } from '../../ITask';
              },
              rows: [[{
                  label: '任务编号',
-                 value: this.props.match.params.id
+                 value: task?.taskNumber
              },  {
                  label: '关联订单',
                  value: task?.saleOrderNumber
