@@ -47,6 +47,7 @@ export interface ISaleOrderBaseInfo {
     readonly taxAmount?: number;
     readonly taxPrice?: number;
     readonly taxRate?: number;
+    readonly description?: string;
 }
 
 export interface IContractInfoVo extends IContract {
@@ -142,7 +143,7 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
                 value: baseInfo?.orderDeliveryTime
             }, {
                 label: '备注',
-                value: baseInfo?.contractInfoVo?.description
+                value: baseInfo?.description
             }]]
         };
     }
