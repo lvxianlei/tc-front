@@ -253,7 +253,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                     required: true,
                     message: '请输入线路名称'
                 }]}>
-                    <Input maxLength={ 100 } disabled={ record.status === 2 || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
+                    <Input maxLength={ 100 } disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
                 </Form.Item> 
             )
         }, {
@@ -274,7 +274,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         })
                     }
                 }]}>
-                    <Input maxLength={ 50 } disabled={ record.status === 2 || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
+                    <Input maxLength={ 50 } disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
                 </Form.Item> 
             )
         }, {
@@ -287,7 +287,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                     required: true,
                     message: '请选择产品类型'
                 }]}>
-                    <Select placeholder="请选择电压等级" className={ styles.select_width } disabled={ record.status === 2 || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }>
+                    <Select placeholder="请选择电压等级" className={ styles.select_width } disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }>
                         { productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={ index } value={ id }>
                                 { name }
@@ -306,7 +306,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                     required: true,
                     message: '请选择电压等级'
                 }]}>
-                    <Select placeholder="请选择电压等级" className={ styles.select_width } disabled={ record.status === 2 || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }>
+                    <Select placeholder="请选择电压等级" className={ styles.select_width } disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }>
                         { voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={ index } value={ id }>
                                 { name }
@@ -331,7 +331,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         step="0.01"
                         precision={ 2 }
                         className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
+                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
                 </Form.Item> 
             )
         }, {
@@ -350,7 +350,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         step="0.01"
                         precision={ 2 }
                         className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
+                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
                         onChange={ () => {
                             this.getProductWeight(index) 
                         } }/>
@@ -369,7 +369,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         step="0.01"
                         precision={ 2 }
                         className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
+                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
                 </Form.Item> 
             )
         }, {
@@ -385,7 +385,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         step="0.01"
                         precision={ 2 }
                         className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
+                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
                         onChange={ () => {
                             this.getProductWeight(index)
                         } }/>
@@ -404,7 +404,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         step="0.01"
                         precision={ 2 }
                         className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
+                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
                 </Form.Item> 
             )
         }, {
@@ -420,7 +420,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         step="0.01"
                         precision={ 2 }
                         className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
+                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
                         onChange={ () => {
                             this.getProductWeight(index)
                         } }/>
@@ -439,7 +439,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         step="0.01"
                         precision={ 2 }
                         className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
+                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
                 </Form.Item> 
             )
         }, {
@@ -455,7 +455,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         step="0.01"
                         precision={ 2 }
                         className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
+                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
                         onChange={ () => {
                             this.getProductWeight(index)
                         } }/>
@@ -474,7 +474,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         step="0.01"
                         precision={ 2 }
                         className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
+                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
                 </Form.Item> 
             )
         }, {
@@ -490,7 +490,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         step="0.01"
                         precision={ 2 }
                         className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
+                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
                         onChange={ () => {
                             this.getProductWeight(index)
                         } }/>
@@ -509,7 +509,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         step="0.01"
                         precision={ 2 }
                         className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
+                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
                         onChange={ () => {
                             this.getProductWeight(index)
                         } }/>
@@ -532,7 +532,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             width: 150,
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
                 <Form.Item name={['productDTOList', index,'description']}>
-                    <Input maxLength={ 50 } disabled={ record.status === 2 || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
+                    <Input maxLength={ 50 } disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
                 </Form.Item> 
             )
         }, {
@@ -543,7 +543,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             fixed: 'right',
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type="link" onClick={ () => this.itemWeightClick(index) } disabled={ record.status === 2 || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }>
+                    <Button type="link" onClick={ () => this.itemWeightClick(index) } disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }>
                         增重项
                     </Button>
                     <Popconfirm 
@@ -554,7 +554,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         onConfirm={ () => { this.onDelete(index, record) } }
                         disabled={ record.status === 2 || record.status === 1 || (!isChange && record.status == 3 ) }
                     >
-                        <Button type="text" disabled={ record.status === 2 || record.status === 1 || (!isChange && record.status == 3 ) }>
+                        <Button type="text" disabled={ record.status === 2 || (isChange && record.status === 0) || record.status === 1 || (!isChange && record.status == 3 ) }>
                             删除
                         </Button>
                     </Popconfirm>
@@ -918,7 +918,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                             const towerShapeValue: ITowerShape = this.getForm()?.getFieldsValue(true);
                             const productDTOListValue: IProductDTOList[] = towerShapeValue?.productDTOList || [];
                             this.getForm()?.setFieldsValue({ ...towerShapeValue, productDTOList: [...productDTOListValue, product] })
-                        } } className={ styles.btn } disabled={ isChange }>添加行</Button>
+                        } } className={ isChange ? styles.hidden : styles.btn }>添加行</Button>
                         <Table { ...this.getTableProps() } />
                     </>
                 );
