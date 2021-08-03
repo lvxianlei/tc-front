@@ -118,7 +118,7 @@ import { ITask } from '../../ITask';
             } 
         },  {
             key: 'internalNumber',
-            title: '合同编号',
+            title: '内部合同编号',
             dataIndex: 'internalNumber',
             render: (internalNumber: number,record: object): React.ReactNode => {
                  return <Link to={ `/prom/contract/detail/${ (record as ITask).contractId }` }>{ internalNumber}</Link>
