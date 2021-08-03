@@ -38,9 +38,7 @@ interface IResponseData {
 //响应数据的限制
 interface ITaskTableDataItem {
     readonly businessId: number;
-    //id
     readonly id: number;
-
     readonly type: string | number;
     //业务类型
     readonly typeName: string;
@@ -52,14 +50,13 @@ interface ITaskTableDataItem {
     readonly updateTime: number | string;
 }
 
-
 //审批状态
 enum AuditStatus {
     PENDING_APPROVAL = 0,
     ADOPT = 1,
     REJECT = 2
 }
-//table
+
 enum AuditStatusItem {
     PENDING_APPROVAL = "待审批",
     ADOPT = "通过",
@@ -67,9 +64,9 @@ enum AuditStatusItem {
 }
 //业务类型
 enum BusinessType {
-    SALE_ORDER_AUDIT = "产品信息变更审批",
+    // SALE_ORDER_AUDIT = "产品信息变更审批",
     TASK_AUDIT = "任务单产品审批",
-    PRODUCT_AUDIT = "杆塔信息变更审批"
+    PRODUCT_AUDIT = "产品信息变更审批"
 }
 
 class ApprovalAll extends AbstractMngtComponent<
@@ -79,7 +76,6 @@ class ApprovalAll extends AbstractMngtComponent<
     //取出state数据
     protected getState(): IApprovalState {
         return {
-            //默认设置
             ...super.getState(),
             tableDataSource: []
         };
@@ -93,14 +89,9 @@ class ApprovalAll extends AbstractMngtComponent<
             "/tower-market/audit",
             {
                 ...filterValues,
-                //页数
                 current: pagination.current || this.state?.tablePagination?.current,
-                //每页数量
                 size: pagination.pageSize || this.state?.tablePagination?.pageSize,
-                //react.key
                 auditStatus: this.state.selectedTabKey
-
-
             }
         );
 
@@ -115,16 +106,16 @@ class ApprovalAll extends AbstractMngtComponent<
             },
         });
     }
-    //component Did mount
+
     public componentDidMount() {
         super.componentDidMount();
         this.fetchTableData({});
     }
-    //
+    
     public getTableData(): object[] {
         return this.state.tableDataSource;
     }
-    //table
+    
     public getTableColumns(item: ITabItem): TableColumnType<object>[] {
         return [
             {
@@ -141,8 +132,6 @@ class ApprovalAll extends AbstractMngtComponent<
                 width: 150,
                 render: (type: string): React.ReactNode => {
                     switch (type) {
-                        case "SALE_ORDER_AUDIT":
-                            return BusinessType.SALE_ORDER_AUDIT
                         case "TASK_AUDIT":
                             return BusinessType.TASK_AUDIT
                         case "PRODUCT_AUDIT":
@@ -275,7 +264,7 @@ class ApprovalAll extends AbstractMngtComponent<
                 children: (
                     <Select className={styles.drop_down_menu}>
                         <Option value="">全部</Option>
-                        <Option value="SALE_ORDER_AUDIT">产品信息变更审批</Option>
+                        <Option value="PRODUCT_AUDIT">产品信息变更审批</Option>
                         <Option value="TASK_AUDIT">任务单产品信息审批</Option>
                     </Select>
                 ),
