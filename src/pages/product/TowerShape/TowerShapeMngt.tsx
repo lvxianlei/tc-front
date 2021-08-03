@@ -3,7 +3,7 @@
  * @copyright © 2021
  */
 
-import { Button, Dropdown, FormItemProps, Input, Menu, Popconfirm, Space, TableColumnType, TablePaginationConfig, TableProps, Upload } from 'antd';
+import { Button, Dropdown, FormItemProps, Input, Menu, message, Popconfirm, Space, TableColumnType, TablePaginationConfig, TableProps, Upload } from 'antd';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -188,7 +188,14 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
                                 'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
                             }
                         }
-                        data={ { productCategoryId: (record as ITowerShape).id } }>
+                        data={ { productCategoryId: (record as ITowerShape).id } }
+                        showUploadList={ false }
+                        onChange={ (info) => {
+                            if(info.file.response && !info.file.response?.success) {
+                                message.warning(info.file.response?.msg)
+                            }
+                            
+                        } }>
                         <Button type="link">导入图纸构件明细</Button>
                     </Upload>
                     <Button type="link" href={ `/product/towershape/componentDetails/${ (record as ITowerShape).id }` }>编辑图纸构件明细</Button>
