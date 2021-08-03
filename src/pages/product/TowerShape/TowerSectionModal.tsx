@@ -3,7 +3,7 @@
  * @copyright © 2021
  */
 
-import { Button, Form, FormInstance, Input, InputNumber, Modal, Popconfirm, Space, Table, TableColumnType } from 'antd';
+import { Button, Form, FormInstance, Input, InputNumber, message, Modal, Popconfirm, Space, Table, TableColumnType } from 'antd';
 import { ColumnType} from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
@@ -447,12 +447,12 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
     }
 
     /**
-     * @description 配段弹窗删除行
+     * @description 配段弹窗删除行操作
      * @param event 
      */
-    private onDelete = (index: number, ind: number, record?: IProductDeployVOList): void => {
+     private toDelete = (index: number, ind: number, record?: IProductDeployVOList): void => {
         let towerSection: IProductDTOList[] | undefined = Object.values(this.getForm()?.getFieldsValue(true));
-        const productDeployDTOList: IProductDeployVOList[] | undefined = towerSection[index].productDeployDTOList;     
+        const productDeployDTOList: IProductDeployVOList[] | undefined = towerSection[index].productDeployDTOList; 
         productDeployDTOList && productDeployDTOList.splice(ind, 1);
         const productDeployDeleteList: IProductDeployVOList[] = this.state.towerSection[index].productDeployDeleteList || [];
         record && productDeployDeleteList.push(record);
@@ -466,6 +466,26 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
             towerSection: [...towerSection],
         }) 
         this.getForm()?.setFieldsValue([...towerSection])
+    }
+
+    /**
+     * @description 配段弹窗删除行
+     * @param event 
+     */
+    private onDelete = async (index: number, ind: number, record?: IProductDeployVOList): Promise<void> => {
+        if(record?.id) {
+            const resData: boolean =  await RequestUtil.get('/tower-data-archive//productDeploy/checkDelete', {
+                partNum: record && record.partNum,
+                productCategoryId: this.state.towerSection[index].productCategoryId
+            });
+            if(resData) {
+                this.toDelete(index, ind, record);
+            } else {
+                message.warning('已被提料引用，无法进行删除！')
+            }
+        } else {
+            this.toDelete(index, ind, record);
+        }
     }
 
     /**
@@ -532,7 +552,6 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
         let towerSection: IProductDTOList[] = this.state.towerSection;
         let productDeployDTOList: IProductDeployVOList[] | undefined = towerSection && towerSection[bodyIndex || 0]?.productDeployDTOList || [];
         let item: IProductDeployVOList = {
-            id: Math.random(),
             partNum: '',
             number: undefined
         }
