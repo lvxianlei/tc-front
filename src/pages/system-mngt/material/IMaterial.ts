@@ -12,7 +12,7 @@
     readonly shortcutCode?: string;
     readonly rowMaterial?: string;
     readonly id?: string;
-    readonly proportion?: string;
+    readonly proportion?: number;
     readonly productName?: string;
     readonly middleCategory?: string;
     readonly materialTexture?: string;

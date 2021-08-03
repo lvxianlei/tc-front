@@ -441,7 +441,7 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             materialCode: "",
             materialTexture: "",
             productName: "",
-            proportion: "",
+            proportion: undefined,
             rowMaterial: "",
             shortcutCode: "",
             spec: "",
