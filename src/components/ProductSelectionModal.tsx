@@ -9,7 +9,7 @@ import React from 'react';
 
 import RequestUtil from '../utils/RequestUtil';
 import AbstractFilteredSelectionModal from './AbstractFilteredSelecableModal';
-import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from './AbstractSelectableModal';
+import AbstractSelectionModal, { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from './AbstractSelectableModal';
 import styles from './AbstractSelectableModal.module.less';
 
  
@@ -49,7 +49,7 @@ import styles from './AbstractSelectableModal.module.less';
  /**
   * Order Selection Component
   */
- export default class OrderSelectionComponent extends AbstractFilteredSelectionModal<IOrderSelectionComponentProps, IOrderSelectionComponentState> {
+ export default class OrderSelectionComponent extends AbstractSelectionModal<IOrderSelectionComponentProps, IOrderSelectionComponentState> {
  
      /**
       * @override
@@ -89,10 +89,7 @@ import styles from './AbstractSelectableModal.module.less';
     
      //查询字段
      public getFilterFormItemProps(): FormItemProps[]  {
-         return [{
-                 name: 'lineName',
-                 children: <Input placeholder="线路名称关键字"/>
-             }];
+         return []
      }
  
      //查询
@@ -190,7 +187,9 @@ import styles from './AbstractSelectableModal.module.less';
                             this.setState ({
                                 isModalVisible: false
                             })
-                           { this.props.onSelect(this.state.selectedRows) }
+                            if(this.state.tableDataSource.length > 0){
+                                { this.props.onSelect(this.state.selectedRows) }
+                            }
                         }
                     } 
                     onCancel={this.handleCancel}
