@@ -137,7 +137,7 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
                 id: this.state.towerSection[index].id,
                 productNumber: this.state.towerSection[index].productNumber,
                 productCategoryId: this.state.towerSection[index]?.productCategoryId,
-                productDeployIdList: this.state.towerSection[index]?.productDeployIdList,
+                productDeployDeleteList: this.state.towerSection[index]?.productDeployDeleteList,
                 productDeployDTOList: productDeployDTOList
             }
         })
@@ -436,7 +436,7 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
                         placement="topRight" 
                         okText="确认"
                         cancelText="取消"
-                        onConfirm={ () => { this.onDelete(index, ind, record.id) } }
+                        onConfirm={ () => { this.onDelete(index, ind, record) } }
                         disabled={ record.status === 2 }
                     >
                         <DeleteOutlined/>
@@ -450,22 +450,21 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
      * @description 配段弹窗删除行
      * @param event 
      */
-    private onDelete = (index: number, ind: number, id?: string | number): void => {
+    private onDelete = (index: number, ind: number, record?: IProductDeployVOList): void => {
         let towerSection: IProductDTOList[] | undefined = Object.values(this.getForm()?.getFieldsValue(true));
         const productDeployDTOList: IProductDeployVOList[] | undefined = towerSection[index].productDeployDTOList;     
         productDeployDTOList && productDeployDTOList.splice(ind, 1);
-        const productDeployIdList: (string | number)[] = this.state.towerSection[index].productDeployIdList || [];
-        id && productDeployIdList.push(id);
+        const productDeployDeleteList: IProductDeployVOList[] = this.state.towerSection[index].productDeployDeleteList || [];
+        record && productDeployDeleteList.push(record);
         towerSection = towerSection.map((items: IProductDTOList) => {
             return {
                 ...items,
-                productDeployIdList: productDeployIdList
+                productDeployDeleteList: productDeployDeleteList
             }
         })
         this.setState({
             towerSection: [...towerSection],
         }) 
-        console.log(towerSection)
         this.getForm()?.setFieldsValue([...towerSection])
     }
 
