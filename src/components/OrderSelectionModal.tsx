@@ -123,7 +123,7 @@ import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponse
                 dataIndex: 'saleOrderNumber',
             },  {
                 key: 'internalNumber',
-                title: '合同编号',
+                title: '内部合同编号',
                 dataIndex: 'internalNumber',
             },  {
                 key: 'projectName',
