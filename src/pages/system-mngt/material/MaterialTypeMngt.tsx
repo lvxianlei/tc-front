@@ -2,7 +2,7 @@
  * @author lxy
  * @copyright © 2021  All rights reserved
  */
-import { Button, Form, FormItemProps, Input, InputNumber, Modal, Space, TableColumnType, TablePaginationConfig, Tree } from 'antd';
+import { Button, Form, FormItemProps, Input, InputNumber, Modal, Space, TableColumnType, TablePaginationConfig, TableProps, Tree } from 'antd';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -59,6 +59,23 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
         })
     }
 
+
+
+    /**
+     * @description Gets table props
+     * @param item 
+     * @returns table props 
+     */
+     protected getTableProps(item: ITabItem): TableProps<object> {
+        return {
+            rowKey: this.getTableRowKey(),
+            bordered: true,
+            pagination: false,
+            onChange: this.onTableChange,
+            dataSource: this.getTableDataSource(item),
+            columns: this.getTableColumns(item),
+        };
+    }
     //modal-value
     public onFinish = async ( values: any ) =>{
         let dataSource: IMaterialType = {};
