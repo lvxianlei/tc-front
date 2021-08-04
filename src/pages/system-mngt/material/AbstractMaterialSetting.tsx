@@ -108,7 +108,17 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
                 },{
                     pattern: /^[^(\u4e00-\u9fa5)|(\s)]*$/,
                     message: '禁止输入中文或空格',
-                }]}
+                },{
+                    validator: (rule: RuleObject, value: IMaterial, callback: (error?: string) => void) => {
+                        this.checkMaterialCode(value, index).then(res => {
+                            console.log(res)
+                            if (res === -1) {
+                                callback()
+                            } else {
+                                callback('相同类型的物料编号保持唯一性！');
+                            }
+                        })
+                    }}]}
                 >
                     { (record as IMaterial).id?<div>{text}</div>:<Input  defaultValue={ text }   maxLength={ 20 }/> }
                 </Form.Item>
@@ -319,6 +329,32 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
         })
     }
 
+
+    /**
+     * @description 验证杆塔号
+     */
+    public checkMaterialCode = (value: IMaterial, index: number): Promise<void | any> =>{
+        return new Promise(async (resolve, reject) => {  // 返回一个promise
+            const materialDataList: IMaterial[] = this.getForm()?.getFieldsValue(true).materialData || [];
+            if(value) {
+                const material = materialDataList.filter((item:IMaterial) => { 
+                    return item.materialCategory && materialDataList[index] && materialDataList[index].materialCategory && item.materialCategory === materialDataList[index].materialCategory 
+                })
+                resolve(material.map((items: IMaterial, ind: number) => {
+                    console.log(items,ind,value,index)
+                    if(index !== ind && items.materialCode && items.materialCode === value){
+                        return false
+                    }else {
+                        return true
+                    }
+                }).findIndex(item => item === false))
+            } else {
+                resolve(false)
+            }
+        }).catch(error => {
+            Promise.reject(error)
+        })
+    }
 
 
     /**
