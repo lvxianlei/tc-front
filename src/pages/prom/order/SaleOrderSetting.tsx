@@ -99,6 +99,7 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSettingRoutePr
             signContractTime: values.signContractTime,
             signCustomerId: contract?.signCustomerId,
             signCustomerName: values.signCustomerName,
+            contractNumber: values.contractNumber
         }
         if(values.chargeType === ChargeType.UNIT_PRICE) {
             values.price = undefined;
@@ -106,6 +107,7 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSettingRoutePr
         values.orderProductDtos = this.state.saleOrder?.orderProductDtos && this.state.saleOrder?.orderProductDtos.map((items: IProductVo, index: number) => {
             return {
                 ...items,
+                taskNoticeId: items.taskNoticeId == -1 ? '' : items.taskNoticeId,
                 tender: this.getForm()?.getFieldsValue(true).orderProductDtos[index].tender,
                 productCategoryId: items.productCategoryId,
                 productId: items.productId
@@ -113,6 +115,15 @@ class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSettingRoutePr
         })
         values = {
             ...values,
+            exchangeRate: values.exchangeRate === null ? 0 : values.exchangeRate,
+            foreignExchangeAmount: values.foreignExchangeAmount === null ? 0 : values.foreignExchangeAmount,
+            foreignPrice: values.foreignPrice === null ? 0 : values.foreignPrice,
+            guaranteeType: values.guaranteeType === null ? 0 : values.guaranteeType,
+            guaranteeAmount: values.guaranteeAmount === null ? 0 : values.guaranteeAmount,
+            portCharge: values.portCharge === null ? 0 : values.portCharge,
+            insuranceCharge: values.insuranceCharge === null ? 0 : values.insuranceCharge,
+            commissionCharge: values.commissionCharge === null ? 0 : values.commissionCharge,
+            creditInsurance: values.creditInsurance === null ? 0 : values.creditInsurance,
             contractInfoDto
         }
         return await RequestUtil.put('/tower-market/saleOrder', {

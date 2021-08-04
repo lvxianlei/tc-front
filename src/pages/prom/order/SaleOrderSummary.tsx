@@ -47,6 +47,7 @@ export interface ISaleOrderBaseInfo {
     readonly taxAmount?: number;
     readonly taxPrice?: number;
     readonly taxRate?: number;
+    readonly description?: string;
 }
 
 export interface IContractInfoVo extends IContract {
@@ -142,7 +143,7 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
                 value: baseInfo?.orderDeliveryTime
             }, {
                 label: '备注',
-                value: baseInfo?.contractInfoVo?.description
+                value: baseInfo?.description
             }]]
         };
     }
@@ -269,6 +270,16 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
     }
 
     /**
+     * @description Gets order columns
+     * @returns order columns 
+     */
+     private getOrderColumnsTakeOutNum(): TableColumnType<object>[] {
+        const list: TableColumnType<object>[] = this.getOrderColumns();
+        list.splice(9, 1);
+        return list;
+    }
+
+    /**
      * @description Gets sys info grid
      * @returns sys info grid 
      */
@@ -326,6 +337,10 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
      * @returns render 
      */
     public render(): React.ReactNode {
+        const baseInfo: ISaleOrderBaseInfo | undefined = this.state.baseInfo;
+        if(baseInfo?.contractInfoVo?.chargeType === ChargeType.UNIT_PRICE) {
+            this.getOrderColumnsTakeOutNum();
+        }
         return SummaryRenderUtil.renderSections([{
             title: '基本信息',
             render: this.renderBaseInfoSection
@@ -341,7 +356,7 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
                         index: index + 1
                     }
                 )
-            ) } pagination={ false } bordered={ true } columns={ this.getOrderColumns() }/>
+            ) } pagination={ false } bordered={ true } columns={ baseInfo?.contractInfoVo?.chargeType === ChargeType.UNIT_PRICE ? this.getOrderColumnsTakeOutNum() : this.getOrderColumns() }/>
         }, {
             title: '系统信息',
             render: this.renderSysInfoSection

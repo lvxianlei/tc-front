@@ -3,13 +3,16 @@
  * @copyright © 2021
  */
 
-import { Button, Form, FormInstance, Input, Modal, Popconfirm, Space, Table, TableColumnType } from 'antd';
+import { Button, Form, FormInstance, Input, InputNumber, message, Modal, Popconfirm, Space, Table, TableColumnType } from 'antd';
 import { ColumnType} from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 import RequestUtil from '../../../utils/RequestUtil';
 import { FormOutlined, DeleteOutlined } from '@ant-design/icons';
 import { IProductAdditionalDTOList, IProductDeployVOList, IProductDTOList } from './ITowerShape';
+import layoutStyles from '../../../layout/Layout.module.less';
+import { RuleObject } from 'antd/lib/form';
+import { StoreValue } from 'antd/lib/form/interface';
 
 export interface ITowerSectionModalProps {
     readonly id?: number | string;
@@ -83,15 +86,15 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
             })
             return {
                 ...records,
-                towerLeg1Length: records.towerLeg1Length === -1 ? undefined : records.towerLeg1Length,
-                towerLeg1Weight: records.towerLeg1Weight === -1 ? undefined : records.towerLeg1Weight,
-                towerLeg2Length: records.towerLeg2Length === -1 ? undefined : records.towerLeg2Length,
-                towerLeg2Weight: records.towerLeg2Weight === -1 ? undefined : records.towerLeg2Weight,
-                towerLeg3Length: records.towerLeg3Length === -1 ? undefined : records.towerLeg3Length,
-                towerLeg3Weight: records.towerLeg3Weight === -1 ? undefined : records.towerLeg3Weight,
-                towerLeg4Length: records.towerLeg4Length === -1 ? undefined : records.towerLeg4Length,
-                towerLeg4Weight: records.towerLeg4Weight === -1 ? undefined : records.towerLeg4Weight,
-                towerFootWeight: records.towerFootWeight === -1 ? undefined : records.towerFootWeight,
+                towerLeg1Length: records.towerLeg1Length == -1 ? undefined : records.towerLeg1Length,
+                towerLeg1Weight: records.towerLeg1Weight == -1 ? undefined : records.towerLeg1Weight,
+                towerLeg2Length: records.towerLeg2Length == -1 ? undefined : records.towerLeg2Length,
+                towerLeg2Weight: records.towerLeg2Weight == -1 ? undefined : records.towerLeg2Weight,
+                towerLeg3Length: records.towerLeg3Length == -1 ? undefined : records.towerLeg3Length,
+                towerLeg3Weight: records.towerLeg3Weight == -1 ? undefined : records.towerLeg3Weight,
+                towerLeg4Length: records.towerLeg4Length == -1 ? undefined : records.towerLeg4Length,
+                towerLeg4Weight: records.towerLeg4Weight == -1 ? undefined : records.towerLeg4Weight,
+                towerFootWeight: records.towerFootWeight == -1 ? undefined : records.towerFootWeight,
                 productAdditional: parseFloat(productAdditional.toFixed(2)),
                 productDeployDTOList: records.productDeployVOList,
                 productDeploy: productDeployRow?.join('+')
@@ -121,11 +124,12 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
         const towerSection: IProductDTOList[] = this.getForm()?.getFieldsValue(true);
         values = Object.values(values);
         values = values.map((items: IProductDTOList, index: number) => {
-            const productDeployDTOList: IProductDeployVOList[] | undefined = towerSection[index].productDeployDTOList?.map((item: IProductDeployVOList) => {
+            const productDeploy: IProductDeployVOList[] | undefined = this.state.towerSection[index]?.productDeployDTOList || [];
+            const productDeployDTOList: IProductDeployVOList[] | undefined = towerSection[index].productDeployDTOList?.map((item: IProductDeployVOList, ind: number) => {
                 return {
                     ...item,
                     productId: this.state.towerSection[index]?.id,
-                    status: this.state.towerSection[index]?.status
+                    status: productDeploy[ind].status || 1 
                 }
             })
             return {
@@ -133,7 +137,7 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
                 id: this.state.towerSection[index].id,
                 productNumber: this.state.towerSection[index].productNumber,
                 productCategoryId: this.state.towerSection[index]?.productCategoryId,
-                productDeployIdList: this.state.towerSection[index]?.productDeployIdList,
+                productDeployDeleteList: this.state.towerSection[index]?.productDeployDeleteList,
                 productDeployDTOList: productDeployDTOList
             }
         })
@@ -345,6 +349,28 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
     }
 
     /**
+     * @description 验证杆塔号
+     */
+    public checkPartNum = (value: StoreValue, index: number, ind: number): Promise<void | any> =>{
+        return new Promise(async (resolve, reject) => {  // 返回一个promise
+            const productDeployDTOList: IProductDeployVOList[] = this.getForm()?.getFieldsValue(true)[index].productDeployDTOList || [];
+            if(value) {
+                resolve(productDeployDTOList.map((items: IProductDeployVOList, itemInd: number) => {
+                    if(ind !== itemInd && items.partNum === value) {
+                        return false
+                    } else {
+                        return true
+                    }
+                }).findIndex(item => item === false))
+            } else {
+                resolve(false)
+            }
+        }).catch(error => {
+            Promise.reject(error)
+        })
+    }
+
+    /**
       * @implements
       * @description Gets table columns
       * @param item 
@@ -359,7 +385,20 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
             render: (_: undefined, record: IProductDeployVOList, ind: number): React.ReactNode => (
                 <Form.Item initialValue={ record.partNum } name={[index, 'productDeployDTOList', ind ,'partNum']} rules= {[{
                     required: true,
-                    message: '请输入段号'
+                    validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                        if(value !== undefined) {
+                            this.checkPartNum(value, index, ind).then((res) => {
+                                if (res===-1) {
+                                    callback()
+                                } else {
+                                    callback('杆塔下段号唯一！');
+                                }
+                            })
+                        } else {
+                            callback('请输入段号');
+                        }
+                        
+                    }
                 }]}>
                     <Input disabled={ record.status === 2 }/>
                 </Form.Item> 
@@ -374,7 +413,14 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
                     required: true,
                     message: '请输入段号数'
                 }]}>
-                    <Input disabled={ record.status === 2 }/>
+                    <InputNumber 
+                        stringMode={ false }
+                        min="1"
+                        max="10"
+                        step="1"
+                        precision={ 0 }
+                        className={ layoutStyles.width100 } 
+                        disabled={ record.status === 2 }/>
                 </Form.Item> 
             )
         }, {
@@ -390,7 +436,7 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
                         placement="topRight" 
                         okText="确认"
                         cancelText="取消"
-                        onConfirm={ () => { this.onDelete(index, ind, record.id) } }
+                        onConfirm={ () => { this.onDelete(index, ind, record) } }
                         disabled={ record.status === 2 }
                     >
                         <DeleteOutlined/>
@@ -401,26 +447,45 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
     }
 
     /**
-     * @description 配段弹窗删除行
+     * @description 配段弹窗删除行操作
      * @param event 
      */
-    private onDelete = (index: number, ind: number, id?: string | number): void => {
+     private toDelete = (index: number, ind: number, record?: IProductDeployVOList): void => {
         let towerSection: IProductDTOList[] | undefined = Object.values(this.getForm()?.getFieldsValue(true));
-        const productDeployDTOList: IProductDeployVOList[] | undefined = towerSection[index].productDeployDTOList;     
+        const productDeployDTOList: IProductDeployVOList[] | undefined = towerSection[index].productDeployDTOList; 
         productDeployDTOList && productDeployDTOList.splice(ind, 1);
-        const productDeployIdList: (string | number)[] = this.state.towerSection[index].productDeployIdList || [];
-        id && productDeployIdList.push(id);
+        const productDeployDeleteList: IProductDeployVOList[] = this.state.towerSection[index].productDeployDeleteList || [];
+        record && productDeployDeleteList.push(record);
         towerSection = towerSection.map((items: IProductDTOList) => {
             return {
                 ...items,
-                productDeployIdList: productDeployIdList
+                productDeployDeleteList: productDeployDeleteList
             }
         })
         this.setState({
             towerSection: [...towerSection],
         }) 
-        console.log(towerSection)
         this.getForm()?.setFieldsValue([...towerSection])
+    }
+
+    /**
+     * @description 配段弹窗删除行
+     * @param event 
+     */
+    private onDelete = async (index: number, ind: number, record?: IProductDeployVOList): Promise<void> => {
+        if(record?.id) {
+            const resData: boolean =  await RequestUtil.get('/tower-data-archive//productDeploy/checkDelete', {
+                partNum: record && record.partNum,
+                productCategoryId: this.state.towerSection[index].productCategoryId
+            });
+            if(resData) {
+                this.toDelete(index, ind, record);
+            } else {
+                message.warning('已被提料引用，无法进行删除！')
+            }
+        } else {
+            this.toDelete(index, ind, record);
+        }
     }
 
     /**
@@ -487,7 +552,6 @@ export default abstract class TowerSectionModal<P extends ITowerSectionModalProp
         let towerSection: IProductDTOList[] = this.state.towerSection;
         let productDeployDTOList: IProductDeployVOList[] | undefined = towerSection && towerSection[bodyIndex || 0]?.productDeployDTOList || [];
         let item: IProductDeployVOList = {
-            id: Math.random(),
             partNum: '',
             number: undefined
         }

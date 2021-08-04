@@ -15,6 +15,9 @@ import styles from './AbstractTowerShapeSetting.module.less';
 import ConfirmableButton from '../../../components/ConfirmableButton';
 import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGroup } from '../../../components/AbstractFillableComponent';
 import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
+import { RuleObject } from 'antd/lib/form';
+import { StoreValue } from 'antd/lib/form/interface';
+import { IProductDeployVOList } from './ITowerShape';
 
 export interface IComponentDetailsSettingProps {
     readonly id: string;
@@ -85,6 +88,10 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
         towerSection = towerSection.map((items: ITowerSection) => {
             return {
                 ...items,
+                width: items.width == -1 ? undefined : items.width,
+                thickness: items.thickness == -1 ? undefined : items.thickness,
+                length: items.length == -1 ? undefined : items.length,
+                accurateWeight: items.accurateWeight == -1 ? undefined : items.accurateWeight,
                 subtotalWeight: (items.number || 0) * (items.singleWeight || 0)
             }
         })
@@ -108,6 +115,12 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
         this.setState ({
             editingKey: undefined
         })
+        values = {
+            ...values,
+            width: values.width == null ? 0 : values.width,
+            thickness: values.thickness == null ? 0 : values.thickness,
+            length: values.length == null ? 0 : values.length,
+        }
         await RequestUtil.put('/tower-data-archive/drawComponent', values).then(res => {
             if(res) {
                 this.getData();
@@ -222,7 +235,7 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
             type: (
                 <InputNumber 
                     stringMode={ false } 
-                    min="0"
+                    min="0.01"
                     step="0.01"
                     precision={ 2 }
                     className={ layoutStyles.width100 } 
@@ -242,7 +255,7 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
             type: (
                 <InputNumber 
                     stringMode={ false } 
-                    min="0"
+                    min="0.01"
                     step="0.01"
                     precision={ 2 }
                     className={ layoutStyles.width100 }
@@ -262,7 +275,7 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
             type: (
                 <InputNumber 
                     stringMode={ false } 
-                    min="0"
+                    min="0.01"
                     step="0.01"
                     precision={ 2 }
                     className={ layoutStyles.width100 }
@@ -396,15 +409,16 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
                     </Space>
                     :
                     <Space direction="horizontal" size="small">
-                        <Button type="link" htmlType="button" disabled={ this.state.editingKey !== undefined }onClick={ this.editRow(record, ind) }>编辑</Button>
+                        <Button type="link" htmlType="button" disabled={ this.state.editingKey !== undefined } onClick={ this.editRow(record, ind) }>编辑</Button>
                         <Popconfirm 
                             title="要删除该条回款计划吗？" 
                             placement="topRight" 
                             okText="确认"
                             cancelText="取消"
                             onConfirm={ () => this.onDelete(record, ind) }
+                            disabled={ this.state.editingKey !== undefined } 
                         >
-                            <Button type="link">
+                            <Button type="link"  disabled={ this.state.editingKey !== undefined } >
                                 删除
                             </Button>
                         </Popconfirm>
@@ -491,6 +505,37 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
             }
         })
     }
+    
+    /**
+     * @description 验证是否存在段号
+     */
+    public checkNum = (value: StoreValue, index: number): number =>{
+        return this.state.towerSection.map((items: IProductDeployVOList, itemInd: number) => {
+            if(index !== itemInd && items.partNum === value) {
+                return false
+            } else {
+                return true
+            }
+        }).findIndex((item: boolean) => item === false)
+    }
+    /**
+     * @description 验证是否配段
+     */
+    public checkPartNum = (value: StoreValue): Promise<void | any> =>{
+        return new Promise(async (resolve, reject) => {  // 返回一个promise
+            const resData = await RequestUtil.get('/tower-data-archive/drawComponent/checkPartNum', {
+                partNum: value,
+                productCategoryId: this.props.match.params.id
+            });
+            if (resData) {
+                resolve(resData)
+            } else {
+                resolve(false)
+            }
+        }).catch(error => {
+            Promise.reject(error)
+        })
+    }
 
     /**
      * @description Get editable cell of contract refund record
@@ -528,9 +573,24 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
                                 rules={[
                                     {
                                       required: true,
-                                      message: `请输入${ title }`,
-                                    },
-                                ]}
+                                      validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                                        if(value && value != '') {
+                                            if (this.checkNum(value, index)===-1) {
+                                                this.checkPartNum(value).then(res => {
+                                                    if (res) {
+                                                        callback()
+                                                    } else {
+                                                        callback('未配段无法编辑构件明细')
+                                                    }
+                                                })
+                                            } else {
+                                                callback('段号已存在')
+                                            }
+                                        } else {
+                                            callback('请输入段号')
+                                        }
+                                    }
+                                }]}
                             >
                                 { type }
                             </Form.Item>
@@ -541,7 +601,7 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
                             initialValue={ record[dataIndex] } 
                             rules={[
                                 {
-                                  required: dataIndex === 'partNum' || dataIndex === 'componentCode' ||  dataIndex === 'rowMaterial' || dataIndex ===  'materialTexture' || dataIndex ===  'spec' || dataIndex ===  'number' || dataIndex ===  'singleWeight',
+                                  required: dataIndex === 'componentCode' ||  dataIndex === 'rowMaterial' || dataIndex ===  'materialTexture' || dataIndex ===  'spec' || dataIndex ===  'number' || dataIndex ===  'singleWeight',
                                   message: `请输入${ title }`,
                                 },
                             ]}

@@ -140,7 +140,7 @@
         "module": "./pages/approval/ApprovalList",
         "exact": true
     },{ // 任务单产品变更审批
-        "name": "任务单产品变更审批",
+        "name": "任务单产品审批",
         "path": "/approval/task/change/:id&:businessId",
         "module": "./pages/approval/taskchange/TaskChange",
         "exact": true

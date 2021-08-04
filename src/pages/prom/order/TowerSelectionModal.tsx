@@ -58,6 +58,7 @@ export default class TowerSelectionModal extends AbstractSelectableModal<ITowerS
         })
         this.setState({
             tableDataSource: resData,
+            selectedRows: []
         });
     }
 
