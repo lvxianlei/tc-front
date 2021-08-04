@@ -111,8 +111,7 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
                 },{
                     validator: (rule: RuleObject, value: IMaterial, callback: (error?: string) => void) => {
                         this.checkMaterialCode(value, index).then(res => {
-                            console.log(res)
-                            if (res === -1) {
+                            if (res === true) {
                                 callback()
                             } else {
                                 callback('相同类型的物料编号保持唯一性！');
@@ -338,16 +337,9 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             const materialDataList: IMaterial[] = this.getForm()?.getFieldsValue(true).materialData || [];
             if(value) {
                 const material = materialDataList.filter((item:IMaterial) => { 
-                    return item.materialCategory && materialDataList[index] && materialDataList[index].materialCategory && item.materialCategory === materialDataList[index].materialCategory 
+                    return item.materialCategory && materialDataList[index] && materialDataList[index].materialCategory && item.materialCode === value && item.materialCategory === materialDataList[index].materialCategory
                 })
-                resolve(material.map((items: IMaterial, ind: number) => {
-                    console.log(items,ind,value,index)
-                    if(index !== ind && items.materialCode && items.materialCode === value){
-                        return false
-                    }else {
-                        return true
-                    }
-                }).findIndex(item => item === false))
+                resolve(material.length > 1?false:true)
             } else {
                 resolve(false)
             }
