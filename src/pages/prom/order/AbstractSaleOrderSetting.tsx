@@ -766,7 +766,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                         step="0.0001"
                         stringMode={ false } 
                         precision={ 4 }
-                        disabled={ this.state?.saleOrder?.contractInfoDto?.chargeType !== ChargeType.UNIT_PRICE  } 
+                        disabled={ this.state?.saleOrder?.contractInfoDto?.chargeType !== ChargeType.UNIT_PRICE || record.status === 2 || record.status === 3 } 
                         onChange={ () => this.priceBlur(index) }
                     />
                 </Form.Item>
