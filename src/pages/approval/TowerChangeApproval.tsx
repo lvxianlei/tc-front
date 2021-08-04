@@ -240,7 +240,7 @@ class TowerChangeApproval extends AbstractTowerShapeSetting<ITowerChangeApproval
      * @param event 
      */
      public itemWeightClick = (index: number): void => {
-        let itemWeight: IProductAdditionalDTOList[] = this.getForm()?.getFieldsValue(true).productChangeRecordVos[index].productAdditionalDTOList;
+        let itemWeight: IProductAdditionalDTOList[] = this.getForm()?.getFieldsValue(true).productChangeRecordVos[index].productAdditionalVOList;
         itemWeight && itemWeight.map((item: IProductAdditionalDTOList, index: number) => {
             if(item.additionalItem && item.additionalItem !== "") {
                 itemWeight = itemWeight;
@@ -251,7 +251,7 @@ class TowerChangeApproval extends AbstractTowerShapeSetting<ITowerChangeApproval
         const productDtos: IProductDTOList[] = this.getForm()?.getFieldsValue(true).productChangeRecordVos || [];
         productDtos[index] = {
             ...productDtos[index],
-            productAdditionalDTOList: itemWeight
+            productAdditionalVOList: itemWeight
         }
         let fieldsValue = {
             ...this.getForm()?.getFieldsValue(true),
@@ -289,12 +289,12 @@ class TowerChangeApproval extends AbstractTowerShapeSetting<ITowerChangeApproval
         const index: number = this.state.index || 0;
         const towerShape: ITowerShape | undefined = this.state.towerShape;
         const productChangeRecordVos: IProductDTOList[] = towerShape?.productChangeRecordVos || [];
-        const productAdditionalDTOList: IProductAdditionalDTOList[] = productChangeRecordVos[index]?.productAdditionalDTOList || [];
+        const productAdditionalVOList: IProductAdditionalDTOList[] = productChangeRecordVos[index]?.productAdditionalVOList || [];
         return <>
             { this.state.isVisible ? <Modal title="增重项" visible={ this.state.isVisible } onCancel={ () => {
                 this.setState({ isVisible: false })
             } } width={ "30%" } footer={ null }>
-                <Table rowKey= {this.getTableRowKey()} bordered={ true } dataSource = { [...productAdditionalDTOList] } columns={ this.getItemColumns(index) } pagination = { false }/>
+                <Table rowKey= {this.getTableRowKey()} bordered={ true } dataSource = { [...productAdditionalVOList] } columns={ this.getItemColumns(index) } pagination = { false }/>
             </Modal>
             : null }
         </> 

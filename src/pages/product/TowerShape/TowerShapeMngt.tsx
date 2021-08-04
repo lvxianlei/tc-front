@@ -3,7 +3,7 @@
  * @copyright © 2021
  */
 
-import { Button, Dropdown, FormItemProps, Input, Menu, Popconfirm, Space, TableColumnType, TablePaginationConfig, TableProps, Upload } from 'antd';
+import { Button, Dropdown, FormItemProps, Input, Menu, message, Popconfirm, Space, TableColumnType, TablePaginationConfig, TableProps, Upload } from 'antd';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -24,7 +24,7 @@ export interface ITowerShapeMngtState extends IAbstractMngtComponentState {
     readonly internalNumber?: string | number;
     readonly projectName?: string;
     readonly steelProductShape?: string;
-    readonly productCategoryName?: string;
+    readonly name?: string;
 }
 
 export interface IResponseData {
@@ -43,7 +43,7 @@ interface ITowerShape {
     readonly materialTexture?: string;
     readonly operateStatus?: number;
     readonly partNumber?: number;
-    readonly productCategoryName?: string;
+    readonly name?: string;
     readonly productShapeName?: string;
     readonly productType?: number | string;
     readonly projectName?: string;
@@ -188,7 +188,14 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
                                 'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
                             }
                         }
-                        data={ { productCategoryId: (record as ITowerShape).id } }>
+                        data={ { productCategoryId: (record as ITowerShape).id } }
+                        showUploadList={ false }
+                        onChange={ (info) => {
+                            if(info.file.response && !info.file.response?.success) {
+                                message.warning(info.file.response?.msg)
+                            }
+                            
+                        } }>
                         <Button type="link">导入图纸构件明细</Button>
                     </Upload>
                     <Button type="link" href={ `/product/towershape/componentDetails/${ (record as ITowerShape).id }` }>编辑图纸构件明细</Button>
@@ -212,7 +219,7 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
             internalNumber: this.state.internalNumber,
             projectName: this.state.projectName,
             steelProductShape: this.state.steelProductShape,
-            productCategoryName: this.state.productCategoryName,
+            name: this.state.name,
         }, pagination);
     }
      
@@ -314,7 +321,7 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
                     internalNumber: this.state.internalNumber,
                     projectName: this.state.projectName,
                     steelProductShape: this.state.steelProductShape,
-                    productCategoryName: this.state.productCategoryName,
+                    name: this.state.name,
                 });
             });
         };
@@ -336,7 +343,7 @@ class TowerShapeMngt extends AbstractMngtComponent<ITowerShapeMngtWithRouteProps
             children: <Input placeholder="工程名称关键字" maxLength={ 200 }/>
         },
         {
-            name: 'productCategoryName',
+            name: 'name',
             children: <Input placeholder="塔型关键字" maxLength={ 200 }/>
         },
         {

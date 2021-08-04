@@ -146,7 +146,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 chargeType: selectedRows[0].chargeType,
                 orderDeliveryTime: moment(selectedRows[0].deliveryTime),
                 contractId: selectedRows[0].id,
-                signCustomerId: selectedRows[0].signCustomerId
+                signCustomerId: selectedRows[0].signCustomerId,
+                contractNumber: selectedRows[0].contractNumber
             };
             this.setState({
                 saleOrder: {
@@ -220,9 +221,9 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const saleOrderValue: ISaleOrder = this.getForm()?.getFieldsValue(true);
         const taxAmount: number = saleOrderValue.taxAmount;
         const taxRate: number = saleOrderValue.taxRate;
-        let amount: number = 0;
-        amount = taxAmount / (1 + Number(taxRate)) || 0;
-        amount = parseFloat(amount.toFixed(2));
+        let amount: number | undefined = 0;
+        amount = taxAmount / (1 + Number(taxRate)) || undefined;
+        amount = amount && parseFloat(amount.toFixed(4));
         this.getForm()?.setFieldsValue({ amount: amount });
         this.getPriceAccordTaxRate();
     }
@@ -232,16 +233,18 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      */
      public getPriceAccordTaxRate = (): void => {
         const saleOrder: ISaleOrder = this.getForm()?.getFieldsValue(true);
-        const amount: number = this.getForm()?.getFieldsValue(true).amount;
+        const amount: number | undefined = this.getForm()?.getFieldsValue(true).amount;
         const totalWeight: number = saleOrder.totalWeight;
         if(this.state.saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE) {
             this.getForm()?.setFieldsValue({ price: '-' });
         } else {
-            let price: number = 0;
-            if(totalWeight > 0) {
-                price = amount / totalWeight || 0;
+            let price: number | undefined = 0;
+            if(amount && totalWeight > 0) {
+                price = amount / totalWeight || undefined;
+            } else {
+                price = undefined;
             }
-            price = parseFloat(price.toFixed(4));
+            price = price && parseFloat(price.toFixed(4));
             this.getForm()?.setFieldsValue({ price: price });
         }
     }
@@ -267,7 +270,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         orderProductDtos = orderProductDtos && orderProductDtos.map(items => {
             return items ={
                 ...items,
-                price: saleOrder?.totalPrice || 0
+                price: saleOrder?.totalPrice || undefined
             }
         })
         this.setState({
@@ -287,17 +290,16 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
         const saleOrder: ISaleOrder = this.getForm()?.getFieldsValue(true);
         const orderProductDtos: IProductVo[] = this.getForm()?.getFieldsValue(true).orderProductDtos || [];
         if(orderProductDtos.length > 0) {
-            let totalPrice: number = 0;
-            totalPrice = saleOrder.taxAmount / saleOrder.totalWeight || 0;
-            totalPrice = parseFloat(totalPrice.toFixed(4));
+            let totalPrice: number | undefined = 0;
+            totalPrice = saleOrder.taxAmount / saleOrder.totalWeight || undefined;
+            totalPrice = totalPrice && parseFloat(totalPrice.toFixed(4));
             orderProductDtos.map<void>((items: IProductVo, ind: number): void => {
                 orderProductDtos[ind] = {
                     ...orderProductDtos[ind],
-                    totalAmount: parseFloat((totalPrice * (orderProductDtos[ind].num || 0) || 0).toFixed(2)),
+                    totalAmount: totalPrice && parseFloat((totalPrice * (orderProductDtos[ind].num || 0) || 0).toFixed(4)),
                     price: totalPrice
                 }
             })
-            console.log(orderProductDtos)
             this.getForm()?.setFieldsValue({ totalPrice: totalPrice, taxPrice: totalPrice, orderProductDtos: orderProductDtos });
         }
     }
@@ -359,7 +361,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             console.log(orderProductDtos)
             const num: number = orderProductDtos[index].num || 0;
             let totalWeight: number = saleOrderValue.totalWeight;
-            totalWeight = parseFloat((totalWeight - num).toFixed(2));
+            totalWeight = parseFloat((totalWeight - num).toFixed(4));
             
             orderProductDtos?.splice(index, 1);
             if(orderQuantity) {
@@ -429,8 +431,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 children: <Input maxLength={ 50 }/>
             }, {
                 label: '关联合同',
-                name: 'contractId',
-                initialValue: saleOrder?.contractInfoDto?.contractId,
+                name: 'contractNumber',
+                initialValue: saleOrder?.contractInfoDto?.contractNumber,
                 rules: [{
                     required: true,
                     message: '请选择关联合同'
@@ -438,8 +440,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 children:
                     <>
                         {
-                            setting ? <Input value={ saleOrder?.contractInfoDto?.contractId }
-                            disabled/> : <Input value={ saleOrder?.contractInfoDto?.contractId } suffix={ 
+                            setting ? <Input value={ saleOrder?.contractInfoDto?.contractNumber }
+                            disabled/> : <Input value={ saleOrder?.contractInfoDto?.contractNumber } suffix={ 
                                 <ContractSelectionComponent onSelect={ this.onSelect } selectKey={ [saleOrder?.contractInfoDto?.contractId] } status={ 1 }/>
                             }/>
                         }
@@ -514,9 +516,9 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 }],
                 children: <InputNumber
                     min="0"
-                    step="0.01"
+                    step="0.0001"
                     stringMode={ false } 
-                    precision={ 2 }  
+                    precision={ 4 }  
                     disabled={ saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE } 
                     onChange={ this.amountBlur }
                     className={ layoutStyles.width100 }/>
@@ -524,7 +526,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 label: '含税单价',
                 name: 'taxPrice',
                 initialValue: saleOrder?.taxPrice,
-                children: <Input  prefix="￥" disabled/>
+                children: <Input prefix="￥" disabled/>
             }, {
                 label: '税率',
                 name: 'taxRate',
@@ -545,12 +547,12 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             }, {
                 label: '不含税金额',
                 name: 'amount',
-                initialValue: saleOrder?.amount,
+                initialValue: saleOrder?.amount == 0 ? undefined : saleOrder?.amount,
                 children: <Input  prefix="￥" disabled/>
             }, {
                 label: '不含税单价',
                 name: 'price',
-                initialValue: saleOrder?.price,
+                initialValue: saleOrder?.price == 0 ? undefined : saleOrder?.price,
                 children: <Input  prefix="￥" disabled/>
             }, {
                 label: '汇率',
@@ -646,7 +648,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             key: 'lineName',
             title: '线路名称',
             dataIndex: 'lineName',
-            width: 150,
+            width: 200,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
                 <Form.Item name={['orderProductDtos', index,'lineName']}>
                     <Input maxLength={ 100 } disabled/>
@@ -656,7 +658,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             key: 'productType',
             title: '产品类型',
             dataIndex: 'productType',
-            width: 150,
+            width: 200,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
                 <Form.Item name={['orderProductDtos', index,'productType']}>
                     <Select disabled getPopupContainer={ triggerNode => triggerNode.parentNode }>
@@ -672,7 +674,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             key: 'productCategoryName',
             title: '塔型',
             dataIndex: 'productCategoryName',
-            width: 150,
+            width: 200,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
                 <Form.Item name={['orderProductDtos', index,'productCategoryName']}>
                     <Input disabled maxLength={ 50 }/>
@@ -692,7 +694,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             key: 'voltageGrade',
             title: '电压等级',
             dataIndex: 'voltageGrade',
-            width: 150,
+            width: 200,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
                 <Form.Item name={['orderProductDtos', index,'voltageGrade']}>
                     <Select style={{ width: '90%' }} disabled getPopupContainer={ triggerNode => triggerNode.parentNode }>
@@ -743,8 +745,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                     <InputNumber 
                         stringMode={ false } 
                         min="0"
-                        step="0.01"
-                        precision={ 2 }
+                        step="0.0001"
+                        precision={ 4 }
                         disabled
                         className={ layoutStyles.width100 }/>
                 </Form.Item> 
@@ -760,11 +762,11 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                     message: '请输入产品单价'
                 }]}>
                     <InputNumber
-                        min="0.01"
-                        step="0.01"
+                        min="0.0001"
+                        step="0.0001"
                         stringMode={ false } 
-                        precision={ 2 }
-                        disabled={ this.state?.saleOrder?.contractInfoDto?.chargeType !== ChargeType.UNIT_PRICE  } 
+                        precision={ 4 }
+                        disabled={ this.state?.saleOrder?.contractInfoDto?.chargeType !== ChargeType.UNIT_PRICE || record.status === 2 || record.status === 3 } 
                         onChange={ () => this.priceBlur(index) }
                     />
                 </Form.Item>
@@ -856,7 +858,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 num: selectedRows[0].productWeight,
                 unit: this.state.saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? '基' : 'kg',
                 price: this.state.saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? undefined : saleOrder?.totalPrice,
-                totalAmount: this.state.saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? undefined : Number.parseFloat(((saleOrder?.totalPrice || 0 ) * selectedRows[0].productWeight).toFixed(2)),
+                totalAmount: this.state.saleOrder?.contractInfoDto?.chargeType === ChargeType.UNIT_PRICE ? undefined : Number.parseFloat(((saleOrder?.totalPrice || 0 ) * selectedRows[0].productWeight).toFixed(4)),
                 tender: '',
                 description: selectedRows[0].description
             };
