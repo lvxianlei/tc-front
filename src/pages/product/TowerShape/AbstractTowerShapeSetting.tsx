@@ -824,8 +824,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
      * @param event 
      */
     private onDelete = async (index: number, record?: IProductDTOList): Promise<void> => {
-        const isChange: boolean | undefined = this.state.isChange;
-        if(isChange) {
+        if(record && record.id) {
             const resData: boolean =  await RequestUtil.get('/tower-data-archive/product/checkDelete', {
                 id: record && record.id,
                 productCategoryId: this.state.towerShape.id
