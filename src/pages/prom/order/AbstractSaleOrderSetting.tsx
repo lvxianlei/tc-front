@@ -648,7 +648,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             key: 'lineName',
             title: '线路名称',
             dataIndex: 'lineName',
-            width: 150,
+            width: 200,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
                 <Form.Item name={['orderProductDtos', index,'lineName']}>
                     <Input maxLength={ 100 } disabled/>
@@ -658,7 +658,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             key: 'productType',
             title: '产品类型',
             dataIndex: 'productType',
-            width: 150,
+            width: 200,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
                 <Form.Item name={['orderProductDtos', index,'productType']}>
                     <Select disabled getPopupContainer={ triggerNode => triggerNode.parentNode }>
@@ -674,7 +674,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             key: 'productCategoryName',
             title: '塔型',
             dataIndex: 'productCategoryName',
-            width: 150,
+            width: 200,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
                 <Form.Item name={['orderProductDtos', index,'productCategoryName']}>
                     <Input disabled maxLength={ 50 }/>
@@ -694,7 +694,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             key: 'voltageGrade',
             title: '电压等级',
             dataIndex: 'voltageGrade',
-            width: 150,
+            width: 200,
             render: (_: undefined, record: IProductVo, index: number): React.ReactNode => (
                 <Form.Item name={['orderProductDtos', index,'voltageGrade']}>
                     <Select style={{ width: '90%' }} disabled getPopupContainer={ triggerNode => triggerNode.parentNode }>
@@ -766,7 +766,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                         step="0.0001"
                         stringMode={ false } 
                         precision={ 4 }
-                        disabled={ this.state?.saleOrder?.contractInfoDto?.chargeType !== ChargeType.UNIT_PRICE  } 
+                        disabled={ this.state?.saleOrder?.contractInfoDto?.chargeType !== ChargeType.UNIT_PRICE || record.status === 2 || record.status === 3 } 
                         onChange={ () => this.priceBlur(index) }
                     />
                 </Form.Item>

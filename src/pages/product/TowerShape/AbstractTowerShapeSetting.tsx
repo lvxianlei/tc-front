@@ -798,10 +798,10 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
     }
 
     /**
-     * @description 产品信息删除行
+     * @description 产品信息删除操作
      * @param event 
      */
-    private onDelete = (index: number, record?: IProductDTOList): void => {
+     private toDelete = async (index: number, record?: IProductDTOList): Promise<void> => {
         const towerShape: ITowerShape | undefined = this.getForm()?.getFieldsValue(true);
         const productDTOList: IProductDTOList[] = towerShape?.productDTOList || [];
         productDTOList.splice(index, 1);
@@ -817,6 +817,26 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             productIdList: productIdList,
             productDeleteList: productDeleteList
         })
+    }
+
+    /**
+     * @description 产品信息删除行
+     * @param event 
+     */
+    private onDelete = async (index: number, record?: IProductDTOList): Promise<void> => {
+        if(record && record.id) {
+            const resData: boolean =  await RequestUtil.get('/tower-data-archive/product/checkDelete', {
+                id: record && record.id,
+                productCategoryId: this.state.towerShape.id
+            });
+            if(resData) {
+                this.toDelete(index, record);
+            } else {
+                message.warning('已被提料引用，无法进行删除！')
+            }
+        } else {
+            this.toDelete(index, record);
+        }
     }
 
     /**

@@ -305,7 +305,6 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
         return new Promise(async (resolve, reject) => {  // 返回一个promise
             const resData = await RequestUtil.get('/tower-system/material/checkMaterialCode', {
                 materialCode: value,
-                materialCategory: values.materialCategory,
                 id: values.id,
             });
             if (resData) {

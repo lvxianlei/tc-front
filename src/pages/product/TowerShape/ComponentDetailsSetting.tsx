@@ -505,6 +505,37 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
             }
         })
     }
+    
+    /**
+     * @description 验证是否存在段号
+     */
+    public checkNum = (value: StoreValue, index: number): number =>{
+        return this.state.towerSection.map((items: IProductDeployVOList, itemInd: number) => {
+            if(index !== itemInd && items.partNum === value) {
+                return false
+            } else {
+                return true
+            }
+        }).findIndex((item: boolean) => item === false)
+    }
+    /**
+     * @description 验证是否配段
+     */
+    public checkPartNum = (value: StoreValue): Promise<void | any> =>{
+        return new Promise(async (resolve, reject) => {  // 返回一个promise
+            const resData = await RequestUtil.get('/tower-data-archive/drawComponent/checkPartNum', {
+                partNum: value,
+                productCategoryId: this.props.match.params.id
+            });
+            if (resData) {
+                resolve(resData)
+            } else {
+                resolve(false)
+            }
+        }).catch(error => {
+            Promise.reject(error)
+        })
+    }
 
     /**
      * @description Get editable cell of contract refund record
@@ -542,7 +573,23 @@ class ComponentDetailsSetting<P extends IComponentDetailsSettingRouteProps, S ex
                                 rules={[
                                     {
                                       required: true,
-                                      message: `请输入${ title }`
+                                      validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                                        if(value && value != '') {
+                                            if (this.checkNum(value, index)===-1) {
+                                                this.checkPartNum(value).then(res => {
+                                                    if (res) {
+                                                        callback()
+                                                    } else {
+                                                        callback('未配段无法编辑构件明细')
+                                                    }
+                                                })
+                                            } else {
+                                                callback('段号已存在')
+                                            }
+                                        } else {
+                                            callback('请输入段号')
+                                        }
+                                    }
                                 }]}
                             >
                                 { type }
