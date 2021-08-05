@@ -78,9 +78,19 @@ import { IProductAdditionalDTOList, IProductDTOList, ITowerShape } from './ITowe
                     productAdditionalDTOList?.splice(index, 1);
                 }
             })
+            console.log( items.towerLeg1Length? -1 : items.towerLeg3Weight)
             return {
                 ...items,
                 productAdditionalDTOList: productAdditionalDTOList,
+                towerLeg1Length: items.towerLeg1Length? items.towerLeg1Length : -1,
+                towerLeg1Weight: items.towerLeg1Weight? items.towerLeg1Weight : -1,
+                towerLeg2Length: items.towerLeg2Length? items.towerLeg2Length : -1,
+                towerLeg2Weight: items.towerLeg2Weight? items.towerLeg2Weight : -1,
+                towerLeg3Length: items.towerLeg3Length? items.towerLeg3Length : -1,
+                towerLeg3Weight: items.towerLeg3Weight? items.towerLeg3Weight : -1,
+                towerLeg4Length: items.towerLeg4Length ? items.towerLeg4Length : -1,
+                towerLeg4Weight: items.towerLeg4Weight ? items.towerLeg4Weight : -1,
+                towerFootWeight: items.towerFootWeight ? items.towerFootWeight : -1,
                 productCategoryId: towerShape.id
             }
         })
