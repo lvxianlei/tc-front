@@ -2,6 +2,7 @@
  * @author zyc
  * @copyright © 2021 
  */
+import { message } from 'antd';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 
@@ -26,7 +27,7 @@ class TowerShapeNew extends AbstractTowerShapeSetting<ITowerShapeNewRouteProps, 
      */
     public async onSubmit(values: Record<string, any>): Promise<void> {
         let productDTOList: IProductDTOList[] = this.getForm()?.getFieldsValue(true).productDTOList;
-        productDTOList = productDTOList.map((items: IProductDTOList, index: number) => { 
+        productDTOList = productDTOList && productDTOList.map((items: IProductDTOList, index: number) => { 
             let productAdditionalDTOList: IProductAdditionalDTOList[] | undefined = items.productAdditionalDTOList;
             productAdditionalDTOList?.forEach((item: IProductAdditionalDTOList, index: number) => {
                 if(item && item.additionalItem !== '' && item.weight) {
@@ -42,7 +43,12 @@ class TowerShapeNew extends AbstractTowerShapeSetting<ITowerShapeNewRouteProps, 
         })
         values.productDTOList = productDTOList;
         values.contractId = this.state.towerShape.contractId;
-        return await RequestUtil.post('/tower-data-archive/productCategory', values);
+        if(values.productDTOList && values.productDTOList.length > 0) {
+            return await RequestUtil.post('/tower-data-archive/productCategory', values);
+        } else {
+            message.warning('至少有一条杆塔信息！');
+            return Promise.reject(false);
+        }   
     }
 }
 
