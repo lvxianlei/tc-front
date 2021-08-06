@@ -2,6 +2,7 @@
  * @author zyc
  * @copyright © 2021 
 */
+import { message } from 'antd';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 
@@ -102,7 +103,12 @@ class TowerShapeSetting extends AbstractTowerShapeSetting<ITowerShapeSettingRout
         values.id = this.getForm()?.getFieldsValue(true).id;
         values.productIdList = this.state.productIdList;
         values.productAdditionalIdList = this.state.productAdditionalIdList;
-        return await RequestUtil.post('/tower-data-archive/productCategory', values);
+        if(values.productDTOList.length > 0) {
+            return await RequestUtil.post('/tower-data-archive/productCategory', values);
+        } else {
+            message.warning('至少有一条杆塔信息！');
+            return Promise.reject(false);
+        }    
     }
 }
 

@@ -2,7 +2,8 @@
  * @author zyc
  * @copyright © 2021 
  */
- import { WithTranslation, withTranslation } from 'react-i18next';
+ import { message } from 'antd';
+import { WithTranslation, withTranslation } from 'react-i18next';
  import { RouteComponentProps, withRouter } from 'react-router';
  
  import RequestUtil from '../../../utils/RequestUtil';
@@ -78,16 +79,15 @@ import { IProductAdditionalDTOList, IProductDTOList, ITowerShape } from './ITowe
                     productAdditionalDTOList?.splice(index, 1);
                 }
             })
-            console.log( items.towerLeg1Length? -1 : items.towerLeg3Weight)
             return {
                 ...items,
                 productAdditionalDTOList: productAdditionalDTOList,
-                towerLeg1Length: items.towerLeg1Length? items.towerLeg1Length : -1,
-                towerLeg1Weight: items.towerLeg1Weight? items.towerLeg1Weight : -1,
-                towerLeg2Length: items.towerLeg2Length? items.towerLeg2Length : -1,
-                towerLeg2Weight: items.towerLeg2Weight? items.towerLeg2Weight : -1,
-                towerLeg3Length: items.towerLeg3Length? items.towerLeg3Length : -1,
-                towerLeg3Weight: items.towerLeg3Weight? items.towerLeg3Weight : -1,
+                towerLeg1Length: items.towerLeg1Length ? items.towerLeg1Length : -1,
+                towerLeg1Weight: items.towerLeg1Weight ? items.towerLeg1Weight : -1,
+                towerLeg2Length: items.towerLeg2Length ? items.towerLeg2Length : -1,
+                towerLeg2Weight: items.towerLeg2Weight ? items.towerLeg2Weight : -1,
+                towerLeg3Length: items.towerLeg3Length ? items.towerLeg3Length : -1,
+                towerLeg3Weight: items.towerLeg3Weight ? items.towerLeg3Weight : -1,
                 towerLeg4Length: items.towerLeg4Length ? items.towerLeg4Length : -1,
                 towerLeg4Weight: items.towerLeg4Weight ? items.towerLeg4Weight : -1,
                 towerFootWeight: items.towerFootWeight ? items.towerFootWeight : -1,
@@ -95,10 +95,16 @@ import { IProductAdditionalDTOList, IProductDTOList, ITowerShape } from './ITowe
             }
         })
         values.productDTOList = productDTOList;
+        console.log(values.productDTOList)
         values.id = this.getForm()?.getFieldsValue(true).id;
         values.productDeleteList = this.state.productDeleteList || [];
         values.productAdditionalDeleteList = this.state.productAdditionalDeleteList || [];
-        return await RequestUtil.post('/tower-data-archive/productCategory/submitProductChange', values);
+        if(values.productDTOList.length > 0) {
+            return await RequestUtil.post('/tower-data-archive/productCategory/submitProductChange', values);
+        } else {
+            message.warning('至少有一条杆塔信息！');
+            return Promise.reject(false);
+        }
      }
  }
  
