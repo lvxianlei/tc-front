@@ -332,7 +332,8 @@ import { DataNode } from 'antd/lib/tree';
       * @param pagination 
       */
      public onTableChange(pagination: TablePaginationConfig): void {
-         this.fetchMaterials({}, pagination);
+         const { bigCategory, middleCategory, smallCategory } = this.state;
+         this.fetchMaterials({ bigCategory, middleCategory, smallCategory }, pagination);
      }
      
      /**
