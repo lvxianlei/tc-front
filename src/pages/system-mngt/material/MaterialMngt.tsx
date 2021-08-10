@@ -475,7 +475,12 @@ import { DataNode } from 'antd/lib/tree';
                             this.setState({
                                 selectedKey:[]
                             })
-                            this.fetchMaterials();
+                            this.fetchMaterials({},{
+                                current: 1,
+                                pageSize: 10,
+                                total: 0,
+                                showSizeChanger: false
+                            });
                         }}>全部</Button>
                         <Tree 
                             onSelect={this.onSelect} 
