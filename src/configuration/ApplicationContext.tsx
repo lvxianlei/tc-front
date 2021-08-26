@@ -8,6 +8,7 @@ import { matchPath, RouteComponentProps } from 'react-router';
 
 import routerConfigJson from '../app-router.config.jsonc';
 import { IFilter } from '../filters/IFilter';
+import IMenuItem from '../layout/tc/IMenuItem';
 import IApplicationContext, { IRouterItem } from './IApplicationContext';
 
 
@@ -22,6 +23,11 @@ export default abstract class ApplicationContext {
      * @description Ctx config of application context
      */
     private static ctxConfig: IApplicationContext;
+
+    /**
+     * @description Menu item stack of application context
+     */
+    private static menuItemStack: IMenuItem[] = [];
 
     /**
      * @description Statics application context
@@ -46,18 +52,50 @@ export default abstract class ApplicationContext {
 
     /**
      * @static
+     * @description Protected application context
+     * @param menuItems 
+     * @param pathname 
+     * @returns menu item by path 
+     */
+    public static getMenuItemByPath(menuItems: IMenuItem[], pathname: string): IMenuItem | undefined {
+        this.traverseRootMenuItemByPath(menuItems, pathname);
+        return this.menuItemStack.pop(); 
+    }
+
+    /**
+     * @private
+     * @static
+     * @description Privates application context
+     * @param menuItems 
+     * @param path 
+     * @returns  
+     */
+    private static traverseRootMenuItemByPath(menuItems: IMenuItem[], path: string) {
+        for (let item of menuItems) {
+            this.menuItemStack.push(item);
+            if (new RegExp(item.path).test(path)) { // Hint the item
+                return;
+            } else if (item.items && item.items.length > 0) { // If the item has children, it will recurse
+                this.traverseRootMenuItemByPath(item.items, path);
+            }
+            this.menuItemStack.pop();
+        }
+    }
+
+    /**
+     * @static
      * @description Gets router item by path
      * @param pathname 
      * @returns router item by path 
      */
     public static getRouterItemByPath(pathname: string): IRouterItem | null {
         const routers: IRouterItem[] = this.get().routers || [];
-        const hitedRouters: IRouterItem[] = routers.filter<IRouterItem>((value: IRouterItem): value is IRouterItem => {
+        const hintedRouters: IRouterItem[] = routers.filter<IRouterItem>((value: IRouterItem): value is IRouterItem => {
             return !!matchPath(pathname, value); // whether hint the item or not
             // return value.path === pathname; // whether hint the item or not
         });
-        if (hitedRouters && hitedRouters.length > 0) { // hited item is existed
-            return hitedRouters[ hitedRouters.length - 1 ];
+        if (hintedRouters && hintedRouters.length > 0) { // hinted item is existed
+            return hintedRouters[ hintedRouters.length - 1 ];
         }
         return null;
     }

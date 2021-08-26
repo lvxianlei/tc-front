@@ -16,6 +16,7 @@ import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
 import { IRouterItem } from '../../configuration/IApplicationContext';
 import ApplicationContext from '../../configuration/ApplicationContext';
+import IMenuItem from './IMenuItem';
 
 export interface ITCHeaderProps {}
 export interface ITCHeaderRouteProps extends RouteComponentProps<ITCHeaderProps> {}
@@ -58,8 +59,18 @@ class TCHeader extends AsyncComponent<ITCHeaderRouteProps, ITCHeaderState> {
     protected renderBreadcrumb(): React.ReactNode {
         const { location } = this.props;
         const pathSnippets: string[] = location.pathname.split('/').filter((i: string) => i);
+        const selectedMenuItem: IMenuItem | undefined =  ApplicationContext.getMenuItemByPath(ApplicationContext.get().layout?.navigationPanel?.props?.menu, `/${ pathSnippets[0] }`)
         return  (
             <Breadcrumb separator="/" className={ styles.breadcrumb }>
+                {
+                    selectedMenuItem
+                    ?
+                    <Breadcrumb.Item key={ selectedMenuItem.path }>
+                        { selectedMenuItem.label }
+                    </Breadcrumb.Item>
+                    :
+                    null
+                }
                 {
                     pathSnippets.map<React.ReactNode>((item: string, index: number): React.ReactNode => {
                         const path: string = `/${pathSnippets.slice(0, index + 1).join('/')}`;

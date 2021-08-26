@@ -10,11 +10,12 @@
 
 .breadcrumb {
     padding-left: 20px;
+    :global(.ant-breadcrumb-link),
     :global(a),
     :global(.ant-breadcrumb-separator) {
         color: rgba(255, 255, 255, 0.4);
     }
-    & > :global(span:last-child) {
+    & > :global(span:last-child span) {
         color: #fff;
     }
 }
