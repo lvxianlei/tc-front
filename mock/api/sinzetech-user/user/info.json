@@ -1,0 +1,31 @@
+{
+    "code": 200,
+    "success": true,
+    "data": {
+        "id": "1",
+        "createUser": "0",
+        "createTime": "2021-04-12 12:59:11",
+        "updateUser": "1",
+        "updateTime": "2021-08-25 11:50:17",
+        "status": 0,
+        "isDeleted": 0,
+        "name": "系统管理员",
+        "account": "admin",
+        "openId": "o50f84tvy30TkqnsUIoO1ZevMQK8",
+        "password": "90b9aa7e25f80cf4f64e990b78a9fc5ebd6cecad",
+        "portrait": "",
+        "phone": "13231107168",
+        "email": "1@qq.com",
+        "identityCard": "110225196403026127",
+        "roleIds": "",
+        "tenantId": "",
+        "tenantName": "",
+        "departmentName": "",
+        "departmentId": -1,
+        "userRoleNames": "",
+        "clientId": "",
+        "userRoleList": [],
+        "userTenantStatus": 0
+    },
+    "msg": "操作成功"
+}

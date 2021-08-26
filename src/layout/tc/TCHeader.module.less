@@ -1,0 +1,20 @@
+.header {
+    display: flex;
+    height: inherit;
+    align-items: center;
+}
+
+.trigger {
+    color: #fff;
+}
+
+.breadcrumb {
+    padding-left: 20px;
+    :global(a),
+    :global(.ant-breadcrumb-separator) {
+        color: rgba(255, 255, 255, 0.4);
+    }
+    & > :global(span:last-child) {
+        color: #fff;
+    }
+}

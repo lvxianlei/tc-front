@@ -14,8 +14,17 @@ export interface IDefaultFrameState extends IAbstractFrameState {}
 
 export default class DefaultFrame<
     P extends IDefaultFrameProps = {},
-    S extends IDefaultFrameState = {}
+    S extends IDefaultFrameState = IDefaultFrameState
 > extends AbstractFrame<P, S> {
+
+    /**
+     * @implements
+     * @description Renders logo
+     * @returns logo 
+     */
+     public renderLogo(): React.ReactNode {
+        return <div>1234</div>;
+    }
 
     /**
      * @override

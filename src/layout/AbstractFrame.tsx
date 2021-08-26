@@ -3,20 +3,41 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 import { Layout } from 'antd';
+import { SiderTheme } from 'antd/lib/layout/Sider';
 import React from 'react';
 
 import ApplicationContext from '../configuration/ApplicationContext';
+import EventBus from '../utils/EventBus';
 import styles from './AbstractFrame.module.less';
 import layoutStyles from './Layout.module.less';
 
 
 export interface IAbstractFrameProps {}
-export interface IAbstractFrameState {}
+export interface IAbstractFrameState {
+    readonly collapsed: boolean;
+}
 
 export default abstract class AbstractFrame<
     P extends IAbstractFrameProps = {},
-    S extends IAbstractFrameState = {}
+    S extends IAbstractFrameState = IAbstractFrameState
 > extends React.Component<P, S> {
+
+    constructor(props: P) {
+        super(props);
+        this.state = this.getState();
+    }
+
+    protected getState(): S {
+        return {
+            collapsed: false
+        } as S;
+    }
+
+    /**
+     * @description Renders logo
+     * @returns logo 
+     */
+    abstract renderLogo(): React.ReactNode;
     
     /**
      * @description Renders navigation panel
@@ -42,6 +63,17 @@ export default abstract class AbstractFrame<
      */
     abstract renderFooterPanel(): React.ReactNode;
 
+    public componentDidMount(): void {
+        super.componentDidMount && super.componentDidMount();
+        EventBus.addListener('menu/collapsed', this.onCollapsed, this);
+    }
+
+    protected onCollapsed(collapsed: boolean): void {
+        this.setState({
+            collapsed: collapsed
+        });
+    }
+
     /**
      * @protected
      * @description Gets menu container width
@@ -52,12 +84,42 @@ export default abstract class AbstractFrame<
     }
 
     /**
+     * @protected
+     * @description Gets menu theme
+     * @returns menu theme 
+     */
+    protected getMenuTheme(): SiderTheme {
+        return ApplicationContext.get().layout?.navigationPanel?.props?.theme || 'light';
+    }
+
+    /**
      * @description Renders abstract frame
      * @returns render 
      */
     public render(): React.ReactNode {
         return (
             <Layout className={ layoutStyles.height100 }>
+                <Layout.Sider theme={ this.getMenuTheme() } collapsed={ this.state.collapsed }
+                    width={ this.getMenuContainerWidth() }>
+                    <div className={ styles.logo }>
+                        { this.renderLogo() }
+                    </div>
+                    <div className={ styles.navigation }>
+                        { this.renderNavigationPanel() }
+                    </div>
+                    {/* <Layout.Footer>
+                        { this.renderFooterPanel() }
+                    </Layout.Footer> */}
+                </Layout.Sider>
+                <Layout>
+                    <Layout.Header className={ styles.header }>
+                        { this.renderHeaderPanel() }
+                    </Layout.Header>
+                    <Layout.Content className={ styles.content }>
+                        { this.renderContentPanel() }
+                    </Layout.Content>
+                </Layout>
+                {/**
                 <Layout.Header>
                     { this.renderHeaderPanel() }
                 </Layout.Header>
@@ -74,6 +136,7 @@ export default abstract class AbstractFrame<
                         </Layout.Footer>
                     </Layout>
                 </Layout>
+                */}
             </Layout>
         );
     }

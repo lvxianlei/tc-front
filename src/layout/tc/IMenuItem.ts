@@ -6,5 +6,6 @@
 export default interface IMenuItem {
     readonly label: string;
     readonly path: string;
+    readonly icon?: string;
     readonly items?: IMenuItem[];
 }

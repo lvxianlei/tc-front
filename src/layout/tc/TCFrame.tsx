@@ -9,67 +9,69 @@ import { Link } from 'react-router-dom';
 
 import ApplicationContext from '../../configuration/ApplicationContext';
 import { IRouterItem } from '../../configuration/IApplicationContext';
-import DefaultFrame, { IDefaultFrameProps } from '../DefaultFrame';
+import DefaultFrame, { IDefaultFrameProps, IDefaultFrameState } from '../DefaultFrame';
 import layoutStyles from '../Layout.module.less';
-import IMenuItem from './IMenuItem';
 
 export interface ITCFrameProps {}
 export interface ITCFrameRouteProps extends RouteComponentProps<ITCFrameProps>, IDefaultFrameProps {}
-export interface ITCFrameState {
-    readonly selectedMenuItem: IMenuItem | undefined;
-}
+export interface ITCFrameState extends IDefaultFrameState {}
 
 /**
  * @TODO Describe the class
  */
 class TCFrame extends DefaultFrame<ITCFrameRouteProps, ITCFrameState> {
 
-    public renderContentPanel(): React.ReactNode {
-        return (
-            <Space direction="vertical" size="small" className={ layoutStyles.width100 }>
-                { this.renderBreadcrumb() }
-                { super.renderContentPanel() }
-            </Space>
-        );
-    }
+    // /**
+    //  * @implements
+    //  * @description Renders content panel
+    //  * @returns content panel 
+    //  */
+    // public renderContentPanel(): React.ReactNode {
+    //     return (
+    //         <Space direction="vertical" size="small" className={ layoutStyles.width100 }>
+    //             { this.renderBreadcrumb() }
+    //             { super.renderContentPanel() }
+    //         </Space>
+    //     );
+    // }
 
-    /**
-     * @protected
-     * @description Renders breadcrumb
-     * @returns breadcrumb 
-     */
-    protected renderBreadcrumb(): React.ReactNode {
-        const { location } = this.props;
-        const pathSnippets: string[] = location.pathname.split('/').filter((i: string) => i);
-        return  (
-            <Card>
-                <Breadcrumb separator=">">
-                    {
-                        pathSnippets.map<React.ReactNode>((item: string, index: number): React.ReactNode => {
-                            const path: string = `/${pathSnippets.slice(0, index + 1).join('/')}`;
-                            const routerItem: IRouterItem | null = ApplicationContext.getRouterItemByPath(path);
-                            return (
-                                routerItem
-                                ?
-                                <Breadcrumb.Item key={ path }>
-                                    {
-                                        path === location.pathname
-                                        ?
-                                        routerItem.name
-                                        :
-                                        <Link to={ path }>{ routerItem.name }</Link>
+    // /**
+    //  * @protected
+    //  * @description Renders breadcrumb
+    //  * @returns breadcrumb 
+    //  */
+    // protected renderBreadcrumb(): React.ReactNode {
+    //     const { location } = this.props;
+    //     const pathSnippets: string[] = location.pathname.split('/').filter((i: string) => i);
+    //     return  (
+    //         <Card>
+    //             <Breadcrumb separator=">">
+    //                 {
+    //                     pathSnippets.map<React.ReactNode>((item: string, index: number): React.ReactNode => {
+    //                         const path: string = `/${pathSnippets.slice(0, index + 1).join('/')}`;
+    //                         const routerItem: IRouterItem | null = ApplicationContext.getRouterItemByPath(path);
+    //                         return (
+    //                             routerItem
+    //                             ?
+    //                             <Breadcrumb.Item key={ path }>
+    //                                 {
+    //                                     path === location.pathname
+    //                                     ?
+    //                                     routerItem.name
+    //                                     :
+    //                                     <Link to={ path }>{ routerItem.name }</Link>
 
-                                    }
-                                </Breadcrumb.Item>
-                                :
-                                null
-                            );
-                        })
-                    }
-                </Breadcrumb>
-            </Card>
-        );
-    }
+    //                                 }
+    //                             </Breadcrumb.Item>
+    //                             :
+    //                             null
+    //                         );
+    //                     })
+    //                 }
+    //             </Breadcrumb>
+    //         </Card>
+    //     );
+    // }
 }
 
 export default withRouter(TCFrame);

@@ -36,6 +36,7 @@ export interface IClientConfig {
 
 export default interface IApplicationContext extends IClientConfig {
     readonly home?: string;
+    readonly theme?: string;
     readonly layout?: ILayout;
     readonly filters?: IFilter[];
     readonly routers?: IRouterItem[];

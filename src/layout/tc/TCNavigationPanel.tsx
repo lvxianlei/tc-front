@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Col, Menu, Row } from 'antd';
+import { Col, Menu, MenuTheme, Row } from 'antd';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -72,6 +72,15 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
     }
 
     /**
+     * @protected
+     * @description Gets menu theme
+     * @returns menu theme 
+     */
+     protected getMenuTheme(): MenuTheme {
+        return ApplicationContext.get().layout?.navigationPanel?.props?.theme || 'light';
+    }
+
+    /**
      * @description Renders TCNavigationPanel
      * @returns render 
      */
@@ -80,30 +89,29 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
         const selectedDarkMenuItem: IMenuItem | undefined = this.getMenuItemByPath(ApplicationContext.get().layout?.navigationPanel?.props?.menu, location.pathname);
         const selectedSubMenuItem: IMenuItem | undefined =  this.getMenuItemByPath(selectedDarkMenuItem?.items || [], location.pathname);
         return (
-            <Row className={ layoutStyles.height100 }>
-                <Col span={ 7 }>
-                    <Menu mode="inline" theme="dark" className={ layoutStyles.height100 } selectedKeys={[ selectedDarkMenuItem?.path || '' ]}>
-                        {
-                            menu.map<React.ReactNode>((item: IMenuItem): React.ReactNode => (
-                                <Menu.Item key={ item.path }>
-                                    <Link to={ item.items ? item.items[0].path : item.path }>{ item.label }</Link>
-                                </Menu.Item>
-                            ))
-                        }
-                    </Menu>
-                </Col>
-                <Col span={ 17 }>
-                    <Menu mode="inline" theme="light" className={ layoutStyles.height100 } selectedKeys={[ selectedSubMenuItem?.path || '' ]}>
-                        {
-                            selectedDarkMenuItem?.items?.map<React.ReactNode>((item: IMenuItem): React.ReactNode => (
-                                <Menu.Item key={ item.path }>
-                                    <Link to={ item.items ? item.items[0].path : item.path }>{ item.label }</Link>
-                                </Menu.Item>
-                            ))
-                        }
-                    </Menu>
-                </Col>
-            </Row>
+            <Menu mode="inline" theme={ this.getMenuTheme() }
+                defaultSelectedKeys={[ selectedSubMenuItem?.path || selectedDarkMenuItem?.path || '' ]}
+                defaultOpenKeys={[ selectedDarkMenuItem?.path || '' ]}>
+                {
+                    menu.map<React.ReactNode>((item: IMenuItem): React.ReactNode => (
+                        (item.items && item.items.length)
+                        ?
+                        <Menu.SubMenu key={ item.path } title={ item.label }>
+                            {
+                                item.items.map<React.ReactNode>((subItem: IMenuItem): React.ReactNode => (
+                                    <Menu.Item key={ subItem.path }>
+                                        <Link to={ subItem.path }>{ subItem.label }</Link>
+                                    </Menu.Item>
+                                ))
+                            }
+                        </Menu.SubMenu>
+                        :
+                        <Menu.Item key={ item.path }>
+                            <Link to={ item.path }>{ item.label }</Link>
+                        </Menu.Item>
+                    ))
+                }
+            </Menu>
         );
     }
 }
