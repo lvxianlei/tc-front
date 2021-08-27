@@ -100,6 +100,7 @@ export default abstract class AbstractFrame<
         return (
             <Layout className={ layoutStyles.height100 }>
                 <Layout.Sider theme={ this.getMenuTheme() } collapsed={ this.state.collapsed }
+                    collapsedWidth={ 48 }
                     width={ this.getMenuContainerWidth() }>
                     <div className={ styles.logo }>
                         { this.renderLogo() }

@@ -23,7 +23,7 @@ export default class DefaultFrame<
      * @returns logo 
      */
      public renderLogo(): React.ReactNode {
-        return <div>1234</div>;
+        return <i className={ `font_family icon-${ ApplicationContext.get().logo }` }></i>;
     }
 
     /**

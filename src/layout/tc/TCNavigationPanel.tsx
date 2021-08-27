@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import AsyncComponent from '../../components/AsyncComponent';
 import ApplicationContext from '../../configuration/ApplicationContext';
 import IMenuItem from './IMenuItem';
+import styles from './TCNavigationPanel.module.less';
 
 export interface ITCNavigationPanelProps {}
 export interface ITCNavigationPanelRouteProps extends RouteComponentProps<ITCNavigationPanelProps>, WithTranslation {
@@ -55,14 +56,14 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
         const selectedDarkMenuItem: IMenuItem | undefined = ApplicationContext.getMenuItemByPath(ApplicationContext.get().layout?.navigationPanel?.props?.menu, location.pathname);
         const selectedSubMenuItem: IMenuItem | undefined =  ApplicationContext.getMenuItemByPath(selectedDarkMenuItem?.items || [], location.pathname);
         return (
-            <Menu mode="inline" theme={ this.getMenuTheme() }
+            <Menu mode="inline" theme={ this.getMenuTheme() } className={ styles.menu }
                 defaultSelectedKeys={[ selectedSubMenuItem?.path || selectedDarkMenuItem?.path || '' ]}
                 defaultOpenKeys={[ selectedDarkMenuItem?.path || '' ]}>
                 {
                     menu.map<React.ReactNode>((item: IMenuItem): React.ReactNode => (
                         (item.items && item.items.length)
                         ?
-                        <Menu.SubMenu key={ item.path } title={ item.label }>
+                        <Menu.SubMenu key={ item.path } title={ item.label } icon={ <i className={ `font_family icon-${ item.icon } ${ styles.icon }` }></i> }>
                             {
                                 item.items.map<React.ReactNode>((subItem: IMenuItem): React.ReactNode => (
                                     <Menu.Item key={ subItem.path }>
@@ -72,7 +73,7 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
                             }
                         </Menu.SubMenu>
                         :
-                        <Menu.Item key={ item.path }>
+                        <Menu.Item key={ item.path } icon={ <i className={ `iconfont icon-${ item.icon }` }></i> }>
                             <Link to={ item.path }>{ item.label }</Link>
                         </Menu.Item>
                     ))
