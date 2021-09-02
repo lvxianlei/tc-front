@@ -14,95 +14,153 @@
             "props": {
                 "width": 250, // 导航面板宽度
                 "theme": "dark",
-                "menu": [{ // 菜单项配置
-                    "label": "客户管理",
-                    "icon": "customer",
-                    "path": "/client",
-                    "items": [{
+                "menu": [
+                    { // 菜单项配置
                         "label": "客户管理",
-                        "path": "/client/mngt"
-                    }]
-                }, {
-                    "label": "营销管理",
-                    "icon": "marketing",
-                    "path": "/prom",
-                    "items": [{
-                        "label": "销售合同管理",
-                        "path": "/prom/contract"
-                    }, {
-                        "label": "销售订单管理",
-                        "path": "/prom/order"
-                    }, {
-                        "label": "销售任务单管理",
-                        "path": "/prom/task"
-                    }]
-                },{
-                    "label": "技术中心",
-                    "icon": "technology",
-                    "path": "/technology",
-                    "items": [
-                        {
-                            "label": "提料管理",
-                            "path": "/technology/materialExtraction"
-                        }]
-                },{
-                    "label": "审批",
-                    "icon": "examine",
-                    "path": "/approval",
-                    "items": [
-                        {
-                            "label": "审批中心",
-                            "path": "/approval/task"
-                        }]
-                },{
-                    "label": "系统管理",
-                    "icon": "system",
-                    "path": "/sys",
-                    "items": [
-                        {
-                        "label": "用户管理",
-                        "path": "/sys/users"
-                    }, 
+                        "icon": "customer",
+                        "path": "/client",
+                        "items": [
+                            {
+                                "label": "客户管理",
+                                "path": "/client/mngt"
+                            }
+                        ]
+                    },
                     {
-                        "label": "字典管理",
-                        "path": "/sys/dxnry"
-                    }, 
+                        "label": "营销管理",
+                        "icon": "marketing",
+                        "path": "/prom",
+                        "items": [
+                            {
+                                "label": "销售合同管理",
+                                "path": "/prom/contract"
+                            },
+                            {
+                                "label": "销售订单管理",
+                                "path": "/prom/order"
+                            },
+                            {
+                                "label": "销售任务单管理",
+                                "path": "/prom/task"
+                            }
+                        ]
+                    },
                     {
-                        "label": "原材料类型管理",
-                        "path": "/sys/materialType"
-                    }, 
+                        "label": "技术中心",
+                        "icon": "technology",
+                        "path": "/technology",
+                        "items": [
+                            {
+                                "label": "提料管理",
+                                "path": "/technology/materialExtraction"
+                            }
+                        ]
+                    },
                     {
-                        "label": "原材料管理",
-                        "path": "/sys/material"
-                    }]
-                }, {
-                    "label": "权限管理",
-                    "icon": "rules",
-                    "path": "/auth",
-                    "items": [{
-                        "label": "角色管理",
-                        "path": "/auth/roles"
-                    }]
-                }, {
-                    "label": "放样外协服务",
-                    "icon": "lofting",
-                    "path": "/outsource",
-                    "items": [{
-                        "label": "委托列表",
-                        "path": "/outsource/entrust"
-                    }, {
-                        "label": "已完成塔型",
-                        "path": "/outsource/towershape"
-                    }]
-                }, {
-                    "label": "产品管理",
-                    "icon": "product",
-                    "path": "/product",
-                    "items": [{
-                        "label": "塔型管理",
-                        "path": "/product/towershape"
-                    }]
-                }]
+                        "label": "审批",
+                        "icon": "examine",
+                        "path": "/approval",
+                        "items": [
+                            {
+                                "label": "审批中心",
+                                "path": "/approval/task"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "系统管理",
+                        "icon": "system",
+                        "path": "/sys",
+                        "items": [
+                            {
+                                "label": "用户管理",
+                                "path": "/sys/users"
+                            },
+                            {
+                                "label": "字典管理",
+                                "path": "/sys/dxnry"
+                            },
+                            {
+                                "label": "原材料类型管理",
+                                "path": "/sys/materialType"
+                            },
+                            {
+                                "label": "原材料管理",
+                                "path": "/sys/material"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "权限管理",
+                        "icon": "rules",
+                        "path": "/auth",
+                        "items": [
+                            {
+                                "label": "角色管理",
+                                "path": "/auth/roles"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "放样外协服务",
+                        "icon": "lofting",
+                        "path": "/outsource",
+                        "items": [
+                            {
+                                "label": "委托列表",
+                                "path": "/outsource/entrust"
+                            },
+                            {
+                                "label": "已完成塔型",
+                                "path": "/outsource/towershape"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "产品管理",
+                        "icon": "product",
+                        "path": "/product",
+                        "items": [
+                            {
+                                "label": "塔型管理",
+                                "path": "/product/towershape"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "招标信息",
+                        "icon": "bidding",
+                        "path": "/bidding",
+                        "items": [
+                            {
+                                "label": "招标信息",
+                                "path": "/bidding/information"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "项目管理",
+                        "icon": "project",
+                        "path": "/project",
+                        "items": [
+                            {
+                                "label": "项目管理",
+                                "path": "/project/management"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "审批管理",
+                        "icon": "approval-mngt",
+                        "path": "/approvalm",
+                        "items": [
+                            {
+                                "label": "审批管理",
+                                "path": "/approvalm/management"
+                            }
+                        ]
+                    }
+                ]
             }
         },
         "content-panel": "./layout/DefaultContentPanel", // 内容面板

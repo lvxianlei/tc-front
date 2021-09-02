@@ -3,220 +3,301 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 { // 路由配置
-    "globalRouters": [{
-        "name": "登录",
-        "path": "/login",
-        "module": "./pages/login/Login",
-        "exact": true
-    }],
-    "routers": [{ // 客户管理
-        "name": "客户管理", // 显示在面包屑中的名称
-        "path": "/client/mngt",
-        "module": "./pages/client-mngt/ClientMngt",
-        "exact": true
-    }, { // 新增客户
-        "name": "新增客户",
-        "path": "/client/mngt/new",
-        "module": "./pages/client-mngt/ClientNew",
-        "exact": true
-    }, { // 编辑客户
-        "name": "编辑客户",
-        "path": "/client/mngt/setting/:id",
-        "module": "./pages/client-mngt/ClientSetting",
-        "exact": true
-    }, {
-        "name": "销售合同管理", 
-        "path": "/prom/contract",
-        "module": "./pages/prom/contract/PromContract",
-        "exact": true
-    }, { // 新增合同
-        "name": "新增合同",
-        "path": "/prom/contract/new",
-        "module": "./pages/prom/contract/ContractNew",
-        "exact": true
-    }, { // 编辑合同
-        "name": "编辑合同",
-        "path": "/prom/contract/setting/:id",
-        "module": "./pages/prom/contract/ContractSetting",
-        "exact": true
-    }, { // 新增回款计划
-        "name": "新增回款记录",
-        "path": "/prom/contract/paymentRecord/:id/:projectName/:signCustomerId/:signCustomerName",
-        "module": "./pages/prom/contract/PaymentRecordNew",
-        "exact": true
-    }, { // 合同详情
-        "name": "合同详情",
-        "path": "/prom/contract/detail/:id",
-        "module": "./pages/prom/contract/ContractDetail",
-        "exact": true
-    }, {
-        "name": "销售订单管理", 
-        "path": "/prom/order",
-        "module": "./pages/prom/order/SaleOrder",
-        "exact": true
-    }, {
-        "name": "新增订单", 
-        "path": "/prom/order/new",
-        "module": "./pages/prom/order/SaleOrderNew",
-        "exact": true
-    }, {
-        "name": "编辑订单", 
-        "path": "/prom/order/setting/:id",
-        "module": "./pages/prom/order/SaleOrderSetting",
-        "exact": true
-    }, { // 订单详情
-        "name": "订单详情",
-        "path": "/prom/order/detail/:id",
-        "module": "./pages/prom/order/SaleOrderDetail",
-        "exact": true
-    }, { // 字典管理
-        "name": "字典管理",
-        "path": "/sys/dxnry",
-        "module": "./pages/system-mngt/DictMngt",
-        "exact": true
-    }, { // 角色管理
-        "name": "角色管理",
-        "path": "/auth/roles",
-        "module": "./pages/auth/role/RoleMngt",
-        "exact": true
-    }, { // 添加角色
-        "name": "添加角色",
-        "path": "/auth/roles/new",
-        "module": "./pages/auth/role/RoleNew",
-        "exact": true
-    }, { // 编辑角色
-        "name": "编辑角色",
-        "path": "/auth/roles/setting/:id",
-        "module": "./pages/auth/role/RoleSetting",
-        "exact": true
-    }, { // 销售任务单管理
-        "name": "销售任务单管理",
-        "path": "/prom/task",
-        "module": "./pages/prom/task-mngt/TasktMngt",
-        "exact": true
-    }, { // 新增任务单
-        "name": "创建任务单",
-        "path": "/prom/task/new",
-        "module": "./pages/prom/task-mngt/TaskNew",
-        "exact": true
-    }, { // 编辑任务单
-        "name": "编辑任务单",
-        "path": "/prom/task/edit/:id",
-        "module": "./pages/prom/task-mngt/TaskEdit",
-        "exact": true
-    }, { // 任务单完善特殊要求
-        "name": "完善特殊要求",
-        "path": "/prom/task/special/:id",
-        "module": "./pages/prom/task-mngt/TaskSpecial",
-        "exact": true
-    }, { // 任务单完善产品信息
-        "name": "完善产品信息",
-        "path": "/prom/task/product/:id",
-        "module": "./pages/prom/task-mngt/TaskProduct",
-        "exact": true
-    }, { // 查看任务单
-        "name": "查看任务单",
-        "path": "/prom/task/view/:id&:status&:taskReviewStatus",
-        "module": "./pages/prom/task-mngt/TaskDetail",
-        "exact": true
-    }, { // 用户管理
-        "name": "用户管理",
-        "path": "/sys/users",
-        "module": "./pages/system-mngt/user/UserMngt",
-        "exact": true
-    }, { // 新增用户
-        "name": "新增用户",
-        "path": "/sys/users/new",
-        "module": "./pages/system-mngt/user/UserNew",
-        "exact": true
-    }, { // 修改用户
-        "name": "修改用户",
-        "path": "/sys/users/setting/:id",
-        "module": "./pages/system-mngt/user/UserSetting",
-        "exact": true
-    },{ //任务单审批
-        "name": "审批中心",
-        "path": "/approval/task",
-        "module": "./pages/approval/ApprovalList",
-        "exact": true
-    },{ // 任务单产品变更审批
-        "name": "任务单产品审批",
-        "path": "/approval/task/change/:id&:businessId",
-        "module": "./pages/approval/taskchange/TaskChange",
-        "exact": true
-    }, { // 审批产品信息变更
-        "name": "产品信息变更审批",
-        "path": "/approval/task/product-change/:id",
-        "module": "./pages/approval/TowerChangeApproval",
-        "exact": true
-    }, { // 委托列表
-        "name": "委托列表",
-        "path": "/outsource/entrust",
-        "module": "./pages/entrust/EntrustList",
-        "exact": true
-    }, { // 委托详情
-        "name": "委托详情",
-        "path": "/outsource/entrust/detail/:id",
-        "module": "./pages/entrust/EntrustDetail",
-        "exact": true
-    }, { // 已完成塔型
-        "name": "已完成塔型",
-        "path": "/outsource/towershape",
-        "module": "./pages/entrust/TowerShape",
-        "exact": true
-    }, { // 原材料类型管理
-        "name": "原材料类型管理",
-        "path": "/sys/materialType",
-        "module": "./pages/system-mngt/material/MaterialTypeMngt",
-        "exact": true
-    }, { // 原材料管理
-        "name": "原材料管理",
-        "path": "/sys/material",
-        "module": "./pages/system-mngt/material/MaterialMngt",
-        "exact": true
-    }, { // 新增原材料
-        "name": "新增原材料",
-        "path": "/sys/material/new",
-        "module": "./pages/system-mngt/material/MaterialNew",
-        "exact": true
-    }, { // 编辑原材料
-        "name": "编辑原材料",
-        "path": "/sys/material/view/:id",
-        "module": "./pages/system-mngt/material/MaterialView",
-    }, { //塔型管理
-        "name": "塔型管理",
-        "path": "/product/towershape",
-        "module": "./pages/product/TowerShape/TowerShapeMngt",
-        "exact": true
-    }, { //新增塔型
-        "name": "新增塔型",
-        "path": "/product/towershape/new",
-        "module": "./pages/product/TowerShape/TowerShapeNew",
-        "exact": true
-    }, { //编辑塔型
-        "name": "编辑塔型",
-        "path": "/product/towershape/setting/:id",
-        "module": "./pages/product/TowerShape/TowerShapeSetting",
-        "exact": true
-    }, { //变更塔型
-        "name": "变更塔型",
-        "path": "/product/towershape/change/:id",
-        "module": "./pages/product/TowerShape/TowerShapeChange",
-        "exact": true
-    }, { //编辑图纸构件明细
-        "name": "编辑图纸构件明细",
-        "path": "/product/towershape/componentDetails/:id",
-        "module": "./pages/product/TowerShape/ComponentDetailsSetting",
-        "exact": true
-    }, { // 提料管理
-        "name": "提料管理",
-        "path": "/technology/materialExtraction",
-        "module": "./pages/technology/materialExtraction/materialExtractionMngt",
-        "exact": true
-    }, { // 新增提料管理
-        "name": "提料管理",
-        "path": "/technology/materialExtraction/new",
-        "module": "./pages/technology/materialExtraction/materialExtractionNew",
-        "exact": true
-    }]
+    "globalRouters": [
+        {
+            "name": "登录",
+            "path": "/login",
+            "module": "./pages/login/Login",
+            "exact": true
+        }
+    ],
+    "routers": [
+        { // 客户管理
+            "name": "客户管理", // 显示在面包屑中的名称
+            "path": "/client/mngt",
+            "module": "./pages/client-mngt/ClientMngt",
+            "exact": true
+        },
+        { // 新增客户
+            "name": "新增客户",
+            "path": "/client/mngt/new",
+            "module": "./pages/client-mngt/ClientNew",
+            "exact": true
+        },
+        { // 编辑客户
+            "name": "编辑客户",
+            "path": "/client/mngt/setting/:id",
+            "module": "./pages/client-mngt/ClientSetting",
+            "exact": true
+        },
+        {
+            "name": "销售合同管理",
+            "path": "/prom/contract",
+            "module": "./pages/prom/contract/PromContract",
+            "exact": true
+        },
+        { // 新增合同
+            "name": "新增合同",
+            "path": "/prom/contract/new",
+            "module": "./pages/prom/contract/ContractNew",
+            "exact": true
+        },
+        { // 编辑合同
+            "name": "编辑合同",
+            "path": "/prom/contract/setting/:id",
+            "module": "./pages/prom/contract/ContractSetting",
+            "exact": true
+        },
+        { // 新增回款计划
+            "name": "新增回款记录",
+            "path": "/prom/contract/paymentRecord/:id/:projectName/:signCustomerId/:signCustomerName",
+            "module": "./pages/prom/contract/PaymentRecordNew",
+            "exact": true
+        },
+        { // 合同详情
+            "name": "合同详情",
+            "path": "/prom/contract/detail/:id",
+            "module": "./pages/prom/contract/ContractDetail",
+            "exact": true
+        },
+        {
+            "name": "销售订单管理",
+            "path": "/prom/order",
+            "module": "./pages/prom/order/SaleOrder",
+            "exact": true
+        },
+        {
+            "name": "新增订单",
+            "path": "/prom/order/new",
+            "module": "./pages/prom/order/SaleOrderNew",
+            "exact": true
+        },
+        {
+            "name": "编辑订单",
+            "path": "/prom/order/setting/:id",
+            "module": "./pages/prom/order/SaleOrderSetting",
+            "exact": true
+        },
+        { // 订单详情
+            "name": "订单详情",
+            "path": "/prom/order/detail/:id",
+            "module": "./pages/prom/order/SaleOrderDetail",
+            "exact": true
+        },
+        { // 字典管理
+            "name": "字典管理",
+            "path": "/sys/dxnry",
+            "module": "./pages/system-mngt/DictMngt",
+            "exact": true
+        },
+        { // 角色管理
+            "name": "角色管理",
+            "path": "/auth/roles",
+            "module": "./pages/auth/role/RoleMngt",
+            "exact": true
+        },
+        { // 添加角色
+            "name": "添加角色",
+            "path": "/auth/roles/new",
+            "module": "./pages/auth/role/RoleNew",
+            "exact": true
+        },
+        { // 编辑角色
+            "name": "编辑角色",
+            "path": "/auth/roles/setting/:id",
+            "module": "./pages/auth/role/RoleSetting",
+            "exact": true
+        },
+        { // 销售任务单管理
+            "name": "销售任务单管理",
+            "path": "/prom/task",
+            "module": "./pages/prom/task-mngt/TasktMngt",
+            "exact": true
+        },
+        { // 新增任务单
+            "name": "创建任务单",
+            "path": "/prom/task/new",
+            "module": "./pages/prom/task-mngt/TaskNew",
+            "exact": true
+        },
+        { // 编辑任务单
+            "name": "编辑任务单",
+            "path": "/prom/task/edit/:id",
+            "module": "./pages/prom/task-mngt/TaskEdit",
+            "exact": true
+        },
+        { // 任务单完善特殊要求
+            "name": "完善特殊要求",
+            "path": "/prom/task/special/:id",
+            "module": "./pages/prom/task-mngt/TaskSpecial",
+            "exact": true
+        },
+        { // 任务单完善产品信息
+            "name": "完善产品信息",
+            "path": "/prom/task/product/:id",
+            "module": "./pages/prom/task-mngt/TaskProduct",
+            "exact": true
+        },
+        { // 查看任务单
+            "name": "查看任务单",
+            "path": "/prom/task/view/:id&:status&:taskReviewStatus",
+            "module": "./pages/prom/task-mngt/TaskDetail",
+            "exact": true
+        },
+        { // 用户管理
+            "name": "用户管理",
+            "path": "/sys/users",
+            "module": "./pages/system-mngt/user/UserMngt",
+            "exact": true
+        },
+        { // 新增用户
+            "name": "新增用户",
+            "path": "/sys/users/new",
+            "module": "./pages/system-mngt/user/UserNew",
+            "exact": true
+        },
+        { // 修改用户
+            "name": "修改用户",
+            "path": "/sys/users/setting/:id",
+            "module": "./pages/system-mngt/user/UserSetting",
+            "exact": true
+        },
+        { //任务单审批
+            "name": "审批中心",
+            "path": "/approval/task",
+            "module": "./pages/approval/ApprovalList",
+            "exact": true
+        },
+        { // 任务单产品变更审批
+            "name": "任务单产品审批",
+            "path": "/approval/task/change/:id&:businessId",
+            "module": "./pages/approval/taskchange/TaskChange",
+            "exact": true
+        },
+        { // 审批产品信息变更
+            "name": "产品信息变更审批",
+            "path": "/approval/task/product-change/:id",
+            "module": "./pages/approval/TowerChangeApproval",
+            "exact": true
+        },
+        { // 委托列表
+            "name": "委托列表",
+            "path": "/outsource/entrust",
+            "module": "./pages/entrust/EntrustList",
+            "exact": true
+        },
+        { // 委托详情
+            "name": "委托详情",
+            "path": "/outsource/entrust/detail/:id",
+            "module": "./pages/entrust/EntrustDetail",
+            "exact": true
+        },
+        { // 已完成塔型
+            "name": "已完成塔型",
+            "path": "/outsource/towershape",
+            "module": "./pages/entrust/TowerShape",
+            "exact": true
+        },
+        { // 原材料类型管理
+            "name": "原材料类型管理",
+            "path": "/sys/materialType",
+            "module": "./pages/system-mngt/material/MaterialTypeMngt",
+            "exact": true
+        },
+        { // 原材料管理
+            "name": "原材料管理",
+            "path": "/sys/material",
+            "module": "./pages/system-mngt/material/MaterialMngt",
+            "exact": true
+        },
+        { // 新增原材料
+            "name": "新增原材料",
+            "path": "/sys/material/new",
+            "module": "./pages/system-mngt/material/MaterialNew",
+            "exact": true
+        },
+        { // 编辑原材料
+            "name": "编辑原材料",
+            "path": "/sys/material/view/:id",
+            "module": "./pages/system-mngt/material/MaterialView",
+        },
+        { //塔型管理
+            "name": "塔型管理",
+            "path": "/product/towershape",
+            "module": "./pages/product/TowerShape/TowerShapeMngt",
+            "exact": true
+        },
+        { //新增塔型
+            "name": "新增塔型",
+            "path": "/product/towershape/new",
+            "module": "./pages/product/TowerShape/TowerShapeNew",
+            "exact": true
+        },
+        { //编辑塔型
+            "name": "编辑塔型",
+            "path": "/product/towershape/setting/:id",
+            "module": "./pages/product/TowerShape/TowerShapeSetting",
+            "exact": true
+        },
+        { //变更塔型
+            "name": "变更塔型",
+            "path": "/product/towershape/change/:id",
+            "module": "./pages/product/TowerShape/TowerShapeChange",
+            "exact": true
+        },
+        { //编辑图纸构件明细
+            "name": "编辑图纸构件明细",
+            "path": "/product/towershape/componentDetails/:id",
+            "module": "./pages/product/TowerShape/ComponentDetailsSetting",
+            "exact": true
+        },
+        { // 提料管理
+            "name": "提料管理",
+            "path": "/technology/materialExtraction",
+            "module": "./pages/technology/materialExtraction/materialExtractionMngt",
+            "exact": true
+        },
+        { // 新增提料管理
+            "name": "提料管理",
+            "path": "/technology/materialExtraction/new",
+            "module": "./pages/technology/materialExtraction/materialExtractionNew",
+            "exact": true
+        },
+        { // 招标信息
+            "name": "招标信息",
+            "path": "/bidding/information",
+            "module": "./pages/bidding/Information",
+            "exact": true
+        },
+        { // 招标信息详情
+            "name": "招标信息详情",
+            "path": "/bidding/information/detail/:id",
+            "module": "./pages/bidding/InformationDetail",
+            "exact": true
+        },
+        { // 项目管理
+            "name": "项目管理",
+            "path": "/project/management",
+            "module": "./pages/project/Management",
+            "exact": true
+        },
+        { // 项目管理详情
+            "name": "项目管理详情",
+            "path": "/project/management/detail/:id",
+            "module": "./pages/project/ManagementDetail",
+            "exact": true
+        },
+        { // 审批管理
+            "name": "审批管理",
+            "path": "/approvalm/management",
+            "module": "./pages/approval-mngt/ApprovalMngt",
+            "exact": true
+        },
+        { // 审批管理详情
+            "name": "审批管理详情",
+            "path": "/approvalm/management/detail/:id",
+            "module": "./pages/approval-mngt/ApprovalMngtDetail",
+            "exact": true
+        }
+    ]
 }

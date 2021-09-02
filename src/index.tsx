@@ -24,28 +24,26 @@ i18n
   .use(backend)
   .use(initReactI18next)
   .init({
-      debug: false,
-      backend: {
-          loadPath: '/locales/{{lng}}/{{ns}}.json'
-      },
-      lng: lang,
-      fallbackLng: lang,
-      whitelist: [Lang.EN, Lang.ZH],
-      interpolation: {
-          escapeValue: false // react already safes from xss
-      },
-      react: {
-          useSuspense: false
-      }
+    debug: false,
+    backend: {
+      loadPath: '/locales/{{lng}}/{{ns}}.json'
+    },
+    lng: lang,
+    fallbackLng: lang,
+    whitelist: [Lang.EN, Lang.ZH],
+    interpolation: {
+      escapeValue: false // react already safes from xss
+    },
+    react: {
+      useSuspense: false
+    }
   });
 
 
-ReactDOM.render( 
-  <React.StrictMode>
-      <ConfigProvider locale={zhCN}>
-        <App />
-    </ConfigProvider>
-  </React.StrictMode>,
+ReactDOM.render(
+  <ConfigProvider locale={zhCN}>
+    <App />
+  </ConfigProvider>,
   document.getElementById('root')
 );
 

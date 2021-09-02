@@ -30,7 +30,7 @@ module.exports = {
             return config;
         },
         addWebpackModuleRule({ test: /.jsonc$/, use: 'jsonc-loader' }),
-        fixBabelImports('antd', {
+        fixBabelImports('antd', { 
             libraryName: 'antd',
             libraryDirectory: 'es',
             style: true
