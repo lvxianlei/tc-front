@@ -33,7 +33,7 @@ class EntrustSetting extends AbstractEntrustSetting<IEntrustSettingRouteProps, I
         this.setState({
             isVisible: true
         })
-        const entrust: IEntrust = await RequestUtil.get<IEntrust>(`/tower-outsource/entrust/${ this.props.data.id }`);
+        const entrust: IEntrust = await RequestUtil.get<IEntrust>(`/tp-task-dispatch/entrust/${ this.props.data.id }`);
         this.setState({
             entrust: entrust,
             attachList: entrust.attachVoList
@@ -63,7 +63,33 @@ class EntrustSetting extends AbstractEntrustSetting<IEntrustSettingRouteProps, I
         values.entrustSubmitType = this.state.entrustSubmitType;
         values.id = this.props.data.id;
         if(values.attachInfoDtoList) {
-            return await RequestUtil.put('/tower-outsource/entrust', values).then(() => {
+            return await RequestUtil.post('/tp-task-dispatch/entrust/entrustSubmit', values).then(() => {
+                this.setState({
+                    isVisible: false
+                })
+                this.props.getTable();
+            });
+        } else {
+            message.error("请上传资料包！")
+            return Promise.reject(false)
+        }
+    }
+    /**
+     * @implements
+     * @description Determines whether submit on
+     * @param values 
+     * @returns save 
+     */
+     public async onFinishSave(values: Record<string, any>): Promise<void> {
+        if(values.projectTime) {
+            values.projectStartTime = moment(values.projectTime[0]).format('YYYY-MM-DD');
+            values.projectEndTime = moment(values.projectTime[1]).format('YYYY-MM-DD');
+        }
+        values.attachInfoDtoList = this.state.attachList;
+        values.entrustSubmitType = this.state.entrustSubmitType;
+        values.id = this.props.data.id;
+        if(values.attachInfoDtoList) {
+            return await RequestUtil.put('/tp-task-dispatch/entrust', values).then(() => {
                 this.setState({
                     isVisible: false
                 })

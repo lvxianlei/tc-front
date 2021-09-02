@@ -62,7 +62,7 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
         this.setState({
             isVisible: true
         })
-        const entrust: IEntrust = await RequestUtil.get<IEntrust>(`/tower-outsource/towerModel/detail/${ this.props.data.id }`);
+        const entrust: IEntrust = await RequestUtil.get<IEntrust>(`/tp-task-dispatch/towerModel/detail/${ this.props.data.id }`);
         this.setState({
             entrust: entrust
         });
@@ -99,7 +99,7 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
     public onFinishSubmit = async (values: Record<string, any>): Promise<void> => {
         const entrust: IEntrust | undefined = this.state.entrust;
         values = { ...entrust, ...values };
-        return await RequestUtil.put('/tower-outsource/towerModel/accept', values).then((res) => {
+        return await RequestUtil.put('/tp-task-dispatch/towerModel/accept', values).then((res) => {
             if(res) {
                 this.setState({
                     isVisible: false
@@ -119,7 +119,7 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
         const entrust: IEntrust | undefined = this.state.entrust;
         let values: IEntrust = this.getForm()?.getFieldsValue(true);
         values = { ...entrust, description: this.getForm()?.getFieldValue('description') };
-        return await RequestUtil.put('/tower-outsource/towerModel/reject', values).then((res) => {
+        return await RequestUtil.put('/tp-task-dispatch/towerModel/reject', values).then((res) => {
             if(res) {
                 this.setState({
                     isVisible: false

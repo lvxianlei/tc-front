@@ -129,7 +129,7 @@ enum EntrustStatus {
          */
     public async componentDidMount() {
         super.componentDidMount();
-        const entrust: IEntrust = await RequestUtil.get<IEntrust>(`/tower-outsource/entrust/${ this.props.match.params.id }`);
+        const entrust: IEntrust = await RequestUtil.get<IEntrust>(`/tp-task-dispatch/entrust/${ this.props.match.params.id }`);
         this.setState({
             entrust
         });
@@ -406,8 +406,8 @@ enum EntrustStatus {
                                                 message: this.state.message,
                                                 entrustId: this.props.match.params.id
                                             }
-                                            await RequestUtil.post('/tower-outsource/entrustMessage', values).then(async ()=>{
-                                                const entrust: IEntrust = await RequestUtil.get<IEntrust>(`/tower-outsource/entrust/${ this.props.match.params.id }`);
+                                            await RequestUtil.post('/tp-task-dispatch/entrustMessage', values).then(async ()=>{
+                                                const entrust: IEntrust = await RequestUtil.get<IEntrust>(`/tp-task-dispatch/entrust/${ this.props.match.params.id }`);
                                                 this.setState({
                                                     entrust,
                                                     message:''
