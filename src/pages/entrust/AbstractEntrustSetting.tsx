@@ -76,6 +76,7 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
     constructor(props: P) {
         super(props);
         this.onFinishSubmit = this.onFinishSubmit.bind(this)
+        this.onFinishSave = this.onFinishSave.bind(this)
     }
 
     /**
@@ -199,7 +200,7 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
             entrustSubmitType: SubmitType.SAVE
         }, () => {
             if (this.getForm()) {
-                this.onFinishSubmit(this.getForm()?.getFieldsValue(true))
+                this.onFinishSave(this.getForm()?.getFieldsValue(true))
             }
         })
     }
@@ -237,7 +238,7 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
      * @returns onfinish 
      */
     abstract onFinishSubmit(values: Record<string, any>): Promise<void>;
-
+    abstract onFinishSave(values: Record<string, any>): Promise<void>;
     /**
      * @protected
      * @description Gets form

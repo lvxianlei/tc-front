@@ -39,7 +39,32 @@ class EntrustNew extends AbstractEntrustSetting<IEntrustNewRouteProps, IEntrustN
         values.attachInfoDtoList = this.state.attachList;
         values.entrustSubmitType = this.state.entrustSubmitType;
         if(values.attachInfoDtoList) {
-            return await RequestUtil.post('/tower-outsource/entrust', values).then(() => {
+            return await RequestUtil.post('/tp-task-dispatch/entrust/entrustSubmit', values).then(() => {
+                this.setState({
+                    isVisible: false,
+                })
+                this.props.getTable();
+            })
+        } else {
+            message.error("请上传资料包！")
+            return Promise.reject(false)
+        }
+    }
+    /**
+     * @implements
+     * @description Determines whether submit on
+     * @param values 
+     * @returns save 
+     */
+     public async onFinishSave(values: Record<string, any>): Promise<void> {
+        if(values.projectTime) {
+            values.projectStartTime = moment(values.projectTime[0]).format('YYYY-MM-DD');
+            values.projectEndTime = moment(values.projectTime[1]).format('YYYY-MM-DD');
+        }
+        values.attachInfoDtoList = this.state.attachList;
+        values.entrustSubmitType = this.state.entrustSubmitType;
+        if(values.attachInfoDtoList) {
+            return await RequestUtil.post('/tp-task-dispatch/entrust', values).then(() => {
                 this.setState({
                     isVisible: false,
                 })

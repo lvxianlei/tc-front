@@ -97,7 +97,7 @@ import EntrustSetting from './EntrustSetting';
       * @param [pagination] 
       */
      protected async fetchTableData(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-outsource/entrust', {
+         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tp-task-dispatch/entrust/customer/page', {
              ...filterValues,
              current: pagination.current || this.state.tablePagination?.current,
              size: pagination.pageSize ||this.state.tablePagination?.pageSize,
@@ -247,7 +247,7 @@ import EntrustSetting from './EntrustSetting';
                                                                         ghost
                                                                         placement="topRight"
                                                                         onConfirm={ async () => {
-                                                                            await RequestUtil.delete(`/tower-outsource/entrust?id=${ (item as IEntrustDataItem).id }`);
+                                                                            await RequestUtil.delete(`/tp-task-dispatch/entrust?id=${ (item as IEntrustDataItem).id }`);
                                                                             this.fetchTableData({});
                                                                         } }
                                                                     >
@@ -284,13 +284,13 @@ import EntrustSetting from './EntrustSetting';
                                                 <Col span={12}>
                                                     <div className = { styles.card_right }>
                                                     <Table 
-                                                        dataSource = {item.towerModelVoList}
+                                                        dataSource = { item.towerModelVoList }
                                                         rowKey = { this.getTableRowKey() }
                                                         bordered = {true}
                                                         onChange = { this.onTableChange }
                                                         style = {{ height: '380px' }}
                                                         columns = {this.getTableColumns(data)}
-                                                        scroll = {item.towerModelVoList.length>10?{ y: 322 }:{}}  
+                                                        scroll = {item && item.towerModelVoList && item.towerModelVoList.length>10?{ y: 322 }:{}}  
                                                         pagination = {false}
                                                         size = 'small'
                                                         rowClassName = {(record: object, index: number) => {
@@ -316,6 +316,11 @@ import EntrustSetting from './EntrustSetting';
         );
     }
 
+    public async listData( id: string|undefined ){
+        const resData: ITowerModelVO[] = await RequestUtil.get<ITowerModelVO[]>(`/tp-task-dispatch/productCategory/getWaitAcceptList?entrustId=${id}`);
+        console.log(id,resData)
+        return  resData
+    }
     //页面变化
     public onChange = (page: number)=> {
         let tablePagination ={

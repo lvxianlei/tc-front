@@ -113,7 +113,7 @@ export default abstract class AbstractTaskChange<P extends ITaskChangeApprovalRo
     /**
      * Determines whether reject on
      */
-    abstract onReject = (): Promise<void> => {
+    protected onReject = (): Promise<void> => {
         const contract: ITaskChange | undefined = this.state.contract;
         return RequestUtil.post('/tower-market/audit/reject', {
             auditId: this.props.match.params.id,
