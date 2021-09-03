@@ -61,10 +61,26 @@ export default function Information(): React.ReactNode {
         path="/tower-customer/customer"
         columns={columns}
         extraOperation={<Button type="primary">新增</Button>}
-        searchFormItems={[{
-            name: 'name',
-            label: '客户名称',
-            children: <Input placeholder="搜索客户名称关键词" maxLength={200} />
-        }]}
+        searchFormItems={[
+            {
+                name: 'name',
+                children: <Input placeholder="请输入项目名称/项目编码/审批编号/关联合同/制单人进行查询" maxLength={200} />
+            },
+            {
+                name: '1',
+                label: '审批类型',
+                children: <Input placeholder="" maxLength={200} />
+            },
+            {
+                name: '2',
+                label: '发起时间',
+                children: <Input placeholder="" maxLength={200} />
+            },
+            {
+                name: '3',
+                label: '审批状态',
+                children: <Input placeholder="" maxLength={200} />
+            },
+        ]}
     />
 }

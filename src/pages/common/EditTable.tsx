@@ -154,7 +154,7 @@ export default function EditTable({ columns = [], dataSource = [] }: EditableTab
 
     return (
         <>
-            <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>新增一条</Button>
+            <Button onClick={handleAdd} type="primary" style={{ marginBottom: 10 }}>新增一条</Button>
             <Table
                 components={components}
                 rowClassName={() => 'editable-row'}

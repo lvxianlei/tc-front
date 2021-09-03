@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Popconfirm, Table, TableColumnProps } from 'antd'
+import { Button, Popconfirm, Row, Table, TableColumnProps } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { Detail } from '../common'
 import SummaryRenderUtil from '../../utils/SummaryRenderUtil'
@@ -47,74 +47,67 @@ export default function InformationDetail(): React.ReactNode {
                         valueCol: { span: 8 },
                         rows: [
                             [{
-                                label: '合同编号',
+                                label: '项目名称',
                                 value: 'baseInfo?.contractNumber'
                             }, {
-                                label: '内部合同编号',
+                                label: '项目单位',
                                 value: 'baseInfo?.internalNumber'
                             }], [{
-                                label: '工程名称',
+                                label: '项目编号',
                                 value: 'baseInfo?.projectName'
                             }, {
-                                label: '工程简称',
+                                label: '数量',
                                 value: 'baseInfo?.simpleProjectName'
                             }], [{
-                                label: '中标类型',
+                                label: '单位',
                                 value: 'baseInfo?.winBidTypeName'
                             }, {
-                                label: '销售类型',
+                                label: '货物类别',
                                 value: 'baseInfo?.saleTypeName'
                             }], [{
-                                label: '业主单位',
+                                label: '招标文件传递方式',
                                 value: 'baseInfo?.customerInfoVo?.customerCompany'
                             }, {
-                                label: '业主联系人',
+                                label: '价格范围（元/吨）',
                                 value: 'baseInfo?.customerInfoVo?.customerLinkman'
                             }], [{
-                                label: '业主联系电话',
+                                label: '验收执行标准及验收方法',
                                 value: 'baseInfo?.customerInfoVo?.customerPhone'
                             }, {
-                                label: '合同签订单位',
+                                label: '原材料执行标准',
                                 value: 'baseInfo?.signCustomerName'
                             }], [{
-                                label: '合同签订日期',
+                                label: '包装要求',
                                 value: 'baseInfo?.signContractTime'
                             }, {
-                                label: '签订人',
+                                label: '是否有合同版本',
                                 value: 'baseInfo?.signUserName'
                             }], [{
-                                label: '要求交货日期',
+                                label: '货款结算条件及方式',
                                 value: 'baseInfo?.deliveryTime'
                             }, {
-                                label: '评审时间',
+                                label: '特殊材质',
                                 value: 'baseInfo?.reviewTime'
                             }], [{
-                                label: '所属国家',
+                                label: '其他',
                                 value: 'baseInfo?.countryCode'
                             }, {
-                                label: '所属区域',
+                                label: '审批状态',
                                 value: 'baseInfo?.regionName'
                             }], [{
-                                label: '计价方式',
-                                value: 'baseInfo?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT'
-                            }, {
-                                label: '合同总价',
-                                value: 'baseInfo?.contractAmount'
-                            }], [{
-                                label: '币种',
-                                value: 'baseInfo?.currencyTypeName'
-                            }], [{
                                 label: '备注',
-                                value: 'baseInfo?.description'
+                                value: 'baseInfo?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT'
                             }]
                         ]
                     })
                 },
-                { title: '订单信息', render: () => <Table columns={tableColumns} /> },
                 {
-                    title: '附件信息',
-                    render: () => (<>
-                        <Button>上传附件</Button>
+                    title: '',
+                    render: () => <Table columns={tableColumns} />
+                },
+                {
+                    title: '附件', render: () => (<>
+                        <Row><Button>上传附件</Button></Row>
                         <Table columns={tableColumns} />
                     </>)
                 }

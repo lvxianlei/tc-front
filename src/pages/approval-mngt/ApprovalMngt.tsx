@@ -1,5 +1,5 @@
 import React from 'react'
-import { Space, Button } from 'antd'
+import { Space, Button, Input } from 'antd'
 import { Link } from 'react-router-dom'
 import ConfirmableButton from '../../components/ConfirmableButton'
 import { Page } from '../common'
@@ -18,7 +18,7 @@ export default function Information(): React.ReactNode {
             title: '客户名称',
             dataIndex: 'name',
             render: (_: undefined, record: any): React.ReactNode => {
-                return <Link to={`/bidding/information/detail/${record.id}`}>{record.name}</Link>
+                return <Link to={`/approvalm/management/detail/${record.id}`}>{record.name}</Link>
             }
         },
         {
@@ -61,6 +61,26 @@ export default function Information(): React.ReactNode {
         path="/tower-customer/customer"
         columns={columns}
         extraOperation={<Button type="primary">新增审批</Button>}
-        searchFormItems={[]}
+        searchFormItems={[
+            {
+                name: 'name',
+                children: <Input placeholder="请输入项目名称/项目编码/审批编号/关联合同/制单人进行查询" maxLength={200} />
+            },
+            {
+                name: '1',
+                label: '审批类型',
+                children: <Input placeholder="" maxLength={200} />
+            },
+            {
+                name: '2',
+                label: '发起时间',
+                children: <Input placeholder="" maxLength={200} />
+            },
+            {
+                name: '3',
+                label: '审批状态',
+                children: <Input placeholder="" maxLength={200} />
+            },
+        ]}
     />
 }
