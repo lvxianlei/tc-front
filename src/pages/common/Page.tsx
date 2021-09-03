@@ -18,6 +18,8 @@ export interface PageProps extends RouteComponentProps, WithTranslation {
     columns: TableColumnType<object>[]
     extraOperation?: ReactNode
     tableProps?: TableProps<any>
+    searchFormItems: FormItemProps[]
+    headTabs?: ITabItem[]
 }
 
 export interface IResponseData {
@@ -103,20 +105,8 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
     }
 
     public getTabItems(): ITabItem[] {
-        let tab = [{
-            label: '全部客户',
-            key: 'item_0'
-        }];
-        if (clientTypeOptions) {
-            clientTypeOptions.map(item => {
-                tab.push({
-                    key: item.id,
-                    label: item.name,
-                })
-            })
-        }
-
-        return tab;
+        let tab = [{ label: '全部', key: 'item_0' }]
+        return this.props.headTabs ? [tab[0], ...this.props.headTabs] : tab;
     }
 
     protected renderExtraOperationContent(): React.ReactNode {
@@ -143,10 +133,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
     }
 
     public getFilterFormItemProps(item: ITabItem): FormItemProps[] {
-        return [{
-            name: 'name',
-            children: <Input placeholder="搜索客户名称关键词" maxLength={200} />
-        }];
+        return this.props.searchFormItems || []
     }
 
 }

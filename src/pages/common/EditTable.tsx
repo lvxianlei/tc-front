@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
-import { Table, Input, Button, Popconfirm, Form } from 'antd'
+import { Table, Input, Button, Popconfirm, Form, TableColumnProps } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import './EditTable.less'
 const EditableContext = React.createContext<FormInstance<any> | null>(null)
@@ -96,8 +96,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
     return <td {...restProps}>{childNode}</td>
 }
 
-type EditableTableProps = Parameters<typeof Table>[0]
-
 interface DataType {
     key: React.Key
     name: string
@@ -110,126 +108,72 @@ interface EditableTableState {
     count: number
 }
 
-type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>
+export interface EditableTableProps {
+    columns: TableColumnProps<object>[]
+    dataSource: object[]
+}
 
-export default class EditableTable extends React.Component<EditableTableProps, EditableTableState> {
-    columns: (ColumnTypes[number] & { editable?: boolean, dataIndex: string })[]
+export default function EditTable({ columns = [], dataSource = [] }: EditableTableProps): JSX.Element {
+    const [tableData, setTableData] = useState<EditableTableState>({ dataSource: [], count: 2 })
 
-    constructor(props: EditableTableProps) {
-        super(props)
-
-        this.columns = [
-            {
-                title: 'name',
-                dataIndex: 'name',
-                width: '30%',
-                editable: true,
-            },
-            {
-                title: 'age',
-                dataIndex: 'age',
-            },
-            {
-                title: 'address',
-                dataIndex: 'address',
-            },
-            {
-                title: 'operation',
-                dataIndex: 'operation',
-                render: (_, record: any) =>
-                    this.state.dataSource.length >= 1 ? (
-                        <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
-                            <a>Delete</a>
-                        </Popconfirm>
-                    ) : null,
-            },
-        ]
-
-        this.state = {
-            dataSource: [
-                {
-                    key: '0',
-                    name: 'Edward King 0',
-                    age: '32',
-                    address: 'London, Park Lane no. 0',
-                },
-                {
-                    key: '1',
-                    name: 'Edward King 1',
-                    age: '32',
-                    address: 'London, Park Lane no. 1',
-                },
-            ],
-            count: 2,
-        }
+    const handleDelete = (key: React.Key) => {
+        const dataSource = [...tableData.dataSource]
+        setTableData({ ...tableData, dataSource: dataSource.filter(item => item.key !== key) })
     }
 
-    handleDelete = (key: React.Key) => {
-        const dataSource = [...this.state.dataSource]
-        this.setState({ dataSource: dataSource.filter(item => item.key !== key) })
-    }
-
-    handleAdd = () => {
-        const { count, dataSource } = this.state
+    const handleAdd = () => {
+        const { count, dataSource } = tableData
         const newData: DataType = {
             key: count,
             name: `Edward King ${count}`,
             age: '32',
             address: `London, Park Lane no. ${count}`,
         }
-        this.setState({
+        setTableData({
             dataSource: [...dataSource, newData],
             count: count + 1,
         })
     }
 
-    handleSave = (row: DataType) => {
-        const newData = [...this.state.dataSource]
+    const handleSave = (row: DataType) => {
+        const newData = [...tableData.dataSource]
         const index = newData.findIndex(item => row.key === item.key)
         const item = newData[index]
         newData.splice(index, 1, {
             ...item,
             ...row,
         })
-        this.setState({ dataSource: newData })
+        setTableData({ ...tableData, dataSource: newData })
+    }
+    const components = {
+        body: {
+            row: EditableRow,
+            cell: EditableCell,
+        },
     }
 
-    render() {
-        const { dataSource } = this.state
-        const components = {
-            body: {
-                row: EditableRow,
-                cell: EditableCell,
-            },
-        }
-        const columns = this.columns.map(col => {
-            if (!col.editable) {
-                return col
-            }
-            return {
-                ...col,
-                onCell: (record: DataType) => ({
-                    record,
-                    editable: col.editable,
-                    dataIndex: col.dataIndex,
-                    title: col.title,
-                    handleSave: this.handleSave,
-                }),
-            }
-        })
-        return (
-            <div>
-                <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
-                    新增
-                </Button>
-                <Table
-                    components={components}
-                    rowClassName={() => 'editable-row'}
-                    bordered
-                    dataSource={dataSource}
-                    columns={columns as ColumnTypes}
-                />
-            </div>
-        )
-    }
+    return (
+        <>
+            <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>新增一条</Button>
+            <Table
+                components={components}
+                rowClassName={() => 'editable-row'}
+                bordered
+                dataSource={tableData.dataSource}
+                columns={columns.map((col: any) => {
+                    if (!col.editable) { return col }
+                    return {
+                        ...col,
+                        onCell: (record: DataType) => ({
+                            record,
+                            editable: col.editable,
+                            dataIndex: col.dataIndex,
+                            title: col.title,
+                            handleSave: handleSave,
+                        }),
+                    }
+                })}
+            />
+        </>
+    )
 }

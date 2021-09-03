@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Button, TableColumnProps } from 'antd'
+import { Space, Button, TableColumnProps, Form, Input } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 import ConfirmableButton from '../../components/ConfirmableButton'
@@ -29,7 +29,7 @@ export default function Management(): React.ReactNode {
             title: '客户名称',
             dataIndex: 'name',
             render: (_: undefined, record: any): React.ReactNode => {
-                return <Link to={`/approvalm/management/detail/${record.id}`}>{record.name}</Link>
+                return <Link to={`/project/management/detail/${record.id}`}>{record.name}</Link>
             }
         },
         {
@@ -88,12 +88,20 @@ export default function Management(): React.ReactNode {
     return <Page
         path="/tower-customer/customer"
         columns={columns}
-        extraOperation={<Button type="primary">新增</Button>}
+        extraOperation={<>
+            <Button type="primary">新增</Button>
+            <Button type="primary">删除</Button>
+        </>}
         tableProps={{
             rowSelection: {
                 selectedRowKeys: selectKeys.selectedUserKeys,
                 onChange: SelectChange
             }
         }}
+        searchFormItems={[{
+            name: 'name',
+            label: '客户名称',
+            children: <Input placeholder="搜索客户名称关键词" maxLength={200} />
+        }]}
     />
 }

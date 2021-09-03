@@ -299,6 +299,12 @@
             "module": "./pages/project/ManagementDetail",
             "exact": true
         },
+        { // 项目管理详情
+            "name": "项目管理详情",
+            "path": "/project/management/detail/:id/:tab",
+            "module": "./pages/project/ManagementDetail",
+            "exact": true
+        },
         { // 审批管理
             "name": "审批管理",
             "path": "/approvalm/management",
