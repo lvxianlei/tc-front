@@ -90,7 +90,6 @@ export default class App extends React.Component<{}, IAppState> {
   public render(): React.ReactNode {
     const frame: ComponentClazz | undefined = ApplicationContext.get().layout?.frame;
     const Frame: React.ComponentClass | undefined = frame?.componentClass;
-    const accessable = !!(AuthUtil.getAuthorization() && AuthUtil.getSinzetechAuth() && AuthUtil.getTenantId());
     const effective: boolean = this.state.isEffective;
     return (
       <Router>

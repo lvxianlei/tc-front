@@ -57,7 +57,8 @@ export default abstract class RequestUtil {
                 headers: {
                     ...headers,
                     ...init?.headers
-                }
+                },
+                referrerPolicy: 'no-referrer-when-downgrade'
             })
             .then((res) => {
                 if (res.status !== 200) {

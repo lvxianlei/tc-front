@@ -4,6 +4,7 @@
  */
 import React from 'react';
 
+import { AuthorityBasic } from '../components/AuthorityComponent';
 import { IFilter } from '../filters/IFilter';
 
 export type ComponentClazzProps = Record<string, any>;
@@ -24,6 +25,7 @@ export interface ILayout extends Record<string, ComponentClazz | undefined> {
 export interface IRouterItem {
     readonly name: string;
     readonly path: string;
+    readonly authority: AuthorityBasic;
     readonly module?: string;
     readonly exact?: boolean;
     readonly children?: IRouterItem[];
@@ -42,6 +44,7 @@ export default interface IApplicationContext extends IClientConfig {
     readonly routers?: IRouterItem[];
     readonly globalRouters?: IRouterItem[];
     readonly dictionaryOption?: Record<string, IDict[] | undefined>;
+    readonly authorites?: AuthorityBasic[];
 }
 
 export interface IDict {

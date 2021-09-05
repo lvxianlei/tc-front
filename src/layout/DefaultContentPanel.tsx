@@ -7,6 +7,7 @@ import { Route, RouteComponentProps } from 'react-router-dom';
 
 import AsyncPanel from '../AsyncPanel';
 import AsyncComponent from '../components/AsyncComponent';
+import { hasAuthority } from '../components/AuthorityComponent';
 import ApplicationContext from '../configuration/ApplicationContext';
 import { IRouterItem } from '../configuration/IApplicationContext';
 
@@ -72,7 +73,7 @@ export interface IDefaultContentPanelState {
             <>
                 {
                     ApplicationContext.get().routers?.map<React.ReactNode>((router: IRouterItem): React.ReactNode => (
-                        router.path
+                        router.path && hasAuthority(router.authority)
                         ?
                         <Route path={ router.path } key={ router.path } exact={ router.exact }
                             render={ this.renderRoute(router.module) }/>

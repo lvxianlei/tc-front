@@ -9,6 +9,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import AsyncComponent from '../../components/AsyncComponent';
+import AuthorityComponent, { hasAuthority } from '../../components/AuthorityComponent';
 import ApplicationContext from '../../configuration/ApplicationContext';
 import IMenuItem from './IMenuItem';
 import styles from './TCNavigationPanel.module.less';
@@ -61,21 +62,31 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
                 defaultOpenKeys={[ selectedDarkMenuItem?.path || '' ]}>
                 {
                     menu.map<React.ReactNode>((item: IMenuItem): React.ReactNode => (
-                        (item.items && item.items.length)
+                        hasAuthority(item.authority)
                         ?
-                        <Menu.SubMenu key={ item.path } title={ item.label } icon={ <i className={ `font_family icon-${ item.icon } ${ styles.icon }` }></i> }>
-                            {
-                                item.items.map<React.ReactNode>((subItem: IMenuItem): React.ReactNode => (
-                                    <Menu.Item key={ subItem.path }>
-                                        <Link to={ subItem.path }>{ subItem.label }</Link>
-                                    </Menu.Item>
-                                ))
-                            }
-                        </Menu.SubMenu>
+                        (
+                            (item.items && item.items.length)
+                            ?
+                            <Menu.SubMenu key={ item.path } title={ item.label } icon={ <i className={ `font_family icon-${ item.icon } ${ styles.icon }` }></i> }>
+                                {
+                                    item.items.map<React.ReactNode>((subItem: IMenuItem): React.ReactNode => (
+                                        hasAuthority(subItem.authority)
+                                        ?
+                                        <Menu.Item key={ subItem.path }>
+                                            <Link to={ subItem.path }>{ subItem.label }</Link>
+                                        </Menu.Item>
+                                        :
+                                        null
+                                    ))
+                                }
+                            </Menu.SubMenu>
+                            :
+                            <Menu.Item key={ item.path } icon={ <i className={ `iconfont icon-${ item.icon }` }></i> }>
+                                <Link to={ item.path }>{ item.label }</Link>
+                            </Menu.Item>
+                        )
                         :
-                        <Menu.Item key={ item.path } icon={ <i className={ `iconfont icon-${ item.icon }` }></i> }>
-                            <Link to={ item.path }>{ item.label }</Link>
-                        </Menu.Item>
+                        null
                     ))
                 }
             </Menu>
