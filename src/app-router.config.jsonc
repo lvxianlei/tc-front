@@ -221,6 +221,7 @@
             "name": "编辑原材料",
             "path": "/sys/material/view/:id",
             "module": "./pages/system-mngt/material/MaterialView",
+            "exact": true
         },
         { //塔型管理
             "name": "塔型管理",
