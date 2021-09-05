@@ -3,7 +3,7 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 import React from 'react';
-import { Authorized, check } from 'react-authorize';
+import { Authorized } from 'react-authorize';
 
 import ApplicationContext from '../configuration/ApplicationContext';
 

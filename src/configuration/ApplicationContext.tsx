@@ -3,7 +3,6 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 import camelcaseKeys from 'camelcase-keys';
-import React from 'react';
 import { matchPath, RouteComponentProps } from 'react-router';
 
 import routerConfigJson from '../app-router.config.jsonc';

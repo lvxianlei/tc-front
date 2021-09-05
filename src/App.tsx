@@ -3,16 +3,14 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 import React from 'react';
-import { BrowserRouter as Router, Redirect, Route, RouteComponentProps, Switch } from 'react-router-dom';
-import AsyncPanel from './AsyncPanel';
+import { BrowserRouter as Router, Route, RouteComponentProps, Switch } from 'react-router-dom';
 
+import AsyncPanel from './AsyncPanel';
 import ApplicationContext from './configuration/ApplicationContext';
 import { ComponentClazz, IRouterItem } from './configuration/IApplicationContext';
-import AuthUtil from './utils/AuthUtil';
 
 interface IAppState {
   readonly shouldRender: boolean | undefined;
-  // readonly isEffective: boolean;
 }
 
 /**
@@ -24,8 +22,7 @@ export default class App extends React.Component<{}, IAppState> {
    * @description State  of app
    */
   public state: IAppState = {
-    shouldRender: undefined// ,
-    // isEffective: true
+    shouldRender: undefined
   };
 
   /**
@@ -56,29 +53,6 @@ export default class App extends React.Component<{}, IAppState> {
     }
   }
 
-  // protected effectivelyInfo(): Promise<boolean> {
-  //   return fetch(`${process.env.REQUEST_API_PATH_PREFIX?.replace(/\/*$/, '/') || ''.replace(/\/*$/, '/')}${`/sinzetech-user/user/info`.replace(/^\/*/, '')}`, {
-  //     mode: 'cors',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-  //       'Tenant-Id': AuthUtil.getTenantId(),
-  //       'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-  //     }
-  //   }).then((res) => {
-  //       if(res.status === 401) {
-  //         this.setState({
-  //           isEffective: false
-  //         })
-  //       } else {
-  //         this.setState({
-  //           isEffective: true
-  //         })
-  //       }
-  //       return res.json();
-  //     })
-  // }
-
   /**
    * @description Renders app
    * @returns render 
@@ -100,9 +74,6 @@ export default class App extends React.Component<{}, IAppState> {
               null
             ))
           } 
-          {
-            // window.location.pathname === '/' && !effective ? <Redirect to='./login'/> : null
-          }
           {
             Frame
             ? 
