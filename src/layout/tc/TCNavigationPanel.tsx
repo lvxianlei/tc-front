@@ -9,7 +9,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import AsyncComponent from '../../components/AsyncComponent';
-import AuthorityComponent, { hasAuthority } from '../../components/AuthorityComponent';
+import { hasAuthority } from '../../components/AuthorityComponent';
 import ApplicationContext from '../../configuration/ApplicationContext';
 import EventBus from '../../utils/EventBus';
 import IMenuItem from './IMenuItem';
