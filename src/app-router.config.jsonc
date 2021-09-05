@@ -65,7 +65,7 @@
             "path": "/prom/order",
             "module": "./pages/prom/order/SaleOrder",
             "exact": true,
-            "authority": "dictionary_detail"
+            "authority": "sale_order"
         },
         {
             "name": "新增订单",

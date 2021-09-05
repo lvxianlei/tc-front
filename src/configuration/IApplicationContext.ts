@@ -44,7 +44,7 @@ export default interface IApplicationContext extends IClientConfig {
     readonly routers?: IRouterItem[];
     readonly globalRouters?: IRouterItem[];
     readonly dictionaryOption?: Record<string, IDict[] | undefined>;
-    readonly authorites?: AuthorityBasic[];
+    readonly authorities?: AuthorityBasic[];
 }
 
 export interface IDict {

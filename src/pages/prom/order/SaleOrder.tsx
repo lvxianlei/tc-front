@@ -8,6 +8,7 @@ import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../../com
 import { ITabItem } from '../../../components/ITabableComponent';
 import ConfirmableButton from '../../../components/ConfirmableButton';
 import RequestUtil from '../../../utils/RequestUtil';
+import AuthorityComponent from '../../../components/AuthorityComponent';
 
 export interface IPromContractProps {}
 export interface IPromContractWithRouteProps extends RouteComponentProps<IPromContractProps>, WithTranslation {}
@@ -163,11 +164,13 @@ class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps, IProm
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Link to={ `/prom/order/setting/${ (record as ITableDataItem).id }` }>编辑</Link>
-                    <ConfirmableButton confirmTitle="要删除该订单吗？" type="link" placement="topRight" onConfirm={ async () => {
-                        let id = (record as ITableDataItem).id;
-                        const resData:IResponseData = await RequestUtil.delete(`/tower-market/saleOrder?id=${ id }`);
-                        this.fetchTableData({});
-                    } }>删除</ConfirmableButton>
+                    <AuthorityComponent permissions="sale_order_del">
+                        <ConfirmableButton confirmTitle="要删除该订单吗？" type="link" placement="topRight" onConfirm={ async () => {
+                            let id = (record as ITableDataItem).id;
+                            const resData:IResponseData = await RequestUtil.delete(`/tower-market/saleOrder?id=${ id }`);
+                            this.fetchTableData({});
+                        } }>删除</ConfirmableButton>
+                    </AuthorityComponent>
                 </Space>
             )
         }];

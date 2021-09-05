@@ -68,6 +68,10 @@ export default abstract class AbstractFrame<
         EventBus.addListener('menu/collapsed', this.onCollapsed, this);
     }
 
+    public componentWillUnmount() {
+        EventBus.removeListener('menu/collapsed', this.onCollapsed, this);
+    }
+
     protected onCollapsed(collapsed: boolean): void {
         this.setState({
             collapsed: collapsed

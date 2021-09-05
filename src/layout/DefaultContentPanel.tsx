@@ -7,7 +7,7 @@ import { Route, RouteComponentProps } from 'react-router-dom';
 
 import AsyncPanel from '../AsyncPanel';
 import AsyncComponent from '../components/AsyncComponent';
-import { hasAuthority } from '../components/AuthorityComponent';
+import { AuthorityBasic, hasAuthority } from '../components/AuthorityComponent';
 import ApplicationContext from '../configuration/ApplicationContext';
 import { IRouterItem } from '../configuration/IApplicationContext';
 
@@ -41,12 +41,12 @@ export interface IDefaultContentPanelState {
      * @param module 
      * @returns route 
      */
-    protected renderRoute(module: string | undefined): (props: RouteComponentProps<{}>) => React.ReactNode {
+    protected renderRoute(module: string | undefined, authority: AuthorityBasic): (props: RouteComponentProps<{}>) => React.ReactNode {
         return (props: RouteComponentProps<{}>): React.ReactNode => {
             if (this.state.shouldRender === undefined) {
                 ApplicationContext.doFiltersAll(props).then((permit: boolean): void => {
                     this.setState({
-                        shouldRender: permit
+                        shouldRender: hasAuthority(authority) && permit
                     });
                 });
             }
@@ -73,10 +73,10 @@ export interface IDefaultContentPanelState {
             <>
                 {
                     ApplicationContext.get().routers?.map<React.ReactNode>((router: IRouterItem): React.ReactNode => (
-                        router.path && hasAuthority(router.authority)
+                        router.path
                         ?
                         <Route path={ router.path } key={ router.path } exact={ router.exact }
-                            render={ this.renderRoute(router.module) }/>
+                            render={ this.renderRoute(router.module, router.authority) }/>
                         :
                         null
                     ))

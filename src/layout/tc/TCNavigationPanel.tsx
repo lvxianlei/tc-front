@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import AsyncComponent from '../../components/AsyncComponent';
 import AuthorityComponent, { hasAuthority } from '../../components/AuthorityComponent';
 import ApplicationContext from '../../configuration/ApplicationContext';
+import EventBus from '../../utils/EventBus';
 import IMenuItem from './IMenuItem';
 import styles from './TCNavigationPanel.module.less';
 
@@ -37,6 +38,17 @@ class TCNavigationPanel extends AsyncComponent<ITCNavigationPanelRouteProps, ITC
         this.state = {
             selectedDarkMenuItem: ApplicationContext.getMenuItemByPath(ApplicationContext.get().layout?.navigationPanel?.props?.menu, props.location.pathname)
         };
+        setTimeout(() => {
+            EventBus.addListener('get/authorities', this.flushRender, this);
+        }, 0);
+    }
+
+    private flushRender(): void {
+        this.forceUpdate();
+    }
+
+    public componentWillUnmount() {
+        EventBus.removeListener('get/authorities', this.flushRender, this);
     }
 
     /**

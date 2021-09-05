@@ -12,7 +12,7 @@ import AuthUtil from './utils/AuthUtil';
 
 interface IAppState {
   readonly shouldRender: boolean | undefined;
-  readonly isEffective: boolean;
+  // readonly isEffective: boolean;
 }
 
 /**
@@ -24,13 +24,9 @@ export default class App extends React.Component<{}, IAppState> {
    * @description State  of app
    */
   public state: IAppState = {
-    shouldRender: undefined,
-    isEffective: true
+    shouldRender: undefined// ,
+    // isEffective: true
   };
-
-  public componentDidMount() {
-    this.effectivelyInfo();
-  }
 
   /**
      * @description Renders route
@@ -60,28 +56,28 @@ export default class App extends React.Component<{}, IAppState> {
     }
   }
 
-  protected effectivelyInfo(): Promise<boolean> {
-    return fetch(`${process.env.REQUEST_API_PATH_PREFIX?.replace(/\/*$/, '/') || ''.replace(/\/*$/, '/')}${`/sinzetech-user/user/info`.replace(/^\/*/, '')}`, {
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-        'Tenant-Id': AuthUtil.getTenantId(),
-        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-      }
-    }).then((res) => {
-        if(res.status === 401) {
-          this.setState({
-            isEffective: false
-          })
-        } else {
-          this.setState({
-            isEffective: true
-          })
-        }
-        return res.json();
-      })
-  }
+  // protected effectivelyInfo(): Promise<boolean> {
+  //   return fetch(`${process.env.REQUEST_API_PATH_PREFIX?.replace(/\/*$/, '/') || ''.replace(/\/*$/, '/')}${`/sinzetech-user/user/info`.replace(/^\/*/, '')}`, {
+  //     mode: 'cors',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+  //       'Tenant-Id': AuthUtil.getTenantId(),
+  //       'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+  //     }
+  //   }).then((res) => {
+  //       if(res.status === 401) {
+  //         this.setState({
+  //           isEffective: false
+  //         })
+  //       } else {
+  //         this.setState({
+  //           isEffective: true
+  //         })
+  //       }
+  //       return res.json();
+  //     })
+  // }
 
   /**
    * @description Renders app
@@ -90,7 +86,7 @@ export default class App extends React.Component<{}, IAppState> {
   public render(): React.ReactNode {
     const frame: ComponentClazz | undefined = ApplicationContext.get().layout?.frame;
     const Frame: React.ComponentClass | undefined = frame?.componentClass;
-    const effective: boolean = this.state.isEffective;
+    // const effective: boolean = this.state.isEffective;
     return (
       <Router>
         <Switch>
@@ -105,7 +101,7 @@ export default class App extends React.Component<{}, IAppState> {
             ))
           } 
           {
-            window.location.pathname === '/' && !effective ? <Redirect to='./login'/> : null
+            // window.location.pathname === '/' && !effective ? <Redirect to='./login'/> : null
           }
           {
             Frame
