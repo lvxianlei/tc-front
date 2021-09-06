@@ -1,6 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { Button, TableColumnProps } from 'antd';
+import { Button, TableColumnProps, Row } from 'antd';
 import { EditTable } from '../common'
 import { Detail, BaseInfo, BaseInfoItemProps } from '../common'
 export default function InfomationNew(): JSX.Element {
@@ -30,8 +30,7 @@ export default function InfomationNew(): JSX.Element {
         { title: '单价', dataIndex: 'price' },
         { title: '金额', dataIndex: 'totalAmount' },
         { title: '标段', dataIndex: 'tender' },
-        { title: '备注', dataIndex: 'description' },
-        { title: '操作', dataIndex: 'opration', render: (): React.ReactNode => <Button type="link">删除</Button> },
+        { title: '备注', dataIndex: 'description' }
     ]
     const baseInfoData: BaseInfoItemProps[] = [
         {
@@ -133,6 +132,8 @@ export default function InfomationNew(): JSX.Element {
         tabItems={[{
             label: '', key: 1, content: <>
                 <BaseInfo dataSource={baseInfoData} edit />
+                <EditTable columns={columns} dataSource={[]} />
+                <Row>附件</Row>
                 <EditTable columns={columns} dataSource={[]} />
             </>
         }]} />

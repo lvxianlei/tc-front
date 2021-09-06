@@ -18,8 +18,8 @@ export default function BaseInfo({ dataSource, edit }: BaseInfoProps): JSX.Eleme
     if (edit) {
         const formData: { [key: string]: any } = {}
         dataSource.forEach((item: BaseInfoItemProps) => formData[item.name] = item.value)
-        return <Form initialValues={formData}>
-            <Descriptions bordered>
+        return <Form initialValues={formData} >
+            <Descriptions bordered column={2}>
                 {dataSource.map((item: any, index) => <Descriptions.Item key={`desc_${index}`} label={item.label}>
                     <Form.Item name={item.name}>
                         <Input />

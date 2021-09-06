@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
-import { Table, Input, Button, Popconfirm, Form, TableColumnProps } from 'antd'
+import { Table, Input, Button, Popconfirm, Form, TableColumnProps, TableColumnsType } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import './EditTable.less'
 const EditableContext = React.createContext<FormInstance<any> | null>(null)
@@ -91,9 +91,8 @@ const EditableCell: React.FC<EditableCellProps> = ({
 
 interface DataType {
     key: React.Key
-    name: string
-    age: string
-    address: string
+    index: number
+    [key: string]: any
 }
 
 interface EditableTableState {
@@ -108,19 +107,16 @@ export interface EditableTableProps {
 
 export default function EditTable({ columns = [], dataSource = [] }: EditableTableProps): JSX.Element {
     const [tableData, setTableData] = useState<EditableTableState>({ dataSource: [], count: 2 })
-
     const handleDelete = (key: React.Key) => {
         const dataSource = [...tableData.dataSource]
-        setTableData({ ...tableData, dataSource: dataSource.filter(item => item.key !== key) })
+        setTableData({ ...tableData, dataSource: dataSource.filter(item => item.index !== key) })
     }
 
     const handleAdd = () => {
         const { count, dataSource } = tableData
         const newData: DataType = {
             key: count,
-            name: `Edward King ${count}`,
-            age: '32',
-            address: `London, Park Lane no. ${count}`,
+            index: dataSource.length + 1
         }
         setTableData({
             dataSource: [...dataSource, newData],
@@ -138,14 +134,18 @@ export default function EditTable({ columns = [], dataSource = [] }: EditableTab
         })
         setTableData({ ...tableData, dataSource: newData })
     }
-    
+
     const components = {
         body: {
             row: EditableRow,
             cell: EditableCell,
         }
     }
-
+    columns = [
+        { title: '序号', dataIndex: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+        ...columns,
+        { title: '操作', dataIndex: 'opration', render: (_a: any, _b: any, index: number): JSX.Element => <Button type="link" onClick={() => handleDelete(index)}>删除</Button> }
+    ]
     return (
         <>
             <Button onClick={handleAdd} type="primary" style={{ marginBottom: 10 }}>新增一条</Button>
