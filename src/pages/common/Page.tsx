@@ -5,12 +5,11 @@
 // 整个common文件夹为让原继承形式组件可以通过传递参数形式复用。
 // 此组件为table页改造
 import React, { ReactNode } from 'react'
-import { TablePaginationConfig, TableColumnType, TableProps, FormItemProps, Space, Input } from 'antd'
+import { TablePaginationConfig, TableColumnType, TableProps, FormItemProps, Space } from 'antd'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { WithTranslation, withTranslation } from 'react-i18next'
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../components/AbstractMngtComponent'
 import { ITabItem } from '../../components/ITabableComponent'
-import { clientTypeOptions } from '../../configuration/DictionaryOptions';
 import RequestUtil from '../../utils/RequestUtil'
 import { IClient } from '../IClient'
 export interface PageProps extends RouteComponentProps, WithTranslation {

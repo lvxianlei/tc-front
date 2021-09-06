@@ -1,10 +1,9 @@
 import { ColProps } from 'antd'
-import Item from 'antd/lib/list/Item'
 import React from 'react'
 import { WithTranslation, withTranslation } from 'react-i18next'
 import { RouteComponentProps, withRouter } from 'react-router'
 import AbstractDetailComponent, { } from '../../components/AbstractDetailComponent'
-import ITabableComponent, { ITabItem } from '../../components/ITabableComponent'
+import { ITabItem } from '../../components/ITabableComponent'
 export interface DetailProps extends RouteComponentProps, WithTranslation {
     operation?: React.ReactNode
     tabItems?: ITabItem[]

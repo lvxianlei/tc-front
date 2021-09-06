@@ -1,8 +1,10 @@
 import React from 'react'
-import { Button, Popconfirm, Row, Table, TableColumnProps } from 'antd'
+import { Spin, Button, Popconfirm, Row, Table, TableColumnProps } from 'antd'
+import useRequest from '@ahooksjs/use-request'
 import { useHistory } from 'react-router-dom'
-import { Detail } from '../common'
+import { Detail, BaseInfo, BaseInfoItemProps } from '../common'
 import SummaryRenderUtil from '../../utils/SummaryRenderUtil'
+import RequestUtil from '../../utils/RequestUtil'
 
 const tableColumns: TableColumnProps<Object>[] = [
     { title: '序号', dataIndex: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
@@ -32,87 +34,131 @@ const tableColumns: TableColumnProps<Object>[] = [
     { title: '标段', dataIndex: 'tender' },
     { title: '备注', dataIndex: 'description' }
 ]
+const baseInfoData: BaseInfoItemProps[] = [
+    {
+        name: 'contractNumber',
+        label: '项目名称',
+        type: 'string',
+        value: 'baseInfo?.contractNumber'
+    },
+    {
+        name: 'internalNumber',
+        label: '项目单位',
+        type: 'string',
+        value: 'baseInfo?.internalNumber'
+    },
+    {
+        name: 'projectName',
+        label: '项目编号',
+        type: 'string',
+        value: 'baseInfo?.projectName'
+    },
+    {
+        name: 'simpleProjectName',
+        label: '数量',
+        type: 'number',
+        value: 'baseInfo?.simpleProjectName'
+    },
+    {
+        name: 'winBidTypeName',
+        label: '单位',
+        type: 'string',
+        value: 'baseInfo?.winBidTypeName'
+    },
+    {
+        name: 'saleTypeName',
+        label: '货物类别',
+        value: 'baseInfo?.saleTypeName'
+    },
+    {
+        name: 'customerCompany',
+        label: '招标文件传递方式',
+        value: 'baseInfo?.customerInfoVo?.customerCompany'
+    },
+    {
+        name: 'customerLinkman',
+        label: '价格范围（元/吨）',
+        value: 'baseInfo?.customerInfoVo?.customerLinkman'
+    },
+    {
+        name: 'customerPhone',
+        label: '验收执行标准及验收方法',
+        value: 'baseInfo?.customerInfoVo?.customerPhone'
+    },
+    {
+        name: 'signCustomerName',
+        label: '原材料执行标准',
+        value: 'baseInfo?.signCustomerName'
+    },
+    {
+        name: 'signContractTime',
+        label: '包装要求',
+        value: 'baseInfo?.signContractTime'
+    },
+    {
+        name: 'signUserName',
+        label: '是否有合同版本',
+        value: 'baseInfo?.signUserName'
+    },
+    {
+        name: 'deliveryTime',
+        label: '货款结算条件及方式',
+        value: 'baseInfo?.deliveryTime'
+    },
+    {
+        name: 'reviewTime',
+        label: '特殊材质',
+        value: 'baseInfo?.reviewTime'
+    },
+    {
+        name: 'countryCode',
+        label: '其他',
+        value: 'baseInfo?.countryCode'
+    },
+    {
+        name: 'regionName',
+        label: '审批状态',
+        value: 'baseInfo?.regionName'
+    },
+    {
+        name: 'chargeType',
+        label: '备注',
+        value: 'baseInfo?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT'
+    }
+]
+
+const tabItems = [
+    {
+        label: '概况信息',
+        key: 1,
+        content: SummaryRenderUtil.renderSections([
+            {
+                title: '基本信息',
+                render: () => <BaseInfo dataSource={baseInfoData} />
+            },
+            {
+                title: '',
+                render: () => <Table columns={tableColumns} />
+            },
+            {
+                title: '附件', render: () => (<>
+                    <Row><Button>上传附件</Button></Row>
+                    <Table columns={tableColumns} />
+                </>)
+            }
+        ])
+    }]
 
 export default function InformationDetail(): React.ReactNode {
     const history = useHistory()
-    const tabItems = [
-        {
-            label: '概况信息',
-            key: 1,
-            content: SummaryRenderUtil.renderSections([
-                {
-                    title: '基本信息',
-                    render: () => SummaryRenderUtil.renderGrid({
-                        labelCol: { span: 4 },
-                        valueCol: { span: 8 },
-                        rows: [
-                            [{
-                                label: '项目名称',
-                                value: 'baseInfo?.contractNumber'
-                            }, {
-                                label: '项目单位',
-                                value: 'baseInfo?.internalNumber'
-                            }], [{
-                                label: '项目编号',
-                                value: 'baseInfo?.projectName'
-                            }, {
-                                label: '数量',
-                                value: 'baseInfo?.simpleProjectName'
-                            }], [{
-                                label: '单位',
-                                value: 'baseInfo?.winBidTypeName'
-                            }, {
-                                label: '货物类别',
-                                value: 'baseInfo?.saleTypeName'
-                            }], [{
-                                label: '招标文件传递方式',
-                                value: 'baseInfo?.customerInfoVo?.customerCompany'
-                            }, {
-                                label: '价格范围（元/吨）',
-                                value: 'baseInfo?.customerInfoVo?.customerLinkman'
-                            }], [{
-                                label: '验收执行标准及验收方法',
-                                value: 'baseInfo?.customerInfoVo?.customerPhone'
-                            }, {
-                                label: '原材料执行标准',
-                                value: 'baseInfo?.signCustomerName'
-                            }], [{
-                                label: '包装要求',
-                                value: 'baseInfo?.signContractTime'
-                            }, {
-                                label: '是否有合同版本',
-                                value: 'baseInfo?.signUserName'
-                            }], [{
-                                label: '货款结算条件及方式',
-                                value: 'baseInfo?.deliveryTime'
-                            }, {
-                                label: '特殊材质',
-                                value: 'baseInfo?.reviewTime'
-                            }], [{
-                                label: '其他',
-                                value: 'baseInfo?.countryCode'
-                            }, {
-                                label: '审批状态',
-                                value: 'baseInfo?.regionName'
-                            }], [{
-                                label: '备注',
-                                value: 'baseInfo?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT'
-                            }]
-                        ]
-                    })
-                },
-                {
-                    title: '',
-                    render: () => <Table columns={tableColumns} />
-                },
-                {
-                    title: '附件', render: () => (<>
-                        <Row><Button>上传附件</Button></Row>
-                        <Table columns={tableColumns} />
-                    </>)
-                }
-            ])
-        }]
+    // const { loading, data, run } = useRequest(() => new Promise(async (resole, reject) => {
+    //     const data = await RequestUtil.get('/test')
+    //     resole(data)
+    // }), {})
+
+    // if (loading) {
+    //     return <Spin spinning={loading} style={{ width: '100%' }}></Spin>
+    // }
 
     return <Detail
         operation={[
