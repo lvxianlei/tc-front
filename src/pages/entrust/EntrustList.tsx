@@ -240,7 +240,7 @@ import EntrustSetting from './EntrustSetting';
                                                                     <Button type="primary" ghost href={ `/outsource/entrust/detail/${ (item as IEntrustDataItem).id }`}>详情</Button>
                                                                 </div>
                                                                 :<div>
-                                                                    <Link to="/outsource/entrust/sstting">编辑</Link>
+                                                                    <Link to={ `/outsource/entrust/sstting/${ (item as IEntrustDataItem).id }` }><Button type="primary" ghost>编辑</Button></Link>
                                                                     <ConfirmableButton 
                                                                         confirmTitle="是否删除该委托吗？" 
                                                                         type="primary"

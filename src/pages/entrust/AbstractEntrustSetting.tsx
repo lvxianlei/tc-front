@@ -1,34 +1,21 @@
 /**
- * @author zyc
- * @copyright © 2021 
+ * @author Cory(coryisbest0728#gmail.com)
+ * @copyright © 2021 Cory. All rights reserved
  */
-import { Button,  Col, ColProps, DatePicker, Form, FormInstance, FormItemProps, FormProps, Input, message, Row, Space } from 'antd';
-import Modal from 'antd/lib/modal/Modal';
-import Dragger from 'antd/lib/upload/Dragger';
+import { Button, Col, DatePicker, Input, message, Row, Space } from 'antd';
+import { FormProps } from 'antd/lib/form';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
-import AsyncComponent from '../../components/AsyncComponent';
-import { IRenderedSection, ISection } from '../../utils/SummaryRenderUtil';
+import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGroup } from '../../components/AbstractFillableComponent';
+import moment from 'moment';
+import Dragger from 'antd/lib/upload/Dragger';
+import AuthUtil from '../../utils/AuthUtil';
 import styles from './AbstractEntrustSetting.module.less';
 import { InboxOutlined } from '@ant-design/icons';
-import moment from 'moment';
 import RequestUtil from '../../utils/RequestUtil';
-import AuthUtil from '../../utils/AuthUtil';
-
-interface IAuthoritableFormItemProps extends FormItemProps {
-    
-}
-
-export interface IFormItemGroup extends ISection {
-    readonly itemProps: IAuthoritableFormItemProps[];
-    readonly itemCol?: ColProps;
-}
-
-export interface IAbstractEntrustSettingState {
+export interface IAbstractEntrustSettingState extends IAbstractFillableComponentState {
     readonly entrust?: IEntrust;
-    readonly isVisible?: boolean;
     readonly attachList?: IAttachVo[];
-    readonly entrustSubmitType?: number;
 }
 
 export interface IEntrust {
@@ -52,57 +39,82 @@ export interface IAttachVo {
     readonly userName?: string;
 }
 
-export enum SubmitType {
-    SUBMIT = 1,
-    SAVE = 2
-}
-
 /**
- * Abstract fillable form component.
+ * Abstract Entrust Setting
  */
-export default abstract class AbstractEntrustSetting<P extends RouteComponentProps, S extends IAbstractEntrustSettingState> extends AsyncComponent<P, S> {
-    
-    private form: React.RefObject<FormInstance> = React.createRef<FormInstance>();
+export default abstract class AbstractEntrustSetting<P extends RouteComponentProps, S extends IAbstractEntrustSettingState> extends AbstractFillableComponent<P, S> {
 
     public state: S = {
-        isVisible: false
+        entrust: undefined
     } as S;
 
     /**
-     * @constructor
-     * Creates an instance of abstract fillable component.
-     * @param props 
+     * @override
+     * @description Gets return path
+     * @returns return path 
      */
-    constructor(props: P) {
-        super(props);
-        this.onFinishSubmit = this.onFinishSubmit.bind(this)
-        this.onFinishSave = this.onFinishSave.bind(this)
+    protected getReturnPath(): string {
+        return '/outsource/entrust';
     }
 
     /**
-     * @constructor
-     * @description show modal
-     * @param props 
+     * @override
+     * @description Gets form props
+     * @returns form props 
      */
-    public showModal = () : void => {
+     protected getFormProps(): FormProps {
+        return {
+            ...super.getFormProps(),
+            labelCol:{ 
+                span: 6 
+            },
+            wrapperCol: {
+                offset: 1
+            }
+        };
+    }
+    
+    public deleteAttach = async (values: Record<string, any>, index: number): Promise<void> => {
+        const attachList: IAttachVo[] | undefined= this.state?.attachList;
+        if(values.id) {
+            await RequestUtil.delete(`/tower-system/attach?ids=${ values.attachId }`);
+        }
+        attachList && attachList.splice(index, 1);
         this.setState({
-            isVisible: true
+            attachList: attachList
         })
-    } 
+    }
 
     /**
-     * @private
+     * @description Renders extra operation area
+     * @returns extra operation area 
+     */
+    protected renderExtraOperationArea(): React.ReactNode {
+        return null;
+    }
+
+    abstract onFinishSubmit(): void;
+
+    /**
+     * @description Gets primary operation button
+     * @returns primary operation button
+     */
+    protected getPrimaryOperationButton(): React.ReactNode {
+        return <Space direction="horizontal" size="large" > 
+            <Button type="primary" htmlType="submit">保存</Button>
+            <Button type="primary" htmlType="button" onClick={ () => this.onFinishSubmit() }>提交</Button>
+        </Space>;
+    }
+
+    /**
+     * @implements
      * @description Gets form item groups
      * @returns form item groups 
      */
-    private getFormItemGroups(): IFormItemGroup[][] {
-        const entrust: IEntrust | undefined = this.state?.entrust;
-        return [[
-            {
+    public getFormItemGroups(): IFormItemGroup[][] {
+        const entrust: IEntrust | undefined = this.state.entrust;
+        return [[{
                 title: '委托信息',
-                itemCol: {
-                    span: 22
-                },
                 itemProps: [{
                     label: '工程名称',
                     name: 'projectName',
@@ -152,7 +164,7 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
                                 let attachList: IAttachVo[] | undefined = this.state.attachList || [];
                                 const resData: IAttachVo | undefined = info.file.response.data;
                                 attachList.push({ 
-                                    filePath: resData?.link,
+                                    filePath: resData?.name,
                                     fileSize: resData?.size,
                                     fileSuffix: resData?.name?.slice(resData?.name?.lastIndexOf('.') + 1, resData?.name.length),
                                     fileUploadTime: resData?.fileUploadTime,
@@ -177,112 +189,12 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
                         </p>
                     </Dragger>
                 }]
-            }
-        ]]
-    }
-
-    /**
-     * @description Determines whether cancel on
-     */
-    protected onCancel = (): void => {
-        this.setState({
-            isVisible: false
-        })
-        this.getForm()?.resetFields();
-    }
-
-    /**
-     * @description Determines whether save on
-     * @param values 
-     * @returns save 
-     */
-    public onSave = (): void => {
-        this.setState({
-            entrustSubmitType: SubmitType.SAVE
-        }, () => {
-            if (this.getForm()) {
-                this.onFinishSave(this.getForm()?.getFieldsValue(true))
-            }
-        })
-    }
-
-    /**
-     * @description Determines whether submit on
-     * @param values 
-     * @returns submit 
-     */
-    public onSubmit = (): void => {
-        this.setState({
-            entrustSubmitType: SubmitType.SUBMIT
-        }, () => {
-            if (this.getForm()) {
-                this.onFinishSubmit(this.getForm()?.getFieldsValue(true))
-            }
-        })
-    }
-
-    public deleteAttach = async (values: Record<string, any>, index: number): Promise<void> => {
-        const attachList: IAttachVo[] | undefined= this.state?.attachList;
-        if(values.id) {
-            await RequestUtil.delete(`/tower-system/attach?ids=${ values.attachId }`);
-        }
-        attachList && attachList.splice(index, 1);
-        this.setState({
-            attachList: attachList
-        })
-    }
-
-     /**
-     * @abstract
-     * @description Determines whether finish on
-     * @param values 
-     * @returns onfinish 
-     */
-    abstract onFinishSubmit(values: Record<string, any>): Promise<void>;
-    abstract onFinishSave(values: Record<string, any>): Promise<void>;
-    /**
-     * @protected
-     * @description Gets form
-     * @returns form 
-     */
-    protected getForm(): FormInstance | null {
-        return this.form?.current;
-    }
-
-    /**
-     * @protected
-     * @description Gets form props
-     * @returns form props 
-     */
-    protected getFormProps(): FormProps {
-        return {
-            labelCol: {
-                span: 4
-            },
-            wrapperCol: {
-                span: 20
-            },
-            onFinish: this.onFinishSubmit
-        };
-    }
-
-    /**
-     * @description Renders extra operation area
-     * @returns pop modal button
-     */
-    abstract popModalButton(): React.ReactNode;
-
-    /**
-     * @protected
-     * @description Renders extra sections
-     * @returns extra sections 
-     */
-    protected renderExtraSections(): IRenderedSection[] {
-        return [{
-            title: '已上传资料包',
-            render: (): React.ReactNode => {
-                return (
-                    <>
+            }],
+            [{
+                title: '已上传资料包',
+                itemProps: [{
+                    label: '',
+                    children: <>
                         { this.state.attachList ? 
                             <>{ this.state.attachList.map<React.ReactNode>((items: IAttachVo, index: number): React.ReactNode => {
                                     return <Row justify="center" gutter={24} key={ index }>
@@ -296,93 +208,11 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
                                     </Row>
                                 })
                             }</> 
-                            : <img src="" alt="" /> }
-                        
+                            : "暂无资料包"
+                        }
                     </>
-                )
+                }]
             }
-        }]
-    }
-
-    /**
-     * @protected
-     * @description Renders form items
-     * @param items 
-     * @param itemIndex 
-     * @returns form items 
-     */
-     protected renderFormItems(items: IFormItemGroup[], itemIndex: number): React.ReactNode {
-        return (
-            <div key={ itemIndex }>
-                {
-                    items.map<React.ReactNode>((group: IFormItemGroup): React.ReactNode => (
-                        <React.Fragment key={ group.title }>
-                            <div className={ styles.title }>{ group.title }</div>
-                            {
-                                group.itemCol
-                                ?
-                                <Row gutter={ 24 }>
-                                {
-                                    group.itemProps.map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
-                                        <Col span={ group.itemCol?.span } key={ `${ props.name }_${ index }` }>
-                                            <Form.Item { ...props }/>
-                                        </Col>
-                                    ))
-                                }
-                                </Row>
-                                :
-                                group.itemProps.map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
-                                    <Form.Item key={ `${ props.name }_${ index }` } { ...props }/>
-                                ))
-                            }
-                        </React.Fragment>
-                    ))
-                }
-            </div>
-        );
-    }
-
-    /**
-     * @description Renders AbstractFillableComponent
-     * @returns render 
-     */
-    public render(): React.ReactNode {
-        return (
-            <>
-                { this.popModalButton() }
-                <Modal title="新建委托" width="60%" footer={ null } visible={ this.state.isVisible } onCancel={ this.onCancel }>
-                    <Form { ...this.getFormProps() } ref={ this.form }>
-                        <Space size="large" direction="vertical">
-                            <Space size="large" direction="horizontal">
-                                <Row>
-                                    <Col span={ 12 }>
-                                        <Space size="middle" direction="horizontal">
-                                            {
-                                                this.state.isVisible && this.getFormItemGroups().map<React.ReactNode>((items: IFormItemGroup[], itemIndex: number): React.ReactNode => this.renderFormItems(items, itemIndex))
-                                            }
-                                        </Space>
-                                    </Col>
-                                    <Col span={ 12 }>
-                                        {
-                                            this.state.isVisible && this.renderExtraSections().map<React.ReactNode>((section: IRenderedSection): React.ReactNode => (
-                                                <React.Fragment key={ section.title }>
-                                                    <div className={ styles.title }>{ section.title }</div>
-                                                    { section.render.call(this) }
-                                                </React.Fragment>
-                                            ))
-                                        }
-                                    </Col>
-                                </Row>
-                            </Space>
-                            <Space size="large" direction="horizontal" className={ styles.footer_btn }>
-                                <Button type="default" htmlType="button" onClick={ this.onCancel }>关闭</Button>
-                                <Button type="default" htmlType="button" onClick={ this.onSave }>保存</Button>
-                                <Button type="primary" htmlType="button" onClick={ this.onSubmit }>提交</Button>
-                            </Space>
-                        </Space>
-                    </Form>
-                </Modal>
-            </>
-        );
+        ]]
     }
 }
