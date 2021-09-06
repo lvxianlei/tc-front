@@ -3,7 +3,7 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 import React from 'react';
-import { BrowserRouter as Router, Route, RouteComponentProps, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Route, RouteComponentProps, Switch } from 'react-router-dom';
 
 import AsyncPanel from './AsyncPanel';
 import ApplicationContext from './configuration/ApplicationContext';
@@ -65,14 +65,19 @@ export default class App extends React.Component<{}, IAppState> {
       <Router>
         <Switch>
           { 
-            ApplicationContext.get().globalRouters?.map<React.ReactNode>((router: IRouterItem): React.ReactNode => (
-              router.path
-              ?
-              <Route path={ router.path } key={ router.path } exact={ router.exact }
-                  render={ this.renderRoute(router.module) }/>
-              :
-              null
-            ))
+            ApplicationContext.get().globalRouters?.map<React.ReactNode>((router: IRouterItem): React.ReactNode => {
+              
+              if( !router.path ){
+                return null;
+              }
+
+              if( router.redirect ){
+                return <Redirect from={ router.path }  key={ router.path } exact={ router.exact } to={ router.redirect }/>
+              }
+
+              return  <Route path={ router.path } key={ router.path } exact={ router.exact }
+              render={ this.renderRoute(router.module) }/>
+            })
           } 
           {
             FrameComponent

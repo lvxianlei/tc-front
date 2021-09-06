@@ -29,6 +29,7 @@ export interface IRouterItem {
     readonly module?: string;
     readonly exact?: boolean;
     readonly children?: IRouterItem[];
+    readonly redirect?: string;
 }
 
 export interface IClientConfig {
