@@ -46,14 +46,14 @@ export interface IDefaultContentPanelState {
             if (this.state.shouldRender === undefined) {
                 ApplicationContext.doFiltersAll(props).then((permit: boolean): void => {
                     this.setState({
-                        shouldRender: hasAuthority(authority) && permit
+                        shouldRender: permit
                     });
                 });
             }
             return (
                 <>
                     {
-                        this.state.shouldRender
+                        hasAuthority(authority) && this.state.shouldRender
                         ?
                         <AsyncPanel module={ module}/>
                         :
