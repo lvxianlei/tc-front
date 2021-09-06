@@ -240,7 +240,7 @@ import EntrustSetting from './EntrustSetting';
                                                                     <Button type="primary" ghost href={ `/outsource/entrust/detail/${ (item as IEntrustDataItem).id }`}>详情</Button>
                                                                 </div>
                                                                 :<div>
-                                                                    <EntrustSetting data={ item } getTable={ () => this.fetchTableData({}) }/>
+                                                                    <Link to="/outsource/entrust/sstting">编辑</Link>
                                                                     <ConfirmableButton 
                                                                         confirmTitle="是否删除该委托吗？" 
                                                                         type="primary"
@@ -387,11 +387,13 @@ import EntrustSetting from './EntrustSetting';
      }
  
      /**
-      * @implements
-      * @description Determines whether new click on
-      * @param event 
-      */
-     public onNewClick(event: React.MouseEvent<HTMLButtonElement>): void {}
+     * @implements
+     * @description Determines whether new click on
+     * @param event 
+     */
+    public onNewClick(event: React.MouseEvent<HTMLButtonElement>): void {
+        this.props.history.push('/outsource/entrust/new');
+    }
  
      /**
       * @implements
@@ -427,8 +429,10 @@ import EntrustSetting from './EntrustSetting';
      * @description 新增按钮
      * @param event 
      */
-    public renderExtraOperationContent(): React.ReactNode {
-        return <EntrustNew getTable={ () => this.fetchTableData({}) }/>;
+    public renderExtraOperationContent(item: ITabItem): React.ReactNode {
+        return this.state.selectedTabKey === '0' ?
+          super.renderExtraOperationContent(item)
+        : null 
     }
  }
  
