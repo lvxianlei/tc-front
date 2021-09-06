@@ -188,6 +188,7 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
         this.setState({
             isVisible: false
         })
+        this.getForm()?.resetFields();
     }
 
     /**

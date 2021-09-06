@@ -68,6 +68,7 @@ class EntrustSetting extends AbstractEntrustSetting<IEntrustSettingRouteProps, I
                     isVisible: false
                 })
                 this.props.getTable();
+                this.getForm()?.resetFields();
             });
         } else {
             message.error("请上传资料包！")
@@ -94,6 +95,7 @@ class EntrustSetting extends AbstractEntrustSetting<IEntrustSettingRouteProps, I
                     isVisible: false
                 })
                 this.props.getTable();
+                this.getForm()?.resetFields();
             });
         } else {
             message.error("请上传资料包！")
