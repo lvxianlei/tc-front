@@ -16,7 +16,8 @@
             "name": "客户管理", // 显示在面包屑中的名称
             "path": "/client/mngt",
             "module": "./pages/client-mngt/ClientMngt",
-            "exact": true
+            "exact": true,
+            "authority": "customer_page"
         },
         { // 新增客户
             "name": "新增客户",
@@ -34,7 +35,8 @@
             "name": "销售合同管理",
             "path": "/prom/contract",
             "module": "./pages/prom/contract/PromContract",
-            "exact": true
+            "exact": true,
+            "authority": "contract"
         },
         { // 新增合同
             "name": "新增合同",
@@ -113,7 +115,8 @@
             "name": "销售任务单管理",
             "path": "/prom/task",
             "module": "./pages/prom/task-mngt/TasktMngt",
-            "exact": true
+            "exact": true,
+            "authority": "task_notice_page"
         },
         { // 新增任务单
             "name": "创建任务单",
