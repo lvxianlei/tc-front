@@ -5,6 +5,12 @@
 { // 路由配置
     "globalRouters": [
         {
+            "name": "首页",
+            "path": "/",
+            "exact": true,
+            "redirect": "/client/mngt"
+        },
+        {
             "name": "登录",
             "path": "/login",
             "module": "./pages/login/Login",
