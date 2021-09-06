@@ -37,7 +37,7 @@ import EntrustSetting from './EntrustSetting';
      readonly projectEndTime: string;
      readonly projectStartTime: string;
      readonly status: number;
-     readonly towerModelVoList: ITowerModelVO[];
+     readonly entrustProductCategoryList: ITowerModelVO[];
  }
  
 
@@ -284,13 +284,13 @@ import EntrustSetting from './EntrustSetting';
                                                 <Col span={12}>
                                                     <div className = { styles.card_right }>
                                                     <Table 
-                                                        dataSource = { item.towerModelVoList }
+                                                        dataSource = { item.entrustProductCategoryList }
                                                         rowKey = { this.getTableRowKey() }
                                                         bordered = {true}
                                                         onChange = { this.onTableChange }
                                                         style = {{ height: '380px' }}
                                                         columns = {this.getTableColumns(data)}
-                                                        scroll = {item && item.towerModelVoList && item.towerModelVoList.length>10?{ y: 322 }:{}}  
+                                                        scroll = {item && item.entrustProductCategoryList && item.entrustProductCategoryList.length>10?{ y: 322 }:{}}  
                                                         pagination = {false}
                                                         size = 'small'
                                                         rowClassName = {(record: object, index: number) => {
