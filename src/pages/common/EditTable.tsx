@@ -4,13 +4,6 @@ import { FormInstance } from 'antd/lib/form'
 import './EditTable.less'
 const EditableContext = React.createContext<FormInstance<any> | null>(null)
 
-interface Item {
-    key: string
-    name: string
-    age: string
-    address: string
-}
-
 interface EditableRowProps {
     index: number
 }
@@ -30,9 +23,9 @@ interface EditableCellProps {
     title: React.ReactNode
     editable: boolean
     children: React.ReactNode
-    dataIndex: keyof Item
-    record: Item
-    handleSave: (record: Item) => void
+    dataIndex: string
+    record: any
+    handleSave: (record: any) => void
 }
 
 const EditableCell: React.FC<EditableCellProps> = ({
@@ -145,11 +138,12 @@ export default function EditTable({ columns = [], dataSource = [] }: EditableTab
         })
         setTableData({ ...tableData, dataSource: newData })
     }
+    
     const components = {
         body: {
             row: EditableRow,
             cell: EditableCell,
-        },
+        }
     }
 
     return (
