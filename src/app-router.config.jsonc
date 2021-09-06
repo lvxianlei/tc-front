@@ -269,13 +269,15 @@
             "name": "招标信息",
             "path": "/bidding/information",
             "module": "./pages/bidding/Information",
-            "exact": true
+            "exact": true,
+            "authority": "bidding"
         },
         { // 招标信息详情
             "name": "招标信息详情",
             "path": "/bidding/information/detail/:id",
             "module": "./pages/bidding/InformationDetail",
-            "exact": true
+            "exact": true,
+            "authority": "bidding_detail"
         },
         { // 招标信息新增
             "name": "新增招标信息",
@@ -293,31 +295,36 @@
             "name": "项目管理",
             "path": "/project/management",
             "module": "./pages/project/Management",
-            "exact": true
+            "exact": true,
+            "authority": "project"
         },
         { // 项目管理详情
             "name": "项目管理详情",
             "path": "/project/management/detail/:id",
             "module": "./pages/project/ManagementDetail",
-            "exact": true
+            "exact": true,
+            "authority": "project_detail"
         },
         { // 项目管理详情
             "name": "项目管理详情",
             "path": "/project/management/detail/:id/:tab",
             "module": "./pages/project/ManagementDetail",
-            "exact": true
+            "exact": true,
+            "authority":"project_detail"
         },
         { // 审批管理
             "name": "审批管理",
             "path": "/approvalm/management",
             "module": "./pages/approval-mngt/ApprovalMngt",
-            "exact": true
+            "exact": true,
+            "authority": "approvalm"
         },
         { // 审批管理详情
             "name": "审批管理详情",
             "path": "/approvalm/management/detail/:id",
             "module": "./pages/approval-mngt/ApprovalMngtDetail",
-            "exact": true
+            "exact": true,
+            "authority": "approvalm_detail"
         }
     ]
 }

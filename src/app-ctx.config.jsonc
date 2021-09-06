@@ -19,11 +19,12 @@
                         "label": "客户管理",
                         "icon": "customer",
                         "path": "/client",
-                        "authority": "",
+                        "authority": "customer_page",
                         "items": [
                             {
                                 "label": "客户管理",
-                                "path": "/client/mngt"
+                                "path": "/client/mngt",
+                                "authority": "customer_detail"
                             }
                         ]
                     },
@@ -136,10 +137,12 @@
                         "label": "招标信息",
                         "icon": "bidding",
                         "path": "/bidding",
+                        "authority": "bidding",
                         "items": [
                             {
                                 "label": "招标信息",
-                                "path": "/bidding/information"
+                                "path": "/bidding/information",
+                                "authority":"bidding_detail"
                             }
                         ]
                     },
@@ -147,10 +150,12 @@
                         "label": "项目管理",
                         "icon": "project",
                         "path": "/project",
+                        "authority": "project",
                         "items": [
                             {
                                 "label": "项目管理",
-                                "path": "/project/management"
+                                "path": "/project/management",
+                                "authority": "project_detail"
                             }
                         ]
                     },
@@ -158,10 +163,12 @@
                         "label": "审批管理",
                         "icon": "approval-mngt",
                         "path": "/approvalm",
+                        "authority": "approvalm",
                         "items": [
                             {
                                 "label": "审批管理",
-                                "path": "/approvalm/management"
+                                "path": "/approvalm/management",
+                                "authority": "approvalm_detail"
                             }
                         ]
                     }

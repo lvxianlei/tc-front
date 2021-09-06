@@ -43,7 +43,7 @@ module.exports = {
         "payment_record_del",
         "payment_record",
         "sale_order",
-        // "sale_order_del",
+        "sale_order_del",
         "role",
         "role_detail",
         "role_add",
@@ -65,6 +65,13 @@ module.exports = {
         "fileVersion_page",
         "fileVersion_detail",
         "fileVersion_down",
-        "fileVersion_file"
+        "fileVersion_file",
+
+        "bidding",
+        "bidding_detail",
+        "project",
+        "project_detail",
+        "approvalm",
+        "approvalm_detail"
     ]
 }
