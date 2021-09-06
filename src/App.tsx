@@ -59,7 +59,7 @@ export default class App extends React.Component<{}, IAppState> {
    */
   public render(): React.ReactNode {
     const frame: ComponentClazz | undefined = ApplicationContext.get().layout?.frame;
-    const Frame: React.ComponentClass | undefined = frame?.componentClass;
+    const FrameComponent: React.ComponentClass | undefined = frame?.componentClass;
     // const effective: boolean = this.state.isEffective;
     return (
       <Router>
@@ -75,9 +75,9 @@ export default class App extends React.Component<{}, IAppState> {
             ))
           } 
           {
-            Frame
+            FrameComponent
             ? 
-            <Frame { ...frame?.props }/>
+            <FrameComponent { ...frame?.props }/>
             :
             null
           }
