@@ -69,9 +69,12 @@ module.exports = {
 
         "bidding",
         "bidding_detail",
+        "bidding_edit",
         "project",
         "project_detail",
+        "project_edit",
         "approvalm",
-        "approvalm_detail"
+        "approvalm_detail",
+        "approvalm_edit"
     ]
 }

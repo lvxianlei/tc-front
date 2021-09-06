@@ -289,7 +289,8 @@
             "name": "编辑招标信息",
             "path": "/bidding/information/new/:id",
             "module": "./pages/bidding/InformationNew",
-            "exact": true
+            "exact": true,
+            "authority": "bidding_edit"
         },
         { // 项目管理
             "name": "项目管理",
@@ -310,7 +311,7 @@
             "path": "/project/management/detail/:id/:tab",
             "module": "./pages/project/ManagementDetail",
             "exact": true,
-            "authority":"project_detail"
+            "authority": "project_detail"
         },
         { // 审批管理
             "name": "审批管理",
