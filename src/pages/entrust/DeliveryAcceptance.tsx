@@ -111,7 +111,7 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
      */
     public onFinishSubmit = async (values: Record<string, any>): Promise<void> => {
         values = { entrustId: this.props.entrustId, productCategoryId: this.props.id, ...values };
-        return await RequestUtil.put('/tp-task-dispatch/towerModel/accept', values).then((res) => {
+        return await RequestUtil.post('/tp-task-dispatch/productCategory/accept', values).then((res) => {
             if(res) {
                 this.setState({
                     isVisible: false
@@ -130,7 +130,7 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
     public onBackSubmit = async (): Promise<void> => {
         let values: Record<string, any> = this.getForm()?.getFieldsValue(true);
         values = { entrustId: this.props.entrustId, productCategoryId: this.props.id, description: this.getForm()?.getFieldValue('description') };
-        return await RequestUtil.put('/tp-task-dispatch/towerModel/reject', values).then((res) => {
+        return await RequestUtil.post('/tp-task-dispatch/productCategory/reject', values).then((res) => {
             if(res) {
                 this.setState({
                     isVisible: false
