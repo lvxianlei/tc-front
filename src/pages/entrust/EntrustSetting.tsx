@@ -90,7 +90,11 @@ class EntrustSetting extends AbstractEntrustSetting<IEntrustSettingRouteProps, I
             values.attachInfoDtoList = this.state.attachList;
             values.id = this.props.match.params.id;
             if(values.attachInfoDtoList) {
-                return RequestUtil.post('/tp-task-dispatch/entrust/entrustSubmit', values);
+                return RequestUtil.post('/tp-task-dispatch/entrust/entrustSubmit', values).then((res) => {
+                    if(res) {
+                        this.props.history.push('/outsource/entrust')
+                    }
+                });;
             } else {
                 message.error("请上传资料包！")
                 return Promise.reject(false)

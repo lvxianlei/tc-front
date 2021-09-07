@@ -48,7 +48,7 @@ class EntrustNew extends AbstractEntrustSetting<IEntrustNewRouteProps, IEntrustN
      * @returns save 
      */
     public onFinishSubmit(): void {
-        this.getForm()?.validateFields().then( (): Promise<void> => {
+        this.getForm()?.validateFields().then((): Promise<void> => {
             const values: Record<string, any> = this.getForm()?.getFieldsValue(true);
             if(values.projectTime) {
                 values.projectStartTime = moment(values.projectTime[0]).format('YYYY-MM-DD');
@@ -56,13 +56,16 @@ class EntrustNew extends AbstractEntrustSetting<IEntrustNewRouteProps, IEntrustN
             }
             values.attachInfoDtoList = this.state.attachList;
             if(values.attachInfoDtoList) {
-                return RequestUtil.post('/tp-task-dispatch/entrust/entrustSubmit', values);
+                return RequestUtil.post('/tp-task-dispatch/entrust/entrustSubmit', values).then((res) => {
+                    if(res) {
+                        this.props.history.push('/outsource/entrust')
+                    }
+                });
             } else {
                 message.error("请上传资料包！")
                 return Promise.reject(false)
             }  
         })
-        
     }
 }
 
