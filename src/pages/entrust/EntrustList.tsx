@@ -54,6 +54,7 @@ import EntrustSetting from './EntrustSetting';
      readonly projectNum: string;
      readonly towerName: string;
      readonly sectionNum: number;
+     readonly entrustId: number | string;
  }
 
  interface IResponseData {
@@ -145,7 +146,7 @@ import EntrustSetting from './EntrustSetting';
         dataIndex: 'operation',
         render: (_: undefined, record: object): React.ReactNode => (
             <Space direction="horizontal" size="small">
-                <DeliveryAcceptance data={ record } getTable={ () => this.fetchTableData({}) }/>
+                <DeliveryAcceptance id={ (record as ITowerModelVO).id } entrustId={ (record as ITowerModelVO).entrustId } getTable={ () => this.fetchTableData({}) }/>
             </Space>
         )
     }];
