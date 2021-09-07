@@ -8,20 +8,26 @@ export interface BaseInfoItemProps {
     type?: 'string' | 'number' | 'date' | 'select'
 }
 
-interface BaseInfoProps {
-    dataSource: BaseInfoItemProps[]
-    edit?: boolean
+export interface BaseInfoColumnsProps {
+    title: string | number,
+    dataIndex: string,
+    render?: () => JSX.Element
 }
 
-export default function BaseInfo({ dataSource, edit }: BaseInfoProps): JSX.Element {
+interface BaseInfoProps {
+    dataSource: { [key in BaseInfoColumnsProps['title']]: any }
+    columns: BaseInfoColumnsProps[]
+    edit?: boolean
+    col?: number
+}
 
+export default function BaseInfo({ dataSource, columns, edit, col = 2 }: BaseInfoProps): JSX.Element {
+    const [form] = Form.useForm()
     if (edit) {
-        const formData: { [key: string]: any } = {}
-        dataSource.forEach((item: BaseInfoItemProps) => formData[item.name] = item.value)
-        return <Form initialValues={formData} >
-            <Descriptions bordered column={2}>
-                {dataSource.map((item: any, index) => <Descriptions.Item key={`desc_${index}`} label={item.label}>
-                    <Form.Item name={item.name}>
+        return <Form form={form} initialValues={dataSource} >
+            <Descriptions bordered column={col}>
+                {columns.map((item: any, index: number) => <Descriptions.Item contentStyle={{ width: `${100 / (col * 2)}%` }} key={`desc_${index}`} label={item.title}>
+                    <Form.Item name={item.dataIndex} label={dataSource[item.title]}>
                         <Input />
                     </Form.Item>
                 </Descriptions.Item>)}
@@ -29,7 +35,7 @@ export default function BaseInfo({ dataSource, edit }: BaseInfoProps): JSX.Eleme
         </Form>
     }
 
-    return <Descriptions bordered column={2}>
-        {dataSource.map((item: any, index) => <Descriptions.Item key={`desc_${index}`} label={item.label}>{item.value}</Descriptions.Item>)}
+    return <Descriptions bordered column={col}>
+        {columns.map((item: any, index: number) => <Descriptions.Item contentStyle={{ width: `${100 / (col * 2)}%` }} key={`desc_${index}`} label={item.title}>{dataSource[item.dataIndex] || ''}</Descriptions.Item>)}
     </Descriptions>
 }

@@ -1,0 +1,89 @@
+{
+    "code": 200,
+    "msg": "do",
+    "success": false,
+    "data": {
+        "attachVos": [
+            {
+                "description": "cupidatat ex",
+                "filePath": "incididunt proident dolore dolor ullamco",
+                "fileSize": -30918889.930596456,
+                "fileSuffix": "id officia non voluptate",
+                "fileUploadTime": "laboris",
+                "id": -8182708.445244953,
+                "name": "exercitation in",
+                "userName": "dolor et consectetur cillum eu"
+            },
+            {
+                "description": "et",
+                "filePath": "aliqua aute sint",
+                "fileSize": 78357033.64328855,
+                "fileSuffix": "dolore magna",
+                "fileUploadTime": "aute sed dolore",
+                "id": 73409539.46603191,
+                "name": "velit aute in",
+                "userName": "eiusmod irure Lorem dolore cillum"
+            }
+        ],
+        "bidBuyEndTime": "elit in",
+        "bidPackageInfoDTOList": [
+            {
+                "amount": 8409500.18292968,
+                "bidInfoId": -18912103.40556708,
+                "deliveryDate": "Ut tempor ut",
+                "deliveryPlace": "labore",
+                "goodsType": "dolore",
+                "id": 86193985.96178421,
+                "packageNumber": "nulla non voluptate commodo",
+                "partBidNumber": "in laborum id aute",
+                "unit": "fugiat veniam"
+            },
+            {
+                "amount": 75873270.8143358,
+                "bidInfoId": -57905728.9912301,
+                "deliveryDate": "nisi minim veniam",
+                "deliveryPlace": "exercitation ullamco esse tempor",
+                "goodsType": "nostrud proident ali",
+                "id": -40135977.63886563,
+                "packageNumber": "dolore Duis sit",
+                "partBidNumber": "ipsum velit",
+                "unit": "Duis occaecat fugiat"
+            },
+            {
+                "amount": 60448336.788577914,
+                "bidInfoId": 16556597.928614989,
+                "deliveryDate": "labore irure voluptate",
+                "deliveryPlace": "aute ullamco pariatur ad fugiat",
+                "goodsType": "quis",
+                "id": 89016018.05226687,
+                "packageNumber": "Duis amet Excepteur voluptate",
+                "partBidNumber": "ut sint a",
+                "unit": "do aute velit"
+            },
+            {
+                "amount": -34191602.98706769,
+                "bidInfoId": 92191575.10641235,
+                "deliveryDate": "irure ut laboris",
+                "deliveryPlace": "enim ullamco tempor laboris",
+                "goodsType": "consequat",
+                "id": 95830540.64013964,
+                "packageNumber": "cillum tem",
+                "partBidNumber": "deserunt dolor",
+                "unit": "aliquip"
+            }
+        ],
+        "biddingAddress": "est nostrud eu ",
+        "biddingAgency": "sit ea aliqua ullamco sunt",
+        "biddingEndTime": "sunt Ut aute",
+        "biddingPerson": "aliqua",
+        "biddingStatus": -15864499.587544098,
+        "explain": "eiusmod irure in ipsum",
+        "id": 36868242.42084113,
+        "projectName": "sunt",
+        "projectNumber": "commodo aute",
+        "reason": "commodo reprehenderit tempor consequat deserunt",
+        "releaseDate": "elit velit",
+        "source": "anim Ut",
+        "sourceWebsite": "commodo"
+    }
+}

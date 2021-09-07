@@ -1,0 +1,257 @@
+{
+    "baseInfoData": [
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName"
+        },
+        {
+            "title": "项目编码",
+            "dataIndex": "projectNumber"
+        },
+        {
+            "title": "分标编号",
+            "dataIndex": "partBidNumber"
+        },
+        {
+            "title": "项目类型",
+            "dataIndex": "projectType"
+        },
+        {
+            "title": "标书购买截至日期",
+            "dataIndex": "bidBuyEndTime"
+        },
+        {
+            "title": "投标截至日期",
+            "dataIndex": "biddingEndTime"
+        },
+        {
+            "title": "招标人",
+            "dataIndex": "biddingPerson"
+        },
+        {
+            "title": "招标代理机构",
+            "dataIndex": "biddingAgency"
+        },
+        {
+            "title": "项目负责人",
+            "dataIndex": "projectLeader"
+        },
+        {
+            "title": "当前项目阶段",
+            "dataIndex": "currentProjectStage"
+        },
+        {
+            "title": "发布日期",
+            "dataIndex": "releaseDate"
+        },
+        {
+            "title": "创建时间",
+            "dataIndex": "createTime"
+        },
+        {
+            "title": "说明",
+            "dataIndex": "explain"
+        }
+    ],
+    "bidInfoColumns": [
+        {
+            "title": "是否中标",
+            "dataIndex": "packageNumber",
+            "key": "packgeNumber"
+        },
+        {
+            "title": "分标编号",
+            "dataIndex": "amount",
+            "key": "amount"
+        },
+        {
+            "title": "货物类别",
+            "dataIndex": "unit",
+            "key": "unit"
+        },
+        {
+            "title": "包号",
+            "dataIndex": "deliveryDate",
+            "key": "deliveryDate"
+        },
+        {
+            "title": "项目单位",
+            "dataIndex": "deliveryPlace",
+            "key": "deliveryPlace"
+        },
+        {
+            "title": "投标人名称",
+            "dataIndex": "deliveryPlace",
+            "key": "deliveryPlace"
+        },
+        {
+            "title": "总价（万元）",
+            "dataIndex": "deliveryPlace",
+            "key": "deliveryPlace"
+        },
+        {
+            "title": "重量（吨）",
+            "dataIndex": "deliveryPlace",
+            "key": "deliveryPlace"
+        }
+    ],
+    "contractTableColumns": [
+        {
+            "title": "合同编号",
+            "dataIndex": "contractNumber"
+        },
+        {
+            "title": "内部合同编号",
+            "dataIndex": "internalNumber"
+        },
+        {
+            "title": "合同名称",
+            "dataIndex": "contractName"
+        },
+        {
+            "title": "合同总重(吨)",
+            "dataIndex": "contractTotalWeight"
+        },
+        {
+            "title": "合同金额(元)",
+            "dataIndex": "contractAmount"
+        },
+        {
+            "title": "业主单位",
+            "dataIndex": "customerCompany"
+        },
+        {
+            "title": "合同签订单位",
+            "dataIndex": "signCustomerName"
+        },
+        {
+            "title": "签订日期",
+            "dataIndex": "signContractTime"
+        },
+        {
+            "title": "要求发货日期",
+            "dataIndex": "deliveryTime"
+        },
+        {
+            "title": "有无技术协议",
+            "dataIndex": "isIta"
+        },
+        {
+            "title": "销售业务员",
+            "dataIndex": "salesman"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        },
+        {
+            "title": "制单人",
+            "dataIndex": "createUserName"
+        },
+        {
+            "title": "制单时间",
+            "dataIndex": "createTime"
+        }
+    ],
+    "saleOrderTableColumns": [
+        {
+            "title": "订单编号",
+            "dataIndex": "saleOrderNumber"
+        },
+        {
+            "title": "任务下发状态",
+            "dataIndex": "taskStatus"
+        },
+        {
+            "title": "内部合同编号",
+            "dataIndex": "internalNumber"
+        },
+        {
+            "title": "订单工程名称",
+            "dataIndex": "orderProjectName"
+        },
+        {
+            "title": "业主单位",
+            "dataIndex": "customerCompany"
+        },
+        {
+            "title": "合同签订单位",
+            "dataIndex": "signCustomerName"
+        },
+        {
+            "title": "订单总价",
+            "dataIndex": "taxAmount"
+        },
+        {
+            "title": "订单重量",
+            "dataIndex": "orderWeight"
+        },
+        {
+            "title": "订单单价",
+            "dataIndex": "taxPrice"
+        },
+        {
+            "title": "签订日期",
+            "dataIndex": "signContractTime"
+        },
+        {
+            "title": "合同交货日期",
+            "dataIndex": "deliveryTime"
+        },
+        {
+            "title": "订单交货日期",
+            "dataIndex": "orderDeliveryTime"
+        },
+        {
+            "title": "制单人",
+            "dataIndex": "createUserName"
+        },
+        {
+            "title": "制单时间",
+            "dataIndex": "createTime"
+        }
+    ],
+    "productGroupColumns": [
+        {
+            "title": "下发状态",
+            "dataIndex": "status"
+        },
+        {
+            "title": "杆塔明细编号",
+            "dataIndex": "number"
+        },
+        {
+            "title": "订单编号",
+            "dataIndex": "orderNumber"
+        },
+        {
+            "title": "订单工程名称",
+            "dataIndex": "projectName"
+        },
+        {
+            "title": "内部合同编号",
+            "dataIndex": "internalNumber"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        },
+        {
+            "title": "制单人",
+            "dataIndex": "createUserName"
+        },
+        {
+            "title": "制单时间",
+            "dataIndex": "createTime"
+        }
+    ],
+    "paths": {
+        "base": "/tower-market/tower-market/projectInfo",
+        "bidDoc": "/tower-market/bidDoc",
+        "bidBase": "/tower-market/bidBase",
+        "frameAgreement": "/tower-market/frameAgreement",
+        "contract": "/tower-market/contract",
+        "productGroup": "/tower-market/productGroup",
+        "salesPlan": "/tower-market/productGroup"
+    }
+}

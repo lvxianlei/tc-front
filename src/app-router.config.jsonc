@@ -317,7 +317,7 @@
         },
         { // 项目管理详情
             "name": "项目管理详情",
-            "path": "/project/management/detail/:id/:tab",
+            "path": "/project/management/detail/:tab/:id",
             "module": "./pages/project/ManagementDetail",
             "exact": true,
             "authority": "project_detail"

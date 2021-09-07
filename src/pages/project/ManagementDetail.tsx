@@ -1,156 +1,96 @@
 import React from 'react'
-import { Button, Table, TableColumnProps, Row, Col, Tabs } from 'antd'
+import { Button, Table, TableColumnProps, Row, Col, Tabs, Radio } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { Detail, } from '../common'
+import { Detail, BaseInfo } from '../common'
 import SummaryRenderUtil from '../../utils/SummaryRenderUtil'
 import { ITabItem } from '../../components/ITabableComponent'
+import { baseInfoData, contractTableColumns, saleOrderTableColumns, productGroupColumns, bidInfoColumns, paths } from './managementDetailData.json'
+import useRequest from '_@ahooksjs_use-request@2.8.10@@ahooksjs/use-request'
+import RequestUtil from '../../utils/RequestUtil'
 const tableColumns: TableColumnProps<Object>[] = [
-    { title: '序号', dataIndex: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    {
-        title: '状态',
-        dataIndex: 'productStatus',
-        render: (productStatus: number): React.ReactNode => {
-            return productStatus === 1 ? '待下发' : productStatus === 2 ? '审批中' : '已下发'
-        }
-    },
-    { title: '线路名称', dataIndex: 'lineName' },
-    { title: '产品类型', dataIndex: 'productTypeName' },
-    { title: '塔型', dataIndex: 'productShape' },
-    { title: '杆塔号', dataIndex: 'productNumber' },
-    { title: '电压等级（KV）', dataIndex: 'voltageGradeName' },
-    { title: '呼高（米）', dataIndex: 'productHeight' },
-    { title: '单位', dataIndex: 'unit' },
-    {
-        title: '数量',
-        dataIndex: 'num',
-        render: (num: number | string): React.ReactNode => {
-            return num == -1 ? '' : num;
-        }
-    },
-    { title: '单价', dataIndex: 'price' },
-    { title: '金额', dataIndex: 'totalAmount' },
-    { title: '标段', dataIndex: 'tender' },
-    { title: '备注', dataIndex: 'description' }
+    { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+    { title: '分标编号', dataIndex: 'partBidNumber', key: 'partBidNumber', },
+    { title: '货物类别', dataIndex: 'goodsType', key: 'goodsType' },
+    { title: '包号', dataIndex: 'packageNumber', key: 'packgeNumber' },
+    { title: '数量', dataIndex: 'amount', key: 'amount' },
+    { title: '单位', dataIndex: 'unit', key: 'unit' },
+    { title: '交货日期', dataIndex: 'deliveryDate', key: 'deliveryDate' },
+    { title: '交货地点', dataIndex: 'deliveryPlace', key: 'deliveryPlace' }
 ]
+
+type TabTypes = "base" | "bidDoc" | "bidBase" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | undefined
 
 export default function ManagementDetail(): React.ReactNode {
     const history = useHistory()
-    const params: { id: string, tab?: string } = useParams()
+    const params = useParams<{ id: string, tab?: TabTypes }>()
+    const { loading, error, data, run } = useRequest(() => new Promise(async (resole, reject) => {
+        const result = await RequestUtil.get(`${paths[params.tab || 'base']}`, {})
+        resole(result)
+    }), {})
     const tabItems: { [key: string]: ITabItem[] } = {
-        tabItems1: [
+        tab_base: [
             {
                 label: '概况信息',
                 key: 1,
-                content: SummaryRenderUtil.renderSections([
-                    {
-                        title: '',
-                        render: () => (<>
-                            <Button style={{ marginRight: '10px' }}>编辑</Button>
-                            <Button>返回</Button>
-                        </>)
-                    },
-                    {
-                        title: '基本信息',
-                        render: () => SummaryRenderUtil.renderGrid({
-                            labelCol: { span: 4 },
-                            valueCol: { span: 8 },
-                            rows: [
-                                [{
-                                    label: '合同编号',
-                                    value: 'baseInfo?.contractNumber'
-                                }, {
-                                    label: '内部合同编号',
-                                    value: 'baseInfo?.internalNumber'
-                                }], [{
-                                    label: '工程名称',
-                                    value: 'baseInfo?.projectName'
-                                }, {
-                                    label: '工程简称',
-                                    value: 'baseInfo?.simpleProjectName'
-                                }], [{
-                                    label: '中标类型',
-                                    value: 'baseInfo?.winBidTypeName'
-                                }, {
-                                    label: '销售类型',
-                                    value: 'baseInfo?.saleTypeName'
-                                }], [{
-                                    label: '业主单位',
-                                    value: 'baseInfo?.customerInfoVo?.customerCompany'
-                                }, {
-                                    label: '业主联系人',
-                                    value: 'baseInfo?.customerInfoVo?.customerLinkman'
-                                }], [{
-                                    label: '业主联系电话',
-                                    value: 'baseInfo?.customerInfoVo?.customerPhone'
-                                }, {
-                                    label: '合同签订单位',
-                                    value: 'baseInfo?.signCustomerName'
-                                }], [{
-                                    label: '合同签订日期',
-                                    value: 'baseInfo?.signContractTime'
-                                }, {
-                                    label: '签订人',
-                                    value: 'baseInfo?.signUserName'
-                                }], [{
-                                    label: '要求交货日期',
-                                    value: 'baseInfo?.deliveryTime'
-                                }, {
-                                    label: '评审时间',
-                                    value: 'baseInfo?.reviewTime'
-                                }], [{
-                                    label: '所属国家',
-                                    value: 'baseInfo?.countryCode'
-                                }, {
-                                    label: '所属区域',
-                                    value: 'baseInfo?.regionName'
-                                }], [{
-                                    label: '计价方式',
-                                    value: 'baseInfo?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT'
-                                }, {
-                                    label: '合同总价',
-                                    value: 'baseInfo?.contractAmount'
-                                }], [{
-                                    label: '币种',
-                                    value: 'baseInfo?.currencyTypeName'
-                                }], [{
-                                    label: '备注',
-                                    value: 'baseInfo?.description'
-                                }]
-                            ]
-                        })
-                    },
-                    { title: '订单信息', render: () => <Table columns={tableColumns} /> },
-                    {
-                        title: '附件信息',
-                        render: () => (<>
-                            <Button>上传附件</Button>
-                            <Table columns={tableColumns} />
-                        </>)
-                    }
-                ])
+                content: <>
+                    <Row>
+                        <Button style={{ marginRight: '10px' }}>编辑</Button>
+                        <Button>返回</Button>
+                    </Row>
+                    <BaseInfo columns={baseInfoData} dataSource={{}} />
+                    <Row style={{ height: '50px', paddingLeft: '10px', lineHeight: '50px' }}>货物清单</Row>
+                    <Table columns={tableColumns} />
+                    <Row style={{ height: '50px', paddingLeft: '10px', lineHeight: '50px' }}><span>附件信息</span><Button type="default">上传附件</Button></Row>
+                    <Table columns={[
+                        {
+                            title: '序号',
+                            dataIndex: 'index',
+                            key: 'index',
+                            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                        },
+                        {
+                            title: '文件名',
+                            dataIndex: 'name',
+                            key: 'name',
+                        },
+                        {
+                            title: '大小',
+                            dataIndex: 'fileSize',
+                            key: 'fileSize',
+                        },
+                        {
+                            title: '上传人',
+                            dataIndex: 'userName',
+                            key: 'userName',
+                        },
+                        {
+                            title: '上传时间',
+                            dataIndex: 'fileUploadTime',
+                            key: 'fileUploadTime',
+                        }
+                    ]} />
+                </>
             }],
-        tabItems2: [
+        tab_bidDoc: [
             {
                 label: '概况信息',
                 key: 1,
-                content: SummaryRenderUtil.renderSections([
-                    { title: '标书制作记录表', render: () => <Table columns={tableColumns} /> },
-                    {
-                        title: '',
-                        render: () => (<>
-                            <Button style={{ marginRight: '10px' }}>编辑</Button>
-                            <Button>返回</Button>
-                        </>)
-                    },
-                    {
-                        title: '填写记录',
-                        render: () => (<>
-                            <Table columns={tableColumns} />
-                        </>)
-                    }
-                ])
+                content: <>
+                    <Row>标书制作记录表</Row>
+                    <BaseInfo columns={baseInfoData} dataSource={{}} col={4} />
+                    <Row><Button>编辑</Button><Button>返回</Button></Row>
+                    <Row>填写记录</Row>
+                    <Table columns={[
+                        { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+                        { title: '部门', dataIndex: 'branch' },
+                        { title: '填写人', dataIndex: 'createUserName' },
+                        { title: '职位', dataIndex: 'position' },
+                        { title: '填写时间', dataIndex: 'createTime' },
+                        { title: '说明', dataIndex: 'description' }
+                    ]} dataSource={[]} />
+                </>
             }],
-        tabItems3: [
+        tab_bidBase: [
             {
                 label: '概况信息',
                 key: 1,
@@ -164,28 +104,22 @@ export default function ManagementDetail(): React.ReactNode {
                     },
                     {
                         title: '基础信息',
-                        render: () => SummaryRenderUtil.renderGrid({
-                            labelCol: { span: 4 },
-                            valueCol: { span: 8 },
-                            rows: [
-                                [{
-                                    label: '年份',
-                                    value: 'baseInfo?.contractNumber'
-                                },
-                                {
-                                    label: '批次',
-                                    value: 'baseInfo?.internalNumber'
-                                }],
-                                [{
-                                    label: '备注',
-                                    value: 'baseInfo?.projectName'
-                                },
-                                {
-                                    label: '是否中标',
-                                    value: 'baseInfo?.simpleProjectName'
-                                }]
-                            ]
-                        })
+                        render: () => <BaseInfo columns={[{
+                            title: '年份',
+                            dataIndex: 'baseInfo?.contractNumber'
+                        },
+                        {
+                            title: '批次',
+                            dataIndex: 'baseInfo?.internalNumber'
+                        }, {
+                            title: '备注',
+                            dataIndex: 'baseInfo?.projectName'
+                        },
+                        {
+                            title: '是否中标',
+                            dataIndex: 'baseInfo?.simpleProjectName'
+                        }]} dataSource={{}} />
+
                     },
                     {
                         title: '开标信息',
@@ -197,112 +131,46 @@ export default function ManagementDetail(): React.ReactNode {
                             </Row>
                             <Tabs type="editable-card" style={{ marginTop: '10px' }}>
                                 <Tabs.TabPane tab="第二轮" key="b">
-                                    <Table columns={tableColumns} />
+                                    <Table columns={bidInfoColumns} />
                                 </Tabs.TabPane>
                                 <Tabs.TabPane tab="第一轮" key="a">
-                                    <Table columns={tableColumns} />
+                                    <Table columns={bidInfoColumns} />
                                 </Tabs.TabPane>
                             </Tabs>
                         </>)
                     }
                 ])
             }],
-        tabItems4: [
+        tab_frameAgreement: [
             {
                 label: '概况信息',
                 key: 1,
-                content: SummaryRenderUtil.renderSections([
-                    {
-                        title: '',
-                        render: () => (<>
-                            <Button style={{ marginRight: '10px' }}>编辑</Button>
-                            <Button>返回</Button>
-                        </>)
-                    },
-                    {
-                        title: '基本信息',
-                        render: () => SummaryRenderUtil.renderGrid({
-                            labelCol: { span: 4 },
-                            valueCol: { span: 8 },
-                            rows: [
-                                [{
-                                    label: '合同编号',
-                                    value: 'baseInfo?.contractNumber'
-                                }, {
-                                    label: '内部合同编号',
-                                    value: 'baseInfo?.internalNumber'
-                                }], [{
-                                    label: '工程名称',
-                                    value: 'baseInfo?.projectName'
-                                }, {
-                                    label: '工程简称',
-                                    value: 'baseInfo?.simpleProjectName'
-                                }], [{
-                                    label: '中标类型',
-                                    value: 'baseInfo?.winBidTypeName'
-                                }, {
-                                    label: '销售类型',
-                                    value: 'baseInfo?.saleTypeName'
-                                }], [{
-                                    label: '业主单位',
-                                    value: 'baseInfo?.customerInfoVo?.customerCompany'
-                                }, {
-                                    label: '业主联系人',
-                                    value: 'baseInfo?.customerInfoVo?.customerLinkman'
-                                }], [{
-                                    label: '业主联系电话',
-                                    value: 'baseInfo?.customerInfoVo?.customerPhone'
-                                }, {
-                                    label: '合同签订单位',
-                                    value: 'baseInfo?.signCustomerName'
-                                }], [{
-                                    label: '合同签订日期',
-                                    value: 'baseInfo?.signContractTime'
-                                }, {
-                                    label: '签订人',
-                                    value: 'baseInfo?.signUserName'
-                                }], [{
-                                    label: '要求交货日期',
-                                    value: 'baseInfo?.deliveryTime'
-                                }, {
-                                    label: '评审时间',
-                                    value: 'baseInfo?.reviewTime'
-                                }], [{
-                                    label: '所属国家',
-                                    value: 'baseInfo?.countryCode'
-                                }, {
-                                    label: '所属区域',
-                                    value: 'baseInfo?.regionName'
-                                }], [{
-                                    label: '计价方式',
-                                    value: 'baseInfo?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT'
-                                }, {
-                                    label: '合同总价',
-                                    value: 'baseInfo?.contractAmount'
-                                }], [{
-                                    label: '币种',
-                                    value: 'baseInfo?.currencyTypeName'
-                                }], [{
-                                    label: '备注',
-                                    value: 'baseInfo?.description'
-                                }]
-                            ]
-                        })
-                    },
-                    { title: '合同物资清单', render: () => <Table columns={tableColumns} /> },
-                    {
-                        title: '系统信息',
-                        render: () => <Table columns={tableColumns} />
-                    }
-                ])
+                content: <>
+                    <Row>
+                        <Button style={{ marginRight: '10px' }}>编辑</Button>
+                        <Button>返回</Button>
+                    </Row>
+                    <Row>基本信息</Row>
+                    <BaseInfo columns={baseInfoData} dataSource={{}} />
+                    <Row style={{ height: '50px', paddingLeft: '10px', lineHeight: '50px' }}>合同物资清单</Row>
+                    <Row><Button type="primary">新增一行</Button></Row>
+                    <Table columns={tableColumns} />
+                    <Row style={{ height: '50px', paddingLeft: '10px', lineHeight: '50px' }}>系统信息</Row>
+                    <BaseInfo columns={[
+                        { title: "最后编辑人", dataIndex: 'index' },
+                        { title: "最后编辑时间", dataIndex: 'index' },
+                        { title: "创建人", dataIndex: 'index' },
+                        { title: "创建时间", dataIndex: 'index' }
+                    ]} dataSource={{}} />
+                </>
             }],
-        tabItems5: [
+        tab_contract: [
             {
                 label: '合同',
                 key: 1,
                 content: <>
-                    <Row><Button type="primary">新增订单</Button></Row>
-                    <Table columns={tableColumns} />
+                    <Row><Button type="primary">新增</Button></Row>
+                    <Table columns={contractTableColumns} />
                 </>
             },
             {
@@ -310,11 +178,11 @@ export default function ManagementDetail(): React.ReactNode {
                 key: 2,
                 content: <>
                     <Row><Button type="primary">新增订单</Button></Row>
-                    <Table columns={tableColumns} />
+                    <Table columns={saleOrderTableColumns} />
                 </>
             }
         ],
-        tabItems6: [
+        tab_productGroup: [
             {
                 label: '概况信息',
                 key: 1,
@@ -324,12 +192,17 @@ export default function ManagementDetail(): React.ReactNode {
                         <Table columns={tableColumns} />
                     </section>
                     <section>
-                        <Row><Button type="primary">明细</Button><Button>统计</Button></Row>
-                        <Table columns={tableColumns} />
+                        <Row><Radio.Group
+                            options={[
+                                { label: '明细', value: 'Apple' },
+                                { label: '统计', value: 'Pear' },]}
+                            optionType="button"
+                        /></Row>
+                        <Table columns={productGroupColumns} />
                     </section>
                 </>
             }],
-        tabItems7: [
+        tab_salesPlan: [
             {
                 label: '概况信息',
                 key: 1,
@@ -345,16 +218,17 @@ export default function ManagementDetail(): React.ReactNode {
                 </>
             }]
     }
+
     return <Detail
         operation={[
-            <Button type={(!params.tab || params.tab === '1') ? "default" : "primary"} key="1" onClick={() => history.push(`/project/management/detail/${params.id}/1`)}>基础信息</Button>,
-            <Button type={(params.tab && params.tab === '2') ? "default" : "primary"} key="2" onClick={() => history.push(`/project/management/detail/${params.id}/2`)}>标书制作</Button>,
-            <Button type={(params.tab && params.tab === '3') ? "default" : "primary"} key='3' onClick={() => history.push(`/project/management/detail/${params.id}/3`)}>招标结果</Button>,
-            <Button type={(params.tab && params.tab === '4') ? "default" : "primary"} key="4" onClick={() => history.push(`/project/management/detail/${params.id}/4`)}>框架协议</Button>,
-            <Button type={(params.tab && params.tab === '5') ? "default" : "primary"} key="5" onClick={() => history.push(`/project/management/detail/${params.id}/5`)}>合同及订单</Button>,
-            <Button type={(params.tab && params.tab === '6') ? "default" : "primary"} key='6' onClick={() => history.push(`/project/management/detail/${params.id}/6`)}>杆塔明细</Button>,
-            <Button type={(params.tab && params.tab === '7') ? "default" : "primary"} key='7' onClick={() => history.push(`/project/management/detail/${params.id}/7`)}>销售计划</Button>
+            <Button type={(!params.tab || params.tab === 'base') ? "default" : "primary"} key="base" onClick={() => history.push(`/project/management/detail/base/${params.id}`)}>基础信息</Button>,
+            <Button type={(params.tab && params.tab === 'bidDoc') ? "default" : "primary"} key="bidDoc" onClick={() => history.push(`/project/management/detail/bidDoc/${params.id}`)}>标书制作</Button>,
+            <Button type={(params.tab && params.tab === 'bidBase') ? "default" : "primary"} key='bidBase' onClick={() => history.push(`/project/management/detail/bidBase/${params.id}`)}>招标结果</Button>,
+            <Button type={(params.tab && params.tab === 'frameAgreement') ? "default" : "primary"} key="frameAgreement" onClick={() => history.push(`/project/management/detail/frameAgreement/${params.id}`)}>框架协议</Button>,
+            <Button type={(params.tab && params.tab === 'contract') ? "default" : "primary"} key="contract" onClick={() => history.push(`/project/management/detail/contract/${params.id}`)}>合同及订单</Button>,
+            <Button type={(params.tab && params.tab === 'productGroup') ? "default" : "primary"} key='productGroup' onClick={() => history.push(`/project/management/detail/productGroup/${params.id}`)}>杆塔明细</Button>,
+            <Button type={(params.tab && params.tab === 'salesPlan') ? "default" : "primary"} key='salesPlan' onClick={() => history.push(`/project/management/detail/salesPlan/${params.id}`)}>销售计划</Button>
         ]}
-        tabItems={tabItems['tabItems' + (params.tab || '1')]}
+        tabItems={tabItems['tab_' + (params.tab || 'base')]}
     />
 }

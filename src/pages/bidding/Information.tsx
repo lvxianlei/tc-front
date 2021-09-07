@@ -1,86 +1,134 @@
 import React from 'react'
-import { Space, Button, Input } from 'antd'
+import { Space, Button, Input, DatePicker, Select } from 'antd'
 import { Link } from 'react-router-dom'
-import ConfirmableButton from '../../components/ConfirmableButton'
 import { Page } from '../common'
-import { IClient } from '../IClient'
 import RequestUtil from '../../utils/RequestUtil'
-export default function Information(): React.ReactNode {
-    const columns = [
-        {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-        },
-        {
-            key: 'name',
-            title: '客户名称',
-            dataIndex: 'name',
-            render: (_: undefined, record: any): React.ReactNode => {
-                return <Link to={`/bidding/information/detail/${record.id}`}>{record.name}</Link>
-            }
-        },
-        {
-            key: 'typeName',
-            title: '客户类型',
-            dataIndex: 'typeName'
-        },
-        {
-            key: 'linkman',
-            title: '重要联系人',
-            dataIndex: 'linkman'
-        },
-        {
-            key: 'phone',
-            title: '手机号码',
-            dataIndex: 'phone'
-        },
-        {
-            key: 'description',
-            title: '备注',
-            dataIndex: 'description'
-        },
-        {
-            key: 'createTime',
-            title: '创建时间',
-            dataIndex: 'createTime'
-        },
-        {
-            key: 'operation',
-            title: '操作',
-            dataIndex: 'operation',
-            render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
-                    <Link to={`/bidding/information/detail/${record.id}`}>查看</Link>
-                </Space>
-            )
+const columns = [
+    {
+        key: 'index',
+        title: '序号',
+        dataIndex: 'index',
+        render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+    },
+    {
+        key: 'projectName',
+        title: '项目名称',
+        width: 100,
+        dataIndex: 'projectName',
+        render: (_: undefined, record: any): React.ReactNode => {
+            return <Link to={`/bidding/information/detail/${record.id}`}>{record.projectName}</Link>
         }
-    ]
+    },
+    {
+        key: 'projectNumber',
+        title: '项目编码',
+        dataIndex: 'projectNumber'
+    },
+    {
+        key: 'bidBuyEndTime',
+        title: '标书购买截至日期',
+        width: 200,
+        dataIndex: 'bidBuyEndTime'
+    },
+    {
+        key: 'biddingEndTime',
+        title: '投标截至日期',
+        width: 200,
+        dataIndex: 'biddingEndTime'
+    },
+    {
+        key: 'biddingPerson',
+        title: '招标人',
+        dataIndex: 'biddingPerson'
+    },
+    {
+        key: 'biddingAgency',
+        title: '招标代理机构',
+        dataIndex: 'biddingAgency'
+    },
+    {
+        key: 'biddingAddress',
+        title: '招标地点',
+        dataIndex: 'biddingAddress'
+    },
+    {
+        key: 'releaseDate',
+        title: '发布日期',
+        dataIndex: 'releaseDate'
+    },
+    {
+        key: 'source',
+        title: '来源',
+        dataIndex: 'source'
+    },
+    {
+        key: 'sourceWebsite',
+        title: '原始地址',
+        dataIndex: 'sourceWebsite'
+    },
+    {
+        key: 'explain',
+        title: '说明',
+        dataIndex: 'explain'
+    },
+    {
+        key: 'biddingStatus',
+        title: '是否应标',
+        dataIndex: 'biddingStatus'
+    },
+    {
+        key: 'reason',
+        title: '不应标原因',
+        dataIndex: 'reason'
+    },
+    {
+        key: 'operation',
+        title: '操作',
+        dataIndex: 'operation',
+        render: (_: undefined, record: any): React.ReactNode => (
+            <Space direction="horizontal" size="small">
+                <Link to={`/bidding/information/detail/${record.id}`}>查看</Link>
+            </Space>
+        )
+    }
+]
+export default function Information(): React.ReactNode {
+
     return <Page
-        path="/tower-customer/customer"
+        path="/tower-market/tower-market/bidInfo"
         columns={columns}
-        extraOperation={<Button type="primary">新增</Button>}
+        headTabs={[]}
         searchFormItems={[
             {
                 name: 'name',
                 children: <Input placeholder="请输入项目名称/项目编码/审批编号/关联合同/制单人进行查询" maxLength={200} />
             },
             {
-                name: '1',
-                label: '审批类型',
-                children: <Input placeholder="" maxLength={200} />
+                name: 'name1',
+                label: '购买截至日期',
+                children: <DatePicker />
             },
             {
-                name: '2',
-                label: '发起时间',
-                children: <Input placeholder="" maxLength={200} />
+                name: 'name2',
+                label: '发布日期',
+                children: <DatePicker />
             },
             {
-                name: '3',
-                label: '审批状态',
-                children: <Input placeholder="" maxLength={200} />
+                name: 'name3',
+                label: '是否应标',
+                children: <Select style={{ width: '100px' }}>
+                    <Select.Option value="1">是</Select.Option>
+                    <Select.Option value="0">否</Select.Option>
+                </Select>
             },
+            {
+                name: 'name4',
+                label: '来源',
+                children: <Select style={{ width: '100px' }}>
+                    <Select.Option value="1">aaaaaaaaaa</Select.Option>
+                    <Select.Option value="0">bbbbbbbbbb</Select.Option>
+                </Select>
+            }
         ]}
     />
 }

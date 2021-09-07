@@ -1,0 +1,52 @@
+{
+    "baseInfoData": [
+        {
+            "dataIndex": "projectName",
+            "title": "项目名称"
+        },
+        {
+            "dataIndex": "projectNumber",
+            "title": "项目编码"
+        },
+        {
+            "dataIndex": "releaseDate",
+            "title": "发布时间"
+        },
+        {
+            "dataIndex": "source",
+            "title": "来源"
+        },
+        {
+            "dataIndex": "bidBuyEndTime",
+            "title": "标书购买截止时间"
+        },
+        {
+            "dataIndex": "sourceWebsite",
+            "title": "原始地址"
+        },
+        {
+            "dataIndex": "biddingPerson",
+            "title": "招标人"
+        },
+        {
+            "dataIndex": "biddingEndTime",
+            "title": "投标截至时间"
+        },
+        {
+            "dataIndex": "biddingAgency",
+            "title": "招标代理机构"
+        },
+        {
+            "dataIndex": "explain",
+            "title": "说明"
+        },
+        {
+            "dataIndex": "biddingStatus",
+            "title": "应标状态"
+        },
+        {
+            "dataIndex": "reason",
+            "title": "不应标原因"
+        }
+    ]
+}

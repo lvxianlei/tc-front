@@ -90,8 +90,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
 }
 
 interface DataType {
-    key: React.Key
-    index: number
     [key: string]: any
 }
 
@@ -106,10 +104,10 @@ export interface EditableTableProps {
 }
 
 export default function EditTable({ columns = [], dataSource = [] }: EditableTableProps): JSX.Element {
-    const [tableData, setTableData] = useState<EditableTableState>({ dataSource: [], count: 2 })
+    const [tableData, setTableData] = useState<EditableTableState>({ dataSource: dataSource.map((item, index) => ({ ...item, key: index })) || [], count: dataSource.length })
     const handleDelete = (key: React.Key) => {
         const dataSource = [...tableData.dataSource]
-        setTableData({ ...tableData, dataSource: dataSource.filter(item => item.index !== key) })
+        setTableData({ ...tableData, dataSource: dataSource.filter(item => item.key !== key) })
     }
 
     const handleAdd = () => {
@@ -144,7 +142,7 @@ export default function EditTable({ columns = [], dataSource = [] }: EditableTab
     columns = [
         { title: '序号', dataIndex: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
         ...columns,
-        { title: '操作', dataIndex: 'opration', render: (_a: any, _b: any, index: number): JSX.Element => <Button type="link" onClick={() => handleDelete(index)}>删除</Button> }
+        { title: '操作', dataIndex: 'opration', render: (_a: any, _b: any): JSX.Element => <Button type="link" onClick={() => handleDelete(_b.key)}>删除</Button> }
     ]
     return (
         <>
