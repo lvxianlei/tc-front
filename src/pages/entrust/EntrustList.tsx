@@ -130,14 +130,14 @@ import EntrustSetting from './EntrustSetting';
      */
   public getTableColumns(item: ITabItem): TableColumnType<object>[] {
     return [{
-        key: 'towerName',
+        key: 'productCategoryName',
         title: '塔型',
-        dataIndex: 'towerName',
+        dataIndex: 'productCategoryName',
     }, {
-        key: 'deliverTime',
+        key: 'giveTime',
         title: '交付日期',
         width: 200,
-        dataIndex: 'deliverTime',
+        dataIndex: 'giveTime',
     }, {
         key: 'operation',
         title: '操作',
