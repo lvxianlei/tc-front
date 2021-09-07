@@ -22,6 +22,7 @@ export interface IDeliveryAcceptanceState {
     readonly isVisible?: boolean;
     readonly deliveryFiles?: IDeliveryFiles;
     readonly isBack?: boolean;
+    readonly detailData?: IDetailData;
 }
 
 export interface IDeliveryFiles{
@@ -29,6 +30,11 @@ export interface IDeliveryFiles{
     readonly productCategoryId?: string;
     readonly deliveryList?: number[];
     readonly attachList?: IAttachVo[];
+}
+
+
+interface IDetailData {
+    readonly buildChart?: string;
 }
 
 export interface IAttachVo {
@@ -50,7 +56,7 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
     private form: React.RefObject<FormInstance> = React.createRef<FormInstance>();
 
     public state: IDeliveryAcceptanceState = {
-        isVisible: true,
+        isVisible: false,
         isBack: false
     } as IDeliveryAcceptanceState;
 
@@ -67,10 +73,14 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
         this.setState({
             isVisible: true
         })
-        const deliveryFiles: IDeliveryFiles = await RequestUtil.get(`/tp-task-dispatch/productCategory/getDeliveryFiles/${ this.props.id }`);
+        const [deliveryFiles, detailData] = await Promise.all<IDeliveryFiles, IDetailData>([
+            RequestUtil.get(`/tp-task-dispatch/productCategory/getDeliveryFiles/${ this.props.id }`),
+            RequestUtil.get<IDetailData>(`/tower-data-archive/productCategory/${ this.props.id }`)
+        ]);
         this.setState({
             isVisible: true,
-            deliveryFiles: deliveryFiles
+            deliveryFiles: deliveryFiles,
+            detailData: detailData
         })
     } 
 
@@ -130,8 +140,8 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
         });
     }
 
-    public uploadAttach = (value: Record<string, any>): void => {
-        window.open(value.filePath);
+    public uploadAttach = (value: string): void => {
+        window.open(value);
     }
 
     public download = async (code: number): Promise<void> => {
@@ -154,6 +164,33 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
             const a = document.createElement('a');
             a.style.display = 'none';
             a.download = code === 2 ? '工艺卡' : code === 3 ? '大样图' :  code === 6 ? '角钢nc数据' : '钢板nc数据' ;
+            a.href = blobUrl;
+            a.click();
+            if(document.body.contains(a)) {
+                document.body.removeChild(a);
+            }
+        })
+    }
+
+    public downloadTMA = async (): Promise<void> => {
+        return fetch(`${process.env.REQUEST_API_PATH_PREFIX?.replace(/\/*$/, '/') || ''.replace(/\/*$/, '/')}${`/tower-vcs/fileVersion/downloadCompFile`.replace(/^\/*/, '')}`, {
+            mode: 'cors',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+              'Tenant-Id': AuthUtil.getTenantId(),
+              'Sinzetech-Auth': AuthUtil.getSinzetechAuth(),
+            },
+            body: stringify({ productCategoryId: this.props.id })
+        }).then((res) => {
+            return res.blob();
+        }).then((data) => {
+            let blob = new Blob([data], {type: 'application/zip'})
+            let blobUrl = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.download = 'TMA文件' ;
             a.href = blobUrl;
             a.click();
             if(document.body.contains(a)) {
@@ -254,74 +291,78 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
                                 </Form.Item>
                                 <div className={ styles.files }>
                                     <Row>
-                                        { deliveryList?.includes(1) ?
-                                            <Col span={ 8 }>
-                                                <span key="1">TMA文件</span>
-                                            </Col>
-                                            : null
-                                        }
-                                        { deliveryList?.includes(2) ?
-                                            <Col span={ 8 }>
-                                                <span key="2">
-                                                    <Button type="link" onClick={ () => this.download(2) }>工艺卡</Button>
-                                                </span>
-                                            </Col>
-                                            : null
-                                        }
-                                        { deliveryList?.includes(3) ? 
-                                            <Col span={ 8 }>
-                                                <span key="3">
-                                                    <Button type="link" onClick={ () => this.download(3) }>大样图</Button>
-                                                </span>
-                                            </Col>
-                                            : null
-                                        }
-                                        { deliveryList?.includes(4) ?
-                                            <Col span={ 8 }>
-                                                <span key="4">构建明细</span>
-                                            </Col>
-                                            : null
-                                        }
-                                        { deliveryList?.includes(5) ? 
-                                            <Col span={ 8 }>
-                                                <span key="5">
-                                                    <Button type="link" onClick={ () => this.exportBoltStatistics() }>螺栓清单</Button>
-                                                </span>
-                                            </Col>
-                                            : null
-                                        }
-                                        { deliveryList?.includes(6) ? 
-                                            <Col span={ 8 }>
-                                                <span key="6">
-                                                    <Button type="link" onClick={ () => this.download(6) }>角钢NC数据</Button>  
-                                                </span>
-                                            </Col>
-                                            : null
-                                        }   
-                                        { deliveryList?.includes(7) ?
-                                            <Col span={ 8 }>
-                                                <span key="7">
-                                                    <Button type="link" onClick={ () => this.download(7) }>钢板NC数据</Button>  
-                                                </span>
-                                            </Col>
-                                            : null
-                                        }
-                                        { deliveryList?.includes(8) ?
-                                            <Col span={ 8 }>
-                                                <span key="8">
-                                                    <Button type="link" onClick={ () => this.exportAssemblyWeld() }>组焊清单</Button>
-                                                </span>
-                                            </Col>
-                                            : null
-                                        }
-                                        { deliveryList?.includes(9) ?
-                                            <Col span={ 8 }>
-                                                <span key="9">
-                                                    <Button type="link" onClick={ () => this.uploadAttach({}) }>结构图</Button>
-                                                </span>
-                                            </Col>
-                                            : null
-                                        }
+                                    { deliveryList?.includes(1) ?
+                                        <Col span={ 8 }>
+                                            <span key="1">
+                                                <Button type="link" onClick={ () => this.downloadTMA() }>TMA文件</Button>
+                                            </span>
+                                        </Col>
+                                        : null
+                                    }
+                                    { deliveryList?.includes(2) ?
+                                        <Col span={ 8 }>
+                                            <span key="2">
+                                                <Button type="link" onClick={ () => this.download(2) }>工艺卡</Button>
+                                            </span>
+                                        </Col>
+                                        : null
+                                    }
+                                    { deliveryList?.includes(3) ? 
+                                        <Col span={ 8 }>
+                                            <span key="3">
+                                                <Button type="link" onClick={ () => this.download(3) }>大样图</Button>
+                                            </span>
+                                        </Col>
+                                        : null
+                                    }
+                                    { deliveryList?.includes(4) ?
+                                        <Col span={ 8 }>
+                                            <span key="4">
+                                                构建明细
+                                            </span>
+                                        </Col>
+                                        : null
+                                    }
+                                    { deliveryList?.includes(5) ? 
+                                        <Col span={ 8 }>
+                                            <span key="5">
+                                                <Button type="link" onClick={ () => this.exportBoltStatistics() }>螺栓清单</Button>
+                                            </span>
+                                        </Col>
+                                        : null
+                                    }
+                                    { deliveryList?.includes(6) ? 
+                                        <Col span={ 8 }>
+                                            <span key="6">
+                                                <Button type="link" onClick={ () => this.download(6) }>角钢NC数据</Button>  
+                                            </span>
+                                        </Col>
+                                        : null
+                                    }   
+                                    { deliveryList?.includes(7) ?
+                                        <Col span={ 8 }>
+                                            <span key="7">
+                                                <Button type="link" onClick={ () => this.download(7) }>钢板NC数据</Button>  
+                                            </span>
+                                        </Col>
+                                        : null
+                                    }
+                                    { deliveryList?.includes(8) ?
+                                        <Col span={ 8 }>
+                                            <span key="8">
+                                                <Button type="link" onClick={ () => this.exportAssemblyWeld() }>组焊清单</Button>
+                                            </span>
+                                        </Col>
+                                        : null
+                                    }
+                                    { deliveryList?.includes(9) ?
+                                        <Col span={ 8 }>
+                                            <span key="9">
+                                                <Button type="link" onClick={ () => this.uploadAttach(this.state.detailData?.buildChart || '') }>结构图</Button>
+                                            </span>
+                                        </Col>
+                                        : null
+                                    }
                                     </Row>
                                 </div>
                                 { deliveryList?.includes(10) ?
@@ -333,7 +374,7 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
                                                     <Col span={6} className={ styles.col }>{ items.name }</Col>
                                                     <Col span={6} className={ styles.col }>{ items.fileUploadTime }</Col>
                                                     <Col span={6}>
-                                                    <Button type="link" onClick={ () => this.uploadAttach(items) } danger>
+                                                    <Button type="link" onClick={ () => this.uploadAttach(items.filePath || '') } danger>
                                                         下载
                                                     </Button>
                                                     </Col>
