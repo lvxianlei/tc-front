@@ -1,21 +1,30 @@
-import React, { useContext, useState, useEffect, useRef } from 'react'
-import { Table, Input, Button, Popconfirm, Form, TableColumnProps, TableColumnsType } from 'antd'
-import { FormInstance } from 'antd/lib/form'
-import './EditTable.less'
-const EditableContext = React.createContext<FormInstance<any> | null>(null)
+import React, { useContext, useState, useEffect, useRef } from 'react';
+import { Table, Input, Button, Popconfirm, Form } from 'antd';
+import { FormInstance } from 'antd/lib/form';
+
+const EditableContext = React.createContext<FormInstance<any> | null>(null);
+
+interface Item {
+    key: string;
+    name: string;
+    age: string;
+    address: string;
+}
 
 interface EditableRowProps {
-    index: number
+    index: number;
 }
 
 const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
-    const [form] = Form.useForm()
+    {/* <tr {...props} /> */ }
     return (
-        <Form form={form} component={false}>
-            <EditableContext.Provider value={form}>
-                <tr {...props} />
-            </EditableContext.Provider>
-        </Form>
+        <Form.List name="editTable">
+            {(fields, { add, remove }) => (<>
+                {fields.map(({ key, name, fieldKey, ...restField }) => (
+                    
+                ))}
+            </>)}
+        </Form.List>
     )
 }
 
@@ -23,9 +32,8 @@ interface EditableCellProps {
     title: React.ReactNode
     editable: boolean
     children: React.ReactNode
-    dataIndex: string
-    record: any
-    handleSave: (record: any) => void
+    dataIndex: keyof Item
+    record: Item
 }
 
 const EditableCell: React.FC<EditableCellProps> = ({
@@ -34,60 +42,23 @@ const EditableCell: React.FC<EditableCellProps> = ({
     children,
     dataIndex,
     record,
-    handleSave,
     ...restProps
 }) => {
-    const [editing, setEditing] = useState(false)
-    const inputRef = useRef<Input>(null)
-    const form = useContext(EditableContext)!
-
-    useEffect(() => {
-        if (editing) {
-            inputRef.current!.focus()
-        }
-    }, [editing])
-
-    const toggleEdit = () => {
-        setEditing(!editing)
-        form.setFieldsValue({ [dataIndex]: record[dataIndex] })
-    }
-
-    const save = async () => {
-        try {
-            const values = await form.validateFields()
-
-            toggleEdit()
-            handleSave({ ...record, ...values })
-        } catch (errInfo) {
-            console.log('Save failed:', errInfo)
-        }
-    }
-
-    let childNode = children
-
-    if (editable) {
-        childNode = editing ? (
+    let childNode = children;
+    if (!editable) {
+        childNode = (
             <Form.Item
                 style={{ margin: 0 }}
                 name={dataIndex}
-                rules={[
-                    {
-                        required: true,
-                        message: `${title} is required.`,
-                    },
-                ]}
             >
-                <Input ref={inputRef} onPressEnter={save} onBlur={save} />
+                <Input />
             </Form.Item>
-        ) : (
-            <div className="editable-cell-value-wrap" style={{ paddingRight: 24 }} onClick={toggleEdit}>
-                {children}
-            </div>
         )
     }
-
     return <td {...restProps}>{childNode}</td>
 }
+
+type EditableTableProps = Parameters<typeof Table>[0]
 
 interface DataType {
     [key: string]: any
@@ -98,16 +69,19 @@ interface EditableTableState {
     count: number
 }
 
-export interface EditableTableProps {
-    columns: TableColumnProps<object>[]
+type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>
+
+interface EditTableProps {
+    columns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[]
     dataSource: object[]
 }
 
-export default function EditTable({ columns = [], dataSource = [] }: EditableTableProps): JSX.Element {
+export default function EditableTable({ columns = [], dataSource = [] }: EditTableProps): JSX.Element {
     const [tableData, setTableData] = useState<EditableTableState>({ dataSource: dataSource.map((item, index) => ({ ...item, key: index })) || [], count: dataSource.length })
+    const [form] = Form.useForm()
+
     const handleDelete = (key: React.Key) => {
-        const dataSource = [...tableData.dataSource]
-        setTableData({ ...tableData, dataSource: dataSource.filter(item => item.key !== key) })
+        setTableData({ ...tableData, dataSource: tableData.dataSource.filter(item => item.key !== key) })
     }
 
     const handleAdd = () => {
@@ -118,54 +92,50 @@ export default function EditTable({ columns = [], dataSource = [] }: EditableTab
         }
         setTableData({
             dataSource: [...dataSource, newData],
-            count: count + 1,
+            count: count + 1
         })
     }
 
-    const handleSave = (row: DataType) => {
-        const newData = [...tableData.dataSource]
-        const index = newData.findIndex(item => row.key === item.key)
-        const item = newData[index]
-        newData.splice(index, 1, {
-            ...item,
-            ...row,
-        })
-        setTableData({ ...tableData, dataSource: newData })
+    const handleSave = async () => {
+        const result = await form.validateFields()
+        console.log("---------", result)
     }
 
-    const components = {
-        body: {
-            row: EditableRow,
-            cell: EditableCell,
-        }
-    }
     columns = [
-        { title: '序号', dataIndex: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+        { title: '序号', dataIndex: 'index', editable: true, render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
         ...columns,
-        { title: '操作', dataIndex: 'opration', render: (_a: any, _b: any): JSX.Element => <Button type="link" onClick={() => handleDelete(_b.key)}>删除</Button> }
+        { title: '操作', dataIndex: 'opration', editable: true, render: (_a: any, _b: any): JSX.Element => <Button type="link" onClick={() => handleDelete(_b.key)}>删除</Button> }
     ]
+
     return (
-        <>
-            <Button onClick={handleAdd} type="primary" style={{ marginBottom: 10 }}>新增一条</Button>
-            <Table
-                components={components}
-                rowClassName={() => 'editable-row'}
-                bordered
-                dataSource={tableData.dataSource}
-                columns={columns.map((col: any) => {
-                    if (!col.editable) { return col }
-                    return {
+        <div>
+            <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
+                新增一行
+            </Button>
+            <Button onClick={handleSave}>保存</Button>
+            <Form form={form} initialValues={{ editTable: { editTable: { editTable: dataSource } } }}>
+                <Table
+                    components={{
+                        body: {
+                            row: EditableRow,
+                            cell: EditableCell,
+                        }
+                    }}
+                    rowClassName={() => 'editable-row'}
+                    bordered
+                    rowKey={(record: any) => `EditTable_${record.id}`}
+                    dataSource={dataSource}
+                    columns={columns.map((col: any) => ({
                         ...col,
                         onCell: (record: DataType) => ({
                             record,
                             editable: col.editable,
                             dataIndex: col.dataIndex,
-                            title: col.title,
-                            handleSave: handleSave,
-                        }),
-                    }
-                })}
-            />
-        </>
+                            title: col.title
+                        })
+                    })) as ColumnTypes}
+                />
+            </Form>
+        </div>
     )
 }
