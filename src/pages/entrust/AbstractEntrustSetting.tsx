@@ -127,7 +127,7 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
                 }, {
                     label: '工程周期',
                     name: 'projectTime',
-                    initialValue: [moment(entrust?.projectStartTime), moment(entrust?.projectEndTime)],
+                    initialValue: entrust?.projectStartTime ? [moment(entrust?.projectStartTime), moment(entrust?.projectEndTime)] : '',
                     rules: [{
                         required: true,
                         message: '请选择工程周期'

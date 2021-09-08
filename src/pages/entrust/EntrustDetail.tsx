@@ -162,10 +162,6 @@ enum EntrustStatus {
             }
         };
     }
-    
-  
-
-
  
     /**
      * @implements
@@ -220,12 +216,10 @@ enum EntrustStatus {
         ];
     }
 
-
     /**
      * @description Renders extra sections
      * @returns extra sections 
      */
-  
     public renderExtraSections(): IRenderedSection[] {
         let extra = [{
             title:'附件',
@@ -269,7 +263,7 @@ enum EntrustStatus {
                                     <Button type='link'>{``}</Button>
                                     <DeliveryAcceptance id={ ''} productCategoryId={ item.id } entrustId={ '' } getTable={ () => {} } btnName={`${ item.productCategoryName }(${ item.giveTime })`} type='detail' key={item.id}/>
                                 </div>
-                                <Progress percent={Math.round((Number(item.examineSectionNum)/Number(item.sectionNum))*100} status="active" />
+                                <Progress percent={ Math.round((Number(item.examineSectionNum)/Number(item.sectionNum)))*100 } status="active" />
                             </div>
                         )
                     })
@@ -278,8 +272,8 @@ enum EntrustStatus {
             })
         }
         return extra
-
     }
+    
     //获取状态
     protected getStatus(item: number){
         let statusTitle = '待发布';

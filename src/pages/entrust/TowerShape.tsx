@@ -360,21 +360,21 @@ class TowerShape extends AbstractMngtComponent<ITowerShapeWithRouteProps, ITower
             title: '塔型名称',
             dataIndex: 'productCategoryName'
         }, {
-            key: 'projectNum',
+            key: 'programCode',
             title: '所属工程编号',
-            dataIndex: 'projectNum'
+            dataIndex: 'programCode'
         }, {
-            key: 'projectName',
+            key: 'programName',
             title: '所属项目名称',
-            dataIndex: 'projectName'
+            dataIndex: 'programName'
         }, {
             key: 'approveNum',
             title: '审核件数',
             dataIndex: 'approveNum'
         }, {
-            key: 'productCategoryReviewer ',
+            key: 'productCategoryReviewerName',
             title: '审核人',
-            dataIndex: 'productCategoryReviewer '
+            dataIndex: 'productCategoryReviewerName'
         }, {
             key: 'giveTime',
             title: '交付日期',
