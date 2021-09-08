@@ -5,7 +5,7 @@ import { Detail, BaseInfo } from '../common'
 import SummaryRenderUtil from '../../utils/SummaryRenderUtil'
 import { ITabItem } from '../../components/ITabableComponent'
 import { baseInfoData, contractTableColumns, saleOrderTableColumns, productGroupColumns, bidInfoColumns, paths } from './managementDetailData.json'
-import useRequest from '_@ahooksjs_use-request@2.8.10@@ahooksjs/use-request'
+import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 const tableColumns: TableColumnProps<Object>[] = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
