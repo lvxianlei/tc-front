@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Button, TableColumnProps, Form, Input } from 'antd'
+import { Space, Button, TableColumnProps, Modal, Input } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 import ConfirmableButton from '../../components/ConfirmableButton'
@@ -98,7 +98,18 @@ export default function Management(): React.ReactNode {
         }]
 
     const handleConfirmDelete = () => {
-        console.log(selectKeys, '--------')
+        Modal.confirm({
+            title: '确认提示',
+            content: '是否确定删除对应项目信息？',
+            okText: '确定',
+            cancelText: '取消',
+            onOk: () => {
+                console.log(selectKeys, '--------')
+            },
+            onCancel: () => {
+
+            }
+        })
     }
 
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: object[]): void => {
@@ -112,7 +123,7 @@ export default function Management(): React.ReactNode {
         path="/tower-market/tower-market/projectInfo"
         columns={columns}
         extraOperation={<>
-            <Button type="primary">新增</Button>
+            <Link to="/project/management/edit/new"><Button type="primary">新建项目</Button></Link>
             <Button type="primary" onClick={handleConfirmDelete}>删除</Button>
         </>}
         tableProps={{

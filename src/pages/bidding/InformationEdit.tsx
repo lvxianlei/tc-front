@@ -6,7 +6,7 @@ import { Detail, BaseInfo } from '../common'
 import { baseInfoData } from './biddingHeadData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
-const columns: TableColumnProps<object>[] = [
+const columns = [
     {
         title: '分标编号',
         dataIndex: 'partBidNumber',

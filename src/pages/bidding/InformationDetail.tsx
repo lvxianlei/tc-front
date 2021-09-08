@@ -62,7 +62,7 @@ export default function InformationDetail(): React.ReactNode {
         </Modal>
         <Detail
             operation={[
-                <Button key="setting" onClick={() => history.push('/bidding/information/new/2')}>编辑</Button>,
+                <Button key="setting" onClick={() => history.push('/bidding/information/edit/2')}>编辑</Button>,
                 <Button key="delete" type="default">删除</Button>,
                 <Button key="bidding" onClick={() => setVisible(true)}>是否应标</Button>,
                 <Button key="new" onClick={() => history.goBack()}>返回</Button>
@@ -84,7 +84,7 @@ export default function InformationDetail(): React.ReactNode {
                             title: '附件',
                             render: () => (<>
                                 <Row><Button>上传附件</Button></Row>
-                                <Table columns={[
+                                <Table rowKey={(record: any) => `information_${record.id}`} columns={[
                                     {
                                         title: '序号',
                                         dataIndex: 'index',
