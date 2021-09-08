@@ -131,7 +131,7 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
     public onBackSubmit = async (): Promise<void> => {
         let values: Record<string, any> = this.getForm()?.getFieldsValue(true);
         values = { entrustId: this.props.entrustId, productCategoryId: this.props.id, description: this.getForm()?.getFieldValue('description') };
-        return await RequestUtil.post('/tp-task-dispatch/productCategory/reject', values).then((res) => {
+        return await RequestUtil.put('/tp-task-dispatch/productCategory/reject', values).then((res) => {
             if(res) {
                 this.setState({
                     isVisible: false

@@ -17,7 +17,7 @@ export interface ITowerShapeState extends IAbstractMngtComponentState {
     readonly tableDataSource: ITableDataItem[];
     readonly isVisible?: boolean;
     readonly deliveryFiles?: IDeliveryFiles;
-    readonly towerName?: string;
+    readonly productCategoryName?: string;
     readonly projectName?: string;
     readonly detailData?: IDetailData
     readonly productCategoryId?: string;
@@ -368,21 +368,21 @@ class TowerShape extends AbstractMngtComponent<ITowerShapeWithRouteProps, ITower
             title: '所属项目名称',
             dataIndex: 'projectName'
         }, {
-            key: 'examineNum',
+            key: 'approveNum',
             title: '审核件数',
-            dataIndex: 'examineNum'
+            dataIndex: 'approveNum'
         }, {
-            key: 'examineName',
+            key: 'productCategoryReviewer ',
             title: '审核人',
-            dataIndex: 'examineName'
+            dataIndex: 'productCategoryReviewer '
         }, {
-            key: 'deliverTime',
+            key: 'giveTime',
             title: '交付日期',
-            dataIndex: 'deliverTime'
+            dataIndex: 'giveTime'
         },  {
-            key: 'passedTime',
+            key: 'receptionTime',
             title: '验收通过日期',
-            dataIndex: 'passedTime'
+            dataIndex: 'receptionTime'
         }, {
             key: 'operation',
             title: '交付文件',
@@ -405,7 +405,7 @@ class TowerShape extends AbstractMngtComponent<ITowerShapeWithRouteProps, ITower
     public onTableChange(pagination: TablePaginationConfig): void {
         this.fetchTableData({
             projectName: this.state.projectName,
-            towerName: this.state.towerName
+            productCategoryName: this.state.productCategoryName
         }, pagination);
     }
 
@@ -462,7 +462,7 @@ class TowerShape extends AbstractMngtComponent<ITowerShapeWithRouteProps, ITower
 
     public getFilterFormItemProps(): FormItemProps[] {
         return [{
-            name: 'towerName',
+            name: 'productCategoryName',
             label: '塔型名称',
             children: <Input placeholder="请输入塔型名称" maxLength={ 200 }/>
         },
