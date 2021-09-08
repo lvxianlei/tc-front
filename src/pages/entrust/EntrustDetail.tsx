@@ -36,6 +36,7 @@ import TextArea from 'antd/lib/input/TextArea';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import AbstractTitledRouteComponent from '../../components/AbstractTitledRouteComponent';
 import moment from 'moment';
+import DeliveryAcceptance from './DeliveryAcceptance';
 const { Step } = Steps
   
 export interface IAbstractEntrustSettingState {
@@ -86,6 +87,8 @@ export interface ITowerModelVO{
     readonly sectionNum: number;
     readonly examineSectionNum: number;
     readonly status: number;
+    readonly giveTime: string;
+    readonly id: string;
 }
 
 export interface IAttachVo {
@@ -263,7 +266,8 @@ enum EntrustStatus {
                         return (
                             <div className={ entrustStyles.tower }>
                                 <div className={ entrustStyles.tower_title }>
-                                    <Button type='link'>{`${item.productCategoryName}(YY-MM-DD)`}</Button>
+                                    <Button type='link'>{``}</Button>
+                                    <DeliveryAcceptance id={ ''} productCategoryId={ item.id } entrustId={ '' } getTable={ () => {} } btnName={`${ item.productCategoryName }(${ item.giveTime })`} type='detail' key={item.id}/>
                                 </div>
                                 <Progress percent={Math.round((Number(item.examineSectionNum)/Number(item.sectionNum))*100)/100} status="active" />
                             </div>
