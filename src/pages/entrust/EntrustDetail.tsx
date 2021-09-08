@@ -250,7 +250,7 @@ enum EntrustStatus {
                                     <div>{item.productCategoryName}</div>
                                     <div>({ this.getStatus(item.status) })</div>
                                 </div>
-                                <Progress percent={Math.round((Number(item.examineSectionNum)/Number(item.sectionNum))*100)/100} status="active" />
+                                <Progress percent={Math.round((Number(item.examineSectionNum)/Number(item.sectionNum))*100)} status="active" />
                             </div>
                         )
                     })
@@ -269,7 +269,7 @@ enum EntrustStatus {
                                     <Button type='link'>{``}</Button>
                                     <DeliveryAcceptance id={ ''} productCategoryId={ item.id } entrustId={ '' } getTable={ () => {} } btnName={`${ item.productCategoryName }(${ item.giveTime })`} type='detail' key={item.id}/>
                                 </div>
-                                <Progress percent={Math.round((Number(item.examineSectionNum)/Number(item.sectionNum))*100)/100} status="active" />
+                                <Progress percent={Math.round((Number(item.examineSectionNum)/Number(item.sectionNum))*100} status="active" />
                             </div>
                         )
                     })
