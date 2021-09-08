@@ -1,34 +1,30 @@
 import { Button, Col, FormItemProps, Input, Modal, Row, TableColumnType, TablePaginationConfig } from 'antd';
+import { stringify } from 'query-string';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../components/AbstractMngtComponent';
 import { ITabItem } from '../../components/ITabableComponent';
+import AuthUtil from '../../utils/AuthUtil';
 import RequestUtil from '../../utils/RequestUtil';
+import { IAttachVo, IDeliveryFiles, IDetailData } from './DeliveryAcceptance';
+import styles from './AbstractEntrustSetting.module.less';
 
 export interface ITowerShapeProps {}
 export interface ITowerShapeWithRouteProps extends RouteComponentProps<ITowerShapeProps>, WithTranslation {}
 export interface ITowerShapeState extends IAbstractMngtComponentState {
     readonly tableDataSource: ITableDataItem[];
     readonly isVisible?: boolean;
-    readonly attachData?: IAttachData[];
+    readonly deliveryFiles?: IDeliveryFiles;
     readonly towerName?: string;
     readonly projectName?: string;
+    readonly detailData?: IDetailData
+    readonly productCategoryId?: string;
 }
 
 interface ITableDataItem {
 
-}
-
-export interface IAttach{
-    readonly attachList: IAttachData[]
-}
-export interface IAttachData {
-    readonly id?: string;
-    readonly name?: string;
-    readonly fileUploadTime?: string;
-    readonly filePath?: string;
 }
 
 interface IResponseData {
@@ -110,35 +106,233 @@ class TowerShape extends AbstractMngtComponent<ITowerShapeWithRouteProps, ITower
      * @description 查看
      */
     public showTowerModal = async (record: Record<string, any>): Promise<void> => {
-        const attachList: IAttach = await RequestUtil.get<IAttach>(`/tp-task-dispatch/productCategory/getDeliveryFiles/${ record.id }`);
+        const [deliveryFiles, detailData] = await Promise.all<IDeliveryFiles, IDetailData>([
+            RequestUtil.get(`/tp-task-dispatch/productCategory/getDeliveryFiles/${ record.productCategoryId }`),
+            RequestUtil.get<IDetailData>(`/tower-data-archive/productCategory/${ record.productCategoryId }`)
+        ]);
         this.setState({
             isVisible: true,
-            attachData: attachList.attachList
+            deliveryFiles: deliveryFiles,
+            detailData: detailData,
+            productCategoryId: record.productCategoryId
+        })
+    }
+    
+    public uploadAttach = (value: string): void => {
+        window.open(value);
+    }
+
+    public download = async (code: number): Promise<void> => {
+        return fetch(`${process.env.REQUEST_API_PATH_PREFIX?.replace(/\/*$/, '/') || ''.replace(/\/*$/, '/')}${`/tower-data-archive/componentDetail/downloadCompAttach`.replace(/^\/*/, '')}`, {
+            mode: 'cors',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+              'Tenant-Id': AuthUtil.getTenantId(),
+              'Sinzetech-Auth': AuthUtil.getSinzetechAuth(),
+            },
+            body: stringify({ productCategoryId: this.state.productCategoryId,
+                fileType: code })
+        }).then((res) => {
+            return res.blob();
+        }).then((data) => {
+            let blob = new Blob([data], {type: 'application/zip'})
+            let blobUrl = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.download = code === 2 ? '工艺卡' : code === 3 ? '大样图' :  code === 6 ? '角钢nc数据' : '钢板nc数据' ;
+            a.href = blobUrl;
+            a.click();
+            if(document.body.contains(a)) {
+                document.body.removeChild(a);
+            }
         })
     }
 
-    public uploadAttach = (value: Record<string, any>): void => {
-        window.open(value.filePath);
+    public downloadTMA = async (): Promise<void> => {
+        return fetch(`${process.env.REQUEST_API_PATH_PREFIX?.replace(/\/*$/, '/') || ''.replace(/\/*$/, '/')}${`/tower-vcs/fileVersion/downloadCompFile`.replace(/^\/*/, '')}`, {
+            mode: 'cors',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+              'Tenant-Id': AuthUtil.getTenantId(),
+              'Sinzetech-Auth': AuthUtil.getSinzetechAuth(),
+            },
+            body: stringify({ productCategoryId: this.state.productCategoryId })
+        }).then((res) => {
+            return res.blob();
+        }).then((data) => {
+            let blob = new Blob([data], {type: 'application/zip'})
+            let blobUrl = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.download = 'TMA文件' ;
+            a.href = blobUrl;
+            a.click();
+            if(document.body.contains(a)) {
+                document.body.removeChild(a);
+            }
+        })
     }
+
+    public exportBoltStatistics = async (): Promise<void> => {
+        return fetch(`${process.env.REQUEST_API_PATH_PREFIX?.replace(/\/*$/, '/') || ''.replace(/\/*$/, '/')}${`/tower-data-archive/boltStatistics/exportBoltStatistics`.replace(/^\/*/, '')}`, {
+            mode: 'cors',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+              'Tenant-Id': AuthUtil.getTenantId(),
+              'Sinzetech-Auth': AuthUtil.getSinzetechAuth(),
+            },
+            body: stringify({ productCategoryId: this.state.productCategoryId })
+        }).then((res) => {
+            return res.blob();
+        }).then((data) => {
+            let blobUrl = window.URL.createObjectURL(data);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.download = '螺栓清单';
+            a.href = blobUrl;
+            a.click();
+            if(document.body.contains(a)) {
+                document.body.removeChild(a);
+            }
+        })
+    }
+
+    public exportAssemblyWeld = async (): Promise<void> => {
+        return fetch(`${process.env.REQUEST_API_PATH_PREFIX?.replace(/\/*$/, '/') || ''.replace(/\/*$/, '/')}${`/tower-data-archive/assemblyWeld/exportAssemblyWeld`.replace(/^\/*/, '')}`, {
+            mode: 'cors',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+              'Tenant-Id': AuthUtil.getTenantId(),
+              'Sinzetech-Auth': AuthUtil.getSinzetechAuth(),
+            },
+            body: stringify({ productCategoryId: this.state.productCategoryId })
+        }).then((res) => {
+            return res.blob();
+        }).then((data) => {
+            let blobUrl = window.URL.createObjectURL(data);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.download = '组焊清单';
+            a.href = blobUrl;
+            a.click();
+            if(document.body.contains(a)) {
+                document.body.removeChild(a);
+            }
+        })
+    }
+
 
     /**
      * @description 文件弹窗
      */
     public render() {
+        const deliveryFiles: IDeliveryFiles | undefined = this.state.deliveryFiles;
+        const deliveryList: number[] | undefined = deliveryFiles?.deliveryList;
         return <>
             { super.render() }
             <Modal title="交付文件" visible={ this.state.isVisible } onCancel={ this.onModalClose } footer={ null } width={ "50%" }>
-                { this.state.attachData && this.state.attachData.map<React.ReactNode>((items: IAttachData): React.ReactNode => {
-                        return <Row justify="center" gutter={16}>
-                            <Col span={6}>{ items.name }</Col>
-                            <Col span={6}>{ items.fileUploadTime }</Col>
-                            <Col span={6}>
-                                <Button type="link" onClick={ () => this.uploadAttach(items) }>
-                                    下载
-                                </Button>
-                            </Col>
-                        </Row>
-                    })
+                <div className={ styles.files }>
+                    <Row>
+                    { deliveryList?.includes(1) ?
+                        <Col span={ 8 }>
+                            <span key="1">
+                                <Button type="link" onClick={ () => this.downloadTMA() }>TMA文件</Button>
+                            </span>
+                        </Col>
+                        : null
+                    }
+                    { deliveryList?.includes(2) ?
+                        <Col span={ 8 }>
+                            <span key="2">
+                                <Button type="link" onClick={ () => this.download(2) }>工艺卡</Button>
+                            </span>
+                        </Col>
+                        : null
+                    }
+                    { deliveryList?.includes(3) ? 
+                        <Col span={ 8 }>
+                            <span key="3">
+                                <Button type="link" onClick={ () => this.download(3) }>大样图</Button>
+                            </span>
+                        </Col>
+                        : null
+                    }
+                    { deliveryList?.includes(4) ?
+                        <Col span={ 8 }>
+                            <span key="4">
+                                构建明细
+                            </span>
+                        </Col>
+                        : null
+                    }
+                    { deliveryList?.includes(5) ? 
+                        <Col span={ 8 }>
+                            <span key="5">
+                                <Button type="link" onClick={ () => this.exportBoltStatistics() }>螺栓清单</Button>
+                            </span>
+                        </Col>
+                        : null
+                    }
+                    { deliveryList?.includes(6) ? 
+                        <Col span={ 8 }>
+                            <span key="6">
+                                <Button type="link" onClick={ () => this.download(6) }>角钢NC数据</Button>  
+                            </span>
+                        </Col>
+                        : null
+                    }   
+                    { deliveryList?.includes(7) ?
+                        <Col span={ 8 }>
+                            <span key="7">
+                                <Button type="link" onClick={ () => this.download(7) }>钢板NC数据</Button>  
+                            </span>
+                        </Col>
+                        : null
+                    }
+                    { deliveryList?.includes(8) ?
+                        <Col span={ 8 }>
+                            <span key="8">
+                                <Button type="link" onClick={ () => this.exportAssemblyWeld() }>组焊清单</Button>
+                            </span>
+                        </Col>
+                        : null
+                    }
+                    { deliveryList?.includes(9) ?
+                        <Col span={ 8 }>
+                            <span key="9">
+                                <Button type="link" onClick={ () => this.uploadAttach(this.state.detailData?.buildChart || '') }>结构图</Button>
+                            </span>
+                        </Col>
+                        : null
+                    }
+                    </Row>
+                </div>
+                { deliveryList?.includes(10) ?
+                    <div>
+                        <p>其他文件</p>
+                        <div className={ styles.content }> 
+                            { this.state.deliveryFiles?.attachList?.map<React.ReactNode>((items: IAttachVo, index: number): React.ReactNode => {
+                                return <Row justify="center" gutter={16} className={ styles.row } key={ index }>
+                                    <Col span={6} className={ styles.col }>{ items.name }</Col>
+                                    <Col span={6} className={ styles.col }>{ items.fileUploadTime }</Col>
+                                    <Col span={6}>
+                                    <Button type="link" onClick={ () => this.uploadAttach(items.filePath || '') } danger>
+                                        下载
+                                    </Button>
+                                    </Col>
+                                </Row>
+                            }) }
+                        </div>
+                    </div>
+                    : null
                 }
             </Modal>
         </>
@@ -162,9 +356,9 @@ class TowerShape extends AbstractMngtComponent<ITowerShapeWithRouteProps, ITower
       */
     public getTableColumns(): TableColumnType<object>[] {
         return [{
-            key: 'towerName',
+            key: 'productCategoryName',
             title: '塔型名称',
-            dataIndex: 'towerName'
+            dataIndex: 'productCategoryName'
         }, {
             key: 'projectNum',
             title: '所属工程编号',
@@ -193,7 +387,7 @@ class TowerShape extends AbstractMngtComponent<ITowerShapeWithRouteProps, ITower
             key: 'operation',
             title: '交付文件',
             dataIndex: 'operation',
-            render: (_: undefined, record: IAttachData): React.ReactNode => (
+            render: (_: undefined, record: IDeliveryFiles): React.ReactNode => (
                 <>
                     <Button type="link" onClick={ () => this.showTowerModal(record) }>
                         查看

@@ -6,7 +6,7 @@ import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import RequestUtil from '../../utils/RequestUtil';
-import { Button, Col, Form, FormInstance, Input,  Modal, Row, Space } from 'antd';
+import { Button, Col, Divider, Form, FormInstance, Input,  Modal, Row, Space } from 'antd';
 import AsyncComponent from '../../components/AsyncComponent';
 import styles from './AbstractEntrustSetting.module.less';
 import AuthUtil from '../../utils/AuthUtil';
@@ -17,6 +17,7 @@ export interface IDeliveryAcceptanceRouteProps extends RouteComponentProps<IDeli
     readonly id: number | string;
     readonly entrustId: number | string;
     readonly getTable:() => void;
+    readonly productCategoryId: string;
 }
 export interface IDeliveryAcceptanceState {
     readonly isVisible?: boolean;
@@ -33,7 +34,7 @@ export interface IDeliveryFiles{
 }
 
 
-interface IDetailData {
+export interface IDetailData {
     readonly buildChart?: string;
 }
 
@@ -74,8 +75,8 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
             isVisible: true
         })
         const [deliveryFiles, detailData] = await Promise.all<IDeliveryFiles, IDetailData>([
-            RequestUtil.get(`/tp-task-dispatch/productCategory/getDeliveryFiles/${ this.props.id }`),
-            RequestUtil.get<IDetailData>(`/tower-data-archive/productCategory/${ this.props.id }`)
+            RequestUtil.get(`/tp-task-dispatch/productCategory/getDeliveryFiles/${ this.props.productCategoryId }`),
+            RequestUtil.get<IDetailData>(`/tower-data-archive/productCategory/${ this.props.productCategoryId }`)
         ]);
         this.setState({
             isVisible: true,
@@ -289,6 +290,7 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
                                     >
                                     <Input />
                                 </Form.Item>
+                                <Divider />
                                 <div className={ styles.files }>
                                     <Row>
                                     { deliveryList?.includes(1) ?
