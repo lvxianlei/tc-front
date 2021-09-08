@@ -18,6 +18,8 @@ export interface IDeliveryAcceptanceRouteProps extends RouteComponentProps<IDeli
     readonly entrustId: number | string;
     readonly getTable:() => void;
     readonly productCategoryId: string;
+    readonly type?: string;
+    readonly btnName?: string;
 }
 export interface IDeliveryAcceptanceState {
     readonly isVisible?: boolean;
@@ -62,7 +64,7 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
     } as IDeliveryAcceptanceState;
 
     public popModalButton(): React.ReactNode {
-        return <Button type="link" htmlType="button" onClick={ this.showModal }>交付验收</Button>
+        return <Button type="link" htmlType="button" onClick={ this.showModal }>{ this.props.type === 'detail' ? this.props.btnName : '交付验收' }</Button>
     }
 
     /**
@@ -288,7 +290,7 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
                                     wrapperCol={{ span: 10 }}
                                     labelCol={{ offset: 7 }}
                                     >
-                                    <Input />
+                                    <Input disabled={ this.props.type === 'detail' }/>
                                 </Form.Item>
                                 <Divider />
                                 <div className={ styles.files }>
@@ -388,8 +390,12 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
                                 }
                                 <Space size="large" direction="horizontal">
                                     <Button type="default" htmlType="button" onClick={ this.onCancel }>关闭</Button>
-                                    <Button type="default" htmlType="button" onClick={ this.onBack }>退回</Button>
-                                    <Button type="primary" htmlType="submit">验收通过</Button>
+                                    { this.props.type === 'detail' ? null : 
+                                        <>
+                                            <Button type="default" htmlType="button" onClick={ this.onBack }>退回</Button>
+                                            <Button type="primary" htmlType="submit">验收通过</Button>
+                                        </>
+                                    }
                                 </Space>
                             </Space> 
                         }
