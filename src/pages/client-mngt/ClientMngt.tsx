@@ -167,12 +167,7 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
      * @param values 
      */
     public async onFilterSubmit(values: Record<string, any>) {
-        const tablePagination:TablePaginationConfig = {
-            current: 1,
-            pageSize: 10,
-            total: 0,
-            showSizeChanger: false
-        }
+        const tablePagination = Object.assign( {}, this.getState().tablePagination )
         this.fetchTableData(values, tablePagination);
     }
 
