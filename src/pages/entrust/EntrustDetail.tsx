@@ -73,7 +73,7 @@ export interface IEntrust {
     readonly attachVoList?: IAttachVo[];	
     readonly entrustMessageVoList?: IEntrustMessageVo[];
     readonly status?: number;
-    readonly towerModelVoList?: ITowerModelVO[];
+    readonly productOverallProgressVoList?: ITowerModelVO[];
 }
  
 export interface IEntrustMessageVo {
@@ -82,10 +82,10 @@ export interface IEntrustMessageVo {
     readonly userName?:	string;
 }
 export interface ITowerModelVO{
-    readonly towerName: string;
+    readonly productCategoryName: string;
     readonly sectionNum: number;
     readonly examineSectionNum: number;
-    readonly examineName: string;
+    readonly status: number;
 }
 
 export interface IAttachVo {
@@ -240,14 +240,32 @@ enum EntrustStatus {
             extra.push({
                 title:'塔进度信息',
                 render:():React.ReactNode => {
-                    return this.state.entrust && this.state.entrust.towerModelVoList && this.state.entrust.towerModelVoList.map((item:ITowerModelVO)=>{
+                    return this.state.entrust && this.state.entrust.productOverallProgressVoList && this.state.entrust.productOverallProgressVoList.map((item:ITowerModelVO)=>{
                         return (
                             <div className={ entrustStyles.tower }>
                                 <div className={ entrustStyles.tower_title }>
-                                    <div>{item.towerName}</div>
-                                    <div>({item.examineName})</div>
+                                    <div>{item.productCategoryName}</div>
+                                    <div>({ this.getStatus(item.status) })</div>
                                 </div>
-                                <Progress percent={Math.round((item.examineSectionNum/item.sectionNum)*100)/100} status="active" />
+                                <Progress percent={Math.round((Number(item.examineSectionNum)/Number(item.sectionNum))*100)/100} status="active" />
+                            </div>
+                        )
+                    })
+                    
+                }
+            })
+        }
+        if(this.state.entrust?.status == EntrustStatus.COMPLETED){
+            extra.push({
+                title:'塔进度信息',
+                render:():React.ReactNode => {
+                    return this.state.entrust && this.state.entrust.productOverallProgressVoList && this.state.entrust.productOverallProgressVoList.map((item:ITowerModelVO)=>{
+                        return (
+                            <div className={ entrustStyles.tower }>
+                                <div className={ entrustStyles.tower_title }>
+                                    <Button type='link'>{`${item.productCategoryName}(YY-MM-DD)`}</Button>
+                                </div>
+                                <Progress percent={Math.round((Number(item.examineSectionNum)/Number(item.sectionNum))*100)/100} status="active" />
                             </div>
                         )
                     })
@@ -258,7 +276,31 @@ enum EntrustStatus {
         return extra
 
     }
-
+    //获取状态
+    protected getStatus(item: number){
+        let statusTitle = '待发布';
+        switch(item){
+            case EntrustStatus.TO_BE_RELEASED:
+                statusTitle = '待发布';
+                break
+            case EntrustStatus.TO_BE_RECEIVED:
+                statusTitle = '待接收'
+                break
+            case EntrustStatus.TO_BE_APPROVAL:
+                statusTitle = '待立项'
+                break
+            case EntrustStatus.UNDER_REVIEW:
+                statusTitle = '审核中'
+                break
+            case EntrustStatus.HAVE_IN_HAND:
+                statusTitle = '进行中'
+                break
+            case EntrustStatus.COMPLETED:
+                statusTitle = '已完成'
+                break
+        }
+        return statusTitle
+    }
     //table-column
     public columns(): TableColumnType<IAttachVo>[] {
         return [
