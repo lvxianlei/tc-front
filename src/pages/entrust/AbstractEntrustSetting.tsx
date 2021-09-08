@@ -27,8 +27,9 @@ export interface IEntrust {
 
 export interface IAttachVo {
     readonly id?: number | string;
+    readonly uid: string;
     readonly originalName?:	string;
-    readonly name?:	string;
+    readonly name:	string;
     readonly fileUploadTime?: string;
     readonly fileSuffix?: string;
     readonly fileSize?: number;	
@@ -74,12 +75,15 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
         };
     }
     
-    public deleteAttach = async (values: Record<string, any>, index: number): Promise<void> => {
-        const attachList: IAttachVo[] | undefined= this.state?.attachList;
+    public deleteAttach = async (values: Record<string, any>): Promise<void> => {
+        
+        
+        let attachList: IAttachVo[] | undefined= this.state?.attachList;
         if(values.id) {
-            await RequestUtil.delete(`/tower-system/attach?ids=${ values.attachId }`);
+            await RequestUtil.delete(`/tower-system/attach?ids=${ values.id }`);
         }
-        attachList && attachList.splice(index, 1);
+        attachList = attachList?.filter( res => res.uid !== values.uid); 
+        console.log(attachList)
         this.setState({
             attachList: attachList
         })
@@ -115,6 +119,9 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
         const entrust: IEntrust | undefined = this.state.entrust;
         return [[{
                 title: '委托信息',
+                itemCol: {
+                    span: 10
+                },
                 itemProps: [{
                     label: '工程名称',
                     name: 'projectName',
@@ -133,8 +140,11 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
                         message: '请选择工程周期'
                     }],
                     children: <DatePicker.RangePicker />
-                }, {
-                    label: '资料包',
+                }],
+            }, {
+                title: '资料包',
+                itemProps: [{
+                    label: '',
                     name: 'attachVoList',
                     initialValue: entrust?.attachVoList,
                     rules: [{
@@ -145,6 +155,7 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
                     <Dragger 
                         name='file' 
                         multiple={ true } 
+                        defaultFileList={ this.state.attachList }
                         action= { () => {
                             const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
                             return baseUrl+'/sinzetech-resource/oss/put-file'
@@ -156,19 +167,19 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
                                 'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
                             }
                         }
-                        className={ styles.upload_section } 
-                        showUploadList={ false }
+                        className={ styles.upload_section }
                         onChange={ (info) => {const { status } = info.file;
                             if (status === 'done') {
                                 message.success(`${info.file.name} file uploaded successfully.`);
                                 let attachList: IAttachVo[] | undefined = this.state.attachList || [];
                                 const resData: IAttachVo | undefined = info.file.response.data;
                                 attachList.push({ 
+                                    uid: info.file.uid,
                                     filePath: resData?.name,
                                     fileSize: resData?.size,
                                     fileSuffix: resData?.name?.slice(resData?.name?.lastIndexOf('.') + 1, resData?.name.length),
                                     fileUploadTime: resData?.fileUploadTime,
-                                    name: resData?.originalName,	
+                                    name: resData?.originalName || "",	
                                     userName: resData?.userName })
                                 this.setState({
                                     attachList: attachList
@@ -176,6 +187,9 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
                             } else if (status === 'error') {
                                 message.error(`${info.file.name} file upload failed.`);
                             }} }
+                        onRemove={ (file) => {
+                            this.deleteAttach(file)
+                        } }
                     >
                         <p className={ styles.upload_drag_icon }>
                             <InboxOutlined />
@@ -188,31 +202,31 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
                             （工程图纸、加工配基表、塔杆明细）
                         </p>
                     </Dragger>
-                }]
+                }],
             }],
-            [{
-                title: '已上传资料包',
-                itemProps: [{
-                    label: '',
-                    children: <>
-                        { this.state.attachList ? 
-                            <>{ this.state.attachList.map<React.ReactNode>((items: IAttachVo, index: number): React.ReactNode => {
-                                    return <Row justify="center" gutter={24} key={ index }>
-                                        <Col span={6}>{ items.name }</Col>
-                                        <Col span={6}>{ items.fileUploadTime }</Col>
-                                        <Col span={6}>
-                                            <Button type="link" onClick={ () => this.deleteAttach(items, index) }>
-                                                删除
-                                            </Button>
-                                        </Col>
-                                    </Row>
-                                })
-                            }</> 
-                            : "暂无资料包"
-                        }
-                    </>
-                }]
-            }
-        ]]
+            // [{
+            //     title: '已上传资料包',
+            //     itemProps: [{
+            //         label: '',
+            //         children: <>
+            //             { this.state.attachList ? 
+            //                 <>{ this.state.attachList.map<React.ReactNode>((items: IAttachVo, index: number): React.ReactNode => {
+            //                         return <Row justify="center" gutter={24} key={ index }>
+            //                             <Col span={6}>{ items.name }</Col>
+            //                             <Col span={6}>{ items.fileUploadTime }</Col>
+            //                             <Col span={6}>
+            //                                 <Button type="link" onClick={ () => this.deleteAttach(items, index) }>
+            //                                     删除
+            //                                 </Button>
+            //                             </Col>
+            //                         </Row>
+            //                     })
+            //                 }</> 
+            //                 : "暂无资料包"
+            //             }
+            //         </>
+            //     }]
+            // }]
+        ]
     }
 }

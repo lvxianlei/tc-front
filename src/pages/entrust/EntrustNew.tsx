@@ -33,7 +33,7 @@ class EntrustNew extends AbstractEntrustSetting<IEntrustNewRouteProps, IEntrustN
             values.projectEndTime = moment(values.projectTime[1]).format('YYYY-MM-DD');
         }
         values.attachInfoDtoList = this.state.attachList;
-        if(values.attachInfoDtoList) {
+        if(values.attachInfoDtoList && values.attachInfoDtoList.length > 0) {
             return await RequestUtil.post('/tp-task-dispatch/entrust', values)
         } else {
             message.error("请上传资料包！")
@@ -55,7 +55,7 @@ class EntrustNew extends AbstractEntrustSetting<IEntrustNewRouteProps, IEntrustN
                 values.projectEndTime = moment(values.projectTime[1]).format('YYYY-MM-DD');
             }
             values.attachInfoDtoList = this.state.attachList;
-            if(values.attachInfoDtoList) {
+            if(values.attachInfoDtoList && values.attachInfoDtoList.length > 0) {
                 return RequestUtil.post('/tp-task-dispatch/entrust/entrustSubmit', values).then((res) => {
                     if(res) {
                         this.props.history.push('/outsource/entrust')
