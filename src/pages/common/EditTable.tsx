@@ -1,141 +1,80 @@
-import React, { useContext, useState, useEffect, useRef } from 'react';
-import { Table, Input, Button, Popconfirm, Form } from 'antd';
-import { FormInstance } from 'antd/lib/form';
-
-const EditableContext = React.createContext<FormInstance<any> | null>(null);
-
-interface Item {
-    key: string;
-    name: string;
-    age: string;
-    address: string;
-}
-
-interface EditableRowProps {
-    index: number;
-}
-
-const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
-    {/* <tr {...props} /> */ }
-    return (
-        <Form.List name="editTable">
-            {(fields, { add, remove }) => (<>
-                {fields.map(({ key, name, fieldKey, ...restField }) => (
-                    
-                ))}
-            </>)}
-        </Form.List>
-    )
-}
-
+import React, { useState } from 'react'
+import { Input, Button, Form, Row, Col } from 'antd'
+import { FormListFieldData, FormListOperation } from 'antd/lib/form/FormList'
+import styles from './EditTable.module.less'
 interface EditableCellProps {
-    title: React.ReactNode
-    editable: boolean
-    children: React.ReactNode
-    dataIndex: keyof Item
-    record: Item
-}
-
-const EditableCell: React.FC<EditableCellProps> = ({
-    title,
-    editable,
-    children,
-    dataIndex,
-    record,
-    ...restProps
-}) => {
-    let childNode = children;
-    if (!editable) {
-        childNode = (
-            <Form.Item
-                style={{ margin: 0 }}
-                name={dataIndex}
-            >
-                <Input />
-            </Form.Item>
-        )
+    columnItem: {
+        title: string
+        dataIndex: string
+        key?: string
+        render?: (fieldKey: number, remove: (index: number | number[]) => void) => JSX.Element
     }
-    return <td {...restProps}>{childNode}</td>
+    fieldKey: number
+    remove: (index: number | number[]) => void
+    [key: string]: any
 }
 
-type EditableTableProps = Parameters<typeof Table>[0]
+const EditableCell: React.FC<EditableCellProps> = ({ columnItem, fieldKey, remove, ...props }) => {
+    if (columnItem.render) {
+        return columnItem.render(fieldKey, remove)
+    }
+    return <>{props.value}</>
+}
 
 interface DataType {
     [key: string]: any
 }
 
-interface EditableTableState {
-    dataSource: DataType[]
-    count: number
-}
-
-type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>
+type ColumnTypes = any[]
 
 interface EditTableProps {
     columns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[]
-    dataSource: object[]
+    dataSource: DataType[]
 }
 
 export default function EditableTable({ columns = [], dataSource = [] }: EditTableProps): JSX.Element {
-    const [tableData, setTableData] = useState<EditableTableState>({ dataSource: dataSource.map((item, index) => ({ ...item, key: index })) || [], count: dataSource.length })
     const [form] = Form.useForm()
-
-    const handleDelete = (key: React.Key) => {
-        setTableData({ ...tableData, dataSource: tableData.dataSource.filter(item => item.key !== key) })
-    }
-
-    const handleAdd = () => {
-        const { count, dataSource } = tableData
-        const newData: DataType = {
-            key: count,
-            index: dataSource.length + 1
-        }
-        setTableData({
-            dataSource: [...dataSource, newData],
-            count: count + 1
-        })
-    }
-
-    const handleSave = async () => {
-        const result = await form.validateFields()
-        console.log("---------", result)
-    }
-
     columns = [
-        { title: '序号', dataIndex: 'index', editable: true, render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+        { title: '序号', dataIndex: 'index', editable: false, render: (key: number): React.ReactNode => (<span>{key + 1}</span>) },
         ...columns,
-        { title: '操作', dataIndex: 'opration', editable: true, render: (_a: any, _b: any): JSX.Element => <Button type="link" onClick={() => handleDelete(_b.key)}>删除</Button> }
+        {
+            title: '操作', dataIndex: 'opration', editable: false,
+            render: (key: number, remove: (index: number | number[]) => void): JSX.Element => <Button type="link" onClick={() => remove(key)}>删除</Button>
+        }
     ]
 
     return (
-        <div>
-            <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
-                新增一行
-            </Button>
-            <Button onClick={handleSave}>保存</Button>
-            <Form form={form} initialValues={{ editTable: { editTable: { editTable: dataSource } } }}>
-                <Table
-                    components={{
-                        body: {
-                            row: EditableRow,
-                            cell: EditableCell,
-                        }
-                    }}
-                    rowClassName={() => 'editable-row'}
-                    bordered
-                    rowKey={(record: any) => `EditTable_${record.id}`}
-                    dataSource={dataSource}
-                    columns={columns.map((col: any) => ({
-                        ...col,
-                        onCell: (record: DataType) => ({
-                            record,
-                            editable: col.editable,
-                            dataIndex: col.dataIndex,
-                            title: col.title
-                        })
-                    })) as ColumnTypes}
-                />
-            </Form>
-        </div>
+        <Form form={form} initialValues={{ editableData: dataSource }}>
+            <Form.List name="editableData">
+                {
+                    (fields: FormListFieldData[], { add, remove }: FormListOperation): React.ReactNode => (
+                        <>
+                            <Button onClick={() => add()} type="primary" style={{ marginBottom: 16 }}>
+                                新增一行
+                            </Button>
+                            <Row className={styles.FormHeader}>
+                                {columns.map((item, index) => (<Col key={`Editable_${index}`} span={item.width || 2}>{item.title}</Col>))}
+                            </Row>
+                            {fields.map(({ key, name, fieldKey, ...restField }) => (
+                                <Row key={`EditableRow_${key}`} className={styles.FormHeader}>
+                                    {columns.map((coItem, coIndex) => {
+                                        return (<Col key={`EditableCol_${coIndex}`} span={coItem.width || 2}>
+                                            <Form.Item
+                                                {...restField}
+                                                name={[name, coItem.dataIndex]}
+                                                fieldKey={[fieldKey, coItem.dataIndex]}
+                                            >
+                                                {coItem.editable === false ? <EditableCell columnItem={coItem as EditableCellProps['columnItem']} fieldKey={fieldKey} remove={remove} /> : <Input />}
+                                            </Form.Item>
+                                        </Col>)
+                                    }
+                                    )}
+                                </Row>
+                            ))}
+                        </>
+                    )
+                }
+            </Form.List>
+        </Form>
     )
 }
