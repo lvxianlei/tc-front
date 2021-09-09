@@ -276,25 +276,34 @@ enum EntrustStatus {
     
     //获取状态
     protected getStatus(item: number){
-        let statusTitle = '待发布';
+        let statusTitle = '进行中';
         switch(item){
             case EntrustStatus.TO_BE_RELEASED:
-                statusTitle = '待发布';
+                statusTitle = '进行中';
                 break
             case EntrustStatus.TO_BE_RECEIVED:
-                statusTitle = '待接收'
-                break
-            case EntrustStatus.TO_BE_APPROVAL:
-                statusTitle = '待立项'
-                break
-            case EntrustStatus.UNDER_REVIEW:
-                statusTitle = '审核中'
-                break
-            case EntrustStatus.HAVE_IN_HAND:
                 statusTitle = '进行中'
                 break
+            case EntrustStatus.TO_BE_APPROVAL:
+                statusTitle = '放样完成'
+                break
+            case EntrustStatus.UNDER_REVIEW:
+                statusTitle = '无审核人'
+                break
+            case EntrustStatus.HAVE_IN_HAND:
+                statusTitle = '审核中'
+                break
             case EntrustStatus.COMPLETED:
-                statusTitle = '已完成'
+                statusTitle = '待交付'
+                break
+            case 6:
+                statusTitle = '已交付'
+                break
+            case 7:
+                statusTitle = '待客户验收'
+                break
+            case 8:
+                statusTitle = '客户已验收'
                 break
         }
         return statusTitle
