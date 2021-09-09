@@ -1,0 +1,79 @@
+{
+  "code": 200,
+  "msg": "sed Ut esse exercitation",
+  "success": true,
+  "data": {
+    "id": -78316876.22259778,
+    "attachVos": [
+      {
+        "description": "voluptate e",
+        "filePath": "cupidatat commodo enim quis nostrud",
+        "fileSize": 42210731.89600918,
+        "fileSuffix": "occaeca",
+        "fileUploadTime": "quis consequat laboris minim",
+        "id": -51788596.56952097,
+        "name": "et est dolor",
+        "userName": "occaecat pariatur"
+      }
+    ],
+    "bidBuyEndTime": "dolor aute",
+    "bidPackageInfoDTOList": [
+      {
+        "amount": -30441445.52928692,
+        "bidInfoId": -98473518.13381788,
+        "deliveryDate": "es",
+        "deliveryPlace": "minim et",
+        "goodsType": "do dolore occaecat nostrud laborum",
+        "id": 12231446.036545262,
+        "packageNumber": "incididunt ex Lorem qui dolore",
+        "partBidNumber": "amet",
+        "unit": "Ut incididunt esse irure"
+      },
+      {
+        "amount": 56232584.65532616,
+        "bidInfoId": -46147636.44800601,
+        "deliveryDate": "eius",
+        "deliveryPlace": "Duis occaec",
+        "goodsType": "dolor exercitation consectetur",
+        "id": -68414512.64944461,
+        "packageNumber": "consequat sint venia",
+        "partBidNumber": "id pariatur aliqua labore adipisi",
+        "unit": "exercitation"
+      },
+      {
+        "amount": 85697173.99891314,
+        "bidInfoId": 34910736.46031904,
+        "deliveryDate": "magna mollit aute",
+        "deliveryPlace": "ad nulla elit velit sit",
+        "goodsType": "velit ea Lorem elit anim",
+        "id": 86869398.91936448,
+        "packageNumber": "qui esse labore ea exercitation",
+        "partBidNumber": "laborum velit dolore mollit amet",
+        "unit": "elit mollit"
+      },
+      {
+        "amount": -60492680.62928772,
+        "bidInfoId": -47999306.15071663,
+        "deliveryDate": "aliquip nulla ea f",
+        "deliveryPlace": "ad in",
+        "goodsType": "sed qui pariatur",
+        "id": 90589374.75800279,
+        "packageNumber": "aliqua veniam sunt ullamco",
+        "partBidNumber": "commod",
+        "unit": "est commodo officia id"
+      }
+    ],
+    "biddingAddress": "magna",
+    "biddingAgency": "occaecat",
+    "biddingEndTime": "dolore commodo aliqua adipisicing",
+    "biddingPerson": "commodo ipsum",
+    "biddingStatus": 20086799.192558974,
+    "explain": "aute",
+    "projectName": "sunt amet enim eu",
+    "projectNumber": "irure consequat reprehenderit occaecat sed",
+    "reason": "nulla in esse ex",
+    "releaseDate": "aute incididunt anim sit veniam",
+    "source": "irure cupidatat eius",
+    "sourceWebsite": "commodo ipsum ut"
+  }
+}

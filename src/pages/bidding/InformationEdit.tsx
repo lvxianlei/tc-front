@@ -31,7 +31,7 @@ const tableColumns: TableColumnProps<Object>[] = [
 export default function InfomationNew(): JSX.Element {
     const history = useHistory()
     const { loading, error, data, run } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get('/tower-market/tower-market/bidInfo/1')
+        const data = await RequestUtil.get('/tower-market/bidInfo/1')
         resole(data)
     }), {})
     const detailData: any = data

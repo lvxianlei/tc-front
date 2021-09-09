@@ -120,7 +120,7 @@ export default function Management(): React.ReactNode {
     }
 
     return <Page
-        path="/tower-market/tower-market/projectInfo"
+        path="/tower-market/projectInfo"
         columns={columns}
         extraOperation={<>
             <Link to="/project/management/edit/new"><Button type="primary">新建项目</Button></Link>

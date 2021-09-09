@@ -95,7 +95,7 @@ const columns = [
 export default function Information(): React.ReactNode {
 
     return <Page
-        path="/tower-market/tower-market/bidInfo"
+        path="/tower-market/bidInfo"
         columns={columns}
         headTabs={[]}
         searchFormItems={[
