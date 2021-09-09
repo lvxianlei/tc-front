@@ -1,8 +1,7 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
-import { Button, TableColumnProps, Row, Spin } from 'antd';
-import { EditTable } from '../common'
-import { Detail, BaseInfo } from '../common'
+import { useHistory } from "react-router-dom"
+import { Button, TableColumnProps, Row, Spin } from 'antd'
+import { EditTable, Detail, BaseInfo } from '../common'
 import { baseInfoData } from './biddingHeadData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
@@ -11,19 +10,17 @@ const columns = [
         title: '分标编号',
         dataIndex: 'partBidNumber',
         key: 'partBidNumber',
+        type: 'text'
     },
-    { title: '货物类别', dataIndex: 'goodsType', key: 'goodsType' },
-    { title: '包号', dataIndex: 'packageNumber', key: 'packgeNumber' },
-    { title: '数量', dataIndex: 'amount', key: 'amount' },
-    { title: '单位', dataIndex: 'unit', key: 'unit' },
-    { title: '交货日期', dataIndex: 'deliveryDate', key: 'deliveryDate' },
-    { title: '交货地点', dataIndex: 'deliveryPlace', key: 'deliveryPlace' }
+    { title: '货物类别', dataIndex: 'goodsType', key: 'goodsType', type: 'text' },
+    { title: '包号', dataIndex: 'packageNumber', key: 'packgeNumber', type: 'text' },
+    { title: '数量', dataIndex: 'amount', key: 'amount', type: 'text' },
+    { title: '单位', dataIndex: 'unit', key: 'unit', type: 'text' },
+    { title: '交货日期', dataIndex: 'deliveryDate', key: 'deliveryDate', type: 'text' },
+    { title: '交货地点', dataIndex: 'deliveryPlace', key: 'deliveryPlace', type: 'text' }
 ]
 const tableColumns: TableColumnProps<Object>[] = [
-    {
-        title: '分标编号',
-        dataIndex: 'partBidNumber'
-    },
+    { title: '分标编号', dataIndex: 'partBidNumber' },
     { title: '货物类别', dataIndex: 'goodsType' },
     { title: '包号', dataIndex: 'packageNumber' },
     { title: '数量', dataIndex: 'amount' },
@@ -59,21 +56,25 @@ export default function InfomationNew(): JSX.Element {
                         title: '文件名',
                         dataIndex: 'name',
                         key: 'name',
+                        type: 'text'
                     },
                     {
                         title: '大小',
                         dataIndex: 'fileSize',
                         key: 'fileSize',
+                        type: 'text'
                     },
                     {
                         title: '上传人',
                         dataIndex: 'userName',
                         key: 'userName',
+                        type: 'text'
                     },
                     {
                         title: '上传时间',
                         dataIndex: 'fileUploadTime',
                         key: 'fileUploadTime',
+                        type: 'text'
                     }
                 ]} dataSource={detailData.attachVos} />
             </>

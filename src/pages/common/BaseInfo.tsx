@@ -1,11 +1,11 @@
 import React from "react"
-import { Descriptions, Form, Input } from "antd"
+import { Descriptions, Form, Input, FormInstance } from "antd"
 
 export interface BaseInfoItemProps {
     name: string
     label: string
     value: string | number | null | undefined
-    type?: 'string' | 'number' | 'date' | 'select'
+    type?: 'text' | 'number' | 'date' | 'select'
 }
 
 export interface BaseInfoColumnsProps {
@@ -19,10 +19,12 @@ interface BaseInfoProps {
     columns: BaseInfoColumnsProps[]
     edit?: boolean
     col?: number
+    onSave?: (form: FormInstance<any>) => void
 }
 
-export default function BaseInfo({ dataSource, columns, edit, col = 2 }: BaseInfoProps): JSX.Element {
+export default function BaseInfo({ dataSource, columns, onSave, edit, col = 2 }: BaseInfoProps): JSX.Element {
     const [form] = Form.useForm()
+    onSave && onSave(form)
     if (edit) {
         return <Form form={form} initialValues={dataSource} >
             <Descriptions bordered column={col}>
