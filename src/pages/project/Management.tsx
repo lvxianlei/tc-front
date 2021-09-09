@@ -109,7 +109,7 @@ export default function Management(): React.ReactNode {
     }
 
     return <Page
-        path="/tower-market/tower-market/projectInfo"
+        path="/tower-market/projectInfo"
         columns={columns}
         extraOperation={<>
             <Button type="primary">新增</Button>

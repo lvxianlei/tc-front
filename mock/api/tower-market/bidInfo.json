@@ -1,0 +1,47 @@
+{
+  "code": 200,
+  "msg": "qui cillum aliqua",
+  "success": true,
+  "data": {
+    "current": 1,
+    "hitCount": true,
+    "pages": 2,
+    "records": [
+      {
+        "bidBuyEndTime": "in dolor do fugiat",
+        "biddingAddress": "eiusmod in",
+        "biddingAgency": "est",
+        "biddingEndTime": "laboris",
+        "biddingPerson": "consequat velit",
+        "biddingStatus": -63455296.05426496,
+        "explain": "minim ut",
+        "id": -1398861.965080738,
+        "projectName": "dolor enim in dolor",
+        "projectNumber": "nisi deserunt commodo ut consectetur",
+        "reason": "et minim sit mollit",
+        "releaseDate": "magna aliqua incididunt",
+        "source": "do non Duis",
+        "sourceWebsite": "in esse anim"
+      },
+      {
+        "bidBuyEndTime": "do",
+        "biddingAddress": "mollit irure",
+        "biddingAgency": "labore consequat iru",
+        "biddingEndTime": "eiusmod dolore",
+        "biddingPerson": "tempor anim ex",
+        "biddingStatus": -77867741.61781369,
+        "explain": "ut cupidatat ex nisi",
+        "id": 14360030.862089217,
+        "projectName": "exercitation sunt ex tempor dolore",
+        "projectNumber": "qui reprehenderit dolore adipisicing",
+        "reason": "minim",
+        "releaseDate": "ullamco mollit",
+        "source": "sunt",
+        "sourceWebsite": "qui"
+      }
+    ],
+    "searchCount": false,
+    "size": 1,
+    "total": 2
+  }
+}

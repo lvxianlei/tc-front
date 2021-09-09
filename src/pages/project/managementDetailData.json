@@ -246,7 +246,7 @@
         }
     ],
     "paths": {
-        "base": "/tower-market/tower-market/projectInfo",
+        "base": "/tower-market/projectInfo",
         "bidDoc": "/tower-market/bidDoc",
         "bidBase": "/tower-market/bidBase",
         "frameAgreement": "/tower-market/frameAgreement",
