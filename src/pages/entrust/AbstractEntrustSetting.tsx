@@ -16,6 +16,7 @@ import RequestUtil from '../../utils/RequestUtil';
 export interface IAbstractEntrustSettingState extends IAbstractFillableComponentState {
     readonly entrust?: IEntrust;
     readonly attachList?: IAttachVo[];
+    readonly isUpload?: boolean;
 }
 
 export interface IEntrust {
@@ -46,7 +47,8 @@ export interface IAttachVo {
 export default abstract class AbstractEntrustSetting<P extends RouteComponentProps, S extends IAbstractEntrustSettingState> extends AbstractFillableComponent<P, S> {
 
     public state: S = {
-        entrust: undefined
+        entrust: undefined,
+        isUpload: false
     } as S;
 
     /**
@@ -105,8 +107,8 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
      */
     protected getPrimaryOperationButton(): React.ReactNode {
         return <Space direction="horizontal" size="large" > 
-            <Button type="primary" htmlType="submit">保存</Button>
-            <Button type="primary" htmlType="button" onClick={ () => this.onFinishSubmit() }>提交</Button>
+            <Button type="primary" htmlType="submit" disabled={ this.state.isUpload }>保存</Button>
+            <Button type="primary" htmlType="button" disabled={ this.state.isUpload } onClick={ () => this.onFinishSubmit() }>提交</Button>
         </Space>;
     }
 
@@ -169,7 +171,13 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
                         }
                         className={ styles.upload_section }
                         onChange={ (info) => {const { status } = info.file;
+                            this.setState({
+                                isUpload: true
+                            })
                             if (status === 'done') {
+                                this.setState({
+                                    isUpload: false
+                                })
                                 message.success(`${info.file.name} file uploaded successfully.`);
                                 let attachList: IAttachVo[] | undefined = this.state.attachList || [];
                                 const resData: IAttachVo | undefined = info.file.response.data;
