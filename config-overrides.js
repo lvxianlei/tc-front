@@ -82,7 +82,14 @@ module.exports = {
     ,
     devServer: overrideDevServer(
         function (config) {
-            const proxy = {};
+            const proxy = {
+                '/yapi': {
+                    target: 'http://yapi.saikul.com/mock/652/',
+                    pathRewrite: {'^/yapi' : ''},
+                    changeOrigin: true, 
+                    secure: false,
+                  },
+            };
             const envConfig = Dotenv.config({ path: path.join(__dirname, '/env', `.${ process.env.NODE_ENV }.env`) });
             fs.readdirSync(path.join(__dirname, './mock/api/')).forEach((dirname) => {
                 const stats = fs.statSync(path.join(__dirname, './mock/api/', dirname));
