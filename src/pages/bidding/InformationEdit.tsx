@@ -1,17 +1,12 @@
 import React from "react";
 import { useHistory } from "react-router-dom"
-import { Button, TableColumnProps, Row, Spin } from 'antd'
+import { Button, TableColumnProps, Row, Spin, Form } from 'antd'
 import { EditTable, Detail, BaseInfo } from '../common'
 import { baseInfoData } from './biddingHeadData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
 const columns = [
-    {
-        title: '分标编号',
-        dataIndex: 'partBidNumber',
-        key: 'partBidNumber',
-        type: 'text'
-    },
+    { title: '分标编号', dataIndex: 'partBidNumber', key: 'partBidNumber', type: 'text' },
     { title: '货物类别', dataIndex: 'goodsType', key: 'goodsType', type: 'text' },
     { title: '包号', dataIndex: 'packageNumber', key: 'packgeNumber', type: 'text' },
     { title: '数量', dataIndex: 'amount', key: 'amount', type: 'text' },
@@ -30,11 +25,20 @@ const tableColumns: TableColumnProps<Object>[] = [
 ]
 export default function InfomationNew(): JSX.Element {
     const history = useHistory()
+    const [baseInfoForm] = Form.useForm()
+    const [bidForm] = Form.useForm()
+    const [attachVosForm] = Form.useForm()
     const { loading, error, data, run } = useRequest(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get('/tower-market/bidInfo/1')
         resole(data)
     }), {})
     const detailData: any = data
+    const handleSave = async () => {
+        const baseInfoResult = await baseInfoForm.getFieldsValue()
+        const bidResult = await bidForm.getFieldsValue()
+        const attachVosResult = await attachVosForm.getFieldsValue()
+        console.log("informationSubmit:", baseInfoResult, bidResult, attachVosResult)
+    }
     if (loading) {
         return <Spin spinning={loading}>
             <div style={{ width: '100%', height: '300px' }}></div>
@@ -43,15 +47,15 @@ export default function InfomationNew(): JSX.Element {
 
     return <Detail
         operation={[
-            <Button key="save" type="default">保存</Button>,
+            <Button key="save" type="default" onClick={handleSave}>保存</Button>,
             <Button key="new" onClick={() => history.goBack()}>取消</Button>
         ]}
         tabItems={[{
             label: '', key: 1, content: <>
-                <BaseInfo columns={baseInfoData} dataSource={detailData} edit />
-                <EditTable columns={columns} dataSource={detailData.bidPackageInfoDTOList} />
+                <BaseInfo form={baseInfoForm} columns={baseInfoData} dataSource={detailData} edit />
+                <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoDTOList} />
                 <Row>附件</Row>
-                <EditTable columns={[
+                <EditTable form={attachVosForm} columns={[
                     {
                         title: '文件名',
                         dataIndex: 'name',

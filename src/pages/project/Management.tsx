@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Space, Button, TableColumnProps, Modal, Input } from 'antd'
-import { DeleteOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 import ConfirmableButton from '../../components/ConfirmableButton'
 import { Page } from '../common'

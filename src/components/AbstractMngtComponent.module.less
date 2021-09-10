@@ -1,13 +1,36 @@
+@import "../App.module.less";
 .tab {
-    :global(.ant-tabs-nav) {
-        background-color: #fff;
-        margin-bottom: 0;
-        :global(.ant-tabs-tab) {
-            padding: 13px 46px;
-        }
+  :global(.ant-tabs-nav) {
+    background-color: #fff;
+    margin-bottom: 0;
+    :global(.ant-tabs-tab) {
+      padding: 13px 46px;
     }
+  }
 }
 
 .filterCard {
-    border-top: none;
+  border-top: none;
+}
+
+.table{
+    .ant-table-thead > tr > th, .ant-table-tbody > tr > td, .ant-table tfoot > tr > th, .ant-table tfoot > tr > td{
+      padding: 12px;
+  }
+}
+
+.tableRow{
+  padding: 0;
+  height: 28px;
+  line-height: 28px;
+  box-sizing: border-box;
+  border: none;
+  &:nth-child(odd){
+    background-color: #F8F8F8;
+  }
+}
+
+.tableCell{
+  padding: 0 12px !important;
+  border: none;
 }

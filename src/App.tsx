@@ -8,7 +8,7 @@ import { BrowserRouter as Router, Redirect, Route, RouteComponentProps, Switch }
 import AsyncPanel from './AsyncPanel';
 import ApplicationContext from './configuration/ApplicationContext';
 import { ComponentClazz, IRouterItem } from './configuration/IApplicationContext';
-
+import './App.module.less'
 interface IAppState {
   readonly shouldRender: boolean | undefined;
 }

@@ -7,6 +7,7 @@ import { ITabItem } from '../../components/ITabableComponent'
 import { baseInfoData, contractTableColumns, saleOrderTableColumns, productGroupColumns, bidInfoColumns, paths } from './managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
+import "./ManagementEdit.less"
 const tableColumns: TableColumnProps<Object>[] = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
     { title: '分标编号', dataIndex: 'partBidNumber', key: 'partBidNumber', },
@@ -39,9 +40,9 @@ export default function ManagementDetail(): React.ReactNode {
                     </Row>
                     <BaseInfo columns={baseInfoData} dataSource={{}} />
                     <Row style={{ height: '50px', paddingLeft: '10px', lineHeight: '50px' }}>货物清单</Row>
-                    <Table columns={tableColumns} />
+                    <Table size="small" columns={tableColumns} />
                     <Row style={{ height: '50px', paddingLeft: '10px', lineHeight: '50px' }}><span>附件信息</span><Button type="default">上传附件</Button></Row>
-                    <Table columns={[
+                    <Table size="small" columns={[
                         {
                             title: '序号',
                             dataIndex: 'index',
@@ -80,7 +81,7 @@ export default function ManagementDetail(): React.ReactNode {
                     <BaseInfo columns={baseInfoData} dataSource={{}} col={4} />
                     <Row><Button>编辑</Button><Button>返回</Button></Row>
                     <Row>填写记录</Row>
-                    <Table columns={[
+                    <Table size="small" columns={[
                         { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
                         { title: '部门', dataIndex: 'branch' },
                         { title: '填写人', dataIndex: 'createUserName' },
@@ -154,7 +155,7 @@ export default function ManagementDetail(): React.ReactNode {
                     <BaseInfo columns={baseInfoData} dataSource={{}} />
                     <Row style={{ height: '50px', paddingLeft: '10px', lineHeight: '50px' }}>合同物资清单</Row>
                     <Row><Button type="primary">新增一行</Button></Row>
-                    <Table columns={tableColumns} />
+                    <Table size="small" columns={tableColumns} />
                     <Row style={{ height: '50px', paddingLeft: '10px', lineHeight: '50px' }}>系统信息</Row>
                     <BaseInfo columns={[
                         { title: "最后编辑人", dataIndex: 'index' },

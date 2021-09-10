@@ -12,6 +12,7 @@ import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../compon
 import { ITabItem } from '../../components/ITabableComponent'
 import RequestUtil from '../../utils/RequestUtil'
 import { IClient } from '../IClient'
+import '../../components/AbstractMngtComponent.module.less'
 export interface PageProps extends RouteComponentProps, WithTranslation {
     path: string
     columns: TableColumnType<object>[]

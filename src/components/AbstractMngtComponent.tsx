@@ -10,6 +10,7 @@ import { RouteComponentProps } from 'react-router';
 
 import layoutStyles from '../layout/Layout.module.less';
 import styles from './AbstractMngtComponent.module.less';
+import './AbstractMngtComponent.module.less';
 import AbstractTabableComponent from './AbstractTabableComponent';
 import ITabableComponent, { ITabItem } from './ITabableComponent';
 
@@ -119,11 +120,13 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
     protected getTableProps(item: ITabItem): TableProps<object> {
         return {
             rowKey: this.getTableRowKey(),
-            bordered: true,
+            bordered: false,
             pagination: this.state.tablePagination || false,
             onChange: this.onTableChange,
             dataSource: this.getTableDataSource(item),
-            columns: this.getTableColumns(item)
+            columns: this.getTableColumns(item).map(item => ({ ...item, ellipsis: true, onCell: () => ({ className: styles.tableCell }) })),
+            size: "small",
+            onRow: () => ({ className: styles.tableRow })
         };
     }
 
@@ -132,8 +135,8 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      * @param activeKey 
      */
     public handleTabChange = (activeKey: string): void => {
-        this.setState( pre => {
-            if( pre.selectedTabKey === activeKey ){
+        this.setState(pre => {
+            if (pre.selectedTabKey === activeKey) {
                 return pre;
             }
 
@@ -151,10 +154,10 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      */
     public render(): React.ReactNode {
         return (
-            <Tabs type="card" className={ styles.tab } onChange={ this.handleTabChange }>
+            <Tabs type="card" className={styles.tab} onChange={this.handleTabChange}>
                 {
                     this.getTabItems().map<React.ReactNode>((item: ITabItem): React.ReactNode => (
-                        <Tabs.TabPane key={ item.key } tab={ item.label }>{ this.renderTabContent(item) }</Tabs.TabPane>
+                        <Tabs.TabPane key={item.key} tab={item.label}>{this.renderTabContent(item)}</Tabs.TabPane>
                     ))
                 }
             </Tabs>
@@ -169,20 +172,20 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      */
     protected renderTabContent(item: ITabItem): React.ReactNode {
         return (
-            <Space direction="vertical" size="small" className={ layoutStyles.width100 }>
+            <Space direction="vertical" size="small" className={layoutStyles.width100}>
                 {
                     this.getFilterFormItemProps(item).length
-                    ?
-                    <Card className={ styles.filterCard }>
-                        { this.renderFilterContent(item) }
-                    </Card>
-                    :
-                    null
+                        ?
+                        <Card className={styles.filterCard}>
+                            {this.renderFilterContent(item)}
+                        </Card>
+                        :
+                        null
                 }
                 <Card>
-                    <Space className={ layoutStyles.width100 } direction="vertical" size="large">
-                        { this.renderExtraOperationContent(item) }
-                        { this.renderTableContent(item) }
+                    <Space className={layoutStyles.width100} direction="vertical" size="large">
+                        {this.renderExtraOperationContent(item)}
+                        {this.renderTableContent(item)}
                     </Space>
                 </Card>
             </Space>
@@ -197,10 +200,10 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      */
     protected renderFilterContent(item: ITabItem): React.ReactNode {
         return (
-            <Form layout="inline" onFinish={ this.onFilterSubmit }>
+            <Form layout="inline" onFinish={this.onFilterSubmit}>
                 {
                     this.getFilterFormItemProps(item).map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
-                        <Form.Item key={ `${ props.name }_${ index }` } { ...props }/>
+                        <Form.Item key={`${props.name}_${index}`} {...props} />
                     ))
                 }
                 <Form.Item>
@@ -215,7 +218,7 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
 
     protected renderExtraOperationContent(item: ITabItem): React.ReactNode {
         return (
-            <Button type="primary" onClick={ this.onNewClick }>新增</Button>
+            <Button type="primary" onClick={this.onNewClick}>新增</Button>
         );
     }
 
@@ -227,7 +230,7 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      */
     protected renderTableContent(item: ITabItem): React.ReactNode {
         return (
-            <Table { ...this.getTableProps(item)}  scroll={{ x: 1200 }}/>
+            <Table {...this.getTableProps(item)} className={styles.table} scroll={{ x: 1200 }} />
         );
     }
 

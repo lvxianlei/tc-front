@@ -78,13 +78,13 @@ export default function InformationDetail(): React.ReactNode {
                         },
                         {
                             title: '',
-                            render: () => <Table rowKey={(record: any) => `table2_${record.id}`} columns={tableColumns} dataSource={detailData.bidPackageInfoDTOList} />
+                            render: () => <Table size="small" rowKey={(record: any) => `table2_${record.id}`} columns={tableColumns} dataSource={detailData.bidPackageInfoDTOList} />
                         },
                         {
                             title: '附件',
                             render: () => (<>
                                 <Row><Button>上传附件</Button></Row>
-                                <Table rowKey={(record: any) => `information_${record.id}`} columns={[
+                                <Table size="small" rowKey={(record: any) => `information_${record.id}`} columns={[
                                     {
                                         title: '序号',
                                         dataIndex: 'index',

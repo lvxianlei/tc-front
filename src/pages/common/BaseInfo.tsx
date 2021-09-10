@@ -1,6 +1,7 @@
 import React from "react"
-import { Descriptions, Form, Input, FormInstance } from "antd"
-
+import { Descriptions, Form, FormInstance } from "antd"
+import { FormItemType } from '../common'
+import styles from './BaseInfo.module.less'
 export interface BaseInfoItemProps {
     name: string
     label: string
@@ -19,25 +20,23 @@ interface BaseInfoProps {
     columns: BaseInfoColumnsProps[]
     edit?: boolean
     col?: number
-    onSave?: (form: FormInstance<any>) => void
+    form?: FormInstance<any>
 }
 
-export default function BaseInfo({ dataSource, columns, onSave, edit, col = 2 }: BaseInfoProps): JSX.Element {
-    const [form] = Form.useForm()
-    onSave && onSave(form)
+export default function BaseInfo({ dataSource, columns, form, edit, col = 4 }: BaseInfoProps): JSX.Element {
     if (edit) {
         return <Form form={form} initialValues={dataSource} >
-            <Descriptions bordered column={col}>
+            <Descriptions bordered column={col} size="small" className={styles.baseInfo}>
                 {columns.map((item: any, index: number) => <Descriptions.Item contentStyle={{ width: `${100 / (col * 2)}%` }} key={`desc_${index}`} label={item.title}>
                     <Form.Item name={item.dataIndex} label={dataSource[item.title]}>
-                        <Input />
+                        <FormItemType type={item.type} />
                     </Form.Item>
                 </Descriptions.Item>)}
             </Descriptions>
         </Form>
     }
 
-    return <Descriptions bordered column={col}>
+    return <Descriptions bordered column={col} size="small" className={styles.baseInfo} >
         {columns.map((item: any, index: number) => <Descriptions.Item contentStyle={{ width: `${100 / (col * 2)}%` }} key={`desc_${index}`} label={item.title}>{dataSource[item.dataIndex] || ''}</Descriptions.Item>)}
     </Descriptions>
 }
