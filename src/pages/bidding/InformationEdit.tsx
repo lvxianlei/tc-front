@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom"
 import { Button, TableColumnProps, Row, Spin, Form } from 'antd'
-import { EditTable, Detail, BaseInfo } from '../common'
+import { EditTable, Detail, BaseInfo, DetailContent } from '../common'
 import { baseInfoData } from './biddingHeadData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
@@ -51,7 +51,7 @@ export default function InfomationNew(): JSX.Element {
             <Button key="new" onClick={() => history.goBack()}>取消</Button>
         ]}
         tabItems={[{
-            label: '', key: 1, content: <>
+            label: '', key: 1, content: <DetailContent>
                 <BaseInfo form={baseInfoForm} columns={baseInfoData} dataSource={detailData} edit />
                 <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoDTOList} />
                 <Row>附件</Row>
@@ -81,6 +81,6 @@ export default function InfomationNew(): JSX.Element {
                         type: 'text'
                     }
                 ]} dataSource={detailData.attachVos} />
-            </>
+            </DetailContent>
         }]} />
 }

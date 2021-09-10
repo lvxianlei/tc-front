@@ -13,7 +13,7 @@
             "module": "./layout/tc/TCNavigationPanel",
             "props": {
                 "width": 250, // 导航面板宽度
-                "theme": "dark",
+                "theme": "#F8F8F8",
                 "menu": [
                     { // 菜单项配置
                         "label": "客户管理",

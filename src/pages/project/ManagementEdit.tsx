@@ -1,10 +1,9 @@
 import React from "react";
 import { Row, Button, TableColumnProps, Form } from "antd";
-import { EditTable } from "../common";
+import { EditTable, DetailContent } from "../common";
 import { useHistory, useParams } from "react-router-dom";
 import { Detail, BaseInfo } from "../common";
 import { baseInfoData } from "./managementDetailData.json";
-import "./ManagementEdit.less"
 const tableColumns: TableColumnProps<Object>[] = [
   { title: "分标编号", dataIndex: "partBidNumber", key: "partBidNumber" },
   { title: "货物类别", dataIndex: "goodsType", key: "goodsType" },
@@ -35,7 +34,7 @@ export default function ManagementEdit(): JSX.Element {
           label: "",
           key: 1,
           content: (
-            <>
+            <DetailContent>
               <BaseInfo
                 form={baseInfoForm}
                 columns={baseInfoData}
@@ -87,9 +86,9 @@ export default function ManagementEdit(): JSX.Element {
                 ]}
                 dataSource={[]}
               />
-            </>
-          ),
-        },
+            </DetailContent>
+          )
+        }
       ]}
     />
   );

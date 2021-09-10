@@ -69,7 +69,7 @@ export default function InformationDetail(): React.ReactNode {
             ]}
             tabItems={[
                 {
-                    label: '概况信息',
+                    label: '',
                     key: 1,
                     content: SummaryRenderUtil.renderSections([
                         {

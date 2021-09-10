@@ -99,7 +99,7 @@ export default abstract class AbstractFrame<
     /**
      * @description Renders abstract frame
      * @returns render 
-     */
+     */ 
     public render(): React.ReactNode {
         return (
             <Layout className={ layoutStyles.height100 }>
