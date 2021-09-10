@@ -27,12 +27,14 @@ module.exports = {
         "task_notice_del",
         "task_notice_edit_detail",
         "task_notice_audit_detail",
+        "contract",
         "contract_add",
         "contract_update",
         "payment_record_add",
         "sale_order_add",
         "sale_order_update",
         "sale_order_detail",
+        "sale_order_section",
         "contract_del",
         "contract_detail",
         "attach",
@@ -78,6 +80,26 @@ module.exports = {
 
         "approvalm",
         "approvalm_detail",
-        "approvalm_edit"
+        "approvalm_edit",
+
+        "approval_section",
+        "approval_task",
+
+        "system_section",
+        "system_users",
+        "system_dxnry",
+        "system_material_type",
+        "system_material",
+
+        "auth_section",
+        "auth_roles",
+
+        "outsource_section",
+        "outsource_entrust",
+        "outsource_towershape",
+
+        "product_section",
+        "product_towershape",
+
     ]
 }
