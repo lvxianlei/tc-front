@@ -171,6 +171,7 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
                         }
                         className={ styles.upload_section }
                         onChange={ (info) => {const { status } = info.file;
+                            console.log(status)
                             this.setState({
                                 isUpload: true
                             })
@@ -194,7 +195,12 @@ export default abstract class AbstractEntrustSetting<P extends RouteComponentPro
                                 })
                             } else if (status === 'error') {
                                 message.error(`${info.file.name} file upload failed.`);
-                            }} }
+                            } else if(status === 'removed') {
+                                this.setState({
+                                    isUpload: false
+                                })
+                            }
+                        } }
                         onRemove={ (file) => {
                             this.deleteAttach(file)
                         } }
