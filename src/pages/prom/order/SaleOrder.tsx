@@ -21,7 +21,7 @@ export interface IPromContractState extends IAbstractMngtComponentState {
     readonly signCustomerName?: string;
 }
 
-interface ITableDataItem {
+export interface ITableDataItem {
     readonly id: number;
     readonly saleOrderNumber: string;
     readonly internalNumber: string;

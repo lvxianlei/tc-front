@@ -32,7 +32,7 @@
                         "label": "营销管理",
                         "icon": "marketing",
                         "path": "/prom",
-                        "authority": "sale_order",
+                        "authority": "sale_order_section",
                         "items": [
                             {
                                 "label": "销售合同管理",
@@ -55,10 +55,12 @@
                         "label": "技术中心",
                         "icon": "technology",
                         "path": "/technology",
+                        "authority": "extraction_material_page",
                         "items": [
                             {
                                 "label": "提料管理",
-                                "path": "/technology/materialExtraction"
+                                "path": "/technology/materialExtraction",
+                                "authority": "extraction_material_page"
                             }
                         ]
                     },
@@ -66,10 +68,12 @@
                         "label": "审批",
                         "icon": "examine",
                         "path": "/approval",
+                        "authocrity": "approval_section",
                         "items": [
                             {
                                 "label": "审批中心",
-                                "path": "/approval/task"
+                                "path": "/approval/task",
+                                "authocrity":"approval_task"
                             }
                         ]
                     },
@@ -77,22 +81,27 @@
                         "label": "系统管理",
                         "icon": "system",
                         "path": "/sys",
+                        "authocrity": "system_section",
                         "items": [
                             {
                                 "label": "用户管理",
-                                "path": "/sys/users"
+                                "path": "/sys/users",
+                                "authocrity": "system_users"
                             },
                             {
                                 "label": "字典管理",
-                                "path": "/sys/dxnry"
+                                "path": "/sys/dxnry",
+                                "authocrity": "system_dxnry"
                             },
                             {
                                 "label": "原材料类型管理",
-                                "path": "/sys/materialType"
+                                "path": "/sys/materialType",
+                                "authocrity": "system_material_type"
                             },
                             {
                                 "label": "原材料管理",
-                                "path": "/sys/material"
+                                "path": "/sys/material",
+                                "authocrity": "system_material"
                             }
                         ]
                     },
@@ -100,10 +109,12 @@
                         "label": "权限管理",
                         "icon": "rules",
                         "path": "/auth",
+                        "authocrity": "auth_section",
                         "items": [
                             {
                                 "label": "角色管理",
-                                "path": "/auth/roles"
+                                "path": "/auth/roles",
+                                "authocrity": "auth_roles"
                             }
                         ]
                     },
@@ -111,14 +122,17 @@
                         "label": "放样外协服务",
                         "icon": "lofting",
                         "path": "/outsource",
+                        "authocrity": "outsource_section",
                         "items": [
                             {
                                 "label": "委托列表",
-                                "path": "/outsource/entrust"
+                                "path": "/outsource/entrust",
+                                "authocrity": "outsource_entrust"
                             },
                             {
                                 "label": "已完成塔型",
-                                "path": "/outsource/towershape"
+                                "path": "/outsource/towershape",
+                                "authocrity": "outsource_towershape"
                             }
                         ]
                     },
@@ -126,10 +140,12 @@
                         "label": "产品管理",
                         "icon": "product",
                         "path": "/product",
+                        "authocrity": "product_section",
                         "items": [
                             {
                                 "label": "塔型管理",
-                                "path": "/product/towershape"
+                                "path": "/product/towershape",
+                                "authocrity": "product_towershape"
                             }
                         ]
                     },

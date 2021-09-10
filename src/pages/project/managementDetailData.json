@@ -95,64 +95,6 @@
             "key": "deliveryPlace"
         }
     ],
-    "contractTableColumns": [
-        {
-            "title": "合同编号",
-            "dataIndex": "contractNumber"
-        },
-        {
-            "title": "内部合同编号",
-            "dataIndex": "internalNumber"
-        },
-        {
-            "title": "合同名称",
-            "dataIndex": "contractName"
-        },
-        {
-            "title": "合同总重(吨)",
-            "dataIndex": "contractTotalWeight"
-        },
-        {
-            "title": "合同金额(元)",
-            "dataIndex": "contractAmount"
-        },
-        {
-            "title": "业主单位",
-            "dataIndex": "customerCompany"
-        },
-        {
-            "title": "合同签订单位",
-            "dataIndex": "signCustomerName"
-        },
-        {
-            "title": "签订日期",
-            "dataIndex": "signContractTime"
-        },
-        {
-            "title": "要求发货日期",
-            "dataIndex": "deliveryTime"
-        },
-        {
-            "title": "有无技术协议",
-            "dataIndex": "isIta"
-        },
-        {
-            "title": "销售业务员",
-            "dataIndex": "salesman"
-        },
-        {
-            "title": "备注",
-            "dataIndex": "description"
-        },
-        {
-            "title": "制单人",
-            "dataIndex": "createUserName"
-        },
-        {
-            "title": "制单时间",
-            "dataIndex": "createTime"
-        }
-    ],
     "saleOrderTableColumns": [
         {
             "title": "订单编号",
