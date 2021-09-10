@@ -35,7 +35,10 @@ export interface IResponseData {
  /**
   * 销售合同管理
   */
-class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IPromContractState> {
+export class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IPromContractState> {
+    
+    requestPath = '/tower-market/contract';
+
     /**
      * @override
      * @description Gets state
@@ -53,7 +56,7 @@ class PromContract extends AbstractMngtComponent<IPromContractWithRouteProps, IP
      * @param filterValues 
      */
     protected async fetchTableData(filterValues: Record<string, any>,pagination: TablePaginationConfig = {}) {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/contract', {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>(this.requestPath, {
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize ||this.state.tablePagination?.pageSize,
