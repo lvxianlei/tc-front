@@ -1,101 +1,19 @@
 import React from "react";
-import {
-  TablePaginationConfig,
-  TableColumnType,
-  Space,
-  FormItemProps,
-  Input,
-} from "antd";
+import { TableColumnType, Space, FormItemProps } from "antd";
 import { withTranslation } from "react-i18next";
 import { Link, withRouter } from "react-router-dom";
-import AbstractMngtComponent from "../../components/AbstractMngtComponent";
 import AuthorityComponent from "../../components/AuthorityComponent";
 import ConfirmableButton from "../../components/ConfirmableButton";
 import { ITabItem } from "../../components/ITabableComponent";
 import RequestUtil from "../../utils/RequestUtil";
 import { IResponseData } from "../common/Page";
-import {
-  IPromContractWithRouteProps,
-  IPromContractState,
-} from "../prom/contract/PromContract";
-import { ITableDataItem } from "../prom/order/SaleOrder";
+import { SaleOrder, ITableDataItem } from "../prom/order/SaleOrder";
 
 /**
  * 项目管理-订单管理
  */
-class SaleOrder extends AbstractMngtComponent<
-  IPromContractWithRouteProps,
-  IPromContractState
-> {
-  /**
-   * @override
-   * @description Gets state
-   * @returns state
-   */
-  protected getState(): IPromContractState {
-    return {
-      ...super.getState(),
-      tableDataSource: [],
-    };
-  }
-
-  /**
-   * @description Fetchs table data
-   * @param filterValues
-   */
-  protected async fetchTableData(
-    filterValues: Record<string, any>,
-    pagination: TablePaginationConfig = {}
-  ) {
-    const resData: IResponseData = await RequestUtil.get<IResponseData>(
-      "/saleOrder",
-      {
-        ...filterValues,
-        current: pagination.current || this.state.tablePagination?.current,
-        size: pagination.pageSize || this.state.tablePagination?.pageSize,
-      }
-    );
-    if (resData?.records?.length == 0 && resData?.current > 1) {
-      this.fetchTableData(
-        {},
-        {
-          current: resData.current - 1,
-          pageSize: 10,
-          total: 0,
-          showSizeChanger: false,
-        }
-      );
-    }
-    this.setState({
-      ...filterValues,
-      tableDataSource: resData.records,
-      tablePagination: {
-        ...this.state.tablePagination,
-        current: resData.current,
-        pageSize: resData.size,
-        total: resData.total,
-      },
-    });
-  }
-
-  /**
-   * @override
-   * @description Components did mount
-   */
-  public async componentDidMount() {
-    super.componentDidMount();
-    this.fetchTableData({});
-  }
-
-  /**
-   * @implements
-   * @description Gets table data source
-   * @param item
-   * @returns table data source
-   */
-  public getTableDataSource(item: ITabItem): object[] {
-    return this.state.tableDataSource;
-  }
+class ManagementOrder extends SaleOrder {
+  requestPath = "/saleOrder";
 
   /**
    * @implements
@@ -228,22 +146,6 @@ class SaleOrder extends AbstractMngtComponent<
 
   /**
    * @implements
-   * @description Determines whether table change on
-   * @param pagination
-   */
-  public onTableChange(pagination: TablePaginationConfig): void {
-    this.fetchTableData({}, pagination);
-  }
-
-  /**
-   * @implements
-   * @description Determines whether filter submit on
-   * @param values
-   */
-  public async onFilterSubmit(values: Record<string, any>) {}
-
-  /**
-   * @implements
    * @description Gets tab items
    * @returns tab items
    */
@@ -251,17 +153,10 @@ class SaleOrder extends AbstractMngtComponent<
     return [
       {
         label: "",
-        key: "tabitem1",
+        key: "",
       },
     ];
   }
-
-  /**
-   * @implements
-   * @description Determines whether tab change on
-   * @param activeKey
-   */
-  public onTabChange(activeKey: string): void {}
 
   /**
    * @implements
@@ -283,4 +178,4 @@ class SaleOrder extends AbstractMngtComponent<
   }
 }
 
-export default withRouter(withTranslation(["translation"])(SaleOrder));
+export default withRouter(withTranslation(["translation"])(ManagementOrder));

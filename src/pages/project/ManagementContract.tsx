@@ -1,5 +1,4 @@
 import {
-  TablePaginationConfig,
   TableColumnType,
   Space,
   Button,
@@ -10,97 +9,18 @@ import React from "react";
 import { withTranslation } from "react-i18next";
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
-import AbstractMngtComponent from "../../components/AbstractMngtComponent";
 import { ITabItem } from "../../components/ITabableComponent";
 import { saleTypeOptions } from "../../configuration/DictionaryOptions";
 import RequestUtil from "../../utils/RequestUtil";
 import { IResponseData } from "../common/Page";
 import { IContract } from "../IContract";
-import {
-  IPromContractWithRouteProps,
-  IPromContractState,
-} from "../prom/contract/PromContract";
+import { PromContract } from "../prom/contract/PromContract";
 
 /**
  * 项目管理-合同
  */
-class ManagementContract extends AbstractMngtComponent<
-  IPromContractWithRouteProps,
-  IPromContractState
-> {
-  /**
-   * @override
-   * @description Gets state
-   * @returns state
-   */
-  protected getState(): IPromContractState {
-    return {
-      ...super.getState(),
-      tableDataSource: [],
-    };
-  }
-
-  /**
-   * @description Fetchs table data
-   * @param filterValues
-   */
-  protected async fetchTableData(
-    filterValues: Record<string, any>,
-    pagination: TablePaginationConfig = {}
-  ) {
-    const resData: IResponseData = await RequestUtil.get<IResponseData>(
-      "/contract",
-      {
-        ...filterValues,
-        current: pagination.current || this.state.tablePagination?.current,
-        size: pagination.pageSize || this.state.tablePagination?.pageSize,
-        saleType:
-          this.state.selectedTabKey === "item_0"
-            ? ""
-            : this.state.selectedTabKey,
-      }
-    );
-    if (resData?.records?.length == 0 && resData?.current > 1) {
-      this.fetchTableData(
-        {},
-        {
-          current: resData.current - 1,
-          pageSize: 10,
-          total: 0,
-          showSizeChanger: false,
-        }
-      );
-    }
-    this.setState({
-      ...filterValues,
-      tableDataSource: resData.records,
-      tablePagination: {
-        ...this.state.tablePagination,
-        current: resData.current,
-        pageSize: resData.size,
-        total: resData.total,
-      },
-    });
-  }
-
-  /**
-   * @override
-   * @description Components did mount
-   */
-  public async componentDidMount() {
-    super.componentDidMount();
-    this.fetchTableData({});
-  }
-
-  /**
-   * @implements
-   * @description Gets table data source
-   * @param item
-   * @returns table data source
-   */
-  public getTableDataSource(item: ITabItem): object[] {
-    return this.state.tableDataSource;
-  }
+class ManagementContract extends PromContract {
+  requestPath = "/contract";
 
   /**
    * @implements
@@ -192,7 +112,7 @@ class ManagementContract extends AbstractMngtComponent<
           <Space direction="horizontal" size="small">
             <Button
               type="link"
-              href={`/prom/contract/setting/${(record as IContract).id}`}
+              href={`/contract/setting/${(record as IContract).id}`}
               disabled={(record as IContract).status === 1}
             >
               编辑
@@ -234,22 +154,6 @@ class ManagementContract extends AbstractMngtComponent<
 
   /**
    * @implements
-   * @description Determines whether table change on
-   * @param pagination
-   */
-  public onTableChange(pagination: TablePaginationConfig): void {
-    this.fetchTableData({}, pagination);
-  }
-
-  /**
-   * @implements
-   * @description Determines whether filter submit on
-   * @param values
-   */
-  public async onFilterSubmit(values: Record<string, any>) {}
-
-  /**
-   * @implements
    * @description Gets tab items
    * @returns tab items
    */
@@ -270,13 +174,6 @@ class ManagementContract extends AbstractMngtComponent<
     }
     return tab;
   }
-
-  /**
-   * @implements
-   * @description Determines whether tab change on
-   * @param activeKey
-   */
-  public onTabChange(activeKey: string): void {}
 
   /**
    * @implements
