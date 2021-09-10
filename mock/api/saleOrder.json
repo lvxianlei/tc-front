@@ -1,0 +1,72 @@
+{
+  "code": 200,
+  "data": {
+    "current": 1,
+    "hitCount": false,
+    "pages": 3,
+    "records": [
+      {
+        "contractId": 38309437.61350563,
+        "createTime": {},
+        "createUser": 19911154.444504753,
+        "createUserName": "laboris",
+        "customerCompany": "consequat",
+        "deliveryTime": "sunt culpa in incididunt ullamco",
+        "id": -74875939.61747532,
+        "internalNumber": "eiusmod sed aute eu",
+        "orderDeliveryTime": "o",
+        "orderProjectName": "sint ut",
+        "orderWeight": -7167230.2767710835,
+        "saleOrderNumber": "incididunt esse aliqua",
+        "signContractTime": "Excepteur commodo cul",
+        "signCustomerName": "Excepteur fugiat",
+        "taskStatus": 8756464.710903078,
+        "taxAmount": -6267687.007712871,
+        "taxPrice": -66852008.7282479
+      },
+      {
+        "contractId": -68159769.7010166,
+        "createTime": {},
+        "createUser": 62373483.80021578,
+        "createUserName": "cupidatat do",
+        "customerCompany": "sit enim",
+        "deliveryTime": "labore sit Ut in officia",
+        "id": 62558540.72920859,
+        "internalNumber": "ut quis consequat cupidatat",
+        "orderDeliveryTime": "proident reprehenderit Ut et incididunt",
+        "orderProjectName": "non ipsum occaecat dolore culpa",
+        "orderWeight": -47731888.81292354,
+        "saleOrderNumber": "nisi Lorem non reprehenderit occaecat",
+        "signContractTime": "enim in",
+        "signCustomerName": "mollit",
+        "taskStatus": 7742682.883164108,
+        "taxAmount": -56813456.70594849,
+        "taxPrice": -26104909.733957008
+      },
+      {
+        "contractId": 71438056.90642142,
+        "createTime": {},
+        "createUser": 67740885.06130487,
+        "createUserName": "laborum nostrud ut",
+        "customerCompany": "velit sint tempor reprehenderit dolor",
+        "deliveryTime": "quis labore",
+        "id": 40334493.51742789,
+        "internalNumber": "incididunt elit in id enim",
+        "orderDeliveryTime": "culpa magna",
+        "orderProjectName": "cupidatat",
+        "orderWeight": -85767414.24681762,
+        "saleOrderNumber": "ad non",
+        "signContractTime": "id aute magna sint",
+        "signCustomerName": "sunt",
+        "taskStatus": -67121524.45705186,
+        "taxAmount": 18221652.259533986,
+        "taxPrice": -14068230.243559748
+      }
+    ],
+    "searchCount": false,
+    "size": 3,
+    "total": 3
+  },
+  "msg": "consequat laboris consectetur ut",
+  "success": true
+}

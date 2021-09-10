@@ -4,10 +4,11 @@ import { useHistory, useParams } from 'react-router-dom'
 import { Detail, BaseInfo } from '../common'
 import SummaryRenderUtil from '../../utils/SummaryRenderUtil'
 import { ITabItem } from '../../components/ITabableComponent'
-import { baseInfoData, saleOrderTableColumns, productGroupColumns, bidInfoColumns, paths } from './managementDetailData.json'
+import { baseInfoData, productGroupColumns, bidInfoColumns, paths } from './managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import ManagementContract from './ManagementContract'
+import ManagementOrder from './ManagementOrder'
 const tableColumns: TableColumnProps<Object>[] = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
     { title: '分标编号', dataIndex: 'partBidNumber', key: 'partBidNumber', },
@@ -174,10 +175,7 @@ export default function ManagementDetail(): React.ReactNode {
             {
                 label: '订单',
                 key: 2,
-                content: <>
-                    <Row><Button type="primary">新增订单</Button></Row>
-                    <Table columns={saleOrderTableColumns} />
-                </>
+                content: <ManagementOrder />
             }
         ],
         tab_productGroup: [
