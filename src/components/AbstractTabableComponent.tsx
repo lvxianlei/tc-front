@@ -28,8 +28,13 @@ export default abstract class AbstractTabableComponent<P extends RouteComponentP
      * @returns tabs props 
      */
     protected getTabsProps(): TabsProps {
+        const tabItems = this.getTabItems();
+        const dontNeedHeader = tabItems.every( tab => !tab.label )
         return {
-            className: styles.tabs
+            className: styles.tabs,
+            tabBarStyle: {
+                display: dontNeedHeader ? "none" : 'block'
+            }
         };
     }
 

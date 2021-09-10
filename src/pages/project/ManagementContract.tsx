@@ -1,0 +1,301 @@
+import {
+  TablePaginationConfig,
+  TableColumnType,
+  Space,
+  Button,
+  Popconfirm,
+  FormItemProps,
+} from "antd";
+import React from "react";
+import { withTranslation } from "react-i18next";
+import { withRouter } from "react-router";
+import { Link } from "react-router-dom";
+import AbstractMngtComponent from "../../components/AbstractMngtComponent";
+import { ITabItem } from "../../components/ITabableComponent";
+import { saleTypeOptions } from "../../configuration/DictionaryOptions";
+import RequestUtil from "../../utils/RequestUtil";
+import { IResponseData } from "../common/Page";
+import { IContract } from "../IContract";
+import {
+  IPromContractWithRouteProps,
+  IPromContractState,
+} from "../prom/contract/PromContract";
+
+/**
+ * 项目管理-合同
+ */
+class ManagementContract extends AbstractMngtComponent<
+  IPromContractWithRouteProps,
+  IPromContractState
+> {
+  /**
+   * @override
+   * @description Gets state
+   * @returns state
+   */
+  protected getState(): IPromContractState {
+    return {
+      ...super.getState(),
+      tableDataSource: [],
+    };
+  }
+
+  /**
+   * @description Fetchs table data
+   * @param filterValues
+   */
+  protected async fetchTableData(
+    filterValues: Record<string, any>,
+    pagination: TablePaginationConfig = {}
+  ) {
+    const resData: IResponseData = await RequestUtil.get<IResponseData>(
+      "/contract",
+      {
+        ...filterValues,
+        current: pagination.current || this.state.tablePagination?.current,
+        size: pagination.pageSize || this.state.tablePagination?.pageSize,
+        saleType:
+          this.state.selectedTabKey === "item_0"
+            ? ""
+            : this.state.selectedTabKey,
+      }
+    );
+    if (resData?.records?.length == 0 && resData?.current > 1) {
+      this.fetchTableData(
+        {},
+        {
+          current: resData.current - 1,
+          pageSize: 10,
+          total: 0,
+          showSizeChanger: false,
+        }
+      );
+    }
+    this.setState({
+      ...filterValues,
+      tableDataSource: resData.records,
+      tablePagination: {
+        ...this.state.tablePagination,
+        current: resData.current,
+        pageSize: resData.size,
+        total: resData.total,
+      },
+    });
+  }
+
+  /**
+   * @override
+   * @description Components did mount
+   */
+  public async componentDidMount() {
+    super.componentDidMount();
+    this.fetchTableData({});
+  }
+
+  /**
+   * @implements
+   * @description Gets table data source
+   * @param item
+   * @returns table data source
+   */
+  public getTableDataSource(item: ITabItem): object[] {
+    return this.state.tableDataSource;
+  }
+
+  /**
+   * @implements
+   * @description Gets table columns
+   * @param item
+   * @returns table columns
+   */
+  public getTableColumns(item: ITabItem): TableColumnType<object>[] {
+    return [
+      {
+        key: "contractNumber",
+        title: "合同编号",
+        dataIndex: "contractNumber",
+        render: (_: undefined, record: object): React.ReactNode => {
+          return (
+            <Link to={`/contract/detail/${(record as IContract).id}`}>
+              {(record as IContract).contractNumber}
+            </Link>
+          );
+        },
+      },
+      {
+        key: "internalNumber",
+        title: "内部合同编号",
+        dataIndex: "internalNumber",
+        render: (_: undefined, record: object): React.ReactNode => {
+          return (
+            <Link to={`/contract/detail/${(record as IContract).id}`}>
+              {(record as IContract).internalNumber}
+            </Link>
+          );
+        },
+      },
+      {
+        key: "contractName",
+        title: "合同名称",
+        dataIndex: "contractName",
+      },
+      {
+        key: "contractTotalWeight",
+        title: "合同总重(吨)",
+        dataIndex: "contractTotalWeight",
+      },
+      {
+        title: "合同金额(元)",
+        dataIndex: "contractAmount",
+      },
+      {
+        title: "业主单位",
+        dataIndex: "customerCompany",
+      },
+      {
+        title: "合同签订单位",
+        dataIndex: "signCustomerName",
+      },
+      {
+        title: "签订日期",
+        dataIndex: "signContractTime",
+      },
+      {
+        title: "要求发货日期",
+        dataIndex: "deliveryTime",
+      },
+      {
+        title: "有无技术协议",
+        dataIndex: "isIta",
+      },
+      {
+        title: "销售业务员",
+        dataIndex: "salesman",
+      },
+      {
+        title: "备注",
+        dataIndex: "description",
+      },
+      {
+        title: "制单人",
+        dataIndex: "createUserName",
+      },
+      {
+        title: "制单时间",
+        dataIndex: "createTime",
+      },
+      {
+        key: "operation",
+        title: "操作",
+        dataIndex: "operation",
+        render: (_: undefined, record: object): React.ReactNode => (
+          <Space direction="horizontal" size="small">
+            <Button
+              type="link"
+              href={`/prom/contract/setting/${(record as IContract).id}`}
+              disabled={(record as IContract).status === 1}
+            >
+              编辑
+            </Button>
+            <Popconfirm
+              title="要删除该客户吗？"
+              placement="topRight"
+              okText="确认"
+              cancelText="取消"
+              onConfirm={async () => {
+                let id = (record as IContract).id;
+                const resData: IResponseData = await RequestUtil.delete(
+                  `/contract?id=${id}`
+                );
+                this.fetchTableData({});
+              }}
+              disabled={(record as IContract).status === 1}
+            >
+              <Button type="link" disabled={(record as IContract).status === 1}>
+                删除
+              </Button>
+            </Popconfirm>
+            <Button
+              type="link"
+              href={`/contract/paymentRecord/${(record as IContract).id}/${
+                (record as IContract).projectName
+              }/${(record as IContract).signCustomerId}/${
+                (record as IContract).signCustomerName
+              }`}
+              disabled={(record as IContract).status === 0}
+            >
+              添加回款记录
+            </Button>
+          </Space>
+        ),
+      },
+    ];
+  }
+
+  /**
+   * @implements
+   * @description Determines whether table change on
+   * @param pagination
+   */
+  public onTableChange(pagination: TablePaginationConfig): void {
+    this.fetchTableData({}, pagination);
+  }
+
+  /**
+   * @implements
+   * @description Determines whether filter submit on
+   * @param values
+   */
+  public async onFilterSubmit(values: Record<string, any>) {}
+
+  /**
+   * @implements
+   * @description Gets tab items
+   * @returns tab items
+   */
+  public getTabItems(): ITabItem[] {
+    let tab = [
+      {
+        label: "",
+        key: "item_0",
+      },
+    ];
+    if (saleTypeOptions) {
+      saleTypeOptions.map((item) => {
+        tab.push({
+          key: item.id,
+          label: item.name,
+        });
+      });
+    }
+    return tab;
+  }
+
+  /**
+   * @implements
+   * @description Determines whether tab change on
+   * @param activeKey
+   */
+  public onTabChange(activeKey: string): void {}
+
+  /**
+   * @implements
+   * @description Determines whether new click on
+   * @param event
+   */
+  public onNewClick(event: React.MouseEvent<HTMLButtonElement>): void {
+    this.props.history.push("/contract/new");
+  }
+
+  /**
+   * @implements
+   * @description Renders filter components
+   * @param item
+   * @returns filter components
+   */
+  public getFilterFormItemProps(item: ITabItem): FormItemProps[] {
+    return [];
+  }
+}
+
+export default withRouter(withTranslation(["translation"])(ManagementContract));

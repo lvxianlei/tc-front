@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Button, Card, Form, FormItemProps, Space, Table, Tabs } from 'antd';
+import { Button, Card, Form, FormItemProps, Space, Table, Tabs, TabsProps } from 'antd';
 import { ColumnType, TablePaginationConfig, TableProps } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
@@ -146,12 +146,27 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
     }
 
     /**
+     * @protected
+     * @description Gets tabs props
+     * @returns tabs props 
+     */
+    protected getTabsProps(): TabsProps {
+        const tabItems = this.getTabItems();
+        const dontNeedHeader = tabItems.every( tab => !tab.label )
+        return {
+            tabBarStyle: {
+                display: dontNeedHeader ? "none" : 'block'
+            }
+        };
+    }
+
+    /**
      * @description Renders AbstractMngtComponent
      * @returns render 
      */
     public render(): React.ReactNode {
         return (
-            <Tabs type="card" className={ styles.tab } onChange={ this.handleTabChange }>
+            <Tabs {...this.getTabsProps()} type="card" className={ styles.tab } onChange={ this.handleTabChange }>
                 {
                     this.getTabItems().map<React.ReactNode>((item: ITabItem): React.ReactNode => (
                         <Tabs.TabPane key={ item.key } tab={ item.label }>{ this.renderTabContent(item) }</Tabs.TabPane>
