@@ -411,11 +411,11 @@ enum EntrustStatus {
                  <Col span={17} >
                     <Card title='委托详情' id='card1' className={ entrustStyles.card_part_left }>
                         <Steps current={current} className={ entrustStyles.card_steps } >
-                            <Step title="工程委托" description={ entrust?.createTime?.split(' ')[0] }/>
-                            <Step title="委托确认" description={ entrust?.confirmationTime?.split(' ')[0] }/>
-                            <Step title="委托拆分" description={ entrust?.splitTime?.split(' ')[0] }/>
-                            <Step title="立项成功" description={ entrust?.projectApprovalTime?.split(' ')[0] }/>
-                            <Step title="委托完成" description={ entrust?.endTime?.split(' ')[0] }/>
+                            <Step title="工程委托" description={ entrust?.createTime }/>
+                            <Step title="委托确认" description={ entrust?.confirmationTime }/>
+                            <Step title="委托拆分" description={ entrust?.splitTime }/>
+                            <Step title="立项成功" description={ entrust?.projectApprovalTime }/>
+                            <Step title="委托完成" description={ entrust?.endTime }/>
                         </Steps>
                
                         <Form { ...this.getFormProps() } ref={ this.formRef }>

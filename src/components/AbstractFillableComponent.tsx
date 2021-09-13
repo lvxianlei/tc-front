@@ -219,9 +219,9 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
                         }
                         <div className={ styles.btnOperationContainer }>
                             <Space direction="horizontal" size="large">
-                                { this.cancelOperationButton() }
-                                { this.renderExtraOperationArea() }
                                 { this.getPrimaryOperationButton() }
+                                { this.renderExtraOperationArea() }
+                                { this.cancelOperationButton() }
                             </Space>
                         </div>
                     </Space>
