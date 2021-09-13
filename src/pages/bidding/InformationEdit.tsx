@@ -45,42 +45,42 @@ export default function InfomationNew(): JSX.Element {
         </Spin>
     }
 
-    return <Detail
+    return <DetailContent
         operation={[
-            <Button key="save" type="default" onClick={handleSave}>保存</Button>,
-            <Button key="new" onClick={() => history.goBack()}>取消</Button>
+            <Button key="save" type="primary" onClick={handleSave}>保存</Button>,
+            <Button key="new" type="primary" onClick={() => history.goBack()}>取消</Button>
         ]}
-        tabItems={[{
-            label: '', key: 1, content: <DetailContent>
-                <BaseInfo form={baseInfoForm} columns={baseInfoData} dataSource={detailData} edit />
-                <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoDTOList} />
-                <Row>附件</Row>
-                <EditTable form={attachVosForm} columns={[
-                    {
-                        title: '文件名',
-                        dataIndex: 'name',
-                        key: 'name',
-                        type: 'text'
-                    },
-                    {
-                        title: '大小',
-                        dataIndex: 'fileSize',
-                        key: 'fileSize',
-                        type: 'text'
-                    },
-                    {
-                        title: '上传人',
-                        dataIndex: 'userName',
-                        key: 'userName',
-                        type: 'text'
-                    },
-                    {
-                        title: '上传时间',
-                        dataIndex: 'fileUploadTime',
-                        key: 'fileUploadTime',
-                        type: 'text'
-                    }
-                ]} dataSource={detailData.attachVos} />
-            </DetailContent>
-        }]} />
+    >
+        <DetailContent>
+            <BaseInfo form={baseInfoForm} columns={baseInfoData} dataSource={detailData} edit />
+            <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoDTOList} />
+            <Row>附件</Row>
+            <EditTable form={attachVosForm} columns={[
+                {
+                    title: '文件名',
+                    dataIndex: 'name',
+                    key: 'name',
+                    type: 'text'
+                },
+                {
+                    title: '大小',
+                    dataIndex: 'fileSize',
+                    key: 'fileSize',
+                    type: 'text'
+                },
+                {
+                    title: '上传人',
+                    dataIndex: 'userName',
+                    key: 'userName',
+                    type: 'text'
+                },
+                {
+                    title: '上传时间',
+                    dataIndex: 'fileUploadTime',
+                    key: 'fileUploadTime',
+                    type: 'text'
+                }
+            ]} dataSource={detailData.attachVos} />
+        </DetailContent>
+    </DetailContent>
 }

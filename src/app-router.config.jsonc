@@ -354,10 +354,24 @@
       "exact": true,
       "authority": "project_detail"
     },
-    { // 项目管理详情
+    { // 项目管理子项详情
       "name": "项目管理子项详情",
       "path": "/project/management/detail/:tab/:id",
       "module": "./pages/project/ManagementDetail",
+      "exact": true,
+      "authority": "project_detail"
+    },
+    { // 项目管理子项详情
+      "name": "项目管理子项详情编辑",
+      "path": "/project/management/detail/edit/base/:id",
+      "module": "./pages/project/ManagementDetailEdit/BaseInfoEdit",
+      "exact": true,
+      "authority": "project_detail"
+    },
+    { // 项目管理子项详情
+      "name": "项目管理子项详情编辑",
+      "path": "/project/management/detail/edit/bidDoc/:id",
+      "module": "./pages/project/ManagementDetailEdit/BidDocEdit",
       "exact": true,
       "authority": "project_detail"
     },
