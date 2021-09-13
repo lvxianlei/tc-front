@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Input, InputNumber, Select, DatePicker, Modal, Table, Button } from 'antd'
+import { PlusOutlined } from "@ant-design/icons"
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import moment from 'moment'
@@ -52,7 +53,7 @@ const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
         <Modal title={`选择${data.title}`} destroyOnClose visible={visible} onCancel={() => setVisible(false)}>
             <Table size="small" loading={loading} columns={data.columns} dataSource={popTableData?.records} />
         </Modal>
-        <Input {...props} readOnly addonAfter={<Button type="link" onClick={() => setVisible(true)}>+</Button>} />
+        <Input {...props} readOnly addonAfter={<PlusOutlined onClick={() => setVisible(true)} />} />
     </>
 }
 interface SelfSelectProps {

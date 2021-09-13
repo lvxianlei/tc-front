@@ -1,16 +1,15 @@
 import React from 'react'
-import { Button, Table, TableColumnProps, Row, Col, Tabs, Radio } from 'antd'
+import { Button, Table, Row, Col, Tabs, Radio } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { BaseInfo, Detail, DetailContent } from '../common'
+import { BaseInfo, DetailContent, CommonTable } from '../common'
 import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
-import SummaryRenderUtil from '../../utils/SummaryRenderUtil'
 import { baseInfoData, productGroupColumns, bidInfoColumns, paths } from './managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import ManagementContract from './ManagementContract'
 import ManagementOrder from './ManagementOrder'
 import styles from "./ManagementDetail.module.less"
-const tableColumns: TableColumnProps<Object>[] = [
+const tableColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
     { title: '分标编号', dataIndex: 'partBidNumber', key: 'partBidNumber', },
     { title: '货物类别', dataIndex: 'goodsType', key: 'goodsType' },
@@ -37,9 +36,9 @@ export default function ManagementDetail(): React.ReactNode {
         ]}>
             <BaseInfo columns={baseInfoData} dataSource={{}} />
             <Row style={{ height: '50px', paddingLeft: '10px', lineHeight: '50px' }}>货物清单</Row>
-            <Table size="small" columns={tableColumns} />
+            <CommonTable columns={tableColumns} dataSource={[]} />
             <Row style={{ height: '50px', paddingLeft: '10px', lineHeight: '50px' }}><span>附件信息</span><Button type="default">上传附件</Button></Row>
-            <Table size="small" columns={[
+            <CommonTable columns={[
                 {
                     title: '序号',
                     dataIndex: 'index',
@@ -66,7 +65,7 @@ export default function ManagementDetail(): React.ReactNode {
                     dataIndex: 'fileUploadTime',
                     key: 'fileUploadTime',
                 }
-            ]} />
+            ]} dataSource={[]} />
         </DetailContent>,
         tab_bidDoc: <DetailContent
             operation={[
@@ -76,7 +75,7 @@ export default function ManagementDetail(): React.ReactNode {
             <Row>标书制作记录表</Row>
             <BaseInfo columns={baseInfoData} dataSource={{}} col={4} />
             <Row>填写记录</Row>
-            <Table size="small" columns={[
+            <CommonTable columns={[
                 { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
                 { title: '部门', dataIndex: 'branch' },
                 { title: '填写人', dataIndex: 'createUserName' },
@@ -112,11 +111,11 @@ export default function ManagementDetail(): React.ReactNode {
             <Tabs type="editable-card" style={{ marginTop: '10px' }}>
                 <Tabs.TabPane tab="第二轮" key="b">
                     <Row><Button>新增一行</Button><Button>导入文件</Button></Row>
-                    <Table columns={bidInfoColumns} />
+                    <CommonTable columns={bidInfoColumns} />
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="第一轮" key="a">
                     <Row><Button>新增一行</Button><Button>导入文件</Button></Row>
-                    <Table columns={bidInfoColumns} />
+                    <CommonTable columns={bidInfoColumns} />
                 </Tabs.TabPane>
             </Tabs>
         </DetailContent>,
@@ -128,7 +127,7 @@ export default function ManagementDetail(): React.ReactNode {
             <BaseInfo columns={baseInfoData} dataSource={{}} />
             <Row style={{ height: '50px', paddingLeft: '10px', lineHeight: '50px' }}>合同物资清单</Row>
             <Row><Button type="primary">新增一行</Button></Row>
-            <Table size="small" columns={tableColumns} />
+            <CommonTable columns={tableColumns} />
             <Row style={{ height: '50px', paddingLeft: '10px', lineHeight: '50px' }}>系统信息</Row>
             <BaseInfo columns={[
                 { title: "最后编辑人", dataIndex: 'index' },
@@ -150,7 +149,7 @@ export default function ManagementDetail(): React.ReactNode {
         tab_productGroup: <DetailContent>
             <section>
                 <Row><Button type="primary" onClick={() => history.push(`/project/management/detail/edit/productGroup/${params.id}`)}>新增</Button></Row>
-                <Table columns={tableColumns} />
+                <CommonTable columns={tableColumns} />
             </section>
             <section>
                 <Row><Radio.Group
@@ -159,7 +158,7 @@ export default function ManagementDetail(): React.ReactNode {
                         { label: '统计', value: 'Pear' },]}
                     optionType="button"
                 /></Row>
-                <Table columns={productGroupColumns} />
+                <CommonTable columns={productGroupColumns} />
             </section>
         </DetailContent>,
         tab_salesPlan: <DetailContent>
@@ -172,7 +171,7 @@ export default function ManagementDetail(): React.ReactNode {
                 </Radio.Group>
             </Row>
             <Row><Button type="primary" onClick={() => history.push(`/project/management/detail/edit/salesPlan/${params.id}`)}>新增</Button></Row>
-            <Table columns={tableColumns} />
+            <CommonTable columns={tableColumns} />
         </DetailContent>
     }
 
