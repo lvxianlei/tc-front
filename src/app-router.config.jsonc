@@ -221,6 +221,20 @@
       "exact": true,
       "authocrity": "outsource_entrust"
     },
+    { // 委托新增
+     "name": "委托新增",
+     "path": "/outsource/entrust/new",
+     "module": "./pages/entrust/EntrustNew",
+     "exact": true,
+     "authocrity": "outsource_entrust"
+    },
+    { // 委托编辑
+     "name": "委托列表",
+     "path": "/outsource/entrust/sstting/:id",
+     "module": "./pages/entrust/EntrustSetting",
+     "exact": true,
+     "authocrity": "outsource_entrust"
+    },
     { // 委托详情
       "name": "委托详情",
       "path": "/outsource/entrust/detail/:id",
