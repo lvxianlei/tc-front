@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Spin, Form, Button, Modal, Row, Table, TableColumnProps, Select, Input } from 'antd'
 import useRequest from '@ahooksjs/use-request'
 import { useHistory } from 'react-router-dom'
-import { Detail, BaseInfo } from '../common'
+import { Detail, BaseInfo, DetailContent } from '../common'
 import { baseInfoData } from './biddingHeadData.json'
 import SummaryRenderUtil from '../../utils/SummaryRenderUtil'
 import RequestUtil from '../../utils/RequestUtil'
@@ -60,63 +60,59 @@ export default function InformationDetail(): React.ReactNode {
                 </Form.Item>
             </Form>
         </Modal>
-        <Detail
-            operation={[
+        <DetailContent
+            title={[
                 <Button key="setting" onClick={() => history.push('/bidding/information/edit/2')}>编辑</Button>,
                 <Button key="delete" type="default">删除</Button>,
                 <Button key="bidding" onClick={() => setVisible(true)}>是否应标</Button>,
                 <Button key="new" onClick={() => history.goBack()}>返回</Button>
-            ]}
-            tabItems={[
+            ]}>
+            {SummaryRenderUtil.renderSections([
                 {
-                    label: '',
-                    key: 1,
-                    content: SummaryRenderUtil.renderSections([
-                        {
-                            title: '基本信息',
-                            render: () => <BaseInfo columns={baseInfoData} dataSource={detailData} />
-                        },
-                        {
-                            title: '',
-                            render: () => <Table size="small" rowKey={(record: any) => `table2_${record.id}`} columns={tableColumns} dataSource={detailData.bidPackageInfoDTOList} />
-                        },
-                        {
-                            title: '附件',
-                            render: () => (<>
-                                <Row><Button>上传附件</Button></Row>
-                                <Table size="small" rowKey={(record: any) => `information_${record.id}`} columns={[
-                                    {
-                                        title: '序号',
-                                        dataIndex: 'index',
-                                        key: 'index',
-                                        render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-                                    },
-                                    {
-                                        title: '文件名',
-                                        dataIndex: 'name',
-                                        key: 'name',
-                                    },
-                                    {
-                                        title: '大小',
-                                        dataIndex: 'fileSize',
-                                        key: 'fileSize',
-                                    },
-                                    {
-                                        title: '上传人',
-                                        dataIndex: 'userName',
-                                        key: 'userName',
-                                    },
-                                    {
-                                        title: '上传时间',
-                                        dataIndex: 'fileUploadTime',
-                                        key: 'fileUploadTime',
-                                    }
-                                ]}
-                                    dataSource={detailData.attachVos}
-                                />
-                            </>)
-                        }
-                    ])
-                }]} />
+                    title: '基本信息',
+                    render: () => <BaseInfo columns={baseInfoData} dataSource={detailData} />
+                },
+                {
+                    title: '',
+                    render: () => <Table size="small" rowKey={(record: any) => `table2_${record.id}`} columns={tableColumns} dataSource={detailData.bidPackageInfoDTOList} />
+                },
+                {
+                    title: '附件',
+                    render: () => (<>
+                        <Row><Button>上传附件</Button></Row>
+                        <Table size="small" rowKey={(record: any) => `information_${record.id}`} columns={[
+                            {
+                                title: '序号',
+                                dataIndex: 'index',
+                                key: 'index',
+                                render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                            },
+                            {
+                                title: '文件名',
+                                dataIndex: 'name',
+                                key: 'name',
+                            },
+                            {
+                                title: '大小',
+                                dataIndex: 'fileSize',
+                                key: 'fileSize',
+                            },
+                            {
+                                title: '上传人',
+                                dataIndex: 'userName',
+                                key: 'userName',
+                            },
+                            {
+                                title: '上传时间',
+                                dataIndex: 'fileUploadTime',
+                                key: 'fileUploadTime',
+                            }
+                        ]}
+                            dataSource={detailData.attachVos}
+                        />
+                    </>)
+                }
+            ])}
+        </DetailContent>
     </>
 }

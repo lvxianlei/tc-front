@@ -67,7 +67,7 @@ export default function EditableTable({ columns = [], dataSource = [], form }: E
                                                 name={[name, coItem.dataIndex]}
                                                 fieldKey={[fieldKey, coItem.dataIndex]}
                                             >
-                                                {coItem.editable === false ? <EditableCell columnItem={coItem as EditableCellProps['columnItem']} fieldKey={fieldKey} index={index} remove={remove} /> : <FormItemType type={coItem.type} />}
+                                                {coItem.editable === false ? <EditableCell columnItem={coItem as EditableCellProps['columnItem']} fieldKey={fieldKey} index={index} remove={remove} /> : <FormItemType type={coItem.type} data={coItem} />}
                                             </Form.Item>
                                         </Col>)
                                     }

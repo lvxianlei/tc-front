@@ -26,7 +26,36 @@
         },
         {
             "title": "招标人",
-            "dataIndex": "biddingPerson"
+            "dataIndex": "biddingPerson",
+            "type": "popTable",
+            "path": "/contract",
+            "columns": [
+                {
+                    "title": "员工编号",
+                    "dataIndex": "a"
+                },
+                {
+                    "title": "姓名",
+                    "dataIndex": "a",
+                    "search": true
+                },
+                {
+                    "title": "部门",
+                    "dataIndex": "a"
+                },
+                {
+                    "title": "岗位",
+                    "dataIndex": "a"
+                },
+                {
+                    "title": "在职状态",
+                    "dataIndex": "a"
+                },
+                {
+                    "title": " 联系电话",
+                    "dataIndex": "a"
+                }
+            ]
         },
         {
             "title": "招标代理机构",
@@ -46,7 +75,8 @@
         },
         {
             "title": "创建时间",
-            "dataIndex": "createTime"
+            "dataIndex": "createTime",
+            "type": "date"
         },
         {
             "title": "说明",
@@ -190,7 +220,7 @@
     "paths": {
         "base": "/tower-market/projectInfo",
         "bidDoc": "/tower-market/bidDoc",
-        "bidBase": "/tower-market/bidBase",
+        "bidResult": "/tower-market/bidResult",
         "frameAgreement": "/tower-market/frameAgreement",
         "contract": "/tower-market/contract",
         "productGroup": "/tower-market/productGroup",

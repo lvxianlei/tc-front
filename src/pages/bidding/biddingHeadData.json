@@ -10,7 +10,8 @@
         },
         {
             "dataIndex": "releaseDate",
-            "title": "发布时间"
+            "title": "发布时间",
+            "type": "date"
         },
         {
             "dataIndex": "source",
@@ -42,7 +43,22 @@
         },
         {
             "dataIndex": "biddingStatus",
-            "title": "应标状态"
+            "title": "应标状态",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "未决定"
+                },
+                {
+                    "value": 1,
+                    "label": "是"
+                },
+                {
+                    "value": 2,
+                    "label": "否"
+                }
+            ]
         },
         {
             "dataIndex": "reason",
