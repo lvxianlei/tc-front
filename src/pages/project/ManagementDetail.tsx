@@ -7,7 +7,7 @@ import { ITabItem } from '../../components/ITabableComponent'
 import { baseInfoData, productGroupColumns, bidInfoColumns, paths } from './managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
-import ManagementContract from './ManagementContract'
+import ManagementContract from './contract/Contract'
 import ManagementOrder from './ManagementOrder'
 import styles from "./ManagementDetail.module.less"
 const tableColumns: TableColumnProps<Object>[] = [
@@ -155,7 +155,6 @@ export default function ManagementDetail(): React.ReactNode {
                 <Tabs.TabPane tab="订单" key="订单">
                     <ManagementOrder />
                 </Tabs.TabPane>
-                <Tabs.TabPane></Tabs.TabPane>
             </Tabs></>,
         tab_productGroup: <>
             <section>

@@ -54,7 +54,7 @@ export default class ContractAttachment extends React.Component<IContractAttachm
      * @description Gets columns
      * @returns columns 
      */
-    private getColumns(): TableColumnType<object>[] {
+    public getColumns(): TableColumnType<object>[] {
         return [ {
             key: 'name',
             title: '附件名称',

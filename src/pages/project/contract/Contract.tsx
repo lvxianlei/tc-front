@@ -9,12 +9,12 @@ import React from "react";
 import { withTranslation } from "react-i18next";
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
-import { ITabItem } from "../../components/ITabableComponent";
-import { saleTypeOptions } from "../../configuration/DictionaryOptions";
-import RequestUtil from "../../utils/RequestUtil";
-import { IResponseData } from "../common/Page";
-import { IContract } from "../IContract";
-import { PromContract } from "../prom/contract/PromContract";
+import { ITabItem } from "../../../components/ITabableComponent";
+import { saleTypeOptions } from "../../../configuration/DictionaryOptions";
+import RequestUtil from "../../../utils/RequestUtil";
+import { IResponseData } from "../../common/Page";
+import { IContract } from "../../IContract";
+import { PromContract } from "../../prom/contract/PromContract";
 
 /**
  * 项目管理-合同
@@ -36,7 +36,7 @@ class ManagementContract extends PromContract {
         dataIndex: "contractNumber",
         render: (_: undefined, record: object): React.ReactNode => {
           return (
-            <Link to={`/contract/detail/${(record as IContract).id}`}>
+            <Link to={`/project/contract/detail/${(record as IContract).id}`}>
               {(record as IContract).contractNumber}
             </Link>
           );
@@ -48,7 +48,7 @@ class ManagementContract extends PromContract {
         dataIndex: "internalNumber",
         render: (_: undefined, record: object): React.ReactNode => {
           return (
-            <Link to={`/contract/detail/${(record as IContract).id}`}>
+            <Link to={`/project/contract/detail/${(record as IContract).id}`}>
               {(record as IContract).internalNumber}
             </Link>
           );

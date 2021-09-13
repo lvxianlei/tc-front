@@ -46,7 +46,8 @@ export interface IOrderItem {
 /**
  * The summary of the contract
  */
-class ContractSummary extends React.Component<IContractSummaryRouteProps, IContractSummaryState> {
+export class ContractSummary extends React.Component<IContractSummaryRouteProps, IContractSummaryState> {
+    requestPath = "/tower-market/saleOrder/getSaleOrderDetailsById";
 
     /**
      * @description State  of contract summary
@@ -61,7 +62,7 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
      * @description Components did mount
      */
     public async componentDidMount() {
-        const orderItems: IOrderItem[] = await RequestUtil.get<IOrderItem[]>(`/tower-market/saleOrder/getSaleOrderDetailsById`, {
+        const orderItems: IOrderItem[] = await RequestUtil.get<IOrderItem[]>(this.requestPath, {
             contractId: this.props.match.params.id
         });
         this.setState({
@@ -91,7 +92,7 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
      * @description Gets base info grid
      * @returns base info grid 
      */
-    private getBaseInfoGrid(): IRenderedGrid {
+    public getBaseInfoGrid(): IRenderedGrid {
         const baseInfo: IContractGeneral | undefined = this.state.baseInfo;
         return {
             labelCol: {
@@ -168,7 +169,7 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
      * @description Gets order columns
      * @returns order columns 
      */
-    private getOrderColumns(): TableColumnType<object>[] {
+     public getOrderColumns(): TableColumnType<object>[] {
         return [{
             title: '序号',
             dataIndex: 'index'
@@ -224,7 +225,7 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
      * @description Gets order summariable items
      * @returns order summariable items 
      */
-    private getOrderSummariableItems(): IRenderdSummariableItem[] {
+     public getOrderSummariableItems(): IRenderdSummariableItem[] {
         const orderItems: IOrderItem[] = this.state.orderItems || [];
         return orderItems.map<IRenderdSummariableItem>((item: IOrderItem): IRenderdSummariableItem => {
             return {
@@ -261,7 +262,7 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
      * @description Gets sys info grid
      * @returns sys info grid 
      */
-    private getSysInfoGrid(): IRenderedGrid {
+     public getSysInfoGrid(): IRenderedGrid {
         const sysInfo: IContract | undefined = this.state.sysInfo;
         return {
             labelCol: {
@@ -290,7 +291,7 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
      * @description Renders base info section
      * @returns base info section 
      */
-    private renderBaseInfoSection = (): React.ReactNode => {
+     public renderBaseInfoSection = (): React.ReactNode => {
         return SummaryRenderUtil.renderGrid(this.getBaseInfoGrid());
     }
 
@@ -298,7 +299,7 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
      * @description Renders order section
      * @returns order section 
      */
-    private renderOrderSection = (): React.ReactNode => {
+     public renderOrderSection = (): React.ReactNode => {
         return SummaryRenderUtil.renderSummariableAreas(this.getOrderSummariableItems());
     }
 
@@ -306,7 +307,7 @@ class ContractSummary extends React.Component<IContractSummaryRouteProps, IContr
      * @description Renders sys info section
      * @returns sys info section 
      */
-    private renderSysInfoSection = (): React.ReactNode => {
+     public renderSysInfoSection = (): React.ReactNode => {
         return SummaryRenderUtil.renderGrid(this.getSysInfoGrid());
     }
 

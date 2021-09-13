@@ -21,7 +21,7 @@ export interface IContractSettingState extends IAbstractContractSettingState {}
  /**
   * Contract Setting
   */
-class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps, IContractSettingState> {
+export class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps, IContractSettingState> {
  
     /**
      * @description Components did mount

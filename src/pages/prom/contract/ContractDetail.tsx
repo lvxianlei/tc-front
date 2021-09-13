@@ -33,7 +33,8 @@ interface IDetail extends IContractGeneral, IContract, IContractAttachment, ICon
 /**
  * Contract detail page component.
  */
-class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, IContractDetailState> {
+export class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, IContractDetailState> {
+    requestPath = "/tower-market/contract";
 
     public state: IContractDetailState = {
         detail: {
@@ -46,7 +47,7 @@ class ContractDetail extends AbstractDetailComponent<IContractDetailRouteProps, 
      * @param filterValues 
      */
     protected async fetchTableData() {
-        const resData: IDetail = await RequestUtil.get<IDetail>(`/tower-market/contract/${ this.props.match.params.id }`);
+        const resData: IDetail = await RequestUtil.get<IDetail>(`${this.requestPath}/${ '2' || this.props.match.params.id }`);
         this.setState({
             detail: resData
         });
