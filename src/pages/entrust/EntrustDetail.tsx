@@ -36,6 +36,7 @@ import TextArea from 'antd/lib/input/TextArea';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import AbstractTitledRouteComponent from '../../components/AbstractTitledRouteComponent';
 import moment from 'moment';
+import DeliveryAcceptance from './DeliveryAcceptance';
 const { Step } = Steps
   
 export interface IAbstractEntrustSettingState {
@@ -73,7 +74,7 @@ export interface IEntrust {
     readonly attachVoList?: IAttachVo[];	
     readonly entrustMessageVoList?: IEntrustMessageVo[];
     readonly status?: number;
-    readonly towerModelVoList?: ITowerModelVO[];
+    readonly productOverallProgressVoList?: ITowerModelVO[];
 }
  
 export interface IEntrustMessageVo {
@@ -82,10 +83,12 @@ export interface IEntrustMessageVo {
     readonly userName?:	string;
 }
 export interface ITowerModelVO{
-    readonly towerName: string;
+    readonly productCategoryName: string;
     readonly sectionNum: number;
     readonly examineSectionNum: number;
-    readonly examineName: string;
+    readonly status: number;
+    readonly giveTime: string;
+    readonly id: string;
 }
 
 export interface IAttachVo {
@@ -159,10 +162,6 @@ enum EntrustStatus {
             }
         };
     }
-    
-  
-
-
  
     /**
      * @implements
@@ -217,12 +216,10 @@ enum EntrustStatus {
         ];
     }
 
-
     /**
      * @description Renders extra sections
      * @returns extra sections 
      */
-  
     public renderExtraSections(): IRenderedSection[] {
         let extra = [{
             title:'附件',
@@ -240,14 +237,33 @@ enum EntrustStatus {
             extra.push({
                 title:'塔进度信息',
                 render:():React.ReactNode => {
-                    return this.state.entrust && this.state.entrust.towerModelVoList && this.state.entrust.towerModelVoList.map((item:ITowerModelVO)=>{
+                    return this.state.entrust && this.state.entrust.productOverallProgressVoList && this.state.entrust.productOverallProgressVoList.map((item:ITowerModelVO)=>{
                         return (
                             <div className={ entrustStyles.tower }>
                                 <div className={ entrustStyles.tower_title }>
-                                    <div>{item.towerName}</div>
-                                    <div>({item.examineName})</div>
+                                    <div>{item.productCategoryName}</div>
+                                    <div>({ this.getStatus(item.status) })</div>
                                 </div>
-                                <Progress percent={Math.round((item.examineSectionNum/item.sectionNum)*100)/100} status="active" />
+                                <Progress percent={Math.round((Number(item.examineSectionNum)/Number(item.sectionNum))*100)} status="active" />
+                            </div>
+                        )
+                    })
+                    
+                }
+            })
+        }
+        if(this.state.entrust?.status == EntrustStatus.COMPLETED){
+            extra.push({
+                title:'塔进度信息',
+                render:():React.ReactNode => {
+                    return this.state.entrust && this.state.entrust.productOverallProgressVoList && this.state.entrust.productOverallProgressVoList.map((item:ITowerModelVO)=>{
+                        return (
+                            <div className={ entrustStyles.tower }>
+                                <div className={ entrustStyles.tower_title }>
+                                    <Button type='link'>{``}</Button>
+                                    <DeliveryAcceptance id={ ''} productCategoryId={ item.id } entrustId={ '' } getTable={ () => {} } btnName={`${ item.productCategoryName }(${ item.giveTime })`} type='detail' key={item.id}/>
+                                </div>
+                                <Progress percent={ Math.round((Number(item.examineSectionNum)/Number(item.sectionNum)))*100 } status="active" />
                             </div>
                         )
                     })
@@ -256,9 +272,42 @@ enum EntrustStatus {
             })
         }
         return extra
-
     }
-
+    
+    //获取状态
+    protected getStatus(item: number){
+        let statusTitle = '进行中';
+        switch(item){
+            case EntrustStatus.TO_BE_RELEASED:
+                statusTitle = '进行中';
+                break
+            case EntrustStatus.TO_BE_RECEIVED:
+                statusTitle = '进行中'
+                break
+            case EntrustStatus.TO_BE_APPROVAL:
+                statusTitle = '放样完成'
+                break
+            case EntrustStatus.UNDER_REVIEW:
+                statusTitle = '无审核人'
+                break
+            case EntrustStatus.HAVE_IN_HAND:
+                statusTitle = '审核中'
+                break
+            case EntrustStatus.COMPLETED:
+                statusTitle = '待交付'
+                break
+            case 6:
+                statusTitle = '已交付'
+                break
+            case 7:
+                statusTitle = '待客户验收'
+                break
+            case 8:
+                statusTitle = '客户已验收'
+                break
+        }
+        return statusTitle
+    }
     //table-column
     public columns(): TableColumnType<IAttachVo>[] {
         return [

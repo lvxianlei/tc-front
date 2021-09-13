@@ -1,9 +1,9 @@
 import React from 'react'
 import { Button, Table, TableColumnProps, Row, Col, Tabs, Radio } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { Detail, BaseInfo, DetailContent } from '../common'
+import { BaseInfo, Detail, DetailContent } from '../common'
+import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
 import SummaryRenderUtil from '../../utils/SummaryRenderUtil'
-import { ITabItem } from '../../components/ITabableComponent'
 import { baseInfoData, productGroupColumns, bidInfoColumns, paths } from './managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
@@ -21,7 +21,7 @@ const tableColumns: TableColumnProps<Object>[] = [
     { title: '交货地点', dataIndex: 'deliveryPlace', key: 'deliveryPlace' }
 ]
 
-type TabTypes = "base" | "bidDoc" | "bidBase" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | undefined
+type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | undefined
 
 export default function ManagementDetail(): React.ReactNode {
     const history = useHistory()
@@ -31,11 +31,10 @@ export default function ManagementDetail(): React.ReactNode {
         resole(result)
     }), {})
     const tabItems: { [key: string]: JSX.Element | React.ReactNode } = {
-        tab_base: <DetailContent>
-            <Row>
-                <Button style={{ marginRight: '10px' }}>编辑</Button>
-                <Button>返回</Button>
-            </Row>
+        tab_base: <DetailContent operation={[
+            <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => history.push(`/project/management/detail/edit/base/${params.id}`)}>编辑</Button>,
+            <Button key="goback" onClick={() => history.goBack()}>返回</Button>
+        ]}>
             <BaseInfo columns={baseInfoData} dataSource={{}} />
             <Row style={{ height: '50px', paddingLeft: '10px', lineHeight: '50px' }}>货物清单</Row>
             <Table size="small" columns={tableColumns} />
@@ -69,10 +68,13 @@ export default function ManagementDetail(): React.ReactNode {
                 }
             ]} />
         </DetailContent>,
-        tab_bidDoc: <DetailContent>
+        tab_bidDoc: <DetailContent
+            operation={[
+                <Button key="edit" type="primary" onClick={() => history.push(`/project/management/detail/edit/bidDoc/${params.id}`)} >编辑</Button>,
+                <Button key="goback">返回</Button>
+            ]}>
             <Row>标书制作记录表</Row>
             <BaseInfo columns={baseInfoData} dataSource={{}} col={4} />
-            <Row><Button>编辑</Button><Button>返回</Button></Row>
             <Row>填写记录</Row>
             <Table size="small" columns={[
                 { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
@@ -83,57 +85,45 @@ export default function ManagementDetail(): React.ReactNode {
                 { title: '说明', dataIndex: 'description' }
             ]} dataSource={[]} />
         </DetailContent>,
-        tab_bidBase: SummaryRenderUtil.renderSections([
-            {
-                title: '',
-                render: () => (<>
-                    <Button style={{ marginRight: '10px' }}>编辑</Button>
-                    <Button>返回</Button>
-                </>)
+        tab_bidResult: <DetailContent operation={[
+            <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => history.push(`/project/management/detail/edit/bidResult/${params.id}`)}>编辑</Button>,
+            <Button key="goback">返回</Button>
+        ]} >
+            <Row>基础信息</Row>
+            <BaseInfo columns={[{
+                title: '年份',
+                dataIndex: 'baseInfo?.contractNumber'
             },
             {
-                title: '基础信息',
-                render: () => <BaseInfo columns={[{
-                    title: '年份',
-                    dataIndex: 'baseInfo?.contractNumber'
-                },
-                {
-                    title: '批次',
-                    dataIndex: 'baseInfo?.internalNumber'
-                }, {
-                    title: '备注',
-                    dataIndex: 'baseInfo?.projectName'
-                },
-                {
-                    title: '是否中标',
-                    dataIndex: 'baseInfo?.simpleProjectName'
-                }]} dataSource={{}} />
-
+                title: '批次',
+                dataIndex: 'baseInfo?.internalNumber'
+            }, {
+                title: '备注',
+                dataIndex: 'baseInfo?.projectName'
             },
             {
-                title: '开标信息',
-                render: () => (<>
-                    <Row gutter={[10, 0]}>
-                        <Col><Button>新增一行</Button></Col>
-                        <Col><Button>导入文件</Button></Col>
-                        <Col><Button>新增一轮报价</Button></Col>
-                    </Row>
-                    <Tabs type="editable-card" style={{ marginTop: '10px' }}>
-                        <Tabs.TabPane tab="第二轮" key="b">
-                            <Table columns={bidInfoColumns} />
-                        </Tabs.TabPane>
-                        <Tabs.TabPane tab="第一轮" key="a">
-                            <Table columns={bidInfoColumns} />
-                        </Tabs.TabPane>
-                    </Tabs>
-                </>)
-            }
-        ]),
-        tab_frameAgreement: <>
-            <Row>
-                <Button style={{ marginRight: '10px' }}>编辑</Button>
-                <Button>返回</Button>
+                title: '是否中标',
+                dataIndex: 'baseInfo?.simpleProjectName'
+            }]} dataSource={{}} />
+            <Row>开标信息</Row>
+            <Row gutter={[10, 0]}>
+                <Col><Button>新增一轮报价</Button></Col>
             </Row>
+            <Tabs type="editable-card" style={{ marginTop: '10px' }}>
+                <Tabs.TabPane tab="第二轮" key="b">
+                    <Row><Button>新增一行</Button><Button>导入文件</Button></Row>
+                    <Table columns={bidInfoColumns} />
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="第一轮" key="a">
+                    <Row><Button>新增一行</Button><Button>导入文件</Button></Row>
+                    <Table columns={bidInfoColumns} />
+                </Tabs.TabPane>
+            </Tabs>
+        </DetailContent>,
+        tab_frameAgreement: <DetailContent operation={[
+            <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => history.push(`/project/management/detail/edit/frameAgreement/${params.id}`)}>编辑</Button>,
+            <Button key="goback">返回</Button>
+        ]}>
             <Row>基本信息</Row>
             <BaseInfo columns={baseInfoData} dataSource={{}} />
             <Row style={{ height: '50px', paddingLeft: '10px', lineHeight: '50px' }}>合同物资清单</Row>
@@ -146,7 +136,7 @@ export default function ManagementDetail(): React.ReactNode {
                 { title: "创建人", dataIndex: 'index' },
                 { title: "创建时间", dataIndex: 'index' }
             ]} dataSource={{}} />
-        </>,
+        </DetailContent>,
         tab_contract: <>
             <Tabs>
                 <Tabs.TabPane tab="合同" key="合同">
@@ -156,9 +146,9 @@ export default function ManagementDetail(): React.ReactNode {
                     <ManagementOrder />
                 </Tabs.TabPane>
             </Tabs></>,
-        tab_productGroup: <>
+        tab_productGroup: <DetailContent>
             <section>
-                <Row><Button type="primary">新增</Button></Row>
+                <Row><Button type="primary" onClick={() => history.push(`/project/management/detail/edit/productGroup/${params.id}`)}>新增</Button></Row>
                 <Table columns={tableColumns} />
             </section>
             <section>
@@ -170,29 +160,23 @@ export default function ManagementDetail(): React.ReactNode {
                 /></Row>
                 <Table columns={productGroupColumns} />
             </section>
-        </>,
-        tab_salesPlan: <>
+        </DetailContent>,
+        tab_salesPlan: <DetailContent>
             <Row>
-                <Button type="link">全部</Button>
-                <Button type="link">审批中</Button>
-                <Button type="link">已驳回</Button>
-                <Button type="link">已通过</Button>
+                <Radio.Group defaultValue="all">
+                    <Radio.Button value="all">全部</Radio.Button>
+                    <Radio.Button value="a" >审批中</Radio.Button>
+                    <Radio.Button value="b" >已驳回</Radio.Button>
+                    <Radio.Button value="c" >已通过</Radio.Button>
+                </Radio.Group>
             </Row>
-            <Row><Button type="primary">新增</Button></Row>
+            <Row><Button type="primary" onClick={() => history.push(`/project/management/detail/edit/salesPlan/${params.id}`)}>新增</Button></Row>
             <Table columns={tableColumns} />
-        </>
+        </DetailContent>
     }
 
     return <DetailContent>
-        <Row className={styles.operation}>
-            <span className={(!params.tab || params.tab === 'base') ? styles.default : ""} key="base" onClick={() => history.push(`/project/management/detail/base/${params.id}`)}>基础信息</span>
-            <span className={(params.tab && params.tab === 'bidDoc') ? styles.default : "primary"} key="bidDoc" onClick={() => history.push(`/project/management/detail/bidDoc/${params.id}`)}>标书制作</span>
-            <span className={(params.tab && params.tab === 'bidBase') ? styles.default : "primary"} key='bidBase' onClick={() => history.push(`/project/management/detail/bidBase/${params.id}`)}>招标结果</span>
-            <span className={(params.tab && params.tab === 'frameAgreement') ? styles.default : "primary"} key="frameAgreement" onClick={() => history.push(`/project/management/detail/frameAgreement/${params.id}`)}>框架协议</span>
-            <span className={(params.tab && params.tab === 'contract') ? styles.default : "primary"} key="contract" onClick={() => history.push(`/project/management/detail/contract/${params.id}`)}>合同及订单</span>
-            <span className={(params.tab && params.tab === 'productGroup') ? styles.default : "primary"} key='productGroup' onClick={() => history.push(`/project/management/detail/productGroup/${params.id}`)}>杆塔明细</span>
-            <span className={(params.tab && params.tab === 'salesPlan') ? styles.default : "primary"} key='salesPlan' onClick={() => history.push(`/project/management/detail/salesPlan/${params.id}`)}>销售计划</span>
-        </Row>
+        <ManagementDetailTabsTitle />
         {tabItems['tab_' + (params.tab || 'base')]}
     </DetailContent>
 }

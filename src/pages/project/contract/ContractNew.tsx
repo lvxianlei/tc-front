@@ -11,10 +11,10 @@ import {
   saleTypeOptions,
   currencyTypeOptions,
 } from "../../../configuration/DictionaryOptions";
-import { IFormItemGroup } from "../../entrust/AbstractEntrustSetting";
 import { IContractInfo } from "../../prom/contract/AbstractContractSetting";
 import { ContractNew } from "../../prom/contract/ContractNew";
 import layoutStyles from "../../../layout/Layout.module.less";
+import { IFormItemGroup } from "../../../components/AbstractFillableComponent";
 
 export interface ProjectContractInfo extends IContractInfo {
   readonly contractName: string;

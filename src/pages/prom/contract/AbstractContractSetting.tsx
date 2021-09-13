@@ -872,7 +872,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                 userName: info.file.response.data.userName,
                                                                 fileSize: info.file.response.data.size,
                                                                 description: '',
-                                                                filePath: info.file.response.data.link,
+                                                                filePath: info.file.response.data.name,
                                                                 fileUploadTime: info.file.response.data.fileUploadTime,
                                                                 fileSuffix: info.file.response.data.fileSuffix
                                                             };

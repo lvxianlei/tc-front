@@ -37,7 +37,7 @@ import EntrustSetting from './EntrustSetting';
      readonly projectEndTime: string;
      readonly projectStartTime: string;
      readonly status: number;
-     readonly towerModelVoList: ITowerModelVO[];
+     readonly entrustProductCategoryList: ITowerModelVO[];
  }
  
 
@@ -54,6 +54,8 @@ import EntrustSetting from './EntrustSetting';
      readonly projectNum: string;
      readonly towerName: string;
      readonly sectionNum: number;
+     readonly entrustId: number | string;
+     readonly productCategoryId: string;
  }
 
  interface IResponseData {
@@ -130,22 +132,22 @@ import EntrustSetting from './EntrustSetting';
      */
   public getTableColumns(item: ITabItem): TableColumnType<object>[] {
     return [{
-        key: 'towerName',
+        key: 'productCategoryName',
         title: '塔型',
-        dataIndex: 'towerName',
+        dataIndex: 'productCategoryName',
     }, {
-        key: 'deliverTime',
+        key: 'giveTime',
         title: '交付日期',
         width: 200,
-        dataIndex: 'deliverTime',
+        dataIndex: 'giveTime',
     }, {
         key: 'operation',
         title: '操作',
         width: 50,
         dataIndex: 'operation',
         render: (_: undefined, record: object): React.ReactNode => (
-            <Space direction="horizontal" size="small">
-                <DeliveryAcceptance data={ record } getTable={ () => this.fetchTableData({}) }/>
+            <Space direction="horizontal" size="small">{console.log(record)}
+                <DeliveryAcceptance id={ (record as ITowerModelVO).id } productCategoryId={ (record as ITowerModelVO).productCategoryId } entrustId={ (record as ITowerModelVO).entrustId } getTable={ () => this.fetchTableData({}) }/>
             </Space>
         )
     }];
@@ -240,7 +242,7 @@ import EntrustSetting from './EntrustSetting';
                                                                     <Button type="primary" ghost href={ `/outsource/entrust/detail/${ (item as IEntrustDataItem).id }`}>详情</Button>
                                                                 </div>
                                                                 :<div>
-                                                                    <EntrustSetting data={ item } getTable={ () => this.fetchTableData({}) }/>
+                                                                    <Link to={ `/outsource/entrust/sstting/${ (item as IEntrustDataItem).id }` }><Button type="primary" ghost>编辑</Button></Link>
                                                                     <ConfirmableButton 
                                                                         confirmTitle="是否删除该委托吗？" 
                                                                         type="primary"
@@ -284,13 +286,13 @@ import EntrustSetting from './EntrustSetting';
                                                 <Col span={12}>
                                                     <div className = { styles.card_right }>
                                                     <Table 
-                                                        dataSource = { item.towerModelVoList }
+                                                        dataSource = { item.entrustProductCategoryList }
                                                         rowKey = { this.getTableRowKey() }
                                                         bordered = {true}
                                                         onChange = { this.onTableChange }
                                                         style = {{ height: '380px' }}
                                                         columns = {this.getTableColumns(data)}
-                                                        scroll = {item && item.towerModelVoList && item.towerModelVoList.length>10?{ y: 322 }:{}}  
+                                                        scroll = {item && item.entrustProductCategoryList && item.entrustProductCategoryList.length>10?{ y: 322 }:{}}  
                                                         pagination = {false}
                                                         size = 'small'
                                                         rowClassName = {(record: object, index: number) => {
@@ -387,11 +389,13 @@ import EntrustSetting from './EntrustSetting';
      }
  
      /**
-      * @implements
-      * @description Determines whether new click on
-      * @param event 
-      */
-     public onNewClick(event: React.MouseEvent<HTMLButtonElement>): void {}
+     * @implements
+     * @description Determines whether new click on
+     * @param event 
+     */
+    public onNewClick(event: React.MouseEvent<HTMLButtonElement>): void {
+        this.props.history.push('/outsource/entrust/new');
+    }
  
      /**
       * @implements
@@ -411,12 +415,19 @@ import EntrustSetting from './EntrustSetting';
                 name: 'status',
                 children: 
                     <Select placeholder="请选择工程状态" className={ styles.select_width } getPopupContainer={ triggerNode => triggerNode.parentNode }>
-                        <Select.Option value={ EntrustStatus.TO_BE_RELEASED }>待发布</Select.Option>
-                        <Select.Option value={ EntrustStatus.TO_BE_RECEIVED }>待接收</Select.Option>
-                        <Select.Option value={ EntrustStatus.TO_BE_APPROVAL }>待立项</Select.Option>
-                        <Select.Option value={ EntrustStatus.UNDER_REVIEW }>审核中</Select.Option>
-                        <Select.Option value={ EntrustStatus.HAVE_IN_HAND }>进行中</Select.Option>
-                        <Select.Option value={ EntrustStatus.COMPLETED }>已完成</Select.Option>
+                        {
+                            this.state.selectedTabKey === '0' ?
+                            <>
+                                <Select.Option value={ EntrustStatus.TO_BE_RELEASED }>待发布</Select.Option>
+                                <Select.Option value={ EntrustStatus.TO_BE_RECEIVED }>待接收</Select.Option>
+                                <Select.Option value={ EntrustStatus.TO_BE_APPROVAL }>待立项</Select.Option>
+                                <Select.Option value={ EntrustStatus.UNDER_REVIEW }>审核中</Select.Option>
+                                <Select.Option value={ EntrustStatus.HAVE_IN_HAND }>进行中</Select.Option>
+                            </>
+                          :  <Select.Option value={ EntrustStatus.COMPLETED }>已完成</Select.Option>
+                        }
+                        
+                       
                     </Select>
             }
         ];
@@ -427,8 +438,10 @@ import EntrustSetting from './EntrustSetting';
      * @description 新增按钮
      * @param event 
      */
-    public renderExtraOperationContent(): React.ReactNode {
-        return <EntrustNew getTable={ () => this.fetchTableData({}) }/>;
+    public renderExtraOperationContent(item: ITabItem): React.ReactNode {
+        return this.state.selectedTabKey === '0' ?
+          super.renderExtraOperationContent(item)
+        : null 
     }
  }
  

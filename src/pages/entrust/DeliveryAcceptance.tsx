@@ -6,26 +6,38 @@ import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import RequestUtil from '../../utils/RequestUtil';
-import { Button, Col, Form, FormInstance, Input,  Modal, Row, Space } from 'antd';
+import { Button, Col, Divider, Form, FormInstance, Input,  Modal, Row, Space } from 'antd';
 import AsyncComponent from '../../components/AsyncComponent';
 import styles from './AbstractEntrustSetting.module.less';
+import AuthUtil from '../../utils/AuthUtil';
+import { stringify } from 'query-string';
 
 export interface IDeliveryAcceptanceProps {}
 export interface IDeliveryAcceptanceRouteProps extends RouteComponentProps<IDeliveryAcceptanceProps>, WithTranslation {
-    readonly data: IEntrust;
+    readonly id: number | string;
+    readonly entrustId: number | string;
     readonly getTable:() => void;
+    readonly productCategoryId: string;
+    readonly type?: string;
+    readonly btnName?: string;
 }
 export interface IDeliveryAcceptanceState {
     readonly isVisible?: boolean;
-    readonly entrust?: IEntrust;
+    readonly deliveryFiles?: IDeliveryFiles;
     readonly isBack?: boolean;
+    readonly detailData?: IDetailData;
 }
 
-export interface IEntrust{
+export interface IDeliveryFiles{
     readonly id?: string;
-    readonly examineNum?: number;
-    readonly attachInfoVOs?: IAttachVo[];     
-    readonly description?: string; 
+    readonly productCategoryId?: string;
+    readonly deliveryList?: number[];
+    readonly attachList?: IAttachVo[];
+}
+
+
+export interface IDetailData {
+    readonly buildChart?: string;
 }
 
 export interface IAttachVo {
@@ -35,6 +47,8 @@ export interface IAttachVo {
     readonly fileSuffix?: string;
     readonly fileSize?: number;        
     readonly filePath?: string;
+    readonly description?: string;
+    readonly userName?: string;
 }
 
 /**
@@ -50,7 +64,7 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
     } as IDeliveryAcceptanceState;
 
     public popModalButton(): React.ReactNode {
-        return <Button type="link" htmlType="button" onClick={ this.showModal }>交付验收</Button>
+        return <Button type="link" htmlType="button" onClick={ this.showModal }>{ this.props.type === 'detail' ? this.props.btnName : '交付验收' }</Button>
     }
 
     /**
@@ -62,12 +76,14 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
         this.setState({
             isVisible: true
         })
-        const entrust: IEntrust = await RequestUtil.get<IEntrust>(`/tp-task-dispatch/towerModel/detail/${ this.props.data.id }`);
+        const [deliveryFiles, detailData] = await Promise.all<IDeliveryFiles, IDetailData>([
+            RequestUtil.get(`/tp-task-dispatch/productCategory/getDeliveryFiles/${ this.props.productCategoryId }`),
+            RequestUtil.get<IDetailData>(`/tower-data-archive/productCategory/${ this.props.productCategoryId }`)
+        ]);
         this.setState({
-            entrust: entrust
-        });
-        this.getForm()?.setFieldsValue({
-            ...entrust
+            isVisible: true,
+            deliveryFiles: deliveryFiles,
+            detailData: detailData
         })
     } 
 
@@ -84,7 +100,7 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
     /**
      * @description Determines whether back on
      */
-     protected onBack = (): void => {
+    protected onBack = (): void => {
         this.setState({
             isBack: true
         })
@@ -97,9 +113,8 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
      * @returns save 
      */
     public onFinishSubmit = async (values: Record<string, any>): Promise<void> => {
-        const entrust: IEntrust | undefined = this.state.entrust;
-        values = { ...entrust, ...values };
-        return await RequestUtil.put('/tp-task-dispatch/towerModel/accept', values).then((res) => {
+        values = { entrustId: this.props.entrustId, productCategoryId: this.props.id, ...values };
+        return await RequestUtil.post('/tp-task-dispatch/productCategory/accept', values).then((res) => {
             if(res) {
                 this.setState({
                     isVisible: false
@@ -115,11 +130,10 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
      * @param values 
      * @returns back submit 
      */
-     public onBackSubmit = async (): Promise<void> => {
-        const entrust: IEntrust | undefined = this.state.entrust;
-        let values: IEntrust = this.getForm()?.getFieldsValue(true);
-        values = { ...entrust, description: this.getForm()?.getFieldValue('description') };
-        return await RequestUtil.put('/tp-task-dispatch/towerModel/reject', values).then((res) => {
+    public onBackSubmit = async (): Promise<void> => {
+        let values: Record<string, any> = this.getForm()?.getFieldsValue(true);
+        values = { entrustId: this.props.entrustId, productCategoryId: this.props.id, description: this.getForm()?.getFieldValue('description') };
+        return await RequestUtil.put('/tp-task-dispatch/productCategory/reject', values).then((res) => {
             if(res) {
                 this.setState({
                     isVisible: false
@@ -129,8 +143,115 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
         });
     }
 
-    public uploadAttach = (value: Record<string, any>): void => {
-        window.open(value.filePath);
+    public uploadAttach = (value: string): void => {
+        window.open(value);
+    }
+
+    public download = async (code: number): Promise<void> => {
+        return fetch(`${process.env.REQUEST_API_PATH_PREFIX?.replace(/\/*$/, '/') || ''.replace(/\/*$/, '/')}${`/tower-data-archive/componentDetail/downloadCompAttach`.replace(/^\/*/, '')}`, {
+            mode: 'cors',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+              'Tenant-Id': AuthUtil.getTenantId(),
+              'Sinzetech-Auth': AuthUtil.getSinzetechAuth(),
+            },
+            body: stringify({ productCategoryId: this.props.id,
+                fileType: code })
+        }).then((res) => {
+            return res.blob();
+        }).then((data) => {
+            let blob = new Blob([data], {type: 'application/zip'})
+            let blobUrl = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.download = code === 2 ? '工艺卡' : code === 3 ? '大样图' :  code === 6 ? '角钢nc数据' : '钢板nc数据' ;
+            a.href = blobUrl;
+            a.click();
+            if(document.body.contains(a)) {
+                document.body.removeChild(a);
+            }
+        })
+    }
+
+    public downloadTMA = async (): Promise<void> => {
+        return fetch(`${process.env.REQUEST_API_PATH_PREFIX?.replace(/\/*$/, '/') || ''.replace(/\/*$/, '/')}${`/tower-vcs/fileVersion/downloadCompFile`.replace(/^\/*/, '')}`, {
+            mode: 'cors',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+              'Tenant-Id': AuthUtil.getTenantId(),
+              'Sinzetech-Auth': AuthUtil.getSinzetechAuth(),
+            },
+            body: stringify({ productCategoryId: this.props.id })
+        }).then((res) => {
+            return res.blob();
+        }).then((data) => {
+            let blob = new Blob([data], {type: 'application/zip'})
+            let blobUrl = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.download = 'TMA文件' ;
+            a.href = blobUrl;
+            a.click();
+            if(document.body.contains(a)) {
+                document.body.removeChild(a);
+            }
+        })
+    }
+
+    public exportBoltStatistics = async (): Promise<void> => {
+        return fetch(`${process.env.REQUEST_API_PATH_PREFIX?.replace(/\/*$/, '/') || ''.replace(/\/*$/, '/')}${`/tower-data-archive/boltStatistics/exportBoltStatistics`.replace(/^\/*/, '')}`, {
+            mode: 'cors',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+              'Tenant-Id': AuthUtil.getTenantId(),
+              'Sinzetech-Auth': AuthUtil.getSinzetechAuth(),
+            },
+            body: stringify({ productCategoryId: this.props.id })
+        }).then((res) => {
+            return res.blob();
+        }).then((data) => {
+            let blobUrl = window.URL.createObjectURL(data);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.download = '螺栓清单';
+            a.href = blobUrl;
+            a.click();
+            if(document.body.contains(a)) {
+                document.body.removeChild(a);
+            }
+        })
+    }
+
+    public exportAssemblyWeld = async (): Promise<void> => {
+        return fetch(`${process.env.REQUEST_API_PATH_PREFIX?.replace(/\/*$/, '/') || ''.replace(/\/*$/, '/')}${`/tower-data-archive/assemblyWeld/exportAssemblyWeld`.replace(/^\/*/, '')}`, {
+            mode: 'cors',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+              'Tenant-Id': AuthUtil.getTenantId(),
+              'Sinzetech-Auth': AuthUtil.getSinzetechAuth(),
+            },
+            body: stringify({ productCategoryId: this.props.id })
+        }).then((res) => {
+            return res.blob();
+        }).then((data) => {
+            let blobUrl = window.URL.createObjectURL(data);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.download = '组焊清单';
+            a.href = blobUrl;
+            a.click();
+            if(document.body.contains(a)) {
+                document.body.removeChild(a);
+            }
+        })
     }
 
     /**
@@ -138,7 +259,8 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
      * @returns render 
      */
     public render(): React.ReactNode {
-        const entrust: IEntrust | undefined = this.state.entrust;
+        const deliveryFiles: IDeliveryFiles | undefined = this.state.deliveryFiles;
+        const deliveryList: number[] | undefined = deliveryFiles?.deliveryList;
         return (
             <>
                 { this.popModalButton() }
@@ -158,33 +280,122 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
                                     <Button type="primary" htmlType="button" onClick={ this.onBackSubmit }>确认退回</Button>
                                 </Space>
                             </Space>
-                            :<Space size="middle" direction="vertical" className={ styles.modal_center }>
+                            :
+                            <Space size="middle" direction="vertical" className={ styles.modal_center }>
                                 <Form.Item 
                                     label="审核件数" 
-                                    name="examineNum" 
+                                    name="approveNum" 
                                     rules={[{ required: true,
                                     message: '请输入审核件数' }]}
                                     wrapperCol={{ span: 10 }}
                                     labelCol={{ offset: 7 }}
                                     >
-                                    <Input />
+                                    <Input disabled={ this.props.type === 'detail' }/>
                                 </Form.Item>
-                                { entrust?.attachInfoVOs && entrust?.attachInfoVOs.map<React.ReactNode>((items: IAttachVo, index: number): React.ReactNode => {
-                                        return <Row justify="center" key={ index }>
-                                            <Col span={6}>{ items.name }</Col>
-                                            <Col span={6}>{ items.fileUploadTime }</Col>
-                                            <Col span={6}>
-                                                <Button type="link" onClick={ () => this.uploadAttach(items) }>
-                                                    下载
-                                                </Button>
-                                            </Col>
-                                        </Row>
-                                    })
+                                <Divider />
+                                <div className={ styles.files }>
+                                    <Row>
+                                    { deliveryList?.includes(1) ?
+                                        <Col span={ 8 }>
+                                            <span key="1">
+                                                <Button type="link" onClick={ () => this.downloadTMA() }>TMA文件</Button>
+                                            </span>
+                                        </Col>
+                                        : null
+                                    }
+                                    { deliveryList?.includes(2) ?
+                                        <Col span={ 8 }>
+                                            <span key="2">
+                                                <Button type="link" onClick={ () => this.download(2) }>工艺卡</Button>
+                                            </span>
+                                        </Col>
+                                        : null
+                                    }
+                                    { deliveryList?.includes(3) ? 
+                                        <Col span={ 8 }>
+                                            <span key="3">
+                                                <Button type="link" onClick={ () => this.download(3) }>大样图</Button>
+                                            </span>
+                                        </Col>
+                                        : null
+                                    }
+                                    { deliveryList?.includes(4) ?
+                                        <Col span={ 8 }>
+                                            <span key="4">
+                                                构建明细
+                                            </span>
+                                        </Col>
+                                        : null
+                                    }
+                                    { deliveryList?.includes(5) ? 
+                                        <Col span={ 8 }>
+                                            <span key="5">
+                                                <Button type="link" onClick={ () => this.exportBoltStatistics() }>螺栓清单</Button>
+                                            </span>
+                                        </Col>
+                                        : null
+                                    }
+                                    { deliveryList?.includes(6) ? 
+                                        <Col span={ 8 }>
+                                            <span key="6">
+                                                <Button type="link" onClick={ () => this.download(6) }>角钢NC数据</Button>  
+                                            </span>
+                                        </Col>
+                                        : null
+                                    }   
+                                    { deliveryList?.includes(7) ?
+                                        <Col span={ 8 }>
+                                            <span key="7">
+                                                <Button type="link" onClick={ () => this.download(7) }>钢板NC数据</Button>  
+                                            </span>
+                                        </Col>
+                                        : null
+                                    }
+                                    { deliveryList?.includes(8) ?
+                                        <Col span={ 8 }>
+                                            <span key="8">
+                                                <Button type="link" onClick={ () => this.exportAssemblyWeld() }>组焊清单</Button>
+                                            </span>
+                                        </Col>
+                                        : null
+                                    }
+                                    { deliveryList?.includes(9) ?
+                                        <Col span={ 8 }>
+                                            <span key="9">
+                                                <Button type="link" onClick={ () => this.uploadAttach(this.state.detailData?.buildChart || '') }>结构图</Button>
+                                            </span>
+                                        </Col>
+                                        : null
+                                    }
+                                    </Row>
+                                </div>
+                                { deliveryList?.includes(10) ?
+                                    <div>
+                                        <p>其他文件</p>
+                                        <div className={ styles.content }> 
+                                            { this.state.deliveryFiles?.attachList?.map<React.ReactNode>((items: IAttachVo, index: number): React.ReactNode => {
+                                                return <Row justify="center" gutter={16} className={ styles.row } key={ index }>
+                                                    <Col span={6} className={ styles.col }>{ items.name }</Col>
+                                                    <Col span={6} className={ styles.col }>{ items.fileUploadTime }</Col>
+                                                    <Col span={6}>
+                                                    <Button type="link" onClick={ () => this.uploadAttach(items.filePath || '') } danger>
+                                                        下载
+                                                    </Button>
+                                                    </Col>
+                                                </Row>
+                                            }) }
+                                        </div>
+                                    </div>
+                                    : null
                                 }
                                 <Space size="large" direction="horizontal">
                                     <Button type="default" htmlType="button" onClick={ this.onCancel }>关闭</Button>
-                                    <Button type="default" htmlType="button" onClick={ this.onBack }>退回</Button>
-                                    <Button type="primary" htmlType="submit">验收通过</Button>
+                                    { this.props.type === 'detail' ? null : 
+                                        <>
+                                            <Button type="default" htmlType="button" onClick={ this.onBack }>退回</Button>
+                                            <Button type="primary" htmlType="submit">验收通过</Button>
+                                        </>
+                                    }
                                 </Space>
                             </Space> 
                         }
