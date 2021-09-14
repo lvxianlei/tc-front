@@ -1,0 +1,25 @@
+{
+    "baseInfo": [],
+    "enclosure": [
+        {
+            "title": "客户类型",
+            "dataIndex": "typeName"
+        },
+        {
+            "title": "重要联系人",
+            "dataIndex": "linkman"
+        },
+        {
+            "title": "手机号码",
+            "dataIndex": "phone"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        },
+        {
+            "title": "创建时间",
+            "dataIndex": "createTime"
+        }
+    ]
+}
