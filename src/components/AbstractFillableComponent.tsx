@@ -56,10 +56,7 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      */
     private onFormFinish(values: Record<string, any>): void {
         this.onSubmit(values).then(() => {
-            const returnPath: string = this.getReturnPath();
-            if (returnPath) {
-                this.props.history.push(returnPath);
-            }
+            this.onCancel()
         });
     }
 
@@ -82,7 +79,10 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      * @description Determines whether cancel on
      */
     protected onCancel = (): void => {
-        this.props.history.push(this.getReturnPath());
+        const returnPath: string = this.getReturnPath();
+        if(returnPath){
+            this.props.history.push(returnPath);
+        } 
     }
 
     /**

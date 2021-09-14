@@ -22,13 +22,14 @@ export interface IContractSettingState extends IAbstractContractSettingState {}
   * Contract Setting
   */
 export class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps, IContractSettingState> {
+    requestPath = "/tower-market/contract";
  
     /**
      * @description Components did mount
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const contract: IContractInfo = await RequestUtil.get<IContractInfo>(`/tower-market/contract/${ this.props.match.params.id }`);
+        const contract: IContractInfo = await RequestUtil.get<IContractInfo>(`${this.requestPath}/${ '2' || this.props.match.params.id }`);
         this.setState({
             contract: contract
         });
@@ -51,12 +52,13 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
                 customerInfoDto: contract.customerInfoVo,
             }
         })
+
         this.getForm()?.setFieldsValue({
             contractNumber: contract.contractNumber,
             id: contract.id,
             internalNumber: contract.internalNumber,
             projectName: contract.projectName,
-            simpleProjectName: contract.simpleProjectName,
+            simpleProjectName: contract.simpleProjectName || '',
             winBidType: contract.winBidType == -1 ? '' : contract.winBidType,
             saleType: contract.saleType == -1 ? '' : contract.saleType,
             signCustomerName: contract.signCustomerName,
@@ -66,7 +68,7 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
             reviewTime: contract.reviewTime && moment(contract.reviewTime),
             chargeType: contract.chargeType === -1 ? '' : contract.chargeType,
             salesman: contract.salesman,
-            region: contract.region || [],
+            region: contract.region ? [contract.region] : [],
             countryCode: contract.countryCode,
             contractAmount: contract.contractAmount,
             currencyType: contract.currencyType,

@@ -416,6 +416,10 @@ class ManagementContractNew extends ContractNew {
       ],
     ];
   }
+  protected getReturnPath(): string {
+    this.props.history.goBack();
+    return "";
+  }
 }
 
 export default withRouter(withTranslation()(ManagementContractNew));
