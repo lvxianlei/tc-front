@@ -110,12 +110,12 @@ class ManagementContract extends PromContract {
         dataIndex: "operation",
         render: (_: undefined, record: object): React.ReactNode => (
           <Space direction="horizontal" size="small">
-            <Button
-              type="link"
-              href={`/contract/setting/${(record as IContract).id}`}
-              disabled={(record as IContract).status === 1}
-            >
-              编辑
+            <Button type="link" disabled={(record as IContract).status === 1}>
+              <Link
+                to={`/project/contract/setting/${(record as IContract).id}`}
+              >
+                编辑
+              </Link>
             </Button>
             <Popconfirm
               title="要删除该客户吗？"
@@ -135,16 +135,16 @@ class ManagementContract extends PromContract {
                 删除
               </Button>
             </Popconfirm>
-            <Button
-              type="link"
-              href={`/contract/paymentRecord/${(record as IContract).id}/${
-                (record as IContract).projectName
-              }/${(record as IContract).signCustomerId}/${
-                (record as IContract).signCustomerName
-              }`}
-              disabled={(record as IContract).status === 0}
-            >
-              添加回款记录
+            <Button type="link" disabled={(record as IContract).status === 0}>
+              <Link
+                to={`/project/contract/paymentRecord/${
+                  (record as IContract).id
+                }/${(record as IContract).projectName}/${
+                  (record as IContract).signCustomerId
+                }/${(record as IContract).signCustomerName}`}
+              >
+                添加回款记录
+              </Link>
             </Button>
           </Space>
         ),
