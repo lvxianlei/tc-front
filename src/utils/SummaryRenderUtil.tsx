@@ -122,17 +122,20 @@ export default abstract class SummaryRenderUtil {
                 {
                     items.map<React.ReactNode>((item: IRenderdSummariableItem, index: number): React.ReactNode => (
                         <div key={ `summariable_${ index }` }>
-                            <Space direction="horizontal" size="large" className={ `${ layoutStyles.width100 } ${ styles.summariableBar } ${ item.renderExtraInBar ? styles.hasExtraOperation : '' }` }>
-                                {
-                                    item.fieldItems.map<React.ReactNode>((fieldItem: IRenderedFieldItem, index: number): React.ReactNode => (
-                                        <div key={ `field_item_${ index }` }>
-                                            <span>{ fieldItem.label }：</span>
-                                            <span>{ fieldItem.value }</span>
-                                        </div>
-                                    ))
-                                }
-                                <div>{ item.renderExtraInBar ? item.renderExtraInBar() : null }</div>
-                            </Space>
+                            { item.fieldItems.length > 0 ? 
+                                <Space direction="horizontal" size="large" className={ `${ layoutStyles.width100 } ${ styles.summariableBar } ${ item.renderExtraInBar ? styles.hasExtraOperation : '' }` }>
+                                    {
+                                        item.fieldItems.map<React.ReactNode>((fieldItem: IRenderedFieldItem, index: number): React.ReactNode => (
+                                            <div key={ `field_item_${ index }` }>
+                                                <span>{ fieldItem.label }：</span>
+                                                <span>{ fieldItem.value }</span>
+                                            </div>
+                                        ))
+                                    }
+                                    <div>{ item.renderExtraInBar ? item.renderExtraInBar() : null }</div>
+                                </Space> : 
+                                null 
+                            }
                             { item.render ? item.render() : null }
                         </div>
                     ))

@@ -21,7 +21,7 @@ export interface IPaymentRecordNewState extends IAbstractPaymentRecordSettingSta
  /**
   * Create a new paymentRecord.
   */
-class PaymentRecordNew extends AbstractPaymentRecordSetting<IPaymentRecordNewRouteProps, IPaymentRecordNewState> {
+export class PaymentRecordNew extends AbstractPaymentRecordSetting<IPaymentRecordNewRouteProps, IPaymentRecordNewState> {
 
     /**
      * @description Components did mount

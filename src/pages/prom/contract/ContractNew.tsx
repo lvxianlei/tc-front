@@ -17,7 +17,7 @@ export interface IContractNewState extends IAbstractContractSettingState {}
 /**
  * Create a new client.
  */
-class ContractNew extends AbstractContractSetting<IContractNewRouteProps, IContractNewState> {
+export class ContractNew extends AbstractContractSetting<IContractNewRouteProps, IContractNewState> {
 
     /**
      * @implements

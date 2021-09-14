@@ -284,7 +284,7 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
                             <Space size="middle" direction="vertical" className={ styles.modal_center }>
                                 <Form.Item 
                                     label="审核件数" 
-                                    name="examineNum" 
+                                    name="approveNum" 
                                     rules={[{ required: true,
                                     message: '请输入审核件数' }]}
                                     wrapperCol={{ span: 10 }}

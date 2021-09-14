@@ -375,6 +375,34 @@
       "exact": true,
       "authority": "project_detail"
     },
+    { // 合同详情
+      "name": "合同详情",
+      "path": "/project/contract/detail/:id",
+      "module": "./pages/project/contract/ContractDetail",
+      "exact": true,
+      "authority": "contract"
+    },
+    { // 新增合同
+      "name": "新增合同",
+      "path": "/project/contract/new",
+      "module": "./pages/project/contract/ContractNew",
+      // "exact": true,
+      "authority": "contract"
+    },
+    { // 编辑合同
+      "name": "编辑合同",
+      "path": "/project/contract/setting/:id",
+      "module": "./pages/project/contract/ContractSetting",
+      "exact": true,
+      "authority": "contract"
+    },
+    { // 新增回款计划
+      "name": "新增回款记录",
+      "path": "/project/contract/paymentRecord/:id/:projectName/:signCustomerId/:signCustomerName",
+      "module": "./pages/project/contract/PaymentRecordNew",
+      "exact": true,
+      "authority": "contract"
+    },
     { // 项目管理基础信息编辑
       "name": "项目管理基础信息编辑",
       "path": "/project/management/detail/edit/base/:id",
