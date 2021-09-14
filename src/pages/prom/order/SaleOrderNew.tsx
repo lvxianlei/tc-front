@@ -16,7 +16,7 @@ export interface ISaleOrderNewState extends IAbstractSaleOrderSettingState {}
 /**
  * Create a new client.
  */
-class SaleOrderNew extends AbstractSaleOrderSetting<ISaleOrderNewRouteProps, ISaleOrderNewState> {
+export class SaleOrderNew extends AbstractSaleOrderSetting<ISaleOrderNewRouteProps, ISaleOrderNewState> {
 
     /**
      * @implements

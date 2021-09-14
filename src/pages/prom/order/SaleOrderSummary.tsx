@@ -66,7 +66,7 @@ export interface ISaleOrderSysInfo {
 /**
  * The summary of the contract
  */
-class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISaleOrderSummaryState> {
+export class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISaleOrderSummaryState> {
 
     /**
      * @description State  of contract summary
@@ -99,7 +99,7 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
      * @description Gets base info grid
      * @returns base info grid 
      */
-    private getBaseInfoGrid(): IRenderedGrid {
+    protected getBaseInfoGrid(): IRenderedGrid {
         const baseInfo: ISaleOrderBaseInfo | undefined = this.state.baseInfo;
         return {
             labelCol: {
@@ -152,7 +152,7 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
      * @description Gets base info grid
      * @returns base info grid 
      */
-     private getAmountInfoGrid(): IRenderedGrid {
+     protected getAmountInfoGrid(): IRenderedGrid {
         const baseInfo: ISaleOrderBaseInfo | undefined = this.state.baseInfo;
         return {
             labelCol: {
@@ -220,7 +220,7 @@ class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProps, ISal
      * @description Gets order columns
      * @returns order columns 
      */
-    private getOrderColumns(): TableColumnType<object>[] {
+    protected getOrderColumns(): TableColumnType<object>[] {
         return [{
             title: '序号',
             dataIndex: 'index'

@@ -2,12 +2,12 @@ import React from "react";
 import { TableColumnType, Space, FormItemProps } from "antd";
 import { withTranslation } from "react-i18next";
 import { Link, withRouter } from "react-router-dom";
-import AuthorityComponent from "../../components/AuthorityComponent";
-import ConfirmableButton from "../../components/ConfirmableButton";
-import { ITabItem } from "../../components/ITabableComponent";
-import RequestUtil from "../../utils/RequestUtil";
-import { IResponseData } from "../common/Page";
-import { SaleOrder, ITableDataItem } from "../prom/order/SaleOrder";
+import AuthorityComponent from "../../../components/AuthorityComponent";
+import ConfirmableButton from "../../../components/ConfirmableButton";
+import { ITabItem } from "../../../components/ITabableComponent";
+import RequestUtil from "../../../utils/RequestUtil";
+import { IResponseData } from "../../common/Page";
+import { SaleOrder, ITableDataItem } from "../../prom/order/SaleOrder";
 
 /**
  * 项目管理-订单管理

@@ -7,7 +7,7 @@ import { baseInfoData, productGroupColumns, bidInfoColumns, paths } from './mana
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import ManagementContract from './contract/Contract'
-import ManagementOrder from './ManagementOrder'
+import ManagementOrder from './order/SaleOrder'
 import styles from "./ManagementDetail.module.less"
 const tableColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },

@@ -403,6 +403,27 @@
       "exact": true,
       "authority": "contract"
     },
+    {
+      "name": "新增订单",
+      "path": "/project/order/new",
+      "module": "./pages/project/order/SaleOrderNew",
+      "exact": true,
+      "authority": "sale_order"
+    },
+    {
+      "name": "编辑订单",
+      "path": "/project/order/setting/:id",
+      "module": "./pages/project/order/SaleOrderSetting",
+      "exact": true,
+      "authority": "sale_order"
+    },
+    { // 订单详情
+      "name": "订单详情",
+      "path": "/project/order/detail/:id",
+      "module": "./pages/project/order/SaleOrderDetail",
+      "exact": true,
+      "authority": "sale_order"
+    },
     { // 项目管理基础信息编辑
       "name": "项目管理基础信息编辑",
       "path": "/project/management/detail/edit/base/:id",

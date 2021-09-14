@@ -29,7 +29,8 @@ interface IDetail extends ISaleOrderBaseInfo, ISaleOrderSysInfo {
 /**
  * SaleOrder detail page component.
  */
-class SaleOrderDetail extends AbstractDetailComponent<IContractDetailRouteProps, ISaleOrderDetailState> {
+export class SaleOrderDetail extends AbstractDetailComponent<IContractDetailRouteProps, ISaleOrderDetailState> {
+    requestPath = "/tower-market/saleOrder";
 
     public state: ISaleOrderDetailState = {
         detail: {}
@@ -40,7 +41,7 @@ class SaleOrderDetail extends AbstractDetailComponent<IContractDetailRouteProps,
      * @param filterValues 
      */
     protected async fetchTableData() {
-        const resData: IDetail = await RequestUtil.get<IDetail>(`/tower-market/saleOrder/${ this.props.match.params.id }`);
+        const resData: IDetail = await RequestUtil.get<IDetail>(`${this.requestPath}/${ "2" || this.props.match.params.id }`);
         this.setState({
             detail: resData
         });
