@@ -17,12 +17,12 @@ export interface ITowerChangeApprovalProps {
     readonly businessId: any;
     readonly id: string;
 }
-export interface ITowerChangeApprovalRouteProps extends RouteComponentProps<ITowerChangeApprovalProps>, WithTranslation {}
-export interface ITowerChangeApprovalState extends IAbstractTowerShapeSettingState {}
+export interface ITowerChangeApprovalRouteProps extends RouteComponentProps<ITowerChangeApprovalProps>, WithTranslation { }
+export interface ITowerChangeApprovalState extends IAbstractTowerShapeSettingState { }
 
 interface ITowerShapeChange extends ITowerShape {
     productChangeRecordVos?: IProductDTOList[];
-} 
+}
 
 //类型
 enum StateType {
@@ -34,7 +34,7 @@ enum StateType {
 
 enum RecordType {
     BEFORE_THE_CHANGE = 1,
-    AFTER_THE_CHANGE = 2       
+    AFTER_THE_CHANGE = 2
 }
 /**
  * Product change approval
@@ -62,15 +62,15 @@ class TowerChangeApproval extends AbstractTowerShapeSetting<ITowerChangeApproval
             return {
                 ...items,
                 productAdditionalDTOList: items.productAdditionalVOList,
-                towerLeg1Length: items.towerLeg1Length == -1 ? undefined : items.towerLeg1Length,
-                towerLeg1Weight: items.towerLeg1Weight == -1 ? undefined : items.towerLeg1Weight,
-                towerLeg2Length: items.towerLeg2Length == -1 ? undefined : items.towerLeg2Length,
-                towerLeg2Weight: items.towerLeg2Weight == -1 ? undefined : items.towerLeg2Weight,
-                towerLeg3Length: items.towerLeg3Length == -1 ? undefined : items.towerLeg3Length,
-                towerLeg3Weight: items.towerLeg3Weight == -1 ? undefined : items.towerLeg3Weight,
-                towerLeg4Length: items.towerLeg4Length == -1 ? undefined : items.towerLeg4Length,
-                towerLeg4Weight: items.towerLeg4Weight == -1 ? undefined : items.towerLeg4Weight,
-                towerFootWeight: items.towerFootWeight == -1 ? undefined : items.towerFootWeight,
+                towerLeg1Length: items.towerLeg1Length === -1 ? undefined : items.towerLeg1Length,
+                towerLeg1Weight: items.towerLeg1Weight === -1 ? undefined : items.towerLeg1Weight,
+                towerLeg2Length: items.towerLeg2Length === -1 ? undefined : items.towerLeg2Length,
+                towerLeg2Weight: items.towerLeg2Weight === -1 ? undefined : items.towerLeg2Weight,
+                towerLeg3Length: items.towerLeg3Length === -1 ? undefined : items.towerLeg3Length,
+                towerLeg3Weight: items.towerLeg3Weight === -1 ? undefined : items.towerLeg3Weight,
+                towerLeg4Length: items.towerLeg4Length === -1 ? undefined : items.towerLeg4Length,
+                towerLeg4Weight: items.towerLeg4Weight === -1 ? undefined : items.towerLeg4Weight,
+                towerFootWeight: items.towerFootWeight === -1 ? undefined : items.towerFootWeight,
                 index: index + 1
             }
         })
@@ -239,7 +239,7 @@ class TowerChangeApproval extends AbstractTowerShapeSetting<ITowerChangeApproval
             width: 180,
             fixed: 'right',
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
-                <Button type="link" onClick={ () => this.itemWeightClick(index) }>
+                <Button type="link" onClick={() => this.itemWeightClick(index)}>
                     查看
                 </Button>
             )
@@ -250,10 +250,10 @@ class TowerChangeApproval extends AbstractTowerShapeSetting<ITowerChangeApproval
      * @description 点击增重项事件
      * @param event 
      */
-     public itemWeightClick = (index: number): void => {
+    public itemWeightClick = (index: number): void => {
         let itemWeight: IProductAdditionalDTOList[] = this.getForm()?.getFieldsValue(true).productChangeRecordVos[index].productAdditionalVOList;
-        itemWeight && itemWeight.map((item: IProductAdditionalDTOList, index: number) => {
-            if(item.additionalItem && item.additionalItem !== "") {
+        itemWeight && itemWeight.forEach((item: IProductAdditionalDTOList, index: number) => {
+            if (item.additionalItem && item.additionalItem !== "") {
                 itemWeight = itemWeight;
             } else {
                 itemWeight.splice(index, 1);
@@ -278,7 +278,7 @@ class TowerChangeApproval extends AbstractTowerShapeSetting<ITowerChangeApproval
       * @param item 
       * @returns table columns 
       */
-     public getItemColumns(index: number): TableColumnType<object>[] {        
+    public getItemColumns(index: number): TableColumnType<object>[] {
         return [{
             key: 'additionalItem',
             title: '增重项',
@@ -292,23 +292,23 @@ class TowerChangeApproval extends AbstractTowerShapeSetting<ITowerChangeApproval
         }];
     }
 
-      /**
-     * @description 增重项弹窗
-     * @param event 
-     */
-       public itemWeightModal = (): React.ReactNode => {
+    /**
+   * @description 增重项弹窗
+   * @param event 
+   */
+    public itemWeightModal = (): React.ReactNode => {
         const index: number = this.state.index || 0;
         const towerShape: ITowerShape | undefined = this.state.towerShape;
         const productChangeRecordVos: IProductDTOList[] = towerShape?.productChangeRecordVos || [];
         const productAdditionalVOList: IProductAdditionalDTOList[] = productChangeRecordVos[index]?.productAdditionalVOList || [];
         return <>
-            { this.state.isVisible ? <Modal title="增重项" visible={ this.state.isVisible } onCancel={ () => {
+            {this.state.isVisible ? <Modal title="增重项" visible={this.state.isVisible} onCancel={() => {
                 this.setState({ isVisible: false })
-            } } width={ "30%" } footer={ null }>
-                <Table rowKey= {this.getTableRowKey()} bordered={ true } dataSource = { [...productAdditionalVOList] } columns={ this.getItemColumns(index) } pagination = { false }/>
+            }} width={"30%"} footer={null}>
+                <Table rowKey={this.getTableRowKey()} bordered={true} dataSource={[...productAdditionalVOList]} columns={this.getItemColumns(index)} pagination={false} />
             </Modal>
-            : null }
-        </> 
+                : null}
+        </>
     }
 
     /**
@@ -321,10 +321,10 @@ class TowerChangeApproval extends AbstractTowerShapeSetting<ITowerChangeApproval
             title: '杆塔信息',
             render: (): React.ReactNode => {
                 return (<>
-                    { this.itemWeightModal() }
+                    {this.itemWeightModal()}
                     <Table rowKey="index" bordered={true} pagination={false}
                         columns={this.getProductTableColumns()} dataSource={this.state.towerShape?.productChangeRecordVos} scroll={{ x: 1200 }} />
-                    </>
+                </>
                 );
             }
         }];

@@ -2,23 +2,19 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
+import React from 'react';
 import './index.css';
 import 'nprogress/nprogress.css';
-
 import i18n from 'i18next';
 import backend from 'i18next-http-backend';
-import React from 'react';
 import ReactDOM from 'react-dom';
 import { initReactI18next } from 'react-i18next';
-
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import LangUtil, { Lang } from './utils/LangUtil';
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 import 'moment/locale/zh-cn';
-import RequestUtil from './utils/RequestUtil';
-
 const lang: Lang = LangUtil.getLang();
 
 i18n

@@ -26,7 +26,7 @@ export default class AuthorizationFilter implements IFilter {
         if (props.location.pathname !== '/login') {
             accessable = !!(AuthUtil.getAuthorization() && AuthUtil.getSinzetechAuth() && AuthUtil.getTenantId());
             if (accessable) {
-                const [info, authorities] = await Promise.all([
+                const [, authorities] = await Promise.all([
                     RequestUtil.get<any>('/sinzetech-user/user/info'),
                     RequestUtil.get<AuthorityBasic[]>('/sinzetech-system/role/componentList')
                 ]);
@@ -34,7 +34,7 @@ export default class AuthorizationFilter implements IFilter {
                 EventBus.emit('get/authorities');
             } else {
                 const { location } = window;
-                props.history.replace(`/login?goto=${ encodeURIComponent(location.href.replace(`${ location.protocol }//${ location.host }`, '')) }`);
+                props.history.replace(`/login?goto=${encodeURIComponent(location.href.replace(`${location.protocol}//${location.host}`, ''))}`);
             }
         }
         return Promise.resolve(accessable);

@@ -12,7 +12,7 @@ import layoutStyles from '../layout/Layout.module.less';
 import styles from './AbstractMngtComponent.module.less';
 import './AbstractMngtComponent.module.less';
 import AbstractTabableComponent from './AbstractTabableComponent';
-import ITabableComponent, { ITabItem } from './ITabableComponent';
+import { ITabItem } from './ITabableComponent';
 
 export interface IAbstractMngtComponentState {
     selectedTabKey: React.Key;

@@ -1,4 +1,4 @@
-import { Card, Modal, Space, Table } from 'antd';
+import { Modal, Table } from 'antd';
 import { ColumnType, TablePaginationConfig, TableProps } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
@@ -162,7 +162,7 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
                                 isModalVisible: false,
                                 selectedRowKeys: []
                             })
-                           { this.props.onSelect(this.state.selectedRows) }
+                            this.props.onSelect(this.state.selectedRows) 
                         }
                     } 
                     onCancel={this.handleCancel}

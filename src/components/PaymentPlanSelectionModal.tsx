@@ -4,8 +4,6 @@
  */
 import { TableColumnType } from 'antd';
 import { GetRowKey } from 'rc-table/lib/interface';
-import React from 'react';
-
 import RequestUtil from '../utils/RequestUtil';
 import AbstractSelectableModal, {
     IAbstractSelectableModalProps,

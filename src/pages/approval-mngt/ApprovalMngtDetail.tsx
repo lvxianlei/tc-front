@@ -1,7 +1,7 @@
 import React from 'react'
-import { Row, Button, Table } from 'antd'
+import { Row, Button } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { Detail, DetailContent, BaseInfo, CommonTable } from '../common'
+import { DetailContent, BaseInfo, CommonTable } from '../common'
 import { enclosure, baseInfo } from './approvalHeadData.json'
 export default function ApprovalMngtDetail(): React.ReactNode {
     const history = useHistory()

@@ -3,7 +3,7 @@
  * @copyright © 2021
  */
 import { FormItemProps, Input, Select } from 'antd';
-import Table, { ColumnType, TablePaginationConfig } from 'antd/lib/table';
+import { ColumnType, TablePaginationConfig } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
@@ -12,8 +12,6 @@ import RequestUtil from '../utils/RequestUtil';
 import AbstractFilteredSelectionModal from './AbstractFilteredSelecableModal';
 import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from './AbstractSelectableModal';
 import { clientTypeOptions } from '../configuration/DictionaryOptions';
-
-const { Option } = Select;
 
 export interface IClientSelectionComponentState extends IAbstractSelectableModalState {
     readonly tableDataSource: IClient[];

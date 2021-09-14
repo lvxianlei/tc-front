@@ -2,24 +2,19 @@
  * @author lxy
  * @copyright © 2021
  */
-import { FormItemProps, Input, Select } from 'antd';
-import Table, { ColumnType, TablePaginationConfig } from 'antd/lib/table';
-import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
-import styles from './AbstractSelectableModal.module.less';
+import { FormItemProps, Input } from 'antd';
+import  { ColumnType, TablePaginationConfig } from 'antd/lib/table';
+import { GetRowKey } from 'rc-table/lib/interface';
 import RequestUtil from '../utils/RequestUtil';
 import AbstractFilteredSelectionModal from './AbstractFilteredSelecableModal';
 import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from './AbstractSelectableModal';
-
  
- 
- const { Option } = Select;
- 
- export interface IOrderSelectionComponentState extends IAbstractSelectableModalState {
+export interface IOrderSelectionComponentState extends IAbstractSelectableModalState {
      readonly tableDataSource: IOrder[];
- }
+}
  
- export interface IOrder {
+export interface IOrder {
      readonly chargeType: number;	
      readonly customerCompany: string;	
      readonly deliveryTime: string;	
@@ -29,12 +24,12 @@ import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponse
      readonly projectName: string;
      readonly saleOrderNumber: string;
      readonly signCustomerName: string;
- }
+}
  
  /**
   * Order Selection Component
   */
- export default class OrderSelectionComponent extends AbstractFilteredSelectionModal<IAbstractSelectableModalProps, IOrderSelectionComponentState> {
+export default class OrderSelectionComponent extends AbstractFilteredSelectionModal<IAbstractSelectableModalProps, IOrderSelectionComponentState> {
  
      /**
       * @override
@@ -65,7 +60,7 @@ import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponse
              current: pagination.current || this.state.tablePagination.current,
              size: pagination.pageSize ||this.state.tablePagination.pageSize
          });
-         if(resData?.records?.length == 0 && resData?.current && resData?.current>1){
+         if(resData?.records?.length === 0 && resData?.current && resData?.current>1){
             this.getTable({
                 ...filterValues,
             },{
@@ -158,4 +153,4 @@ import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponse
      protected getTableRowKey(): string | GetRowKey<object> {
          return 'id';
      }
- }
+}

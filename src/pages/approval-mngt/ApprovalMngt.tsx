@@ -1,10 +1,9 @@
 import React from 'react'
 import { Space, Button, Input } from 'antd'
 import { Link } from 'react-router-dom'
-import ConfirmableButton from '../../components/ConfirmableButton'
 import { Page } from '../common'
-import { IClient } from '../IClient'
-import RequestUtil from '../../utils/RequestUtil'
+// import { IClient } from '../IClient'
+// import RequestUtil from '../../utils/RequestUtil'
 export default function Information(): React.ReactNode {
     const columns = [
         {
