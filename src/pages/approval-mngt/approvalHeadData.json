@@ -2,22 +2,28 @@
     "baseInfo": [],
     "enclosure": [
         {
+            "key": "typeName",
             "title": "客户类型",
-            "dataIndex": "typeName"
+            "dataIndex": "typeName",
+            "type": "select"
         },
         {
+            "key": "linkman",
             "title": "重要联系人",
             "dataIndex": "linkman"
         },
         {
+            "key": "phone",
             "title": "手机号码",
             "dataIndex": "phone"
         },
         {
+            "key": "description",
             "title": "备注",
             "dataIndex": "description"
         },
         {
+            "key": "createTime",
             "title": "创建时间",
             "dataIndex": "createTime"
         }

@@ -41,12 +41,12 @@ interface TextData extends ColumnsItem {
 }
 
 interface CommonTableProps {
-    columns: (SelectData | TextData)[]
+    columns: TableColumnProps<object>[]
     dataSource?: object[]
 }
 
 export default function CommonTable({ columns, dataSource = [] }: CommonTableProps): JSX.Element {
-    columns = columns.map((item: (SelectData | TextData), index: number) => generateRender(item.type || "text", item))
+    columns = columns.map((item: any, index: number) => generateRender(item.type || "text", item))
     return <Table
         size="small"
         rowKey={(record: any) => `common_table_${record.id || record.title || record.dataIndex}`}

@@ -151,7 +151,7 @@
                     },
                     {
                         "label": "招标信息",
-                        "icon": "bidding",
+                        "icon": "zhaobiao2",
                         "path": "/bidding",
                         "authority": "bidding",
                         "items": [
@@ -164,7 +164,7 @@
                     },
                     {
                         "label": "项目管理",
-                        "icon": "project",
+                        "icon": "xiangmuguanli",
                         "path": "/project",
                         "authority": "project",
                         "items": [
@@ -177,7 +177,7 @@
                     },
                     {
                         "label": "审批管理",
-                        "icon": "approval-mngt",
+                        "icon": "examine",
                         "path": "/approvalm",
                         "authority": "approvalm",
                         "items": [
