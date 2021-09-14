@@ -12,19 +12,19 @@ interface SelectOption {
     [key: string]: any
 }
 
-interface SelectData {
+export interface SelectData {
     type: "select"
     enum?: SelectOption[]
     path?: string
     [key: string]: any
 }
 
-interface InputData {
+export interface InputData {
     type?: "text"
     [key: string]: any
 }
 
-interface PopTableData {
+export interface PopTableData {
     type: "PopTable"
     title: string
     path: string

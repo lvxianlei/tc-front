@@ -1,7 +1,8 @@
 import React from "react"
-import { Descriptions, Form, FormInstance, Row, Col } from "antd"
+import { Descriptions, Form, FormInstance, Row, Col, TableColumnProps } from "antd"
 import { FormItemType } from '../common'
 import styles from './BaseInfo.module.less'
+import { SelectData, InputData, PopTableData, FormItemTypesType } from "./FormItemType"
 export interface BaseInfoItemProps {
     name: string
     label: string
@@ -10,14 +11,15 @@ export interface BaseInfoItemProps {
 }
 
 export interface BaseInfoColumnsProps {
-    title: string | number,
-    dataIndex: string,
-    render?: () => JSX.Element
+    type?: FormItemTypesType
+    path?: string
+    columns?: any[]
+    [key: string]: any
 }
 
 interface BaseInfoProps {
     dataSource: { [key in BaseInfoColumnsProps['title']]: any }
-    columns: BaseInfoColumnsProps[]
+    columns: any[]
     edit?: boolean
     col?: number
     form?: FormInstance<any>

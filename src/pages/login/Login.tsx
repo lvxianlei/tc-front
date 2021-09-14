@@ -1,5 +1,5 @@
 import { LockOutlined, SafetyCertificateOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Card, Form, Input, Layout, Space, Typography } from 'antd';
+import { Button, Card, Form, Input, Layout, Space, Typography, notification } from 'antd';
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import MD5 from 'crypto-js/md5';
@@ -77,7 +77,7 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
     private async onSubmit(values: Record<string, any>) {
         AuthUtil.setTenantId(this.state.tenant.tenantId, { expires: 7 });
         values.password = MD5(values.password).toString();
-        const { access_token } = await RequestUtil.post('/sinzetech-auth/oauth/token', {
+        const { access_token, ...result } = await RequestUtil.post('/sinzetech-auth/oauth/token', {
             ...values,
             tenantId: this.state.tenant.tenantId
         }, {
@@ -85,11 +85,17 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
             'Captcha-code': values.code,
             'Captcha-key': this.state.captcha.key
         });
-        AuthUtil.setSinzetechAuth(access_token, { expires: 7 });
-        let gotoPath: string = decodeURIComponent(new URLSearchParams(this.props.location.search).get('goto') || '');
-        const index: number = gotoPath.lastIndexOf("=");
-        gotoPath = gotoPath.slice(index + 1, gotoPath.length);
-        this.props.history.push(gotoPath || ApplicationContext.get().home || '/');
+        if (result.error) {
+            notification.error({
+                message: result.error_description
+            })
+        } else {
+            AuthUtil.setSinzetechAuth(access_token, { expires: 7 });
+            let gotoPath: string = decodeURIComponent(new URLSearchParams(this.props.location.search).get('goto') || '');
+            const index: number = gotoPath.lastIndexOf("=");
+            gotoPath = gotoPath.slice(index + 1, gotoPath.length);
+            this.props.history.push(gotoPath || ApplicationContext.get().home || '/');
+        }
     }
 
     /**

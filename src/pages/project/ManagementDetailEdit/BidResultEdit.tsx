@@ -11,7 +11,7 @@ export default function BidResultEdit(): JSX.Element {
         <Button>返回</Button>
     ]} >
         <Row>基础信息</Row>
-        <BaseInfo columns={[{
+        <BaseInfo edit columns={[{
             title: '年份',
             dataIndex: 'baseInfo?.contractNumber'
         },
@@ -24,6 +24,21 @@ export default function BidResultEdit(): JSX.Element {
         },
         {
             title: '是否中标',
+            type: "select",
+            enum: [
+                {
+                    value: 0,
+                    label: "未公布"
+                },
+                {
+                    value: 1,
+                    label: "是"
+                },
+                {
+                    value: 2,
+                    label: "否"
+                }
+            ],
             dataIndex: 'baseInfo?.simpleProjectName'
         }]} dataSource={{}} />
         <Row>开标信息</Row>

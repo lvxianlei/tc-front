@@ -7,23 +7,23 @@ import React from 'react';
 import ApplicationContext from '../configuration/ApplicationContext';
 import { ComponentClazz, ILayout } from '../configuration/IApplicationContext';
 import AbstractFrame, { IAbstractFrameProps, IAbstractFrameState } from './AbstractFrame';
+import Logo from "./logo.png"
 
-
-export interface IDefaultFrameProps extends IAbstractFrameProps {}
-export interface IDefaultFrameState extends IAbstractFrameState {}
+export interface IDefaultFrameProps extends IAbstractFrameProps { }
+export interface IDefaultFrameState extends IAbstractFrameState { }
 
 export default class DefaultFrame<
     P extends IDefaultFrameProps = {},
     S extends IDefaultFrameState = IDefaultFrameState
-> extends AbstractFrame<P, S> {
+    > extends AbstractFrame<P, S> {
 
     /**
      * @implements
      * @description Renders logo
      * @returns logo 
      */
-     public renderLogo(): React.ReactNode {
-        return <i className={ `font_family icon-${ ApplicationContext.get().logo }` }></i>;
+    public renderLogo(): React.ReactNode {
+        return <h1 style={{ height: "100%" }}><img height="100%" src={Logo} /></h1>;
     }
 
     /**
@@ -72,7 +72,7 @@ export default class DefaultFrame<
         const layout: ILayout | undefined = ApplicationContext.get().layout;
         const panel: ComponentClazz | undefined = layout ? layout[panelName] : undefined;
         const Panel: React.ComponentClass | undefined = panel?.componentClass;
-        return Panel ? <Panel { ...panel?.props }/> : null;
+        return Panel ? <Panel {...panel?.props} /> : null;
     }
-    
+
 }
