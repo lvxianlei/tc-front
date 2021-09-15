@@ -21,13 +21,14 @@ export interface ISaleOrderSettingState extends IAbstractSaleOrderSettingState {
  * SaleOrder Setting
  */
 export class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSettingRouteProps, ISaleOrderSettingState> {
+    requestPath = "/tower-market/saleOrder";
 
     /**
      * @description Components did mount
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const saleOrder: ISaleOrder = await RequestUtil.get<ISaleOrder>(`/tower-market/saleOrder/${ this.props.match.params.id }`);
+        const saleOrder: ISaleOrder = await RequestUtil.get<ISaleOrder>(`${this.requestPath}/${ "2" || this.props.match.params.id }`);
         saleOrder.orderProductDtos = saleOrder.orderProductVos?.map<IProductVo>((product: IProductVo, index: number): IProductVo => {
             return {
                 ...product,

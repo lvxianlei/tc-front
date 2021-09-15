@@ -15,11 +15,12 @@ import {
 import { SaleOrderSetting } from "../../prom/order/SaleOrderSetting";
 import layoutStyles from "../../../layout/Layout.module.less";
 
-interface ManagementSaleOrder extends ISaleOrder {
+export interface ManagementSaleOrder extends ISaleOrder {
   orderWeight?: number;
 }
 
 class ManagementSaleOrderSetting extends SaleOrderSetting {
+  requestPath = "/saleOrder";
   public getFormItemGroups(): IFormItemGroup[][] {
     const saleOrder: ManagementSaleOrder | undefined = this.state
       .saleOrder as ManagementSaleOrder;
@@ -377,6 +378,10 @@ class ManagementSaleOrderSetting extends SaleOrderSetting {
         },
       ],
     ];
+  }
+  protected getReturnPath(): string {
+    this.props.history.goBack();
+    return "";
   }
 }
 export default withRouter(withTranslation()(ManagementSaleOrderSetting));
