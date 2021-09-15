@@ -3,11 +3,26 @@ import { Space, Button, Input, DatePicker, Select } from 'antd'
 import { Link } from 'react-router-dom'
 import { Page } from '../common'
 import RequestUtil from '../../utils/RequestUtil'
+const biddingStatusEnum = [
+    {
+        value: 0,
+        label: "未决定"
+    },
+    {
+        value: 1,
+        label: "是"
+    },
+    {
+        value: 2,
+        label: "否"
+    }
+]
 const columns = [
     {
         key: 'index',
         title: '序号',
         dataIndex: 'index',
+        width: 50,
         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
     },
     {
@@ -72,9 +87,9 @@ const columns = [
         dataIndex: 'explain'
     },
     {
-        key: 'biddingStatus',
         title: '是否应标',
-        dataIndex: 'biddingStatus'
+        dataIndex: 'biddingStatus',
+        render: (_: any, record: any) => <>{biddingStatusEnum.find(item=>item.value===record.biddingStatus)?.label}</>
     },
     {
         key: 'reason',

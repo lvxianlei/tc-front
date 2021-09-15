@@ -70,7 +70,10 @@ const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, ...props }
         text: <Input {...props} />,
         number: <InputNumber {...props} />,
         select: <SelfSelect {...props} data={data as SelectData} />,
-        date: <DatePicker {...props} value={props.value ? moment(props.value, "YYYY-MM-DD HH:mm:ss") : null} format="YYYY-MM-DD HH:mm:ss" />,
+        date: <DatePicker
+            {...props}
+            value={props.value ? moment(props.value, data.format || "YYYY-MM-DD HH:mm:ss") : null}
+            format={data.format || "YYYY-MM-DD HH:mm:ss"} />,
         textarea: <Input.TextArea {...props} />,
         popForm: <Input {...props} />,
         popTable: <PopTable {...props} data={data as PopTableData} />

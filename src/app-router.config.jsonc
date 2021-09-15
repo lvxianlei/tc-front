@@ -467,7 +467,6 @@
       "exact": true,
       "authority": "project_detail"
     },
-
     {
       // 项目新建/编辑
       "name": "项目编辑",
@@ -489,6 +488,20 @@
       "module": "./pages/approval-mngt/ApprovalMngtDetail",
       "exact": true,
       "authority": "approvalm_detail"
+    },
+    { // 审批管理新建
+      "name": "审批管理详情",
+      "path": "/approvalm/management/edit/new/:type",
+      "module": "./pages/approval-mngt/ApprovalMngtEdit",
+      "exact": true,
+      "authority": "approvalm_edit"
+    },
+    { // 审批管理详情
+      "name": "审批管理详情",
+      "path": "/approvalm/management/edit/:id",
+      "module": "./pages/approval-mngt/ApprovalMngtEdit",
+      "exact": true,
+      "authority": "approvalm_edit"
     }
   ]
 }

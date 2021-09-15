@@ -1,31 +1,87 @@
 {
-    "baseInfo": [],
-    "enclosure": [
+    "baseInfo": [
         {
-            "key": "typeName",
-            "title": "客户类型",
-            "dataIndex": "typeName",
-            "type": "select"
+            "title": "项目名称",
+            "dataIndex": "projectName"
         },
         {
-            "key": "linkman",
-            "title": "重要联系人",
-            "dataIndex": "linkman"
+            "title": "项目单位",
+            "dataIndex": "biddingPerson"
         },
         {
-            "key": "phone",
-            "title": "手机号码",
-            "dataIndex": "phone"
+            "title": "项目编码",
+            "dataIndex": "projectNumber"
         },
         {
-            "key": "description",
+            "title": "投标截至时间",
+            "dataIndex": "projectName"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "projectName"
+        }
+    ],
+    "auditHead": [
+        {
+            "title": "审批编码",
+            "dataIndex": "businessNumber"
+        },
+        {
+            "title": "项目编码",
+            "dataIndex": "projectNumber"
+        },
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName"
+        },
+        {
+            "title": "项目单位",
+            "dataIndex": "biddingPerson"
+        },
+        {
+            "title": "关联合同",
+            "dataIndex": "internalNumber"
+        },
+        {
+            "title": "审批单类型",
+            "dataIndex": "processName"
+        },
+        {
+            "title": "审批状态",
+            "dataIndex": "auditStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "待审批"
+                },
+                {
+                    "value": 1,
+                    "label": "通过"
+                },
+                {
+                    "value": 2,
+                    "label": "驳回"
+                }
+            ]
+        },
+        {
+            "title": "发起时间",
+            "dataIndex": "startTime",
+            "type": "date"
+        },
+        {
             "title": "备注",
             "dataIndex": "description"
         },
         {
-            "key": "createTime",
-            "title": "创建时间",
-            "dataIndex": "createTime"
+            "title": "制单人",
+            "dataIndex": "createUserName"
+        },
+        {
+            "title": "制单时间",
+            "dataIndex": "createTime",
+            "type": "date"
         }
     ]
 }

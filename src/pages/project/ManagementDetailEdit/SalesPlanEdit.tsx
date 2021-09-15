@@ -1,7 +1,8 @@
 import React from "react"
 import { useHistory, useParams } from "react-router-dom"
 import { Row, Col, Button, Table, Radio } from "antd"
-import { DetailContent, BaseInfo } from "../../common"
+import { DetailContent, BaseInfo, EditTable } from "../../common"
+import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 const tableColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
     { title: '分标编号', dataIndex: 'partBidNumber', key: 'partBidNumber', },
@@ -15,6 +16,7 @@ const tableColumns = [
 export default function SalesPlanEdit() {
 
     return <DetailContent>
+        <ManagementDetailTabsTitle />
         <Row>
             <Radio.Group defaultValue="all">
                 <Radio.Button value="all">全部</Radio.Button>
@@ -23,7 +25,6 @@ export default function SalesPlanEdit() {
                 <Radio.Button value="c" >已通过</Radio.Button>
             </Radio.Group>
         </Row>
-        <Row><Button type="primary">新增</Button></Row>
-        <Table columns={tableColumns} />
+        <EditTable columns={tableColumns} dataSource={[]} />
     </DetailContent>
 }

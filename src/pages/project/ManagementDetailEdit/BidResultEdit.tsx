@@ -2,14 +2,13 @@ import React from "react"
 import { useHistory, useParams } from "react-router-dom"
 import { Row, Col, Button, Tabs, Table } from "antd"
 import { DetailContent, BaseInfo } from "../../common"
+import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { bidInfoColumns } from '../managementDetailData.json'
 export default function BidResultEdit(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ id: string, tab: string }>()
-    return (<DetailContent operation={[
-        <Button style={{ marginRight: '10px' }} type="primary" onClick={() => history.push(`/project/management/detail/edit/bidDoc/${params.id}`)}>编辑</Button>,
-        <Button>返回</Button>
-    ]} >
+    return (<DetailContent >
+        <ManagementDetailTabsTitle />
         <Row>基础信息</Row>
         <BaseInfo edit columns={[{
             title: '年份',

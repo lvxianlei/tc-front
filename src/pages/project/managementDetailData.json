@@ -217,10 +217,88 @@
             "dataIndex": "createTime"
         }
     ],
+    "frameAgreementColumns": [
+        {
+            "title": "协议编号",
+            "dataIndex": "frameAgreementCode"
+        },
+        {
+            "title": "协议名称",
+            "dataIndex": "frameAgreementName"
+        },
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName"
+        },
+        {
+            "title": "合同总重(吨)",
+            "dataIndex": "contractWeight"
+        },
+        {
+            "title": "合同单价(元/吨)",
+            "dataIndex": "contractMoney"
+        },
+        {
+            "title": "合同总价(元)",
+            "dataIndex": "contractMoneyCount"
+        },
+        {
+            "title": "中标类型",
+            "dataIndex": "bidType"
+        },
+        {
+            "title": "销售类型",
+            "dataIndex": "saleType"
+        },
+        {
+            "title": "业主单位",
+            "dataIndex": "ownerCompany"
+        },
+        {
+            "title": "业主联系人",
+            "dataIndex": "ownerUser"
+        },
+        {
+            "title": "业主联系电话",
+            "dataIndex": "ownerPhone"
+        },
+        {
+            "title": "签订单位",
+            "dataIndex": "signCompany"
+        },
+        {
+            "title": "签订日期",
+            "dataIndex": "signDate"
+        },
+        {
+            "title": "签订人",
+            "dataIndex": "signUser"
+        },
+        {
+            "title": "交货日期",
+            "dataIndex": "deliveryDate"
+        },
+        {
+            "title": "有无技术协议",
+            "dataIndex": "isIta"
+        },
+        {
+            "title": "所属区域",
+            "dataIndex": "address"
+        },
+        {
+            "title": "销售员",
+            "dataIndex": "saleUser"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        }
+    ],
     "paths": {
         "base": "/tower-market/projectInfo",
         "bidDoc": "/tower-market/bidDoc",
-        "bidResult": "/tower-market/bidResult",
+        "bidResult": "/tower-market/bidBase",
         "frameAgreement": "/tower-market/frameAgreement",
         "contract": "/tower-market/contract",
         "productGroup": "/tower-market/productGroup",

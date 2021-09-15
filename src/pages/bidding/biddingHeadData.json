@@ -11,7 +11,8 @@
         {
             "dataIndex": "releaseDate",
             "title": "发布时间",
-            "type": "date"
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "dataIndex": "source",

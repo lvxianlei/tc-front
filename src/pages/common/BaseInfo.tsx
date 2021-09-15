@@ -18,7 +18,7 @@ export interface BaseInfoColumnsProps {
 }
 
 interface BaseInfoProps {
-    dataSource: { [key in BaseInfoColumnsProps['title']]: any }
+    dataSource: { [key:string]: any }
     columns: any[]
     edit?: boolean
     col?: number

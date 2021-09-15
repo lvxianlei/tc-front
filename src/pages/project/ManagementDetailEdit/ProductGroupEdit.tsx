@@ -2,6 +2,7 @@ import React from "react"
 import { useHistory, useParams } from "react-router-dom"
 import { Row, Col, Button, Tabs, Table, Radio } from "antd"
 import { DetailContent, BaseInfo } from "../../common"
+import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { productGroupColumns } from '../managementDetailData.json'
 const tableColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
@@ -16,6 +17,7 @@ const tableColumns = [
 export default function ProductGroupEdit() {
 
     return <DetailContent>
+        <ManagementDetailTabsTitle />
         <section>
             <Row><Button type="primary">新增</Button></Row>
             <Table columns={tableColumns} />

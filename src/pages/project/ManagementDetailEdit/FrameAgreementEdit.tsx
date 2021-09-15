@@ -2,6 +2,7 @@ import React from "react"
 import { useHistory, useParams } from "react-router-dom"
 import { Row, Col, Button, Tabs, Table } from "antd"
 import { DetailContent, BaseInfo } from "../../common"
+import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { baseInfoData } from '../managementDetailData.json'
 const tableColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
@@ -15,12 +16,10 @@ const tableColumns = [
 ]
 export default function FrameAgreementEdit(): JSX.Element {
 
-    return <DetailContent operation={[
-        <Button key="edit" style={{ marginRight: '10px' }} type="primary">编辑</Button>,
-        <Button key="goback">返回</Button>
-    ]}>
+    return <DetailContent >
+        <ManagementDetailTabsTitle />
         <Row>基本信息</Row>
-        <BaseInfo columns={baseInfoData} dataSource={{}} />
+        <BaseInfo columns={baseInfoData} dataSource={{}} edit />
         <Row style={{ height: '50px', paddingLeft: '10px', lineHeight: '50px' }}>合同物资清单</Row>
         <Row><Button type="primary">新增一行</Button></Row>
         <Table size="small" columns={tableColumns} />

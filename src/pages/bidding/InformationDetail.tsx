@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-import { Spin, Form, Button, Modal, Row, TableColumnProps, Select, Input } from 'antd'
+import { Spin, Form, Button, Modal, Row, Select, Input } from 'antd'
 import useRequest from '@ahooksjs/use-request'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { Detail, BaseInfo, DetailContent, CommonTable } from '../common'
 import { baseInfoData } from './biddingHeadData.json'
 import SummaryRenderUtil from '../../utils/SummaryRenderUtil'
 import RequestUtil from '../../utils/RequestUtil'
 const tableColumns = [
-    { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+    { title: '序号', dataIndex: 'index', width: 50, key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
     {
         title: '分标编号',
         dataIndex: 'partBidNumber',
@@ -22,10 +22,11 @@ const tableColumns = [
 ]
 export default function InformationDetail(): React.ReactNode {
     const history = useHistory()
+    const params = useParams<{ id: string }>()
     const [form] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false)
     const { loading, error, data, run } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get('/tower-market/bidInfo/1')
+        const data = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data
@@ -62,7 +63,7 @@ export default function InformationDetail(): React.ReactNode {
         </Modal>
         <DetailContent
             title={[
-                <Button key="setting" onClick={() => history.push('/bidding/information/edit/2')}>编辑</Button>,
+                <Button key="setting" onClick={() => history.push(`/bidding/information/edit/${params.id}`)}>编辑</Button>,
                 <Button key="delete" type="default">删除</Button>,
                 <Button key="bidding" onClick={() => setVisible(true)}>是否应标</Button>,
                 <Button key="new" onClick={() => history.goBack()}>返回</Button>

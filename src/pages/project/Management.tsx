@@ -21,13 +21,14 @@ export default function Management(): React.ReactNode {
             key: 'index',
             title: '序号',
             dataIndex: 'index',
+            width: 50,
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
             key: 'projectName',
             title: '项目名称',
             dataIndex: 'projectName',
-            render: (_a: any, _b: any) => <Link to={`/project/management/detail/1`}>{_b.projectName}</Link>
+            render: (_a: any, _b: any) => <Link to={`/project/management/detail/${_b.id}`}>{_b.projectName}</Link>
         },
         {
             key: 'projectNumber',

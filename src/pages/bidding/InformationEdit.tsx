@@ -1,5 +1,5 @@
 import React from "react";
-import { useHistory } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
 import { Button, TableColumnProps, Row, Spin, Form } from 'antd'
 import { EditTable, Detail, BaseInfo, DetailContent } from '../common'
 import { baseInfoData } from './biddingHeadData.json'
@@ -25,11 +25,12 @@ const tableColumns: TableColumnProps<Object>[] = [
 ]
 export default function InfomationNew(): JSX.Element {
     const history = useHistory()
+    const params = useParams<{ id: string }>()
     const [baseInfoForm] = Form.useForm()
     const [bidForm] = Form.useForm()
     const [attachVosForm] = Form.useForm()
     const { loading, error, data, run } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get('/tower-market/bidInfo/1')
+        const data = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data
