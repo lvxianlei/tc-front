@@ -9,6 +9,7 @@ import RequestUtil from '../../utils/RequestUtil'
 import ManagementContract from './contract/Contract'
 import ManagementOrder from './order/SaleOrder'
 import styles from "./ManagementDetail.module.less"
+import BidResult from './bidResult'
 const tableColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
     { title: '分标编号', dataIndex: 'partBidNumber', key: 'partBidNumber', },
@@ -20,7 +21,7 @@ const tableColumns = [
     { title: '交货地点', dataIndex: 'deliveryPlace', key: 'deliveryPlace' }
 ]
 
-type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | undefined
+export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | undefined
 
 export default function ManagementDetail(): React.ReactNode {
     const history = useHistory()
@@ -84,6 +85,7 @@ export default function ManagementDetail(): React.ReactNode {
                 { title: '说明', dataIndex: 'description' }
             ]} dataSource={data?.bidBizRecordVos} />
         </DetailContent>,
+<<<<<<< HEAD
         tab_bidResult: <DetailContent operation={[
             <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => history.push(`/project/management/detail/edit/bidResult/${params.id}`)}>编辑</Button>,
             <Button key="goback">返回</Button>
@@ -119,6 +121,9 @@ export default function ManagementDetail(): React.ReactNode {
                 </Tabs.TabPane>
             </Tabs>
         </DetailContent>,
+=======
+        tab_bidResult: <BidResult/>,
+>>>>>>> 166fedfe4284c19c8fabee6b36c5f0e6f8afe6af
         tab_frameAgreement: <DetailContent operation={[
             <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => history.push(`/project/management/detail/edit/frameAgreement/${params.id}`)}>编辑</Button>,
             <Button key="goback">返回</Button>
