@@ -3,6 +3,7 @@ import { Descriptions, Form, FormInstance, Row, Col, TableColumnProps } from "an
 import { FormItemType } from '../common'
 import styles from './BaseInfo.module.less'
 import { SelectData, InputData, PopTableData, FormItemTypesType } from "./FormItemType"
+import moment from "moment"
 export interface BaseInfoItemProps {
     name: string
     label: string
@@ -18,11 +19,22 @@ export interface BaseInfoColumnsProps {
 }
 
 interface BaseInfoProps {
-    dataSource: { [key:string]: any }
+    dataSource: { [key: string]: any }
     columns: any[]
     edit?: boolean
     col?: number
     form?: FormInstance<any>
+}
+
+function formatDataType(dataItem: any, dataSource: any): string {
+    const value = dataSource[dataItem.dataIndex]
+    const types: any = {
+        number: value && value !== -1 ? value : "-",
+        select: (value && dataItem.enum) ? dataItem.enum.find((item: any) => item.value === value).label : "-",
+        date: value ? dataItem.format && moment(value, dataItem.format).valueOf() : "-",
+        string: value || "-"
+    }
+    return types[dataItem.type || "string"]
 }
 
 export default function BaseInfo({ dataSource, columns, form, edit, col = 4 }: BaseInfoProps): JSX.Element {
@@ -42,6 +54,6 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4 }: B
     }
 
     return <Descriptions bordered column={col} size="small" className={styles.baseInfo} >
-        {columns.map((item: any, index: number) => <Descriptions.Item contentStyle={{ width: `${100 / (col * 2)}%` }} key={`desc_${index}`} label={item.title}>{dataSource[item.dataIndex] || ''}</Descriptions.Item>)}
+        {columns.map((item: any, index: number) => <Descriptions.Item contentStyle={{ width: `${100 / (col * 2)}%` }} key={`desc_${index}`} label={item.title}>{formatDataType(item, dataSource)}</Descriptions.Item>)}
     </Descriptions>
 }

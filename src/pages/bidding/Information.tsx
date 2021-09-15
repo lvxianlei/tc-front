@@ -115,29 +115,29 @@ export default function Information(): React.ReactNode {
         headTabs={[]}
         searchFormItems={[
             {
-                name: 'name',
+                name: 'fuzzyQuery',
                 children: <Input placeholder="请输入项目名称/项目编码/审批编号/关联合同/制单人进行查询" maxLength={200} />
             },
             {
-                name: 'name1',
+                name: 'startBidBuyEndTime',
                 label: '购买截至日期',
                 children: <DatePicker />
             },
             {
-                name: 'name2',
+                name: 'startReleaseDate',
                 label: '发布日期',
                 children: <DatePicker />
             },
             {
-                name: 'name3',
+                name: 'biddingStatus',
                 label: '是否应标',
                 children: <Select style={{ width: '100px' }}>
                     <Select.Option value="1">是</Select.Option>
-                    <Select.Option value="0">否</Select.Option>
+                    <Select.Option value="2">否</Select.Option>
                 </Select>
             },
             {
-                name: 'name4',
+                name: 'source',
                 label: '来源',
                 children: <Select style={{ width: '100px' }}>
                     <Select.Option value="1">aaaaaaaaaa</Select.Option>

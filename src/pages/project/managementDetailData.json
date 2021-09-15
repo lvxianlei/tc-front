@@ -125,6 +125,96 @@
             "key": "deliveryPlace"
         }
     ],
+    "bidDocColumns": [
+        {
+            "title": "类别",
+            "dataIndex": "bidType"
+        },
+        {
+            "title": "详细类别",
+            "dataIndex": "typeDetail"
+        },
+        {
+            "title": "招标编号",
+            "dataIndex": "bidCode"
+        },
+        {
+            "title": "货物类别",
+            "dataIndex": "cargoType"
+        },
+        {
+            "title": "分配日期",
+            "dataIndex": "assignDate"
+        },
+        {
+            "title": "地区",
+            "dataIndex": "address"
+        },
+        {
+            "title": "商务份数",
+            "dataIndex": "commercialNum"
+        },
+        {
+            "title": "技术份数",
+            "dataIndex": "skillNum"
+        },
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName"
+        },
+        {
+            "title": "包号",
+            "dataIndex": "packageCode"
+        },
+        {
+            "title": "电子版完成日期",
+            "dataIndex": "elDate"
+        },
+        {
+            "title": "澄清/补遗日期",
+            "dataIndex": "reDate"
+        },
+        {
+            "title": "纸质打印日期",
+            "dataIndex": "paDate"
+        },
+        {
+            "title": "全部完成日期",
+            "dataIndex": "completeDate"
+        },
+        {
+            "title": "制作人员",
+            "dataIndex": "mackUser"
+        },
+        {
+            "title": "接收人接收及日期",
+            "dataIndex": "receiveUserDate"
+        },
+        {
+            "title": "授权人",
+            "dataIndex": "warrantUser"
+        },
+        {
+            "title": "检查人",
+            "dataIndex": "checkUser"
+        },
+        {
+            "title": "开标日期",
+            "dataIndex": "openBidDate"
+        },
+        {
+            "title": "总招标量",
+            "dataIndex": "bidCount"
+        },
+        {
+            "title": "购买数量",
+            "dataIndex": "buyCount"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        }
+    ],
     "saleOrderTableColumns": [
         {
             "title": "订单编号",
@@ -232,23 +322,28 @@
         },
         {
             "title": "合同总重(吨)",
-            "dataIndex": "contractWeight"
+            "dataIndex": "contractWeight",
+            "type": "number"
         },
         {
             "title": "合同单价(元/吨)",
-            "dataIndex": "contractMoney"
+            "dataIndex": "contractMoney",
+            "type": "number"
         },
         {
             "title": "合同总价(元)",
-            "dataIndex": "contractMoneyCount"
+            "dataIndex": "contractMoneyCount",
+            "type": "number"
         },
         {
             "title": "中标类型",
-            "dataIndex": "bidType"
+            "dataIndex": "bidType",
+            "type": "select"
         },
         {
             "title": "销售类型",
-            "dataIndex": "saleType"
+            "dataIndex": "saleType",
+            "type": "select"
         },
         {
             "title": "业主单位",
@@ -268,7 +363,8 @@
         },
         {
             "title": "签订日期",
-            "dataIndex": "signDate"
+            "dataIndex": "signDate",
+            "type": "date"
         },
         {
             "title": "签订人",
@@ -276,7 +372,8 @@
         },
         {
             "title": "交货日期",
-            "dataIndex": "deliveryDate"
+            "dataIndex": "deliveryDate",
+            "type": "date"
         },
         {
             "title": "有无技术协议",
