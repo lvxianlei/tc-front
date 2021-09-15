@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import { Spin, Form, Button, Modal, Row, Select, Input } from 'antd'
-import useRequest from '@ahooksjs/use-request'
+import { Spin, Form, Button, Modal, Select, Input } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { Detail, BaseInfo, DetailContent, CommonTable } from '../common'
+import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common'
 import { baseInfoData } from './biddingHeadData.json'
-import SummaryRenderUtil from '../../utils/SummaryRenderUtil'
 import RequestUtil from '../../utils/RequestUtil'
+import useRequest from '@ahooksjs/use-request'
 const tableColumns = [
     { title: '序号', dataIndex: 'index', width: 50, key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
     {
@@ -63,43 +62,22 @@ export default function InformationDetail(): React.ReactNode {
         </Modal>
         <DetailContent
             title={[
-                <Button key="setting" onClick={() => history.push(`/bidding/information/edit/${params.id}`)}>编辑</Button>,
+                <Button key="setting" type="primary" onClick={() => history.push(`/bidding/information/edit/${params.id}`)}>编辑</Button>,
                 <Button key="delete" type="default">删除</Button>,
                 <Button key="bidding" onClick={() => setVisible(true)}>是否应标</Button>,
                 <Button key="new" onClick={() => history.goBack()}>返回</Button>
             ]}>
-            <Row>基本信息</Row>
+            <DetailTitle title="基本信息" />
             <BaseInfo columns={baseInfoData} dataSource={detailData} />
+            <DetailTitle title="货物清单" />
             <CommonTable columns={tableColumns} dataSource={detailData.bidPackageInfoDTOList} />
-            <Row>附件</Row>
-            <Row><Button>上传附件</Button></Row>
+            <DetailTitle title="附件" operation={[<Button type="primary">上传附件</Button>]} />
             <CommonTable columns={[
-                {
-                    title: '序号',
-                    dataIndex: 'index',
-                    key: 'index',
-                    render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-                },
-                {
-                    title: '文件名',
-                    dataIndex: 'name',
-                    key: 'name',
-                },
-                {
-                    title: '大小',
-                    dataIndex: 'fileSize',
-                    key: 'fileSize',
-                },
-                {
-                    title: '上传人',
-                    dataIndex: 'userName',
-                    key: 'userName',
-                },
-                {
-                    title: '上传时间',
-                    dataIndex: 'fileUploadTime',
-                    key: 'fileUploadTime',
-                }
+                { title: '序号', dataIndex: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+                { title: '文件名', dataIndex: 'name' },
+                { title: '大小', dataIndex: 'fileSize' },
+                { title: '上传人', dataIndex: 'userName' },
+                { title: '上传时间', dataIndex: 'fileUploadTime' }
             ]}
                 dataSource={detailData.attachVos}
             />

@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory, useParams } from "react-router-dom"
 import { Button, TableColumnProps, Row, Spin, Form } from 'antd'
-import { EditTable, Detail, BaseInfo, DetailContent } from '../common'
+import { EditTable, DetailTitle, BaseInfo, DetailContent } from '../common'
 import { baseInfoData } from './biddingHeadData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
@@ -52,36 +52,35 @@ export default function InfomationNew(): JSX.Element {
             <Button key="new" type="primary" onClick={() => history.goBack()}>取消</Button>
         ]}
     >
-        <DetailContent>
-            <BaseInfo form={baseInfoForm} columns={baseInfoData} dataSource={detailData} edit />
-            <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoDTOList} />
-            <Row>附件</Row>
-            <EditTable form={attachVosForm} columns={[
-                {
-                    title: '文件名',
-                    dataIndex: 'name',
-                    key: 'name',
-                    type: 'text'
-                },
-                {
-                    title: '大小',
-                    dataIndex: 'fileSize',
-                    key: 'fileSize',
-                    type: 'text'
-                },
-                {
-                    title: '上传人',
-                    dataIndex: 'userName',
-                    key: 'userName',
-                    type: 'text'
-                },
-                {
-                    title: '上传时间',
-                    dataIndex: 'fileUploadTime',
-                    key: 'fileUploadTime',
-                    type: 'text'
-                }
-            ]} dataSource={detailData.attachVos} />
-        </DetailContent>
+        <DetailTitle title="基础信息" />
+        <BaseInfo form={baseInfoForm} columns={baseInfoData} dataSource={detailData} edit />
+        <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoDTOList} />
+        <DetailTitle title="附件" />
+        <EditTable form={attachVosForm} columns={[
+            {
+                title: '文件名',
+                dataIndex: 'name',
+                key: 'name',
+                type: 'text'
+            },
+            {
+                title: '大小',
+                dataIndex: 'fileSize',
+                key: 'fileSize',
+                type: 'text'
+            },
+            {
+                title: '上传人',
+                dataIndex: 'userName',
+                key: 'userName',
+                type: 'text'
+            },
+            {
+                title: '上传时间',
+                dataIndex: 'fileUploadTime',
+                key: 'fileUploadTime',
+                type: 'text'
+            }
+        ]} dataSource={detailData.attachVos} />
     </DetailContent>
 }

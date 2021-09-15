@@ -152,11 +152,13 @@
         },
         {
             "title": "商务份数",
-            "dataIndex": "commercialNum"
+            "dataIndex": "commercialNum",
+            "type": "number"
         },
         {
             "title": "技术份数",
-            "dataIndex": "skillNum"
+            "dataIndex": "skillNum",
+            "type": "number"
         },
         {
             "title": "项目名称",
@@ -204,11 +206,13 @@
         },
         {
             "title": "总招标量",
-            "dataIndex": "bidCount"
+            "dataIndex": "bidCount",
+            "type": "number"
         },
         {
             "title": "购买数量",
-            "dataIndex": "buyCount"
+            "dataIndex": "buyCount",
+            "type": "number"
         },
         {
             "title": "备注",
@@ -377,7 +381,22 @@
         },
         {
             "title": "有无技术协议",
-            "dataIndex": "isIta"
+            "dataIndex": "isIta",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "原件"
+                },
+                {
+                    "value": -1,
+                    "label": "无"
+                },
+                {
+                    "value": 1,
+                    "label": "复印件"
+                }
+            ]
         },
         {
             "title": "所属区域",

@@ -1,7 +1,7 @@
 import React from "react"
 import { useHistory, useParams } from "react-router-dom"
 import { Row, Col, Button, Tabs, Table } from "antd"
-import { DetailContent, BaseInfo } from "../../common"
+import { DetailContent, BaseInfo, DetailTitle } from "../../common"
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { bidInfoColumns } from '../managementDetailData.json'
 export default function BidResultEdit(): JSX.Element {
@@ -9,38 +9,39 @@ export default function BidResultEdit(): JSX.Element {
     const params = useParams<{ id: string, tab: string }>()
     return (<DetailContent >
         <ManagementDetailTabsTitle />
-        <Row>基础信息</Row>
-        <BaseInfo edit columns={[{
-            title: '年份',
-            dataIndex: 'baseInfo?.contractNumber'
-        },
-        {
-            title: '批次',
-            dataIndex: 'baseInfo?.internalNumber'
-        }, {
-            title: '备注',
-            dataIndex: 'baseInfo?.projectName'
-        },
-        {
-            title: '是否中标',
-            type: "select",
-            enum: [
-                {
-                    value: 0,
-                    label: "未公布"
-                },
-                {
-                    value: 1,
-                    label: "是"
-                },
-                {
-                    value: 2,
-                    label: "否"
-                }
-            ],
-            dataIndex: 'baseInfo?.simpleProjectName'
-        }]} dataSource={{}} />
-        <Row>开标信息</Row>
+        <DetailTitle title="基本信息" />
+        <BaseInfo edit columns={[
+            {
+                title: '年份',
+                dataIndex: 'date'
+            },
+            {
+                title: '批次',
+                dataIndex: 'batch'
+            }, {
+                title: '备注',
+                dataIndex: 'description'
+            },
+            {
+                title: '是否中标',
+                dataIndex: "isBid",
+                type: "select",
+                enum: [
+                    {
+                        value: 0,
+                        label: "未公布"
+                    },
+                    {
+                        value: 1,
+                        label: "是"
+                    },
+                    {
+                        value: 2,
+                        label: "否"
+                    }
+                ]
+            }]} dataSource={{}} />
+        <DetailTitle title="开标信息" />
         <Row gutter={[10, 0]}>
             <Col><Button>新增一轮报价</Button></Col>
         </Row>

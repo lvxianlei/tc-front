@@ -1,8 +1,7 @@
 import React from "react";
 import { Row, Button, TableColumnProps, Form } from "antd";
-import { EditTable, DetailContent } from "../common";
+import { EditTable, DetailContent, BaseInfo } from "../common";
 import { useHistory, useParams } from "react-router-dom";
-import { Detail, BaseInfo } from "../common";
 import { baseInfoData } from "./managementDetailData.json";
 const tableColumns: TableColumnProps<Object>[] = [
   { title: "分标编号", dataIndex: "partBidNumber", key: "partBidNumber" },
@@ -22,74 +21,46 @@ export default function ManagementEdit(): JSX.Element {
   const history = useHistory();
   const params = useParams<RouterParams>();
   const [baseInfoForm] = Form.useForm();
-  console.log(params);
   return (
-    <Detail
+    <DetailContent
       operation={[
-        <Button key="save" style={{ marginRight: "10px" }}>保存</Button>,
-        <Button key="goback" onClick={() => history.goBack()}>返回</Button>,
+        <Button key="save" type="primary" style={{ marginRight: "10px" }}>保存</Button>,
+        <Button key="saveOrSubmit" type="primary" style={{ marginRight: "10px" }}>保存并提交审核</Button>,
+        <Button key="goback" onClick={() => history.goBack()}>取消</Button>,
       ]}
-      tabItems={[
-        {
-          label: "",
-          key: 1,
-          content: (
-            <DetailContent>
-              <BaseInfo
-                form={baseInfoForm}
-                columns={baseInfoData}
-                dataSource={{}}
-                edit
-              />
-              <Row
-                style={{
-                  height: "50px",
-                  paddingLeft: "10px",
-                  lineHeight: "50px",
-                }}
-              >
-                货物清单
-              </Row>
-              <EditTable columns={tableColumns} dataSource={[]} />
-              <Row
-                style={{
-                  height: "50px",
-                  paddingLeft: "10px",
-                  lineHeight: "50px",
-                }}
-              >
-                <span>附件信息</span>
-                <Button type="default">上传附件</Button>
-              </Row>
-              <EditTable
-                columns={[
-                  {
-                    title: "文件名",
-                    dataIndex: "name",
-                    key: "name",
-                  },
-                  {
-                    title: "大小",
-                    dataIndex: "fileSize",
-                    key: "fileSize",
-                  },
-                  {
-                    title: "上传人",
-                    dataIndex: "userName",
-                    key: "userName",
-                  },
-                  {
-                    title: "上传时间",
-                    dataIndex: "fileUploadTime",
-                    key: "fileUploadTime",
-                  },
-                ]}
-                dataSource={[]}
-              />
-            </DetailContent>
-          )
-        }
-      ]}
-    />
-  );
+    >
+      <Row>基本信息</Row>
+      <BaseInfo form={baseInfoForm} columns={baseInfoData} dataSource={{}} edit />
+      <Row style={{ height: "50px", paddingLeft: "10px", lineHeight: "50px" }}>货物清单</Row>
+      <EditTable columns={tableColumns} dataSource={[]} />
+      <Row style={{ height: "50px", paddingLeft: "10px", lineHeight: "50px", }}>
+        <span>附件信息</span><Button type="default">上传附件</Button>
+      </Row>
+      <EditTable
+        columns={[
+          {
+            title: "文件名",
+            dataIndex: "name",
+            key: "name",
+          },
+          {
+            title: "大小",
+            dataIndex: "fileSize",
+            key: "fileSize",
+          },
+          {
+            title: "上传人",
+            dataIndex: "userName",
+            key: "userName",
+          },
+          {
+            title: "上传时间",
+            dataIndex: "fileUploadTime",
+            key: "fileUploadTime",
+          },
+        ]}
+        dataSource={[]}
+      />
+    </DetailContent>
+  )
 }
