@@ -85,45 +85,7 @@ export default function ManagementDetail(): React.ReactNode {
                 { title: '说明', dataIndex: 'description' }
             ]} dataSource={data?.bidBizRecordVos} />
         </DetailContent>,
-<<<<<<< HEAD
-        tab_bidResult: <DetailContent operation={[
-            <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => history.push(`/project/management/detail/edit/bidResult/${params.id}`)}>编辑</Button>,
-            <Button key="goback">返回</Button>
-        ]} >
-            <Row>基础信息</Row>
-            <BaseInfo columns={[{
-                title: '年份',
-                dataIndex: 'date'
-            },
-            {
-                title: '批次',
-                dataIndex: 'batch'
-            }, {
-                title: '备注',
-                dataIndex: 'description'
-            },
-            {
-                title: '是否中标',
-                dataIndex: 'isBid'
-            }]} dataSource={data || {}} />
-            <Row>开标信息</Row>
-            <Row gutter={[10, 0]}>
-                <Col><Button>新增一轮报价</Button></Col>
-            </Row>
-            <Tabs type="editable-card" style={{ marginTop: '10px' }}>
-                <Tabs.TabPane tab="第二轮" key="b">
-                    <Row><Button>新增一行</Button><Button>导入文件</Button></Row>
-                    <CommonTable columns={bidInfoColumns} />
-                </Tabs.TabPane>
-                <Tabs.TabPane tab="第一轮" key="a">
-                    <Row><Button>新增一行</Button><Button>导入文件</Button></Row>
-                    <CommonTable columns={bidInfoColumns} />
-                </Tabs.TabPane>
-            </Tabs>
-        </DetailContent>,
-=======
         tab_bidResult: <BidResult/>,
->>>>>>> 166fedfe4284c19c8fabee6b36c5f0e6f8afe6af
         tab_frameAgreement: <DetailContent operation={[
             <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => history.push(`/project/management/detail/edit/frameAgreement/${params.id}`)}>编辑</Button>,
             <Button key="goback">返回</Button>
