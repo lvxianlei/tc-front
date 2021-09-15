@@ -51,34 +51,29 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
     }
 
     protected async fetchTableData(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>(this.props.path, {
-            ...filterValues,
-            current: pagination.current || this.state.tablePagination?.current,
-            size: pagination.pageSize || this.state.tablePagination?.pageSize,
-            type: this.state.selectedTabKey === 'item_0' ? '' : this.state.selectedTabKey
-        });
-        if (resData?.records?.length == 0 && resData?.current > 1) {
-            this.fetchTableData({}, {
-                current: resData.current - 1,
-                pageSize: 10,
-                total: 0,
-                showSizeChanger: false
+        try {
+            const resData: IResponseData = await RequestUtil.get<IResponseData>(this.props.path, {
+                ...filterValues,
+                current: pagination.current || this.state.tablePagination?.current,
+                size: pagination.pageSize || this.state.tablePagination?.pageSize,
+                type: this.state.selectedTabKey === 'item_0' ? '' : this.state.selectedTabKey
             });
+            this.setState({
+                ...filterValues,
+                tableDataSource: resData.records,
+                tablePagination: {
+                    ...this.state.tablePagination,
+                    current: resData.current,
+                    pageSize: resData.size,
+                    total: resData.total
+                }
+            });
+        } catch (error) {
+            console.log(error, "==========")
         }
-        this.setState({
-            ...filterValues,
-            tableDataSource: resData.records,
-            tablePagination: {
-                ...this.state.tablePagination,
-                current: resData.current,
-                pageSize: resData.size,
-                total: resData.total
-            }
-        });
     }
 
     public async componentDidMount() {
-        super.componentDidMount();
         this.fetchTableData({});
     }
 

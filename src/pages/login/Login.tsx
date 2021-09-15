@@ -91,6 +91,7 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
             })
         } else {
             AuthUtil.setSinzetechAuth(access_token);
+            console.log("token:", access_token)
             // 暂时有问题，先去掉
             // let gotoPath: string = decodeURIComponent(new URLSearchParams(this.props.location.search).get('goto') || '');
             // const index: number = gotoPath.lastIndexOf("=");

@@ -158,7 +158,7 @@
                             {
                                 "label": "招标信息",
                                 "path": "/bidding/information",
-                                "authority":"bidding_detail"
+                                "authority":"bidding"
                             }
                         ]
                     },
@@ -171,7 +171,7 @@
                             {
                                 "label": "项目管理",
                                 "path": "/project/management",
-                                "authority": "project_detail"
+                                "authority": "project"
                             }
                         ]
                     },
@@ -184,7 +184,7 @@
                             {
                                 "label": "审批管理",
                                 "path": "/approvalm/management",
-                                "authority": "approvalm_detail"
+                                "authority": "approvalm"
                             }
                         ]
                     }

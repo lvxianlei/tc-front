@@ -57,7 +57,7 @@ export default function Information(): React.ReactNode {
         }
     ]
     return <Page
-        path="/tower-customer/customer"
+        path="/audit/getAuditRecord"
         columns={columns}
         extraOperation={<Button type="primary">新增审批</Button>}
         searchFormItems={[

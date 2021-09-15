@@ -68,7 +68,7 @@ module.exports = {
         "fileVersion_detail",
         "fileVersion_down",
         "fileVersion_file",
-
+ 
         "bidding",
         "bidding_detail",
         "bidding_edit",
