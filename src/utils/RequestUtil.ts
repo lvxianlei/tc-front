@@ -27,8 +27,9 @@ export default abstract class RequestUtil {
      */
     private static backToLogin() {
         const urlWithoutHost: string = window.location.href.replace(`${window.location.protocol}//${window.location.host}`, '');
-        window.history.replaceState(null, '', `/login?goto=${ encodeURIComponent(urlWithoutHost) }`);
-        window.location.reload();
+        // window.history.replaceState(null, '', `/login?goto=${ encodeURIComponent(urlWithoutHost) }`);
+        // window.history.replaceState(null, '', `/login`);
+        // window.location.reload();
     }
 
     /**

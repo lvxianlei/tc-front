@@ -33,8 +33,9 @@ export default class AuthorizationFilter implements IFilter {
                 ApplicationContext.get({ authorities: authorities });
                 EventBus.emit('get/authorities');
             } else {
-                const { location } = window;
-                props.history.replace(`/login?goto=${encodeURIComponent(location.href.replace(`${location.protocol}//${location.host}`, ''))}`);
+                // const { location } = window;
+                // props.history.replace(`/login?goto=${encodeURIComponent(location.href.replace(`${location.protocol}//${location.host}`, ''))}`);
+                props.history.replace(`/login`);
             }
         }
         return Promise.resolve(accessable);

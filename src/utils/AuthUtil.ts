@@ -27,7 +27,7 @@ export default abstract class AuthUtil {
     public static getAuthorization(): string {
         if (!this.authorization) {
             const clinetInfo: IClientConfig = ApplicationContext.get();
-            this.authorization = `${ Base64.stringify(Utf8.parse(`${ clinetInfo.clientId }:${ clinetInfo.clientSecret }`)) }`;
+            this.authorization = `${Base64.stringify(Utf8.parse(`${clinetInfo.clientId}:${clinetInfo.clientSecret}`))}`;
         }
         return this.authorization;
     }
@@ -57,7 +57,7 @@ export default abstract class AuthUtil {
      * @returns sinzetech auth 
      */
     public static getSinzetechAuth(): string {
-        return Cookies.get(TOKEN_KEY) || '';
+        return sessionStorage.getItem(TOKEN_KEY) || '';
     }
 
     /**
@@ -66,7 +66,7 @@ export default abstract class AuthUtil {
      * @param token 
      * @param [options] 
      */
-    public static setSinzetechAuth(token: string, options?: CookieAttributes): void {
-        Cookies.set(TOKEN_KEY, token, options);
+    public static setSinzetechAuth(token: string): void {
+        sessionStorage.setItem(TOKEN_KEY, token);
     }
 }

@@ -90,11 +90,12 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
                 message: result.error_description
             })
         } else {
-            AuthUtil.setSinzetechAuth(access_token, { expires: 7 });
-            let gotoPath: string = decodeURIComponent(new URLSearchParams(this.props.location.search).get('goto') || '');
-            const index: number = gotoPath.lastIndexOf("=");
-            gotoPath = gotoPath.slice(index + 1, gotoPath.length);
-            this.props.history.push(gotoPath || ApplicationContext.get().home || '/');
+            AuthUtil.setSinzetechAuth(access_token);
+            // 暂时有问题，先去掉
+            // let gotoPath: string = decodeURIComponent(new URLSearchParams(this.props.location.search).get('goto') || '');
+            // const index: number = gotoPath.lastIndexOf("=");
+            // gotoPath = gotoPath.slice(index + 1, gotoPath.length);
+            this.props.history.push(ApplicationContext.get().home || '/');
         }
     }
 
