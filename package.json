@@ -37,7 +37,8 @@
     "react-scripts": "4.0.3",
     "react-sortable-hoc": "^2.0.0",
     "typescript": "^4.2.4",
-    "web-vitals": "^1.1.1"
+    "web-vitals": "^1.1.1",
+    "xlsx": "^0.17.1"
   },
   "scripts": {
     "start": "cross-env NODE_ENV=development GENERATE_SOURCEMAP=false react-app-rewired start",

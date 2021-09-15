@@ -9,6 +9,7 @@ import RequestUtil from '../../utils/RequestUtil'
 import ManagementContract from './contract/Contract'
 import ManagementOrder from './order/SaleOrder'
 import styles from "./ManagementDetail.module.less"
+import BidResult from './bidResult'
 const tableColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
     { title: '分标编号', dataIndex: 'partBidNumber', key: 'partBidNumber', },
@@ -20,7 +21,7 @@ const tableColumns = [
     { title: '交货地点', dataIndex: 'deliveryPlace', key: 'deliveryPlace' }
 ]
 
-type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | undefined
+export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | undefined
 
 export default function ManagementDetail(): React.ReactNode {
     const history = useHistory()
@@ -84,41 +85,7 @@ export default function ManagementDetail(): React.ReactNode {
                 { title: '说明', dataIndex: 'description' }
             ]} dataSource={[]} />
         </DetailContent>,
-        tab_bidResult: <DetailContent operation={[
-            <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => history.push(`/project/management/detail/edit/bidResult/${params.id}`)}>编辑</Button>,
-            <Button key="goback">返回</Button>
-        ]} >
-            <Row>基础信息</Row>
-            <BaseInfo columns={[{
-                title: '年份',
-                dataIndex: 'baseInfo?.contractNumber'
-            },
-            {
-                title: '批次',
-                dataIndex: 'baseInfo?.internalNumber'
-            }, {
-                title: '备注',
-                dataIndex: 'baseInfo?.projectName'
-            },
-            {
-                title: '是否中标',
-                dataIndex: 'baseInfo?.simpleProjectName'
-            }]} dataSource={{}} />
-            <Row>开标信息</Row>
-            <Row gutter={[10, 0]}>
-                <Col><Button>新增一轮报价</Button></Col>
-            </Row>
-            <Tabs type="editable-card" style={{ marginTop: '10px' }}>
-                <Tabs.TabPane tab="第二轮" key="b">
-                    <Row><Button>新增一行</Button><Button>导入文件</Button></Row>
-                    <CommonTable columns={bidInfoColumns} />
-                </Tabs.TabPane>
-                <Tabs.TabPane tab="第一轮" key="a">
-                    <Row><Button>新增一行</Button><Button>导入文件</Button></Row>
-                    <CommonTable columns={bidInfoColumns} />
-                </Tabs.TabPane>
-            </Tabs>
-        </DetailContent>,
+        tab_bidResult: <BidResult/>,
         tab_frameAgreement: <DetailContent operation={[
             <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => history.push(`/project/management/detail/edit/frameAgreement/${params.id}`)}>编辑</Button>,
             <Button key="goback">返回</Button>
