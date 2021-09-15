@@ -20,7 +20,7 @@ export interface ISaleOrderSettingState extends IAbstractSaleOrderSettingState {
 /**
  * SaleOrder Setting
  */
-class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSettingRouteProps, ISaleOrderSettingState> {
+export class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSettingRouteProps, ISaleOrderSettingState> {
 
     /**
      * @description Components did mount
