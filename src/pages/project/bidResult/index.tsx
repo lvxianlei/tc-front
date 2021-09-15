@@ -265,7 +265,7 @@ const BidResult = () => {
         ]}
         dataSource={{}}
       />
-      <DetailTitle title="开标信息" operation={[<Button onClick={tabAdd} type="primary">新增一轮报价</Button>]} />
+      <DetailTitle title="开标信息" operation={[<Button key="bidResult" onClick={tabAdd} type="primary">新增一轮报价</Button>]} />
       <TabsCanEdit ref={tabeditable} data={data} />
     </DetailContent>
   );

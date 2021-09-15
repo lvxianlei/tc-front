@@ -21,7 +21,7 @@ export default function BaseInfoEdit(): JSX.Element {
         <BaseInfo columns={baseInfoData} dataSource={{}} edit />
         <DetailTitle title="货物清单" />
         <EditTable columns={tableColumns} dataSource={[]} />
-        <DetailTitle title="附件信息" operation={[<Button type="primary">上传附件</Button>]} />
+        <DetailTitle title="附件信息" operation={[<Button key="bidDoc" type="primary">上传附件</Button>]} />
         <EditTable columns={[
             { title: '文件名', dataIndex: 'name' },
             { title: '大小', dataIndex: 'fileSize' },

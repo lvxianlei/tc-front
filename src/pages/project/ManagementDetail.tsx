@@ -39,7 +39,7 @@ export default function ManagementDetail(): React.ReactNode {
             <BaseInfo columns={baseInfoData} dataSource={data || {}} />
             <DetailTitle title="货物清单" />
             <CommonTable columns={tableColumns} dataSource={data?.cargoVOList} />
-            <DetailTitle title="附件信息" operation={[<Button type="default">上传附件</Button>]} />
+            <DetailTitle title="附件信息" operation={[<Button key="base" type="default">上传附件</Button>]} />
             <CommonTable columns={[
                 {
                     title: '序号',
