@@ -52,7 +52,7 @@ class ManagementContractDetail extends ContractDetail {
         <Link to={"/project/contract/new"}>新增</Link>
       </Button>,
       <Button key="setting" disabled={this.state.detail.contractStatus === 1}>
-        <Link to={`/project/contract/setting/${this.props.match.params.id}`}>
+        <Link to={`/project/contract/setting/${(this.props.match.params as any).projectId}/${this.props.match.params.id}`}>
           编辑
         </Link>
       </Button>,

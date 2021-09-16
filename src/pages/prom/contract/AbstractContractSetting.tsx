@@ -53,6 +53,13 @@ export interface IContractInfo extends IContract {
     readonly paymentPlanVos?: IPaymentPlanDto[];
 }
 
+export interface ProjectContractInfo extends IContractInfo {
+    readonly contractName: string;
+    readonly contractTotalWeight: number;
+    readonly contractPrice: number;
+    readonly isIta: 0 | 1 | 2;
+  }
+
 export interface ICustomerInfoDto {
     readonly customerId?: string | number;
     readonly customerCompany?: string;

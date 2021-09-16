@@ -14,6 +14,8 @@ interface ManagementSaleOrderBaseInfo extends ISaleOrderBaseInfo {
 }
 
 class ManagementSaleOrderSummary extends SaleOrderSummary {
+  requestPath = "/tower-market/saleOrder";
+ 
   protected getBaseInfoGrid(): IRenderedGrid {
     const baseInfo: ManagementSaleOrderBaseInfo | undefined = this.state
       .baseInfo as ManagementSaleOrderBaseInfo;

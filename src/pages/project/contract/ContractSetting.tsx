@@ -9,8 +9,8 @@ import ClientSelectionComponent from "../../../components/ClientSelectionModal";
 import { winBidTypeOptions, saleTypeOptions, currencyTypeOptions } from "../../../configuration/DictionaryOptions";
 import { IFormItemGroup } from "../../entrust/EntrustDetail";
 import { ContractSetting } from "../../prom/contract/ContractSetting";
-import { ProjectContractInfo } from "./ContractNew";
 import layoutStyles from '../../../layout/Layout.module.less';
+import { ProjectContractInfo } from "../../prom/contract/AbstractContractSetting";
 
 class ManagementContractSetting extends ContractSetting {
   public getFormItemGroups(): IFormItemGroup[][] {

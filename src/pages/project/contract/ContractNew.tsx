@@ -11,17 +11,10 @@ import {
   saleTypeOptions,
   currencyTypeOptions,
 } from "../../../configuration/DictionaryOptions";
-import { IContractInfo } from "../../prom/contract/AbstractContractSetting";
 import { ContractNew } from "../../prom/contract/ContractNew";
 import layoutStyles from "../../../layout/Layout.module.less";
 import { IFormItemGroup } from "../../../components/AbstractFillableComponent";
-
-export interface ProjectContractInfo extends IContractInfo {
-  readonly contractName: string;
-  readonly contractTotalWeight: number;
-  readonly contractPrice: number;
-  readonly isIta: 0 | 1 | 2;
-}
+import { ProjectContractInfo } from "../../prom/contract/AbstractContractSetting";
 
 class ManagementContractNew extends ContractNew {
   public getFormItemGroups(): IFormItemGroup[][] {
