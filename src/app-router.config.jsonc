@@ -503,5 +503,22 @@
       "exact": true,
       "authority": "approvalm_edit"
     }
+
+    //rd
+    ,
+    { // 驾驶舱-计划跟踪
+      "name": "计划跟踪",
+      "path": "/cockpit/planTrack",
+      "module": "./pages/cockpit/PlanTrack",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 驾驶舱-放样计划
+      "name": "放样计划",
+      "path": "/cockpit/planSetOut",
+      "module": "./pages/cockpit/PlanSetOut",
+      "exact": true,
+      "authority": "approvalm"
+    }
   ]
 }

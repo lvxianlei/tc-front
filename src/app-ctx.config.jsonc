@@ -187,6 +187,163 @@
                                 "authority": "approvalm"
                             }
                         ]
+                    },
+                    {
+                        "label": "工作台",
+                        "icon": "approval-mngt",
+                        "path": "/workBench",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "工作台",
+                                "path": "/workBench/workBenchMngt",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "驾驶舱",
+                        "icon": "approval-mngt",
+                        "path": "/cockpit",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "计划跟踪",
+                                "path": "/cockpit/planTrack",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "放样计划",
+                                "path": "/cockpit/planSetOut",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "评估任务",
+                        "icon": "approval-mngt",
+                        "path": "/assessmentTask",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "评估任务",
+                                "path": "/assessmentTask/AssessmentTask",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "确认任务",
+                        "icon": "approval-mngt",
+                        "path": "/confirmTask",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "确认任务",
+                                "path": "/confirmTask/ConfirmTaskMngt",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "放样任务",
+                        "icon": "approval-mngt",
+                        "path": "/setOutTask",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "放样任务",
+                                "path": "/setOutTask/setOutTask",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "工作管理",
+                        "icon": "approval-mngt",
+                        "path": "/workMngt",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "评估列表",
+                                "path": "/workMngt/evaluationList",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "确认列表",
+                                "path": "/workMngt/confirmList",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "安排列表",
+                                "path": "/workMngt/scheduleList",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "提料列表",
+                                "path": "/workMngt/pickList",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "放样列表",
+                                "path": "/workMngt/setOutList",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "螺栓列表",
+                                "path": "/workMngt/boltList",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "样图列表",
+                                "path": "/workMngt/sampleDrawList",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "组焊列表",
+                                "path": "/workMngt/assemblyWeldingList",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "图纸塔型",
+                        "icon": "approval-mngt",
+                        "path": "/drawTower",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "图纸塔型",
+                                "path": "/drawTower/drawTowerMngt",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "放样塔型",
+                        "icon": "approval-mngt",
+                        "path": "/setOutTower",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "放样塔型",
+                                "path": "/setOutTower/setOutTowerMngt",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "问题单",
+                        "icon": "approval-mngt",
+                        "path": "/question",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "问题单",
+                                "path": "/question/questionMngt",
+                                "authority": "approvalm"
+                            }
+                        ]
                     }
                 ]
             }
