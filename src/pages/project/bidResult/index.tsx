@@ -54,7 +54,7 @@ function formatWorkbook(
   });
 
   if (calcRequire) {
-    if (requireKeys.some((kname) => !fullKeys.includes(kname))) {
+    if (requireKeys && requireKeys.some((kname) => !fullKeys.includes(kname))) {
       return [];
     }
   }
