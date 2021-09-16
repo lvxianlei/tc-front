@@ -9,7 +9,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
 
 import RequestUtil from '../../../utils/RequestUtil';
-import AbstractSaleOrderSetting, { IAbstractSaleOrderSettingState, ISaleOrder, IProductVo, IContractInfoDto, ChargeType } from './AbstractSaleOrderSetting';
+import AbstractSaleOrderSetting, { IAbstractSaleOrderSettingState, ISaleOrder, IProductVo, IContractInfoDto, ChargeType, ManagementSaleOrder } from './AbstractSaleOrderSetting';
 
 export interface ISaleOrderSettingProps {
     readonly id: string;
@@ -28,7 +28,7 @@ export class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSetting
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const saleOrder: ISaleOrder = await RequestUtil.get<ISaleOrder>(`${this.requestPath}/${ "2" || this.props.match.params.id }`);
+        const saleOrder = await RequestUtil.get<ManagementSaleOrder>(`${this.requestPath}/${ this.props.match.params.id }`);
         saleOrder.orderProductDtos = saleOrder.orderProductVos?.map<IProductVo>((product: IProductVo, index: number): IProductVo => {
             return {
                 ...product,
@@ -63,6 +63,23 @@ export class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSetting
             signCustomerName: saleOrder.contractInfoVo?.signCustomerName,
             orderProductDtos: saleOrder.orderProductDtos,
             price: saleOrder.price === -1 ? '-' : saleOrder.price,
+
+            orderProjectName: saleOrder.orderProjectName,
+            purchaseOrderNumber: saleOrder.purchaseOrderNumber,
+            taxAmount: saleOrder.taxAmount,
+            amount: saleOrder.amount,
+            taxPrice: saleOrder.taxPrice,
+            taxRate: saleOrder.taxRate === -1 ? '-' : saleOrder.taxRate,
+            foreignExchangeAmount: saleOrder.foreignExchangeAmount,
+            exchangeRate: saleOrder.exchangeRate === -1 ? '-' : saleOrder.exchangeRate,
+            foreignPrice: saleOrder.foreignPrice === -1 ? '-' : saleOrder.foreignPrice,
+            guaranteeType: saleOrder.guaranteeType === "-1" ? '-' : saleOrder.guaranteeType,
+            portCharge: saleOrder.portCharge === -1 ? '-' : saleOrder.portCharge,
+            guaranteeAmount: saleOrder.guaranteeAmount === -1 ? '-' : saleOrder.guaranteeAmount,
+            insuranceCharge: saleOrder.insuranceCharge === -1 ? '-' : saleOrder.insuranceCharge,
+            creditInsurance: saleOrder.creditInsurance === -1 ? '-' : saleOrder.creditInsurance,
+            commissionCharge: saleOrder.commissionCharge === -1 ? '-' : saleOrder.commissionCharge,
+            description: saleOrder.description
         });
         this.getColumnsChange(saleOrder.contractInfoVo?.chargeType || 0);
     }

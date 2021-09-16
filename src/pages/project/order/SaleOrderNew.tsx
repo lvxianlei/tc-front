@@ -8,9 +8,8 @@ import {
   taxRateOptions,
 } from "../../../configuration/DictionaryOptions";
 import { IFormItemGroup } from "../../entrust/EntrustDetail";
-import { ChargeType } from "../../prom/order/AbstractSaleOrderSetting";
+import { ChargeType, ManagementSaleOrder } from "../../prom/order/AbstractSaleOrderSetting";
 import { SaleOrderNew } from "../../prom/order/SaleOrderNew";
-import { ManagementSaleOrder } from "./SaleOrderSetting";
 import layoutStyles from "../../../layout/Layout.module.less";
 
 class ManagementSaleOrderNew extends SaleOrderNew {

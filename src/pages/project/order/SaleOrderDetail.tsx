@@ -21,12 +21,14 @@ class ManagementSaleOrderDetail extends SaleOrderDetail {
     ];
   }
   public renderOperationArea(): React.ReactNode | React.ReactNode[] {
+    const projectId = (this.props.match.params as any).id;
+    
     return [
       <Button key="new">
         <Link to={"/project/order/new"}>新增</Link>
       </Button>,
       <Button key="setting">
-        <Link to={`/project/order/setting/${this.props.match.params.id}`}>
+        <Link to={`/project/order/setting/${projectId}/${this.props.match.params.id}`}>
           编辑
         </Link>
       </Button>,
