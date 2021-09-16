@@ -519,6 +519,20 @@
       "module": "./pages/cockpit/PlanSetOut",
       "exact": true,
       "authority": "approvalm"
+    },
+    { // 确认任务
+      "name": "确认任务",
+      "path": "/confirmTask/ConfirmTaskMngt",
+      "module": "./pages/confirmTask/ConfirmTaskMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 确认任务详情
+      "name": "确认任务详情",
+      "path": "/confirmTask/ConfirmTaskMngt/ConfirmTaskDetail/:id",
+      "module": "./pages/confirmTask/ConfirmTaskDetail",
+      "exact": true,
+      "authority": "approvalm"
     }
   ]
 }
