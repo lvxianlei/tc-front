@@ -29,7 +29,7 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const contract: IContractInfo = await RequestUtil.get<IContractInfo>(`${this.requestPath}/${ '2' || this.props.match.params.id }`);
+        const contract: IContractInfo = await RequestUtil.get<IContractInfo>(`${this.requestPath}/${ this.props.match.params.id }`);
         this.setState({
             contract: contract
         });

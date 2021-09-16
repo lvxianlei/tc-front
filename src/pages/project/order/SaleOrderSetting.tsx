@@ -20,7 +20,6 @@ export interface ManagementSaleOrder extends ISaleOrder {
 }
 
 class ManagementSaleOrderSetting extends SaleOrderSetting {
-  requestPath = "/saleOrder";
   public getFormItemGroups(): IFormItemGroup[][] {
     const saleOrder: ManagementSaleOrder | undefined = this.state
       .saleOrder as ManagementSaleOrder;

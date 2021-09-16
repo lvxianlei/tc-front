@@ -16,7 +16,6 @@ import { Link } from "react-router-dom";
  */
 
 class ManagementContractDetail extends ContractDetail {
-  requestPath = "/contract";
   public getTabItems(): ITabItem[] {
     const tabs = [...super.getTabItems()];
 
