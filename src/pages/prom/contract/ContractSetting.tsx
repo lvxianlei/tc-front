@@ -8,7 +8,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
 
 import RequestUtil from '../../../utils/RequestUtil';
-import AbstractContractSetting, { IAbstractContractSettingState, IAttachDTO, IContractInfo, IPaymentPlanDto, IRegion, planType } from './AbstractContractSetting';
+import AbstractContractSetting, { IAbstractContractSettingState, IAttachDTO, IContractInfo, IPaymentPlanDto, IRegion, planType, ProjectContractInfo } from './AbstractContractSetting';
 import moment from 'moment'
 import { message } from 'antd';
 
@@ -29,7 +29,7 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const contract: IContractInfo = await RequestUtil.get<IContractInfo>(`${this.requestPath}/${ this.props.match.params.id }`);
+        const contract = await RequestUtil.get<ProjectContractInfo>(`${this.requestPath}/${ this.props.match.params.id }`);
         this.setState({
             contract: contract
         });
@@ -80,7 +80,12 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
             customerLinkman: contract.customerInfoVo?.customerLinkman,
             customerPhone: contract.customerInfoVo?.customerPhone,
             productType: contract?.productType === -1 ? '' : contract?.productType,
-            voltageGrade: contract?.voltageGrade === -1 ? '' : contract?.voltageGrade
+            voltageGrade: contract?.voltageGrade === -1 ? '' : contract?.voltageGrade,
+
+            contractTotalWeight: contract?.contractTotalWeight,
+            contractName: contract?.contractName,
+            contractPrice: contract?.contractPrice,
+            isIta: contract?.isIta
         });
         const region: string[] | undefined = this.state.contract.region;
         let regionInfoData: IRegion[] =  this.state.regionInfoData;
