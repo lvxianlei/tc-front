@@ -1,32 +1,42 @@
 import React from "react"
 import { useHistory, useParams } from "react-router-dom"
-import { Row, Button } from "antd"
-import { DetailContent, BaseInfo, EditTable, DetailTitle } from '../../common'
+import { Row, Button, Form } from "antd"
+import { DetailContent, BaseInfo, EditTable, DetailTitle, CommonTable } from '../../common'
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
-import { baseInfoData } from '../managementDetailData.json'
-const tableColumns = [
-    { title: '分标编号', dataIndex: 'partBidNumber' },
-    { title: '货物类别', dataIndex: 'goodsType' },
-    { title: '包号', dataIndex: 'packageNumber' },
-    { title: '数量', dataIndex: 'amount' },
-    { title: '单位', dataIndex: 'unit' },
-    { title: '交货日期', dataIndex: 'deliveryDate' },
-    { title: '交货地点', dataIndex: 'deliveryPlace' }
-]
+import { bidDocColumns } from '../managementDetailData.json'
+import useRequest from '@ahooksjs/use-request'
+import RequestUtil from "../../../utils/RequestUtil"
+import { TabTypes } from "../ManagementDetail"
 export default function BaseInfoEdit(): JSX.Element {
     const history = useHistory()
-    return <DetailContent operation={[<Button key="save" type="primary">保存</Button>, <Button key="cacel" onClick={() => history.goBack()}>取消</Button>]}>
+    const params = useParams<{ tab: TabTypes, id: string }>()
+    const [baseInfoForm] = Form.useForm()
+    const { loading, error, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidDoc/${params.id}`)
+        console.log(result)
+        baseInfoForm.setFieldsValue(result)
+        resole(result)
+    }))
+    const handleSubmit = async () => {
+        const baseInfoData = await baseInfoForm.getFieldsValue()
+        console.log({ ...data, ...baseInfoData })
+    }
+    return <DetailContent
+        operation={[
+            <Button key="edit" type="primary" onClick={handleSubmit}>保存</Button>,
+            <Button key="goback">返回</Button>
+        ]}>
         <ManagementDetailTabsTitle />
-        <DetailTitle title="基本信息" />
-        <BaseInfo columns={baseInfoData} dataSource={{}} edit />
-        <DetailTitle title="货物清单" />
-        <EditTable columns={tableColumns} dataSource={[]} />
-        <DetailTitle title="附件信息" operation={[<Button key="bidDoc" type="primary">上传附件</Button>]} />
-        <EditTable columns={[
-            { title: '文件名', dataIndex: 'name' },
-            { title: '大小', dataIndex: 'fileSize' },
-            { title: '上传人', dataIndex: 'userName' },
-            { title: '上传时间', dataIndex: 'fileUploadTime' }
-        ]} dataSource={[]} />
+        <DetailTitle title="标书制作记录表" />
+        <BaseInfo form={baseInfoForm} columns={bidDocColumns} dataSource={data || {}} col={4} edit />
+        <DetailTitle title="填写记录" />
+        <CommonTable columns={[
+            { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+            { title: '部门', dataIndex: 'branch' },
+            { title: '填写人', dataIndex: 'createUserName' },
+            { title: '职位', dataIndex: 'position' },
+            { title: '填写时间', dataIndex: 'createTime' },
+            { title: '说明', dataIndex: 'description' }
+        ]} dataSource={data?.bidBizRecordVos} />
     </DetailContent>
 }

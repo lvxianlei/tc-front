@@ -28,7 +28,7 @@
             "title": "招标人",
             "dataIndex": "biddingPerson",
             "type": "popTable",
-            "path": "/contract",
+            "path": "/",
             "columns": [
                 {
                     "title": "员工编号",
@@ -458,6 +458,28 @@
         {
             "title": "交货地点",
             "dataIndex": "deliveryPlace"
+        }
+    ],
+    "newProductGroup": [
+        {
+            "title": "选择订单",
+            "dataIndex": ""
+        },
+        {
+            "title": "内部编号",
+            "dataIndex": "internalNumber"
+        },
+        {
+            "title": "订单工程名称",
+            "dataIndex": "orderProjectName"
+        },
+        {
+            "title": "业主单位",
+            "dataIndex": "customerCompany"
+        },
+        {
+            "title": "说明",
+            "dataIndex": "description"
         }
     ],
     "paths": {

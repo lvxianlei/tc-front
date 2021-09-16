@@ -44,14 +44,18 @@ interface PopTableProps {
     data: PopTableData
 }
 
-const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
-    const [visible, setVisible] = useState<boolean>(false)
+const PopTableContent: React.FC<{ data: PopTableData }> = ({ data }) => {
     const { loading, data: popTableData } = useRequest<any>(() => new Promise(async (resolve, reject) => {
         resolve(await RequestUtil.get<{ data: any }>(data.path))
     }))
+    return <Table size="small" loading={loading} columns={data.columns} dataSource={popTableData?.records} />
+}
+
+const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
+    const [visible, setVisible] = useState<boolean>(false)
     return <>
         <Modal title={`选择${data.title}`} destroyOnClose visible={visible} onCancel={() => setVisible(false)}>
-            <Table size="small" loading={loading} columns={data.columns} dataSource={popTableData?.records} />
+            <PopTableContent data={data} />
         </Modal>
         <Input {...props} readOnly addonAfter={<PlusOutlined onClick={() => setVisible(true)} />} />
     </>

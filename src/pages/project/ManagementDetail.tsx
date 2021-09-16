@@ -94,7 +94,7 @@ export default function ManagementDetail(): React.ReactNode {
                 </Tabs.TabPane>
             </Tabs></>,
         tab_productGroup: <DetailContent title={[
-            <Button type="primary" onClick={() => history.push(`/project/management/detail/edit/productGroup/${params.id}`)}>新增</Button>
+            <Button key="new" type="primary" onClick={() => history.push(`/project/management/detail/edit/productGroup/${params.id}`)}>新增</Button>
         ]}>
             <CommonTable columns={cargoVOListColumns} />
             <Row><Radio.Group
@@ -119,7 +119,6 @@ export default function ManagementDetail(): React.ReactNode {
             <CommonTable columns={cargoVOListColumns} />
         </>
     }
-
     return <>
         <ManagementDetailTabsTitle />
         <Spin spinning={loading}>

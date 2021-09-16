@@ -41,10 +41,7 @@ export default function BidResultEdit(): JSX.Element {
                     }
                 ]
             }]} dataSource={{}} />
-        <DetailTitle title="开标信息" />
-        <Row gutter={[10, 0]}>
-            <Col><Button>新增一轮报价</Button></Col>
-        </Row>
+        <DetailTitle title="开标信息" operation={[<Button key="new" type="primary">新增一轮报价</Button>]}/>
         <Tabs type="editable-card" style={{ marginTop: '10px' }}>
             <Tabs.TabPane tab="第二轮" key="b">
                 <Row><Button>新增一行</Button><Button>导入文件</Button></Row>
