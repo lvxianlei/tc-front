@@ -12,12 +12,12 @@ const tableColumns = [
         dataIndex: 'partBidNumber',
         key: 'partBidNumber',
     },
-    { title: '货物类别', dataIndex: 'goodsType', key: 'goodsType' },
-    { title: '包号', dataIndex: 'packageNumber', key: 'packgeNumber' },
-    { title: '数量', dataIndex: 'amount', key: 'amount' },
-    { title: '单位', dataIndex: 'unit', key: 'unit' },
-    { title: '交货日期', dataIndex: 'deliveryDate', key: 'deliveryDate' },
-    { title: '交货地点', dataIndex: 'deliveryPlace', key: 'deliveryPlace' }
+    { title: '货物类别', dataIndex: 'goodsType' },
+    { title: '包号', dataIndex: 'packageNumber' },
+    { title: '数量', dataIndex: 'amount' },
+    { title: '单位', dataIndex: 'unit' },
+    { title: '交货日期', dataIndex: 'deliveryDate' },
+    { title: '交货地点', dataIndex: 'deliveryPlace' }
 ]
 export default function InformationDetail(): React.ReactNode {
     const history = useHistory()

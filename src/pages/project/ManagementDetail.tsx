@@ -3,24 +3,13 @@ import { Button, Row, Col, Tabs, Radio, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common'
 import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
-import { baseInfoData, productGroupColumns, bidDocColumns, paths, frameAgreementColumns } from './managementDetailData.json'
+import { baseInfoData, productGroupColumns, bidDocColumns, paths, frameAgreementColumns, enclosure, cargoVOListColumns } from './managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import ManagementContract from './contract/Contract'
 import ManagementOrder from './order/SaleOrder'
 import styles from "./ManagementDetail.module.less"
 import BidResult from './bidResult'
-const tableColumns = [
-    { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '分标编号', dataIndex: 'partBidNumber', key: 'partBidNumber', },
-    { title: '货物类别', dataIndex: 'goodsType', key: 'goodsType' },
-    { title: '包号', dataIndex: 'packageNumber', key: 'packgeNumber' },
-    { title: '数量', dataIndex: 'amount', key: 'amount' },
-    { title: '单位', dataIndex: 'unit', key: 'unit' },
-    { title: '交货日期', dataIndex: 'deliveryDate', key: 'deliveryDate' },
-    { title: '交货地点', dataIndex: 'deliveryPlace', key: 'deliveryPlace' }
-]
-
 export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | undefined
 
 export default function ManagementDetail(): React.ReactNode {
@@ -38,7 +27,10 @@ export default function ManagementDetail(): React.ReactNode {
             <DetailTitle title="基本信息" />
             <BaseInfo columns={baseInfoData} dataSource={data || {}} />
             <DetailTitle title="货物清单" />
-            <CommonTable columns={tableColumns} dataSource={data?.cargoVOList} />
+            <CommonTable columns={[
+                { title: '序号', dataIndex: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+                ...cargoVOListColumns
+            ]} dataSource={data?.cargoVOList} />
             <DetailTitle title="附件信息" operation={[<Button key="base" type="default">上传附件</Button>]} />
             <CommonTable columns={[
                 {
@@ -47,26 +39,7 @@ export default function ManagementDetail(): React.ReactNode {
                     key: 'index',
                     render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                 },
-                {
-                    title: '文件名',
-                    dataIndex: 'name',
-                    key: 'name',
-                },
-                {
-                    title: '大小',
-                    dataIndex: 'fileSize',
-                    key: 'fileSize',
-                },
-                {
-                    title: '上传人',
-                    dataIndex: 'userName',
-                    key: 'userName',
-                },
-                {
-                    title: '上传时间',
-                    dataIndex: 'fileUploadTime',
-                    key: 'fileUploadTime',
-                }
+                ...enclosure
             ]} dataSource={data?.attachVos} />
         </DetailContent>,
         tab_bidDoc: <DetailContent
@@ -95,7 +68,10 @@ export default function ManagementDetail(): React.ReactNode {
             <BaseInfo columns={frameAgreementColumns} dataSource={data || {}} />
             <DetailTitle title="合同物资清单" />
             <Row><Button type="primary">新增一行</Button></Row>
-            <CommonTable columns={tableColumns} dataSource={data?.contractCargoVos} />
+            <CommonTable columns={[
+                { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+                ...cargoVOListColumns
+            ]} dataSource={data?.contractCargoVos} />
             <DetailTitle title="系统信息" />
             <BaseInfo columns={[
                 { title: "最后编辑人", dataIndex: 'updateUserLast' },
@@ -116,7 +92,7 @@ export default function ManagementDetail(): React.ReactNode {
         tab_productGroup: <DetailContent title={[
             <Button type="primary" onClick={() => history.push(`/project/management/detail/edit/productGroup/${params.id}`)}>新增</Button>
         ]}>
-            <CommonTable columns={tableColumns} />
+            <CommonTable columns={cargoVOListColumns} />
             <Row><Radio.Group
                 options={[
                     { label: '明细', value: 'Apple' },
@@ -136,7 +112,7 @@ export default function ManagementDetail(): React.ReactNode {
                 </Radio.Group>
             </Row>
             <Row><Button type="primary" onClick={() => history.push(`/project/management/detail/edit/salesPlan/${params.id}`)}>新增</Button></Row>
-            <CommonTable columns={tableColumns} />
+            <CommonTable columns={cargoVOListColumns} />
         </>
     }
 

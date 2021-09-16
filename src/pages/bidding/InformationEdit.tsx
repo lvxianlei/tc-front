@@ -54,22 +54,10 @@ export default function InfomationNew(): JSX.Element {
         <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoDTOList} />
         <DetailTitle title="附件" operation={[<Button key="su" type="primary" >上传附件</Button>]} />
         <CommonTable columns={[
-            {
-                title: '文件名',
-                dataIndex: 'name'
-            },
-            {
-                title: '大小',
-                dataIndex: 'fileSize'
-            },
-            {
-                title: '上传人',
-                dataIndex: 'userName'
-            },
-            {
-                title: '上传时间',
-                dataIndex: 'fileUploadTime'
-            }
+            { title: '文件名', dataIndex: 'name' },
+            { title: '大小', dataIndex: 'fileSize' },
+            { title: '上传人', dataIndex: 'userName' },
+            { title: '上传时间', dataIndex: 'fileUploadTime' }
         ]} dataSource={detailData.attachVos} />
     </DetailContent>
 }
