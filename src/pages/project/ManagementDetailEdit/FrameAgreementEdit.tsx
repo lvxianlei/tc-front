@@ -7,43 +7,40 @@ import { frameAgreementColumns, cargoVOListColumns } from '../managementDetailDa
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 import { TabTypes } from "../ManagementDetail"
-const tableColumns = [
-    { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '分标编号', dataIndex: 'partBidNumber', key: 'partBidNumber', },
-    { title: '货物类别', dataIndex: 'goodsType', key: 'goodsType' },
-    { title: '包号', dataIndex: 'packageNumber', key: 'packgeNumber' },
-    { title: '数量', dataIndex: 'amount', key: 'amount' },
-    { title: '单位', dataIndex: 'unit', key: 'unit' },
-    { title: '交货日期', dataIndex: 'deliveryDate', key: 'deliveryDate' },
-    { title: '交货地点', dataIndex: 'deliveryPlace', key: 'deliveryPlace' }
-]
+import ApplicationContext from "../../../configuration/ApplicationContext"
 export default function FrameAgreementEdit(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ tab: TabTypes, id: string }>()
     const [baseInfoForm] = Form.useForm()
+    const [cargoDtoForm] = Form.useForm()
+    const dictionaryOptions: any = ApplicationContext.get().dictionaryOption
+    const bidType = dictionaryOptions["122"]
     const { loading, error, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/frameAgreement/${params.id}`)
         baseInfoForm.setFieldsValue(result)
         resole(result)
     }))
+    const { loading: saveStatus, error: saveError, data: saveResult, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
+        const result: { [key: string]: any } = await RequestUtil.put(`/tower-market/frameAgreement`, postData)
+        resole(result)
+    }), { manual: true })
 
     const handleSubmit = async () => {
         const baseInfoData = await baseInfoForm.getFieldsValue()
-        console.log({ ...data, ...baseInfoData })
+        const contractCargoDtosData = await cargoDtoForm.getFieldsValue()
+        
+        await run({ ...data, ...baseInfoData, projectId: params.id, contractCargoDtos: contractCargoDtosData.submit })
     }
 
     return <DetailContent operation={[
-        <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={handleSubmit}>保存</Button>,
+        <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={handleSubmit} loading={saveStatus}>保存</Button>,
         <Button key="goback">返回</Button>
     ]}>
         <ManagementDetailTabsTitle />
         <DetailTitle title="基本信息" />
-        <BaseInfo form={baseInfoForm} columns={frameAgreementColumns} dataSource={data || {}} edit />
+        <BaseInfo form={baseInfoForm} columns={frameAgreementColumns.map((item) => item.dataIndex === "bidType" ? ({ ...item, type: "select", enum: bidType.map((bid: any) => ({ value: bid.id, label: bid.name })) }) : item)} dataSource={data || {}} edit />
         <DetailTitle title="合同物资清单" />
-        <EditTable columns={[
-            { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-            ...cargoVOListColumns
-        ]} dataSource={data?.contractCargoVos} />
+        <EditTable form={cargoDtoForm} columns={cargoVOListColumns} dataSource={data?.contractCargoVos} />
         <DetailTitle title="系统信息" />
         <BaseInfo columns={[
             { title: "最后编辑人", dataIndex: 'updateUserLast' },

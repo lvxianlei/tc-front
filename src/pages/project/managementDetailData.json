@@ -314,7 +314,8 @@
     "frameAgreementColumns": [
         {
             "title": "协议编号",
-            "dataIndex": "frameAgreementCode"
+            "dataIndex": "frameAgreementCode",
+            "disabled": true
         },
         {
             "title": "协议名称",
@@ -347,7 +348,21 @@
         {
             "title": "销售类型",
             "dataIndex": "saleType",
-            "type": "select"
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "国内业务"
+                },
+                {
+                    "value": 1,
+                    "label": "国际业务"
+                },
+                {
+                    "value": 2,
+                    "label": "其他"
+                }
+            ]
         },
         {
             "title": "业主单位",

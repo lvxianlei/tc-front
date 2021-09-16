@@ -81,7 +81,7 @@
                         "label": "系统管理",
                         "icon": "system",
                         "path": "/sys",
-                        "authocrity": "system_section",
+                        "authocrity": "dictionary_type_list",
                         "items": [
                             {
                                 "label": "用户管理",
@@ -91,7 +91,7 @@
                             {
                                 "label": "字典管理",
                                 "path": "/sys/dxnry",
-                                "authocrity": "system_dxnry"
+                                "authocrity": "dictionary_type_list"
                             },
                             {
                                 "label": "原材料类型管理",

@@ -102,9 +102,9 @@ interface BidProps {
   closable?: boolean;
 }
 
-const TabsCanEdit = forwardRef((props: { data?: BidProps[] }, ref?: any) => {
+export const TabsCanEdit = forwardRef((props: { data?: BidProps[] }, ref?: any) => {
   const { data } = props;
-  const [panes, setpanes] = useState(undefined as undefined | BidProps[]);
+  const [panes, setpanes] = useState<undefined | BidProps[]>();
 
   useEffect(() => {
     setpanes(
@@ -112,7 +112,7 @@ const TabsCanEdit = forwardRef((props: { data?: BidProps[] }, ref?: any) => {
         return Object.assign(
           { ...item },
           {
-            content: (
+            content: item.content || (
               <>
                 <Row>
                   <Button>新增一行</Button>
@@ -192,9 +192,12 @@ const TabsCanEdit = forwardRef((props: { data?: BidProps[] }, ref?: any) => {
     () => {
       return {
         tabAdd,
+        getData(){
+          return panes
+        }
       };
     },
-    [tabAdd]
+    [tabAdd,panes]
   );
 
   return (
@@ -272,3 +275,4 @@ const BidResult = () => {
 };
 
 export default BidResult;
+

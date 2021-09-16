@@ -49,7 +49,7 @@ export default function CommonTable({ columns, dataSource = [] }: CommonTablePro
     columns = columns.map((item: any, index: number) => generateRender(item.type || "text", item))
     return <Table
         size="small"
-        rowKey={(record: any) => `common_table_${record.id || record.title || record.dataIndex}`}
+        rowKey={(index: any, record: any) => `common_table_${record.id || record.title || record.dataIndex || JSON.stringify(index)}`}
         columns={columns}
         onRow={() => ({ className: styles.tableRow })}
         dataSource={dataSource} />

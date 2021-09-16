@@ -71,11 +71,11 @@ const SelfSelect: React.FC<SelfSelectProps> = ({ data, ...props }) => {
 
 const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, ...props }) => {
     const ItemTypes = {
-        text: <Input {...props} />,
+        text: <Input {...props} disabled={data.disabled} />,
         number: <InputNumber {...props} />,
         select: <SelfSelect {...props} data={data as SelectData} />,
         date: <DatePicker
-            {...props}
+            {...data.picker ? { ...props, picker: data.picker } : { ...props }}
             value={props.value ? moment(props.value, data.format || "YYYY-MM-DD HH:mm:ss") : null}
             format={data.format || "YYYY-MM-DD HH:mm:ss"} />,
         textarea: <Input.TextArea {...props} />,
