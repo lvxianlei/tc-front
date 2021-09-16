@@ -60,6 +60,11 @@ export interface ISaleOrder {
     readonly contractInfoVo?: IContractInfoDto;
 }
 
+export interface ManagementSaleOrder extends ISaleOrder {
+    orderWeight?: number;
+    orderProjectName?: string;
+  }
+
 export interface IProductVo extends IProduct {
     readonly num?: number;
     readonly productCategoryId?: string | number;

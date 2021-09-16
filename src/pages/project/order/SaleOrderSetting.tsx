@@ -9,15 +9,13 @@ import {
 } from "../../../configuration/DictionaryOptions";
 import { IFormItemGroup } from "../../entrust/EntrustDetail";
 import {
-  ISaleOrder,
   ChargeType,
+  ManagementSaleOrder,
 } from "../../prom/order/AbstractSaleOrderSetting";
 import { SaleOrderSetting } from "../../prom/order/SaleOrderSetting";
 import layoutStyles from "../../../layout/Layout.module.less";
 
-export interface ManagementSaleOrder extends ISaleOrder {
-  orderWeight?: number;
-}
+
 
 class ManagementSaleOrderSetting extends SaleOrderSetting {
   public getFormItemGroups(): IFormItemGroup[][] {
@@ -79,8 +77,8 @@ class ManagementSaleOrderSetting extends SaleOrderSetting {
             },
             {
               label: "订单工程名称",
-              name: "projectName",
-              initialValue: saleOrder?.contractInfoDto?.projectName,
+              name: "orderProjectName",
+              initialValue: saleOrder?.orderProjectName,
               children: <Input />,
             },
             {
