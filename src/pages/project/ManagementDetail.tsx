@@ -3,7 +3,7 @@ import { Button, Row, Col, Tabs, Radio, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common'
 import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
-import { baseInfoData, productGroupColumns, bidDocColumns, paths, frameAgreementColumns, enclosure, cargoVOListColumns } from './managementDetailData.json'
+import { baseInfoData, productGroupColumns, bidDocColumns, paths, frameAgreementColumns, enclosure, cargoVOListColumns, materialListColumns } from './managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import ManagementContract from './contract/Contract'
@@ -16,7 +16,7 @@ export default function ManagementDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, tab?: TabTypes }>()
     const { loading, error, data, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
-        if(params.tab  === "contract"){
+        if (params.tab === "contract") {
             resole({})
             return;
         }
@@ -71,10 +71,9 @@ export default function ManagementDetail(): React.ReactNode {
             <DetailTitle title="基本信息" />
             <BaseInfo columns={frameAgreementColumns} dataSource={data || {}} />
             <DetailTitle title="合同物资清单" />
-            <Row><Button type="primary">新增一行</Button></Row>
             <CommonTable columns={[
-                { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-                ...cargoVOListColumns
+                { title: '序号', dataIndex: 'index', width: 50, key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+                ...materialListColumns
             ]} dataSource={data?.contractCargoVos} />
             <DetailTitle title="系统信息" />
             <BaseInfo columns={[

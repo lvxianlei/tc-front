@@ -39,12 +39,12 @@ export default function EditableTable({ columns = [], dataSource = [], form }: E
     const baseRowData: { [key: string]: string | number | null } = {}
     columns.forEach(item => baseRowData[item.dataIndex] = null)
     columns = [
-        { title: '序号', dataIndex: 'index', editable: false, render: (key: number, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-        ...columns,
+        { title: '序号', dataIndex: 'index', width: 50, editable: false, render: (key: number, index: number): React.ReactNode => (<span>{index + 1}</span>) },
         {
-            title: '操作', dataIndex: 'opration', editable: false,
+            title: '操作', dataIndex: 'opration', width: 50, editable: false,
             render: (key: number, _: number, remove: (index: number | number[]) => void): JSX.Element => <Button type="link" onClick={() => remove(key)}>删除</Button>
-        }
+        },
+        ...columns
     ]
     return (
         <Form form={form} initialValues={{ submit: dataSource }} className={styles.editable}>
@@ -67,7 +67,7 @@ export default function EditableTable({ columns = [], dataSource = [], form }: E
                                                 name={[name, coItem.dataIndex]}
                                                 fieldKey={[fieldKey, coItem.dataIndex]}
                                             >
-                                                {coItem.editable === false ? <EditableCell columnItem={coItem as EditableCellProps['columnItem']} fieldKey={fieldKey} index={index} remove={remove} /> : <FormItemType type={coItem.type} data={coItem} />}
+                                                {coItem.editable === false ? <EditableCell columnItem={coItem as EditableCellProps['columnItem']} fieldKey={name} index={index} remove={remove} /> : <FormItemType type={coItem.type} data={coItem} />}
                                             </Form.Item>
                                         </Col>)
                                     }

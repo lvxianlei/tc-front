@@ -460,7 +460,8 @@
         },
         {
             "title": "数量",
-            "dataIndex": "amount"
+            "dataIndex": "amount",
+            "type": "number"
         },
         {
             "title": "单位",
@@ -468,7 +469,9 @@
         },
         {
             "title": "交货日期",
-            "dataIndex": "deliveryDate"
+            "dataIndex": "deliveryDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "交货地点",
@@ -495,6 +498,56 @@
         {
             "title": "说明",
             "dataIndex": "description"
+        }
+    ],
+    "materialListColumns": [
+        {
+            "title": "*物资名称",
+            "label": "cargoName"
+        },
+        {
+            "title": "规格型号",
+            "label": "specs"
+        },
+        {
+            "title": "*计量单位",
+            "label": "metering"
+        },
+        {
+            "title": "*数量",
+            "label": "number"
+        },
+        {
+            "title": "*单价（含税）（元）",
+            "label": "moneyTax"
+        },
+        {
+            "title": "单价（不含税）（元）",
+            "label": "money"
+        },
+        {
+            "title": "*合同总价（含税）（元）",
+            "label": "contractMoneyTax"
+        },
+        {
+            "title": "合同总价（不含税）（元）",
+            "label": "contractMoney"
+        },
+        {
+            "title": "*增值税率（%）",
+            "label": "tax"
+        },
+        {
+            "title": "交货时间",
+            "label": "date"
+        },
+        {
+            "title": "收货人及联系电话",
+            "label": "phone"
+        },
+        {
+            "title": "备注",
+            "label": "description"
         }
     ],
     "paths": {

@@ -31,7 +31,7 @@ function formatDataType(dataItem: any, dataSource: any): string {
     const types: any = {
         number: value && value !== -1 ? value : "-",
         select: (value && dataItem.enum && value !== -1) ? dataItem.enum.find((item: any) => item.value === value).label : "-",
-        date: value ? dataItem.format && moment(value, dataItem.format || "YYYY-MM-DD HH:mm:ss").valueOf() : "-",
+        date: value ? moment(value).format(dataItem.format || "YYYY-MM-DD HH:mm:ss") : "-",
         string: value || "-"
     }
     return types[dataItem.type || "string"]
