@@ -174,7 +174,7 @@ class ManagementContractSummary extends ContractSummary {
       },
       {
         title: "签订日期",
-        dataIndex: "signContractTime	",
+        dataIndex: "signContractTime",
       },
       {
         title: "要求交货日期",
