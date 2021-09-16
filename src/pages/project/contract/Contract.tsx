@@ -20,8 +20,6 @@ import { PromContract } from "../../prom/contract/PromContract";
  * 项目管理-合同
  */
 class ManagementContract extends PromContract {
-  requestPath = "/contract";
-
   /**
    * @implements
    * @description Gets table columns
@@ -29,6 +27,7 @@ class ManagementContract extends PromContract {
    * @returns table columns
    */
   public getTableColumns(item: ITabItem): TableColumnType<object>[] {
+    const projectId = (this.props.match.params as any).id;
     return [
       {
         key: "contractNumber",
@@ -36,7 +35,11 @@ class ManagementContract extends PromContract {
         dataIndex: "contractNumber",
         render: (_: undefined, record: object): React.ReactNode => {
           return (
-            <Link to={`/project/contract/detail/${(record as IContract).id}`}>
+            <Link
+              to={`/project/contract/detail/${projectId}/${
+                (record as IContract).id
+              }`}
+            >
               {(record as IContract).contractNumber}
             </Link>
           );
@@ -48,7 +51,7 @@ class ManagementContract extends PromContract {
         dataIndex: "internalNumber",
         render: (_: undefined, record: object): React.ReactNode => {
           return (
-            <Link to={`/project/contract/detail/${(record as IContract).id}`}>
+            <Link to={`/project/contract/detail/${projectId}/${(record as IContract).id}`}>
               {(record as IContract).internalNumber}
             </Link>
           );
@@ -112,7 +115,7 @@ class ManagementContract extends PromContract {
           <Space direction="horizontal" size="small">
             <Button type="link" disabled={(record as IContract).status === 1}>
               <Link
-                to={`/project/contract/setting/${(record as IContract).id}`}
+                to={`/project/contract/setting/${projectId}/${(record as IContract).id}`}
               >
                 编辑
               </Link>

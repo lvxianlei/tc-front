@@ -27,6 +27,10 @@ export default function ManagementDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, tab?: TabTypes }>()
     const { loading, error, data, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        if(params.tab  === "contract"){
+            resole({})
+            return;
+        }
         const result: { [key: string]: any } = await RequestUtil.get(`${paths[params.tab || 'base']}/${params.id}`, {})
         resole(result)
     }), { refreshDeps: [params.tab] })

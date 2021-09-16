@@ -13,7 +13,6 @@ import { ProjectContractInfo } from "./ContractNew";
 import layoutStyles from '../../../layout/Layout.module.less';
 
 class ManagementContractSetting extends ContractSetting {
-  requestPath = "/contract";
   public getFormItemGroups(): IFormItemGroup[][] {
     const contract = this.state.contract as ProjectContractInfo | undefined;
     return [

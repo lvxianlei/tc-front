@@ -41,7 +41,7 @@ export class SaleOrderDetail extends AbstractDetailComponent<IContractDetailRout
      * @param filterValues 
      */
     protected async fetchTableData() {
-        const resData: IDetail = await RequestUtil.get<IDetail>(`${this.requestPath}/${ "2" || this.props.match.params.id }`);
+        const resData: IDetail = await RequestUtil.get<IDetail>(`${this.requestPath}/${ this.props.match.params.id }`);
         this.setState({
             detail: resData
         });

@@ -10,7 +10,6 @@ import { IProduct } from "../../IProduct";
 import RequestUtil from "../../../utils/RequestUtil";
 
 class ManagementContractSummary extends ContractSummary {
-  requestPath = "/saleOrder";
   getBaseInfoGrid() {
     const baseInfo: any | undefined = this.state.baseInfo;
     return {

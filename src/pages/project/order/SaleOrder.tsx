@@ -13,8 +13,6 @@ import { SaleOrder, ITableDataItem } from "../../prom/order/SaleOrder";
  * 项目管理-订单管理
  */
 class ManagementOrder extends SaleOrder {
-  requestPath = "/saleOrder";
-
   /**
    * @implements
    * @description Gets table columns
@@ -22,6 +20,7 @@ class ManagementOrder extends SaleOrder {
    * @returns table columns
    */
   public getTableColumns(item: ITabItem): TableColumnType<object>[] {
+    const projectId = (this.props.match.params as any).id;
     return [
       {
         key: "saleOrderNumber",
@@ -29,7 +28,11 @@ class ManagementOrder extends SaleOrder {
         dataIndex: "saleOrderNumber",
         render: (_: undefined, record: object): React.ReactNode => {
           return (
-            <Link to={`/project/order/detail/${(record as ITableDataItem).id}`}>
+            <Link
+              to={`/project/order/detail/${projectId}/${
+                (record as ITableDataItem).id
+              }`}
+            >
               {(record as ITableDataItem).saleOrderNumber}
             </Link>
           );
@@ -47,7 +50,7 @@ class ManagementOrder extends SaleOrder {
         render: (_: undefined, record: object): React.ReactNode => {
           return (
             <Link
-              to={`/project/contract/detail/${
+              to={`/project/contract/detail/${projectId}/${
                 (record as ITableDataItem).contractId
               }`}
             >
@@ -118,7 +121,9 @@ class ManagementOrder extends SaleOrder {
         render: (_: undefined, record: object): React.ReactNode => (
           <Space direction="horizontal" size="small">
             <Link
-              to={`/project/order/setting/${(record as ITableDataItem).id}`}
+              to={`/project/order/setting/${projectId}/${
+                (record as ITableDataItem).id
+              }`}
             >
               编辑
             </Link>

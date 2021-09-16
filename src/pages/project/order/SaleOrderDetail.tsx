@@ -8,7 +8,6 @@ import { SaleOrderDetail } from "../../prom/order/SaleOrderDetail";
 import ManagementSaleOrderSummary from "./SaleOrderSummary";
 
 class ManagementSaleOrderDetail extends SaleOrderDetail {
-  requestPath = "/saleOrder";
   public getTabItems(): ITabItem[] {
     return [
       Object.assign({}, super.getTabItems()[0], {

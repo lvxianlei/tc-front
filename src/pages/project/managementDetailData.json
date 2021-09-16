@@ -416,7 +416,6 @@
         "bidDoc": "/tower-market/bidDoc",
         "bidResult": "/tower-market/bidBase",
         "frameAgreement": "/tower-market/frameAgreement",
-        "contract": "/tower-market/contract",
         "productGroup": "/tower-market/productGroup",
         "salesPlan": "/tower-market/productGroup"
     }
