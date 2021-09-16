@@ -140,10 +140,10 @@ export default function ManagementDetail(): React.ReactNode {
         </>
     }
 
-    return <DetailContent>
+    return <>
         <ManagementDetailTabsTitle />
         <Spin spinning={loading}>
             {tabItems['tab_' + (params.tab || 'base')]}
         </Spin>
-    </DetailContent>
+    </>
 }

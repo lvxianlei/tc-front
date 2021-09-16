@@ -142,40 +142,40 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
         [
           {
             label: "税率",
-            value: baseInfo?.taxRate == -1 ? undefined : baseInfo?.taxRate,
+            value: baseInfo?.taxRate === -1 ? undefined : baseInfo?.taxRate,
           },
           {
             label: "汇率",
             value:
-              baseInfo?.exchangeRate == -1 ? undefined : baseInfo?.exchangeRate,
+              baseInfo?.exchangeRate === -1 ? undefined : baseInfo?.exchangeRate,
           },
         ],
         [
           {
             label: "外汇金额",
             value:
-              baseInfo?.foreignExchangeAmount == -1
+              baseInfo?.foreignExchangeAmount === -1
                 ? undefined
                 : baseInfo?.foreignExchangeAmount,
           },
           {
             label: "外汇单价",
             value:
-              baseInfo?.foreignPrice == -1 ? undefined : baseInfo?.foreignPrice,
+              baseInfo?.foreignPrice === -1 ? undefined : baseInfo?.foreignPrice,
           },
         ],
         [
           {
             label: "保函类型",
             value:
-              baseInfo?.guaranteeType == "-1"
+              baseInfo?.guaranteeType === "-1"
                 ? undefined
                 : baseInfo?.guaranteeType,
           },
           {
             label: "保函金额",
             value:
-              baseInfo?.guaranteeAmount == -1
+              baseInfo?.guaranteeAmount === -1
                 ? undefined
                 : baseInfo?.guaranteeAmount,
           },
@@ -184,28 +184,28 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
           {
             label: "海运及保险费",
             value:
-              baseInfo?.insuranceCharge == -1
+              baseInfo?.insuranceCharge === -1
                 ? undefined
                 : baseInfo?.insuranceCharge,
           },
           {
             label: "港口费用",
             value:
-              baseInfo?.portCharge == -1 ? undefined : baseInfo?.portCharge,
+              baseInfo?.portCharge === -1 ? undefined : baseInfo?.portCharge,
           },
         ],
         [
           {
             label: "出口信用保险",
             value:
-              baseInfo?.creditInsurance == -1
+              baseInfo?.creditInsurance === -1
                 ? undefined
                 : baseInfo?.creditInsurance,
           },
           {
             label: "佣金",
             value:
-              baseInfo?.commissionCharge == -1
+              baseInfo?.commissionCharge === -1
                 ? undefined
                 : baseInfo?.commissionCharge,
           },

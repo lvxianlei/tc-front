@@ -172,7 +172,7 @@ import { ITask } from '../../ITask';
             },
             rows: [[{
                 label: '原材料标准',
-                value: task?.materialStandardName == '-1' ? '': task?.materialStandardName
+                value: task?.materialStandardName === '-1' ? '': task?.materialStandardName
             },  {
                 label: '原材料要求',
                 value: task?.materialDemand

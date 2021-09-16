@@ -23,7 +23,7 @@ export default class DefaultFrame<
      * @returns logo 
      */
     public renderLogo(): React.ReactNode {
-        return <h1 style={{ height: "100%" }}><img height="100%" src={Logo} /></h1>;
+        return <h1 style={{ height: "100%" }}><img height="100%" src={Logo} alt=""/></h1>;
     }
 
     /**

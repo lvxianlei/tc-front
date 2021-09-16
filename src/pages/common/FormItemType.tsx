@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Input, InputNumber, Select, DatePicker, Modal, Table, Button } from 'antd'
+import { Input, InputNumber, Select, DatePicker, Modal, Table } from 'antd'
 import { PlusOutlined } from "@ant-design/icons"
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
@@ -46,7 +46,7 @@ interface PopTableProps {
 
 const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
     const [visible, setVisible] = useState<boolean>(false)
-    const { loading, data: popTableData, run } = useRequest<any>(() => new Promise(async (resolve, reject) => {
+    const { loading, data: popTableData } = useRequest<any>(() => new Promise(async (resolve, reject) => {
         resolve(await RequestUtil.get<{ data: any }>(data.path))
     }))
     return <>

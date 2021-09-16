@@ -164,7 +164,7 @@ class ManagementSaleOrderSetting extends SaleOrderSetting {
               label: "不含税金额",
               name: "amount",
               initialValue:
-                saleOrder?.amount == 0 ? undefined : saleOrder?.amount,
+                saleOrder?.amount === 0 ? undefined : saleOrder?.amount,
               children: <Input prefix="￥" disabled />,
             },
             {
@@ -177,14 +177,14 @@ class ManagementSaleOrderSetting extends SaleOrderSetting {
               label: "不含税单价",
               name: "price",
               initialValue:
-                saleOrder?.price == 0 ? undefined : saleOrder?.price,
+                saleOrder?.price === 0 ? undefined : saleOrder?.price,
               children: <Input prefix="￥" />,
             },
             {
               label: "税率",
               name: "taxRate",
               initialValue:
-                saleOrder?.taxRate == -1 ? undefined : saleOrder?.taxRate,
+                saleOrder?.taxRate === -1 ? undefined : saleOrder?.taxRate,
               children: (
                 <Select
                   showSearch
@@ -217,7 +217,7 @@ class ManagementSaleOrderSetting extends SaleOrderSetting {
               label: "外汇金额",
               name: "foreignExchangeAmount",
               initialValue:
-                saleOrder?.foreignExchangeAmount == -1
+                saleOrder?.foreignExchangeAmount === -1
                   ? undefined
                   : saleOrder?.foreignExchangeAmount,
               children: (
@@ -234,7 +234,7 @@ class ManagementSaleOrderSetting extends SaleOrderSetting {
               label: "汇率",
               name: "exchangeRate",
               initialValue:
-                saleOrder?.exchangeRate == -1
+                saleOrder?.exchangeRate === -1
                   ? undefined
                   : saleOrder?.exchangeRate,
               children: (
@@ -252,7 +252,7 @@ class ManagementSaleOrderSetting extends SaleOrderSetting {
               label: "外汇单价",
               name: "foreignPrice",
               initialValue:
-                saleOrder?.foreignPrice == -1
+                saleOrder?.foreignPrice === -1
                   ? undefined
                   : saleOrder?.foreignPrice,
               children: (
@@ -269,7 +269,7 @@ class ManagementSaleOrderSetting extends SaleOrderSetting {
               label: "保函类型",
               name: "guaranteeType",
               initialValue:
-                saleOrder?.guaranteeType == "-1"
+                saleOrder?.guaranteeType === "-1"
                   ? undefined
                   : saleOrder?.guaranteeType,
               children: (
@@ -281,7 +281,7 @@ class ManagementSaleOrderSetting extends SaleOrderSetting {
               label: "港口费用",
               name: "portCharge",
               initialValue:
-                saleOrder?.portCharge == -1 ? undefined : saleOrder?.portCharge,
+                saleOrder?.portCharge === -1 ? undefined : saleOrder?.portCharge,
               children: (
                 <InputNumber
                   min="0"
@@ -296,7 +296,7 @@ class ManagementSaleOrderSetting extends SaleOrderSetting {
               label: "保函金额",
               name: "guaranteeAmount",
               initialValue:
-                saleOrder?.guaranteeAmount == -1
+                saleOrder?.guaranteeAmount === -1
                   ? undefined
                   : saleOrder?.guaranteeAmount,
               children: (
@@ -314,7 +314,7 @@ class ManagementSaleOrderSetting extends SaleOrderSetting {
               label: "海运及保险费",
               name: "insuranceCharge",
               initialValue:
-                saleOrder?.insuranceCharge == -1
+                saleOrder?.insuranceCharge === -1
                   ? undefined
                   : saleOrder?.insuranceCharge,
               children: (
@@ -331,7 +331,7 @@ class ManagementSaleOrderSetting extends SaleOrderSetting {
               label: "出口信用保险",
               name: "creditInsurance",
               initialValue:
-                saleOrder?.creditInsurance == -1
+                saleOrder?.creditInsurance === -1
                   ? undefined
                   : saleOrder?.creditInsurance,
               children: (
@@ -348,7 +348,7 @@ class ManagementSaleOrderSetting extends SaleOrderSetting {
               label: "佣金",
               name: "commissionCharge",
               initialValue:
-                saleOrder?.commissionCharge == -1
+                saleOrder?.commissionCharge === -1
                   ? undefined
                   : saleOrder?.commissionCharge,
               children: (

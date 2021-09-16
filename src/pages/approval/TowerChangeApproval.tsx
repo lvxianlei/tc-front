@@ -253,9 +253,7 @@ class TowerChangeApproval extends AbstractTowerShapeSetting<ITowerChangeApproval
     public itemWeightClick = (index: number): void => {
         let itemWeight: IProductAdditionalDTOList[] = this.getForm()?.getFieldsValue(true).productChangeRecordVos[index].productAdditionalVOList;
         itemWeight && itemWeight.forEach((item: IProductAdditionalDTOList, index: number) => {
-            if (item.additionalItem && item.additionalItem !== "") {
-                itemWeight = itemWeight;
-            } else {
+            if (!(item.additionalItem && item.additionalItem !== "")) {
                 itemWeight.splice(index, 1);
             }
         })

@@ -4,7 +4,7 @@ import RequestUtil from "../../utils/RequestUtil"
 import useRequest from "@ahooksjs/use-request"
 export default function SelectAuditType(props: ModalFuncProps): JSX.Element {
     const [selectValue, setSelectValue] = useState("")
-    const { loading, data, error } = useRequest<any>(() => new Promise(async (resolve, reject) => {
+    const { loading, data } = useRequest<any>(() => new Promise(async (resolve, reject) => {
         const result = await RequestUtil.get("/tower-market/audit/getAuditType")
         resolve(result)
     }))

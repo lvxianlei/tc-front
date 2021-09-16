@@ -17,9 +17,8 @@ import layoutStyles from '../../../layout/Layout.module.less';
 import { IProductAdditionalDTOList, IProductDTOList, ITowerShape } from './ITowerShape';
 import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
 import { StoreValue } from 'antd/lib/form/interface';
-import { idText } from 'typescript';
 import RequestUtil from '../../../utils/RequestUtil';
- 
+
 export interface IAbstractTowerShapeSettingState extends IAbstractFillableComponentState {
     readonly towerShape: ITowerShape;
     readonly isVisible?: boolean;
@@ -27,8 +26,8 @@ export interface IAbstractTowerShapeSettingState extends IAbstractFillableCompon
     readonly oldTowerShape: ITowerShape;
     readonly isChange?: boolean;
     readonly isReference?: boolean;
-    readonly productIdList?: (string| Number)[];
-    readonly productAdditionalIdList?: (string| Number)[];
+    readonly productIdList?: (string | Number)[];
+    readonly productAdditionalIdList?: (string | Number)[];
     readonly productDeleteList?: IProductDTOList[];
     readonly productAdditionalDeleteList?: IProductAdditionalDTOList[];
 }
@@ -61,7 +60,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
     protected getFormProps(): FormProps {
         return {
             ...super.getFormProps(),
-           labelCol: {
+            labelCol: {
                 span: 8
             },
             wrapperCol: {
@@ -73,7 +72,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
 
     public onSelect = (selectedRows: DataType[] | any): void => {
         const towerShape: ITowerShape | undefined = this.state.towerShape;
-        if(selectedRows && selectedRows.length > 0 ) {
+        if (selectedRows && selectedRows.length > 0) {
             const modalSelectedValue: ITowerShape = {
                 internalNumber: selectedRows[0].internalNumber,
                 projectName: selectedRows[0].projectName,
@@ -86,15 +85,15 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                 },
             })
             this.getForm()?.setFieldsValue({ ...modalSelectedValue })
-        }   
+        }
     }
 
-     /**
-     * @description 验证塔型+钢印塔型是否重复
-     */
-      public checkContractNumber = (value: StoreValue): Promise<void | any> =>{
+    /**
+    * @description 验证塔型+钢印塔型是否重复
+    */
+    public checkContractNumber = (value: StoreValue): Promise<void | any> => {
         return new Promise(async (resolve, reject) => {  // 返回一个promise
-            if(this.getForm()?.getFieldsValue(true).name && this.getForm()?.getFieldsValue(true).steelProductShape) {
+            if (this.getForm()?.getFieldsValue(true).name && this.getForm()?.getFieldsValue(true).steelProductShape) {
                 const resData = await RequestUtil.get('/tower-data-archive/productCategory/checkProductCategory', {
                     name: this.getForm()?.getFieldsValue(true).name,
                     steelProductShape: this.getForm()?.getFieldsValue(true).steelProductShape,
@@ -126,7 +125,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             itemCol: {
                 span: 8
             },
-            itemProps: [ {
+            itemProps: [{
                 label: '内部合同编号',
                 name: 'internalNumber',
                 initialValue: towerShape?.internalNumber,
@@ -134,21 +133,21 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                     required: true,
                     message: '请选择关联合同'
                 }],
-                children: 
-                (
-                    isReference 
-                    ?
-                    <Input value={ towerShape?.internalNumber } disabled/> 
-                    :
-                    <Input value={ towerShape?.internalNumber } disabled suffix={ 
-                        <ContractSelectionComponent onSelect={ this.onSelect }/>
-                    }/> 
-                )
+                children:
+                    (
+                        isReference
+                            ?
+                            <Input value={towerShape?.internalNumber} disabled />
+                            :
+                            <Input value={towerShape?.internalNumber} disabled suffix={
+                                <ContractSelectionComponent onSelect={this.onSelect} />
+                            } />
+                    )
             }, {
                 label: '工程名称',
                 name: 'projectName',
                 initialValue: towerShape?.projectName,
-                children: <Input disabled/>
+                children: <Input disabled />
             }, {
                 label: '塔型',
                 name: 'name',
@@ -156,7 +155,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                 rules: [{
                     required: true,
                     validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
-                        if(value && value != '') {
+                        if (value && value !== "") {
                             this.checkContractNumber(value).then(res => {
                                 if (res) {
                                     callback()
@@ -169,7 +168,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         }
                     }
                 }],
-                children: <Input maxLength={ 50 } disabled={ isReference }/>
+                children: <Input maxLength={50} disabled={isReference} />
             }, {
                 label: '钢印塔型',
                 name: 'steelProductShape',
@@ -177,7 +176,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                 rules: [{
                     required: true,
                     validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
-                        if(value && value != '') {
+                        if (value && value !== "") {
                             this.checkContractNumber(value).then(res => {
                                 if (res) {
                                     callback()
@@ -190,12 +189,12 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         }
                     }
                 }],
-                children: <Input maxLength={ 50 } disabled={ isReference }/>
+                children: <Input maxLength={50} disabled={isReference} />
             }, {
                 label: '备注',
                 name: 'description',
                 initialValue: towerShape?.description,
-                children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息" disabled={ isReference }/>
+                children: <Input.TextArea rows={5} showCount={true} maxLength={300} placeholder="请输入备注信息" disabled={isReference} />
             }]
         }]]
     }
@@ -203,12 +202,12 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
     /**
      * @description 验证杆塔号
      */
-     public checkProductNumber = (value: StoreValue, index: number): Promise<void | any> =>{
+    public checkProductNumber = (value: StoreValue, index: number): Promise<void | any> => {
         return new Promise(async (resolve, reject) => {  // 返回一个promise
             const productDTOList: IProductDTOList[] = this.getForm()?.getFieldsValue(true).productDTOList || [];
-            if(value) {
+            if (value) {
                 resolve(productDTOList.map((items: IProductDTOList, ind: number) => {
-                    if(index !== ind && items.productNumber === value) {
+                    if (index !== ind && items.productNumber === value) {
                         return false
                     } else {
                         return true
@@ -228,20 +227,20 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
       * @param item 
       * @returns table columns 
       */
-     public getColumns(): TableColumnType<object>[] {    
-        const isChange: boolean | undefined = this.state.isChange;      
+    public getColumns(): TableColumnType<object>[] {
+        const isChange: boolean | undefined = this.state.isChange;
         return [{
             key: 'status',
             title: '* 状态',
             dataIndex: 'status',
             width: 150,
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
-                <Form.Item initialValue={ record.status } name={['productDTOList', index,'status']} rules= {[{
+                <Form.Item initialValue={record.status} name={['productDTOList', index, 'status']} rules={[{
                     required: true,
                     message: '请输入线路名称'
                 }]}>
-                    { record.status === 0 ? '新建' : record.status === 1 ? '待下发' : record.status === 2 ? '审批中' : '已下发' }
-                </Form.Item> 
+                    {record.status === 0 ? '新建' : record.status === 1 ? '待下发' : record.status === 2 ? '审批中' : '已下发'}
+                </Form.Item>
             )
         }, {
             key: 'lineName',
@@ -249,12 +248,12 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             dataIndex: 'lineName',
             width: 150,
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
-                <Form.Item name={['productDTOList', index,'lineName']} rules= {[{
+                <Form.Item name={['productDTOList', index, 'lineName']} rules={[{
                     required: true,
                     message: '请输入线路名称'
                 }]}>
-                    <Input maxLength={ 100 } disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
-                </Form.Item> 
+                    <Input maxLength={100} disabled={record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status === 3)} />
+                </Form.Item>
             )
         }, {
             key: 'productNumber',
@@ -262,11 +261,11 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             dataIndex: 'productNumber',
             width: 150,
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
-                <Form.Item name={['productDTOList', index,'productNumber']} rules= {[{
+                <Form.Item name={['productDTOList', index, 'productNumber']} rules={[{
                     required: true,
                     validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
                         this.checkProductNumber(value, index).then((res) => {
-                            if (res===-1) {
+                            if (res === -1) {
                                 callback()
                             } else {
                                 callback('请输入杆塔号，且塔型下杆塔号唯一！');
@@ -274,8 +273,8 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                         })
                     }
                 }]}>
-                    <Input maxLength={ 50 } disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
-                </Form.Item> 
+                    <Input maxLength={50} disabled={record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status === 3)} />
+                </Form.Item>
             )
         }, {
             key: 'productType',
@@ -283,18 +282,18 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             dataIndex: 'productType',
             width: 150,
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
-                <Form.Item name={['productDTOList', index,'productType']} rules= {[{
+                <Form.Item name={['productDTOList', index, 'productType']} rules={[{
                     required: true,
                     message: '请选择产品类型'
                 }]}>
-                    <Select placeholder="请选择电压等级" className={ styles.select_width } disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }>
-                        { productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                            return <Select.Option key={ index } value={ id }>
-                                { name }
+                    <Select placeholder="请选择电压等级" className={styles.select_width} disabled={record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status === 3)}>
+                        {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={index} value={id}>
+                                {name}
                             </Select.Option>
-                        }) }
+                        })}
                     </Select>
-                </Form.Item> 
+                </Form.Item>
             )
         }, {
             key: 'voltageGrade',
@@ -302,18 +301,18 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             dataIndex: 'voltageGrade',
             width: 150,
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
-                <Form.Item name={['productDTOList', index,'voltageGrade']} rules= {[{
+                <Form.Item name={['productDTOList', index, 'voltageGrade']} rules={[{
                     required: true,
                     message: '请选择电压等级'
                 }]}>
-                    <Select placeholder="请选择电压等级" className={ styles.select_width } disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }>
-                        { voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
-                            return <Select.Option key={ index } value={ id }>
-                                { name }
+                    <Select placeholder="请选择电压等级" className={styles.select_width} disabled={record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status === 3)}>
+                        {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={index} value={id}>
+                                {name}
                             </Select.Option>
-                        }) }
+                        })}
                     </Select>
-                </Form.Item> 
+                </Form.Item>
             )
         }, {
             key: 'productHeight',
@@ -321,18 +320,18 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             dataIndex: 'productHeight',
             width: 150,
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
-                <Form.Item name={['productDTOList', index,'productHeight']} rules= {[{
+                <Form.Item name={['productDTOList', index, 'productHeight']} rules={[{
                     required: true,
                     message: '请输入呼高'
                 }]}>
-                    <InputNumber 
-                        stringMode={ false } 
+                    <InputNumber
+                        stringMode={false}
                         min="0"
                         step="0.01"
-                        precision={ 2 }
-                        className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
-                </Form.Item> 
+                        precision={2}
+                        className={layoutStyles.width100}
+                        disabled={record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status === 3)} />
+                </Form.Item>
             )
         }, {
             key: 'bodyWeight',
@@ -340,21 +339,21 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             dataIndex: 'bodyWeight',
             width: 150,
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
-                <Form.Item name={['productDTOList', index,'bodyWeight']} rules= {[{
+                <Form.Item name={['productDTOList', index, 'bodyWeight']} rules={[{
                     required: true,
                     message: '请输入身部重量'
                 }]}>
-                    <InputNumber 
-                        stringMode={ false } 
+                    <InputNumber
+                        stringMode={false}
                         min="0.01"
                         step="0.01"
-                        precision={ 2 }
-                        className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
-                        onChange={ () => {
-                            this.getProductWeight(index) 
-                        } }/>
-                </Form.Item> 
+                        precision={2}
+                        className={layoutStyles.width100}
+                        disabled={record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status === 3)}
+                        onChange={() => {
+                            this.getProductWeight(index)
+                        }} />
+                </Form.Item>
             )
         }, {
             key: 'towerLeg1Length',
@@ -362,15 +361,15 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             dataIndex: 'towerLeg1Length',
             width: 150,
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
-                <Form.Item name={['productDTOList', index,'towerLeg1Length']}>
-                    <InputNumber 
-                        stringMode={ false } 
+                <Form.Item name={['productDTOList', index, 'towerLeg1Length']}>
+                    <InputNumber
+                        stringMode={false}
                         min="0"
                         step="0.01"
-                        precision={ 2 }
-                        className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
-                </Form.Item> 
+                        precision={2}
+                        className={layoutStyles.width100}
+                        disabled={record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status === 3)} />
+                </Form.Item>
             )
         }, {
             key: 'towerLeg1Weight',
@@ -378,18 +377,18 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             dataIndex: 'towerLeg1Weight',
             width: 150,
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
-                <Form.Item name={['productDTOList', index,'towerLeg1Weight']}>
-                    <InputNumber 
-                        stringMode={ false } 
+                <Form.Item name={['productDTOList', index, 'towerLeg1Weight']}>
+                    <InputNumber
+                        stringMode={false}
                         min="0"
                         step="0.01"
-                        precision={ 2 }
-                        className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
-                        onChange={ () => {
+                        precision={2}
+                        className={layoutStyles.width100}
+                        disabled={record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status === 3)}
+                        onChange={() => {
                             this.getProductWeight(index)
-                        } }/>
-                </Form.Item> 
+                        }} />
+                </Form.Item>
             )
         }, {
             key: 'towerLeg2Length',
@@ -397,15 +396,15 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             dataIndex: 'towerLeg2Length',
             width: 150,
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
-                <Form.Item name={['productDTOList', index,'towerLeg2Length']}>
-                    <InputNumber 
-                        stringMode={ false } 
+                <Form.Item name={['productDTOList', index, 'towerLeg2Length']}>
+                    <InputNumber
+                        stringMode={false}
                         min="0"
                         step="0.01"
-                        precision={ 2 }
-                        className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
-                </Form.Item> 
+                        precision={2}
+                        className={layoutStyles.width100}
+                        disabled={record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status === 3)} />
+                </Form.Item>
             )
         }, {
             key: 'towerLeg2Weight',
@@ -413,18 +412,18 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             dataIndex: 'towerLeg2Weight',
             width: 150,
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
-                <Form.Item name={['productDTOList', index,'towerLeg2Weight']}>
-                    <InputNumber 
-                        stringMode={ false } 
+                <Form.Item name={['productDTOList', index, 'towerLeg2Weight']}>
+                    <InputNumber
+                        stringMode={false}
                         min="0"
                         step="0.01"
-                        precision={ 2 }
-                        className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
-                        onChange={ () => {
+                        precision={2}
+                        className={layoutStyles.width100}
+                        disabled={record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status === 3)}
+                        onChange={() => {
                             this.getProductWeight(index)
-                        } }/>
-                </Form.Item> 
+                        }} />
+                </Form.Item>
             )
         }, {
             key: 'towerLeg3Length',
@@ -432,15 +431,15 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             dataIndex: 'towerLeg3Length',
             width: 150,
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
-                <Form.Item name={['productDTOList', index,'towerLeg3Length']}>
-                    <InputNumber 
-                        stringMode={ false } 
+                <Form.Item name={['productDTOList', index, 'towerLeg3Length']}>
+                    <InputNumber
+                        stringMode={false}
                         min="0"
                         step="0.01"
-                        precision={ 2 }
-                        className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
-                </Form.Item> 
+                        precision={2}
+                        className={layoutStyles.width100}
+                        disabled={record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status === 3)} />
+                </Form.Item>
             )
         }, {
             key: 'towerLeg3Weight',
@@ -448,18 +447,18 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             dataIndex: 'towerLeg3Weight',
             width: 150,
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
-                <Form.Item name={['productDTOList', index,'towerLeg3Weight']}>
-                    <InputNumber 
-                        stringMode={ false } 
+                <Form.Item name={['productDTOList', index, 'towerLeg3Weight']}>
+                    <InputNumber
+                        stringMode={false}
                         min="0"
                         step="0.01"
-                        precision={ 2 }
-                        className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
-                        onChange={ () => {
+                        precision={2}
+                        className={layoutStyles.width100}
+                        disabled={record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status === 3)}
+                        onChange={() => {
                             this.getProductWeight(index)
-                        } }/>
-                </Form.Item> 
+                        }} />
+                </Form.Item>
             )
         }, {
             key: 'towerLeg4Length',
@@ -467,15 +466,15 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             dataIndex: 'towerLeg4Length',
             width: 150,
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
-                <Form.Item name={['productDTOList', index,'towerLeg4Length']}>
-                    <InputNumber 
-                        stringMode={ false } 
+                <Form.Item name={['productDTOList', index, 'towerLeg4Length']}>
+                    <InputNumber
+                        stringMode={false}
                         min="0"
                         step="0.01"
-                        precision={ 2 }
-                        className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
-                </Form.Item> 
+                        precision={2}
+                        className={layoutStyles.width100}
+                        disabled={record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status === 3)} />
+                </Form.Item>
             )
         }, {
             key: 'towerLeg4Weight',
@@ -483,57 +482,57 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             dataIndex: 'towerLeg4Weight',
             width: 150,
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
-                <Form.Item name={['productDTOList', index,'towerLeg4Weight']}>
-                    <InputNumber 
-                        stringMode={ false } 
+                <Form.Item name={['productDTOList', index, 'towerLeg4Weight']}>
+                    <InputNumber
+                        stringMode={false}
                         min="0"
                         step="0.01"
-                        precision={ 2 }
-                        className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
-                        onChange={ () => {
+                        precision={2}
+                        className={layoutStyles.width100}
+                        disabled={record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status === 3)}
+                        onChange={() => {
                             this.getProductWeight(index)
-                        } }/>
-                </Form.Item> 
+                        }} />
+                </Form.Item>
             )
-        },  {
+        }, {
             key: 'towerFootWeight',
             title: '塔脚板重量（kg）',
             dataIndex: 'towerFootWeight',
             width: 150,
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
-                <Form.Item name={['productDTOList', index,'towerFootWeight']}>
-                    <InputNumber 
-                        stringMode={ false } 
+                <Form.Item name={['productDTOList', index, 'towerFootWeight']}>
+                    <InputNumber
+                        stringMode={false}
                         min="0"
                         step="0.01"
-                        precision={ 2 }
-                        className={ layoutStyles.width100 }
-                        disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }
-                        onChange={ () => {
+                        precision={2}
+                        className={layoutStyles.width100}
+                        disabled={record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status === 3)}
+                        onChange={() => {
                             this.getProductWeight(index)
-                        } }/>
-                </Form.Item> 
+                        }} />
+                </Form.Item>
             )
-        },  {
+        }, {
             key: 'productWeight',
             title: '杆塔重量（kg）',
             dataIndex: 'productWeight',
             width: 150,
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
-                <Form.Item name={['productDTOList', index,'productWeight']}>
-                    <Input disabled/>
-                </Form.Item> 
+                <Form.Item name={['productDTOList', index, 'productWeight']}>
+                    <Input disabled />
+                </Form.Item>
             )
-        },  {
+        }, {
             key: 'description',
             title: '备注',
             dataIndex: 'description',
             width: 150,
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
-                <Form.Item name={['productDTOList', index,'description']}>
-                    <Input maxLength={ 50 } disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }/>
-                </Form.Item> 
+                <Form.Item name={['productDTOList', index, 'description']}>
+                    <Input maxLength={50} disabled={record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status === 3)} />
+                </Form.Item>
             )
         }, {
             key: 'operation',
@@ -543,18 +542,18 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             fixed: 'right',
             render: (_: undefined, record: IProductDTOList, index: number): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type="link" onClick={ () => this.itemWeightClick(index) } disabled={ record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status == 3 ) }>
+                    <Button type="link" onClick={() => this.itemWeightClick(index)} disabled={record.status === 2 || (isChange && record.status === 0) || (isChange && record.status === 1) || (!isChange && record.status === 3)}>
                         增重项
                     </Button>
-                    <Popconfirm 
-                        title="要删除该杆塔信息吗？" 
-                        placement="topRight" 
+                    <Popconfirm
+                        title="要删除该杆塔信息吗？"
+                        placement="topRight"
                         okText="确认"
                         cancelText="取消"
-                        onConfirm={ () => { this.onDelete(index, record) } }
-                        disabled={ record.status === 2 || record.status === 1 || (!isChange && record.status == 3 ) }
+                        onConfirm={() => { this.onDelete(index, record) }}
+                        disabled={record.status === 2 || record.status === 1 || (!isChange && record.status === 3)}
                     >
-                        <Button type="text" disabled={ record.status === 2 || (isChange && record.status === 0) || record.status === 1 || (!isChange && record.status == 3 ) }>
+                        <Button type="text" disabled={record.status === 2 || (isChange && record.status === 0) || record.status === 1 || (!isChange && record.status === 3)}>
                             删除
                         </Button>
                     </Popconfirm>
@@ -570,7 +569,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
     public itemWeightClick = (index: number): void => {
         let itemWeight: IProductAdditionalDTOList[] = this.getForm()?.getFieldsValue(true).productDTOList[index].productAdditionalDTOList;
         itemWeight && itemWeight.map((item: IProductAdditionalDTOList, index: number) => {
-            if(item.additionalItem && item.additionalItem !== "") {
+            if (item.additionalItem && item.additionalItem !== "") {
                 itemWeight = itemWeight;
             } else {
                 itemWeight.splice(index, 1);
@@ -615,7 +614,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
         const productAdditionalDTOList: IProductAdditionalDTOList[] = productDTOList[index]?.productAdditionalDTOList || [];
         let weight: number = 0;
         let itemTotalWeight: number = 0;
-        if(productAdditionalDTOList.length > 0) {
+        if (productAdditionalDTOList.length > 0) {
             productAdditionalDTOList.map((items: IProductAdditionalDTOList, ind: number): void => {
                 itemTotalWeight = Number(itemTotalWeight) + Number(items.weight || 0);
                 this.getForm()?.validateFields([['productDTOList', index, "productAdditionalDTOList", ind, 'additionalItem'], ['productDTOList', index, "productAdditionalDTOList", ind, 'weight']])
@@ -648,7 +647,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
                 isVisible: false
             })
         }
-        
+
     }
 
     /**
@@ -657,19 +656,19 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
       * @param item 
       * @returns table columns 
       */
-    public getItemColumns(index: number): TableColumnType<object>[] {        
+    public getItemColumns(index: number): TableColumnType<object>[] {
         return [{
             key: 'additionalItem',
             title: '* 增重项',
             dataIndex: 'additionalItem',
             width: 150,
             render: (_: undefined, record: IProductAdditionalDTOList, ind: number): React.ReactNode => (
-                <Form.Item initialValue={ record.additionalItem } name={['productDTOList', index, "productAdditionalDTOList", ind ,'additionalItem']} rules= {[{
+                <Form.Item initialValue={record.additionalItem} name={['productDTOList', index, "productAdditionalDTOList", ind, 'additionalItem']} rules={[{
                     required: true,
                     message: '请输入增重项'
                 }]}>
-                    <Input maxLength={ 20 }/>
-                </Form.Item> 
+                    <Input maxLength={20} />
+                </Form.Item>
             )
         }, {
             key: 'weight',
@@ -677,17 +676,17 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             dataIndex: 'weight',
             width: 150,
             render: (_: undefined, record: IProductAdditionalDTOList, ind: number): React.ReactNode => (
-                <Form.Item initialValue={ record.weight } name={['productDTOList', index, "productAdditionalDTOList", ind,'weight']} rules= {[{
+                <Form.Item initialValue={record.weight} name={['productDTOList', index, "productAdditionalDTOList", ind, 'weight']} rules={[{
                     required: true,
                     message: '请输入增重'
                 }]}>
-                    <InputNumber 
-                        stringMode={ false } 
+                    <InputNumber
+                        stringMode={false}
                         min="0"
                         step="0.01"
-                        precision={ 2 }
-                        className={ layoutStyles.width100 }/>
-                </Form.Item> 
+                        precision={2}
+                        className={layoutStyles.width100} />
+                </Form.Item>
             )
         }, {
             key: 'operation',
@@ -697,14 +696,14 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             fixed: 'right',
             render: (_: undefined, record: IProductAdditionalDTOList, ind: number): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Popconfirm 
-                        title="要删除该增重项吗？" 
-                        placement="topRight" 
+                    <Popconfirm
+                        title="要删除该增重项吗？"
+                        placement="topRight"
                         okText="确认"
                         cancelText="取消"
-                        onConfirm={ () => { this.onModalDelete(index, ind, record) } }
+                        onConfirm={() => { this.onModalDelete(index, ind, record) }}
                     >
-                        <DeleteOutlined/>
+                        <DeleteOutlined />
                     </Popconfirm>
                 </Space>
             )
@@ -715,7 +714,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
      * @description 增重项添加行
      * @param event 
      */
-    public itemWeightAddRow = (): void =>  {
+    public itemWeightAddRow = (): void => {
         const index: number = this.state.index || 0;
         const towerShape: ITowerShape | undefined = this.state.towerShape;
         const productDTOList: IProductDTOList[] = towerShape?.productDTOList || [];
@@ -726,7 +725,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
         }
         productDTOList[index] = {
             ...productDTOList[index],
-            productAdditionalDTOList: [ 
+            productAdditionalDTOList: [
                 ...productAdditionalDTOList || [],
                 item
             ]
@@ -737,7 +736,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
         const productDtosValue: IProductDTOList[] = this.getForm()?.getFieldsValue(true).productDTOList || [];
         productDtosValue[index] = {
             ...productDtosValue[index],
-            productAdditionalDTOList: [ 
+            productAdditionalDTOList: [
                 ...(productDtosValue[index].productAdditionalDTOList || []),
                 item
             ]
@@ -759,12 +758,12 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
         const productDTOList: IProductDTOList[] = towerShape?.productDTOList || [];
         const productAdditionalDTOList: IProductAdditionalDTOList[] = productDTOList[index]?.productAdditionalDTOList || [];
         return <>
-            { this.state.isVisible ? <Modal title="增重项" visible={ this.state.isVisible } onCancel={ this.onModalClose } width={ "30%" } okText="确定" cancelText="取消" onOk={ this.onModalOk }>
-                <Button type="primary" onClick={ this.itemWeightAddRow } className={ styles.btn }>添加行</Button>
-                <Table rowKey= {this.getTableRowKey()} bordered={ true } dataSource = { [...productAdditionalDTOList] } columns={ this.getItemColumns(index) } pagination = { false }/>
+            {this.state.isVisible ? <Modal title="增重项" visible={this.state.isVisible} onCancel={this.onModalClose} width={"30%"} okText="确定" cancelText="取消" onOk={this.onModalOk}>
+                <Button type="primary" onClick={this.itemWeightAddRow} className={styles.btn}>添加行</Button>
+                <Table rowKey={this.getTableRowKey()} bordered={true} dataSource={[...productAdditionalDTOList]} columns={this.getItemColumns(index)} pagination={false} />
             </Modal>
-            : null }
-        </> 
+                : null}
+        </>
     }
 
     /**
@@ -786,7 +785,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             return itemTotalWeight = Number(itemTotalWeight) + Number(items.weight || 0);
         })
         let weight: number = 0;
-        weight =  Number(bodyWeight) + Number(weightOne) + Number(weightTwo) + Number(weightThree) + Number(weightFour) + Number(towerFootWeight) + Number(itemTotalWeight);
+        weight = Number(bodyWeight) + Number(weightOne) + Number(weightTwo) + Number(weightThree) + Number(weightFour) + Number(towerFootWeight) + Number(itemTotalWeight);
         weight = parseFloat(weight.toFixed(2));
         productDtos[index] = {
             ...productDtos[index],
@@ -801,14 +800,14 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
      * @description 产品信息删除操作
      * @param event 
      */
-     private toDelete = async (index: number, record?: IProductDTOList): Promise<void> => {
+    private toDelete = async (index: number, record?: IProductDTOList): Promise<void> => {
         const towerShape: ITowerShape | undefined = this.getForm()?.getFieldsValue(true);
         const productDTOList: IProductDTOList[] = towerShape?.productDTOList || [];
         productDTOList.splice(index, 1);
-        const productIdList: (string| Number)[]  = this.state.productIdList || [];
+        const productIdList: (string | Number)[] = this.state.productIdList || [];
         const productDeleteList: IProductDTOList[] = this.state.productDeleteList || [];
         record && record.id && productIdList.push(record.id);
-        record && record.id &&productDeleteList.push(record);
+        record && record.id && productDeleteList.push(record);
         this.setState({
             towerShape: {
                 ...towerShape,
@@ -824,12 +823,12 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
      * @param event 
      */
     private onDelete = async (index: number, record?: IProductDTOList): Promise<void> => {
-        if(record && record.id) {
-            const resData: boolean =  await RequestUtil.get('/tower-data-archive/product/checkDelete', {
+        if (record && record.id) {
+            const resData: boolean = await RequestUtil.get('/tower-data-archive/product/checkDelete', {
                 id: record && record.id,
                 productCategoryId: this.state.towerShape.id
             });
-            if(resData) {
+            if (resData) {
                 this.toDelete(index, record);
             } else {
                 message.warning('已被提料引用，无法进行删除！')
@@ -848,10 +847,10 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
         const productDTOList: IProductDTOList[] = towerShape?.productDTOList || [];
         const productAdditionalDTOList: IProductAdditionalDTOList[] = productDTOList && productDTOList[index]?.productAdditionalDTOList || [];
         productAdditionalDTOList.splice(ind, 1);
-        const productAdditionalIdList: (string| Number)[]  = this.state.productAdditionalIdList || [];
+        const productAdditionalIdList: (string | Number)[] = this.state.productAdditionalIdList || [];
         const productAdditionalDeleteList: IProductAdditionalDTOList[] = this.state.productAdditionalDeleteList || [];
         record && record.id && productAdditionalIdList.push(record.id);
-        record && record.id &&productAdditionalDeleteList.push(record);
+        record && record.id && productAdditionalDeleteList.push(record);
         this.setState({
             towerShape: {
                 ...towerShape,
@@ -886,7 +885,7 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
     protected getTableRowKey(): string | GetRowKey<object> {
         return 'id';
     }
-    
+
     /**
      * @description Renders extra sections
      * @returns extra sections 
@@ -898,49 +897,49 @@ export default abstract class AbstractTowerShapeSetting<P extends RouteComponent
             title: '杆塔信息',
             render: (): React.ReactNode => {
                 return (<>
-                        { this.itemWeightModal() }
-                        <Button type="primary" onClick={ () => { 
-                            const productDTOList: IProductDTOList[] = towerShape?.productDTOList || [];
-                            let product: IProductDTOList = {
-                                status: 0,
-                                bodyWeight: undefined,
-                                description: '',
-                                id: '',
-                                lineName: '',
-                                productAdditionalDTOList: [],
-                                productHeight: undefined,
-                                productNumber: '',
-                                productCategoryName: '',
-                                productShapeId: undefined,
-                                productType: '',
-                                productWeight: undefined,
-                                towerFootWeight: undefined,
-                                towerLeg1Length: undefined,
-                                towerLeg1Num: undefined,
-                                towerLeg1Weight: undefined,
-                                towerLeg2Length: undefined,
-                                towerLeg2Num: undefined,
-                                towerLeg2Weight: undefined,
-                                towerLeg3Length: undefined,
-                                towerLeg3Num: undefined,
-                                towerLeg3Weight: undefined,
-                                towerLeg4Length: undefined,
-                                towerLeg4Num: undefined,
-                                towerLeg4Weight: undefined,
-                                voltageGrade: ''
+                    {this.itemWeightModal()}
+                    <Button type="primary" onClick={() => {
+                        const productDTOList: IProductDTOList[] = towerShape?.productDTOList || [];
+                        let product: IProductDTOList = {
+                            status: 0,
+                            bodyWeight: undefined,
+                            description: '',
+                            id: '',
+                            lineName: '',
+                            productAdditionalDTOList: [],
+                            productHeight: undefined,
+                            productNumber: '',
+                            productCategoryName: '',
+                            productShapeId: undefined,
+                            productType: '',
+                            productWeight: undefined,
+                            towerFootWeight: undefined,
+                            towerLeg1Length: undefined,
+                            towerLeg1Num: undefined,
+                            towerLeg1Weight: undefined,
+                            towerLeg2Length: undefined,
+                            towerLeg2Num: undefined,
+                            towerLeg2Weight: undefined,
+                            towerLeg3Length: undefined,
+                            towerLeg3Num: undefined,
+                            towerLeg3Weight: undefined,
+                            towerLeg4Length: undefined,
+                            towerLeg4Num: undefined,
+                            towerLeg4Weight: undefined,
+                            voltageGrade: ''
+                        }
+                        this.setState({
+                            towerShape: {
+                                ...towerShape,
+                                productDTOList: [...productDTOList, product]
                             }
-                            this.setState({
-                                towerShape: {
-                                    ...towerShape,
-                                    productDTOList: [...productDTOList, product]
-                                }
-                            })
-                            const towerShapeValue: ITowerShape = this.getForm()?.getFieldsValue(true);
-                            const productDTOListValue: IProductDTOList[] = towerShapeValue?.productDTOList || [];
-                            this.getForm()?.setFieldsValue({ ...towerShapeValue, productDTOList: [...productDTOListValue, product] })
-                        } } className={ isChange ? styles.hidden : styles.btn }>添加行</Button>
-                        <Table { ...this.getTableProps() } />
-                    </>
+                        })
+                        const towerShapeValue: ITowerShape = this.getForm()?.getFieldsValue(true);
+                        const productDTOListValue: IProductDTOList[] = towerShapeValue?.productDTOList || [];
+                        this.getForm()?.setFieldsValue({ ...towerShapeValue, productDTOList: [...productDTOListValue, product] })
+                    }} className={isChange ? styles.hidden : styles.btn}>添加行</Button>
+                    <Table {...this.getTableProps()} />
+                </>
                 );
             }
         }];

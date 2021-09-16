@@ -35,7 +35,7 @@ class MaterialExtractionNew extends AbstractMaterialExtractionSetting<IMaterialE
         };
         if(this.state.paragraphDataSource && this.state.paragraphDataSource.length > 0) {
             const paragraphValue = this.state.paragraphDataSource.filter((item:IParagraph)=>{
-                return item.sectionCount == 0
+                return item.sectionCount === 0
             })
             if(paragraphValue.length === this.state.paragraphDataSource.length){
                 message.error("未提任何段，不可保存！")

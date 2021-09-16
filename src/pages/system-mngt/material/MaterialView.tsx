@@ -32,7 +32,7 @@ import { IMaterial, IMaterialTree } from './IMaterial';
         const materialValue = material.map((item:IMaterial)=>{
             return {
                 ...item,
-                proportion: item.proportion == -1 ? undefined : item.proportion
+                proportion: item.proportion === -1 ? undefined : item.proportion
             }
         })
         this.setState({

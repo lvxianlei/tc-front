@@ -733,7 +733,7 @@ enum StepTitleItem {
                             onConfirm={ () => {
                                 let num:number = 0;
                                 productDataSource.map(({ id }, index: number)=>{
-                                    if( id == record.id ){
+                                    if( id === record.id ){
                                         num = index;
                                     }
                                 })
