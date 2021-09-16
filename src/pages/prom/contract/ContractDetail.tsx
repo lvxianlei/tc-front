@@ -61,20 +61,20 @@ export class ContractDetail extends AbstractDetailComponent<IContractDetailRoute
         let regionName: string = '';
         if(region && detail?.countryCode === 0) {
             resData.filter((items: IRegion) => {
-                if(items.code == region[0]) {
+                if(items.code === region[0]) {
                     regionName = items.name;
                 }
             })
             const secondData: IRegion[] = await RequestUtil.get(`/tower-system/region/${ region[0] }`);
             if(region[1]) {
                 secondData.filter((items: IRegion) => {
-                    if(items.code == region[1]) {
+                    if(items.code === region[1]) {
                         regionName = regionName + '/' + items.name;
                     }
                 })
                 const thiedData: IRegion[] = await RequestUtil.get(`/tower-system/region/${ region[1] }`);
                 thiedData.filter((items: IRegion) => {
-                    if(items.code == region[2]) {
+                    if(items.code === region[2]) {
                         regionName = regionName + '/' + items.name;
                     }
                 })

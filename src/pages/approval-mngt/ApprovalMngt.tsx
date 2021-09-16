@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Button, Input, Modal, Select } from 'antd'
+import { Space, Button, Input } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { Page } from '../common'
 import SelectAuditType from './SelectAuditType'
@@ -26,12 +26,13 @@ export default function Information(): React.ReactNode {
                     width: 50,
                     render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                 },
-                ...auditHead, {
+                ...auditHead,
+                {
                     title: '操作',
                     dataIndex: 'operation',
                     render: (_: undefined, record: any): React.ReactNode => (
                         <Space direction="horizontal" size="small">
-                            <Link to={`/bidding/information/detail/${record.id}`}>查看</Link>
+                            <Link to={`/approvalm/management/detail/${record.id}`}>查看</Link>
                         </Space>
                     )
                 }]}

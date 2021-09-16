@@ -1,8 +1,8 @@
 import React from "react"
-import { Descriptions, Form, FormInstance, Row, Col, TableColumnProps } from "antd"
+import { Descriptions, Form, FormInstance, Row, Col } from "antd"
 import { FormItemType } from '../common'
 import styles from './BaseInfo.module.less'
-import { SelectData, InputData, PopTableData, FormItemTypesType } from "./FormItemType"
+import { FormItemTypesType } from "./FormItemType"
 import moment from "moment"
 export interface BaseInfoItemProps {
     name: string

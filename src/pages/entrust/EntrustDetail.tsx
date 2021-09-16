@@ -233,7 +233,7 @@ enum EntrustStatus {
                 )
             }
         }];
-        if(this.state.entrust?.status == EntrustStatus.HAVE_IN_HAND || this.state.entrust?.status == EntrustStatus.COMPLETED){
+        if(this.state.entrust?.status === EntrustStatus.HAVE_IN_HAND || this.state.entrust?.status === EntrustStatus.COMPLETED){
             extra.push({
                 title:'塔进度信息',
                 render:():React.ReactNode => {
@@ -252,7 +252,7 @@ enum EntrustStatus {
                 }
             })
         }
-        if(this.state.entrust?.status == EntrustStatus.COMPLETED){
+        if(this.state.entrust?.status === EntrustStatus.COMPLETED){
             extra.push({
                 title:'塔进度信息',
                 render:():React.ReactNode => {

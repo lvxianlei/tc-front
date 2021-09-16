@@ -530,7 +530,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             }, {
                 label: '税率',
                 name: 'taxRate',
-                initialValue: saleOrder?.taxRate == -1 ? undefined : saleOrder?.taxRate,
+                initialValue: saleOrder?.taxRate === -1 ? undefined : saleOrder?.taxRate,
                 children: 
                     <Select showSearch onSearch={ this.addNewOption } onChange={ this.getAmount } getPopupContainer={ triggerNode => triggerNode.parentNode }>
                         {
@@ -547,57 +547,57 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
             }, {
                 label: '不含税金额',
                 name: 'amount',
-                initialValue: saleOrder?.amount == 0 ? undefined : saleOrder?.amount,
+                initialValue: saleOrder?.amount === 0 ? undefined : saleOrder?.amount,
                 children: <Input  prefix="￥" disabled/>
             }, {
                 label: '不含税单价',
                 name: 'price',
-                initialValue: saleOrder?.price == 0 ? undefined : saleOrder?.price,
+                initialValue: saleOrder?.price === 0 ? undefined : saleOrder?.price,
                 children: <Input  prefix="￥" disabled/>
             }, {
                 label: '汇率',
                 name: 'exchangeRate',
-                initialValue: saleOrder?.exchangeRate == -1 ? undefined : saleOrder?.exchangeRate,
+                initialValue: saleOrder?.exchangeRate === -1 ? undefined : saleOrder?.exchangeRate,
                 children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } className={ layoutStyles.width100 }/>
             }, {
                 label: '外汇金额',
                 name: 'foreignExchangeAmount',
-                initialValue: saleOrder?.foreignExchangeAmount == -1 ? undefined : saleOrder?.foreignExchangeAmount,
+                initialValue: saleOrder?.foreignExchangeAmount === -1 ? undefined : saleOrder?.foreignExchangeAmount,
                 children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 2 } className={ layoutStyles.width100 }/>
             }, {
                 label: '外汇单价',
                 name: 'foreignPrice',
-                initialValue: saleOrder?.foreignPrice == -1 ? undefined : saleOrder?.foreignPrice,
+                initialValue: saleOrder?.foreignPrice === -1 ? undefined : saleOrder?.foreignPrice,
                 children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } className={ layoutStyles.width100 }/>
             }, {
                 label: '保函类型',
                 name: 'guaranteeType',
-                initialValue: saleOrder?.guaranteeType == '-1' ? undefined : saleOrder?.guaranteeType,
+                initialValue: saleOrder?.guaranteeType === '-1' ? undefined : saleOrder?.guaranteeType,
                 children:  <Input maxLength={ 50 } className={ layoutStyles.width100 }/>
             }, {
                 label: '保函金额',
                 name: 'guaranteeAmount',
-                initialValue: saleOrder?.guaranteeAmount == -1 ? undefined : saleOrder?.guaranteeAmount,
+                initialValue: saleOrder?.guaranteeAmount === -1 ? undefined : saleOrder?.guaranteeAmount,
                 children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 2 } className={ layoutStyles.width100 }/>
             }, {
                 label: '港口费用',
                 name: 'portCharge',
-                initialValue: saleOrder?.portCharge == -1 ? undefined : saleOrder?.portCharge,
+                initialValue: saleOrder?.portCharge === -1 ? undefined : saleOrder?.portCharge,
                 children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } className={ layoutStyles.width100 }/>
             }, {
                 label: '海运及保险费',
                 name: 'insuranceCharge',
-                initialValue: saleOrder?.insuranceCharge == -1 ? undefined : saleOrder?.insuranceCharge,
+                initialValue: saleOrder?.insuranceCharge === -1 ? undefined : saleOrder?.insuranceCharge,
                 children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } className={ layoutStyles.width100 }/>
             }, {
                 label: '佣金',
                 name: 'commissionCharge',
-                initialValue: saleOrder?.commissionCharge == -1 ? undefined :saleOrder?.commissionCharge,
+                initialValue: saleOrder?.commissionCharge === -1 ? undefined :saleOrder?.commissionCharge,
                 children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } className={ layoutStyles.width100 }/>
             }, {
                 label: '出口信用保险',
                 name: 'creditInsurance',
-                initialValue: saleOrder?.creditInsurance == -1 ? undefined : saleOrder?.creditInsurance,
+                initialValue: saleOrder?.creditInsurance === -1 ? undefined : saleOrder?.creditInsurance,
                 children:  <InputNumber min="0" step="0.0001" stringMode={ false } precision={ 4 } className={ layoutStyles.width100 }/>
             }, {
                 label: '订单交货日期',

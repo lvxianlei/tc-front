@@ -24,7 +24,7 @@ export default function InformationDetail(): React.ReactNode {
     const params = useParams<{ id: string }>()
     const [form] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false)
-    const { loading, error, data, run } = useRequest(() => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
         resole(data)
     }), {})

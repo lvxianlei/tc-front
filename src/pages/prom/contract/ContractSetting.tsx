@@ -59,8 +59,8 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
             internalNumber: contract.internalNumber,
             projectName: contract.projectName,
             simpleProjectName: contract.simpleProjectName || '',
-            winBidType: contract.winBidType == -1 ? '' : contract.winBidType,
-            saleType: contract.saleType == -1 ? '' : contract.saleType,
+            winBidType: contract.winBidType === -1 ? '' : contract.winBidType,
+            saleType: contract.saleType === -1 ? '' : contract.saleType,
             signCustomerName: contract.signCustomerName,
             signContractTime: contract.signContractTime && moment(contract.signContractTime),
             signUserName: contract.signUserName,
@@ -79,14 +79,14 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
             customerCompany: contract.customerInfoVo?.customerCompany,
             customerLinkman: contract.customerInfoVo?.customerLinkman,
             customerPhone: contract.customerInfoVo?.customerPhone,
-            productType: contract?.productType == -1 ? '' : contract?.productType,
-            voltageGrade: contract?.voltageGrade == -1 ? '' : contract?.voltageGrade
+            productType: contract?.productType === -1 ? '' : contract?.productType,
+            voltageGrade: contract?.voltageGrade === -1 ? '' : contract?.voltageGrade
         });
         const region: string[] | undefined = this.state.contract.region;
         let regionInfoData: IRegion[] =  this.state.regionInfoData;
         if(this.state.contract.countryCode === 0) {
             if(region && region.length > 0) {
-                const index: number = regionInfoData.findIndex((regionInfo: IRegion) => regionInfo.code == region[0]);
+                const index: number = regionInfoData.findIndex((regionInfo: IRegion) => regionInfo.code === region[0]);
                 const resData: IRegion[] = await RequestUtil.get(`/tower-system/region/${ region[0] }`);
                 regionInfoData[index] ={
                     ...regionInfoData[index],

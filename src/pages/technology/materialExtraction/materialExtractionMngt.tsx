@@ -67,7 +67,7 @@ class materialExtractionMngt extends AbstractMngtComponent<ImaterialExtractionMn
             size: pagination.pageSize ||this.state.tablePagination?.pageSize,
             saleType: this.state.selectedTabKey === 'item_0' ? '' : this.state.selectedTabKey
         });
-        if(resData?.records?.length == 0 && resData?.current>1){
+        if(resData?.records?.length === 0 && resData?.current>1){
             this.fetchTableData({
                 ...filterValues,
             },{

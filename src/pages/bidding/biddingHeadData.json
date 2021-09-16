@@ -20,7 +20,9 @@
         },
         {
             "dataIndex": "bidBuyEndTime",
-            "title": "标书购买截止时间"
+            "title": "标书购买截止时间",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "dataIndex": "sourceWebsite",
@@ -32,15 +34,13 @@
         },
         {
             "dataIndex": "biddingEndTime",
-            "title": "投标截至时间"
+            "title": "投标截至时间",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "dataIndex": "biddingAgency",
             "title": "招标代理机构"
-        },
-        {
-            "dataIndex": "explain",
-            "title": "说明"
         },
         {
             "dataIndex": "biddingStatus",
@@ -64,6 +64,11 @@
         {
             "dataIndex": "reason",
             "title": "不应标原因"
+        },
+        {
+            "dataIndex": "explain",
+            "title": "说明",
+            "type": "textarea"
         }
     ]
 }

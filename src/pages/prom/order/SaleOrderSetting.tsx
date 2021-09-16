@@ -32,14 +32,14 @@ export class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSetting
         saleOrder.orderProductDtos = saleOrder.orderProductVos?.map<IProductVo>((product: IProductVo, index: number): IProductVo => {
             return {
                 ...product,
-                num: product.num == -1 ? undefined : product.num,
+                num: product.num === -1 ? undefined : product.num,
                 index: index + 1
             };
         });
         this.setState({
             saleOrder: {
                 ...saleOrder,
-                price: saleOrder.price == -1 ? undefined : saleOrder.price,
+                price: saleOrder.price === -1 ? undefined : saleOrder.price,
                 orderProductDtos: saleOrder.orderProductDtos,
                 contractInfoDto: saleOrder.contractInfoVo
             },
@@ -62,7 +62,7 @@ export class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSetting
             signCustomerId: saleOrder.contractInfoVo?.signCustomerId,
             signCustomerName: saleOrder.contractInfoVo?.signCustomerName,
             orderProductDtos: saleOrder.orderProductDtos,
-            price: saleOrder.price == -1 ? '-' : saleOrder.price,
+            price: saleOrder.price === -1 ? '-' : saleOrder.price,
         });
         this.getColumnsChange(saleOrder.contractInfoVo?.chargeType || 0);
     }
@@ -108,7 +108,7 @@ export class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSetting
         values.orderProductDtos = this.state.saleOrder?.orderProductDtos && this.state.saleOrder?.orderProductDtos.map((items: IProductVo, index: number) => {
             return {
                 ...items,
-                taskNoticeId: items.taskNoticeId == -1 ? '' : items.taskNoticeId,
+                taskNoticeId: items.taskNoticeId === -1 ? '' : items.taskNoticeId,
                 tender: this.getForm()?.getFieldsValue(true).orderProductDtos[index].tender,
                 productCategoryId: items.productCategoryId,
                 productId: items.productId

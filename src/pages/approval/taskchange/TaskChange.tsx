@@ -1,24 +1,22 @@
-import { DatePicker, Input, message, Select, TableColumnType, Tag } from 'antd';
+import { DatePicker, Input, message, TableColumnType, Tag } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
-import { materialStandardOptions } from '../../../configuration/DictionaryOptions';
 import RequestUtil from '../../../utils/RequestUtil';
 import AbstractTaskChange, { IAbstractTaxkchangeState, ITaskChange } from './AbstractTaskchange';
-
 
 export interface ITaxkChangeProps {
     readonly businessId: string;
     readonly id: string;
 }
 //产品类型
-enum ProductType {
-    ANGLE_STEEL_TOWER = 0,  //"角钢塔" 
-    TUBE_TOWER = 1,        //"管塔"
-    BOLT = 2              //"螺栓"
-}
+// enum ProductType {
+//     ANGLE_STEEL_TOWER = 0,  //"角钢塔" 
+//     TUBE_TOWER = 1,        //"管塔"
+//     BOLT = 2              //"螺栓"
+// }
 //类型
 enum StateType{
     UNCHANGED=0,              //未变更

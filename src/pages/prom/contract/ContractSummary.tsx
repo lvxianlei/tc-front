@@ -204,7 +204,7 @@ export class ContractSummary extends React.Component<IContractSummaryRouteProps,
             title: '数量',
             dataIndex: 'num',
             render: (num: number | string): React.ReactNode => {
-                return num == -1 ? '' : num;
+                return num === -1 ? '' : num;
             }
         }, {
             title: '单价',

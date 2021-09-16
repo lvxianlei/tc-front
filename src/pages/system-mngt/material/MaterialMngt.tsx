@@ -106,7 +106,7 @@ import { DataNode } from 'antd/lib/tree';
             align: "center",
             width: 400,
             render:(text, record, index)=>{
-                return text? text == 0? <span>比重*体积（钢板类）</span> : <span>比重*长度（角板类）</span> :<div></div>
+                return text? text === 0? <span>比重*体积（钢板类）</span> : <span>比重*长度（角板类）</span> :<div></div>
             }
         },{
             key: 'description',
@@ -162,7 +162,7 @@ import { DataNode } from 'antd/lib/tree';
              current: pagination.current || this.state.tablePagination?.current,
              size: pagination.pageSize ||this.state.tablePagination?.pageSize,
          });
-         if(resData?.records?.length == 0 && resData?.current>1){
+         if(resData?.records?.length === 0 && resData?.current>1){
             this.fetchMaterials({
                 ...filterValues
             },{

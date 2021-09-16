@@ -12,10 +12,10 @@ interface ManagementState {
 }
 
 export default function Management(): React.ReactNode {
-    const [selectKeys, setSelectKeys] = useState<ManagementState>({
-        selectedUserKeys: [],
-        selectedUsers: []
-    })
+    // const [selectKeys, setSelectKeys] = useState<ManagementState>({
+    //     selectedUserKeys: [],
+    //     selectedUsers: []
+    // })
     const columns: TableColumnProps<object>[] = [
         {
             key: 'index',
@@ -81,7 +81,7 @@ export default function Management(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={`/project/management/detail/1`}>查看</Link>
+                    <Link to={`/project/management/detail/${(record as IClient).id}`}>查看</Link>
                     <Link to={`/project/management/edit/${(record as IClient).id}`}>编辑</Link>
                     <ConfirmableButton
                         confirmTitle="要删除该客户吗？"
@@ -100,11 +100,11 @@ export default function Management(): React.ReactNode {
     const handleConfirmDelete = () => {
         Modal.confirm({
             title: '确认提示',
-            content: '是否确定删除对应项目信息？',
+            content: '确定删除对应项目信息？',
             okText: '确定',
             cancelText: '取消',
             onOk: () => {
-                console.log(selectKeys, '--------')
+
             },
             onCancel: () => {
 
@@ -112,25 +112,25 @@ export default function Management(): React.ReactNode {
         })
     }
 
-    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: object[]): void => {
-        setSelectKeys({
-            selectedUserKeys: selectedRowKeys,
-            selectedUsers: selectedRows
-        });
-    }
+    // const SelectChange = (selectedRowKeys: React.Key[], selectedRows: object[]): void => {
+    //     setSelectKeys({
+    //         selectedUserKeys: selectedRowKeys,
+    //         selectedUsers: selectedRows
+    //     });
+    // }
 
     return <Page
         path="/tower-market/projectInfo"
         columns={columns}
         extraOperation={<>
             <Link to="/project/management/edit/new"><Button type="primary">新建项目</Button></Link>
-            <Button type="primary" onClick={handleConfirmDelete}>删除</Button>
+            {/* <Button type="primary" onClick={handleConfirmDelete}>删除</Button> */}
         </>}
         tableProps={{
-            rowSelection: {
-                selectedRowKeys: selectKeys.selectedUserKeys,
-                onChange: SelectChange
-            }
+            // rowSelection: {
+            //     selectedRowKeys: selectKeys.selectedUserKeys,
+            //     onChange: SelectChange
+            // }
         }}
         searchFormItems={[
             {

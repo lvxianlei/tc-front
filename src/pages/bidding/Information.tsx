@@ -1,8 +1,7 @@
 import React from 'react'
-import { Space, Button, Input, DatePicker, Select } from 'antd'
+import { Space, Input, DatePicker, Select } from 'antd'
 import { Link } from 'react-router-dom'
 import { Page } from '../common'
-import RequestUtil from '../../utils/RequestUtil'
 const biddingStatusEnum = [
     {
         value: 0,
@@ -89,7 +88,7 @@ const columns = [
     {
         title: '是否应标',
         dataIndex: 'biddingStatus',
-        render: (_: any, record: any) => <>{biddingStatusEnum.find(item=>item.value===record.biddingStatus)?.label}</>
+        render: (_: any, record: any) => <>{biddingStatusEnum.find(item => item.value === record.biddingStatus)?.label}</>
     },
     {
         key: 'reason',
