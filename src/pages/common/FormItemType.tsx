@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Input, InputNumber, Select, DatePicker, Modal, Table } from 'antd'
+import { Input, InputNumber, Select, DatePicker, Modal, Form } from 'antd'
+import CommonTable from "./CommonTable"
 import { PlusOutlined } from "@ant-design/icons"
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
@@ -45,16 +46,24 @@ interface PopTableProps {
 }
 
 const PopTableContent: React.FC<{ data: PopTableData }> = ({ data }) => {
-    const { loading, data: popTableData } = useRequest<any>(() => new Promise(async (resolve, reject) => {
-        resolve(await RequestUtil.get<{ data: any }>(data.path))
+    const searchs = data.columns.filter((item: any) => item.search)
+    const { loading, data: popTableData, run } = useRequest<any>((params: {}) => new Promise(async (resolve, reject) => {
+        resolve(await RequestUtil.get<{ data: any }>(data.path, params))
     }))
-    return <Table size="small" loading={loading} columns={data.columns} dataSource={popTableData?.records} />
+    return <>
+        <Form >
+            {searchs.map((fItem: any) => <Form.Item>
+                <FormItemType data={fItem} />
+            </Form.Item>)}
+        </Form>
+        <CommonTable columns={data.columns} dataSource={popTableData?.records} />
+    </>
 }
 
 const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
     const [visible, setVisible] = useState<boolean>(false)
     return <>
-        <Modal title={`选择${data.title}`} destroyOnClose visible={visible} onCancel={() => setVisible(false)}>
+        <Modal width={data.width || 520} title={`选择${data.title}`} destroyOnClose visible={visible} onCancel={() => setVisible(false)}>
             <PopTableContent data={data} />
         </Modal>
         <Input {...props} addonAfter={<PlusOutlined onClick={() => setVisible(true)} />} />

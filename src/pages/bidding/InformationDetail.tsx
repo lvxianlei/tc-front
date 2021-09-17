@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { Spin, Form, Button, Modal, Select, Input } from 'antd'
+import { Spin, Form, Button, Modal, Select, Input, Upload } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common'
 import { baseInfoData } from './biddingHeadData.json'
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
+import AuthUtil from '../../utils/AuthUtil'
 const tableColumns = [
     { title: '序号', dataIndex: 'index', width: 50, key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
     {
@@ -71,7 +72,21 @@ export default function InformationDetail(): React.ReactNode {
             <BaseInfo columns={baseInfoData} dataSource={detailData} col={4} />
             <DetailTitle title="货物清单" />
             <CommonTable columns={tableColumns} dataSource={detailData.bidPackageInfoVOS} />
-            <DetailTitle title="附件" operation={[<Button key="bid" type="primary">上传附件</Button>]} />
+            <DetailTitle title="附件" operation={[
+                <Upload
+                    key="sub"
+                    name="file"
+                    multiple={true}
+                    action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
+                    headers={{
+                        'Content-Type': 'application/json',
+                        'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                        'Tenant-Id': AuthUtil.getTenantId(),
+                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                    }}
+                    showUploadList={false}
+                ><Button type="primary">上传附件</Button></Upload>
+            ]} />
             <CommonTable columns={[
                 { title: '序号', dataIndex: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
                 { title: '文件名', dataIndex: 'name' },

@@ -514,20 +514,53 @@
     ],
     "newProductGroup": [
         {
-            "title": "选择订单",
-            "dataIndex": ""
+            "title": "订单",
+            "dataIndex": "orderNumber",
+            "type": "popTable",
+            "path": "/tower-market/saleOrder",
+            "width": 1011,
+            "columns": [
+                {
+                    "title": "订单编号",
+                    "dataIndex": "saleOrderNumber",
+                    "search": true
+                },
+                {
+                    "title": "内部合同编号",
+                    "dataIndex": "internalNumber"
+                },
+                {
+                    "title": "订单工程名称",
+                    "dataIndex": "orderProjectName"
+                },
+                {
+                    "title": "合同签订单位",
+                    "dataIndex": "signCustomerName"
+                },
+                {
+                    "title": "签订日期",
+                    "dataIndex": "signContractTime"
+                },
+                {
+                    "title": "合同交货日期",
+                    "dataIndex": "deliveryTime"
+                }
+            ]
         },
         {
             "title": "内部编号",
-            "dataIndex": "internalNumber"
+            "dataIndex": "internalNumber",
+            "disabled": true
         },
         {
             "title": "订单工程名称",
-            "dataIndex": "orderProjectName"
+            "dataIndex": "orderProjectName",
+            "disabled": true
         },
         {
             "title": "业主单位",
-            "dataIndex": "customerCompany"
+            "dataIndex": "customerCompany",
+            "disabled": true
         },
         {
             "title": "说明",
@@ -537,62 +570,136 @@
     "materialListColumns": [
         {
             "title": "*物资名称",
-            "label": "cargoName",
+            "dataIndex": "cargoName",
             "width": 100
         },
         {
             "title": "规格型号",
-            "label": "specs",
+            "dataIndex": "specs",
             "width": 100
         },
         {
             "title": "*计量单位",
-            "label": "metering",
-            "width": 50
+            "dataIndex": "metering",
+            "width": 100
         },
         {
             "title": "*数量",
-            "label": "number",
-            "width": 50
+            "dataIndex": "number",
+            "width": 100
         },
         {
-            "title": "*单价（含税）（元）",
-            "label": "moneyTax",
-            "width": 50
+            "title": "*单价(含税)(元)",
+            "dataIndex": "moneyTax",
+            "width": 150
         },
         {
-            "title": "单价（不含税）（元）",
-            "label": "money",
-            "width": 50
+            "title": "单价(不含税)(元)",
+            "dataIndex": "money",
+            "width": 150
         },
         {
-            "title": "*合同总价（含税）（元）",
-            "label": "contractMoneyTax",
-            "width": 50
+            "title": "*合同总价(含税)(元)",
+            "dataIndex": "contractMoneyTax",
+            "width": 150
         },
         {
-            "title": "合同总价（不含税）（元）",
-            "label": "contractMoney",
-            "width": 50
+            "title": "合同总价(不含税)(元)",
+            "dataIndex": "contractMoney",
+            "width": 150
         },
         {
-            "title": "*增值税率（%）",
-            "label": "tax",
-            "width": 50
+            "title": "*增值税率(%)",
+            "dataIndex": "tax",
+            "width": 150
         },
         {
             "title": "交货时间",
-            "label": "date",
+            "dataIndex": "date",
             "width": 100
         },
         {
             "title": "收货人及联系电话",
-            "label": "phone",
-            "width": 100
+            "dataIndex": "phone",
+            "width": 150
         },
         {
             "title": "备注",
-            "label": "description"
+            "dataIndex": "description"
+        }
+    ],
+    "taskNotice": [
+        {
+            "title": "任务单编号",
+            "dataIndex": "taskNumber"
+        },
+        {
+            "title": "订单编号",
+            "dataIndex": "saleOrderNumber"
+        },
+        {
+            "title": "合同编号",
+            "dataIndex": "internalNumber"
+        },
+        {
+            "title": "订单工程名称",
+            "dataIndex": "orderProjectName"
+        },
+        {
+            "title": "原材料标准",
+            "dataIndex": "materialStandardName"
+        },
+        {
+            "title": "原材料要求",
+            "dataIndex": "materialDemand"
+        },
+        {
+            "title": "客户交货日期",
+            "dataIndex": "deliveryTime"
+        },
+        {
+            "title": "计划交货日期",
+            "dataIndex": "planDeliveryTime"
+        },
+        {
+            "title": "审批状态",
+            "dataIndex": "taskReviewStatus"
+        }
+    ],
+    "taskNoticeEditBaseInfo": [
+        {
+            "title": "任务单编号",
+            "dataIndex": "taskNumber"
+        },
+        {
+            "title": "订单编号",
+            "dataIndex": "saleOrderNumber"
+        },
+        {
+            "title": "合同编号",
+            "dataIndex": "internalNumber"
+        },
+        {
+            "title": "订单工程名称",
+            "dataIndex": "orderProjectName"
+        }
+    ],
+    "taskNoticeEditSpec": [
+        {
+            "title": "任务单编号",
+            "dataIndex": "taskNumber"
+        },
+        {
+            "title": "订单编号",
+            "dataIndex": "saleOrderNumber"
+        },
+        {
+            "title": "合同编号",
+            "dataIndex": "internalNumber"
+        },
+        {
+            "title": "订单工程名称",
+            "dataIndex": "orderProjectName"
         }
     ],
     "paths": {
@@ -601,6 +708,6 @@
         "bidResult": "/tower-market/bidBase",
         "frameAgreement": "/tower-market/frameAgreement",
         "productGroup": "/tower-market/productGroup",
-        "salesPlan": "/tower-market/productGroup"
+        "salesPlan": "/tower-market/taskNotice"
     }
 }

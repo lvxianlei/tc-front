@@ -1,10 +1,11 @@
 import React from "react";
 import { useHistory, useParams } from "react-router-dom"
-import { Button, Spin, Form, message } from 'antd'
+import { Button, Spin, Form, message, Upload } from 'antd'
 import { EditTable, DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common'
 import { baseInfoData } from './biddingHeadData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
+import AuthUtil from "../../utils/AuthUtil"
 const columns = [
     { title: '分标编号', dataIndex: 'partBidNumber' },
     { title: '货物类别', dataIndex: 'goodsType' },
@@ -56,7 +57,19 @@ export default function InfomationNew(): JSX.Element {
         <DetailTitle title="基础信息" />
         <BaseInfo form={baseInfoForm} columns={baseInfoData} dataSource={detailData} edit />
         <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoVOS} />
-        <DetailTitle title="附件" operation={[<Button key="su" type="primary" >上传附件</Button>]} />
+        <DetailTitle title="附件" operation={[<Upload
+            key="sub"
+            name="file"
+            multiple={true}
+            action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
+            headers={{
+                'Content-Type': 'application/json',
+                'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                'Tenant-Id': AuthUtil.getTenantId(),
+                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+            }}
+            showUploadList={false}
+        ><Button key="su" type="primary" >上传附件</Button></Upload>]} />
         <CommonTable columns={[
             { title: '文件名', dataIndex: 'name' },
             { title: '大小', dataIndex: 'fileSize' },

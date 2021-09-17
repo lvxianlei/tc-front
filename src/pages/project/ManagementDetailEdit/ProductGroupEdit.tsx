@@ -1,20 +1,43 @@
 import React from "react"
-import { useHistory, useParams } from "react-router-dom"
-import { Button } from "antd"
+import { useHistory, useParams, useRouteMatch } from "react-router-dom"
+import { Button, Form } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, CommonTable } from "../../common"
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { productGroupColumns, newProductGroup } from '../managementDetailData.json'
+import { TabTypes } from "../ManagementDetail"
+import useRequest from '@ahooksjs/use-request'
+import RequestUtil from "../../../utils/RequestUtil"
 export default function ProductGroupEdit() {
+    const history = useHistory()
+    const match: any = useRouteMatch<{ type: "new" | "edit", id: string }>("/project/management/detail/:type/productGroup/:id")
+    const [baseInfoForm] = Form.useForm()
+    const [cargoDtoForm] = Form.useForm()
+    const { loading, error, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/frameAgreement/${match.params.id}`)
+        baseInfoForm.setFieldsValue(result)
+        cargoDtoForm.setFieldsValue({ submit: result.contractCargoVos })
+        resole(result)
+    }), { manual: match.params.type === "new" })
 
+    const { loading: saveStatus, error: saveError, data: saveResult, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
+        const result: { [key: string]: any } = await RequestUtil.put(`/tower-market/frameAgreement`, postData)
+        resole(result)
+    }), { manual: true })
+
+    const handleSubmit = async () => {
+        const baseInfoData = await baseInfoForm.getFieldsValue()
+        const contractCargoDtosData = await cargoDtoForm.getFieldsValue()
+        delete data?.contractCargoVos
+        await run({ ...data, ...baseInfoData, projectId: match.params.id, contractCargoDtos: contractCargoDtosData.submit })
+    }
     return <DetailContent
         title={[<Button key="pro" type="primary">导入确认明细</Button>]}
         operation={[
             <Button key="save" type="primary" style={{ marginRight: "12px" }}>保存</Button>,
-            <Button key="goback" type="primary">返回</Button>
+            <Button key="goback" type="default" onClick={() => history.goBack()}>返回</Button>
         ]}>
-        <ManagementDetailTabsTitle />
         <DetailTitle title="基本信息" />
-        <BaseInfo columns={newProductGroup} dataSource={{}} />
+        <BaseInfo form={baseInfoForm} columns={newProductGroup} dataSource={data || {}} edit />
         <DetailTitle title="明细" />
         <CommonTable columns={productGroupColumns} />
     </DetailContent>

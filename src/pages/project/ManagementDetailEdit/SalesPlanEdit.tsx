@@ -3,6 +3,7 @@ import { useHistory, useParams } from "react-router-dom"
 import { Row, Col, Button, Table, Radio } from "antd"
 import { DetailContent, BaseInfo, EditTable, DetailTitle, CommonTable } from "../../common"
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
+import { taskNoticeEditBaseInfo, taskNoticeEditSpec } from "../managementDetailData.json"
 const tableColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
     { title: '分标编号', dataIndex: 'partBidNumber', key: 'partBidNumber', },
@@ -14,18 +15,18 @@ const tableColumns = [
     { title: '交货地点', dataIndex: 'deliveryPlace', key: 'deliveryPlace' }
 ]
 export default function SalesPlanEdit() {
-
+    const history = useHistory()
     return <DetailContent operation={[
         <Button key="save" type="primary" style={{ marginRight: "12px" }}>保存</Button>,
         <Button key="saveOr" type="primary" style={{ marginRight: "12px" }}>保存并提交审核</Button>,
-        <Button key="cacel" >取消</Button>
+        <Button key="cacel" onClick={() => history.goBack()} >取消</Button>
     ]}>
         <ManagementDetailTabsTitle />
         <DetailTitle title="基本信息" />
-        <BaseInfo columns={tableColumns} dataSource={{}} edit />
+        <BaseInfo columns={taskNoticeEditBaseInfo} dataSource={{}} edit />
         <DetailTitle title="特殊要求" />
-        <BaseInfo columns={tableColumns} dataSource={{}} edit />
-        <DetailTitle title="特殊要求" operation={[<Button key="select">选择杆塔明细</Button>]} />
+        <BaseInfo columns={taskNoticeEditSpec} dataSource={{}} edit />
+        <DetailTitle title="产品信息" operation={[<Button key="select" type="primary">选择杆塔明细</Button>]} />
         <CommonTable columns={tableColumns} />
     </DetailContent>
 }

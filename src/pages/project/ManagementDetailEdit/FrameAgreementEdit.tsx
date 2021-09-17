@@ -1,9 +1,9 @@
 import React from "react"
 import { useHistory, useParams } from "react-router-dom"
-import { Row, Button, Form } from "antd"
+import { Button, Form } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, EditTable } from "../../common"
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
-import { frameAgreementColumns, cargoVOListColumns, materialListColumns } from '../managementDetailData.json'
+import { frameAgreementColumns, materialListColumns } from '../managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 import { TabTypes } from "../ManagementDetail"
@@ -18,6 +18,7 @@ export default function FrameAgreementEdit(): JSX.Element {
     const { loading, error, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/frameAgreement/${params.id}`)
         baseInfoForm.setFieldsValue(result)
+        cargoDtoForm.setFieldsValue({ submit: result.contractCargoVos })
         resole(result)
     }))
     const { loading: saveStatus, error: saveError, data: saveResult, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
@@ -28,7 +29,7 @@ export default function FrameAgreementEdit(): JSX.Element {
     const handleSubmit = async () => {
         const baseInfoData = await baseInfoForm.getFieldsValue()
         const contractCargoDtosData = await cargoDtoForm.getFieldsValue()
-
+        delete data?.contractCargoVos
         await run({ ...data, ...baseInfoData, projectId: params.id, contractCargoDtos: contractCargoDtosData.submit })
     }
 
@@ -36,6 +37,7 @@ export default function FrameAgreementEdit(): JSX.Element {
         <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={handleSubmit} loading={saveStatus}>保存</Button>,
         <Button key="goback">返回</Button>
     ]}>
+
         <ManagementDetailTabsTitle />
         <DetailTitle title="基本信息" />
         <BaseInfo form={baseInfoForm} columns={frameAgreementColumns.map((item) => item.dataIndex === "bidType" ? ({ ...item, type: "select", enum: bidType.map((bid: any) => ({ value: bid.id, label: bid.name })) }) : item)} dataSource={data || {}} edit />

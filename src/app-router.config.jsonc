@@ -222,18 +222,18 @@
       "authocrity": "outsource_entrust"
     },
     { // 委托新增
-     "name": "委托新增",
-     "path": "/outsource/entrust/new",
-     "module": "./pages/entrust/EntrustNew",
-     "exact": true,
-     "authocrity": "outsource_entrust"
+      "name": "委托新增",
+      "path": "/outsource/entrust/new",
+      "module": "./pages/entrust/EntrustNew",
+      "exact": true,
+      "authocrity": "outsource_entrust"
     },
     { // 委托编辑
-     "name": "委托列表",
-     "path": "/outsource/entrust/sstting/:id",
-     "module": "./pages/entrust/EntrustSetting",
-     "exact": true,
-     "authocrity": "outsource_entrust"
+      "name": "委托列表",
+      "path": "/outsource/entrust/sstting/:id",
+      "module": "./pages/entrust/EntrustSetting",
+      "exact": true,
+      "authocrity": "outsource_entrust"
     },
     { // 委托详情
       "name": "委托详情",
@@ -438,7 +438,6 @@
       "exact": true,
       "authority": "project_detail"
     },
-
     { // 项目管理招标结果编辑
       "name": "招标结果编辑",
       "path": "/project/management/detail/edit/bidResult/:id",
@@ -453,14 +452,21 @@
       "exact": true,
       "authority": "project_detail"
     },
-    { // 项目管理子项详情
+    { // 杆塔明细编辑
       "name": "杆塔明细编辑",
       "path": "/project/management/detail/edit/productGroup/:id",
       "module": "./pages/project/ManagementDetailEdit/ProductGroupEdit",
       "exact": true,
       "authority": "project_detail"
     },
-    { // 项目管理子项详情
+    { // 新增杆塔明细
+      "name": "新增杆塔明细",
+      "path": "/project/management/detail/new/productGroup/:id",
+      "module": "./pages/project/ManagementDetailEdit/ProductGroupEdit",
+      "exact": true,
+      "authority": "project_detail"
+    },
+    { // 销售计划编辑
       "name": "销售计划编辑",
       "path": "/project/management/detail/edit/salesPlan/:id",
       "module": "./pages/project/ManagementDetailEdit/SalesPlanEdit",
@@ -503,7 +509,6 @@
       "exact": true,
       "authority": "approvalm_edit"
     }
-
     //rd
     ,
     { // 驾驶舱-计划跟踪

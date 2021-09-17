@@ -55,14 +55,15 @@ export default function EditableTable({ columns = [], dataSource = [], form, opr
                         <>
                             <Row><Button onClick={() => add(baseRowData)} type="primary" style={{ marginBottom: 16 }}>新增一行</Button>{opration}</Row>
                             <Row className={styles.FormHeader}>
-                                {columns.map((item, index) => (<Col key={`Editable_${index}`} span={item.width || 2}>{item.title}</Col>))}
+                                {columns.map((item, index) => (<Col key={`Editable_${index}`} span={2}>{item.title}</Col>))}
                             </Row>
                             {fields.map(({ key, name, fieldKey, ...restField }, index: number) => (
                                 <Row key={`EditableRow_${key}`} className={`${styles.FormHeader} ${styles.FormRow}`}>
                                     {columns.map((coItem, coIndex) => {
-                                        return (<Col key={`EditableCol_${coIndex}`} span={coItem.width || 2}>
+                                        return (<Col key={`EditableCol_${coIndex}`} span={2}>
                                             <Form.Item
                                                 {...restField}
+                                                className={styles.formItem}
                                                 name={[name, coItem.dataIndex]}
                                                 fieldKey={[fieldKey, coItem.dataIndex]}
                                             >
