@@ -537,21 +537,21 @@
     { // 工作管理-确认列表
       "name": "确认列表",
       "path": "/workMngt/confirmList",
-      "module": "./pages/workMngt/comfirmList/ConfirmList",
+      "module": "./pages/workMngt/confirmList/ConfirmList",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-确认列表-确认信息
       "name": "确认信息",
       "path": "/workMngt/confirmList/confirmMessage/:id",
-      "module": "./pages/workMngt/comfirmList/ConfirmMessage",
+      "module": "./pages/workMngt/confirmList/ConfirmMessage",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-确认列表-确认明细
       "name": "确认明细",
       "path": "/workMngt/confirmList/confirmDetail/:id",
-      "module": "./pages/workMngt/comfirmList/ConfirmDetail",
+      "module": "./pages/workMngt/confirmList/ConfirmDetail",
       "exact": true,
       "authority": "approvalm"
     },
@@ -559,6 +559,13 @@
       "name": "指派列表",
       "path": "/workMngt/scheduleList",
       "module": "./pages/workMngt/scheduleList/ScheduleList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-指派列表
+      "name": "指派查看",
+      "path": "/workMngt/scheduleList/scheduleView/:id",
+      "module": "./pages/workMngt/scheduleList/ScheduleView",
       "exact": true,
       "authority": "approvalm"
     },
