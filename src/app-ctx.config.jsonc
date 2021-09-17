@@ -227,7 +227,7 @@
                         "items": [
                             {
                                 "label": "评估任务",
-                                "path": "/assessmentTask/AssessmentTask",
+                                "path": "/assessmentTask",
                                 "authority": "approvalm"
                             }
                         ]
