@@ -1,9 +1,14 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Select, Button, Modal, Form } from 'antd'
-import { Link } from 'react-router-dom'
-import { Page } from '../../common'
-
+import { Link, useHistory } from 'react-router-dom'
+import { Page } from '../../common';
+import { FixedType } from 'rc-table/lib/interface';
+interface ManagementState {
+    selectedKeys: React.Key[]
+    selected: object[]
+}
 export default function Information(): React.ReactNode {
+    const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
     const handleModalOk = async () => {
@@ -25,78 +30,160 @@ export default function Information(): React.ReactNode {
         },
         {
             key: 'projectName',
-            title: '放样任务编号',
+            title: '塔型',
             width: 100,
             dataIndex: 'projectName'
         },
         {
             key: 'projectName',
-            title: '任务单编号',
+            title: '塔型钢印号',
             width: 100,
             dataIndex: 'projectName'
         },
         {
             key: 'projectName',
-            title: '订单编号',
+            title: '模式',
             width: 100,
             dataIndex: 'projectName'
         },
         {
             key: 'projectName',
-            title: '内部合同编号',
+            title: '优先级',
             width: 100,
             dataIndex: 'projectName'
         },
         {
             key: 'bidBuyEndTime',
-            title: '计划交付时间',
+            title: '提料负责人',
             width: 200,
             dataIndex: 'bidBuyEndTime'
         },
         {
             key: 'biddingEndTime',
-            title: '重量（吨）',
+            title: '提料计划交付时间',
             width: 200,
             dataIndex: 'biddingEndTime'
         },
         {
             key: 'biddingAgency',
-            title: '塔型（个）',
+            title: '提料配段负责人',
+            width: 100,
             dataIndex: 'biddingAgency'
         },
         {
             key: 'biddingAddress',
-            title: '杆塔（基）',
+            title: '提料配段计划交付时间',
+            width: 200,
             dataIndex: 'biddingAddress'
         },
         {
             key: 'biddingAgency',
-            title: '状态',
+            title: '放样负责人',
+            width: 100,
             dataIndex: 'biddingAgency'
         },
         {
             key: 'biddingAddress',
-            title: '最新状态变更时间',
+            title: '放样计划交付时间',
+            width: 200,
+            dataIndex: 'biddingAddress'
+        },
+        {
+            key: 'biddingAgency',
+            title: '组焊清单负责人',
+            width: 100,
+            dataIndex: 'biddingAgency'
+        },
+        {
+            key: 'biddingAddress',
+            title: '组焊计划交付时间',
+            width: 200,
+            dataIndex: 'biddingAddress'
+        },
+        {
+            key: 'biddingAgency',
+            title: '放样配段负责人',
+            width: 100,
+            dataIndex: 'biddingAgency'
+        },
+        {
+            key: 'biddingAddress',
+            title: '放样配段计划交付时间',
+            width: 200,
+            dataIndex: 'biddingAddress'
+        },
+        {
+            key: 'biddingAgency',
+            title: '小样图负责人',
+            width: 100,
+            dataIndex: 'biddingAgency'
+        },
+        {
+            key: 'biddingAddress',
+            title: '小样图计划交付时间',
+            width: 200,
+            dataIndex: 'biddingAddress'
+        },
+        {
+            key: 'biddingAgency',
+            title: '螺栓清单',
+            width: 100,
+            dataIndex: 'biddingAgency'
+        },
+        {
+            key: 'biddingAddress',
+            title: '螺栓计划交付时间',
+            width: 200,
+            dataIndex: 'biddingAddress'
+        },
+        {
+            key: 'biddingAddress',
+            title: '备注',
+            width: 200,
             dataIndex: 'biddingAddress'
         },
         {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
+            fixed: 'right' as FixedType,
+            width: 100,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={`/workMngt/scheduleList/scheduleView/${record.id}`}>查看</Link>
+                    <Link to={`/workMngt/confirmList/confirmMessage/${record.id}`}>指派</Link>
                 </Space>
             )
         }
     ]
 
     const handleModalCancel = () => setVisible(false)
+    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: object[]): void => {
+        setSelectKeys({
+            selectedKeys: selectedRowKeys,
+            selected: selectedRows
+        });
+    }
+    const [selectKeys, setSelectKeys] = useState<ManagementState>({
+        selectedKeys: [],
+        selected: []
+    })
     return (
         <Page
             path="/tower-market/bidInfo"
             columns={columns}
-            extraOperation={<Button type="primary">导出</Button>}
+            extraOperation={
+                <Space>
+                    <Button type="primary">导出</Button>
+                    <Button type="primary">指派</Button>
+                    <Button type="primary" onClick={() => history.goBack()}>返回上一级</Button>
+                </Space>
+            }
+            tableProps={{
+            rowSelection: {
+                selectedRowKeys: selectKeys.selectedKeys,
+                onChange: SelectChange
+            }
+            }}
             searchFormItems={[
                 {
                     name: 'startBidBuyEndTime',

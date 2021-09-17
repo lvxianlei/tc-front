@@ -1,12 +1,16 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Select, Button, Modal, Form } from 'antd'
 import { Link } from 'react-router-dom'
-import { Page } from '../common'
+import { CommonTable, DetailTitle, Page } from '../common';
+import { FixedType } from 'rc-table/lib/interface';
+import TextArea from 'antd/lib/input/TextArea';
 
 export default function Information(): React.ReactNode {
-    const [visible, setVisible] = useState<boolean>(false);
+    const [assignVisible, setVisible] = useState<boolean>(false);
+    const [detailVisible, setDetailVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
-    const handleModalOk = async () => {
+    const [formDetail] = Form.useForm();
+    const handleAssignModalOk = async () => {
         try {
             const submitData = await form.validateFields()
             console.log(submitData)
@@ -15,6 +19,84 @@ export default function Information(): React.ReactNode {
             console.log(error)
         }
     }
+    const handleDetailModalOk = async () => {
+        try {
+            const submitData = await formDetail.validateFields()
+            console.log(submitData)
+            setVisible(false)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const towerColumns=[
+        {
+            key: 'index',
+            title: '序号',
+            dataIndex: 'index',
+            width: 50,
+            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+        },
+        {
+            key: 'projectName',
+            title: '线路名称',
+            width: 100,
+            dataIndex: 'projectName'
+        },
+        {
+            key: 'projectName',
+            title: '杆塔号',
+            width: 100,
+            dataIndex: 'projectName'
+        },
+        {
+            key: 'projectName',
+            title: '塔型',
+            width: 100,
+            dataIndex: 'projectName'
+        },
+        {
+            key: 'projectName',
+            title: '塔型钢印号',
+            width: 100,
+            dataIndex: 'projectName'
+        },
+        {
+            key: 'projectName',
+            title: '产品类型',
+            width: 100,
+            dataIndex: 'projectName'
+        },
+        {
+            key: 'projectName',
+            title: '电压等级（kv）',
+            width: 100,
+            dataIndex: 'projectName'
+        },
+        {
+            key: 'projectName',
+            title: '呼高（m）',
+            width: 100,
+            dataIndex: 'projectName'
+        },
+        {
+            key: 'projectName',
+            title: '其他增重（kg）',
+            width: 100,
+            dataIndex: 'projectName'
+        },
+        {
+            key: 'projectName',
+            title: '总重（kg）',
+            width: 100,
+            dataIndex: 'projectName'
+        },
+        {
+            key: 'projectName',
+            title: '备注',
+            width: 100,
+            dataIndex: 'projectName'
+        }
+    ]
     const columns = [
         {
             key: 'index',
@@ -62,21 +144,24 @@ export default function Information(): React.ReactNode {
         {
             key: 'operation',
             title: '操作',
+            fixed: 'right' as FixedType,
+            width: 250,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Link to={`/confirmTask/ConfirmTaskMngt/ConfirmTaskDetail/${record.id}`}>任务详情</Link>
                     <Button type='link' onClick={() => setVisible(true)}>指派</Button>
-                    <Link to={`/bidding/information/detail/${record.id}`}>明细</Link>
+                    <Button type='link' onClick={() => setDetailVisible(true)}>明细</Button>
                     <Button type='link'>提交任务</Button>
                 </Space>
             )
         }
     ]
 
-    const handleModalCancel = () => setVisible(false)
+    const handleAssignModalCancel = () => setVisible(false)
+    const handleDetailModalCancel = () => setDetailVisible(false)
     return <>
-        <Modal visible={visible} title="指派" okText="提交" onOk={handleModalOk} onCancel={handleModalCancel} >
+        <Modal visible={assignVisible} title="指派" okText="提交" onOk={handleAssignModalOk} onCancel={handleAssignModalCancel} >
             <Form form={form}>
                 <Form.Item name="aaaa" label="部门">
                     <Select>
@@ -94,6 +179,35 @@ export default function Information(): React.ReactNode {
                     <DatePicker />
                 </Form.Item>
             </Form>
+        </Modal>
+        <Modal visible={detailVisible} title="明细" okText="确认" onOk={handleDetailModalOk} onCancel={handleDetailModalCancel} width={1200}>
+            <DetailTitle title="杆塔信息"/>
+            <CommonTable columns={towerColumns} dataSource={[]} />
+            <DetailTitle title="其他信息"/>
+            <Form form={formDetail}>
+                <Form.Item name="decription" label="备注">
+                    <TextArea maxLength={300} showCount rows={3}/>
+                </Form.Item>
+            </Form>
+            <DetailTitle title="附件"/>
+            <CommonTable columns={[
+                {
+                    title: '附件名称',
+                    dataIndex: 'name',
+                    key: 'name',
+                },
+                {
+                    key: 'operation',
+                    title: '操作',
+                    dataIndex: 'operation',
+                    render: (_: undefined, record: any): React.ReactNode => (
+                        <Space direction="horizontal" size="small">
+                            <Button type='link'>下载</Button>
+                            <Button type='link'>预览</Button>
+                        </Space>
+                    )
+                }
+            ]} dataSource={[]} />
         </Modal>
         <Page
             path="/tower-market/bidInfo"

@@ -167,14 +167,6 @@ class ManagementContract extends PromContract {
         key: "item_0",
       },
     ];
-    if (saleTypeOptions) {
-      saleTypeOptions.map((item) => {
-        tab.push({
-          key: item.id,
-          label: item.name,
-        });
-      });
-    }
     return tab;
   }
 

@@ -1,12 +1,10 @@
 import React from 'react';
-import { Button, Space, Modal, Input, FormProps, DatePicker } from 'antd';
-import { DetailContent, CommonTable } from '../common';
+import { Button, Modal, Input, FormProps, DatePicker } from 'antd';
 import RequestUtil from '../../utils/RequestUtil';
 import styles from './AssessmentTask.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGroup } from '../../components/AbstractFillableComponent';
-import Select from 'rc-select';
 
 export interface AssignProps {}
 export interface IAssignRouteProps extends RouteComponentProps<AssignProps>, WithTranslation {
@@ -38,7 +36,11 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
     }
 
     public onSubmit = async (): Promise<void> => {
-
+        if (this.getForm()) {
+            this.getForm()?.validateFields().then((res) => {
+                console.log(this.getForm()?.getFieldsValue(true))
+            })
+        }
     }
 
     /**
@@ -86,7 +88,7 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
                     required: true,
                     message: '请选择部门'
                 }],
-                children: <Input maxLength={ 100 } size="small"/>
+                children: <Input placeholder="请选择" maxLength={ 100 } />
             }, {
                 label: '人员',
                 name: 'type',
@@ -95,7 +97,7 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
                     message: '请选择人员'
                 }],
                 children: (
-                    <Input maxLength={ 100 } size="small" />
+                    <Input placeholder="请选择" maxLength={ 100 } />
                     // <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
                     //     { clientTypeOptions && clientTypeOptions.map(({ id, name }, index) => {
                     //         return <Select.Option key={ index } value={ id }>
@@ -105,15 +107,35 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
                     // </Select>
                 )
             }, {
-                label: '计划交付时间 ',
+                label: '计划交付时间',
                 name: 'description',
                 rules: [{
                     required: true,
                     message: '请选择计划交付时间'
                 }],
-                children: <DatePicker />
+                children: <DatePicker className={ styles.width100 }/>
             }]
         }]];
+    }
+
+    /**
+     * @description Renders AbstractDetailComponent
+     * @returns render 
+     */
+    public render(): React.ReactNode {
+        return <>
+            <Button type="link" onClick={ () => this.setState({ visible: true }) }>指派</Button>
+            <Modal 
+                visible={ this.state.visible } 
+                width="40%" 
+                title="指派" 
+                onCancel={ () => this.onCancel() }
+                onOk={ () => this.onSubmit() }
+                okText="提交"
+            >
+                { super.render() }
+            </Modal>
+        </>
     }
 
     /**
@@ -125,31 +147,29 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
     }
 
     /**
+     * @description Gets primary operation button
+     * @returns primary operation button
+     */
+    protected getPrimaryOperationButton(): React.ReactNode {
+        return null;
+    }
+
+    /**
+     * @description Renders extra operation area
+     * @returns extra operation area 
+     */
+    protected cancelOperationButton(): React.ReactNode {
+        return null;
+    }
+
+
+    /**
      * @protected
      * @description Gets title
      * @returns title 
      */
     protected getTitle(): string {
         return '';
-    }
-
-     /**
-     * @description Renders AbstractDetailComponent
-     * @returns render 
-     */
-    public render(): React.ReactNode {
-        return <>
-            <Button type="link" onClick={ () => this.setState({ visible: true }) }>指派</Button>
-            <Modal 
-                visible={ this.state.visible } 
-                width="40%" 
-                title="评估信息" 
-                footer={ <Button type="ghost" onClick={() => this.onCancel() }>关闭</Button> } 
-                onCancel={ () => this.onCancel() }
-            >
-                { super.render() }
-            </Modal>
-        </>
     }
 }
 

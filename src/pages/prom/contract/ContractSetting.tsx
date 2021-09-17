@@ -68,7 +68,7 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
             reviewTime: contract.reviewTime && moment(contract.reviewTime),
             chargeType: contract.chargeType === -1 ? '' : contract.chargeType,
             salesman: contract.salesman,
-            region: contract.region ? [contract.region] : [],
+            region: Array.isArray(contract?.region) ?  contract?.region : [contract?.region ],
             countryCode: contract.countryCode,
             contractAmount: contract.contractAmount,
             currencyType: contract.currencyType,
@@ -97,14 +97,14 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
                     ...regionInfoData[index],
                     children: resData
                 }
-                if(region[1]) {
-                    const childrenIndex: number = regionInfoData[index].children.findIndex((regionInfo: IRegion) => regionInfo.code === region[1]);
-                    const resChildrenData: IRegion[] = await RequestUtil.get(`/tower-system/region/${ region[1] }`);
-                    regionInfoData[index].children[childrenIndex] = {
-                        ...regionInfoData[index].children[childrenIndex],
-                        children: resChildrenData
-                    }
-                }
+                // if(region[1]) {
+                //     const childrenIndex: number = regionInfoData[index].children.findIndex((regionInfo: IRegion) => regionInfo.code === region[1]);
+                //     const resChildrenData: IRegion[] = await RequestUtil.get(`/tower-system/region/${ region[1] }`);
+                //     regionInfoData[index].children[childrenIndex] = {
+                //         ...regionInfoData[index].children[childrenIndex],
+                //         children: resChildrenData
+                //     }
+                // }
                 this.setState({
                     regionInfoData: regionInfoData
                 })
@@ -157,6 +157,7 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
         });
         values.signCustomerId = this.state.contract?.signCustomerId;
         console.log(totalAmount,values.contractAmount)
+        values.region = Array.isArray(values?.region) ? values?.region?.[0] : values?.region;
         if( totalRate < 100) {
             message.error('计划回款总占比必须等于100');
             return Promise.reject(false);
@@ -172,7 +173,7 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
         } else {
             return await RequestUtil.put('/tower-market/contract', {
                 ...values,
-                id: this.props.match.params.id
+                projectId: this.props.match.params.id,
             });
         }
     }

@@ -5,10 +5,14 @@ import { withRouter } from "react-router-dom";
 import ContractSelectionComponent from "../../../components/ContractSelectionModal";
 import {
   currencyTypeOptions,
+  saleTypeOptions,
   taxRateOptions,
 } from "../../../configuration/DictionaryOptions";
 import { IFormItemGroup } from "../../entrust/EntrustDetail";
-import { ChargeType, ManagementSaleOrder } from "../../prom/order/AbstractSaleOrderSetting";
+import {
+  ChargeType,
+  ManagementSaleOrder,
+} from "../../prom/order/AbstractSaleOrderSetting";
 import { SaleOrderNew } from "../../prom/order/SaleOrderNew";
 import layoutStyles from "../../../layout/Layout.module.less";
 
@@ -16,8 +20,6 @@ class ManagementSaleOrderNew extends SaleOrderNew {
   public getFormItemGroups(): IFormItemGroup[][] {
     const saleOrder: ManagementSaleOrder | undefined = this.state
       .saleOrder as ManagementSaleOrder;
-    const orderQuantity: number | undefined = this.state.orderQuantity;
-    const setting: boolean | undefined = this.state?.isSetting;
     return [
       [
         {
@@ -43,32 +45,23 @@ class ManagementSaleOrderNew extends SaleOrderNew {
                 },
               ],
               children: (
-                <>
-                  {setting ? (
-                    <Input
-                      value={saleOrder?.contractInfoDto?.contractNumber}
-                      disabled
+                <Input
+                  value={saleOrder?.contractInfoDto?.contractNumber}
+                  suffix={
+                    <ContractSelectionComponent
+                      onSelect={this.onSelect}
+                      selectKey={[saleOrder?.contractInfoDto?.contractId]}
+                      status={1}
                     />
-                  ) : (
-                    <Input
-                      value={saleOrder?.contractInfoDto?.contractNumber}
-                      suffix={
-                        <ContractSelectionComponent
-                          onSelect={this.onSelect}
-                          selectKey={[saleOrder?.contractInfoDto?.contractId]}
-                          status={1}
-                        />
-                      }
-                    />
-                  )}
-                </>
+                  }
+                />
               ),
             },
             {
               label: "内部合同编号",
               name: "internalNumber",
               initialValue: saleOrder?.contractInfoDto?.internalNumber,
-              children: <Input disabled />,
+              children: <Input />,
             },
             {
               label: "订单工程名称",
@@ -80,25 +73,25 @@ class ManagementSaleOrderNew extends SaleOrderNew {
               label: "业主单位",
               name: "customerCompany",
               initialValue: saleOrder?.contractInfoDto?.customerCompany,
-              children: <Input disabled />,
+              children: <Input />,
             },
             {
               label: "合同签订单位",
               name: "signCustomerName",
               initialValue: saleOrder?.contractInfoDto?.signCustomerName,
-              children: <Input disabled />,
+              children: <Input />,
             },
             {
               label: "合同签订日期",
               name: "signContractTime",
               initialValue: saleOrder?.contractInfoDto?.signContractTime,
-              children: <Input disabled />,
+              children: <Input />,
             },
             {
               label: "合同要求交货日期",
               name: "deliveryTime",
               initialValue: saleOrder?.contractInfoDto?.deliveryTime,
-              children: <Input disabled />,
+              children: <Input />,
             },
             {
               label: "币种",
@@ -109,7 +102,7 @@ class ManagementSaleOrderNew extends SaleOrderNew {
                   currencyTypeOptions.length > 0 &&
                   currencyTypeOptions[0].id),
               children: (
-                <Select disabled>
+                <Select>
                   {currencyTypeOptions &&
                     currencyTypeOptions.map(({ id, name }, index) => {
                       return (
@@ -125,7 +118,7 @@ class ManagementSaleOrderNew extends SaleOrderNew {
               label: "订单重量",
               name: "orderWeight",
               initialValue: saleOrder?.orderWeight,
-              children: <Input disabled suffix={"吨"} />,
+              children: <Input suffix={"吨"} />,
             },
             {
               label: "含税金额",
@@ -143,10 +136,6 @@ class ManagementSaleOrderNew extends SaleOrderNew {
                   step="0.0001"
                   stringMode={false}
                   precision={4}
-                  disabled={
-                    saleOrder?.contractInfoDto?.chargeType ===
-                    ChargeType.UNIT_PRICE
-                  }
                   onChange={this.amountBlur}
                   className={layoutStyles.width100}
                 />
@@ -157,7 +146,7 @@ class ManagementSaleOrderNew extends SaleOrderNew {
               name: "amount",
               initialValue:
                 saleOrder?.amount === 0 ? undefined : saleOrder?.amount,
-              children: <Input prefix="￥" disabled />,
+              children: <Input prefix="￥" />,
             },
             {
               label: "含税单价",
@@ -239,7 +228,25 @@ class ManagementSaleOrderNew extends SaleOrderNew {
                 />
               ),
             },
-            // 销售类型
+            {
+              label: "销售类型",
+              name: "saleType",
+              initialValue: saleOrder?.saleType,
+              children: (
+                <Select
+                  getPopupContainer={(triggerNode) => triggerNode.parentNode}
+                >
+                  {saleTypeOptions &&
+                    saleTypeOptions.map(({ id, name }, index) => {
+                      return (
+                        <Select.Option key={index} value={id}>
+                          {name}
+                        </Select.Option>
+                      );
+                    })}
+                </Select>
+              ),
+            },
             {
               label: "外汇单价",
               name: "foreignPrice",
@@ -268,12 +275,25 @@ class ManagementSaleOrderNew extends SaleOrderNew {
                 <Input maxLength={50} className={layoutStyles.width100} />
               ),
             },
-            //   销售业务员
+            {
+              label: "销售业务员",
+              name: "salesman",
+              initialValue: saleOrder?.salesman,
+              rules: [
+                {
+                  required: false,
+                  message: "请输入销售业务员",
+                },
+              ],
+              children: <Input maxLength={20} />,
+            },
             {
               label: "港口费用",
               name: "portCharge",
               initialValue:
-                saleOrder?.portCharge === -1 ? undefined : saleOrder?.portCharge,
+                saleOrder?.portCharge === -1
+                  ? undefined
+                  : saleOrder?.portCharge,
               children: (
                 <InputNumber
                   min="0"

@@ -6,10 +6,14 @@ import moment from "moment";
 import { withTranslation } from "react-i18next";
 import { withRouter } from "react-router-dom";
 import ClientSelectionComponent from "../../../components/ClientSelectionModal";
-import { winBidTypeOptions, saleTypeOptions, currencyTypeOptions } from "../../../configuration/DictionaryOptions";
+import {
+  winBidTypeOptions,
+  saleTypeOptions,
+  currencyTypeOptions,
+} from "../../../configuration/DictionaryOptions";
 import { IFormItemGroup } from "../../entrust/EntrustDetail";
 import { ContractSetting } from "../../prom/contract/ContractSetting";
-import layoutStyles from '../../../layout/Layout.module.less';
+import layoutStyles from "../../../layout/Layout.module.less";
 import { ProjectContractInfo } from "../../prom/contract/AbstractContractSetting";
 
 class ManagementContractSetting extends ContractSetting {
@@ -328,25 +332,41 @@ class ManagementContractSetting extends ContractSetting {
                     value: StoreValue,
                     callback: (error?: string) => void
                   ) => {
-                    if (value.length >= 2) {
+                    if (value.length >= 1) {
                       callback();
                     } else {
-                      callback("所属区域需选择到市级");
+                      callback("所属区域需选择到省级");
                     }
                   },
                 },
               ],
               children: (
-                <Cascader
-                  fieldNames={{ label: "name", value: "code" }}
-                  options={this.state.regionInfoData}
-                  onChange={this.onRegionInfoChange}
-                  changeOnSelect
+                <Select
+                  getPopupContainer={(triggerNode) => triggerNode.parentNode}
                   disabled={
                     this.getForm()?.getFieldValue("countryCode") === 1 ||
                     contract?.countryCode === 1
                   }
-                />
+                >
+                  {this.state.regionInfoData?.map((opt: any) => {
+                    return (
+                      <Select.Option key={opt.code} value={opt.code}>
+                        {opt.name}
+                      </Select.Option>
+                    );
+                  })}
+                </Select>
+
+                // <Cascader
+                //   fieldNames={{ label: "name", value: "code" }}
+                //   options={this.state.regionInfoData?.map(item=>item.children = [])}
+                //   onChange={this.onRegionInfoChange}
+                //   changeOnSelect
+                //   disabled={
+                //     this.getForm()?.getFieldValue("countryCode") === 1 ||
+                //     contract?.countryCode === 1
+                //   }
+                // />
               ),
             },
             {

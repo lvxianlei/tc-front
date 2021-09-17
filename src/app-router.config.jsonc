@@ -542,21 +542,21 @@
     { // 工作管理-确认列表
       "name": "确认列表",
       "path": "/workMngt/confirmList",
-      "module": "./pages/workMngt/comfirmList/ConfirmList",
+      "module": "./pages/workMngt/confirmList/ConfirmList",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-确认列表-确认信息
       "name": "确认信息",
       "path": "/workMngt/confirmList/confirmMessage/:id",
-      "module": "./pages/workMngt/comfirmList/ConfirmMessage",
+      "module": "./pages/workMngt/confirmList/ConfirmMessage",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-确认列表-确认明细
       "name": "确认明细",
       "path": "/workMngt/confirmList/confirmDetail/:id",
-      "module": "./pages/workMngt/comfirmList/ConfirmDetail",
+      "module": "./pages/workMngt/confirmList/ConfirmDetail",
       "exact": true,
       "authority": "approvalm"
     },
@@ -564,6 +564,13 @@
       "name": "指派列表",
       "path": "/workMngt/scheduleList",
       "module": "./pages/workMngt/scheduleList/ScheduleList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-指派列表
+      "name": "指派查看",
+      "path": "/workMngt/scheduleList/scheduleView/:id",
+      "module": "./pages/workMngt/scheduleList/ScheduleView",
       "exact": true,
       "authority": "approvalm"
     },
@@ -578,6 +585,104 @@
       "name": "评估任务详情",
       "path": "/assessmentTask/assessmentTaskDetail/:id",
       "module": "./pages/AssessmentTask/AssessmentTaskDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-提料列表
+      "name": "提料列表",
+      "path": "/workMngt/pickList",
+      "module": "./pages/workMngt/pickList/PickList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-提料-提料信息
+      "name": "提料信息",
+      "path": "/workMngt/pickList/pickMessage/:id",
+      "module": "./pages/workMngt/pickList/PickMessage",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-提料-杆塔信息
+      "name": "杆塔信息",
+      "path": "/workMngt/pickList/pickTowerMessage/:id",
+      "module": "./pages/workMngt/pickList/PickTowerMessage",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-提料-杆塔配段
+      "name": "杆塔配段",
+      "path": "/workMngt/pickList/pickTower/:id",
+      "module": "./pages/workMngt/pickList/PickTower",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-评估列表
+      "name": "评估列表",
+      "path": "/workMngt/evaluationList",
+      "module": "./pages/workMngt/evaluation/EvaluationList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 放样任务
+      "name": "放样任务",
+      "path": "/setOutTask",
+      "module": "./pages/setOutTask/SetOutTaskList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 放样任务详情
+      "name": "放样任务详情",
+      "path": "/setOutTaskDetail",
+      "module": "./pages/setOutTask/setOutTaskDetail/:id",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 放样任务-塔型
+      "name": "塔型",
+      "path": "/setOutTaskTower",
+      "module": "./pages/setOutTask/setOutTaskTower/:id",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 放样任务-杆塔
+      "name": "杆塔",
+      "path": "/setOutTaskPole",
+      "module": "./pages/setOutTask/setOutTaskPole/:id",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-放样列表
+      "name": "放样列表",
+      "path": "/workMngt/setOutList",
+      "module": "./pages/workMngt/setOut/setOutList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-小样图列表
+      "name": "小样图列表",
+      "path": "/workMngt/sampleDrawList",
+      "module": "./pages/workMngt/sampleDrawList/SampleDrawList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-小样图信息
+      "name": "小样图信息",
+      "path": "/workMngt/sampleDrawList/sampleDrawMessage/:id",
+      "module": "./pages/workMngt/sampleDrawList/SampleDrawMessage",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-小样图
+      "name": "小样图",
+      "path": "/workMngt/sampleDrawList/sampleDraw/:id",
+      "module": "./pages/workMngt/sampleDrawList/SampleDraw",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-校核
+      "name": "小样图校核",
+      "path": "/workMngt/sampleDrawList/sampleDrawCheck/:id",
+      "module": "./pages/workMngt/sampleDrawList/SampleDrawCheck",
       "exact": true,
       "authority": "approvalm"
     }

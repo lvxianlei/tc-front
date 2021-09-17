@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Select, Button, Modal, Form } from 'antd'
-import { Link } from 'react-router-dom'
 import { FixedType } from 'rc-table/lib/interface';
+import { Link } from 'react-router-dom'
 import { Page } from '../../common'
 
 export default function Information(): React.ReactNode {
@@ -26,36 +26,43 @@ export default function Information(): React.ReactNode {
         },
         {
             key: 'projectName',
-            title: '确认任务编号',
+            title: '放样任务编号',
             width: 100,
             dataIndex: 'projectName'
         },
         {
             key: 'projectNumber',
-            title: '合同名称',
+            title: '任务单编号',
+            width: 100,
+            dataIndex: 'projectNumber'
+        },
+        {
+            key: 'projectNumber',
+            title: '内部合同编号',
+            width: 100,
             dataIndex: 'projectNumber'
         },
         {
             key: 'bidBuyEndTime',
-            title: '计划交付时间',
-            width: 200,
+            title: '塔型',
+            width: 100,
             dataIndex: 'bidBuyEndTime'
         },
         {
             key: 'biddingEndTime',
-            title: '确认人',
-            width: 200,
+            title: '塔型钢印号',
+            width: 100,
             dataIndex: 'biddingEndTime'
         },
         {
             key: 'biddingAgency',
-            title: '状态',
+            title: '杆塔（基）',
             width: 100,
             dataIndex: 'biddingAgency'
         },
         {
             key: 'biddingAddress',
-            title: '状态时间',
+            title: '计划交付时间',
             width: 200,
             dataIndex: 'biddingAddress'
         },
@@ -63,12 +70,14 @@ export default function Information(): React.ReactNode {
             key: 'operation',
             title: '操作',
             fixed: 'right' as FixedType,
-            width: 150,
+            width: 230,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={`/workMngt/confirmList/confirmMessage/${record.id}`}>确认信息</Link>
-                    <Link to={`/workMngt/confirmList/confirmDetail/${record.id}`}>确认明细</Link>
+                    <Link to={`/workMngt/pickList/pickMessage/${record.id}`}>提料信息</Link>
+                    <Link to={`/workMngt/pickList/pickTowerMessage/${record.id}`}>塔型信息</Link>
+                    <Link to={`/workMngt/pickList/pickTower/${record.id}`}>杆塔配段</Link>
+                    <Button type='link'>确认信息</Button>
                 </Space>
             )
         }
@@ -83,7 +92,12 @@ export default function Information(): React.ReactNode {
             searchFormItems={[
                 {
                     name: 'startBidBuyEndTime',
-                    label: '任务状态',
+                    label: '最新状态变更时间',
+                    children: <DatePicker />
+                },
+                {
+                    name: 'startBidBuyEndTime',
+                    label: '塔型状态',
                     children: <DatePicker />
                 },
                 {
@@ -93,13 +107,13 @@ export default function Information(): React.ReactNode {
                 },
                 {
                     name: 'startReleaseDate',
-                    label: '确认人',
+                    label: '模式',
                     children: <DatePicker />
                 },
                 {
                     name: 'biddingStatus',
                     label: '模糊查询项',
-                    children: <Input placeholder="请输入任务编号/合同名称进行查询" maxLength={200} />
+                    children: <Input placeholder="请输入放样任务编号/任务单编号/订单编号/内部合同编号/塔型/塔型钢印号进行查询" maxLength={200} />
                 },
             ]}
         />

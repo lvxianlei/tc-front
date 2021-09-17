@@ -1,0 +1,46 @@
+{
+    "specialInfoData": [
+        {
+            "dataIndex": "projectName",
+            "title": "原材料标准"
+        },
+        {
+            "dataIndex": "projectNumber",
+            "title": "原材料要求"
+        },
+        {
+            "dataIndex": "releaseDate",
+            "title": "焊接要求"
+        },
+        {
+            "dataIndex": "source",
+            "title": "包装要求"
+        },
+        {
+            "dataIndex": "bidBuyEndTime",
+            "title": "镀锌要求"
+        },
+        {
+            "dataIndex": "description",
+            "title": "备注"
+        }
+    ],
+    "productInfoData": [
+        {
+            "dataIndex": "projectName",
+            "title": "塔型（个）"
+        },
+        {
+            "dataIndex": "projectNumber",
+            "title": "杆塔（基）"
+        },
+        {
+            "dataIndex": "releaseDate",
+            "title": "产品类型"
+        },
+        {
+            "dataIndex": "source",
+            "title": "总重量（kg）"
+        }
+    ]
+}

@@ -332,10 +332,10 @@ class ManagementContractNew extends ContractNew {
                     value: StoreValue,
                     callback: (error?: string) => void
                   ) => {
-                    if (value.length >= 2) {
+                    if (value.length >= 1) {
                       callback();
                     } else {
-                      callback("所属区域需选择到市级");
+                      callback("所属区域需选择到省级");
                     }
                   },
                 },
