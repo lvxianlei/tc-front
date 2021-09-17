@@ -561,6 +561,20 @@
       "module": "./pages/workMngt/scheduleList/ScheduleList",
       "exact": true,
       "authority": "approvalm"
+    },
+    { // 评估任务
+      "name": "评估任务",
+      "path": "/assessmentTask",
+      "module": "./pages/AssessmentTask/AssessmentTaskList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 评估任务详情
+      "name": "评估任务详情",
+      "path": "/assessmentTask/assessmentTaskDetail/:id",
+      "module": "./pages/AssessmentTask/AssessmentTaskDetail",
+      "exact": true,
+      "authority": "approvalm"
     }
   ]
 }
