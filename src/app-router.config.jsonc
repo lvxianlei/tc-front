@@ -662,21 +662,21 @@
     },
     { // 工作管理-小样图信息
       "name": "小样图信息",
-      "path": "/workMngt/sampleDrawList/sampleDrawMessage",
+      "path": "/workMngt/sampleDrawList/sampleDrawMessage/:id",
       "module": "./pages/workMngt/sampleDrawList/SampleDrawMessage",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-小样图
       "name": "小样图",
-      "path": "/workMngt/sampleDrawList/sampleDraw",
+      "path": "/workMngt/sampleDrawList/sampleDraw/:id",
       "module": "./pages/workMngt/sampleDrawList/SampleDraw",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-校核
       "name": "小样图校核",
-      "path": "/workMngt/sampleDrawList/sampleDrawCheck",
+      "path": "/workMngt/sampleDrawList/sampleDrawCheck/:id",
       "module": "./pages/workMngt/sampleDrawList/SampleDrawCheck",
       "exact": true,
       "authority": "approvalm"
