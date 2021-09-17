@@ -24,12 +24,12 @@ export default function ManagementDetail(): React.ReactNode {
             resole({})
             return;
         }
-        if (params.tab === "productGroup" || "salesPlan") {
+        if (["productGroup", "salesPlan"].includes(params.tab as string)) {
             const result: { [key: string]: any } = await RequestUtil.get(`${paths[params.tab || 'base']}`, { projectId: params.id, ...postData })
             resole(result)
             return
         }
-        const result: { [key: string]: any } = await RequestUtil.get(`${paths[params.tab || 'base']}/${params.id}`, {})
+        const result: { [key: string]: any } = await RequestUtil.get(`${paths[params.tab || 'base']}/${params.id}`)
         resole(result)
     }), { refreshDeps: [params.tab] })
     const tabItems: { [key: string]: JSX.Element | React.ReactNode } = {
