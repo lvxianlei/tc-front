@@ -1,20 +1,15 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  Button,
-  Row,
-  Radio,
-  Table,
-  TableProps,
-  TablePaginationConfig,
-} from "antd";
-import { useHistory, useParams } from "react-router-dom";
+import React, { useMemo, useRef } from "react";
+import { Button, Row, Radio, Space } from "antd";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { DetailContent, CommonTable } from "../../common";
-import {
-  productGroupColumns,
-  cargoVOListColumns,
-} from "../managementDetailData.json";
-import styles from "../../../components/AbstractMngtComponent.module.less";
+import { productGroupColumns } from "../managementDetailData.json";
+import { DataTableForSinzetec } from "../../../components/DataTableForSinzetec";
+import { ColumnsType } from "antd/lib/table";
+import AuthorityComponent from "../../../components/AuthorityComponent";
+import ConfirmableButton from "../../../components/ConfirmableButton";
 import RequestUtil from "../../../utils/RequestUtil";
+import { IResponseData } from "../../common/Page";
+import { ITableDataItem } from "../../prom/order/SaleOrder";
 
 interface ProductGroupItem {
   createTime?: string;
@@ -28,102 +23,89 @@ interface ProductGroupItem {
   status?: string;
 }
 
-interface DataTableForSinzetec extends TableProps<object> {
-  requestFun?: (pagination?: TablePaginationConfig | false) => void;
-}
-
-const DataTableForSinzetec = (props: DataTableForSinzetec) => {
-  const [_pagination, setpagination] = useState<
-    TablePaginationConfig | false
-  >();
-  const [data, setdata] = useState<any[]>();
-
-  const {
-    requestFun,
-    rowKey = "id",
-    bordered = false,
-    pagination = false,
-    onChange,
-    dataSource,
-    columns,
-    size = "small",
-    onRow,
-    ...extraProps
-  } = props;
-
-  const _columns = useMemo(() => {
-    return columns?.map((col) => {
-      return {
-        ...col,
-        ellipsis: col.ellipsis === undefined ? true : col.ellipsis,
-        onCell(...params: any[]) {
-          const inputonCell =
-            col.onCell && col.onCell.apply(null, params as any);
-          const inputClassName = inputonCell?.className;
-          return {
-            ...inputonCell,
-            className: `${styles.tableCell} ${inputClassName || ""}`,
-          };
-        },
-      };
-    });
-  }, [columns]);
-
-  const _onRow = useCallback(
-    (...params: any[]) => {
-      const inputOnRow = onRow && onRow.apply(null, params as any);
-      const inputClassName = inputOnRow?.className;
-      return {
-        ...inputOnRow,
-        className: `${styles.tableRow} ${inputClassName || ""}`,
-      };
-    },
-    [onRow]
-  );
-
-  useEffect(() => {
-    setpagination(pagination);
-  }, [pagination]);
-
-  const _onChange = useCallback(
-    (pagination: TablePaginationConfig, ...extraParams) => {
-      setpagination(_pagination);
-      onChange && onChange.apply(null, [pagination, ...extraParams] as any);
-    },
-    [_pagination, onChange]
-  );
-
-  useEffect(() => {
-    requestFun && requestFun(_pagination);
-  }, [_pagination, requestFun]);
-
-  return (
-    <Table
-      {...extraProps}
-      rowKey={rowKey}
-      bordered={bordered}
-      size={size}
-      columns={_columns}
-      onRow={_onRow}
-      onChange={_onChange}
-      pagination={_pagination}
-      dataSource={data}
-    />
-  );
-};
-
 const ProductGroupList = () => {
-  const [data, setData] = useState<ProductGroupItem[]>();
+  const params = useParams<any>();
+  const datatable = useRef<any>();
 
-  const requestFun = useCallback(
-    (pagination?: TablePaginationConfig | false) => {},
-    []
-  );
+  const columns: ColumnsType<ProductGroupItem> = useMemo(() => {
+    return [
+      {
+        title: "序号",
+        dataIndex: "index",
+      },
+      {
+        title: "下发状态",
+        dataIndex: "status",
+      },
+      {
+        title: "杆塔明细编号",
+        dataIndex: "number",
+      },
+      {
+        title: "订单编号",
+        dataIndex: "orderNumber",
+      },
+      {
+        title: "订单工程名称",
+        dataIndex: "projectName",
+      },
+      {
+        title: "内部合同编号",
+        dataIndex: "internalNumber",
+      },
+      {
+        title: "备注",
+        dataIndex: "description",
+      },
+      {
+        title: "制单人",
+        dataIndex: "createUserName",
+      },
+      {
+        title: "制单时间",
+        dataIndex: "createTime",
+      },
+      {
+        title: "操作",
+        dataIndex: "",
+        render(_, record) {
+          return (
+            <Space direction="horizontal" size="small">
+              <Link to={`/prom/order/setting/${record.id}`}>编辑</Link>
+              <Link to={`/prom/order/setting/${(record as ITableDataItem).id}`}>
+                编辑
+              </Link>
+              <AuthorityComponent permissions="sale_order_del">
+                <ConfirmableButton
+                  confirmTitle="要删除该条数据吗？"
+                  type="link"
+                  placement="topRight"
+                  onConfirm={async () => {
+                    let id = (record as ITableDataItem).id;
+                    const resData: IResponseData = await RequestUtil.delete(
+                      `/tower-market/saleOrder?id=${id}`
+                    );
+                    datatable.current?.goFirstPage();
+                  }}
+                >
+                  删除
+                </ConfirmableButton>
+              </AuthorityComponent>
+            </Space>
+          );
+        },
+      },
+    ];
+  }, []);
 
   return (
     <DataTableForSinzetec
-      columns={cargoVOListColumns}
-      requestFun={requestFun}
+      ref={datatable}
+      columns={columns}
+      reqPath={"/tower-market/productGroup"}
+      reqParams={{
+        projectId: params.id,
+      }}
     />
   );
 };
