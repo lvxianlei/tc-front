@@ -50,7 +50,9 @@ const PopTableContent: React.FC<{ data: PopTableData }> = ({ data }) => {
     const searchs = data.columns.filter((item: any) => item.search)
     const { loading, data: popTableData, run } = useRequest<any>((params: {}) => new Promise(async (resolve, reject) => {
         resolve(await RequestUtil.get<{ data: any }>(data.path, params))
+        console.log(popTableData)
     }))
+    const onSelectChange = (selectedRowKeys: any[]) => setSelect(selectedRowKeys)
     return <>
         <Form>
             <Row gutter={6}>
@@ -61,7 +63,14 @@ const PopTableContent: React.FC<{ data: PopTableData }> = ({ data }) => {
                 </Form.Item></Col>)}
             </Row>
         </Form>
-        <CommonTable columns={data.columns} dataSource={popTableData?.records} />
+        <CommonTable
+            columns={data.columns}
+            rowSelection={{
+                select,
+                onChange: onSelectChange,
+            }}
+            dataSource={popTableData?.records}
+            pagination={{ size: popTableData?.size, current: popTableData?.current, total: popTableData?.total }} />
     </>
 }
 

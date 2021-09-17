@@ -74,8 +74,7 @@ export default function InformationDetail(): React.ReactNode {
                         columns: [
                             {
                                 title: '登录账号',
-                                dataIndex: 'account',
-                                search: true
+                                dataIndex: 'account'
                             },
                             {
                                 title: '用户姓名',
