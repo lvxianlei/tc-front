@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { Spin, Form, Button, Modal, Select, Input, Upload } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
+import { PlusOutlined } from "@ant-design/icons"
 import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common'
+import { PopTable } from "../common/FormItemType"
 import { baseInfoData } from './biddingHeadData.json'
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
@@ -25,10 +27,16 @@ export default function InformationDetail(): React.ReactNode {
     const params = useParams<{ id: string }>()
     const [form] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false)
+    const [popTablevisible, setPopTableVisible] = useState<boolean>(false)
+    const [isBid, setIsBid] = useState("0")
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
         resole(data)
     }), {})
+    const { loading: bidResStatus, data: bidResResult, run } = useRequest((postData: {}) => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get(`/tower-market/bidInfo/bidResponse`, { id: params.id, ...postData })
+        resole(data)
+    }), { manual: true })
     const detailData: any = data
     if (loading) {
         return <Spin spinning={loading}>
@@ -39,7 +47,7 @@ export default function InformationDetail(): React.ReactNode {
     const handleModalOk = async () => {
         try {
             const submitData = await form.validateFields()
-            console.log(submitData)
+            run({ ...submitData })
             setVisible(false)
         } catch (error) {
             console.log(error)
@@ -47,18 +55,47 @@ export default function InformationDetail(): React.ReactNode {
     }
 
     const handleModalCancel = () => setVisible(false)
+
     return <>
-        <Modal visible={visible} title="是否应标" okText="确定并自动生成项目" onOk={handleModalOk} onCancel={handleModalCancel} >
+        <Modal zIndex={15} visible={visible} title="是否应标" okText="确定并自动生成项目" onOk={handleModalOk} onCancel={handleModalCancel} >
             <Form form={form}>
                 <Form.Item name="aaaa" label="是否应标">
-                    <Select>
+                    <Select defaultValue="1" onChange={(value: string) => { setIsBid(value) }}>
                         <Select.Option value="1">是</Select.Option>
-                        <Select.Option value="0">否</Select.Option>
+                        <Select.Option value="2">否</Select.Option>
                     </Select>
                 </Form.Item>
-                <Form.Item name="bbbb" label="设置项目负责人">
-                    <Input />
-                </Form.Item>
+                {isBid !== "2" ? <Form.Item name="projectLeader" label="设置项目负责人">
+                    <PopTable data={{
+                        type: "PopTable",
+                        title: "选择项目负责人",
+                        dataIndex: "projectLeader",
+                        path: "/sinzetech-user/user",
+                        columns: [
+                            {
+                                title: '登录账号',
+                                dataIndex: 'account',
+                                search: true
+                            },
+                            {
+                                title: '用户姓名',
+                                dataIndex: 'name',
+                                search: true
+                            },
+                            {
+                                title: '所属角色',
+                                dataIndex: 'userRoleNames'
+                            },
+                            {
+                                title: '所属机构',
+                                dataIndex: 'departmentName'
+                            }
+                        ] as any[]
+                    }} />
+                    {/* <Input readOnly addonAfter={<PlusOutlined onClick={() => setPopTableVisible(true)} />} /> */}
+                </Form.Item> : <Form.Item name="reason" label="原因">
+                    <Input.TextArea />
+                </Form.Item>}
             </Form>
         </Modal>
         <DetailContent

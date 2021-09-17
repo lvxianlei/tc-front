@@ -60,10 +60,10 @@ export default function InfomationNew(): JSX.Element {
         <DetailTitle title="附件" operation={[<Upload
             key="sub"
             name="file"
+            accept=".doc,.docx,.pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/png,image/jpeg,.txt,.xls,.xlsx"
             multiple={true}
             action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
             headers={{
-                'Content-Type': 'application/json',
                 'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
                 'Tenant-Id': AuthUtil.getTenantId(),
                 'Sinzetech-Auth': AuthUtil.getSinzetechAuth()

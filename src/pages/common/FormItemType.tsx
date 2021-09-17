@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Input, InputNumber, Select, DatePicker, Modal, Form } from 'antd'
+import { Input, InputNumber, Select, DatePicker, Modal, Form, Row, Col } from 'antd'
 import CommonTable from "./CommonTable"
 import { PlusOutlined } from "@ant-design/icons"
 import RequestUtil from '../../utils/RequestUtil'
@@ -46,21 +46,26 @@ interface PopTableProps {
 }
 
 const PopTableContent: React.FC<{ data: PopTableData }> = ({ data }) => {
+    const [select, setSelect] = useState<any[]>([])
     const searchs = data.columns.filter((item: any) => item.search)
     const { loading, data: popTableData, run } = useRequest<any>((params: {}) => new Promise(async (resolve, reject) => {
         resolve(await RequestUtil.get<{ data: any }>(data.path, params))
     }))
     return <>
-        <Form >
-            {searchs.map((fItem: any) => <Form.Item>
-                <FormItemType data={fItem} />
-            </Form.Item>)}
+        <Form>
+            <Row gutter={6}>
+                {searchs.map((fItem: any) => <Col span={searchs.length / 24} key={fItem.dataIndex}><Form.Item
+                    name={fItem.dataIndex}
+                    label={fItem.title}>
+                    <FormItemType data={fItem} />
+                </Form.Item></Col>)}
+            </Row>
         </Form>
         <CommonTable columns={data.columns} dataSource={popTableData?.records} />
     </>
 }
 
-const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
+export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
     const [visible, setVisible] = useState<boolean>(false)
     return <>
         <Modal width={data.width || 520} title={`选择${data.title}`} destroyOnClose visible={visible} onCancel={() => setVisible(false)}>
