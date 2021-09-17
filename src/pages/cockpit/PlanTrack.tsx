@@ -9,6 +9,7 @@ export default function Information(): React.ReactNode {
         {
             key: 'index',
             title: '序号',
+            width: 50,
             dataIndex: 'index',
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
@@ -16,6 +17,7 @@ export default function Information(): React.ReactNode {
             key: 'name',
             title: '业务员',
             dataIndex: 'name',
+            width: 100,
             render: (_: undefined, record: any): React.ReactNode => {
                 return <Link to={`/approvalm/management/detail/${record.id}`}>{record.name}</Link>
             }
@@ -23,71 +25,85 @@ export default function Information(): React.ReactNode {
         {
             key: 'typeName',
             title: '放样任务编号',
+            width: 100,
             dataIndex: 'typeName'
         },
         {
             key: 'linkman',
             title: '内部合同号',
+            width: 100,
             dataIndex: 'linkman'
         },
         {
             key: 'phone',
             title: '任务单编号',
+            width: 100,
             dataIndex: 'phone'
         },
         {
             key: 'description',
             title: '塔型',
+            width: 100,
             dataIndex: 'description'
         },
         {
             key: 'createTime',
             title: '优先级',
+            width: 100,
             dataIndex: 'createTime'
         },
         {
             key: 'phone',
             title: '基数',
+            width: 100,
             dataIndex: 'phone'
         },
         {
             key: 'description',
             title: '合同总量',
+            width: 100,
             dataIndex: 'description'
         },
         {
             key: 'createTime',
             title: '塔型提料状态',
+            width: 100,
             dataIndex: 'createTime'
         },
         {
             key: 'phone',
             title: '提料计划交付时间',
+            width: 100,
             dataIndex: 'phone'
         },
         {
             key: 'description',
             title: '提料实际交付时间',
+            width: 100,
             dataIndex: 'description'
         },
         {
             key: 'createTime',
             title: '塔型放样状态',
+            width: 100,
             dataIndex: 'createTime'
         },
         {
             key: 'phone',
             title: '放样计划交付时间',
+            width: 100,
             dataIndex: 'phone'
         },
         {
             key: 'description',
             title: '放样实际交付时间',
+            width: 100,
             dataIndex: 'description'
         },
         {
             key: 'createTime',
             title: '备注',
+            width: 100,
             dataIndex: 'createTime'
         },
     ]

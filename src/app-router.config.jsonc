@@ -533,6 +533,34 @@
       "module": "./pages/confirmTask/ConfirmTaskDetail",
       "exact": true,
       "authority": "approvalm"
+    },
+    { // 工作管理-确认列表
+      "name": "确认列表",
+      "path": "/workMngt/confirmList",
+      "module": "./pages/workMngt/comfirmList/ConfirmList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-确认列表-确认信息
+      "name": "确认信息",
+      "path": "/workMngt/confirmList/confirmMessage/:id",
+      "module": "./pages/workMngt/comfirmList/ConfirmMessage",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-确认列表-确认明细
+      "name": "确认明细",
+      "path": "/workMngt/confirmList/confirmDetail/:id",
+      "module": "./pages/workMngt/comfirmList/ConfirmDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-指派列表
+      "name": "指派列表",
+      "path": "/workMngt/scheduleList",
+      "module": "./pages/workMngt/scheduleList/ScheduleList",
+      "exact": true,
+      "authority": "approvalm"
     }
   ]
 }

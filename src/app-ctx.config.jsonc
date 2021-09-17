@@ -275,7 +275,7 @@
                                 "authority": "approvalm"
                             },
                             {
-                                "label": "安排列表",
+                                "label": "指派列表",
                                 "path": "/workMngt/scheduleList",
                                 "authority": "approvalm"
                             },
