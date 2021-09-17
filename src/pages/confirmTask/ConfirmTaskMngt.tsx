@@ -143,6 +143,8 @@ export default function Information(): React.ReactNode {
         {
             key: 'operation',
             title: '操作',
+            fixed: 'right',
+            width: 250,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">

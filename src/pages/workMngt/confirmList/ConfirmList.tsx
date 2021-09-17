@@ -49,16 +49,20 @@ export default function Information(): React.ReactNode {
         {
             key: 'biddingAgency',
             title: '状态',
+            width: 100,
             dataIndex: 'biddingAgency'
         },
         {
             key: 'biddingAddress',
             title: '状态时间',
+            width: 200,
             dataIndex: 'biddingAddress'
         },
         {
             key: 'operation',
             title: '操作',
+            fixed: 'right',
+            width: 150,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">

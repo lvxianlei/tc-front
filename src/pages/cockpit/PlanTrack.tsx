@@ -73,13 +73,13 @@ export default function Information(): React.ReactNode {
         {
             key: 'phone',
             title: '提料计划交付时间',
-            width: 100,
+            width: 200,
             dataIndex: 'phone'
         },
         {
             key: 'description',
             title: '提料实际交付时间',
-            width: 100,
+            width: 200,
             dataIndex: 'description'
         },
         {
@@ -91,19 +91,19 @@ export default function Information(): React.ReactNode {
         {
             key: 'phone',
             title: '放样计划交付时间',
-            width: 100,
+            width: 200,
             dataIndex: 'phone'
         },
         {
             key: 'description',
             title: '放样实际交付时间',
-            width: 100,
+            width: 200,
             dataIndex: 'description'
         },
         {
             key: 'createTime',
             title: '备注',
-            width: 100,
+            width: 200,
             dataIndex: 'createTime'
         },
     ]

@@ -20,7 +20,7 @@ export default function ManagementDetail(): React.ReactNode {
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
                 <DetailTitle title="基本信息" />
-                <BaseInfo columns={baseInfoData} dataSource={detailData || {}} />
+                <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
                 <DetailTitle title="相关附件"/>
                 <CommonTable columns={[
                     {
