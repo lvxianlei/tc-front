@@ -600,7 +600,6 @@
         "bidDoc": "/tower-market/bidDoc",
         "bidResult": "/tower-market/bidBase",
         "frameAgreement": "/tower-market/frameAgreement",
-        "productGroup": "/tower-market/productGroup",
         "salesPlan": "/tower-market/productGroup"
     }
 }

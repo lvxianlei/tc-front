@@ -41,7 +41,7 @@ export default abstract class RequestUtil {
      * @param [init] 
      * @returns request 
      */
-    private static request<T>(path: string, init?: RequestInit): Promise<T> {
+    private static request<T>(path: string, init?: RequestInit, cancel?: (abort: AbortController)=>void ): Promise<T> {
         return new Promise<T>((resolve: (data: T) => void, reject: (res: IResponse<T>) => void): void => {
             let headers: HeadersInit = {
                 'Content-Type': 'application/json',
@@ -52,6 +52,11 @@ export default abstract class RequestUtil {
             if (sinzetechAuth) {
                 headers['Sinzetech-Auth'] = sinzetechAuth;
             }
+            
+            const controller = new AbortController();
+            const { signal } = controller;
+            cancel && cancel(controller)
+
             fetch(this.joinUrl(path, process.env.REQUEST_API_PATH_PREFIX || ''), {
                 mode: 'cors',
                 ...(init || {}),
@@ -59,7 +64,8 @@ export default abstract class RequestUtil {
                     ...headers,
                     ...init?.headers
                 },
-                referrerPolicy: 'no-referrer-when-downgrade'
+                referrerPolicy: 'no-referrer-when-downgrade',
+                signal
             })
             .then((res) => {
                 if (res.status !== 200) {
@@ -85,7 +91,11 @@ export default abstract class RequestUtil {
             })
             .catch((e: Error) => {
                 NProgress.done();
-                message.error(e.message);
+                if (e.name === 'AbortError') {
+                    // console.log('abort');
+                }else{
+                    message.error(e.message);
+                }
             });
         });
     }
@@ -100,7 +110,7 @@ export default abstract class RequestUtil {
      * @param [headers] 
      * @returns get 
      */
-    public static get<T>(path: string, params?: Record<string, any>, headers?: HeadersInit) : Promise<T> {
+    public static get<T>(path: string, params?: Record<string, any>, headers?: HeadersInit, cancel?: (abort: AbortController)=>void ) : Promise<T> {
         NProgress.inc();
         if (params) {
             path += `?${ stringify(params) }`;
@@ -108,7 +118,7 @@ export default abstract class RequestUtil {
         return this.request(path, {
             method: 'GET',
             headers: headers
-        });
+        }, cancel);
     }
 
     /**

@@ -3,7 +3,7 @@ import { Button, Row, Col, Tabs, Radio, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common'
 import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
-import { baseInfoData, productGroupColumns, bidDocColumns, paths, frameAgreementColumns, enclosure, cargoVOListColumns, materialListColumns } from './managementDetailData.json'
+import { baseInfoData, bidDocColumns, paths, frameAgreementColumns, enclosure, cargoVOListColumns, materialListColumns } from './managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import ManagementContract from './contract/Contract'
@@ -11,6 +11,7 @@ import ManagementOrder from './order/SaleOrder'
 import styles from "./ManagementDetail.module.less"
 import ApplicationContext from "../../configuration/ApplicationContext"
 import BidResult from './bidResult'
+import ProductGroup from './productGroup'
 export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | undefined
 
 export default function ManagementDetail(): React.ReactNode {
@@ -19,7 +20,7 @@ export default function ManagementDetail(): React.ReactNode {
     const dictionaryOptions: any = ApplicationContext.get().dictionaryOption
     const bidType = dictionaryOptions["124"]
     const { loading, error, data, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
-        if (params.tab === "contract") {
+        if (params.tab === "contract" || params.tab === "productGroup") {
             resole({})
             return;
         }
@@ -95,19 +96,7 @@ export default function ManagementDetail(): React.ReactNode {
                     <ManagementOrder />
                 </Tabs.TabPane>
             </Tabs></>,
-        tab_productGroup: <DetailContent title={[
-            <Button key="new" type="primary" onClick={() => history.push(`/project/management/detail/edit/productGroup/${params.id}`)}>新增</Button>
-        ]}>
-            <CommonTable columns={cargoVOListColumns} />
-            <Row><Radio.Group
-                options={[
-                    { label: '明细', value: 'Apple' },
-                    { label: '统计', value: 'Pear' }
-                ]}
-                optionType="button"
-            /></Row>
-            <CommonTable columns={productGroupColumns} />
-        </DetailContent>,
+        tab_productGroup: <ProductGroup/>,
         tab_salesPlan: <>
             <Row>
                 <Radio.Group defaultValue="all">
