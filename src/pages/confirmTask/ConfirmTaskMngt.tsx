@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Select, Button, Modal, Form } from 'antd'
 import { Link } from 'react-router-dom'
-import { CommonTable, DetailTitle, Page } from '../common'
+import { CommonTable, DetailTitle, Page } from '../common';
+import { FixedType } from 'rc-table/lib/interface';
 import TextArea from 'antd/lib/input/TextArea';
 
 export default function Information(): React.ReactNode {
@@ -143,7 +144,7 @@ export default function Information(): React.ReactNode {
         {
             key: 'operation',
             title: '操作',
-            fixed: 'right',
+            fixed: 'right' as FixedType,
             width: 250,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
