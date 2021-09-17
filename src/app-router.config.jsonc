@@ -610,6 +610,27 @@
       "module": "./pages/workMngt/pickList/PickTower",
       "exact": true,
       "authority": "approvalm"
+    },
+    { // 工作管理-评估列表
+      "name": "评估列表",
+      "path": "/workMngt/evaluationList",
+      "module": "./pages/workMngt/evaluation/EvaluationList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 确认任务
+      "name": "确认任务",
+      "path": "/setOutTask",
+      "module": "./pages/setOutTask/SetOutTaskList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-确认列表
+      "name": "确认列表",
+      "path": "/workMngt/confirmList",
+      "module": "./pages/workMngt/confirm/confirmList",
+      "exact": true,
+      "authority": "approvalm"
     }
   ]
 }

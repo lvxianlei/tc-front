@@ -253,7 +253,7 @@
                         "items": [
                             {
                                 "label": "放样任务",
-                                "path": "/setOutTask/setOutTask",
+                                "path": "/setOutTask",
                                 "authority": "approvalm"
                             }
                         ]
