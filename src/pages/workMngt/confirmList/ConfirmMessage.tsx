@@ -1,10 +1,10 @@
 import React from 'react'
 import { Button, Row, Col, Tabs, Radio, Spin, Space } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common';
+import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
 import { baseInfoData } from './confirm.json';
 import useRequest from '@ahooksjs/use-request';
-import RequestUtil from '../../utils/RequestUtil';
+import RequestUtil from '../../../utils/RequestUtil';
 
 export default function ManagementDetail(): React.ReactNode {
     const history = useHistory()

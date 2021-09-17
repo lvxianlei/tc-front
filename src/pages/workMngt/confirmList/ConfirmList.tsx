@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Select, Button, Modal, Form } from 'antd'
 import { Link } from 'react-router-dom'
-import { Page } from '../common'
+import { Page } from '../../common'
 
 export default function Information(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
