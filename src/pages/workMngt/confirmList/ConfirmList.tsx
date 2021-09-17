@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Select, Button, Modal, Form } from 'antd'
 import { Link } from 'react-router-dom'
+import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common'
 
 export default function Information(): React.ReactNode {
@@ -61,7 +62,7 @@ export default function Information(): React.ReactNode {
         {
             key: 'operation',
             title: '操作',
-            fixed: 'right',
+            fixed: 'right' as FixedType,
             width: 150,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
