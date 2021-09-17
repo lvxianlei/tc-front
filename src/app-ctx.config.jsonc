@@ -295,7 +295,7 @@
                                 "authority": "approvalm"
                             },
                             {
-                                "label": "样图列表",
+                                "label": "小样图列表",
                                 "path": "/workMngt/sampleDrawList",
                                 "authority": "approvalm"
                             },

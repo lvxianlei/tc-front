@@ -652,6 +652,34 @@
       "module": "./pages/workMngt/setOut/setOutList",
       "exact": true,
       "authority": "approvalm"
+    },
+    { // 工作管理-小样图列表
+      "name": "小样图列表",
+      "path": "/workMngt/sampleDrawList",
+      "module": "./pages/workMngt/sampleDrawList/SampleDrawList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-小样图信息
+      "name": "小样图信息",
+      "path": "/workMngt/sampleDrawList/sampleDrawMessage",
+      "module": "./pages/workMngt/sampleDrawList/SampleDrawMessage",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-小样图
+      "name": "小样图",
+      "path": "/workMngt/sampleDrawList/sampleDraw",
+      "module": "./pages/workMngt/sampleDrawList/SampleDraw",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-校核
+      "name": "小样图校核",
+      "path": "/workMngt/sampleDrawList/sampleDrawCheck",
+      "module": "./pages/workMngt/sampleDrawList/SampleDrawCheck",
+      "exact": true,
+      "authority": "approvalm"
     }
   ]
 }
