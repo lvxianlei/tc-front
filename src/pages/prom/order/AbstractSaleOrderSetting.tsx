@@ -63,6 +63,8 @@ export interface ISaleOrder {
 export interface ManagementSaleOrder extends ISaleOrder {
     orderWeight?: number;
     orderProjectName?: string;
+    saleType?: string;
+    salesman?: string;
   }
 
 export interface IProductVo extends IProduct {

@@ -79,7 +79,11 @@ export class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSetting
             insuranceCharge: saleOrder.insuranceCharge === -1 ? '-' : saleOrder.insuranceCharge,
             creditInsurance: saleOrder.creditInsurance === -1 ? '-' : saleOrder.creditInsurance,
             commissionCharge: saleOrder.commissionCharge === -1 ? '-' : saleOrder.commissionCharge,
-            description: saleOrder.description
+            description: saleOrder.description,
+            saleType: saleOrder.saleType,
+            salesman: saleOrder.salesman,
+            contractNumber: saleOrder.contractInfoVo?.contractNumber,
+
         });
         this.getColumnsChange(saleOrder.contractInfoVo?.chargeType || 0);
     }
