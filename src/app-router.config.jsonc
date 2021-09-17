@@ -586,7 +586,7 @@
     { // 工作管理-提料列表
       "name": "提料列表",
       "path": "/workMngt/pickList",
-      "module": "./pages/workMngt/pickList/pickList",
+      "module": "./pages/workMngt/pickList/PickList",
       "exact": true,
       "authority": "approvalm"
     },
