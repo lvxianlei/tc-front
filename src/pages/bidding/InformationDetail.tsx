@@ -68,7 +68,7 @@ export default function InformationDetail(): React.ReactNode {
                 <Button key="new" onClick={() => history.goBack()}>返回</Button>
             ]}>
             <DetailTitle title="基本信息" />
-            <BaseInfo columns={baseInfoData} dataSource={detailData} />
+            <BaseInfo columns={baseInfoData} dataSource={detailData} col={4} />
             <DetailTitle title="货物清单" />
             <CommonTable columns={tableColumns} dataSource={detailData.bidPackageInfoDTOList} />
             <DetailTitle title="附件" operation={[<Button key="bid" type="primary">上传附件</Button>]} />

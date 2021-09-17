@@ -9,12 +9,15 @@ import RequestUtil from '../../utils/RequestUtil'
 import ManagementContract from './contract/Contract'
 import ManagementOrder from './order/SaleOrder'
 import styles from "./ManagementDetail.module.less"
+import ApplicationContext from "../../configuration/ApplicationContext"
 import BidResult from './bidResult'
 export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | undefined
 
 export default function ManagementDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, tab?: TabTypes }>()
+    const dictionaryOptions: any = ApplicationContext.get().dictionaryOption
+    const bidType = dictionaryOptions["124"]
     const { loading, error, data, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         if (params.tab === "contract") {
             resole({})
@@ -52,14 +55,14 @@ export default function ManagementDetail(): React.ReactNode {
                 <Button key="goback">返回</Button>
             ]}>
             <DetailTitle title="标书制作记录表" />
-            <BaseInfo columns={bidDocColumns} dataSource={data || {}} col={4} />
+            <BaseInfo columns={bidDocColumns.map(item => item.dataIndex === "bidType" ? ({ ...item, type: "select", enum: bidType.map((bid: any) => ({ value: bid.id, label: bid.name })) }) : item)} dataSource={data || {}} col={4} />
             <DetailTitle title="填写记录" />
             <CommonTable columns={[
-                { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-                { title: '部门', dataIndex: 'branch' },
-                { title: '填写人', dataIndex: 'createUserName' },
-                { title: '职位', dataIndex: 'position' },
-                { title: '填写时间', dataIndex: 'createTime' },
+                { title: '序号', dataIndex: 'index', width: 50, render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+                { title: '部门', width: 100, dataIndex: 'branch' },
+                { title: '填写人', width: 100, dataIndex: 'createUserName' },
+                { title: '职位', width: 100, dataIndex: 'position' },
+                { title: '填写时间', width: 150, dataIndex: 'createTime' },
                 { title: '说明', dataIndex: 'description' }
             ]} dataSource={data?.bidBizRecordVos} />
         </DetailContent>,

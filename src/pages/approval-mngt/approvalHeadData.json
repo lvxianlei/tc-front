@@ -14,11 +14,55 @@
         },
         {
             "title": "投标截至时间",
-            "dataIndex": "projectName"
+            "dataIndex": "bidDeadline"
         },
         {
             "title": "数量",
-            "dataIndex": "projectName"
+            "dataIndex": "num"
+        },
+        {
+            "title": "单位",
+            "dataIndex": "unit"
+        },
+        {
+            "title": "货物类别",
+            "dataIndex": "goodsCategory"
+        },
+        {
+            "title": "招标文件传递方式",
+            "dataIndex": "transmission"
+        },
+        {
+            "title": "价格范围（元/吨）",
+            "dataIndex": "priceRange"
+        },
+        {
+            "title": "验收执行标准及验收方法",
+            "dataIndex": "acceptanceStandard"
+        },
+        {
+            "title": "原材料执行标准",
+            "dataIndex": "executiveStandard"
+        },
+        {
+            "title": "包装要求",
+            "dataIndex": "packagingRequirements"
+        },
+        {
+            "title": "是否有合同版本",
+            "dataIndex": "contract"
+        },
+        {
+            "title": "货款结算条件及方式",
+            "dataIndex": "settlementType"
+        },
+        {
+            "title": "特殊材质",
+            "dataIndex": "specialMaterial"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
         }
     ],
     "auditHead": [

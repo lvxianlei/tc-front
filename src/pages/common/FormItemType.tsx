@@ -57,7 +57,7 @@ const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
         <Modal title={`选择${data.title}`} destroyOnClose visible={visible} onCancel={() => setVisible(false)}>
             <PopTableContent data={data} />
         </Modal>
-        <Input {...props} readOnly addonAfter={<PlusOutlined onClick={() => setVisible(true)} />} />
+        <Input {...props} addonAfter={<PlusOutlined onClick={() => setVisible(true)} />} />
     </>
 }
 interface SelfSelectProps {

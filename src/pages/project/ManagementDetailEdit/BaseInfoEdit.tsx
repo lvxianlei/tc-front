@@ -20,6 +20,12 @@ export default function BaseInfoEdit(): JSX.Element {
         attachVosForm.setFieldsValue(result.attachVos)
         resole(result)
     }))
+
+    const { loading: saveStatus, data: saveResult, run } = useRequest<{ [key: string]: any }>(({ }) => new Promise(async (resole, reject) => {
+        const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/projectInfo/${params.id}`)
+        resole(result)
+    }), { manual: true })
+
     const handleSubmit = async () => {
         const baseInfoData = await baseInfoForm.getFieldsValue()
         const cargoVOListData = await cargoVOListForm.getFieldsValue()

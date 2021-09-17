@@ -21,7 +21,8 @@ export default function InfomationNew(): JSX.Element {
     const [baseInfoForm] = Form.useForm()
     const [bidForm] = Form.useForm()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
+        bidForm.setFieldsValue({ submit: data.bidPackageInfoVOS })
         resole(data)
     }))
     const { loading: saveStatus, data: saveResult, run } = useRequest((postData: {}) => new Promise(async (resove, reject) => {
@@ -31,8 +32,11 @@ export default function InfomationNew(): JSX.Element {
     const detailData: any = data
     const handleSave = async () => {
         const baseInfoResult = await baseInfoForm.getFieldsValue()
-        const bidPackageInfoVOS = await bidForm.getFieldsValue()
-        await run({ ...detailData, ...baseInfoResult, bidPackageInfoVOS: bidPackageInfoVOS.submit })
+        const bidPackageInfoDTOList = await bidForm.getFieldsValue()
+        const postData = { ...detailData, ...baseInfoResult, bidPackageInfoDTOList: bidPackageInfoDTOList.submit }
+        delete postData.bidPackageInfoVOS
+        delete postData.attachVos
+        await run(postData)
         if (saveResult) {
             message.success('保存成功...')
         }
@@ -51,7 +55,7 @@ export default function InfomationNew(): JSX.Element {
     >
         <DetailTitle title="基础信息" />
         <BaseInfo form={baseInfoForm} columns={baseInfoData} dataSource={detailData} edit />
-        <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoDTOList} />
+        <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoVOS} />
         <DetailTitle title="附件" operation={[<Button key="su" type="primary" >上传附件</Button>]} />
         <CommonTable columns={[
             { title: '文件名', dataIndex: 'name' },

@@ -12,7 +12,7 @@ import styles from './AbstractFrame.module.less';
 import layoutStyles from './Layout.module.less';
 
 
-export interface IAbstractFrameProps {}
+export interface IAbstractFrameProps { }
 export interface IAbstractFrameState {
     readonly collapsed: boolean;
 }
@@ -20,7 +20,7 @@ export interface IAbstractFrameState {
 export default abstract class AbstractFrame<
     P extends IAbstractFrameProps = {},
     S extends IAbstractFrameState = IAbstractFrameState
-> extends React.Component<P, S> {
+    > extends React.Component<P, S> {
 
     constructor(props: P) {
         super(props);
@@ -38,7 +38,7 @@ export default abstract class AbstractFrame<
      * @returns logo 
      */
     abstract renderLogo(): React.ReactNode;
-    
+
     /**
      * @description Renders navigation panel
      * @returns navigation panel 
@@ -99,29 +99,34 @@ export default abstract class AbstractFrame<
     /**
      * @description Renders abstract frame
      * @returns render 
-     */ 
+     */
     public render(): React.ReactNode {
         return (
-            <Layout className={ layoutStyles.height100 }>
-                <Layout.Sider theme={ this.getMenuTheme() } collapsed={ this.state.collapsed }
-                    collapsedWidth={ 48 }
-                    width={ this.getMenuContainerWidth() }>
-                    <div className={ styles.logo }>
-                        { this.renderLogo() }
-                    </div>
-                    <div className={ styles.navigation }>
-                        { this.renderNavigationPanel() }
-                    </div>
-                    {/* <Layout.Footer>
+            <Layout className={layoutStyles.height100}>
+                <Layout.Header className={styles.header}>
+                    <Layout>
+                        <Layout.Sider className={styles.logo} theme={this.getMenuTheme()} collapsedWidth={48} width={this.getMenuContainerWidth()}>
+                            {this.renderLogo()}
+                        </Layout.Sider>
+                        <Layout.Content className={styles.headerContent}>
+                            {this.renderHeaderPanel()}
+                        </Layout.Content>
+                    </Layout>
+                </Layout.Header>
+                <Layout>
+                    <Layout.Sider theme={this.getMenuTheme()} collapsed={this.state.collapsed}
+                        collapsedWidth={48}
+                        style={{ backgroundColor: "#F8F8F8" }}
+                        width={this.getMenuContainerWidth()}>
+                        <div className={styles.navigation}>
+                            {this.renderNavigationPanel()}
+                        </div>
+                        {/* <Layout.Footer>
                         { this.renderFooterPanel() }
                     </Layout.Footer> */}
-                </Layout.Sider>
-                <Layout>
-                    <Layout.Header className={ styles.header }>
-                        { this.renderHeaderPanel() }
-                    </Layout.Header>
-                    <Layout.Content className={ styles.content }>
-                        { this.renderContentPanel() }
+                    </Layout.Sider>
+                    <Layout.Content className={styles.content}>
+                        {this.renderContentPanel()}
                     </Layout.Content>
                 </Layout>
                 {/**

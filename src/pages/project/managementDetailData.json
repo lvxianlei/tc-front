@@ -14,7 +14,18 @@
         },
         {
             "title": "项目类型",
-            "dataIndex": "projectType"
+            "dataIndex": "projectType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "公开招标"
+                },
+                {
+                    "value": 1,
+                    "label": "用户工程"
+                }
+            ]
         },
         {
             "title": "标书购买截至日期",
@@ -67,7 +78,30 @@
         },
         {
             "title": "当前项目阶段",
-            "dataIndex": "currentProjectStage"
+            "dataIndex": "currentProjectStage",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "准备投标"
+                },
+                {
+                    "value": 1,
+                    "label": "投标"
+                },
+                {
+                    "value": 2,
+                    "label": "合同签订"
+                },
+                {
+                    "value": 3,
+                    "label": "合同执行"
+                },
+                {
+                    "value": 4,
+                    "label": "项目结束"
+                }
+            ]
         },
         {
             "title": "发布日期",
