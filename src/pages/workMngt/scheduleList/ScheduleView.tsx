@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Select, Button, Modal, Form } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
-import { Page } from '../../common'
+import { Page } from '../../common';
+import { FixedType } from 'rc-table/lib/interface';
 interface ManagementState {
     selectedKeys: React.Key[]
     selected: object[]
@@ -145,7 +146,7 @@ export default function Information(): React.ReactNode {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
-            fixed: 'right',
+            fixed: 'right' as FixedType,
             width: 100,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
