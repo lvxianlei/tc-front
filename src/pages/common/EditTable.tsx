@@ -33,9 +33,10 @@ interface EditTableProps {
     columns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string, type: FormItemTypesType })[]
     dataSource: DataType[]
     form?: FormInstance
+    opration?: React.ReactNode[]
 }
 
-export default function EditableTable({ columns = [], dataSource = [], form }: EditTableProps): JSX.Element {
+export default function EditableTable({ columns = [], dataSource = [], form, opration }: EditTableProps): JSX.Element {
     const baseRowData: { [key: string]: string | number | null } = {}
     columns.forEach(item => baseRowData[item.dataIndex] = null)
     columns = [
@@ -52,9 +53,7 @@ export default function EditableTable({ columns = [], dataSource = [], form }: E
                 {
                     (fields: FormListFieldData[], { add, remove }: FormListOperation): React.ReactNode => (
                         <>
-                            <Button onClick={() => add(baseRowData)} type="primary" style={{ marginBottom: 16 }}>
-                                新增一行
-                            </Button>
+                            <Row><Button onClick={() => add(baseRowData)} type="primary" style={{ marginBottom: 16 }}>新增一行</Button>{opration}</Row>
                             <Row className={styles.FormHeader}>
                                 {columns.map((item, index) => (<Col key={`Editable_${index}`} span={item.width || 2}>{item.title}</Col>))}
                             </Row>

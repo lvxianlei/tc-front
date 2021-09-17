@@ -16,13 +16,13 @@ export default function BaseInfoEdit(): JSX.Element {
     const { loading, error, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/projectInfo/${params.id}`)
         baseInfoForm.setFieldsValue(result)
-        cargoVOListForm.setFieldsValue(result.cargoVOList)
+        cargoVOListForm.setFieldsValue({ submit: result.cargoVOList })
         attachVosForm.setFieldsValue(result.attachVos)
         resole(result)
     }))
 
-    const { loading: saveStatus, data: saveResult, run } = useRequest<{ [key: string]: any }>(({ }) => new Promise(async (resole, reject) => {
-        const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/projectInfo/${params.id}`)
+    const { loading: saveStatus, data: saveResult, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
+        const result: { [key: string]: any } = await RequestUtil.put(`/tower-market/projectInfo`, postData)
         resole(result)
     }), { manual: true })
 
@@ -30,10 +30,13 @@ export default function BaseInfoEdit(): JSX.Element {
         const baseInfoData = await baseInfoForm.getFieldsValue()
         const cargoVOListData = await cargoVOListForm.getFieldsValue()
         const attachVos = await attachVosForm.getFieldsValue()
-        console.log(baseInfoData, cargoVOListData, attachVos)
+        delete data?.cargoVOList
+        delete data?.attachVos
+        await run({ ...data, ...baseInfoData, attachInfoDtos: [], cargoDTOList: cargoVOListData.submit })
+
     }
 
-    return <DetailContent operation={[<Button key="save" type="primary" onClick={handleSubmit}>保存</Button>, <Button key="cacel" onClick={() => history.goBack()}>取消</Button>]}>
+    return <DetailContent operation={[<Button key="save" type="primary" onClick={handleSubmit} loading={saveStatus}>保存</Button>, <Button key="cacel" onClick={() => history.goBack()}>取消</Button>]}>
         <ManagementDetailTabsTitle />
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />

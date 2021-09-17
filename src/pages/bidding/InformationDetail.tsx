@@ -70,7 +70,7 @@ export default function InformationDetail(): React.ReactNode {
             <DetailTitle title="基本信息" />
             <BaseInfo columns={baseInfoData} dataSource={detailData} col={4} />
             <DetailTitle title="货物清单" />
-            <CommonTable columns={tableColumns} dataSource={detailData.bidPackageInfoDTOList} />
+            <CommonTable columns={tableColumns} dataSource={detailData.bidPackageInfoVOS} />
             <DetailTitle title="附件" operation={[<Button key="bid" type="primary">上传附件</Button>]} />
             <CommonTable columns={[
                 { title: '序号', dataIndex: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },

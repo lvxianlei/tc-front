@@ -537,47 +537,58 @@
     "materialListColumns": [
         {
             "title": "*物资名称",
-            "label": "cargoName"
+            "label": "cargoName",
+            "width": 100
         },
         {
             "title": "规格型号",
-            "label": "specs"
+            "label": "specs",
+            "width": 100
         },
         {
             "title": "*计量单位",
-            "label": "metering"
+            "label": "metering",
+            "width": 50
         },
         {
             "title": "*数量",
-            "label": "number"
+            "label": "number",
+            "width": 50
         },
         {
             "title": "*单价（含税）（元）",
-            "label": "moneyTax"
+            "label": "moneyTax",
+            "width": 50
         },
         {
             "title": "单价（不含税）（元）",
-            "label": "money"
+            "label": "money",
+            "width": 50
         },
         {
             "title": "*合同总价（含税）（元）",
-            "label": "contractMoneyTax"
+            "label": "contractMoneyTax",
+            "width": 50
         },
         {
             "title": "合同总价（不含税）（元）",
-            "label": "contractMoney"
+            "label": "contractMoney",
+            "width": 50
         },
         {
             "title": "*增值税率（%）",
-            "label": "tax"
+            "label": "tax",
+            "width": 50
         },
         {
             "title": "交货时间",
-            "label": "date"
+            "label": "date",
+            "width": 100
         },
         {
             "title": "收货人及联系电话",
-            "label": "phone"
+            "label": "phone",
+            "width": 100
         },
         {
             "title": "备注",

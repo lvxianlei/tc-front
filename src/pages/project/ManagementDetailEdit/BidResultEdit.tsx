@@ -1,7 +1,7 @@
 import React, { useRef } from "react"
 import { useHistory, useParams } from "react-router-dom"
-import { Row, Button, Tabs, Table, Form, Spin } from "antd"
-import { DetailContent, BaseInfo, DetailTitle } from "../../common"
+import { Button, Form, Spin } from "antd"
+import { DetailContent, BaseInfo, DetailTitle, EditTable, EditTabs } from "../../common"
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { bidInfoColumns } from '../managementDetailData.json'
 import { TabsCanEdit } from "../bidResult"
@@ -80,11 +80,11 @@ export default function BidResultEdit(): JSX.Element {
                         }
                     ]
                 }]} dataSource={data || {}} />
-            <DetailTitle title="开标信息" operation={[<Button key="new" type="primary">新增一轮报价</Button>]} />
-            <TabsCanEdit ref={ref} data={[
+            <DetailTitle title="开标信息" operation={[<Button key="new" type="primary" onClick={() => (ref.current as any)?.tabAdd()}>新增一轮报价</Button>]} />
+            {/* <TabsCanEdit ref={ref} data={[
                 {
                     title: "第一轮",
-                    content: <>abc</>,
+                    content: <EditTable columns={bidInfoColumns} dataSource={[]} opration={[<Button key="submit" type="default" style={{ marginLeft: "16px" }}>导入文件</Button>]} />,
                     key: "第一轮",
                 },
                 {
@@ -93,7 +93,11 @@ export default function BidResultEdit(): JSX.Element {
 
                     key: "第二轮",
                 },
-            ]} />
+            ]} /> */}
+            <EditTabs>
+                <EditTable columns={bidInfoColumns} dataSource={[]} opration={[<Button key="submit" type="default" style={{ marginLeft: "16px" }}>导入文件</Button>]} />
+                <EditTable columns={bidInfoColumns} dataSource={[]} opration={[<Button key="submit" type="default" style={{ marginLeft: "16px" }}>导入文件</Button>]} />
+            </EditTabs>
         </Spin>
     </DetailContent>)
 }

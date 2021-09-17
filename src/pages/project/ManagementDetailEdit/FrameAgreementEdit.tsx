@@ -3,7 +3,7 @@ import { useHistory, useParams } from "react-router-dom"
 import { Row, Button, Form } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, EditTable } from "../../common"
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
-import { frameAgreementColumns, cargoVOListColumns } from '../managementDetailData.json'
+import { frameAgreementColumns, cargoVOListColumns, materialListColumns } from '../managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 import { TabTypes } from "../ManagementDetail"
@@ -28,7 +28,7 @@ export default function FrameAgreementEdit(): JSX.Element {
     const handleSubmit = async () => {
         const baseInfoData = await baseInfoForm.getFieldsValue()
         const contractCargoDtosData = await cargoDtoForm.getFieldsValue()
-        
+
         await run({ ...data, ...baseInfoData, projectId: params.id, contractCargoDtos: contractCargoDtosData.submit })
     }
 
@@ -40,7 +40,7 @@ export default function FrameAgreementEdit(): JSX.Element {
         <DetailTitle title="基本信息" />
         <BaseInfo form={baseInfoForm} columns={frameAgreementColumns.map((item) => item.dataIndex === "bidType" ? ({ ...item, type: "select", enum: bidType.map((bid: any) => ({ value: bid.id, label: bid.name })) }) : item)} dataSource={data || {}} edit />
         <DetailTitle title="合同物资清单" />
-        <EditTable form={cargoDtoForm} columns={cargoVOListColumns} dataSource={data?.contractCargoVos} />
+        <EditTable form={cargoDtoForm} columns={materialListColumns} dataSource={data?.contractCargoVos} />
         <DetailTitle title="系统信息" />
         <BaseInfo columns={[
             { title: "最后编辑人", dataIndex: 'updateUserLast' },

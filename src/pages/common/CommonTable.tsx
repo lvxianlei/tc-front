@@ -7,7 +7,7 @@ type ColumnsItemsType = "text" | "string" | "number" | "select" | "date" | undef
 function generateRender(type: ColumnsItemsType, data: (SelectData | TextData)) {
     switch (type) {
         case "date":
-            return ({ ...data, ellipsis: true, onCell: () => ({ className: styles.tableCell }), render: (text: string, record: any) => <>{moment(text, record.format || "YYYY-MM-DD HH:mm:ss")}</> })
+            return ({ ...data, ellipsis: true, onCell: () => ({ className: styles.tableCell }), render: (text: string, record: any) => <>{text ? moment(text).format(record.format || "YYYY-MM-DD HH:mm:ss") : "-"}</> })
         case "select":
             return ({ ...data, ellipsis: true, onCell: () => ({ className: styles.tableCell }), render: (text: string, record: any) => <>{record.enum ? record.enum.find((item: { value: string, label: string }) => item.value === text).label : text}</> })
         default:
