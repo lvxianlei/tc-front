@@ -5,6 +5,7 @@ import RequestUtil from '../../utils/RequestUtil';
 import styles from './AssessmentTask.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
+import useRequest from '@ahooksjs/use-request';
 
 export interface AssessmentInformationProps {}
 export interface IAssessmentInformationRouteProps extends RouteComponentProps<AssessmentInformationProps>, WithTranslation {
@@ -30,14 +31,10 @@ class AssessmentInformation extends React.Component<IAssessmentInformationRouteP
         })
     }
 
-    public componentDidMount() {
-        this.getInformation();
-    }
-
-    private async getInformation(): Promise<void> {
+    private async modalShow(): Promise<void> {
         const data = await RequestUtil.get(`/tower-market/bidInfo/${ this.props.id }`);
         this.setState({
-            
+            visible: true
         })
     }
 
@@ -47,8 +44,8 @@ class AssessmentInformation extends React.Component<IAssessmentInformationRouteP
      */
     public render(): React.ReactNode {
         return <>
-            <Button type="link" onClick={ () => this.setState({ visible: true }) }>评估信息</Button>
-            <Modal 
+            <Button type="link" onClick={ () => this.modalShow() }>评估信息</Button>
+            <Modal
                 visible={ this.state.visible } 
                 width="40%" 
                 title="评估信息" 

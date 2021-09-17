@@ -80,7 +80,7 @@ export default function AssessmentTaskDetail(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // const data = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
+        // const data = await RequestUtil.get(`/tower-market/bidInfo/${ params.id }`)
         resole(data)
     }), {})
     const detailData: any = data

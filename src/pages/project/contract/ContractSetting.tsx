@@ -348,7 +348,7 @@ class ManagementContractSetting extends ContractSetting {
                     contract?.countryCode === 1
                   }
                 >
-                  {this.state.regionInfoData?.map((opt) => {
+                  {this.state.regionInfoData?.map((opt: any) => {
                     return (
                       <Select.Option key={opt.code} value={opt.code}>
                         {opt.name}
