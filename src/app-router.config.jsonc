@@ -582,6 +582,34 @@
       "module": "./pages/AssessmentTask/AssessmentTaskDetail",
       "exact": true,
       "authority": "approvalm"
+    },
+    { // 工作管理-提料列表
+      "name": "提料列表",
+      "path": "/workMngt/pickList",
+      "module": "./pages/workMngt/pickList/pickList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-提料-提料信息
+      "name": "提料信息",
+      "path": "/workMngt/pickList/pickMessage/:id",
+      "module": "./pages/workMngt/pickList/PickMessage",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-提料-杆塔信息
+      "name": "杆塔信息",
+      "path": "/workMngt/pickList/pickTowerMessage/:id",
+      "module": "./pages/workMngt/pickList/PickTowerMessage",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-提料-杆塔配段
+      "name": "杆塔配段",
+      "path": "/workMngt/pickList/pickTower/:id",
+      "module": "./pages/workMngt/pickList/PickTower",
+      "exact": true,
+      "authority": "approvalm"
     }
   ]
 }
