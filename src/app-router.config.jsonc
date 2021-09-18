@@ -616,6 +616,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 工作管理-提料-杆塔配段-杆塔信息
+      "name": "杆塔配段",
+      "path": "/workMngt/pickList/pickTower/pickTowerDetail/:id",
+      "module": "./pages/workMngt/pickList/PickTowerDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 工作管理-评估列表
       "name": "评估列表",
       "path": "/workMngt/evaluationList",
