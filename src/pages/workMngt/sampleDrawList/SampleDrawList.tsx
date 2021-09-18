@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, Modal, Form } from 'antd';
+import { Space, Input, DatePicker, Button, Form } from 'antd';
 import { Link } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
 
-export default function Information(): React.ReactNode {
+export default function SampleDrawList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
     const handleModalOk = async () => {

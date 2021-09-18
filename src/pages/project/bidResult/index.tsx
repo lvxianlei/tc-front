@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useEffect,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -18,6 +19,8 @@ import {
 import { TabTypes } from "../ManagementDetail";
 import { bidInfoColumns } from "../managementDetailData.json";
 import * as XLSX from "xlsx";
+import { useForm } from "antd/es/form/Form";
+import { EditTableProps } from "../../common/EditTable";
 
 export function readWorkbookFromLocalFile(
   file: Blob,
@@ -133,26 +136,45 @@ interface TabsCanEditData {
   item?: any;
 }
 
-// content: item.content || (
-//   <>
-//     <Row>
-//       <Button>新增一行</Button>
-//       <UploadXLS />
-//     </Row>
-//     <CommonTable columns={bidInfoColumns} />
-//   </>
-// ),
+export const EditTableHasForm = forwardRef(
+  (props: EditTableProps, ref?: any) => {
+    const [form] = useForm();
+
+    useImperativeHandle(
+      ref,
+      () => {
+        return {
+          getForm() {
+            return form;
+          },
+        };
+      },
+      [form]
+    );
+
+    return <EditTable form={form} {...props} />;
+  }
+);
 
 interface TabsCanEditProps {
-  data?: BidProps[];
-  eachContent?: (item?: any) => React.ReactNode;
-  canEdit?: boolean;
+  data?: BidProps[]; // 务必要有不同的key值
+  eachContent?: (
+    item: any,
+    tempRef?: {
+      ref: Record<string, any>;
+      key: string;
+    }
+  ) => React.ReactNode;
+  canEdit?: boolean; // 是否可编辑，可编辑时没有X
   newItemTitle?: (newkey: string, paneslen: number) => string;
+  hasRefFun?: boolean; // 是否获取到content内部的ref方法，会在 getData 方法返回 refFun 字段
 }
 
 export const TabsCanEdit = forwardRef((props: TabsCanEditProps, ref?: any) => {
-  const { data, eachContent, canEdit, newItemTitle } = props;
+  const { data, eachContent, canEdit, newItemTitle, hasRefFun } = props;
   const [panes, setpanes] = useState<undefined | TabsCanEditData[]>();
+
+  const contentRefs = useRef<Record<string, any>>({});
 
   useEffect(() => {
     setpanes(
@@ -162,12 +184,22 @@ export const TabsCanEdit = forwardRef((props: TabsCanEditProps, ref?: any) => {
           title,
           key,
           closable: canEdit ? closable : false,
-          content: eachContent && eachContent(item),
+          content:
+            eachContent &&
+            eachContent(
+              item,
+              hasRefFun
+                ? {
+                    ref: contentRefs.current,
+                    key,
+                  }
+                : undefined
+            ),
           item,
         };
       })
     );
-  }, [canEdit, data, eachContent]);
+  }, [canEdit, data, eachContent, hasRefFun]);
 
   const [activeKey, setactiveKey] = useState(undefined as undefined | string);
   const tabChange = useCallback((activeKey: string) => {
@@ -190,7 +222,17 @@ export const TabsCanEdit = forwardRef((props: TabsCanEditProps, ref?: any) => {
       const newPanes: TabsCanEditData = {
         ...newItem,
         item: newItem,
-        content: eachContent && eachContent(newItem),
+        content:
+          eachContent &&
+          eachContent(
+            newItem,
+            hasRefFun
+              ? {
+                  ref: contentRefs.current,
+                  key: activeKey,
+                }
+              : undefined
+          ),
       };
 
       setpanes((pre) => {
@@ -203,7 +245,7 @@ export const TabsCanEdit = forwardRef((props: TabsCanEditProps, ref?: any) => {
       });
       setactiveKey(activeKey);
     },
-    [eachContent, newItemTitle, paneslen]
+    [eachContent, hasRefFun, newItemTitle, paneslen]
   );
 
   const tabEdit = (targetKey: any, action: "add" | "remove") => {
@@ -231,16 +273,33 @@ export const TabsCanEdit = forwardRef((props: TabsCanEditProps, ref?: any) => {
       }
       setpanes(newPanes);
       setactiveKey(newActiveKey);
+
+      delete contentRefs.current?.[targetKey];
     }
   };
+
+  useEffect(()=>{
+    return ()=>{
+      contentRefs.current && (contentRefs.current = {})
+    }
+  },[])
 
   useImperativeHandle(
     ref,
     () => {
       return {
         tabAdd,
-        getData() {
-          return panes?.map((item) => item.item);
+        getData(needRefFun?: boolean) {
+          const refFuncs = contentRefs.current;
+          return panes?.map((item) => {
+            if (needRefFun) {
+              return item.item;
+            }
+            return {
+              ...item.item,
+              refFun: refFuncs[item.key],
+            };
+          });
         },
       };
     },
@@ -284,15 +343,24 @@ const BidResult = () => {
 
   const tabeditable = useRef(undefined as any);
   const tabAdd = useCallback(() => {
-    tabeditable.current?.tabAdd();
+    // tabeditable.current?.tabAdd();
+    // 以下为获取tabs内部表单或者暴露的其他ref方法的方式
+    // const data = tabeditable.current?.getData();
+    // (data as any[]).forEach((item) => {
+    //   const { refFun, ...realItem } = item;
+    //   const _form = refFun?.getForm();
+    //   const fdata = _form.getFieldsValue();
+    //   console.log(fdata, realItem);
+    // });
   }, []);
 
-  const eachContent = useCallback(() => {
+  const eachContent = useCallback((item: any, tempRef?: any) => {
     return (
-      <EditTable
+      <EditTableHasForm
         columns={bidInfoColumns}
         dataSource={[]}
         opration={[<UploadXLS />]}
+        // ref={tempRef ? (o) => (tempRef.ref[tempRef.key] = o) : undefined}
       />
     );
   }, []);
@@ -339,12 +407,17 @@ const BidResult = () => {
       <DetailTitle
         title="开标信息"
         operation={[
-          <Button key="bidResult" onClick={tabAdd} type="primary">
+          <Button key="bidResult" onClick={tabAdd} type="primary" disabled>
             新增一轮报价
           </Button>,
         ]}
       />
-      <TabsCanEdit ref={tabeditable} data={data} eachContent={eachContent} />
+      <TabsCanEdit
+        ref={tabeditable}
+        data={data}
+        eachContent={eachContent}
+        // hasRefFun={true}
+      />
     </DetailContent>
   );
 };

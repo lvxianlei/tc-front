@@ -1,12 +1,12 @@
 import React from 'react'
-import { Button, Row, Col, Tabs, Radio, Spin, Space } from 'antd';
+import { Button, Spin, Space } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
 import { baseInfoData } from './confirm.json';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 
-export default function ManagementDetail(): React.ReactNode {
+export default function ConfirmMessage(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {

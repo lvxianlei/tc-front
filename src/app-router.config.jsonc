@@ -713,6 +713,41 @@
       "module": "./pages/questionMngt/SampleDrawDetail",
       "exact": true,
       "authority": "approvalm"
+    },
+    { // 放样塔型
+      "name": "放样塔型列表",
+      "path": "/setOutTower/setOutTowerMngt",
+      "module": "./pages/setOutTower/SetOutTowerMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 放样塔型-塔型详情
+      "name": "塔型详情",
+      "path": "/setOutTower/setOutTowerMngt/towerDetail/:id",
+      "module": "./pages/setOutTower/TowerDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 放样塔型-塔型构件
+      "name": "塔型构件",
+      "path": "/setOutTower/setOutTowerMngt/towerMember/:id",
+      "module": "./pages/setOutTower/TowerMemberList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 放样塔型-组焊清单
+      "name": "组焊清单",
+      "path": "/setOutTower/setOutTowerMngt/assemblyWeld/:id",
+      "module": "./pages/setOutTower/AssemblyWeldList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 放样塔型-螺栓清单
+      "name": "螺栓清单",
+      "path": "/setOutTower/setOutTowerMngt/bolt/:id",
+      "module": "./pages/setOutTower/BoltList",
+      "exact": true,
+      "authority": "approvalm"
     }
   ]
 }

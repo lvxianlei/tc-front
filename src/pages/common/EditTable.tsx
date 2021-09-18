@@ -29,7 +29,7 @@ interface DataType {
 
 type ColumnTypes = any[]
 
-interface EditTableProps {
+export interface EditTableProps {
     columns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string, type: FormItemTypesType })[]
     dataSource: DataType[]
     form?: FormInstance

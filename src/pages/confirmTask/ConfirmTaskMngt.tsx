@@ -5,7 +5,7 @@ import { CommonTable, DetailTitle, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import TextArea from 'antd/lib/input/TextArea';
 
-export default function Information(): React.ReactNode {
+export default function ConfirmTaskMngt(): React.ReactNode {
     const [assignVisible, setVisible] = useState<boolean>(false);
     const [detailVisible, setDetailVisible] = useState<boolean>(false);
     const [form] = Form.useForm();

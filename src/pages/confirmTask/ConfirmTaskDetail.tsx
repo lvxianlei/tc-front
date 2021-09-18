@@ -15,7 +15,7 @@ const tableColumns = [
     { title: '备注', dataIndex: 'unit', key: 'unit' }
 ]
 
-export default function ManagementDetail(): React.ReactNode {
+export default function ConfirmDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {

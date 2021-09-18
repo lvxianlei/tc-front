@@ -1,10 +1,11 @@
-import React from 'react'
-import { Space, Input, DatePicker,  Button } from 'antd'
+import React, { useState } from 'react'
+import { Space, Input, DatePicker,  Button, Modal } from 'antd'
 import { Link } from 'react-router-dom'
-import { Page } from '../common';
+import { CommonTable, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 
-export default function QuestionMngt(): React.ReactNode {
+export default function SetOutTowerMngt(): React.ReactNode {
+    const [visible, setVisible] = useState<boolean>(false);
     const columns = [
         {
             key: 'index',
@@ -15,13 +16,13 @@ export default function QuestionMngt(): React.ReactNode {
         },
         {
             key: 'projectName',
-            title: '问题单编号',
+            title: '塔型',
             width: 100,
             dataIndex: 'projectName'
         },
         {
             key: 'projectName',
-            title: '问题单状态',
+            title: '塔型钢印号',
             width: 100,
             dataIndex: 'projectName'
         },
@@ -63,38 +64,65 @@ export default function QuestionMngt(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={`/question/questionMngt/otherDetail/${record.id}`}>查看详情</Link>
-                    <Link to={`/question/questionMngt/assemblyWeldDetail/${record.id}`}>查看详情</Link>
-                    <Link to={`/question/questionMngt/sampleDrawDetail/${record.id}`}>查看详情</Link>
+                    <Link to={`/setOutTower/setOutTowerMngt/towerDetail/${record.id}`}>塔型信息</Link>
+                    <Link to={`/setOutTower/setOutTowerMngt/towerMember/${record.id}`}>塔型构件</Link>
+                    <Link to={`/setOutTower/setOutTowerMngt/assemblyWeld/${record.id}`}>组焊清单</Link>
+                    <Link to={`/setOutTower/setOutTowerMngt/bolt/${record.id}`}>螺栓清单</Link>
+                    <Button type='link' onClick={()=>{setVisible(true)}}>附件</Button>
                 </Space>
             )
         }
     ]
+    const handleModalCancel = () => setVisible(false)
     return <>
+        <Modal title='附件'  width={1200} visible={visible} onCancel={handleModalCancel} footer={false}>
+            <CommonTable columns={[
+                { 
+                    key: 'index',
+                    title: '序号', 
+                    dataIndex: 'index',
+                    width: 50, 
+                    render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+                { 
+                    key: 'name', 
+                    title: '交付物名称', 
+                    dataIndex: 'name',
+                    width: 150 
+                },
+                { 
+                    key: 'name', 
+                    title: '用途', 
+                    dataIndex: 'name',
+                    width: 230
+                },
+                { 
+                    key: 'operation', 
+                    title: '操作', 
+                    dataIndex: 'operation', 
+                    render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                        <Button type="link">下载</Button>
+                ) }
+            ]} dataSource={[]} />
+        </Modal>
         <Page
             path="/tower-market/bidInfo"
             columns={columns}
             extraOperation={<Button type="primary">导出</Button>}
             searchFormItems={[
                 {
-                    name: 'fuzzyQuery',
-                    label:'状态时间',
-                    children: <Input placeholder="请输入项目名称/项目编码/审批编号/关联合同/制单人进行查询" maxLength={200} />
-                },
-                {
                     name: 'startBidBuyEndTime',
-                    label: '问题单状态',
+                    label: '类型',
                     children: <DatePicker />
                 },
                 {
                     name: 'startReleaseDate',
-                    label: '问题单类型',
+                    label: '创建时间',
                     children: <DatePicker />
                 },
                 {
                     name: 'biddingStatus',
                     label: '模糊查询项',
-                    children: <Input placeholder="请输入问题单编号/塔型进行查询" maxLength={200} />
+                    children: <Input placeholder="请输入塔型/塔型钢印号/任务单编号/订单编号/内部合同编号进行查询" maxLength={200} />
                 },
             ]}
         />

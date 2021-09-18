@@ -1,10 +1,8 @@
-import React from 'react'
-import { Space, Button, Input } from 'antd'
-import { Link } from 'react-router-dom'
-import { Page } from '../common'
-// import { IClient } from '../IClient'
-// import RequestUtil from '../../utils/RequestUtil'
-export default function Information(): React.ReactNode {
+import React from 'react';
+import { Button, Input } from 'antd';
+import { Page } from '../common';
+
+export default function PlanSetOut(): React.ReactNode {
     const columns = [
         {
             key: 'index',

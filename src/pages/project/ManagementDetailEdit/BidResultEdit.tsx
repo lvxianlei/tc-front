@@ -4,7 +4,7 @@ import { Button, Form, Spin } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, EditTable, EditTabs } from "../../common"
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { bidInfoColumns } from '../managementDetailData.json'
-import { TabsCanEdit, UploadXLS } from "../bidResult"
+import { EditTableHasForm, TabsCanEdit, UploadXLS } from "../bidResult"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 const postBaseData = {
@@ -36,8 +36,19 @@ export default function BidResultEdit(): JSX.Element {
 
     const handleSubmit = async () => {
         const tabsData = (ref.current as any).getData()
-        const baseInfoData = await baseInfoForm.getFieldsValue()
-        console.log(tabsData)
+        const baseInfoData = await baseInfoForm.getFieldsValue();
+
+        const _tabsData = await Promise.all(
+            (tabsData as any[]).map(async (item) => {
+                const { refFun, ...realItem } = item;
+                const _form = refFun?.getForm();
+                const fdata = await _form.getFieldsValue();
+                return {realItem, formData: fdata?.submit}
+            })
+        )
+
+        console.log(_tabsData)
+
         await run({ ...postBaseData, ...baseInfoData, projectId: params.id, date: baseInfoData.date.year && baseInfoData.date.year(), id: data?.id })
     }
 
@@ -84,6 +95,7 @@ export default function BidResultEdit(): JSX.Element {
             <TabsCanEdit
                 ref={ref}
                 canEdit={true}
+                hasRefFun={true}
                 data={[
                 {
                     title: "第一轮",
@@ -94,14 +106,18 @@ export default function BidResultEdit(): JSX.Element {
                     key: "第二轮",
                 },
                 ]}
-                eachContent={(item: any) => {
-                return (
-                    <EditTable
-                        columns={bidInfoColumns}
-                        dataSource={[]}
-                        opration={[<UploadXLS />]}
-                    />
-                );
+                eachContent={(item: any, tempRef?: {
+                    ref: Record<string, any>;
+                    key: string;
+                }) => {
+                    return (
+                        <EditTableHasForm
+                            columns={bidInfoColumns}
+                            dataSource={[]}
+                            opration={[<UploadXLS />]}
+                            ref={tempRef ? (o) => (tempRef.ref[tempRef.key] = o) : undefined}
+                        />
+                    );
                 }}
             />
         </Spin>

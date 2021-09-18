@@ -14,7 +14,7 @@ const tableColumns = [
     { title: '任务状态', dataIndex: 'amount', key: 'amount' }
 ]
 
-export default function ManagementDetail(): React.ReactNode {
+export default function PickDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
