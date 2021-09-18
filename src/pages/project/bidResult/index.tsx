@@ -98,7 +98,13 @@ const xlsKeyNameDic: [string, string][] = [
   ["重量", "weight"],
 ];
 
-export const UploadXLS = (props: { children?: React.ReactNode }) => {
+export const UploadXLS = (props: {
+  children?: React.ReactNode;
+  readEnd?: (data: { [key: string]: any }[]) => void;
+  xlsKeyNameDic?: [string, string][]
+  requireKeys?: string[]
+}) => {
+  const { readEnd, xlsKeyNameDic, requireKeys  } = props;
   return (
     <Upload
       accept=".xls,.xlsx"
@@ -110,7 +116,7 @@ export const UploadXLS = (props: { children?: React.ReactNode }) => {
             new Map(xlsKeyNameDic),
             requireKeys
           );
-          console.log(xlsxList);
+          readEnd && readEnd(xlsxList);
         });
       }}
       showUploadList={false}
@@ -278,11 +284,11 @@ export const TabsCanEdit = forwardRef((props: TabsCanEditProps, ref?: any) => {
     }
   };
 
-  useEffect(()=>{
-    return ()=>{
-      contentRefs.current && (contentRefs.current = {})
-    }
-  },[])
+  useEffect(() => {
+    return () => {
+      contentRefs.current && (contentRefs.current = {});
+    };
+  }, []);
 
   useImperativeHandle(
     ref,
@@ -359,7 +365,7 @@ const BidResult = () => {
       <EditTableHasForm
         columns={bidInfoColumns}
         dataSource={[]}
-        opration={[<UploadXLS />]}
+        opration={[<UploadXLS xlsKeyNameDic={xlsKeyNameDic} requireKeys={requireKeys}/>]}
         // ref={tempRef ? (o) => (tempRef.ref[tempRef.key] = o) : undefined}
       />
     );

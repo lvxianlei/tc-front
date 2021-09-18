@@ -110,11 +110,16 @@ export default function BidResultEdit(): JSX.Element {
                     ref: Record<string, any>;
                     key: string;
                 }) => {
+                    const data:any[] = []
                     return (
                         <EditTableHasForm
                             columns={bidInfoColumns}
-                            dataSource={[]}
-                            opration={[<UploadXLS />]}
+                            dataSource={data}
+                            opration={[<UploadXLS readEnd={(_data)=>{
+                                console.log(_data)
+                                // 伪代码 不可用
+                                // setData(data.concat(_data))
+                            }}/>]}
                             ref={tempRef ? (o) => (tempRef.ref[tempRef.key] = o) : undefined}
                         />
                     );

@@ -616,6 +616,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 工作管理-提料-杆塔配段-杆塔信息
+      "name": "杆塔配段",
+      "path": "/workMngt/pickList/pickTower/pickTowerDetail/:id",
+      "module": "./pages/workMngt/pickList/PickTowerDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 工作管理-评估列表
       "name": "评估列表",
       "path": "/workMngt/evaluationList",
@@ -655,6 +662,55 @@
       "name": "放样列表",
       "path": "/workMngt/setOutList",
       "module": "./pages/workMngt/setOut/SetOutList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-放样信息
+      "name": "放样信息",
+      "path": "/workMngt/setOutList/setOutInformation/:id",
+      "module": "./pages/workMngt/setOut/SetOutInformation",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-塔型信息
+      "name": "塔型信息",
+      "path": "/workMngt/setOutList/towerInformation/:id",
+      "module": "./pages/workMngt/setOut/TowerInformation",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-塔型信息-放样
+      "name": "放样",
+      "path": "/workMngt/setOutList/towerInformation/:id/lofting/:loftId",
+      "module": "./pages/workMngt/setOut/Lofting",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-塔型信息-NC程序
+      "name": "NC程序",
+      "path": "/workMngt/setOutList/towerInformation/:id/NCProgram/:NCId",
+      "module": "./pages/workMngt/setOut/NCProgram",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-塔型信息-校核
+      "name": "校核",
+      "path": "/workMngt/setOutList/towerInformation/:id/towerCheck/:checkId",
+      "module": "./pages/workMngt/setOut/TowerCheck",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-塔型信息-塔型放样明细
+      "name": "塔型放样明细",
+      "path": "/workMngt/setOutList/towerInformation/:id/towerLoftingDetails/:checkId",
+      "module": "./pages/workMngt/setOut/TowerLoftingDetails",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-杆塔信息
+      "name": "杆塔信息",
+      "path": "/workMngt/setOutList/poleInformation/:id",
+      "module": "./pages/workMngt/setOut/PoleInformation",
       "exact": true,
       "authority": "approvalm"
     },
