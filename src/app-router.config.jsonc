@@ -632,29 +632,29 @@
     },
     { // 放样任务详情
       "name": "放样任务详情",
-      "path": "/setOutTaskDetail",
-      "module": "./pages/setOutTask/setOutTaskDetail/:id",
+      "path": "/setOutTask/setOutTaskDetail/:id",
+      "module": "./pages/setOutTask/SetOutTaskDetail",
       "exact": true,
       "authority": "approvalm"
     },
     { // 放样任务-塔型
       "name": "塔型",
-      "path": "/setOutTaskTower",
-      "module": "./pages/setOutTask/setOutTaskTower/:id",
+      "path": "/setOutTask/setOutTaskTower/:id",
+      "module": "./pages/setOutTask/SetOutTaskTower",
       "exact": true,
       "authority": "approvalm"
     },
     { // 放样任务-杆塔
       "name": "杆塔",
-      "path": "/setOutTaskPole",
-      "module": "./pages/setOutTask/setOutTaskPole/:id",
+      "path": "/setOutTask/setOutTaskPole/:id",
+      "module": "./pages/setOutTask/SetOutTaskPole",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-放样列表
       "name": "放样列表",
       "path": "/workMngt/setOutList",
-      "module": "./pages/workMngt/setOut/setOutList",
+      "module": "./pages/workMngt/setOut/SetOutList",
       "exact": true,
       "authority": "approvalm"
     },
