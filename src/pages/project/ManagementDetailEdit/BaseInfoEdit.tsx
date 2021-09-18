@@ -1,6 +1,6 @@
 import React from "react"
 import { useHistory, useParams } from "react-router-dom"
-import { Button, Form, Spin, Upload } from "antd"
+import { Button, Form, message, Spin, Upload } from "antd"
 import { DetailContent, BaseInfo, EditTable, DetailTitle, CommonTable } from '../../common'
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { baseInfoData, enclosure, paths, cargoVOListColumns } from '../managementDetailData.json'
@@ -28,6 +28,8 @@ export default function BaseInfoEdit(): JSX.Element {
     }), { manual: true })
 
     const handleSubmit = async () => {
+        await baseInfoForm.validateFields()
+        await cargoVOListForm.validateFields()
         const baseInfoData = await baseInfoForm.getFieldsValue()
         const cargoVOListData = await cargoVOListForm.getFieldsValue()
         const attachVos = await attachVosForm.getFieldsValue()
@@ -35,9 +37,16 @@ export default function BaseInfoEdit(): JSX.Element {
         delete data?.attachVos
         await run({ ...data, ...baseInfoData, attachInfoDtos: [], cargoDTOList: cargoVOListData.submit })
 
+        if (saveResult) {
+            message.success("保存成功...")
+        }
+
     }
 
-    return <DetailContent operation={[<Button key="save" type="primary" onClick={handleSubmit} loading={saveStatus}>保存</Button>, <Button key="cacel" onClick={() => history.goBack()}>取消</Button>]}>
+    return <DetailContent operation={[
+        <Button key="save" type="primary" onClick={handleSubmit} loading={saveStatus}>保存</Button>,
+        <Button key="cacel" onClick={() => history.goBack()}>取消</Button>
+    ]}>
         <ManagementDetailTabsTitle />
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
@@ -50,7 +59,6 @@ export default function BaseInfoEdit(): JSX.Element {
                 multiple={true}
                 action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
                 headers={{
-                    'Content-Type': 'application/json',
                     'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
                     'Tenant-Id': AuthUtil.getTenantId(),
                     'Sinzetech-Auth': AuthUtil.getSinzetechAuth()

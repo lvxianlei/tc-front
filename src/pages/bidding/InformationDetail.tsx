@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Spin, Form, Button, Modal, Select, Input, Upload } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { PlusOutlined } from "@ant-design/icons"
+// import { PlusOutlined } from "@ant-design/icons"
 import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common'
 import { PopTable } from "../common/FormItemType"
 import { baseInfoData } from './biddingHeadData.json'
@@ -65,7 +65,7 @@ export default function InformationDetail(): React.ReactNode {
                         <Select.Option value="2">否</Select.Option>
                     </Select>
                 </Form.Item>
-                {isBid !== "2" ? <Form.Item name="projectLeader" label="设置项目负责人">
+                {isBid !== "2" ? <Form.Item name="projectLeader" label="设置项目负责人" getValueFromEvent={value => value.id}>
                     <PopTable data={{
                         type: "PopTable",
                         title: "选择项目负责人",
@@ -100,8 +100,10 @@ export default function InformationDetail(): React.ReactNode {
         <DetailContent
             title={[
                 <Button key="setting" type="primary" onClick={() => history.push(`/bidding/information/edit/${params.id}`)}>编辑</Button>,
-                <Button key="delete" type="default">删除</Button>,
-                <Button key="bidding" onClick={() => setVisible(true)}>是否应标</Button>,
+                <Button key="delete" type="default" onClick={()=>Modal.confirm({
+                    title:"确定删除本条消息吗"
+                })}>删除</Button>,
+                <Button key="bidding" onClick={() => setVisible(true)} disabled={detailData.biddingStatus === 0}>是否应标</Button>,
                 <Button key="new" onClick={() => history.goBack()}>返回</Button>
             ]}>
             <DetailTitle title="基本信息" />
@@ -115,7 +117,6 @@ export default function InformationDetail(): React.ReactNode {
                     multiple={true}
                     action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
                     headers={{
-                        'Content-Type': 'application/json',
                         'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
                         'Tenant-Id': AuthUtil.getTenantId(),
                         'Sinzetech-Auth': AuthUtil.getSinzetechAuth()

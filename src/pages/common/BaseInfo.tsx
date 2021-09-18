@@ -43,7 +43,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4 }: B
             <Row gutter={[0, 10]}>
                 {columns.map((item: any, index: number) => <Col key={`form_item_${index}`} span={24 / col}>
                     <Col span={24}>
-                        <Form.Item name={item.dataIndex} label={item.title} rules={item.rules}>
+                        <Form.Item name={item.dataIndex} label={item.title} rules={item.rules || []}>
                             <FormItemType type={item.type} data={item} />
                         </Form.Item>
                     </Col>

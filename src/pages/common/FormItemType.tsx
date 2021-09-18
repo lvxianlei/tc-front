@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Input, InputNumber, Select, DatePicker, Modal, Form, Row, Col } from 'antd'
 import CommonTable from "./CommonTable"
 import { PlusOutlined } from "@ant-design/icons"
@@ -31,6 +31,8 @@ export interface PopTableData {
     path: string
     columns: { title: string, dataIndex: string, type?: string }[]
     search?: boolean
+    selectType?: "checkbox" | "radio"
+    value?: string
     [key: string]: any
 }
 
@@ -45,14 +47,17 @@ interface PopTableProps {
     data: PopTableData
 }
 
-const PopTableContent: React.FC<{ data: PopTableData }> = ({ data }) => {
+const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: any) => void }> = ({ data, onChange }) => {
     const [select, setSelect] = useState<any[]>([])
     const searchs = data.columns.filter((item: any) => item.search)
     const { loading, data: popTableData, run } = useRequest<any>((params: {}) => new Promise(async (resolve, reject) => {
         resolve(await RequestUtil.get<{ data: any }>(data.path, params))
         console.log(popTableData)
     }))
-    const onSelectChange = (selectedRowKeys: any[]) => setSelect(selectedRowKeys)
+    const onSelectChange = (selectedRowKeys: string[], selectRows: any[]) => {
+        onChange && onChange(selectRows)
+        setSelect(selectedRowKeys)
+    }
     return <>
         <Form>
             <Row gutter={6}>
@@ -66,7 +71,8 @@ const PopTableContent: React.FC<{ data: PopTableData }> = ({ data }) => {
         <CommonTable
             columns={data.columns}
             rowSelection={{
-                select,
+                selectedRowKeys: select,
+                type: data.selectType || "radio",
                 onChange: onSelectChange,
             }}
             dataSource={popTableData?.records}
@@ -76,11 +82,20 @@ const PopTableContent: React.FC<{ data: PopTableData }> = ({ data }) => {
 
 export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
     const [visible, setVisible] = useState<boolean>(false)
+    const [value, setValue] = useState({ value: (props as any).value, id: "" })
+
+    const handleChange = (event: any) => setValue({ id: event[0].id, value: event[0][data.value || "name" || "id"] })
+
+    const handleOk = () => {
+        (props as any).onChange(value.id || value.value)
+        setVisible(false)
+    }
+
     return <>
-        <Modal width={data.width || 520} title={`选择${data.title}`} destroyOnClose visible={visible} onCancel={() => setVisible(false)}>
-            <PopTableContent data={data} />
+        <Modal width={data.width || 520} title={`选择${data.title}`} destroyOnClose visible={visible} onOk={handleOk} onCancel={() => setVisible(false)}>
+            <PopTableContent data={data} onChange={handleChange} />
         </Modal>
-        <Input {...props} addonAfter={<PlusOutlined onClick={() => setVisible(true)} />} />
+        <Input {...props} value={value.value || (props as any).value} addonAfter={<PlusOutlined onClick={() => setVisible(true)} />} />
     </>
 }
 interface SelfSelectProps {
@@ -99,7 +114,8 @@ const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, ...props }
         select: <SelfSelect {...props} data={data as SelectData} />,
         date: <DatePicker
             {...data.picker ? { ...props, picker: data.picker } : { ...props }}
-            value={props.value ? moment(props.value, data.format || "YYYY-MM-DD HH:mm:ss") : null}
+            onChange={(value) => props.onChange(value?.format(data.format || "YYYY-MM-DD HH:mm:ss"))}
+            value={props.value ? moment(props.value) : null}
             format={data.format || "YYYY-MM-DD HH:mm:ss"} />,
         textarea: <Input.TextArea {...props} />,
         popForm: <Input {...props} />,
