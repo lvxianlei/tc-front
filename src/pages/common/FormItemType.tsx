@@ -31,6 +31,7 @@ export interface PopTableData {
     path: string
     columns: { title: string, dataIndex: string, type?: string }[]
     search?: boolean
+    dependencies?: boolean
     selectType?: "checkbox" | "radio"
     value?: string
     [key: string]: any
@@ -82,12 +83,14 @@ const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: any) =>
 
 export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
     const [visible, setVisible] = useState<boolean>(false)
-    const [value, setValue] = useState({ value: (props as any).value, id: "" })
+    const [value, setValue] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: {} })
 
-    const handleChange = (event: any) => setValue({ id: event[0].id, value: event[0][data.value || "name" || "id"] })
+    const handleChange = (event: any) => setValue({ id: event[0].id, value: event[0][data.value || "name" || "id"], records: event })
 
     const handleOk = () => {
-        (props as any).onChange(value.id || value.value)
+        const depFalseValue = value.id || value.value
+        const changeValue = data.dependencies ? value : depFalseValue;
+        (props as any).onChange(changeValue)
         setVisible(false)
     }
 

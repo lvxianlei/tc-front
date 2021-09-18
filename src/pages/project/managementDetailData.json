@@ -590,6 +590,8 @@
             "type": "popTable",
             "path": "/tower-market/saleOrder",
             "width": 1011,
+            "value": "saleOrderNumber",
+            "dependencies": true,
             "columns": [
                 {
                     "title": "订单编号",
@@ -641,7 +643,7 @@
     ],
     "materialListColumns": [
         {
-            "title": "*物资名称",
+            "title": "物资名称",
             "dataIndex": "cargoName",
             "width": 100
         },
@@ -651,17 +653,17 @@
             "width": 100
         },
         {
-            "title": "*计量单位",
+            "title": "计量单位",
             "dataIndex": "metering",
             "width": 100
         },
         {
-            "title": "*数量",
+            "title": "数量",
             "dataIndex": "number",
             "width": 100
         },
         {
-            "title": "*单价(含税)(元)",
+            "title": "单价(含税)(元)",
             "dataIndex": "moneyTax",
             "width": 150
         },
@@ -671,7 +673,7 @@
             "width": 150
         },
         {
-            "title": "*合同总价(含税)(元)",
+            "title": "合同总价(含税)(元)",
             "dataIndex": "contractMoneyTax",
             "width": 150
         },
@@ -681,7 +683,7 @@
             "width": 150
         },
         {
-            "title": "*增值税率(%)",
+            "title": "增值税率(%)",
             "dataIndex": "tax",
             "width": 150
         },

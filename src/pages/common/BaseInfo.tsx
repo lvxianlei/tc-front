@@ -24,6 +24,7 @@ interface BaseInfoProps {
     edit?: boolean
     col?: number
     form?: FormInstance<any>
+    onChange?: (changedFields: any, allFields: any, dataSource: { [key: string]: any }) => void
 }
 
 function formatDataType(dataItem: any, dataSource: any): string {
@@ -37,9 +38,16 @@ function formatDataType(dataItem: any, dataSource: any): string {
     return types[dataItem.type || "string"]
 }
 
-export default function BaseInfo({ dataSource, columns, form, edit, col = 4 }: BaseInfoProps): JSX.Element {
+export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onChange = () => { } }: BaseInfoProps): JSX.Element {
     if (edit) {
-        return <Form form={form} initialValues={dataSource} labelAlign="right" layout="inline" labelCol={{ style: { width: '80px', whiteSpace: "break-spaces" } }}>
+        return <Form
+            onValuesChange={(changedFields, allFields) => onChange(changedFields, allFields, dataSource)}
+            form={form}
+            initialValues={dataSource}
+            labelAlign="right"
+            layout="inline"
+            labelCol={{ style: { width: '80px', whiteSpace: "break-spaces" } }}
+        >
             <Row gutter={[0, 10]}>
                 {columns.map((item: any, index: number) => <Col key={`form_item_${index}`} span={24 / col}>
                     <Col span={24}>
