@@ -1,12 +1,28 @@
-import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState, } from "react"
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { Button, Row, Col, Tabs, Upload } from "antd";
 import { useHistory, useParams } from "react-router";
-import { DetailContent, BaseInfo, CommonTable, DetailTitle } from "../../common";
+import {
+  DetailContent,
+  BaseInfo,
+  CommonTable,
+  DetailTitle,
+  EditTable,
+} from "../../common";
 import { TabTypes } from "../ManagementDetail";
 import { bidInfoColumns } from "../managementDetailData.json";
 import * as XLSX from "xlsx";
 
-export function readWorkbookFromLocalFile(file: Blob, callback?: (workbook: XLSX.WorkBook) => any) {
+export function readWorkbookFromLocalFile(
+  file: Blob,
+  callback?: (workbook: XLSX.WorkBook) => any
+) {
   var reader = new FileReader();
   reader.onload = function (e) {
     const data = e.target?.result;
@@ -62,7 +78,14 @@ function formatWorkbook(
   return res;
 }
 
-const requireKeys = ["bidName", "bidCode", "cargoType", "projectCompany", "money", "weight"]
+const requireKeys = [
+  "bidName",
+  "bidCode",
+  "cargoType",
+  "projectCompany",
+  "money",
+  "weight",
+];
 const xlsKeyNameDic: [string, string][] = [
   ["投标人名称", "bidName"],
   ["分标编号", "bidCode"],
@@ -72,7 +95,7 @@ const xlsKeyNameDic: [string, string][] = [
   ["重量", "weight"],
 ];
 
-const UploadXLS = (props: { children?: React.ReactNode }) => {
+export const UploadXLS = (props: { children?: React.ReactNode }) => {
   return (
     <Upload
       accept=".xls,.xlsx"
@@ -97,67 +120,91 @@ const UploadXLS = (props: { children?: React.ReactNode }) => {
 
 interface BidProps {
   title: string;
-  content: any;
   key: string;
   closable?: boolean;
+  [key: string]: any;
 }
 
-export const TabsCanEdit = forwardRef((props: { data?: BidProps[] }, ref?: any) => {
-  const { data } = props;
-  const [panes, setpanes] = useState<undefined | BidProps[]>();
+interface TabsCanEditData {
+  title: string;
+  key: string;
+  closable?: boolean;
+  content?: React.ReactNode;
+  item?: any;
+}
+
+// content: item.content || (
+//   <>
+//     <Row>
+//       <Button>新增一行</Button>
+//       <UploadXLS />
+//     </Row>
+//     <CommonTable columns={bidInfoColumns} />
+//   </>
+// ),
+
+interface TabsCanEditProps {
+  data?: BidProps[];
+  eachContent?: (item?: any) => React.ReactNode;
+  canEdit?: boolean;
+  newItemTitle?: (newkey: string, paneslen: number) => string;
+}
+
+export const TabsCanEdit = forwardRef((props: TabsCanEditProps, ref?: any) => {
+  const { data, eachContent, canEdit, newItemTitle } = props;
+  const [panes, setpanes] = useState<undefined | TabsCanEditData[]>();
 
   useEffect(() => {
     setpanes(
       data?.map((item) => {
-        return Object.assign(
-          { ...item },
-          {
-            content: item.content || (
-              <>
-                <Row>
-                  <Button>新增一行</Button>
-                  <UploadXLS />
-                </Row>
-                <CommonTable columns={bidInfoColumns} />
-              </>
-            ),
-          }
-        );
+        const { title, key, closable } = item;
+        return {
+          title,
+          key,
+          closable: canEdit ? closable : false,
+          content: eachContent && eachContent(item),
+          item,
+        };
       })
     );
-  }, [data]);
+  }, [canEdit, data, eachContent]);
+
   const [activeKey, setactiveKey] = useState(undefined as undefined | string);
   const tabChange = useCallback((activeKey: string) => {
     setactiveKey(activeKey);
   }, []);
 
   const paneslen = panes?.length || 0;
-  const tabAdd = useCallback(() => {
-    const activeKey = `第${paneslen + 1}轮`;
-    const newItem: BidProps = {
-      title: activeKey,
-      content: (
-        <>
-          <Row>
-            <Button>新增一行</Button>
-            <UploadXLS />
-          </Row>
-          <CommonTable columns={bidInfoColumns} />
-        </>
-      ),
-      key: activeKey,
-      closable: true,
-    };
-    setpanes((pre) => {
-      if (!pre) {
-        return [newItem];
-      }
-      const cpdata = pre.slice(0);
-      cpdata.unshift(newItem);
-      return cpdata;
-    });
-    setactiveKey(activeKey);
-  }, [paneslen]);
+  const tabAdd = useCallback(
+    (_activeKey?: string) => {
+      const activeKey = _activeKey || `第${paneslen + 1}轮`;
+      const title = newItemTitle
+        ? newItemTitle(activeKey, paneslen)
+        : activeKey;
+      const newItem: BidProps = {
+        title,
+        key: activeKey,
+        closable: true,
+      };
+
+      const newPanes: TabsCanEditData = {
+        ...newItem,
+        item: newItem,
+        content: eachContent && eachContent(newItem),
+      };
+
+      setpanes((pre) => {
+        if (!pre) {
+          return [newPanes];
+        }
+        const cpdata = pre.slice(0);
+        cpdata.unshift(newPanes);
+        return cpdata;
+      });
+      setactiveKey(activeKey);
+    },
+    [eachContent, newItemTitle, paneslen]
+  );
 
   const tabEdit = (targetKey: any, action: "add" | "remove") => {
     if (action === "add") {
@@ -192,17 +239,17 @@ export const TabsCanEdit = forwardRef((props: { data?: BidProps[] }, ref?: any) 
     () => {
       return {
         tabAdd,
-        getData(){
-          return panes
-        }
+        getData() {
+          return panes?.map((item) => item.item);
+        },
       };
     },
-    [tabAdd,panes]
+    [tabAdd, panes]
   );
 
   return (
     <Tabs
-      type="editable-card"
+      type={canEdit ? "editable-card" : "card"}
       style={{ marginTop: "10px" }}
       onChange={tabChange}
       activeKey={activeKey}
@@ -225,14 +272,13 @@ const BidResult = () => {
   const [data, setdata] = useState([
     {
       title: "第一轮",
-      content: "",
       key: "第一轮",
+      closable: true,
     },
     {
       title: "第二轮",
-      content: "",
-
       key: "第二轮",
+      closable: true,
     },
   ] as undefined | BidProps[]);
 
@@ -241,19 +287,41 @@ const BidResult = () => {
     tabeditable.current?.tabAdd();
   }, []);
 
+  const eachContent = useCallback(() => {
+    return (
+      <EditTable
+        columns={bidInfoColumns}
+        dataSource={[]}
+        opration={[<UploadXLS />]}
+      />
+    );
+  }, []);
+
   return (
     <DetailContent
       operation={[
-        <Button key="edit" style={{ marginRight: "10px" }} type="primary" onClick={() => history.push(`/project/management/detail/edit/bidResult/${params.id}`)}>
+        <Button
+          key="edit"
+          style={{ marginRight: "10px" }}
+          type="primary"
+          onClick={() =>
+            history.push(
+              `/project/management/detail/edit/bidResult/${params.id}`
+            )
+          }
+        >
           编辑
         </Button>,
-        <Button key="goback" onClick={() => history.goBack()}>返回</Button>
+        <Button key="goback" onClick={() => history.goBack()}>
+          返回
+        </Button>,
       ]}
     >
       <DetailTitle title="基础信息" />
       <BaseInfo
         columns={[
-          { title: "年份", dataIndex: "date" }, { title: "批次", dataIndex: "batch" },
+          { title: "年份", dataIndex: "date" },
+          { title: "批次", dataIndex: "batch" },
           { title: "备注", dataIndex: "description" },
           {
             title: "是否中标",
@@ -262,17 +330,23 @@ const BidResult = () => {
             enum: [
               { value: -1, label: "未公布" },
               { value: 0, label: "否" },
-              { value: 1, label: "是" }
-            ]
-          }
+              { value: 1, label: "是" },
+            ],
+          },
         ]}
         dataSource={{}}
       />
-      <DetailTitle title="开标信息" operation={[<Button key="bidResult" onClick={tabAdd} type="primary">新增一轮报价</Button>]} />
-      <TabsCanEdit ref={tabeditable} data={data} />
+      <DetailTitle
+        title="开标信息"
+        operation={[
+          <Button key="bidResult" onClick={tabAdd} type="primary">
+            新增一轮报价
+          </Button>,
+        ]}
+      />
+      <TabsCanEdit ref={tabeditable} data={data} eachContent={eachContent} />
     </DetailContent>
   );
 };
 
 export default BidResult;
-

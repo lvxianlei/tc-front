@@ -4,7 +4,7 @@ import { Button, Form, Spin } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, EditTable, EditTabs } from "../../common"
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { bidInfoColumns } from '../managementDetailData.json'
-import { TabsCanEdit } from "../bidResult"
+import { TabsCanEdit, UploadXLS } from "../bidResult"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 const postBaseData = {
@@ -81,23 +81,29 @@ export default function BidResultEdit(): JSX.Element {
                     ]
                 }]} dataSource={data || {}} />
             <DetailTitle title="开标信息" operation={[<Button key="new" type="primary" onClick={() => (ref.current as any)?.tabAdd()}>新增一轮报价</Button>]} />
-            {/* <TabsCanEdit ref={ref} data={[
+            <TabsCanEdit
+                ref={ref}
+                canEdit={true}
+                data={[
                 {
                     title: "第一轮",
-                    content: <EditTable columns={bidInfoColumns} dataSource={[]} opration={[<Button key="submit" type="default" style={{ marginLeft: "16px" }}>导入文件</Button>]} />,
                     key: "第一轮",
                 },
                 {
                     title: "第二轮",
-                    content: "",
-
                     key: "第二轮",
                 },
-            ]} /> */}
-            <EditTabs>
-                <EditTable columns={bidInfoColumns} dataSource={[]} opration={[<Button key="submit" type="default" style={{ marginLeft: "16px" }}>导入文件</Button>]} />
-                <EditTable columns={bidInfoColumns} dataSource={[]} opration={[<Button key="submit" type="default" style={{ marginLeft: "16px" }}>导入文件</Button>]} />
-            </EditTabs>
+                ]}
+                eachContent={(item: any) => {
+                return (
+                    <EditTable
+                        columns={bidInfoColumns}
+                        dataSource={[]}
+                        opration={[<UploadXLS />]}
+                    />
+                );
+                }}
+            />
         </Spin>
     </DetailContent>)
 }

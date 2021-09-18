@@ -1,8 +1,6 @@
 import React, { useMemo, useRef } from "react";
-import { Button, Row, Radio, Space } from "antd";
-import { Link, useHistory, useParams } from "react-router-dom";
-import { DetailContent, CommonTable } from "../../common";
-import { productGroupColumns } from "../managementDetailData.json";
+import { Space } from "antd";
+import { Link, useParams } from "react-router-dom";
 import { DataTableForSinzetec } from "../../../components/DataTableForSinzetec";
 import { ColumnsType } from "antd/lib/table";
 import AuthorityComponent from "../../../components/AuthorityComponent";
@@ -23,7 +21,7 @@ interface ProductGroupItem {
   status?: string;
 }
 
-const ProductGroupList = () => {
+export const ProductGroupList = () => {
   const params = useParams<any>();
   const datatable = useRef<any>();
 
@@ -109,40 +107,3 @@ const ProductGroupList = () => {
     />
   );
 };
-
-const ProductGroup = () => {
-  const history = useHistory();
-  const params = useParams<any>();
-
-  return (
-    <DetailContent
-      title={[
-        <Button
-          key="new"
-          type="primary"
-          onClick={() =>
-            history.push(
-              `/project/management/detail/edit/productGroup/${params.id}`
-            )
-          }
-        >
-          新增
-        </Button>,
-      ]}
-    >
-      <ProductGroupList />
-      <Row>
-        <Radio.Group
-          options={[
-            { label: "明细", value: "Apple" },
-            { label: "统计", value: "Pear" },
-          ]}
-          optionType="button"
-        />
-      </Row>
-      <CommonTable columns={productGroupColumns} />
-    </DetailContent>
-  );
-};
-
-export default ProductGroup;
