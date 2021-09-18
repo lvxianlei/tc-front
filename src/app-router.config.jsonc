@@ -632,29 +632,29 @@
     },
     { // 放样任务详情
       "name": "放样任务详情",
-      "path": "/setOutTaskDetail",
-      "module": "./pages/setOutTask/setOutTaskDetail/:id",
+      "path": "/setOutTask/setOutTaskDetail/:id",
+      "module": "./pages/setOutTask/SetOutTaskDetail",
       "exact": true,
       "authority": "approvalm"
     },
     { // 放样任务-塔型
       "name": "塔型",
-      "path": "/setOutTaskTower",
-      "module": "./pages/setOutTask/setOutTaskTower/:id",
+      "path": "/setOutTask/setOutTaskTower/:id",
+      "module": "./pages/setOutTask/SetOutTaskTower",
       "exact": true,
       "authority": "approvalm"
     },
     { // 放样任务-杆塔
       "name": "杆塔",
-      "path": "/setOutTaskPole",
-      "module": "./pages/setOutTask/setOutTaskPole/:id",
+      "path": "/setOutTask/setOutTaskPole/:id",
+      "module": "./pages/setOutTask/SetOutTaskPole",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-放样列表
       "name": "放样列表",
       "path": "/workMngt/setOutList",
-      "module": "./pages/workMngt/setOut/setOutList",
+      "module": "./pages/workMngt/setOut/SetOutList",
       "exact": true,
       "authority": "approvalm"
     },
@@ -683,6 +683,34 @@
       "name": "小样图校核",
       "path": "/workMngt/sampleDrawList/sampleDrawCheck/:id",
       "module": "./pages/workMngt/sampleDrawList/SampleDrawCheck",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 问题单
+      "name": "问题单列表",
+      "path": "/question/questionMngt",
+      "module": "./pages/questionMngt/QuestionMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 问题单-提料/放样/螺栓
+      "name": "问题单详情",
+      "path": "/question/questionMngt/otherDetail/:id",
+      "module": "./pages/questionMngt/OtherDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 问题单-组焊
+      "name": "问题单详情",
+      "path": "/question/questionMngt/assemblyWeldDetail/:id",
+      "module": "./pages/questionMngt/AssemblyWeldDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 问题单-小样图详情
+      "name": "问题单详情",
+      "path": "/question/questionMngt/sampleDrawDetail/:id",
+      "module": "./pages/questionMngt/SampleDrawDetail",
       "exact": true,
       "authority": "approvalm"
     }

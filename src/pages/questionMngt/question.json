@@ -1,0 +1,20 @@
+{
+    "baseInfoData": [
+        {
+            "dataIndex": "projectName",
+            "title": "问题字段"
+        },
+        {
+            "dataIndex": "projectNumber",
+            "title": "原字段信息"
+        },
+        {
+            "dataIndex": "description",
+            "title": "备注"
+        },
+        {
+            "dataIndex": "message",
+            "title": "校对后信息"
+        }
+    ]
+}

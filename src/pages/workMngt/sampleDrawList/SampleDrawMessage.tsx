@@ -28,9 +28,9 @@ export default function ManagementDetail(): React.ReactNode {
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
                 <DetailTitle title="特殊要求" />
-                <BaseInfo columns={specialInfoData} dataSource={detailData || {}} />
+                <BaseInfo columns={specialInfoData} dataSource={detailData || {}} col={2}/>
                 <DetailTitle title="产品信息" />
-                <BaseInfo columns={productInfoData} dataSource={detailData || {}} />
+                <BaseInfo columns={productInfoData} dataSource={detailData || {}} col={2}/>
                 <DetailTitle title="相关附件"/>
                 <CommonTable columns={[
                     {
