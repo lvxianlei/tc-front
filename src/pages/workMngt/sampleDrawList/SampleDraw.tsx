@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, Modal, Form, Image } from 'antd';
+import { Space, Input, DatePicker, Button, Modal, Form, Image } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
 import { useHistory } from 'react-router-dom';
 
-export default function Information(): React.ReactNode {
+export default function SampleDraw(): React.ReactNode {
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();

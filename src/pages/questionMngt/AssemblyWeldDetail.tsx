@@ -1,8 +1,7 @@
 import React from 'react'
 import { Button, Spin, Space } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common';
-import { baseInfoData } from './question.json';
+import { DetailContent, CommonTable, DetailTitle } from '../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
@@ -26,7 +25,7 @@ const towerColumns = [
     { title: '电焊长度（mm）', dataIndex: 'unit', key: 'unit' }
 ]
 
-export default function ManagementDetail(): React.ReactNode {
+export default function AssemblyWeldDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {

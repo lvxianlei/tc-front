@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Row, Col, Tabs, Radio, Spin, Space, Modal, Form } from 'antd';
+import { Button, Spin, Space, Modal, Form } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
 import { baseInfoData } from './confirm.json';
@@ -62,7 +62,7 @@ const tableColumns = [
     }
 ];
 
-export default function ManagementDetail(): React.ReactNode {
+export default function ConfirmDetail(): React.ReactNode {
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();

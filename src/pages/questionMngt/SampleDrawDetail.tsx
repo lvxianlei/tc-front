@@ -1,8 +1,7 @@
 import React from 'react'
 import { Button, Spin, Image, Descriptions } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common';
-import { baseInfoData } from './question.json';
+import { DetailContent, CommonTable, DetailTitle } from '../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
 
@@ -15,7 +14,7 @@ const tableColumns = [
     { title: '备注', dataIndex: 'unit', key: 'unit' }
 ]
 
-export default function ManagementDetail(): React.ReactNode {
+export default function SampleDrawDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {

@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Select, Button, Modal, Form } from 'antd'
+import { Space, Input, DatePicker, Button, Form } from 'antd'
 import { Link } from 'react-router-dom'
 import { Page } from '../../common'
 
-export default function Information(): React.ReactNode {
+export default function ScheduleList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
     const handleModalOk = async () => {
