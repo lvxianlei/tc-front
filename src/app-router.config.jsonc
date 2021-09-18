@@ -667,7 +667,7 @@
     },
     { // 工作管理-塔型信息
       "name": "塔型信息",
-      "path": "/workMngt/setOutList/towerIformation/:id",
+      "path": "/workMngt/setOutList/towerInformation/:id",
       "module": "./pages/workMngt/setOut/TowerInformation",
       "exact": true,
       "authority": "approvalm"
@@ -702,8 +702,8 @@
     },
     { // 工作管理-杆塔信息
       "name": "杆塔信息",
-      "path": "/workMngt/setOutList/poleformation/:id",
-      "module": "./pages/workMngt/setOut/Poleformation",
+      "path": "/workMngt/setOutList/poleInformation/:id",
+      "module": "./pages/workMngt/setOut/PoleInformation",
       "exact": true,
       "authority": "approvalm"
     },
