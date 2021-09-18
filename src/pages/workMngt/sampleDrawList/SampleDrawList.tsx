@@ -126,7 +126,7 @@ export default function Information(): React.ReactNode {
                 {
                     name: 'biddingStatus',
                     label: '模糊查询项',
-                    children: <Input placeholder="请输入放样任务编号/任务单编号、订单编号/内部合同编号进行查询" maxLength={200} />
+                    children: <Input placeholder="请输入放样任务编号/任务单编号/订单编号/内部合同编号进行查询" maxLength={200} />
                 },
             ]}
         />

@@ -685,6 +685,34 @@
       "module": "./pages/workMngt/sampleDrawList/SampleDrawCheck",
       "exact": true,
       "authority": "approvalm"
+    },
+    { // 问题单
+      "name": "问题单列表",
+      "path": "/question/questionMngt",
+      "module": "./pages/questionMngt/QuestionMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 问题单-提料/放样/螺栓
+      "name": "问题单详情",
+      "path": "/question/questionMngt/otherDetail/:id",
+      "module": "./pages/questionMngt/OtherDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 问题单-组焊
+      "name": "问题单详情",
+      "path": "/question/questionMngt/assemblyWeldDetail/:id",
+      "module": "./pages/questionMngt/AssemblyWeldDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 问题单-小样图详情
+      "name": "问题单详情",
+      "path": "/question/questionMngt/sampleDrawDetail/:id",
+      "module": "./pages/questionMngt/SampleDrawDetail",
+      "exact": true,
+      "authority": "approvalm"
     }
   ]
 }
