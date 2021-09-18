@@ -95,7 +95,7 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
         <Modal width={data.width || 520} title={`选择${data.title}`} destroyOnClose visible={visible} onOk={handleOk} onCancel={() => setVisible(false)}>
             <PopTableContent data={data} onChange={handleChange} />
         </Modal>
-        <Input {...props} value={value.value || (props as any).value} addonAfter={<PlusOutlined onClick={() => setVisible(true)} />} />
+        <Input {...props} readOnly={data.readOnly || true} value={value.value || (props as any).value} addonAfter={<PlusOutlined onClick={() => setVisible(true)} />} />
     </>
 }
 interface SelfSelectProps {
@@ -110,15 +110,15 @@ const SelfSelect: React.FC<SelfSelectProps> = ({ data, ...props }) => {
 const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, ...props }) => {
     const ItemTypes = {
         text: <Input {...props} disabled={data.disabled} />,
-        number: <InputNumber {...props} />,
+        number: <InputNumber {...props} disabled={data.disabled} />,
         select: <SelfSelect {...props} data={data as SelectData} />,
         date: <DatePicker
             {...data.picker ? { ...props, picker: data.picker } : { ...props }}
             onChange={(value) => props.onChange(value?.format(data.format || "YYYY-MM-DD HH:mm:ss"))}
             value={props.value ? moment(props.value) : null}
-            format={data.format || "YYYY-MM-DD HH:mm:ss"} />,
-        textarea: <Input.TextArea {...props} />,
-        popForm: <Input {...props} />,
+            format={data.format || "YYYY-MM-DD HH:mm:ss"} disabled={data.disabled} />,
+        textarea: <Input.TextArea {...props} disabled={data.disabled} />,
+        popForm: <Input {...props} disabled={data.disabled} />,
         popTable: <PopTable {...props} data={data as PopTableData} />
     }
     return <>{ItemTypes[type]}</>

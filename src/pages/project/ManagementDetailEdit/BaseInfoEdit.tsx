@@ -35,12 +35,17 @@ export default function BaseInfoEdit(): JSX.Element {
         const attachVos = await attachVosForm.getFieldsValue()
         delete data?.cargoVOList
         delete data?.attachVos
-        await run({ ...data, ...baseInfoData, attachInfoDtos: [], cargoDTOList: cargoVOListData.submit })
+        await run({
+            ...data,
+            ...baseInfoData,
+            attachInfoDtos: [],
+            cargoDTOList: cargoVOListData.submit,
+            projectLeaderId: baseInfoData.projectLeader
+        })
 
         if (saveResult) {
             message.success("保存成功...")
         }
-
     }
 
     return <DetailContent operation={[

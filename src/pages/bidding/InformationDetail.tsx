@@ -34,7 +34,7 @@ export default function InformationDetail(): React.ReactNode {
         resole(data)
     }), {})
     const { loading: bidResStatus, data: bidResResult, run } = useRequest((postData: {}) => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-market/bidInfo/bidResponse`, { id: params.id, ...postData })
+        const data = await RequestUtil.post(`/tower-market/bidInfo/bidResponse`, { id: params.id, ...postData })
         resole(data)
     }), { manual: true })
     const detailData: any = data
@@ -47,6 +47,7 @@ export default function InformationDetail(): React.ReactNode {
     const handleModalOk = async () => {
         try {
             const submitData = await form.validateFields()
+            console.log(submitData, '----')
             run({ ...submitData })
             setVisible(false)
         } catch (error) {
@@ -59,7 +60,7 @@ export default function InformationDetail(): React.ReactNode {
     return <>
         <Modal zIndex={15} visible={visible} title="是否应标" okText="确定并自动生成项目" onOk={handleModalOk} onCancel={handleModalCancel} >
             <Form form={form}>
-                <Form.Item name="aaaa" label="是否应标">
+                <Form.Item name="biddingStatus" label="是否应标">
                     <Select defaultValue="1" onChange={(value: string) => { setIsBid(value) }}>
                         <Select.Option value="1">是</Select.Option>
                         <Select.Option value="2">否</Select.Option>
@@ -99,11 +100,9 @@ export default function InformationDetail(): React.ReactNode {
         </Modal>
         <DetailContent
             title={[
-                <Button key="setting" type="primary" onClick={() => history.push(`/bidding/information/edit/${params.id}`)}>编辑</Button>,
-                <Button key="delete" type="default" onClick={()=>Modal.confirm({
-                    title:"确定删除本条消息吗"
-                })}>删除</Button>,
-                <Button key="bidding" onClick={() => setVisible(true)} disabled={detailData.biddingStatus === 0}>是否应标</Button>,
+                <Button key="setting" type="primary" style={{ marginRight: "16px" }} onClick={() => history.push(`/bidding/information/edit/${params.id}`)}>编辑</Button>,
+                <Button key="delete" type="default" style={{ marginRight: "16px" }} onClick={() => Modal.confirm({ title: "确定删除本条消息吗" })}>删除</Button>,
+                detailData.biddingStatus === 0 && <Button key="bidding" style={{ marginRight: "16px" }} onClick={() => setVisible(true)}>是否应标</Button>,
                 <Button key="new" onClick={() => history.goBack()}>返回</Button>
             ]}>
             <DetailTitle title="基本信息" />

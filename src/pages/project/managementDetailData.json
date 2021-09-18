@@ -49,24 +49,35 @@
             "title": "招标人",
             "dataIndex": "biddingPerson",
             "type": "popTable",
-            "path": "/sinzetech-user/user",
+            "path": "/tower-customer/customer",
             "columns": [
                 {
-                    "title": "登录账号",
-                    "dataIndex": "account"
+                    "title": "客户类型",
+                    "dataIndex": "typeName",
+                    "type": "select",
+                    "enum": [
+                        {
+                            "value": 0,
+                            "label": "国内客户"
+                        },
+                        {
+                            "value": 1,
+                            "label": "国际客户"
+                        }
+                    ]
                 },
                 {
-                    "title": "用户姓名",
+                    "title": "客户名称",
                     "dataIndex": "name",
                     "search": true
                 },
                 {
-                    "title": "所属角色",
-                    "dataIndex": "userRoleNames"
+                    "title": "首要联系人",
+                    "dataIndex": "linkman"
                 },
                 {
-                    "title": "所属机构",
-                    "dataIndex": "departmentName"
+                    "title": "联系电话",
+                    "dataIndex": "phone"
                 }
             ]
         },
@@ -79,6 +90,7 @@
             "dataIndex": "projectLeader",
             "type": "popTable",
             "path": "/sinzetech-user/user",
+            "readOnly": true,
             "columns": [
                 {
                     "title": "登录账号",
@@ -136,11 +148,12 @@
             "title": "创建时间",
             "dataIndex": "createTime",
             "type": "date",
-            "format": "YYYY-MM-DD"
+            "disabled": true
         },
         {
             "title": "说明",
-            "dataIndex": "explain"
+            "dataIndex": "explain",
+            "type": "textarea"
         }
     ],
     "bidInfoColumns": [
@@ -351,7 +364,22 @@
     "productGroupColumns": [
         {
             "title": "下发状态",
-            "dataIndex": "status"
+            "dataIndex": "status",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "未下发"
+                },
+                {
+                    "value": 1,
+                    "label": "部分下发"
+                },
+                {
+                    "value": 2,
+                    "label": "已下发"
+                }
+            ]
         },
         {
             "title": "杆塔明细编号",

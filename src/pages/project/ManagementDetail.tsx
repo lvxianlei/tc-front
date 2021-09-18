@@ -116,7 +116,19 @@ export default function ManagementDetail(): React.ReactNode {
         tab_productGroup: <DetailContent title={[
             <Button key="new" type="primary" onClick={() => history.push(`/project/management/detail/new/productGroup/${params.id}`)}>新增</Button>
         ]}>
-            <CommonTable columns={cargoVOListColumns} />
+            <CommonTable columns={[
+                ...productGroupColumns,
+                {
+                    title: "操作",
+                    dataIndex: "opration",
+                    ellipsis: false,
+                    width: 200,
+                    render: (_: any, record: any) => <>
+                        <Button type="link" onClick={() => history.push(`/`)} >查看</Button>
+                        <Button type="link" onClick={() => history.push(`/project/management/detail/edit/productGroup/${record.id}`)}>编辑</Button>
+                        <Button type="link" onClick={() => history.push(`/delete`)} >删除</Button>
+                    </>
+                }]} dataSource={data?.records} />
             <Row><Radio.Group
                 options={[
                     { label: '明细', value: 'Apple' },
@@ -124,7 +136,7 @@ export default function ManagementDetail(): React.ReactNode {
                 ]}
                 optionType="button"
             /></Row>
-            <CommonTable columns={productGroupColumns} />
+            <CommonTable columns={cargoVOListColumns} />
         </DetailContent>,
         tab_salesPlan: <>
             <Row>
