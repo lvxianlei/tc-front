@@ -60,6 +60,7 @@ export default function CommonTable({ columns, dataSource = [], ...props }: Comm
     columns = columns.map((item: any, index: number) => generateRender(item.type || "text", item))
     return <Table
         size="small"
+        scroll={{ x: true }}
         rowKey={(_: any, record: any) => `common_table_${record.id || record.title || JSON.stringify(record)}`}
         columns={columns}
         onRow={() => ({ className: styles.tableRow })}
