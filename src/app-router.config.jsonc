@@ -735,6 +735,48 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 工作管理-杆塔信息-杆塔放样明细
+      "name": "杆塔放样明细",
+      "path": "/workMngt/setOutList/poleInformation/:id/poleLoftingDetails/:id",
+      "module": "./pages/workMngt/setOut/PoleLoftingDetails",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-杆塔信息-包装清单
+      "name": "包装清单",
+      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:id",
+      "module": "./pages/workMngt/setOut/PackingList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-杆塔信息-添加包装清单
+      "name": "添加包装清单",
+      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:id/packingListNew",
+      "module": "./pages/workMngt/setOut/PackingListNew",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-杆塔信息-编辑包装清单
+      "name": "编辑包装清单",
+      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:id/packingListSetting/id",
+      "module": "./pages/workMngt/setOut/PackingListSetting",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-组焊列表
+      "name": "组焊列表",
+      "path": "/workMngt/compoundList",
+      "module": "./pages/workMngt/compound/CompoundList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-组焊信息
+      "name": "组焊信息",
+      "path": "/workMngt/compoundList/compoundInformation/:id",
+      "module": "./pages/workMngt/compound/CompoundInformation",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 工作管理-小样图列表
       "name": "小样图列表",
       "path": "/workMngt/sampleDrawList",
