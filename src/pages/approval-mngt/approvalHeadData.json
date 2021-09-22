@@ -2,27 +2,34 @@
     "baseInfo": [
         {
             "title": "项目名称",
-            "dataIndex": "projectName"
+            "dataIndex": "projectName",
+            "disabled": true
         },
         {
             "title": "项目单位",
-            "dataIndex": "biddingPerson"
+            "dataIndex": "biddingPerson",
+            "disabled": true
         },
         {
             "title": "项目编码",
-            "dataIndex": "projectNumber"
+            "dataIndex": "projectNumber",
+            "disabled": true
         },
         {
             "title": "投标截至时间",
-            "dataIndex": "bidDeadline"
+            "dataIndex": "bidDeadline",
+            "disabled": true,
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "数量",
-            "dataIndex": "num"
+            "dataIndex": "num",
+            "type": "number"
         },
         {
             "title": "单位",
-            "dataIndex": "unit"
+            "dataIndex": "unit",
+            "type": "number"
         },
         {
             "title": "货物类别",
@@ -34,7 +41,8 @@
         },
         {
             "title": "价格范围（元/吨）",
-            "dataIndex": "priceRange"
+            "dataIndex": "priceRange",
+            "type": "number"
         },
         {
             "title": "验收执行标准及验收方法",
@@ -62,7 +70,8 @@
         },
         {
             "title": "备注",
-            "dataIndex": "description"
+            "dataIndex": "description",
+            "type": "textarea"
         }
     ],
     "auditHead": [
@@ -131,7 +140,45 @@
     "bondBaseInfo": [
         {
             "title": "项目工程",
-            "dataIndex": ""
+            "dataIndex": "projectId",
+            "type": "popTable",
+            "path": "/tower-market/contract",
+            "width": 1011,
+            "value": "contractName",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "合同编号",
+                    "dataIndex": "contractNumber",
+                    "search": true
+                },
+                {
+                    "title": "合同名称",
+                    "dataIndex": "contractName"
+                },
+                {
+                    "title": "销售类型",
+                    "dataIndex": "saleType"
+                },
+                {
+                    "title": "业主单位",
+                    "dataIndex": "customerCompany",
+                    "search": true
+                },
+                {
+                    "title": "合同签订单位",
+                    "dataIndex": "signCustomerName"
+                },
+                {
+                    "title": "合同签订日期",
+                    "dataIndex": "signContractTime"
+                },
+                {
+                    "title": "要求交货日期",
+                    "dataIndex": "deliveryTime"
+                }
+            ]
         },
         {
             "title": "项目名称",
@@ -150,7 +197,7 @@
         },
         {
             "title": "请款人",
-            "dataIndex": ""
+            "dataIndex": "requestFundsUser"
         },
         {
             "title": "申请时间",
@@ -247,8 +294,253 @@
     ],
     "drawH": [
         {
+            "title": "邮政单号",
+            "dataIndex": "postalNumber"
+        },
+        {
+            "title": "业主单位",
+            "dataIndex": "customerCompany",
+            "disabled": true
+        },
+        {
+            "title": "相关合同",
+            "dataIndex": "contractId",
+            "type": "popTable",
+            "path": "/tower-market/contract",
+            "width": 1011,
+            "value": "contractName",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "合同编号",
+                    "dataIndex": "contractNumber",
+                    "search": true
+                },
+                {
+                    "title": "合同名称",
+                    "dataIndex": "contractName"
+                },
+                {
+                    "title": "销售类型",
+                    "dataIndex": "saleType"
+                },
+                {
+                    "title": "业主单位",
+                    "dataIndex": "customerCompany",
+                    "search": true
+                },
+                {
+                    "title": "合同签订单位",
+                    "dataIndex": "signCustomerName"
+                },
+                {
+                    "title": "合同签订日期",
+                    "dataIndex": "signContractTime"
+                },
+                {
+                    "title": "要求交货日期",
+                    "dataIndex": "deliveryTime"
+                }
+            ]
+        },
+        {
+            "title": "合同名称",
+            "dataIndex": "contractName",
+            "disabled": true
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": "serviceManager",
+            "disabled": true
+        },
+        {
+            "title": "签收人",
+            "dataIndex": "signedUser",
+            "type": "popTable",
+            "path": "/sinzetech-user/user",
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "userRoleNames"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "departmentName"
+                }
+            ]
+        },
+        {
+            "title": "接收人",
+            "dataIndex": "receiver",
+            "type": "popTable",
+            "path": "/sinzetech-user/user",
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "userRoleNames"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "departmentName"
+                }
+            ]
+        },
+        {
+            "title": "接收日期",
+            "dataIndex": "receivedTime",
+            "type": "date"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea"
+        }
+    ],
+    "drawHConfirm": [
+        {
+            "title": "部门",
+            "dataIndex": ""
+        },
+        {
+            "title": "干系人",
+            "dataIndex": ""
+        },
+        {
+            "title": "职位",
+            "dataIndex": ""
+        },
+        {
+            "title": "确认时间",
+            "dataIndex": ""
+        },
+        {
+            "title": "确认结果",
+            "dataIndex": ""
+        },
+        {
+            "title": "意见",
+            "dataIndex": ""
+        },
+        {
             "title": "",
             "dataIndex": ""
+        }
+    ],
+    "drawingCofirm": [
+        {
+            "title": "相关合同",
+            "dataIndex": "contractId",
+            "type": "popTable",
+            "path": "/tower-market/contract",
+            "width": 1011,
+            "value": "contractName",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "合同编号",
+                    "dataIndex": "contractNumber",
+                    "search": true
+                },
+                {
+                    "title": "合同名称",
+                    "dataIndex": "contractName"
+                },
+                {
+                    "title": "销售类型",
+                    "dataIndex": "saleType"
+                },
+                {
+                    "title": "业主单位",
+                    "dataIndex": "customerCompany",
+                    "search": true
+                },
+                {
+                    "title": "合同签订单位",
+                    "dataIndex": "signCustomerName"
+                },
+                {
+                    "title": "合同签订日期",
+                    "dataIndex": "signContractTime"
+                },
+                {
+                    "title": "要求交货日期",
+                    "dataIndex": "deliveryTime"
+                }
+            ]
+        },
+        {
+            "title": "业主单位",
+            "dataIndex": "customerCompany",
+            "disabled": true
+        },
+        {
+            "title": "合同名称",
+            "dataIndex": "contractName",
+            "disabled": true
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": "serviceManager",
+            "disabled": true
+        },
+        {
+            "title": "业务经理联系电话",
+            "dataIndex": "serviceManagerTel",
+            "disabled": true
+        },
+        {
+            "title": "设计院联系人",
+            "dataIndex": "designInstituteUser"
+        },
+        {
+            "title": "设计院联系人电话",
+            "dataIndex": "designInstituteUserTel"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea"
+        }
+    ],
+    "enclosure": [
+        {
+            "title": "文件名",
+            "dataIndex": "originalName"
+        },
+        {
+            "title": "大小",
+            "dataIndex": "size"
+        },
+        {
+            "title": "上传人",
+            "dataIndex": "userName"
+        },
+        {
+            "title": "上传时间",
+            "dataIndex": "fileUploadTime",
+            "type": "date"
         }
     ]
 }

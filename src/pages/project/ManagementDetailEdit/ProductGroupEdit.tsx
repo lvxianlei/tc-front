@@ -2,9 +2,8 @@ import React, { useState } from "react"
 import { useHistory, useParams, useRouteMatch } from "react-router-dom"
 import { Button, Form, Modal } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, CommonTable } from "../../common"
-import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
+import SelectProductGroup from "./SelectProductGroup"
 import { productGroupColumns, newProductGroup } from '../managementDetailData.json'
-import { TabTypes } from "../ManagementDetail"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 export default function ProductGroupEdit() {
@@ -45,9 +44,7 @@ export default function ProductGroupEdit() {
             <Button key="goback" type="default" onClick={() => history.goBack()}>返回</Button>
         ]}>
         <Modal title="选择确认明细" visible={visible} onCancel={() => setVisible(false)} width={1011}>
-            <CommonTable columns={newProductGroup.map(item => ({ ...item, width: 150 }))} dataSource={[]} />
-            <DetailTitle title="明细" />
-            <CommonTable columns={newProductGroup.map(item => ({ ...item, width: 150 }))} dataSource={[]} />
+            <SelectProductGroup />
         </Modal>
         <DetailTitle title="基本信息" />
         <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={newProductGroup} dataSource={data || {}} edit />

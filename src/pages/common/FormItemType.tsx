@@ -53,7 +53,6 @@ const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: any) =>
     const searchs = data.columns.filter((item: any) => item.search)
     const { loading, data: popTableData, run } = useRequest<any>((params: {}) => new Promise(async (resolve, reject) => {
         resolve(await RequestUtil.get<{ data: any }>(data.path, params))
-        console.log(popTableData)
     }))
     const onSelectChange = (selectedRowKeys: string[], selectRows: any[]) => {
         onChange && onChange(selectRows)
