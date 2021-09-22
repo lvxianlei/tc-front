@@ -765,15 +765,29 @@
     },
     { // 工作管理-组焊列表
       "name": "组焊列表",
-      "path": "/workMngt/compoundList",
-      "module": "./pages/workMngt/compound/CompoundList",
+      "path": "/workMngt/assemblyWeldingList",
+      "module": "./pages/workMngt/assemblyWelding/AssemblyWeldingList",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-组焊信息
       "name": "组焊信息",
-      "path": "/workMngt/compoundList/compoundInformation/:id",
-      "module": "./pages/workMngt/compound/CompoundInformation",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingInformation/:id",
+      "module": "./pages/workMngt/assemblyWelding/AssemblyWeldingInformation",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-螺栓列表
+      "name": "螺栓列表",
+      "path": "/workMngt/boltList",
+      "module": "./pages/workMngt/bolt/BoltList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-螺栓信息
+      "name": "螺栓信息",
+      "path": "/workMngt/boltList/boltInformation/:id",
+      "module": "./pages/workMngt/bolt/BoltInformation",
       "exact": true,
       "authority": "approvalm"
     },
