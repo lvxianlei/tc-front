@@ -19,7 +19,6 @@ export default function ApprovalMngtEdit(): JSX.Element {
                 multiple={true}
                 action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
                 headers={{
-                    'Content-Type': 'application/json',
                     'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
                     'Tenant-Id': AuthUtil.getTenantId(),
                     'Sinzetech-Auth': AuthUtil.getSinzetechAuth()

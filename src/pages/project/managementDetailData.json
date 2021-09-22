@@ -25,46 +25,59 @@
                     "value": 1,
                     "label": "用户工程"
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择项目类型"
+                }
             ]
         },
         {
             "title": "标书购买截至日期",
-            "dataIndex": "bidBuyEndTime"
+            "dataIndex": "bidBuyEndTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "投标截至日期",
-            "dataIndex": "biddingEndTime"
+            "dataIndex": "biddingEndTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "招标人",
             "dataIndex": "biddingPerson",
             "type": "popTable",
-            "path": "/",
+            "path": "/tower-customer/customer",
             "columns": [
                 {
-                    "title": "员工编号",
-                    "dataIndex": "a"
+                    "title": "客户类型",
+                    "dataIndex": "typeName",
+                    "type": "select",
+                    "enum": [
+                        {
+                            "value": 0,
+                            "label": "国内客户"
+                        },
+                        {
+                            "value": 1,
+                            "label": "国际客户"
+                        }
+                    ]
                 },
                 {
-                    "title": "姓名",
-                    "dataIndex": "a",
+                    "title": "客户名称",
+                    "dataIndex": "name",
                     "search": true
                 },
                 {
-                    "title": "部门",
-                    "dataIndex": "a"
+                    "title": "首要联系人",
+                    "dataIndex": "linkman"
                 },
                 {
-                    "title": "岗位",
-                    "dataIndex": "a"
-                },
-                {
-                    "title": "在职状态",
-                    "dataIndex": "a"
-                },
-                {
-                    "title": " 联系电话",
-                    "dataIndex": "a"
+                    "title": "联系电话",
+                    "dataIndex": "phone"
                 }
             ]
         },
@@ -74,7 +87,29 @@
         },
         {
             "title": "项目负责人",
-            "dataIndex": "projectLeader"
+            "dataIndex": "projectLeader",
+            "type": "popTable",
+            "path": "/sinzetech-user/user",
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "userRoleNames"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "departmentName"
+                }
+            ]
         },
         {
             "title": "当前项目阶段",
@@ -105,58 +140,54 @@
         },
         {
             "title": "发布日期",
-            "dataIndex": "releaseDate"
+            "dataIndex": "releaseDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "创建时间",
             "dataIndex": "createTime",
-            "type": "date"
+            "type": "date",
+            "disabled": true
         },
         {
             "title": "说明",
-            "dataIndex": "explain"
+            "dataIndex": "explain",
+            "type": "textarea"
         }
     ],
     "bidInfoColumns": [
         {
             "title": "是否中标",
-            "dataIndex": "packageNumber",
-            "key": "packgeNumber"
+            "dataIndex": "packageNumber"
         },
         {
             "title": "分标编号",
-            "dataIndex": "amount",
-            "key": "amount"
+            "dataIndex": "amount"
         },
         {
             "title": "货物类别",
-            "dataIndex": "unit",
-            "key": "unit"
+            "dataIndex": "unit"
         },
         {
             "title": "包号",
-            "dataIndex": "deliveryDate",
-            "key": "deliveryDate"
+            "dataIndex": "deliveryDate"
         },
         {
             "title": "项目单位",
-            "dataIndex": "deliveryPlace",
-            "key": "deliveryPlace"
+            "dataIndex": "deliveryPlace"
         },
         {
             "title": "投标人名称",
-            "dataIndex": "deliveryPlace",
-            "key": "deliveryPlace"
+            "dataIndex": "deliveryPlace"
         },
         {
             "title": "总价（万元）",
-            "dataIndex": "deliveryPlace",
-            "key": "deliveryPlace"
+            "dataIndex": "deliveryPlace"
         },
         {
             "title": "重量（吨）",
-            "dataIndex": "deliveryPlace",
-            "key": "deliveryPlace"
+            "dataIndex": "deliveryPlace"
         }
     ],
     "bidDocColumns": [
@@ -170,7 +201,8 @@
         },
         {
             "title": "招标编号",
-            "dataIndex": "bidCode"
+            "dataIndex": "bidCode",
+            "disabled": true
         },
         {
             "title": "货物类别",
@@ -178,7 +210,9 @@
         },
         {
             "title": "分配日期",
-            "dataIndex": "assignDate"
+            "dataIndex": "assignDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "地区",
@@ -196,7 +230,8 @@
         },
         {
             "title": "项目名称",
-            "dataIndex": "projectName"
+            "dataIndex": "projectName",
+            "disabled": true
         },
         {
             "title": "包号",
@@ -212,11 +247,14 @@
         },
         {
             "title": "纸质打印日期",
-            "dataIndex": "paDate"
+            "dataIndex": "paDate",
+            "type": "date"
         },
         {
             "title": "全部完成日期",
-            "dataIndex": "completeDate"
+            "dataIndex": "completeDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "制作人员",
@@ -224,7 +262,9 @@
         },
         {
             "title": "接收人接收及日期",
-            "dataIndex": "receiveUserDate"
+            "dataIndex": "receiveUserDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "授权人",
@@ -236,7 +276,9 @@
         },
         {
             "title": "开标日期",
-            "dataIndex": "openBidDate"
+            "dataIndex": "openBidDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "总招标量",
@@ -292,15 +334,21 @@
         },
         {
             "title": "签订日期",
-            "dataIndex": "signContractTime"
+            "dataIndex": "signContractTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "合同交货日期",
-            "dataIndex": "deliveryTime"
+            "dataIndex": "deliveryTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "订单交货日期",
-            "dataIndex": "orderDeliveryTime"
+            "dataIndex": "orderDeliveryTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "制单人",
@@ -308,13 +356,30 @@
         },
         {
             "title": "制单时间",
-            "dataIndex": "createTime"
+            "dataIndex": "createTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         }
     ],
     "productGroupColumns": [
         {
             "title": "下发状态",
-            "dataIndex": "status"
+            "dataIndex": "status",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "未下发"
+                },
+                {
+                    "value": 1,
+                    "label": "部分下发"
+                },
+                {
+                    "value": 2,
+                    "label": "已下发"
+                }
+            ]
         },
         {
             "title": "杆塔明细编号",
@@ -342,7 +407,9 @@
         },
         {
             "title": "制单时间",
-            "dataIndex": "createTime"
+            "dataIndex": "createTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         }
     ],
     "frameAgreementColumns": [
@@ -357,7 +424,8 @@
         },
         {
             "title": "项目名称",
-            "dataIndex": "projectName"
+            "dataIndex": "projectName",
+            "disabled": true
         },
         {
             "title": "合同总重(吨)",
@@ -417,7 +485,8 @@
         {
             "title": "签订日期",
             "dataIndex": "signDate",
-            "type": "date"
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "签订人",
@@ -426,7 +495,8 @@
         {
             "title": "交货日期",
             "dataIndex": "deliveryDate",
-            "type": "date"
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "有无技术协议",
@@ -476,7 +546,8 @@
         {
             "title": "上传时间",
             "dataIndex": "fileUploadTime",
-            "type": "date"
+            "type": "date",
+            "format": "YYYY-MM-DD"
         }
     ],
     "cargoVOListColumns": [
@@ -519,6 +590,8 @@
             "type": "popTable",
             "path": "/tower-market/saleOrder",
             "width": 1011,
+            "value": "saleOrderNumber",
+            "dependencies": true,
             "columns": [
                 {
                     "title": "订单编号",
@@ -564,12 +637,13 @@
         },
         {
             "title": "说明",
-            "dataIndex": "description"
+            "dataIndex": "description",
+            "type": "textarea"
         }
     ],
     "materialListColumns": [
         {
-            "title": "*物资名称",
+            "title": "物资名称",
             "dataIndex": "cargoName",
             "width": 100
         },
@@ -579,17 +653,17 @@
             "width": 100
         },
         {
-            "title": "*计量单位",
+            "title": "计量单位",
             "dataIndex": "metering",
             "width": 100
         },
         {
-            "title": "*数量",
+            "title": "数量",
             "dataIndex": "number",
             "width": 100
         },
         {
-            "title": "*单价(含税)(元)",
+            "title": "单价(含税)(元)",
             "dataIndex": "moneyTax",
             "width": 150
         },
@@ -599,7 +673,7 @@
             "width": 150
         },
         {
-            "title": "*合同总价(含税)(元)",
+            "title": "合同总价(含税)(元)",
             "dataIndex": "contractMoneyTax",
             "width": 150
         },
@@ -609,7 +683,7 @@
             "width": 150
         },
         {
-            "title": "*增值税率(%)",
+            "title": "增值税率(%)",
             "dataIndex": "tax",
             "width": 150
         },
@@ -655,11 +729,15 @@
         },
         {
             "title": "客户交货日期",
-            "dataIndex": "deliveryTime"
+            "dataIndex": "deliveryTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "计划交货日期",
-            "dataIndex": "planDeliveryTime"
+            "dataIndex": "planDeliveryTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "审批状态",

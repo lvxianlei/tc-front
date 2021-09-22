@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Spin, Form, Button, Modal, Select, Input, Upload } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { PlusOutlined } from "@ant-design/icons"
+// import { PlusOutlined } from "@ant-design/icons"
 import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common'
 import { PopTable } from "../common/FormItemType"
 import { baseInfoData } from './biddingHeadData.json'
@@ -34,7 +34,7 @@ export default function InformationDetail(): React.ReactNode {
         resole(data)
     }), {})
     const { loading: bidResStatus, data: bidResResult, run } = useRequest((postData: {}) => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-market/bidInfo/bidResponse`, { id: params.id, ...postData })
+        const data = await RequestUtil.post(`/tower-market/bidInfo/bidResponse`, { id: params.id, ...postData })
         resole(data)
     }), { manual: true })
     const detailData: any = data
@@ -47,6 +47,7 @@ export default function InformationDetail(): React.ReactNode {
     const handleModalOk = async () => {
         try {
             const submitData = await form.validateFields()
+            console.log(submitData, '----')
             run({ ...submitData })
             setVisible(false)
         } catch (error) {
@@ -59,13 +60,13 @@ export default function InformationDetail(): React.ReactNode {
     return <>
         <Modal zIndex={15} visible={visible} title="是否应标" okText="确定并自动生成项目" onOk={handleModalOk} onCancel={handleModalCancel} >
             <Form form={form}>
-                <Form.Item name="aaaa" label="是否应标">
+                <Form.Item name="biddingStatus" label="是否应标">
                     <Select defaultValue="1" onChange={(value: string) => { setIsBid(value) }}>
                         <Select.Option value="1">是</Select.Option>
                         <Select.Option value="2">否</Select.Option>
                     </Select>
                 </Form.Item>
-                {isBid !== "2" ? <Form.Item name="projectLeader" label="设置项目负责人">
+                {isBid !== "2" ? <Form.Item name="projectLeader" label="设置项目负责人" getValueFromEvent={value => value.id}>
                     <PopTable data={{
                         type: "PopTable",
                         title: "选择项目负责人",
@@ -99,9 +100,9 @@ export default function InformationDetail(): React.ReactNode {
         </Modal>
         <DetailContent
             title={[
-                <Button key="setting" type="primary" onClick={() => history.push(`/bidding/information/edit/${params.id}`)}>编辑</Button>,
-                <Button key="delete" type="default">删除</Button>,
-                <Button key="bidding" onClick={() => setVisible(true)}>是否应标</Button>,
+                <Button key="setting" type="primary" style={{ marginRight: "16px" }} onClick={() => history.push(`/bidding/information/edit/${params.id}`)}>编辑</Button>,
+                <Button key="delete" type="default" style={{ marginRight: "16px" }} onClick={() => Modal.confirm({ title: "确定删除本条消息吗" })}>删除</Button>,
+                detailData.biddingStatus === 0 && <Button key="bidding" style={{ marginRight: "16px" }} onClick={() => setVisible(true)}>是否应标</Button>,
                 <Button key="new" onClick={() => history.goBack()}>返回</Button>
             ]}>
             <DetailTitle title="基本信息" />
@@ -115,7 +116,6 @@ export default function InformationDetail(): React.ReactNode {
                     multiple={true}
                     action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
                     headers={{
-                        'Content-Type': 'application/json',
                         'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
                         'Tenant-Id': AuthUtil.getTenantId(),
                         'Sinzetech-Auth': AuthUtil.getSinzetechAuth()

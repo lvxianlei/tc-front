@@ -127,5 +127,128 @@
             "dataIndex": "createTime",
             "type": "date"
         }
+    ],
+    "bondBaseInfo": [
+        {
+            "title": "项目工程",
+            "dataIndex": ""
+        },
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName",
+            "disabled": true
+        },
+        {
+            "title": "项目编码",
+            "dataIndex": "projectNumber",
+            "disabled": true
+        },
+        {
+            "title": "编号",
+            "dataIndex": "projectNumber",
+            "disabled": true
+        },
+        {
+            "title": "请款人",
+            "dataIndex": ""
+        },
+        {
+            "title": "申请时间",
+            "dataIndex": ""
+        },
+        {
+            "title": "支付类型",
+            "dataIndex": "paymentType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "履约保证金"
+                },
+                {
+                    "value": 2,
+                    "label": "购买标书"
+                }
+            ]
+        },
+        {
+            "title": "收款单位",
+            "dataIndex": "payee"
+        },
+        {
+            "title": "付款日期",
+            "dataIndex": "paymentTime"
+        },
+        {
+            "title": "发票开具单位",
+            "dataIndex": "invoiceIssuingUnit"
+        },
+        {
+            "title": "账号",
+            "dataIndex": ""
+        },
+        {
+            "title": "开户银行",
+            "dataIndex": "bank"
+        },
+        {
+            "title": "支付类别",
+            "dataIndex": "paymentCategory"
+        },
+        {
+            "title": "申请金额",
+            "dataIndex": "applyAmount"
+        },
+        {
+            "title": "申请金额(大写)",
+            "dataIndex": "applyAmountName"
+        },
+        {
+            "title": "币种",
+            "dataIndex": "currencyType"
+        }
+    ],
+    "auditIdRecord": [
+        {
+            "title": "部门",
+            "lable": "dept"
+        },
+        {
+            "title": "审批人",
+            "lable": "auditor"
+        },
+        {
+            "title": "职位",
+            "lable": "position"
+        },
+        {
+            "title": "审批时间",
+            "lable": "updateTime"
+        },
+        {
+            "title": "审批结果",
+            "lable": "auditStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "通过"
+                },
+                {
+                    "value": 2,
+                    "label": "驳回"
+                }
+            ]
+        },
+        {
+            "title": "意见",
+            "lable": "description"
+        }
+    ],
+    "drawH": [
+        {
+            "title": "",
+            "dataIndex": ""
+        }
     ]
 }
