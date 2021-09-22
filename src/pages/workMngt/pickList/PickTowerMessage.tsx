@@ -81,9 +81,9 @@ export default function PickTowerMessage(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type='link' onClick={() => setVisible(true)}>提料</Button>
-                    <Link to={`/workMngt/pickList/pickTower/pickTowerDetail/${record.id}`}>校核</Link>
-                    <Link to={`/workMngt/pickList/pickTower/pickTowerDetail/${record.id}`}>明细</Link>
+                    <Link to={`/workMngt/pickList/pickTowerMessage/pick/${record.id}`}>提料</Link>
+                    <Link to={`/workMngt/pickList/pickTowerMessage/check/${record.id}`}>校核</Link>
+                    <Link to={`/workMngt/pickList/pickTowerMessage/detail/${record.id}`}>明细</Link>
                 </Space>
             )
         }

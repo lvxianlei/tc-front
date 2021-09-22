@@ -609,6 +609,27 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 工作管理-提料-杆塔信息-提料
+      "name": "提料",
+      "path": "/workMngt/pickList/pickTowerMessage/pick/:id",
+      "module": "./pages/workMngt/pickList/pickTowerMessage/Pick",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-提料-杆塔信息-校核
+      "name": "校核",
+      "path": "/workMngt/pickList/pickTowerMessage/check/:id",
+      "module": "./pages/workMngt/pickList/pickTowerMessage/Check",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-提料-杆塔信息-明细
+      "name": "明细",
+      "path": "/workMngt/pickList/pickTowerMessage/detail/:id",
+      "module": "./pages/workMngt/pickList/pickTowerMessage/Detail",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 工作管理-提料-杆塔配段
       "name": "杆塔配段",
       "path": "/workMngt/pickList/pickTower/:id",
