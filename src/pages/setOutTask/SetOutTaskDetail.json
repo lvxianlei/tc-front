@@ -1,0 +1,96 @@
+{
+    "baseColumns": [
+        {
+            "dataIndex": "projectName",
+            "title": "订单编号"
+        },
+        {
+            "dataIndex": "projectNumber",
+            "title": "内部合同编号"
+        },
+        {
+            "dataIndex": "source",
+            "title": "订单工程名称"
+        },
+        {
+            "dataIndex": "releaseDate",
+            "title": "业主单位"
+        },
+        {
+            "dataIndex": "sourceWebsite",
+            "title": "合同签订单位"
+        },
+        {
+            "dataIndex": "bidBuyEndTime",
+            "title": "订单交货日期",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "dataIndex": "bidBuyEndTime",
+            "title": "客户交货日期",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "dataIndex": "bidBuyEndTime",
+            "title": "计划交货日期",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "dataIndex": "explain",
+            "title": "备注",
+            "type": "textarea"
+        }
+    ],
+    "specialColums": [
+        {
+            "dataIndex": "projectName",
+            "title": "原材料标准"
+        },
+        {
+            "dataIndex": "projectNumber",
+            "title": "原材料要求"
+        },
+        {
+            "dataIndex": "source",
+            "title": "焊接要求"
+        },
+        {
+            "dataIndex": "releaseDate",
+            "title": "包装要求"
+        },
+        {
+            "dataIndex": "sourceWebsite",
+            "title": "镀锌要求"
+        },
+        {
+            "dataIndex": "explain",
+            "title": "备注",
+            "type": "textarea"
+        }
+    ],
+    "productColumns": [
+        {
+            "dataIndex": "explain",
+            "title": "塔型（个）",
+            "type": "textarea"
+        },
+        {
+            "dataIndex": "explain",
+            "title": "杆塔（基）",
+            "type": "textarea"
+        },
+        {
+            "dataIndex": "explain",
+            "title": "产品类型",
+            "type": "textarea"
+        },
+        {
+            "dataIndex": "explain",
+            "title": "总重量（kg）",
+            "type": "textarea"
+        }
+    ]
+}

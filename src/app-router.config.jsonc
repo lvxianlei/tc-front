@@ -623,6 +623,48 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 工作管理-提料-杆塔信息-提料
+      "name": "提料",
+      "path": "/workMngt/pickList/pickTowerMessage/pick/:id",
+      "module": "./pages/workMngt/pickList/pickTowerMessage/Pick",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-提料-杆塔信息-提料-放样塔型套用
+      "name": "放样塔型套用",
+      "path": "/workMngt/pickList/pickTowerMessage/pick/:id/setOutApply",
+      "module": "./pages/workMngt/pickList/pickTowerMessage/SetOutApply",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-提料-杆塔信息-提料-图形塔型套用
+      "name": "图形塔型套用",
+      "path": "/workMngt/pickList/pickTowerMessage/pick/:id/drawApply",
+      "module": "./pages/workMngt/pickList/pickTowerMessage/DrawApply",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-提料-杆塔信息-提料-识别
+      "name": "识别",
+      "path": "/workMngt/pickList/pickTowerMessage/pick/:id/recognize",
+      "module": "./pages/workMngt/pickList/pickTowerMessage/ImageRecognize",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-提料-杆塔信息-校核
+      "name": "校核",
+      "path": "/workMngt/pickList/pickTowerMessage/check/:id",
+      "module": "./pages/workMngt/pickList/pickTowerMessage/Check",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-提料-杆塔信息-明细
+      "name": "明细",
+      "path": "/workMngt/pickList/pickTowerMessage/detail/:id",
+      "module": "./pages/workMngt/pickList/pickTowerMessage/Detail",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 工作管理-提料-杆塔配段
       "name": "杆塔配段",
       "path": "/workMngt/pickList/pickTower/:id",
@@ -725,6 +767,62 @@
       "name": "杆塔信息",
       "path": "/workMngt/setOutList/poleInformation/:id",
       "module": "./pages/workMngt/setOut/PoleInformation",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-杆塔信息-杆塔放样明细
+      "name": "杆塔放样明细",
+      "path": "/workMngt/setOutList/poleInformation/:id/poleLoftingDetails/:id",
+      "module": "./pages/workMngt/setOut/PoleLoftingDetails",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-杆塔信息-包装清单
+      "name": "包装清单",
+      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:id",
+      "module": "./pages/workMngt/setOut/PackingList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-杆塔信息-添加包装清单
+      "name": "添加包装清单",
+      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:id/packingListNew",
+      "module": "./pages/workMngt/setOut/PackingListNew",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-杆塔信息-编辑包装清单
+      "name": "编辑包装清单",
+      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:id/packingListSetting/id",
+      "module": "./pages/workMngt/setOut/PackingListSetting",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-组焊列表
+      "name": "组焊列表",
+      "path": "/workMngt/assemblyWeldingList",
+      "module": "./pages/workMngt/assemblyWelding/AssemblyWeldingList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-组焊信息
+      "name": "组焊信息",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingInformation/:id",
+      "module": "./pages/workMngt/assemblyWelding/AssemblyWeldingInformation",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-螺栓列表
+      "name": "螺栓列表",
+      "path": "/workMngt/boltList",
+      "module": "./pages/workMngt/bolt/BoltList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-螺栓信息
+      "name": "螺栓信息",
+      "path": "/workMngt/boltList/boltInformation/:id",
+      "module": "./pages/workMngt/bolt/BoltInformation",
       "exact": true,
       "authority": "approvalm"
     },
