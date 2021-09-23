@@ -39,16 +39,18 @@ export default function BidResultEdit(): JSX.Element {
         const baseInfoData = await baseInfoForm.getFieldsValue();
 
         const _tabsData = await Promise.all(
-            (tabsData as any[]).map(async (item) => {
-                const { refFun, ...realItem } = item;
+            (tabsData as any[]).map(async (item, index) => {
+                const { refFun, title, ...realItem } = item;
                 const _form = refFun?.getForm();
                 const fdata = await _form.getFieldsValue();
-                return { realItem, formData: fdata?.submit }
+                return ({ round: index, roundName: title, formData: fdata?.submit })
             })
         )
-
-        console.log(_tabsData)
-
+        const postTabsData = _tabsData.reduce((total: any, nextItem: any) => {
+            const nextTabItem = nextItem.formData ? nextItem.formData.map((formItem: any) => ({ ...formItem, round: nextItem.round, roundName: nextItem.roundName })) : []
+            return total.concat(nextTabItem)
+        }, [])
+        run({ ...baseInfoData, bidOpenRecordDtos: postTabsData, roundCount: _tabsData.length, projectId: params.id })
         // await run({ ...postBaseData, ...baseInfoData, projectId: params.id, date: baseInfoData.date.year && baseInfoData.date.year(), id: data?.id })
     }
 

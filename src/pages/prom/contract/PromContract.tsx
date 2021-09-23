@@ -179,7 +179,7 @@ export class PromContract extends AbstractMngtComponent<IPromContractWithRoutePr
                             删除
                         </Button>
                     </Popconfirm>
-                    <Button type="link" href={ `/prom/contract/paymentRecord/${ (record as IContract).id }/${ (record as IContract).projectName }/${ (record as IContract).signCustomerId }/${ (record as IContract).signCustomerName }` } disabled={ (record as IContract).status === 0 }>添加回款记录</Button>
+                    <Button type="link" href={ `/prom/contract/paymentRecord/${ (record as IContract).id }/${ (record as IContract).projectName }/${ (record as IContract).signCustomerId }/${ (record as IContract).signCustomerName }` }>添加回款记录</Button>
                 </Space>
             )
         }];

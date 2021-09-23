@@ -47,7 +47,13 @@ class ManagementContractDetail extends ContractDetail {
     ];
   }
   public renderOperationArea(): React.ReactNode | React.ReactNode[] {
+    console.log(this.state)
     return [
+      <Button key="add">
+        <Link to={`/project/contract/paymentRecord/${this.state.detail.id
+          }/${this.state.detail.projectName||undefined}/${this.state.detail.signCustomerId
+          }/${this.state.detail.signCustomerName}`}>添加回款记录</Link>
+      </Button>,
       <Button key="new">
         <Link to={"/project/contract/new"}>新增</Link>
       </Button>,

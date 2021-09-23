@@ -1,6 +1,6 @@
 import React from 'react'
-import { Button, Row, Tabs, Radio, Spin, Upload } from 'antd'
-import { useHistory, useParams } from 'react-router-dom'
+import { Button, Row, Tabs, Radio, Spin, Upload, Modal } from 'antd'
+import { useHistory, useParams, Link } from 'react-router-dom'
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common'
 import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
 import {
@@ -12,9 +12,7 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import ManagementContract from './contract/Contract'
 import ManagementOrder from './order/SaleOrder'
-import styles from "./ManagementDetail.module.less"
 import ApplicationContext from "../../configuration/ApplicationContext"
-import BidResult from './bidResult'
 import AuthUtil from '../../utils/AuthUtil'
 export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | undefined
 
@@ -36,6 +34,31 @@ export default function ManagementDetail(): React.ReactNode {
         const result: { [key: string]: any } = await RequestUtil.get(`${paths[params.tab || 'base']}/${params.id}`)
         resole(result)
     }), { refreshDeps: [params.tab] })
+
+    const { loading: deleteLoading, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/productGroup/${id}`)
+            resole(result)
+            history.go(0)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const deleteProductGroupItem = (id: string) => {
+        Modal.confirm({
+            title: "删除",
+            content: "确定删除此数据吗？",
+            onOk: () => new Promise(async (resove, reject) => {
+                try {
+                    await deleteRun(id)
+                    resove("")
+                } catch (error) {
+                    reject(error)
+                }
+            })
+        })
+    }
     const tabItems: { [key: string]: JSX.Element | React.ReactNode } = {
         tab_base: <DetailContent operation={[
             <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => history.push(`/project/management/detail/edit/base/${params.id}`)}>编辑</Button>,
@@ -178,9 +201,9 @@ export default function ManagementDetail(): React.ReactNode {
                     ellipsis: false,
                     width: 200,
                     render: (_: any, record: any) => <>
-                        <Button type="link" onClick={() => history.push(`/`)} >查看</Button>
+                        <Button type="link" onClick={() => history.push(`/project/management/detail/productGroup/item/${record.id}`)} >查看</Button>
                         <Button type="link" onClick={() => history.push(`/project/management/detail/edit/productGroup/${record.id}`)}>编辑</Button>
-                        <Button type="link" onClick={() => history.push(`/delete`)} >删除</Button>
+                        <Button type="link" onClick={() => deleteProductGroupItem(record.id)} >删除</Button>
                     </>
                 }]} dataSource={data?.records} />
             <Row><Radio.Group
@@ -201,20 +224,20 @@ export default function ManagementDetail(): React.ReactNode {
                     <Radio.Button value="1" >已通过</Radio.Button>
                 </Radio.Group>
             </Row>
-            <Row><Button type="primary" onClick={() => history.push(`/project/management/detail/edit/salesPlan/${params.id}`)}>新增</Button></Row>
+            <Row><Button type="primary" onClick={() => history.push(`/project/management/detail/new/salesPlan/${params.id}`)}>新增</Button></Row>
             <CommonTable columns={[...taskNotice, {
                 title: "操作",
                 dataIndex: "opration",
                 fixed: "right",
-                render: () => {
+                render: (_: any, record: any) => {
                     return <>
                         <Button type="link">查看</Button>
-                        <Button type="link">编辑</Button>
+                        <Link to={`/project/management/detail/edit/salesPlan/${record.id}`}>编辑</Link>
                         <Button type="link">删除</Button>
                         <Button type="link">提交审批</Button>
                     </>
                 }
-            }]} />
+            }]} dataSource={data?.records} />
         </>
     }
     return <>

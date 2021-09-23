@@ -159,35 +159,35 @@
     "bidInfoColumns": [
         {
             "title": "是否中标",
-            "dataIndex": "packageNumber"
+            "dataIndex": "isBid"
         },
         {
             "title": "分标编号",
-            "dataIndex": "amount"
+            "dataIndex": "bidCode"
         },
         {
             "title": "货物类别",
-            "dataIndex": "unit"
+            "dataIndex": "cargoType"
         },
         {
             "title": "包号",
-            "dataIndex": "deliveryDate"
+            "dataIndex": "packageCode"
         },
         {
             "title": "项目单位",
-            "dataIndex": "deliveryPlace"
+            "dataIndex": "projectCompany"
         },
         {
             "title": "投标人名称",
-            "dataIndex": "deliveryPlace"
+            "dataIndex": "bidName"
         },
         {
             "title": "总价（万元）",
-            "dataIndex": "deliveryPlace"
+            "dataIndex": "money"
         },
         {
             "title": "重量（吨）",
-            "dataIndex": "deliveryPlace"
+            "dataIndex": "weight"
         }
     ],
     "bidDocColumns": [
@@ -586,11 +586,11 @@
     "newProductGroup": [
         {
             "title": "订单",
-            "dataIndex": "orderNumber",
+            "dataIndex": "saleOrderNumber",
             "type": "popTable",
             "path": "/tower-market/saleOrder",
             "width": 1011,
-            "value": "saleOrderNumber",
+            "value": "saleOrderId",
             "dependencies": true,
             "columns": [
                 {
@@ -746,38 +746,261 @@
     ],
     "taskNoticeEditBaseInfo": [
         {
-            "title": "任务单编号",
-            "dataIndex": "taskNumber"
+            "title": "关联订单",
+            "dataIndex": "saleOrderNumber",
+            "type": "popTable",
+            "path": "/tower-market/saleOrder",
+            "width": 1011,
+            "value": "saleOrderId",
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "订单编号",
+                    "dataIndex": "saleOrderNumber",
+                    "search": true
+                },
+                {
+                    "title": "内部合同编号",
+                    "dataIndex": "internalNumber"
+                },
+                {
+                    "title": "订单工程名称",
+                    "dataIndex": "orderProjectName"
+                },
+                {
+                    "title": "合同签订单位",
+                    "dataIndex": "signCustomerName"
+                },
+                {
+                    "title": "签订日期",
+                    "dataIndex": "signContractTime"
+                },
+                {
+                    "title": "合同交货日期",
+                    "dataIndex": "deliveryTime"
+                }
+            ]
         },
         {
-            "title": "订单编号",
-            "dataIndex": "saleOrderNumber"
-        },
-        {
-            "title": "合同编号",
-            "dataIndex": "internalNumber"
+            "title": "内部合同编号",
+            "dataIndex": "internalNumber",
+            "disabled": true
         },
         {
             "title": "订单工程名称",
-            "dataIndex": "orderProjectName"
+            "dataIndex": "orderProjectName",
+            "disabled": true
+        },
+        {
+            "title": "业主单位",
+            "dataIndex": "customerCompany",
+            "disabled": true
+        },
+        {
+            "title": "合同签订单位",
+            "dataIndex": "signCustomerName",
+            "disabled": true
+        },
+        {
+            "title": "订单交货日期",
+            "dataIndex": "orderDeliveryTime",
+            "disabled": true,
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "客户交货日期",
+            "dataIndex": "deliveryTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "计划交货日期",
+            "dataIndex": "planDeliveryTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "原材料要求",
+            "dataIndex": "materialDemand"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea"
         }
     ],
     "taskNoticeEditSpec": [
         {
-            "title": "任务单编号",
-            "dataIndex": "taskNumber"
+            "title": "原材料标准",
+            "dataIndex": "materialStandard",
+            "type": "select"
         },
         {
-            "title": "订单编号",
-            "dataIndex": "saleOrderNumber"
+            "title": "原材料要求",
+            "dataIndex": "materialDemand"
         },
+        {
+            "title": "焊接要求",
+            "dataIndex": "weldingDemand"
+        },
+        {
+            "title": "包装要求",
+            "dataIndex": "packDemand"
+        },
+        {
+            "title": "镀锌要求",
+            "dataIndex": "galvanizeDemand"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea"
+        }
+    ],
+    "contract": [
         {
             "title": "合同编号",
-            "dataIndex": "internalNumber"
+            "dataIndex": "contractNumber",
+            "search": true
         },
         {
-            "title": "订单工程名称",
-            "dataIndex": "orderProjectName"
+            "title": "合同名称",
+            "dataIndex": "contractName"
+        },
+        {
+            "title": "销售类型",
+            "dataIndex": "saleType"
+        },
+        {
+            "title": "业主单位",
+            "dataIndex": "customerCompany",
+            "search": true
+        },
+        {
+            "title": "合同签订单位",
+            "dataIndex": "signCustomerName"
+        },
+        {
+            "title": "合同签订日期",
+            "dataIndex": "signContractTime"
+        },
+        {
+            "title": "要求交货日期",
+            "dataIndex": "deliveryTime"
+        }
+    ],
+    "productAssist": [
+        {
+            "title": "线路名称",
+            "dataIndex": "lineName",
+            "width": 120
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 120
+        },
+        {
+            "title": "杆塔号",
+            "dataIndex": "productNumber",
+            "width": 120
+        },
+        {
+            "title": "产品类型",
+            "dataIndex": "productTypeName",
+            "width": 120
+        },
+        {
+            "title": "电压等级（kV）",
+            "dataIndex": "voltageGradeName",
+            "width": 120
+        },
+        {
+            "title": " 呼高（m）",
+            "dataIndex": "productHeight"
+        },
+        {
+            "title": "杆塔重量（kg）",
+            "dataIndex": "productWeight"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        }
+    ],
+    "salesAssist": [
+        {
+            "title": "线路名称",
+            "dataIndex": "lineName"
+        },
+        {
+            "title": "产品类型",
+            "dataIndex": "productTypeName"
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName"
+        },
+        {
+            "title": "杆塔号",
+            "dataIndex": "productNumber"
+        },
+        {
+            "title": "电压等级",
+            "dataIndex": "voltageGradeName"
+        },
+        {
+            "title": "呼高（米）",
+            "dataIndex": "productHeight"
+        },
+        {
+            "title": "身部重量（kg）",
+            "dataIndex": "bodyWeight"
+        },
+        {
+            "title": "接腿1#长度（m）",
+            "dataIndex": "towerLeg1Length"
+        },
+        {
+            "title": "接腿1#重量（kg）",
+            "dataIndex": "towerLeg1Weight"
+        },
+        {
+            "title": "接腿2#长度（m）",
+            "dataIndex": "towerLeg2Length"
+        },
+        {
+            "title": "接腿2#重量（kg）",
+            "dataIndex": "towerLeg2Weight"
+        },
+        {
+            "title": "接腿3#长度（m）",
+            "dataIndex": "towerLeg3Length"
+        },
+        {
+            "title": "接腿3#重量（kg）",
+            "dataIndex": "towerLeg3Weight"
+        },
+        {
+            "title": "接腿4#长度（m）",
+            "dataIndex": "towerLeg4Length"
+        },
+        {
+            "title": "接腿4#重量（kg）",
+            "dataIndex": "towerLeg4Weight"
+        },
+        {
+            "title": "塔脚板重量（kg）",
+            "dataIndex": "towerFootWeight"
+        },
+        {
+            "title": "杆塔重量（kg）",
+            "dataIndex": "productWeight"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
         }
     ],
     "paths": {

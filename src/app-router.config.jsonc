@@ -459,6 +459,13 @@
       "exact": true,
       "authority": "project_detail"
     },
+    { // 查看杆塔明细
+      "name": "杆塔明细",
+      "path": "/project/management/detail/productGroup/item/:id",
+      "module": "./pages/project/ProductDetail",
+      "exact": true,
+      "authority": "project_detail"
+    },
     { // 新增杆塔明细
       "name": "新增杆塔明细",
       "path": "/project/management/detail/new/productGroup/:id",
@@ -469,6 +476,13 @@
     { // 销售计划编辑
       "name": "销售计划编辑",
       "path": "/project/management/detail/edit/salesPlan/:id",
+      "module": "./pages/project/ManagementDetailEdit/SalesPlanEdit",
+      "exact": true,
+      "authority": "project_detail"
+    },
+    { // 新增销售计划编辑
+      "name": "新增销售计划",
+      "path": "/project/management/detail/new/salesPlan/:id",
       "module": "./pages/project/ManagementDetailEdit/SalesPlanEdit",
       "exact": true,
       "authority": "project_detail"

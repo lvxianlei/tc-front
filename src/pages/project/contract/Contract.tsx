@@ -138,7 +138,7 @@ class ManagementContract extends PromContract {
                 删除
               </Button>
             </Popconfirm>
-            <Button type="link" disabled={(record as IContract).status === 0}>
+            <Button type="link">
               <Link
                 to={`/project/contract/paymentRecord/${
                   (record as IContract).id

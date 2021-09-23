@@ -2,12 +2,15 @@ import React, { useState } from 'react'
 import { Space, Button, Input, Modal, Form, message, Upload } from 'antd'
 import { Link } from 'react-router-dom'
 import { Page, BaseInfo, DetailTitle, CommonTable } from '../common'
+import ApprovalTypesView from "./ApprovalTypesView"
 import SelectAuditType from './SelectAuditType'
 import useRequest from '@ahooksjs/use-request'
 import { auditHead } from "./approvalHeadData.json"
 import { bondBaseInfo, enclosure, drawH, drawingCofirm, baseInfo } from "./approvalHeadData.json"
 import RequestUtil from '../../utils/RequestUtil'
 import AuthUtil from "../../utils/AuthUtil"
+
+
 export default function Information(): React.ReactNode {
     const [visible, setVisible] = useState(false)
     const [performanceBondVisible, setPerformanceBondVisible] = useState<boolean>(false)
@@ -15,6 +18,8 @@ export default function Information(): React.ReactNode {
     const [drawingCofirmVisible, setDrawingCofirmVisible] = useState<boolean>(false)
     const [bidingVisible, setBidingVisible] = useState<boolean>(false)
     const [attachInfo, setAttachInfo] = useState<any[]>([])
+    const [currentView, setCurrentView] = useState<string>("performance_bond")
+    const [viewVisible, setViewVisible] = useState<boolean>(false)
     const [performanceBondForm] = Form.useForm()
     const [drawHForm] = Form.useForm()
     const [drawingCofirmForm] = Form.useForm()
@@ -136,6 +141,11 @@ export default function Information(): React.ReactNode {
         bidingForm.resetFields()
         setAttachInfo([])
     }
+
+    const handleSeeClick = (processName: string, id: string) => {
+        setViewVisible(true)
+    }
+
     return <>
         <Modal
             title="履约保证金审批"
@@ -230,6 +240,7 @@ export default function Information(): React.ReactNode {
             <CommonTable columns={enclosure} dataSource={attachInfo} />
         </Modal>
         <SelectAuditType visible={visible} title="新建审批" okText="创建" onOk={handleOk} onCancel={() => setVisible(false)} />
+        <ApprovalTypesView type={currentView} onCancel={() => setViewVisible(false)} />
         <Page
             path="/tower-market/audit"
             columns={[
@@ -246,7 +257,7 @@ export default function Information(): React.ReactNode {
                     dataIndex: 'operation',
                     render: (_: undefined, record: any): React.ReactNode => (
                         <Space direction="horizontal" size="small">
-                            <Link to={`/approvalm/management/detail/${record.id}`}>查看</Link>
+                            <Button type="link" onClick={() => handleSeeClick(record.processName, record.id)}>查看</Button>
                         </Space>
                     )
                 }]}

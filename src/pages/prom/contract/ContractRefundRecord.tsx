@@ -629,7 +629,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                     label: '未回款金额',
                     value: item.uncollectedPayment
                 }],
-                renderExtraInBar: (): React.ReactNode => this.renderExtraInBar(index),
+                // renderExtraInBar: (): React.ReactNode => this.renderExtraInBar(index),
                 render: (): React.ReactNode => (
                     <Form ref={ this.form } key={ Math.random() } onFinish={ this.save } onValuesChange={ (changedValues, allValues) => {
                         this.getForm()?.setFieldsValue({ ...allValues })

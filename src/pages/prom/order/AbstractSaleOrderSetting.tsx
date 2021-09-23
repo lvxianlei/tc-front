@@ -907,41 +907,42 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
      * @returns extra sections 
      */
     public renderExtraSections(): IRenderedSection[] {
-        return [{
-            title: '产品信息',
-            render: (): React.ReactNode => {
-                const chargeType: string | number | undefined = this.state.saleOrder?.contractInfoDto?.chargeType;
-                return (
-                    <>
-                        <TowerSelectionModal onSelect={ this.selectAddRow } id={ this.state.saleOrder?.contractInfoDto?.contractId } selectKey={ this.state.saleOrder?.orderProductDtos }/>
-                        <Table { ...this.getTableProps() } summary={pageData => {
-                            return (
-                                <>
-                                    <Table.Summary.Row>
-                                        <Table.Summary.Cell colSpan={ 9 } index={ 1 }>总结</Table.Summary.Cell>
-                                        <Table.Summary.Cell index={ 2 } className={ chargeType===ChargeType.UNIT_PRICE ? styles.ishidden : undefined }>
-                                            <Form.Item name="totalWeight">
-                                                <Input disabled/>
-                                            </Form.Item>
-                                        </Table.Summary.Cell>
-                                        <Table.Summary.Cell index={ 3 }>  
-                                            <Form.Item name="totalPrice">
-                                                <Input disabled/>
-                                            </Form.Item>
-                                        </Table.Summary.Cell>
-                                        <Table.Summary.Cell index={ 4 }>  
-                                            <Form.Item name="totalAmount">
-                                                <Input disabled/>
-                                            </Form.Item>
-                                        </Table.Summary.Cell>
-                                    </Table.Summary.Row>
-                                </>
-                            );
-                        }}></Table>
-                    </>
-                );
-            }
-        }];
+        // [{
+        //     title: '产品信息',
+        //     render: (): React.ReactNode => {
+        //         const chargeType: string | number | undefined = this.state.saleOrder?.contractInfoDto?.chargeType;
+        //         return (
+        //             <>
+        //                 <TowerSelectionModal onSelect={ this.selectAddRow } id={ this.state.saleOrder?.contractInfoDto?.contractId } selectKey={ this.state.saleOrder?.orderProductDtos }/>
+        //                 <Table { ...this.getTableProps() } summary={pageData => {
+        //                     return (
+        //                         <>
+        //                             <Table.Summary.Row>
+        //                                 <Table.Summary.Cell colSpan={ 9 } index={ 1 }>总结</Table.Summary.Cell>
+        //                                 <Table.Summary.Cell index={ 2 } className={ chargeType===ChargeType.UNIT_PRICE ? styles.ishidden : undefined }>
+        //                                     <Form.Item name="totalWeight">
+        //                                         <Input disabled/>
+        //                                     </Form.Item>
+        //                                 </Table.Summary.Cell>
+        //                                 <Table.Summary.Cell index={ 3 }>  
+        //                                     <Form.Item name="totalPrice">
+        //                                         <Input disabled/>
+        //                                     </Form.Item>
+        //                                 </Table.Summary.Cell>
+        //                                 <Table.Summary.Cell index={ 4 }>  
+        //                                     <Form.Item name="totalAmount">
+        //                                         <Input disabled/>
+        //                                     </Form.Item>
+        //                                 </Table.Summary.Cell>
+        //                             </Table.Summary.Row>
+        //                         </>
+        //                     );
+        //                 }}></Table>
+        //             </>
+        //         );
+        //     }
+        // }];
+        return []
     }
     
     /**
