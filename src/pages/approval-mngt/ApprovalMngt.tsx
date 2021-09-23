@@ -9,8 +9,12 @@ import { auditHead } from "./approvalHeadData.json"
 import { bondBaseInfo, enclosure, drawH, drawingCofirm, baseInfo } from "./approvalHeadData.json"
 import RequestUtil from '../../utils/RequestUtil'
 import AuthUtil from "../../utils/AuthUtil"
-
-
+const auditEnum: any = {
+    "performance_bond": "履约保证金申请",
+    "drawing_handover": "图纸交接申请",
+    "drawing_confirmation": "图纸交接确认申请",
+    "bidding_evaluation": "招标评审申请"
+}
 export default function Information(): React.ReactNode {
     const [visible, setVisible] = useState(false)
     const [performanceBondVisible, setPerformanceBondVisible] = useState<boolean>(false)
@@ -19,6 +23,7 @@ export default function Information(): React.ReactNode {
     const [bidingVisible, setBidingVisible] = useState<boolean>(false)
     const [attachInfo, setAttachInfo] = useState<any[]>([])
     const [currentView, setCurrentView] = useState<string>("performance_bond")
+    const [currentViewId, setCurrentViewId] = useState<string>("")
     const [viewVisible, setViewVisible] = useState<boolean>(false)
     const [performanceBondForm] = Form.useForm()
     const [drawHForm] = Form.useForm()
@@ -143,7 +148,9 @@ export default function Information(): React.ReactNode {
     }
 
     const handleSeeClick = (processName: string, id: string) => {
+        setCurrentView(Object.keys(auditEnum).find(key => auditEnum[key] === processName) as string)
         setViewVisible(true)
+        setCurrentViewId(id)
     }
 
     return <>
@@ -240,7 +247,11 @@ export default function Information(): React.ReactNode {
             <CommonTable columns={enclosure} dataSource={attachInfo} />
         </Modal>
         <SelectAuditType visible={visible} title="新建审批" okText="创建" onOk={handleOk} onCancel={() => setVisible(false)} />
-        <ApprovalTypesView type={currentView} onCancel={() => setViewVisible(false)} />
+        <ApprovalTypesView
+            title={auditEnum[currentView]}
+            visible={viewVisible}
+            onCancel={() => setViewVisible(false)}
+            id={currentViewId} />
         <Page
             path="/tower-market/audit"
             columns={[
