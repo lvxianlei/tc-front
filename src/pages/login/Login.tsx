@@ -1,5 +1,5 @@
 import { LockOutlined, SafetyCertificateOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Card, Form, Input, Layout, Space, Typography, notification } from 'antd';
+import { Button, Card, Form, Input, Layout, Space, Typography, notification, Carousel } from 'antd';
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import MD5 from 'crypto-js/md5';
@@ -107,14 +107,14 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
     public render(): React.ReactNode {
         return (
             <Layout className={layoutStyles.height100}>
-                <Layout.Header className={style.header}></Layout.Header>
                 <Layout.Content className={style.content}>
+                <div className={style.logo}/>
                     <div className={style.loginArea}>
-                        <Card className={style.loginCard}>
+                        <div className={style.loginCard}>
                             <div className={style.loginLogo}>
-                                <ToolOutlined />
+                                <div className={ style.loginTitleTop}><span>塔云</span><span style={{color:'black'}}>平台</span></div>
+                                <div className={ style.loginTitleBottom }>铁塔设计制造一站式解决方案</div>
                             </div>
-                            <Typography.Title level={4} className={style.loginTitle}>XX管理系统</Typography.Title>
                             <Form onFinish={this.onSubmit}>
                                 <Form.Item name="username" rules={[
                                     {
@@ -157,17 +157,15 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
                                 <Form.Item name="type" initialValue="account" className={layoutStyles.hidden}>
                                     <Input type="hidden" />
                                 </Form.Item>
-                                <Form.Item name="scope" initialValue="all" className={layoutStyles.hidden}>
-                                    <Input type="hidden" />
-                                </Form.Item>
-                                <Form.Item>
-                                    <Button type="primary" htmlType="submit" size="large" className={layoutStyles.width100}>登录</Button>
-                                </Form.Item>
+                                <div>
+                                    <Button type="primary" htmlType="submit" size="large" className={style.submitButton}>登录</Button>
+                                </div>
+                                    <Button htmlType="submit" type='link' size='large'>忘记密码</Button>
                             </Form>
-                        </Card>
+                        </div>
+                        <div className={ style.bottom }>© 2019 powered by 德汇科技. All rights reserved</div>
                     </div>
                 </Layout.Content>
-                <Layout.Footer className={style.footer}></Layout.Footer>
             </Layout>
         );
     }
