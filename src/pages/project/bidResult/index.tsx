@@ -104,7 +104,7 @@ export const UploadXLS = (props: {
   xlsKeyNameDic?: [string, string][]
   requireKeys?: string[]
 }) => {
-  const { readEnd, xlsKeyNameDic, requireKeys  } = props;
+  const { readEnd, xlsKeyNameDic, requireKeys } = props;
   return (
     <Upload
       accept=".xls,.xlsx"
@@ -196,9 +196,9 @@ export const TabsCanEdit = forwardRef((props: TabsCanEditProps, ref?: any) => {
               item,
               hasRefFun
                 ? {
-                    ref: contentRefs.current,
-                    key,
-                  }
+                  ref: contentRefs.current,
+                  key,
+                }
                 : undefined
             ),
           item,
@@ -234,9 +234,9 @@ export const TabsCanEdit = forwardRef((props: TabsCanEditProps, ref?: any) => {
             newItem,
             hasRefFun
               ? {
-                  ref: contentRefs.current,
-                  key: activeKey,
-                }
+                ref: contentRefs.current,
+                key: activeKey,
+              }
               : undefined
           ),
       };
@@ -321,7 +321,7 @@ export const TabsCanEdit = forwardRef((props: TabsCanEditProps, ref?: any) => {
       onEdit={tabEdit}
       hideAdd={true}
     >
-      {panes?.map((pane) => (
+      {panes?.map((pane,index) => (
         <Tabs.TabPane tab={pane.title} key={pane.key} closable={pane.closable}>
           {pane.content}
         </Tabs.TabPane>
@@ -365,8 +365,8 @@ const BidResult = () => {
       <EditTableHasForm
         columns={bidInfoColumns}
         dataSource={[]}
-        opration={[<UploadXLS xlsKeyNameDic={xlsKeyNameDic} requireKeys={requireKeys}/>]}
-        // ref={tempRef ? (o) => (tempRef.ref[tempRef.key] = o) : undefined}
+        opration={[<UploadXLS xlsKeyNameDic={xlsKeyNameDic} requireKeys={requireKeys} />]}
+      // ref={tempRef ? (o) => (tempRef.ref[tempRef.key] = o) : undefined}
       />
     );
   }, []);
@@ -374,21 +374,10 @@ const BidResult = () => {
   return (
     <DetailContent
       operation={[
-        <Button
-          key="edit"
-          style={{ marginRight: "10px" }}
-          type="primary"
-          onClick={() =>
-            history.push(
-              `/project/management/detail/edit/bidResult/${params.id}`
-            )
-          }
-        >
-          编辑
-        </Button>,
-        <Button key="goback" onClick={() => history.goBack()}>
-          返回
-        </Button>,
+        <Button key="edit" style={{ marginRight: "10px" }} type="primary"
+          onClick={() => history.push(`/project/management/detail/edit/bidResult/${params.id}`)}
+        >编辑</Button>,
+        <Button key="goback" onClick={() => history.goBack()}>返回</Button>,
       ]}
     >
       <DetailTitle title="基础信息" />
@@ -422,7 +411,6 @@ const BidResult = () => {
         ref={tabeditable}
         data={data}
         eachContent={eachContent}
-        // hasRefFun={true}
       />
     </DetailContent>
   );

@@ -3,7 +3,11 @@ import { Button, Row, Tabs, Radio, Spin, Upload } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common'
 import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
-import { baseInfoData, productGroupColumns, bidDocColumns, paths, frameAgreementColumns, enclosure, cargoVOListColumns, materialListColumns, taskNotice } from './managementDetailData.json'
+import {
+    baseInfoData, productGroupColumns, bidDocColumns, paths,
+    frameAgreementColumns, enclosure, cargoVOListColumns, materialListColumns, taskNotice,
+    bidInfoColumns
+} from './managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import ManagementContract from './contract/Contract'
@@ -84,7 +88,57 @@ export default function ManagementDetail(): React.ReactNode {
                 { title: '说明', dataIndex: 'description' }
             ]} dataSource={data?.bidBizRecordVos} />
         </DetailContent>,
-        tab_bidResult: <BidResult />,
+        tab_bidResult: <DetailContent operation={[
+            <Button key="goEdit" type="primary" onClick={() => history.push(`/project/management/detail/edit/bidResult/${params.id}`)}>编辑</Button>,
+            <Button key="goback" onClick={() => history.goBack}>返回</Button>
+        ]}>
+            <Spin spinning={loading}>
+                <DetailTitle title="基本信息" />
+                <BaseInfo columns={[
+                    {
+                        title: '年份',
+                        dataIndex: 'date',
+                        type: "date",
+                        format: "YYYY",
+                        picker: "year"
+                    },
+                    {
+                        title: '批次',
+                        dataIndex: 'batch',
+                        type: "number"
+                    }, {
+                        title: '备注',
+                        dataIndex: 'description'
+                    },
+                    {
+                        title: '是否中标',
+                        dataIndex: "isBid",
+                        type: "select",
+                        enum: [
+                            {
+                                value: 0,
+                                label: "未公布"
+                            },
+                            {
+                                value: 1,
+                                label: "是"
+                            },
+                            {
+                                value: 2,
+                                label: "否"
+                            }
+                        ]
+                    }]} dataSource={data || {}} col={2} />
+                <DetailTitle title="开标信息" />
+                <Tabs>
+                    {data?.bidOpenRecordListVos?.length > 0 ? data?.bidOpenRecordListVos.map((item: any, index: number) => <Tabs.TabPane tab={item.roundName}>
+                        <CommonTable columns={bidInfoColumns} dataSource={item.bidOpenRecordVos || []} />
+                    </Tabs.TabPane>) : <Tabs.TabPane tab="第 1 轮">
+                        <CommonTable columns={bidInfoColumns} dataSource={[]} />
+                    </Tabs.TabPane>}
+                </Tabs>
+            </Spin>
+        </DetailContent>,
         tab_frameAgreement: <DetailContent operation={[
             <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => history.push(`/project/management/detail/edit/frameAgreement/${params.id}`)}>编辑</Button>,
             <Button key="goback">返回</Button>

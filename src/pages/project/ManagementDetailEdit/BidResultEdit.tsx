@@ -43,13 +43,13 @@ export default function BidResultEdit(): JSX.Element {
                 const { refFun, ...realItem } = item;
                 const _form = refFun?.getForm();
                 const fdata = await _form.getFieldsValue();
-                return {realItem, formData: fdata?.submit}
+                return { realItem, formData: fdata?.submit }
             })
         )
 
         console.log(_tabsData)
 
-        await run({ ...postBaseData, ...baseInfoData, projectId: params.id, date: baseInfoData.date.year && baseInfoData.date.year(), id: data?.id })
+        // await run({ ...postBaseData, ...baseInfoData, projectId: params.id, date: baseInfoData.date.year && baseInfoData.date.year(), id: data?.id })
     }
 
     return (<DetailContent operation={[<Button key="save" type="primary" onClick={handleSubmit}>保存</Button>]}>
@@ -97,29 +97,26 @@ export default function BidResultEdit(): JSX.Element {
                 canEdit={true}
                 hasRefFun={true}
                 data={[
-                {
-                    title: "第一轮",
-                    key: "第一轮",
-                },
-                {
-                    title: "第二轮",
-                    key: "第二轮",
-                },
+                    {
+                        title: "第 1 轮",
+                        key: "第 1 轮",
+                        content: <EditTable columns={bidInfoColumns} dataSource={[]} />
+                    }
                 ]}
                 eachContent={(item: any, tempRef?: {
                     ref: Record<string, any>;
                     key: string;
                 }) => {
-                    const data:any[] = []
+                    const data: any[] = []
                     return (
                         <EditTableHasForm
                             columns={bidInfoColumns}
                             dataSource={data}
-                            opration={[<UploadXLS readEnd={(_data)=>{
+                            opration={[<UploadXLS key="xlxs" readEnd={(_data) => {
                                 console.log(_data)
                                 // 伪代码 不可用
                                 // setData(data.concat(_data))
-                            }}/>]}
+                            }} />]}
                             ref={tempRef ? (o) => (tempRef.ref[tempRef.key] = o) : undefined}
                         />
                     );
