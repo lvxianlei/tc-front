@@ -178,7 +178,7 @@ export default function PickTower(): React.ReactNode {
                     <Space>
                     <Button type="primary">导出</Button>
                     <Button type="primary">提交</Button>
-                    <Button type="primary" onClick={()=>history.goBack()}>返回上一级</Button>
+                    <Button type="primary" onClick={()=>history.push('/workMngt/pickList')}>返回上一级</Button>
                     </Space>
                 }
                 searchFormItems={[

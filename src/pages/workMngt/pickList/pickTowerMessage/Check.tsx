@@ -26,7 +26,13 @@ export default function PickCheckList(): React.ReactNode {
         <Page
             path="/tower-market/bidInfo"
             columns={columns}
-            // extraOperation={}
+            extraOperation={
+                <Space>
+                    <Button>导出</Button>
+                    <Button>完成校核</Button>
+                    <Button>返回上一级</Button>
+                </Space>
+            }
             searchFormItems={[
                 {
                     name: 'startBidBuyEndTime',

@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Button, Form, Modal } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
-import { Link } from 'react-router-dom'
+import { Link, useHistory, useParams } from 'react-router-dom'
 import { CommonTable, Page } from '../../../common'
 
 export default function PickPickList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
+    const params = useParams<{ id: string }>();
+    const history = useHistory();
     const [form] = Form.useForm();
     const handleModalOk = async () => {
         try {
@@ -24,63 +26,21 @@ export default function PickPickList(): React.ReactNode {
             width: 50,
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
-        {
-            key: 'projectName',
-            title: '放样任务编号',
-            width: 100,
-            dataIndex: 'projectName'
-        },
-        {
-            key: 'projectNumber',
-            title: '任务单编号',
-            width: 100,
-            dataIndex: 'projectNumber'
-        },
-        {
-            key: 'projectNumber',
-            title: '内部合同编号',
-            width: 100,
-            dataIndex: 'projectNumber'
-        },
-        {
-            key: 'bidBuyEndTime',
-            title: '塔型',
-            width: 100,
-            dataIndex: 'bidBuyEndTime'
-        },
-        {
-            key: 'biddingEndTime',
-            title: '塔型钢印号',
-            width: 100,
-            dataIndex: 'biddingEndTime'
-        },
-        {
-            key: 'biddingAgency',
-            title: '杆塔（基）',
-            width: 100,
-            dataIndex: 'biddingAgency'
-        },
-        {
-            key: 'biddingAddress',
-            title: '计划交付时间',
-            width: 200,
-            dataIndex: 'biddingAddress'
-        },
-        {
-            key: 'operation',
-            title: '操作',
-            fixed: 'right' as FixedType,
-            width: 230,
-            dataIndex: 'operation',
-            render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
-                    <Link to={`/workMngt/pickList/pickMessage/${record.id}`}>提料信息</Link>
-                    <Link to={`/workMngt/pickList/pickTowerMessage/${record.id}`}>塔型信息</Link>
-                    <Link to={`/workMngt/pickList/pickTower/${record.id}`}>杆塔配段</Link>
-                    <Button type='link' onClick={() => setVisible(true)}>交付物</Button>
-                </Space>
-            )
-        }
+        { title: '段名', dataIndex: 'partBidNumber', key: 'partBidNumber', },
+        { title: '构件编号', dataIndex: 'goodsType', key: 'goodsType' },
+        { title: '材料名称', dataIndex: 'packageNumber', key: 'packgeNumber' },
+        { title: '材质', dataIndex: 'amount', key: 'amount' },
+        { title: '规格', dataIndex: 'unit', key: 'unit' },
+        { title: '单基件数', dataIndex: 'unit', key: 'unit' },
+        { title: '长度（mm）', dataIndex: 'packageNumber', key: 'packgeNumber' },
+        { title: '宽度（mm）', dataIndex: 'amount', key: 'amount' },
+        { title: '理算重量（kg）', dataIndex: 'unit', key: 'unit' },
+        { title: '单件重量（kg）', dataIndex: 'packageNumber', key: 'packgeNumber' },
+        { title: '小计重量（kg）', dataIndex: 'amount', key: 'amount' },
+        { title: '备注', dataIndex: 'unit', key: 'unit' },
+        { title: '操作', key:'operation', render:(): React.ReactNode =>(
+                <Button type='link'>删除</Button>
+        )}
     ]
 
     const handleModalCancel = () => setVisible(false)
@@ -118,33 +78,30 @@ export default function PickPickList(): React.ReactNode {
             <Page
                 path="/tower-market/bidInfo"
                 columns={columns}
-                extraOperation={<Button type="primary">导出</Button>}
+                extraOperation={
+                    <Space>
+                        <Button type="primary">导出</Button>
+                        {/* <Button type="primary">模板下载</Button> */}
+                        <Button type="primary">导入</Button>
+                        <Button type="primary" onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/pick/${params.id}/drawApply`)}}>图纸塔型套用</Button>
+                        <Button type="primary" onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/pick/${params.id}/setOutApply`)}}>放样塔型套用</Button>
+                        <Button type="primary">完成提料</Button>
+                        <Button type="primary">编辑/锁定</Button>
+                        <Button type="primary" onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/pick/${params.id}/recognize`)}}>识别</Button>
+                        <Button type="primary">返回上一级</Button>
+                    </Space>
+                }
                 searchFormItems={[
                     {
                         name: 'startBidBuyEndTime',
-                        label: '最新状态变更时间',
+                        label: '材料名称',
                         children: <DatePicker />
                     },
                     {
                         name: 'startBidBuyEndTime',
-                        label: '塔型状态',
+                        label: '材质',
                         children: <DatePicker />
-                    },
-                    {
-                        name: 'fuzzyQuery',
-                        label:'计划交付时间',
-                        children: <Input placeholder="请输入项目名称/项目编码/审批编号/关联合同/制单人进行查询" maxLength={200} />
-                    },
-                    {
-                        name: 'startReleaseDate',
-                        label: '模式',
-                        children: <DatePicker />
-                    },
-                    {
-                        name: 'biddingStatus',
-                        label: '模糊查询项',
-                        children: <Input placeholder="请输入放样任务编号/任务单编号/订单编号/内部合同编号/塔型/塔型钢印号进行查询" maxLength={200} />
-                    },
+                    }
                 ]}
             />
         </>
