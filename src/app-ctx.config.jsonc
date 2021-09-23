@@ -190,7 +190,7 @@
                     },
                     {
                         "label": "工作台",
-                        "icon": "approval-mngt",
+                        "icon": "technology",
                         "path": "/workBench",
                         "authority": "approvalm",
                         "items": [
@@ -203,7 +203,7 @@
                     },
                     {
                         "label": "驾驶舱",
-                        "icon": "approval-mngt",
+                        "icon": "technology",
                         "path": "/cockpit",
                         "authority": "approvalm",
                         "items": [
@@ -221,7 +221,7 @@
                     },
                     {
                         "label": "评估任务",
-                        "icon": "approval-mngt",
+                        "icon": "technology",
                         "path": "/assessmentTask",
                         "authority": "approvalm",
                         "items": [
@@ -234,7 +234,7 @@
                     },
                     {
                         "label": "确认任务",
-                        "icon": "approval-mngt",
+                        "icon": "technology",
                         "path": "/confirmTask",
                         "authority": "approvalm",
                         "items": [
@@ -247,7 +247,7 @@
                     },
                     {
                         "label": "放样任务",
-                        "icon": "approval-mngt",
+                        "icon": "technology",
                         "path": "/setOutTask",
                         "authority": "approvalm",
                         "items": [
@@ -260,7 +260,7 @@
                     },
                     {
                         "label": "工作管理",
-                        "icon": "approval-mngt",
+                        "icon": "technology",
                         "path": "/workMngt",
                         "authority": "approvalm",
                         "items": [
@@ -308,7 +308,7 @@
                     },
                     {
                         "label": "图纸塔型",
-                        "icon": "approval-mngt",
+                        "icon": "technology",
                         "path": "/drawTower",
                         "authority": "approvalm",
                         "items": [
@@ -321,7 +321,7 @@
                     },
                     {
                         "label": "放样塔型",
-                        "icon": "approval-mngt",
+                        "icon": "technology",
                         "path": "/setOutTower",
                         "authority": "approvalm",
                         "items": [
@@ -334,7 +334,7 @@
                     },
                     {
                         "label": "问题单",
-                        "icon": "approval-mngt",
+                        "icon": "technology",
                         "path": "/question",
                         "authority": "approvalm",
                         "items": [
