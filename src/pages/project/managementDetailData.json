@@ -195,7 +195,22 @@
     "bidInfoColumns": [
         {
             "title": "是否中标",
-            "dataIndex": "isBid"
+            "dataIndex": "isBid",
+            "type": "select",
+            "enum": [
+                {
+                    "value": -1,
+                    "label": "未公布"
+                },
+                {
+                    "value": 1,
+                    "label": "是"
+                },
+                {
+                    "value": 2,
+                    "label": "否"
+                }
+            ]
         },
         {
             "title": "分标编号",
@@ -219,11 +234,13 @@
         },
         {
             "title": "总价（万元）",
-            "dataIndex": "money"
+            "dataIndex": "money",
+            "type": "number"
         },
         {
             "title": "重量（吨）",
-            "dataIndex": "weight"
+            "dataIndex": "weight",
+            "type": "number"
         }
     ],
     "bidDocColumns": [
@@ -275,16 +292,21 @@
         },
         {
             "title": "电子版完成日期",
-            "dataIndex": "elDate"
+            "dataIndex": "elDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "澄清/补遗日期",
-            "dataIndex": "reDate"
+            "dataIndex": "reDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "纸质打印日期",
             "dataIndex": "paDate",
-            "type": "date"
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "全部完成日期",
@@ -328,7 +350,8 @@
         },
         {
             "title": "备注",
-            "dataIndex": "description"
+            "dataIndex": "description",
+            "type": "textarea"
         }
     ],
     "saleOrderTableColumns": [
@@ -726,7 +749,8 @@
         {
             "title": "交货时间",
             "dataIndex": "date",
-            "width": 100
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "收货人及联系电话",

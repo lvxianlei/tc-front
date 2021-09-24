@@ -1,6 +1,6 @@
 import React from "react"
 import { useHistory, useParams } from "react-router-dom"
-import { Spin, Button, Form } from "antd"
+import { Spin, Button, Form, message } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, CommonTable } from '../../common'
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { bidDocColumns } from '../managementDetailData.json'
@@ -20,19 +20,27 @@ export default function BaseInfoEdit(): JSX.Element {
         resole(result)
     }))
     const { loading: saveStatus, data: saveResult, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
-        const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/bidDoc`, postData)
-        resole(result)
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/bidDoc`, postData)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
     }), { manual: true })
 
     const handleSubmit = async () => {
         const baseInfoData = await baseInfoForm.getFieldsValue()
-        await run({ ...data, ...baseInfoData, projectId: params.id })
+        const result = await run({ ...data, ...baseInfoData, projectId: params.id })
+        if (result) {
+            message.success("保存成功...")
+            history.goBack()
+        }
     }
 
     return <DetailContent
         operation={[
             <Button key="edit" type="primary" onClick={handleSubmit} loading={saveStatus}>保存</Button>,
-            <Button key="goback">返回</Button>
+            <Button key="goback" onClick={() => history.goBack()}>返回</Button>
         ]}>
         <ManagementDetailTabsTitle />
         <Spin spinning={loading}>

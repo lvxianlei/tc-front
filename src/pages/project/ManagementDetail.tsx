@@ -13,7 +13,6 @@ import RequestUtil from '../../utils/RequestUtil'
 import ManagementContract from './contract/Contract'
 import ManagementOrder from './order/SaleOrder'
 import ApplicationContext from "../../configuration/ApplicationContext"
-import AuthUtil from '../../utils/AuthUtil'
 export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | undefined
 
 export default function ManagementDetail(): React.ReactNode {
@@ -21,6 +20,7 @@ export default function ManagementDetail(): React.ReactNode {
     const params = useParams<{ id: string, tab?: TabTypes }>()
     const dictionaryOptions: any = ApplicationContext.get().dictionaryOption
     const bidType = dictionaryOptions["124"]
+    const frangmentBidType = dictionaryOptions["122"]
     const { loading, error, data, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
         if (params.tab === "contract") {
             resole({})
@@ -71,19 +71,7 @@ export default function ManagementDetail(): React.ReactNode {
                 { title: '序号', dataIndex: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
                 ...cargoVOListColumns
             ]} dataSource={data?.cargoVOList} />
-            <DetailTitle title="附件信息" operation={[
-                <Upload
-                    key="sub"
-                    name="file"
-                    multiple={true}
-                    action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
-                    headers={{
-                        'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                        'Tenant-Id': AuthUtil.getTenantId(),
-                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                    }}
-                    showUploadList={false}
-                ><Button key="base" type="default">上传附件</Button></Upload>]} />
+            <DetailTitle title="附件信息" />
             <CommonTable columns={[
                 {
                     title: '序号',
@@ -97,7 +85,7 @@ export default function ManagementDetail(): React.ReactNode {
         tab_bidDoc: <DetailContent
             operation={[
                 <Button key="edit" type="primary" onClick={() => history.push(`/project/management/detail/edit/bidDoc/${params.id}`)} >编辑</Button>,
-                <Button key="goback">返回</Button>
+                <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
             <DetailTitle title="标书制作记录表" />
             <BaseInfo columns={bidDocColumns.map(item => item.dataIndex === "bidType" ? ({ ...item, type: "select", enum: bidType.map((bid: any) => ({ value: bid.id, label: bid.name })) }) : item)} dataSource={data || {}} col={4} />
@@ -164,10 +152,16 @@ export default function ManagementDetail(): React.ReactNode {
         </DetailContent>,
         tab_frameAgreement: <DetailContent operation={[
             <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => history.push(`/project/management/detail/edit/frameAgreement/${params.id}`)}>编辑</Button>,
-            <Button key="goback">返回</Button>
+            <Button key="goback" onClick={() => history.goBack()}>返回</Button>
         ]}>
             <DetailTitle title="基本信息" />
-            <BaseInfo columns={frameAgreementColumns} dataSource={data || {}} />
+            <BaseInfo columns={frameAgreementColumns.map((item: any) => item.dataIndex === "bidType" ? ({
+                ...item,
+                enum: frangmentBidType.map((fitem: any) => ({
+                    value: fitem.id, label: fitem.name
+                }))
+            }) : item)}
+                dataSource={data || {}} />
             <DetailTitle title="合同物资清单" />
             <CommonTable columns={[
                 { title: '序号', dataIndex: 'index', width: 50, key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },

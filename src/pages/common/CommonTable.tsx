@@ -10,7 +10,7 @@ function generateRender(type: ColumnsItemsType, data: (SelectData | TextData)) {
             return ({
                 ellipsis: true,
                 onCell: () => ({ className: styles.tableCell }),
-                render: (text: string, record: any) => <>{text ? moment(text).format(record.format || "YYYY-MM-DD HH:mm:ss") : "-"}</>,
+                render: (text: string, record: any) => <>{text ? moment(text).format(data.format || "YYYY-MM-DD HH:mm:ss") : "-"}</>,
                 ...data
             })
         case "select":

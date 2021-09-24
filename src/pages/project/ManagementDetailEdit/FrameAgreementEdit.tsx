@@ -22,7 +22,7 @@ export default function FrameAgreementEdit(): JSX.Element {
         resole(result)
     }))
     const { loading: saveStatus, error: saveError, data: saveResult, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
-        const result: { [key: string]: any } = await RequestUtil.put(`/tower-market/frameAgreement`, postData)
+        const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/frameAgreement`, postData)
         resole(result)
     }), { manual: true })
 

@@ -138,8 +138,18 @@ export default function Information(): React.ReactNode {
     const uploadChange = (event: any) => {
         if (event.file.status === "done") {
             if (event.file.response.code === 200) {
-                console.log(event.file.response)
-                setAttachInfo([...attachInfo, event.file.response.data])
+                const dataInfo = event.file.response.data
+                const fileInfo = dataInfo.name.split(".")
+                setAttachInfo([...attachInfo, {
+                    id: attachInfo.length,
+                    name: dataInfo.originalName.split(".")[0],
+                    description: "",
+                    filePath: dataInfo.link,
+                    fileSize: dataInfo.size,
+                    fileSuffix: fileInfo[fileInfo.length - 1],
+                    userName: dataInfo.userName,
+                    fileUploadTime: dataInfo.fileUploadTime
+                }])
             }
         }
     }

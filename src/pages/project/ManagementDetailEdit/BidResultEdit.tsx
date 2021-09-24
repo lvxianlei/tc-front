@@ -80,7 +80,7 @@ export default function BidResultEdit(): JSX.Element {
                     type: "select",
                     enum: [
                         {
-                            value: 0,
+                            value: -1,
                             label: "未公布"
                         },
                         {
