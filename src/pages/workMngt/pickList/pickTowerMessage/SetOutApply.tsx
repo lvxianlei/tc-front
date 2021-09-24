@@ -11,14 +11,7 @@ const towerColumns = [
     { title: '塔型', dataIndex: 'partBidNumber', key: 'partBidNumber', },
     { title: '塔型钢印号', dataIndex: 'amount', key: 'amount' },
     { title: '任务单号', dataIndex: 'goodsType', key: 'goodsType' },
-    { title: '规格', dataIndex: 'unit', key: 'unit' },
-    { title: '单段件数', dataIndex: 'packageNumber', key: 'packgeNumber' },
-    { title: '宽度（mm）', dataIndex: 'amount', key: 'amount' },
-    { title: '长度（mm）', dataIndex: 'packageNumber', key: 'packgeNumber' },
-    { title: '理算重量（kg）', dataIndex: 'unit', key: 'unit' },
-    { title: '单件重量（kg）', dataIndex: 'packageNumber', key: 'packgeNumber' },
-    { title: '小计重量（kg）', dataIndex: 'amount', key: 'amount' },
-    { title: '备注', dataIndex: 'unit', key: 'unit' }
+    { title: '呼高', dataIndex: 'unit', key: 'unit' },
 ]
 
 const paragraphColumns = [
