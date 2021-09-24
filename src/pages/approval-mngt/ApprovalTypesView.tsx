@@ -6,10 +6,10 @@ import useRequest from '@ahooksjs/use-request'
 import AuthUtil from "../../utils/AuthUtil"
 import { bondBaseInfo, enclosure, drawH, drawingCofirm, baseInfo, auditIdRecord } from "./approvalHeadData.json"
 const paths: any = {
-    "履约保证金申请": "/tower-market/performanceBond?auditId=",
-    "图纸交接申请": "/tower-market/drawingHandover?drawingHandoverId=",
-    "图纸交接确认申请": "/tower-market/drawingConfirmation",
-    "招标评审申请": "/tower-market/biddingEvaluation?auditId="
+    "履约保证金申请": "/tower-market/performanceBond/",
+    "图纸交接申请": "/tower-market/drawingHandover/",
+    "图纸交接确认申请": "/tower-market/drawingConfirmation/",
+    "招标评审申请": "/tower-market/biddingEvaluation/"
 }
 interface ApprovalTypesViewProps {
     id: string
@@ -42,8 +42,8 @@ const ViewDetail: React.FC<ApprovalTypesViewProps> = ({ id, path, title }) => {
                 <Radio.Button value="base">基本信息</Radio.Button>
                 <Radio.Button value="records">审批记录</Radio.Button>
             </Radio.Group>
-            {radioValue === "base" && <BaseInfo columns={bondBaseInfo} dataSource={(data as any) || {}} />}
-            {radioValue === "records" && <CommonTable columns={auditIdRecord} dataSource={data?.records} />}
+            {radioValue === "base" && <BaseInfo columns={bondBaseInfo} dataSource={data?.performanceBond || {}} />}
+            {radioValue === "records" && <CommonTable columns={auditIdRecord} dataSource={data?.records || []} />}
         </DetailContent>,
         "图纸交接申请": <DetailContent>
             <Radio.Group defaultValue={radioValue} onChange={(event: any) => radioOnchange(event.target.value)}>

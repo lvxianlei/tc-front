@@ -17,7 +17,7 @@ function generateRender(type: ColumnsItemsType, data: (SelectData | TextData)) {
             return ({
                 ellipsis: true,
                 onCell: () => ({ className: styles.tableCell }),
-                render: (text: string, record: any) => <>{record.enum ? record.enum.find((item: { value: string, label: string }) => item.value === text).label : text}</>,
+                render: (text: string) => <>{text && data.enum ? data.enum.find((item: { value: string, label: string }) => item.value === text).label : text}</>,
                 ...data
             })
         default:

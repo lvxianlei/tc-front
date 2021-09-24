@@ -11,6 +11,40 @@ interface ManagementState {
     selectedUsers: object[]
 }
 
+const projectType = [
+    {
+        value: 0,
+        label: "公开招标"
+    },
+    {
+        value: 1,
+        label: "用户工程"
+    }
+]
+
+const currentProjectStage = [
+    {
+        value: 0,
+        label: "准备投标"
+    },
+    {
+        value: 1,
+        label: "投标"
+    },
+    {
+        value: 2,
+        label: "合同签订"
+    },
+    {
+        value: 3,
+        label: "合同执行"
+    },
+    {
+        value: 4,
+        label: "项目结束"
+    }
+]
+
 export default function Management(): React.ReactNode {
     // const [selectKeys, setSelectKeys] = useState<ManagementState>({
     //     selectedUserKeys: [],
@@ -38,7 +72,8 @@ export default function Management(): React.ReactNode {
         {
             key: 'projectType',
             title: '项目类型',
-            dataIndex: 'projectType'
+            dataIndex: 'projectType',
+            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{projectType.find(item => item.value === Number(_a))?.label}</span>)
         },
         {
             key: 'bidBuyEndTime',
@@ -53,7 +88,8 @@ export default function Management(): React.ReactNode {
         {
             key: 'currentProjectStage',
             title: '项目阶段',
-            dataIndex: 'currentProjectStage'
+            dataIndex: 'currentProjectStage',
+            render: (_a: number) => <span>{currentProjectStage.find(item => item.value === _a)?.label}</span>
         },
         {
             key: 'projectLeader',
@@ -71,9 +107,9 @@ export default function Management(): React.ReactNode {
             dataIndex: 'releaseDate'
         },
         {
-            key: 'explain',
+            key: 'bidExplain',
             title: '说明',
-            dataIndex: 'explain'
+            dataIndex: 'bidExplain'
         },
         {
             key: 'operation',
@@ -82,7 +118,7 @@ export default function Management(): React.ReactNode {
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Link to={`/project/management/detail/${(record as IClient).id}`}>查看</Link>
-                    <Link to={`/project/management/edit/${(record as IClient).id}`}>编辑</Link>
+                    <Link to={`/project/management/detail/edit/base/${(record as IClient).id}`}>编辑</Link>
                     <ConfirmableButton
                         confirmTitle="要删除该客户吗？"
                         type="link"

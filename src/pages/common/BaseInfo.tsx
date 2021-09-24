@@ -33,7 +33,8 @@ function formatDataType(dataItem: any, dataSource: any): string {
         number: value && value !== -1 ? value : "-",
         select: (value && dataItem.enum && value !== -1) ? dataItem.enum.find((item: any) => item.value === value)?.label : "-",
         date: value ? moment(value).format(dataItem.format || "YYYY-MM-DD HH:mm:ss") : "-",
-        string: value || "-"
+        string: value || "-",
+        textarea: value || "-"
     }
     return types[dataItem.type || "string"]
 }
@@ -52,7 +53,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
                 {columns.map((item: any, index: number) => <Col key={`form_item_${index}`} span={24 / col}>
                     <Col span={24}>
                         <Form.Item name={item.dataIndex} label={item.title} rules={item.rules || []}>
-                            <FormItemType type={item.type} data={item} />
+                            {item.render ? item.render() : <FormItemType type={item.type} data={item} />}
                         </Form.Item>
                     </Col>
                 </Col>

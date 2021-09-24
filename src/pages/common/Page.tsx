@@ -20,6 +20,7 @@ export interface PageProps extends RouteComponentProps, WithTranslation {
     tableProps?: TableProps<any>
     searchFormItems: FormItemProps[]
     headTabs?: ITabItem[]
+    onFilterSubmit?(values: Record<string, any>): Record<string, any>
 }
 
 export interface IResponseData {
@@ -96,7 +97,8 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
             total: 0,
             showSizeChanger: false
         }
-        this.fetchTableData(values, tablePagination);
+        const postValue: any = this.props.onFilterSubmit && this.props.onFilterSubmit(values)
+        this.fetchTableData(postValue, tablePagination);
     }
 
     public getTabItems(): ITabItem[] {

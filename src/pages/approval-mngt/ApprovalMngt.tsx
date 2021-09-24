@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Space, Button, Input, Modal, Form, message, Upload } from 'antd'
-import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { Page, BaseInfo, DetailTitle, CommonTable } from '../common'
 import ApprovalTypesView from "./ApprovalTypesView"
 import SelectAuditType from './SelectAuditType'
@@ -16,6 +16,7 @@ const auditEnum: any = {
     "bidding_evaluation": "招标评审申请"
 }
 export default function Information(): React.ReactNode {
+    const history = useHistory()
     const [visible, setVisible] = useState(false)
     const [performanceBondVisible, setPerformanceBondVisible] = useState<boolean>(false)
     const [drawHVisible, setDrawHVisible] = useState<boolean>(false)
@@ -66,6 +67,7 @@ export default function Information(): React.ReactNode {
         if (result) {
             message.success("成功创建申请...")
             setPerformanceBondVisible(false)
+            history.go(0)
         } else {
             message.error(`创建申请失败！原因：${result}`)
         }
@@ -79,7 +81,7 @@ export default function Information(): React.ReactNode {
         if (result) {
             message.success("成功创建申请...")
             setDrawHVisible(false)
-
+            history.go(0)
         } else {
             message.error(`创建申请失败！原因：${result}`)
         }
@@ -94,6 +96,7 @@ export default function Information(): React.ReactNode {
         if (result) {
             message.success("成功创建申请...")
             setDrawingCofirmVisible(false)
+            history.go(0)
         } else {
             message.error(`创建申请失败！原因：${result}`)
         }
@@ -108,6 +111,7 @@ export default function Information(): React.ReactNode {
         if (result) {
             message.success("成功创建申请...")
             setBidingVisible(false)
+            history.go(0)
         } else {
             message.error(`创建申请失败！原因：${result}`)
         }

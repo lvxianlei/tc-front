@@ -35,6 +35,7 @@ export default function InformationDetail(): React.ReactNode {
     }), {})
     const { loading: bidResStatus, data: bidResResult, run } = useRequest((postData: {}) => new Promise(async (resole, reject) => {
         const data = await RequestUtil.post(`/tower-market/bidInfo/bidResponse`, { id: params.id, ...postData })
+        form.setFieldsValue({ biddingStatus: 1 })
         resole(data)
     }), { manual: true })
     const detailData: any = data
@@ -47,31 +48,39 @@ export default function InformationDetail(): React.ReactNode {
     const handleModalOk = async () => {
         try {
             const submitData = await form.validateFields()
-            console.log(submitData, '----')
-            run({ ...submitData })
+            await run({ ...submitData })
             setVisible(false)
+            history.go(0)
         } catch (error) {
             console.log(error)
         }
     }
 
     const handleModalCancel = () => setVisible(false)
-
+    const handleChange = (fields: any, allFields: any) => {
+        if (Object.keys(fields)[0] === "biddingStatus") {
+            setIsBid(fields.biddingStatus)
+        }
+    }
     return <>
         <Modal zIndex={15} visible={visible} title="是否应标" okText="确定并自动生成项目" onOk={handleModalOk} onCancel={handleModalCancel} >
-            <Form form={form}>
+            <Form form={form} onValuesChange={handleChange}>
                 <Form.Item name="biddingStatus" label="是否应标">
-                    <Select defaultValue="1" onChange={(value: string) => { setIsBid(value) }}>
+                    <Select>
                         <Select.Option value="1">是</Select.Option>
                         <Select.Option value="2">否</Select.Option>
                     </Select>
                 </Form.Item>
-                {isBid !== "2" ? <Form.Item name="projectLeader" label="设置项目负责人" getValueFromEvent={value => value.id}>
-                    <PopTable data={{
+                {isBid === "2" && <Form.Item name="reason" label="原因">
+                    <Input.TextArea />
+                </Form.Item>}
+                {isBid === "1" && <Form.Item name="projectLeaderId" label="设置项目负责人">
+                    <PopTable onChange={(event: any) => form.setFieldsValue({ projectLeaderId: event.id })} data={{
                         type: "PopTable",
                         title: "选择项目负责人",
                         dataIndex: "projectLeader",
                         path: "/sinzetech-user/user",
+                        dependencies: true,
                         columns: [
                             {
                                 title: '登录账号',
@@ -91,11 +100,7 @@ export default function InformationDetail(): React.ReactNode {
                                 dataIndex: 'departmentName'
                             }
                         ] as any[]
-                    }} />
-                    {/* <Input readOnly addonAfter={<PlusOutlined onClick={() => setPopTableVisible(true)} />} /> */}
-                </Form.Item> : <Form.Item name="reason" label="原因">
-                    <Input.TextArea />
-                </Form.Item>}
+                    }} /> </Form.Item>}
             </Form>
         </Modal>
         <DetailContent

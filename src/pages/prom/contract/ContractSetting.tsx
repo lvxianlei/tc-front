@@ -15,21 +15,21 @@ import { message } from 'antd';
 export interface IContractSettingProps {
     readonly id: string;
 }
-export interface IContractSettingRouteProps extends RouteComponentProps<IContractSettingProps>, WithTranslation {}
-export interface IContractSettingState extends IAbstractContractSettingState {}
- 
- /**
-  * Contract Setting
-  */
+export interface IContractSettingRouteProps extends RouteComponentProps<IContractSettingProps>, WithTranslation { }
+export interface IContractSettingState extends IAbstractContractSettingState { }
+
+/**
+ * Contract Setting
+ */
 export class ContractSetting extends AbstractContractSetting<IContractSettingRouteProps, IContractSettingState> {
     requestPath = "/tower-market/contract";
- 
+
     /**
      * @description Components did mount
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const contract = await RequestUtil.get<ProjectContractInfo>(`${this.requestPath}/${ this.props.match.params.id }`);
+        const contract = await RequestUtil.get<ProjectContractInfo>(`${this.requestPath}/${this.props.match.params.id}`);
         this.setState({
             contract: contract
         });
@@ -68,7 +68,7 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
             reviewTime: contract.reviewTime && moment(contract.reviewTime),
             chargeType: contract.chargeType === -1 ? '' : contract.chargeType,
             salesman: contract.salesman,
-            region: Array.isArray(contract?.region) ?  contract?.region : [contract?.region ],
+            region: Array.isArray(contract?.region) ? contract?.region : [contract?.region],
             countryCode: contract.countryCode,
             contractAmount: contract.contractAmount,
             currencyType: contract.currencyType,
@@ -88,12 +88,12 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
             isIta: contract?.isIta
         });
         const region: string[] | undefined = this.state.contract.region;
-        let regionInfoData: IRegion[] =  this.state.regionInfoData;
-        if(this.state.contract.countryCode === 0) {
-            if(region && region.length > 0) {
+        let regionInfoData: IRegion[] = this.state.regionInfoData;
+        if (this.state.contract.countryCode === 0) {
+            if (region && region.length > 0) {
                 const index: number = regionInfoData.findIndex((regionInfo: IRegion) => regionInfo.code === region[0]);
-                const resData: IRegion[] = await RequestUtil.get(`/tower-system/region/${ region[0] }`);
-                regionInfoData[index] ={
+                const resData: IRegion[] = await RequestUtil.get(`/tower-system/region/${region[0]}`);
+                regionInfoData[index] = {
                     ...regionInfoData[index],
                     children: resData
                 }
@@ -111,7 +111,7 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
             }
         }
     }
- 
+
     /**
      * @override
      * @description Gets form item groups
@@ -123,7 +123,7 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
         }
         return [];
     }
- 
+
     /**
      * @implements
      * @description Determines whether submit on
@@ -138,7 +138,7 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
         })
         let totalAmount: number = 0;
         planValue.map<number>((item: IPaymentPlanDto): number => {
-            return  totalAmount = parseFloat((Number(item.returnedAmount) + Number(totalAmount)).toFixed(2));
+            return totalAmount = parseFloat((Number(item.returnedAmount) + Number(totalAmount)).toFixed(2));
         })
         values.customerInfoDto = {
             ...(this.state.contract?.customerInfoDto),
@@ -156,24 +156,25 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
             };
         });
         values.signCustomerId = this.state.contract?.signCustomerId;
-        console.log(totalAmount,values.contractAmount)
+        console.log(totalAmount, values.contractAmount)
         values.region = Array.isArray(values?.region) ? values?.region?.[0] : values?.region;
-        if( totalRate < 100) {
+        if (totalRate < 100) {
             message.error('计划回款总占比必须等于100');
             return Promise.reject(false);
-        } else if( totalRate > 100 ) {
+        } else if (totalRate > 100) {
             message.error('计划回款总占比必须等于100');
             return Promise.reject(false);
-        } else if( totalAmount < values.contractAmount ) {
+        } else if (totalAmount < values.contractAmount) {
             message.error('计划回款总金额必须等于合同总价');
             return Promise.reject(false);
-        } else if( totalAmount > values.contractAmount ) {
+        } else if (totalAmount > values.contractAmount) {
             message.error('计划回款总金额必须等于合同总价');
             return Promise.reject(false);
         } else {
             return await RequestUtil.put('/tower-market/contract', {
                 ...values,
-                projectId: this.props.match.params.id,
+                id: this.props.match.params.id,
+                projectId: (this.state.contract as any).projectId
             });
         }
     }
@@ -187,5 +188,5 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
         return null;
     }
 }
- 
+
 export default withRouter(withTranslation()(ContractSetting));

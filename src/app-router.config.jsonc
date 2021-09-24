@@ -384,7 +384,7 @@
     },
     { // 新增合同
       "name": "新增合同",
-      "path": "/project/contract/new",
+      "path": "/project/contract/new/:projectId",
       "module": "./pages/project/contract/ContractNew",
       // "exact": true,
       "authority": "contract"
@@ -405,7 +405,7 @@
     },
     {
       "name": "新增订单",
-      "path": "/project/order/new",
+      "path": "/project/order/new/:projectId",
       "module": "./pages/project/order/SaleOrderNew",
       "exact": true,
       "authority": "sale_order"
@@ -484,6 +484,13 @@
       "name": "新增销售计划",
       "path": "/project/management/detail/new/salesPlan/:id",
       "module": "./pages/project/ManagementDetailEdit/SalesPlanEdit",
+      "exact": true,
+      "authority": "project_detail"
+    },
+    { // 销售计划详情
+      "name": "销售计划详情",
+      "path": "/project/management/detail/cat/salesPlan/:id",
+      "module": "./pages/project/SalesPlanDetail",
       "exact": true,
       "authority": "project_detail"
     },

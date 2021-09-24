@@ -46,13 +46,18 @@ export default function SalesPlanEdit() {
         const baseInfoData = baseInfoForm.getFieldsValue()
         const cargoDtoData = cargoDtoForm.getFieldsValue()
         baseInfoData.saleOrderId = saleOrderId
-        const result = await run({ ...data, ...baseInfoData, ...cargoDtoData, projectId: match.params.id, contractId, productIds: selectRows.map(item => item.id) })
+        const result = await run({
+            ...data, ...baseInfoData, ...cargoDtoData,
+            projectId: match.params.id,
+            contractId,
+            saleOrderId,
+            productIds: selectRows.map(item => item.id)
+        })
         history.goBack()
     }
 
     const handleBaseInfoChange = (changedFields: any, allFields: any) => {
         if (Object.keys(changedFields)[0] === "saleOrderNumber") {
-            console.log(changedFields)
             baseInfoForm.setFieldsValue({ ...allFields, ...changedFields.saleOrderNumber.records[0] })
             setSaleOrderId(changedFields.saleOrderNumber.records[0].id)
             setContractId(changedFields.saleOrderNumber.records[0].contractId)

@@ -65,7 +65,7 @@ export default function ManagementDetail(): React.ReactNode {
             <Button key="goback" onClick={() => history.goBack()}>返回</Button>
         ]}>
             <DetailTitle title="基本信息" />
-            <BaseInfo columns={baseInfoData} dataSource={data || {}} />
+            <BaseInfo columns={baseInfoData.map((item: any) => ["projectLeader", "biddingPerson"].includes(item.dataIndex) ? ({ title: item.title, dataIndex: item.dataIndex }) : item)} dataSource={data || {}} />
             <DetailTitle title="货物清单" />
             <CommonTable columns={[
                 { title: '序号', dataIndex: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
@@ -215,7 +215,7 @@ export default function ManagementDetail(): React.ReactNode {
             /></Row>
             <CommonTable columns={cargoVOListColumns} />
         </DetailContent>,
-        tab_salesPlan: <>
+        tab_salesPlan: <DetailContent>
             <Row>
                 <Radio.Group defaultValue="" onChange={(event) => run({ taskReviewStatus: event.target.value })} >
                     <Radio.Button value="">全部</Radio.Button>
@@ -231,14 +231,14 @@ export default function ManagementDetail(): React.ReactNode {
                 fixed: "right",
                 render: (_: any, record: any) => {
                     return <>
-                        <Button type="link">查看</Button>
+                        <Button type="link" onClick={() => history.push(`/project/management/detail/cat/salesPlan/${record.id}`)}>查看</Button>
                         <Link to={`/project/management/detail/edit/salesPlan/${record.id}`}>编辑</Link>
                         <Button type="link">删除</Button>
                         <Button type="link">提交审批</Button>
                     </>
                 }
             }]} dataSource={data?.records} />
-        </>
+        </DetailContent>
     }
     return <>
         <ManagementDetailTabsTitle />
