@@ -69,7 +69,7 @@ export default function ProductGroupEdit() {
         <DetailTitle title="基本信息" />
         <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={newProductGroup.map((item: any) => item.dataIndex === "saleOrderNumber" ? ({
             ...item,
-            path: `${item.path}${match.params.id}`
+            path: `${item.path}${match.params.id}${data?.id ? `&contractId=${data?.contractId}` : ""}`
         }) : item)} dataSource={data || {}} edit />
         <DetailTitle title="明细" />
         <CommonTable columns={productAssist} dataSource={select} />

@@ -60,6 +60,7 @@ export default function BaseInfoEdit(): JSX.Element {
     }
 
     const handleBaseInfoChange = (changedFields: any, allFields: any) => {
+        console.log(changedFields)
         if (Object.keys(changedFields)[0] === "projectLeader") {
             baseInfoForm.setFieldsValue({ ...allFields, ...changedFields.projectLeader.records[0] })
             setProjectLeaderId(changedFields.projectLeader.records[0].id)
@@ -79,7 +80,8 @@ export default function BaseInfoEdit(): JSX.Element {
                 const dataInfo = event.file.response.data
                 const fileInfo = dataInfo.name.split(".")
                 setAttachVosData([...attachVosData, {
-                    id: attachVosData.length,
+                    id: "",
+                    uid: attachVosData.length,
                     name: dataInfo.originalName.split(".")[0],
                     description: "",
                     filePath: dataInfo.link,
@@ -92,7 +94,7 @@ export default function BaseInfoEdit(): JSX.Element {
         }
     }
     const deleteAttachData = (id: number) => {
-        setAttachVosData(attachVosData.filter((item: any) => item.id !== id))
+        setAttachVosData(attachVosData.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
     }
     return <DetailContent operation={[
         <Button key="save" type="primary" onClick={handleSubmit} loading={saveStatus}>保存</Button>,
@@ -123,7 +125,7 @@ export default function BaseInfoEdit(): JSX.Element {
             <CommonTable columns={[{
                 title: "操作", dataIndex: "opration",
                 render: (_: any, record: any) => (<>
-                    <Button type="link" onClick={() => deleteAttachData(record.id)}>删除</Button>
+                    <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
                     {/* <Button type="link">下载</Button> */}
                 </>)
             }, ...enclosure]} dataSource={attachVosData} />

@@ -114,20 +114,7 @@ export default function InformationDetail(): React.ReactNode {
             <BaseInfo columns={baseInfoData} dataSource={detailData} col={4} />
             <DetailTitle title="货物清单" />
             <CommonTable columns={tableColumns} dataSource={detailData.bidPackageInfoVOS} />
-            <DetailTitle title="附件" operation={[
-                <Upload
-                    key="sub"
-                    name="file"
-                    multiple={true}
-                    action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
-                    headers={{
-                        'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                        'Tenant-Id': AuthUtil.getTenantId(),
-                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                    }}
-                    showUploadList={false}
-                ><Button type="primary">上传附件</Button></Upload>
-            ]} />
+            <DetailTitle title="附件" />
             <CommonTable columns={[
                 { title: '序号', dataIndex: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
                 { title: '文件名', dataIndex: 'name' },

@@ -48,7 +48,7 @@
             "path": "/tower-customer/customer",
             "readOnly": false,
             "value": "name",
-            "dependencies": false,
+            "dependencies": true,
             "columns": [
                 {
                     "title": "客户类型",

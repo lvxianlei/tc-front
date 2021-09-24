@@ -68,7 +68,11 @@ export default function ManagementDetail(): React.ReactNode {
             <BaseInfo columns={baseInfoData.map((item: any) => ["projectLeader", "biddingPerson"].includes(item.dataIndex) ? ({ title: item.title, dataIndex: item.dataIndex }) : item)} dataSource={data || {}} />
             <DetailTitle title="货物清单" />
             <CommonTable columns={[
-                { title: '序号', dataIndex: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+                {
+                    title: '序号',
+                    dataIndex: 'index',
+                    render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                },
                 ...cargoVOListColumns
             ]} dataSource={data?.cargoVOList} />
             <DetailTitle title="附件信息" />
@@ -142,11 +146,15 @@ export default function ManagementDetail(): React.ReactNode {
                     }]} dataSource={data || {}} col={2} />
                 <DetailTitle title="开标信息" />
                 <Tabs>
-                    {data?.bidOpenRecordListVos?.length > 0 ? data?.bidOpenRecordListVos.map((item: any, index: number) => <Tabs.TabPane tab={item.roundName}>
+                    {data?.bidOpenRecordListVos?.length > 0 ? data?.bidOpenRecordListVos.map((item: any, index: number) => <Tabs.TabPane key={index}
+                        tab={item.roundName}>
                         <CommonTable columns={bidInfoColumns} dataSource={item.bidOpenRecordVos || []} />
-                    </Tabs.TabPane>) : <Tabs.TabPane tab="第 1 轮">
-                        <CommonTable columns={bidInfoColumns} dataSource={[]} />
-                    </Tabs.TabPane>}
+                    </Tabs.TabPane>)
+                        :
+                        <Tabs.TabPane tab="第 1 轮">
+                            <CommonTable columns={bidInfoColumns} dataSource={[]} />
+                        </Tabs.TabPane>
+                    }
                 </Tabs>
             </Spin>
         </DetailContent>,
