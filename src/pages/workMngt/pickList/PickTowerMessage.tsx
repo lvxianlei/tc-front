@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Button, Form, Modal, Row, Col } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
+import TowerPickAssign from './TowerPickAssign';
 
 export default function PickTowerMessage(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const history = useHistory();
+    const params = useParams<{ id: string }>();
     const [form] = Form.useForm();
     const handleModalOk = async () => {
         try {
@@ -191,6 +193,7 @@ export default function PickTowerMessage(): React.ReactNode {
                     <Space>
                     <Button type="primary">导出</Button>
                     <Button type="primary">提交</Button>
+                    <TowerPickAssign id={ params.id }/>
                     <Button type="primary" onClick={()=>history.goBack()}>返回上一级</Button>
                     </Space>
                 }
