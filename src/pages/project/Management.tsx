@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import { Space, Button, TableColumnProps, Modal, Input } from 'antd'
+import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select } from 'antd'
 import { Link } from 'react-router-dom'
 import ConfirmableButton from '../../components/ConfirmableButton'
 import { Page } from '../common'
 import { IClient } from '../IClient'
 import RequestUtil from '../../utils/RequestUtil'
-
 interface ManagementState {
     selectedUserKeys: React.Key[]
     selectedUsers: object[]
@@ -148,12 +147,20 @@ export default function Management(): React.ReactNode {
         })
     }
 
-    // const SelectChange = (selectedRowKeys: React.Key[], selectedRows: object[]): void => {
-    //     setSelectKeys({
-    //         selectedUserKeys: selectedRowKeys,
-    //         selectedUsers: selectedRows
-    //     });
-    // }
+    const onFilterSubmit = (value: any) => {
+        if (value.startBidBuyEndTime) {
+            const formatDate = value.startBidBuyEndTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startBidBuyEndTime = formatDate[0]
+            value.endBidBuyEndTime = formatDate[1]
+        }
+
+        if (value.startBiddingEndTime) {
+            const formatDate = value.startBiddingEndTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startBiddingEndTime = formatDate[0]
+            value.endBiddingEndTime = formatDate[1]
+        }
+        return value
+    }
 
     return <Page
         path="/tower-market/projectInfo"
@@ -162,31 +169,28 @@ export default function Management(): React.ReactNode {
             <Link to="/project/management/edit/new"><Button type="primary">新建项目</Button></Link>
             {/* <Button type="primary" onClick={handleConfirmDelete}>删除</Button> */}
         </>}
-        tableProps={{
-            // rowSelection: {
-            //     selectedRowKeys: selectKeys.selectedUserKeys,
-            //     onChange: SelectChange
-            // }
-        }}
+        onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {
-                name: 'name',
+                name: 'fuzzyQuery',
                 children: <Input placeholder="搜索客户名称关键词" maxLength={200} />
             },
             {
-                name: '1',
-                label: '招标截至日期',
-                children: <Input placeholder="搜索客户名称关键词" maxLength={200} />
-            },
-            {
-                name: '2',
+                name: 'startBidBuyEndTime',
                 label: '购买截至日期',
-                children: <Input placeholder="搜索客户名称关键词" maxLength={200} />
+                children: <DatePicker.RangePicker format="YYYY-MM-DD" />
             },
             {
-                name: '3',
+                name: 'startBiddingEndTime',
+                label: '投标截至日期',
+                children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+            },
+            {
+                name: 'currentProjectStage',
                 label: '项目状态',
-                children: <Input placeholder="搜索客户名称关键词" maxLength={200} />
+                children: <Select style={{ width: "100px" }}>
+                    {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+                </Select>
             },
         ]}
     />

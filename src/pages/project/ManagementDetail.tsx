@@ -1,12 +1,12 @@
-import React from 'react'
-import { Button, Row, Tabs, Radio, Spin, Upload, Modal } from 'antd'
+import React, { useState } from 'react'
+import { Button, Row, Tabs, Radio, Spin, Upload, Modal, message } from 'antd'
 import { useHistory, useParams, Link } from 'react-router-dom'
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common'
 import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
 import {
     baseInfoData, productGroupColumns, bidDocColumns, paths,
     frameAgreementColumns, enclosure, cargoVOListColumns, materialListColumns, taskNotice,
-    bidInfoColumns
+    bidInfoColumns, productAssist
 } from './managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
@@ -14,13 +14,31 @@ import ManagementContract from './contract/Contract'
 import ManagementOrder from './order/SaleOrder'
 import ApplicationContext from "../../configuration/ApplicationContext"
 export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | undefined
-
+const productAssistStatistics = [
+    {
+        "title": "塔型",
+        "dataIndex": "productCategoryName"
+    },
+    {
+        "title": "基数",
+        "dataIndex": "number"
+    },
+    {
+        "title": "重量（吨）",
+        "dataIndex": "weight"
+    }
+]
 export default function ManagementDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, tab?: TabTypes }>()
     const dictionaryOptions: any = ApplicationContext.get().dictionaryOption
     const bidType = dictionaryOptions["124"]
     const frangmentBidType = dictionaryOptions["122"]
+    const [productGroupFlag, setProductGroupFlag] = useState<"productAssistDetailVos" | "productAssistStatisticsVos">("productAssistDetailVos")
+    const [productGroupData, setProductGroupData] = useState<{ productAssistDetailVos: any[], productAssistStatisticsVos: any[] }>({
+        productAssistDetailVos: [],
+        productAssistStatisticsVos: []
+    })
     const { loading, error, data, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
         if (params.tab === "contract") {
             resole({})
@@ -34,6 +52,15 @@ export default function ManagementDetail(): React.ReactNode {
         const result: { [key: string]: any } = await RequestUtil.get(`${paths[params.tab || 'base']}/${params.id}`)
         resole(result)
     }), { refreshDeps: [params.tab] })
+
+    const { loading: projectGroupLoading, data: projectGroupData, run: projectGroupRun } = useRequest<{ [key: string]: any }>((id) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/productAssist/getProductAssist?productGroupId=${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
 
     const { loading: deleteLoading, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
@@ -58,6 +85,11 @@ export default function ManagementDetail(): React.ReactNode {
                 }
             })
         })
+    }
+    const handleProductGroupClick = async (id: string) => {
+        console.log(id, "=====")
+        const result: any = await projectGroupRun(id)
+        setProductGroupData(result)
     }
     const tabItems: { [key: string]: JSX.Element | React.ReactNode } = {
         tab_base: <DetailContent operation={[
@@ -195,27 +227,35 @@ export default function ManagementDetail(): React.ReactNode {
         tab_productGroup: <DetailContent title={[
             <Button key="new" type="primary" onClick={() => history.push(`/project/management/detail/new/productGroup/${params.id}`)}>新增</Button>
         ]}>
-            <CommonTable columns={[
-                ...productGroupColumns,
-                {
-                    title: "操作",
-                    dataIndex: "opration",
-                    ellipsis: false,
-                    width: 200,
-                    render: (_: any, record: any) => <>
-                        <Button type="link" onClick={() => history.push(`/project/management/detail/productGroup/item/${params.id}/${record.id}`)} >查看</Button>
-                        <Button type="link" onClick={() => history.push(`/project/management/detail/edit/productGroup/${params.id}/${record.id}`)}>编辑</Button>
-                        {`${record.status}` === "0" && <Button type="link" onClick={() => deleteProductGroupItem(record.id)} >删除</Button>}
-                    </>
-                }]} dataSource={data?.records} />
+            <CommonTable
+                columns={[
+                    ...productGroupColumns,
+                    {
+                        title: "操作",
+                        dataIndex: "opration",
+                        ellipsis: false,
+                        width: 200,
+                        render: (_: any, record: any) => <>
+                            <Button type="link" onClick={() => history.push(`/project/management/detail/productGroup/item/${params.id}/${record.id}`)} >查看</Button>
+                            <Button type="link" onClick={() => history.push(`/project/management/detail/edit/productGroup/${params.id}/${record.id}`)}>编辑</Button>
+                            {`${record.status}` === "0" && <Button type="link" onClick={() => deleteProductGroupItem(record.id)} >删除</Button>}
+                        </>
+                    }]}
+                onRow={(record: any) => ({
+                    onClick: () => handleProductGroupClick(record.id)
+                })}
+                dataSource={data?.records}
+            />
             <Row><Radio.Group
+                value={productGroupFlag}
+                onChange={(event: any) => setProductGroupFlag(event.target.value)}
                 options={[
-                    { label: '明细', value: 'Apple' },
-                    { label: '统计', value: 'Pear' }
+                    { label: '明细', value: 'productAssistDetailVos' },
+                    { label: '统计', value: 'productAssistStatisticsVos' }
                 ]}
                 optionType="button"
             /></Row>
-            <CommonTable columns={cargoVOListColumns} dataSource={[]} />
+            <CommonTable columns={productGroupFlag === "productAssistStatisticsVos" ? productAssistStatistics : productAssist} dataSource={productGroupData[productGroupFlag]} />
         </DetailContent>,
         tab_salesPlan: <DetailContent>
             <Row>

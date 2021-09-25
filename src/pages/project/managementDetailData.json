@@ -1062,6 +1062,20 @@
             "dataIndex": "description"
         }
     ],
+    "productAssistStatistics": [
+        {
+            "title": "塔型",
+            "dataIndex": "productWeight"
+        },
+        {
+            "title": "基数",
+            "dataIndex": "productWeight"
+        },
+        {
+            "title": "重量（吨）",
+            "dataIndex": "productWeight"
+        }
+    ],
     "paths": {
         "base": "/tower-market/projectInfo",
         "bidDoc": "/tower-market/bidDoc",
