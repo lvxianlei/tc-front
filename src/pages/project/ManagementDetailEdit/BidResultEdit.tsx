@@ -16,7 +16,7 @@ export default function BidResultEdit(): JSX.Element {
     const { loading, error, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidBase/${params.id}`)
         baseInfoForm.setFieldsValue(result)
-        if (result.bidOpenRecordVos?.length > 0) {
+        if (result.bidOpenRecordListVos?.length > 0) {
             setBidOpenRecordVos(result.bidOpenRecordListVos)
         }
         resole(result)
@@ -33,13 +33,13 @@ export default function BidResultEdit(): JSX.Element {
     const handleSubmit = async () => {
         const tabsData = (ref.current as any).getData()
         const baseInfoData = await baseInfoForm.getFieldsValue();
-        const _tabsData = await Promise.all(tabsData.map((item: any) => new Promise(async (resove, reject) => {
+        const _tabsData = await Promise.all(tabsData.map((item: any, index: number) => new Promise(async (resove, reject) => {
             const { refFun, title: roundName, key: round } = item
             if (refFun?.getForm()) {
                 const fdata = await refFun?.getForm().getFieldsValue()
-                resove({ round, roundName, formData: fdata?.submit })
+                resove({ round: index, roundName, formData: fdata?.submit })
             } else {
-                resove({ round, roundName, formData: [] })
+                resove({ round: index, roundName, formData: [] })
             }
         })))
 
@@ -59,6 +59,7 @@ export default function BidResultEdit(): JSX.Element {
             projectId: params.id,
             id: data?.id
         })
+
         if (result) {
             message.success("保存成功...")
             history.goBack()
@@ -122,7 +123,7 @@ export default function BidResultEdit(): JSX.Element {
             <DetailTitle title="开标信息" operation={[<Button key="new" type="primary"
                 onClick={() => setBidOpenRecordVos([
                     {
-                        round: bidOpenRecordVos.length,
+                        round: bidOpenRecordVos.length + 1,
                         roundName: `第 ${bidOpenRecordVos.length + 1} 轮`,
                         bidOpenRecordVos: []
                     },

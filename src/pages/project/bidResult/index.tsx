@@ -133,7 +133,7 @@ export const TabsCanEdit = forwardRef((props: TabsCanEditProps, ref?: any) => {
     )
   }, [canEdit, data, eachContent, hasRefFun])
 
-  const [activeKey, setactiveKey] = useState(undefined as undefined | string)
+  const [activeKey, setactiveKey] = useState("1")
 
   const tabChange = useCallback((activeKey: string) => setactiveKey(activeKey), [])
 
@@ -165,33 +165,17 @@ export const TabsCanEdit = forwardRef((props: TabsCanEditProps, ref?: any) => {
   }, [eachContent, hasRefFun, newItemTitle, paneslen])
 
   const tabEdit = (targetKey: any, action: "add" | "remove") => {
-    console.log(targetKey, action, panes)
     if (action === "add") {
       tabAdd()
     } else if (action === "remove") {
       if (!panes) {
         return
       }
-      let newActiveKey = activeKey
-
-      const lastIndex = panes.reduce((v, pane, i) => {
-        if (pane.key === targetKey) {
-          v = i - 1
-        }
-        return v
-      }, 0)
-      const newPanes = panes.filter((pane) => pane.key !== targetKey)
-      if (newPanes.length && newActiveKey === targetKey) {
-        if (lastIndex >= 0) {
-          newActiveKey = newPanes[lastIndex].key
-        } else {
-          newActiveKey = newPanes[0].key
-        }
-      }
+      const newPanes = panes.filter((pane, index) => (pane.key + "" !== targetKey))
       setpanes(newPanes)
-      setactiveKey(newActiveKey)
-
+      setactiveKey("1")
       delete contentRefs.current?.[targetKey]
+      return
     }
   }
 
@@ -216,7 +200,6 @@ export const TabsCanEdit = forwardRef((props: TabsCanEditProps, ref?: any) => {
       })
     },
   }), [tabAdd, panes])
-
   return (
     <Tabs
       type={canEdit ? "editable-card" : "card"}
@@ -227,7 +210,7 @@ export const TabsCanEdit = forwardRef((props: TabsCanEditProps, ref?: any) => {
       hideAdd={true}
     >
       {panes?.map((pane, index) => (
-        <Tabs.TabPane tab={pane.title} key={index} closable={pane.closable}>
+        <Tabs.TabPane tab={pane.title} key={pane.key} closable={pane.closable}>
           {pane.content}
         </Tabs.TabPane>
       ))}
