@@ -34,7 +34,8 @@ function formatDataType(dataItem: any, dataSource: any): string {
         select: (value && dataItem.enum && value !== -1) ? dataItem.enum.find((item: any) => item.value === value)?.label : "-",
         date: value ? moment(value).format(dataItem.format || "YYYY-MM-DD HH:mm:ss") : "-",
         string: value || "-",
-        textarea: value || "-"
+        textarea: value || "-",
+        popTable: value || "-"
     }
     return types[dataItem.type || "string"]
 }

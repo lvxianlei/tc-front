@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react"
 import { useHistory, useParams } from "react-router-dom"
-import { Button, Form, message, Spin } from "antd"
+import { Button, Form, message, Spin, Modal } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, EditTable, EditTabs } from "../../common"
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { bidInfoColumns } from '../managementDetailData.json'
@@ -16,12 +16,18 @@ export default function BidResultEdit(): JSX.Element {
     const { loading, error, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidBase/${params.id}`)
         baseInfoForm.setFieldsValue(result)
-        setBidOpenRecordVos(result.bidOpenRecordListVos)
+        if (result.bidOpenRecordVos?.length > 0) {
+            setBidOpenRecordVos(result.bidOpenRecordListVos)
+        }
         resole(result)
     }))
     const { loading: saveStatus, data: saveResult, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
-        const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/bidBase`, postData)
-        resole(result)
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/bidBase`, postData)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
     }), { manual: true })
 
     const handleSubmit = async () => {
@@ -36,7 +42,11 @@ export default function BidResultEdit(): JSX.Element {
             })
         )
         const postTabsData = _tabsData.reduce((total: any, nextItem: any) => {
-            const nextTabItem = nextItem.formData ? nextItem.formData.map((formItem: any) => ({ ...formItem, round: nextItem.round, roundName: nextItem.roundName })) : []
+            const nextTabItem = nextItem.formData ? nextItem.formData.map((formItem: any) => ({
+                ...formItem,
+                round: nextItem.round,
+                roundName: nextItem.roundName
+            })) : []
             return total.concat(nextTabItem)
         }, [])
 
@@ -52,7 +62,23 @@ export default function BidResultEdit(): JSX.Element {
             history.goBack()
         }
     }
-    return (<DetailContent operation={[<Button key="save" type="primary" onClick={handleSubmit}>保存</Button>]}>
+    const handelCancel = () => {
+        Modal.confirm({
+            title: "离开提醒",
+            content: "确定要离开吗？",
+            onOk: () => history.goBack()
+        })
+    }
+    return (<DetailContent operation={[
+        <Button
+            key="save"
+            type="primary"
+            onClick={handleSubmit}
+            loading={saveStatus}
+            style={{ marginRight: 16 }}
+        >保存</Button>,
+        <Button key="goback" onClick={handelCancel}>取消</Button>,
+    ]}>
         <ManagementDetailTabsTitle />
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
@@ -106,7 +132,6 @@ export default function BidResultEdit(): JSX.Element {
                     key: string;
                 }) => {
                     const data: any[] = bidOpenRecordVos.find((bidItem: any) => bidItem.roundName === item.key).bidOpenRecordVos
-                    console.log(data,"---")
                     return (
                         <EditTableHasForm
                             columns={bidInfoColumns}

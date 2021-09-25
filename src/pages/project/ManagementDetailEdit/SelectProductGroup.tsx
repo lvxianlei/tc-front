@@ -8,6 +8,7 @@ export default function SelectProductGroup(props: any): JSX.Element {
     const [select, setSelect] = useState<any[]>([])
     const [projectSelect, setProjectSelect] = useState<string[]>([])
     const [projectSelectRows, setProjectSelectRows] = useState<any[]>([])
+    
     const { loading, error, data, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/contract?projectId=${props.projectId}`)
@@ -19,7 +20,7 @@ export default function SelectProductGroup(props: any): JSX.Element {
 
     const { loading: productGroupLoading, data: productGroup, run: productGroupRun } = useRequest<any>(({ id }) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/productAssist/getProductByContractId?contractId=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/productAssist/getProductByContractId?contractId=${id}&productGroupId=${props.productGroupId}`)
             resole(result)
         } catch (error) {
             reject(error)

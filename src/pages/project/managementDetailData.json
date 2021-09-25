@@ -802,7 +802,26 @@
         },
         {
             "title": "审批状态",
-            "dataIndex": "taskReviewStatus"
+            "dataIndex": "taskReviewStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "value": -1,
+                    "label": "-"
+                },
+                {
+                    "value": 0,
+                    "label": "审批中"
+                },
+                {
+                    "value": 1,
+                    "label": "审批通过"
+                },
+                {
+                    "value": 2,
+                    "label": "审批驳回"
+                }
+            ]
         }
     ],
     "taskNoticeEditBaseInfo": [
@@ -812,7 +831,7 @@
             "type": "popTable",
             "path": "/tower-market/saleOrder",
             "width": 1011,
-            "value": "saleOrderId",
+            "value": "saleOrderNumber",
             "dependencies": true,
             "columns": [
                 {
@@ -882,10 +901,6 @@
             "format": "YYYY-MM-DD"
         },
         {
-            "title": "原材料要求",
-            "dataIndex": "materialDemand"
-        },
-        {
             "title": "备注",
             "dataIndex": "description",
             "type": "textarea"
@@ -915,7 +930,7 @@
         },
         {
             "title": "备注",
-            "dataIndex": "description",
+            "dataIndex": "peculiarDescription",
             "type": "textarea"
         }
     ],
@@ -952,6 +967,25 @@
         }
     ],
     "productAssist": [
+        {
+            "title": "状态",
+            "dataIndex": "productStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "未下发"
+                },
+                {
+                    "value": 1,
+                    "label": "已下发"
+                }
+            ]
+        },
+        {
+            "title": "基数",
+            "dataIndex": "number"
+        },
         {
             "title": "线路名称",
             "dataIndex": "lineName",
@@ -1000,6 +1034,10 @@
             "dataIndex": "productTypeName"
         },
         {
+            "title": "基数",
+            "dataIndex": "number"
+        },
+        {
             "title": "塔型",
             "dataIndex": "productCategoryName"
         },
@@ -1014,46 +1052,6 @@
         {
             "title": "呼高（米）",
             "dataIndex": "productHeight"
-        },
-        {
-            "title": "身部重量（kg）",
-            "dataIndex": "bodyWeight"
-        },
-        {
-            "title": "接腿1#长度（m）",
-            "dataIndex": "towerLeg1Length"
-        },
-        {
-            "title": "接腿1#重量（kg）",
-            "dataIndex": "towerLeg1Weight"
-        },
-        {
-            "title": "接腿2#长度（m）",
-            "dataIndex": "towerLeg2Length"
-        },
-        {
-            "title": "接腿2#重量（kg）",
-            "dataIndex": "towerLeg2Weight"
-        },
-        {
-            "title": "接腿3#长度（m）",
-            "dataIndex": "towerLeg3Length"
-        },
-        {
-            "title": "接腿3#重量（kg）",
-            "dataIndex": "towerLeg3Weight"
-        },
-        {
-            "title": "接腿4#长度（m）",
-            "dataIndex": "towerLeg4Length"
-        },
-        {
-            "title": "接腿4#重量（kg）",
-            "dataIndex": "towerLeg4Weight"
-        },
-        {
-            "title": "塔脚板重量（kg）",
-            "dataIndex": "towerFootWeight"
         },
         {
             "title": "杆塔重量（kg）",

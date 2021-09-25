@@ -203,9 +203,9 @@ export default function ManagementDetail(): React.ReactNode {
                     ellipsis: false,
                     width: 200,
                     render: (_: any, record: any) => <>
-                        <Button type="link" onClick={() => history.push(`/project/management/detail/productGroup/item/${record.id}`)} >查看</Button>
-                        <Button type="link" onClick={() => history.push(`/project/management/detail/edit/productGroup/${record.id}`)}>编辑</Button>
-                        <Button type="link" onClick={() => deleteProductGroupItem(record.id)} >删除</Button>
+                        <Button type="link" onClick={() => history.push(`/project/management/detail/productGroup/item/${params.id}/${record.id}`)} >查看</Button>
+                        <Button type="link" onClick={() => history.push(`/project/management/detail/edit/productGroup/${params.id}/${record.id}`)}>编辑</Button>
+                        {`${record.status}` === "0" && <Button type="link" onClick={() => deleteProductGroupItem(record.id)} >删除</Button>}
                     </>
                 }]} dataSource={data?.records} />
             <Row><Radio.Group
@@ -233,10 +233,12 @@ export default function ManagementDetail(): React.ReactNode {
                 fixed: "right",
                 render: (_: any, record: any) => {
                     return <>
-                        <Button type="link" onClick={() => history.push(`/project/management/detail/cat/salesPlan/${record.id}`)}>查看</Button>
-                        <Link to={`/project/management/detail/edit/salesPlan/${record.id}`}>编辑</Link>
-                        <Button type="link">删除</Button>
-                        <Button type="link">提交审批</Button>
+                        <Button type="link" onClick={() => history.push(`/project/management/detail/cat/salesPlan/${params.id}/${record.id}`)}>查看</Button>
+                        {[2, -1].includes(record.taskReviewStatus) && <>
+                            <Link to={`/project/management/detail/edit/salesPlan/${params.id}/${record.id}`}>编辑</Link>
+                            <Button type="link">删除</Button>
+                            <Button type="link">提交审批</Button>
+                        </>}
                     </>
                 }
             }]} dataSource={data?.records} />

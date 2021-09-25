@@ -8,7 +8,7 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 export default function ProductGroupEdit() {
     const history = useHistory()
-    const match: any = useRouteMatch<{ type: "new" | "edit", id: string }>("/project/management/detail/:type/productGroup/:id")
+    const match: any = useRouteMatch<{ type: "new" | "edit", id: string }>("/project/management/detail/:type/productGroup/:projectId/:id")
     const [visible, setVisible] = useState<boolean>(false)
     const [select, setSelect] = useState<any[]>([])
     const [contractId, setContractId] = useState<string>("")
@@ -16,11 +16,17 @@ export default function ProductGroupEdit() {
     const [baseInfoForm] = Form.useForm()
     const [cargoDtoForm] = Form.useForm()
     const { loading, error, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
-        const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/productGroup/${match.params.id}`)
-        baseInfoForm.setFieldsValue(result)
-        cargoDtoForm.setFieldsValue({ submit: result.contractCargoVos })
-        setSelect(result.productDetails)
-        resole(result)
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/productGroup/${match.params.id}`)
+            baseInfoForm.setFieldsValue(result)
+            cargoDtoForm.setFieldsValue({ submit: result.contractCargoVos })
+            setContractId(result.contractId)
+            setSaleOrderId(result.saleOrderId)
+            setSelect(result.productDetails)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
     }), { manual: match.params.type === "new" })
 
     const { loading: saveStatus, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
@@ -40,8 +46,11 @@ export default function ProductGroupEdit() {
         delete data?.contractCargoVos
         await run({
             ...data, ...baseInfoData,
-            projectId: match.params.id, contractId, saleOrderId,
-            contractCargoDtos: contractCargoDtosData.submit, productIds: select.map(item => item.id)
+            projectId: match.params.projectId,
+            contractId,
+            saleOrderId,
+            contractCargoDtos: contractCargoDtosData.submit,
+            productIds: select.map(item => item.id)
         })
         history.goBack()
     }
@@ -55,23 +64,48 @@ export default function ProductGroupEdit() {
     }
 
     const handleModalOk = (selectRows: any[]) => {
-        setSelect(selectRows)
+        setSelect([...select, ...selectRows.filter((item: any) => !select.map((item: any) => item.id).includes(item.id))])
         setVisible(false)
     }
-
+    const deleteProject = (id: string) => {
+        setSelect(select.filter((item: any) => item.id !== id))
+    }
     return <DetailContent
         title={[<Button key="pro" type="primary" onClick={() => setVisible(true)}>导入确认明细</Button>]}
         operation={[
             <Button key="save" type="primary" style={{ marginRight: "12px" }} onClick={handleSubmit} loading={saveStatus}>保存</Button>,
             <Button key="goback" type="default" onClick={() => history.goBack()}>返回</Button>
         ]}>
-        <SelectProductGroup projectId={match.params.id} visible={visible} onCancel={() => setVisible(false)} onOk={handleModalOk} />
+        <SelectProductGroup
+            projectId={match.params.projectId}
+            productGroupId={match.params.id}
+            visible={visible}
+            onCancel={() => setVisible(false)}
+            onOk={handleModalOk} />
         <DetailTitle title="基本信息" />
-        <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={newProductGroup.map((item: any) => item.dataIndex === "saleOrderNumber" ? ({
-            ...item,
-            path: `${item.path}${match.params.id}${data?.id ? `&contractId=${data?.contractId}` : ""}`
-        }) : item)} dataSource={data || {}} edit />
+        <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={newProductGroup.map((item: any) => {
+            switch (item.dataIndex) {
+                case "saleOrderNumber":
+                    return ({
+                        ...item,
+                        disabled: [1, 2].includes(data?.status),
+                        path: `${item.path}${match.params.projectId}`
+                    })
+                case "description":
+                    return ({ ...item, disabled: [1, 2].includes(data?.status) })
+                default:
+                    return item
+            }
+        })} dataSource={data || {}} edit />
         <DetailTitle title="明细" />
-        <CommonTable columns={productAssist} dataSource={select} />
+        <CommonTable columns={[{
+            title: "操作",
+            dataIndex: "opration",
+            width: 30,
+            fixed: true,
+            render: (_: any, records: any) => <>
+                <Button type="link" onClick={() => deleteProject(records.id)}>删除</Button>
+            </>
+        }, ...productAssist]} dataSource={select} />
     </DetailContent>
 }
