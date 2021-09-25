@@ -41,6 +41,23 @@ class ManagementOrder extends SaleOrder {
         key: "taskStatus",
         title: "任务下发状态",
         dataIndex: "taskStatus",
+        render: (value: number, record: object): React.ReactNode => {
+          const renderEnum: any = [
+            {
+              value: 0,
+              label: "未下发"
+            },
+            {
+              value: 1,
+              label: "部分下发"
+            },
+            {
+              value: 2,
+              label: "全部下发"
+            },
+          ]
+          return <>{renderEnum.find((item: any) => item.value === value).label}</>
+        }
       },
       {
         key: "internalNumber",
@@ -132,7 +149,7 @@ class ManagementOrder extends SaleOrder {
                 onConfirm={async () => {
                   let id = (record as ITableDataItem).id;
                   const resData: IResponseData = await RequestUtil.delete(
-                    `/saleOrder?id=${id}`
+                    `/tower-market/saleOrder?id=${id}`
                   );
                   this.fetchTableData({});
                 }}

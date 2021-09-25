@@ -36,9 +36,8 @@ class ManagementContract extends PromContract {
         render: (_: undefined, record: object): React.ReactNode => {
           return (
             <Link
-              to={`/project/contract/detail/${projectId}/${
-                (record as IContract).id
-              }`}
+              to={`/project/contract/detail/${projectId}/${(record as IContract).id
+                }`}
             >
               {(record as IContract).contractNumber}
             </Link>
@@ -113,7 +112,7 @@ class ManagementContract extends PromContract {
         dataIndex: "operation",
         render: (_: undefined, record: object): React.ReactNode => (
           <Space direction="horizontal" size="small">
-            <Button type="link" disabled={(record as IContract).status === 1}>
+            <Button type="link" disabled={(record as IContract).isRelateOrder === 1}>
               <Link
                 to={`/project/contract/setting/${projectId}/${(record as IContract).id}`}
               >
@@ -121,7 +120,7 @@ class ManagementContract extends PromContract {
               </Link>
             </Button>
             <Popconfirm
-              title="要删除该客户吗？"
+              title="要删除该合同吗？"
               placement="topRight"
               okText="确认"
               cancelText="取消"
@@ -132,19 +131,18 @@ class ManagementContract extends PromContract {
                 );
                 this.fetchTableData({});
               }}
-              disabled={(record as IContract).status === 1}
+              disabled={(record as IContract).isRelateOrder === 1}
             >
-              <Button type="link" disabled={(record as IContract).status === 1}>
+              <Button type="link" disabled={(record as IContract).isRelateOrder === 1}>
                 删除
               </Button>
             </Popconfirm>
             <Button type="link">
               <Link
-                to={`/project/contract/paymentRecord/${
-                  (record as IContract).id
-                }/${(record as IContract).projectName}/${
-                  (record as IContract).signCustomerId
-                }/${(record as IContract).signCustomerName}`}
+                to={`/project/contract/paymentRecord/${(record as IContract).id
+                  }/${(record as any).contractName}/${(record as IContract).signCustomerId
+                  }/${(record as IContract).signCustomerName
+                  }/${(record as any).contractNumber}/${(this.props.match.params as any).id}`}
               >
                 添加回款记录
               </Link>

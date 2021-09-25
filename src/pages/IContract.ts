@@ -37,4 +37,5 @@ export interface IContract {
     readonly winBidTypeName?: string;
     readonly productTypeName?: string;
     readonly voltageGradeName?: string;
+    readonly isRelateOrder?: number;
 }

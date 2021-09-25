@@ -55,6 +55,7 @@ export default function BaseInfoEdit(): JSX.Element {
 
         if (saveResult) {
             message.success("保存成功...")
+            history.goBack()
         }
     }
 
@@ -74,7 +75,7 @@ export default function BaseInfoEdit(): JSX.Element {
                     uid: attachVosData.length,
                     name: dataInfo.originalName.split(".")[0],
                     description: "",
-                    filePath: dataInfo.link,
+                    filePath: dataInfo.name,
                     fileSize: dataInfo.size,
                     fileSuffix: fileInfo[fileInfo.length - 1],
                     userName: dataInfo.userName,

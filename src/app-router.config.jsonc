@@ -398,7 +398,7 @@
     },
     { // 新增回款计划
       "name": "新增回款记录",
-      "path": "/project/contract/paymentRecord/:id/:projectName/:signCustomerId/:signCustomerName",
+      "path": "/project/contract/paymentRecord/:id/:contractName/:signCustomerId/:signCustomerName/:contractNumber/:projectId",
       "module": "./pages/project/contract/PaymentRecordNew",
       "exact": true,
       "authority": "contract"

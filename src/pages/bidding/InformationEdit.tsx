@@ -71,7 +71,7 @@ export default function InfomationNew(): JSX.Element {
                     id: attachVosData.length,
                     name: dataInfo.originalName.split(".")[0],
                     description: "",
-                    filePath: dataInfo.link,
+                    filePath: dataInfo.name,
                     fileSize: dataInfo.size,
                     fileSuffix: fileInfo[fileInfo.length - 1],
                     userName: dataInfo.userName,

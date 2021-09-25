@@ -165,6 +165,7 @@ export const TabsCanEdit = forwardRef((props: TabsCanEditProps, ref?: any) => {
   }, [eachContent, hasRefFun, newItemTitle, paneslen])
 
   const tabEdit = (targetKey: any, action: "add" | "remove") => {
+    console.log(targetKey, action, panes)
     if (action === "add") {
       tabAdd()
     } else if (action === "remove") {

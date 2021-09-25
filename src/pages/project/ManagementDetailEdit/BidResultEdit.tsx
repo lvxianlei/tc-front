@@ -33,14 +33,16 @@ export default function BidResultEdit(): JSX.Element {
     const handleSubmit = async () => {
         const tabsData = (ref.current as any).getData()
         const baseInfoData = await baseInfoForm.getFieldsValue();
-        const _tabsData = await Promise.all(
-            (tabsData as any[]).map(async (item, index) => {
-                const { refFun, title, ...realItem } = item;
-                const _form = refFun?.getForm();
-                const fdata = await _form.getFieldsValue();
-                return ({ round: index, roundName: title, formData: fdata?.submit })
-            })
-        )
+        const _tabsData = await Promise.all(tabsData.map((item: any) => new Promise(async (resove, reject) => {
+            const { refFun, title: roundName, key: round } = item
+            if (refFun?.getForm()) {
+                const fdata = await refFun?.getForm().getFieldsValue()
+                resove({ round, roundName, formData: fdata?.submit })
+            } else {
+                resove({ round, roundName, formData: [] })
+            }
+        })))
+
         const postTabsData = _tabsData.reduce((total: any, nextItem: any) => {
             const nextTabItem = nextItem.formData ? nextItem.formData.map((formItem: any) => ({
                 ...formItem,
@@ -117,21 +119,29 @@ export default function BidResultEdit(): JSX.Element {
                         }
                     ]
                 }]} dataSource={data || {}} />
-            <DetailTitle title="开标信息" operation={[<Button key="new" type="primary" onClick={() => (ref.current as any)?.tabAdd()}>新增一轮报价</Button>]} />
+            <DetailTitle title="开标信息" operation={[<Button key="new" type="primary"
+                onClick={() => setBidOpenRecordVos([
+                    {
+                        round: bidOpenRecordVos.length,
+                        roundName: `第 ${bidOpenRecordVos.length + 1} 轮`,
+                        bidOpenRecordVos: []
+                    },
+                    ...bidOpenRecordVos
+                ])}>新增一轮报价</Button>]} />
             <TabsCanEdit
                 ref={ref}
                 canEdit={true}
                 hasRefFun={true}
                 data={bidOpenRecordVos.map((item: any) => ({
                     title: item.roundName,
-                    key: item.roundName,
+                    key: item.round,
                     content: <EditTable columns={bidInfoColumns} dataSource={item.bidOpenRecordVos || []} />
                 }))}
                 eachContent={(item: any, tempRef?: {
                     ref: Record<string, any>;
                     key: string;
                 }) => {
-                    const data: any[] = bidOpenRecordVos.find((bidItem: any) => bidItem.roundName === item.key).bidOpenRecordVos
+                    const data: any[] = bidOpenRecordVos.find((bidItem: any) => bidItem.round === item.key).bidOpenRecordVos
                     return (
                         <EditTableHasForm
                             columns={bidInfoColumns}
