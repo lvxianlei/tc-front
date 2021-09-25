@@ -200,6 +200,7 @@ export const TabsCanEdit = forwardRef((props: TabsCanEditProps, ref?: any) => {
       })
     },
   }), [tabAdd, panes])
+  console.log(panes)
   return (
     <Tabs
       type={canEdit ? "editable-card" : "card"}

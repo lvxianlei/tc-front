@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react"
 import { useHistory, useParams } from "react-router-dom"
 import { Button, Form, message, Spin, Modal } from "antd"
-import { DetailContent, BaseInfo, DetailTitle, EditTable, EditTabs } from "../../common"
+import { DetailContent, BaseInfo, DetailTitle, EditTable } from "../../common"
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { bidInfoColumns } from '../managementDetailData.json'
 import { EditTableHasForm, TabsCanEdit, UploadXLS } from "../bidResult"
@@ -11,13 +11,15 @@ export default function BidResultEdit(): JSX.Element {
     const history = useHistory()
     const ref = useRef()
     const params = useParams<{ id: string, tab: string }>()
-    const [bidOpenRecordVos, setBidOpenRecordVos] = useState<any[]>([{ round: 1, roundName: "第 1 轮", bidOpenRecordVos: [] }])
+    const [bidOpenRecordVos, setBidOpenRecordVos] = useState<any[]>([{ round: 1, roundName: "第 1 轮", fixed: true, bidOpenRecordVos: [] }])
     const [baseInfoForm] = Form.useForm()
     const { loading, error, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidBase/${params.id}`)
         baseInfoForm.setFieldsValue(result)
         if (result.bidOpenRecordListVos?.length > 0) {
-            setBidOpenRecordVos(result.bidOpenRecordListVos)
+            const resultBid = result.bidOpenRecordListVos.reverse()
+            resultBid[resultBid.length-1].fixed = true
+            setBidOpenRecordVos(resultBid)
         }
         resole(result)
     }))
@@ -33,13 +35,13 @@ export default function BidResultEdit(): JSX.Element {
     const handleSubmit = async () => {
         const tabsData = (ref.current as any).getData()
         const baseInfoData = await baseInfoForm.getFieldsValue();
-        const _tabsData = await Promise.all(tabsData.map((item: any, index: number) => new Promise(async (resove, reject) => {
+        const _tabsData = await Promise.all(tabsData.map((item: any) => new Promise(async (resove, reject) => {
             const { refFun, title: roundName, key: round } = item
             if (refFun?.getForm()) {
                 const fdata = await refFun?.getForm().getFieldsValue()
-                resove({ round: index, roundName, formData: fdata?.submit })
+                resove({ round, roundName, formData: fdata?.submit })
             } else {
-                resove({ round: index, roundName, formData: [] })
+                resove({ round, roundName, formData: [] })
             }
         })))
 
