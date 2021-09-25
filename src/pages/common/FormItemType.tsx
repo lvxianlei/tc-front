@@ -46,6 +46,7 @@ interface FormItemTypes {
 
 interface PopTableProps {
     data: PopTableData
+    [key: string]: any
 }
 
 const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: any) => void }> = ({ data, onChange }) => {
@@ -92,12 +93,17 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
         (props as any).onChange(changeValue)
         setVisible(false)
     }
-
+    const inputChange = (event: any) => {
+        const inputValue = event.target.value
+        const changeValue = { ...value, value: inputValue };
+        (props as any).onChange({ ...changeValue })
+        setValue({ ...value, ...changeValue })
+    }
     return <>
         <Modal width={data.width || 520} title={`选择${data.title}`} destroyOnClose visible={visible} onOk={handleOk} onCancel={() => setVisible(false)}>
             <PopTableContent data={data} onChange={handleChange} />
         </Modal>
-        <Input {...props} readOnly={data.readOnly || true} value={value.value || (props as any).value} addonAfter={<PlusOutlined onClick={() => setVisible(true)} />} />
+        <Input {...props} onChange={inputChange} readOnly={data.readOnly === undefined ? true : data.readOnly} value={value.value || (props as any).value} addonAfter={<PlusOutlined onClick={() => setVisible(true)} />} />
     </>
 }
 interface SelfSelectProps {

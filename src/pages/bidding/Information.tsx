@@ -81,9 +81,9 @@ const columns = [
         dataIndex: 'sourceWebsite'
     },
     {
-        key: 'explain',
+        key: 'bidExplain',
         title: '说明',
-        dataIndex: 'explain'
+        dataIndex: 'bidExplain'
     },
     {
         title: '是否应标',
@@ -107,11 +107,29 @@ const columns = [
     }
 ]
 export default function Information(): React.ReactNode {
-
+    const onFilterSubmit = (value: any) => {
+        if (value.startBidBuyEndTime) {
+            const formatDate = value.startBidBuyEndTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startBidBuyEndTime = formatDate[0]
+            value.endBidBuyEndTime = formatDate[1]
+        }
+        if (value.startReleaseDate) {
+            const formatDate = value.startReleaseDate.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startReleaseDate = formatDate[0]
+            value.endReleaseDate = formatDate[1]
+        }
+        if (value.startBiddingEndTime) {
+            const formatDate = value.startBiddingEndTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startBiddingEndTime = formatDate[0]
+            value.endBiddingEndTime = formatDate[1]
+        }
+        return value
+    }
     return <Page
         path="/tower-market/bidInfo"
         columns={columns}
         headTabs={[]}
+        onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {
                 name: 'fuzzyQuery',
@@ -120,12 +138,17 @@ export default function Information(): React.ReactNode {
             {
                 name: 'startBidBuyEndTime',
                 label: '购买截至日期',
-                children: <DatePicker />
+                children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 200 }} />
             },
             {
                 name: 'startReleaseDate',
                 label: '发布日期',
-                children: <DatePicker />
+                children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 200 }} />
+            },
+            {
+                name: 'startBiddingEndTime',
+                label: '投标截至日期',
+                children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 200 }} />
             },
             {
                 name: 'biddingStatus',

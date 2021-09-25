@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory, useParams } from "react-router-dom"
-import { Button, Spin, Form, message, Upload } from 'antd'
+import { Button, Spin, Form, message, Upload, Select } from 'antd'
 import { EditTable, DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common'
 import { baseInfoData } from './biddingHeadData.json'
 import useRequest from '@ahooksjs/use-request'
@@ -19,22 +19,37 @@ const columns = [
 export default function InfomationNew(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ id: string }>()
+    const [attachVosData, setAttachVosData] = useState<any[]>([])
     const [baseInfoForm] = Form.useForm()
     const [bidForm] = Form.useForm()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
-        bidForm.setFieldsValue({ submit: data.bidPackageInfoVOS })
-        resole(data)
+        try {
+            const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
+            bidForm.setFieldsValue({ submit: data.bidPackageInfoVOS })
+            setAttachVosData(data.attachVos)
+            resole(data)
+        } catch (error) {
+            reject(error)
+        }
     }))
     const { loading: saveStatus, data: saveResult, run } = useRequest((postData: {}) => new Promise(async (resove, reject) => {
-        const data = await RequestUtil.put(`/tower-market/bidInfo`, postData)
-        resove(data)
+        try {
+            const data: any = await RequestUtil.put(`/tower-market/bidInfo`, postData)
+            resove(data)
+        } catch (error) {
+            reject(error)
+        }
     }), { manual: true })
     const detailData: any = data
     const handleSave = async () => {
         const baseInfoResult = await baseInfoForm.getFieldsValue()
         const bidPackageInfoDTOList = await bidForm.getFieldsValue()
-        const postData = { ...detailData, ...baseInfoResult, bidPackageInfoDTOList: bidPackageInfoDTOList.submit }
+        const postData = {
+            ...detailData,
+            ...baseInfoResult,
+            bidPackageInfoDTOList: bidPackageInfoDTOList.submit,
+            attachInfoDtos: attachVosData.map((item: any) => ({ ...item, id: "" }))
+        }
         delete postData.bidPackageInfoVOS
         delete postData.attachVos
         await run(postData)
@@ -47,7 +62,27 @@ export default function InfomationNew(): JSX.Element {
             <div style={{ width: '100%', height: '300px' }}></div>
         </Spin>
     }
-
+    const uploadChange = (event: any) => {
+        if (event.file.status === "done") {
+            if (event.file.response.code === 200) {
+                const dataInfo = event.file.response.data
+                const fileInfo = dataInfo.name.split(".")
+                setAttachVosData([...attachVosData, {
+                    id: attachVosData.length,
+                    name: dataInfo.originalName.split(".")[0],
+                    description: "",
+                    filePath: dataInfo.link,
+                    fileSize: dataInfo.size,
+                    fileSuffix: fileInfo[fileInfo.length - 1],
+                    userName: dataInfo.userName,
+                    fileUploadTime: dataInfo.fileUploadTime
+                }])
+            }
+        }
+    }
+    const deleteAttachData = (id: number) => {
+        setAttachVosData(attachVosData.filter((item: any) => item.id !== id))
+    }
     return <DetailContent
         operation={[
             <Button key="save" type="primary" onClick={handleSave} loading={saveStatus}>保存</Button>,
@@ -55,7 +90,14 @@ export default function InfomationNew(): JSX.Element {
         ]}
     >
         <DetailTitle title="基础信息" />
-        <BaseInfo form={baseInfoForm} columns={baseInfoData} dataSource={detailData} edit />
+        <BaseInfo form={baseInfoForm} columns={baseInfoData.map((item: any) => item.dataIndex === "biddingStatus" ? ({
+            ...item,
+            render: (text: any, records: any) => {
+                return <Select>
+                    {item.enum.map((select: any) => <Select.Option key={select.value} value={select.value}>{select.lable}</Select.Option>)}
+                </Select>
+            }
+        }) : item)} dataSource={detailData} edit />
         <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoVOS} />
         <DetailTitle title="附件" operation={[<Upload
             key="sub"
@@ -69,12 +111,19 @@ export default function InfomationNew(): JSX.Element {
                 'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
             }}
             showUploadList={false}
+            onChange={uploadChange}
         ><Button key="su" type="primary" >上传附件</Button></Upload>]} />
-        <CommonTable columns={[
-            { title: '文件名', dataIndex: 'name' },
-            { title: '大小', dataIndex: 'fileSize' },
-            { title: '上传人', dataIndex: 'userName' },
-            { title: '上传时间', dataIndex: 'fileUploadTime' }
-        ]} dataSource={detailData.attachVos} />
+        <CommonTable columns={[{
+            title: "操作", dataIndex: "opration",
+            render: (_: any, record: any) => (<>
+                <Button type="link" onClick={() => deleteAttachData(record.id)}>删除</Button>
+                {/* <Button type="link">下载</Button> */}
+            </>)
+        },
+        { title: '文件名', dataIndex: 'name' },
+        { title: '大小', dataIndex: 'fileSize' },
+        { title: '上传人', dataIndex: 'userName' },
+        { title: '上传时间', dataIndex: 'fileUploadTime' }
+        ]} dataSource={attachVosData} />
     </DetailContent>
 }

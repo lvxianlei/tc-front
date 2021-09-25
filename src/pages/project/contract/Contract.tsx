@@ -176,7 +176,7 @@ class ManagementContract extends PromContract {
    * @param event
    */
   public onNewClick(event: React.MouseEvent<HTMLButtonElement>): void {
-    this.props.history.push("/project/contract/new");
+    this.props.history.push(`/project/contract/new/${(this.props.match.params as any).id}`);
   }
 
   /**

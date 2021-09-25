@@ -1,32 +1,22 @@
-import React, { useRef } from "react"
+import React, { useRef, useState } from "react"
 import { useHistory, useParams } from "react-router-dom"
-import { Button, Form, Spin } from "antd"
+import { Button, Form, message, Spin } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, EditTable, EditTabs } from "../../common"
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { bidInfoColumns } from '../managementDetailData.json'
 import { EditTableHasForm, TabsCanEdit, UploadXLS } from "../bidResult"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
-const postBaseData = {
-    batch: 0,
-    bidOpenRecordDtos: [],
-    date: 2019,
-    delBidOpenByIds: [],
-    delRound: [],
-    description: "",
-    id: -1,
-    isBid: 10,
-    projectId: 111,
-    roundCount: 10
-}
 export default function BidResultEdit(): JSX.Element {
     const history = useHistory()
     const ref = useRef()
     const params = useParams<{ id: string, tab: string }>()
+    const [bidOpenRecordVos, setBidOpenRecordVos] = useState<any[]>([{ round: 1, roundName: "第 1 轮", bidOpenRecordVos: [] }])
     const [baseInfoForm] = Form.useForm()
     const { loading, error, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidBase/${params.id}`)
         baseInfoForm.setFieldsValue(result)
+        setBidOpenRecordVos(result.bidOpenRecordListVos)
         resole(result)
     }))
     const { loading: saveStatus, data: saveResult, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
@@ -37,7 +27,6 @@ export default function BidResultEdit(): JSX.Element {
     const handleSubmit = async () => {
         const tabsData = (ref.current as any).getData()
         const baseInfoData = await baseInfoForm.getFieldsValue();
-
         const _tabsData = await Promise.all(
             (tabsData as any[]).map(async (item, index) => {
                 const { refFun, title, ...realItem } = item;
@@ -50,10 +39,19 @@ export default function BidResultEdit(): JSX.Element {
             const nextTabItem = nextItem.formData ? nextItem.formData.map((formItem: any) => ({ ...formItem, round: nextItem.round, roundName: nextItem.roundName })) : []
             return total.concat(nextTabItem)
         }, [])
-        run({ ...baseInfoData, bidOpenRecordDtos: postTabsData, roundCount: _tabsData.length, projectId: params.id })
-        // await run({ ...postBaseData, ...baseInfoData, projectId: params.id, date: baseInfoData.date.year && baseInfoData.date.year(), id: data?.id })
-    }
 
+        const result = await run({
+            ...baseInfoData,
+            bidOpenRecordDtos: postTabsData,
+            roundCount: _tabsData.length,
+            projectId: params.id,
+            id: data?.id
+        })
+        if (result) {
+            message.success("保存成功...")
+            history.goBack()
+        }
+    }
     return (<DetailContent operation={[<Button key="save" type="primary" onClick={handleSubmit}>保存</Button>]}>
         <ManagementDetailTabsTitle />
         <Spin spinning={loading}>
@@ -80,7 +78,7 @@ export default function BidResultEdit(): JSX.Element {
                     type: "select",
                     enum: [
                         {
-                            value: 0,
+                            value: -1,
                             label: "未公布"
                         },
                         {
@@ -98,18 +96,17 @@ export default function BidResultEdit(): JSX.Element {
                 ref={ref}
                 canEdit={true}
                 hasRefFun={true}
-                data={[
-                    {
-                        title: "第 1 轮",
-                        key: "第 1 轮",
-                        content: <EditTable columns={bidInfoColumns} dataSource={[]} />
-                    }
-                ]}
+                data={bidOpenRecordVos.map((item: any) => ({
+                    title: item.roundName,
+                    key: item.roundName,
+                    content: <EditTable columns={bidInfoColumns} dataSource={item.bidOpenRecordVos || []} />
+                }))}
                 eachContent={(item: any, tempRef?: {
                     ref: Record<string, any>;
                     key: string;
                 }) => {
-                    const data: any[] = []
+                    const data: any[] = bidOpenRecordVos.find((bidItem: any) => bidItem.roundName === item.key).bidOpenRecordVos
+                    console.log(data,"---")
                     return (
                         <EditTableHasForm
                             columns={bidInfoColumns}

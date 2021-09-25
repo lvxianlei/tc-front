@@ -10,8 +10,8 @@ import ConfirmableButton from '../../../components/ConfirmableButton';
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthorityComponent from '../../../components/AuthorityComponent';
 
-export interface IPromContractProps {}
-export interface IPromContractWithRouteProps extends RouteComponentProps<IPromContractProps>, WithTranslation {}
+export interface IPromContractProps { }
+export interface IPromContractWithRouteProps extends RouteComponentProps<IPromContractProps>, WithTranslation { }
 export interface IPromContractState extends IAbstractMngtComponentState {
     readonly tableDataSource: ITableDataItem[];
     readonly saleOrderNumber?: string;
@@ -42,9 +42,9 @@ export interface IResponseData {
     readonly records: ITableDataItem[];
 }
 
- /**
-  * 销售合同管理
-  */
+/**
+ * 销售合同管理
+ */
 export class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps, IPromContractState> {
 
     requestPath = '/tower-market/saleOrder';
@@ -65,15 +65,16 @@ export class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps
      * @description Fetchs table data
      * @param filterValues 
      */
-    protected async fetchTableData(filterValues: Record<string, any>,pagination: TablePaginationConfig = {}) {
+    protected async fetchTableData(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
         const resData: IResponseData = await RequestUtil.get<IResponseData>(this.requestPath, {
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
-            size: pagination.pageSize ||this.state.tablePagination?.pageSize,
-            countryCode: this.state.selectedTabKey
+            size: pagination.pageSize || this.state.tablePagination?.pageSize,
+            countryCode: this.state.selectedTabKey,
+            projectId: (this.props.match.params as any).id
         });
-        if(resData?.records?.length === 0 && resData?.current>1){
-            this.fetchTableData({},{
+        if (resData?.records?.length === 0 && resData?.current > 1) {
+            this.fetchTableData({}, {
                 current: resData.current - 1,
                 pageSize: 10,
                 total: 0,
@@ -123,35 +124,35 @@ export class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps
             title: '订单编号',
             dataIndex: 'saleOrderNumber',
             render: (_: undefined, record: object): React.ReactNode => {
-                    return <Link to={ `/prom/order/detail/${ (record as ITableDataItem).id }` }>{ (record as ITableDataItem).saleOrderNumber }</Link>
+                return <Link to={`/prom/order/detail/${(record as ITableDataItem).id}`}>{(record as ITableDataItem).saleOrderNumber}</Link>
             }
         }, {
             key: 'internalNumber',
             title: '内部合同编号',
             dataIndex: 'internalNumber',
             render: (_: undefined, record: object): React.ReactNode => {
-                return <Link to={ `/prom/contract/detail/${ (record as ITableDataItem).contractId }` }>{ (record as ITableDataItem).internalNumber }</Link>
+                return <Link to={`/prom/contract/detail/${(record as ITableDataItem).contractId}`}>{(record as ITableDataItem).internalNumber}</Link>
             }
         }, {
             key: 'projectName',
             title: '工程名称',
             dataIndex: 'projectName'
-        },  {
+        }, {
             key: 'customerCompany',
             title: '业主单位',
             dataIndex: 'customerCompany'
-        },  {
+        }, {
             key: 'signCustomerName',
             title: '合同签订单位',
             dataIndex: 'signCustomerName'
-        },  {
-             key: 'chargeType',
-             title: '计价方式',
-             dataIndex: 'chargeType',
-             render: (productType: number): React.ReactNode => {
-                return  productType === 0 ? '订单总价、总重计算单价' : '产品单价、基数计算总价';
-             }
-         }, {
+        }, {
+            key: 'chargeType',
+            title: '计价方式',
+            dataIndex: 'chargeType',
+            render: (productType: number): React.ReactNode => {
+                return productType === 0 ? '订单总价、总重计算单价' : '产品单价、基数计算总价';
+            }
+        }, {
             key: 'deliveryTime',
             title: '合同交货日期',
             dataIndex: 'deliveryTime'
@@ -165,24 +166,24 @@ export class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps
             dataIndex: 'operation',
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={ `/prom/order/setting/${ (record as ITableDataItem).id }` }>编辑</Link>
+                    <Link to={`/prom/order/setting/${(record as ITableDataItem).id}`}>编辑</Link>
                     <AuthorityComponent permissions="sale_order_del">
-                        <ConfirmableButton confirmTitle="要删除该订单吗？" type="link" placement="topRight" onConfirm={ async () => {
+                        <ConfirmableButton confirmTitle="要删除该订单吗？" type="link" placement="topRight" onConfirm={async () => {
                             let id = (record as ITableDataItem).id;
-                            const resData:IResponseData = await RequestUtil.delete(`/tower-market/saleOrder?id=${ id }`);
+                            const resData: IResponseData = await RequestUtil.delete(`/tower-market/saleOrder?id=${id}`);
                             this.fetchTableData({});
-                        } }>删除</ConfirmableButton>
+                        }}>删除</ConfirmableButton>
                     </AuthorityComponent>
                 </Space>
             )
         }];
-     }
+    }
 
-     /**
-     * @implements
-     * @description Determines whether table change on
-     * @param pagination 
-     */
+    /**
+    * @implements
+    * @description Determines whether table change on
+    * @param pagination 
+    */
     public onTableChange(pagination: TablePaginationConfig): void {
         this.fetchTableData({
             saleOrderNumber: this.state.saleOrderNumber,
@@ -192,15 +193,15 @@ export class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps
             signCustomerName: this.state.signCustomerName
         }, pagination);
     }
-    
-     
-     /**
-      * @implements
-      * @description Determines whether filter submit on
-      * @param values 
-      */
+
+
+    /**
+     * @implements
+     * @description Determines whether filter submit on
+     * @param values 
+     */
     public async onFilterSubmit(values: Record<string, any>) {
-        const tablePagination:TablePaginationConfig = {
+        const tablePagination: TablePaginationConfig = {
             current: 1,
             pageSize: 10,
             total: 0,
@@ -220,7 +221,7 @@ export class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps
             key: ""
         }];
     }
- 
+
     /**
      * @implements
      * @description Determines whether tab change on
@@ -230,41 +231,41 @@ export class SaleOrder extends AbstractMngtComponent<IPromContractWithRouteProps
         this.fetchTableData({});
     }
 
-     /**
-     * @implements
-     * @description Determines whether new click on
-     * @param event 
-     */
+    /**
+    * @implements
+    * @description Determines whether new click on
+    * @param event 
+    */
     public onNewClick(event: React.MouseEvent<HTMLButtonElement>): void {
         this.props.history.push('/prom/order/new');
     }
- 
-     /**
-      * @implements
-      * @description Renders filter components
-      * @param item 
-      * @returns filter components 
-      */
+
+    /**
+     * @implements
+     * @description Renders filter components
+     * @param item 
+     * @returns filter components 
+     */
     public getFilterFormItemProps(item: ITabItem): FormItemProps[] {
         return [{
             name: 'saleOrderNumber',
-            children: <Input placeholder="订单编号关键词" maxLength={ 200 } autoComplete="off"/>
+            children: <Input placeholder="订单编号关键词" maxLength={200} autoComplete="off" />
         },
         {
             name: 'internalNumber',
-            children: <Input placeholder="内部合同编号关键词" maxLength={ 200 } autoComplete="off"/>
+            children: <Input placeholder="内部合同编号关键词" maxLength={200} autoComplete="off" />
         },
         {
             name: 'projectName',
-            children: <Input placeholder="工程名称关键词" maxLength={ 200 } autoComplete="off"/>
+            children: <Input placeholder="工程名称关键词" maxLength={200} autoComplete="off" />
         },
         {
             name: 'customerCompany',
-            children: <Input placeholder="业主单位关键词" maxLength={ 200 } autoComplete="off"/>
+            children: <Input placeholder="业主单位关键词" maxLength={200} autoComplete="off" />
         },
         {
             name: 'signCustomerName',
-            children: <Input placeholder="合同签订单位关键词" maxLength={ 200 } autoComplete="off"/>
+            children: <Input placeholder="合同签订单位关键词" maxLength={200} autoComplete="off" />
         }];
     }
 }

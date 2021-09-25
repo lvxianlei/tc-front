@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button, Form, Row, Col, FormInstance } from 'antd'
 import { FormItemType, FormItemTypesType } from '../common'
 import { FormListFieldData, FormListOperation } from 'antd/lib/form/FormList'
@@ -31,7 +31,7 @@ type ColumnTypes = any[]
 
 export interface EditTableProps {
     columns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string, type: FormItemTypesType })[]
-    dataSource: DataType[]
+    dataSource: any[]
     form?: FormInstance
     opration?: React.ReactNode[]
 }

@@ -258,23 +258,23 @@
     "auditIdRecord": [
         {
             "title": "部门",
-            "lable": "dept"
+            "dataIndex": "dept"
         },
         {
             "title": "审批人",
-            "lable": "auditor"
+            "dataIndex": "auditor"
         },
         {
             "title": "职位",
-            "lable": "position"
+            "dataIndex": "position"
         },
         {
             "title": "审批时间",
-            "lable": "updateTime"
+            "dataIndex": "updateTime"
         },
         {
             "title": "审批结果",
-            "lable": "auditStatus",
+            "dataIndex": "auditStatus",
             "type": "select",
             "enum": [
                 {
@@ -289,7 +289,7 @@
         },
         {
             "title": "意见",
-            "lable": "description"
+            "dataIndex": "description"
         }
     ],
     "drawH": [

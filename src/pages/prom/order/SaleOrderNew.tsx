@@ -9,9 +9,9 @@ import RequestUtil from '../../../utils/RequestUtil';
 import AbstractSaleOrderSetting, { ChargeType, IAbstractSaleOrderSettingState, IContractInfoDto, IProductVo } from './AbstractSaleOrderSetting';
 import moment from 'moment'
 
-export interface ISaleOrderNewProps {}
-export interface ISaleOrderNewRouteProps extends RouteComponentProps<ISaleOrderNewProps>, WithTranslation {}
-export interface ISaleOrderNewState extends IAbstractSaleOrderSettingState {}
+export interface ISaleOrderNewProps { }
+export interface ISaleOrderNewRouteProps extends RouteComponentProps<ISaleOrderNewProps>, WithTranslation { }
+export interface ISaleOrderNewState extends IAbstractSaleOrderSettingState { }
 
 /**
  * Create a new client.
@@ -41,7 +41,7 @@ export class SaleOrderNew extends AbstractSaleOrderSetting<ISaleOrderNewRoutePro
             signCustomerName: values.signCustomerName,
             contractNumber: values.contractNumber
         }
-        if(values.chargeType === ChargeType.UNIT_PRICE) {
+        if (values.chargeType === ChargeType.UNIT_PRICE) {
             values.price = undefined;
         }
         values.orderProductDtos = this.state.saleOrder?.orderProductDtos && this.state.saleOrder?.orderProductDtos.map((items: IProductVo, index: number) => {
@@ -54,8 +54,10 @@ export class SaleOrderNew extends AbstractSaleOrderSetting<ISaleOrderNewRoutePro
         })
         values = {
             ...values,
-            contractInfoDto
+            contractInfoDto,
+            projectId: (this.props.match.params as any).projectId
         }
+
         return await RequestUtil.post('/tower-market/saleOrder', values);
     }
 
@@ -64,7 +66,7 @@ export class SaleOrderNew extends AbstractSaleOrderSetting<ISaleOrderNewRoutePro
      * @description Descriptions product change approval
      * @returns extra operation area 
      */
-     protected renderExtraOperationArea(): React.ReactNode {
+    protected renderExtraOperationArea(): React.ReactNode {
         return null;
     }
 }

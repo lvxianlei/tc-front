@@ -29,9 +29,8 @@ class ManagementOrder extends SaleOrder {
         render: (_: undefined, record: object): React.ReactNode => {
           return (
             <Link
-              to={`/project/order/detail/${projectId}/${
-                (record as ITableDataItem).id
-              }`}
+              to={`/project/order/detail/${projectId}/${(record as ITableDataItem).id
+                }`}
             >
               {(record as ITableDataItem).saleOrderNumber}
             </Link>
@@ -50,9 +49,8 @@ class ManagementOrder extends SaleOrder {
         render: (_: undefined, record: object): React.ReactNode => {
           return (
             <Link
-              to={`/project/contract/detail/${projectId}/${
-                (record as ITableDataItem).contractId
-              }`}
+              to={`/project/contract/detail/${projectId}/${(record as ITableDataItem).contractId
+                }`}
             >
               {(record as ITableDataItem).internalNumber}
             </Link>
@@ -121,9 +119,8 @@ class ManagementOrder extends SaleOrder {
         render: (_: undefined, record: object): React.ReactNode => (
           <Space direction="horizontal" size="small">
             <Link
-              to={`/project/order/setting/${projectId}/${
-                (record as ITableDataItem).id
-              }`}
+              to={`/project/order/setting/${projectId}/${(record as ITableDataItem).id
+                }`}
             >
               编辑
             </Link>
@@ -169,7 +166,7 @@ class ManagementOrder extends SaleOrder {
    * @param event
    */
   public onNewClick(event: React.MouseEvent<HTMLButtonElement>): void {
-    this.props.history.push("/project/order/new");
+    this.props.history.push(`/project/order/new/${(this.props.match.params as any).id}`);
   }
 
   /**

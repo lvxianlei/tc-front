@@ -341,16 +341,21 @@ class ManagementContractNew extends ContractNew {
                 },
               ],
               children: (
-                <Cascader
-                  fieldNames={{ label: "name", value: "code" }}
-                  options={this.state.regionInfoData}
-                  onChange={this.onRegionInfoChange}
-                  changeOnSelect
+                <Select
+                  getPopupContainer={(triggerNode) => triggerNode.parentNode}
                   disabled={
                     this.getForm()?.getFieldValue("countryCode") === 1 ||
                     contract?.countryCode === 1
                   }
-                />
+                >
+                  {this.state.regionInfoData?.map((opt: any) => {
+                    return (
+                      <Select.Option key={opt.code} value={opt.code}>
+                        {opt.name}
+                      </Select.Option>
+                    );
+                  })}
+                </Select>
               ),
             },
             {

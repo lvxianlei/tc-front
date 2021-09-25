@@ -10,7 +10,7 @@ export default function SelectProductGroup(props: any): JSX.Element {
     const [projectSelectRows, setProjectSelectRows] = useState<any[]>([])
     const { loading, error, data, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/contract`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/contract?projectId=${props.projectId}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -25,6 +25,7 @@ export default function SelectProductGroup(props: any): JSX.Element {
             reject(error)
         }
     }), { manual: true })
+
     const onSelectChange = (selectedRowKeys: string[], selectRows: any[]) => {
         setSelect(selectedRowKeys)
         productGroupRun({ id: selectRows[0].id })
@@ -33,7 +34,7 @@ export default function SelectProductGroup(props: any): JSX.Element {
         setProjectSelect(selectedRowKeys)
         setProjectSelectRows(selectRows)
     }
-    
+
     return <Modal title="选择确认明细" width={1011} {...props} destroyOnClose onOk={() => props.onOk && props.onOk(projectSelectRows)} >
         <CommonTable
             loading={loading}
