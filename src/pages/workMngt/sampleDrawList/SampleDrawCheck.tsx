@@ -86,7 +86,6 @@ export default function SampleDrawCheck(): React.ReactNode {
                     <Space>
                     <Button type="primary">导出</Button>
                     <Button type="primary">完成校核</Button>
-                    <Button type="primary">校核/锁定</Button>
                     <Button type="primary" onClick={() => history.goBack()}>返回上一级</Button>
                     <span>小样图数：23/100</span>
                     </Space>
