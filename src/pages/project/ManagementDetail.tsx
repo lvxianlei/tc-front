@@ -215,7 +215,7 @@ export default function ManagementDetail(): React.ReactNode {
                 ]}
                 optionType="button"
             /></Row>
-            <CommonTable columns={cargoVOListColumns} />
+            <CommonTable columns={cargoVOListColumns} dataSource={[]} />
         </DetailContent>,
         tab_salesPlan: <DetailContent>
             <Row>

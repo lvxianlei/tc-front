@@ -2,6 +2,7 @@ import React from 'react'
 import { Space, Input, DatePicker, Select } from 'antd'
 import { Link } from 'react-router-dom'
 import { Page } from '../common'
+import ApplicationContext from "../../configuration/ApplicationContext"
 const biddingStatusEnum = [
     {
         value: 0,
@@ -107,6 +108,7 @@ const columns = [
     }
 ]
 export default function Information(): React.ReactNode {
+    const dictionaryOptions: any = (ApplicationContext.get().dictionaryOption as any)["125"]
     const onFilterSubmit = (value: any) => {
         if (value.startBidBuyEndTime) {
             const formatDate = value.startBidBuyEndTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -123,8 +125,12 @@ export default function Information(): React.ReactNode {
             value.startBiddingEndTime = formatDate[0]
             value.endBiddingEndTime = formatDate[1]
         }
+        if (value.source) {
+            value.source = value.source.join(",")
+        }
         return value
     }
+
     return <Page
         path="/tower-market/bidInfo"
         columns={columns}
@@ -138,22 +144,22 @@ export default function Information(): React.ReactNode {
             {
                 name: 'startBidBuyEndTime',
                 label: '购买截至日期',
-                children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 200 }} />
+                children: <DatePicker.RangePicker format="YYYY-MM-DD" />
             },
             {
                 name: 'startReleaseDate',
                 label: '发布日期',
-                children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 200 }} />
+                children: <DatePicker.RangePicker format="YYYY-MM-DD" />
             },
             {
                 name: 'startBiddingEndTime',
                 label: '投标截至日期',
-                children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 200 }} />
+                children: <DatePicker.RangePicker format="YYYY-MM-DD" />
             },
             {
                 name: 'biddingStatus',
                 label: '是否应标',
-                children: <Select style={{ width: '100px' }}>
+                children: <Select style={{ width: "100px" }}>
                     <Select.Option value="1">是</Select.Option>
                     <Select.Option value="2">否</Select.Option>
                 </Select>
@@ -161,9 +167,8 @@ export default function Information(): React.ReactNode {
             {
                 name: 'source',
                 label: '来源',
-                children: <Select style={{ width: '100px' }}>
-                    <Select.Option value="1">aaaaaaaaaa</Select.Option>
-                    <Select.Option value="0">bbbbbbbbbb</Select.Option>
+                children: <Select mode="multiple" style={{ minWidth: "100px" }}>
+                    {dictionaryOptions.map((item: any, index: number) => <Select.Option key={index} value={item.name}>{item.name}</Select.Option>)}
                 </Select>
             }
         ]}

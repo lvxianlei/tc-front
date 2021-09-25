@@ -13,12 +13,12 @@ export default function BidResultEdit(): JSX.Element {
     const params = useParams<{ id: string, tab: string }>()
     const [bidOpenRecordVos, setBidOpenRecordVos] = useState<any[]>([{ round: 1, roundName: "第 1 轮", fixed: true, bidOpenRecordVos: [] }])
     const [baseInfoForm] = Form.useForm()
-    const { loading, error, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidBase/${params.id}`)
         baseInfoForm.setFieldsValue(result)
         if (result.bidOpenRecordListVos?.length > 0) {
             const resultBid = result.bidOpenRecordListVos.reverse()
-            resultBid[resultBid.length-1].fixed = true
+            resultBid[resultBid.length - 1].fixed = true
             setBidOpenRecordVos(resultBid)
         }
         resole(result)
@@ -41,7 +41,7 @@ export default function BidResultEdit(): JSX.Element {
                 const fdata = await refFun?.getForm().getFieldsValue()
                 resove({ round, roundName, formData: fdata?.submit })
             } else {
-                resove({ round, roundName, formData: [] })
+                resove({ round, roundName, formData: bidOpenRecordVos.find((item: any) => item.round === round).bidOpenRecordVos || [] })
             }
         })))
 
