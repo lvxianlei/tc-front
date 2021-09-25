@@ -12,7 +12,6 @@ export default function BaseInfoEdit(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ tab: TabTypes, id: string }>()
     const [projectLeaderId, setProjectLeaderId] = useState<string>("")
-    const [biddingPerson, setBiddingPerson] = useState<string>("")
     const [attachVosData, setAttachVosData] = useState<any[]>([])
     const [baseInfoForm] = Form.useForm()
     const [cargoVOListForm] = Form.useForm()
@@ -21,7 +20,6 @@ export default function BaseInfoEdit(): JSX.Element {
     const { loading, error, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/projectInfo/${params.id}`)
         setProjectLeaderId(result.projectLeaderId)
-        setBiddingPerson(result.biddingPerson)
         setAttachVosData(result.attachVos)
         baseInfoForm.setFieldsValue(result)
         cargoVOListForm.setFieldsValue({ submit: result.cargoVOList })
@@ -51,7 +49,8 @@ export default function BaseInfoEdit(): JSX.Element {
             attachInfoDtos: attachVosData,
             cargoDTOList: cargoVOListData.submit,
             projectLeaderId,
-            biddingPerson
+            biddingPerson: baseInfoData.biddingPerson.value || baseInfoData.biddingPerson,
+            biddingAgency: baseInfoData.biddingAgency.value || baseInfoData.biddingAgency
         })
 
         if (saveResult) {
@@ -62,16 +61,7 @@ export default function BaseInfoEdit(): JSX.Element {
     const handleBaseInfoChange = (changedFields: any, allFields: any) => {
         console.log(changedFields)
         if (Object.keys(changedFields)[0] === "projectLeader") {
-            baseInfoForm.setFieldsValue({ ...allFields, ...changedFields.projectLeader.records[0] })
             setProjectLeaderId(changedFields.projectLeader.records[0].id)
-        }
-        if (Object.keys(changedFields)[0] === "biddingPerson") {
-            if (changedFields.biddingPerson) {
-                baseInfoForm.setFieldsValue({ biddingPerson: changedFields.biddingPerson })
-                setBiddingPerson(changedFields.biddingPerson)
-            } else {
-                setBiddingPerson(changedFields.biddingPerson.value)
-            }
         }
     }
     const uploadChange = (event: any) => {
@@ -103,10 +93,7 @@ export default function BaseInfoEdit(): JSX.Element {
         <ManagementDetailTabsTitle />
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
-            <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={baseInfoData.map((item: any) => item.dataIndex === "biddingStatus" ? ({
-                ...item,
-                render: () => <>aaaa</>
-            }) : item)} dataSource={data || {}} edit />
+            <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={baseInfoData} dataSource={data || {}} edit />
             <DetailTitle title="货物清单" />
             <EditTable form={cargoVOListForm} columns={cargoVOListColumns} dataSource={data?.cargoVOList} />
             <DetailTitle title="附件信息" operation={[<Upload

@@ -184,6 +184,7 @@
             "title": "创建时间",
             "dataIndex": "createTime",
             "type": "date",
+            "format": "YYYY-MM-DD",
             "disabled": true
         },
         {

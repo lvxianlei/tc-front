@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useHistory, useParams } from "react-router-dom"
-import { Button, Spin, Form, message, Upload } from 'antd'
+import { Button, Spin, Form, message, Upload, Select } from 'antd'
 import { EditTable, DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common'
 import { baseInfoData } from './biddingHeadData.json'
 import useRequest from '@ahooksjs/use-request'
@@ -90,7 +90,14 @@ export default function InfomationNew(): JSX.Element {
         ]}
     >
         <DetailTitle title="基础信息" />
-        <BaseInfo form={baseInfoForm} columns={baseInfoData} dataSource={detailData} edit />
+        <BaseInfo form={baseInfoForm} columns={baseInfoData.map((item: any) => item.dataIndex === "biddingStatus" ? ({
+            ...item,
+            render: (text: any, records: any) => {
+                return <Select>
+                    {item.enum.map((select: any) => <Select.Option key={select.value} value={select.value}>{select.lable}</Select.Option>)}
+                </Select>
+            }
+        }) : item)} dataSource={detailData} edit />
         <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoVOS} />
         <DetailTitle title="附件" operation={[<Upload
             key="sub"
