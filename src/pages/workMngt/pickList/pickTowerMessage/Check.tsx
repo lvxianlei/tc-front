@@ -4,6 +4,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import { Link } from 'react-router-dom'
 import { CommonTable, Page } from '../../../common'
 import QuestionnaireModal from './QuestionnaireModal';
+import { Popconfirm } from 'antd';
 
 export default function PickCheckList(): React.ReactNode {
     const [form] = Form.useForm();
@@ -48,7 +49,14 @@ export default function PickCheckList(): React.ReactNode {
                 extraOperation={
                     <Space>
                         <Button>导出</Button>
-                        <Button>完成校核</Button>
+                        <Popconfirm
+                            title="确认完成校核?"
+                            onConfirm={ () => {} }
+                            okText="确认"
+                            cancelText="取消"
+                        > 
+                            <Button>完成校核</Button>
+                        </Popconfirm>
                         <Button>返回上一级</Button>
                     </Space>
                 }

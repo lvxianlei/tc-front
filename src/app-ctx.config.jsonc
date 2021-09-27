@@ -344,6 +344,19 @@
                                 "authority": "approvalm"
                             }
                         ]
+                    },
+                    {
+                        "label": "基础设置",
+                        "icon": "technology",
+                        "path": "/baseSetting",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "基础设置",
+                                "path": "/baseSetting/baseSettingMngt",
+                                "authority": "approvalm"
+                            }
+                        ]
                     }
                 ]
             }

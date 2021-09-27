@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Space, Modal, Form, FormInstance, Input } from 'antd';
+import { Button, Space, Modal, Form, FormInstance, Input, Popconfirm } from 'antd';
 import { DetailContent, CommonTable, BaseInfo } from '../../../common';
 import RequestUtil from '../../../../utils/RequestUtil';
 import styles from './SetOut.module.less';
@@ -99,7 +99,14 @@ class QuestionnaireModal extends React.Component<IQuestionnaireModalRouteProps, 
                 footer={ 
                     <Space direction="horizontal" size="small">
                         <Button type="primary" onClick={ () => this.props.modalCancel() } ghost>关闭</Button>
-                        <Button type="primary" onClick={ () => this.submitQuestion() }>提交问题</Button>
+                        <Popconfirm
+                            title="确认提交问题?"
+                            onConfirm={ () => {} }
+                            okText="确认"
+                            cancelText="取消"
+                        >   
+                             <Button type="primary" onClick={ () => this.submitQuestion() }>提交问题</Button>
+                        </Popconfirm>
                     </Space> } 
                 onCancel={ () => this.props.modalCancel() }
             >

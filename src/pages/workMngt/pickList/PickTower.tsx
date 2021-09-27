@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Button, Form, Modal, Row, Col } from 'antd'
+import { Space, Input, DatePicker, Button, Form, Modal, Row, Col, Popconfirm } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
 import { Link, useHistory } from 'react-router-dom'
 import { Page } from '../../common'
@@ -177,7 +177,14 @@ export default function PickTower(): React.ReactNode {
                 extraOperation={
                     <Space>
                     <Button type="primary">导出</Button>
-                    <Button type="primary">提交</Button>
+                    <Popconfirm
+                        title="确认提交?"
+                        onConfirm={ () => {} }
+                        okText="确认"
+                        cancelText="取消"
+                    >   
+                        <Button type="primary">提交</Button>
+                    </Popconfirm>
                     <Button type="primary" onClick={()=>history.push('/workMngt/pickList')}>返回上一级</Button>
                     </Space>
                 }

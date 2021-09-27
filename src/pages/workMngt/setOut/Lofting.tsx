@@ -9,7 +9,7 @@ import { Space, Select, Button, Popconfirm, Input, Form, FormInstance } from 'an
 import { Page } from '../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
 import styles from './TowerLoftingAssign.module.less';
-import { useHistory, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import UploadModal from './UploadModal';
 
 interface Column extends ColumnType<object> {
@@ -263,7 +263,7 @@ export default function Lofting(): React.ReactNode {
                 <Button type="primary" ghost>模板下载</Button>
                 <Button type="primary" ghost>完成放样</Button>
                 <Button type="primary" ghost>导入</Button>
-                <Button type="primary" ghost>放样塔型套用</Button>
+                <Link to="./"><Button type="primary" ghost>放样塔型套用</Button></Link>
                 <Button type="primary" ghost onClick={ () => { 
                     if(editorLock === '编辑') {
                         setColumns(columns);

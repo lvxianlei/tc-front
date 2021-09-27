@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Spin, Image, Space, Upload, message } from 'antd';
+import { Button, Spin, Image, Space, Upload, message, Popconfirm } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable } from '../../../common';
 import useRequest from '@ahooksjs/use-request';
@@ -36,7 +36,14 @@ export default function PickTowerDetail(): React.ReactNode {
     return <>
         <Spin spinning={loading}>
             <DetailContent operation={[
-                <Button  onClick={() => history.goBack()}>保存数据</Button>,
+                <Popconfirm
+                    title="确认保存数据?"
+                    onConfirm={ () => {} }
+                    okText="确认"
+                    cancelText="取消"
+                >   
+                    <Button  onClick={() => history.goBack()}>保存数据</Button>
+                </Popconfirm>,
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
                 <Space>

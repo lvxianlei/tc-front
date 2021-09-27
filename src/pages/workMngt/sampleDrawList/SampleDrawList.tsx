@@ -3,6 +3,7 @@ import { Space, Input, DatePicker, Button, Form } from 'antd';
 import { Link } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
+import { Popconfirm } from 'antd';
 
 export default function SampleDrawList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
@@ -95,7 +96,14 @@ export default function SampleDrawList(): React.ReactNode {
                     <Link to={`/workMngt/sampleDrawList/sampleDrawMessage/${record.id}`}>小样图信息</Link>
                     <Link to={`/workMngt/sampleDrawList/sampleDraw/${record.id}`}>小样图</Link>
                     <Link to={`/workMngt/sampleDrawList/sampleDrawCheck/${record.id}`}>校核</Link>
-                    <Button type='link'>提交</Button>
+                    <Popconfirm
+                        title="确认提交?"
+                        onConfirm={ () => {} }
+                        okText="确认"
+                        cancelText="取消"
+                    >   
+                        <Button type="link">提交</Button>
+                    </Popconfirm>
                 </Space>
             )
         }
