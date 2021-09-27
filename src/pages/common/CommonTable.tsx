@@ -14,7 +14,6 @@ function generateRender(type: ColumnsItemsType, data: (SelectData | TextData)) {
                 ...data
             })
         case "select":
-            console.log(data.enum)
             return ({
                 ellipsis: true,
                 onCell: () => ({ className: styles.tableCell }),

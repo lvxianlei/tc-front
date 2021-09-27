@@ -118,6 +118,12 @@
             "value": "name",
             "readOnly": true,
             "dependencies": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择项目负责人..."
+                }
+            ],
             "columns": [
                 {
                     "title": "登录账号",
@@ -238,7 +244,13 @@
     "bidDocColumns": [
         {
             "title": "类别",
-            "dataIndex": "bidType"
+            "dataIndex": "bidType",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择类别..."
+                }
+            ]
         },
         {
             "title": "详细类别",
@@ -643,6 +655,17 @@
             "width": 1011,
             "value": "saleOrderId",
             "dependencies": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择订单"
+                },
+                {
+                    "type": "string",
+                    "min": 1,
+                    "message": "请选择订单"
+                }
+            ],
             "columns": [
                 {
                     "title": "订单编号",
@@ -696,7 +719,13 @@
         {
             "title": "物资名称",
             "dataIndex": "cargoName",
-            "width": 100
+            "width": 100,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请填写物资名称"
+                }
+            ]
         },
         {
             "title": "规格型号",
@@ -706,17 +735,37 @@
         {
             "title": "计量单位",
             "dataIndex": "metering",
-            "width": 100
+            "width": 100,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请填写计量单位"
+                }
+            ]
         },
         {
             "title": "数量",
             "dataIndex": "number",
-            "width": 100
+            "type": "number",
+            "width": 100,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请填写数量"
+                }
+            ]
         },
         {
             "title": "单价(含税)(元)",
             "dataIndex": "moneyTax",
-            "width": 150
+            "type": "number",
+            "width": 100,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请填写单价(含税)(元)"
+                }
+            ]
         },
         {
             "title": "单价(不含税)(元)",
@@ -726,17 +775,32 @@
         {
             "title": "合同总价(含税)(元)",
             "dataIndex": "contractMoneyTax",
-            "width": 150
+            "type": "number",
+            "width": 100,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请填写合同总价(含税)(元)"
+                }
+            ]
         },
         {
             "title": "合同总价(不含税)(元)",
             "dataIndex": "contractMoney",
-            "width": 150
+            "width": 150,
+            "type": "number"
         },
         {
             "title": "增值税率(%)",
             "dataIndex": "tax",
-            "width": 150
+            "width": 150,
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请填写增值税率(%)"
+                }
+            ]
         },
         {
             "title": "交货时间",

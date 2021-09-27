@@ -33,38 +33,42 @@ export default function BidResultEdit(): JSX.Element {
     }), { manual: true })
 
     const handleSubmit = async () => {
-        const tabsData = (ref.current as any).getData()
-        const baseInfoData = await baseInfoForm.getFieldsValue();
-        const _tabsData = await Promise.all(tabsData.map((item: any) => new Promise(async (resove, reject) => {
-            const { refFun, title: roundName, key: round } = item
-            if (refFun?.getForm()) {
-                const fdata = await refFun?.getForm().getFieldsValue()
-                resove({ round, roundName, formData: fdata?.submit })
-            } else {
-                resove({ round, roundName, formData: bidOpenRecordVos.find((item: any) => item.round === round).bidOpenRecordVos || [] })
+        try {
+            const tabsData = (ref.current as any).getData()
+            const baseInfoData = await baseInfoForm.validateFields();
+            const _tabsData = await Promise.all(tabsData.map((item: any) => new Promise(async (resove, reject) => {
+                const { refFun, title: roundName, key: round } = item
+                if (refFun?.getForm()) {
+                    const fdata = await refFun?.getForm().validateFields()
+                    resove({ round, roundName, formData: fdata?.submit })
+                } else {
+                    resove({ round, roundName, formData: bidOpenRecordVos.find((item: any) => item.round === round).bidOpenRecordVos || [] })
+                }
+            })))
+
+            const postTabsData = _tabsData.reduce((total: any, nextItem: any) => {
+                const nextTabItem = nextItem.formData ? nextItem.formData.map((formItem: any) => ({
+                    ...formItem,
+                    round: nextItem.round,
+                    roundName: nextItem.roundName
+                })) : []
+                return total.concat(nextTabItem)
+            }, [])
+
+            const result = await run({
+                ...baseInfoData,
+                bidOpenRecordDtos: postTabsData,
+                roundCount: _tabsData.length,
+                projectId: params.id,
+                id: data?.id
+            })
+
+            if (result) {
+                message.success("保存成功...")
+                history.goBack()
             }
-        })))
-
-        const postTabsData = _tabsData.reduce((total: any, nextItem: any) => {
-            const nextTabItem = nextItem.formData ? nextItem.formData.map((formItem: any) => ({
-                ...formItem,
-                round: nextItem.round,
-                roundName: nextItem.roundName
-            })) : []
-            return total.concat(nextTabItem)
-        }, [])
-
-        const result = await run({
-            ...baseInfoData,
-            bidOpenRecordDtos: postTabsData,
-            roundCount: _tabsData.length,
-            projectId: params.id,
-            id: data?.id
-        })
-
-        if (result) {
-            message.success("保存成功...")
-            history.goBack()
+        } catch (error) {
+            console.log(error)
         }
     }
     const handelCancel = () => {
@@ -74,6 +78,15 @@ export default function BidResultEdit(): JSX.Element {
             onOk: () => history.goBack()
         })
     }
+
+    const handleEditTableChange = (changeFiled: any, roundItem: any, action: "add" | "remove") => {
+        const resultData = bidOpenRecordVos.find((bidItem: any) => bidItem.round === roundItem.key).bidOpenRecordVos
+        setBidOpenRecordVos(bidOpenRecordVos.map((bidItem: any) => bidItem.round === roundItem.key ? ({
+            ...bidItem,
+            bidOpenRecordVos: resultData.concat(changeFiled).filter((fitem: any) => fitem.uid || fitem.id || fitem.uid === 0)
+        }) : bidItem))
+    }
+
     return (<DetailContent operation={[
         <Button
             key="save"
@@ -113,11 +126,11 @@ export default function BidResultEdit(): JSX.Element {
                             label: "未公布"
                         },
                         {
-                            value: 1,
+                            value: 0,
                             label: "是"
                         },
                         {
-                            value: 2,
+                            value: 1,
                             label: "否"
                         }
                     ]
@@ -139,7 +152,10 @@ export default function BidResultEdit(): JSX.Element {
                 data={bidOpenRecordVos.map((item: any) => ({
                     title: item.roundName,
                     key: item.round,
-                    content: <EditTable columns={bidInfoColumns} dataSource={item.bidOpenRecordVos || []} />
+                    content: <EditTable
+                        onChange={(changeFiled: any, action: "add" | "remove") => handleEditTableChange(changeFiled, item, action)}
+                        columns={bidInfoColumns}
+                        dataSource={item.bidOpenRecordVos || []} />
                 }))}
                 eachContent={(item: any, tempRef?: {
                     ref: Record<string, any>;
@@ -150,10 +166,21 @@ export default function BidResultEdit(): JSX.Element {
                         <EditTableHasForm
                             columns={bidInfoColumns}
                             dataSource={data}
+                            onChange={(changeFiled: any, action: "add" | "remove") => handleEditTableChange(changeFiled, item, action)}
                             opration={[<UploadXLS key="xlxs" readEnd={(_data) => {
-                                console.log(_data)
-                                // 伪代码 不可用
-                                // setData(data.concat(_data))
+                                const resultData = bidOpenRecordVos.find((bidItem: any) => bidItem.round === item.key).bidOpenRecordVos
+                                const uploadData = _data.map((item: any, index) => {
+                                    const rowData: any = { uid: resultData.length + index }
+                                    Object.keys(item).forEach((columnItem: string) => {
+                                        const columnDataIndex = (bidInfoColumns).find(bidItem => bidItem.title === columnItem)
+                                        columnDataIndex && (rowData[columnDataIndex.dataIndex] = item[columnItem])
+                                    })
+                                    return rowData
+                                })
+                                setBidOpenRecordVos(bidOpenRecordVos.map((bidItem: any) => bidItem.round === item.key ? ({
+                                    ...bidItem,
+                                    bidOpenRecordVos: resultData.concat(uploadData).filter((fitem: any) => fitem.uid || fitem.id || fitem.uid === 0)
+                                }) : bidItem))
                             }} />]}
                             ref={tempRef ? (o) => (tempRef.ref[tempRef.key] = o) : undefined}
                         />

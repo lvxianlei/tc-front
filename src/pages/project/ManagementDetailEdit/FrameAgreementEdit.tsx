@@ -39,13 +39,17 @@ export default function FrameAgreementEdit(): JSX.Element {
     }), { manual: true })
 
     const handleSubmit = async () => {
-        const baseInfoData = await baseInfoForm.getFieldsValue()
-        const contractCargoDtosData = await cargoDtoForm.getFieldsValue()
-        delete data?.contractCargoVos
-        const result = await run({ ...data, ...baseInfoData, projectId: params.id, contractCargoDtos: contractCargoDtosData.submit })
-        if (result) {
-            message.success("保存成功...")
-            history.goBack()
+        try {
+            const baseInfoData = await baseInfoForm.validateFields()
+            const contractCargoDtosData = await cargoDtoForm.validateFields()
+            delete data?.contractCargoVos
+            const result = await run({ ...data, ...baseInfoData, projectId: params.id, contractCargoDtos: contractCargoDtosData.submit })
+            if (result) {
+                message.success("保存成功...")
+                history.goBack()
+            }
+        } catch (error) {
+            console.log(error)
         }
     }
 

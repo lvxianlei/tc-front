@@ -1,15 +1,10 @@
-import React, { useState } from 'react'
-import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select } from 'antd'
-import { Link } from 'react-router-dom'
+import React from 'react'
+import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message } from 'antd'
+import { Link, useHistory } from 'react-router-dom'
 import ConfirmableButton from '../../components/ConfirmableButton'
 import { Page } from '../common'
 import { IClient } from '../IClient'
 import RequestUtil from '../../utils/RequestUtil'
-interface ManagementState {
-    selectedUserKeys: React.Key[]
-    selectedUsers: object[]
-}
-
 const projectType = [
     {
         value: 0,
@@ -45,10 +40,7 @@ const currentProjectStage = [
 ]
 
 export default function Management(): React.ReactNode {
-    // const [selectKeys, setSelectKeys] = useState<ManagementState>({
-    //     selectedUserKeys: [],
-    //     selectedUsers: []
-    // })
+    const history = useHistory()
     const columns: TableColumnProps<object>[] = [
         {
             key: 'index',
@@ -119,13 +111,16 @@ export default function Management(): React.ReactNode {
                     <Link to={`/project/management/detail/${(record as IClient).id}`}>查看</Link>
                     <Link to={`/project/management/detail/edit/base/${(record as IClient).id}`}>编辑</Link>
                     <ConfirmableButton
-                        confirmTitle="要删除该客户吗？"
+                        confirmTitle="是否确定删除对应项目信息？"
                         type="link"
                         placement="topRight"
                         onConfirm={async () => {
-                            await RequestUtil.delete(`/tower-customer/customer?customerId=${(record as IClient).id}`)
-                        }}
-                    >
+                            const result = await RequestUtil.delete(`/tower-market/projectInfo?id=${(record as IClient).id}`)
+                            if (result) {
+                                message.success("项目成功删除...")
+                                history.go(0)
+                            }
+                        }}>
                         删除
                     </ConfirmableButton>
                 </Space>

@@ -38,9 +38,10 @@ export interface EditTableProps {
     dataSource: any[]
     form?: FormInstance
     opration?: React.ReactNode[]
+    onChange?: (changeFileds: any, action: "add" | "remove") => void
 }
 
-export default function EditableTable({ columns = [], dataSource = [], form, opration }: EditTableProps): JSX.Element {
+export default function EditableTable({ columns = [], dataSource = [], form, opration, onChange }: EditTableProps): JSX.Element {
     const [dataState, setDataState] = useState<any>({
         data: dataSource || [],
         loading: false
@@ -51,10 +52,14 @@ export default function EditableTable({ columns = [], dataSource = [], form, opr
         { title: '序号', dataIndex: 'index', width: 50, editable: false, render: (key: number, index: number): React.ReactNode => (<span>{index + 1}</span>) },
         {
             title: '操作', dataIndex: 'opration', width: 50, editable: false,
-            render: (key: number, _: number, remove: (index: number | number[]) => void): JSX.Element => <Button type="link" onClick={() => remove(key)}>删除</Button>
+            render: (key: number, _: number, remove: (index: number | number[]) => void): JSX.Element => <Button type="link" onClick={() => handleRemove(remove, key)}>删除</Button>
         },
         ...columns
     ]
+    const handleRemove = (remove: any, key: any) => {
+        remove(key)
+        console.log(key)
+    }
     const vlist: React.FC<any> = ({
         height,
         isScrolling,
@@ -110,12 +115,13 @@ export default function EditableTable({ columns = [], dataSource = [], form, opr
         }</AutoSizer>
 
     const handleAddRow = (add: any) => {
-        add(baseRowData)
+        add({ ...baseRowData, uid: dataState.data.length + 1 })
         setDataState({ ...dataState, data: dataState.data.concat(baseRowData) })
+        onChange && onChange({ ...baseRowData, uid: dataState.data.length + 1 }, "add")
     }
 
     return (
-        <Form form={form} initialValues={{ submit: dataSource }} className={styles.editable}>
+        <Form form={form} initialValues={{ submit: dataState.data }} className={styles.editable}>
             <Form.List name="submit">
                 {
                     (fields: FormListFieldData[], { add, remove }: FormListOperation): React.ReactNode => (
@@ -124,7 +130,7 @@ export default function EditableTable({ columns = [], dataSource = [], form, opr
                             <Row className={styles.FormHeader}>
                                 {columns.map((item, index) => (<Col key={`Editable_${index}`} span={2}>{item.title}</Col>))}
                             </Row>
-                            <Row style={{ position: "relative", height: 400 }}>
+                            {/* <Row style={{ position: "relative", height: 400 }}>
                                 <WindowScroller>
                                     {({ height, isScrolling, onChildScroll, scrollTop }) => autoSizer({
                                         height,
@@ -135,24 +141,23 @@ export default function EditableTable({ columns = [], dataSource = [], form, opr
                                         remove
                                     })}
                                 </WindowScroller>
-                            </Row>
-                            {/* {fields.map(({ key, name, fieldKey, ...restField }, index: number) => (
+                            </Row> */}
+                            {fields.map(({ key, name, fieldKey, ...restField }, index: number) => (
                                 <Row key={`EditableRow_${key}`} className={`${styles.FormHeader} ${styles.FormRow}`}>
-                                    {columns.map((coItem, coIndex) => {
-                                        return (<Col key={`EditableCol_${coIndex}`} span={2}>
-                                            <Form.Item
-                                                {...restField}
-                                                className={styles.formItem}
-                                                name={[name, coItem.dataIndex]}
-                                                fieldKey={[fieldKey, coItem.dataIndex]}
-                                            >
-                                                {coItem.editable === false ? <EditableCell columnItem={coItem as EditableCellProps['columnItem']} fieldKey={name} index={index} remove={remove} /> : <FormItemType type={coItem.type} data={coItem} />}
-                                            </Form.Item>
-                                        </Col>)
-                                    }
+                                    {columns.map((coItem, coIndex) => (<Col key={`EditableCol_${coIndex}`} span={2}>
+                                        <Form.Item
+                                            {...restField}
+                                            className={styles.formItem}
+                                            name={[name, coItem.dataIndex]}
+                                            fieldKey={[fieldKey, coItem.dataIndex]}
+                                            rules={coItem.rules || []}
+                                        >
+                                            {coItem.editable === false ? <EditableCell columnItem={coItem as EditableCellProps['columnItem']} fieldKey={name} index={index} remove={remove} /> : <FormItemType type={coItem.type} data={coItem} />}
+                                        </Form.Item>
+                                    </Col>)
                                     )}
                                 </Row>
-                            ))} */}
+                            ))}
                         </>
                     )
                 }

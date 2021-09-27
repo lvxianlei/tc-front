@@ -31,7 +31,7 @@ function formatDataType(dataItem: any, dataSource: any): string {
     const value = dataSource[dataItem.dataIndex]
     const types: any = {
         number: value && value !== -1 ? value : "-",
-        select: ((value || value === 0) && dataItem.enum && value !== -1) ? dataItem.enum.find((item: any) => item.value === value)?.label : "-",
+        select: ((value || value === 0) && dataItem.enum) ? (dataItem.enum.find((item: any) => item.value === value)?.label || "-") : "-",
         date: value ? moment(value).format(dataItem.format || "YYYY-MM-DD HH:mm:ss") : "-",
         string: value || "-",
         textarea: value || "-",
@@ -50,12 +50,14 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
             layout="inline"
             labelCol={{ style: { width: '80px', whiteSpace: "break-spaces" } }}
         >
-            <Row gutter={[0, 10]}>
+            <Row gutter={[0, 10]} >
                 {columns.map((item: any, index: number) => <Col key={`form_item_${index}`} span={24 / col}>
-                    <Col span={24}>
-                        <Form.Item name={item.dataIndex} label={item.title} rules={item.rules || []}>
-                            {item.render ? item.render() : <FormItemType type={item.type} data={item} />}
-                        </Form.Item>
+                    <Col span={24} >
+                        <div className={styles.baseInfoForm}>
+                            <Form.Item name={item.dataIndex} label={item.title} rules={item.rules || []}>
+                                {item.render ? item.render() : <FormItemType type={item.type} data={item} />}
+                            </Form.Item>
+                        </div>
                     </Col>
                 </Col>
                 )}
@@ -63,7 +65,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
         </Form>
     }
 
-    return <Descriptions bordered column={col} size="small" className={styles.baseInfo} >
+    return <Descriptions bordered column={col} size="small" >
         {columns.map((item: any, index: number) => <Descriptions.Item contentStyle={{ width: `${100 / (col * 2)}%` }} key={`desc_${index}`} label={item.title}>{formatDataType(item, dataSource)}</Descriptions.Item>)}
     </Descriptions>
 }

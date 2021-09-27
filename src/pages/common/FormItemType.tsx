@@ -51,26 +51,33 @@ interface PopTableProps {
 
 const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: any) => void }> = ({ data, onChange }) => {
     const [select, setSelect] = useState<any[]>([])
+    const [form] = Form.useForm()
     const searchs = data.columns.filter((item: any) => item.search)
     const { loading, data: popTableData, run } = useRequest<any>((params: {}) => new Promise(async (resolve, reject) => {
-        resolve(await RequestUtil.get<{ data: any }>(data.path, params))
+        try {
+            resolve(await RequestUtil.get<{ data: any }>(data.path, params))
+        } catch (error) {
+            reject(error)
+        }
     }))
     const onSelectChange = (selectedRowKeys: string[], selectRows: any[]) => {
         onChange && onChange(selectRows)
         setSelect(selectedRowKeys)
     }
     return <>
-        <Form>
-            <Row gutter={6}>
+        <Form form={form} onFinish={async (data: any) => await run({ ...data })}>
+            <Row gutter={2} style={{ height: 32 }}>
                 {searchs.map((fItem: any) => <Col span={searchs.length / 24} key={fItem.dataIndex}><Form.Item
                     name={fItem.dataIndex}
-                    label={fItem.title}>
+                    label={fItem.title}
+                    style={{ height: 32, fontSize: 12 }}
+                >
                     <FormItemType data={fItem} />
                 </Form.Item>
                 </Col>)}
                 <Form.Item>
-                    <Button type="primary">搜索</Button>
-                    <Button type="default">重置</Button>
+                    <Button type="primary" htmlType="submit" size="small" style={{ marginLeft: 12 }}>搜索</Button>
+                    <Button type="default" size="small" onClick={() => form.resetFields()} style={{ marginLeft: 12 }}>重置</Button>
                 </Form.Item>
             </Row>
         </Form>
@@ -81,8 +88,15 @@ const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: any) =>
                 type: data.selectType || "radio",
                 onChange: onSelectChange,
             }}
+            size="small"
+            loading={loading}
             dataSource={popTableData?.records}
-            pagination={{ size: popTableData?.size, current: popTableData?.current, total: popTableData?.total }} />
+            pagination={{
+                size: "small",
+                pageSize: popTableData?.size,
+                current: popTableData?.current,
+                total: popTableData?.total
+            }} />
     </>
 }
 
@@ -104,11 +118,18 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
         (props as any).onChange({ ...changeValue })
         setValue({ ...value, ...changeValue })
     }
+
     return <>
         <Modal width={data.width || 520} title={`选择${data.title}`} destroyOnClose visible={visible} onOk={handleOk} onCancel={() => setVisible(false)}>
             <PopTableContent data={data} onChange={handleChange} />
         </Modal>
-        <Input {...props} disabled={data.disabled} style={{ width: "100%" }} onChange={inputChange} readOnly={data.readOnly === undefined ? true : data.readOnly} value={value.value || (props as any).value} addonAfter={<PlusOutlined onClick={() => !data.disabled && setVisible(true)} />} />
+        <Input
+            {...props}
+            disabled={data.disabled}
+            style={{ width: "100%", height: "100%", ...props.style }}
+            onChange={inputChange} readOnly={data.readOnly === undefined ? true : data.readOnly}
+            value={value.value}
+            addonAfter={<PlusOutlined onClick={() => !data.disabled && setVisible(true)} />} />
     </>
 }
 interface SelfSelectProps {
@@ -122,16 +143,16 @@ const SelfSelect: React.FC<SelfSelectProps> = ({ data, ...props }) => {
 
 const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, ...props }) => {
     const ItemTypes = {
-        text: <Input {...props} disabled={data.disabled} style={{ width: "100%" }} />,
-        number: <InputNumber {...props} disabled={data.disabled} style={{ width: "100%" }} />,
+        text: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} />,
+        number: <InputNumber {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} />,
         select: <SelfSelect {...props} data={data as SelectData} />,
         date: <DatePicker
             {...data.picker ? { ...props, picker: data.picker } : { ...props }}
             onChange={(value) => props.onChange(value?.format(data.format || "YYYY-MM-DD HH:mm:ss"))}
             value={props.value ? moment(props.value) : null}
-            format={data.format || "YYYY-MM-DD HH:mm:ss"} disabled={data.disabled} style={{ width: "100%" }} />,
-        textarea: <Input.TextArea {...props} disabled={data.disabled} style={{ width: "100%" }} />,
-        popForm: <Input {...props} disabled={data.disabled} style={{ width: "100%" }} />,
+            format={data.format || "YYYY-MM-DD HH:mm:ss"} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} />,
+        textarea: <Input.TextArea {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} />,
+        popForm: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} />,
         popTable: <PopTable {...props} data={data as PopTableData} />
     }
     return <>{ItemTypes[type]}</>

@@ -88,7 +88,6 @@ export default function ManagementDetail(): React.ReactNode {
         })
     }
     const handleProductGroupClick = async (id: string) => {
-        console.log(id, "=====")
         const result: any = await projectGroupRun(id)
         setProductGroupData(result)
     }
@@ -125,7 +124,11 @@ export default function ManagementDetail(): React.ReactNode {
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
             <DetailTitle title="标书制作记录表" />
-            <BaseInfo columns={bidDocColumns.map(item => item.dataIndex === "bidType" ? ({ ...item, type: "select", enum: bidType.map((bid: any) => ({ value: bid.id, label: bid.name })) }) : item)} dataSource={data || {}} col={4} />
+            <BaseInfo columns={bidDocColumns.map(item => item.dataIndex === "bidType" ? ({
+                ...item,
+                type: "select",
+                enum: bidType.map((bid: any) => ({ value: bid.id, label: bid.name }))
+            }) : item)} dataSource={data || {}} col={4} />
             <DetailTitle title="填写记录" />
             <CommonTable columns={[
                 { title: '序号', dataIndex: 'index', width: 50, render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
@@ -140,56 +143,55 @@ export default function ManagementDetail(): React.ReactNode {
             <Button key="goEdit" type="primary" onClick={() => history.push(`/project/management/detail/edit/bidResult/${params.id}`)}>编辑</Button>,
             <Button key="goback" onClick={() => history.goBack}>返回</Button>
         ]}>
-            <Spin spinning={loading}>
-                <DetailTitle title="基本信息" />
-                <BaseInfo columns={[
-                    {
-                        title: '年份',
-                        dataIndex: 'date',
-                        type: "date",
-                        format: "YYYY",
-                        picker: "year"
-                    },
-                    {
-                        title: '批次',
-                        dataIndex: 'batch',
-                        type: "number"
-                    }, {
-                        title: '备注',
-                        dataIndex: 'description'
-                    },
-                    {
-                        title: '是否中标',
-                        dataIndex: "isBid",
-                        type: "select",
-                        enum: [
-                            {
-                                value: 0,
-                                label: "未公布"
-                            },
-                            {
-                                value: 1,
-                                label: "是"
-                            },
-                            {
-                                value: 2,
-                                label: "否"
-                            }
-                        ]
-                    }]} dataSource={data || {}} col={2} />
-                <DetailTitle title="开标信息" />
-                <Tabs>
-                    {data?.bidOpenRecordListVos?.length > 0 ? data?.bidOpenRecordListVos.reverse().map((item: any, index: number) => <Tabs.TabPane key={index}
-                        tab={item.roundName}>
-                        <CommonTable columns={bidInfoColumns} dataSource={item.bidOpenRecordVos || []} />
-                    </Tabs.TabPane>)
-                        :
-                        <Tabs.TabPane tab="第 1 轮">
-                            <CommonTable columns={bidInfoColumns} dataSource={[]} />
-                        </Tabs.TabPane>
-                    }
-                </Tabs>
-            </Spin>
+
+            <DetailTitle title="基本信息" />
+            <BaseInfo columns={[
+                {
+                    title: '年份',
+                    dataIndex: 'date',
+                    type: "date",
+                    format: "YYYY",
+                    picker: "year"
+                },
+                {
+                    title: '批次',
+                    dataIndex: 'batch',
+                    type: "number"
+                }, {
+                    title: '备注',
+                    dataIndex: 'description'
+                },
+                {
+                    title: '是否中标',
+                    dataIndex: "isBid",
+                    type: "select",
+                    enum: [
+                        {
+                            value: -1,
+                            label: "未公布"
+                        },
+                        {
+                            value: 0,
+                            label: "是"
+                        },
+                        {
+                            value: 1,
+                            label: "否"
+                        }
+                    ]
+                }]} dataSource={data || {}} col={2} />
+            <DetailTitle title="开标信息" />
+            <Tabs>
+                {data?.bidOpenRecordListVos?.length > 0 ? data?.bidOpenRecordListVos.reverse().map((item: any, index: number) => <Tabs.TabPane key={index}
+                    tab={item.roundName}>
+                    <CommonTable columns={bidInfoColumns} dataSource={item.bidOpenRecordVos || []} />
+                </Tabs.TabPane>)
+                    :
+                    <Tabs.TabPane tab="第 1 轮">
+                        <CommonTable columns={bidInfoColumns} dataSource={[]} />
+                    </Tabs.TabPane>
+                }
+            </Tabs>
         </DetailContent>,
         tab_frameAgreement: <DetailContent operation={[
             <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => history.push(`/project/management/detail/edit/frameAgreement/${params.id}`)}>编辑</Button>,
