@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Button, Modal, Form, Image } from 'antd';
+import { Space, Input, DatePicker, Button, Modal, Form, Image, Popconfirm } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
 import { useHistory } from 'react-router-dom';
@@ -85,7 +85,14 @@ export default function SampleDrawCheck(): React.ReactNode {
                 extraOperation={
                     <Space>
                     <Button type="primary">导出</Button>
-                    <Button type="primary">完成校核</Button>
+                    <Popconfirm
+                        title="确认完成校核?"
+                        onConfirm={ () => {} }
+                        okText="确认"
+                        cancelText="取消"
+                    >   
+                        <Button type="primary">完成校核</Button>
+                    </Popconfirm>
                     <Button type="primary" onClick={() => history.goBack()}>返回上一级</Button>
                     <span>小样图数：23/100</span>
                     </Space>

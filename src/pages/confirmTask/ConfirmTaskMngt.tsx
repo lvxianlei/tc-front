@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Select, Button, Modal, Form } from 'antd'
+import { Space, Input, DatePicker, Select, Button, Modal, Form, Popconfirm } from 'antd'
 import { Link } from 'react-router-dom'
 import { CommonTable, DetailTitle, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -152,7 +152,14 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                     <Link to={`/confirmTask/ConfirmTaskMngt/ConfirmTaskDetail/${record.id}`}>任务详情</Link>
                     <Button type='link' onClick={() => setVisible(true)}>指派</Button>
                     <Button type='link' onClick={() => setDetailVisible(true)}>明细</Button>
-                    <Button type='link'>提交任务</Button>
+                    <Popconfirm
+                        title="确认提交任务?"
+                        onConfirm={ () => {} }
+                        okText="确认"
+                        cancelText="取消"
+                    >   
+                        <Button type='link'>提交任务</Button>
+                    </Popconfirm>
                 </Space>
             )
         }
