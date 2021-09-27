@@ -106,16 +106,16 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'projectName',
+            key: 'drawTaskNum',
             title: '确认任务编号',
             width: 100,
-            dataIndex: 'projectName'
+            dataIndex: 'drawTaskNum'
         },
         {
-            key: 'projectNumber',
+            key: 'status',
             title: '任务状态',
             width: 100,
-            dataIndex: 'projectNumber'
+            dataIndex: 'status'
         },
         {
             key: 'bidBuyEndTime',
@@ -124,22 +124,22 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             dataIndex: 'bidBuyEndTime'
         },
         {
-            key: 'biddingEndTime',
+            key: 'confirmName',
             title: '确认人',
             width: 200,
-            dataIndex: 'biddingEndTime'
+            dataIndex: 'confirmName'
         },
         {
-            key: 'biddingAgency',
+            key: 'contractName',
             title: '合同名称',
             width: 100,
-            dataIndex: 'biddingAgency'
+            dataIndex: 'contractName'
         },
         {
-            key: 'biddingAddress',
+            key: 'aeName',
             title: '业务经理',
             width: 100,
-            dataIndex: 'biddingAddress'
+            dataIndex: 'aeName'
         },
         {
             key: 'operation',
@@ -217,27 +217,32 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             ]} dataSource={[]} />
         </Modal>
         <Page
-            path="/tower-market/bidInfo"
+            path="/tower-science/drawTask"
             columns={columns}
             extraOperation={<Button type="primary">导出</Button>}
             searchFormItems={[
                 {
-                    name: 'fuzzyQuery',
+                    name: 'updateStatusTimeStart',
                     label:'最新状态变更时间',
-                    children: <Input placeholder="请输入项目名称/项目编码/审批编号/关联合同/制单人进行查询" maxLength={200} />
+                    children: <DatePicker />
                 },
                 {
-                    name: 'startBidBuyEndTime',
+                    name: 'updateStatusTimeEnd',
+                    label:'',
+                    children: <DatePicker  />
+                },
+                {
+                    name: 'status',
                     label: '任务状态',
                     children: <DatePicker />
                 },
                 {
-                    name: 'startReleaseDate',
+                    name: 'confirmName',
                     label: '确认人',
                     children: <DatePicker />
                 },
                 {
-                    name: 'biddingStatus',
+                    name: 'fuzzyQueryItem',
                     label: '模糊查询项',
                     children: <Input placeholder="请输入任务编号/合同名称/业务经理进行查询" maxLength={200} />
                 },
