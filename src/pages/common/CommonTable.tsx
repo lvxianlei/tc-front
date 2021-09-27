@@ -14,10 +14,11 @@ function generateRender(type: ColumnsItemsType, data: (SelectData | TextData)) {
                 ...data
             })
         case "select":
+            console.log(data.enum)
             return ({
                 ellipsis: true,
                 onCell: () => ({ className: styles.tableCell }),
-                render: (text: string | number) => <>{(text || text === 0) && data.enum ? data.enum.find((item: { value: string, label: string }) => item.value === text).label : text}</>,
+                render: (text: string | number) => <>{((text || text === 0) && data.enum) ? data.enum.find((item: { value: string, label: string }) => item.value === text)?.label : text}</>,
                 ...data
             })
         default:

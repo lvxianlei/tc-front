@@ -53,7 +53,7 @@ export default function EditableTable({ columns = [], dataSource = [], form, opr
                 {
                     (fields: FormListFieldData[], { add, remove }: FormListOperation): React.ReactNode => (
                         <>
-                            <Row><Button onClick={() => add(baseRowData)} type="primary" style={{ marginBottom: 16 }}>新增一行</Button>{opration}</Row>
+                            <Row><Button onClick={() => add(baseRowData)} type="primary" style={{ margin: "0 16px 16px 0" }}>新增一行</Button>{opration}</Row>
                             <Row className={styles.FormHeader}>
                                 {columns.map((item, index) => (<Col key={`Editable_${index}`} span={2}>{item.title}</Col>))}
                             </Row>

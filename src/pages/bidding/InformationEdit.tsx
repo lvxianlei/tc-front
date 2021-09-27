@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useHistory, useParams } from "react-router-dom"
-import { Button, Spin, Form, message, Upload, Select } from 'antd'
+import { Button, Spin, Form, message, Upload, Modal } from 'antd'
 import { EditTable, DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common'
 import { baseInfoData } from './biddingHeadData.json'
 import useRequest from '@ahooksjs/use-request'
@@ -20,12 +20,14 @@ export default function InfomationNew(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const [attachVosData, setAttachVosData] = useState<any[]>([])
+    const [reasonStatus, setReasonStatus] = useState<boolean>(false)
     const [baseInfoForm] = Form.useForm()
     const [bidForm] = Form.useForm()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         try {
             const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
             bidForm.setFieldsValue({ submit: data.bidPackageInfoVOS })
+            setReasonStatus(data.biddingStatus !== 2)
             setAttachVosData(data.attachVos)
             resole(data)
         } catch (error) {
@@ -52,8 +54,8 @@ export default function InfomationNew(): JSX.Element {
         }
         delete postData.bidPackageInfoVOS
         delete postData.attachVos
-        await run(postData)
-        if (saveResult) {
+        const result = await run(postData)
+        if (result) {
             message.success('保存成功...')
         }
     }
@@ -80,9 +82,27 @@ export default function InfomationNew(): JSX.Element {
             }
         }
     }
+
     const deleteAttachData = (id: number) => {
         setAttachVosData(attachVosData.filter((item: any) => item.id !== id))
     }
+
+    const handleBaseInfoChange = (changeFiled: any) => {
+        const { biddingStatus } = changeFiled
+        if (detailData.biddingStatus === 1 && biddingStatus !== 1) {
+            Modal.confirm({
+                title: "应标状态修改",
+                content: "当前标的已被应标，是否取消应标？确定后，该招标信息的项目将被删除，请再三确认！",
+                onOk: () => {
+                    setReasonStatus(biddingStatus !== 2)
+                },
+                onCancel: () => {
+                    baseInfoForm.setFieldsValue({ biddingStatus: 1 })
+                }
+            })
+        }
+    }
+
     return <DetailContent
         operation={[
             <Button key="save" type="primary" onClick={handleSave} loading={saveStatus}>保存</Button>,
@@ -90,13 +110,9 @@ export default function InfomationNew(): JSX.Element {
         ]}
     >
         <DetailTitle title="基础信息" />
-        <BaseInfo form={baseInfoForm} columns={baseInfoData.map((item: any) => item.dataIndex === "biddingStatus" ? ({
+        <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={baseInfoData.map((item: any) => item.dataIndex === "reason" ? ({
             ...item,
-            render: (text: any, records: any) => {
-                return <Select>
-                    {item.enum.map((select: any) => <Select.Option key={select.value} value={select.value}>{select.lable}</Select.Option>)}
-                </Select>
-            }
+            disabled: reasonStatus
         }) : item)} dataSource={detailData} edit />
         <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoVOS} />
         <DetailTitle title="附件" operation={[<Upload

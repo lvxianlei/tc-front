@@ -34,6 +34,7 @@ export default function ManagementDetail(): React.ReactNode {
     const dictionaryOptions: any = ApplicationContext.get().dictionaryOption
     const bidType = dictionaryOptions["124"]
     const frangmentBidType = dictionaryOptions["122"]
+    const typeNameEnum = dictionaryOptions["121"].map((item: any) => ({ value: item.id, label: item.name }))
     const [productGroupFlag, setProductGroupFlag] = useState<"productAssistDetailVos" | "productAssistStatisticsVos">("productAssistDetailVos")
     const [productGroupData, setProductGroupData] = useState<{ productAssistDetailVos: any[], productAssistStatisticsVos: any[] }>({
         productAssistDetailVos: [],

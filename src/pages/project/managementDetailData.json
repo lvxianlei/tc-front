@@ -52,18 +52,9 @@
             "columns": [
                 {
                     "title": "客户类型",
-                    "dataIndex": "typeName",
+                    "dataIndex": "type",
                     "type": "select",
-                    "enum": [
-                        {
-                            "value": 0,
-                            "label": "国内客户"
-                        },
-                        {
-                            "value": 1,
-                            "label": "国际客户"
-                        }
-                    ]
+                    "enum": []
                 },
                 {
                     "title": "客户名称",

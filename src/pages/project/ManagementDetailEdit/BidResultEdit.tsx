@@ -122,7 +122,8 @@ export default function BidResultEdit(): JSX.Element {
                         }
                     ]
                 }]} dataSource={data || {}} />
-            <DetailTitle title="开标信息" operation={[<Button key="new" type="primary"
+            <DetailTitle title="开标信息" operation={[<Button key="new"
+                type="primary"
                 onClick={() => setBidOpenRecordVos([
                     {
                         round: bidOpenRecordVos.length + 1,

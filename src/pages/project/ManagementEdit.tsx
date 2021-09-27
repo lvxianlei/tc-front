@@ -7,6 +7,8 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
 import { TabTypes } from "./ManagementDetail"
 import AuthUtil from "../../utils/AuthUtil"
+import ApplicationContext from "../../configuration/ApplicationContext"
+const dictionaryOptions: any = ApplicationContext.get().dictionaryOption
 export default function BaseInfoEdit(): JSX.Element {
   const history = useHistory()
   const params = useParams<{ tab: TabTypes, id: string }>()
@@ -15,6 +17,7 @@ export default function BaseInfoEdit(): JSX.Element {
   const [attachVosData, setAttachVosData] = useState<any[]>([])
   const [baseInfoForm] = Form.useForm()
   const [cargoVOListForm] = Form.useForm()
+  const typeNameEnum = dictionaryOptions["121"].map((item: any) => ({ value: item.id, label: item.name }))
   const { loading: saveStatus, data: saveResult, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
     try {
       const result: { [key: string]: any } = await RequestUtil.put(`/tower-market/projectInfo`, postData)
@@ -84,7 +87,10 @@ export default function BaseInfoEdit(): JSX.Element {
     <Button key="cacel" onClick={() => history.goBack()}>取消</Button>
   ]}>
     <DetailTitle title="基本信息" />
-    <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={baseInfoData} dataSource={{}} edit />
+    <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={baseInfoData.map((item: any) => item.dataIndex === "biddingPerson" ? ({
+      ...item,
+      columns: item.columns.map((columnItem: any) => columnItem.dataIndex === "type" ? ({ ...columnItem, enum: typeNameEnum }) : columnItem)
+    }) : item)} dataSource={{}} edit />
     <DetailTitle title="货物清单" />
     <EditTable form={cargoVOListForm} columns={cargoVOListColumns} dataSource={[]} />
     <DetailTitle title="附件信息" operation={[<Upload
