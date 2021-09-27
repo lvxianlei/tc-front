@@ -50,13 +50,14 @@ export default function InfomationNew(): JSX.Element {
             ...detailData,
             ...baseInfoResult,
             bidPackageInfoDTOList: bidPackageInfoDTOList.submit,
-            attachInfoDtos: attachVosData.map((item: any) => ({ ...item, id: "" }))
+            attachInfoDtos: attachVosData
         }
         delete postData.bidPackageInfoVOS
         delete postData.attachVos
         const result = await run(postData)
         if (result) {
             message.success('保存成功...')
+            history.goBack()
         }
     }
     if (loading) {
@@ -70,7 +71,8 @@ export default function InfomationNew(): JSX.Element {
                 const dataInfo = event.file.response.data
                 const fileInfo = dataInfo.name.split(".")
                 setAttachVosData([...attachVosData, {
-                    id: attachVosData.length,
+                    id: "",
+                    uid: attachVosData.length,
                     name: dataInfo.originalName.split(".")[0],
                     description: "",
                     filePath: dataInfo.name,
@@ -105,8 +107,14 @@ export default function InfomationNew(): JSX.Element {
 
     return <DetailContent
         operation={[
-            <Button key="save" type="primary" onClick={handleSave} loading={saveStatus}>保存</Button>,
-            <Button key="new" type="primary" onClick={() => history.goBack()}>取消</Button>
+            <Button
+                key="save"
+                type="primary"
+                onClick={handleSave}
+                loading={saveStatus}
+                style={{ marginRight: 16 }}
+            >保存</Button>,
+            <Button key="cancel" onClick={() => history.goBack()}>取消</Button>
         ]}
     >
         <DetailTitle title="基础信息" />
@@ -114,6 +122,7 @@ export default function InfomationNew(): JSX.Element {
             ...item,
             disabled: reasonStatus
         }) : item)} dataSource={detailData} edit />
+        <DetailTitle title="货物清单" />
         <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoVOS} />
         <DetailTitle title="附件" operation={[<Upload
             key="sub"

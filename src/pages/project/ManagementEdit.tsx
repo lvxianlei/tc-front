@@ -42,6 +42,7 @@ export default function BaseInfoEdit(): JSX.Element {
 
     if (saveResult) {
       message.success("保存成功...")
+      history.goBack()
     }
   }
 
@@ -83,7 +84,13 @@ export default function BaseInfoEdit(): JSX.Element {
     setAttachVosData(attachVosData.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
   }
   return <DetailContent operation={[
-    <Button key="save" type="primary" onClick={handleSubmit} loading={saveStatus}>保存</Button>,
+    <Button
+      key="save"
+      type="primary"
+      onClick={handleSubmit}
+      loading={saveStatus}
+      style={{ marginRight: 16 }}
+    >保存</Button>,
     <Button key="cacel" onClick={() => history.goBack()}>取消</Button>
   ]}>
     <DetailTitle title="基本信息" />
