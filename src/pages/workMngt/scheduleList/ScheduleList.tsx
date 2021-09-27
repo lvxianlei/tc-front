@@ -1,20 +1,9 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Button, Form } from 'antd'
+import { Space, Input, DatePicker, Button, Form, Select } from 'antd'
 import { Link } from 'react-router-dom'
 import { Page } from '../../common'
 
 export default function ScheduleList(): React.ReactNode {
-    const [visible, setVisible] = useState<boolean>(false);
-    const [form] = Form.useForm();
-    const handleModalOk = async () => {
-        try {
-            const submitData = await form.validateFields()
-            console.log(submitData)
-            setVisible(false)
-        } catch (error) {
-            console.log(error)
-        }
-    }
     const columns = [
         {
             key: 'index',
@@ -91,30 +80,39 @@ export default function ScheduleList(): React.ReactNode {
         }
     ]
 
-    const handleModalCancel = () => setVisible(false)
     return (
         <Page
-            path="/tower-market/bidInfo"
+            path="/tower-science/loftingTask"
             columns={columns}
             extraOperation={<Button type="primary">导出</Button>}
             searchFormItems={[
                 {
-                    name: 'startBidBuyEndTime',
+                    name: 'updateStatusTimeStart',
                     label: '最新状态变更时间',
-                    children: <DatePicker />
+                    children: <DatePicker placeholder='请选择开始时间'/>
                 },
                 {
-                    name: 'fuzzyQuery',
+                    name: 'updateStatusTimeEnd',
+                    label: '',
+                    children: <DatePicker placeholder='请选择结束时间'/>
+                },
+                {
+                    name: 'status',
                     label:'任务状态',
-                    children: <Input placeholder="请输入项目名称/项目编码/审批编号/关联合同/制单人进行查询" maxLength={200} />
+                    children: <Select style={{width:"100%"}}/>
                 },
                 {
-                    name: 'startReleaseDate',
+                    name: 'plannedDeliveryTimeStart',
                     label: '计划交付时间',
-                    children: <DatePicker />
+                    children: <DatePicker placeholder='请选择开始时间'/>
                 },
                 {
-                    name: 'biddingStatus',
+                    name: 'plannedDeliveryTimeEnd',
+                    label: '',
+                    children: <DatePicker placeholder='请选择结束时间'/>
+                },
+                {
+                    name: 'fuzzyMsg',
                     label: '模糊查询项',
                     children: <Input placeholder="请输入放样任务编号/任务单编号、订单编号/内部合同编号进行查询" maxLength={200} />
                 },
