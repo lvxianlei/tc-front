@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Button, Form } from 'antd'
+import { Space, Input, DatePicker, Button, Form, Modal, Row, Col, Select, Cascader } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
+import TextArea from 'antd/lib/input/TextArea';
 interface ManagementState {
     selectedKeys: React.Key[]
     selected: object[]
 }
 export default function ScheduleView(): React.ReactNode {
-    const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
+    const history = useHistory();
     const [form] = Form.useForm();
     const handleModalOk = async () => {
         try {
@@ -150,62 +151,175 @@ export default function ScheduleView(): React.ReactNode {
             width: 100,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={`/workMngt/confirmList/confirmMessage/${record.id}`}>指派</Link>
+                    <Button type='link' onClick={()=>{
+                        setVisible(true)
+                    }}>指派</Button>
                 </Space>
             )
         }
     ]
 
-    const handleModalCancel = () => setVisible(false)
-    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: object[]): void => {
-        setSelectKeys({
-            selectedKeys: selectedRowKeys,
-            selected: selectedRows
-        });
-    }
-    const [selectKeys, setSelectKeys] = useState<ManagementState>({
-        selectedKeys: [],
-        selected: []
-    })
+    const handleModalCancel = () => setVisible(false);
+    const formItemLayout = {
+        labelCol: { span: 4 },
+        wrapperCol: { span: 17 }
+    };
     return (
-        <Page
-            path="/tower-market/bidInfo"
-            columns={columns}
-            extraOperation={
-                <Space>
-                    <Button type="primary">导出</Button>
-                    <Button type="primary">指派</Button>
-                    <Button type="primary" onClick={() => history.goBack()}>返回上一级</Button>
-                </Space>
-            }
-            tableProps={{
-            rowSelection: {
-                selectedRowKeys: selectKeys.selectedKeys,
-                onChange: SelectChange
-            }
-            }}
-            searchFormItems={[
-                {
-                    name: 'startBidBuyEndTime',
-                    label: '最新状态变更时间',
-                    children: <DatePicker />
-                },
-                {
-                    name: 'fuzzyQuery',
-                    label:'任务状态',
-                    children: <Input placeholder="请输入项目名称/项目编码/审批编号/关联合同/制单人进行查询" maxLength={200} />
-                },
-                {
-                    name: 'startReleaseDate',
-                    label: '计划交付时间',
-                    children: <DatePicker />
-                },
-                {
-                    name: 'biddingStatus',
-                    label: '模糊查询项',
-                    children: <Input placeholder="请输入放样任务编号/任务单编号、订单编号/内部合同编号进行查询" maxLength={200} />
-                },
-            ]}
-        />
+        <>
+            <Modal title='指派信息'  width={1200} visible={visible} onCancel={handleModalCancel} onOk={handleModalOk}>
+                <Form form={form} {...formItemLayout}>
+                    <Row>
+                        <Col span={12}>
+                            <Form.Item name="aaaa" label="塔型">
+                                <span>JC30153B</span>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="reason" label="模式" rules={[{required: true,message:'请选择模式'}]}>
+                                <Select>
+                                    <Select.Option value='0' key='0'>新放</Select.Option>
+                                    <Select.Option value='1' key='1'>套用</Select.Option>
+                                    <Select.Option value='2' key='2'>重新出卡</Select.Option>
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={12}>
+                            <Form.Item name="aaaa" label="提料负责人" rules={[{required: true,message:'请选择提料负责人'}]}>
+                                <Cascader/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="reason" label="计划交付时间" rules={[{required: true,message:'请选择计划交付时间'}]}>
+                                <DatePicker format='YYYY-MM-DD' style={{width:'100%'}}/>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={12}>
+                            <Form.Item name="aaaa" label="提料配段负责人" rules={[{required: true,message:'请选择提料配段负责人'}]}>
+                                <Cascader/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="reason" label="计划交付时间" rules={[{required: true,message:'请选择计划交付时间'}]}>
+                                <DatePicker format='YYYY-MM-DD' style={{width:'100%'}}/>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={12}>
+                            <Form.Item name="aaaa" label="放样负责人" rules={[{required: true,message:'请选择放样负责人'}]}>
+                                <Cascader/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="reason" label="计划交付时间" rules={[{required: true,message:'请选择计划交付时间'}]}>
+                                <DatePicker format='YYYY-MM-DD' style={{width:'100%'}}/>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={12}>
+                            <Form.Item name="aaaa" label="组焊清单负责人 " rules={[{required: true,message:'请选择组焊清单负责人 '}]}>
+                                <Cascader/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="reason" label="计划交付时间" rules={[{required: true,message:'请选择计划交付时间'}]}>
+                                <DatePicker format='YYYY-MM-DD' style={{width:'100%'}}/>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={12}>
+                            <Form.Item name="aaaa" label="放样配段负责人" rules={[{required: true,message:'请选择放样配段负责人'}]}>
+                                <Cascader/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="reason" label="计划交付时间" rules={[{required: true,message:'请选择计划交付时间'}]}>
+                                <DatePicker format='YYYY-MM-DD' style={{width:'100%'}}/>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={12}>
+                            <Form.Item name="aaaa" label="小样图负责人" rules={[{required: true,message:'请选择小样图负责人'}]}>
+                                <Cascader/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="reason" label="计划交付时间" rules={[{required: true,message:'请选择计划交付时间'}]}>
+                                <DatePicker format='YYYY-MM-DD' style={{width:'100%'}}/>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={12}>
+                            <Form.Item name="aaaa" label="螺栓清单负责人" rules={[{required: true,message:'请选择螺栓清单负责人'}]}>
+                                <Cascader/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="reason" label="计划交付时间" rules={[{required: true,message:'请选择计划交付时间'}]}>
+                                <DatePicker format='YYYY-MM-DD' style={{width:'100%'}}/>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={12}>
+                            <Form.Item name="aaaa" label="优先级" rules={[{required: true,message:'请选择优先级'}]}>
+                                <Cascader/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="decription" label="备注" >
+                                <TextArea/>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Form>
+            </Modal>
+            <Page
+                path="/tower-market/bidInfo"
+                columns={columns}
+                extraOperation={
+                    <Space>
+                        <Button type="primary">导出</Button>
+                        <Button type="primary" onClick={() => history.goBack()}>返回上一级</Button>
+                    </Space>
+                }
+                // tableProps={{
+                // rowSelection: {
+                //     selectedRowKeys: selectKeys.selectedKeys,
+                //     onChange: SelectChange
+                // }
+                // }}
+                searchFormItems={[
+                    {
+                        name: 'startBidBuyEndTime',
+                        label: '最新状态变更时间',
+                        children: <DatePicker />
+                    },
+                    {
+                        name: 'fuzzyQuery',
+                        label:'任务状态',
+                        children: <Input placeholder="请输入项目名称/项目编码/审批编号/关联合同/制单人进行查询" maxLength={200} />
+                    },
+                    {
+                        name: 'startReleaseDate',
+                        label: '计划交付时间',
+                        children: <DatePicker />
+                    },
+                    {
+                        name: 'biddingStatus',
+                        label: '模糊查询项',
+                        children: <Input placeholder="请输入放样任务编号/任务单编号、订单编号/内部合同编号进行查询" maxLength={200} />
+                    },
+                ]}
+            />
+        </>
     )
 }

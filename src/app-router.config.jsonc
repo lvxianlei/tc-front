@@ -923,6 +923,13 @@
       "module": "./pages/setOutTower/BoltList",
       "exact": true,
       "authority": "approvalm"
+    },
+    { // 基础设置
+      "name": "基础设置",
+      "path": "/baseSetting/baseSettingMngt",
+      "module": "./pages/baseSetting/BaseSettingMngt",
+      "exact": true,
+      "authority": "approvalm"
     }
   ]
 }
