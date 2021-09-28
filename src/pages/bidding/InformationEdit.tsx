@@ -91,7 +91,7 @@ export default function InfomationNew(): JSX.Element {
 
     const handleBaseInfoChange = (changeFiled: any) => {
         const { biddingStatus } = changeFiled
-        if (detailData.biddingStatus === 1 && biddingStatus !== 1) {
+        if (biddingStatus && detailData.biddingStatus === 1 && biddingStatus !== 1) {
             Modal.confirm({
                 title: "应标状态修改",
                 content: "当前标的已被应标，是否取消应标？确定后，该招标信息的项目将被删除，请再三确认！",
@@ -103,7 +103,6 @@ export default function InfomationNew(): JSX.Element {
                 }
             })
         }
-        setReasonStatus(biddingStatus !== 2)
     }
 
     return <DetailContent
