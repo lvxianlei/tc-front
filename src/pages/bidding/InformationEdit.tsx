@@ -103,6 +103,7 @@ export default function InfomationNew(): JSX.Element {
                 }
             })
         }
+        setReasonStatus(biddingStatus !== 2)
     }
 
     return <DetailContent
@@ -118,10 +119,7 @@ export default function InfomationNew(): JSX.Element {
         ]}
     >
         <DetailTitle title="基础信息" />
-        <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={baseInfoData.map((item: any) => item.dataIndex === "reason" ? ({
-            ...item,
-            disabled: reasonStatus
-        }) : item)} dataSource={detailData} edit />
+        <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={!reasonStatus ? baseInfoData : baseInfoData.filter((item: any) => item.dataIndex !== "reason")} dataSource={detailData} edit />
         <DetailTitle title="货物清单" />
         <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoVOS} />
         <DetailTitle title="附件" operation={[<Upload

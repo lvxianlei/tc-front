@@ -54,7 +54,7 @@ export default function FrameAgreementEdit(): JSX.Element {
     }
 
     return <DetailContent operation={[
-        <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={handleSubmit} loading={saveStatus}>保存</Button>,
+        <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={handleSubmit} loading={saveStatus}>保存</Button>,
         <Button key="goback" onClick={() => history.goBack()}>返回</Button>
     ]}>
         <ManagementDetailTabsTitle />

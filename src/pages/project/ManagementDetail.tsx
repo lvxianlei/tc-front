@@ -93,7 +93,8 @@ export default function ManagementDetail(): React.ReactNode {
     }
     const tabItems: { [key: string]: JSX.Element | React.ReactNode } = {
         tab_base: <DetailContent operation={[
-            <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => history.push(`/project/management/detail/edit/base/${params.id}`)}>编辑</Button>,
+            <Button key="edit" style={{ marginRight: '16px' }}
+                type="primary" onClick={() => history.push(`/project/management/detail/edit/base/${params.id}`)}>编辑</Button>,
             <Button key="goback" onClick={() => history.goBack()}>返回</Button>
         ]}>
             <DetailTitle title="基本信息" />
@@ -120,7 +121,8 @@ export default function ManagementDetail(): React.ReactNode {
         </DetailContent>,
         tab_bidDoc: <DetailContent
             operation={[
-                <Button key="edit" type="primary" onClick={() => history.push(`/project/management/detail/edit/bidDoc/${params.id}`)} >编辑</Button>,
+                <Button key="edit" type="primary" style={{ marginRight: 16 }}
+                    onClick={() => history.push(`/project/management/detail/edit/bidDoc/${params.id}`)} >编辑</Button>,
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
             <DetailTitle title="标书制作记录表" />
@@ -140,7 +142,8 @@ export default function ManagementDetail(): React.ReactNode {
             ]} dataSource={data?.bidBizRecordVos} />
         </DetailContent>,
         tab_bidResult: <DetailContent operation={[
-            <Button key="goEdit" type="primary" onClick={() => history.push(`/project/management/detail/edit/bidResult/${params.id}`)}>编辑</Button>,
+            <Button key="goEdit" type="primary" style={{ marginRight: 16 }}
+                onClick={() => history.push(`/project/management/detail/edit/bidResult/${params.id}`)}>编辑</Button>,
             <Button key="goback" onClick={() => history.goBack}>返回</Button>
         ]}>
 
@@ -194,7 +197,7 @@ export default function ManagementDetail(): React.ReactNode {
             </Tabs>
         </DetailContent>,
         tab_frameAgreement: <DetailContent operation={[
-            <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => history.push(`/project/management/detail/edit/frameAgreement/${params.id}`)}>编辑</Button>,
+            <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={() => history.push(`/project/management/detail/edit/frameAgreement/${params.id}`)}>编辑</Button>,
             <Button key="goback" onClick={() => history.goBack()}>返回</Button>
         ]}>
             <DetailTitle title="基本信息" />

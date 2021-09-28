@@ -31,7 +31,7 @@ export default function BaseInfoEdit(): JSX.Element {
         }
     }))
 
-    const { loading: saveStatus, data: saveResult, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
+    const { loading: saveStatus, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.put(`/tower-market/projectInfo`, postData)
             resole(result)
@@ -46,7 +46,7 @@ export default function BaseInfoEdit(): JSX.Element {
             const cargoVOListData = await cargoVOListForm.validateFields()
             delete data?.cargoVOList
             delete data?.attachVos
-            await run({
+            const result = await run({
                 ...data,
                 ...baseInfoData,
                 attachInfoDtos: attachVosData,
@@ -55,8 +55,7 @@ export default function BaseInfoEdit(): JSX.Element {
                 biddingPerson: baseInfoData.biddingPerson.value || baseInfoData.biddingPerson,
                 biddingAgency: baseInfoData.biddingAgency.value || baseInfoData.biddingAgency
             })
-
-            if (saveResult) {
+            if (result) {
                 message.success("保存成功...")
                 history.goBack()
             }
@@ -93,9 +92,15 @@ export default function BaseInfoEdit(): JSX.Element {
     const deleteAttachData = (id: number) => {
         setAttachVosData(attachVosData.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
     }
-    
+
     return <DetailContent operation={[
-        <Button key="save" type="primary" onClick={handleSubmit} loading={saveStatus}>保存</Button>,
+        <Button
+            key="save"
+            type="primary"
+            onClick={handleSubmit}
+            loading={saveStatus}
+            style={{ marginRight: 16 }}
+        >保存</Button>,
         <Button key="cacel" onClick={() => history.goBack()}>取消</Button>
     ]}>
         <ManagementDetailTabsTitle />

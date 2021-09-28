@@ -141,7 +141,7 @@ export default function InformationDetail(): React.ReactNode {
                 <Button key="new" onClick={() => history.goBack()}>返回</Button>
             ]}>
             <DetailTitle title="基本信息" />
-            <BaseInfo columns={baseInfoData} dataSource={data || {}} col={4} />
+            <BaseInfo columns={isBid === "2" ? baseInfoData : baseInfoData.filter((item: any) => item.dataIndex !== "reason")} dataSource={data || {}} col={4} />
             <DetailTitle title="货物清单" />
             <CommonTable columns={tableColumns} dataSource={data?.bidPackageInfoVOS} />
             <DetailTitle title="附件" />
