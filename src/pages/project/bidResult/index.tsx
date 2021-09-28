@@ -216,7 +216,7 @@ export const TabsCanEdit = forwardRef((props: TabsCanEditProps, ref?: any) => {
       hideAdd={true}
     >
       {panes?.map((pane, index) => (
-        <Tabs.TabPane tab={pane.title} key={pane.key} closable={pane.closable}>
+        <Tabs.TabPane tab={pane.title} key={pane.key} closable={index === panes.length - 1 ? false : pane.closable}>
           {pane.content}
         </Tabs.TabPane>
       ))}

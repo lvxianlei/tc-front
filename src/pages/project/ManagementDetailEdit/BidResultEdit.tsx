@@ -80,10 +80,11 @@ export default function BidResultEdit(): JSX.Element {
     }
 
     const handleEditTableChange = (changeFiled: any, roundItem: any, action: "add" | "remove") => {
+        console.log(action)
         const resultData = bidOpenRecordVos.find((bidItem: any) => bidItem.round === roundItem.key).bidOpenRecordVos
         setBidOpenRecordVos(bidOpenRecordVos.map((bidItem: any) => bidItem.round === roundItem.key ? ({
             ...bidItem,
-            bidOpenRecordVos: resultData.concat(changeFiled).filter((fitem: any) => fitem.uid || fitem.id || fitem.uid === 0)
+            bidOpenRecordVos: resultData.concat(changeFiled)
         }) : bidItem))
     }
 
@@ -179,7 +180,7 @@ export default function BidResultEdit(): JSX.Element {
                                 })
                                 setBidOpenRecordVos(bidOpenRecordVos.map((bidItem: any) => bidItem.round === item.key ? ({
                                     ...bidItem,
-                                    bidOpenRecordVos: resultData.concat(uploadData).filter((fitem: any) => fitem.uid || fitem.id || fitem.uid === 0)
+                                    bidOpenRecordVos: resultData.concat(uploadData)
                                 }) : bidItem))
                             }} />]}
                             ref={tempRef ? (o) => (tempRef.ref[tempRef.key] = o) : undefined}

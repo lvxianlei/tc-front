@@ -49,8 +49,17 @@ interface PopTableProps {
     [key: string]: any
 }
 
+interface PagenationProps {
+    current: number
+    pageSize: number
+}
+
 const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: any) => void }> = ({ data, onChange }) => {
     const [select, setSelect] = useState<any[]>([])
+    const [pagenation, setPagenation] = useState<PagenationProps>({
+        current: 1,
+        pageSize: 10
+    })
     const [form] = Form.useForm()
     const searchs = data.columns.filter((item: any) => item.search)
     const { loading, data: popTableData, run } = useRequest<any>((params) => new Promise(async (resolve, reject) => {
@@ -61,12 +70,14 @@ const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: any) =>
         } catch (error) {
             reject(error)
         }
-    }))
+    }), { refreshDeps: [pagenation.current] })
 
     const onSelectChange = (selectedRowKeys: string[], selectRows: any[]) => {
         onChange && onChange(selectRows)
         setSelect(selectedRowKeys)
     }
+
+    const paginationChange = (page: number, pageSize: number) => setPagenation({ ...pagenation, current: page, pageSize })
 
     return <>
         <Form form={form} onFinish={async (data: any) => await run({ ...data })}>
@@ -97,9 +108,9 @@ const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: any) =>
             dataSource={popTableData?.records}
             pagination={{
                 size: "small",
-                pageSize: popTableData?.size,
-                onChange: async (data: any) => await run(data),
-                current: popTableData?.current,
+                pageSize: pagenation.pageSize,
+                onChange: paginationChange,
+                current: pagenation.current,
                 total: popTableData?.total
             }} />
     </>
@@ -117,6 +128,7 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
         (props as any).onChange(changeValue)
         setVisible(false)
     }
+
     const inputChange = (event: any) => {
         const inputValue = event.target.value
         const changeValue = { ...value, value: inputValue };
@@ -134,7 +146,7 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
             style={{ width: "100%", height: "100%", ...props.style }}
             onChange={inputChange}
             readOnly={data.readOnly === undefined ? true : data.readOnly}
-            value={value.records && value.records[0] ? value.records[0][data.dataIndex] || "" : value.value}
+            value={typeof props.value === "string" ? props.value : value.value}
             addonAfter={<PlusOutlined onClick={() => !data.disabled && setVisible(true)} />} />
     </>
 }

@@ -3,7 +3,50 @@
         {
             "title": "项目名称",
             "dataIndex": "projectName",
-            "disabled": true
+            "type": "popTable",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入项目名称..."
+                }
+            ],
+            "path": "/tower-market/contract",
+            "width": 1011,
+            "value": "contractName",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "合同编号",
+                    "dataIndex": "contractNumber",
+                    "search": true
+                },
+                {
+                    "title": "合同名称",
+                    "dataIndex": "contractName"
+                },
+                {
+                    "title": "销售类型",
+                    "dataIndex": "saleType"
+                },
+                {
+                    "title": "业主单位",
+                    "dataIndex": "customerCompany",
+                    "search": true
+                },
+                {
+                    "title": "合同签订单位",
+                    "dataIndex": "signCustomerName"
+                },
+                {
+                    "title": "合同签订日期",
+                    "dataIndex": "signContractTime"
+                },
+                {
+                    "title": "要求交货日期",
+                    "dataIndex": "deliveryTime"
+                }
+            ]
         },
         {
             "title": "项目单位",
@@ -24,16 +67,34 @@
         {
             "title": "数量",
             "dataIndex": "num",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入数量..."
+                }
+            ]
         },
         {
             "title": "单位",
             "dataIndex": "unit",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入单位..."
+                }
+            ]
         },
         {
             "title": "货物类别",
-            "dataIndex": "goodsCategory"
+            "dataIndex": "goodsCategory",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入货物类别..."
+                }
+            ]
         },
         {
             "title": "招标文件传递方式",

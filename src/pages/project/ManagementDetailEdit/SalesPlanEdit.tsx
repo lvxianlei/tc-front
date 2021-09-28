@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useHistory, useRouteMatch } from "react-router-dom"
-import { Button, Form, Modal, Spin } from "antd"
+import { Button, Form, message, Modal, Spin } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, CommonTable } from "../../common"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
@@ -21,13 +21,17 @@ export default function SalesPlanEdit() {
     const [baseInfoForm] = Form.useForm()
     const [cargoDtoForm] = Form.useForm()
     const { loading, error, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
-        const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/taskNotice/${match.params.id}`)
-        baseInfoForm.setFieldsValue(result)
-        cargoDtoForm.setFieldsValue(result)
-        setSaleOrderId(result.saleOrderId)
-        setContractId(result.contractId)
-        setProductDetails(result.productInfos || [])
-        resole(result)
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/taskNotice/${match.params.id}`)
+            baseInfoForm.setFieldsValue(result)
+            cargoDtoForm.setFieldsValue(result)
+            setSaleOrderId(result.saleOrderId)
+            setContractId(result.contractId)
+            setProductDetails(result.productInfos || [])
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
     }), { manual: match.params.type === "new" })
 
     const { loading: saveStatus, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
@@ -49,20 +53,29 @@ export default function SalesPlanEdit() {
     }), { manual: true })
 
     const handleSubmit = async () => {
-        await baseInfoForm.validateFields()
-        await cargoDtoForm.validateFields()
-        const baseInfoData = baseInfoForm.getFieldsValue()
-        const cargoDtoData = cargoDtoForm.getFieldsValue()
-        baseInfoData.saleOrderId = saleOrderId
-        const result = await run({
-            ...data, ...baseInfoData, ...cargoDtoData,
-            projectId: match.params.projectId,
-            contractId,
-            saleOrderId,
-            productIds: productDetails.map(item => item.id),
-            saleOrderNumber: baseInfoData.saleOrderNumber.value || baseInfoData.saleOrderNumber
-        })
-        history.goBack()
+        try {
+            const baseInfoData = await baseInfoForm.validateFields()
+            const cargoDtoData = await cargoDtoForm.validateFields()
+            if (productDetails.length <= 0) {
+                message.error("请添加产品信息...")
+                return
+            }
+            const result = await run({
+                ...data, ...baseInfoData, ...cargoDtoData,
+                projectId: match.params.projectId,
+                contractId,
+                saleOrderId,
+                saleOrder: baseInfoData.saleOrderNumber.saleOrderId || "",
+                productIds: productDetails.map(item => item.id),
+                saleOrderNumber: baseInfoData.saleOrderNumber.value || baseInfoData.saleOrderNumber
+            })
+            if (result) {
+                message.success("保存成功...")
+                history.goBack()
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const handleBaseInfoChange = (changedFields: any, allFields: any) => {
@@ -87,7 +100,6 @@ export default function SalesPlanEdit() {
     }
 
     const onRowsChange = (selectedRowKeys: string[], rows: any[]) => {
-
         setSelect(selectedRowKeys)
         setSelectRows(rows)
     }

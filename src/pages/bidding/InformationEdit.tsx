@@ -44,8 +44,8 @@ export default function InfomationNew(): JSX.Element {
     }), { manual: true })
     const detailData: any = data
     const handleSave = async () => {
-        const baseInfoResult = await baseInfoForm.getFieldsValue()
-        const bidPackageInfoDTOList = await bidForm.getFieldsValue()
+        const baseInfoResult = await baseInfoForm.validateFields()
+        const bidPackageInfoDTOList = await bidForm.validateFields()
         const postData = {
             ...detailData,
             ...baseInfoResult,
