@@ -99,6 +99,15 @@ class ManagementContract extends PromContract {
       {
         title: "有无技术协议",
         dataIndex: "isIta",
+        render: (text: any, records: any) => {
+          let value = "无";
+          if (text === 1) {
+            value = "原件"
+          } else if (text === 2) {
+            value = "复印件"
+          }
+          return <>{value}</>
+        }
       },
       {
         title: "销售业务员",

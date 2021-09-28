@@ -135,17 +135,13 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      * @param activeKey 
      */
     public handleTabChange = (activeKey: string): void => {
-        this.setState(pre => {
-            if (pre.selectedTabKey === activeKey) {
-                return pre;
-            }
-
-            this.onTabChange(activeKey);
-            return {
+        if (this.state.selectedTabKey !== activeKey) {
+            this.setState({
                 selectedTabKey: activeKey,
                 tablePagination: this.getState().tablePagination
-            } as S;
-        })
+            } as S)
+        }
+        this.onTabChange(activeKey)
     }
 
     /**

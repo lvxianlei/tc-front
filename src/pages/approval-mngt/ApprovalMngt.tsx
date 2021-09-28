@@ -176,20 +176,12 @@ export default function Information(): React.ReactNode {
     const handleBidingChange = (changedFields: any, allFields: any) => {
         if (Object.keys(changedFields)[0] === "projectName") {
             const {
-                internalNumber,
-                orderProjectName,
-                customerCompany,
-                signCustomerName,
-                orderDeliveryTime
-            } = changedFields.saleOrderNumber.records[0]
+              
+            } = changedFields.projectName.records[0]
 
-            bidingForm.setFieldsValue({
-                internalNumber,
-                orderProjectName,
-                customerCompany,
-                signCustomerName,
-                orderDeliveryTime
-            })
+            // bidingForm.setFieldsValue({
+              
+            // })
         }
     }
     const onFilterSubmit = (value: any) => {

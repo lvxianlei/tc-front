@@ -14,8 +14,8 @@ import { ITabItem } from '../../components/ITabableComponent';
 import { IClient } from '../IClient';
 import RequestUtil from '../../utils/RequestUtil';
 
-export interface IClientMngtProps {}
-export interface IClientMngtWithRouteProps extends RouteComponentProps<IClientMngtProps>, WithTranslation {}
+export interface IClientMngtProps { }
+export interface IClientMngtWithRouteProps extends RouteComponentProps<IClientMngtProps>, WithTranslation { }
 export interface IClientMngtState extends IAbstractMngtComponentState {
     readonly tableDataSource: IClient[];
     readonly name?: string;
@@ -56,11 +56,10 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-customer/customer', {
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
-            size: pagination.pageSize ||this.state.tablePagination?.pageSize,
-            type: this.state.selectedTabKey === 'item_0' ? '' : this.state.selectedTabKey
+            size: pagination.pageSize || this.state.tablePagination?.pageSize,
         });
-        if(resData?.records?.length === 0 && resData?.current>1){
-            this.fetchTableData({},{
+        if (resData?.records?.length === 0 && resData?.current > 1) {
+            this.fetchTableData({}, {
                 current: resData.current - 1,
                 pageSize: 10,
                 total: 0,
@@ -135,15 +134,15 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
             dataIndex: 'operation',
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={ `/client/mngt/setting/${ (record as IClient).id }` }>编辑</Link>
-                    <ConfirmableButton 
-                        confirmTitle="要删除该客户吗？" 
-                        type="link" 
+                    <Link to={`/client/mngt/setting/${(record as IClient).id}`}>编辑</Link>
+                    <ConfirmableButton
+                        confirmTitle="要删除该客户吗？"
+                        type="link"
                         placement="topRight"
-                        onConfirm={ async () => {
-                            await RequestUtil.delete(`/tower-customer/customer?customerId=${ (record as IClient).id }`);
+                        onConfirm={async () => {
+                            await RequestUtil.delete(`/tower-customer/customer?customerId=${(record as IClient).id}`);
                             this.fetchTableData({});
-                        } }
+                        }}
                     >
                         删除
                     </ConfirmableButton>
@@ -160,14 +159,14 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
     public onTableChange(pagination: TablePaginationConfig): void {
         this.fetchTableData({ name: this.state.name }, pagination);
     }
-    
+
     /**
      * @implements
      * @description Determines whether filter submit on
      * @param values 
      */
     public async onFilterSubmit(values: Record<string, any>) {
-        const tablePagination = Object.assign( {}, this.getState().tablePagination )
+        const tablePagination = Object.assign({}, this.getState().tablePagination)
         this.fetchTableData(values, tablePagination);
     }
 
@@ -179,14 +178,14 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
     public getTabItems(): ITabItem[] {
         let tab = [{
             label: '全部客户',
-            key: 'item_0'
+            key: ''
         }];
-        if(clientTypeOptions){
-            clientTypeOptions.map(item =>{
-                 tab.push({
+        if (clientTypeOptions) {
+            clientTypeOptions.map(item => {
+                tab.push({
                     key: item.id,
                     label: item.name,
-                }) 
+                })
             })
         }
 
@@ -199,7 +198,7 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
      * @param activeKey 
      */
     public onTabChange(activeKey: string): void {
-        this.fetchTableData({});
+        this.fetchTableData({ type: activeKey });
     }
 
     /**
@@ -220,7 +219,7 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
     public getFilterFormItemProps(item: ITabItem): FormItemProps[] {
         return [{
             name: 'name',
-            children: <Input placeholder="搜索客户名称关键词" maxLength={ 200 }/>
+            children: <Input placeholder="搜索客户名称关键词" maxLength={200} />
         }];
     }
 }
