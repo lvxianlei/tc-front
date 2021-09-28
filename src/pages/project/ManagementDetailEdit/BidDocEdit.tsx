@@ -14,10 +14,17 @@ export default function BaseInfoEdit(): JSX.Element {
     const dictionaryOptions: any = ApplicationContext.get().dictionaryOption
     const bidType = dictionaryOptions["124"]
     const [baseInfoForm] = Form.useForm()
-    const { loading, error, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
-        const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidDoc/${params.id}`)
-        baseInfoForm.setFieldsValue(result)
-        resole(result)
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidDoc/${params.id}`)
+            if (result.bidType === -1) {
+                result.bidType = null
+            }
+            baseInfoForm.setFieldsValue(result)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
     }))
     const { loading: saveStatus, data: saveResult, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
         try {
@@ -29,17 +36,21 @@ export default function BaseInfoEdit(): JSX.Element {
     }), { manual: true })
 
     const handleSubmit = async () => {
-        const baseInfoData = await baseInfoForm.getFieldsValue()
-        const result = await run({ ...data, ...baseInfoData, projectId: params.id })
-        if (result) {
-            message.success("保存成功...")
-            history.goBack()
+        try {
+            const baseInfoData = await baseInfoForm.validateFields()
+            const result = await run({ ...data, ...baseInfoData, projectId: params.id })
+            if (result) {
+                message.success("保存成功...")
+                history.goBack()
+            }
+        } catch (error) {
+            console.log(error)
         }
     }
 
     return <DetailContent
         operation={[
-            <Button key="edit" type="primary" onClick={handleSubmit} loading={saveStatus}>保存</Button>,
+            <Button key="edit" type="primary" onClick={handleSubmit} loading={saveStatus} style={{ marginRight: 16 }}>保存</Button>,
             <Button key="goback" onClick={() => history.goBack()}>返回</Button>
         ]}>
         <ManagementDetailTabsTitle />

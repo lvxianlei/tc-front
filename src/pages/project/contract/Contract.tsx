@@ -4,18 +4,19 @@ import {
   Button,
   Popconfirm,
   FormItemProps,
+  Upload,
+  message
 } from "antd";
 import React from "react";
 import { withTranslation } from "react-i18next";
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import { ITabItem } from "../../../components/ITabableComponent";
-import { saleTypeOptions } from "../../../configuration/DictionaryOptions";
 import RequestUtil from "../../../utils/RequestUtil";
 import { IResponseData } from "../../common/Page";
 import { IContract } from "../../IContract";
 import { PromContract } from "../../prom/contract/PromContract";
-
+import AuthUtil from "../../../utils/AuthUtil"
 /**
  * 项目管理-合同
  */
@@ -26,6 +27,15 @@ class ManagementContract extends PromContract {
    * @param item
    * @returns table columns
    */
+
+  public uploadChange = (event: any) => {
+    if (event.file.status === "done") {
+      if (event.file.response.code === 200) {
+        message.success("杆塔信息导入成功...")
+      }
+    }
+  }
+
   public getTableColumns(item: ITabItem): TableColumnType<object>[] {
     const projectId = (this.props.match.params as any).id;
     return [
@@ -127,9 +137,12 @@ class ManagementContract extends PromContract {
               onConfirm={async () => {
                 let id = (record as IContract).id;
                 const resData: IResponseData = await RequestUtil.delete(
-                  `/contract?id=${id}`
-                );
-                this.fetchTableData({});
+                  `/tower-market/contract?id=${id}`
+                )
+                if (resData) {
+                  message.success("合同已成功删除...")
+                  this.fetchTableData({})
+                }
               }}
               disabled={(record as IContract).isRelateOrder === 1}
             >
@@ -147,6 +160,20 @@ class ManagementContract extends PromContract {
                 添加回款记录
               </Link>
             </Button>
+            <Upload
+              key="sub"
+              name="file"
+              multiple={true}
+              action={`${process.env.REQUEST_API_PATH_PREFIX}/tower-market/productAssist/importProductAssist`}
+              headers={{
+                'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                'Tenant-Id': AuthUtil.getTenantId(),
+                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+              }}
+              data={{ contractId: (record as any).id }}
+              showUploadList={false}
+              onChange={this.uploadChange}
+            ><Button key="enclosure" type="link">导入杆塔信息</Button></Upload>
           </Space>
         ),
       },

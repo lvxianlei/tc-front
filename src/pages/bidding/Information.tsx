@@ -28,7 +28,7 @@ const columns = [
     {
         key: 'projectName',
         title: '项目名称',
-        width: 100,
+        width: 120,
         dataIndex: 'projectName',
         render: (_: undefined, record: any): React.ReactNode => {
             return <Link to={`/bidding/information/detail/${record.id}`}>{record.projectName}</Link>
@@ -59,7 +59,8 @@ const columns = [
     {
         key: 'biddingAgency',
         title: '招标代理机构',
-        dataIndex: 'biddingAgency'
+        dataIndex: 'biddingAgency',
+        width: 120
     },
     {
         key: 'biddingAddress',
@@ -100,6 +101,8 @@ const columns = [
         key: 'operation',
         title: '操作',
         dataIndex: 'operation',
+        fixed: 'right',
+        width: 100,
         render: (_: undefined, record: any): React.ReactNode => (
             <Space direction="horizontal" size="small">
                 <Link to={`/bidding/information/detail/${record.id}`}>查看</Link>
@@ -133,7 +136,7 @@ export default function Information(): React.ReactNode {
 
     return <Page
         path="/tower-market/bidInfo"
-        columns={columns}
+        columns={columns as any}
         headTabs={[]}
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
@@ -160,6 +163,7 @@ export default function Information(): React.ReactNode {
                 name: 'biddingStatus',
                 label: '是否应标',
                 children: <Select style={{ width: "100px" }}>
+                    <Select.Option value="0">未决定</Select.Option>
                     <Select.Option value="1">是</Select.Option>
                     <Select.Option value="2">否</Select.Option>
                 </Select>

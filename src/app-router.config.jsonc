@@ -770,6 +770,14 @@
       "exact": true,
       "authority": "approvalm"
     },
+    
+    { // 工作管理-塔型信息-放样
+      "name": "放样",
+      "path": "/workMngt/setOutList/towerInformation/:id/lofting/:loftId",
+      "module": "./pages/workMngt/setOut/Lofting",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 工作管理-杆塔信息
       "name": "杆塔信息",
       "path": "/workMngt/setOutList/poleInformation/:id",

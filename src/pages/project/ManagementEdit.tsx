@@ -7,14 +7,16 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
 import { TabTypes } from "./ManagementDetail"
 import AuthUtil from "../../utils/AuthUtil"
+import ApplicationContext from "../../configuration/ApplicationContext"
+const dictionaryOptions: any = ApplicationContext.get().dictionaryOption
 export default function BaseInfoEdit(): JSX.Element {
   const history = useHistory()
   const params = useParams<{ tab: TabTypes, id: string }>()
   const [projectLeaderId, setProjectLeaderId] = useState<string>("")
-  const [biddingPerson, setBiddingPerson] = useState<string>("")
   const [attachVosData, setAttachVosData] = useState<any[]>([])
   const [baseInfoForm] = Form.useForm()
   const [cargoVOListForm] = Form.useForm()
+  const typeNameEnum = dictionaryOptions["121"].map((item: any) => ({ value: item.id, label: item.name }))
   const { loading: saveStatus, data: saveResult, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
     try {
       const result: { [key: string]: any } = await RequestUtil.put(`/tower-market/projectInfo`, postData)
@@ -25,35 +27,30 @@ export default function BaseInfoEdit(): JSX.Element {
   }), { manual: true })
 
   const handleSubmit = async () => {
-    await baseInfoForm.validateFields()
-    await cargoVOListForm.validateFields()
-    const baseInfoData = await baseInfoForm.getFieldsValue()
-    const cargoVOListData = await cargoVOListForm.getFieldsValue()
-    await run({
-      ...baseInfoData,
-      attachInfoDtos: attachVosData,
-      cargoDTOList: cargoVOListData.submit,
-      projectLeaderId,
-      biddingPerson
-    })
-
-    if (saveResult) {
-      message.success("保存成功...")
+    try {
+      const baseInfoData = await baseInfoForm.validateFields()
+      const cargoVOListData = await cargoVOListForm.validateFields()
+      const result = await run({
+        ...baseInfoData,
+        attachInfoDtos: attachVosData,
+        cargoDTOList: cargoVOListData.submit,
+        projectLeaderId,
+        projectLeader: baseInfoData.projectLeader.value || baseInfoData.projectLeader,
+        biddingPerson: baseInfoData.biddingPerson.value || baseInfoData.biddingPerson,
+        biddingAgency: baseInfoData.biddingAgency.value || baseInfoData.biddingAgency
+      })
+      if (result) {
+        message.success("保存成功...")
+        history.goBack()
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 
   const handleBaseInfoChange = (changedFields: any, allFields: any) => {
     if (Object.keys(changedFields)[0] === "projectLeader") {
-      baseInfoForm.setFieldsValue({ ...allFields, ...changedFields.projectLeader.records[0] })
       setProjectLeaderId(changedFields.projectLeader.records[0].id)
-    }
-    if (Object.keys(changedFields)[0] === "biddingPerson") {
-      if (changedFields.biddingPerson) {
-        baseInfoForm.setFieldsValue({ biddingPerson: changedFields.biddingPerson })
-        setBiddingPerson(changedFields.biddingPerson)
-      } else {
-        setBiddingPerson(changedFields.biddingPerson.value)
-      }
     }
   }
 
@@ -80,11 +77,20 @@ export default function BaseInfoEdit(): JSX.Element {
     setAttachVosData(attachVosData.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
   }
   return <DetailContent operation={[
-    <Button key="save" type="primary" onClick={handleSubmit} loading={saveStatus}>保存</Button>,
+    <Button
+      key="save"
+      type="primary"
+      onClick={handleSubmit}
+      loading={saveStatus}
+      style={{ marginRight: 16 }}
+    >保存</Button>,
     <Button key="cacel" onClick={() => history.goBack()}>取消</Button>
   ]}>
     <DetailTitle title="基本信息" />
-    <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={baseInfoData} dataSource={{}} edit />
+    <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={baseInfoData.map((item: any) => item.dataIndex === "biddingPerson" ? ({
+      ...item,
+      columns: item.columns.map((columnItem: any) => columnItem.dataIndex === "type" ? ({ ...columnItem, enum: typeNameEnum }) : columnItem)
+    }) : item)} dataSource={{}} edit />
     <DetailTitle title="货物清单" />
     <EditTable form={cargoVOListForm} columns={cargoVOListColumns} dataSource={[]} />
     <DetailTitle title="附件信息" operation={[<Upload

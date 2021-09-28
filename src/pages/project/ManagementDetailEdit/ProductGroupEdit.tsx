@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useHistory, useRouteMatch } from "react-router-dom"
-import { Button, Form } from "antd"
+import { Button, Form, message } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, CommonTable } from "../../common"
 import SelectProductGroup from "./SelectProductGroup"
 import { newProductGroup, productAssist } from '../managementDetailData.json'
@@ -41,27 +41,39 @@ export default function ProductGroupEdit() {
     }), { manual: true })
 
     const handleSubmit = async () => {
-        const baseInfoData = await baseInfoForm.getFieldsValue()
-        const saleOrderData = baseInfoData.saleOrderNumber?.id || baseInfoData.saleOrderId
-        baseInfoData.saleOrderId = saleOrderData
-        const contractCargoDtosData = await cargoDtoForm.getFieldsValue()
-        delete data?.contractCargoVos
-        await run({
-            ...data, ...baseInfoData,
-            projectId: match.params.projectId,
-            contractId,
-            saleOrderId,
-            contractCargoDtos: contractCargoDtosData.submit,
-            productIds: select.map(item => item.id)
-        })
-        history.goBack()
+        try {
+            const baseInfoData = await baseInfoForm.validateFields()
+            const saleOrderData = baseInfoData.saleOrderNumber?.id || baseInfoData.saleOrderId
+            baseInfoData.saleOrderId = saleOrderData
+            const contractCargoDtosData = await cargoDtoForm.validateFields()
+            delete data?.contractCargoVos
+            if (select.map(item => item.id).length <= 0) {
+                message.error("当前杆塔明细未关联确认明细，请关联后再保存...")
+            } else {
+                await run({
+                    ...data, ...baseInfoData,
+                    projectId: match.params.projectId,
+                    contractId,
+                    saleOrderId,
+                    contractCargoDtos: contractCargoDtosData.submit,
+                    productIds: select.map(item => item.id)
+                })
+                history.goBack()
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const handleBaseInfoChange = (changedFields: any, allFields: any) => {
         if (Object.keys(changedFields)[0] === "saleOrderNumber") {
-            baseInfoForm.setFieldsValue({ ...allFields, ...changedFields.saleOrderNumber.records[0] })
-            setContractId(changedFields.saleOrderNumber.records[0].contractId)
-            setSaleOrderId(changedFields.saleOrderNumber.records[0].id)
+            console.log({ ...changedFields.saleOrderNumber, value: "" })
+            baseInfoForm.setFieldsValue({
+                ...allFields,
+                ...changedFields.saleOrderNumber.records[0]
+            })
+            setContractId(changedFields.saleOrderNumber.records[0]?.contractId || "")
+            setSaleOrderId(changedFields.saleOrderNumber.records[0]?.id || "")
         }
     }
 
@@ -91,7 +103,7 @@ export default function ProductGroupEdit() {
                     return ({
                         ...item,
                         disabled: [1, 2].includes(data?.status),
-                        path: `${item.path}${match.params.projectId}`
+                        path: `${item.path}?projectId=${match.params.projectId}`
                     })
                 case "description":
                     return ({ ...item, disabled: [1, 2].includes(data?.status) })

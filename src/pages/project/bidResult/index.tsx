@@ -1,5 +1,6 @@
-import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState, } from "react"
-import { Button, Tabs, Upload } from "antd"
+import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react"
+import { Button, Tabs, Upload, Tooltip } from "antd"
+import { InfoCircleOutlined } from "@ant-design/icons"
 import { EditTable } from "../../common"
 import * as XLSX from "xlsx"
 import { useForm } from "antd/es/form/Form"
@@ -82,9 +83,14 @@ export const UploadXLS = (props: {
       showUploadList={false}
       onChange={() => false}
     >
-      {props.children || <Button type="primary">导入文件</Button>}
-    </Upload>
-  )
+      {props.children || <Button type="primary" style={{ marginRight: 5 }}>导入文件</Button>}
+      {props.children || <Tooltip placement="top"
+        title={<>
+          文件导入要求：<br />
+          1、仅Excel文件导入（xls，xlsx均可）。<br />
+          2、列名必须包括包号、投标人名称、分标编号、货物类别、项目单位、总价、重量
+        </>}> <InfoCircleOutlined size={16} /></Tooltip>}
+    </Upload>)
 }
 
 interface BidProps {

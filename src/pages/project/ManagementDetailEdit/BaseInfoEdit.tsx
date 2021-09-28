@@ -3,7 +3,7 @@ import { useHistory, useParams } from "react-router-dom"
 import { Button, Form, message, Spin, Upload } from "antd"
 import { DetailContent, BaseInfo, EditTable, DetailTitle, CommonTable } from '../../common'
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
-import { baseInfoData, enclosure, paths, cargoVOListColumns } from '../managementDetailData.json'
+import { baseInfoData, enclosure, cargoVOListColumns } from '../managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 import { TabTypes } from "../ManagementDetail"
@@ -17,17 +17,21 @@ export default function BaseInfoEdit(): JSX.Element {
     const [cargoVOListForm] = Form.useForm()
     const [attachVosForm] = Form.useForm()
 
-    const { loading, error, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
-        const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/projectInfo/${params.id}`)
-        setProjectLeaderId(result.projectLeaderId)
-        setAttachVosData(result.attachVos)
-        baseInfoForm.setFieldsValue(result)
-        cargoVOListForm.setFieldsValue({ submit: result.cargoVOList })
-        attachVosForm.setFieldsValue(result.attachVos)
-        resole(result)
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/projectInfo/${params.id}`)
+            setProjectLeaderId(result.projectLeaderId)
+            setAttachVosData(result.attachVos)
+            baseInfoForm.setFieldsValue(result)
+            cargoVOListForm.setFieldsValue({ submit: result.cargoVOList })
+            attachVosForm.setFieldsValue(result.attachVos)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
     }))
 
-    const { loading: saveStatus, data: saveResult, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
+    const { loading: saveStatus, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.put(`/tower-market/projectInfo`, postData)
             resole(result)
@@ -37,30 +41,31 @@ export default function BaseInfoEdit(): JSX.Element {
     }), { manual: true })
 
     const handleSubmit = async () => {
-        await baseInfoForm.validateFields()
-        await cargoVOListForm.validateFields()
-        const baseInfoData = await baseInfoForm.getFieldsValue()
-        const cargoVOListData = await cargoVOListForm.getFieldsValue()
-        delete data?.cargoVOList
-        delete data?.attachVos
-        await run({
-            ...data,
-            ...baseInfoData,
-            attachInfoDtos: attachVosData,
-            cargoDTOList: cargoVOListData.submit,
-            projectLeaderId,
-            biddingPerson: baseInfoData.biddingPerson.value || baseInfoData.biddingPerson,
-            biddingAgency: baseInfoData.biddingAgency.value || baseInfoData.biddingAgency
-        })
-
-        if (saveResult) {
-            message.success("保存成功...")
-            history.goBack()
+        try {
+            const baseInfoData = await baseInfoForm.validateFields()
+            const cargoVOListData = await cargoVOListForm.validateFields()
+            delete data?.cargoVOList
+            delete data?.attachVos
+            const result = await run({
+                ...data,
+                ...baseInfoData,
+                attachInfoDtos: attachVosData,
+                cargoDTOList: cargoVOListData.submit,
+                projectLeaderId,
+                projectLeader: baseInfoData.projectLeader.value || baseInfoData.projectLeader,
+                biddingPerson: baseInfoData.biddingPerson.value || baseInfoData.biddingPerson,
+                biddingAgency: baseInfoData.biddingAgency.value || baseInfoData.biddingAgency
+            })
+            if (result) {
+                message.success("保存成功...")
+                history.goBack()
+            }
+        } catch (error) {
+            console.log(error)
         }
     }
 
-    const handleBaseInfoChange = (changedFields: any, allFields: any) => {
-        console.log(changedFields)
+    const handleBaseInfoChange = (changedFields: any) => {
         if (Object.keys(changedFields)[0] === "projectLeader") {
             setProjectLeaderId(changedFields.projectLeader.records[0].id)
         }
@@ -84,11 +89,19 @@ export default function BaseInfoEdit(): JSX.Element {
             }
         }
     }
+
     const deleteAttachData = (id: number) => {
         setAttachVosData(attachVosData.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
     }
+
     return <DetailContent operation={[
-        <Button key="save" type="primary" onClick={handleSubmit} loading={saveStatus}>保存</Button>,
+        <Button
+            key="save"
+            type="primary"
+            onClick={handleSubmit}
+            loading={saveStatus}
+            style={{ marginRight: 16 }}
+        >保存</Button>,
         <Button key="cacel" onClick={() => history.goBack()}>取消</Button>
     ]}>
         <ManagementDetailTabsTitle />

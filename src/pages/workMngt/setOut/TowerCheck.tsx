@@ -6,9 +6,9 @@
 
 
 import React, { useState } from 'react';
-import { Space, Select, Button, Modal } from 'antd';
+import { Space, Select, Button } from 'antd';
 import { Page } from '../../common';
-import { ColumnType, FixedType } from 'rc-table/lib/interface';
+import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { useHistory } from 'react-router-dom';
 import QuestionnaireModal from './QuestionnaireModal';
