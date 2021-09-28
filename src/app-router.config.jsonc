@@ -771,10 +771,10 @@
       "authority": "approvalm"
     },
     
-    { // 工作管理-塔型信息-放样
-      "name": "放样",
-      "path": "/workMngt/setOutList/towerInformation/:id/lofting/:loftId",
-      "module": "./pages/workMngt/setOut/Lofting",
+    { // 工作管理-塔型信息-放样-放样塔型套用
+      "name": "放样塔型套用",
+      "path": "/workMngt/setOutList/towerInformation/:id/lofting/:loftId/loftingTowerApplication",
+      "module": "./pages/workMngt/setOut/LoftingTowerApplication",
       "exact": true,
       "authority": "approvalm"
     },
@@ -820,10 +820,24 @@
       "exact": true,
       "authority": "approvalm"
     },
-    { // 工作管理-组焊信息
+    { // 工作管理-组焊列表-组焊信息
       "name": "组焊信息",
       "path": "/workMngt/assemblyWeldingList/assemblyWeldingInformation/:id",
       "module": "./pages/workMngt/assemblyWelding/AssemblyWeldingInformation",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-组焊列表-组焊清单
+      "name": "组焊清单",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id",
+      "module": "./pages/workMngt/assemblyWelding/AssemblyWeldingListing",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-组焊列表-校核
+      "name": "组焊清单",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingCheck/:id",
+      "module": "./pages/workMngt/assemblyWelding/AssemblyWeldingCheck",
       "exact": true,
       "authority": "approvalm"
     },
