@@ -52,6 +52,7 @@ export default function BaseInfoEdit(): JSX.Element {
                 attachInfoDtos: attachVosData,
                 cargoDTOList: cargoVOListData.submit,
                 projectLeaderId,
+                projectLeader: baseInfoData.projectLeader.value || baseInfoData.projectLeader,
                 biddingPerson: baseInfoData.biddingPerson.value || baseInfoData.biddingPerson,
                 biddingAgency: baseInfoData.biddingAgency.value || baseInfoData.biddingAgency
             })

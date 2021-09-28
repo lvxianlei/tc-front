@@ -60,6 +60,7 @@ class TCHeader extends AsyncComponent<ITCHeaderRouteProps, ITCHeaderState> {
         const { location } = this.props;
         const pathSnippets: string[] = location.pathname.split('/').filter((i: string) => i);
         const selectedMenuItem: IMenuItem | undefined =  ApplicationContext.getMenuItemByPath(ApplicationContext.get().layout?.navigationPanel?.props?.menu, `/${ pathSnippets[0] }`)
+       console.log(pathSnippets)
         return  (
             <Breadcrumb separator="/" className={ styles.breadcrumb }>
                 {

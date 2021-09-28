@@ -651,7 +651,7 @@
             "title": "订单",
             "dataIndex": "saleOrderNumber",
             "type": "popTable",
-            "path": "/tower-market/saleOrder?projectId=",
+            "path": "/tower-market/saleOrder",
             "width": 1011,
             "value": "saleOrderId",
             "dependencies": true,

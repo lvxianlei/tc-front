@@ -265,6 +265,11 @@ export default function Information(): React.ReactNode {
             title={auditEnum[currentView]}
             visible={viewVisible}
             onCancel={() => setViewVisible(false)}
+            footer={[
+                <Button key="ok" type="primary" onClick={() => setViewVisible(false)}>
+                    确认
+                </Button>
+            ]}
             id={currentViewId} />
         <Page
             path="/tower-market/audit"

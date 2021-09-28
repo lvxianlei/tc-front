@@ -53,17 +53,21 @@ const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: any) =>
     const [select, setSelect] = useState<any[]>([])
     const [form] = Form.useForm()
     const searchs = data.columns.filter((item: any) => item.search)
-    const { loading, data: popTableData, run } = useRequest<any>((params: {}) => new Promise(async (resolve, reject) => {
+    const { loading, data: popTableData, run } = useRequest<any>((params) => new Promise(async (resolve, reject) => {
         try {
-            resolve(await RequestUtil.get<{ data: any }>(data.path, params))
+            const paramsOptions = params && Object.keys(params).map((item: string) => `${item}=${params[item] || ""}`).join("&")
+            const path = data.path.includes("?") ? `${data.path}&${paramsOptions || ''}` : `${data.path}?${paramsOptions || ''}`
+            resolve(await RequestUtil.get<{ data: any }>(path))
         } catch (error) {
             reject(error)
         }
     }))
+
     const onSelectChange = (selectedRowKeys: string[], selectRows: any[]) => {
         onChange && onChange(selectRows)
         setSelect(selectedRowKeys)
     }
+
     return <>
         <Form form={form} onFinish={async (data: any) => await run({ ...data })}>
             <Row gutter={2} style={{ height: 32 }}>
@@ -94,6 +98,7 @@ const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: any) =>
             pagination={{
                 size: "small",
                 pageSize: popTableData?.size,
+                onChange: async (data: any) => await run(data),
                 current: popTableData?.current,
                 total: popTableData?.total
             }} />
@@ -127,8 +132,9 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
             {...props}
             disabled={data.disabled}
             style={{ width: "100%", height: "100%", ...props.style }}
-            onChange={inputChange} readOnly={data.readOnly === undefined ? true : data.readOnly}
-            value={value.value}
+            onChange={inputChange}
+            readOnly={data.readOnly === undefined ? true : data.readOnly}
+            value={value.records && value.records[0] ? value.records[0][data.dataIndex] || "" : value.value}
             addonAfter={<PlusOutlined onClick={() => !data.disabled && setVisible(true)} />} />
     </>
 }

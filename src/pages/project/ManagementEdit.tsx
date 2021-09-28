@@ -13,7 +13,6 @@ export default function BaseInfoEdit(): JSX.Element {
   const history = useHistory()
   const params = useParams<{ tab: TabTypes, id: string }>()
   const [projectLeaderId, setProjectLeaderId] = useState<string>("")
-  const [biddingPerson, setBiddingPerson] = useState<string>("")
   const [attachVosData, setAttachVosData] = useState<any[]>([])
   const [baseInfoForm] = Form.useForm()
   const [cargoVOListForm] = Form.useForm()
@@ -28,36 +27,30 @@ export default function BaseInfoEdit(): JSX.Element {
   }), { manual: true })
 
   const handleSubmit = async () => {
-    await baseInfoForm.validateFields()
-    await cargoVOListForm.validateFields()
-    const baseInfoData = await baseInfoForm.getFieldsValue()
-    const cargoVOListData = await cargoVOListForm.getFieldsValue()
-    await run({
-      ...baseInfoData,
-      attachInfoDtos: attachVosData,
-      cargoDTOList: cargoVOListData.submit,
-      projectLeaderId,
-      biddingPerson
-    })
-
-    if (saveResult) {
-      message.success("保存成功...")
-      history.goBack()
+    try {
+      const baseInfoData = await baseInfoForm.validateFields()
+      const cargoVOListData = await cargoVOListForm.validateFields()
+      const result = await run({
+        ...baseInfoData,
+        attachInfoDtos: attachVosData,
+        cargoDTOList: cargoVOListData.submit,
+        projectLeaderId,
+        projectLeader: baseInfoData.projectLeader.value || baseInfoData.projectLeader,
+        biddingPerson: baseInfoData.biddingPerson.value || baseInfoData.biddingPerson,
+        biddingAgency: baseInfoData.biddingAgency.value || baseInfoData.biddingAgency
+      })
+      if (result) {
+        message.success("保存成功...")
+        history.goBack()
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 
   const handleBaseInfoChange = (changedFields: any, allFields: any) => {
     if (Object.keys(changedFields)[0] === "projectLeader") {
-      baseInfoForm.setFieldsValue({ ...allFields, ...changedFields.projectLeader.records[0] })
       setProjectLeaderId(changedFields.projectLeader.records[0].id)
-    }
-    if (Object.keys(changedFields)[0] === "biddingPerson") {
-      if (changedFields.biddingPerson) {
-        baseInfoForm.setFieldsValue({ biddingPerson: changedFields.biddingPerson })
-        setBiddingPerson(changedFields.biddingPerson)
-      } else {
-        setBiddingPerson(changedFields.biddingPerson.value)
-      }
     }
   }
 

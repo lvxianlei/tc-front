@@ -70,8 +70,7 @@ export default function ProductGroupEdit() {
             console.log({ ...changedFields.saleOrderNumber, value: "" })
             baseInfoForm.setFieldsValue({
                 ...allFields,
-                ...changedFields.saleOrderNumber.records[0],
-                saleOrderNumber: { ...changedFields.saleOrderNumber, value: "" }
+                ...changedFields.saleOrderNumber.records[0]
             })
             setContractId(changedFields.saleOrderNumber.records[0]?.contractId || "")
             setSaleOrderId(changedFields.saleOrderNumber.records[0]?.id || "")
@@ -104,7 +103,7 @@ export default function ProductGroupEdit() {
                     return ({
                         ...item,
                         disabled: [1, 2].includes(data?.status),
-                        path: `${item.path}${match.params.projectId}`
+                        path: `${item.path}?projectId=${match.params.projectId}`
                     })
                 case "description":
                     return ({ ...item, disabled: [1, 2].includes(data?.status) })
