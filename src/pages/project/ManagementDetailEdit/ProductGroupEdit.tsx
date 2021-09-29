@@ -67,7 +67,6 @@ export default function ProductGroupEdit() {
 
     const handleBaseInfoChange = (changedFields: any, allFields: any) => {
         if (Object.keys(changedFields)[0] === "saleOrderNumber") {
-            console.log({ ...changedFields.saleOrderNumber, value: "" })
             baseInfoForm.setFieldsValue({
                 ...allFields,
                 ...changedFields.saleOrderNumber.records[0]

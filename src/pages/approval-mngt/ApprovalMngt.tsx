@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Button, Input, Modal, Form, message, Upload } from 'antd'
+import { Space, Button, Input, Modal, Form, message, Upload, Select, DatePicker } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { Page, BaseInfo, DetailTitle, CommonTable } from '../common'
 import ApprovalTypesView from "./ApprovalTypesView"
@@ -9,6 +9,7 @@ import { auditHead } from "./approvalHeadData.json"
 import { bondBaseInfo, enclosure, drawH, drawingCofirm, baseInfo } from "./approvalHeadData.json"
 import RequestUtil from '../../utils/RequestUtil'
 import AuthUtil from "../../utils/AuthUtil"
+import ApplicationContext from "../../configuration/ApplicationContext"
 const auditEnum: any = {
     "performance_bond": "履约保证金申请",
     "drawing_handover": "图纸交接申请",
@@ -16,6 +17,11 @@ const auditEnum: any = {
     "bidding_evaluation": "招标评审申请"
 }
 export default function Information(): React.ReactNode {
+    const processTypeIdEnum = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
+
     const history = useHistory()
     const [visible, setVisible] = useState(false)
     const [performanceBondVisible, setPerformanceBondVisible] = useState<boolean>(false)
@@ -167,6 +173,24 @@ export default function Information(): React.ReactNode {
         setCurrentViewId(id)
     }
 
+    const handleBidingChange = (changedFields: any, allFields: any) => {
+        if (Object.keys(changedFields)[0] === "projectName") {
+            const {
+              
+            } = changedFields.projectName.records[0]
+
+            // bidingForm.setFieldsValue({
+              
+            // })
+        }
+    }
+    const onFilterSubmit = (value: any) => {
+        console.log(value)
+        if (value.minStartTime) {
+            value.minStartTime = value.minStartTime.format("YYYY-MM-DD")
+        }
+        return value
+    }
     return <>
         <Modal
             title="履约保证金审批"
@@ -244,7 +268,7 @@ export default function Information(): React.ReactNode {
             confirmLoading={loading}
         >
             <DetailTitle title="基本信息" />
-            <BaseInfo form={bidingForm} columns={baseInfo} dataSource={{}} edit col={3} />
+            <BaseInfo form={bidingForm} onChange={handleBidingChange} columns={baseInfo} dataSource={{}} edit col={3} />
             <DetailTitle title="附件信息" operation={[<Upload
                 key="sub"
                 name="file"
@@ -291,6 +315,7 @@ export default function Information(): React.ReactNode {
                         </Space>
                     )
                 }]}
+            onFilterSubmit={onFilterSubmit}
             extraOperation={<Button type="primary" onClick={handleNewAudit}>新增审批</Button>}
             searchFormItems={[
                 {
@@ -305,13 +330,17 @@ export default function Information(): React.ReactNode {
                 {
                     name: 'minStartTime',
                     label: '发起时间',
-                    children: <Input placeholder="" maxLength={200} />
+                    children: <DatePicker format="YYYY-MM-DD" />
                 },
                 {
                     name: 'auditStatus',
                     label: '审批状态',
-                    children: <Input placeholder="" maxLength={200} />
-                },
+                    children: <Select style={{ width: 160 }}>
+                        <Select.Option value={0} key="audit-0">审批中</Select.Option>
+                        <Select.Option value={1} key="audit-1">已通过</Select.Option>
+                        <Select.Option value={2} key="audit-2">已驳回</Select.Option>
+                    </Select>
+                }
             ]}
         />
     </>

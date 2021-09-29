@@ -2,11 +2,23 @@
     "baseInfoData": [
         {
             "title": "项目名称",
-            "dataIndex": "projectName"
+            "dataIndex": "projectName",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入项目名称..."
+                }
+            ]
         },
         {
             "title": "项目编码",
-            "dataIndex": "projectNumber"
+            "dataIndex": "projectNumber",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入项目编码..."
+                }
+            ]
         },
         {
             "title": "项目类型",
@@ -69,6 +81,12 @@
                     "title": "联系电话",
                     "dataIndex": "phone"
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择招标人..."
+                }
             ]
         },
         {
@@ -107,6 +125,12 @@
                 {
                     "title": "联系电话",
                     "dataIndex": "phone"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择招标代理机构..."
                 }
             ]
         },
@@ -169,6 +193,12 @@
                     "value": 4,
                     "label": "项目结束"
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择当前项目阶段..."
+                }
             ]
         },
         {
@@ -176,13 +206,6 @@
             "dataIndex": "releaseDate",
             "type": "date",
             "format": "YYYY-MM-DD"
-        },
-        {
-            "title": "创建时间",
-            "dataIndex": "createTime",
-            "type": "date",
-            "format": "YYYY-MM-DD",
-            "disabled": true
         },
         {
             "title": "说明",
@@ -653,7 +676,7 @@
             "type": "popTable",
             "path": "/tower-market/saleOrder",
             "width": 1011,
-            "value": "saleOrderId",
+            "value": "saleOrderNumber",
             "dependencies": true,
             "rules": [
                 {
@@ -888,6 +911,12 @@
             "width": 1011,
             "value": "saleOrderNumber",
             "dependencies": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择关联订单..."
+                }
+            ],
             "columns": [
                 {
                     "title": "订单编号",
@@ -953,7 +982,13 @@
             "title": "计划交货日期",
             "dataIndex": "planDeliveryTime",
             "type": "date",
-            "format": "YYYY-MM-DD"
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择计划交货日期..."
+                }
+            ]
         },
         {
             "title": "备注",
@@ -965,7 +1000,13 @@
         {
             "title": "原材料标准",
             "dataIndex": "materialStandard",
-            "type": "select"
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择原材料标准..."
+                }
+            ]
         },
         {
             "title": "原材料要求",

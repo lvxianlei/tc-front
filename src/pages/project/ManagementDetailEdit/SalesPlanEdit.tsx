@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useHistory, useRouteMatch } from "react-router-dom"
-import { Button, Form, Modal, Spin } from "antd"
+import { Button, Form, message, Modal, Spin } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, CommonTable } from "../../common"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
@@ -20,19 +20,32 @@ export default function SalesPlanEdit() {
     const [contractId, setContractId] = useState<string>("")
     const [baseInfoForm] = Form.useForm()
     const [cargoDtoForm] = Form.useForm()
-    const { loading, error, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
-        const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/taskNotice/${match.params.id}`)
-        baseInfoForm.setFieldsValue(result)
-        cargoDtoForm.setFieldsValue(result)
-        setSaleOrderId(result.saleOrderId)
-        setContractId(result.contractId)
-        setProductDetails(result.productInfos || [])
-        resole(result)
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/taskNotice/${match.params.id}`)
+            baseInfoForm.setFieldsValue(result)
+            cargoDtoForm.setFieldsValue(result)
+            setSaleOrderId(result.saleOrderId)
+            setContractId(result.contractId)
+            setProductDetails(result.productInfos || [])
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
     }), { manual: match.params.type === "new" })
 
     const { loading: saveStatus, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/taskNotice`, postData)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const { loading: saveAndApproveLoading, run: saveAndApproveRun } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/taskNotice/saveAndApprove`, postData)
             resole(result)
         } catch (error) {
             reject(error)
@@ -48,21 +61,42 @@ export default function SalesPlanEdit() {
         }
     }), { manual: true })
 
-    const handleSubmit = async () => {
-        await baseInfoForm.validateFields()
-        await cargoDtoForm.validateFields()
-        const baseInfoData = baseInfoForm.getFieldsValue()
-        const cargoDtoData = cargoDtoForm.getFieldsValue()
-        baseInfoData.saleOrderId = saleOrderId
-        const result = await run({
-            ...data, ...baseInfoData, ...cargoDtoData,
-            projectId: match.params.projectId,
-            contractId,
-            saleOrderId,
-            productIds: productDetails.map(item => item.id),
-            saleOrderNumber: baseInfoData.saleOrderNumber.value || baseInfoData.saleOrderNumber
-        })
-        history.goBack()
+    const handleSubmit = async (type: "save" | "saveAndApprove") => {
+        try {
+            const baseInfoData = await baseInfoForm.validateFields()
+            const cargoDtoData = await cargoDtoForm.validateFields()
+            if (productDetails.length <= 0) {
+                message.error("请添加产品信息...")
+                return
+            }
+            const submitData = {
+                ...data, ...baseInfoData, ...cargoDtoData,
+                projectId: match.params.projectId,
+                contractId,
+                saleOrderId,
+                saleOrder: baseInfoData.saleOrderNumber.saleOrderId || "",
+                productIds: productDetails.map(item => item.id),
+                saleOrderNumber: baseInfoData.saleOrderNumber.value || baseInfoData.saleOrderNumber
+            }
+            if (type === "save") {
+                const result = await run(submitData)
+                if (result) {
+                    message.success("保存成功...")
+                    history.goBack()
+                }
+                return
+            }
+            if (type === "saveAndApprove") {
+                const result = await saveAndApproveRun(submitData)
+                if (result) {
+                    message.success("保存并提交审核成功...")
+                    history.goBack()
+                }
+                return
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const handleBaseInfoChange = (changedFields: any, allFields: any) => {
@@ -87,7 +121,6 @@ export default function SalesPlanEdit() {
     }
 
     const onRowsChange = (selectedRowKeys: string[], rows: any[]) => {
-
         setSelect(selectedRowKeys)
         setSelectRows(rows)
     }
@@ -103,8 +136,14 @@ export default function SalesPlanEdit() {
     }
 
     return <DetailContent operation={[
-        <Button key="save" type="primary" style={{ marginRight: "12px" }} onClick={handleSubmit} loading={saveStatus} >保存</Button>,
-        <Button key="saveOr" type="primary" style={{ marginRight: "12px" }} loading={saveStatus}>保存并提交审核</Button>,
+        <Button
+            key="save" type="primary"
+            style={{ marginRight: "12px" }}
+            onClick={() => handleSubmit("save")} loading={saveStatus || saveAndApproveLoading} >保存</Button>,
+        <Button key="saveOr" type="primary"
+            style={{ marginRight: "12px" }}
+            loading={saveStatus || saveAndApproveLoading}
+            onClick={() => handleSubmit("saveAndApprove")}>保存并提交审核</Button>,
         <Button key="cacel" onClick={() => history.goBack()} >取消</Button>
     ]}>
         <Modal

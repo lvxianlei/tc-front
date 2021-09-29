@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Button, Card, Col, ColProps, Form, FormInstance, FormItemProps, FormProps, Row, Space } from 'antd';
+import { Button, Card, Col, ColProps, Form, FormInstance, FormItemProps, FormProps, message, Row, Space } from 'antd';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -20,13 +20,13 @@ export interface IFormItemGroup extends ISection {
     readonly itemCol?: ColProps;
 }
 
-export interface IAbstractFillableComponentState {}
+export interface IAbstractFillableComponentState { }
 
 /**
  * Abstract fillable form component.
  */
 export default abstract class AbstractFillableComponent<P extends RouteComponentProps, S extends IAbstractFillableComponentState> extends AbstractTitledRouteComponent<P, S> {
-    
+
     private form: React.RefObject<FormInstance> = React.createRef<FormInstance>();
 
     /**
@@ -80,23 +80,25 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      */
     protected onCancel = (): void => {
         const returnPath: string = this.getReturnPath();
-        if(returnPath){
+        if (returnPath) {
             this.props.history.push(returnPath);
-        } 
+        }
     }
 
     /**
      * @protected
      * @description Determines whether submit and continue on
      */
-    protected onSubmitAndContinue(): void {
+    protected async onSubmitAndContinue() {
         if (this.getForm()) {
-            this.onSubmit(this.getForm()?.getFieldsValue()).then(() => {
+            const result: any = await (this.getForm() as any).validateFields()
+            const saveResult: any = await this.onSubmit(result)
+            if (!!saveResult) {
+                await message.success("保存成功...")
                 this.getForm()?.resetFields();
-            });
+            }
         }
     }
-
     /**
      * @protected
      * @description Gets form
@@ -137,15 +139,15 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      * @returns extra operation area 
      */
     protected renderExtraOperationArea(): React.ReactNode {
-        return <Button type="primary" htmlType="button" onClick={ this.onSubmitAndContinue }>保存并继续新增</Button>;
+        return <Button type="primary" htmlType="button" onClick={this.onSubmitAndContinue}>保存并继续新增</Button>;
     }
 
     /**
      * @description Renders extra operation area
      * @returns extra operation area 
      */
-     protected cancelOperationButton(): React.ReactNode {
-        return <Button type="ghost" htmlType="reset" onClick={ this.onCancel }>取消</Button>;
+    protected cancelOperationButton(): React.ReactNode {
+        return <Button type="ghost" htmlType="reset" onClick={this.onCancel}>取消</Button>;
     }
 
     /**
@@ -165,27 +167,27 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      */
     protected renderFormItems(items: IFormItemGroup[], itemIndex: number): React.ReactNode {
         return (
-            <div key={ itemIndex }>
+            <div key={itemIndex}>
                 {
                     items.map<React.ReactNode>((group: IFormItemGroup): React.ReactNode => (
-                        <React.Fragment key={ group.title }>
-                            <div className={ styles.title }>{ group.title }</div>
+                        <React.Fragment key={group.title}>
+                            <div className={styles.title}>{group.title}</div>
                             {
                                 group.itemCol
-                                ?
-                                <Row gutter={ 24 }>
-                                {
+                                    ?
+                                    <Row gutter={24}>
+                                        {
+                                            group.itemProps.map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
+                                                <Col span={group.itemCol?.span} key={`${props.name}_${index}`}>
+                                                    <Form.Item {...props} />
+                                                </Col>
+                                            ))
+                                        }
+                                    </Row>
+                                    :
                                     group.itemProps.map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
-                                        <Col span={ group.itemCol?.span } key={ `${ props.name }_${ index }` }>
-                                            <Form.Item { ...props }/>
-                                        </Col>
+                                        <Form.Item key={`${props.name}_${index}`} {...props} />
                                     ))
-                                }
-                                </Row>
-                                :
-                                group.itemProps.map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
-                                    <Form.Item key={ `${ props.name }_${ index }` } { ...props }/>
-                                ))
                             }
                         </React.Fragment>
                     ))
@@ -201,27 +203,27 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
     public render(): React.ReactNode {
         const formItemGroups: IFormItemGroup[][] = this.getFormItemGroups();
         return (
-            <Card title={ this.getTitle() }>
-                <Form { ...this.getFormProps() } ref={ this.form }>
-                    <Space size="large" direction="vertical" className={ `${ layoutStyles.width100 } ${ styles.space }` }>
-                        <Space size="middle" direction="horizontal" className={ `${ layoutStyles.width100 } ${ styles.hspace }` }>
+            <Card title={this.getTitle()}>
+                <Form {...this.getFormProps()} ref={this.form}>
+                    <Space size="large" direction="vertical" className={`${layoutStyles.width100} ${styles.space}`}>
+                        <Space size="middle" direction="horizontal" className={`${layoutStyles.width100} ${styles.hspace}`}>
                             {
                                 formItemGroups.map<React.ReactNode>((items: IFormItemGroup[], itemIndex: number): React.ReactNode => this.renderFormItems(items, itemIndex))
                             }
                         </Space>
                         {
                             this.renderExtraSections().map<React.ReactNode>((section: IRenderedSection): React.ReactNode => (
-                                <React.Fragment key={ section.title }>
-                                    <div className={ styles.title }>{ section.title }</div>
-                                    { section.render.call(this) }
+                                <React.Fragment key={section.title}>
+                                    <div className={styles.title}>{section.title}</div>
+                                    {section.render.call(this)}
                                 </React.Fragment>
                             ))
                         }
-                        <div className={ styles.btnOperationContainer }>
+                        <div className={styles.btnOperationContainer}>
                             <Space direction="horizontal" size="large">
-                                { this.getPrimaryOperationButton() }
-                                { this.renderExtraOperationArea() }
-                                { this.cancelOperationButton() }
+                                {this.getPrimaryOperationButton()}
+                                {this.renderExtraOperationArea()}
+                                {this.cancelOperationButton()}
                             </Space>
                         </div>
                     </Space>

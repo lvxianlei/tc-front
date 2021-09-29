@@ -67,7 +67,24 @@ export default function ManagementDetail(): React.ReactNode {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/productGroup/${id}`)
             resole(result)
-            history.go(0)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const { loading: noticeLoading, run: noticeRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-market/taskNotice?taskNoticeId=${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const { loading: deleteNoticeLoading, run: deleteNoticeRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/taskNotice?taskNoticeId=${id}`)
+            resole(result)
         } catch (error) {
             reject(error)
         }
@@ -79,18 +96,48 @@ export default function ManagementDetail(): React.ReactNode {
             content: "确定删除此数据吗？",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
-                    await deleteRun(id)
-                    resove("")
+                    const result = await deleteRun(id)
+                    if (result) {
+                        resove("")
+                        history.go(0)
+                    }
                 } catch (error) {
                     reject(error)
                 }
             })
         })
     }
+
+    const deleteSaleOrderItem = (id: string) => {
+        Modal.confirm({
+            title: "删除",
+            content: "确定删除此数据吗？",
+            onOk: () => new Promise(async (resove, reject) => {
+                try {
+                    const result = await deleteNoticeRun(id)
+                    if (result) {
+                        resove("")
+                        history.go(0)
+                    }
+                } catch (error) {
+                    reject(error)
+                }
+            })
+        })
+    }
+
     const handleProductGroupClick = async (id: string) => {
         const result: any = await projectGroupRun(id)
         setProductGroupData(result)
     }
+
+    const handleSubmitAudit = async (saleOrderId: string) => {
+        const result = await noticeRun(saleOrderId)
+        if (result) {
+            message.success("成功提交审核...")
+        }
+    }
+
     const tabItems: { [key: string]: JSX.Element | React.ReactNode } = {
         tab_base: <DetailContent operation={[
             <Button key="edit" style={{ marginRight: '16px' }}
@@ -282,8 +329,8 @@ export default function ManagementDetail(): React.ReactNode {
                         <Button type="link" onClick={() => history.push(`/project/management/detail/cat/salesPlan/${params.id}/${record.id}`)}>查看</Button>
                         {[2, -1].includes(record.taskReviewStatus) && <>
                             <Link to={`/project/management/detail/edit/salesPlan/${params.id}/${record.id}`}>编辑</Link>
-                            <Button type="link">删除</Button>
-                            <Button type="link">提交审批</Button>
+                            <Button type="link" onClick={() => deleteSaleOrderItem(record.id)}>删除</Button>
+                            <Button type="link" loading={noticeLoading} onClick={() => handleSubmitAudit(record.id)}>提交审批</Button>
                         </>}
                     </>
                 }

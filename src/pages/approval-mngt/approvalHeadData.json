@@ -3,7 +3,30 @@
         {
             "title": "项目名称",
             "dataIndex": "projectName",
-            "disabled": true
+            "type": "popTable",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入项目名称..."
+                }
+            ],
+            "path": "/tower-market/projectInfo",
+            "width": 1011,
+            "value": "projectName",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "项目名称",
+                    "dataIndex": "projectName",
+                    "search": true
+                },
+                {
+                    "title": "项目编码",
+                    "dataIndex": "projectNumber",
+                    "search": true
+                }
+            ]
         },
         {
             "title": "项目单位",
@@ -24,16 +47,34 @@
         {
             "title": "数量",
             "dataIndex": "num",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入数量..."
+                }
+            ]
         },
         {
             "title": "单位",
             "dataIndex": "unit",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入单位..."
+                }
+            ]
         },
         {
             "title": "货物类别",
-            "dataIndex": "goodsCategory"
+            "dataIndex": "goodsCategory",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入货物类别..."
+                }
+            ]
         },
         {
             "title": "招标文件传递方式",
@@ -45,7 +86,7 @@
             "type": "number"
         },
         {
-            "title": "验收执行标准及验收方法",
+            "title": "验收执行标准及方法",
             "dataIndex": "acceptanceStandard"
         },
         {

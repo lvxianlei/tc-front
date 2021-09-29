@@ -1,9 +1,9 @@
 import React from "react"
 import { Descriptions, Form, FormInstance, Row, Col } from "antd"
 import { FormItemType } from '../common'
-import styles from './BaseInfo.module.less'
 import { FormItemTypesType } from "./FormItemType"
 import moment from "moment"
+import './BaseInfo.less'
 export interface BaseInfoItemProps {
     name: string
     label: string
@@ -50,11 +50,11 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
             layout="inline"
             labelCol={{ style: { width: '80px', whiteSpace: "break-spaces" } }}
         >
-            <Row gutter={[0, 10]} >
+            <Row>
                 {columns.map((item: any, index: number) => <Col key={`form_item_${index}`} span={24 / col}>
                     <Col span={24} >
-                        <div className={styles.baseInfoForm}>
-                            <Form.Item name={item.dataIndex} label={item.title} rules={item.rules || []}>
+                        <div style={{ height: 56 }}>
+                            <Form.Item className="baseInfoForm" name={item.dataIndex} label={item.title} rules={item.rules || []}>
                                 {item.render ? item.render() : <FormItemType type={item.type} data={item} />}
                             </Form.Item>
                         </div>

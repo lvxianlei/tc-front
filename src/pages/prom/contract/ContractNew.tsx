@@ -65,6 +65,16 @@ export class ContractNew extends AbstractContractSetting<IContractNewRouteProps,
             message.error('计划回款总金额必须等于合同总价');
             return Promise.reject(false);
         } else {
+            console.log(!values.contractPrice)
+            if (!values.contractPrice) {
+                values.contractPrice = "0"
+            }
+            if (!values.contractAmount) {
+                values.contractAmount = "0"
+            }
+            if (!values.contractTotalWeight) {
+                values.contractTotalWeight = "0"
+            }
             return await RequestUtil.post('/tower-market/contract', { ...values, projectId: (this.props.match.params as any).projectId });
         }
     }
