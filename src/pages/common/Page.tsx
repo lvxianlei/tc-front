@@ -61,7 +61,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
             });
             this.setState({
                 ...filterValues,
-                tableDataSource: resData.records,
+                tableDataSource: resData.records || resData,
                 tablePagination: {
                     ...this.state.tablePagination,
                     current: resData.current,

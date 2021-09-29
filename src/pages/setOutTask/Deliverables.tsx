@@ -25,14 +25,14 @@ const tableColumns = [
         width: 50, 
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
     {
-        key: 'partBidNumber',
+        key: 'name',
         title: '交付物名称',
-        dataIndex: 'partBidNumber', 
+        dataIndex: 'name', 
     },
     {  
-        key: 'goodsType', 
+        key: 'use', 
         title: '用途', 
-        dataIndex: 'goodsType' 
+        dataIndex: 'use' 
     }, 
     {
         key: 'operation',

@@ -1,96 +1,92 @@
 {
     "baseColumns": [
         {
-            "dataIndex": "projectName",
+            "dataIndex": "saleOrderNumber",
             "title": "订单编号"
         },
         {
-            "dataIndex": "projectNumber",
+            "dataIndex": "internalNumber",
             "title": "内部合同编号"
         },
         {
-            "dataIndex": "source",
+            "dataIndex": "projectName",
             "title": "订单工程名称"
         },
         {
-            "dataIndex": "releaseDate",
+            "dataIndex": "customerCompany",
             "title": "业主单位"
         },
         {
-            "dataIndex": "sourceWebsite",
+            "dataIndex": "signCustomerName",
             "title": "合同签订单位"
         },
         {
-            "dataIndex": "bidBuyEndTime",
+            "dataIndex": "orderDeliveryTime",
             "title": "订单交货日期",
             "type": "date",
             "format": "YYYY-MM-DD"
         },
         {
-            "dataIndex": "bidBuyEndTime",
+            "dataIndex": "customerDeliveryTime",
             "title": "客户交货日期",
             "type": "date",
             "format": "YYYY-MM-DD"
         },
         {
-            "dataIndex": "bidBuyEndTime",
+            "dataIndex": "plannedDeliveryCargoTime",
             "title": "计划交货日期",
             "type": "date",
             "format": "YYYY-MM-DD"
         },
         {
-            "dataIndex": "explain",
+            "dataIndex": "description",
             "title": "备注",
             "type": "textarea"
         }
     ],
     "specialColums": [
         {
-            "dataIndex": "projectName",
+            "dataIndex": "materialStandard",
             "title": "原材料标准"
         },
         {
-            "dataIndex": "projectNumber",
+            "dataIndex": "materialDemand",
             "title": "原材料要求"
         },
         {
-            "dataIndex": "source",
+            "dataIndex": "weldingDemand",
             "title": "焊接要求"
         },
         {
-            "dataIndex": "releaseDate",
+            "dataIndex": "packDemand",
             "title": "包装要求"
         },
         {
-            "dataIndex": "sourceWebsite",
+            "dataIndex": "galvanizeDemand",
             "title": "镀锌要求"
         },
         {
-            "dataIndex": "explain",
+            "dataIndex": "peculiarDescription",
             "title": "备注",
             "type": "textarea"
         }
     ],
     "productColumns": [
         {
-            "dataIndex": "explain",
-            "title": "塔型（个）",
-            "type": "textarea"
+            "dataIndex": "productCategoryNum",
+            "title": "塔型（个）"
         },
         {
-            "dataIndex": "explain",
-            "title": "杆塔（基）",
-            "type": "textarea"
+            "dataIndex": "productNum",
+            "title": "杆塔（基）"
         },
         {
-            "dataIndex": "explain",
-            "title": "产品类型",
-            "type": "textarea"
+            "dataIndex": "productType",
+            "title": "产品类型"
         },
         {
-            "dataIndex": "explain",
-            "title": "总重量（kg）",
-            "type": "textarea"
+            "dataIndex": "totalWeight",
+            "title": "总重量（kg）"
         }
     ]
 }
