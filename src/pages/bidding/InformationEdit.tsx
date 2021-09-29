@@ -114,6 +114,7 @@ export default function InfomationNew(): JSX.Element {
                 title: "应标状态修改",
                 content: "当前标的已被应标，是否取消应标？确定后，该招标信息的项目将被删除，请再三确认！",
                 onOk: () => {
+                    setBinddingStatus(biddingStatus)
                     setReasonStatus(biddingStatus !== 2)
                 },
                 onCancel: () => {
@@ -125,11 +126,12 @@ export default function InfomationNew(): JSX.Element {
         if (biddingStatus === 1) {
             setVisible(true)
         }
+        setBinddingStatus(biddingStatus)
     }
 
     const filterBaseInfoData: (baseInfoData: any) => any[] = (baseInfoData) => {
-        const newData = baseInfoData.map((item: any) => item.dataIndex === "biddingStatus" ? ({ ...item, disabled: binddingStatus === 0 }) : item)
-        return !reasonStatus ? newData : newData.filter((item: any) => item.dataIndex !== "reason")
+        const newData = baseInfoData.map((item: any) => item.dataIndex === "biddingStatus" ? ({ ...item, disabled: detailData?.biddingStatus === 0 }) : item)
+        return ![0, 1].includes(binddingStatus) ? newData : newData.filter((item: any) => item.dataIndex !== "reason")
     }
 
     const handleModalOk = async () => {
@@ -142,7 +144,11 @@ export default function InfomationNew(): JSX.Element {
         }
     }
 
-    const handleModalCancel = () => setVisible(false)
+    const handleModalCancel = () => {
+        setBinddingStatus(2)
+        setVisible(false)
+        baseInfoForm.setFieldsValue({ biddingStatus: 2 })
+    }
     const handleChange = (fields: any, allFields: any) => {
 
     }

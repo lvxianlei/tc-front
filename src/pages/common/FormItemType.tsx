@@ -62,9 +62,12 @@ const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: any) =>
     })
     const [form] = Form.useForm()
     const searchs = data.columns.filter((item: any) => item.search)
-    const { loading, data: popTableData, run } = useRequest<any>((params) => new Promise(async (resolve, reject) => {
+    const { loading, data: popTableData, run } = useRequest<any>(() => new Promise(async (resolve, reject) => {
         try {
-            const paramsOptions = params && Object.keys(params).map((item: string) => `${item}=${params[item] || ""}`).join("&")
+            const params = await form.getFieldsValue()
+            params.current = pagenation.current
+            params.pageSize = pagenation.pageSize
+            const paramsOptions = Object.keys(params).map((item: string) => `${item}=${params[item] || ""}`).join("&")
             const path = data.path.includes("?") ? `${data.path}&${paramsOptions || ''}` : `${data.path}?${paramsOptions || ''}`
             resolve(await RequestUtil.get<{ data: any }>(path))
         } catch (error) {
@@ -80,7 +83,7 @@ const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: any) =>
     const paginationChange = (page: number, pageSize: number) => setPagenation({ ...pagenation, current: page, pageSize })
 
     return <>
-        <Form form={form} onFinish={async (data: any) => await run({ ...data })}>
+        <Form form={form} onFinish={async () => await run()}>
             <Row gutter={2} style={{ height: 32 }}>
                 {searchs.map((fItem: any) => <Col span={searchs.length / 24} key={fItem.dataIndex}><Form.Item
                     name={fItem.dataIndex}

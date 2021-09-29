@@ -64,3 +64,12 @@
   overflow-x: auto;
   background-color: #fff;
 }
+
+.required{
+  &::before{
+    content: "*";
+    color: red;
+    margin-right: 5px;
+    line-height: 32px;
+  }
+}

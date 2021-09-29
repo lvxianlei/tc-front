@@ -209,7 +209,9 @@ export default function Information(): React.ReactNode {
     }
     const onFilterSubmit = (value: any) => {
         if (value.minStartTime) {
-            value.minStartTime = value.minStartTime.format("YYYY-MM-DD")
+            const formatDate = value.minStartTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.minStartTime = formatDate[0]
+            value.maxStartTime = formatDate[1]
         }
         return value
     }
@@ -373,7 +375,7 @@ export default function Information(): React.ReactNode {
                 {
                     name: 'minStartTime',
                     label: '发起时间',
-                    children: <DatePicker format="YYYY-MM-DD" />
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
                     name: 'auditStatus',

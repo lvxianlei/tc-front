@@ -1,9 +1,8 @@
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react"
-import { Button, Tabs, Upload, Tooltip } from "antd"
+import { Button, Tabs, Upload, Tooltip, Form } from "antd"
 import { InfoCircleOutlined } from "@ant-design/icons"
 import { EditTable } from "../../common"
 import * as XLSX from "xlsx"
-import { useForm } from "antd/es/form/Form"
 import { EditTableProps } from "../../common/EditTable"
 
 export function readWorkbookFromLocalFile(file: Blob, callback?: (workbook: XLSX.WorkBook) => any) {
@@ -32,7 +31,6 @@ function outputWorkbook(workbook: XLSX.WorkBook, onlyone = true) {
 
 function formatWorkbook(input: { [key: string]: any, __rowNum__: number }[], keyNameDic?: Map<string, string>, requireKeys?: string[]) {
   const _data = input.slice(0).sort((a, b) => a.__rowNum__ - b.__rowNum__)
-
   const fullKeys: string[] = []
   const calcRequire = requireKeys && requireKeys.length > 0
   const res = _data.map((item) => {
@@ -41,7 +39,6 @@ function formatWorkbook(input: { [key: string]: any, __rowNum__: number }[], key
       const realKeyName = keyNameDic ? keyNameDic.get(kname) || kname : kname
       const realVal = item[kname]
       resObj[realKeyName] = realVal
-
       if (calcRequire && !fullKeys.includes(realKeyName)) {
         fullKeys.push(realKeyName)
       }
@@ -89,7 +86,7 @@ export const UploadXLS = (props: {
           文件导入要求：<br />
           1、仅Excel文件导入（xls，xlsx均可）。<br />
           2、列名必须包括包号、投标人名称、分标编号、货物类别、项目单位、总价、重量
-        </>}> <InfoCircleOutlined style={{ fontSize: 20 ,verticalAlign:"middle"}} /></Tooltip>}
+        </>}> <InfoCircleOutlined style={{ fontSize: 20, verticalAlign: "middle" }} /></Tooltip>}
     </Upload>)
 }
 
@@ -109,8 +106,7 @@ interface TabsCanEditData {
 }
 
 export const EditTableHasForm = forwardRef((props: EditTableProps, ref?: any) => {
-  const [form] = useForm()
-  form.setFieldsValue({ submit: props.dataSource })
+  const [form] = Form.useForm()
   useImperativeHandle(ref, () => ({ getForm: () => form }), [form])
   return <EditTable form={form} {...props} />
 })
@@ -177,10 +173,10 @@ export const TabsCanEdit = forwardRef((props: TabsCanEditProps, ref?: any) => {
       if (!panes) {
         return
       }
-      const newPanes = panes.filter((pane, index) => (pane.key + "" !== targetKey))
+      const newPanes = panes.filter((pane) => (pane.key + "" !== targetKey))
       setpanes(newPanes)
       setactiveKey("1")
-      delete contentRefs.current?.[targetKey]
+      delete contentRefs.current?.[parseFloat(targetKey)]
       return
     }
   }

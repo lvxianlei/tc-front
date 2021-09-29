@@ -743,6 +743,7 @@
             "title": "物资名称",
             "dataIndex": "cargoName",
             "width": 100,
+            "required": true,
             "rules": [
                 {
                     "required": true,
@@ -759,6 +760,7 @@
             "title": "计量单位",
             "dataIndex": "metering",
             "width": 100,
+            "required": true,
             "rules": [
                 {
                     "required": true,
@@ -771,6 +773,7 @@
             "dataIndex": "number",
             "type": "number",
             "width": 100,
+            "required": true,
             "rules": [
                 {
                     "required": true,
@@ -783,6 +786,7 @@
             "dataIndex": "moneyTax",
             "type": "number",
             "width": 100,
+            "required": true,
             "rules": [
                 {
                     "required": true,
@@ -800,6 +804,7 @@
             "dataIndex": "contractMoneyTax",
             "type": "number",
             "width": 100,
+            "required": true,
             "rules": [
                 {
                     "required": true,
@@ -818,6 +823,7 @@
             "dataIndex": "tax",
             "width": 150,
             "type": "number",
+            "required": true,
             "rules": [
                 {
                     "required": true,
