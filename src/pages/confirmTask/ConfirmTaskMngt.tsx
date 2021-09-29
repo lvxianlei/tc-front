@@ -1,102 +1,28 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Select, Button, Modal, Form, Popconfirm } from 'antd'
+import { Space, Input, DatePicker, Select, Button, Modal, Form, Popconfirm, Row, Col } from 'antd'
 import { Link } from 'react-router-dom'
-import { CommonTable, DetailTitle, Page } from '../common';
+import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
-import TextArea from 'antd/lib/input/TextArea';
+import RequestUtil from '../../utils/RequestUtil';
+import moment from 'moment';
 
 export default function ConfirmTaskMngt(): React.ReactNode {
     const [assignVisible, setVisible] = useState<boolean>(false);
-    const [detailVisible, setDetailVisible] = useState<boolean>(false);
+    const [drawTaskId, setDrawTaskId] = useState<string>('');
     const [form] = Form.useForm();
-    const [formDetail] = Form.useForm();
     const handleAssignModalOk = async () => {
         try {
-            const submitData = await form.validateFields()
+            const submitData = await form.validateFields();
+            submitData.drawTaskId = drawTaskId;
+            submitData.plannedDeliveryTime = moment(submitData.plannedDeliveryTime).format('YYYY-MM-DD');
             console.log(submitData)
-            setVisible(false)
+            await RequestUtil.post('/tower-science/drawTask/assignDrawTask', submitData).then(()=>{
+                setVisible(false)
+            })
         } catch (error) {
             console.log(error)
         }
     }
-    const handleDetailModalOk = async () => {
-        try {
-            const submitData = await formDetail.validateFields()
-            console.log(submitData)
-            setVisible(false)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    const towerColumns=[
-        {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            width: 50,
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-        },
-        {
-            key: 'projectName',
-            title: '线路名称',
-            width: 100,
-            dataIndex: 'projectName'
-        },
-        {
-            key: 'projectName',
-            title: '杆塔号',
-            width: 100,
-            dataIndex: 'projectName'
-        },
-        {
-            key: 'projectName',
-            title: '塔型',
-            width: 100,
-            dataIndex: 'projectName'
-        },
-        {
-            key: 'projectName',
-            title: '塔型钢印号',
-            width: 100,
-            dataIndex: 'projectName'
-        },
-        {
-            key: 'projectName',
-            title: '产品类型',
-            width: 100,
-            dataIndex: 'projectName'
-        },
-        {
-            key: 'projectName',
-            title: '电压等级（kv）',
-            width: 100,
-            dataIndex: 'projectName'
-        },
-        {
-            key: 'projectName',
-            title: '呼高（m）',
-            width: 100,
-            dataIndex: 'projectName'
-        },
-        {
-            key: 'projectName',
-            title: '其他增重（kg）',
-            width: 100,
-            dataIndex: 'projectName'
-        },
-        {
-            key: 'projectName',
-            title: '总重（kg）',
-            width: 100,
-            dataIndex: 'projectName'
-        },
-        {
-            key: 'projectName',
-            title: '备注',
-            width: 100,
-            dataIndex: 'projectName'
-        }
-    ]
     const columns = [
         {
             key: 'index',
@@ -115,13 +41,42 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             key: 'status',
             title: '任务状态',
             width: 100,
-            dataIndex: 'status'
+            dataIndex: 'status',
+            render: (value: number, record: object): React.ReactNode => {
+                const renderEnum: any = [
+                    {
+                        value: 0,
+                        label: "已拒绝"
+                    },
+                    {
+                        value: 1,
+                        label: "待确认"
+                    },
+                    {
+                        value: 2,
+                        label: "待指派"
+                    },
+                    {
+                        value: 3,
+                        label: "待完成"
+                    },
+                    {
+                        value: 4,
+                        label: "已完成"
+                    },
+                    {
+                        value: 5,
+                        label: "已提交"
+                    }
+                  ]
+                return <>{renderEnum.find((item: any) => item.value === value).label}</>
+            }
         },
         {
-            key: 'bidBuyEndTime',
+            key: 'updateStatusTime',
             title: '最新状态变更时间',
             width: 200,
-            dataIndex: 'bidBuyEndTime'
+            dataIndex: 'updateStatusTime'
         },
         {
             key: 'confirmName',
@@ -150,11 +105,13 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Link to={`/confirmTask/ConfirmTaskMngt/ConfirmTaskDetail/${record.id}`}>任务详情</Link>
-                    <Button type='link' onClick={() => setVisible(true)}>指派</Button>
-                    <Button type='link' onClick={() => setDetailVisible(true)}>明细</Button>
+                    <Button type='link' onClick={() => { setDrawTaskId(record.id); setVisible(true) }}>指派</Button>
+                    <Link to={`/confirmTask/ConfirmTaskMngt/ConfirmDetail/${record.id}`}>明细</Link>
                     <Popconfirm
                         title="确认提交任务?"
-                        onConfirm={ () => {} }
+                        onConfirm={ async () => {
+                            await RequestUtil.post('/tower-science/drawTask/submitDrawTask', record.id)
+                        } }
                         okText="确认"
                         cancelText="取消"
                     >   
@@ -165,61 +122,50 @@ export default function ConfirmTaskMngt(): React.ReactNode {
         }
     ]
 
-    const handleAssignModalCancel = () => setVisible(false)
-    const handleDetailModalCancel = () => setDetailVisible(false)
+    const handleAssignModalCancel = () => setVisible(false);
+    const onFilterSubmit = (value: any) => {
+        console.log(value)
+        return value
+    }
+    const formItemLayout = {
+        labelCol: { span: 6 },
+        wrapperCol: { span: 16 }
+    };
     return <>
-        <Modal visible={assignVisible} title="指派" okText="提交" onOk={handleAssignModalOk} onCancel={handleAssignModalCancel} >
-            <Form form={form}>
-                <Form.Item name="aaaa" label="部门">
-                    <Select>
-                        <Select.Option value="1">是</Select.Option>
-                        <Select.Option value="0">否</Select.Option>
-                    </Select>
-                </Form.Item>
-                <Form.Item name="cccc" label="人员">
-                    <Select>
-                        <Select.Option value="1">是</Select.Option>
-                        <Select.Option value="0">否</Select.Option>
-                    </Select>
-                </Form.Item>
-                <Form.Item name="bbbb" label="计划交付时间">
-                    <DatePicker />
-                </Form.Item>
+        <Modal visible={ assignVisible } title="指派" okText="提交" onOk={ handleAssignModalOk } onCancel={ handleAssignModalCancel } width={ 800 }>
+            <Form form={ form } { ...formItemLayout }>
+                <Row>
+                    <Col span={12}>
+                        <Form.Item name="dept" label="部门" rules={[{required:true,message:"请选择部门"}]}>
+                            <Select style={{width:'100%'}}>
+                                <Select.Option value="1">是</Select.Option>
+                                <Select.Option value="0">否</Select.Option>
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item name="assignorId" label="人员" rules={[{required:true,message:"请选择人员"}]}>
+                            <Select style={{width:'100%'}}>
+                                <Select.Option value="1">是</Select.Option>
+                                <Select.Option value="0">否</Select.Option>
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <Form.Item name="plannedDeliveryTime" label="计划交付时间" rules={[{required:true,message:"请选择计划交付时间"}]}>
+                            <DatePicker format='YYYY-MM-DD' style={{width:'100%'}}/>
+                        </Form.Item>
+                    </Col>
+                </Row>
             </Form>
-        </Modal>
-        <Modal visible={detailVisible} title="明细" okText="确认" onOk={handleDetailModalOk} onCancel={handleDetailModalCancel} width={1200}>
-            <DetailTitle title="杆塔信息"/>
-            <CommonTable columns={towerColumns} dataSource={[]} />
-            <DetailTitle title="其他信息"/>
-            <Form form={formDetail}>
-                <Form.Item name="decription" label="备注">
-                    <TextArea maxLength={300} showCount rows={3}/>
-                </Form.Item>
-            </Form>
-            <DetailTitle title="附件"/>
-            <CommonTable columns={[
-                {
-                    title: '附件名称',
-                    dataIndex: 'name',
-                    key: 'name',
-                },
-                {
-                    key: 'operation',
-                    title: '操作',
-                    dataIndex: 'operation',
-                    render: (_: undefined, record: any): React.ReactNode => (
-                        <Space direction="horizontal" size="small">
-                            <Button type='link'>下载</Button>
-                            <Button type='link'>预览</Button>
-                        </Space>
-                    )
-                }
-            ]} dataSource={[]} />
         </Modal>
         <Page
             path="/tower-science/drawTask"
             columns={columns}
             extraOperation={<Button type="primary">导出</Button>}
+            onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
                     name: 'updateStatusTimeStart',
@@ -234,7 +180,14 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                 {
                     name: 'status',
                     label: '任务状态',
-                    children: <DatePicker />
+                    children: <Select style={{width:"100%"}}>
+                        <Select.Option value={1} key={1}>待确认</Select.Option>
+                        <Select.Option value={2} key={2}>待指派</Select.Option>
+                        <Select.Option value={3} key={3}>待完成</Select.Option>
+                        <Select.Option value={4} key={4}>已完成</Select.Option>
+                        <Select.Option value={5} key={5}>已提交</Select.Option>
+                        <Select.Option value={0} key={0}>已拒绝</Select.Option>
+                    </Select>
                 },
                 {
                     name: 'confirmName',

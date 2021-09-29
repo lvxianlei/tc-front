@@ -1,0 +1,67 @@
+{
+	"code": 200,
+	"msg": "",
+	"success": true,
+	"data": {
+		"aeId": -99759560,
+		"aeName": "nisi nostrud",
+		"aePhone": "ut aliquip aute anim veniam",
+		"assignorId": -62202413,
+		"attachInfoVOList": [{
+			"description": "incididunt laborum cupidatat",
+			"filePath": "dolor Ut",
+			"fileSize": -46196582.569880866,
+			"fileSuffix": "ullamco nisi est sunt",
+			"fileUploadTime": "1978-10-08T08:07:52.045Z",
+			"id": 13819008,
+			"name": "anim minim",
+			"userName": "nis"
+		}, {
+			"description": "enim dolore elit",
+			"filePath": "elit",
+			"fileSize": -35769058.00025552,
+			"fileSuffix": "Lorem esse nisi nostrud",
+			"fileUploadTime": "2009-11-08T05:39:47.851Z",
+			"id": -40142568,
+			"name": "culpa in laborum est",
+			"userName": "et reprehenderit"
+		}, {
+			"description": "in voluptate veniam",
+			"filePath": "officia ipsum",
+			"fileSize": 87504485.16459617,
+			"fileSuffix": "velit",
+			"fileUploadTime": "1994-04-07T00:17:43.374Z",
+			"id": -52457116,
+			"name": "ut nulla fugiat nostrud",
+			"userName": "do fugiat adipisicing"
+		}],
+		"confirmId": -1966528,
+		"contractName": "quis laboris",
+		"contractNum": "eiusmod reprehenderit",
+		"customerId": -84067206,
+		"customerName": "proident cillum ut",
+		"description": "ipsum",
+		"designContactsId": -42688409,
+		"designContactsName": -75468187,
+		"designPhone": "nisi qui adipisicing",
+		"drawTaskId": "sunt nisi exe",
+		"id": -49398493,
+		"operationInformationVOList": [{
+			"createDepartment": "occaecat",
+			"createTime": "2015-07-21T05:26:04.449Z",
+			"createUser": "ullamco ea irure in nulla",
+            "createUserName": "ullamco ea irure in nulla",
+			"description": "labo",
+			"status": 0
+		}, {
+			"createDepartment": "labore",
+			"createTime": "1969-09-12T17:33:48.301Z",
+			"createUser": "qui",
+            "createUserName": "qui",
+			"description": "qui nulla pariatur commodo",
+			"status": 1
+		}],
+		"plannedDeliveryTime": "1955-06-25T22:28:07.493Z",
+		"status": "aliqua nulla in nostrud"
+	}
+}

@@ -560,6 +560,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 确认任务明细
+      "name": "确认任务明细",
+      "path": "/confirmTask/ConfirmTaskMngt/ConfirmDetail/:id",
+      "module": "./pages/confirmTask/ConfirmDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 工作管理-确认列表
       "name": "确认列表",
       "path": "/workMngt/confirmList",

@@ -1,27 +1,27 @@
 {
     "baseInfoData": [
         {
-            "dataIndex": "projectName",
+            "dataIndex": "contractName",
             "title": "合同名称"
         },
         {
-            "dataIndex": "projectNumber",
+            "dataIndex": "customerName",
             "title": "客户名称"
         },
         {
-            "dataIndex": "releaseDate",
+            "dataIndex": "aeName",
             "title": "业务经理"
         },
         {
-            "dataIndex": "source",
+            "dataIndex": "aePhone",
             "title": "业务经理电话"
         },
         {
-            "dataIndex": "bidBuyEndTime",
+            "dataIndex": "designContactsName",
             "title": "设计院联系人"
         },
         {
-            "dataIndex": "sourceWebsite",
+            "dataIndex": "designPhone",
             "title": "设计院联系电话"
         }
     ]
