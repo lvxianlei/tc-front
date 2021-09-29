@@ -57,6 +57,7 @@ class ClientMngt extends AbstractMngtComponent<IClientMngtWithRouteProps, IClien
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize || this.state.tablePagination?.pageSize,
+            type: filterValues.type ? filterValues.type : this.state.selectedTabKey || ""
         });
         if (resData?.records?.length === 0 && resData?.current > 1) {
             this.fetchTableData({}, {

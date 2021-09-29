@@ -193,6 +193,12 @@
                     "value": 4,
                     "label": "项目结束"
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择当前项目阶段..."
+                }
             ]
         },
         {

@@ -19,7 +19,7 @@ export default function BaseInfoEdit(): JSX.Element {
   const typeNameEnum = dictionaryOptions["121"].map((item: any) => ({ value: item.id, label: item.name }))
   const { loading: saveStatus, data: saveResult, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
     try {
-      const result: { [key: string]: any } = await RequestUtil.put(`/tower-market/projectInfo`, postData)
+      const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/projectInfo`, postData)
       resole(result)
     } catch (error) {
       reject(error)
