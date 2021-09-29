@@ -17,7 +17,6 @@ interface ApprovalTypesViewProps {
 }
 type radioTypes = "base" | "records" | "attachVos"
 const ViewDetail: React.FC<ApprovalTypesViewProps> = ({ id, path, title }) => {
-    const [attachInfo, setAttachInfo] = useState<any[]>([])
     const [radioValue, setRadioValue] = useState<radioTypes>("base")
     const { loading, data } = useRequest<any>(() => new Promise(async (resolve, reject) => {
         try {
@@ -27,14 +26,6 @@ const ViewDetail: React.FC<ApprovalTypesViewProps> = ({ id, path, title }) => {
             reject(error)
         }
     }), { refreshDeps: [id] })
-    const uploadChange = (event: any) => {
-        if (event.file.status === "done") {
-            if (event.file.response.code === 200) {
-                console.log(event.file.response)
-                setAttachInfo([...attachInfo, event.file.response.data])
-            }
-        }
-    }
     const radioOnchange = (value: radioTypes) => setRadioValue(value)
     const detailType: any = {
         "履约保证金申请": <DetailContent>
@@ -42,7 +33,9 @@ const ViewDetail: React.FC<ApprovalTypesViewProps> = ({ id, path, title }) => {
                 <Radio.Button value="base">基本信息</Radio.Button>
                 <Radio.Button value="records">审批记录</Radio.Button>
             </Radio.Group>
-            {radioValue === "base" && <BaseInfo columns={bondBaseInfo} dataSource={data?.performanceBond || {}} />}
+            {radioValue === "base" && <BaseInfo columns={[
+                ...bondBaseInfo,
+                { title: "审批时间", dataIndex: "updateTime", type: "date", format: "YYYY-MM-DD" }]} dataSource={data?.performanceBond || {}} />}
             {radioValue === "records" && <CommonTable columns={auditIdRecord} dataSource={data?.records || []} />}
         </DetailContent>,
         "图纸交接申请": <DetailContent>
@@ -61,22 +54,7 @@ const ViewDetail: React.FC<ApprovalTypesViewProps> = ({ id, path, title }) => {
             </Radio.Group>
             {radioValue === "base" && <BaseInfo columns={drawingCofirm} dataSource={(data as any) || {}} />}
             {radioValue === "records" && <CommonTable columns={auditIdRecord} dataSource={data?.records} />}
-            {radioValue === "attachVos" && <>
-                <DetailTitle title="" operation={[<Upload
-                    key="sub"
-                    name="file"
-                    multiple={true}
-                    action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
-                    headers={{
-                        'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                        'Tenant-Id': AuthUtil.getTenantId(),
-                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                    }}
-                    onChange={uploadChange}
-                    showUploadList={false}
-                ><Button key="enclosure" type="default">上传附件</Button></Upload>]} />
-                <CommonTable columns={enclosure} dataSource={attachInfo} />
-            </>}
+            {radioValue === "attachVos" && <CommonTable columns={enclosure} dataSource={data?.attachInfo} />}
         </DetailContent>,
         "招标评审申请": <DetailContent>
             <Radio.Group defaultValue={radioValue} onChange={(event: any) => radioOnchange(event.target.value)}>
@@ -86,22 +64,7 @@ const ViewDetail: React.FC<ApprovalTypesViewProps> = ({ id, path, title }) => {
             </Radio.Group>
             {radioValue === "base" && <BaseInfo columns={baseInfo} dataSource={(data as any) || {}} />}
             {radioValue === "records" && <CommonTable columns={auditIdRecord} dataSource={data?.records} />}
-            {radioValue === "attachVos" && <>
-                <DetailTitle title="" operation={[<Upload
-                    key="sub"
-                    name="file"
-                    multiple={true}
-                    action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
-                    headers={{
-                        'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                        'Tenant-Id': AuthUtil.getTenantId(),
-                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                    }}
-                    onChange={uploadChange}
-                    showUploadList={false}
-                ><Button key="enclosure" type="default">上传附件</Button></Upload>]} />
-                <CommonTable columns={enclosure} dataSource={attachInfo} />
-            </>}
+            {radioValue === "attachVos" && <CommonTable columns={enclosure} dataSource={data?.attachInfo} />}
         </DetailContent>
     }
     return <Spin spinning={loading}>

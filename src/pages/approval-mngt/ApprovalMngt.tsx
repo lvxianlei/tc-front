@@ -17,7 +17,7 @@ const auditEnum: any = {
     "bidding_evaluation": "招标评审申请"
 }
 export default function Information(): React.ReactNode {
-    const processTypeIdEnum = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: { id: string, name: string }) => ({
+    const currencyTypeEnum = (ApplicationContext.get().dictionaryOption as any)["111"].map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
@@ -88,6 +88,7 @@ export default function Information(): React.ReactNode {
         await drawHForm.validateFields()
         const postData = await drawHForm.getFieldsValue()
         postData.contractId = postData.contractId?.id || ""
+        postData.signedUser = postData.signedUser?.value || ""
         const result = await run({ path: "/tower-market/drawingHandover", data: postData })
         if (result) {
             message.success("成功创建申请...")
@@ -117,7 +118,8 @@ export default function Information(): React.ReactNode {
         await bidingForm.validateFields()
         const postData = await bidingForm.getFieldsValue()
         postData.attachInfoDtos = attachInfo
-        postData.projectId = postData.projectId?.id || ""
+        postData.projectId = postData.projectName?.id || ""
+        postData.projectName = postData.projectName?.value || ""
         const result = await run({ path: "/tower-market/biddingEvaluation/submitAudit", data: postData })
         if (result) {
             message.success("成功创建申请...")
@@ -134,9 +136,20 @@ export default function Information(): React.ReactNode {
         }
     }
 
-    const drawingCofirmChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
+    const drawingCofirmChange = (fields: { [key: string]: any }) => {
         if (Object.keys(fields)[0] === "contractId") {
-            drawingCofirmForm.setFieldsValue({ ...allFields, ...fields.contractId.records[0] })
+            const {
+                customerCompany,
+                contractName,
+                serviceManager,
+                serviceManagerTel
+            } = fields.contractId.records[0]
+            drawingCofirmForm.setFieldsValue({
+                customerCompany,
+                contractName,
+                serviceManager,
+                serviceManagerTel
+            })
         }
     }
 
@@ -152,7 +165,8 @@ export default function Information(): React.ReactNode {
                 const dataInfo = event.file.response.data
                 const fileInfo = dataInfo.name.split(".")
                 setAttachInfo([...attachInfo, {
-                    id: attachInfo.length,
+                    id: "",
+                    uid: attachInfo.length,
                     name: dataInfo.originalName.split(".")[0],
                     description: "",
                     filePath: dataInfo.name,
@@ -181,21 +195,29 @@ export default function Information(): React.ReactNode {
     const handleBidingChange = (changedFields: any, allFields: any) => {
         if (Object.keys(changedFields)[0] === "projectName") {
             const {
-
+                biddingEndTime,
+                biddingPerson,
+                projectNumber
             } = changedFields.projectName.records[0]
 
-            // bidingForm.setFieldsValue({
-
-            // })
+            bidingForm.setFieldsValue({
+                bidDeadline: biddingEndTime,
+                biddingPerson,
+                projectNumber
+            })
         }
     }
     const onFilterSubmit = (value: any) => {
-        console.log(value)
         if (value.minStartTime) {
             value.minStartTime = value.minStartTime.format("YYYY-MM-DD")
         }
         return value
     }
+
+    const deleteAttachData = (id: number) => {
+        setAttachInfo(attachInfo.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
+    }
+
     return <>
         <Modal
             title="履约保证金审批"
@@ -211,7 +233,11 @@ export default function Information(): React.ReactNode {
             confirmLoading={loading}
         >
             <DetailTitle title="基本信息" />
-            <BaseInfo form={performanceBondForm} onChange={performanceBondChange} columns={bondBaseInfo} dataSource={{}} edit col={2} />
+            <BaseInfo form={performanceBondForm} onChange={performanceBondChange} columns={bondBaseInfo.map((item: any) => item.dataIndex === "currencyType" ? ({
+                ...item,
+                type: "select",
+                enum: currencyTypeEnum
+            }) : item)} dataSource={{}} edit col={2} />
         </Modal>
         <Modal
             title="图纸交接申请"
@@ -257,7 +283,12 @@ export default function Information(): React.ReactNode {
                 onChange={uploadChange}
                 showUploadList={false}
             ><Button key="enclosure" type="default">上传附件</Button></Upload>]} />
-            <CommonTable columns={enclosure} dataSource={attachInfo} />
+            <CommonTable columns={[{
+                title: "操作",
+                dataIndex: "opration",
+                render: (_: any, records: any) => <Button type="link" onClick={() => deleteAttachData(records.uid || records.id)}>删除</Button>
+            },
+            ...enclosure]} dataSource={attachInfo} />
         </Modal>
         <Modal
             title="招标评审申请"
@@ -287,7 +318,12 @@ export default function Information(): React.ReactNode {
                 onChange={uploadChange}
                 showUploadList={false}
             ><Button key="enclosure" type="default">上传附件</Button></Upload>]} />
-            <CommonTable columns={enclosure} dataSource={attachInfo} />
+            <CommonTable columns={[{
+                title: "操作",
+                dataIndex: "opration",
+                render: (_: any, records: any) => <Button type="link" onClick={() => deleteAttachData(records.uid || records.id)}>删除</Button>
+            },
+            ...enclosure]} dataSource={attachInfo} />
         </Modal>
         <SelectAuditType visible={visible} title="新建审批" okText="创建" onOk={handleOk} onCancel={() => setVisible(false)} />
         <ApprovalTypesView

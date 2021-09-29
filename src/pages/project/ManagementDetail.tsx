@@ -40,6 +40,7 @@ export default function ManagementDetail(): React.ReactNode {
         productAssistDetailVos: [],
         productAssistStatisticsVos: []
     })
+    const [salesPlanStatus, setSalesPlanStatus] = useState<string>("")
     const { loading, error, data, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
         if (params.tab === "contract") {
             resole({})
@@ -330,14 +331,17 @@ export default function ManagementDetail(): React.ReactNode {
         </DetailContent>,
         tab_salesPlan: <DetailContent>
             <Row>
-                <Radio.Group defaultValue="" onChange={(event) => run({ taskReviewStatus: event.target.value })} >
+                <Radio.Group defaultValue="" onChange={(event) => {
+                    setSalesPlanStatus(event.target.value)
+                    run({ taskReviewStatus: event.target.value })
+                }} >
                     <Radio.Button value="">全部</Radio.Button>
                     <Radio.Button value="0" >审批中</Radio.Button>
                     <Radio.Button value="2" >已驳回</Radio.Button>
                     <Radio.Button value="1" >已通过</Radio.Button>
                 </Radio.Group>
             </Row>
-            <Row><Button type="primary" onClick={() => history.push(`/project/management/detail/new/salesPlan/${params.id}`)}>新增</Button></Row>
+            {salesPlanStatus === "" && <Row><Button type="primary" onClick={() => history.push(`/project/management/detail/new/salesPlan/${params.id}`)}>新增</Button></Row>}
             <CommonTable columns={[...taskNotice, {
                 title: "操作",
                 dataIndex: "opration",

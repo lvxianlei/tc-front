@@ -219,6 +219,12 @@
                     "title": "要求交货日期",
                     "dataIndex": "deliveryTime"
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择项目工程..."
+                }
             ]
         },
         {
@@ -238,11 +244,13 @@
         },
         {
             "title": "请款人",
-            "dataIndex": "requestFundsUser"
-        },
-        {
-            "title": "申请时间",
-            "dataIndex": ""
+            "dataIndex": "requestFundsUser",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入请款人..."
+                }
+            ]
         },
         {
             "title": "支付类型",
@@ -257,15 +265,33 @@
                     "value": 2,
                     "label": "购买标书"
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入请款人..."
+                }
             ]
         },
         {
             "title": "收款单位",
-            "dataIndex": "payee"
+            "dataIndex": "payee",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入请款人..."
+                }
+            ]
         },
         {
             "title": "付款日期",
-            "dataIndex": "paymentTime"
+            "dataIndex": "paymentTime",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入请款人..."
+                }
+            ]
         },
         {
             "title": "发票开具单位",
@@ -273,19 +299,43 @@
         },
         {
             "title": "账号",
-            "dataIndex": ""
+            "dataIndex": "",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入请款人..."
+                }
+            ]
         },
         {
             "title": "开户银行",
-            "dataIndex": "bank"
+            "dataIndex": "bank",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入请款人..."
+                }
+            ]
         },
         {
             "title": "支付类别",
-            "dataIndex": "paymentCategory"
+            "dataIndex": "paymentCategory",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入请款人..."
+                }
+            ]
         },
         {
             "title": "申请金额",
-            "dataIndex": "applyAmount"
+            "dataIndex": "applyAmount",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入请款人..."
+                }
+            ]
         },
         {
             "title": "申请金额(大写)",
@@ -383,6 +433,12 @@
                     "title": "要求交货日期",
                     "dataIndex": "deliveryTime"
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择相关合同..."
+                }
             ]
         },
         {
@@ -401,6 +457,8 @@
             "type": "popTable",
             "path": "/sinzetech-user/user",
             "readOnly": true,
+            "dependencies": true,
+            "value": "name",
             "columns": [
                 {
                     "title": "登录账号",
@@ -418,6 +476,12 @@
                 {
                     "title": "所属机构",
                     "dataIndex": "departmentName"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择签收人..."
                 }
             ]
         },
@@ -445,12 +509,24 @@
                     "title": "所属机构",
                     "dataIndex": "departmentName"
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择接收人..."
+                }
             ]
         },
         {
             "title": "接收日期",
             "dataIndex": "receivedTime",
-            "type": "date"
+            "type": "date",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择接收日期..."
+                }
+            ]
         },
         {
             "title": "备注",
@@ -529,6 +605,12 @@
                     "title": "要求交货日期",
                     "dataIndex": "deliveryTime"
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择相关合同..."
+                }
             ]
         },
         {
@@ -549,15 +631,33 @@
         {
             "title": "业务经理联系电话",
             "dataIndex": "serviceManagerTel",
-            "disabled": true
+            "disabled": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择业务经理联系电话..."
+                }
+            ]
         },
         {
             "title": "设计院联系人",
-            "dataIndex": "designInstituteUser"
+            "dataIndex": "designInstituteUser",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入设计院联系人..."
+                }
+            ]
         },
         {
             "title": "设计院联系人电话",
-            "dataIndex": "designInstituteUserTel"
+            "dataIndex": "designInstituteUserTel",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入设计院联系人电话..."
+                }
+            ]
         },
         {
             "title": "备注",
@@ -568,11 +668,11 @@
     "enclosure": [
         {
             "title": "文件名",
-            "dataIndex": "originalName"
+            "dataIndex": "name"
         },
         {
             "title": "大小",
-            "dataIndex": "size"
+            "dataIndex": "fileSize"
         },
         {
             "title": "上传人",
