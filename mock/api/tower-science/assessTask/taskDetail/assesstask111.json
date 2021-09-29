@@ -1,0 +1,48 @@
+{
+    "code": 200, 
+    "msg": "ad re", 
+    "success": true, 
+    "data": {
+        "bidEndTime": "1998-10-08T17:36:08.136Z", 
+        "applicantTime": "2000-01-01T15:03:20.296Z", 
+        "applicantUser": 33434933, 
+        "programLeaderId": -7126839, 
+        "customer": "est", 
+        "programName": "Duis proident cillum sint ut", 
+        "id": 43191263, 
+        "description": -56061927, 
+        "status": "1", 
+        "taskDataRecordList": [
+            {
+                "id": "mollit do", 
+                "opreateUser": "laboris proident Excepteur", 
+                "opreateUserDept": "mo", 
+                "createTime": "proiden", 
+                "status": "0", 
+                "description": "Duis est"
+            },
+            {
+                "id": "mollit do", 
+                "opreateUser": "laboris proident Excepteur fsdftrtg", 
+                "opreateUserDept": "momu", 
+                "createTime": "proiden wercc", 
+                "status": "1", 
+                "description": "Duieers est"
+            }
+        ], 
+        "fileList": [
+            {
+                "id": "consequat id labore aliquip", 
+                "filePath": "id anim in", 
+                "fileSuffix": "Lorem", 
+                "fileName": "esse nisi elit Excepteur"
+            }, 
+            {
+                "id": "sint enim", 
+                "filePath": "sunt ipsum do pariatur", 
+                "fileSuffix": "sint", 
+                "fileName": "ullamco nulla Lorem nisi aliqui"
+            }
+        ]
+    }
+}

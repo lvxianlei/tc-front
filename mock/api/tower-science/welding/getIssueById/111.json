@@ -1,0 +1,88 @@
+{
+    "code": 200, 
+    "msg": "", 
+    "success": true, 
+    "data": {
+        "attachInfoDtoList": [
+            {
+                "description": "enim anim incididunt", 
+                "filePath": "culpa exercitation Excepteur minim non", 
+                "fileSize": 7178059.684739634, 
+                "fileSuffix": "proident esse", 
+                "fileUploadTime": "1951-01-17T00:34:00.506Z", 
+                "id": 20045678, 
+                "name": "nisi occaecat cupidatat ad", 
+                "userName": "Lorem et fugiat irure"
+            }, 
+            {
+                "description": "ad incididunt id exercitati", 
+                "filePath": "nisi consequat", 
+                "fileSize": 41199542.40501934, 
+                "fileSuffix": "cupidata", 
+                "fileUploadTime": "2018-02-12T17:51:25.5Z", 
+                "id": 83916843, 
+                "name": "minim in", 
+                "userName": "ullamco ad labore"
+            }, 
+            {
+                "description": "nostrud aliquip et", 
+                "filePath": "aliquip pariatur id", 
+                "fileSize": 68216030.16688046, 
+                "fileSuffix": "eiusmod sunt do voluptate", 
+                "fileUploadTime": "1996-10-12T12:09:53.63Z", 
+                "id": -18222513, 
+                "name": "aute reprehende", 
+                "userName": "voluptate ut et aliqua Excepteur"
+            }
+        ], 
+        "galvanizeDemand": "laborum laboris sint", 
+        "id": 44971949, 
+        "loftingTaskId": 7581304, 
+        "materialDemand": "irure Ut", 
+        "materialStandard": "exercitation paria", 
+        "operationInformationVOList": [
+            {
+                "createDepartment": "nulla Ut mollit reprehenderit cupidatat", 
+                "createTime": "2005-05-15T20:41:40.506Z", 
+                "createUser": "sit pariatur magna in laborum", 
+                "description": "laborum", 
+                "status": 17520068
+            }, 
+            {
+                "createDepartment": "ullamco", 
+                "createTime": "1960-02-16T05:20:01.648Z", 
+                "createUser": "culpa cupidatat proident fugiat occaecat", 
+                "description": "laboris do magna", 
+                "status": -23390052
+            }, 
+            {
+                "createDepartment": "e", 
+                "createTime": "1955-09-02T14:48:27.103Z", 
+                "createUser": "qui sit amet aliqua", 
+                "description": "dolore ullamco", 
+                "status": -81605253
+            }, 
+            {
+                "createDepartment": "Lor", 
+                "createTime": "1974-05-19T15:02:31.583Z", 
+                "createUser": "do mollit", 
+                "description": "velit dolor", 
+                "status": -8369208
+            }, 
+            {
+                "createDepartment": "consectetur Ut adipisicing ad exercitation", 
+                "createTime": "1945-01-13T08:33:45.263Z", 
+                "createUser": "voluptate sint", 
+                "description": "incididunt Lorem ut labore", 
+                "status": -31555065
+            }
+        ], 
+        "packDemand": "consequat sint", 
+        "peculiarDescription": "anim", 
+        "productModelNum": 76231791, 
+        "productNum": -41220370, 
+        "productType": "nostrud culpa", 
+        "totalWeight": -67658410.51269689, 
+        "weldingDemand": "Duis proident in"
+    }
+}
