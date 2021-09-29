@@ -323,7 +323,7 @@ export default function ScheduleView(): React.ReactNode {
                         </Col>
                         <Col span={12}>
                             <Form.Item name="materialPartDeliverTime" label="计划交付时间" rules={[{required: true,message:'请选择计划交付时间'}]} >
-                                <DatePicker  style={{width:'100%'}}/>
+                                <DatePicker  style={{width:'100%'}} disabled/>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -366,7 +366,7 @@ export default function ScheduleView(): React.ReactNode {
                         </Col>
                         <Col span={12}>
                             <Form.Item name="combinedWeldingDeliverTime" label="计划交付时间" rules={[{required: true,message:'请选择计划交付时间'}]} >
-                                <DatePicker  style={{width:'100%'}}/>
+                                <DatePicker  style={{width:'100%'}} disabled/>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -387,7 +387,7 @@ export default function ScheduleView(): React.ReactNode {
                         </Col>
                         <Col span={12}>
                             <Form.Item name="loftingPartDeliverTime" label="计划交付时间" rules={[{required: true,message:'请选择计划交付时间'}]} >
-                                <DatePicker  style={{width:'100%'}}/>
+                                <DatePicker  style={{width:'100%'}} disabled/>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -408,7 +408,7 @@ export default function ScheduleView(): React.ReactNode {
                         </Col>
                         <Col span={12}>
                             <Form.Item name="smallSampleDeliverTime" label="计划交付时间" rules={[{required: true,message:'请选择计划交付时间'}]}>
-                                <DatePicker  style={{width:'100%'}}/>
+                                <DatePicker  style={{width:'100%'}} disabled/>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -430,7 +430,7 @@ export default function ScheduleView(): React.ReactNode {
                         </Col>
                         <Col span={12}>
                             <Form.Item name="boltDeliverTime" label="计划交付时间" rules={[{required: true,message:'请选择计划交付时间'}]} >
-                                <DatePicker  style={{width:'100%'}}/>
+                                <DatePicker  style={{width:'100%'}} disabled/>
                             </Form.Item>
                         </Col>
                     </Row>
