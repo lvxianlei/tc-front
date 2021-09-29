@@ -5,7 +5,14 @@ import RequestUtil from '../../utils/RequestUtil';
 import styles from './AssessmentTask.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
-import useRequest from '@ahooksjs/use-request';
+import { IFileList } from './AssessmentTaskDetail';
+
+interface IResponse {
+    readonly id?: string;
+    readonly description?: string;
+    readonly status?: string;
+    readonly assessFileList?: IFileList[];
+}
 
 export interface AssessmentInformationProps {}
 export interface IAssessmentInformationRouteProps extends RouteComponentProps<AssessmentInformationProps>, WithTranslation {
@@ -15,6 +22,7 @@ export interface IAssessmentInformationRouteProps extends RouteComponentProps<As
 export interface AssessmentInformationState {
     readonly visible: boolean;
     readonly description?: string;
+    readonly assessFileList?: IFileList[];
 }
 class AssessmentInformation extends React.Component<IAssessmentInformationRouteProps, AssessmentInformationState> {
     constructor(props: IAssessmentInformationRouteProps) {
@@ -32,9 +40,11 @@ class AssessmentInformation extends React.Component<IAssessmentInformationRouteP
     }
 
     private async modalShow(): Promise<void> {
-        const data = await RequestUtil.get(`/tower-market/bidInfo/${ this.props.id }`);
+        const data: IResponse = await RequestUtil.get<IResponse>(`/tower-science/assessTask/infoDetail/${ this.props.id }`);
         this.setState({
-            visible: true
+            visible: true,
+            assessFileList: data.assessFileList,
+            description: data.description
         })
     }
 
@@ -58,10 +68,10 @@ class AssessmentInformation extends React.Component<IAssessmentInformationRouteP
                     <p className={ styles.topPadding }>评估文件</p>
                     <CommonTable columns={[
                         { 
-                            key: 'name', 
+                            key: 'fileName', 
                             title: '附件', 
-                            dataIndex: 'name',
-                            width: 150 
+                            dataIndex: 'fileName',
+                            width: 350 
                         },
                         { 
                             key: 'operation', 
@@ -69,12 +79,13 @@ class AssessmentInformation extends React.Component<IAssessmentInformationRouteP
                             dataIndex: 'operation', 
                             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                                 <Space direction="horizontal" size="small">
-                                    <Button type="link">下载</Button>
-                                    <Button type="link">预览</Button>
+                                    <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
+                                    <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button>
                                 </Space>
                         ) }
                     ]}
-                        dataSource={ [] }
+                        dataSource={ this.state.assessFileList }
+                        pagination={ false }
                     />
                 </DetailContent>
             </Modal>

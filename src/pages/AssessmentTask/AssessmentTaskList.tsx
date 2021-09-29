@@ -1,11 +1,12 @@
 import React from 'react';
-import { Space, Input, DatePicker, Select, Button, Popconfirm } from 'antd';
+import { Space, Input, DatePicker, Select, Button, Popconfirm, Form, Row, Col } from 'antd';
 import { Link } from 'react-router-dom';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import AssessmentInformation from './AssessmentInformation';
 import styles from './AssessmentTask.module.less';
 import Assign from './Assign';
+import RequestUtil from '../../utils/RequestUtil';
 
 const columns = [
     {
@@ -16,51 +17,51 @@ const columns = [
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
     },
     {
-        key: 'projectName',
+        key: 'taskCode',
         title: '评估任务编号',
         width: 150,
-        dataIndex: 'projectName'
+        dataIndex: 'taskCode'
     },
     {
-        key: 'projectNumber',
+        key: 'status',
         title: '任务状态',
-        dataIndex: 'projectNumber',
+        dataIndex: 'status',
         width: 120
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'updateStatusTime',
         title: '最新状态变更时间',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'updateStatusTime'
     },
     {
-        key: 'biddingEndTime',
+        key: 'assessUserName',
         title: '评估人',
         width: 150,
-        dataIndex: 'biddingEndTime'
+        dataIndex: 'assessUserName'
     },
     {
-        key: 'biddingPerson',
+        key: 'programName',
         title: '项目名称',
-        dataIndex: 'biddingPerson',
+        dataIndex: 'programName',
         width: 200
     },
     {
-        key: 'biddingAgency',
+        key: 'customer',
         title: '客户名称',
-        dataIndex: 'biddingAgency',
+        dataIndex: 'customer',
         width: 200
     },
     {
-        key: 'biddingAddress',
+        key: 'programLeaderName',
         title: '项目负责人',
-        dataIndex: 'biddingAddress',
+        dataIndex: 'programLeaderName',
         width: 150
     },
     {
-        key: 'releaseDate',
+        key: 'bidEndTime',
         title: '投标截止时间',
-        dataIndex: 'releaseDate',
+        dataIndex: 'bidEndTime',
         width: 200
     },
     {
@@ -76,7 +77,9 @@ const columns = [
                 <AssessmentInformation id={ record.id } />
                 <Popconfirm
                     title="确认提交?"
-                    onConfirm={ () => {} }
+                    onConfirm={ () => {
+                        RequestUtil.put(`/tower-science/assessTask/submit`, { id: record.id });
+                    } }
                     okText="提交"
                     cancelText="取消"
                 >
@@ -89,47 +92,97 @@ const columns = [
 
 export default function AssessmentTaskList(): React.ReactNode {
     return <Page
-        path="/tower-market/bidInfo"
+        path="/tower-science/assessTask"
         columns={ columns }
         headTabs={ [] }
         extraOperation={ <Button type="primary" ghost>导出</Button> }
         searchFormItems={ [
             {
-                name: 'startReleaseDate',
+                name: 'fuzzyMsg',
                 label: '模糊查询项',
                 children: <Input placeholder="任务编号/项目名称/客户名称"/>
             },
             {
-                name: 'fuzzyQuery',
+                name: 'updateStatusTime',
                 label: '最新状态变更时间',
-                children: <DatePicker />
+                children: <DatePicker.RangePicker />
             },
             {
-                name: 'startBidBuyEndTime',
+                name: 'status',
                 label: '任务状态',
                 children: <Select style={{ width: '120px' }}>
-                    <Select.Option value="0" key="0">aaaaaaaaaa</Select.Option>
-                    <Select.Option value="1" key="1">bbbbbbbbbb</Select.Option>
-                    <Select.Option value="2" key="2">bbbggggggggggggggggbbbbbbb</Select.Option>
-                    <Select.Option value="3" key="3">bbbbbbbbbb</Select.Option>
-                    <Select.Option value="4" key="4">bbbbbbbbbb</Select.Option>
+                    <Select.Option value="0" key="0">已拒绝</Select.Option>
+                    <Select.Option value="1" key="1">待确认</Select.Option>
+                    <Select.Option value="2" key="2">待指派</Select.Option>
+                    <Select.Option value="3" key="3">待完成</Select.Option>
+                    <Select.Option value="4" key="4">已完成</Select.Option>
+                    <Select.Option value="5" key="5">已提交</Select.Option>
                 </Select>
             },
             {
-                name: 'startReleaseDate',
+                name: 'programLeaderId',
                 label: '项目负责人',
-                children: <Input />
+                children: <>
+                    <Col>
+                        <Form.Item name="programLeaderIdDept">
+                            <Select style={{ width: '120px' }}>
+                                <Select.Option value="0" key="0">已拒绝</Select.Option>
+                                <Select.Option value="1" key="1">待确认</Select.Option>
+                                <Select.Option value="2" key="2">待指派</Select.Option>
+                                <Select.Option value="3" key="3">待完成</Select.Option>
+                                <Select.Option value="4" key="4">已完成</Select.Option>
+                                <Select.Option value="5" key="5">已提交</Select.Option>
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                    <Col>
+                        <Form.Item name="programLeaderId">
+                            <Input />
+                        </Form.Item>
+                    </Col>
+                </>
             },
             {
                 name: 'startReleaseDate',
                 label: '评估人',
-                children: <Input />
+                children: <Row>
+                    <Col>
+                        <Form.Item name="assessUserDept">
+                            <Select style={{ width: '120px' }}>
+                                <Select.Option value="0" key="0">已拒绝</Select.Option>
+                                <Select.Option value="1" key="1">待确认</Select.Option>
+                                <Select.Option value="2" key="2">待指派</Select.Option>
+                                <Select.Option value="3" key="3">待完成</Select.Option>
+                                <Select.Option value="4" key="4">已完成</Select.Option>
+                                <Select.Option value="5" key="5">已提交</Select.Option>
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                    <Col>
+                        <Form.Item name="assessUser">
+                            <Input />
+                        </Form.Item>
+                    </Col>
+                </Row>
             },
             {
-                name: 'fuzzyQuery',
+                name: 'bidEndTime',
                 label: '投标截止时间',
                 children: <DatePicker />
             }
         ] }
+        onFilterSubmit = { (values: Record<string, any>) => {
+            if(values.updateStatusTime) {
+                const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
+                values.updateStatusTimeStart = formatDate[0];
+                values.updateStatusTimeEnd = formatDate[1];
+            }
+            if(values.bidEndTimeStart) {
+                const formatDate = values.bidEndTimeStart.map((item: any) => item.format("YYYY-MM-DD"));
+                values.bidEndTimeStartStart = formatDate[0];
+                values.bidEndTimeStartEnd = formatDate[1];
+            }
+            return values;
+        } }
     />
 }
