@@ -118,14 +118,16 @@ const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: any) =>
 
 export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
     const [visible, setVisible] = useState<boolean>(false)
+    const [popContent, setPopContent] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: {} })
     const [value, setValue] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: {} })
 
-    const handleChange = (event: any) => setValue({ id: event[0].id, value: event[0][data.value || "name" || "id"], records: event })
+    const handleChange = (event: any) => setPopContent({ id: event[0].id, value: event[0][data.value || "name" || "id"], records: event })
 
     const handleOk = () => {
-        const depFalseValue = value.id || value.value
-        const changeValue = data.dependencies ? value : depFalseValue;
+        const depFalseValue = popContent.id || popContent.value
+        const changeValue = data.dependencies ? popContent : depFalseValue;
         (props as any).onChange(changeValue)
+        setValue(popContent)
         setVisible(false)
     }
 
@@ -134,10 +136,15 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
         const changeValue = { ...value, value: inputValue };
         (props as any).onChange({ ...changeValue })
         setValue({ ...value, ...changeValue })
+        setPopContent({ ...value, ...changeValue })
+    }
+
+    const handleCancel = () => {
+        setVisible(false)
     }
 
     return <>
-        <Modal width={data.width || 520} title={`选择${data.title}`} destroyOnClose visible={visible} onOk={handleOk} onCancel={() => setVisible(false)}>
+        <Modal width={data.width || 520} title={`选择${data.title}`} destroyOnClose visible={visible} onOk={handleOk} onCancel={handleCancel}>
             <PopTableContent data={data} onChange={handleChange} />
         </Modal>
         <Input
@@ -154,7 +161,7 @@ interface SelfSelectProps {
     data: SelectData
 }
 const SelfSelect: React.FC<SelfSelectProps> = ({ data, ...props }) => {
-    return <Select {...props} style={{ width: "100%" }}>
+    return <Select {...props} disabled={data.disabled} style={{ width: "100%" }}>
         {data.enum?.map((item: SelectOption, index: number) => (<Select.Option key={`select_option_${index}_${item.value}`} value={item.value} >{item.label}</Select.Option>))}
     </Select>
 }

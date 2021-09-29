@@ -870,7 +870,13 @@
             "title": "客户交货日期",
             "dataIndex": "deliveryTime",
             "type": "date",
-            "format": "YYYY-MM-DD"
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请填写客户交货日期..."
+                }
+            ]
         },
         {
             "title": "计划交货日期",

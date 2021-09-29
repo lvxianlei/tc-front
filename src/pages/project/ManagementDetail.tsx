@@ -90,6 +90,24 @@ export default function ManagementDetail(): React.ReactNode {
         }
     }), { manual: true })
 
+    const { loading: noticeAdoptLoading, run: noticeAdoptRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-market/taskNotice/adopt?taskNoticeId=${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const { loading: noticeRejectLoading, run: noticeRejectRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-market/taskNotice/reject?taskNoticeId=${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     const deleteProductGroupItem = (id: string) => {
         Modal.confirm({
             title: "删除",
@@ -135,6 +153,7 @@ export default function ManagementDetail(): React.ReactNode {
         const result = await noticeRun(saleOrderId)
         if (result) {
             message.success("成功提交审核...")
+            history.go(0)
         }
     }
 
@@ -193,7 +212,6 @@ export default function ManagementDetail(): React.ReactNode {
                 onClick={() => history.push(`/project/management/detail/edit/bidResult/${params.id}`)}>编辑</Button>,
             <Button key="goback" onClick={() => history.goBack}>返回</Button>
         ]}>
-
             <DetailTitle title="基本信息" />
             <BaseInfo columns={[
                 {
@@ -327,6 +345,18 @@ export default function ManagementDetail(): React.ReactNode {
                 render: (_: any, record: any) => {
                     return <>
                         <Button type="link" onClick={() => history.push(`/project/management/detail/cat/salesPlan/${params.id}/${record.id}`)}>查看</Button>
+                        {record.taskReviewStatus === 0 && <>
+                            <Button type="link" onClick={async () => {
+                                const result = await noticeAdoptRun(record.id)
+                                result && message.success("审批通过成功...")
+                                history.go(0)
+                            }}>审批通过</Button>
+                            <Button type="link" onClick={async () => {
+                                const result = await noticeRejectRun(record.id)
+                                result && message.success("审批已驳回...")
+                                history.go(0)
+                            }}>驳回</Button>
+                        </>}
                         {[2, -1].includes(record.taskReviewStatus) && <>
                             <Link to={`/project/management/detail/edit/salesPlan/${params.id}/${record.id}`}>编辑</Link>
                             <Button type="link" onClick={() => deleteSaleOrderItem(record.id)}>删除</Button>

@@ -45,6 +45,11 @@ export default function Information(): React.ReactNode {
         }
     }), { manual: true })
 
+    const { data: auditType } = useRequest<any>(() => new Promise(async (resolve, reject) => {
+        const result = await RequestUtil.get("/tower-market/audit/getAuditType")
+        resolve(result)
+    }))
+
     const handleNewAudit = () => setVisible(true)
     const handleOk = (value: string) => {
         switch (value) {
@@ -176,11 +181,11 @@ export default function Information(): React.ReactNode {
     const handleBidingChange = (changedFields: any, allFields: any) => {
         if (Object.keys(changedFields)[0] === "projectName") {
             const {
-              
+
             } = changedFields.projectName.records[0]
 
             // bidingForm.setFieldsValue({
-              
+
             // })
         }
     }
@@ -325,7 +330,9 @@ export default function Information(): React.ReactNode {
                 {
                     name: 'processTypeId',
                     label: '审批类型',
-                    children: <Input placeholder="" maxLength={200} />
+                    children: <Select style={{ width: 160 }}>
+                        {auditType?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}
+                    </Select>
                 },
                 {
                     name: 'minStartTime',
