@@ -1,35 +1,106 @@
-import React from 'react'
-import { Button, Spin, Space } from 'antd';
+import React, { useState } from 'react'
+import { Button, Spin, Space, Modal, Form } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common';
 import { baseInfoData } from './confirmTaskData.json';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
+import TextArea from 'antd/lib/input/TextArea';
 
 const tableColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '操作部门', dataIndex: 'partBidNumber', key: 'partBidNumber', },
-    { title: '操作人', dataIndex: 'goodsType', key: 'goodsType' },
-    { title: '操作时间', dataIndex: 'packageNumber', key: 'packgeNumber' },
-    { title: '任务状态', dataIndex: 'amount', key: 'amount' },
-    { title: '备注', dataIndex: 'unit', key: 'unit' }
+    { title: '操作部门', dataIndex: 'createDepartment', key: 'createDepartment', },
+    { title: '操作人', dataIndex: 'createUserName', key: 'createUserName' },
+    { title: '操作时间', dataIndex: 'createTime', key: 'createTime' },
+    { title: '任务状态', dataIndex: 'status', key: 'status', render: (value: number, record: object): React.ReactNode => {
+        const renderEnum: any = [
+            {
+                value: 0,
+                label: "已拒绝"
+            },
+            {
+                value: 1,
+                label: "待确认"
+            },
+            {
+                value: 2,
+                label: "待指派"
+            },
+            {
+                value: 3,
+                label: "待完成"
+            },
+            {
+                value: 4,
+                label: "已完成"
+            },
+            {
+                value: 5,
+                label: "已提交"
+            }
+        ]
+             return <>{renderEnum.find((item: any) => item.value === value).label}</>
+    }},
+    { title: '备注', dataIndex: 'description', key: 'description' }
 ]
 
-export default function ConfirmDetail(): React.ReactNode {
+export default function ConfirmTaskDetail(): React.ReactNode {
     const history = useHistory()
+    const [visible, setVisible] = useState<boolean>(false);
+    const [form] = Form.useForm();
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-science/drawTask/getDrawTaskById/${params.id}`)
         resole(data)
     }), {})
-    const detailData: any = data
+    const detailData: any = data;
+    const handleModalOk = async () => {
+        try {
+            const refuseData = await form.validateFields();
+            refuseData.drawTaskId = params.id;
+            await RequestUtil.post('/tower-science/drawTask/refuseDrawTask', refuseData).then(()=>{
+                setVisible(false)
+            })
+        
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const handleModalCancel = () => setVisible(false);
     return <>
         <Spin spinning={loading}>
             <DetailContent operation={[
-                <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => history.push(`/project/management/detail/edit/base/${params.id}`)}>接收</Button>,
-                <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => history.push(`/project/management/detail/edit/base/${params.id}`)}>拒绝</Button>,
+                <Button 
+                    style={{ marginRight: '10px' }}
+                    type="primary" 
+                    onClick={async () => {
+                            await RequestUtil.post('/tower-science/drawTask/receiveDrawTask',{drawTaskId:params.id})
+                    }}
+                >接收</Button>,
+                <Button 
+                    key="edit" 
+                    style={{ marginRight: '10px' }} 
+                    type="primary" 
+                    onClick={() => {
+                        setVisible(true)
+                    }}
+                >拒绝</Button>,
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
+            <Modal 
+                title='拒绝'
+                visible={visible} 
+                onCancel={handleModalCancel}
+                onOk={handleModalOk}
+                okText='提交'
+                cancelText='关闭'
+            >
+                <Form form={form} >
+                    <Form.Item name="reason" label="拒绝原因" rules={[{required:true, message:'请填写拒绝原因'}]}>
+                        <TextArea showCount maxLength={500}/>
+                    </Form.Item>
+                </Form>
+                </Modal>
                 <DetailTitle title="基本信息" />
                 <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
                 <DetailTitle title="相关附件"/>
@@ -45,14 +116,14 @@ export default function ConfirmDetail(): React.ReactNode {
                         dataIndex: 'operation',
                         render: (_: undefined, record: any): React.ReactNode => (
                             <Space direction="horizontal" size="small">
-                                <Button type='link'>下载</Button>
-                                <Button type='link'>预览</Button>
+                                <Button type='link' onClick={()=>{window.open(record.filePath)}}>下载</Button>
+                                <Button type='link' onClick={()=>{window.open(record.filePath)}}>预览</Button>
                             </Space>
                         )
                     }
-                ]} dataSource={detailData?.attachVos} />
+                ]} dataSource={detailData?.attachInfoVOList} />
                 <DetailTitle title="操作信息" />
-                <CommonTable columns={tableColumns} dataSource={detailData?.cargoVOList} />
+                <CommonTable columns={tableColumns} dataSource={detailData?.operationInformationVOList} />
             </DetailContent>
         </Spin>
     </>
