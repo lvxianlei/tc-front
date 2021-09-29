@@ -1,5 +1,5 @@
 import React from 'react';
-import { Space, Input, DatePicker, Select, Button } from 'antd';
+import { Space, Input, DatePicker, Select, Button, Row, Col, Form } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './Evaluation.module.less';
@@ -14,40 +14,56 @@ const columns = [
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
     },
     {
-        key: 'projectName',
+        key: 'taskCode',
         title: '评估任务编号',
         width: 150,
-        dataIndex: 'projectName'
+        dataIndex: 'taskCode'
     },
     {
-        key: 'projectNumber',
+        key: 'programName',
         title: '项目名称',
-        dataIndex: 'projectNumber',
+        dataIndex: 'programName',
         width: 120
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'expectDeliverTime',
         title: '计划交付时间',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'expectDeliverTime'
     },
     {
-        key: 'biddingEndTime',
+        key: 'assessUser',
         title: '评估人',
         width: 150,
-        dataIndex: 'biddingEndTime'
+        dataIndex: 'assessUser'
     },
     {
-        key: 'biddingPerson',
+        key: 'status',
         title: '状态',
-        dataIndex: 'biddingPerson',
-        width: 200
+        dataIndex: 'status',
+        width: 200,
+        render: (status: string): React.ReactNode => {
+            switch (status) {
+                case '0':
+                    return '已拒绝';
+                case "1":
+                    return '待接收';
+                case '2':
+                    return '待指派';
+                case '3':
+                    return '待完成';
+                case '4':
+                    return '已完成';
+                case '5':
+                    return '已提交';
+            }
+        }
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'updateStatusTime',
         title: '最新状态变更时间',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'updateStatusTime'
     },
     {
         key: 'operation',
@@ -65,7 +81,7 @@ const columns = [
 
 export default function EvaluationList(): React.ReactNode {
     return <Page
-        path="/tower-market/bidInfo"
+        path="/tower-science/assessList"
         columns={ columns }
         headTabs={ [] }
         extraOperation={ <Button type="primary" ghost>导出</Button> }
@@ -76,22 +92,36 @@ export default function EvaluationList(): React.ReactNode {
                 children: <Input placeholder="任务编号/项目名称"/>
             },
             {
-                name: 'startBidBuyEndTime',
+                name: 'status',
                 label: '任务状态',
                 children: <Select style={{ width: '120px' }}>
-                    <Select.Option value="0" key="0">待完成</Select.Option>
-                    <Select.Option value="1" key="1">已完成</Select.Option>
+                    <Select.Option value="3" key="3">待完成</Select.Option>
+                    <Select.Option value="4" key="4">已完成</Select.Option>
                 </Select>
             },
             {
-                name: 'fuzzyQuery',
+                name: 'expectDeliverTime',
                 label: '计划交付时间',
                 children: <DatePicker />
             },
             {
                 name: 'startReleaseDate',
                 label: '评估人',
-                children: <Input />
+                children: <Row>
+                    <Col>
+                        <Form.Item name="assessUserDept">
+                            <Select style={{ width: '120px' }}>
+                                <Select.Option value="0" key="0">已拒绝</Select.Option>
+                                <Select.Option value="1" key="1">待确认</Select.Option>
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                    <Col>
+                        <Form.Item name="assessUser">
+                            <Input />
+                        </Form.Item>
+                    </Col>
+                </Row>
             }
         ] }
     />

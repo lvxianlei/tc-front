@@ -24,21 +24,22 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
         visible: false
     }
 
-    public componentDidMount() {
-        this.getInformation();
-    }
-
-    private async getInformation(): Promise<void> {
-        const data = await RequestUtil.get(`/tower-market/bidInfo/${ this.props.id }`);
+    private async modalShow(): Promise<void> {
         this.setState({
-            
+            visible: true
         })
     }
 
     public onSubmit = async (): Promise<void> => {
         if (this.getForm()) {
             this.getForm()?.validateFields().then((res) => {
-                console.log(this.getForm()?.getFieldsValue(true))
+                const values = this.getForm()?.getFieldsValue(true);
+                RequestUtil.post(`/tower-science/assessTask/assign`, {
+                    ...values,
+                    expectDeliverTime: values.expectDeliverTime.format("YYYY-MM-DD")
+                }).then(res => {
+                    this.onCancel();
+                } );
             })
         }
     }
@@ -83,7 +84,7 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
             },
             itemProps: [{
                 label: '部门',
-                name: 'name',
+                name: 'assessUserDept',
                 rules: [{
                     required: true,
                     message: '请选择部门'
@@ -91,7 +92,7 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
                 children: <Input placeholder="请选择" maxLength={ 100 } />
             }, {
                 label: '人员',
-                name: 'type',
+                name: 'assessUser',
                 rules: [{
                     required: true,
                     message: '请选择人员'
@@ -108,7 +109,7 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
                 )
             }, {
                 label: '计划交付时间',
-                name: 'description',
+                name: 'expectDeliverTime',
                 rules: [{
                     required: true,
                     message: '请选择计划交付时间'
@@ -124,7 +125,7 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
      */
     public render(): React.ReactNode {
         return <>
-            <Button type="link" onClick={ () => this.setState({ visible: true }) }>指派</Button>
+            <Button type="link" onClick={ () => this.modalShow() }>指派</Button>
             <Modal 
                 visible={ this.state.visible } 
                 width="40%" 
