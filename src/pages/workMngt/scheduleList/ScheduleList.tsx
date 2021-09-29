@@ -13,60 +13,89 @@ export default function ScheduleList(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'projectName',
+            key: 'taskCode',
             title: '放样任务编号',
             width: 100,
-            dataIndex: 'projectName'
+            dataIndex: 'taskCode'
         },
         {
-            key: 'projectName',
+            key: 'taskNumber',
             title: '任务单编号',
             width: 100,
-            dataIndex: 'projectName'
+            dataIndex: 'taskNumber'
         },
         {
-            key: 'projectName',
+            key: 'saleOrderNumber',
             title: '订单编号',
             width: 100,
-            dataIndex: 'projectName'
+            dataIndex: 'saleOrderNumber'
         },
         {
-            key: 'projectName',
+            key: 'internalNumber',
             title: '内部合同编号',
             width: 100,
-            dataIndex: 'projectName'
+            dataIndex: 'internalNumber'
         },
         {
-            key: 'bidBuyEndTime',
+            key: 'plannedDeliveryTime',
             title: '计划交付时间',
             width: 200,
-            dataIndex: 'bidBuyEndTime'
+            dataIndex: 'plannedDeliveryTime'
         },
         {
-            key: 'biddingEndTime',
+            key: 'weight',
             title: '重量（吨）',
             width: 200,
-            dataIndex: 'biddingEndTime'
+            dataIndex: 'weight'
         },
         {
-            key: 'biddingAgency',
+            key: 'productCategoryNum',
             title: '塔型（个）',
-            dataIndex: 'biddingAgency'
+            dataIndex: 'productCategoryNum'
         },
         {
-            key: 'biddingAddress',
+            key: 'productNum',
             title: '杆塔（基）',
-            dataIndex: 'biddingAddress'
+            dataIndex: 'productNum'
         },
         {
-            key: 'biddingAgency',
+            key: 'status',
             title: '状态',
-            dataIndex: 'biddingAgency'
+            dataIndex: 'status',
+            render: (value: number, record: object): React.ReactNode => {
+                const renderEnum: any = [
+                  {
+                    value: 1,
+                    label: "待确认"
+                  },
+                  {
+                    value: 2,
+                    label: "待指派"
+                  },
+                  {
+                    value: 3,
+                    label: "已拒绝"
+                  },
+                  {
+                    value: 4,
+                    label: "待完成"
+                  },
+                  {
+                    value: 5,
+                    label: "已完成"
+                  },
+                  {
+                    value: 6,
+                    label: "已提交"
+                  },
+                ]
+                return <>{renderEnum.find((item: any) => item.value === value).label}</>
+            }
         },
         {
-            key: 'biddingAddress',
+            key: 'updateStatusTime',
             title: '最新状态变更时间',
-            dataIndex: 'biddingAddress'
+            dataIndex: 'updateStatusTime'
         },
         {
             key: 'operation',
@@ -80,11 +109,19 @@ export default function ScheduleList(): React.ReactNode {
         }
     ]
 
+    const onFilterSubmit = (value: any) => {
+        console.log(value)
+        return value
+    }
+
+   
+
     return (
         <Page
             path="/tower-science/loftingTask"
             columns={columns}
             extraOperation={<Button type="primary">导出</Button>}
+            onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
                     name: 'updateStatusTimeStart',
@@ -99,7 +136,14 @@ export default function ScheduleList(): React.ReactNode {
                 {
                     name: 'status',
                     label:'任务状态',
-                    children: <Select style={{width:"100%"}}/>
+                    children: <Select style={{width:"100%"}}>
+                        <Select.Option value={1} key={1}>待确认</Select.Option>
+                        <Select.Option value={2} key={2}>待指派</Select.Option>
+                        <Select.Option value={3} key={3}>已拒绝</Select.Option>
+                        <Select.Option value={4} key={4}>待完成</Select.Option>
+                        <Select.Option value={5} key={5}>已完成</Select.Option>
+                        <Select.Option value={6} key={6}>已提交</Select.Option>
+                    </Select>
                 },
                 {
                     name: 'plannedDeliveryTimeStart',

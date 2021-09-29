@@ -1,0 +1,27 @@
+{
+	"code": 200,
+	"msg": "pariatur",
+	"success": true,
+	"data": {
+		"boltDeliverTime": "2005-05-18",
+		"boltLeader": -29607261,
+		"combinedWeldingDeliverTime": "1986-04-06",
+		"combinedWeldingLeader": 88176453,
+		"description": "ipsum irure",
+		"id": 15424720,
+		"loftingDeliverTime": "1997-08-02",
+		"loftingLeader": -67646473,
+		"loftingPartDeliverTime": "2005-01-05",
+		"loftingPartLeader": 88418735,
+		"loftingTask": -50448815,
+		"materialDeliverTime": "1966-12-10",
+		"materialLeader": 71228226,
+		"materialPartDeliverTime": "1958-05-16",
+		"materialPartLeader": -64754705,
+		"pattern": 2,
+		"name": "quis in veniam voluptate",
+		"priority": 1,
+		"smallSampleDeliverTime": "1945-12-26",
+		"smallSampleLeader": -58435617
+	}
+}

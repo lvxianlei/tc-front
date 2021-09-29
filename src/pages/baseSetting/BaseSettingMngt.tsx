@@ -151,7 +151,7 @@ export default function TowerDetail(): React.ReactNode {
                                 ( fields , { add, remove }) => fields.map(
                                     field => (
                                     <>
-                                        <Col span={ 1 }></Col>
+                                        <Col span={ 3 }></Col>
                                         <Col span={ 3 }>
                                         <Form.Item name={[ field.name , 'name']}>
                                             <span><span style={{color:'red'}}>* </span> {detailData[field.name].name}</span>
