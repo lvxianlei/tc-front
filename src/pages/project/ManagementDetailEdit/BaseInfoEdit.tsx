@@ -94,42 +94,44 @@ export default function BaseInfoEdit(): JSX.Element {
         setAttachVosData(attachVosData.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
     }
 
-    return <DetailContent operation={[
-        <Button
-            key="save"
-            type="primary"
-            onClick={handleSubmit}
-            loading={saveStatus}
-            style={{ marginRight: 16 }}
-        >保存</Button>,
-        <Button key="cacel" onClick={() => history.goBack()}>取消</Button>
-    ]}>
+    return <>
         <ManagementDetailTabsTitle />
-        <Spin spinning={loading}>
-            <DetailTitle title="基本信息" />
-            <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={baseInfoData} dataSource={data || {}} edit />
-            <DetailTitle title="货物清单" />
-            <EditTable form={cargoVOListForm} columns={cargoVOListColumns} dataSource={data?.cargoVOList} />
-            <DetailTitle title="附件信息" operation={[<Upload
-                key="sub"
-                name="file"
-                multiple={true}
-                action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
-                headers={{
-                    'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                    'Tenant-Id': AuthUtil.getTenantId(),
-                    'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                }}
-                showUploadList={false}
-                onChange={uploadChange}
-            ><Button key="enclosure" type="default">上传附件</Button></Upload>]} />
-            <CommonTable columns={[{
-                title: "操作", dataIndex: "opration",
-                render: (_: any, record: any) => (<>
-                    <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
-                    {/* <Button type="link">下载</Button> */}
-                </>)
-            }, ...enclosure]} dataSource={attachVosData} />
-        </Spin>
-    </DetailContent>
+        <DetailContent operation={[
+            <Button
+                key="save"
+                type="primary"
+                onClick={handleSubmit}
+                loading={saveStatus}
+                style={{ marginRight: 16 }}
+            >保存</Button>,
+            <Button key="cacel" onClick={() => history.goBack()}>取消</Button>
+        ]}>
+            <Spin spinning={loading}>
+                <DetailTitle title="基本信息" />
+                <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={baseInfoData} dataSource={data || {}} edit />
+                <DetailTitle title="货物清单" />
+                <EditTable form={cargoVOListForm} columns={cargoVOListColumns} dataSource={data?.cargoVOList} />
+                <DetailTitle title="附件信息" operation={[<Upload
+                    key="sub"
+                    name="file"
+                    multiple={true}
+                    action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
+                    headers={{
+                        'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                        'Tenant-Id': AuthUtil.getTenantId(),
+                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                    }}
+                    showUploadList={false}
+                    onChange={uploadChange}
+                ><Button key="enclosure" type="default">上传附件</Button></Upload>]} />
+                <CommonTable columns={[{
+                    title: "操作", dataIndex: "opration",
+                    render: (_: any, record: any) => (<>
+                        <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
+                        {/* <Button type="link">下载</Button> */}
+                    </>)
+                }, ...enclosure]} dataSource={attachVosData} />
+            </Spin>
+        </DetailContent>
+    </>
 }

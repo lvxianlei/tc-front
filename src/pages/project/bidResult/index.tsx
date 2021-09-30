@@ -117,11 +117,11 @@ interface TabsCanEditProps {
   canEdit?: boolean // 是否可编辑，可编辑时没有X
   newItemTitle?: (newkey: string, paneslen: number) => string
   hasRefFun?: boolean // 是否获取到content内部的ref方法，会在 getData 方法返回 refFun 字段
-  onChange?: (panes: undefined | TabsCanEditData[]) => void
+  onRemove?: (removeKey: string, removeItem: TabsCanEditData | undefined) => void
 }
 
 export const TabsCanEdit = forwardRef((props: TabsCanEditProps, ref?: any) => {
-  const { data, eachContent, canEdit, newItemTitle, hasRefFun, onChange } = props
+  const { data, eachContent, canEdit, newItemTitle, hasRefFun, onRemove } = props
   const [panes, setpanes] = useState<undefined | TabsCanEditData[]>()
   const contentRefs = useRef<Record<string, any>>({})
   useEffect(() => {
@@ -170,7 +170,6 @@ export const TabsCanEdit = forwardRef((props: TabsCanEditProps, ref?: any) => {
   const tabEdit = (targetKey: any, action: "add" | "remove") => {
     if (action === "add") {
       tabAdd()
-      onChange && onChange(panes)
     } else if (action === "remove") {
       if (!panes) {
         return
@@ -179,7 +178,7 @@ export const TabsCanEdit = forwardRef((props: TabsCanEditProps, ref?: any) => {
       setpanes(newPanes)
       setactiveKey("1")
       delete contentRefs.current?.[parseFloat(targetKey)]
-      onChange && onChange(newPanes)
+      onRemove && onRemove(targetKey, panes.find((pane: any) => pane.key.toString() === targetKey)?.item)
       return
     }
   }

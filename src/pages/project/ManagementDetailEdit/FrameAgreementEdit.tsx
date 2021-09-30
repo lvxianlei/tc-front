@@ -53,29 +53,31 @@ export default function FrameAgreementEdit(): JSX.Element {
         }
     }
 
-    return <DetailContent operation={[
-        <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={handleSubmit} loading={saveStatus}>保存</Button>,
-        <Button key="goback" onClick={() => history.goBack()}>返回</Button>
-    ]}>
+    return <>
         <ManagementDetailTabsTitle />
-        <Spin spinning={loading}>
-            <DetailTitle title="基本信息" />
-            <BaseInfo form={baseInfoForm}
-                columns={frameAgreementColumns.map((item) => item.dataIndex === "bidType" ? ({
-                    ...item,
-                    type: "select",
-                    enum: bidType.map((bid: any) => ({ value: bid.id, label: bid.name }))
-                }) : item)}
-                dataSource={data || {}} edit />
-            <DetailTitle title="合同物资清单" />
-            <EditTable form={cargoDtoForm} columns={materialListColumns} dataSource={data?.contractCargoVos} />
-            <DetailTitle title="系统信息" />
-            <BaseInfo columns={[
-                { title: "最后编辑人", dataIndex: 'updateUserLast' },
-                { title: "最后编辑时间", dataIndex: 'updateTimeLast', type: "date" },
-                { title: "创建人", dataIndex: 'createUserName' },
-                { title: "创建时间", dataIndex: 'createTime', type: "date" }
-            ]} dataSource={data || {}} />
-        </Spin>
-    </DetailContent>
+        <DetailContent operation={[
+            <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={handleSubmit} loading={saveStatus}>保存</Button>,
+            <Button key="goback" onClick={() => history.goBack()}>返回</Button>
+        ]}>
+            <Spin spinning={loading}>
+                <DetailTitle title="基本信息" />
+                <BaseInfo form={baseInfoForm}
+                    columns={frameAgreementColumns.map((item) => item.dataIndex === "bidType" ? ({
+                        ...item,
+                        type: "select",
+                        enum: bidType.map((bid: any) => ({ value: bid.id, label: bid.name }))
+                    }) : item)}
+                    dataSource={data || {}} edit />
+                <DetailTitle title="合同物资清单" />
+                <EditTable form={cargoDtoForm} columns={materialListColumns} dataSource={data?.contractCargoVos} />
+                <DetailTitle title="系统信息" />
+                <BaseInfo columns={[
+                    { title: "最后编辑人", dataIndex: 'updateUserLast' },
+                    { title: "最后编辑时间", dataIndex: 'updateTimeLast', type: "date" },
+                    { title: "创建人", dataIndex: 'createUserName' },
+                    { title: "创建时间", dataIndex: 'createTime', type: "date" }
+                ]} dataSource={data || {}} />
+            </Spin>
+        </DetailContent>
+    </>
 }

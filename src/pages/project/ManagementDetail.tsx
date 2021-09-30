@@ -162,7 +162,7 @@ export default function ManagementDetail(): React.ReactNode {
         tab_base: <DetailContent operation={[
             <Button key="edit" style={{ marginRight: '16px' }}
                 type="primary" onClick={() => history.push(`/project/management/detail/edit/base/${params.id}`)}>编辑</Button>,
-            <Button key="goback" onClick={() => history.goBack()}>返回</Button>
+            <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
         ]}>
             <DetailTitle title="基本信息" />
             <BaseInfo columns={baseInfoData.map((item: any) => ["projectLeader", "biddingPerson"].includes(item.dataIndex) ? ({ title: item.title, dataIndex: item.dataIndex }) : item)} dataSource={data || {}} />
@@ -190,7 +190,7 @@ export default function ManagementDetail(): React.ReactNode {
             operation={[
                 <Button key="edit" type="primary" style={{ marginRight: 16 }}
                     onClick={() => history.push(`/project/management/detail/edit/bidDoc/${params.id}`)} >编辑</Button>,
-                <Button key="goback" onClick={() => history.goBack()}>返回</Button>
+                <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
             ]}>
             <DetailTitle title="标书制作记录表" />
             <BaseInfo columns={bidDocColumns.map(item => item.dataIndex === "bidType" ? ({
@@ -211,7 +211,7 @@ export default function ManagementDetail(): React.ReactNode {
         tab_bidResult: <DetailContent operation={[
             <Button key="goEdit" type="primary" style={{ marginRight: 16 }}
                 onClick={() => history.push(`/project/management/detail/edit/bidResult/${params.id}`)}>编辑</Button>,
-            <Button key="goback" onClick={() => history.goBack}>返回</Button>
+            <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
         ]}>
             <DetailTitle title="基本信息" />
             <BaseInfo columns={[
@@ -264,7 +264,7 @@ export default function ManagementDetail(): React.ReactNode {
         </DetailContent>,
         tab_frameAgreement: <DetailContent operation={[
             <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={() => history.push(`/project/management/detail/edit/frameAgreement/${params.id}`)}>编辑</Button>,
-            <Button key="goback" onClick={() => history.goBack()}>返回</Button>
+            <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
         ]}>
             <DetailTitle title="基本信息" />
             <BaseInfo columns={frameAgreementColumns.map((item: any) => item.dataIndex === "bidType" ? ({

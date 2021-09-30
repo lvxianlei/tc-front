@@ -13,16 +13,22 @@ export default function BidResultEdit(): JSX.Element {
     const params = useParams<{ id: string, tab: string }>()
     const [bidOpenRecordVos, setBidOpenRecordVos] = useState<any[]>([{ round: 1, roundName: "第 1 轮", fixed: true, bidOpenRecordVos: [] }])
     const [baseInfoForm] = Form.useForm()
+
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
-        const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidBase/${params.id}`)
-        baseInfoForm.setFieldsValue(result)
-        if (result.bidOpenRecordListVos?.length > 0) {
-            const resultBid = result.bidOpenRecordListVos.reverse()
-            resultBid[resultBid.length - 1].fixed = true
-            setBidOpenRecordVos(resultBid)
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidBase/${params.id}`)
+            baseInfoForm.setFieldsValue(result)
+            if (result.bidOpenRecordListVos?.length > 0) {
+                const resultBid = result.bidOpenRecordListVos.reverse()
+                resultBid[resultBid.length - 1].fixed = true
+                setBidOpenRecordVos(resultBid)
+            }
+            resole(result)
+        } catch (error) {
+            reject(error)
         }
-        resole(result)
-    }))
+    }), { refreshDeps: [params.id] })
+
     const { loading: saveStatus, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/bidBase`, postData)
@@ -61,6 +67,7 @@ export default function BidResultEdit(): JSX.Element {
                 projectId: params.id,
                 id: data?.id
             })
+
             if (result) {
                 message.success("保存成功...")
                 history.goBack()
@@ -77,107 +84,117 @@ export default function BidResultEdit(): JSX.Element {
         })
     }
 
-    const handleTabsCanEditChange = (data: any) => {
-        console.log(data)
-        const newData = data.map((item: any) => {
-            console.log(item)
-            const { ref } = item
-        })
+    const handleTabsCanEditChange = (removeKey: string, removeItem: any) => {
+        setBidOpenRecordVos(bidOpenRecordVos.filter((bid: any) => bid.round !== parseFloat(removeKey)))
     }
 
-    return (<DetailContent operation={[
-        <Button
-            key="save"
-            type="primary"
-            onClick={handleSubmit}
-            loading={saveStatus}
-            style={{ marginRight: 16 }}
-        >保存</Button>,
-        <Button key="goback" onClick={handelCancel}>取消</Button>,
-    ]}>
+    const generateFormatEditData = (column: any, data: any) => {
+        let value: any = ""
+        switch (column.type) {
+            case "select":
+                value = column.enum.find((enumItem: any) => enumItem.label === data).value
+                break
+        }
+        return value
+    }
+
+    return (<>
         <ManagementDetailTabsTitle />
-        <Spin spinning={loading}>
-            <DetailTitle title="基本信息" />
-            <BaseInfo form={baseInfoForm} edit columns={[
-                {
-                    title: '年份',
-                    dataIndex: 'date',
-                    type: "date",
-                    format: "YYYY",
-                    picker: "year"
-                },
-                {
-                    title: '批次',
-                    dataIndex: 'batch',
-                    type: "number"
-                }, {
-                    title: '备注',
-                    dataIndex: 'description'
-                },
-                {
-                    title: '是否中标',
-                    dataIndex: "isBid",
-                    type: "select",
-                    enum: [
-                        {
-                            value: -1,
-                            label: "未公布"
-                        },
-                        {
-                            value: 0,
-                            label: "是"
-                        },
-                        {
-                            value: 1,
-                            label: "否"
-                        }
-                    ]
-                }]} dataSource={data || {}} />
-            <DetailTitle title="开标信息" operation={[<Button key="new"
+        <DetailContent operation={[
+            <Button
+                key="save"
                 type="primary"
-                onClick={() => setBidOpenRecordVos([
+                onClick={handleSubmit}
+                loading={saveStatus}
+                style={{ marginRight: 16 }}
+            >保存</Button>,
+            <Button key="goback" onClick={handelCancel}>取消</Button>,
+        ]}>
+            <Spin spinning={loading}>
+                <DetailTitle title="基本信息" />
+                <BaseInfo form={baseInfoForm} edit columns={[
                     {
-                        round: bidOpenRecordVos.length + 1,
-                        roundName: `第 ${bidOpenRecordVos.length + 1} 轮`,
-                        bidOpenRecordVos: []
+                        title: '年份',
+                        dataIndex: 'date',
+                        type: "date",
+                        format: "YYYY",
+                        picker: "year"
                     },
-                    ...bidOpenRecordVos
-                ])}>新增一轮报价</Button>]} />
-            <TabsCanEdit
-                ref={ref}
-                canEdit={true}
-                hasRefFun={true}
-                data={bidOpenRecordVos.map((item: any) => ({
-                    title: item.roundName,
-                    key: item.round,
-                    content: <EditTable columns={bidInfoColumns} dataSource={item.bidOpenRecordVos || []} />
-                }))}
-                onChange={handleTabsCanEditChange}
-                eachContent={(item: any, tempRef?: { ref: Record<string, any>; key: string; }) => {
-                    const data: any[] = bidOpenRecordVos.find((bidItem: any) => bidItem.round === item.key).bidOpenRecordVos
-                    return (
-                        <EditTableHasForm
-                            columns={bidInfoColumns}
-                            dataSource={data}
-                            opration={[<UploadXLS key="xlxs" readEnd={async (_data) => {
-                                const resultData = bidOpenRecordVos.find((bidItem: any) => bidItem.round === item.key).bidOpenRecordVos
-                                const uploadData = _data.map((item: any, index) => {
-                                    const rowData: any = { uid: resultData.length + index }
-                                    Object.keys(item).forEach((columnItem: string) => {
-                                        const columnDataIndex = (bidInfoColumns).find(bidItem => bidItem.title === columnItem)
-                                        columnDataIndex && (rowData[columnDataIndex.dataIndex] = item[columnItem])
+                    {
+                        title: '批次',
+                        dataIndex: 'batch',
+                        type: "number"
+                    }, {
+                        title: '备注',
+                        dataIndex: 'description'
+                    },
+                    {
+                        title: '是否中标',
+                        dataIndex: "isBid",
+                        type: "select",
+                        enum: [
+                            {
+                                value: -1,
+                                label: "未公布"
+                            },
+                            {
+                                value: 0,
+                                label: "是"
+                            },
+                            {
+                                value: 1,
+                                label: "否"
+                            }
+                        ]
+                    }]} dataSource={data || {}} />
+                <DetailTitle title="开标信息" operation={[<Button key="new"
+                    type="primary"
+                    onClick={() => setBidOpenRecordVos([
+                        {
+                            round: bidOpenRecordVos.length + 1,
+                            roundName: `第 ${bidOpenRecordVos.length + 1} 轮`,
+                            bidOpenRecordVos: []
+                        },
+                        ...bidOpenRecordVos
+                    ])}>新增一轮报价</Button>]} />
+                <TabsCanEdit
+                    ref={ref}
+                    canEdit={true}
+                    hasRefFun={true}
+                    data={bidOpenRecordVos.map((item: any) => ({
+                        title: item.roundName,
+                        key: item.round,
+                        content: <EditTable columns={bidInfoColumns} dataSource={item.bidOpenRecordVos || []} />
+                    }))}
+                    onRemove={handleTabsCanEditChange}
+                    eachContent={(item: any, tempRef?: { ref: Record<string, any>; key: string; }) => {
+                        const data: any[] = bidOpenRecordVos.find((bidItem: any) => bidItem.round === item.key).bidOpenRecordVos
+                        return (
+                            <EditTableHasForm
+                                columns={bidInfoColumns}
+                                dataSource={data}
+                                opration={[<UploadXLS key="xlxs" readEnd={async (_data) => {
+                                    const resultData = bidOpenRecordVos.find((bidItem: any) => bidItem.round === item.key).bidOpenRecordVos
+                                    const uploadData = _data.map((item: any, index) => {
+                                        const rowData: any = { uid: resultData.length + index }
+                                        Object.keys(item).forEach((columnItem: string) => {
+                                            const columnDataIndex = (bidInfoColumns).find(bidItem => bidItem.title === columnItem)
+                                            if (columnDataIndex) {
+                                                rowData[columnDataIndex.dataIndex] = generateFormatEditData(columnDataIndex, item[columnItem])
+                                            }
+                                        })
+                                        return rowData
                                     })
-                                    return rowData
-                                })
-                                const editForm = tempRef?.ref[item.key].getForm()
-                                const values = await editForm.getFieldsValue().submit
-                                editForm.setFieldsValue({ submit: values.concat(uploadData) })
-                            }} />]}
-                            ref={tempRef ? (o) => (tempRef.ref[tempRef.key] = o) : undefined}
-                        />
-                    );
-                }}
-            />
-        </Spin>
-    </DetailContent>)
+                                    const editForm = tempRef?.ref[item.key].getForm()
+                                    const values = await editForm.getFieldsValue().submit
+                                    editForm.setFieldsValue({ submit: values.concat(uploadData) })
+                                }} />]}
+                                ref={tempRef ? (o) => (tempRef.ref[tempRef.key] = o) : undefined}
+                            />
+                        );
+                    }}
+                />
+            </Spin>
+        </DetailContent>
+    </>)
 }

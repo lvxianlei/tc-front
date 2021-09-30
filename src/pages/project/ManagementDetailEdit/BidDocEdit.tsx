@@ -48,28 +48,31 @@ export default function BaseInfoEdit(): JSX.Element {
         }
     }
 
-    return <DetailContent
-        operation={[
-            <Button key="edit" type="primary" onClick={handleSubmit} loading={saveStatus} style={{ marginRight: 16 }}>保存</Button>,
-            <Button key="goback" onClick={() => history.goBack()}>返回</Button>
-        ]}>
+    return <>
         <ManagementDetailTabsTitle />
-        <Spin spinning={loading}>
-            <DetailTitle title="标书制作记录表" />
-            <BaseInfo form={baseInfoForm} columns={bidDocColumns.map(item => item.dataIndex === "bidType" ? ({
-                ...item,
-                type: "select",
-                enum: bidType.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-            }) : ({ ...item }))} dataSource={data || {}} col={4} edit />
-            <DetailTitle title="填写记录" />
-            <CommonTable columns={[
-                { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-                { title: '部门', dataIndex: 'branch' },
-                { title: '填写人', dataIndex: 'createUserName' },
-                { title: '职位', dataIndex: 'position' },
-                { title: '填写时间', dataIndex: 'createTime' },
-                { title: '说明', dataIndex: 'description' }
-            ]} dataSource={data?.bidBizRecordVos} />
-        </Spin>
-    </DetailContent>
+        <DetailContent
+            operation={[
+                <Button key="edit" type="primary" onClick={handleSubmit} loading={saveStatus} style={{ marginRight: 16 }}>保存</Button>,
+                <Button key="goback" onClick={() => history.goBack()}>返回</Button>
+            ]}>
+
+            <Spin spinning={loading}>
+                <DetailTitle title="标书制作记录表" />
+                <BaseInfo form={baseInfoForm} columns={bidDocColumns.map(item => item.dataIndex === "bidType" ? ({
+                    ...item,
+                    type: "select",
+                    enum: bidType.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+                }) : ({ ...item }))} dataSource={data || {}} col={4} edit />
+                <DetailTitle title="填写记录" />
+                <CommonTable columns={[
+                    { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+                    { title: '部门', dataIndex: 'branch' },
+                    { title: '填写人', dataIndex: 'createUserName' },
+                    { title: '职位', dataIndex: 'position' },
+                    { title: '填写时间', dataIndex: 'createTime' },
+                    { title: '说明', dataIndex: 'description' }
+                ]} dataSource={data?.bidBizRecordVos} />
+            </Spin>
+        </DetailContent>
+    </>
 }
