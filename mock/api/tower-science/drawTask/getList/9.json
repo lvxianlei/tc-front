@@ -3,7 +3,7 @@
 	"msg": "",
 	"success": true,
 	"data": {
-		"attachInfoVOList": [{
+		"attachInfoList": [{
 			"description": "pariatur nostrud ut dolor",
 			"filePath": "est tempor dolore",
 			"fileSize": -9672769.264815703,
@@ -50,7 +50,7 @@
 			"userName": "cupidatat"
 		}],
 		"description": "dolore qui nu",
-		"drawProductDetailVOList": [{
+		"drawProductDetailList": [{
 			"basicHight": -14578241.266300872,
 			"description": "in nulla enim sint",
 			"drawTaskId": 7767709,

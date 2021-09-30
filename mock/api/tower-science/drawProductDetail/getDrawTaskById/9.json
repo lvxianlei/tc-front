@@ -7,7 +7,7 @@
 		"aeName": "eu",
 		"aePhone": "mollit anim",
 		"assignorId": -12866690,
-		"attachInfoDtoList": [{
+		"attachInfoList": [{
 			"description": "ut eiusmod",
 			"filePath": "non mollit laboris sint incididunt",
 			"fileSize": -56825384.324740246,
@@ -64,7 +64,7 @@
 		"designPhone": "eu aute commodo fugiat",
 		"drawTaskId": "eiusmod dolore n",
 		"id": -30474766,
-		"operationInformationVOList": [{
+		"statusRecordList": [{
 			"createDepartment": "Excepteur proident in ea",
 			"createTime": "1988-07-27T20:57:18.02Z",
 			"createUser": "incididunt",

@@ -7,7 +7,7 @@
 		"aeName": "nisi nostrud",
 		"aePhone": "ut aliquip aute anim veniam",
 		"assignorId": -62202413,
-		"attachInfoVOList": [{
+		"attachInfoList": [{
 			"description": "incididunt laborum cupidatat",
 			"filePath": "dolor Ut",
 			"fileSize": -46196582.569880866,
@@ -46,7 +46,7 @@
 		"designPhone": "nisi qui adipisicing",
 		"drawTaskId": "sunt nisi exe",
 		"id": -49398493,
-		"operationInformationVOList": [{
+		"statusRecordList": [{
 			"createDepartment": "occaecat",
 			"createTime": "2015-07-21T05:26:04.449Z",
 			"createUser": "ullamco ea irure in nulla",
