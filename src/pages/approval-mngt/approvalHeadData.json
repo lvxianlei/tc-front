@@ -58,7 +58,6 @@
         {
             "title": "单位",
             "dataIndex": "unit",
-            "type": "number",
             "rules": [
                 {
                     "required": true,

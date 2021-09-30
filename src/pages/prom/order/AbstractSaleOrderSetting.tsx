@@ -154,7 +154,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 orderDeliveryTime: moment(selectedRows[0].deliveryTime),
                 contractId: selectedRows[0].id,
                 signCustomerId: selectedRows[0].signCustomerId,
-                contractNumber: selectedRows[0].contractNumber
+                contractNumber: selectedRows[0].contractNumber,
+                saleType: selectedRows[0].saleType
             };
             this.setState({
                 saleOrder: {
@@ -347,7 +348,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             label: "内部合同编号",
                             name: "internalNumber",
                             initialValue: saleOrder?.contractInfoDto?.internalNumber,
-                            children: <Input />,
+                            children: <Input disabled={true} />,
                         },
                         {
                             label: "订单工程名称",
@@ -359,25 +360,25 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             label: "业主单位",
                             name: "customerCompany",
                             initialValue: saleOrder?.contractInfoDto?.customerCompany,
-                            children: <Input />,
+                            children: <Input disabled={true} />,
                         },
                         {
                             label: "合同签订单位",
                             name: "signCustomerName",
                             initialValue: saleOrder?.contractInfoDto?.signCustomerName,
-                            children: <Input />,
+                            children: <Input disabled={true} />,
                         },
                         {
                             label: "合同签订日期",
                             name: "signContractTime",
                             initialValue: saleOrder?.contractInfoDto?.signContractTime,
-                            children: <Input />,
+                            children: <Input disabled={true} />,
                         },
                         {
                             label: "合同要求交货日期",
                             name: "deliveryTime",
                             initialValue: saleOrder?.contractInfoDto?.deliveryTime,
-                            children: <Input />,
+                            children: <Input disabled={true} />,
                         },
                         {
                             label: "币种",
@@ -388,7 +389,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                     currencyTypeOptions.length > 0 &&
                                     currencyTypeOptions[0].id),
                             children: (
-                                <Select>
+                                <Select disabled={true}>
                                     {currencyTypeOptions &&
                                         currencyTypeOptions.map(({ id, name }, index) => {
                                             return (
@@ -507,7 +508,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             name: "saleType",
                             initialValue: saleOrder?.saleType,
                             children: (
-                                <Select
+                                <Select disabled={true}
                                     getPopupContainer={(triggerNode) => triggerNode.parentNode}
                                 >
                                     {saleTypeOptions &&

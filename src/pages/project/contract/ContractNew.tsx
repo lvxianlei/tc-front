@@ -81,7 +81,7 @@ class ManagementContractNew extends ContractNew {
               initialValue: contract?.contractTotalWeight,
               rules: [
                 {
-                  required: false,
+                  required: true,
                   message: "请输入合同总重(吨)",
                 },
               ],
@@ -121,7 +121,7 @@ class ManagementContractNew extends ContractNew {
               initialValue: contract?.contractAmount,
               rules: [
                 {
-                  required: false,
+                  required: true,
                   message: "请输入合同总价(元)",
                 },
               ],
@@ -323,7 +323,7 @@ class ManagementContractNew extends ContractNew {
               initialValue: contract?.region,
               rules: [
                 {
-                  required: false,
+                  required: true,
                   message: "请选择所属区域",
                 },
                 {
@@ -364,7 +364,7 @@ class ManagementContractNew extends ContractNew {
               initialValue: contract?.salesman,
               rules: [
                 {
-                  required: false,
+                  required: true,
                   message: "请输入销售员",
                 },
               ],
@@ -376,9 +376,10 @@ class ManagementContractNew extends ContractNew {
               initialValue: contract?.description,
               children: (
                 <Input.TextArea
-                  rows={5}
+                  rows={2}
                   showCount={true}
                   maxLength={300}
+                  autoSize={false}
                   placeholder="请输入备注信息"
                   className={layoutStyles.width100}
                 />

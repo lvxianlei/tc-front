@@ -55,7 +55,7 @@ class ManagementContractDetail extends ContractDetail {
           `}>添加回款记录</Link>
       </Button>,
       <Button key="new">
-        <Link to={"/project/contract/new"}>新增</Link>
+        <Link to={`/project/contract/new/${(this.state.detail as any).projectId}`}>新增</Link>
       </Button>,
       <Button key="setting" disabled={this.state.detail.contractStatus === 1}>
         <Link to={`/project/contract/setting/${(this.props.match.params as any).projectId}/${this.props.match.params.id}`}>

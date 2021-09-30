@@ -19,7 +19,7 @@ export default function BidResultEdit(): JSX.Element {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidBase/${params.id}`)
             baseInfoForm.setFieldsValue(result)
             if (result.bidOpenRecordListVos?.length > 0) {
-                const resultBid = result.bidOpenRecordListVos.reverse()
+                const resultBid = result.bidOpenRecordListVos
                 resultBid[resultBid.length - 1].fixed = true
                 setBidOpenRecordVos(resultBid)
             }

@@ -23,8 +23,8 @@ interface ISaleOrderSummaryProps {
     readonly sysInfo?: ISaleOrderSysInfo;
 }
 
-interface ISaleOrderSummaryRouteProps extends RouteComponentProps<ISaleOrderSummaryParamsProps>, ISaleOrderSummaryProps {}
-interface ISaleOrderSummaryState extends ISaleOrderSummaryProps {}
+interface ISaleOrderSummaryRouteProps extends RouteComponentProps<ISaleOrderSummaryParamsProps>, ISaleOrderSummaryProps { }
+interface ISaleOrderSummaryState extends ISaleOrderSummaryProps { }
 
 export interface ISaleOrderBaseInfo {
     readonly contractInfoVo?: IContractInfoVo;
@@ -111,7 +111,7 @@ export class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProp
             rows: [[{
                 label: '订单编号',
                 value: baseInfo?.saleOrderNumber
-            },{
+            }, {
                 label: '采购订单号',
                 value: baseInfo?.purchaseOrderNumber
             }], [{
@@ -152,7 +152,7 @@ export class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProp
      * @description Gets base info grid
      * @returns base info grid 
      */
-     protected getAmountInfoGrid(): IRenderedGrid {
+    protected getAmountInfoGrid(): IRenderedGrid {
         const baseInfo: ISaleOrderBaseInfo | undefined = this.state.baseInfo;
         return {
             labelCol: {
@@ -164,7 +164,7 @@ export class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProp
             rows: [[{
                 label: '计价方式',
                 value: baseInfo?.contractInfoVo?.chargeType === ChargeType.ORDER_TOTAL_WEIGHT ? '订单总价、总重计算单价' : '产品单价、基数计算总价'
-            },{
+            }, {
                 label: '币种',
                 value: baseInfo?.contractInfoVo?.currencyTypeName
             }], [{
@@ -221,14 +221,18 @@ export class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProp
      * @returns order columns 
      */
     protected getOrderColumns(): TableColumnType<object>[] {
+        const productStatus: any = {
+            0: "未下发",
+            1: "已下发"
+        }
         return [{
             title: '序号',
             dataIndex: 'index'
         }, {
             title: '状态',
-            dataIndex: 'status',
+            dataIndex: 'productStatus',
             render: (status: number): React.ReactNode => {
-                return status === 0 ? '新建' : status === 1 ? '待下发' : status === 2 ? '审批中' : '已下发'
+                return productStatus[status]
             }
         }, {
             title: '线路名称',
@@ -273,7 +277,7 @@ export class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProp
      * @description Gets order columns
      * @returns order columns 
      */
-     private getOrderColumnsTakeOutNum(): TableColumnType<object>[] {
+    private getOrderColumnsTakeOutNum(): TableColumnType<object>[] {
         const list: TableColumnType<object>[] = this.getOrderColumns();
         list.splice(9, 1);
         return list;
@@ -295,7 +299,7 @@ export class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProp
             rows: [[{
                 label: '最后编辑人',
                 value: sysInfo?.updateUserName
-            },{
+            }, {
                 label: '最后编辑时间',
                 value: sysInfo?.updateTime
             }], [{
@@ -316,11 +320,11 @@ export class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProp
         return SummaryRenderUtil.renderGrid(this.getBaseInfoGrid());
     }
 
-     /**
-     * @description Renders amount info section
-     * @returns base info section 
-     */
-      private renderAmountInfoSection = (): React.ReactNode => {
+    /**
+    * @description Renders amount info section
+    * @returns base info section 
+    */
+    private renderAmountInfoSection = (): React.ReactNode => {
         return SummaryRenderUtil.renderGrid(this.getAmountInfoGrid());
     }
 
@@ -338,7 +342,7 @@ export class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProp
      */
     public render(): React.ReactNode {
         const baseInfo: ISaleOrderBaseInfo | undefined = this.state.baseInfo;
-        if(baseInfo?.contractInfoVo?.chargeType === ChargeType.UNIT_PRICE) {
+        if (baseInfo?.contractInfoVo?.chargeType === ChargeType.UNIT_PRICE) {
             this.getOrderColumnsTakeOutNum();
         }
         return SummaryRenderUtil.renderSections([{
@@ -349,14 +353,16 @@ export class SaleOrderSummary extends React.Component<ISaleOrderSummaryRouteProp
             render: this.renderAmountInfoSection
         }, {
             title: '产品信息',
-            render: (): React.ReactNode => <Table rowKey="index"  dataSource={ this.state.baseInfo?.orderProductVos?.map<IProductVo>(
+            render: (): React.ReactNode => <Table rowKey="index" dataSource={this.state.baseInfo?.orderProductVos?.map<IProductVo>(
                 (orderProductVos: IProductVo, index: number): IProductVo => (
                     {
                         ...orderProductVos,
                         index: index + 1
                     }
                 )
-            ) } pagination={ false } bordered={ true } columns={ baseInfo?.contractInfoVo?.chargeType === ChargeType.UNIT_PRICE ? this.getOrderColumnsTakeOutNum() : this.getOrderColumns() }/>
+            )} pagination={false} bordered={true} columns={
+                baseInfo?.contractInfoVo?.chargeType === ChargeType.UNIT_PRICE ? this.getOrderColumnsTakeOutNum() : this.getOrderColumns()
+            } />
         }, {
             title: '系统信息',
             render: this.renderSysInfoSection

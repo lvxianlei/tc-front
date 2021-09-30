@@ -27,6 +27,7 @@ import AuthUtil from '../../../utils/AuthUtil';
 import { currencyTypeOptions, productTypeOptions, saleTypeOptions, voltageGradeOptions, winBidTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IContract } from '../../IContract';
 import layoutStyles from '../../../layout/Layout.module.less';
+import { downLoadFile } from '../../../utils';
 export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
     readonly tablePagination: TablePaginationConfig;
     readonly contract: IContractInfo;
@@ -35,7 +36,7 @@ export interface IAbstractContractSettingState extends IAbstractFillableComponen
     readonly regionInfoData: [] | IRegion[];
     readonly childData: [] | undefined;
     readonly col: [];
-    readonly url: string;
+    readonly url: { link?: string | undefined, fileSuffix?: string | undefined };
     readonly isVisible: boolean;
 }
 
@@ -58,7 +59,7 @@ export interface ProjectContractInfo extends IContractInfo {
     readonly contractTotalWeight: number;
     readonly contractPrice: number;
     readonly isIta: 0 | 1 | 2;
-  }
+}
 
 export interface ICustomerInfoDto {
     readonly customerId?: string | number;
@@ -117,13 +118,13 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     public state: S = {
         contract: {},
         checkList: [],
-        url: '',
+        url: { link: "", fileSuffix: "" },
         isVisible: false
     } as S;
 
     public async componentDidMount() {
         super.componentDidMount();
-        this.getRegionInfo({}); 
+        this.getRegionInfo({});
 
     }
 
@@ -161,7 +162,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
      */
     public checkChange = (record: Record<string, any>): void => {
         let checked: any = this.state.checkList;
-        if(record.target.checked) {
+        if (record.target.checked) {
             checked.push(record.target.value);
         } else {
             checked = checked.filter((item: any) => item !== record.target.value);
@@ -171,17 +172,17 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         })
     }
 
-    public  getRegionInfo = async (record: Record<string, any>) => {
-        const resData: [] = await RequestUtil.get(`/tower-system/region/${ '00' }`);
+    public getRegionInfo = async (record: Record<string, any>) => {
+        const resData: [] = await RequestUtil.get(`/tower-system/region/${'00'}`);
         this.setState({
-            regionInfoData:  resData
+            regionInfoData: resData
         })
     }
 
-    public onRegionInfoChange =  async (record: Record<string, any>,selectedOptions?: CascaderOptionType[] | any) => {
-        if( selectedOptions.length > 0 && selectedOptions.length < 3 ) {
+    public onRegionInfoChange = async (record: Record<string, any>, selectedOptions?: CascaderOptionType[] | any) => {
+        if (selectedOptions.length > 0 && selectedOptions.length < 3) {
             let parentCode = record[selectedOptions.length - 1];
-            const resData: [] = await RequestUtil.get(`/tower-system/region/${ parentCode }`);
+            const resData: [] = await RequestUtil.get(`/tower-system/region/${parentCode}`);
             const targetOption = selectedOptions[selectedOptions.length - 1];
             targetOption.children = resData;
         }
@@ -192,9 +193,9 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
      * @description 弹窗
      * @returns 
      */
-    public onSelect = (selectedRows: DataType[]):void => {
+    public onSelect = (selectedRows: DataType[]): void => {
         const contract: IContractInfo | undefined = this.state.contract;
-        if(selectedRows && selectedRows.length > 0 ) {
+        if (selectedRows && selectedRows.length > 0) {
             this.setState({
                 contract: {
                     ...(contract || {}),
@@ -206,9 +207,9 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         }
     }
 
-    public onCustomerCompanySelect = (selectedRows: DataType[]):void => {
+    public onCustomerCompanySelect = (selectedRows: DataType[]): void => {
         const contract: IContractInfo | undefined = this.state.contract;
-        if(selectedRows && selectedRows.length > 0 ) {
+        if (selectedRows && selectedRows.length > 0) {
             const select = {
                 customerId: selectedRows[0].id,
                 customerCompany: selectedRows[0].name,
@@ -231,7 +232,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     /**
      * @description 验证合同编号是否重复
      */
-    public checkContractNumber = (value: StoreValue): Promise<void | any> =>{
+    public checkContractNumber = (value: StoreValue): Promise<void | any> => {
         return new Promise(async (resolve, reject) => {  // 返回一个promise
             const resData = await RequestUtil.get('/tower-market/contract/isContractNumberRepeated', {
                 contractId: this.state.contract?.id,
@@ -253,37 +254,37 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     public checkReturnedRate(index: number): void {
         const planValue: IPaymentPlanDto[] = this.getForm()?.getFieldsValue(true).paymentPlanDtos;
         const contractAmount: number = this.getForm()?.getFieldValue("contractAmount");
-        if(this.getForm()?.getFieldValue("contractAmount") && planValue[index] && planValue[index].returnedRate !== undefined ) {
+        if (this.getForm()?.getFieldValue("contractAmount") && planValue[index] && planValue[index].returnedRate !== undefined) {
             planValue[index] = {
                 ...planValue[index],
-                returnedAmount:  parseFloat((contractAmount * planValue[index].returnedRate * 0.01).toFixed(2))
+                returnedAmount: parseFloat((contractAmount * planValue[index].returnedRate * 0.01).toFixed(2))
             }
             this.getForm()?.setFieldsValue({
                 planValue: planValue
             })
             let totalRate: number = 0;
             planValue.map<number>((item: IPaymentPlanDto): number => {
-                return totalRate = Number(item.returnedRate) + Number(totalRate);  
+                return totalRate = Number(item.returnedRate) + Number(totalRate);
             })
             let totalAmount: number = 0;
             planValue.map<number>((item: IPaymentPlanDto): number => {
-                return  totalAmount = Number(item.returnedAmount) + Number(totalAmount);
+                return totalAmount = Number(item.returnedAmount) + Number(totalAmount);
             })
-            if(totalRate > 100) {
+            if (totalRate > 100) {
                 message.info('计划回款总占比不得大于100%！');
                 planValue[index] = {
                     ...planValue[index],
                     returnedRate: parseFloat((100 - (totalRate - planValue[index].returnedRate)).toFixed(2)),
-                    returnedAmount: parseFloat((contractAmount - (totalAmount - planValue[index].returnedAmount )).toFixed(2)) 
+                    returnedAmount: parseFloat((contractAmount - (totalAmount - planValue[index].returnedAmount)).toFixed(2))
                 }
                 this.getForm()?.setFieldsValue({
                     planValue: planValue
                 })
-            } else if(totalRate === 100) {
+            } else if (totalRate === 100) {
                 planValue[index] = {
                     ...planValue[index],
                     returnedRate: parseFloat((100 - (totalRate - planValue[index].returnedRate)).toFixed(2)),
-                    returnedAmount: parseFloat((contractAmount - (totalAmount - planValue[index].returnedAmount )).toFixed(2))
+                    returnedAmount: parseFloat((contractAmount - (totalAmount - planValue[index].returnedAmount)).toFixed(2))
                 }
                 this.getForm()?.setFieldsValue({
                     planValue: planValue
@@ -295,13 +296,13 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     /**
      * @description 验证回款总金额&计算回款占比
      */
-     public checkReturnedAmount(index: number): void {
+    public checkReturnedAmount(index: number): void {
         const planValue: IPaymentPlanDto[] = this.getForm()?.getFieldsValue(true).paymentPlanDtos;
         const contractAmount: number = this.getForm()?.getFieldValue("contractAmount");
-        if(this.getForm()?.getFieldValue("contractAmount") && planValue[index] && planValue[index].returnedAmount !== undefined ) {
+        if (this.getForm()?.getFieldValue("contractAmount") && planValue[index] && planValue[index].returnedAmount !== undefined) {
             planValue[index] = {
                 ...planValue[index],
-                returnedRate:  parseFloat((planValue[index].returnedAmount / contractAmount * 100).toFixed(2))
+                returnedRate: parseFloat((planValue[index].returnedAmount / contractAmount * 100).toFixed(2))
             }
             this.getForm()?.setFieldsValue({
                 planValue: planValue
@@ -314,21 +315,21 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             planValue.map<number>((item: IPaymentPlanDto): number => {
                 return totalAmount = Number(item.returnedAmount) + Number(totalAmount.toFixed(2));
             })
-            if(totalAmount > contractAmount) {
+            if (totalAmount > contractAmount) {
                 message.info('计划回款总金额不得大于合同总价！');
                 planValue[index] = {
                     ...planValue[index],
                     returnedRate: parseFloat((100 - (totalRate - planValue[index].returnedRate)).toFixed(2)),
-                    returnedAmount: parseFloat((contractAmount - (totalAmount - planValue[index].returnedAmount )).toFixed(2)) 
+                    returnedAmount: parseFloat((contractAmount - (totalAmount - planValue[index].returnedAmount)).toFixed(2))
                 }
                 this.getForm()?.setFieldsValue({
                     planValue: planValue
                 })
-            } else if(totalAmount === contractAmount) {
+            } else if (totalAmount === contractAmount) {
                 planValue[index] = {
                     ...planValue[index],
                     returnedRate: parseFloat((100 - (totalRate - planValue[index].returnedRate)).toFixed(2)),
-                    returnedAmount: parseFloat((contractAmount - (totalAmount - planValue[index].returnedAmount )).toFixed(2)) 
+                    returnedAmount: parseFloat((contractAmount - (totalAmount - planValue[index].returnedAmount)).toFixed(2))
                 }
                 this.getForm()?.setFieldsValue({
                     planValue: planValue
@@ -340,11 +341,11 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     /**
      * @description 输入总价时计算占比/金额
      */
-    public contractAmountBlur(): void  {
+    public contractAmountBlur(): void {
         let planValue: IPaymentPlanDto[] = this.getForm()?.getFieldsValue(true).paymentPlanDtos;
         const contractAmount: number = this.getForm()?.getFieldValue("contractAmount");
         planValue.map<void>((item: IPaymentPlanDto, index: number): void => {
-            if(this.getForm()?.getFieldValue("contractAmount") && planValue[index] && planValue[index].returnedRate) {
+            if (this.getForm()?.getFieldValue("contractAmount") && planValue[index] && planValue[index].returnedRate) {
                 planValue[index] = {
                     ...planValue[index],
                     returnedAmount: parseFloat((contractAmount * planValue[index].returnedRate * 0.01).toFixed(2))
@@ -357,24 +358,24 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 planValue.map<number>((item: IPaymentPlanDto): number => {
                     return totalAmount = Number(item.returnedAmount) + Number(totalAmount.toFixed(2));
                 })
-                if(totalAmount > contractAmount) {
+                if (totalAmount > contractAmount) {
                     planValue[index] = {
                         ...planValue[index],
-                        returnedAmount: parseFloat((contractAmount - (totalAmount - planValue[index].returnedAmount )).toFixed(2)) 
+                        returnedAmount: parseFloat((contractAmount - (totalAmount - planValue[index].returnedAmount)).toFixed(2))
                     }
                     this.getForm()?.setFieldsValue({
                         planValue: planValue
                     })
-                } else if(totalAmount === contractAmount) {
+                } else if (totalAmount === contractAmount) {
                     planValue[index] = {
                         ...planValue[index],
-                        returnedAmount: parseFloat((contractAmount - (totalAmount - planValue[index].returnedAmount )).toFixed(2)) 
+                        returnedAmount: parseFloat((contractAmount - (totalAmount - planValue[index].returnedAmount)).toFixed(2))
                     }
                     this.getForm()?.setFieldsValue({
                         planValue: planValue
                     })
                 }
-            } 
+            }
 
         })
         this.getForm()?.setFieldsValue({
@@ -388,287 +389,288 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
      * @returns form item groups 
      */
     public getFormItemGroups(): IFormItemGroup[][] {
-            const contract: IContractInfo | undefined = this.state.contract;
-            return [[{
-                title: '基础信息',
-                itemCol: {
-                    span: 8
-                },
-                itemProps: [{
-                    label: '合同编号',
-                    name: 'contractNumber',
-                    initialValue: contract?.contractNumber,
-                    rules: [{
-                        required: true,
-                        validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
-                            if(value && value != '') {
-                                this.checkContractNumber(value).then(res => {
-                                    if (res) {
-                                        callback()
-                                    } else {
-                                        callback('合同编号重复')
-                                    }
-                                })
-                            } else {
-                                callback('请输入合同编号')
-                            }
-                        }
-                    }],
-                    children: <Input value={ contract?.contractNumber } maxLength={ 50 }/>
-                }, {
-                    label: '内部合同编号',
-                    name: 'internalNumber',
-                    initialValue: contract?.internalNumber,
-                    children: <Input placeholder="内部合同编号自动生成" disabled/>
-                }, {
-                    label: '工程名称',
-                    name: 'projectName',
-                    initialValue: contract?.projectName,
-                    rules: [{
-                        required: true,
-                        message: '请输入工程名称'
-                    }],
-                    children: <Input maxLength={ 100 }/>
-                }, {
-                    label: '工程简称',
-                    name: 'simpleProjectName',
-                    initialValue: contract?.simpleProjectName,
-                    children: <Input maxLength={ 50 }/>
-                }, {
-                    label: '中标类型',
-                    name: 'winBidType', 
-                    initialValue: contract?.winBidType,
-                    children: (
-                        <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
-                            { winBidTypeOptions && winBidTypeOptions.map(({ id, name }, index) => {
-                                return <Select.Option key={ index } value={ id }>
-                                    { name }
-                                </Select.Option>
-                            }) }
-                        </Select>
-                    )
-                }, {
-                    label: '销售类型',
-                    name: 'saleType',
-                    initialValue: contract?.saleType,
-                    children: (
-                        <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
-                            { saleTypeOptions && saleTypeOptions.map(({ id, name }, index) => {
-                                return <Select.Option key={ index } value={ id }>
-                                    { name }
-                                </Select.Option>
-                            }) }
-                        </Select>
-                    )
-                }, {
-                    label: '业主单位',
-                    name: 'customerCompany',
-                    initialValue: contract?.customerInfoDto?.customerCompany,
-                    rules: [{
-                        required: true,
-                        message: '请选择业主单位'
-                    }],
-                    children: 
-                        <>
-                            <Input value={ contract?.customerInfoDto?.customerCompany } suffix={ 
-                                <ClientSelectionComponent onSelect={ this.onCustomerCompanySelect } selectKey={ [contract.customerInfoDto?.customerId] }/>
-                            }/>
-                        </>
-                }, {
-                    label: '业主联系人',
-                    name: 'customerLinkman',
-                    initialValue: contract?.customerInfoDto?.customerLinkman,
-                    children: <Input value={ contract?.customerInfoDto?.customerLinkman } maxLength={ 30 }/>
-                }, {
-                    label: '业主联系电话',
-                    name: 'customerPhone',
-                    initialValue: contract?.customerInfoDto?.customerPhone,
-                    children: <Input value={ contract?.customerInfoDto?.customerPhone } maxLength={ 30 }/>
-                }, {
-                    label: '合同签订单位',
-                    name: 'signCustomerName',
-                    initialValue: contract?.signCustomerName,
-                    rules: [{
-                        required: true,
-                        message: '请选择合同签订单位'
-                    }],
-                    children:
-                        <>
-                            <Input value={ contract?.signCustomerName } suffix={ 
-                                <ClientSelectionComponent onSelect={ this.onSelect } selectKey={ [contract.signCustomerId] }/>
-                            }/>
-                        </>
-                }, {
-                    label: '合同签订日期',
-                    name: 'signContractTime',
-                    initialValue: contract?.signContractTime ? moment(contract?.signContractTime) : '',
-                    rules: [{
-                        required: true,
-                        message: '请选择合同签订日期'
-                    }],
-                    children:  <DatePicker format="YYYY-MM-DD"/>
-                }, {
-                    label: '签订人',
-                    name: 'signUserName',
-                    initialValue: contract?.signUserName,
-                    rules: [{
-                        required: true,
-                        message: '请输入签订人'
-                    }],
-                    children:  <Input maxLength={ 20 }/>
-                }, {
-                    label: '要求交货日期',
-                    name: 'deliveryTime',
-                    initialValue: contract?.deliveryTime ? moment(contract?.deliveryTime) : '',
-                    rules: [{
-                        required: true,
-                        message: '请选择要求交货日期'
-                    }],
-                    children:  <DatePicker format="YYYY-MM-DD"/>
-                }, {
-                    label: '评审时间',
-                    name: 'reviewTime',
-                    initialValue: contract?.reviewTime ? moment(contract?.reviewTime) : '',
-                    children:  <DatePicker showTime format="YYYY-MM-DD HH:mm" />
-                }, {
-                    label: '所属国家',
-                    name: 'countryCode',
-                    initialValue: contract?.countryCode,
-                    rules: [{
-                        required: true,
-                        message: '请选择所属国家'
-                    }],
-                    children: (
-                        <Select onChange={ (value: number) => {
-                            this.getForm()?.setFieldsValue({ countryCode: value, regionInfoDTO: [], region: [] })
-                            this.setState({
-                                contract: {
-                                    ...(contract || {}),
-                                    countryCode: value,
-                                    region: []
+        const contract: IContractInfo | undefined = this.state.contract;
+        return [[{
+            title: '基础信息',
+            itemCol: {
+                span: 8
+            },
+            itemProps: [{
+                label: '合同编号',
+                name: 'contractNumber',
+                initialValue: contract?.contractNumber,
+                rules: [{
+                    required: true,
+                    validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                        if (value && value != '') {
+                            this.checkContractNumber(value).then(res => {
+                                if (res) {
+                                    callback()
+                                } else {
+                                    callback('合同编号重复')
                                 }
                             })
-                        } }
-                        getPopupContainer={ triggerNode => triggerNode.parentNode }>
-                            <Select.Option value={ 0 }>中国</Select.Option>
-                            <Select.Option value={ 1 }>海外</Select.Option>
-                        </Select>
-                    )
-                }, {
-                    label: '销售员',
-                    name: 'salesman',
-                    initialValue: contract?.salesman,
-                    rules: [{
-                        required: true,
-                        message: '请输入销售员'
-                    }],
-                    children:  <Input maxLength={ 20 }/>
-                }, {
-                    label: '计价方式',
-                    name: 'chargeType',
-                    initialValue: contract?.chargeType,
-                    rules: [{
-                        required: true,
-                        message: '请选择选择计价方式'
-                    }],
-                    children: (
-                        <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
-                            <Select.Option value={ 0 }>订单总价、总重计算单价</Select.Option>
-                            <Select.Option value={ 1 }>产品单价、基数计算总价</Select.Option>
-                        </Select>
-                    )
-                }, {
-                    label: '所属区域',
-                    name: 'region',
-                    initialValue: contract?.region,
-                    rules: [{
-                        required: this.getForm()?.getFieldValue('countryCode') === 1 || contract?.countryCode === 1 ? false : true,
-                        message: '请选择所属区域'
-                    },{
-                        validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
-                            if(!(this.getForm()?.getFieldValue('countryCode') === 1 || contract?.countryCode === 1)) {
-                                if (value.length >= 2) {
-                                    callback();
-                                }else {
-                                    callback('所属区域需选择到市级');
-                                }
-                            } else {
-                                callback();
-                            }
+                        } else {
+                            callback('请输入合同编号')
                         }
-                    }],
-                    children: (
-                        <Cascader
-                            fieldNames={{ label: 'name', value: 'code' }}
-                            options={this.state.regionInfoData}
-                            onChange={this.onRegionInfoChange}
-                            changeOnSelect
-                            disabled={ this.getForm()?.getFieldValue('countryCode') === 1 || contract?.countryCode === 1 }
-                        />
-                    )
+                    }
+                }],
+                children: <Input value={contract?.contractNumber} maxLength={50} />
+            }, {
+                label: '内部合同编号',
+                name: 'internalNumber',
+                initialValue: contract?.internalNumber,
+                children: <Input placeholder="内部合同编号自动生成" disabled />
+            }, {
+                label: '工程名称',
+                name: 'projectName',
+                initialValue: contract?.projectName,
+                rules: [{
+                    required: true,
+                    message: '请输入工程名称'
+                }],
+                children: <Input maxLength={100} />
+            }, {
+                label: '工程简称',
+                name: 'simpleProjectName',
+                initialValue: contract?.simpleProjectName,
+                children: <Input maxLength={50} />
+            }, {
+                label: '中标类型',
+                name: 'winBidType',
+                initialValue: contract?.winBidType,
+                children: (
+                    <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                        {winBidTypeOptions && winBidTypeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={index} value={id}>
+                                {name}
+                            </Select.Option>
+                        })}
+                    </Select>
+                )
+            }, {
+                label: '销售类型',
+                name: 'saleType',
+                initialValue: contract?.saleType,
+                children: (
+                    <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                        {saleTypeOptions && saleTypeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={index} value={id}>
+                                {name}
+                            </Select.Option>
+                        })}
+                    </Select>
+                )
+            }, {
+                label: '业主单位',
+                name: 'customerCompany',
+                initialValue: contract?.customerInfoDto?.customerCompany,
+                rules: [{
+                    required: true,
+                    message: '请选择业主单位'
+                }],
+                children:
+                    <>
+                        <Input value={contract?.customerInfoDto?.customerCompany} suffix={
+                            <ClientSelectionComponent onSelect={this.onCustomerCompanySelect} selectKey={[contract.customerInfoDto?.customerId]} />
+                        } />
+                    </>
+            }, {
+                label: '业主联系人',
+                name: 'customerLinkman',
+                initialValue: contract?.customerInfoDto?.customerLinkman,
+                children: <Input value={contract?.customerInfoDto?.customerLinkman} maxLength={30} />
+            }, {
+                label: '业主联系电话',
+                name: 'customerPhone',
+                initialValue: contract?.customerInfoDto?.customerPhone,
+                children: <Input value={contract?.customerInfoDto?.customerPhone} maxLength={30} />
+            }, {
+                label: '合同签订单位',
+                name: 'signCustomerName',
+                initialValue: contract?.signCustomerName,
+                rules: [{
+                    required: true,
+                    message: '请选择合同签订单位'
+                }],
+                children:
+                    <>
+                        <Input value={contract?.signCustomerName} suffix={
+                            <ClientSelectionComponent onSelect={this.onSelect} selectKey={[contract.signCustomerId]} />
+                        } />
+                    </>
+            }, {
+                label: '合同签订日期',
+                name: 'signContractTime',
+                initialValue: contract?.signContractTime ? moment(contract?.signContractTime) : '',
+                rules: [{
+                    required: true,
+                    message: '请选择合同签订日期'
+                }],
+                children: <DatePicker format="YYYY-MM-DD" />
+            }, {
+                label: '签订人',
+                name: 'signUserName',
+                initialValue: contract?.signUserName,
+                rules: [{
+                    required: true,
+                    message: '请输入签订人'
+                }],
+                children: <Input maxLength={20} />
+            }, {
+                label: '要求交货日期',
+                name: 'deliveryTime',
+                initialValue: contract?.deliveryTime ? moment(contract?.deliveryTime) : '',
+                rules: [{
+                    required: true,
+                    message: '请选择要求交货日期'
+                }],
+                children: <DatePicker format="YYYY-MM-DD" />
+            }, {
+                label: '评审时间',
+                name: 'reviewTime',
+                initialValue: contract?.reviewTime ? moment(contract?.reviewTime) : '',
+                children: <DatePicker showTime format="YYYY-MM-DD HH:mm" />
+            }, {
+                label: '所属国家',
+                name: 'countryCode',
+                initialValue: contract?.countryCode,
+                rules: [{
+                    required: true,
+                    message: '请选择所属国家'
+                }],
+                children: (
+                    <Select onChange={(value: number) => {
+                        this.getForm()?.setFieldsValue({ countryCode: value, regionInfoDTO: [], region: [] })
+                        this.setState({
+                            contract: {
+                                ...(contract || {}),
+                                countryCode: value,
+                                region: []
+                            }
+                        })
+                    }}
+                        getPopupContainer={triggerNode => triggerNode.parentNode}>
+                        <Select.Option value={0}>中国</Select.Option>
+                        <Select.Option value={1}>海外</Select.Option>
+                    </Select>
+                )
+            }, {
+                label: '销售员',
+                name: 'salesman',
+                initialValue: contract?.salesman,
+                rules: [{
+                    required: true,
+                    message: '请输入销售员'
+                }],
+                children: <Input maxLength={20} />
+            }, {
+                label: '计价方式',
+                name: 'chargeType',
+                initialValue: contract?.chargeType,
+                rules: [{
+                    required: true,
+                    message: '请选择选择计价方式'
+                }],
+                children: (
+                    <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                        <Select.Option value={0}>订单总价、总重计算单价</Select.Option>
+                        <Select.Option value={1}>产品单价、基数计算总价</Select.Option>
+                    </Select>
+                )
+            }, {
+                label: '所属区域',
+                name: 'region',
+                initialValue: contract?.region,
+                rules: [{
+                    required: this.getForm()?.getFieldValue('countryCode') === 1 || contract?.countryCode === 1 ? false : true,
+                    message: '请选择所属区域'
                 }, {
-                    label: '合同总价',
-                    name: 'contractAmount',
-                    initialValue: contract?.contractAmount,
-                    rules: [{
-                        required: true,
-                        message: '请输入合同总价'
-                    }],
-                    children: <InputNumber min="0.01" max="10000000000.00" step="0.01" stringMode={ false } precision={ 2 } prefix="￥" onChange={ () => this.contractAmountBlur() } className={ layoutStyles.width100 }/>
-                }, {
-                    label: '币种',
-                    name: 'currencyType',
-                    initialValue: contract?.currencyType,
-                    rules: [{
-                        required: true,
-                        message: '请选择币种'
-                    }],
-                    children: (
-                        <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
-                            { currencyTypeOptions && currencyTypeOptions.map(({ id, name }, index) => {
-                                return <Select.Option key={ index } value={ id }>
-                                    { name }
-                                </Select.Option>
-                            }) }
-                        </Select>
-                    )
-                }, {
-                    label: '备注',
-                    name: 'description',
-                    initialValue: contract?.description,
-                    children: <Input.TextArea rows={ 5 } showCount={ true } maxLength={ 300 } placeholder="请输入备注信息"/>
-                }]}, {
-                    title: '产品信息',
-                    itemCol: {
-                        span: 12
-                    },
-                    itemProps: [ {
-                        label: '产品类型',
-                        name: 'productType',
-                        initialValue: contract?.productType,
-                        children: (
-                            <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
-                                { productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                                    return <Select.Option key={ index } value={ id }>
-                                        { name }
-                                    </Select.Option>
-                                }) }
-                            </Select>
-                        )
-                    }, {
-                        label: '电压等级',
-                        name: 'voltageGrade',
-                        initialValue: contract?.voltageGrade,
-                        children: (
-                            <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
-                                { voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
-                                    return <Select.Option key={ index } value={ id }>
-                                        { name }KV
-                                    </Select.Option>
-                                }) }
-                            </Select>
-                        )
-                    }]
+                    validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                        if (!(this.getForm()?.getFieldValue('countryCode') === 1 || contract?.countryCode === 1)) {
+                            if (value.length >= 2) {
+                                callback();
+                            } else {
+                                callback('所属区域需选择到市级');
+                            }
+                        } else {
+                            callback();
+                        }
+                    }
+                }],
+                children: (
+                    <Cascader
+                        fieldNames={{ label: 'name', value: 'code' }}
+                        options={this.state.regionInfoData}
+                        onChange={this.onRegionInfoChange}
+                        changeOnSelect
+                        disabled={this.getForm()?.getFieldValue('countryCode') === 1 || contract?.countryCode === 1}
+                    />
+                )
+            }, {
+                label: '合同总价',
+                name: 'contractAmount',
+                initialValue: contract?.contractAmount,
+                rules: [{
+                    required: true,
+                    message: '请输入合同总价'
+                }],
+                children: <InputNumber min="0.01" max="10000000000.00" step="0.01" stringMode={false} precision={2} prefix="￥" onChange={() => this.contractAmountBlur()} className={layoutStyles.width100} />
+            }, {
+                label: '币种',
+                name: 'currencyType',
+                initialValue: contract?.currencyType,
+                rules: [{
+                    required: true,
+                    message: '请选择币种'
+                }],
+                children: (
+                    <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                        {currencyTypeOptions && currencyTypeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={index} value={id}>
+                                {name}
+                            </Select.Option>
+                        })}
+                    </Select>
+                )
+            }, {
+                label: '备注',
+                name: 'description',
+                initialValue: contract?.description,
+                children: <Input.TextArea rows={5} showCount={true} maxLength={300} placeholder="请输入备注信息" />
+            }]
+        }, {
+            title: '产品信息',
+            itemCol: {
+                span: 12
+            },
+            itemProps: [{
+                label: '产品类型',
+                name: 'productType',
+                initialValue: contract?.productType,
+                children: (
+                    <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                        {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={index} value={id}>
+                                {name}
+                            </Select.Option>
+                        })}
+                    </Select>
+                )
+            }, {
+                label: '电压等级',
+                name: 'voltageGrade',
+                initialValue: contract?.voltageGrade,
+                children: (
+                    <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                        {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={index} value={id}>
+                                {name}KV
+                            </Select.Option>
+                        })}
+                    </Select>
+                )
+            }]
         }]];
     }
 
@@ -680,11 +682,13 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
 
     public render() {
         return <>
-                {super.render()}
-                <Modal visible={ this.state.isVisible } onCancel={ this.modalCancel } onOk={ this.modalCancel } width={ "60%" }>
-                   { this.state.url.substr((this.state.url.lastIndexOf(".")) + 1) === 'pdf' ? <iframe src={ this.state.url } frameBorder="0" className={ styles.iframe }></iframe> : <img src={ this.state.url }/> }
-                </Modal>
-            </>
+            {super.render()}
+            <Modal visible={this.state.isVisible} onCancel={this.modalCancel} onOk={this.modalCancel} width={"60%"}>
+                {this.state.url.fileSuffix && this.state.url.fileSuffix === "pdf" && <iframe src={this.state.url.link} frameBorder="0" className={styles.iframe}></iframe>}
+                {this.state.url.fileSuffix && this.state.url.fileSuffix !== "pdf" && <img src={this.state.url.link} />}
+                {!this.state.url.fileSuffix && this.state.url.link && this.state.url.link.substr((this.state.url.link.lastIndexOf(".")) + 1) === 'pdf' ? <iframe src={this.state.url.link} frameBorder="0" className={styles.iframe}></iframe> : <img src={this.state.url.link} />}
+            </Modal>
+        </>
     }
 
     /**
@@ -698,52 +702,52 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             render: (): React.ReactNode => {
                 return (
                     <>
-                        <Form.Item name="planType" initialValue={ contract?.planType || 0 }>
-                            <Radio.Group onChange={ (e: RadioChangeEvent) => {
+                        <Form.Item name="planType" initialValue={contract?.planType || 0}>
+                            <Radio.Group onChange={(e: RadioChangeEvent) => {
                                 this.setState({
                                     contract: {
                                         ...(contract || {}),
                                         planType: e.target.value
                                     }
                                 })
-                            } }>
-                                <Radio value={ planType.PROPORTION }>按占比</Radio>
-                                <Radio value={ planType.AMOUNT }>按金额</Radio>
+                            }}>
+                                <Radio value={planType.PROPORTION}>按占比</Radio>
+                                <Radio value={planType.AMOUNT}>按金额</Radio>
                             </Radio.Group>
                         </Form.Item>
-                        <Form.List name="paymentPlanDtos" initialValue={ contract?.paymentPlanDtos || [] }>
+                        <Form.List name="paymentPlanDtos" initialValue={contract?.paymentPlanDtos || []}>
                             {
                                 (fields: FormListFieldData[], operation: FormListOperation): React.ReactNode => {
                                     return (
                                         <>
-                                            <Button type="primary" onClick={ () => ( operation.add({ returnedRate: 0, returnedAmount: 0 }) ) } className={ styles.btn }>新增</Button>
-                                            <Row className={ styles.FormHeader }>
-                                                <Col span={ 2 }>期次</Col>
-                                                <Col span={ 5 }>计划回款日期</Col>
-                                                <Col span={ 5 }>计划回款占比(%)</Col>
-                                                <Col span={ 5 }>计划回款金额</Col>
-                                                <Col span={ 5 }>备注</Col>
-                                                <Col span={ 2 }>操作</Col>
+                                            <Button type="primary" onClick={() => (operation.add({ returnedRate: 0, returnedAmount: 0 }))} className={styles.btn}>新增</Button>
+                                            <Row className={styles.FormHeader}>
+                                                <Col span={2}>期次</Col>
+                                                <Col span={5}>计划回款日期</Col>
+                                                <Col span={5}>计划回款占比(%)</Col>
+                                                <Col span={5}>计划回款金额</Col>
+                                                <Col span={5}>备注</Col>
+                                                <Col span={2}>操作</Col>
                                             </Row>
                                             {
                                                 fields.map<React.ReactNode>((field: FormListFieldData, index: number): React.ReactNode => (
-                                                    <Row key={ `${ field.name }_${ index }` } className={ styles.FormItem }>
-                                                        <Col span={ 2 }>{ index + 1 }</Col>
-                                                        <Col span={ 5 }>
-                                                            <Form.Item 
-                                                                { ...field } 
-                                                                name={[field.name, 'returnedTime']} 
-                                                                fieldKey={[field.fieldKey, 'returnedTime']} 
+                                                    <Row key={`${field.name}_${index}`} className={styles.FormItem}>
+                                                        <Col span={2}>{index + 1}</Col>
+                                                        <Col span={5}>
+                                                            <Form.Item
+                                                                {...field}
+                                                                name={[field.name, 'returnedTime']}
+                                                                fieldKey={[field.fieldKey, 'returnedTime']}
                                                                 rules={[{
                                                                     required: true,
                                                                     message: '请选择计划回款日期'
                                                                 }]}
                                                             >
-                                                                <DatePicker format="YYYY-MM-DD"/>
+                                                                <DatePicker format="YYYY-MM-DD" />
                                                             </Form.Item>
                                                         </Col>
-                                                        <Col span={ 5 }>
-                                                            <Form.Item { ...field } name={[field.name, 'returnedRate']} fieldKey={[field.fieldKey, 'returnedRate']} rules={[{
+                                                        <Col span={5}>
+                                                            <Form.Item {...field} name={[field.name, 'returnedRate']} fieldKey={[field.fieldKey, 'returnedRate']} rules={[{
                                                                 required: this.state.contract?.planType === planType.PROPORTION || this.state.contract?.planType === undefined,
                                                                 message: '请输入计划回款占比'
                                                             }, {
@@ -755,18 +759,18 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                     }
                                                                 }
                                                             }]}>
-                                                                <InputNumber 
-                                                                    stringMode={ false } 
+                                                                <InputNumber
+                                                                    stringMode={false}
                                                                     min="0"
                                                                     step="0.01"
-                                                                    precision={ 2 }
-                                                                    onChange={ () => this.checkReturnedRate(index) } 
-                                                                    disabled={ this.state.contract?.planType === planType.AMOUNT }
-                                                                    className={ layoutStyles.width100 }/>
+                                                                    precision={2}
+                                                                    onChange={() => this.checkReturnedRate(index)}
+                                                                    disabled={this.state.contract?.planType === planType.AMOUNT}
+                                                                    className={layoutStyles.width100} />
                                                             </Form.Item>
                                                         </Col>
-                                                        <Col span={ 5 }>
-                                                            <Form.Item { ...field } name={[field.name, 'returnedAmount']} fieldKey={[field.fieldKey, 'returnedAmount']} rules={[{
+                                                        <Col span={5}>
+                                                            <Form.Item {...field} name={[field.name, 'returnedAmount']} fieldKey={[field.fieldKey, 'returnedAmount']} rules={[{
                                                                 required: this.state.contract?.planType === planType.AMOUNT,
                                                                 message: '请输入计划回款金额'
                                                             }, {
@@ -778,25 +782,25 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                     }
                                                                 }
                                                             }]}>
-                                                                <InputNumber 
-                                                                    stringMode={ false } 
+                                                                <InputNumber
+                                                                    stringMode={false}
                                                                     min="0"
                                                                     step="0.01"
-                                                                    precision={ 2 }
-                                                                    onChange={ () => this.checkReturnedAmount(index) }
-                                                                    disabled={ this.state.contract?.planType === planType.PROPORTION || this.state.contract?.planType === undefined}
-                                                                    className={ layoutStyles.width100 }/>
+                                                                    precision={2}
+                                                                    onChange={() => this.checkReturnedAmount(index)}
+                                                                    disabled={this.state.contract?.planType === planType.PROPORTION || this.state.contract?.planType === undefined}
+                                                                    className={layoutStyles.width100} />
                                                             </Form.Item>
                                                         </Col>
-                                                        <Col span={ 5 }>
-                                                            <Form.Item { ...field } name={[field.name, 'description']} fieldKey={[field.fieldKey, 'description']}>
-                                                                <Input.TextArea rows={ 5 } maxLength={ 300 }/>
+                                                        <Col span={5}>
+                                                            <Form.Item {...field} name={[field.name, 'description']} fieldKey={[field.fieldKey, 'description']}>
+                                                                <Input.TextArea rows={5} maxLength={300} />
                                                             </Form.Item>
                                                         </Col>
-                                                        <Col span={ 2 }>
+                                                        <Col span={2}>
                                                             <ConfirmableButton confirmTitle="要删除该条回款计划吗？"
                                                                 type="link" placement="topRight"
-                                                                onConfirm={ () => { operation.remove(index); } }>
+                                                                onConfirm={() => { operation.remove(index); }}>
                                                                 <DeleteOutlined />
                                                             </ConfirmableButton>
                                                         </Col>
@@ -811,45 +815,45 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                     </>
                 );
             }
-        },{
-            title: '附件',   
+        }, {
+            title: '附件',
             render: (): React.ReactNode => {
                 return (
                     <>
-                        <Row className={ styles.attachHeader }>
-                            <Col span={ 1 }></Col>
-                            <Col span={ 6 }>附件名称</Col>
-                            <Col span={ 2 }>文件大小</Col>
-                            <Col span={ 4 }>上传时间</Col>
-                            <Col span={ 4 }>上传人员</Col>
-                            <Col span={ 4 }>备注</Col>
-                            <Col span={ 3 }>操作</Col>
+                        <Row className={styles.attachHeader}>
+                            <Col span={1}></Col>
+                            <Col span={6}>附件名称</Col>
+                            <Col span={2}>文件大小</Col>
+                            <Col span={4}>上传时间</Col>
+                            <Col span={4}>上传人员</Col>
+                            <Col span={4}>备注</Col>
+                            <Col span={3}>操作</Col>
                         </Row>
                         <Form.List name="attachInfoDtos">
                             {
                                 (fields: FormListFieldData[], operation: FormListOperation): React.ReactNode => {
                                     return (
                                         <>
-                                            <Space size="small" className={ styles.attachBtn }>
+                                            <Space size="small" className={styles.attachBtn}>
                                                 <Upload
-                                                    maxCount = { 10 }
+                                                    maxCount={10}
                                                     accept=".doc,.docx,.pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/png,image/jpeg,.txt,.xls,.xlsx"
-                                                    action={ () => {
+                                                    action={() => {
                                                         const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                                                        return baseUrl+'/sinzetech-resource/oss/put-file'
-                                                    } } 
+                                                        return baseUrl + '/sinzetech-resource/oss/put-file'
+                                                    }}
                                                     headers={
                                                         {
-                                                            'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                                                            'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
                                                             'Tenant-Id': AuthUtil.getTenantId(),
                                                             'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
                                                         }
                                                     }
-                                                    beforeUpload = { 
+                                                    beforeUpload={
                                                         (file) => {
                                                             const isLt10M = file.size / 1024 / 1024 > 10;
                                                             return new Promise((resolve, reject) => {
-                                                                if(this.state.contract.attachInfoDtos && this.state.contract.attachInfoDtos.length >= 10 ) {
+                                                                if (this.state.contract.attachInfoDtos && this.state.contract.attachInfoDtos.length >= 10) {
                                                                     message.error('文件最多上传10个！')
                                                                     reject()
                                                                 } else {
@@ -864,28 +868,32 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                             })
                                                         }
                                                     }
-                                                    onChange={ (info)=>{
+                                                    onChange={(info) => {
                                                         if (info.file.status === 'done') {
                                                             let index: number = 1;
-                                                            if(this.state.contract.attachInfoDtos) {
+                                                            if (this.state.contract.attachInfoDtos) {
                                                                 index = this.state.contract.attachInfoDtos.length + 1;
                                                             } else {
                                                                 index = 1;
-                                                            } 
+                                                            }
                                                             const contract: IContractInfo = this.state.contract;
                                                             let attachInfoDtos: IAttachDTO[] = contract.attachInfoDtos;
-                                                            const attachInfoItem: IAttachDTO = {
-                                                                name: info.file.response.data.originalName,
-                                                                userName: info.file.response.data.userName,
-                                                                fileSize: info.file.response.data.size,
-                                                                description: '',
-                                                                filePath: info.file.response.data.name,
-                                                                fileUploadTime: info.file.response.data.fileUploadTime,
-                                                                fileSuffix: info.file.response.data.fileSuffix
+                                                            const dataInfo = info.file.response.data
+                                                            const fileInfo = dataInfo.name.split(".")
+                                                            const attachInfoItem = {
+                                                                id: "",
+                                                                name: dataInfo.originalName.split(".")[0],
+                                                                description: "",
+                                                                filePath: dataInfo.name,
+                                                                fileSize: dataInfo.size,
+                                                                fileSuffix: fileInfo[fileInfo.length - 1],
+                                                                userName: dataInfo.userName,
+                                                                fileUploadTime: dataInfo.fileUploadTime,
+                                                                link: dataInfo.link
                                                             };
                                                             operation.add(attachInfoItem);
-                                                            if(attachInfoDtos) {
-                                                                attachInfoDtos.push(attachInfoItem);  
+                                                            if (attachInfoDtos) {
+                                                                attachInfoDtos.push(attachInfoItem);
                                                             } else {
                                                                 attachInfoDtos = [attachInfoItem];
                                                             }
@@ -898,31 +906,20 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                         } else if (info.file.status === 'error') {
                                                             console.log(info.file, info.fileList);
                                                         }
-                                                    } } showUploadList= {false}>
+                                                    }} showUploadList={false}>
                                                     <Button type="primary">添加</Button>
                                                 </Upload>
-                                                <Button type="primary" onClick={ ()=> {
-                                                    let checked: any[] = this.state.checkList;
-                                                    let attachInfoDtos: IAttachDTO[] =  this.state.contract?.attachInfoDtos;
-                                                    if(attachInfoDtos) {
-                                                        attachInfoDtos.map<IAttachDTO>((items: IAttachDTO, index: number): IAttachDTO | any=> {
-                                                            if(checked.includes(index)){
-                                                                window.open(items.filePath)
-                                                            }
-                                                        })
-                                                    }
-                                                } }>下载</Button>
-                                                <Button type="primary" onClick={ async ()=> {
-                                                    let attachInfoDtos: any[] =  this.getForm()?.getFieldValue("attachInfoDtos");
+                                                <Button type="primary" onClick={async () => {
+                                                    let attachInfoDtos: any[] = this.getForm()?.getFieldValue("attachInfoDtos");
                                                     let checked: any[] = this.state.checkList;
                                                     let batchId: any[] = [];
                                                     checked.map((item: any) => {
                                                         batchId.push(attachInfoDtos[item].id);
                                                         contract.attachInfoDtos.splice(item, 1);
                                                     })
-                                                    if(batchId[0]) {
-                                                        const resData: IResponseData = await RequestUtil.delete(`/tower-system/attach?ids=${ batchId.join(',') }`)
-                                                        if(resData) {
+                                                    if (batchId[0]) {
+                                                        const resData: IResponseData = await RequestUtil.delete(`/tower-system/attach?ids=${batchId.join(',')}`)
+                                                        if (resData) {
                                                             operation.remove(checked)
                                                         }
                                                     } else {
@@ -934,73 +931,76 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                             attachInfoDtos: contract.attachInfoDtos
                                                         }
                                                     })
-                                                } }>删除</Button>
+                                                }}>删除</Button>
                                             </Space>
                                             {
                                                 fields.map<React.ReactNode>((field: FormListFieldData, index: number): React.ReactNode => (
-                                                    <Row key={ `${ field.name }_${ index }` } className={ styles.FormItem }>
-                                                        <Col span={ 1 }>
-                                                            <Checkbox value={ index } onChange={ this.checkChange }></Checkbox>
+                                                    <Row key={`${field.name}_${index}`} className={styles.FormItem}>
+                                                        <Col span={1}>
+                                                            <Checkbox value={index} onChange={this.checkChange}></Checkbox>
                                                         </Col>
-                                                        <Col span={ 6 }>
-                                                            <Form.Item { ...field } name={[field.name, 'name']} fieldKey={[field.fieldKey, 'name']}>
-                                                                <Input disabled  className={ styles.Input }/>
+                                                        <Col span={6}>
+                                                            <Form.Item {...field} name={[field.name, 'name']} fieldKey={[field.fieldKey, 'name']}>
+                                                                <Input disabled className={styles.Input} />
                                                             </Form.Item>
                                                         </Col>
-                                                        <Col span={ 2 }>
-                                                            <Form.Item { ...field } name={[field.name, 'fileSize']} fieldKey={[field.fieldKey, 'fileSize']}>
-                                                                <Input disabled  className={ styles.Input }/>
+                                                        <Col span={2}>
+                                                            <Form.Item {...field} name={[field.name, 'fileSize']} fieldKey={[field.fieldKey, 'fileSize']}>
+                                                                <Input disabled className={styles.Input} />
                                                             </Form.Item>
                                                         </Col>
-                                                        <Col span={ 4 }>
-                                                            <Form.Item { ...field } name={[field.name, 'fileUploadTime']} fieldKey={[field.fieldKey, 'fileUploadTime']}>
-                                                                <Input disabled  className={ styles.Input }/>
+                                                        <Col span={4}>
+                                                            <Form.Item {...field} name={[field.name, 'fileUploadTime']} fieldKey={[field.fieldKey, 'fileUploadTime']}>
+                                                                <Input disabled className={styles.Input} />
                                                             </Form.Item>
                                                         </Col>
-                                                        <Col span={ 4 }>
-                                                            <Form.Item { ...field } name={[field.name, 'userName']} fieldKey={[field.fieldKey, 'userName']}>
-                                                                <Input disabled  className={ styles.Input }/>
+                                                        <Col span={4}>
+                                                            <Form.Item {...field} name={[field.name, 'userName']} fieldKey={[field.fieldKey, 'userName']}>
+                                                                <Input disabled className={styles.Input} />
                                                             </Form.Item>
                                                         </Col>
-                                                        <Col span={ 4 }>
-                                                            <Form.Item { ...field } name={[field.name, 'description']} fieldKey={[field.fieldKey, 'description']}>
-                                                                <Input.TextArea rows={ 5 } maxLength={ 300 }/>
+                                                        <Col span={4}>
+                                                            <Form.Item {...field} name={[field.name, 'description']} fieldKey={[field.fieldKey, 'description']}>
+                                                                <Input.TextArea rows={1} maxLength={300} />
                                                             </Form.Item>
                                                         </Col>
-                                                        <Col span={ 3 }>
+                                                        <Col span={3}>
                                                             <Space direction="horizontal" size="small">
-                                                                <Button type="link" onClick={ async () => {
-                                                                    let attachInfoDtos: IAttachDTO =  this.state.contract?.attachInfoDtos[index];
-                                                                    const suffix: string = attachInfoDtos.filePath.substr((attachInfoDtos.filePath.lastIndexOf(".")) + 1);
-                                                                    if(suffix === 'jpg' || suffix === 'pdf' || suffix ===  'jpeg' || suffix === 'png') {
-                                                                       this.setState({
+                                                                <Button type="link" onClick={async () => {
+                                                                    let attachInfoDtos: any = this.state.contract?.attachInfoDtos[index];
+                                                                    const suffix: string = attachInfoDtos.fileSuffix
+                                                                    if (['jpg', 'pdf', 'jpeg', 'png'].includes(suffix)) {
+                                                                        this.setState({
                                                                             isVisible: true,
-                                                                            url: attachInfoDtos.filePath
-                                                                        }) 
+                                                                            url: {
+                                                                                link: attachInfoDtos.link || attachInfoDtos.filePath,
+                                                                                fileSuffix: attachInfoDtos
+                                                                            }
+                                                                        })
                                                                     } else {
                                                                         message.info('仅图片、pdf支持预览')
                                                                     }
-                                                                    
-                                                                } }>预览</Button>
+
+                                                                }}>预览</Button>
                                                                 <Button type="link" onClick={
                                                                     () => {
-                                                                        let attachInfoDtos: IAttachDTO =  this.state.contract?.attachInfoDtos[index];
-                                                                        window.open(attachInfoDtos.filePath);
+                                                                        const attachInfoDtos: any = this.state.contract?.attachInfoDtos[index]
+                                                                        downLoadFile(attachInfoDtos.link || attachInfoDtos.filePath)
                                                                     }
                                                                 }>下载</Button>
                                                                 <ConfirmableButton confirmTitle="要删除该附件吗？"
                                                                     type="link" placement="topRight"
-                                                                    onConfirm={ async () => {
-                                                                        let attachInfoDtos =  this.getForm()?.getFieldValue("attachInfoDtos");
-                                                                        if(attachInfoDtos[index].id) {
-                                                                            const resData: IResponseData = await RequestUtil.delete(`/tower-system/attach?ids=${ attachInfoDtos[index].id }`)
-                                                                            if(resData) {
+                                                                    onConfirm={async () => {
+                                                                        let attachInfoDtos = this.getForm()?.getFieldValue("attachInfoDtos");
+                                                                        if (attachInfoDtos[index].id) {
+                                                                            const resData: IResponseData = await RequestUtil.delete(`/tower-system/attach?ids=${attachInfoDtos[index].id}`)
+                                                                            if (resData) {
                                                                                 operation.remove(index);
                                                                             }
                                                                         } else {
                                                                             operation.remove(index);
                                                                         }
-                                                                        contract.attachInfoDtos.splice(index , 1);
+                                                                        contract.attachInfoDtos.splice(index, 1);
                                                                         this.setState({
                                                                             contract: {
                                                                                 ...contract,

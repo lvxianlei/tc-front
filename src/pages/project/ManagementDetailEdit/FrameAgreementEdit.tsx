@@ -15,13 +15,14 @@ export default function FrameAgreementEdit(): JSX.Element {
     const [cargoDtoForm] = Form.useForm()
     const dictionaryOptions: any = ApplicationContext.get().dictionaryOption
     const bidType = dictionaryOptions["122"]
-    const { loading, error, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/frameAgreement/${params.id}`)
             baseInfoForm.setFieldsValue({
                 ...result,
                 bidType: result.bidType === -1 ? null : result.bidType,
-                saleType: result.saleType === -1 ? null : result.saleType
+                saleType: result.saleType === -1 ? null : result.saleType,
+                isIta: result.isIta === -1 ? null : result.isIta
             })
             cargoDtoForm.setFieldsValue({ submit: result.contractCargoVos })
             resole(result)

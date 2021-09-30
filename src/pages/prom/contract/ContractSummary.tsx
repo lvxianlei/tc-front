@@ -24,10 +24,11 @@ interface IContractSummaryProps {
     readonly baseInfo?: IContractGeneral;
     readonly orderItems?: IOrderItem[];
     readonly sysInfo?: IContract;
+    readonly region?: any[];
 }
 
-interface IContractSummaryRouteProps extends RouteComponentProps<IContractSummaryParamsProps>, IContractSummaryProps {}
-interface IContractSummaryState extends IContractSummaryProps {}
+interface IContractSummaryRouteProps extends RouteComponentProps<IContractSummaryParamsProps>, IContractSummaryProps { }
+interface IContractSummaryState extends IContractSummaryProps { }
 
 export interface IContractGeneral extends IContract {
     readonly customerInfoVo?: ICustomerInfoDto;
@@ -104,7 +105,7 @@ export class ContractSummary extends React.Component<IContractSummaryRouteProps,
             rows: [[{
                 label: '合同编号',
                 value: baseInfo?.contractNumber
-            },{
+            }, {
                 label: '内部合同编号',
                 value: baseInfo?.internalNumber
             }], [{
@@ -169,7 +170,7 @@ export class ContractSummary extends React.Component<IContractSummaryRouteProps,
      * @description Gets order columns
      * @returns order columns 
      */
-     public getOrderColumns(): TableColumnType<object>[] {
+    public getOrderColumns(): TableColumnType<object>[] {
         return [{
             title: '序号',
             dataIndex: 'index'
@@ -225,7 +226,7 @@ export class ContractSummary extends React.Component<IContractSummaryRouteProps,
      * @description Gets order summariable items
      * @returns order summariable items 
      */
-     public getOrderSummariableItems(): IRenderdSummariableItem[] {
+    public getOrderSummariableItems(): IRenderdSummariableItem[] {
         const orderItems: IOrderItem[] = this.state.orderItems || [];
         return orderItems.map<IRenderdSummariableItem>((item: IOrderItem): IRenderdSummariableItem => {
             return {
@@ -240,10 +241,10 @@ export class ContractSummary extends React.Component<IContractSummaryRouteProps,
                     value: item.orderQuantity
                 }, {
                     label: '订单金额',
-                    value:  item.taxAmount
+                    value: item.taxAmount
                 }],
                 render: (): React.ReactNode => (
-                    <Table rowKey="index"  dataSource={
+                    <Table rowKey="index" dataSource={
                         item.productVos?.map<IProduct>(
                             (productVos: IProduct, index: number): IProduct => (
                                 {
@@ -252,17 +253,17 @@ export class ContractSummary extends React.Component<IContractSummaryRouteProps,
                                 }
                             )
                         )
-                    } pagination={ false } bordered={ true } columns={ this.getOrderColumns() }/>
+                    } pagination={false} bordered={true} columns={this.getOrderColumns()} />
                 )
-            }  
-        })  
+            }
+        })
     }
 
     /**
      * @description Gets sys info grid
      * @returns sys info grid 
      */
-     public getSysInfoGrid(): IRenderedGrid {
+    public getSysInfoGrid(): IRenderedGrid {
         const sysInfo: IContract | undefined = this.state.sysInfo;
         return {
             labelCol: {
@@ -274,7 +275,7 @@ export class ContractSummary extends React.Component<IContractSummaryRouteProps,
             rows: [[{
                 label: '最后编辑人',
                 value: sysInfo?.updateUserName
-            },{
+            }, {
                 label: '最后编辑时间',
                 value: sysInfo?.updateTime
             }], [{
@@ -291,7 +292,7 @@ export class ContractSummary extends React.Component<IContractSummaryRouteProps,
      * @description Renders base info section
      * @returns base info section 
      */
-     public renderBaseInfoSection = (): React.ReactNode => {
+    public renderBaseInfoSection = (): React.ReactNode => {
         return SummaryRenderUtil.renderGrid(this.getBaseInfoGrid());
     }
 
@@ -299,7 +300,7 @@ export class ContractSummary extends React.Component<IContractSummaryRouteProps,
      * @description Renders order section
      * @returns order section 
      */
-     public renderOrderSection = (): React.ReactNode => {
+    public renderOrderSection = (): React.ReactNode => {
         return SummaryRenderUtil.renderSummariableAreas(this.getOrderSummariableItems());
     }
 
@@ -307,7 +308,7 @@ export class ContractSummary extends React.Component<IContractSummaryRouteProps,
      * @description Renders sys info section
      * @returns sys info section 
      */
-     public renderSysInfoSection = (): React.ReactNode => {
+    public renderSysInfoSection = (): React.ReactNode => {
         return SummaryRenderUtil.renderGrid(this.getSysInfoGrid());
     }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { TableColumnType, Space, FormItemProps } from "antd";
+import { TableColumnType, Space, FormItemProps, Button } from "antd";
 import { withTranslation } from "react-i18next";
 import { Link, withRouter } from "react-router-dom";
 import AuthorityComponent from "../../../components/AuthorityComponent";
@@ -133,18 +133,17 @@ class ManagementOrder extends SaleOrder {
         key: "operation",
         title: "操作",
         dataIndex: "operation",
-        render: (_: undefined, record: object): React.ReactNode => (
+        render: (_: undefined, record: any): React.ReactNode => (
           <Space direction="horizontal" size="small">
-            <Link
-              to={`/project/order/setting/${projectId}/${(record as ITableDataItem).id
-                }`}
-            >
-              编辑
-            </Link>
+            <Button
+              type="link"
+              disabled={record.isProductGroupRef !== 0}
+              onClick={() => this.props.history.push(`/project/order/setting/${projectId}/${(record as ITableDataItem).id}`)}>编辑</Button>
             <AuthorityComponent permissions="sale_order_del">
               <ConfirmableButton
                 confirmTitle="要删除该订单吗？"
                 type="link"
+
                 placement="topRight"
                 onConfirm={async () => {
                   let id = (record as ITableDataItem).id;
@@ -154,7 +153,7 @@ class ManagementOrder extends SaleOrder {
                   this.fetchTableData({});
                 }}
               >
-                删除
+                <Button type="link" disabled={record.isProductGroupRef !== 0}>删除</Button>
               </ConfirmableButton>
             </AuthorityComponent>
           </Space>

@@ -15,7 +15,7 @@ interface ManagementSaleOrderBaseInfo extends ISaleOrderBaseInfo {
 
 class ManagementSaleOrderSummary extends SaleOrderSummary {
   requestPath = "/tower-market/saleOrder";
- 
+
   protected getBaseInfoGrid(): IRenderedGrid {
     const baseInfo: ManagementSaleOrderBaseInfo | undefined = this.state
       .baseInfo as ManagementSaleOrderBaseInfo;
@@ -216,56 +216,56 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
     };
   }
   protected getOrderColumns(): TableColumnType<object>[] {
-    return [
-      {
-        title: "状态",
-        dataIndex: "status",
-        render: (status: number): React.ReactNode => {
-          return status === 0
-            ? "新建"
-            : status === 1
-            ? "待下发"
-            : status === 2
-            ? "审批中"
-            : "已下发";
-        },
-      },
-      {
-        title: "线路名称",
-        dataIndex: "lineName",
-      },
-      {
-        title: "杆塔号",
-        dataIndex: "productNumber",
-      },
-      {
-        title: "塔型",
-        dataIndex: "productCategoryName",
-      },
-      {
-        title: "基数",
-        dataIndex: "number",
-      },
-      {
-        title: "产品类型",
-        dataIndex: "productTypeName",
-      },
-      {
-        title: "电压等级（KV）",
-        dataIndex: "voltageGradeName",
-      },
-      {
-        title: "呼高（m）",
-        dataIndex: "productHeight",
-      },
-      {
-        title: "杆塔重量（kg）",
-        dataIndex: "productWeight",
-      },
-      {
-        title: "备注",
-        dataIndex: "description",
-      },
+    const productStatus: any = {
+      0: "未下发",
+      1: "已下发"
+    }
+    return [{
+      title: '序号',
+      dataIndex: 'index'
+    }, {
+      title: '状态',
+      dataIndex: 'productStatus',
+      render: (status: number): React.ReactNode => {
+        return productStatus[status]
+      }
+    },
+    {
+      title: "线路名称",
+      dataIndex: "lineName",
+    },
+    {
+      title: "杆塔号",
+      dataIndex: "productNumber",
+    },
+    {
+      title: "塔型",
+      dataIndex: "productCategoryName",
+    },
+    {
+      title: "基数",
+      dataIndex: "number",
+    },
+    {
+      title: "产品类型",
+      dataIndex: "productTypeName",
+    },
+    {
+      title: "电压等级（KV）",
+      dataIndex: "voltageGradeName",
+    },
+    {
+      title: "呼高（m）",
+      dataIndex: "productHeight",
+    },
+    {
+      title: "杆塔重量（kg）",
+      dataIndex: "productWeight",
+    },
+    {
+      title: "备注",
+      dataIndex: "description",
+    },
     ];
   }
 }

@@ -1,13 +1,20 @@
 import React from "react";
 import { Table } from "antd";
 import { withRouter } from "react-router-dom";
-import { IRenderdSummariableItem } from "../../../utils/SummaryRenderUtil";
-import {
-  ContractSummary,
-  IOrderItem,
-} from "../../prom/contract/ContractSummary";
-import { IProduct } from "../../IProduct";
+import { ContractSummary } from "../../prom/contract/ContractSummary";
 import RequestUtil from "../../../utils/RequestUtil";
+
+const isIta: any = {
+  0: "无",
+  1: "原件",
+  2: "复印件"
+}
+
+const taskStatus: any = {
+  0: "未下发",
+  1: "部分下发",
+  2: "已下发"
+}
 
 class ManagementContractSummary extends ContractSummary {
   requestPath = "/tower-market/saleOrder";
@@ -98,13 +105,13 @@ class ManagementContractSummary extends ContractSummary {
           },
           {
             label: "有无技术协议",
-            value: baseInfo?.isIta,
+            value: isIta[baseInfo?.isIta || 0],
           },
         ],
         [
           {
             label: "所属区域",
-            value: baseInfo?.region,
+            value: this.state.region?.find((reItem: any) => reItem.code === baseInfo?.region)?.name,
           },
           {
             label: "销售员",
@@ -151,6 +158,7 @@ class ManagementContractSummary extends ContractSummary {
       {
         title: "下发状态",
         dataIndex: "taskStatus",
+        render: (text: any) => <>{taskStatus[text || 0]}</>
       },
       {
         title: "采购订单号",
@@ -198,9 +206,11 @@ class ManagementContractSummary extends ContractSummary {
     const orderItems = await RequestUtil.get<any>(this.requestPath, {
       contractId: this.props.match.params.id,
     });
+    const region = await RequestUtil.get<any>("/tower-system/region/00");
 
     this.setState({
       orderItems: orderItems.records as any[],
+      region: region
     });
   }
 }

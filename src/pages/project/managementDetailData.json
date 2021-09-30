@@ -591,14 +591,14 @@
             "enum": [
                 {
                     "value": 0,
-                    "label": "原件"
-                },
-                {
-                    "value": -1,
                     "label": "无"
                 },
                 {
                     "value": 1,
+                    "label": "原件"
+                },
+                {
+                    "value": 2,
                     "label": "复印件"
                 }
             ]
