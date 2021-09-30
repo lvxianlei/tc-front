@@ -1,11 +1,11 @@
 {
     "baseInfoData": [
         {
-            "dataIndex": "projectName",
+            "dataIndex": "problemFieldName",
             "title": "问题字段"
         },
         {
-            "dataIndex": "projectNumber",
+            "dataIndex": "currentValue",
             "title": "原字段信息"
         },
         {
@@ -13,7 +13,7 @@
             "title": "备注"
         },
         {
-            "dataIndex": "message",
+            "dataIndex": "newValue",
             "title": "校对后信息"
         }
     ]

@@ -899,7 +899,7 @@
     },
     { // 问题单-提料/放样/螺栓
       "name": "问题单详情",
-      "path": "/question/questionMngt/otherDetail/:id",
+      "path": "/question/questionMngt/otherDetail/:id/:type",
       "module": "./pages/questionMngt/OtherDetail",
       "exact": true,
       "authority": "approvalm"

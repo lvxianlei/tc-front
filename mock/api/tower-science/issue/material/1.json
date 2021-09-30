@@ -1,0 +1,45 @@
+{
+	"code": 200,
+	"msg": "",
+	"success": true,
+	"data": {
+		"currentValue": 46984690,
+		"dataType": -93048533,
+		"drawProductStructure": [{
+			"basicsPartNum": 18350629,
+			"basicsTheoryWeight": 56162608.64856678,
+			"basicsWeight": -32508617.334340036,
+			"code": "in nostrud magna dolore commodo",
+			"description": "veniam Lorem culpa non",
+			"greenColumn": ["in commodo incididunt", "pariatur "],
+			"id": -66926510,
+			"length": 25631268.917123422,
+			"materialName": "occaecat exercitation enim irure mollit",
+			"name": "ea sed in est do",
+			"productCategory": 69532290,
+			"redColumn": ["qui ipsum veniam", "occaecat"],
+			"segmentName": "id aliquip ex ut consequat",
+			"structureSpec": "tempor dolore",
+			"structureTexture": "minim quis est cillum",
+			"thickness": 98026520.70448312,
+			"totalWeight": 11284005.571972117,
+			"width": 44388125.89890459,
+			"yellowColumn": ["ad adipisicing proident"]
+		}],
+		"id": 81423011,
+		"issueRecordList": [{
+			"description": "nisi nostrud",
+			"id": 47372651,
+			"status":1,
+			"updateDepartment": 85457165,
+			"updateDepartmentName": "ut et qui esse velit",
+			"updateTime": -72650476,
+			"updateUser": 19216887,
+			"updateUserName": "tempor laboris ipsum commodo"
+		}],
+		"keyId": -62687627,
+		"newValue": -27215957,
+		"problemField": 55616486,
+		"problemFieldName": -25396555
+	}
+}

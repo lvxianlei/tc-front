@@ -302,7 +302,7 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
         return value;
     }
     return <Page
-        path="/audit/getAuditRecord"
+        path="/tower-science/assessTask/planLofting"
         columns={columns}
         onFilterSubmit={onFilterSubmit}
         extraOperation={<Button type="primary">导出</Button>}

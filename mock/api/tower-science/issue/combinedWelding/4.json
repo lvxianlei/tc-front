@@ -1,0 +1,137 @@
+{
+	"code": 200,
+	"msg": "",
+	"success": true,
+	"data": {
+		"description": "deserunt exercitation",
+		"issueRecordList": [{
+			"description": "eu ad",
+			"id": 75088945,
+			"status": 1,
+			"updateDepartment": 33589632,
+			"updateDepartmentName": "exercitation",
+			"updateTime": -63326843,
+			"updateUser": -58748968,
+			"updateUserName": "ea ullamco"
+		}, {
+			"description": "anim",
+			"id": 34768234,
+			"status": 2,
+			"updateDepartment": -78300873,
+			"updateDepartmentName": "mini",
+			"updateTime": 17885420,
+			"updateUser": 1660036,
+			"updateUserName": "sit "
+		}],
+		"weldingDetailedStructureList": [{
+			"description": "ipsum quis adipisic",
+			"electricWeldingMeters": "dolore ea non",
+			"isMainPart": "in exercitation ex dolore labore",
+			"length": "nisi consequat irure",
+			"materialName": "laboris ut incidi",
+			"partId": "non mollit ea sed",
+			"segmentId": "velit",
+			"singleNum": "id eu tempor in",
+			"structureSpec": "commodo",
+			"structureTexture": "enim",
+			"width": "incididunt id adipisicing do"
+		}, {
+			"description": "in aute",
+			"electricWeldingMeters": "amet",
+			"isMainPart": "est",
+			"length": "eu occaecat",
+			"materialName": "ul",
+			"partId": "nostrud amet cillum",
+			"segmentId": "exercitation",
+			"singleNum": "dolore dolore sint",
+			"structureSpec": "ex deserunt qui anim veniam",
+			"structureTexture": "labore id pariatur reprehenderit tempor",
+			"width": "dolore in pariatur"
+		}, {
+			"description": "veniam anim nostrud consequat",
+			"electricWeldingMeters": "Duis nostrud",
+			"isMainPart": "deserunt veniam anim voluptate",
+			"length": "moll",
+			"materialName": "ipsum est in do",
+			"partId": "laborum cupidatat commodo elit",
+			"segmentId": "et irure veniam eu",
+			"singleNum": "cillu",
+			"structureSpec": "et nulla sit enim cillum",
+			"structureTexture": "velit dolore",
+			"width": "ut fugiat elit consequat Duis"
+		}, {
+			"description": "enim non minim",
+			"electricWeldingMeters": "Excepteur",
+			"isMainPart": "cupidatat adipisicing",
+			"length": "sint et officia",
+			"materialName": "dolor sit elit pariatur commo",
+			"partId": "cillum sit quis laboris Lorem",
+			"segmentId": "qui aliquip ea",
+			"singleNum": "enim",
+			"structureSpec": "occaecat ut sunt",
+			"structureTexture": "quis Duis consectetur",
+			"width": "sed"
+		}],
+		"weldingDetailedStructureVOList": [{
+			"description": "cillum",
+			"electricWeldingMeters": "dolore dolore anim tempor incididunt",
+			"isMainPart": "tempor",
+			"length": "voluptate consect",
+			"materialName": "pariatur minim labore consec",
+			"partId": "do sed",
+			"segmentId": "esse enim",
+			"singleNum": "do ex eiusmod dolor consequat",
+			"structureSpec": "laborum velit sunt aute",
+			"structureTexture": "aliqua reprehenderit magna Lorem",
+			"width": "Duis ea est deserunt eu"
+		}, {
+			"description": "sunt",
+			"electricWeldingMeters": "in adipisicing sint officia",
+			"isMainPart": "Duis magna aliquip incididunt i",
+			"length": "laborum Excepteur cupidatat",
+			"materialName": "adipisicing",
+			"partId": "nisi laborum",
+			"segmentId": "irure sint fugiat velit in",
+			"singleNum": "Excepteur exercitation esse",
+			"structureSpec": "elit ullamco qu",
+			"structureTexture": "aute",
+			"width": "elit in"
+		}, {
+			"description": "ad Ut eiusmod",
+			"electricWeldingMeters": "occaecat minim proident",
+			"isMainPart": "magna ex minim",
+			"length": "aliquip Ex",
+			"materialName": "et",
+			"partId": "dolor do in sed",
+			"segmentId": "reprehend",
+			"singleNum": "ipsum",
+			"structureSpec": "cillum",
+			"structureTexture": "deserunt id",
+			"width": "occaecat tempor nisi anim non"
+		}, {
+			"description": "aliqua",
+			"electricWeldingMeters": "id sunt dolor Ut",
+			"isMainPart": "et in",
+			"length": "mollit exercitation",
+			"materialName": "laboris nulla sit",
+			"partId": "fugiat cillum sunt dolore dolor",
+			"segmentId": "Excepteur",
+			"singleNum": "proident consectetur magna aute Duis",
+			"structureSpec": "enim Lorem",
+			"structureTexture": "ullamco id ipsum",
+			"width": "velit"
+		}, {
+			"description": "aliqua",
+			"electricWeldingMeters": "culpa eiusmod ex dolor",
+			"isMainPart": "dolor elit veniam",
+			"length": "elit",
+			"materialName": "Ut nostrud in",
+			"partId": "culpa",
+			"segmentId": "eu Lorem ullamc",
+			"singleNum": "consequat culpa nulla pariatur",
+			"structureSpec": "laborum tempor do Excepteur non",
+			"structureTexture": "culpa minim Excepteur elit reprehenderit",
+			"width": "ad id voluptate pariatur"
+		}]
+	}
+}

@@ -1,0 +1,42 @@
+{
+	"code": 200,
+	"msg": "",
+	"success": true,
+	"data": {
+		"currentValue": -78420494,
+		"dataType": 25549582,
+		"id": 25468734,
+		"issueRecordList": [{
+			"description": "Lorem",
+			"id": -22815309,
+			"status": 1,
+			"updateDepartment": -15514155,
+			"updateDepartmentName": "minim cupidatat elit aliquip incididunt",
+			"updateTime": 7156631,
+			"updateUser": -65582624,
+			"updateUserName": "cupidatat sint Ut"
+		}, {
+			"description": "Ut ut nulla culpa ipsum",
+			"id": -18939910,
+			"status": 2,
+			"updateDepartment": -92649824,
+			"updateDepartmentName": "officia amet mo",
+			"updateTime": 44582628,
+			"updateUser": -99445443,
+			"updateUserName": "mollit tempor commodo in laborum"
+		}, {
+			"description": "aliqua Excepteur eiusmod",
+			"id": 82149170,
+			"status": 3,
+			"updateDepartment": 71581661,
+			"updateDepartmentName": "adipisicing ex velit",
+			"updateTime": 24846720,
+			"updateUser": 46579556,
+			"updateUserName": "Duis ut quis"
+		}],
+		"keyId": -30459309,
+		"newValue": -98656583,
+		"problemField": 5470293,
+		"problemFieldName": 86113155
+	}
+}

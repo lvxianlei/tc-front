@@ -1,0 +1,72 @@
+{
+	"code": 200,
+	"msg": "",
+	"success": true,
+	"data": {
+		"currentValue": 21037900,
+		"dataType": -80527424,
+		"drawProductStructure": [{
+			"basicsPartNum": 13616527,
+			"basicsTheoryWeight": -57443615.0086731,
+			"basicsWeight": 72219267.80647635,
+			"code": "pariatur",
+			"description": "occaecat dolore est",
+			"greenColumn": ["Lorem", "nisi minim enim"],
+			"id": -90086806,
+			"length": -52788520.39357571,
+			"materialName": "eiusm",
+			"name": "reprehenderit do qui",
+			"productCategory": 75404734,
+			"redColumn": ["non"],
+			"segmentName": "deserunt anim irure fugiat Excepteur",
+			"structureSpec": "voluptate deserunt",
+			"structureTexture": "voluptate anim",
+			"thickness": 40910744.63891116,
+			"totalWeight": -69522167.66951165,
+			"width": 49998719.14187804,
+			"yellowColumn": ["ad", "pariatur enim ad", "dolore", "proiden", "cillum pariatur elit"]
+		}],
+		"id": -7230987,
+		"issueRecordList": [{
+			"description": "amet aliquip id irure",
+			"id": 66224947,
+			"status": 1,
+			"updateDepartment": -69591312,
+			"updateDepartmentName": "irure cillum incididunt fugiat ea",
+			"updateTime": 23437432,
+			"updateUser": -90978463,
+			"updateUserName": "in tempor quis esse"
+		}, {
+			"description": "id",
+			"id": -70013973,
+			"status": 2,
+			"updateDepartment": -56918789,
+			"updateDepartmentName": "adipisicing Excepteur Ut nostrud",
+			"updateTime": 79022501,
+			"updateUser": 20737915,
+			"updateUserName": "sed ea"
+		}, {
+			"description": "sunt exercitat",
+			"id": 41992408,
+			"status":3,
+			"updateDepartment": 85493400,
+			"updateDepartmentName": "minim",
+			"updateTime": -75206187,
+			"updateUser": 71788386,
+			"updateUserName": "esse"
+		}, {
+			"description": "qui nisi ea",
+			"id": -3176416,
+			"status":2,
+			"updateDepartment": -78617619,
+			"updateDepartmentName": "in aliquip ex est",
+			"updateTime": -20214588,
+			"updateUser": 95644728,
+			"updateUserName": "do"
+		}],
+		"keyId": -34611465,
+		"newValue": -21163804,
+		"problemField": -72515199,
+		"problemFieldName": -95474764
+	}
+}

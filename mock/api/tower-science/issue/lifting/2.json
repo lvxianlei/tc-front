@@ -1,0 +1,54 @@
+{
+	"code": 200,
+	"msg": "",
+	"success": true,
+	"data": {
+		"currentValue": 10632562,
+		"dataType": -33921153,
+		"drawProductStructure": [{
+			"basicsPartNum": -16904519,
+			"basicsTheoryWeight": 92178520.57318345,
+			"basicsWeight": 41350242.9511261,
+			"code": "sint incididunt",
+			"description": "voluptate consectetur",
+			"greenColumn": ["consectetur commodo"],
+			"id": 4202070,
+			"length": -34779382.03339792,
+			"materialName": "elit quis eu labore",
+			"name": "ad",
+			"productCategory": -60080665,
+			"redColumn": ["Duis ad elit", "sunt", "amet velit anim exercitation", "cillum amet nulla nisi", "reprehenderit id cillum aute sed"],
+			"segmentName": "Lorem",
+			"structureSpec": "esse",
+			"structureTexture": "culpa esse consectetur ut quis",
+			"thickness": 52728468.92203361,
+			"totalWeight": 41735532.3039999,
+			"width": 45837326.73950589,
+			"yellowColumn": ["dolore ut exercitation aliquip", "commodo", "fugiat", "non "]
+		}],
+		"id": -63189370,
+		"issueRecordList": [{
+			"description": "incididunt est dolore dolor aliquip",
+			"id": -7525183,
+			"status": 1,
+			"updateDepartment": 60272573,
+			"updateDepartmentName": "ullamco sint non do in",
+			"updateTime": -86629134,
+			"updateUser": 38214237,
+			"updateUserName": "ci"
+		}, {
+			"description": "veniam dolor",
+			"id": 16928088,
+			"status": 2,
+			"updateDepartment": 79909529,
+			"updateDepartmentName": "tempor incididunt velit sunt",
+			"updateTime": 3893745,
+			"updateUser": 54147267,
+			"updateUserName": "voluptate ea qui adipisicing sint"
+		}],
+		"keyId": 80880479,
+		"newValue": 91074598,
+		"problemField": -10863297,
+		"problemFieldName": 78888418
+	}
+}
