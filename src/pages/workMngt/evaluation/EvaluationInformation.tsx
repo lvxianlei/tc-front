@@ -111,10 +111,10 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                     <Space direction="horizontal" size="small">
                         <Button type="ghost" onClick={() => this.modalCancel() }>关闭</Button> 
                         {
-                            // this.state.information?.status === '3' ? 
+                            this.state.information?.status === '3' ? 
                             <><Button type="primary" onClick={() => this.onSave() }>保存</Button> 
                             <Button type="primary" onClick={() => this.onSubmit() } ghost>保存并提交</Button></>
-                            // : null
+                            : null
                         }
                     </Space>
                 } 

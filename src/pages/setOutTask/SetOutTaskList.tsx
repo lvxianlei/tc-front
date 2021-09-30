@@ -5,6 +5,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOutTask.module.less';
 import { Link } from 'react-router-dom';
 import Deliverables from './Deliverables';
+import RequestUtil from '../../utils/RequestUtil';
 
 const columns = [
     {
@@ -15,70 +16,86 @@ const columns = [
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
     },
     {
-        key: 'projectName',
+        key: 'taskCode',
         title: '放样任务编号',
         width: 150,
-        dataIndex: 'projectName'
+        dataIndex: 'taskCode'
     },
     {
-        key: 'projectNumber',
+        key: 'status',
         title: '任务状态',
-        dataIndex: 'projectNumber',
-        width: 120
+        dataIndex: 'status',
+        width: 120,
+        render: (status: number): React.ReactNode => {
+            switch (status) {
+                case 1:
+                    return '待确认';
+                case 2:
+                    return '待指派';
+                case 3:
+                    return '已拒绝';
+                case 4:
+                    return '待完成';
+                case 5:
+                    return '已完成';
+                case 6:
+                    return '已提交';
+            }
+        }
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'updateStatusTime',
         title: '最新状态变更时间',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'updateStatusTime'
     },
     {
-        key: 'biddingEndTime',
+        key: 'productCategory',
         title: '塔型完成进度',
         width: 150,
-        dataIndex: 'biddingEndTime',
+        dataIndex: 'productCategory',
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            <Link to={ `/setOutTask/setOutTaskTower/${ record.id }` }>{ record.biddingEndTime }塔型完成进度</Link>
+            <Link to={ `/setOutTask/setOutTaskTower/${ record.id }` }>{ record.productCategoryEndNum + '/' + record.productCategoryNum }</Link>
         )
     },
     {
-        key: 'biddingPerson',
+        key: 'product',
         title: '杆塔完成进度',
-        dataIndex: 'biddingPerson',
+        dataIndex: 'product',
         width: 200,
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            <Link to={ `/setOutTask/setOutTaskPole/${ record.id }` }>{ record.biddingEndTime }杆塔完成进度</Link>
+            <Link to={ `/setOutTask/setOutTaskPole/${ record.id }` }>{ record.productEndNum + '/' + record.productNum }</Link>
         )
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'weight',
         title: '重量（吨）',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'weight'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'taskNumber',
         title: '任务单编号',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'taskNumber'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'saleOrderNumber',
         title: '订单编号',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'saleOrderNumber'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'internalNumber',
         title: '内部合同编号',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'internalNumber'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'plannedDeliveryTime',
         title: '计划交付时间',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'plannedDeliveryTime'
     },
     {
         key: 'operation',
@@ -92,7 +109,9 @@ const columns = [
                 <Deliverables id={ record.id }/>
                 <Popconfirm
                     title="确认提交?"
-                    onConfirm={ () => {} }
+                    onConfirm={ () => {
+                        RequestUtil.post(`/tower-science/loftingTask/submit`, { id: record.id });
+                    } }
                     okText="提交"
                     cancelText="取消"
                 >
@@ -105,38 +124,51 @@ const columns = [
 
 export default function SetOutTaskList(): React.ReactNode {
     return <Page
-        path="/tower-market/bidInfo"
+        path="/tower-science/loftingTask/taskPage"
         columns={ columns }
         headTabs={ [] }
         extraOperation={ <Button type="primary" ghost>导出</Button> }
         searchFormItems={ [
             {
-                name: 'startReleaseDate',
+                name: 'fuzzyMsg',
                 label: '模糊查询项',
                 children: <Input placeholder="放样任务编号/任务单编号/订单编号/内部合同编号"/>
             },
             {
-                name: 'startReleaseDate',
+                name: 'updateStatusTime',
                 label: '最新状态变更时间',
-                children: <DatePicker />
+                children: <DatePicker.RangePicker />
             },
             {
-                name: 'startBidBuyEndTime',
+                name: 'status',
                 label: '任务状态',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
-                    <Select.Option value="0" key="0">待确认</Select.Option>
-                    <Select.Option value="1" key="1">待指派</Select.Option>
-                    <Select.Option value="2" key="2">已拒绝</Select.Option>
-                    <Select.Option value="3" key="3">待完成</Select.Option>
-                    <Select.Option value="4" key="4">已完成</Select.Option>
-                    <Select.Option value="5" key="5">已提交</Select.Option>
+                    <Select.Option value={ 1 } key="1">待确认</Select.Option>
+                    <Select.Option value={ 2 } key="2">待指派</Select.Option>
+                    <Select.Option value={ 3 } key="3">已拒绝</Select.Option>
+                    <Select.Option value={ 4 } key="4">待完成</Select.Option>
+                    <Select.Option value={ 5 } key="5">已完成</Select.Option>
+                    <Select.Option value={ 6 } key="6">已提交</Select.Option>
                 </Select>
             },
             {
-                name: 'fuzzyQuery',
+                name: 'plannedDeliveryTime',
                 label: '计划交付时间',
-                children: <DatePicker />
+                children: <DatePicker.RangePicker />
             },
         ] }
+        onFilterSubmit = { (values: Record<string, any>) => {
+            if(values.updateStatusTime) {
+                const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
+                values.updateStatusTimeStart = formatDate[0];
+                values.updateStatusTimeEnd = formatDate[1];
+            }
+            if(values.plannedDeliveryTime) {
+                const formatDate = values.plannedDeliveryTime.map((item: any) => item.format("YYYY-MM-DD"));
+                values.plannedDeliveryTimeStart = formatDate[0];
+                values.plannedDeliveryTimeEnd = formatDate[1];
+            }
+            return values;
+        } }
     />
 }

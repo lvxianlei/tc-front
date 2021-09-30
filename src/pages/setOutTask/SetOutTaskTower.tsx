@@ -3,7 +3,7 @@ import { Space, Button } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOutTask.module.less';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 const columns = [
     {
@@ -15,132 +15,132 @@ const columns = [
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
     },
     {
-        key: 'projectName',
+        key: 'name',
         title: '塔型',
         width: 150,
-        dataIndex: 'projectName'
+        dataIndex: 'name'
     },
     {
-        key: 'projectNumber',
+        key: 'steelProductShape',
         title: '钢印号塔型',
-        dataIndex: 'projectNumber',
+        dataIndex: 'steelProductShape',
         width: 120
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'num',
         title: '基数',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'num'
     },
     {
-        key: 'biddingEndTime',
+        key: 'loftingLeaderName',
         title: '放样负责人',
         width: 150,
-        dataIndex: 'biddingEndTime'
+        dataIndex: 'loftingLeaderName'
     },
     {
-        key: 'biddingPerson',
+        key: 'loftingUserName',
         title: '放样人',
-        dataIndex: 'biddingPerson',
+        dataIndex: 'loftingUserName',
         width: 200
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'loftingDeliverTime',
         title: '放样交付时间',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'loftingDeliverTime'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'loftingStatus',
         title: '塔型放样状态',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'loftingStatus'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'materialLeaderName',
         title: '提料负责人',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'materialLeaderName'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'materialUserName',
         title: '提料人',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'materialUserName'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'materialDeliverTime',
         title: '提料交付时间',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'materialDeliverTime'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'materialStatus',
         title: '塔型提料状态',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'materialStatus'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'boltLeaderName',
         title: '螺栓负责人',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'boltLeaderName'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'boltDeliverTime',
         title: '螺栓交付时间',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'boltDeliverTime'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'boltStatus',
         title: '螺栓清单状态',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'boltStatus'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'smallSampleLeaderName',
         title: '小样图负责人',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'smallSampleLeaderName'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'smallSampleDeliverTime',
         title: '小样图交付时间',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'smallSampleDeliverTime'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'smallSampleStatus',
         title: '小样图清单状态',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'smallSampleStatus'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'combinedWeldingLeaderName',
         title: '组焊负责人',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'combinedWeldingLeaderName'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'combinedWeldingDeliverTime',
         title: '组焊交付时间',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'combinedWeldingDeliverTime'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'boltStatus',
         title: '组焊清单状态',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'boltStatus'
     }
 ]
 
 export default function SetOutTaskTower(): React.ReactNode {
     const history = useHistory();
-    
+    const params = useParams<{ id: string }>();
     return <Page
-        path="/tower-market/bidInfo"
+        path={`/tower-science/productCategory/list?loftingTaskId=${ params.id }`}
         columns={ columns }
         headTabs={ [] }
         extraOperation={ 
@@ -150,5 +150,8 @@ export default function SetOutTaskTower(): React.ReactNode {
             </Space> 
         }
         searchFormItems={ [] }
+        tableProps={{ 
+            pagination: false
+        }}
     />
 }

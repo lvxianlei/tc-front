@@ -15,71 +15,81 @@ const columns = [
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
     },
     {
-        key: 'projectName',
+        key: 'productNumber',
         title: '杆塔号',
         width: 150,
-        dataIndex: 'projectName'
+        dataIndex: 'productNumber'
     },
     {
-        key: 'projectNumber',
+        key: 'productCategoryName',
         title: '塔型',
-        dataIndex: 'projectNumber',
+        dataIndex: 'productCategoryName',
         width: 120
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'loftingLeaderName',
         title: '放样负责人',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'loftingLeaderName'
     },
     {
-        key: 'biddingEndTime',
+        key: 'loftingUserName',
         title: '放样人',
         width: 150,
-        dataIndex: 'biddingEndTime'
+        dataIndex: 'loftingUserName'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'loftingDeliverTime',
         title: '放样交付时间',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'loftingDeliverTime'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'loftingStatus',
         title: '杆塔放样状态',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'loftingStatus'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'materialLeaderName',
         title: '提料负责人',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'materialLeaderName'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'materialUserName',
         title: '提料人',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'materialUserName'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'materialDeliverTime',
         title: '提料交付时间',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'materialDeliverTime'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'materialStatus',
         title: '杆塔提料状态',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'materialStatus',
+        render: (status: number): React.ReactNode => {
+            switch (status) {
+                case 1:
+                    return '配段中';
+                case 2:
+                    return '已完成';
+                case 3:
+                    return '已提交';
+            }
+        }
     }
 ]
 
 export default function SetOutTaskPole(): React.ReactNode {
     const history = useHistory();
     return <Page
-        path="/tower-market/bidInfo"
+        path="/tower-science/product/page"
         columns={ columns }
         headTabs={ [] }
         extraOperation={ 

@@ -124,5 +124,11 @@ export default function EvaluationList(): React.ReactNode {
                 </Row>
             }
         ] }
+        onFilterSubmit = { (values: Record<string, any>) => {
+            if(values.expectDeliverTime) {
+                values.expectDeliverTime = values.expectDeliverTime.format("YYYY-MM-DD");
+            }
+            return values;
+        } }
     />
 }
