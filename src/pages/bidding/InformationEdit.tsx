@@ -21,7 +21,6 @@ export default function InfomationNew(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const [attachVosData, setAttachVosData] = useState<any[]>([])
-    const [reasonStatus, setReasonStatus] = useState<boolean>(false)
     const [binddingStatus, setBinddingStatus] = useState<number>(0)
     const [visible, setVisible] = useState<boolean>(false)
     const [baseInfoForm] = Form.useForm()
@@ -31,7 +30,6 @@ export default function InfomationNew(): JSX.Element {
         try {
             const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
             bidForm.setFieldsValue({ submit: data.bidPackageInfoVOS })
-            setReasonStatus(data.biddingStatus !== 2)
             setBinddingStatus(data.biddingStatus)
             setAttachVosData(data.attachVos)
             resole(data)
@@ -107,31 +105,33 @@ export default function InfomationNew(): JSX.Element {
     }
 
     const handleBaseInfoChange = (changeFiled: any) => {
-        const { biddingStatus } = changeFiled;
-        (biddingStatus || biddingStatus === 0) && setBinddingStatus(biddingStatus)
-        if (biddingStatus === 2) {
-            Modal.confirm({
-                title: "应标状态修改",
-                content: "当前标的已被应标，是否取消应标？确定后，该招标信息的项目将被删除，请再三确认！",
-                onOk: () => {
-                    setBinddingStatus(biddingStatus)
-                    setReasonStatus(biddingStatus !== 2)
-                },
-                onCancel: () => {
-                    baseInfoForm.setFieldsValue({ biddingStatus: 1 })
-                }
-            })
-            return
+        if (Object.keys(changeFiled)[0] === "biddingStatus") {
+            const { biddingStatus } = changeFiled
+            if (biddingStatus === 2) {
+                Modal.confirm({
+                    title: "应标状态修改",
+                    content: "当前标的已被应标，是否取消应标？确定后，该招标信息的项目将被删除，请再三确认！",
+                    onOk: () => {
+                        setBinddingStatus(biddingStatus)
+                    },
+                    onCancel: () => {
+                        baseInfoForm.setFieldsValue({ biddingStatus: 1 })
+                    }
+                })
+                return
+            }
+            if (biddingStatus === 1) {
+                setVisible(true)
+            }
+            setBinddingStatus(biddingStatus)
         }
-        if (biddingStatus === 1) {
-            setVisible(true)
-        }
-        setBinddingStatus(biddingStatus)
+
     }
 
     const filterBaseInfoData: (baseInfoData: any) => any[] = (baseInfoData) => {
+        console.log(binddingStatus)
         const newData = baseInfoData.map((item: any) => item.dataIndex === "biddingStatus" ? ({ ...item, disabled: detailData?.biddingStatus === 0 }) : item)
-        return ![0, 1].includes(binddingStatus) ? newData : newData.filter((item: any) => item.dataIndex !== "reason")
+        return [0, 1].includes(binddingStatus) ? newData.filter((item: any) => item.dataIndex !== "reason") : newData
     }
 
     const handleModalOk = async () => {

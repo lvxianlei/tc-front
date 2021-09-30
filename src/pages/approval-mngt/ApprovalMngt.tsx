@@ -141,21 +141,20 @@ export default function Information(): React.ReactNode {
             const {
                 customerCompany,
                 contractName,
-                serviceManager,
-                serviceManagerTel
+                salesman,
             } = fields.contractId.records[0]
             drawingCofirmForm.setFieldsValue({
                 customerCompany,
                 contractName,
-                serviceManager,
-                serviceManagerTel
+                serviceManager: salesman
             })
         }
     }
 
     const performanceBondChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
         if (Object.keys(fields)[0] === "projectId") {
-            bidingForm.setFieldsValue({ ...allFields, ...fields.projectId.records[0] })
+            const { projectName, projectNumber } = fields.projectId.records[0]
+            performanceBondForm.setFieldsValue({ projectName, projectNumber })
         }
     }
 

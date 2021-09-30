@@ -135,6 +135,10 @@ export default function SalesPlanEdit() {
         setVisible(false)
     }
 
+    const deleteProject = (id: string) => {
+        setProductDetails(productDetails.filter((pro: any) => pro.id !== id))
+    }
+
     return <DetailContent operation={[
         <Button
             key="save" type="primary"
@@ -174,7 +178,15 @@ export default function SalesPlanEdit() {
                 columns={taskNoticeEditSpec.map(item => item.dataIndex === "materialStandard" ? ({ ...item, enum: materialStandardEnum }) : item)}
                 dataSource={data || {}} edit col={3} />
             <DetailTitle title="产品信息" operation={[<Button key="select" type="primary" disabled={!saleOrderId} onClick={handleSelectClick}>选择杆塔明细</Button>]} />
-            <CommonTable columns={salesAssist} scroll={{ x: true }} dataSource={productDetails} />
+            <CommonTable columns={[{
+                title: "操作",
+                dataIndex: "opration",
+                width: 30,
+                fixed: true,
+                render: (_: any, records: any) => <>
+                    <Button type="link" onClick={() => deleteProject(records.id)}>删除</Button>
+                </>
+            }, ...salesAssist]} scroll={{ x: true }} dataSource={productDetails} />
         </Spin>
     </DetailContent>
 }
