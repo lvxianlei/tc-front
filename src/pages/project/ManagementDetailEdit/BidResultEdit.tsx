@@ -77,6 +77,14 @@ export default function BidResultEdit(): JSX.Element {
         })
     }
 
+    const handleTabsCanEditChange = (data: any) => {
+        console.log(data)
+        const newData = data.map((item: any) => {
+            console.log(item)
+            const { ref } = item
+        })
+    }
+
     return (<DetailContent operation={[
         <Button
             key="save"
@@ -144,6 +152,7 @@ export default function BidResultEdit(): JSX.Element {
                     key: item.round,
                     content: <EditTable columns={bidInfoColumns} dataSource={item.bidOpenRecordVos || []} />
                 }))}
+                onChange={handleTabsCanEditChange}
                 eachContent={(item: any, tempRef?: { ref: Record<string, any>; key: string; }) => {
                     const data: any[] = bidOpenRecordVos.find((bidItem: any) => bidItem.round === item.key).bidOpenRecordVos
                     return (
