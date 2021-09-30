@@ -10,7 +10,7 @@ export default function ConfirmMessage(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDrawTaskById/${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data
@@ -39,7 +39,7 @@ export default function ConfirmMessage(): React.ReactNode {
                             </Space>
                         )
                     }
-                ]} dataSource={detailData?.attachVos} />
+                ]} dataSource={detailData?.attachInfoList} />
                 {/* <DetailTitle title="完成信息" />
                 <CommonTable columns={[
                     {

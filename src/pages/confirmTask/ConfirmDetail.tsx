@@ -15,64 +15,64 @@ const towerColumns=[
         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
     },
     {
-        key: 'projectName',
+        key: 'lineName',
         title: '线路名称',
         width: 100,
-        dataIndex: 'projectName'
+        dataIndex: 'lineName'
     },
     {
-        key: 'projectName',
+        key: 'name',
         title: '杆塔号',
         width: 100,
-        dataIndex: 'projectName'
+        dataIndex: 'name'
     },
     {
-        key: 'projectName',
+        key: 'productCategory',
         title: '塔型',
         width: 100,
-        dataIndex: 'projectName'
+        dataIndex: 'productCategory'
     },
     {
-        key: 'projectName',
+        key: 'steelProductShape',
         title: '塔型钢印号',
         width: 100,
-        dataIndex: 'projectName'
+        dataIndex: 'steelProductShape'
     },
     {
-        key: 'projectName',
+        key: 'productType',
         title: '产品类型',
         width: 100,
-        dataIndex: 'projectName'
+        dataIndex: 'productType'
     },
     {
-        key: 'projectName',
+        key: 'voltageLevel',
         title: '电压等级（kv）',
         width: 100,
-        dataIndex: 'projectName'
+        dataIndex: 'voltageLevel'
     },
     {
-        key: 'projectName',
+        key: 'basicHight',
         title: '呼高（m）',
         width: 100,
-        dataIndex: 'projectName'
+        dataIndex: 'basicHight'
     },
     {
-        key: 'projectName',
+        key: 'otherWeight',
         title: '其他增重（kg）',
         width: 100,
-        dataIndex: 'projectName'
+        dataIndex: 'otherWeight'
     },
     {
-        key: 'projectName',
+        key: 'totalWeight',
         title: '总重（kg）',
         width: 100,
-        dataIndex: 'projectName'
+        dataIndex: 'totalWeight'
     },
     {
-        key: 'projectName',
+        key: 'description',
         title: '备注',
         width: 100,
-        dataIndex: 'projectName'
+        dataIndex: 'description'
     }
 ]
 
@@ -90,7 +90,7 @@ export default function ConfirmDetail(): React.ReactNode {
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
             <DetailTitle title="杆塔信息"/>
-            <CommonTable columns={towerColumns} dataSource={detailData?.drawProductDetailVOList} />
+            <CommonTable columns={towerColumns} dataSource={detailData?.drawProductDetailList} />
             <DetailTitle title="备注"/>
             <TextArea maxLength={500} showCount rows={3} value={detailData?.description} disabled/>
             <DetailTitle title="附件"/>
@@ -111,7 +111,7 @@ export default function ConfirmDetail(): React.ReactNode {
                         </Space>
                     )
                 }
-            ]} dataSource={detailData?.attachInfoVOList} />
+            ]} dataSource={detailData?.attachInfoList} />
             </DetailContent>
         </Spin>
     </>

@@ -1,0 +1,83 @@
+{
+	"code": 200,
+	"msg": "",
+	"success": true,
+	"data": {
+		"aeId": 27500397,
+		"aeName": "eu",
+		"aePhone": "mollit anim",
+		"assignorId": -12866690,
+		"attachInfoList": [{
+			"description": "ut eiusmod",
+			"filePath": "non mollit laboris sint incididunt",
+			"fileSize": -56825384.324740246,
+			"fileSuffix": "commodo ea",
+			"fileUploadTime": "2014-04-19T17:38:37.455Z",
+			"id": -66384833,
+			"name": "aliquip ipsum occaecat minim Excepteur",
+			"userName": "sint aute nulla"
+		}, {
+			"description": "aute deserunt irure",
+			"filePath": "voluptate id",
+			"fileSize": 54703827.246444434,
+			"fileSuffix": "ad",
+			"fileUploadTime": "1996-08-22T01:55:13.368Z",
+			"id": -65529502,
+			"name": "",
+			"userName": "qui dolor ex"
+		}, {
+			"description": "adipisicing Duis",
+			"filePath": "ex ad",
+			"fileSize": -16271280.757224023,
+			"fileSuffix": "reprehenderit in",
+			"fileUploadTime": "1972-01-23T06:34:14.259Z",
+			"id": -68639836,
+			"name": "labore cupidatat non nostrud",
+			"userName": "pariatur deserunt reprehenderit"
+		}, {
+			"description": "et",
+			"filePath": "deserunt",
+			"fileSize": 26663899.351259127,
+			"fileSuffix": "cupidatat",
+			"fileUploadTime": "1949-04-24T04:29:56.309Z",
+			"id": -23656205,
+			"name": "Duis Lorem officia",
+			"userName": "dolor sed Duis"
+		}, {
+			"description": "esse",
+			"filePath": "eiusmod veniam enim anim",
+			"fileSize": 61045866.37438807,
+			"fileSuffix": "ex enim sunt minim",
+			"fileUploadTime": "1952-08-01T18:06:43.505Z",
+			"id": 20869595,
+			"name": "in reprehenderit",
+			"userName": "aliqua"
+		}],
+		"confirmId": 25378366,
+		"contractName": "ut in",
+		"contractNum": "mollit laborum cillum magna ut",
+		"customerId": -81903109,
+		"customerName": "non voluptate",
+		"description": "dolor repr",
+		"designContactsId": 77375211,
+		"designContactsName": 71753593,
+		"designPhone": "eu aute commodo fugiat",
+		"drawTaskId": "eiusmod dolore n",
+		"id": -30474766,
+		"statusRecordList": [{
+			"createDepartment": "Excepteur proident in ea",
+			"createTime": "1988-07-27T20:57:18.02Z",
+			"createUser": "incididunt",
+			"description": "ex ut",
+			"status": "ullamco dolor"
+		}, {
+			"createDepartment": "Excep",
+			"createTime": "1943-09-09T12:45:53.574Z",
+			"createUser": "minim pariatur sed",
+			"description": "incididunt enim amet magna cillum",
+			"status": "velit pariatur Duis"
+		}],
+		"plannedDeliveryTime": "2005-05-30T05:47:01.711Z",
+		"status": "deserunt incididunt nisi ut do"
+	}
+}

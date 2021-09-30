@@ -1,11 +1,8 @@
 import React from 'react';
 import { Button, Modal } from 'antd';
 import { DetailContent, CommonTable } from '../common';
-import RequestUtil from '../../utils/RequestUtil';
-import styles from './SetOutTask.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
-import useRequest from '@ahooksjs/use-request';
 
 export interface DeliverablesProps {}
 export interface IDeliverablesRouteProps extends RouteComponentProps<DeliverablesProps>, WithTranslation {

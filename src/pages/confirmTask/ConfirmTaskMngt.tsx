@@ -190,9 +190,14 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                     </Select>
                 },
                 {
-                    name: 'confirmName',
+                    name: 'confirmDept',
                     label: '确认人',
-                    children: <DatePicker />
+                    children: <Select />
+                },
+                {
+                    name: 'confirmId',
+                    label:'',
+                    children: <Select  />
                 },
                 {
                     name: 'fuzzyQueryItem',

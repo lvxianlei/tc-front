@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Input } from 'antd';
+import { Button, Input, Select } from 'antd';
 import { Link } from 'react-router-dom';
 import { Page } from '../common';
 
@@ -13,123 +13,212 @@ export default function PlanTrack(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'name',
+            key: 'businessUserName',
             title: '业务员',
-            dataIndex: 'name',
+            dataIndex: 'businessUserName',
             width: 100,
-            render: (_: undefined, record: any): React.ReactNode => {
-                return <Link to={`/approvalm/management/detail/${record.id}`}>{record.name}</Link>
+        },
+        {
+            key: 'taskCode',
+            title: '放样任务编号',
+            width: 100,
+            dataIndex: 'taskCode'
+        },
+        {
+            key: 'internalNumber',
+            title: '内部合同号',
+            width: 100,
+            dataIndex: 'internalNumber'
+        },
+        {
+            key: 'taskNumber',
+            title: '任务单编号',
+            width: 100,
+            dataIndex: 'taskNumber'
+        },
+        {
+            key: 'productCategoryName',
+            title: '塔型',
+            width: 100,
+            dataIndex: 'productCategoryName'
+        },
+        {
+            key: 'priority',
+            title: '优先级',
+            width: 100,
+            dataIndex: 'priority',
+            render: (value: number, record: object): React.ReactNode => {
+                const renderEnum: any = [
+                  {
+                    value: 1,
+                    label: "高"
+                  },
+                  {
+                    value: 2,
+                    label: "中"
+                  },
+                  {
+                    value: 3,
+                    label: "低"
+                  },
+                ]
+                return <>{renderEnum.find((item: any) => item.value === value).label}</>
             }
         },
         {
-            key: 'typeName',
-            title: '放样任务编号',
-            width: 100,
-            dataIndex: 'typeName'
-        },
-        {
-            key: 'linkman',
-            title: '内部合同号',
-            width: 100,
-            dataIndex: 'linkman'
-        },
-        {
-            key: 'phone',
-            title: '任务单编号',
-            width: 100,
-            dataIndex: 'phone'
-        },
-        {
-            key: 'description',
-            title: '塔型',
-            width: 100,
-            dataIndex: 'description'
-        },
-        {
-            key: 'createTime',
-            title: '优先级',
-            width: 100,
-            dataIndex: 'createTime'
-        },
-        {
-            key: 'phone',
+            key: 'num',
             title: '基数',
             width: 100,
-            dataIndex: 'phone'
+            dataIndex: 'num'
         },
         {
-            key: 'description',
+            key: 'totalWeight',
             title: '合同总量',
             width: 100,
-            dataIndex: 'description'
+            dataIndex: 'totalWeight'
         },
         {
-            key: 'createTime',
+            key: 'materialStatus',
             title: '塔型提料状态',
             width: 100,
-            dataIndex: 'createTime'
+            dataIndex: 'materialStatus',
+            render: (value: number, record: object): React.ReactNode => {
+                const renderEnum: any = [
+                  {
+                    value: 1,
+                    label: "待指派"
+                  },
+                  {
+                    value: 2,
+                    label: "提料中"
+                  },
+                  {
+                    value: 3,
+                    label: "配段中"
+                  },
+                  {
+                    value: 4,
+                    label: "已完成"
+                  },
+                  {
+                    value: 5,
+                    label: "已提交"
+                  },
+                ]
+                return <>{renderEnum.find((item: any) => item.value === value).label}</>
+            }
         },
         {
-            key: 'phone',
+            key: 'materialDeliverTime',
             title: '提料计划交付时间',
             width: 200,
-            dataIndex: 'phone'
+            dataIndex: 'materialDeliverTime'
         },
         {
-            key: 'description',
+            key: 'materialDeliverRealTime',
             title: '提料实际交付时间',
             width: 200,
-            dataIndex: 'description'
+            dataIndex: 'materialDeliverRealTime'
         },
         {
-            key: 'createTime',
+            key: 'loftingStatus',
             title: '塔型放样状态',
             width: 100,
-            dataIndex: 'createTime'
+            dataIndex: 'loftingStatus',
+            render: (value: number, record: object): React.ReactNode => {
+                const renderEnum: any = [
+                    {
+                        value: 1,
+                        label: "待指派"
+                    },
+                    {
+                        value: 2,
+                        label: "放样中"
+                    },
+                    {
+                        value: 3,
+                        label: "组焊中"
+                    },
+                    {
+                        value: 4,
+                        label: "配段中"
+                    },
+                    {
+                        value: 5,
+                        label: "已完成"
+                    },
+                    {
+                        value: 6,
+                        label: "已提交"
+                    },
+                ]
+                return <>{renderEnum.find((item: any) => item.value === value).label}</>
+            }
         },
         {
-            key: 'phone',
+            key: 'loftingDeliverTime',
             title: '放样计划交付时间',
             width: 200,
-            dataIndex: 'phone'
+            dataIndex: 'loftingDeliverTime'
+        },
+        {
+            key: 'loftingDeliverRealTime',
+            title: '放样实际交付时间',
+            width: 200,
+            dataIndex: 'loftingDeliverRealTime'
         },
         {
             key: 'description',
-            title: '放样实际交付时间',
+            title: '备注',
             width: 200,
             dataIndex: 'description'
         },
-        {
-            key: 'createTime',
-            title: '备注',
-            width: 200,
-            dataIndex: 'createTime'
-        },
-    ]
+    ];
+    const onFilterSubmit=(value: any)=>{
+        return value;
+    }
     return <Page
-        path="/audit/getAuditRecord"
+        path="/tower-science/assessTask/planTrack"
         columns={columns}
+        onFilterSubmit={onFilterSubmit}
         extraOperation={<Button type="primary">导出</Button>}
         searchFormItems={[
             {
-                name: 'name',
-                label: '最新状态变更时间',
-                children: <Input placeholder="请输入项目名称/项目编码/审批编号/关联合同/制单人进行查询" maxLength={200} />
-            },
-            {
-                name: '1',
-                label: '任务状态',
-                children: <Input placeholder="" maxLength={200} />
-            },
-            {
-                name: '2',
+                name: 'priority',
                 label: '优先级',
-                children: <Input placeholder="" maxLength={200} />
+                children:   <Select>
+                                <Select.Option value={1} key={1}>高</Select.Option>
+                                <Select.Option value={2} key={2}>中</Select.Option>
+                                <Select.Option value={3} key={3}>低</Select.Option>
+                            </Select>
             },
             {
-                name: '3',
+                name: 'materialStatus',
+                label: '塔型提料状态',
+                children:   <Select>
+                                <Select.Option value={1} key={1}>待指派</Select.Option>
+                                <Select.Option value={2} key={2}>提料中</Select.Option>
+                                <Select.Option value={3} key={3}>配段中</Select.Option>
+                                <Select.Option value={4} key={4}>已完成</Select.Option>
+                                <Select.Option value={5} key={5}>已提交</Select.Option>
+                            </Select>
+            },
+            {
+                name: 'loftingStatus',
+                label: '塔型放样状态',
+                children:   <Select>
+                                <Select.Option value={1} key={1}>待指派</Select.Option>
+                                <Select.Option value={2} key={2}>放样中</Select.Option>
+                                <Select.Option value={3} key={3}>组焊中</Select.Option>
+                                <Select.Option value={4} key={4}>配段中</Select.Option>
+                                <Select.Option value={5} key={5}>已完成</Select.Option>
+                                <Select.Option value={6} key={6}>已提交</Select.Option>
+                            </Select>
+            },
+            {
+                name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="请输入任务编号/合同名称/业务经理进行查询" maxLength={200} />
+                children: <Input placeholder="请输入放样任务编号/任务单编号/订单编号/内部合同编号进行查询" maxLength={200} />
             },
         ]}
     />

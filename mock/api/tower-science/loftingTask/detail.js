@@ -34,7 +34,7 @@ module.exports = {
         "signCustomerId": -77474912,
         "signCustomerName": "eiusmod consectetur sint",
         "status": 15512195,
-        "taskCode": "Ut nostrud Excepteur occaecat cupidatat",
+        "taskNum": "Ut nostrud Excepteur occaecat cupidatat",
         "taskDataVOList": [{
             "createTime": "1977-07-13T11:42:50.541Z",
             "status": 1,
@@ -48,7 +48,7 @@ module.exports = {
             "createDepartment": "tempor la",
             "description": 27269496
         }],
-        "taskNumber": "irure esse",
+        "externalTaskNum": "irure esse",
         "totalWeight": 14125754.131339893,
         "updateStatusTime": "1997-09-16T23:13:04.889Z",
         "weight": "eu",

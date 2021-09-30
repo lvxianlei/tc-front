@@ -121,9 +121,9 @@ export default function ConfirmTaskDetail(): React.ReactNode {
                             </Space>
                         )
                     }
-                ]} dataSource={detailData?.attachInfoVOList} />
+                ]} dataSource={detailData?.attachInfoList} />
                 <DetailTitle title="操作信息" />
-                <CommonTable columns={tableColumns} dataSource={detailData?.operationInformationVOList} />
+                <CommonTable columns={tableColumns} dataSource={detailData?.statusRecordList} />
             </DetailContent>
         </Spin>
     </>

@@ -13,8 +13,8 @@ for (let i = 1; i < 10; ++i) {
         "productEndNum": Random.increment(),
         "productNum": Random.increment(),
         "saleOrderNumber": Random.increment(),
-        "taskCode": Random.increment(),
-        "taskNumber": Random.increment(),
+        "taskNum": Random.increment(),
+        "externalTaskNum": Random.increment(),
         "updateStatusTime": Random.date('yyyy-MM-dd HH:mm'),
         "weight":  Random.increment(),
         "status|1-5": 1
@@ -34,8 +34,8 @@ module.exports = {
             "productEndNum": Random.increment(),
             "productNum": Random.increment(),
             "saleOrderNumber": Random.increment(),
-            "taskCode": Random.increment(),
-            "taskNumber": Random.increment(),
+            "taskNum": Random.increment(),
+            "externalTaskNum": Random.increment(),
             "updateStatusTime": Random.date('yyyy-MM-dd HH:mm'),
             "weight":  Random.increment(),
             "status|1-5": 1

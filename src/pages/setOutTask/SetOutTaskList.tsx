@@ -16,10 +16,10 @@ const columns = [
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
     },
     {
-        key: 'taskCode',
+        key: 'taskNum',
         title: '放样任务编号',
         width: 150,
-        dataIndex: 'taskCode'
+        dataIndex: 'taskNum'
     },
     {
         key: 'status',
@@ -28,17 +28,17 @@ const columns = [
         width: 120,
         render: (status: number): React.ReactNode => {
             switch (status) {
+                case 0:
+                    return '已拒绝';
                 case 1:
                     return '待确认';
                 case 2:
                     return '待指派';
                 case 3:
-                    return '已拒绝';
-                case 4:
                     return '待完成';
-                case 5:
+                case 4:
                     return '已完成';
-                case 6:
+                case 5:
                     return '已提交';
             }
         }
@@ -74,10 +74,10 @@ const columns = [
         dataIndex: 'weight'
     },
     {
-        key: 'taskNumber',
+        key: 'externalTaskNum',
         title: '任务单编号',
         width: 200,
-        dataIndex: 'taskNumber'
+        dataIndex: 'externalTaskNum'
     },
     {
         key: 'saleOrderNumber',
@@ -143,12 +143,12 @@ export default function SetOutTaskList(): React.ReactNode {
                 name: 'status',
                 label: '任务状态',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
+                    <Select.Option value={ 0 } key="0">已拒绝</Select.Option>
                     <Select.Option value={ 1 } key="1">待确认</Select.Option>
                     <Select.Option value={ 2 } key="2">待指派</Select.Option>
-                    <Select.Option value={ 3 } key="3">已拒绝</Select.Option>
-                    <Select.Option value={ 4 } key="4">待完成</Select.Option>
-                    <Select.Option value={ 5 } key="5">已完成</Select.Option>
-                    <Select.Option value={ 6 } key="6">已提交</Select.Option>
+                    <Select.Option value={ 3 } key="3">待完成</Select.Option>
+                    <Select.Option value={ 4 } key="4">已完成</Select.Option>
+                    <Select.Option value={ 5 } key="5">已提交</Select.Option>
                 </Select>
             },
             {
