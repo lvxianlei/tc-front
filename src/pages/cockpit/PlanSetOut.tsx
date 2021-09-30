@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Input, Select } from 'antd';
 import { Page } from '../common';
 
-export default function PlanSetOut(): React.ReactNode {  //张韵泽：负责人直接返回名称，无需增加-Name字段
+export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负责人直接返回名称，无需增加-Name字段   30号：加Name
     const columns = [
         {
             key: 'index',
@@ -131,10 +131,10 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽：负责人
             }
         },
         {
-            key: 'materialUser',
+            key: 'materialUserName',
             title: '提料负责人',
             width: 100,
-            dataIndex: 'materialUser'
+            dataIndex: 'materialUserName'
         },
         {
             key: 'materialDeliverTime',
@@ -149,10 +149,10 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽：负责人
             dataIndex: 'materialDeliverRealTime'
         },
         {
-            key: 'loftingPartLeader',
+            key: 'loftingPartLeaderName',
             title: '提料配段负责人',
             width: 100,
-            dataIndex: 'loftingPartLeader'
+            dataIndex: 'loftingPartLeaderName'
         },
         {
             key: 'loftingPartDeliverTime',
@@ -202,10 +202,10 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽：负责人
             }
         },
         {
-            key: 'loftingLeader',
+            key: 'loftingLeaderName',
             title: '放样负责人',
             width: 100,
-            dataIndex: 'loftingLeader'
+            dataIndex: 'loftingLeaderName'
         },
         {
             key: 'loftingDeliverTime',
@@ -220,10 +220,10 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽：负责人
             dataIndex: 'loftingDeliverRealTime'
         },
         {
-            key: 'loftingPartLeader',
+            key: 'loftingPartLeaderName',
             title: '放样配段负责人',
             width: 100,
-            dataIndex: 'loftingPartLeader'
+            dataIndex: 'loftingPartLeaderName'
         },
         {
             key: 'loftingPartDeliverTime',
@@ -238,10 +238,10 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽：负责人
             dataIndex: 'loftingPartDeliverRealTime'
         },
         {
-            key: 'weldingLeader',
+            key: 'weldingLeaderName',
             title: '组焊清单',
             width: 100,
-            dataIndex: 'weldingLeader'
+            dataIndex: 'weldingLeaderName'
         },
         {
             key: 'weldingDeliverTime',
@@ -256,10 +256,10 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽：负责人
             dataIndex: 'weldingDeliverRealTime'
         },
         {
-            key: 'smallSampleLeader',
+            key: 'smallSampleLeaderName',
             title: '小样图负责人',
             width: 100,
-            dataIndex: 'smallSampleLeader'
+            dataIndex: 'smallSampleLeaderName'
         },
         {
             key: 'smallSampleDeliverTime',
@@ -274,10 +274,10 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽：负责人
             dataIndex: 'smallSampleDeliverRealTime'
         },
         {
-            key: 'boltLeader',
+            key: 'boltLeaderName',
             title: '螺栓清单',
             width: 100,
-            dataIndex: 'boltLeader'
+            dataIndex: 'boltLeaderName'
         },
         {
             key: 'boltDeliverTime',
