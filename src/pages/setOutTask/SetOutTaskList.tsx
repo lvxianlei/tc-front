@@ -16,10 +16,10 @@ const columns = [
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
     },
     {
-        key: 'taskCode',
+        key: 'taskNum',
         title: '放样任务编号',
         width: 150,
-        dataIndex: 'taskCode'
+        dataIndex: 'taskNum'
     },
     {
         key: 'status',
@@ -74,10 +74,10 @@ const columns = [
         dataIndex: 'weight'
     },
     {
-        key: 'taskNumber',
+        key: 'externalTaskNum',
         title: '任务单编号',
         width: 200,
-        dataIndex: 'taskNumber'
+        dataIndex: 'externalTaskNum'
     },
     {
         key: 'saleOrderNumber',

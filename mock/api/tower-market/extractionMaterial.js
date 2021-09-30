@@ -12,7 +12,7 @@ for (let i = 1; i < 10; ++i) {
         "projectName": Random.cword(5,10),
         "description": Random.cword(5,10),
         "createUser": Random.cword(5,10),
-        "taskNumber": Random.natural(11),
+        "externalTaskNum": Random.natural(11),
         "productShape": Random.cword(5,10),
         "createTime": Random.date('yyyy-MM-dd'),
     });
@@ -30,7 +30,7 @@ module.exports = {
             "projectName": Random.cword(5,10),
             "description": Random.cword(5,10),
             "createUser": Random.cword(5,10),
-            "taskNumber": Random.natural(11),
+            "externalTaskNum": Random.natural(11),
             "productShape": Random.cword(5,10),
             "createTime": Random.date('yyyy-MM-dd'),
         }].concat(records),

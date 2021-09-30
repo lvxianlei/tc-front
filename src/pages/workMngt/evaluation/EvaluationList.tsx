@@ -14,10 +14,10 @@ const columns = [
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
     },
     {
-        key: 'taskCode',
+        key: 'taskNum',
         title: '评估任务编号',
         width: 150,
-        dataIndex: 'taskCode'
+        dataIndex: 'taskNum'
     },
     {
         key: 'programName',

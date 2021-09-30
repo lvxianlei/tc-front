@@ -12,8 +12,8 @@ for (let i = 1; i < 10; ++i) {
         "productType": "Duis esse", 
         "saleOrderNumber": Random.cword(3,10), 
         "status|1-5": "1",
-        "taskCode": Random.increment(), 
-        "taskNumber": Random.increment(), 
+        "taskNum": Random.increment(), 
+        "externalTaskNum": Random.increment(), 
         "updateStatusTime": Random.date('yyyy-MM-dd HH:mm'), 
         "weldingLeader":  Random.cword(3,10)
     });
@@ -31,8 +31,8 @@ module.exports = {
             "productType": "Duis esse", 
             "saleOrderNumber": Random.cword(3,10), 
             "status|1-5": "1",
-            "taskCode": Random.increment(), 
-            "taskNumber": Random.increment(), 
+            "taskNum": Random.increment(), 
+            "externalTaskNum": Random.increment(), 
             "updateStatusTime": Random.date('yyyy-MM-dd HH:mm'), 
             "weldingLeader":  Random.cword(3,10)
         }].concat(records),

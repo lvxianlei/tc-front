@@ -16,7 +16,7 @@ for (let i = 1; i < 10; ++i) {
         "programLeaderId": 97521073, 
         "programLeaderName": Random.cword(3,10), 
         "programName": Random.cword(3,10), 
-        "taskCode":  Random.increment(), 
+        "taskNum":  Random.increment(), 
         "updateStatusTime": Random.date('yyyy-MM-dd HH:mm'), 
         "status|1-5": "1"
     });
@@ -38,7 +38,7 @@ module.exports = {
             "programLeaderId": 97521073, 
             "programLeaderName": Random.cword(3,10), 
             "programName": Random.cword(3,10), 
-            "taskCode":  Random.increment(), 
+            "taskNum":  Random.increment(), 
             "updateStatusTime": Random.date('yyyy-MM-dd HH:mm'), 
             "status|1-5": "1"
         }].concat(records),
