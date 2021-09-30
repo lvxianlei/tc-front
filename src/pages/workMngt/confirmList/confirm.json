@@ -1,28 +1,159 @@
 {
     "baseInfoData": [
         {
-            "dataIndex": "projectName",
+            "dataIndex": "contractName",
             "title": "合同名称"
         },
         {
-            "dataIndex": "projectNumber",
+            "dataIndex": "customerName",
             "title": "客户名称"
         },
         {
-            "dataIndex": "releaseDate",
+            "dataIndex": "aeName",
             "title": "业务经理"
         },
         {
-            "dataIndex": "source",
+            "dataIndex": "aePhone",
             "title": "业务经理电话"
         },
         {
-            "dataIndex": "bidBuyEndTime",
+            "dataIndex": "designContactsName",
             "title": "设计院联系人"
         },
         {
-            "dataIndex": "sourceWebsite",
+            "dataIndex": "designPhone",
             "title": "设计院联系电话"
+        },
+        {
+            "dataIndex": "description",
+            "title": "备注"
+        }
+    ],
+    "towerData": [
+        {
+            "dataIndex": "contractName",
+            "title": "线路名称",
+            "rules":[{
+                "required": true,
+                "message":"请输入线路名称"
+            }]
+        },
+        {
+            "dataIndex": "customerName",
+            "title": "杆塔号",
+            "rules":[{
+                "required": true,
+                "message":"请输入杆塔号"
+            }]
+        },
+        {
+            "dataIndex": "aeName",
+            "title": "塔型",
+            "rules":[{
+                "required": true,
+                "message":"请输入塔型"
+            }]
+        },
+        {
+            "dataIndex": "aePhone",
+            "title": "塔型钢印号",
+            "rules":[{
+                "required": true,
+                "message":"请输入塔型钢印号"
+            }]
+        },
+        {
+            "dataIndex": "aePhone",
+            "title": "产品类型",
+            "rules":[{
+                "required": true,
+                "message":"请选择产品类型"
+            }],
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "是"
+                },
+                {
+                    "value": 2,
+                    "label": "否"
+                }
+            ]
+        },
+        {
+            "dataIndex": "designContactsName",
+            "title": "电压等级（kV）",
+            "rules":[{
+                "required": true,
+                "message":"请选择电压等级（kV）"
+            }],
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "110"
+                },
+                {
+                    "value": 2,
+                    "label": "220"
+                }
+            ]
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "呼高（m）",
+            "rules":[{
+                "required": true,
+                "message":"请输入呼高（m）"
+            }]
+        },
+        {
+            "dataIndex": "description",
+            "title": "模式",
+            "rules":[{
+                "required": true,
+                "message":"请选择模式"
+            }],
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "新放"
+                },
+                {
+                    "value": 2,
+                    "label": "重新出卡"
+                },
+                {
+                    "value": 3,
+                    "label": "套用"
+                }
+            ]
+        },
+        {
+            "dataIndex": "description",
+            "title": "杆塔重量（kg）",
+            "rules":[{
+                "required": true,
+                "message":"请输入杆塔重量（kg）"
+            }]
+        },
+        {
+            "dataIndex": "description",
+            "title": "其他增重（kg）",
+            "rules":[{
+                "required": true,
+                "message":"请输入其他增重（kg）"
+            }]
+        },
+        {
+            "dataIndex": "description",
+            "title": "总重（kg）",
+            "rules":[{
+                "required": true,
+                "message":"请输入总重（kg）"
+            }]
         },
         {
             "dataIndex": "description",

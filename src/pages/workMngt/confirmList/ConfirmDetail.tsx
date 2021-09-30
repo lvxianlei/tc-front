@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { Button, Spin, Space, Modal, Form, TableColumnProps } from 'antd';
+import { Button, Spin, Space, Modal, Form, TableColumnProps, Row, Col } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
-import { baseInfoData } from './confirm.json';
+import { towerData } from './confirm.json';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
@@ -73,11 +73,14 @@ const EditableCell: React.FC<EditableCellProps> = ({
 
 const EditableTable = ({ dataSource = [], ...props }: EditableTableProps) => {
   const [form] = Form.useForm();
-  const [data, setData] = useState(dataSource);
+  const [data, setData] = useState<any[]>(dataSource);
   const [editingKey, setEditingKey] = useState('');
-
   const isEditing = (record: Item) => record.key === editingKey;
-
+  const [value,setValue] = useState<number>(1);
+  if(dataSource && dataSource.length>0 && value === 1){
+      setData(dataSource);
+      setValue(2)
+  };
   const edit = (record: Partial<Item> & { key: React.Key }) => {
     form.setFieldsValue({ partBidNumber: '', unit: '', address: '', ...record });
     setEditingKey(record.key);
@@ -120,52 +123,97 @@ const EditableTable = ({ dataSource = [], ...props }: EditableTableProps) => {
     },
     { 
         title: '* 线路名称', 
-        dataIndex: 'partBidNumber',
+        dataIndex: 'lineName',
         type:'text',
         editable: true,
-        key: 'partBidNumber', 
+        key: 'lineName', 
     },
     { 
         title: '* 杆塔号', 
-        dataIndex: 'goodsType', 
+        dataIndex: 'name', 
         type:'text',
         editable: true,
-        key: 'goodsType' 
+        key: 'name' 
     },
     { 
         title: '* 塔型', 
-        dataIndex: 'packageNumber', 
+        dataIndex: 'productCategory', 
         type:'select',
         editable: true,
-        key: 'packgeNumber' 
+        key: 'productCategory' 
     },
     { 
         title: '* 塔型钢印号', 
-        dataIndex: 'amount', 
+        dataIndex: 'steelProductShape', 
         type:'text',
         editable: true,
-        key: 'amount' 
+        key: 'steelProductShape' 
     },
     { 
         title: '* 产品类型', 
-        dataIndex: 'unit', 
+        dataIndex: 'productType', 
         type:'select',
         editable: true,
-        key: 'unit' 
+        key: 'productType' 
     },
     { 
         title: '* 电压等级（kv）', 
-        dataIndex: 'unit',
+        dataIndex: 'voltageLevel',
         type:'select', 
         editable: true,
-        key: 'unit' 
+        key: 'voltageLevel' 
     },
     { 
         title: '* 呼高（m）', 
-        dataIndex: 'unit', 
+        dataIndex: 'basicHight', 
         type:'text',
         editable: true,
-        key: 'unit' 
+        key: 'basicHight' 
+    },
+    { 
+        title: '* 模式', 
+        dataIndex: 'pattern', 
+        type:'select',
+        editable: true,
+        key: 'pattern',
+        render: (value: number, record: object): React.ReactNode => {
+          const renderEnum: any = [
+            {
+              value: 1,
+              label: "新放"
+            },
+            {
+              value: 2,
+              label: "重新出卡"
+            },
+            {
+              value: 3,
+              label: "套用"
+            },
+          ]
+          return <>{renderEnum.find((item: any) => item.value === value).label}</>
+        }
+    },
+    { 
+        title: '* 杆塔重量（kg）', 
+        dataIndex: 'productWeight', 
+        type:'text',
+        editable: true,
+        key: 'productWeight' 
+    },
+    { 
+        title: '* 其他增重（kg）', 
+        dataIndex: 'otherWeight', 
+        type:'text',
+        editable: true,
+        key: 'otherWeight' 
+    },
+    { 
+        title: '* 总重（kg）', 
+        dataIndex: 'totalWeight', 
+        type:'text',
+        editable: true,
+        key: 'totalWeight' 
     },
     {
         key: 'operation',
@@ -226,6 +274,7 @@ const EditableTable = ({ dataSource = [], ...props }: EditableTableProps) => {
         dataSource={data}
         columns={mergedColumns}
         rowClassName="editable-row"
+        rowKey='index'
         pagination={{
           onChange: cancel,
         }}
@@ -238,11 +287,13 @@ const EditableTable = ({ dataSource = [], ...props }: EditableTableProps) => {
 export default function ConfirmDetail(): React.ReactNode {
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
+    const [tableDataSource, setTableDataSource] = useState<any[]|undefined>([]);
     const [form] = Form.useForm();
     const handleModalOk = async () => {
         try {
-            const submitData = await form.validateFields()
-            console.log(submitData)
+            const submitData = await form.validateFields();
+            tableDataSource&&tableDataSource.push(submitData);
+            setTableDataSource(tableDataSource);
             setVisible(false)
         } catch (error) {
             console.log(error)
@@ -251,10 +302,15 @@ export default function ConfirmDetail(): React.ReactNode {
     const handleModalCancel = () => setVisible(false)
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
-        resole(data)
+        const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById/${params.id}`)
+        resole(data);
+        setTableDataSource(data?.drawProductDetailList);
     }), {})
-    const detailData: any = data
+    const detailData: any = data;
+    const formItemLayout = {
+      labelCol: { span: 6 },
+      wrapperCol: { span: 16 }
+  };
     return <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space>
@@ -275,9 +331,9 @@ export default function ConfirmDetail(): React.ReactNode {
                         <Button type='primary' ghost onClick={() => setVisible(true)}>添加</Button>
                     </Space>
                 </div>
-                <EditableTable dataSource={ detailData?.attachVos  } />
+                <EditableTable dataSource={ tableDataSource } />
                 <DetailTitle title="备注"/>
-                <TextArea maxLength={ 200 }/>
+                <TextArea maxLength={ 200 } value={detailData?.description}/>
                 <DetailTitle title="附件"/>
                 <CommonTable columns={[
                     {
@@ -297,27 +353,127 @@ export default function ConfirmDetail(): React.ReactNode {
                             </Space>
                         )
                     }
-                ]} dataSource={detailData?.attachVos} />
+                ]} dataSource={detailData?.attachInfoList} />
             </DetailContent>
-            <Modal visible={visible} title="添加" onOk={handleModalOk} onCancel={handleModalCancel}  width={ 1200 }>
-                {/* <Form form={form}> */}
-                    {/* <Form.Item name="aaaa" label="部门">
-                        <Select>
-                            <Select.Option value="1">是</Select.Option>
-                            <Select.Option value="0">否</Select.Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item name="cccc" label="人员">
-                        <Select>
-                            <Select.Option value="1">是</Select.Option>
-                            <Select.Option value="0">否</Select.Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item name="bbbb" label="计划交付时间">
-                        <DatePicker />
-                    </Form.Item> */}
-                    <BaseInfo columns={baseInfoData} dataSource={detailData || {}} edit/>
-                {/* </Form> */}
+            <Modal visible={visible} title="添加" onOk={handleModalOk} onCancel={handleModalCancel}  width={ 800 }>
+                <Form form={form} { ...formItemLayout }>
+                    <Row>
+                      <Col span={12}>
+                        <Form.Item name="lineName" label="线路名称" rules={[{
+                            "required": true,
+                            "message":"请输入线路名称"
+                        }]}>
+                            <Input/>
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item name="name" label="杆塔号" rules={[{
+                            "required": true,
+                            "message":"请输入杆塔号"
+                        }]}>
+                            <Input/>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>
+                        <Form.Item name="productCategory" label="塔型" rules={[{
+                            "required": true,
+                            "message":"请输入塔型"
+                        }]}>
+                            <Input/>
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item name="steelProductShape" label="塔型钢印号" rules={[{
+                            "required": true,
+                            "message":"请输入塔型钢印号"
+                        }]}>
+                            <Input/>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>
+                        <Form.Item name="productType" label="产品类型" rules={[{
+                            "required": true,
+                            "message":"请选择产品类型"
+                        }]}>
+                            <Select>
+                                <Select.Option value={1} key={1}>220</Select.Option>
+                                <Select.Option value={2} key={2}>110</Select.Option>
+                            </Select>
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item name="voltageLevel" label="电压等级（kV）" rules={[{
+                            "required": true,
+                            "message":"请选择电压等级（kV）"
+                        }]}>
+                            <Select>
+                                <Select.Option value={1} key={1}>220</Select.Option>
+                                <Select.Option value={2} key={2}>110</Select.Option>
+                            </Select>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>
+                        <Form.Item name="basicHight" label="呼高（m）" rules={[{
+                            "required": true,
+                            "message":"请输入呼高（m）"
+                        }]}>
+                            <Input/>
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item name="pattern" label="模式" rules={[{
+                            "required": true,
+                            "message":"请选择模式"
+                        }]}>
+                            <Select>
+                                <Select.Option value={1} key={1}>新放</Select.Option>
+                                <Select.Option value={3} key={3}>套用</Select.Option>
+                                <Select.Option value={2} key={2}>重新出卡</Select.Option>
+                            </Select>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>
+                        <Form.Item name="productWeight" label="杆塔重量（kg）" rules={[{
+                            "required": true,
+                            "message":"请输入杆塔重量（kg）"
+                        }]}>
+                            <Input/>
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item name="otherWeight" label="其他增重（kg）" rules={[{
+                            "required": true,
+                            "message":"请输入其他增重（kg）"
+                        }]}>
+                            <Input/>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>
+                        <Form.Item name="totalWeight" label="总重（kg）" rules={[{
+                            "required": true,
+                            "message":"请输入总重（kg）"
+                        }]}>
+                            <Input/>
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item name="description" label="备注">
+                            <TextArea rows={1} showCount maxLength={500}/>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    {/* <BaseInfo columns={towerData} dataSource={detailData || {}} edit col={ 2 }/> */}
+                </Form>
             </Modal>
         </Spin>
 }
