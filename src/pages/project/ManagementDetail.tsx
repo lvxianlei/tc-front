@@ -13,6 +13,7 @@ import RequestUtil from '../../utils/RequestUtil'
 import ManagementContract from './contract/Contract'
 import ManagementOrder from './order/SaleOrder'
 import ApplicationContext from "../../configuration/ApplicationContext"
+import { downLoadFile } from "../../utils"
 export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | undefined
 const productAssistStatistics = [
     {
@@ -177,6 +178,15 @@ export default function ManagementDetail(): React.ReactNode {
             ]} dataSource={data?.cargoVOList} />
             <DetailTitle title="附件信息" />
             <CommonTable columns={[
+                {
+                    title: '操作',
+                    width: 60,
+                    dataIndex: 'opration',
+                    render: (_a: any, _b: any, index: number): React.ReactNode => (<Button
+                        type="link"
+                        onClick={() => downLoadFile(_b.filePath)}
+                    >下载</Button>)
+                },
                 {
                     title: '序号',
                     dataIndex: 'index',

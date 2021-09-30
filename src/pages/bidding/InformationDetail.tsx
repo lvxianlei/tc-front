@@ -6,6 +6,7 @@ import { PopTable } from "../common/FormItemType"
 import { baseInfoData } from './biddingHeadData.json'
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
+import { downLoadFile } from "../../utils"
 const tableColumns = [
     { title: '序号', dataIndex: 'index', width: 50, key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
     {
@@ -146,6 +147,15 @@ export default function InformationDetail(): React.ReactNode {
             <CommonTable columns={tableColumns} dataSource={data?.bidPackageInfoVOS} />
             <DetailTitle title="附件" />
             <CommonTable columns={[
+                {
+                    title: '操作',
+                    width: 60,
+                    dataIndex: 'opration',
+                    render: (_a: any, _b: any, index: number): React.ReactNode => (<Button
+                        type="link"
+                        onClick={() => downLoadFile(_b.filePath)}
+                    >下载</Button>)
+                },
                 { title: '序号', dataIndex: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
                 { title: '文件名', dataIndex: 'name' },
                 { title: '大小', dataIndex: 'fileSize' },
