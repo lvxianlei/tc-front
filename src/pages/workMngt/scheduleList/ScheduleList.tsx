@@ -13,16 +13,16 @@ export default function ScheduleList(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'taskCode',
+            key: 'taskNum',
             title: '放样任务编号',
             width: 100,
-            dataIndex: 'taskCode'
+            dataIndex: 'taskNum'
         },
         {
-            key: 'taskNumber',
+            key: 'externalTaskNum',
             title: '任务单编号',
             width: 100,
-            dataIndex: 'taskNumber'
+            dataIndex: 'externalTaskNum'
         },
         {
             key: 'saleOrderNumber',
@@ -65,6 +65,10 @@ export default function ScheduleList(): React.ReactNode {
             render: (value: number, record: object): React.ReactNode => {
                 const renderEnum: any = [
                   {
+                    value: 0,
+                    label: "已拒绝"
+                  },
+                  {
                     value: 1,
                     label: "待确认"
                   },
@@ -72,20 +76,17 @@ export default function ScheduleList(): React.ReactNode {
                     value: 2,
                     label: "待指派"
                   },
+                 
                   {
                     value: 3,
-                    label: "已拒绝"
-                  },
-                  {
-                    value: 4,
                     label: "待完成"
                   },
                   {
-                    value: 5,
+                    value: 4,
                     label: "已完成"
                   },
                   {
-                    value: 6,
+                    value: 5,
                     label: "已提交"
                   },
                 ]

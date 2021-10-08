@@ -114,6 +114,8 @@ export default function SetOutTaskDetail(): React.ReactNode {
             } } 
             onOk={ () => {
                 RequestUtil.post(`/tower-science/loftingTask/refuse`, { id: params.id, description: rejectReason });
+                setVisible(false); 
+                history.goBack();
                 setRejectReason("");
             } } 
             cancelText="关闭" 
