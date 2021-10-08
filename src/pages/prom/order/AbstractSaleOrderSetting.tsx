@@ -154,6 +154,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 orderDeliveryTime: moment(selectedRows[0].deliveryTime),
                 contractId: selectedRows[0].id,
                 signCustomerId: selectedRows[0].signCustomerId,
+                signUserName: selectedRows[0].signUserName,
                 contractNumber: selectedRows[0].contractNumber,
                 saleType: selectedRows[0].saleType
             };
@@ -165,11 +166,11 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 },
                 orderQuantity: 0
             })
-            if (selectedRows[0].chargeType === ChargeType.UNIT_PRICE) {
-                this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, price: '-', orderProductDtos: [], totalWeight: undefined, totalPrice: '', totalAmount: '', taxAmount: undefined, taxPrice: '', amount: '', orderQuantity: '' });
-            } else {
-                this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, price: 0, orderProductDtos: [], totalWeight: undefined, totalPrice: '', totalAmount: '', taxAmount: undefined, taxPrice: '', amount: '', orderQuantity: '' });
-            }
+            // if (selectedRows[0].chargeType === ChargeType.UNIT_PRICE) {
+            //     this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, price: '-', orderProductDtos: [], totalWeight: undefined, totalPrice: '', totalAmount: '', taxAmount: undefined, taxPrice: '', amount: '', orderQuantity: '' });
+            // } else {
+            //     this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, price: 0, orderProductDtos: [], totalWeight: undefined, totalPrice: '', totalAmount: '', taxAmount: undefined, taxPrice: '', amount: '', orderQuantity: '' });
+            // }
             this.getUnitByChargeType();
             this.getColumnsChange(selectedRows[0].chargeType);
         }
