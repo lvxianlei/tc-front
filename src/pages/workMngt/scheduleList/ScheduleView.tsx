@@ -46,7 +46,7 @@ export default function ScheduleView(): React.ReactNode {
 
             await RequestUtil.post('/tower-science/productCategory/assign', saveData).then(()=>{
                 setVisible(false);
-                form.resetFields();
+                form.setFieldsValue({});
                 history.push(`/workMngt/scheduleList/scheduleView/${params.id}`)
             })
         
