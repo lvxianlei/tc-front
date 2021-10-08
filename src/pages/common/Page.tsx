@@ -21,6 +21,7 @@ export interface PageProps extends RouteComponentProps, WithTranslation {
     searchFormItems: FormItemProps[]
     headTabs?: ITabItem[]
     onFilterSubmit?(values: Record<string, any>): Record<string, any>
+    requestData?: {}
 }
 
 export interface IResponseData {
@@ -54,6 +55,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
     protected async fetchTableData(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
         try {
             const resData: IResponseData = await RequestUtil.get<IResponseData>(this.props.path, {
+                ...this.props.requestData,
                 ...filterValues,
                 current: pagination.current || this.state.tablePagination?.current,
                 size: pagination.pageSize || this.state.tablePagination?.pageSize,
