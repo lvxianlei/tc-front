@@ -9,7 +9,7 @@ const {
   addBabelPresets,
   addBabelPlugin,
   addLessLoader,
-  addWebpackModuleRule,
+  addWebpackModuleRule
 } = require("customize-cra");
 const DotenvWebpack = require("dotenv-webpack");
 const Dotenv = require("dotenv");

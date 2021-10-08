@@ -105,7 +105,10 @@ export default function InformationDetail(): React.ReactNode {
                 {isBid === "2" && <Form.Item name="reason" label="原因">
                     <Input.TextArea />
                 </Form.Item>}
-                {isBid === "1" && <Form.Item name="projectLeaderId" label="设置项目负责人">
+                {isBid === "1" && <Form.Item name="projectLeaderId" label="设置项目负责人" rules={[{
+                    required: true,
+                    message: '请设置项目负责人...',
+                }]}>
                     <PopTable onChange={(event: any) => form.setFieldsValue({ projectLeaderId: event.id })} data={{
                         type: "PopTable",
                         title: "选择项目负责人",
