@@ -121,14 +121,14 @@
       "path": "/auth/roles/new",
       "module": "./pages/auth/role/RoleNew",
       "exact": true,
-      "authocrity": "auth_roles"
+      "authocrity": "auth_roles_add"
     },
     { // 编辑角色
       "name": "编辑角色",
       "path": "/auth/roles/setting/:id",
       "module": "./pages/auth/role/RoleSetting",
       "exact": true,
-      "authocrity": "auth_roles"
+      "authocrity": "auth_roles_edit"
     },
     { // 销售任务单管理
       "name": "销售任务单管理",
@@ -361,16 +361,24 @@
       "exact": true,
       "authority": "project"
     },
+    {
+      // 项目新建/编辑
+      "name": "项目新建",
+      "path": "/project/management/new",
+      "module": "./pages/project/ManagementEdit",
+      "exact": true,
+      "authority": "project_edit"
+    },
     { // 项目管理详情
       "name": "项目管理基本信息",
-      "path": "/project/management/detail/:id",
+      "path": "/project/management/base/:id",
       "module": "./pages/project/ManagementDetail",
       "exact": true,
       "authority": "project_detail"
     },
     { // 项目管理子项详情
       "name": "项目管理子项详情",
-      "path": "/project/management/detail/:tab/:id",
+      "path": "/project/management/:tab/:id",
       "module": "./pages/project/ManagementDetail",
       "exact": true,
       "authority": "project_detail"
@@ -426,81 +434,73 @@
     },
     { // 项目管理基础信息编辑
       "name": "项目管理基础信息编辑",
-      "path": "/project/management/detail/edit/base/:id",
+      "path": "/project/management/edit/base/:id",
       "module": "./pages/project/ManagementDetailEdit/BaseInfoEdit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 项目管理标书制作编辑
       "name": "标书制作编辑",
-      "path": "/project/management/detail/edit/bidDoc/:id",
+      "path": "/project/management/edit/bidDoc/:id",
       "module": "./pages/project/ManagementDetailEdit/BidDocEdit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 项目管理招标结果编辑
       "name": "招标结果编辑",
-      "path": "/project/management/detail/edit/bidResult/:id",
+      "path": "/project/management/edit/bidResult/:id",
       "module": "./pages/project/ManagementDetailEdit/BidResultEdit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 项目管理框架协议编辑
       "name": "框架协议编辑",
-      "path": "/project/management/detail/edit/frameAgreement/:id",
+      "path": "/project/management/edit/frameAgreement/:id",
       "module": "./pages/project/ManagementDetailEdit/FrameAgreementEdit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 杆塔明细编辑
       "name": "杆塔明细编辑",
-      "path": "/project/management/detail/edit/productGroup/:projectId/:id",
+      "path": "/project/management/edit/productGroup/:projectId/:id",
       "module": "./pages/project/ManagementDetailEdit/ProductGroupEdit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 查看杆塔明细
       "name": "杆塔明细",
-      "path": "/project/management/detail/productGroup/item/:projectId/:id",
+      "path": "/project/management/productGroup/item/:projectId/:id",
       "module": "./pages/project/ProductDetail",
       "exact": true,
       "authority": "project_detail"
     },
     { // 新增杆塔明细
       "name": "新增杆塔明细",
-      "path": "/project/management/detail/new/productGroup/:id",
+      "path": "/project/management/new/productGroup/:id",
       "module": "./pages/project/ManagementDetailEdit/ProductGroupEdit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 销售计划编辑
       "name": "销售计划编辑",
-      "path": "/project/management/detail/edit/salesPlan/:projectId/:id",
+      "path": "/project/management/edit/salesPlan/:projectId/:id",
       "module": "./pages/project/ManagementDetailEdit/SalesPlanEdit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 新增销售计划编辑
       "name": "新增销售计划",
-      "path": "/project/management/detail/new/salesPlan/:id",
+      "path": "/project/management/new/salesPlan/:id",
       "module": "./pages/project/ManagementDetailEdit/SalesPlanEdit",
       "exact": true,
       "authority": "project_detail"
     },
     { // 销售计划详情
       "name": "销售计划详情",
-      "path": "/project/management/detail/cat/salesPlan/:projectId/:id",
+      "path": "/project/management/cat/salesPlan/:projectId/:id",
       "module": "./pages/project/SalesPlanDetail",
       "exact": true,
       "authority": "project_detail"
-    },
-    {
-      // 项目新建/编辑
-      "name": "项目编辑",
-      "path": "/project/management/edit/:id",
-      "module": "./pages/project/ManagementEdit",
-      "exact": true,
-      "authority": "project_edit"
     },
     { // 审批管理
       "name": "审批管理",
@@ -777,7 +777,6 @@
       "exact": true,
       "authority": "approvalm"
     },
-    
     { // 工作管理-塔型信息-放样-放样塔型套用
       "name": "放样塔型套用",
       "path": "/workMngt/setOutList/towerInformation/:id/lofting/:loftId/loftingTowerApplication",

@@ -53,7 +53,7 @@ export default function Management(): React.ReactNode {
             key: 'projectName',
             title: '项目名称',
             dataIndex: 'projectName',
-            render: (_a: any, _b: any) => <Link to={`/project/management/detail/${_b.id}`}>{_b.projectName}</Link>
+            render: (_a: any, _b: any) => <Link to={`/project/management/base/${_b.id}`}>{_b.projectName}</Link>
         },
         {
             key: 'projectNumber',
@@ -108,8 +108,8 @@ export default function Management(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={`/project/management/detail/${(record as IClient).id}`}>查看</Link>
-                    <Link to={`/project/management/detail/edit/base/${(record as IClient).id}`}>编辑</Link>
+                    <Link to={`/project/management/base/${(record as IClient).id}`}>查看</Link>
+                    <Link to={`/project/management/edit/base/${(record as IClient).id}`}>编辑</Link>
                     <ConfirmableButton
                         confirmTitle="是否确定删除对应项目信息？"
                         type="link"
@@ -160,10 +160,7 @@ export default function Management(): React.ReactNode {
     return <Page
         path="/tower-market/projectInfo"
         columns={columns}
-        extraOperation={<>
-            <Link to="/project/management/edit/new"><Button type="primary">新建项目</Button></Link>
-            {/* <Button type="primary" onClick={handleConfirmDelete}>删除</Button> */}
-        </>}
+        extraOperation={<Link to="/project/management/new"><Button type="primary">新建项目</Button></Link>}
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {

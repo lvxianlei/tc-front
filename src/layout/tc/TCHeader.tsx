@@ -6,7 +6,7 @@ import React from 'react';
 import {
     MenuUnfoldOutlined,
     MenuFoldOutlined
-  } from '@ant-design/icons';
+} from '@ant-design/icons';
 
 import styles from './TCHeader.module.less';
 
@@ -18,8 +18,8 @@ import { IRouterItem } from '../../configuration/IApplicationContext';
 import ApplicationContext from '../../configuration/ApplicationContext';
 import IMenuItem from './IMenuItem';
 
-export interface ITCHeaderProps {}
-export interface ITCHeaderRouteProps extends RouteComponentProps<ITCHeaderProps> {}
+export interface ITCHeaderProps { }
+export interface ITCHeaderRouteProps extends RouteComponentProps<ITCHeaderProps> { }
 export interface ITCHeaderState {
     readonly collapsed: boolean;
 }
@@ -59,38 +59,60 @@ class TCHeader extends AsyncComponent<ITCHeaderRouteProps, ITCHeaderState> {
     protected renderBreadcrumb(): React.ReactNode {
         const { location } = this.props;
         const pathSnippets: string[] = location.pathname.split('/').filter((i: string) => i);
-        const selectedMenuItem: IMenuItem | undefined =  ApplicationContext.getMenuItemByPath(ApplicationContext.get().layout?.navigationPanel?.props?.menu, `/${ pathSnippets[0] }`)
-       console.log(pathSnippets)
-        return  (
-            <Breadcrumb separator="/" className={ styles.breadcrumb }>
+        const selectedMenuItem: IMenuItem | undefined = ApplicationContext.getMenuItemByPath(ApplicationContext.get().layout?.navigationPanel?.props?.menu, `/${pathSnippets[0]}`)
+        return (
+            <Breadcrumb separator="/" className={styles.breadcrumb}>
                 {
                     selectedMenuItem
-                    ?
-                    <Breadcrumb.Item key={ selectedMenuItem.path }>
-                        { selectedMenuItem.label }
-                    </Breadcrumb.Item>
-                    :
-                    null
+                        ?
+                        <Breadcrumb.Item key={selectedMenuItem.path}>
+                            {selectedMenuItem.label}
+                        </Breadcrumb.Item>
+                        :
+                        null
                 }
                 {
                     pathSnippets.map<React.ReactNode>((item: string, index: number): React.ReactNode => {
-                        const path: string = `/${pathSnippets.slice(0, index + 1).join('/')}`;
+                        let path: string = `/${pathSnippets.slice(0, index + 1).join('/')}`;
                         const routerItem: IRouterItem | null = ApplicationContext.getRouterItemByPath(path);
+                        if (routerItem?.path.includes("/project/management/:tab") && !pathSnippets.includes("/edit")) {
+                            path = `/${pathSnippets.filter(pathItem => pathItem !== "edit").join('/')}/${pathSnippets[pathSnippets.length - 1]}`
+                        }
+                        if (pathSnippets.includes("productGroup") && routerItem?.path.includes("/project/management/:tab")) {
+                            if (pathSnippets.includes("new")) {
+                                path = `/${pathSnippets.filter(pathItem => pathItem !== "new").join('/')}`
+                            } else if (pathSnippets.includes("edit")) {
+                                const basePath = pathSnippets.filter(pathItem => pathItem !== "edit")
+                                path = `/${basePath.slice(0, basePath.length - 1).join('/')}`
+                            }
+                        }
+                        if (pathSnippets.includes("salesPlan") && routerItem?.path.includes("/project/management/:tab")) {
+                            if (pathSnippets.includes("new")) {
+                                path = `/${pathSnippets.filter(pathItem => pathItem !== "new").join('/')}`
+                            } else if (pathSnippets.includes("edit")) {
+                                const basePath = pathSnippets.filter(pathItem => pathItem !== "edit")
+                                path = `/${basePath.slice(0, basePath.length - 1).join('/')}`
+                            } else if (pathSnippets.includes("cat")) {
+                                const basePath = pathSnippets.filter(pathItem => pathItem !== "cat")
+                                path = `/${basePath.slice(0, basePath.length - 1).join('/')}`
+                            }
+                        }
+                        // routerItem && console.log(path)
                         return (
                             routerItem
-                            ?
-                            <Breadcrumb.Item key={ path }>
-                                {
-                                    path === location.pathname
-                                    ?
-                                    routerItem.name
-                                    :
-                                    <Link to={ path }>{ routerItem.name }</Link>
+                                ?
+                                <Breadcrumb.Item key={path}>
+                                    {
+                                        path === location.pathname
+                                            ?
+                                            routerItem.name
+                                            :
+                                            <Link to={path}>{routerItem.name}</Link>
 
-                                }
-                            </Breadcrumb.Item>
-                            :
-                            null
+                                    }
+                                </Breadcrumb.Item>
+                                :
+                                null
                         );
                     })
                 }
@@ -104,15 +126,15 @@ class TCHeader extends AsyncComponent<ITCHeaderRouteProps, ITCHeaderState> {
      */
     public render(): React.ReactNode {
         return (
-            <div className={ styles.header }>
+            <div className={styles.header}>
                 {
                     this.state.collapsed
-                    ?
-                    <MenuUnfoldOutlined className={ styles.trigger } onClick={ this.toggle }/>
-                    :
-                    <MenuFoldOutlined className={ styles.trigger } onClick={ this.toggle }/>
+                        ?
+                        <MenuUnfoldOutlined className={styles.trigger} onClick={this.toggle} />
+                        :
+                        <MenuFoldOutlined className={styles.trigger} onClick={this.toggle} />
                 }
-                { this.renderBreadcrumb() }
+                {this.renderBreadcrumb()}
             </div>
         );
     }

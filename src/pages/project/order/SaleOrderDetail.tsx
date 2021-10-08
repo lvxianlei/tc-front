@@ -23,7 +23,7 @@ class ManagementSaleOrderDetail extends SaleOrderDetail {
     const projectId = (this.props.match.params as any).id;
 
     return [
-      <Button key="setting">
+      <Button key="setting" disabled={(this.state.detail as any)?.isProductGroupRef !== 0}>
         <Link to={`/project/order/setting/${projectId}/${this.props.match.params.id}`}>
           编辑
         </Link>

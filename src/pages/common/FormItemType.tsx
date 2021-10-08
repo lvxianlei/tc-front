@@ -81,7 +81,6 @@ const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: any) =>
     }
 
     const paginationChange = (page: number, pageSize: number) => setPagenation({ ...pagenation, current: page, pageSize })
-
     return <>
         <Form form={form} onFinish={async () => await run()}>
             <Row gutter={2} style={{ height: 32 }}>
@@ -106,6 +105,7 @@ const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: any) =>
                 type: data.selectType || "radio",
                 onChange: onSelectChange,
             }}
+            rowKey={(record: any) => record.id}
             size="small"
             loading={loading}
             dataSource={popTableData?.records}

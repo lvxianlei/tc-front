@@ -17,6 +17,7 @@ export default function BaseInfoEdit(): JSX.Element {
   const [attachVosData, setAttachVosData] = useState<any[]>([])
   const [baseInfoForm] = Form.useForm()
   const [cargoVOListForm] = Form.useForm()
+  console.log("new-----------------------------")
   const typeNameEnum = dictionaryOptions["121"].map((item: any) => ({ value: item.id, label: item.name }))
   const { loading: saveStatus, data: saveResult, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
     try {

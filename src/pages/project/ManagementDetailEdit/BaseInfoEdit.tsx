@@ -17,7 +17,6 @@ export default function BaseInfoEdit(): JSX.Element {
     const [baseInfoForm] = Form.useForm()
     const [cargoVOListForm] = Form.useForm()
     const [attachVosForm] = Form.useForm()
-
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/projectInfo/${params.id}`)
