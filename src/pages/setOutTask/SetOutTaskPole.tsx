@@ -3,7 +3,7 @@ import { Space, Button } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOutTask.module.less';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 const columns = [
     {
@@ -88,8 +88,10 @@ const columns = [
 
 export default function SetOutTaskPole(): React.ReactNode {
     const history = useHistory();
+    const params = useParams<{ id: string }>();
     return <Page
         path="/tower-science/product/page"
+        requestData={{ loftingTaskId: params.id  }}
         columns={ columns }
         headTabs={ [] }
         extraOperation={ 

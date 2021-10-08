@@ -69,6 +69,37 @@ class Deliverables extends React.Component<IDeliverablesRouteProps, Deliverables
      * @returns render 
      */
     public render(): React.ReactNode {
+        const data = [{
+            name: '提料塔型构件明细汇总.zip',
+            use: '提料塔型构件明细汇总'
+        }, {
+            name: '提料杆塔构件明细汇总.zip',
+            use: '提料杆塔构件明细汇总'
+        }, {
+            name: '放样塔型构件明细汇总.zip',
+            use: '放样塔型构件明细汇总'
+        }, {
+            name: '放样杆塔构件明细汇总.zip',
+            use: '放样杆塔构件明细汇总'
+        }, {
+            name: '包装图纸汇总.zip',
+            use: '包装图纸汇总'
+        }, {
+            name: '塔型图纸汇总.zip',
+            use: '塔型图纸汇总'
+        }, {
+            name: '组焊清单汇总.zip',
+            use: '组焊清单汇总'
+        }, {
+            name: '小样图汇总.zip',
+            use: '小样图汇总'
+        }, {
+            name: '螺栓清单汇总.zip',
+            use: '螺栓清单汇总'
+        }, {
+            name: 'NC程序汇总.zip',
+            use: 'NC程序汇总'
+        }, ]
         return <>
             <Button type="link" onClick={ () => this.modalShow() }>交付物</Button>
             <Modal
@@ -80,7 +111,7 @@ class Deliverables extends React.Component<IDeliverablesRouteProps, Deliverables
             >
                 <DetailContent>
                     <p>交付物清单</p>
-                    <CommonTable columns={ tableColumns } dataSource={ [] } />
+                    <CommonTable columns={ tableColumns } dataSource={ data } />
                 </DetailContent>
             </Modal>
         </>
