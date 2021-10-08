@@ -17,7 +17,7 @@ import SaleOrderSummary, { ISaleOrderBaseInfo, ISaleOrderSysInfo } from './SaleO
 export interface ISaleOrderDetailProps {
     readonly id: string;
 }
-export interface IContractDetailRouteProps extends RouteComponentProps<ISaleOrderDetailProps> {}
+export interface IContractDetailRouteProps extends RouteComponentProps<ISaleOrderDetailProps> { }
 export interface ISaleOrderDetailState {
     readonly detail: IDetail;
 }
@@ -41,7 +41,7 @@ export class SaleOrderDetail extends AbstractDetailComponent<IContractDetailRout
      * @param filterValues 
      */
     protected async fetchTableData() {
-        const resData: IDetail = await RequestUtil.get<IDetail>(`${this.requestPath}/${ this.props.match.params.id }`);
+        const resData: IDetail = await RequestUtil.get<IDetail>(`${this.requestPath}/${this.props.match.params.id}`);
         this.setState({
             detail: resData
         });
@@ -50,31 +50,31 @@ export class SaleOrderDetail extends AbstractDetailComponent<IContractDetailRout
     public async componentDidMount() {
         this.fetchTableData();
     }
-    
+
     /**
      * @implements
      * @description Gets subinfo col props
      * @returns subinfo col props 
      */
-    public getSubinfoColProps (): ColProps[] {
+    public getSubinfoColProps(): ColProps[] {
         const detail: IDetail | undefined = this.state?.detail;
         return [{
             span: 8,
             children: (
-                <span>关联合同：{ detail?.contractInfoVo?.internalNumber }</span>
+                <span>关联合同：{detail?.contractInfoVo?.internalNumber}</span>
             )
         }, {
             span: 8,
             children: (
-                <span>交货日期：{ detail?.contractInfoVo?.deliveryTime }</span>
+                <span>交货日期：{detail?.contractInfoVo?.deliveryTime}</span>
             )
         }];
     }
 
     public deleteOrder = async (): Promise<void> => {
-        const resData: IResponseData = await RequestUtil.delete(`/tower-market/saleOrder?id=${ this.props.match.params.id }`)
-        if(resData) {
-            this.props.history.push(`/prom/order`);
+        const resData: IResponseData = await RequestUtil.delete(`/tower-market/saleOrder?id=${this.props.match.params.id}`)
+        if (resData) {
+            this.props.history.go(-1);
         }
     }
 
@@ -86,8 +86,8 @@ export class SaleOrderDetail extends AbstractDetailComponent<IContractDetailRout
     public renderOperationArea(): React.ReactNode | React.ReactNode[] {
         return [
             <Button key="new" href="/prom/order/new">新增</Button>,
-            <Button key="setting" href={ `/prom/order/setting/${ this.props.match.params.id }`}>编辑</Button>,
-            <ConfirmableButton key="delete" confirmTitle="要删除该订单吗？" onConfirm={ this.deleteOrder }>删除</ConfirmableButton>
+            <Button key="setting" href={`/prom/order/setting/${this.props.match.params.id}`}>编辑</Button>,
+            <ConfirmableButton key="delete" confirmTitle="要删除该订单吗？" onConfirm={this.deleteOrder}>删除</ConfirmableButton>
         ];
     }
 
@@ -100,7 +100,7 @@ export class SaleOrderDetail extends AbstractDetailComponent<IContractDetailRout
         return [{
             label: '概况信息',
             key: 1,
-            content: <SaleOrderSummary baseInfo={ this.state.detail } sysInfo={ this.state.detail } />
+            content: <SaleOrderSummary baseInfo={this.state.detail} sysInfo={this.state.detail} />
         }];
     }
 }

@@ -9,6 +9,7 @@ import { auditHead } from "./approvalHeadData.json"
 import { bondBaseInfo, enclosure, drawH, drawingCofirm, baseInfo } from "./approvalHeadData.json"
 import RequestUtil from '../../utils/RequestUtil'
 import AuthUtil from "../../utils/AuthUtil"
+import { downLoadFile } from "../../utils"
 import ApplicationContext from "../../configuration/ApplicationContext"
 const auditEnum: any = {
     "performance_bond": "履约保证金申请",
@@ -207,10 +208,10 @@ export default function Information(): React.ReactNode {
         }
     }
     const onFilterSubmit = (value: any) => {
-        if (value.minStartTime) {
-            const formatDate = value.minStartTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.minStartTime = formatDate[0]
-            value.maxStartTime = formatDate[1]
+        if (value.marketAuditTime) {
+            const formatDate = value.marketAuditTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startMarketAuditTime = formatDate[0]
+            value.endMarketAuditTime = formatDate[1]
         }
         return value
     }
@@ -287,7 +288,10 @@ export default function Information(): React.ReactNode {
             <CommonTable columns={[{
                 title: "操作",
                 dataIndex: "opration",
-                render: (_: any, records: any) => <Button type="link" onClick={() => deleteAttachData(records.uid || records.id)}>删除</Button>
+                render: (_: any, records: any) => <>
+                    <Button type="link" onClick={() => deleteAttachData(records.uid || records.id)}>删除</Button>
+                    <Button type="link" onClick={() => downLoadFile(records.filePath)}>下载</Button>
+                </>
             },
             ...enclosure]} dataSource={attachInfo} />
         </Modal>
@@ -322,7 +326,10 @@ export default function Information(): React.ReactNode {
             <CommonTable columns={[{
                 title: "操作",
                 dataIndex: "opration",
-                render: (_: any, records: any) => <Button type="link" onClick={() => deleteAttachData(records.uid || records.id)}>删除</Button>
+                render: (_: any, records: any) => <>
+                    <Button type="link" onClick={() => deleteAttachData(records.uid || records.id)}>删除</Button>
+                    <Button type="link" onClick={() => downLoadFile(records.filePath)}>下载</Button>
+                </>
             },
             ...enclosure]} dataSource={attachInfo} />
         </Modal>
@@ -372,7 +379,7 @@ export default function Information(): React.ReactNode {
                     </Select>
                 },
                 {
-                    name: 'minStartTime',
+                    name: 'marketAuditTime',
                     label: '发起时间',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },

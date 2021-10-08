@@ -7,6 +7,7 @@ import { baseInfoData } from './biddingHeadData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
 import AuthUtil from "../../utils/AuthUtil"
+import { downLoadFile } from "../../utils"
 const columns = [
     { title: '分标编号', dataIndex: 'partBidNumber' },
     { title: '货物类别', dataIndex: 'goodsType' },
@@ -85,6 +86,7 @@ export default function InfomationNew(): JSX.Element {
             if (event.file.response.code === 200) {
                 const dataInfo = event.file.response.data
                 const fileInfo = dataInfo.name.split(".")
+                let uid = attachVosData.length
                 setAttachVosData([...attachVosData, {
                     id: "",
                     uid: attachVosData.length,
@@ -100,9 +102,7 @@ export default function InfomationNew(): JSX.Element {
         }
     }
 
-    const deleteAttachData = (id: number) => {
-        setAttachVosData(attachVosData.filter((item: any) => item.id !== id))
-    }
+    const deleteAttachData = (id: number) => setAttachVosData(attachVosData.filter((item: any) => (item.id || item.uid) !== id))
 
     const handleBaseInfoChange = (changeFiled: any) => {
         if (Object.keys(changeFiled)[0] === "biddingStatus") {
@@ -129,7 +129,6 @@ export default function InfomationNew(): JSX.Element {
     }
 
     const filterBaseInfoData: (baseInfoData: any) => any[] = (baseInfoData) => {
-        console.log(binddingStatus)
         const newData = baseInfoData.map((item: any) => item.dataIndex === "biddingStatus" ? ({ ...item, disabled: detailData?.biddingStatus === 0 }) : item)
         return [0, 1].includes(binddingStatus) ? newData.filter((item: any) => item.dataIndex !== "reason") : newData
     }
@@ -218,8 +217,11 @@ export default function InfomationNew(): JSX.Element {
         <CommonTable columns={[{
             title: "操作", dataIndex: "opration",
             render: (_: any, record: any) => (<>
-                <Button type="link" onClick={() => deleteAttachData(record.id)}>删除</Button>
-                {/* <Button type="link">下载</Button> */}
+                <Button type="link" onClick={() => deleteAttachData(record.id || record.uid)}>删除</Button>
+                <Button
+                    type="link"
+                    onClick={() => downLoadFile(record.filePath)}
+                >下载</Button>
             </>)
         },
         { title: '文件名', dataIndex: 'name' },

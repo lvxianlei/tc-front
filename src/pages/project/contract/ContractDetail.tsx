@@ -1,15 +1,15 @@
-import React from "react";
-import { withTranslation } from "react-i18next";
-import { withRouter } from "react-router";
-import { ITabItem } from "../../../components/ITabableComponent";
-import { ContractDetail } from "../../prom/contract/ContractDetail";
-import ManagementContractSummary from "./ContractSummary";
-import ManagementContractAttachment from "./ContractAttachment";
-import ManagementContractRefundRecord from "./ContractRefundRecord";
-import { Button, Popconfirm } from "antd";
-import RequestUtil from "../../../utils/RequestUtil";
-import { IResponseData } from "../../common/Page";
-import { Link } from "react-router-dom";
+import React from "react"
+import { withTranslation } from "react-i18next"
+import { withRouter } from "react-router"
+import { ITabItem } from "../../../components/ITabableComponent"
+import { ContractDetail } from "../../prom/contract/ContractDetail"
+import ManagementContractSummary from "./ContractSummary"
+import ManagementContractAttachment from "./ContractAttachment"
+import ManagementContractRefundRecord from "./ContractRefundRecord"
+import { Button, Popconfirm } from "antd"
+import RequestUtil from "../../../utils/RequestUtil"
+import { IResponseData } from "../../common/Page"
+import { Link } from "react-router-dom"
 
 /**
  * 项目管理-合同详情
@@ -54,9 +54,6 @@ class ManagementContractDetail extends ContractDetail {
           }/${this.state.detail.signCustomerName}/${this.state.detail.contractNumber}/${(this.state.detail as any).projectId}
           `}>添加回款记录</Link>
       </Button>,
-      <Button key="new">
-        <Link to={`/project/contract/new/${(this.state.detail as any).projectId}`}>新增</Link>
-      </Button>,
       <Button key="setting" disabled={this.state.detail.contractStatus === 1}>
         <Link to={`/project/contract/setting/${(this.props.match.params as any).projectId}/${this.props.match.params.id}`}>
           编辑
@@ -84,6 +81,7 @@ class ManagementContractDetail extends ContractDetail {
           删除
         </Button>
       </Popconfirm>,
+      <Button type="default" key="goback" onClick={() => this.props.history.go(-1)}>返回</Button>
     ];
   }
 }

@@ -794,7 +794,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                         </Col>
                                                         <Col span={5}>
                                                             <Form.Item {...field} name={[field.name, 'description']} fieldKey={[field.fieldKey, 'description']}>
-                                                                <Input.TextArea rows={5} maxLength={300} />
+                                                                <Input.TextArea rows={1} maxLength={300} />
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={2}>

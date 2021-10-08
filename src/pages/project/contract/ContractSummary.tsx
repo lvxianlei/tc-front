@@ -162,7 +162,7 @@ class ManagementContractSummary extends ContractSummary {
       },
       {
         title: "采购订单号",
-        dataIndex: "saleOrderNumber",
+        dataIndex: "purchaseOrderNumber",
       },
       {
         title: "订单工程名称",

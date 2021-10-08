@@ -1,8 +1,7 @@
-import { Button } from "antd";
+import { Button, Popconfirm } from "antd";
 import React from "react";
 import { withTranslation } from "react-i18next";
 import { Link, withRouter } from "react-router-dom";
-import ConfirmableButton from "../../../components/ConfirmableButton";
 import { ITabItem } from "../../../components/ITabableComponent";
 import { SaleOrderDetail } from "../../prom/order/SaleOrderDetail";
 import ManagementSaleOrderSummary from "./SaleOrderSummary";
@@ -22,23 +21,23 @@ class ManagementSaleOrderDetail extends SaleOrderDetail {
   }
   public renderOperationArea(): React.ReactNode | React.ReactNode[] {
     const projectId = (this.props.match.params as any).id;
-    
+
     return [
-      <Button key="new">
-        <Link to={"/project/order/new"}>新增</Link>
-      </Button>,
       <Button key="setting">
         <Link to={`/project/order/setting/${projectId}/${this.props.match.params.id}`}>
           编辑
         </Link>
       </Button>,
-      <ConfirmableButton
+      <Popconfirm
         key="delete"
-        confirmTitle="要删除该订单吗？"
+        title="要删除该订单吗？"
+        okText="确认"
+        cancelText="取消"
         onConfirm={this.deleteOrder}
       >
-        删除
-      </ConfirmableButton>,
+        <Button type="default">删除</Button>
+      </Popconfirm>,
+      <Button type="default" key="goback" onClick={() => this.props.history.go(-1)}>返回</Button>
     ];
   }
 }

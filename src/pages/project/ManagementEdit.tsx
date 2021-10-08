@@ -7,6 +7,7 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
 import { TabTypes } from "./ManagementDetail"
 import AuthUtil from "../../utils/AuthUtil"
+import { downLoadFile } from "../../utils"
 import ApplicationContext from "../../configuration/ApplicationContext"
 const dictionaryOptions: any = ApplicationContext.get().dictionaryOption
 export default function BaseInfoEdit(): JSX.Element {
@@ -110,7 +111,7 @@ export default function BaseInfoEdit(): JSX.Element {
       title: "操作", dataIndex: "opration",
       render: (_: any, record: any) => (<>
         <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
-        {/* <Button type="link">下载</Button> */}
+        <Button type="link" onClick={() => downLoadFile(record.filePath)}>下载</Button>
       </>)
     }, ...enclosure]} dataSource={attachVosData} />
   </DetailContent>
