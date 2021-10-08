@@ -751,28 +751,28 @@
     },
     { // 工作管理-塔型信息-放样
       "name": "放样",
-      "path": "/workMngt/setOutList/towerInformation/:id/lofting/:loftId",
+      "path": "/workMngt/setOutList/towerInformation/:id/lofting/:productSegmentId",
       "module": "./pages/workMngt/setOut/Lofting",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-塔型信息-NC程序
       "name": "NC程序",
-      "path": "/workMngt/setOutList/towerInformation/:id/NCProgram/:NCId",
+      "path": "/workMngt/setOutList/towerInformation/:id/NCProgram/:productSegmentId",
       "module": "./pages/workMngt/setOut/NCProgram",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-塔型信息-校核
       "name": "校核",
-      "path": "/workMngt/setOutList/towerInformation/:id/towerCheck/:checkId",
+      "path": "/workMngt/setOutList/towerInformation/:id/towerCheck/:productSegmentId",
       "module": "./pages/workMngt/setOut/TowerCheck",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-塔型信息-塔型放样明细
       "name": "塔型放样明细",
-      "path": "/workMngt/setOutList/towerInformation/:id/towerLoftingDetails/:checkId",
+      "path": "/workMngt/setOutList/towerInformation/:id/towerLoftingDetails/:productSegmentId",
       "module": "./pages/workMngt/setOut/TowerLoftingDetails",
       "exact": true,
       "authority": "approvalm"

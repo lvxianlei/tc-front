@@ -65,8 +65,10 @@ export default function SetOutTaskDetail(): React.ReactNode {
                 {
                     detailData.status === 1 ? 
                     <><Button type="primary" onClick={ () => {
-                        RequestUtil.post(`/tower-science/loftingTask/receive`, { id: params.id });
-                    } }>接收</Button>
+                        RequestUtil.post(`/tower-science/loftingTask/receive`, { id: params.id }).then(res => {
+                            history.goBack();
+                        });
+                    } }>接收</Button> 
                     <Button type="ghost" onClick={ () => setVisible(true) }>拒绝</Button></>
                     : null
                 }
@@ -101,7 +103,7 @@ export default function SetOutTaskDetail(): React.ReactNode {
                 pagination={ false }
             />
             <DetailTitle title="操作信息"/>
-            <CommonTable columns={ tableColumns } dataSource={ detailData.taskDataVOList } pagination={ false }/>
+            <CommonTable columns={ tableColumns } dataSource={ detailData.statusRecordList } pagination={ false }/>
         </DetailContent>
         <Modal 
             visible={ visible } 

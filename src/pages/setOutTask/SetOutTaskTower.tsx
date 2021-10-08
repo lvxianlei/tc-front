@@ -140,7 +140,8 @@ export default function SetOutTaskTower(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     return <Page
-        path={`/tower-science/productCategory/list?loftingTaskId=${ params.id }`}
+        path="/tower-science/productCategory/list"
+        requestData={{ loftingTaskId: params.id  }}
         columns={ columns }
         headTabs={ [] }
         extraOperation={ 

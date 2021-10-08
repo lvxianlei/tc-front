@@ -358,30 +358,30 @@ class TowerShape extends AbstractMngtComponent<ITowerShapeWithRouteProps, ITower
      */
     public getTableColumns(): TableColumnType<object>[] {
         return [{
-            key: 'productCategoryName',
-            title: '塔型名称',
-            dataIndex: 'productCategoryName'
-        }, {
             key: 'programCode',
             title: '所属工程编号',
             dataIndex: 'programCode'
-        }, {
+        },  {
             key: 'programName',
             title: '所属项目名称',
             dataIndex: 'programName'
         }, {
+            key: 'productCategoryName',
+            title: '塔型名称',
+            dataIndex: 'productCategoryName'
+        },{
             key: 'approveNum',
             title: '审核件数',
             dataIndex: 'approveNum'
         }, {
-            key: 'productCategoryReviewerName',
-            title: '审核人',
-            dataIndex: 'productCategoryReviewerName'
-        }, {
             key: 'giveTime',
             title: '交付日期',
             dataIndex: 'giveTime'
-        }, {
+        },  {
+            key: 'productCategoryReviewerName',
+            title: '审核人',
+            dataIndex: 'productCategoryReviewerName'
+        },{
             key: 'receptionTime',
             title: '验收通过日期',
             dataIndex: 'receptionTime'
