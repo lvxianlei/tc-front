@@ -6,21 +6,21 @@ type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" 
 export default function ManagementDetailTabsTitle(): JSX.Element {
     const location = useLocation()
     const history = useHistory()
-    const editParams = useRouteMatch<{ id: string, tab?: TabTypes }>("/project/management/detail/edit/:tab/:id")?.params
+    const editParams = useRouteMatch<{ id: string, tab?: TabTypes }>("/project/management/edit/:tab/:id")?.params
     const detailParams = useParams<{ id: string, tab?: TabTypes }>()
     let params: { id: string, tab?: TabTypes } = { id: "", tab: "base" }
-    if (location.pathname.includes("/project/management/detail/edit")) {
+    if (location.pathname.includes("/project/management/edit")) {
         params = editParams || { id: "" }
     } else {
         params = detailParams
     }
     return <Row className={styles.operation}>
-        <span className={(!params.tab || params.tab === 'base') ? styles.default : ""} key="base" onClick={() => history.push(`/project/management/detail/base/${params.id}`)}>基础信息</span>
-        <span className={(params.tab && params.tab === 'bidDoc') ? styles.default : ""} key="bidDoc" onClick={() => history.push(`/project/management/detail/bidDoc/${params.id}`)}>标书制作</span>
-        <span className={(params.tab && params.tab === 'bidResult') ? styles.default : ""} key='bidResult' onClick={() => history.push(`/project/management/detail/bidResult/${params.id}`)}>招标结果</span>
-        <span className={(params.tab && params.tab === 'frameAgreement') ? styles.default : ""} key="frameAgreement" onClick={() => history.push(`/project/management/detail/frameAgreement/${params.id}`)}>框架协议</span>
-        <span className={(params.tab && params.tab === 'contract') ? styles.default : ""} key="contract" onClick={() => history.push(`/project/management/detail/contract/${params.id}`)}>合同及订单</span>
-        <span className={(params.tab && params.tab === 'productGroup') ? styles.default : ""} key='productGroup' onClick={() => history.push(`/project/management/detail/productGroup/${params.id}`)}>杆塔明细</span>
-        <span className={(params.tab && params.tab === 'salesPlan') ? styles.default : ""} key='salesPlan' onClick={() => history.push(`/project/management/detail/salesPlan/${params.id}`)}>销售计划</span>
+        <span className={(!params.tab || params.tab === 'base') ? styles.default : ""} key="base" onClick={() => history.push(`/project/management/base/${params.id}`)}>基础信息</span>
+        <span className={(params.tab && params.tab === 'bidDoc') ? styles.default : ""} key="bidDoc" onClick={() => history.push(`/project/management/bidDoc/${params.id}`)}>标书制作</span>
+        <span className={(params.tab && params.tab === 'bidResult') ? styles.default : ""} key='bidResult' onClick={() => history.push(`/project/management/bidResult/${params.id}`)}>招标结果</span>
+        <span className={(params.tab && params.tab === 'frameAgreement') ? styles.default : ""} key="frameAgreement" onClick={() => history.push(`/project/management/frameAgreement/${params.id}`)}>框架协议</span>
+        <span className={(params.tab && params.tab === 'contract') ? styles.default : ""} key="contract" onClick={() => history.push(`/project/management/contract/${params.id}`)}>合同及订单</span>
+        <span className={(params.tab && params.tab === 'productGroup') ? styles.default : ""} key='productGroup' onClick={() => history.push(`/project/management/productGroup/${params.id}`)}>杆塔明细</span>
+        <span className={(params.tab && params.tab === 'salesPlan') ? styles.default : ""} key='salesPlan' onClick={() => history.push(`/project/management/salesPlan/${params.id}`)}>销售计划</span>
     </Row>
 }

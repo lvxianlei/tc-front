@@ -405,7 +405,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             label: "订单重量",
                             name: "orderWeight",
                             initialValue: saleOrder?.orderWeight || "0.0000",
-                            children: <Input suffix={"吨"} onChange={() => { this.getAmount(); this.getTaxAmount() }} />,
+
+                            children: <InputNumber className={layoutStyles.width100} step="0.0001" max={99999999.9999} onChange={() => { this.getAmount(); this.getTaxAmount() }} />,
                         },
                         {
                             label: "含税金额",
@@ -433,13 +434,13 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             label: "含税单价",
                             name: "taxPrice",
                             initialValue: saleOrder?.taxPrice || "0.00",
-                            children: <Input prefix="￥" onChange={this.getTaxAmount} />,
+                            children: <InputNumber onChange={this.getTaxAmount} max={99999999.9999} />,
                         },
                         {
                             label: "不含税单价",
                             name: "price",
                             initialValue: saleOrder?.price || "0.00",
-                            children: <Input prefix="￥" onChange={this.getAmount} />,
+                            children: <InputNumber onChange={this.getAmount} max={99999999.9999} />,
                         },
                         {
                             label: "税率",
@@ -480,10 +481,11 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                 saleOrder?.foreignExchangeAmount || "0.00",
                             children: (
                                 <InputNumber
-                                    min="0"
+                                    min={0}
                                     step="0.01"
                                     stringMode={false}
                                     precision={2}
+                                    max={99999999.9999}
                                     className={layoutStyles.width100}
                                 />
                             ),
@@ -495,8 +497,9 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                 saleOrder?.exchangeRate || "0.00",
                             children: (
                                 <InputNumber
-                                    min="0"
+                                    min={0}
                                     step="0.01"
+                                    max={99999999.9999}
                                     stringMode={false}
                                     precision={2}
                                     className={layoutStyles.width100}
@@ -529,10 +532,11 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                 saleOrder?.foreignPrice || "0.00",
                             children: (
                                 <InputNumber
-                                    min="0"
+                                    min={0}
                                     step="0.01"
                                     stringMode={false}
                                     precision={2}
+                                    max={99999999.9999}
                                     className={layoutStyles.width100}
                                 />
                             ),
@@ -567,10 +571,11 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                 saleOrder?.portCharge || "0.00",
                             children: (
                                 <InputNumber
-                                    min="0"
+                                    min={0}
                                     step="0.01"
                                     stringMode={false}
                                     precision={2}
+                                    max={99999999.9999}
                                     className={layoutStyles.width100}
                                 />
                             ),
@@ -582,10 +587,11 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                 saleOrder?.guaranteeAmount || "0.00",
                             children: (
                                 <InputNumber
-                                    min="0"
+                                    min={0}
                                     step="0.01"
                                     stringMode={false}
                                     precision={2}
+                                    max={99999999.9999}
                                     className={layoutStyles.width100}
                                 />
                             ),
@@ -598,10 +604,11 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                 saleOrder?.insuranceCharge || "0.00",
                             children: (
                                 <InputNumber
-                                    min="0"
+                                    min={0}
                                     step="0.01"
                                     stringMode={false}
                                     precision={2}
+                                    max={99999999.9999}
                                     className={layoutStyles.width100}
                                 />
                             ),
@@ -613,10 +620,11 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                 saleOrder?.creditInsurance || "0.00",
                             children: (
                                 <InputNumber
-                                    min="0"
+                                    min={0}
                                     step="0.01"
                                     stringMode={false}
                                     precision={2}
+                                    max={99999999.9999}
                                     className={layoutStyles.width100}
                                 />
                             ),
@@ -628,10 +636,11 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                 saleOrder?.commissionCharge || "0.00",
                             children: (
                                 <InputNumber
-                                    min="0"
+                                    min={0}
                                     step="0.01"
                                     stringMode={false}
                                     precision={2}
+                                    max={99999999.9999}
                                     className={layoutStyles.width100}
                                 />
                             ),

@@ -162,7 +162,7 @@ export default function ManagementDetail(): React.ReactNode {
     const tabItems: { [key: string]: JSX.Element | React.ReactNode } = {
         tab_base: <DetailContent operation={[
             <Button key="edit" style={{ marginRight: '16px' }}
-                type="primary" onClick={() => history.push(`/project/management/detail/edit/base/${params.id}`)}>编辑</Button>,
+                type="primary" onClick={() => history.push(`/project/management/edit/base/${params.id}`)}>编辑</Button>,
             <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
         ]}>
             <DetailTitle title="基本信息" />
@@ -199,7 +199,7 @@ export default function ManagementDetail(): React.ReactNode {
         tab_bidDoc: <DetailContent
             operation={[
                 <Button key="edit" type="primary" style={{ marginRight: 16 }}
-                    onClick={() => history.push(`/project/management/detail/edit/bidDoc/${params.id}`)} >编辑</Button>,
+                    onClick={() => history.push(`/project/management/edit/bidDoc/${params.id}`)} >编辑</Button>,
                 <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
             ]}>
             <DetailTitle title="标书制作记录表" />
@@ -220,7 +220,7 @@ export default function ManagementDetail(): React.ReactNode {
         </DetailContent>,
         tab_bidResult: <DetailContent operation={[
             <Button key="goEdit" type="primary" style={{ marginRight: 16 }}
-                onClick={() => history.push(`/project/management/detail/edit/bidResult/${params.id}`)}>编辑</Button>,
+                onClick={() => history.push(`/project/management/edit/bidResult/${params.id}`)}>编辑</Button>,
             <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
         ]}>
             <DetailTitle title="基本信息" />
@@ -273,7 +273,7 @@ export default function ManagementDetail(): React.ReactNode {
             </Tabs>
         </DetailContent>,
         tab_frameAgreement: <DetailContent operation={[
-            <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={() => history.push(`/project/management/detail/edit/frameAgreement/${params.id}`)}>编辑</Button>,
+            <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={() => history.push(`/project/management/edit/frameAgreement/${params.id}`)}>编辑</Button>,
             <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
         ]}>
             <DetailTitle title="基本信息" />
@@ -307,7 +307,7 @@ export default function ManagementDetail(): React.ReactNode {
                 </Tabs.TabPane>
             </Tabs></>,
         tab_productGroup: <DetailContent title={[
-            <Button key="new" type="primary" onClick={() => history.push(`/project/management/detail/new/productGroup/${params.id}`)}>新增</Button>
+            <Button key="new" type="primary" onClick={() => history.push(`/project/management/new/productGroup/${params.id}`)}>新增</Button>
         ]}>
             <CommonTable
                 columns={[
@@ -318,8 +318,8 @@ export default function ManagementDetail(): React.ReactNode {
                         ellipsis: false,
                         width: 200,
                         render: (_: any, record: any) => <>
-                            <Button type="link" onClick={() => history.push(`/project/management/detail/productGroup/item/${params.id}/${record.id}`)} >查看</Button>
-                            <Button type="link" onClick={() => history.push(`/project/management/detail/edit/productGroup/${params.id}/${record.id}`)}>编辑</Button>
+                            <Button type="link" onClick={() => history.push(`/project/management/productGroup/item/${params.id}/${record.id}`)} >查看</Button>
+                            <Button type="link" onClick={() => history.push(`/project/management/edit/productGroup/${params.id}/${record.id}`)}>编辑</Button>
                             {`${record.status}` === "0" && <Button type="link" onClick={() => deleteProductGroupItem(record.id)} >删除</Button>}
                         </>
                     }]}
@@ -351,14 +351,14 @@ export default function ManagementDetail(): React.ReactNode {
                     <Radio.Button value="1" >已通过</Radio.Button>
                 </Radio.Group>
             </Row>
-            {salesPlanStatus === "" && <Row><Button type="primary" onClick={() => history.push(`/project/management/detail/new/salesPlan/${params.id}`)}>新增</Button></Row>}
+            {salesPlanStatus === "" && <Row><Button type="primary" onClick={() => history.push(`/project/management/new/salesPlan/${params.id}`)}>新增</Button></Row>}
             <CommonTable columns={[...taskNotice, {
                 title: "操作",
                 dataIndex: "opration",
                 fixed: "right",
                 render: (_: any, record: any) => {
                     return <>
-                        <Button type="link" onClick={() => history.push(`/project/management/detail/cat/salesPlan/${params.id}/${record.id}`)}>查看</Button>
+                        <Button type="link" onClick={() => history.push(`/project/management/cat/salesPlan/${params.id}/${record.id}`)}>查看</Button>
                         {record.taskReviewStatus === 0 && <>
                             <Button type="link" onClick={async () => {
                                 const result = await noticeAdoptRun(record.id)

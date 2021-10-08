@@ -212,6 +212,7 @@ export default function Information(): React.ReactNode {
             const formatDate = value.marketAuditTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startMarketAuditTime = formatDate[0]
             value.endMarketAuditTime = formatDate[1]
+            delete value.marketAuditTime
         }
         return value
     }

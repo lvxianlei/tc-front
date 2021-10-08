@@ -9,16 +9,16 @@ import ApplicationContext from "../../configuration/ApplicationContext"
 export default function SalesPlanEdit() {
     const history = useHistory()
     const materialStandardEnum = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const match: any = useRouteMatch<{ type: "new" | "edit", id: string }>("/project/management/detail/:type/salesPlan/:projectId/:id")
-    const [productDetails, setProductDetails] = useState<any[]>([])
+    const match: any = useRouteMatch<{ type: "new" | "edit", id: string }>("/project/management/:type/salesPlan/:projectId/:id")
+    // const [productDetails, setProductDetails] = useState<any[]>([])
     const [baseInfoForm] = Form.useForm()
     const [cargoDtoForm] = Form.useForm()
-    const { loading, error, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/taskNotice/${match.params.id}`)
             baseInfoForm.setFieldsValue(result)
             cargoDtoForm.setFieldsValue({ submit: result.contractCargoVos })
-            setProductDetails(result.productDetails || [])
+            // setProductDetails(result.productDetails || [])
             resole(result)
         } catch (error) {
             reject(error)
@@ -32,7 +32,7 @@ export default function SalesPlanEdit() {
             <DetailTitle title="基本信息" />
             <BaseInfo columns={taskNoticeEditBaseInfo} dataSource={data || {}} />
             <DetailTitle title="特殊要求" />
-            <BaseInfo columns={taskNoticeEditSpec.map(item => item.dataIndex === "materialStandard" ? ({ ...item, enum: materialStandardEnum }) : item)} dataSource={data||{}} />
+            <BaseInfo columns={taskNoticeEditSpec.map(item => item.dataIndex === "materialStandard" ? ({ ...item, enum: materialStandardEnum }) : item)} dataSource={data || {}} />
             <DetailTitle title="产品信息" />
             <CommonTable columns={salesAssist} scroll={{ x: true }} dataSource={data?.productInfos} />
         </Spin>

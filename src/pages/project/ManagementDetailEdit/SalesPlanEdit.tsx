@@ -9,8 +9,8 @@ import ApplicationContext from "../../../configuration/ApplicationContext"
 export default function SalesPlanEdit() {
     const history = useHistory()
     const materialStandardEnum = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const editMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string, id: string }>("/project/management/detail/:type/salesPlan/:projectId/:id")
-    const newMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string }>("/project/management/detail/:type/salesPlan/:projectId")
+    const editMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string, id: string }>("/project/management/:type/salesPlan/:projectId/:id")
+    const newMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string }>("/project/management/:type/salesPlan/:projectId")
     const match = editMatch || newMatch
     const [select, setSelect] = useState<string[]>([])
     const [selectRows, setSelectRows] = useState<any[]>([])
@@ -171,7 +171,7 @@ export default function SalesPlanEdit() {
             <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange}
                 columns={taskNoticeEditBaseInfo.map((item: any) => item.dataIndex === "saleOrderNumber" ? ({
                     ...item,
-                    path: `${item.path}?projectId=${match.params.projectId}`
+                    path: `${item.path}?projectId=${match.params.projectId}&taskStatus=0,1`
                 }) : item)} dataSource={data || {}} edit col={3} />
             <DetailTitle title="特殊要求" />
             <BaseInfo form={cargoDtoForm}

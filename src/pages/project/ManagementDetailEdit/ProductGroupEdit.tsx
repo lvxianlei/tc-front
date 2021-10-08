@@ -8,8 +8,8 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 export default function ProductGroupEdit() {
     const history = useHistory()
-    const editMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string, id: string }>("/project/management/detail/:type/productGroup/:projectId/:id")
-    const newMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string }>("/project/management/detail/:type/productGroup/:projectId")
+    const editMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string, id: string }>("/project/management/:type/productGroup/:projectId/:id")
+    const newMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string }>("/project/management/:type/productGroup/:projectId")
     const match = editMatch || newMatch
     const [visible, setVisible] = useState<boolean>(false)
     const [select, setSelect] = useState<any[]>([])
