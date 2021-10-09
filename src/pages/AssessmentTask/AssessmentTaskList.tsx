@@ -13,112 +13,111 @@ import useRequest from '@ahooksjs/use-request';
 
 
 export default function AssessmentTaskList(): React.ReactNode {
-    const history = useHistory();
-const columns = [
-    {
-        key: 'index',
-        title: '序号',
-        dataIndex: 'index',
-        width: 50,
-        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
-    },
-    {
-        key: 'taskCode',
-        title: '评估任务编号',
-        width: 150,
-        dataIndex: 'taskCode'
-    },
-    {
-        key: 'status',
-        title: '任务状态',
-        dataIndex: 'status',
-        width: 120,
-        render: (status: number): React.ReactNode => {
-            switch (status) {
-                case 0:
-                    return '已拒绝';
-                case 1:
-                    return '待确认';
-                case 2:
-                    return '待指派';
-                case 3:
-                    return '待完成';
-                case 4:
-                    return '已完成';
-                case 5:
-                    return '已提交';
-            }
-        }
-    },
-    {
-        key: 'updateStatusTime',
-        title: '最新状态变更时间',
-        width: 200,
-        dataIndex: 'updateStatusTime'
-    },
-    {
-        key: 'assessUserName',
-        title: '评估人',
-        width: 150,
-        dataIndex: 'assessUserName'
-    },
-    {
-        key: 'programName',
-        title: '项目名称',
-        dataIndex: 'programName',
-        width: 200
-    },
-    {
-        key: 'customer',
-        title: '客户名称',
-        dataIndex: 'customer',
-        width: 200
-    },
-    {
-        key: 'programLeaderName',
-        title: '项目负责人',
-        dataIndex: 'programLeaderName',
-        width: 150
-    },
-    {
-        key: 'bidEndTime',
-        title: '投标截止时间',
-        dataIndex: 'bidEndTime',
-        width: 200
-    },
-    {
-        key: 'operation',
-        title: '操作',
-        dataIndex: 'operation',
-        fixed: 'right' as FixedType,
-        width: 230,
-        render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-            <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                <Link to={ `/assessmentTask/assessmentTaskDetail/${ record.id }` }>任务详情</Link>
-                {
-                    record.status === 2 ? 
-                    <Assign id={ record.id } updataList={ () => { history.go(0); } } />
-                    : <Button type="link" disabled>指派</Button>
+    const [ refresh, setRefresh ] = useState<boolean>(false);
+    const columns = [
+        {
+            key: 'index',
+            title: '序号',
+            dataIndex: 'index',
+            width: 50,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+        },
+        {
+            key: 'taskCode',
+            title: '评估任务编号',
+            width: 150,
+            dataIndex: 'taskCode'
+        },
+        {
+            key: 'status',
+            title: '任务状态',
+            dataIndex: 'status',
+            width: 120,
+            render: (status: number): React.ReactNode => {
+                switch (status) {
+                    case 0:
+                        return '已拒绝';
+                    case 1:
+                        return '待确认';
+                    case 2:
+                        return '待指派';
+                    case 3:
+                        return '待完成';
+                    case 4:
+                        return '已完成';
+                    case 5:
+                        return '已提交';
                 }
-                <AssessmentInformation id={ record.id } />
-                <Popconfirm
-                    title="确认提交?"
-                    onConfirm={ () => {
-                        RequestUtil.put(`/tower-science/assessTask/submit?id=${ record.id }`, { id: record.id }).then(res => {
-                            history.go(0); 
-                        });
-                    } }
-                    okText="提交"
-                    cancelText="取消"
-                    disabled={ record.status !== 4 }
-                >
-                    <Button type="link" disabled={ record.status !== 4 }>提交任务</Button>
-                </Popconfirm>
-            </Space>
-        )
-    }
-]
-
+            }
+        },
+        {
+            key: 'updateStatusTime',
+            title: '最新状态变更时间',
+            width: 200,
+            dataIndex: 'updateStatusTime'
+        },
+        {
+            key: 'assessUserName',
+            title: '评估人',
+            width: 150,
+            dataIndex: 'assessUserName'
+        },
+        {
+            key: 'programName',
+            title: '项目名称',
+            dataIndex: 'programName',
+            width: 200
+        },
+        {
+            key: 'customer',
+            title: '客户名称',
+            dataIndex: 'customer',
+            width: 200
+        },
+        {
+            key: 'programLeaderName',
+            title: '项目负责人',
+            dataIndex: 'programLeaderName',
+            width: 150
+        },
+        {
+            key: 'bidEndTime',
+            title: '投标截止时间',
+            dataIndex: 'bidEndTime',
+            width: 200
+        },
+        {
+            key: 'operation',
+            title: '操作',
+            dataIndex: 'operation',
+            fixed: 'right' as FixedType,
+            width: 230,
+            render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                <Space direction="horizontal" size="small" className={ styles.operationBtn }>
+                    <Link to={ `/assessmentTask/assessmentTaskDetail/${ record.id }` }>任务详情</Link>
+                    {
+                        record.status === 2 ? 
+                        <Assign id={ record.id } updataList={ () => { setRefresh(!refresh); } } />
+                        : <Button type="link" disabled>指派</Button>
+                    }
+                    <AssessmentInformation id={ record.id } />
+                    <Popconfirm
+                        title="确认提交?"
+                        onConfirm={ () => {
+                            RequestUtil.put(`/tower-science/assessTask/submit?id=${ record.id }`, { id: record.id }).then(res => {
+                                setRefresh(!refresh); 
+                            });
+                        } }
+                        okText="提交"
+                        cancelText="取消"
+                        disabled={ record.status !== 4 }
+                    >
+                        <Button type="link" disabled={ record.status !== 4 }>提交任务</Button>
+                    </Popconfirm>
+                </Space>
+            )
+        }
+    ]
 
     const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
@@ -147,7 +146,7 @@ const columns = [
                 { renderTreeNodes(item.children) }
             </TreeNode>);
         }
-        return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id }/>;
+        return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id } />;
     });
 
     const onDepartmentChange = async (value: Record<string, any>, title?: string) => {
@@ -165,6 +164,7 @@ const columns = [
         columns={ columns }
         headTabs={ [] }
         extraOperation={ <Button type="primary" ghost>导出</Button> }
+        refresh={ refresh }
         searchFormItems={ [
             {
                 name: 'fuzzyMsg',
@@ -172,14 +172,14 @@ const columns = [
                 children: <Input placeholder="任务编号/项目名称/客户名称"/>
             },
             {
-                name: 'updateStatusTime',
+                name: 'a',
                 label: '最新状态变更时间',
                 children: <DatePicker.RangePicker />
             },
             {
                 name: 'status',
                 label: '任务状态',
-                children: <Select placeholder="请选择" className={ styles.width200 }>
+                children: <Select placeholder="请选择" style={{ width: "150px" }}>
                     <Select.Option value="0" key="0">已拒绝</Select.Option>
                     <Select.Option value="1" key="1">待确认</Select.Option>
                     <Select.Option value="2" key="2">待指派</Select.Option>
@@ -189,19 +189,19 @@ const columns = [
                 </Select>
             },
             {
-                name: 'programLeaderId',
+                name: 'programLeader',
                 label: '项目负责人',
                 children: <Row>
                     <Col>
-                        <Form.Item name="programLeaderIdDept">
-                            <TreeSelect placeholder="请选择" onChange={ (value: any) => { onDepartmentChange(value, 'programLeader') } } className={ styles.width200 }>
+                        <Form.Item name="programLeaderDept">
+                            <TreeSelect placeholder="请选择" onChange={ (value: any) => { onDepartmentChange(value, 'programLeader') } } style={{ width: "150px" }}>
                                 { renderTreeNodes(wrapRole2DataNode(departmentData)) }
                             </TreeSelect>
                         </Form.Item>
                     </Col>
                     <Col>
-                        <Form.Item name="programLeaderId">
-                            <Select placeholder="请选择" className={ styles.width200 }>
+                        <Form.Item name="programLeader">
+                            <Select placeholder="请选择" style={{ width: "150px" }}>
                                 { programLeader && programLeader.map((item: any) => {
                                     return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
                                 }) }
@@ -216,14 +216,14 @@ const columns = [
                 children: <Row>
                     <Col>
                         <Form.Item name="assessUserDept">
-                            <TreeSelect placeholder="请选择" onChange={ (value: any) => { onDepartmentChange(value, 'startReleaseDepartment') } }>
+                            <TreeSelect placeholder="请选择" onChange={ (value: any) => { onDepartmentChange(value, 'startReleaseDepartment') } } style={{ width: "150px" }}>
                                 { renderTreeNodes(wrapRole2DataNode(departmentData)) }
                             </TreeSelect>
                         </Form.Item>
                     </Col>
                     <Col>
                         <Form.Item name="assessUser">
-                            <Select placeholder="请选择">
+                            <Select placeholder="请选择" style={{ width: "150px" }}>
                                 { startRelease && startRelease.map((item: any) => {
                                     return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
                                 }) }
@@ -239,15 +239,15 @@ const columns = [
             }
         ] }
         onFilterSubmit = { (values: Record<string, any>) => {
-            if(values.updateStatusTime) {
-                const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
+            if(values.a) {
+                const formatDate = values.a.map((item: any) => item.format("YYYY-MM-DD"));
                 values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                 values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             }
             if(values.bidEndTime) {
                 const formatDate = values.bidEndTime.map((item: any) => item.format("YYYY-MM-DD"));
-                values.bidEndTimeStartStart = formatDate[0] + ' 00:00:00';
-                values.bidEndTimeStartEnd = formatDate[1] + ' 23:59:59';
+                values.bidEndTimeStart = formatDate[0] + ' 00:00:00';
+                values.bidEndTimeEnd = formatDate[1] + ' 23:59:59';
             }
             return values;
         } }
