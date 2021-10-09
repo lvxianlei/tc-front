@@ -15,14 +15,14 @@ const tableColumns = [
         width: 50, 
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
     {
-        key: 'createDepartment',
+        key: 'createDeptName',
         title: '操作部门',
-        dataIndex: 'createDepartment', 
+        dataIndex: 'createDeptName', 
     },
     {  
-        key: 'createUser', 
+        key: 'createUserName', 
         title: '操作人', 
-        dataIndex: 'createUser' 
+        dataIndex: 'createUserName' 
     },
     { 
         key: 'createTime', 
@@ -30,9 +30,25 @@ const tableColumns = [
         dataIndex: 'createTime' 
     },
     {
-        key: 'status', 
+        key: 'currentStatus', 
         title: '任务状态', 
-        dataIndex: 'status' 
+        dataIndex: 'currentStatus',
+        render: (status: number): React.ReactNode => {
+            switch (status) {
+                case 0:
+                    return '已拒绝';
+                case 1:
+                    return '待确认';
+                case 2:
+                    return '待指派';
+                case 3:
+                    return '待完成';
+                case 4:
+                    return '已完成';
+                case 5:
+                    return '已提交';
+            }
+        } 
     },
     { 
         key: 'description', 
@@ -103,7 +119,7 @@ export default function SetOutTaskDetail(): React.ReactNode {
                 pagination={ false }
             />
             <DetailTitle title="操作信息"/>
-            <CommonTable columns={ tableColumns } dataSource={ detailData.statusRecordList } pagination={ false }/>
+            <CommonTable columns={ tableColumns } dataSource={ detailData.stateRecordVOS } pagination={ false }/>
         </DetailContent>
         <Modal 
             visible={ visible } 
