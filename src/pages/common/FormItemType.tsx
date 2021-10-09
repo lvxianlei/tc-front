@@ -81,8 +81,12 @@ const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: any) =>
     }
 
     const paginationChange = (page: number, pageSize: number) => setPagenation({ ...pagenation, current: page, pageSize })
+
     return <>
-        <Form form={form} onFinish={async () => await run()}>
+        <Form form={form} onFinish={async () => {
+            setPagenation({ ...pagenation, current: 1, pageSize: 10 })
+            await run()
+        }}>
             <Row gutter={2} style={{ height: 32 }}>
                 {searchs.map((fItem: any) => <Col span={searchs.length / 24} key={fItem.dataIndex}><Form.Item
                     name={fItem.dataIndex}

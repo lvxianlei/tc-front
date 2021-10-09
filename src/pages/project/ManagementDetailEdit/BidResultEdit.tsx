@@ -174,7 +174,24 @@ export default function BidResultEdit(): JSX.Element {
                                 columns={bidInfoColumns}
                                 dataSource={data}
                                 opration={[<UploadXLS key="xlxs" readEnd={async (_data) => {
+                                    const vilidateCols = ["包号", "投标人名称", "分标编号", "货物类别", "项目单位", "总价", "重量"]
+                                    if (_data.length <= 0) {
+                                        message.error("文件不能为空...")
+                                        return
+                                    }
+                                    if (Object.keys(_data[0]).length <= 0) {
+                                        message.error("文件不符合上传规则...")
+                                        return
+                                    }
+                                    const rowItem: string[] = Object.keys(_data[0])
+                                    const vilidateRow: number = rowItem.filter(item => vilidateCols.includes(item)).length
+                                    if (vilidateRow !== vilidateCols.length) {
+                                        message.error("文件不符合上传规则...")
+                                        return
+                                    }
                                     const resultData = bidOpenRecordVos.find((bidItem: any) => bidItem.round === item.key).bidOpenRecordVos
+                                    const filterUploadData = _data.filter(item => Object.keys(item).every(eItem => eItem))
+                                    console.log(filterUploadData,"---------------")
                                     const uploadData = _data.map((item: any, index) => {
                                         const rowData: any = { uid: resultData.length + index }
                                         Object.keys(item).forEach((columnItem: string) => {

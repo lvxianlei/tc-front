@@ -372,7 +372,7 @@ export default function ManagementDetail(): React.ReactNode {
                             }}>驳回</Button>
                         </>}
                         {[2, -1].includes(record.taskReviewStatus) && <>
-                            <Link to={`/project/management/detail/edit/salesPlan/${params.id}/${record.id}`}>编辑</Link>
+                            <Link to={`/project/management/edit/salesPlan/${params.id}/${record.id}`}>编辑</Link>
                             <Button type="link" onClick={() => deleteSaleOrderItem(record.id)}>删除</Button>
                             <Button type="link" loading={noticeLoading} onClick={() => handleSubmitAudit(record.id)}>提交审批</Button>
                         </>}

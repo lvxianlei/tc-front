@@ -369,13 +369,6 @@
       "exact": true,
       "authority": "project_edit"
     },
-    { // 项目管理详情
-      "name": "项目管理基本信息",
-      "path": "/project/management/base/:id",
-      "module": "./pages/project/ManagementDetail",
-      "exact": true,
-      "authority": "project_detail"
-    },
     { // 项目管理子项详情
       "name": "项目管理子项详情",
       "path": "/project/management/:tab/:id",

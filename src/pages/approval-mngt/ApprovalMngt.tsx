@@ -192,13 +192,13 @@ export default function Information(): React.ReactNode {
         setCurrentViewId(id)
     }
 
-    const handleBidingChange = (changedFields: any, allFields: any) => {
-        if (Object.keys(changedFields)[0] === "projectName") {
+    const handleBidingChange = (changedFields: any) => {
+        if (Object.keys(changedFields).length > 0 && Object.keys(changedFields)[0] === "projectName") {
             const {
                 biddingEndTime,
                 biddingPerson,
                 projectNumber
-            } = changedFields.projectName.records[0]
+            } = changedFields.projectName?.records[0]
 
             bidingForm.setFieldsValue({
                 bidDeadline: biddingEndTime,
