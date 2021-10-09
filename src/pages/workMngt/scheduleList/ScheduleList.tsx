@@ -113,14 +113,14 @@ export default function ScheduleList(): React.ReactNode {
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateStatusTimeStart = formatDate[0]
-            value.updateStatusTimeEnd = formatDate[1]
+            value.updateStatusTimeStart = formatDate[0]+ ' 00:00:00';
+            value.updateStatusTimeEnd = formatDate[1]+ ' 23:59:59';
             delete value.statusUpdateTime
         }
         if (value.planTime) {
             const formatDate = value.planTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.plannedDeliveryTimeStart = formatDate[0]
-            value.plannedDeliveryTimeEnd = formatDate[1]
+            value.plannedDeliveryTimeStart = formatDate[0]+ ' 00:00:00';
+            value.plannedDeliveryTimeEnd = formatDate[1]+ ' 23:59:59';
             delete value.planTime
         }
         return value
