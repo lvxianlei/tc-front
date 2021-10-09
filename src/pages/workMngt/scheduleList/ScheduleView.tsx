@@ -24,7 +24,7 @@ export default function ScheduleView(): React.ReactNode {
     const [materialUser, setMaterialUser] = useState<any|undefined>([]);
     const [materialPartUser, setMaterialPartUser] = useState<any|undefined>([]);
     const [smallSampleUser, setSmallSampleUser] = useState<any|undefined>([]);
-    const params = useParams<{ id: string }>();
+    const params = useParams<{ id: string, status: string }>();
     const handleModalOk = async () => {
         try {
             const saveData = await form.validateFields();
@@ -48,6 +48,7 @@ export default function ScheduleView(): React.ReactNode {
                 setVisible(false);
                 form.setFieldsValue({});
                 history.push(`/workMngt/scheduleList/scheduleView/${params.id}`)
+                history.push(`/workMngt/scheduleList/scheduleView/${params.id}/${params.status}`)
             })
         
         } catch (error) {
@@ -276,7 +277,7 @@ export default function ScheduleView(): React.ReactNode {
                             smallSampleDeliverTime:resData.smallSampleDeliverTime? moment(resData.smallSampleDeliverTime):''
                         });
                         setVisible(true);
-                    }}>指派</Button>
+                    }} disabled={params.status!=='3'}>指派</Button>
                 </Space>
             )
         }

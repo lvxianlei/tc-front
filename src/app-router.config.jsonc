@@ -597,7 +597,7 @@
     },
     { // 工作管理-指派列表
       "name": "指派查看",
-      "path": "/workMngt/scheduleList/scheduleView/:id",
+      "path": "/workMngt/scheduleList/scheduleView/:id/:status",
       "module": "./pages/workMngt/scheduleList/ScheduleView",
       "exact": true,
       "authority": "approvalm"

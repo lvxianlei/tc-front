@@ -76,7 +76,6 @@ export default function ScheduleList(): React.ReactNode {
                     value: 2,
                     label: "待指派"
                   },
-                 
                   {
                     value: 3,
                     label: "待完成"
@@ -104,7 +103,7 @@ export default function ScheduleList(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={`/workMngt/scheduleList/scheduleView/${record.id}`}>查看</Link>
+                    <Link to={`/workMngt/scheduleList/scheduleView/${record.id}/${record.status}`}>查看</Link>
                 </Space>
             )
         }
@@ -138,12 +137,12 @@ export default function ScheduleList(): React.ReactNode {
                     name: 'status',
                     label:'任务状态',
                     children: <Select style={{width:"100%"}}>
+                        <Select.Option value={0} key={0}>已拒绝</Select.Option>
                         <Select.Option value={1} key={1}>待确认</Select.Option>
                         <Select.Option value={2} key={2}>待指派</Select.Option>
-                        <Select.Option value={3} key={3}>已拒绝</Select.Option>
-                        <Select.Option value={4} key={4}>待完成</Select.Option>
-                        <Select.Option value={5} key={5}>已完成</Select.Option>
-                        <Select.Option value={6} key={6}>已提交</Select.Option>
+                        <Select.Option value={3} key={3}>待完成</Select.Option>
+                        <Select.Option value={4} key={4}>已完成</Select.Option>
+                        <Select.Option value={5} key={5}>已提交</Select.Option>
                     </Select>
                 },
                 {
