@@ -42,7 +42,7 @@ interface IPaymentPlanVo {
     readonly returnedTime?: string;
     readonly status?: number;
     readonly updateTime?: string;
-    readonly updateUser?: string; 
+    readonly updateUser?: string;
     readonly paymentPlanId?: string;
     readonly uncollectedPayment?: number;
     readonly paymentReceived?: number;
@@ -67,7 +67,7 @@ interface IPaymentRecordVo {
 }
 
 interface EditTableColumnType<RecordType> extends TableColumnType<object> {
-    readonly editable?: boolean; 
+    readonly editable?: boolean;
     readonly type?: React.ReactNode;
     readonly title: string;
 }
@@ -106,7 +106,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
     static getDerivedStateFromProps(props: IContractRefundRecordProps, prevState: IContractRefundRecordState): IContractRefundRecordState | null {
         if (!prevState.paymentPlanVos || !prevState.paymentPlanVos.length || prevState.isUpdate) {
             return {
-                paymentPlanVos: [ ...(props.paymentPlanVos || []) ]
+                paymentPlanVos: [...(props.paymentPlanVos || [])]
             }
         }
         return null;
@@ -135,7 +135,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                 paymentPlanId: this.state.paymentPlanVos[index].id
             });
             this.setState({
-                paymentPlanVos: [ ...paymentPlanVos ],
+                paymentPlanVos: [...paymentPlanVos],
                 isUpdate: false
             });
         }
@@ -148,7 +148,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
      */
     private renderExtraInBar(index: number): React.ReactNode {
         return (
-            <Button type="primary" onClick={ this.addRecord(index) } disabled={ this.props.contractStatus === 0 }>添加</Button>
+            <Button type="primary" onClick={this.addRecord(index)} disabled={this.props.contractStatus === 0}>添加</Button>
         );
     }
 
@@ -190,14 +190,14 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
      * @param record 
      * @returns plan 
      */
-    private deletePlan(record: Record<string, any>, index: number): (e?: React.MouseEvent<HTMLElement>) => void {       
+    private deletePlan(record: Record<string, any>, index: number): (e?: React.MouseEvent<HTMLElement>) => void {
         return async () => {
             const paymentPlanVos: IPaymentPlanVo[] = (this.state.paymentPlanVos || []);
             const paymentPlanVo: IPaymentPlanVo = paymentPlanVos.filter(item => item.id === record.paymentPlanId)[0];
             let paymentRecordVos: IPaymentRecordVo[] = paymentPlanVo.paymentRecordVos;
-            if(record.id) {
-                const data: boolean = await RequestUtil.delete<boolean>(`/tower-market/paymentRecord/${ record.id }`);
-                if(data && this.props.onDeleted) {
+            if (record.id) {
+                const data: boolean = await RequestUtil.delete<boolean>(`/tower-market/paymentRecord/${record.id}`);
+                if (data && this.props.onDeleted) {
                     this.props.onDeleted();
                     this.setState({
                         isUpdate: true
@@ -205,12 +205,12 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                 }
                 paymentRecordVos.splice(index, 1);
                 this.setState({
-                    paymentPlanVos: [ ...paymentPlanVos ]
+                    paymentPlanVos: [...paymentPlanVos]
                 });
             } else {
                 paymentRecordVos.splice(index, 1);
                 this.setState({
-                    paymentPlanVos: [ ...paymentPlanVos ]
+                    paymentPlanVos: [...paymentPlanVos]
                 });
             }
         }
@@ -221,17 +221,17 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
      */
     public onSelect = (selectedRows: DataType[]): void => {
         let paymentPlanVos: IPaymentPlanVo[] = this.state.paymentPlanVos || [];
-        const keyParts: string [] = (this.state.editingKey || '').split('-');
+        const keyParts: string[] = (this.state.editingKey || '').split('-');
         const paymentPlanId: string = keyParts[0];
         const record: IPaymentRecordVo = this.getForm()?.getFieldsValue(true);
         const tableIndex: string = keyParts[1];
-        if( selectedRows && selectedRows.length > 0 ) {
+        if (selectedRows && selectedRows.length > 0) {
             paymentPlanVos = paymentPlanVos.map<IPaymentPlanVo>((items: IPaymentPlanVo): IPaymentPlanVo => {
-                if(items.id === paymentPlanId) {
+                if (items.id === paymentPlanId) {
                     return {
                         ...items,
                         paymentRecordVos: items.paymentRecordVos.map<IPaymentRecordVo>((item: IPaymentRecordVo, index: number): IPaymentRecordVo => {
-                            if(index === Number(tableIndex) ) {
+                            if (index === Number(tableIndex)) {
                                 return {
                                     ...item,
                                     refundTime: record.refundTime,
@@ -255,7 +255,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                 }
             });
             this.setState({
-                paymentPlanVos: [ ...paymentPlanVos ]
+                paymentPlanVos: [...paymentPlanVos]
             });
             this.getForm()?.setFieldsValue({
                 customerName: selectedRows[0].name
@@ -281,29 +281,29 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
      */
     public save = async (values: Record<string, any>) => {
         try {
-            if(!values.customerName) {
+            if (!values.customerName) {
                 message.warning('请选择来款单位')
                 return Promise.reject(false);
-            } else if ( !values.refundTime) {
+            } else if (!values.refundTime) {
                 message.warning('请选择来款时间')
                 return Promise.reject(false);
-            } else if ( !values.refundMode) {
-                message.warning('请选择来款方式') 
+            } else if (!values.refundMode) {
+                message.warning('请选择来款方式')
                 return Promise.reject(false);
-            } else if ( !values.refundAmount) {
+            } else if (!values.refundAmount) {
                 message.warning('请输入来款金额')
                 return Promise.reject(false);
-            } else if ( !values.currencyType) {
+            } else if (!values.currencyType) {
                 message.warning('请选择币种')
                 return Promise.reject(false);
             } else {
                 this.enterLoading();
-                const keyParts: string [] = (this.state.editingKey || '').split('-');
+                const keyParts: string[] = (this.state.editingKey || '').split('-');
                 const paymentPlanId: string = keyParts[0];
                 const paymentPlanVos: IPaymentPlanVo[] = (this.state.paymentPlanVos || []);
                 const paymentPlanVo: IPaymentPlanVo = paymentPlanVos.filter(item => item.id === paymentPlanId)[0];
                 let paymentRecordVos: IPaymentRecordVo[] = paymentPlanVo.paymentRecordVos;
-                const customerId: string| number | undefined = paymentRecordVos[ values.index as number ].customerId;
+                const customerId: string | number | undefined = paymentRecordVos[values.index as number].customerId;
                 values = {
                     ...values,
                     refundTime: moment(values.refundTime).format('YYYY-MM-DD HH:mm'),
@@ -327,17 +327,17 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                     paymentRecordVos[values.index as number] = newPlan;
                 }
                 this.setState({
-                    paymentPlanVos: [ ...paymentPlanVos ],
+                    paymentPlanVos: [...paymentPlanVos],
                     editingKey: ''
                 });
-                if(this.props.onDeleted) {
+                if (this.props.onDeleted) {
                     this.props.onDeleted();
                     this.setState({
                         isUpdate: true
                     })
                 }
             }
-        } catch(e) {}   
+        } catch (e) { }
     }
 
     /**
@@ -350,30 +350,30 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             dataIndex: 'refundTime',
             editable: true,
             width: 150,
-            type: <DatePicker showTime/>
+            type: <DatePicker showTime />
         }, {
             title: '* 来款单位',
             dataIndex: 'customerName',
             editable: true,
             width: 200,
-            type: <Input suffix={ <ClientSelectionComponent onSelect={ this.onSelect } />} />
+            type: <Input suffix={<ClientSelectionComponent onSelect={this.onSelect} />} />
         }, {
             title: '* 来款方式',
             dataIndex: 'refundMode',
             editable: true,
             width: 150,
             type: (
-                <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
-                    { refundModeOptions && refundModeOptions.map(({ id, name }, index) => {
-                        return <Select.Option key={ index } value={ id }>
-                            { name }
+                <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                    {refundModeOptions && refundModeOptions.map(({ id, name }, index) => {
+                        return <Select.Option key={index} value={id}>
+                            {name}
                         </Select.Option>
-                    }) }
+                    })}
                 </Select>
             ),
             render: (refundMode: number | string): React.ReactNode => {
                 return refundModeOptions && refundModeOptions.map(({ id, name }, index) => {
-                    if(id === refundMode) {
+                    if (id === refundMode) {
                         return name
                     } else {
                         return ""
@@ -385,24 +385,24 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             dataIndex: 'refundAmount',
             editable: true,
             width: 150,
-            type: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } className={ layoutStyles.width100 }/>
+            type: <InputNumber min={0} step="0.01" max={999999999999.99} stringMode={false} precision={2} className={layoutStyles.width100} />
         }, {
             title: '* 币种',
             dataIndex: 'currencyType',
             editable: true,
             width: 200,
             type: (
-                <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
-                    { currencyTypeOptions && currencyTypeOptions.map(({ id, name }, index) => {
-                        return <Select.Option key={ index } value={ id }>
-                            { name }
+                <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                    {currencyTypeOptions && currencyTypeOptions.map(({ id, name }, index) => {
+                        return <Select.Option key={index} value={id}>
+                            {name}
                         </Select.Option>
-                    }) }
+                    })}
                 </Select>
             ),
             render: (currencyType: number | string): React.ReactNode => {
-                return  currencyTypeOptions && currencyTypeOptions.map(({ id, name }, index) => {
-                    if(id === currencyType) {
+                return currencyTypeOptions && currencyTypeOptions.map(({ id, name }, index) => {
+                    if (id === currencyType) {
                         return name
                     } else {
                         return ""
@@ -414,7 +414,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             dataIndex: 'exchangeRate',
             editable: true,
             width: 150,
-            type: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } className={ layoutStyles.width100 }/>,
+            type: <InputNumber min={0} step="0.01" max={999999999999.99} stringMode={false} precision={2} className={layoutStyles.width100} />,
             render: (exchangeRate: number | string): React.ReactNode => {
                 return exchangeRate === -1 ? '' : exchangeRate
             }
@@ -423,7 +423,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             dataIndex: 'foreignExchangeAmount',
             editable: true,
             width: 150,
-            type: <InputNumber min="0" step="0.01" stringMode={ false } precision={ 2 } className={ layoutStyles.width100 }/>,
+            type: <InputNumber min={0} step="0.01" max={999999999999.99} stringMode={false} precision={2} className={layoutStyles.width100} />,
             render: (foreignExchangeAmount: number | string): React.ReactNode => {
                 return foreignExchangeAmount === -1 ? '' : foreignExchangeAmount
             }
@@ -432,84 +432,86 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             dataIndex: 'refundBank',
             editable: true,
             width: 200,
-            type: <Input/>
+            type: <Input />
         }, {
             title: '备注',
             dataIndex: 'description',
             editable: true,
             width: 200,
-            type: <Input.TextArea rows={ 5 } maxLength={ 300 }/>
+            type: <Input.TextArea rows={5} maxLength={300} />
         }, {
             title: '操作',
             dataIndex: 'operation',
             width: 200,
             fixed: 'right',
-            render: (oper: undefined, record: Record<string, any>, index: number) =>{
+            render: (oper: undefined, record: Record<string, any>, index: number) => {
                 const editing: boolean = this.isEditing(record.paymentPlanId + '-' + index);
                 return (
                     editing
-                    ?
-                    <Space direction="horizontal" size="small">
-                        <Button type="link" htmlType="submit" loading={ this.state.loading }>保存</Button>
-                        <ConfirmableButton confirmTitle="要取消编辑吗？"
-                            type="link" placement="topRight"
-                            onConfirm={ () => { 
-                                let paymentPlanVos: IPaymentPlanVo[] = this.state.paymentPlanVos || [];
-                                const keyParts: string [] = (this.state.editingKey || '').split('-');
-                                const paymentPlanId: string = keyParts[0];
-                                paymentPlanVos = paymentPlanVos.map<IPaymentPlanVo>((items: IPaymentPlanVo, planIndex: number): IPaymentPlanVo => {
-                                    if(items.id === paymentPlanId) {
-                                        return {
-                                            ...items,
-                                            paymentRecordVos: items.paymentRecordVos.map<IPaymentRecordVo>((item: IPaymentRecordVo, ind: number): IPaymentRecordVo => {
-                                                if(item.id){
-                                                    return {
-                                                        ...item,
-                                                        customerName: this.props.paymentPlanVos[planIndex].paymentRecordVos[ind].customerName,
-                                                        customerId:  this.props.paymentPlanVos[planIndex].paymentRecordVos[ind].customerId
-                                                    };
-                                                } else {
-                                                    return {
-                                                        ...item,
-                                                        customerName: '',
-                                                        customerId: ''
-                                                    };
-                                                }
-                                            })
+                        ?
+                        <Space direction="horizontal" size="small">
+                            <Button type="link" htmlType="submit" loading={this.state.loading}>保存</Button>
+                            <ConfirmableButton confirmTitle="要取消编辑吗？"
+                                type="link" placement="topRight"
+                                onConfirm={() => {
+                                    let paymentPlanVos: IPaymentPlanVo[] = this.state.paymentPlanVos || [];
+                                    const keyParts: string[] = (this.state.editingKey || '').split('-');
+                                    const paymentPlanId: string = keyParts[0];
+                                    paymentPlanVos = paymentPlanVos.map<IPaymentPlanVo>((items: IPaymentPlanVo, planIndex: number): IPaymentPlanVo => {
+                                        if (items.id === paymentPlanId) {
+                                            return {
+                                                ...items,
+                                                paymentRecordVos: items.paymentRecordVos.map<IPaymentRecordVo>((item: IPaymentRecordVo, ind: number): IPaymentRecordVo => {
+                                                    if (item.id) {
+                                                        return {
+                                                            ...item,
+                                                            refundTime: (item.refundTime as any)?.format("YYYY-MM-DD HH:mm:ss"),
+                                                            customerName: this.props.paymentPlanVos[planIndex].paymentRecordVos[ind].customerName,
+                                                            customerId: this.props.paymentPlanVos[planIndex].paymentRecordVos[ind].customerId,
+                                                        };
+                                                    } else {
+                                                        return {
+                                                            ...item,
+                                                            refundTime: (item.refundTime as any)?.format("YYYY-MM-DD HH:mm:ss"),
+                                                            customerName: '',
+                                                            customerId: ''
+                                                        };
+                                                    }
+                                                })
+                                            }
+                                        } else {
+                                            return items;
                                         }
-                                    } else {
-                                        return items;
-                                    }
-                                });
-                                this.getForm()?.setFieldsValue({
-                                    customerName: ''
-                                });
-                                this.setState({
-                                    editingKey: '',
-                                    paymentPlanVos: [ ...paymentPlanVos ]
-                                })
-                            } }>
-                            取消
-                        </ConfirmableButton>
-                    </Space>
-                    :
-                    <Space direction="horizontal" size="small">
-                        <Button type="link" htmlType="button" disabled={ this.state.editingKey !== '' || this.props.contractStatus === 0  } onClick={ this.editRow(record, index) }>编辑</Button>
-                        <Popconfirm 
-                            title="要删除该条回款计划吗？" 
-                            placement="topRight" 
-                            okText="确认"
-                            cancelText="取消"
-                            onConfirm={ this.deletePlan(record, index) } 
-                            disabled={ this.props.contractStatus === 0 }
-                        >
-                            <Button type="link" disabled={ this.props.contractStatus === 0 }>
-                                删除
-                            </Button>
-                        </Popconfirm>
-                    </Space>
+                                    });
+                                    this.getForm()?.setFieldsValue({
+                                        customerName: ''
+                                    });
+                                    this.setState({
+                                        editingKey: '',
+                                        paymentPlanVos: [...paymentPlanVos]
+                                    })
+                                }}>
+                                取消
+                            </ConfirmableButton>
+                        </Space>
+                        :
+                        <Space direction="horizontal" size="small">
+                            <Button type="link" htmlType="button" disabled={this.state.editingKey !== '' || this.props.contractStatus === 0} onClick={this.editRow(record, index)}>编辑</Button>
+                            <Popconfirm
+                                title="要删除该条回款计划吗？"
+                                placement="topRight"
+                                okText="确认"
+                                cancelText="取消"
+                                onConfirm={this.deletePlan(record, index)}
+                                disabled={this.props.contractStatus === 0}
+                            >
+                                <Button type="link" disabled={this.props.contractStatus === 0}>
+                                    删除
+                                </Button>
+                            </Popconfirm>
+                        </Space>
                 )
-            }   
+            }
         }];
     }
 
@@ -519,7 +521,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
      */
     private getMergedColumns(): EditTableColumnType<object>[] {
         return this.getChargingRecordColumns().map<EditTableColumnType<object>>((col: EditTableColumnType<object>): EditTableColumnType<object> => {
-            if(!col.editable) {
+            if (!col.editable) {
                 return col
             } else {
                 return {
@@ -531,7 +533,7 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                             dataIndex: col.dataIndex,
                             title: col.title,
                             index: index,
-                            editing: this.isEditing( record.paymentPlanId + '-' + index )
+                            editing: this.isEditing(record.paymentPlanId + '-' + index)
                         };
                     }
                 }
@@ -553,53 +555,53 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
             children,
             ...restProps
         } = recordItem;
-        return ( 
-            <td { ...restProps }>
+        return (
+            <td {...restProps}>
                 {
                     editing
-                    ?
-                    <>
-                        {
-                            dataIndex === 'refundTime'
-                            ?
-                            <>
-                                <Form.Item
-                                    name="index"
-                                    initialValue={ index }
-                                    className={ styles.hidden }
-                                >
-                                    <Input type="hidden"/>
-                                </Form.Item>
-                                <Form.Item
-                                    name="id"
-                                    initialValue={ record.id }
-                                    className={ styles.hidden }
-                                >
-                                    <Input type="hidden"/>
-                                </Form.Item>
-                            </>
-                            :
-                            null
-                        }
-                        <Form.Item
-                            name={ dataIndex }
-                            initialValue={
-                                (dataIndex === 'refundTime')
-                                ? 
-                                moment(record[dataIndex])
-                                :
-                                (record[dataIndex] === -1)
-                                ?
-                                ''
-                                :
-                                record[dataIndex]
-                            } 
-                        >
-                            { type }
-                        </Form.Item>
-                    </>
-                    :
-                    children
+                        ?
+                        <>
+                            {
+                                dataIndex === 'refundTime'
+                                    ?
+                                    <>
+                                        <Form.Item
+                                            name="index"
+                                            initialValue={index}
+                                            className={styles.hidden}
+                                        >
+                                            <Input type="hidden" />
+                                        </Form.Item>
+                                        <Form.Item
+                                            name="id"
+                                            initialValue={record.id}
+                                            className={styles.hidden}
+                                        >
+                                            <Input type="hidden" />
+                                        </Form.Item>
+                                    </>
+                                    :
+                                    null
+                            }
+                            <Form.Item
+                                name={dataIndex}
+                                initialValue={
+                                    (dataIndex === 'refundTime')
+                                        ?
+                                        moment(record[dataIndex])
+                                        :
+                                        (record[dataIndex] === -1)
+                                            ?
+                                            ''
+                                            :
+                                            record[dataIndex]
+                                }
+                            >
+                                {type}
+                            </Form.Item>
+                        </>
+                        :
+                        children
                 }
             </td>
         );
@@ -611,10 +613,10 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
      */
     private getChargingRecordSummariableItems(): IRenderdSummariableItem[] {
         let paymentPlanVos: IPaymentPlanVo[] = this.state.paymentPlanVos || [];
-        return paymentPlanVos.map<IRenderdSummariableItem>((item: IPaymentPlanVo, index: number) : IRenderdSummariableItem => {
+        return paymentPlanVos.map<IRenderdSummariableItem>((item: IPaymentPlanVo, index: number): IRenderdSummariableItem => {
             return {
                 fieldItems: [{
-                    label: `第${ item.period }期计划 `,
+                    label: `第${item.period}期计划 `,
                     value: item.returnedTime
                 }, {
                     label: '计划回款占比',
@@ -631,15 +633,15 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                 }],
                 // renderExtraInBar: (): React.ReactNode => this.renderExtraInBar(index),
                 render: (): React.ReactNode => (
-                    <Form ref={ this.form } key={ Math.random() } onFinish={ this.save } onValuesChange={ (changedValues, allValues) => {
+                    <Form ref={this.form} key={Math.random()} onFinish={this.save} onValuesChange={(changedValues, allValues) => {
                         this.getForm()?.setFieldsValue({ ...allValues })
-                    } }>
+                    }}>
                         <Table
                             rowKey="id"
-                            dataSource={ [...item.paymentRecordVos] }
-                            columns={ this.getMergedColumns() } 
-                            bordered={ true }
-                            pagination={ false }
+                            dataSource={[...item.paymentRecordVos]}
+                            columns={this.getMergedColumns()}
+                            bordered={true}
+                            pagination={false}
                             components={{
                                 body: {
                                     cell: this.getEditableCell

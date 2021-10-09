@@ -120,6 +120,19 @@ export default function InfomationNew(): JSX.Element {
                 })
                 return
             }
+            if (biddingStatus === 0) {
+                Modal.confirm({
+                    title: "应标状态修改",
+                    content: "当前标的已被应标，是否取消应标？确定后，工程将被删除，请再三确认！",
+                    onOk: () => {
+                        setBinddingStatus(biddingStatus)
+                    },
+                    onCancel: () => {
+                        baseInfoForm.setFieldsValue({ biddingStatus: 1 })
+                    }
+                })
+                return
+            }
             if (biddingStatus === 1) {
                 setVisible(true)
             }

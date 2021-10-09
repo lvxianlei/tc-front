@@ -435,13 +435,13 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             label: "含税单价",
                             name: "taxPrice",
                             initialValue: saleOrder?.taxPrice || "0.00",
-                            children: <InputNumber onChange={this.getTaxAmount} max={99999999.9999} />,
+                            children: <InputNumber onChange={this.getTaxAmount} max={999999999999.99} />,
                         },
                         {
                             label: "不含税单价",
                             name: "price",
                             initialValue: saleOrder?.price || "0.00",
-                            children: <InputNumber onChange={this.getAmount} max={99999999.9999} />,
+                            children: <InputNumber onChange={this.getAmount} max={999999999999.99} />,
                         },
                         {
                             label: "税率",
@@ -486,7 +486,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                     step="0.01"
                                     stringMode={false}
                                     precision={2}
-                                    max={99999999.9999}
+                                    max={999999999999.99}
                                     className={layoutStyles.width100}
                                 />
                             ),
@@ -500,7 +500,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                 <InputNumber
                                     min={0}
                                     step="0.01"
-                                    max={99999999.9999}
+                                    max={999999999999.99}
                                     stringMode={false}
                                     precision={2}
                                     className={layoutStyles.width100}
@@ -537,7 +537,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                     step="0.01"
                                     stringMode={false}
                                     precision={2}
-                                    max={99999999.9999}
+                                    max={999999999999.99}
                                     className={layoutStyles.width100}
                                 />
                             ),
@@ -576,7 +576,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                     step="0.01"
                                     stringMode={false}
                                     precision={2}
-                                    max={99999999.9999}
+                                    max={999999999999.99}
                                     className={layoutStyles.width100}
                                 />
                             ),
@@ -592,7 +592,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                     step="0.01"
                                     stringMode={false}
                                     precision={2}
-                                    max={99999999.9999}
+                                    max={999999999999.99}
                                     className={layoutStyles.width100}
                                 />
                             ),
@@ -609,7 +609,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                     step="0.01"
                                     stringMode={false}
                                     precision={2}
-                                    max={99999999.9999}
+                                    max={999999999999.99}
                                     className={layoutStyles.width100}
                                 />
                             ),
@@ -625,7 +625,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                     step="0.01"
                                     stringMode={false}
                                     precision={2}
-                                    max={99999999.9999}
+                                    max={999999999999.99}
                                     className={layoutStyles.width100}
                                 />
                             ),
@@ -641,7 +641,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                     step="0.01"
                                     stringMode={false}
                                     precision={2}
-                                    max={99999999.9999}
+                                    max={999999999999.99}
                                     className={layoutStyles.width100}
                                 />
                             ),
