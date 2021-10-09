@@ -13,6 +13,7 @@ import styles from './scheduleList.module.less';
 
 export default function ScheduleView(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
+    const [refresh, setRefresh] = useState<boolean>(false);
     const [scheduleData, setScheduleData] = useState<any|undefined>({});
     const history = useHistory();
     const [form] = Form.useForm();
@@ -56,8 +57,8 @@ export default function ScheduleView(): React.ReactNode {
             await RequestUtil.post('/tower-science/productCategory/assign', saveData).then(()=>{
                 setVisible(false);
                 form.setFieldsValue({});
-                history.push(`/workMngt/scheduleList/scheduleView/${params.id}`)
-                history.push(`/workMngt/scheduleList/scheduleView/${params.id}/${params.status}`)
+            }).then(()=>{
+                setRefresh(!refresh);
             })
         
         } catch (error) {
@@ -635,6 +636,7 @@ export default function ScheduleView(): React.ReactNode {
                 }
                 requestData={{ loftingTaskId: params.id }}
                 onFilterSubmit={ onFilterSubmit }
+                refresh={ refresh }
                 searchFormItems={[
                     {
                         name: 'pattern',

@@ -183,7 +183,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
             <Modal
                 visible={ this.state.visible } 
                 width="80%" 
-                title="塔型放样指派" 
+                title="塔型提料指派" 
                 footer={ 
                     <Space direction="horizontal" className={ styles.bottomBtn }>
                         <Button type="ghost" onClick={ () => this.modalCancel() }>关闭</Button>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Space, Input, DatePicker, Select, Button, Popconfirm } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -8,7 +8,7 @@ import Deliverables from './Deliverables';
 import RequestUtil from '../../utils/RequestUtil';
 
 export default function SetOutTaskList(): React.ReactNode {
-    const history = useHistory();
+    const [ refresh, setRefresh ] = useState<boolean>(false);
     
     const columns = [
         {
@@ -114,7 +114,7 @@ export default function SetOutTaskList(): React.ReactNode {
                         title="确认提交?"
                         onConfirm={ () => {
                             RequestUtil.post(`/tower-science/loftingTask/submit`, { id: record.id }).then(res => {
-                                history.go(0);
+                                setRefresh(!refresh);
                             });
                         } }
                         okText="提交"
@@ -132,6 +132,7 @@ export default function SetOutTaskList(): React.ReactNode {
         columns={ columns }
         headTabs={ [] }
         extraOperation={ <Button type="primary" ghost>导出</Button> }
+        refresh={ refresh }
         searchFormItems={ [
             {
                 name: 'fuzzyMsg',

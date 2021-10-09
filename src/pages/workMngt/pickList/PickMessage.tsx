@@ -8,17 +8,17 @@ import RequestUtil from '../../../utils/RequestUtil';
 
 const tableColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '操作部门', dataIndex: 'partBidNumber', key: 'partBidNumber', },
-    { title: '操作人', dataIndex: 'goodsType', key: 'goodsType' },
-    { title: '操作时间', dataIndex: 'packageNumber', key: 'packgeNumber' },
-    { title: '任务状态', dataIndex: 'amount', key: 'amount' }
+    { title: '操作部门', dataIndex: 'createDepartment', key: 'createDepartment', },
+    { title: '操作人', dataIndex: 'createUser', key: 'createUser' },
+    { title: '操作时间', dataIndex: 'createTime', key: 'createTime' },
+    { title: '任务状态', dataIndex: 'status', key: 'status' }
 ]
 
 export default function PickDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
+        const data: any = await RequestUtil.get(`tower-science/materialTask?id=${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data

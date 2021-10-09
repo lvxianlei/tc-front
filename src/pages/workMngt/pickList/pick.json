@@ -1,23 +1,23 @@
 {
     "specialInfoData": [
         {
-            "dataIndex": "projectName",
+            "dataIndex": "materialStandard",
             "title": "原材料标准"
         },
         {
-            "dataIndex": "projectNumber",
+            "dataIndex": "materialDemand",
             "title": "原材料要求"
         },
         {
-            "dataIndex": "releaseDate",
+            "dataIndex": "weldingDemand",
             "title": "焊接要求"
         },
         {
-            "dataIndex": "source",
+            "dataIndex": "packDemand",
             "title": "包装要求"
         },
         {
-            "dataIndex": "bidBuyEndTime",
+            "dataIndex": "galvanizeDemand",
             "title": "镀锌要求"
         },
         {
@@ -27,19 +27,19 @@
     ],
     "productInfoData": [
         {
-            "dataIndex": "projectName",
+            "dataIndex": "productCategoryNum",
             "title": "塔型（个）"
         },
         {
-            "dataIndex": "projectNumber",
+            "dataIndex": "productNum",
             "title": "杆塔（基）"
         },
         {
-            "dataIndex": "releaseDate",
+            "dataIndex": "productType",
             "title": "产品类型"
         },
         {
-            "dataIndex": "source",
+            "dataIndex": "totalWeight",
             "title": "总重量（kg）"
         }
     ]

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Button, Form, Modal } from 'antd'
+import { Space, Input, DatePicker, Button, Form, Modal, Select } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
 import { Link } from 'react-router-dom'
 import { CommonTable, Page } from '../../common'
@@ -7,15 +7,6 @@ import { CommonTable, Page } from '../../common'
 export default function PickList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
-    const handleModalOk = async () => {
-        try {
-            const submitData = await form.validateFields()
-            console.log(submitData)
-            setVisible(false)
-        } catch (error) {
-            console.log(error)
-        }
-    }
     const columns = [
         {
             key: 'index',
@@ -25,46 +16,46 @@ export default function PickList(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'projectName',
+            key: 'taskCode',
             title: '放样任务编号',
             width: 100,
-            dataIndex: 'projectName'
+            dataIndex: 'taskCode'
         },
         {
-            key: 'projectNumber',
+            key: 'taskNumber',
             title: '任务单编号',
             width: 100,
-            dataIndex: 'projectNumber'
+            dataIndex: 'taskNumber'
         },
         {
-            key: 'projectNumber',
+            key: 'internalNumber',
             title: '内部合同编号',
             width: 100,
-            dataIndex: 'projectNumber'
+            dataIndex: 'internalNumber'
         },
         {
-            key: 'bidBuyEndTime',
+            key: 'productCategoryName',
             title: '塔型',
             width: 100,
-            dataIndex: 'bidBuyEndTime'
+            dataIndex: 'productCategoryName'
         },
         {
-            key: 'biddingEndTime',
+            key: 'steelProductShape',
             title: '塔型钢印号',
             width: 100,
-            dataIndex: 'biddingEndTime'
+            dataIndex: 'steelProductShape'
         },
         {
-            key: 'biddingAgency',
+            key: 'productNum',
             title: '杆塔（基）',
             width: 100,
-            dataIndex: 'biddingAgency'
+            dataIndex: 'productNum'
         },
         {
-            key: 'biddingAddress',
+            key: 'plannedDeliveryTime',
             title: '计划交付时间',
             width: 200,
-            dataIndex: 'biddingAddress'
+            dataIndex: 'plannedDeliveryTime'
         },
         {
             key: 'operation',
@@ -83,7 +74,22 @@ export default function PickList(): React.ReactNode {
         }
     ]
 
-    const handleModalCancel = () => setVisible(false)
+    const handleModalCancel = () => setVisible(false);
+    const onFilterSubmit = (value: any) => {
+        if (value.statusUpdateTime) {
+            const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.updateStatusTimeStart = formatDate[0]+ ' 00:00:00';
+            value.updateStatusTimeEnd = formatDate[1]+ ' 23:59:59';
+            delete value.statusUpdateTime
+        }
+        if (value.planTime) {
+            const formatDate = value.planTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.plannedDeliveryTimeStart = formatDate[0]+ ' 00:00:00';
+            value.plannedDeliveryTimeEnd = formatDate[1]+ ' 23:59:59';
+            delete value.planTime
+        }
+        return value
+    }
     return (
         <>
             <Modal title='交付物清单'  width={1200} visible={visible} onCancel={handleModalCancel} footer={false}>
@@ -101,44 +107,56 @@ export default function PickList(): React.ReactNode {
                         width: 150 
                     },
                     { 
-                        key: 'name', 
+                        key: 'function', 
                         title: '用途', 
-                        dataIndex: 'name',
+                        dataIndex: 'function',
                         width: 230
                     },
                     { 
                         key: 'operation', 
                         title: '操作', 
+                        width: 50, 
                         dataIndex: 'operation', 
                         render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                             <Button type="link">下载</Button>
                     ) }
-                ]} dataSource={[]} />
+                ]} dataSource={[{name:'塔型名称构件明细.excel',function:'提料塔型构件明细'},{name:'杆塔构件明细汇总表.excel',function:'提料杆塔构件明细汇总'}]} />
             </Modal>
             <Page
-                path="/tower-market/bidInfo"
+                path="/tower-science/materialTask"
                 columns={columns}
+                onFilterSubmit={onFilterSubmit}
                 extraOperation={<Button type="primary">导出</Button>}
                 searchFormItems={[
                     {
-                        name: 'startBidBuyEndTime',
+                        name: 'statusUpdateTime',
                         label: '最新状态变更时间',
-                        children: <DatePicker />
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                     {
-                        name: 'startBidBuyEndTime',
+                        name: 'status',
                         label: '塔型状态',
-                        children: <DatePicker />
+                        children: <Select style={{width:'100px'}}>
+                            <Select.Option value={1} key={1}>待指派</Select.Option>
+                            <Select.Option value={2} key={2}>提料中</Select.Option>
+                            <Select.Option value={3} key={3}>配段中</Select.Option>
+                            <Select.Option value={4} key={4}>已完成</Select.Option>
+                            <Select.Option value={5} key={5}>已提交</Select.Option>
+                        </Select>
                     },
                     {
-                        name: 'fuzzyQuery',
+                        name: 'planTime',
                         label:'计划交付时间',
-                        children: <Input placeholder="请输入项目名称/项目编码/审批编号/关联合同/制单人进行查询" maxLength={200} />
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                     {
-                        name: 'startReleaseDate',
+                        name: 'pattern',
                         label: '模式',
-                        children: <DatePicker />
+                        children: <Select style={{width:'100px'}}>
+                            <Select.Option value={1} key={1}>新放</Select.Option>
+                            <Select.Option value={2} key={2}>重新出卡</Select.Option>
+                            <Select.Option value={3} key={3}>套用</Select.Option>
+                        </Select>
                     },
                     {
                         name: 'biddingStatus',

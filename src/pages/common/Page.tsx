@@ -22,6 +22,7 @@ export interface PageProps extends RouteComponentProps, WithTranslation {
     headTabs?: ITabItem[]
     onFilterSubmit?(values: Record<string, any>): Record<string, any>
     requestData?: {}
+    refresh?: boolean//刷新
 }
 
 export interface IResponseData {
@@ -78,6 +79,13 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
 
     public async componentDidMount() {
         this.fetchTableData({});
+    }
+
+    public async componentDidUpdate(nextProps:any){
+        console.log(nextProps,this.props)
+        if(nextProps.refresh!==this.props.refresh){
+            this.fetchTableData({})
+        }
     }
 
     public getTableDataSource(item: ITabItem): IClient[] {
