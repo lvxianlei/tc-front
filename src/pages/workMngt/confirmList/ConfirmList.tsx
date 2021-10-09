@@ -1,10 +1,23 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Button, Form, Select } from 'antd'
+import { Space, Input, DatePicker, Button, Form, Select, TreeSelect } from 'antd'
 import { Link } from 'react-router-dom'
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common'
+import { TreeNode } from 'antd/lib/tree-select';
+import useRequest from '@ahooksjs/use-request';
+import RequestUtil from '../../../utils/RequestUtil';
+import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
+import styles from './confirm.module.less';
 
 export default function ConfirmList(): React.ReactNode {
+    const [confirmLeader, setConfirmLeader] = useState<any|undefined>([]);
+    const [department, setDepartment] = useState<any|undefined>([]);
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
+        setDepartment(departmentData);
+        resole(data)
+    }), {})
+    
     const columns = [
         {
             key: 'index',
@@ -90,18 +103,53 @@ export default function ConfirmList(): React.ReactNode {
                 </Space>
             )
         }
-    ]
-
+    ];
+    const onDepartmentChange = async (value: Record<string, any>) => {
+        const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
+        setConfirmLeader(userData.records);
+    }
+    const renderTreeNodes = (data:any) =>
+    data.map((item:any) => {
+        if (item.children) {
+            item.disabled = true;
+            return (
+            <TreeNode key={item.id} title={item.title} value={item.id} disabled={item.disabled} className={styles.node}>
+                {renderTreeNodes(item.children)}
+            </TreeNode>
+            );
+        }
+        return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
+    });
+    const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
+        roles.forEach((role: any & SelectDataNode): void => {
+            role.value = role.id;
+            role.isLeaf = false;
+            if (role.children && role.children.length > 0) {
+                wrapRole2DataNode(role.children);
+            }
+        });
+        return roles;
+    }
+    const onFilterSubmit = (value: any) => {
+        if (value.planTime) {
+            const formatDate = value.planTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.plannedDeliveryTimeStart = formatDate[0]+ ' 00:00:00';
+            value.plannedDeliveryTimeEnd = formatDate[1]+ ' 23:59:59';
+            delete value.planTime
+        }
+        return value
+    }
     return (
         <Page
             path="/tower-science/drawProductDetail"
             columns={columns}
             extraOperation={<Button type="primary">导出</Button>}
+            onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
                     name: 'status',
                     label: '任务状态',
-                    children: <Select style={{width:"100%"}}>
+                    children: <Select style={{width:"100px"}}>
                         <Select.Option value={1} key={1}>待确认</Select.Option>
                         <Select.Option value={2} key={2}>待指派</Select.Option>
                         <Select.Option value={3} key={3}>待完成</Select.Option>
@@ -111,24 +159,27 @@ export default function ConfirmList(): React.ReactNode {
                     </Select>
                 },
                 {
-                    name: 'plannedDeliveryTimeStart',
+                    name: 'planTime',
                     label:'计划交付时间',
-                    children: <DatePicker />
-                },
-                {
-                    name: 'plannedDeliveryTimeEnd',
-                    label:'',
-                    children: <DatePicker  />
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
                     name: 'confirmDept',
                     label: '确认人',
-                    children: <Select />
+                    children:  <TreeSelect style={{width:'200px'}}
+                                    onChange={ onDepartmentChange }
+                                >
+                                    {renderTreeNodes(wrapRole2DataNode( department ))}
+                                </TreeSelect>
                 },
                 {
                     name: 'confirmId',
-                    label: '',
-                    children: <Select />
+                    label:'',
+                    children:   <Select style={{width:'100px'}}>
+                                    { confirmLeader && confirmLeader.map((item:any)=>{
+                                        return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                    }) }
+                                </Select>
                 },
                 {
                     name: 'fuzzyQueryItem',

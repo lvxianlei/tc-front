@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Spin, Space, Modal, Form } from 'antd';
+import { Button, Spin, Space, Modal, Form, message } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common';
 import { baseInfoData } from './confirmTaskData.json';
@@ -39,18 +39,18 @@ const tableColumns = [
                 label: "已提交"
             }
         ]
-             return <>{renderEnum.find((item: any) => item.value === value).label}</>
+             return <>{value!==-1&&value?renderEnum.find((item: any) => item.value === value).label:''}</>
     }},
     { title: '备注', dataIndex: 'description', key: 'description' }
 ]
 
 export default function ConfirmTaskDetail(): React.ReactNode {
-    const history = useHistory()
+    const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/drawTask/getDrawTaskById/${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-science/drawTask/getDrawTaskById?drawTaskId=${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data;
@@ -74,7 +74,11 @@ export default function ConfirmTaskDetail(): React.ReactNode {
                     style={{ marginRight: '10px' }}
                     type="primary" 
                     onClick={async () => {
-                            await RequestUtil.post('/tower-science/drawTask/receiveDrawTask',{drawTaskId:params.id})
+                        await RequestUtil.post('/tower-science/drawTask/receiveDrawTask',{drawTaskId: params.id}).then(()=>{
+                            message.success('接收成功！');
+                        }).then(()=>{
+                            history.push(`/confirmTask/ConfirmTaskMngt`)
+                        });  
                     }}
                 >接收</Button>,
                 <Button 
@@ -117,7 +121,7 @@ export default function ConfirmTaskDetail(): React.ReactNode {
                         render: (_: undefined, record: any): React.ReactNode => (
                             <Space direction="horizontal" size="small">
                                 <Button type='link' onClick={()=>{window.open(record.filePath)}}>下载</Button>
-                                <Button type='link' onClick={()=>{window.open(record.filePath)}}>预览</Button>
+                                {record.fileSuffix==='pdf'?<Button type='link' onClick={()=>{window.open(record.filePath)}}>预览</Button>:null}
                             </Space>
                         )
                     }

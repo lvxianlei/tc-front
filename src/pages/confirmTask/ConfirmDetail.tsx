@@ -80,7 +80,7 @@ export default function ConfirmDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/drawTask/getList/${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-science/drawTask/getList?drawTaskId=${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data;
@@ -106,8 +106,8 @@ export default function ConfirmDetail(): React.ReactNode {
                     dataIndex: 'operation',
                     render: (_: undefined, record: any): React.ReactNode => (
                         <Space direction="horizontal" size="small">
-                            <Button type='link'>下载</Button>
-                            <Button type='link'>预览</Button>
+                            <Button type='link' onClick={()=>{window.open(record.filePath)}}>下载</Button>
+                            {record.fileSuffix==='pdf'?<Button type='link' onClick={()=>{window.open(record.filePath)}}>预览</Button>:null}
                         </Space>
                     )
                 }
