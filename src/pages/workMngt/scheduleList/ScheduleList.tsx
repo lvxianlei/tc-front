@@ -109,12 +109,22 @@ export default function ScheduleList(): React.ReactNode {
         }
     ]
 
+
     const onFilterSubmit = (value: any) => {
-        console.log(value)
+        if (value.statusUpdateTime) {
+            const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.updateStatusTimeStart = formatDate[0]+ ' 00:00:00';
+            value.updateStatusTimeEnd = formatDate[1]+ ' 23:59:59';
+            delete value.statusUpdateTime
+        }
+        if (value.planTime) {
+            const formatDate = value.planTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.plannedDeliveryTimeStart = formatDate[0]+ ' 00:00:00';
+            value.plannedDeliveryTimeEnd = formatDate[1]+ ' 23:59:59';
+            delete value.planTime
+        }
         return value
     }
-
-   
 
     return (
         <Page
@@ -124,19 +134,14 @@ export default function ScheduleList(): React.ReactNode {
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
-                    name: 'updateStatusTimeStart',
+                    name: 'statusUpdateTime',
                     label: '最新状态变更时间',
-                    children: <DatePicker placeholder='请选择开始时间'/>
-                },
-                {
-                    name: 'updateStatusTimeEnd',
-                    label: '',
-                    children: <DatePicker placeholder='请选择结束时间'/>
+                    children: <DatePicker.RangePicker format='YYYY-MM-DD'/>
                 },
                 {
                     name: 'status',
                     label:'任务状态',
-                    children: <Select style={{width:"100%"}}>
+                    children: <Select style={{width:"100px"}}>
                         <Select.Option value={0} key={0}>已拒绝</Select.Option>
                         <Select.Option value={1} key={1}>待确认</Select.Option>
                         <Select.Option value={2} key={2}>待指派</Select.Option>
@@ -146,19 +151,15 @@ export default function ScheduleList(): React.ReactNode {
                     </Select>
                 },
                 {
-                    name: 'plannedDeliveryTimeStart',
+                    name: 'planTime',
                     label: '计划交付时间',
-                    children: <DatePicker placeholder='请选择开始时间'/>
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
-                {
-                    name: 'plannedDeliveryTimeEnd',
-                    label: '',
-                    children: <DatePicker placeholder='请选择结束时间'/>
-                },
+                
                 {
                     name: 'fuzzyMsg',
                     label: '模糊查询项',
-                    children: <Input placeholder="请输入放样任务编号/任务单编号、订单编号/内部合同编号进行查询" maxLength={200} />
+                    children: <Input placeholder="请输入放样任务编号/任务单编号/订单编号/内部合同编号进行查询" maxLength={200} />
                 },
             ]}
         />
