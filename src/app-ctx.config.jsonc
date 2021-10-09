@@ -29,42 +29,6 @@
                         ]
                     },
                     {
-                        "label": "营销管理",
-                        "icon": "marketing",
-                        "path": "/prom",
-                        "authority": "sale_order_section",
-                        "items": [
-                            {
-                                "label": "销售合同管理",
-                                "path": "/prom/contract",
-                                "authority": "contract"
-                            },
-                            {
-                                "label": "销售订单管理",
-                                "path": "/prom/order",
-                                "authority": "sale_order"
-                            },
-                            {
-                                "label": "销售任务单管理",
-                                "path": "/prom/task",
-                                "authority": "task_notice_page"
-                            }
-                        ]
-                    },
-                    {
-                        "label": "技术中心",
-                        "icon": "technology",
-                        "path": "/technology",
-                        "authority": "extraction_material_page",
-                        "items": [
-                            {
-                                "label": "提料管理",
-                                "path": "/technology/materialExtraction",
-                                "authority": "extraction_material_page"
-                            }
-                        ]
-                    },
-                    {
                         "label": "审批",
                         "icon": "examine",
                         "path": "/approval",
@@ -86,22 +50,22 @@
                             {
                                 "label": "用户管理",
                                 "path": "/sys/users",
-                                "authocrity": "system_users"
+                                "authocrity": "bidding"
                             },
                             {
                                 "label": "字典管理",
                                 "path": "/sys/dxnry",
-                                "authocrity": "dictionary_type_list"
+                                "authocrity": "bidding"
                             },
                             {
                                 "label": "原材料类型管理",
                                 "path": "/sys/materialType",
-                                "authocrity": "system_material_type"
+                                "authocrity": "bidding"
                             },
                             {
                                 "label": "原材料管理",
                                 "path": "/sys/material",
-                                "authocrity": "system_material"
+                                "authocrity": "bidding"
                             }
                         ]
                     },
