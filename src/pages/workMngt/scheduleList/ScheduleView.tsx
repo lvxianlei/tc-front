@@ -23,8 +23,16 @@ export default function ScheduleView(): React.ReactNode {
     const [loftingPartUser, setLoftingPartUser] = useState<any|undefined>([]);
     const [materialUser, setMaterialUser] = useState<any|undefined>([]);
     const [materialPartUser, setMaterialPartUser] = useState<any|undefined>([]);
+    const [materialLeader, setMaterialLeader] = useState<any|undefined>([]);
     const [smallSampleUser, setSmallSampleUser] = useState<any|undefined>([]);
     const params = useParams<{ id: string, status: string }>();
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
+        setDepartment(departmentData);
+        resole(data)
+    }), {})
+    
+    
     const handleModalOk = async () => {
         try {
             const saveData = await form.validateFields();
@@ -222,8 +230,6 @@ export default function ScheduleView(): React.ReactNode {
                 <Space direction="horizontal" size="small">
                     <Button type='link' onClick={async ()=>{
                         const resData: any = await RequestUtil.get(`/tower-science/productCategory/${record.id}`);
-                        const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
-                        setDepartment(departmentData);
                         setScheduleData(resData);
                         if(resData.materialLeaderDepartment){
                             const materialLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.materialLeaderDepartment}&size=1000`);
@@ -302,6 +308,8 @@ export default function ScheduleView(): React.ReactNode {
                 return setWeldingUser(userData.records);
             case "boltLeaderDepartment":
                 return setBoltUser(userData.records);
+            case "materialLeaderDepartmentQuery":
+                return setMaterialLeader(userData.records);
         };
     }
     const formItemLayout = {
@@ -631,7 +639,7 @@ export default function ScheduleView(): React.ReactNode {
                     {
                         name: 'pattern',
                         label: '模式',
-                        children:   <Select style={{width:"100%"}}>
+                        children:   <Select style={{width:"100px"}}>
                                         <Select.Option value='1' key='1'>新放</Select.Option>
                                         <Select.Option value='3' key='3'>套用</Select.Option>
                                         <Select.Option value='2' key='2'>重新出卡</Select.Option>
@@ -640,16 +648,29 @@ export default function ScheduleView(): React.ReactNode {
                     {
                         name: 'priority',
                         label:'优先级',
-                        children:   <Select style={{width:"100%"}}>
+                        children:   <Select style={{width:"100px"}}>
                                         <Select.Option value='1' key='1'>高</Select.Option>
                                         <Select.Option value='2' key='2'>中</Select.Option>
                                         <Select.Option value='3' key='3'>低</Select.Option>
                                     </Select>
                     },
                     {
-                        name: 'materialPartLeader',
+                        name: 'materialLeaderDepartment',
                         label: '提料负责人',
-                        children: <Input />
+                        children:  <TreeSelect style={{width:'200px'}}
+                                        onChange={(value:any)=>{onDepartmentChange(value,'materialLeaderDepartmentQuery')}  }
+                                    >
+                                        {renderTreeNodes(wrapRole2DataNode( department ))}
+                                    </TreeSelect>
+                    },
+                    {
+                        name: 'materialLeader',
+                        label:'',
+                        children:   <Select style={{width:'100px'}}>
+                                        { materialLeader && materialLeader.map((item:any)=>{
+                                            return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                        }) }
+                                    </Select>
                     },
                     {
                         name: 'fuzzyMsg',
