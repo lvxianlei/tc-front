@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Spin, Space, Modal, Form, TableColumnProps, Row, Col, Upload } from 'antd';
+import { Button, Spin, Space, Modal, Form, TableColumnProps, Row, Col, Upload, message } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
 import { towerData } from './confirm.json';
@@ -8,6 +8,8 @@ import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
 import { Table, Input, InputNumber, Popconfirm, Typography, Select } from 'antd';
 import { CloudUploadOutlined } from '@ant-design/icons';
+import AuthUtil from '../../../utils/AuthUtil';
+import { downLoadFile } from '../../../utils';
 interface Item {
   key: string;
   name: string;
@@ -26,67 +28,73 @@ for (let i = 0; i < 100; i++) {
     address: `London Park no. ${i}`,
   });
 }
-interface EditableTableProps{
-    dataSource?: object[]
-    [key: string]: any
-}
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
   dataIndex: string;
   title: any;
-  inputType: 'number' | 'text' | 'select';
+  inputType: 'number' | 'text' | 'select' | 'edit' | 'textArea';
   enums?: object[];
   record: Item;
   index: number;
   children: React.ReactNode;
 }
 
-const EditableCell: React.FC<EditableCellProps> = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  enums,
-  record,
-  index,
-  children,
-  ...restProps
-}) => {
-  const inputNode = inputType === 'number' ? <InputNumber /> : inputType === 'select' ?<Select>{enums&&enums.map((item:any)=>{
-    return <Select.Option value={item.value} key ={item.value}>{item.label}</Select.Option>
-  })}</Select> : <Input />;
-  
-  return (
-    <td {...restProps}>
-      {console.log(enums)}
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{ margin: 0 }}
-          rules={[
-            {
-              required: true,
-              message: `请输入${title}!`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
+
 
 export default function ConfirmDetail(): React.ReactNode {
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
     const [tableDataSource, setTableDataSource] = useState<object[]>([]);
+    const [description, setDescription] = useState('');
+    const [attachInfo, setAttachInfo] = useState<any[]>([])
     const [form] = Form.useForm();
     const [formRef] = Form.useForm();
     const [editingKey, setEditingKey] = useState('');
     const isEditing = (record: Item) => record.key === editingKey;
+
+    const EditableCell: React.FC<EditableCellProps> = ({
+      editing,
+      dataIndex,
+      title,
+      inputType,
+      enums,
+      record,
+      index,
+      children,
+      ...restProps
+    }) => {
+      const inputNode = inputType === 'number' ? <InputNumber onChange={(value:number)=>{
+        const productWeight:number = formRef.getFieldValue('productWeight')?formRef.getFieldValue('productWeight'):0;
+        const otherWeight:number = formRef.getFieldValue('otherWeight')?formRef.getFieldValue('otherWeight'):0;
+        formRef.setFieldsValue({
+            totalWeight:productWeight+otherWeight
+        })
+      }} min={0} precision={4}/> : inputType === 'select' ?<Select>{enums&&enums.map((item:any)=>{
+        return <Select.Option value={item.value} key ={item.value}>{item.label}</Select.Option>
+      })}</Select> : inputType === 'edit'?<span>保存后自动计算</span>: inputType === 'textArea'?<TextArea maxLength={500} rows={1} showCount/>:<Input />;
+      
+      return (
+        <td {...restProps}>
+          {console.log(enums)}
+          {editing ? (
+            <Form.Item
+              name={dataIndex}
+              style={{ margin: 0 }}
+              rules={[
+                {
+                  required: true,
+                  message: `请输入${title}!`,
+                },
+              ]}
+            >
+              {inputNode}
+            </Form.Item>
+          ) : (
+            children
+          )}
+        </td>
+      );
+    };
     const edit = (record: Partial<Item> & { key: React.Key }) => {
       formRef.setFieldsValue({ partBidNumber: '', unit: '', address: '', ...record });
       setEditingKey(record.key);
@@ -229,7 +237,7 @@ export default function ConfirmDetail(): React.ReactNode {
           key: 'productWeight' 
       },
       { 
-          title: '* 其他增重（kg）', 
+          title: '其他增重（kg）', 
           dataIndex: 'otherWeight', 
           type:'number',
           editable: true,
@@ -238,9 +246,19 @@ export default function ConfirmDetail(): React.ReactNode {
       { 
           title: '* 总重（kg）', 
           dataIndex: 'totalWeight', 
-          type:'number',
+          type:'edit',
           editable: true,
-          key: 'totalWeight' 
+          key: 'totalWeight',
+          render:(_:any,record:any)=>{
+              return <span>{(record.otherWeight+record.productWeight).toFixed(4)}</span>
+          } 
+      },
+      { 
+          title: '备注', 
+          dataIndex: 'description', 
+          type:'textArea',
+          editable: true,
+          key: 'description' 
       },
       {
           key: 'operation',
@@ -278,19 +296,20 @@ export default function ConfirmDetail(): React.ReactNode {
             const submitData = await form.validateFields();
             submitData.key = tableDataSource && tableDataSource.length.toString()
             tableDataSource.push(submitData);
-            console.log(tableDataSource)
             setTableDataSource(tableDataSource);
+            form.resetFields();
             setVisible(false)
         } catch (error) {
             console.log(error)
         }
     }
-    const handleModalCancel = () => setVisible(false)
+    const handleModalCancel = () => {setVisible(false);form.resetFields();}
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById/${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
         resole(data);
         setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString() }}));
+        setAttachInfo([...data.attachInfoList])
     }), {})
     const detailData: any = data;
     const formItemLayout = {
@@ -313,11 +332,76 @@ export default function ConfirmDetail(): React.ReactNode {
         }),
       };
     });
+
+    const uploadChange = (event: any) => {
+      if (event.file.status === "done") {
+          if (event.file.response.code === 200) {
+              const dataInfo = event.file.response.data
+              const fileInfo = dataInfo.name.split(".")
+              setAttachInfo([...attachInfo, {
+                  id: "",
+                  uid: attachInfo.length,
+                  name: dataInfo.originalName.split(".")[0],
+                  description: "",
+                  filePath: dataInfo.name,
+                  fileSize: dataInfo.size,
+                  fileSuffix: fileInfo[fileInfo.length - 1],
+                  userName: dataInfo.userName,
+                  fileUploadTime: dataInfo.fileUploadTime
+              }])
+          }
+      }
+    }
+    const deleteAttachData = (id: number) => {
+      setAttachInfo(attachInfo.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
+    }
     return <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space>
-                    <Button type='primary' onClick={() => {}}>保存</Button>
-                    <Button type='primary' onClick={() => history.goBack()}>保存并提交</Button>
+                    <Button type='primary' onClick={async () => {
+                        try {
+                          const saveData:any = {
+                              drawTaskId: params.id,
+                              attachInfoList:attachInfo,
+                              drawProductDetailList:tableDataSource,
+                              description,
+                          }
+                          if(tableDataSource.length>0){
+                              console.log(saveData)
+                              await RequestUtil.post('/tower-science/drawProductDetail/saveDrawProduct', saveData).then(()=>{
+                                  message.success('保存成功！');
+                              })
+                          }
+                          else{
+                            message.error('未添加塔信息不可保存或提交！')
+                          }
+                      } catch (error) {
+                          console.log(error)
+                      }
+                    }}>保存</Button>
+                    <Button type='primary' onClick={async () => {
+                        try {
+                          const submitData:any = {
+                              drawTaskId: params.id,
+                              attachInfoList:attachInfo,
+                              drawProductDetailList:tableDataSource,
+                              description,
+                          }
+                          if(tableDataSource.length>0){
+                              console.log(submitData)
+                              await RequestUtil.post('/tower-science/drawProductDetail/submitDrawProduct', submitData).then(()=>{
+                                  message.success('保存并提交成功！');
+                              }).then(()=>{
+                                  history.push('/workMngt/confirmList')
+                              })
+                          }
+                          else{
+                            message.error('未添加塔信息不可保存或提交！')
+                          }
+                      } catch (error) {
+                          console.log(error)
+                      }
+                    }}>保存并提交</Button>
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
                 </Space>
             ]}>
@@ -352,8 +436,22 @@ export default function ConfirmDetail(): React.ReactNode {
                     />
                 </Form>
                 <DetailTitle title="备注"/>
-                <TextArea maxLength={ 200 } value={detailData?.description}/>
-                <Upload><span style={{fontSize:'16px',marginLeft:'13px'}}>附件</span><CloudUploadOutlined /></Upload>
+                {detailData&&detailData.description?<TextArea maxLength={ 200 } defaultValue={detailData.description} onChange={(e)=>{
+                    setDescription(e.target.value)
+                }}/>:null}
+                <Upload
+                    key="sub"
+                    name="file"
+                    multiple={true}
+                    action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
+                    headers={{
+                        'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                        'Tenant-Id': AuthUtil.getTenantId(),
+                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                    }}
+                    onChange={uploadChange}
+                    showUploadList={false}
+                ><span style={{fontSize:'16px',marginLeft:'13px'}}>附件 </span><CloudUploadOutlined /></Upload>
                 <CommonTable columns={[
                     {
                         title: '附件名称',
@@ -366,13 +464,13 @@ export default function ConfirmDetail(): React.ReactNode {
                         dataIndex: 'operation',
                         render: (_: undefined, record: any): React.ReactNode => (
                             <Space direction="horizontal" size="small">
-                                <Button type='link'>下载</Button>
-                                <Button type='link'>预览</Button>
-                                <Button type='link'>删除</Button>
+                                <Button type="link" onClick={() => downLoadFile(record.filePath)}>下载</Button>
+                                {record.fileSuffix==='pdf'?<Button type='link' onClick={()=>{window.open(record.filePath)}}>预览</Button>:null}
+                                <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
                             </Space>
                         )
                     }
-                ]} dataSource={detailData?.attachInfoList} />
+                ]} dataSource={attachInfo}  />
             </DetailContent>
             <Modal visible={visible} title="添加" onOk={handleModalOk} onCancel={handleModalCancel}  width={ 800 }>
                 <Form form={form} { ...formItemLayout }>
@@ -442,7 +540,7 @@ export default function ConfirmDetail(): React.ReactNode {
                             "required": true,
                             "message":"请输入呼高（m）"
                         }]}>
-                            <Input/>
+                            <InputNumber precision={2} style={{width:'100%'}} min={0}/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>
@@ -464,15 +562,22 @@ export default function ConfirmDetail(): React.ReactNode {
                             "required": true,
                             "message":"请输入杆塔重量（kg）"
                         }]}>
-                            <Input/>
+                            <InputNumber precision={4} style={{width:'100%'}} min={0} onChange={(value:number)=>{
+                                const data:number = form.getFieldValue('otherWeight')?form.getFieldValue('otherWeight'):0;
+                                form.setFieldsValue({
+                                    totalWeight:data+value
+                                })
+                            }}/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item name="otherWeight" label="其他增重（kg）" rules={[{
-                            "required": true,
-                            "message":"请输入其他增重（kg）"
-                        }]}>
-                            <Input/>
+                        <Form.Item name="otherWeight" label="其他增重（kg）">
+                            <InputNumber precision={4} style={{width:'100%'}} min={0} onChange={(value:number)=>{
+                                const data:number = form.getFieldValue('productWeight')?form.getFieldValue('productWeight'):0;
+                                form.setFieldsValue({
+                                    totalWeight:data+value
+                                })
+                            }}/>
                         </Form.Item>
                       </Col>
                     </Row>
@@ -482,7 +587,7 @@ export default function ConfirmDetail(): React.ReactNode {
                             "required": true,
                             "message":"请输入总重（kg）"
                         }]}>
-                            <Input/>
+                            <InputNumber precision={4} style={{width:'100%'}} disabled/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>
