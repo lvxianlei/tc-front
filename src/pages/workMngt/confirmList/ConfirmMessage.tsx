@@ -34,8 +34,8 @@ export default function ConfirmMessage(): React.ReactNode {
                         dataIndex: 'operation',
                         render: (_: undefined, record: any): React.ReactNode => (
                             <Space direction="horizontal" size="small">
-                                <Button type='link'>下载</Button>
-                                <Button type='link'>预览</Button>
+                                <Button type='link' onClick={()=>{window.open(record.filePath)}}>下载</Button>
+                                {record.fileSuffix==='pdf'?<Button type='link' onClick={()=>{window.open(record.filePath)}}>预览</Button>:null}
                             </Space>
                         )
                     }
