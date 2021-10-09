@@ -1,19 +1,25 @@
 import React from 'react';
-import { Button, Modal, Input, FormProps, DatePicker } from 'antd';
+import { Button, Modal, Input, FormProps, DatePicker, TreeSelect, Select } from 'antd';
 import RequestUtil from '../../utils/RequestUtil';
 import styles from './AssessmentTask.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGroup } from '../../components/AbstractFillableComponent';
+import { TreeNode } from 'antd/lib/tree-select';
+import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
+import useRequest from '@ahooksjs/use-request';
 
 export interface AssignProps {}
 export interface IAssignRouteProps extends RouteComponentProps<AssignProps>, WithTranslation {
     readonly id: number | string;
+    readonly updataList: () => void;
 }
 
 export interface AssignState extends IAbstractFillableComponentState {
     readonly visible: boolean;
     readonly description?: string;
+    readonly assessUserOptions?: [];
+    readonly departmentData?: SelectDataNode[];
 }
 class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
     constructor(props: IAssignRouteProps) {
@@ -25,8 +31,10 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
     }
 
     private async modalShow(): Promise<void> {
+        const departmentData = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
         this.setState({
-            visible: true
+            visible: true,
+            departmentData: departmentData
         })
     }
 
@@ -34,11 +42,13 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
         if (this.getForm()) {
             this.getForm()?.validateFields().then((res) => {
                 const values = this.getForm()?.getFieldsValue(true);
-                RequestUtil.post(`/tower-science/assessTask/assign`, {
+                RequestUtil.put(`/tower-science/assessTask/assign`, {
                     ...values,
-                    expectDeliverTime: values.expectDeliverTime.format("YYYY-MM-DD")
+                    id: this.props.id,
+                    expectDeliverTime: values.expectDeliverTime.format("YYYY-MM-DD") + ' 00:00:00'
                 }).then(res => {
                     this.onCancel();
+                    this.props.updataList();
                 } );
             })
         }
@@ -72,6 +82,37 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
     }
 
     /**
+     * onDepartmentChange
+     */
+    public onDepartmentChange = async (value: Record<string, any>) => {
+        const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${ value }&size=1000`);
+        this.setState({
+            assessUserOptions: userData.records
+        })
+    }
+
+    public wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
+        roles && roles.forEach((role: any & SelectDataNode): void => {
+            role.value = role.id;
+            role.isLeaf = false;
+            if (role.children && role.children.length > 0) {
+                this.wrapRole2DataNode(role.children);
+            }
+        });
+        return roles;
+    }
+
+    public renderTreeNodes = (data:any) => data.map((item:any) => {
+        if (item.children) {
+            item.disabled = true;
+            return (<TreeNode key={ item.id } title={ item.title } value={ item.id } disabled={ item.disabled } className={ styles.node } >
+                { this.renderTreeNodes(item.children) }
+            </TreeNode>);
+        }
+        return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id }/>;
+    });
+
+    /**
      * @implements
      * @description Gets form item groups
      * @returns form item groups 
@@ -89,7 +130,9 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
                     required: true,
                     message: '请选择部门'
                 }],
-                children: <Input placeholder="请选择" maxLength={ 100 } />
+                children: <TreeSelect placeholder="请选择" onChange={ (value: any) => { this.onDepartmentChange(value) } } className={ styles.width200 }>
+                    { this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
+                </TreeSelect>
             }, {
                 label: '人员',
                 name: 'assessUser',
@@ -98,14 +141,11 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
                     message: '请选择人员'
                 }],
                 children: (
-                    <Input placeholder="请选择" maxLength={ 100 } />
-                    // <Select getPopupContainer={ triggerNode => triggerNode.parentNode }>
-                    //     { clientTypeOptions && clientTypeOptions.map(({ id, name }, index) => {
-                    //         return <Select.Option key={ index } value={ id }>
-                    //             { name }
-                    //         </Select.Option>
-                    //     }) }
-                    // </Select>
+                    <Select placeholder="请选择">
+                        { this.state.assessUserOptions && this.state.assessUserOptions.map((item: any) => {
+                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                        }) }
+                    </Select>
                 )
             }, {
                 label: '计划交付时间',

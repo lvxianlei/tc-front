@@ -9,7 +9,7 @@ import { IFileList } from './AssessmentTaskDetail';
 
 interface IResponse {
     readonly id?: string;
-    readonly description?: string;
+    readonly assessInfo?: string;
     readonly status?: string;
     readonly assessFileList?: IFileList[];
 }
@@ -44,7 +44,7 @@ class AssessmentInformation extends React.Component<IAssessmentInformationRouteP
         this.setState({
             visible: true,
             assessFileList: data.assessFileList,
-            description: data.description
+            description: data.assessInfo
         })
     }
 
