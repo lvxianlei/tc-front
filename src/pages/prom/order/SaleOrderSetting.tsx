@@ -110,7 +110,6 @@ export class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSetting
         values.orderDeliveryTime = moment(values.orderDeliveryTime).format('YYYY-MM-DD');
         let contractInfoDto: IContractInfoDto = {};
         const contract: IContractInfoDto | undefined = this.state.saleOrder?.contractInfoDto;
-        console.log("+++++++++++++", contract)
         contractInfoDto = {
             chargeType: values.chargeType,
             contractId: contract?.contractId,

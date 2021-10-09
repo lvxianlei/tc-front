@@ -166,11 +166,11 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 },
                 orderQuantity: 0
             })
-            // if (selectedRows[0].chargeType === ChargeType.UNIT_PRICE) {
-            //     this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, price: '-', orderProductDtos: [], totalWeight: undefined, totalPrice: '', totalAmount: '', taxAmount: undefined, taxPrice: '', amount: '', orderQuantity: '' });
-            // } else {
-            //     this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, price: 0, orderProductDtos: [], totalWeight: undefined, totalPrice: '', totalAmount: '', taxAmount: undefined, taxPrice: '', amount: '', orderQuantity: '' });
-            // }
+            if (selectedRows[0].chargeType === ChargeType.UNIT_PRICE) {
+                this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, orderProductDtos: []});
+            } else {
+                this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, orderProductDtos: []});
+            }
             this.getUnitByChargeType();
             this.getColumnsChange(selectedRows[0].chargeType);
         }
