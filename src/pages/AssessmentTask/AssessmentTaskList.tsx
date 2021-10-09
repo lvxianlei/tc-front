@@ -1,13 +1,19 @@
-import React from 'react';
-import { Space, Input, DatePicker, Select, Button, Popconfirm, Form, Row, Col } from 'antd';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Space, Input, DatePicker, Select, Button, Popconfirm, Form, Row, Col, TreeSelect } from 'antd';
+import { Link, useHistory } from 'react-router-dom';
 import { Page } from '../common';
+import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { FixedType } from 'rc-table/lib/interface';
 import AssessmentInformation from './AssessmentInformation';
 import styles from './AssessmentTask.module.less';
 import Assign from './Assign';
 import RequestUtil from '../../utils/RequestUtil';
+import { TreeNode } from 'rc-tree-select';
+import useRequest from '@ahooksjs/use-request';
 
+
+export default function AssessmentTaskList(): React.ReactNode {
+    const history = useHistory();
 const columns = [
     {
         key: 'index',
@@ -17,16 +23,32 @@ const columns = [
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
     },
     {
-        key: 'taskNum',
+        key: 'taskCode',
         title: '评估任务编号',
         width: 150,
-        dataIndex: 'taskNum'
+        dataIndex: 'taskCode'
     },
     {
         key: 'status',
         title: '任务状态',
         dataIndex: 'status',
-        width: 120
+        width: 120,
+        render: (status: number): React.ReactNode => {
+            switch (status) {
+                case 0:
+                    return '已拒绝';
+                case 1:
+                    return '待确认';
+                case 2:
+                    return '待指派';
+                case 3:
+                    return '待完成';
+                case 4:
+                    return '已完成';
+                case 5:
+                    return '已提交';
+            }
+        }
     },
     {
         key: 'updateStatusTime',
@@ -73,24 +95,71 @@ const columns = [
         render: (_: undefined, record: Record<string, any>): React.ReactNode => (
             <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                 <Link to={ `/assessmentTask/assessmentTaskDetail/${ record.id }` }>任务详情</Link>
-                <Assign id={ record.id } />
+                {
+                    record.status === 2 ? 
+                    <Assign id={ record.id } updataList={ () => { history.go(0); } } />
+                    : <Button type="link" disabled>指派</Button>
+                }
                 <AssessmentInformation id={ record.id } />
                 <Popconfirm
                     title="确认提交?"
                     onConfirm={ () => {
-                        RequestUtil.put(`/tower-science/assessTask/submit`, { id: record.id });
+                        RequestUtil.put(`/tower-science/assessTask/submit?id=${ record.id }`, { id: record.id }).then(res => {
+                            history.go(0); 
+                        });
                     } }
                     okText="提交"
                     cancelText="取消"
+                    disabled={ record.status !== 4 }
                 >
-                    <Button type="link">提交任务</Button>
+                    <Button type="link" disabled={ record.status !== 4 }>提交任务</Button>
                 </Popconfirm>
             </Space>
         )
     }
 ]
 
-export default function AssessmentTaskList(): React.ReactNode {
+
+    const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
+        resole(data);
+    }), {})
+    const departmentData: any = data || [];
+
+    const [ startRelease, setStartRelease ] = useState([]);
+    const [ programLeader,setProgramLeader ] = useState([]);
+
+    const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
+        roles && roles.forEach((role: any & SelectDataNode): void => {
+            role.value = role.id;
+            role.isLeaf = false;
+            if (role.children && role.children.length > 0) {
+                wrapRole2DataNode(role.children);
+            }
+        });
+        return roles;
+    }
+
+    const renderTreeNodes = (data:any) => data.map((item:any) => {
+        if (item.children) {
+            item.disabled = true;
+            return (<TreeNode key={ item.id } title={ item.title } value={ item.id } disabled={ item.disabled } className={ styles.node } >
+                { renderTreeNodes(item.children) }
+            </TreeNode>);
+        }
+        return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id }/>;
+    });
+
+    const onDepartmentChange = async (value: Record<string, any>, title?: string) => {
+        const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${ value }&size=1000`);
+        switch (title) {
+            case "startReleaseDepartment":
+                return setStartRelease(userData.records);
+            case "programLeader":
+                return setProgramLeader(userData.records);
+        };
+    }
+
     return <Page
         path="/tower-science/assessTask"
         columns={ columns }
@@ -110,7 +179,7 @@ export default function AssessmentTaskList(): React.ReactNode {
             {
                 name: 'status',
                 label: '任务状态',
-                children: <Select style={{ width: '120px' }}>
+                children: <Select placeholder="请选择" className={ styles.width200 }>
                     <Select.Option value="0" key="0">已拒绝</Select.Option>
                     <Select.Option value="1" key="1">待确认</Select.Option>
                     <Select.Option value="2" key="2">待指派</Select.Option>
@@ -122,25 +191,24 @@ export default function AssessmentTaskList(): React.ReactNode {
             {
                 name: 'programLeaderId',
                 label: '项目负责人',
-                children: <>
+                children: <Row>
                     <Col>
                         <Form.Item name="programLeaderIdDept">
-                            <Select style={{ width: '120px' }}>
-                                <Select.Option value="0" key="0">已拒绝</Select.Option>
-                                <Select.Option value="1" key="1">待确认</Select.Option>
-                                <Select.Option value="2" key="2">待指派</Select.Option>
-                                <Select.Option value="3" key="3">待完成</Select.Option>
-                                <Select.Option value="4" key="4">已完成</Select.Option>
-                                <Select.Option value="5" key="5">已提交</Select.Option>
-                            </Select>
+                            <TreeSelect placeholder="请选择" onChange={ (value: any) => { onDepartmentChange(value, 'programLeader') } } className={ styles.width200 }>
+                                { renderTreeNodes(wrapRole2DataNode(departmentData)) }
+                            </TreeSelect>
                         </Form.Item>
                     </Col>
                     <Col>
                         <Form.Item name="programLeaderId">
-                            <Input />
+                            <Select placeholder="请选择" className={ styles.width200 }>
+                                { programLeader && programLeader.map((item: any) => {
+                                    return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                }) }
+                            </Select>
                         </Form.Item>
                     </Col>
-                </>
+                </Row>
             },
             {
                 name: 'startReleaseDate',
@@ -148,19 +216,18 @@ export default function AssessmentTaskList(): React.ReactNode {
                 children: <Row>
                     <Col>
                         <Form.Item name="assessUserDept">
-                            <Select style={{ width: '120px' }}>
-                                <Select.Option value="0" key="0">已拒绝</Select.Option>
-                                <Select.Option value="1" key="1">待确认</Select.Option>
-                                <Select.Option value="2" key="2">待指派</Select.Option>
-                                <Select.Option value="3" key="3">待完成</Select.Option>
-                                <Select.Option value="4" key="4">已完成</Select.Option>
-                                <Select.Option value="5" key="5">已提交</Select.Option>
-                            </Select>
+                            <TreeSelect placeholder="请选择" onChange={ (value: any) => { onDepartmentChange(value, 'startReleaseDepartment') } }>
+                                { renderTreeNodes(wrapRole2DataNode(departmentData)) }
+                            </TreeSelect>
                         </Form.Item>
                     </Col>
                     <Col>
                         <Form.Item name="assessUser">
-                            <Input />
+                            <Select placeholder="请选择">
+                                { startRelease && startRelease.map((item: any) => {
+                                    return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                }) }
+                            </Select>
                         </Form.Item>
                     </Col>
                 </Row>
@@ -168,19 +235,19 @@ export default function AssessmentTaskList(): React.ReactNode {
             {
                 name: 'bidEndTime',
                 label: '投标截止时间',
-                children: <DatePicker />
+                children: <DatePicker.RangePicker />
             }
         ] }
         onFilterSubmit = { (values: Record<string, any>) => {
             if(values.updateStatusTime) {
                 const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
-                values.updateStatusTimeStart = formatDate[0];
-                values.updateStatusTimeEnd = formatDate[1];
+                values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
+                values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             }
-            if(values.bidEndTimeStart) {
-                const formatDate = values.bidEndTimeStart.map((item: any) => item.format("YYYY-MM-DD"));
-                values.bidEndTimeStartStart = formatDate[0];
-                values.bidEndTimeStartEnd = formatDate[1];
+            if(values.bidEndTime) {
+                const formatDate = values.bidEndTime.map((item: any) => item.format("YYYY-MM-DD"));
+                values.bidEndTimeStartStart = formatDate[0] + ' 00:00:00';
+                values.bidEndTimeStartEnd = formatDate[1] + ' 23:59:59';
             }
             return values;
         } }

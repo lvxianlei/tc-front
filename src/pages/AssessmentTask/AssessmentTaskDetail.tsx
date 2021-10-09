@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Spin, Button, Space, Modal, Row, Col, Input } from 'antd';
+import { Spin, Button, Space, Modal, Row, Col, Input, message } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
@@ -15,7 +15,7 @@ interface IDetail {
     readonly description?: string;
     readonly programLeaderId?: string;
     readonly programName?: string;
-    readonly status?: string;
+    readonly status?: string | number;
     readonly fileList?: IFileList[];
     readonly taskDataRecordList?: ItaskDataRecordList[];
 }
@@ -144,9 +144,12 @@ export default function AssessmentTaskDetail(): React.ReactNode {
             <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
                 <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
                 {
-                    detailData.status === '1' ?
+                    detailData.status === 1 ?
                     <><Button type="primary" onClick={ () => {
-                        RequestUtil.put(`/tower-science/assessTask/accept`, { id: params.id });
+                        RequestUtil.put(`/tower-science/assessTask/accept?id=${ params.id }`).then(res => {
+                            message.success('接收成功');
+                            history.go(0);
+                        });
                     } }>接收</Button>
                     <Button type="ghost" onClick={ () => setVisible(true) }>拒绝</Button></>
                     :
@@ -189,8 +192,12 @@ export default function AssessmentTaskDetail(): React.ReactNode {
                 setRejectReason(""); 
             } } 
             onOk={ () => {
-                RequestUtil.put(`/tower-science/assessTask/reject`, { id: params.id, rejectReason: rejectReason });
-                setRejectReason("");
+                RequestUtil.put(`/tower-science/assessTask/reject`, { id: params.id, rejectReason: rejectReason }).then(res => {
+                    setRejectReason("");
+                    setVisible(false); 
+                    message.success('拒绝成功');
+                    history.go(0);
+                });
             } } 
             cancelText="关闭" 
             okText="提交" 
