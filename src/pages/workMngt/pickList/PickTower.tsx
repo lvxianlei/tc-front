@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Button, Form, Modal, Row, Col, Popconfirm } from 'antd'
+import { Space, Input, DatePicker, Button, Form, Modal, Row, Col, Popconfirm, Select } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
 import { Link, useHistory } from 'react-router-dom'
 import { Page } from '../../common'
@@ -26,40 +26,57 @@ export default function PickTower(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'projectName',
+            key: 'productNumber',
             title: '杆塔号',
             width: 100,
-            dataIndex: 'projectName'
+            dataIndex: 'productNumber'
         },
         {
-            key: 'projectNumber',
+            key: 'productCategoryName',
             title: '塔型',
             width: 100,
-            dataIndex: 'projectNumber'
+            dataIndex: 'productCategoryName'
         },
         {
-            key: 'projectNumber',
+            key: 'materialDeliverTime',
             title: '计划交付时间',
             width: 100,
-            dataIndex: 'projectNumber'
+            dataIndex: 'materialDeliverTime'
         },
         {
-            key: 'bidBuyEndTime',
+            key: 'materialUser',
             title: '配段人',
             width: 100,
-            dataIndex: 'bidBuyEndTime'
+            dataIndex: 'materialUser'
         },
         {
-            key: 'biddingEndTime',
+            key: 'materialStatus',
             title: '杆塔提料状态',
             width: 100,
-            dataIndex: 'biddingEndTime'
+            dataIndex: 'materialStatus',
+            render: (value: number, record: object): React.ReactNode => {
+                const renderEnum: any = [
+                  {
+                    value: 1,
+                    label: "配段中"
+                  },
+                  {
+                    value: 2,
+                    label: "已完成"
+                  },
+                  {
+                    value: 3,
+                    label: "已提交"
+                  },
+                ]
+                return <>{value&&value!==-1?renderEnum.find((item: any) => item.value === value).label:null}</>
+            }
         },
         {
-            key: 'biddingAddress',
+            key: 'materialUpdateStatusTime',
             title: '最新状态变更时间',
             width: 200,
-            dataIndex: 'biddingAddress'
+            dataIndex: 'materialUpdateStatusTime'
         },
         {
             key: 'operation',
@@ -81,6 +98,15 @@ export default function PickTower(): React.ReactNode {
         labelCol: { span: 4 },
         wrapperCol: { span: 17 }
     };
+    const onFilterSubmit = (value: any) => {
+        if (value.statusUpdateTime) {
+            const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.updateStatusTimeStart = formatDate[0]+ ' 00:00:00';
+            value.updateStatusTimeEnd = formatDate[1]+ ' 23:59:59';
+            delete value.statusUpdateTime
+        }
+        return value
+    }
     return (
         <>
             <Modal title='配段信息'  width={1200} visible={visible} onCancel={handleModalCancel} onOk={handleModalOk}>
@@ -173,7 +199,10 @@ export default function PickTower(): React.ReactNode {
             </Modal>
             <Page
                 path="/tower-market/bidInfo"
+                // path="/tower-science/product/material"
                 columns={columns}
+                onFilterSubmit={onFilterSubmit}
+                // requestData={{ productCategoryId: params.id }}
                 extraOperation={
                     <Space>
                     <Button type="primary">导出</Button>
@@ -190,30 +219,24 @@ export default function PickTower(): React.ReactNode {
                 }
                 searchFormItems={[
                     {
-                        name: 'startBidBuyEndTime',
+                        name: 'statusUpdateTime',
                         label: '最新状态变更时间',
-                        children: <DatePicker />
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                     {
-                        name: 'startBidBuyEndTime',
-                        label: '塔型状态',
-                        children: <DatePicker />
+                        name: 'status',
+                        label: '杆塔提料状态',
+                        children: <Select style={{width:'100px'}}>
+                            <Select.Option value={1} key={1}>配段中</Select.Option>
+                            <Select.Option value={2} key={2}>已完成</Select.Option>
+                            <Select.Option value={3} key={3}>已提交</Select.Option>
+                        </Select>
                     },
                     {
-                        name: 'fuzzyQuery',
-                        label:'计划交付时间',
-                        children: <Input placeholder="请输入项目名称/项目编码/审批编号/关联合同/制单人进行查询" maxLength={200} />
-                    },
-                    {
-                        name: 'startReleaseDate',
-                        label: '模式',
-                        children: <DatePicker />
-                    },
-                    {
-                        name: 'biddingStatus',
-                        label: '模糊查询项',
-                        children: <Input placeholder="请输入放样任务编号/任务单编号/订单编号/内部合同编号/塔型/塔型钢印号进行查询" maxLength={200} />
-                    },
+                        name: 'planTime',
+                        label:'配段人',
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    }
                 ]}
             />
         </>
