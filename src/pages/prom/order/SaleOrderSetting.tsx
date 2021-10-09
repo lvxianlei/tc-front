@@ -14,8 +14,8 @@ import AbstractSaleOrderSetting, { IAbstractSaleOrderSettingState, ISaleOrder, I
 export interface ISaleOrderSettingProps {
     readonly id: string;
 }
-export interface ISaleOrderSettingRouteProps extends RouteComponentProps<ISaleOrderSettingProps>, WithTranslation {}
-export interface ISaleOrderSettingState extends IAbstractSaleOrderSettingState {}
+export interface ISaleOrderSettingRouteProps extends RouteComponentProps<ISaleOrderSettingProps>, WithTranslation { }
+export interface ISaleOrderSettingState extends IAbstractSaleOrderSettingState { }
 
 /**
  * SaleOrder Setting
@@ -28,7 +28,7 @@ export class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSetting
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const saleOrder = await RequestUtil.get<ManagementSaleOrder>(`${this.requestPath}/${ this.props.match.params.id }`);
+        const saleOrder = await RequestUtil.get<ManagementSaleOrder>(`${this.requestPath}/${this.props.match.params.id}`);
         saleOrder.orderProductDtos = saleOrder.orderProductVos?.map<IProductVo>((product: IProductVo, index: number): IProductVo => {
             return {
                 ...product,
@@ -110,6 +110,7 @@ export class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSetting
         values.orderDeliveryTime = moment(values.orderDeliveryTime).format('YYYY-MM-DD');
         let contractInfoDto: IContractInfoDto = {};
         const contract: IContractInfoDto | undefined = this.state.saleOrder?.contractInfoDto;
+        console.log("+++++++++++++", contract)
         contractInfoDto = {
             chargeType: values.chargeType,
             contractId: contract?.contractId,
@@ -121,9 +122,10 @@ export class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSetting
             signContractTime: values.signContractTime,
             signCustomerId: contract?.signCustomerId,
             signCustomerName: values.signCustomerName,
-            contractNumber: values.contractNumber
+            contractNumber: values.contractNumber,
+            signUserName: contract?.signUserName
         }
-        if(values.chargeType === ChargeType.UNIT_PRICE) {
+        if (values.chargeType === ChargeType.UNIT_PRICE) {
             values.price = undefined;
         }
         values.orderProductDtos = this.state.saleOrder?.orderProductDtos && this.state.saleOrder?.orderProductDtos.map((items: IProductVo, index: number) => {
