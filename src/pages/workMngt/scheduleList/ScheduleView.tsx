@@ -18,7 +18,7 @@ export default function ScheduleView(): React.ReactNode {
     const [form] = Form.useForm();
     const [department, setDepartment] = useState<any|undefined>([]);
     const [boltUser, setBoltUser] = useState<any|undefined>([]);
-    const [combinedWeldingUser, setCombinedWeldingUser] = useState<any|undefined>([]);
+    const [weldingUser, setWeldingUser] = useState<any|undefined>([]);
     const [loftingUser, setLoftingUser] = useState<any|undefined>([]);
     const [loftingPartUser, setLoftingPartUser] = useState<any|undefined>([]);
     const [materialUser, setMaterialUser] = useState<any|undefined>([]);
@@ -28,21 +28,22 @@ export default function ScheduleView(): React.ReactNode {
     const handleModalOk = async () => {
         try {
             const saveData = await form.validateFields();
+            console.log(saveData)
             saveData.id = scheduleData.id;
             saveData.boltDeliverTime= moment(saveData.boltDeliverTime).format('YYYY-MM-DD HH:mm:ss');
-            saveData.combinedWeldingDeliverTime= moment(saveData.combinedWeldingDeliverTime).format('YYYY-MM-DD HH:mm:ss');
+            saveData.weldingDeliverTime= moment(saveData.weldingDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.loftingDeliverTime= moment(saveData.loftingDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.loftingPartDeliverTime= moment(saveData.loftingPartDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.materialDeliverTime=moment(saveData.materialDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.materialPartDeliverTime= moment(saveData.materialPartDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.smallSampleDeliverTime= moment(saveData.smallSampleDeliverTime).format('YYYY-MM-DD HH:mm:ss');
-            saveData.materialLeaderDepartment= saveData.materialLeaderDepartment[0];
-            saveData.materialPartLeaderDepartment= saveData.materialPartLeaderDepartment[0];
-            saveData.boltLeaderDepartment= saveData.boltLeaderDepartment[0];
-            saveData.combinedWeldingLeaderDepartment= saveData.combinedWeldingLeaderDepartment[0];
-            saveData.loftingLeaderDepartment= saveData.loftingLeaderDepartment[0];
-            saveData.loftingPartLeaderDepartment= saveData.loftingPartLeaderDepartment[0];
-            saveData.smallSampleLeaderDepartment= saveData.smallSampleLeaderDepartment[0];
+            saveData.materialLeaderDepartment= Array.isArray(saveData.materialLeaderDepartment)?saveData.materialLeaderDepartment[0]:saveData.materialLeaderDepartment;
+            saveData.materialPartLeaderDepartment= Array.isArray(saveData.materialPartLeaderDepartment)?saveData.materialPartLeaderDepartment[0]:saveData.materialPartLeaderDepartment;
+            saveData.boltLeaderDepartment= Array.isArray(saveData.boltLeaderDepartment)?saveData.boltLeaderDepartment[0]:saveData.boltLeaderDepartment;
+            saveData.weldingLeaderDepartment= Array.isArray(saveData.weldingLeaderDepartment)?saveData.weldingLeaderDepartment[0]:saveData.weldingLeaderDepartment;
+            saveData.loftingLeaderDepartment=  Array.isArray(saveData.loftingLeaderDepartment)?saveData.loftingLeaderDepartment[0]:saveData.loftingLeaderDepartment;
+            saveData.loftingPartLeaderDepartment= Array.isArray(saveData.loftingPartLeaderDepartment)?saveData.loftingPartLeaderDepartment[0]:saveData.loftingPartLeaderDepartment;
+            saveData.smallSampleLeaderDepartment= Array.isArray(saveData.smallSampleLeaderDepartment)?saveData.smallSampleLeaderDepartment[0]:saveData.smallSampleLeaderDepartment;
 
             await RequestUtil.post('/tower-science/productCategory/assign', saveData).then(()=>{
                 setVisible(false);
@@ -158,16 +159,16 @@ export default function ScheduleView(): React.ReactNode {
             dataIndex: 'loftingPartDeliverTime'
         },
         {
-            key: 'combinedWeldingLeaderName',
+            key: 'weldingLeaderName',
             title: '组焊清单负责人',
             width: 100,
-            dataIndex: 'combinedWeldingLeaderName'
+            dataIndex: 'weldingLeaderName'
         },
         {
-            key: 'combinedWeldingDeliverTime',
+            key: 'weldingDeliverTime',
             title: '组焊计划交付时间',
             width: 200,
-            dataIndex: 'combinedWeldingDeliverTime'
+            dataIndex: 'weldingDeliverTime'
         },
         {
             key: 'loftingPartLeaderName',
@@ -244,9 +245,9 @@ export default function ScheduleView(): React.ReactNode {
                             const loftingLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.loftingLeaderDepartment}&size=1000`);
                             setLoftingUser(loftingLeaderDepartment.records);
                         }
-                        if(resData.combinedWeldingLeaderDepartment){
-                            const combinedWeldingLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.combinedWeldingLeaderDepartment}&size=1000`);
-                            setCombinedWeldingUser(combinedWeldingLeaderDepartment.records);
+                        if(resData.weldingLeaderDepartment){
+                            const weldingLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.weldingLeaderDepartment}&size=1000`);
+                            setWeldingUser(weldingLeaderDepartment.records);
                         }
                         if(resData.boltLeaderDepartment){
                             const boltLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.boltLeaderDepartment}&size=1000`);
@@ -254,22 +255,22 @@ export default function ScheduleView(): React.ReactNode {
                         }
                         form.setFieldsValue({
                             ...resData,
-                            materialLeader:resData.materialLeader?resData.materialLeader:'',
-                            materialLeaderDepartment:resData.materialLeaderDepartment?[resData.materialLeaderDepartment]:'',
-                            boltLeader:resData.boltLeader?resData.boltLeader:'',
-                            boltLeaderDepartment:resData.boltLeaderDepartment?[resData.boltLeaderDepartment]:'',
-                            combinedWeldingLeader:resData.combinedWeldingLeader?resData.combinedWeldingLeader:'',
-                            combinedWeldingLeaderDepartment:resData.combinedWeldingLeaderDepartment?[resData.combinedWeldingLeaderDepartment]:'',
-                            loftingLeader:resData.loftingLeader?resData.loftingLeader:'',
-                            loftingLeaderDepartment:resData.loftingLeaderDepartment?[resData.loftingLeaderDepartment]:'',
-                            loftingPartLeader:resData.loftingPartLeader?resData.loftingPartLeader:'',
-                            loftingPartLeaderDepartment:resData.loftingPartLeaderDepartment?[resData.loftingPartLeaderDepartment]:'',
-                            materialPartLeader:resData.materialPartLeader?resData.materialPartLeader:'',
-                            materialPartLeaderDepartment:resData.materialPartLeaderDepartment?[resData.materialPartLeaderDepartment]:'',
-                            smallSampleLeader:resData.smallSampleLeader?resData.smallSampleLeader:'',
-                            smallSampleLeaderDepartment:resData.smallSampleLeaderDepartment?[resData.smallSampleLeaderDepartment]:'',
+                            materialLeader:resData.materialLeader && resData.materialLeader!==-1 ?resData.materialLeader:'',
+                            materialLeaderDepartment:resData.materialLeaderDepartment && resData.materialLeaderDepartment!==-1?[resData.materialLeaderDepartment]:'',
+                            boltLeader:resData.boltLeader&& resData.boltLeader!==-1?resData.boltLeader:'',
+                            boltLeaderDepartment:resData.boltLeaderDepartment&& resData.boltLeaderDepartment!==-1?[resData.boltLeaderDepartment]:'',
+                            weldingLeader:resData.weldingLeader&& resData.weldingLeader!==-1?resData.weldingLeader:'',
+                            weldingLeaderDepartment:resData.weldingLeaderDepartment&& resData.weldingLeaderDepartment!==-1?[resData.weldingLeaderDepartment]:'',
+                            loftingLeader:resData.loftingLeader&& resData.loftingLeader!==-1?resData.loftingLeader:'',
+                            loftingLeaderDepartment:resData.loftingLeaderDepartment&& resData.loftingLeaderDepartment!==-1?[resData.loftingLeaderDepartment]:'',
+                            loftingPartLeader:resData.loftingPartLeader&& resData.loftingPartLeader!==-1?resData.loftingPartLeader:'',
+                            loftingPartLeaderDepartment:resData.loftingPartLeaderDepartment&& resData.loftingPartLeaderDepartment!==-1?[resData.loftingPartLeaderDepartment]:'',
+                            materialPartLeader:resData.materialPartLeader&& resData.materialPartLeader!==-1?resData.materialPartLeader:'',
+                            materialPartLeaderDepartment:resData.materialPartLeaderDepartment&& resData.materialPartLeaderDepartment!==-1?[resData.materialPartLeaderDepartment]:'',
+                            smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
+                            smallSampleLeaderDepartment:resData.smallSampleLeaderDepartment&& resData.smallSampleLeaderDepartment!==-1?[resData.smallSampleLeaderDepartment]:'',
                             boltDeliverTime:resData.boltDeliverTime?moment(resData.boltDeliverTime):'',
-                            combinedWeldingDeliverTime: resData.combinedWeldingDeliverTime?moment(resData.combinedWeldingDeliverTime):'',
+                            weldingDeliverTime: resData.weldingDeliverTime?moment(resData.weldingDeliverTime):'',
                             loftingDeliverTime: resData.loftingDeliverTime?moment(resData.loftingDeliverTime):'',
                             loftingPartDeliverTime: resData.loftingPartDeliverTime?moment(resData.loftingPartDeliverTime):'',
                             materialDeliverTime:resData.materialDeliverTime?moment(resData.materialDeliverTime):'',
@@ -297,8 +298,8 @@ export default function ScheduleView(): React.ReactNode {
                 return setLoftingPartUser(userData.records);
             case "loftingLeaderDepartment":
                 return setLoftingUser(userData.records);
-            case "combinedWeldingLeaderDepartment":
-                return setCombinedWeldingUser(userData.records);
+            case "weldingLeaderDepartment":
+                return setWeldingUser(userData.records);
             case "boltLeaderDepartment":
                 return setBoltUser(userData.records);
         };
@@ -466,7 +467,7 @@ export default function ScheduleView(): React.ReactNode {
                                     let newSmallSampleCompletionTime =new Date(uom.setHours(uom.getHours() + smallSampleCompletionTime));
                                     let newBoltCompletionTime =new Date(uom.setHours(uom.getHours() + boltCompletionTime));
                                     form.setFieldsValue({ 
-                                        combinedWeldingDeliverTime: moment(newWeldingCompletionTime),
+                                        weldingDeliverTime: moment(newWeldingCompletionTime),
                                         boltDeliverTime: moment(newBoltCompletionTime), 
                                         smallSampleDeliverTime: moment(newSmallSampleCompletionTime),
                                         loftingPartDeliverTime: moment(newLoftingWithSectionCompletionTime)  
@@ -479,18 +480,18 @@ export default function ScheduleView(): React.ReactNode {
                         <Col span={12}>
                             <Row>
                                 <Col span={15}>
-                                    <Form.Item name="combinedWeldingLeaderDepartment" label="组焊清单负责人 " rules={[{required: true,message:'请选择组焊清单负责人部门'}]} >
+                                    <Form.Item name="weldingLeaderDepartment" label="组焊清单负责人 " rules={[{required: true,message:'请选择组焊清单负责人部门'}]} >
                                         <TreeSelect
-                                            onChange={(value:any)=>{onDepartmentChange(value,'combinedWeldingLeaderDepartment')}  }
+                                            onChange={(value:any)=>{onDepartmentChange(value,'weldingLeaderDepartment')}  }
                                         >
                                             {renderTreeNodes(wrapRole2DataNode( department ))}
                                         </TreeSelect>
                                     </Form.Item>
                                 </Col>
                                 <Col span={6}>
-                                    <Form.Item name="combinedWeldingLeader" label="" rules={[{required: true,message:'请选择组焊清单负责人'}]} >
+                                    <Form.Item name="weldingLeader" label="" rules={[{required: true,message:'请选择组焊清单负责人'}]} >
                                         <Select>
-                                            { combinedWeldingUser && combinedWeldingUser.map((item:any)=>{
+                                            { weldingUser && weldingUser.map((item:any)=>{
                                                 return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
                                             }) }
                                         </Select>
@@ -500,7 +501,7 @@ export default function ScheduleView(): React.ReactNode {
                             
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="combinedWeldingDeliverTime" label="计划交付时间" rules={[{required: true,message:'请选择计划交付时间'}]} >
+                            <Form.Item name="weldingDeliverTime" label="计划交付时间" rules={[{required: true,message:'请选择计划交付时间'}]} >
                                 <DatePicker  style={{width:'100%'}} disabled format={'YYYY-MM-DD HH:mm:ss'}/>
                             </Form.Item>
                         </Col>
