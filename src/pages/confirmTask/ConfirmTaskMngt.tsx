@@ -12,6 +12,7 @@ import styles from './confirm.module.less';
 
 export default function ConfirmTaskMngt(): React.ReactNode {
     const [user, setUser] = useState<any[]|undefined>([]);
+    const [refresh, setRefresh] = useState<boolean>(false);
     const [confirmLeader, setConfirmLeader] = useState<any|undefined>([]);
     const [department, setDepartment] = useState<any|undefined>([]);
     const [assignVisible, setVisible] = useState<boolean>(false);
@@ -29,10 +30,13 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             const submitData = await form.validateFields();
             submitData.drawTaskId = drawTaskId;
             submitData.plannedDeliveryTime = moment(submitData.plannedDeliveryTime).format('YYYY-MM-DD');
-            console.log(submitData)
             await RequestUtil.post('/tower-science/drawTask/assignDrawTask', submitData).then(()=>{
+                message.success('指派成功！')
+            }).then(()=>{
                 setVisible(false);
                 form.resetFields();
+            }).then(()=>{
+                history.push('/confirmTask/ConfirmTaskMngt');
             })
         } catch (error) {
             console.log(error)
@@ -124,14 +128,14 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                         setDrawTaskId(record.id);
                         setVisible(true) 
                     }} disabled={ record.status !== 2 }>指派</Button>
-                     <Button type='link' onClick={()=>history.push(`/confirmTask/ConfirmTaskMngt/ConfirmDetail/${record.id}`)}>明细</Button>
+                    <Button type='link' onClick={()=>history.push(`/confirmTask/ConfirmTaskMngt/ConfirmDetail/${record.id}`)}>明细</Button>
                     <Popconfirm
                         title="确认提交任务?"
                         onConfirm={ async () => {
                             await RequestUtil.post(`/tower-science/drawTask/submitDrawTask`,{ drawTaskId: record.id }).then(()=>{
                                 message.success('提交成功！');
                             }).then(()=>{
-                                history.push(`/confirmTask/ConfirmTaskMngt`)
+                                setRefresh(!refresh)
                             })
                         } }
                         okText="确认"
@@ -226,6 +230,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
         <Page
             path="/tower-science/drawTask"
             columns={columns}
+            refresh={ refresh }
             extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
