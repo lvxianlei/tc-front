@@ -18,7 +18,10 @@ const AppCtxConfigCompiler = require("./compiler/AppCtxConfigCompiler");
 const { ModifySourcePlugin } = require("modify-source-webpack-plugin");
 const MockWebpackPlugin = require("mock-webpack-plugin");
 const mockConfig = require("./mock/config");
-
+const { DefinePlugin } = require("webpack")
+const envConfig = Dotenv.config({
+  path: path.join(__dirname, "/env", `.env.${process.env.REACT_APP_ENV}`),
+});
 module.exports = {
   webpack: override(
     function (config) {
@@ -59,7 +62,7 @@ module.exports = {
     }),
     addWebpackPlugin(
       new DotenvWebpack({
-        path: `./env/.${process.env.NODE_ENV}.env`, // load this now instead of the ones in '.env'
+        path: `./env/.env.${process.env.REACT_APP_ENV}`, // load this now instead of the ones in '.env'
         safe: true, // load '.env.example' to verify the '.env' variables are all set. Can also be a string to a different file.
         systemvars: true, // load all the predefined 'process.env' variables which will trump anything local per dotenv specs.
         silent: true, // hide any errors
@@ -67,6 +70,9 @@ module.exports = {
       })
     ),
     addWebpackPlugin(new AntdDayjsWebpackPlugin()),
+    addWebpackPlugin(new DefinePlugin({
+      "process.env.REACT_APP_ENV": envConfig.parsed.REQUEST_API_PATH_PREFIX
+    })),
     addWebpackPlugin(
       new ModifySourcePlugin({
         rules: [
@@ -77,8 +83,8 @@ module.exports = {
         ],
       })
     ),
-    process.env.NODE_ENV === "development" ||
-      process.env.NODE_ENV === "integration"
+    process.env.REACT_APP_ENV === "development" ||
+      process.env.REACT_APP_ENV === "integration"
       ? addWebpackPlugin(
         new MockWebpackPlugin({
           // mock config
@@ -96,11 +102,8 @@ module.exports = {
         pathRewrite: { "^/yapi": "" },
         changeOrigin: true,
         secure: false,
-      },
-    };
-    const envConfig = Dotenv.config({
-      path: path.join(__dirname, "/env", `.${process.env.NODE_ENV}.env`),
-    });
+      }
+    }
     fs.readdirSync(path.join(__dirname, "./mock/api/")).forEach((dirname) => {
       const stats = fs.statSync(path.join(__dirname, "./mock/api/", dirname));
       if (!stats.isDirectory()) {

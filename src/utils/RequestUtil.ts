@@ -41,22 +41,21 @@ export default abstract class RequestUtil {
      * @param [init] 
      * @returns request 
      */
-    private static request<T>(path: string, init?: RequestInit, cancel?: (abort: AbortController)=>void ): Promise<T> {
+    private static request<T>(path: string, init?: RequestInit, cancel?: (abort: AbortController) => void): Promise<T> {
         return new Promise<T>((resolve: (data: T) => void, reject: (res: IResponse<T>) => void): void => {
             let headers: HeadersInit = {
                 'Content-Type': 'application/json',
-                'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
                 'Tenant-Id': AuthUtil.getTenantId()
             };
             const sinzetechAuth: string = AuthUtil.getSinzetechAuth();
             if (sinzetechAuth) {
                 headers['Sinzetech-Auth'] = sinzetechAuth;
             }
-            
+
             const controller = new AbortController();
             const { signal } = controller;
             cancel && cancel(controller)
-
             fetch(this.joinUrl(path, process.env.REQUEST_API_PATH_PREFIX || ''), {
                 mode: 'cors',
                 ...(init || {}),
@@ -67,40 +66,40 @@ export default abstract class RequestUtil {
                 referrerPolicy: 'no-referrer-when-downgrade',
                 signal
             })
-            .then((res) => {
-                if (res.status !== 200) {
+                .then((res) => {
+                    if (res.status !== 200) {
+                        NProgress.done();
+                    }
+                    if (res.status === 401) {
+                        setTimeout(this.backToLogin, 10);
+                    }
+                    return res.json();
+                })
+                .then((res: IResponse<T> | any) => {
                     NProgress.done();
-                }
-                if (res.status === 401) {
-                    setTimeout(this.backToLogin, 10);
-                }
-                return res.json();
-            })
-            .then((res: IResponse<T> | any) => {
-                NProgress.done();
-                if(path === '/sinzetech-auth/oauth/token') {
-                    resolve(res);
-                } else if (res.code === 200) {
-                    resolve(res.data);
-                } else if (res.code === 401) {
-                    setTimeout(this.backToLogin, 10);
-                }else {
-                    message.error(res.msg);
-                    reject(res);
-                }
-            })
-            .catch((e: Error) => {
-                NProgress.done();
-                if (e.name === 'AbortError') {
-                    // console.log('abort');
-                }else{
-                    message.error(e.message);
-                }
-            });
+                    if (path === '/sinzetech-auth/oauth/token') {
+                        resolve(res);
+                    } else if (res.code === 200) {
+                        resolve(res.data);
+                    } else if (res.code === 401) {
+                        setTimeout(this.backToLogin, 10);
+                    } else {
+                        message.error(res.msg);
+                        reject(res);
+                    }
+                })
+                .catch((e: Error) => {
+                    NProgress.done();
+                    if (e.name === 'AbortError') {
+                        // console.log('abort');
+                    } else {
+                        message.error(e.message);
+                    }
+                });
         });
     }
 
-    
+
     /**
      * @static
      * @description Gets request util
@@ -110,10 +109,10 @@ export default abstract class RequestUtil {
      * @param [headers] 
      * @returns get 
      */
-    public static get<T>(path: string, params?: Record<string, any>, headers?: HeadersInit, cancel?: (abort: AbortController)=>void ) : Promise<T> {
+    public static get<T>(path: string, params?: Record<string, any>, headers?: HeadersInit, cancel?: (abort: AbortController) => void): Promise<T> {
         NProgress.inc();
         if (params) {
-            path += `?${ stringify(params) }`;
+            path += `?${stringify(params)}`;
         }
         return this.request(path, {
             method: 'GET',
@@ -184,6 +183,6 @@ export default abstract class RequestUtil {
      * @returns url 
      */
     private static joinUrl(path: string, base: string): string {
-        return `${ base.replace(/\/*$/, '/') }${ path.replace(/^\/*/, '') }`;
+        return `${base.replace(/\/*$/, '/')}${path.replace(/^\/*/, '')}`;
     }
 }
