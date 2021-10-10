@@ -16,7 +16,7 @@ export interface IAuthorityComponentProps {
     children?: React.ReactNode | React.ReactElement<any> | null;
     permissions: Permissions;
 }
-export interface IAuthorityComponentState {}
+export interface IAuthorityComponentState { }
 
 /**
  * The wrapper of authority component
@@ -30,10 +30,10 @@ export default class AuthorityComponent extends React.Component<IAuthorityCompon
      */
     public render(): React.ReactNode {
         return (
-            <Authorized permissions={ this.props.permissions || '' }
-                authority={ ApplicationContext.get().authorities || [] }
-                unauthorized={ null } loading={ null }>
-                { this.props.children as React.ReactElement }
+            <Authorized permissions={this.props.permissions || ''}
+                authority={ApplicationContext.get().authorities || []}
+                unauthorized={null} loading={null}>
+                {this.props.children as React.ReactElement}
             </Authorized>
         );
     }
@@ -49,7 +49,7 @@ export function hasAuthority(permissions?: Authority): boolean {
     const authority: AuthorityBasic[] = ApplicationContext.get().authorities || [];
     for (const value of authority) {
         if (permissions.indexOf(value) !== -1) {
-          return true;
+            return true;
         }
     }
     return false;

@@ -107,28 +107,28 @@
       "path": "/sys/dxnry",
       "module": "./pages/system-mngt/DictMngt",
       "exact": true,
-      "authocrity": "system_dxnry"
+      "authority": "dxnry"
     },
     { // 角色管理
       "name": "角色管理",
       "path": "/auth/roles",
       "module": "./pages/auth/role/RoleMngt",
       "exact": true,
-      "authocrity": "auth_roles"
+      "authority": "auth_section"
     },
     { // 添加角色
       "name": "添加角色",
       "path": "/auth/roles/new",
       "module": "./pages/auth/role/RoleNew",
       "exact": true,
-      "authocrity": "auth_roles_add"
+      "authority": "auth_section"
     },
     { // 编辑角色
       "name": "编辑角色",
       "path": "/auth/roles/setting/:id",
       "module": "./pages/auth/role/RoleSetting",
       "exact": true,
-      "authocrity": "auth_roles_edit"
+      "authority": "auth_section"
     },
     { // 销售任务单管理
       "name": "销售任务单管理",
@@ -177,140 +177,140 @@
       "path": "/sys/users",
       "module": "./pages/system-mngt/user/UserMngt",
       "exact": true,
-      "authocrity": "system_users"
+      "authority": "users"
     },
     { // 新增用户
       "name": "新增用户",
       "path": "/sys/users/new",
       "module": "./pages/system-mngt/user/UserNew",
       "exact": true,
-      "authocrity": "system_users"
+      "authority": "users"
     },
     { // 修改用户
       "name": "修改用户",
       "path": "/sys/users/setting/:id",
       "module": "./pages/system-mngt/user/UserSetting",
       "exact": true,
-      "authocrity": "system_users"
+      "authority": "users"
     },
     { //任务单审批
       "name": "审批中心",
       "path": "/approval/task",
       "module": "./pages/approval/ApprovalList",
       "exact": true,
-      "authocrity": "approval_task"
+      "authority": "approval_task"
     },
     { // 任务单产品变更审批
       "name": "任务单产品审批",
       "path": "/approval/task/change/:id&:businessId",
       "module": "./pages/approval/taskchange/TaskChange",
       "exact": true,
-      "authocrity": "approval_task"
+      "authority": "approval_task"
     },
     { // 审批产品信息变更
       "name": "产品信息变更审批",
       "path": "/approval/task/product-change/:id",
       "module": "./pages/approval/TowerChangeApproval",
       "exact": true,
-      "authocrity": "approval_task"
+      "authority": "approval_task"
     },
     { // 委托列表
       "name": "委托列表",
       "path": "/outsource/entrust",
       "module": "./pages/entrust/EntrustList",
       "exact": true,
-      "authocrity": "outsource_entrust"
+      "authority": "outsource_entrust"
     },
     { // 委托新增
       "name": "委托新增",
       "path": "/outsource/entrust/new",
       "module": "./pages/entrust/EntrustNew",
       "exact": true,
-      "authocrity": "outsource_entrust"
+      "authority": "outsource_entrust"
     },
     { // 委托编辑
       "name": "委托列表",
       "path": "/outsource/entrust/sstting/:id",
       "module": "./pages/entrust/EntrustSetting",
       "exact": true,
-      "authocrity": "outsource_entrust"
+      "authority": "outsource_entrust"
     },
     { // 委托详情
       "name": "委托详情",
       "path": "/outsource/entrust/detail/:id",
       "module": "./pages/entrust/EntrustDetail",
       "exact": true,
-      "authocrity": "outsource_entrust"
+      "authority": "outsource_entrust"
     },
     { // 已完成塔型
       "name": "已完成塔型",
       "path": "/outsource/towershape",
       "module": "./pages/entrust/TowerShape",
       "exact": true,
-      "authocrity": "outsource_towershape"
+      "authority": "outsource_towershape"
     },
     { // 原材料类型管理
       "name": "原材料类型管理",
       "path": "/sys/materialType",
       "module": "./pages/system-mngt/material/MaterialTypeMngt",
       "exact": true,
-      "authocrity": "system_material_type"
+      "authority": "system_material_type"
     },
     { // 原材料管理
       "name": "原材料管理",
       "path": "/sys/material",
       "module": "./pages/system-mngt/material/MaterialMngt",
       "exact": true,
-      "authocrity": "system_material"
+      "authority": "system_material"
     },
     { // 新增原材料
       "name": "新增原材料",
       "path": "/sys/material/new",
       "module": "./pages/system-mngt/material/MaterialNew",
       "exact": true,
-      "authocrity": "system_material"
+      "authority": "system_material"
     },
     { // 编辑原材料
       "name": "编辑原材料",
       "path": "/sys/material/view/:id",
       "module": "./pages/system-mngt/material/MaterialView",
       "exact": true,
-      "authocrity": "system_material"
+      "authority": "system_material"
     },
     { //塔型管理
       "name": "塔型管理",
       "path": "/product/towershape",
       "module": "./pages/product/TowerShape/TowerShapeMngt",
       "exact": true,
-      "authocrity": "pcroduct_towershape"
+      "authority": "pcroduct_towershape"
     },
     { //新增塔型
       "name": "新增塔型",
       "path": "/product/towershape/new",
       "module": "./pages/product/TowerShape/TowerShapeNew",
       "exact": true,
-      "authocrity": "pcroduct_towershape"
+      "authority": "pcroduct_towershape"
     },
     { //编辑塔型
       "name": "编辑塔型",
       "path": "/product/towershape/setting/:id",
       "module": "./pages/product/TowerShape/TowerShapeSetting",
       "exact": true,
-      "authocrity": "pcroduct_towershape"
+      "authority": "pcroduct_towershape"
     },
     { //变更塔型
       "name": "变更塔型",
       "path": "/product/towershape/change/:id",
       "module": "./pages/product/TowerShape/TowerShapeChange",
       "exact": true,
-      "authocrity": "pcroduct_towershape"
+      "authority": "pcroduct_towershape"
     },
     { //编辑图纸构件明细
       "name": "编辑图纸构件明细",
       "path": "/product/towershape/componentDetails/:id",
       "module": "./pages/product/TowerShape/ComponentDetailsSetting",
       "exact": true,
-      "authocrity": "pcroduct_towershape"
+      "authority": "pcroduct_towershape"
     },
     { // 提料管理
       "name": "提料管理",

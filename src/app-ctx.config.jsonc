@@ -28,91 +28,92 @@
                             }
                         ]
                     },
-                    {
-                        "label": "审批",
-                        "icon": "examine",
-                        "path": "/approval",
-                        "authocrity": "approval_section",
-                        "items": [
-                            {
-                                "label": "审批中心",
-                                "path": "/approval/task",
-                                "authocrity":"approval_task"
-                            }
-                        ]
-                    },
+                    // {
+                    //     "label": "审批",
+                    //     "icon": "examine",
+                    //     "path": "/approval",
+                    //     "authority": "approval_section",
+                    //     "items": [
+                    //         {
+                    //             "label": "审批中心",
+                    //             "path": "/approval/task",
+                    //             "authority":"approval_task"
+                    //         }
+                    //     ]
+                    // },
                     {
                         "label": "系统管理",
                         "icon": "system",
                         "path": "/sys",
-                        "authocrity": "dictionary_type_list",
+                        "authority": "dictionary_type_list",
                         "items": [
                             {
                                 "label": "用户管理",
                                 "path": "/sys/users",
-                                "authocrity": "bidding"
+                                "authority": "users"
                             },
                             {
                                 "label": "字典管理",
                                 "path": "/sys/dxnry",
-                                "authocrity": "bidding"
-                            },
-                            {
-                                "label": "原材料类型管理",
-                                "path": "/sys/materialType",
-                                "authocrity": "bidding"
-                            },
-                            {
-                                "label": "原材料管理",
-                                "path": "/sys/material",
-                                "authocrity": "bidding"
+                                "authority": "dxnry"
                             }
+                            // ,
+                            // {
+                            //     "label": "原材料类型管理",
+                            //     "path": "/sys/materialType",
+                            //     "authority": "bidding"
+                            // },
+                            // {
+                            //     "label": "原材料管理",
+                            //     "path": "/sys/material",
+                            //     "authority": "bidding"
+                            // }
                         ]
                     },
                     {
                         "label": "权限管理",
                         "icon": "rules",
                         "path": "/auth",
-                        "authocrity": "auth_section",
+                        "authority": "auth_section",
                         "items": [
                             {
                                 "label": "角色管理",
                                 "path": "/auth/roles",
-                                "authocrity": "auth_roles"
+                                "authority": "auth_section"
                             }
                         ]
                     },
-                    {
-                        "label": "放样外协服务",
-                        "icon": "lofting",
-                        "path": "/outsource",
-                        "authocrity": "outsource_section",
-                        "items": [
-                            {
-                                "label": "委托列表",
-                                "path": "/outsource/entrust",
-                                "authocrity": "outsource_entrust"
-                            },
-                            {
-                                "label": "已完成塔型",
-                                "path": "/outsource/towershape",
-                                "authocrity": "outsource_towershape"
-                            }
-                        ]
-                    },
-                    {
-                        "label": "产品管理",
-                        "icon": "product",
-                        "path": "/product",
-                        "authocrity": "product_section",
-                        "items": [
-                            {
-                                "label": "塔型管理",
-                                "path": "/product/towershape",
-                                "authocrity": "product_towershape"
-                            }
-                        ]
-                    },
+                    // {
+                    //     "label": "放样外协服务",
+                    //     "icon": "lofting",
+                    //     "path": "/outsource",
+                    //     "authority": "outsource_section",
+                    //     "items": [
+                    //         {
+                    //             "label": "委托列表",
+                    //             "path": "/outsource/entrust",
+                    //             "authority": "outsource_entrust"
+                    //         },
+                    //         {
+                    //             "label": "已完成塔型",
+                    //             "path": "/outsource/towershape",
+                    //             "authority": "outsource_towershape"
+                    //         }
+                    //     ]
+                    // },
+                    // {
+                    //     "label": "产品管理",
+                    //     "icon": "product",
+                    //     "path": "/product",
+                    //     "authority": "product_section",
+                    //     "items": [
+                    //         {
+                    //             "label": "塔型管理",
+                    //             "path": "/product/towershape",
+                    //             "authority": "product_towershape"
+                    //         }
+                    //     ]
+                    // },
                     {
                         "label": "招标信息",
                         "icon": "zhaobiao2",
