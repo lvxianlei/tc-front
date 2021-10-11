@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Button, Form, Select, TreeSelect } from 'antd'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common'
 import { TreeNode } from 'antd/lib/tree-select';
@@ -12,6 +12,7 @@ import styles from './confirm.module.less';
 export default function ConfirmList(): React.ReactNode {
     const [confirmLeader, setConfirmLeader] = useState<any|undefined>([]);
     const [department, setDepartment] = useState<any|undefined>([]);
+    const history = useHistory();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
         setDepartment(departmentData);
@@ -99,8 +100,8 @@ export default function ConfirmList(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={`/workMngt/confirmList/confirmMessage/${record.id}`}>确认信息</Link>
-                    {record.status === 3?<Link to={`/workMngt/confirmList/confirmDetail/${record.id}`}>确认明细</Link>:null}
+                    <Button type='link' onClick={()=>{history.push(`/workMngt/confirmList/confirmMessage/${record.id}`)}}>确认信息</Button>
+                    <Button type='link' onClick={()=>{history.push(`/workMngt/confirmList/confirmDetail/${record.id}`)}} >确认明细</Button>
                 </Space>
             )
         }

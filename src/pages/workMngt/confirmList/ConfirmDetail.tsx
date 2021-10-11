@@ -11,6 +11,7 @@ import { CloudUploadOutlined } from '@ant-design/icons';
 import AuthUtil from '../../../utils/AuthUtil';
 import { downLoadFile } from '../../../utils';
 import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
+import { Console } from 'node:console';
 interface Item {
   key: string;
   name: string;
@@ -46,6 +47,7 @@ export default function ConfirmDetail(): React.ReactNode {
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
     const [tableDataSource, setTableDataSource] = useState<object[]>([]);
+    const [weight,setWeight] = useState<string>('0');
     const [description, setDescription] = useState('');
     const [attachInfo, setAttachInfo] = useState<any[]>([])
     const [form] = Form.useForm();
@@ -65,10 +67,15 @@ export default function ConfirmDetail(): React.ReactNode {
       ...restProps
     }) => {
       const inputNode = inputType === 'number' ? <InputNumber onChange={(value:number)=>{
-        const productWeight:number = formRef.getFieldValue('productWeight')?formRef.getFieldValue('productWeight'):0;
-        const otherWeight:number = formRef.getFieldValue('otherWeight')?formRef.getFieldValue('otherWeight'):0;
+        let number = 0;
+        if(dataIndex==='productWeight'){
+            number = formRef.getFieldValue('otherWeight')?formRef.getFieldValue('otherWeight'):0;
+        }
+        if(dataIndex==='otherWeight'){
+          number = formRef.getFieldValue('productWeight')?formRef.getFieldValue('productWeight'):0;;
+        }
         formRef.setFieldsValue({
-            totalWeight:productWeight+otherWeight
+            totalWeight:value+number
         })
       }} min={0} precision={4}/> : inputType === 'select' ?<Select>{enums&&enums.map((item:any)=>{
         return <Select.Option value={item.value} key ={item.value}>{item.label}</Select.Option>
@@ -106,6 +113,11 @@ export default function ConfirmDetail(): React.ReactNode {
         newData.splice(index, 1);
       }
       setTableDataSource(newData);
+      let totalNumber = '0';
+        newData.forEach((item:any)=>{
+          totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(4)
+        })
+        setWeight(totalNumber);
     };
     const cancel = () => {
       setEditingKey('');
@@ -130,6 +142,11 @@ export default function ConfirmDetail(): React.ReactNode {
           setTableDataSource(newData);
           setEditingKey('');
         }
+        let totalNumber = '0';
+        newData.forEach((item:any)=>{
+          totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(4)
+        })
+        setWeight(totalNumber);
       } catch (errInfo) {
         console.log('Validate Failed:', errInfo);
       }
@@ -280,7 +297,7 @@ export default function ConfirmDetail(): React.ReactNode {
           editable: true,
           key: 'totalWeight',
           render:(_:any,record:any)=>{
-              return <span>{(parseInt(record.otherWeight)+parseInt(record.productWeight)).toFixed(4)}</span>
+              return <span>{(parseFloat(record.otherWeight)+parseFloat(record.productWeight)).toFixed(4)}</span>
           } 
       },
       { 
@@ -324,11 +341,17 @@ export default function ConfirmDetail(): React.ReactNode {
     const handleModalOk = async () => {
         try {
             const submitData = await form.validateFields();
+            console.log(submitData)
             submitData.key = tableDataSource && tableDataSource.length.toString()
             tableDataSource.push(submitData);
             setTableDataSource(tableDataSource);
+            let number = '0';
+            tableDataSource.forEach((item:any)=>{
+                number = (parseFloat(item.totalWeight)+parseFloat(number)).toFixed(4)
+            })
+            setWeight(number);
             form.resetFields();
-            setVisible(false)
+            setVisible(false);
         } catch (error) {
             console.log(error)
         }
@@ -448,8 +471,8 @@ export default function ConfirmDetail(): React.ReactNode {
                     <Space>
                         <Button type='primary' ghost onClick={() => history.goBack()}>导出</Button>
                         <Button type='primary' ghost onClick={() => history.goBack()}>模板下载</Button>
-                        <span>总基数：23基</span>
-                        <span>总重量：24kg</span>
+                        <span>总基数：{tableDataSource.length}基</span>
+                        <span>总重量：{weight}kg</span>
                     </Space>
                     <Space>
                         <Button type='primary' ghost onClick={() => history.goBack()}>导入</Button>

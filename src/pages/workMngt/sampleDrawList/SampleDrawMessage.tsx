@@ -8,17 +8,37 @@ import RequestUtil from '../../../utils/RequestUtil';
 
 const tableColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '操作部门', dataIndex: 'partBidNumber', key: 'partBidNumber', },
-    { title: '操作人', dataIndex: 'goodsType', key: 'goodsType' },
-    { title: '操作时间', dataIndex: 'packageNumber', key: 'packgeNumber' },
-    { title: '任务状态', dataIndex: 'amount', key: 'amount' }
+    { title: '操作部门', dataIndex: 'opreateUserDeptName', key: 'opreateUserDeptName', },
+    { title: '操作人', dataIndex: 'opreateUserName', key: 'opreateUserName' },
+    { title: '操作时间', dataIndex: 'createTime', key: 'createTime' },
+    { title: '任务状态', dataIndex: 'status', key: 'status', render: (value: number, record: object): React.ReactNode => {
+        const renderEnum: any = [
+            {
+                value: 1,
+                label: "待修改"
+            },
+            {
+                value: 2,
+                label: "已修改"
+            },
+            {
+                value: 3,
+                label: "已拒绝"
+            },
+            {
+                value: 4,
+                label: "已删除"
+            }
+        ]
+             return <>{value && renderEnum.find((item: any) => item.value === value).label}</>
+    }}
 ]
 
 export default function SampleDrawMessage(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-science/smallSample/${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data
@@ -30,7 +50,7 @@ export default function SampleDrawMessage(): React.ReactNode {
                 <DetailTitle title="特殊要求" />
                 <BaseInfo columns={specialInfoData} dataSource={detailData || {}} col={2}/>
                 <DetailTitle title="产品信息" />
-                <BaseInfo columns={productInfoData} dataSource={detailData || {}} col={2}/>
+                <BaseInfo columns={productInfoData} dataSource={detailData?.productVO || {}} col={2}/>
                 <DetailTitle title="相关附件"/>
                 <CommonTable columns={[
                     {

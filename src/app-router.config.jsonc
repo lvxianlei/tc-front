@@ -548,7 +548,7 @@
     },
     { // 确认任务详情
       "name": "确认任务详情",
-      "path": "/confirmTask/ConfirmTaskMngt/ConfirmTaskDetail/:id",
+      "path": "/confirmTask/ConfirmTaskMngt/ConfirmTaskDetail/:id/:status",
       "module": "./pages/confirmTask/ConfirmTaskDetail",
       "exact": true,
       "authority": "approvalm"
