@@ -165,7 +165,7 @@ export default function Management(): React.ReactNode {
         searchFormItems={[
             {
                 name: 'fuzzyQuery',
-                children: <Input placeholder="搜索客户名称关键词" maxLength={200} />
+                children: <Input placeholder="项目名称/项目编码/分标编码/项目负责人" style={{ width: 260 }} />
             },
             {
                 name: 'startBidBuyEndTime',

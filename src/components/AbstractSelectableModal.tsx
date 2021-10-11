@@ -9,7 +9,7 @@ import PopModalButton from './PopModalButton';
 export interface IAbstractSelectableModalProps {
     readonly onSelect: (selectedRows: DataType[]) => void;
     readonly id?: number | string;
-    readonly selectKey?:  React.Key[] | any;
+    readonly selectKey?: React.Key[] | any;
 }
 
 export interface IAbstractSelectableModalState {
@@ -22,7 +22,7 @@ export interface IAbstractSelectableModalState {
     readonly selectedRows: object[] | any,
 }
 
-export interface DataType{
+export interface DataType {
     readonly linkman?: string;
     readonly name?: string;
     readonly id?: number | string;
@@ -52,7 +52,7 @@ export interface IResponseData {
     readonly paymentPlanVos: [];
 }
 
-export default abstract class AbstractSelectionModal<P extends IAbstractSelectableModalProps, S extends IAbstractSelectableModalState> extends React.Component<P,S> {
+export default abstract class AbstractSelectionModal<P extends IAbstractSelectableModalProps, S extends IAbstractSelectableModalState> extends React.Component<P, S> {
 
     /**
      * @constructor
@@ -81,7 +81,7 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
      * @param event 
      */
     public handleCancel = (): void => {
-        this.setState ({
+        this.setState({
             isModalVisible: false
         })
     };
@@ -90,19 +90,19 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
      * @description 显示弹窗 
      * @param event 
      */
-    public showModal =  (): void => {
+    public showModal = (): void => {
         this.setState({
             isModalVisible: true,
             selectedRowKeys: this.props.selectKey
         })
     }
 
-       /**
-     * @abstract
-     * @description Gets table data source
-     * @param item 
-     * @returns table data source 
-     */
+    /**
+  * @abstract
+  * @description Gets table data source
+  * @param item 
+  * @returns table data source 
+  */
     abstract getTableDataSource(): object[];
 
     /**
@@ -113,19 +113,20 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
      */
     abstract getTableColumns(): ColumnType<object>[];
 
-    public onSelectChange = (selectedRowKeys: React.Key[],selectedRows: DataType[]) => {
-        this.setState({ 
+    public onSelectChange = (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
+        this.setState({
             selectedRowKeys,
             selectedRows
         });
-    } 
-    
+    }
+
     public getTableProps(): TableProps<object> {
         return {
-            rowKey:  this.getTableRowKey(),
-            bordered:  true, 
-            dataSource:  this.getTableDataSource(), 
+            rowKey: this.getTableRowKey(),
+            bordered: true,
+            dataSource: this.getTableDataSource(),
             columns: this.getTableColumns(),
+            size: "small",
             rowSelection: {
                 type: "radio",
                 selectedRowKeys: this.state.selectedRowKeys,
@@ -139,10 +140,10 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
      */
     protected renderTableContent(): React.ReactNode {
         return (
-            <Table 
-                { ...this.getTableProps() }
+            <Table
+                {...this.getTableProps()}
                 scroll={{ x: 1200 }}
-                className={ styles.modalTable }
+                className={styles.modalTable}
             />
         );
     }
@@ -150,26 +151,26 @@ export default abstract class AbstractSelectionModal<P extends IAbstractSelectab
     public render(): React.ReactNode {
         return (
             <>
-                <PopModalButton showModal={ this.showModal }/>
-                <Modal 
-                    title={ this.state.confirmTitle } 
-                    visible={this.state.isModalVisible} 
-                    okText={ this.state.okText }
-                    cancelText={ this.state.cancelText }
-                    onOk={ 
+                <PopModalButton showModal={this.showModal} />
+                <Modal
+                    title={this.state.confirmTitle}
+                    visible={this.state.isModalVisible}
+                    okText={this.state.okText}
+                    cancelText={this.state.cancelText}
+                    onOk={
                         () => {
-                            this.setState ({
+                            this.setState({
                                 isModalVisible: false,
                                 selectedRowKeys: []
                             })
-                            this.props.onSelect(this.state.selectedRows) 
+                            this.props.onSelect(this.state.selectedRows)
                         }
-                    } 
+                    }
                     onCancel={this.handleCancel}
                     width="50%"
                 >
-                    {this.renderTableContent()}  
-                </Modal>  
+                    {this.renderTableContent()}
+                </Modal>
             </>
         );
     }

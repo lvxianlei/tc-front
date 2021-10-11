@@ -286,7 +286,7 @@ export default function Information(): React.ReactNode {
                 }}
                 onChange={uploadChange}
                 showUploadList={false}
-            ><Button key="enclosure" type="default">上传附件</Button></Upload>]} />
+            ><Button key="enclosure" type="primary" ghost>上传附件</Button></Upload>]} />
             <CommonTable columns={[{
                 title: "操作",
                 dataIndex: "opration",
@@ -324,7 +324,7 @@ export default function Information(): React.ReactNode {
                 }}
                 onChange={uploadChange}
                 showUploadList={false}
-            ><Button key="enclosure" type="default">上传附件</Button></Upload>]} />
+            ><Button key="enclosure" type="primary" ghost>上传附件</Button></Upload>]} />
             <CommonTable columns={[{
                 title: "操作",
                 dataIndex: "opration",

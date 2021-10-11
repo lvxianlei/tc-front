@@ -44,7 +44,7 @@ export default class ContractSelectionComponent extends AbstractFilteredSelectio
         };
     }
 
-    public showModal =  (): void => {
+    public showModal = (): void => {
         this.setState({
             isModalVisible: true,
         })
@@ -53,12 +53,12 @@ export default class ContractSelectionComponent extends AbstractFilteredSelectio
     public componentDidMount(): void {
         this.getTable({})
     }
-    
+
     public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/contract', {
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
-            size: pagination.pageSize ||this.state.tablePagination?.pageSize,
+            size: pagination.pageSize || this.state.tablePagination?.pageSize,
             status: this.props.status
         });
         this.setState({
@@ -72,26 +72,26 @@ export default class ContractSelectionComponent extends AbstractFilteredSelectio
             }
         });
     }
- 
-    public getFilterFormItemProps(): FormItemProps[]  {
+
+    public getFilterFormItemProps(): FormItemProps[] {
         return [{
             name: 'saleType',
-            children: 
-                <Select placeholder="请选择销售类型" className={ styles.select_width } getPopupContainer={ triggerNode => triggerNode.parentNode }>
-                    { saleTypeOptions && saleTypeOptions.map(({ id, name }, index) => {
-                        return <Option key={ index } value={ id }>
-                            { name }
+            children:
+                <Select placeholder="请选择销售类型" className={styles.select_width} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                    {saleTypeOptions && saleTypeOptions.map(({ id, name }, index) => {
+                        return <Option key={index} value={id}>
+                            {name}
                         </Option>
-                    }) }
+                    })}
                 </Select>
-            
-        },{
-                name: 'projectName',
-                children: <Input placeholder="工程名称关键字"/>
-            }, {
-                name: 'customerCompany',
-                children: <Input placeholder="业主单位关键字"/>
-            }];
+
+        }, {
+            name: 'projectName',
+            children: <Input placeholder="工程名称关键字" />
+        }, {
+            name: 'customerCompany',
+            children: <Input placeholder="业主单位关键字" />
+        }];
     }
 
     public onFilterSubmit = async (values: Record<string, any>) => {
@@ -103,7 +103,7 @@ export default class ContractSelectionComponent extends AbstractFilteredSelectio
         });
     }
 
-    public getTableDataSource(): object[]  {
+    public getTableDataSource(): object[] {
         return this.state.tableDataSource;
     }
 
@@ -111,34 +111,33 @@ export default class ContractSelectionComponent extends AbstractFilteredSelectio
         return [{
             key: 'contractNumber',
             title: '合同编号',
-            dataIndex: 'contractNumber'
+            dataIndex: 'contractNumber',
+            width: 50
         }, {
-            key: 'projectName',
-            title: '工程名称',
-            dataIndex: 'projectName'
+            key: 'contractName',
+            title: '合同名称',
+            dataIndex: 'contractName',
+            width: 50
         }, {
-            key: 'saleTypeName',
+            key: 'saleType',
             title: '销售类型',
-            dataIndex: 'saleTypeName'
+            dataIndex: 'saleType',
+            width: 50
         }, {
             key: 'customerCompany',
             title: '业主单位',
-            dataIndex: 'customerCompany'
+            dataIndex: 'customerCompany',
+            width: 50
         }, {
             key: 'signCustomerName',
             title: '合同签订单位',
-            dataIndex: 'signCustomerName'
+            dataIndex: 'signCustomerName',
+            width: 50
         }, {
             key: 'deliveryTime',
             title: '要求交货日期',
-            dataIndex: 'deliveryTime'
-        }, {
-            key: 'chargeType',
-            title: '计价方式',
-            dataIndex: 'chargeType',
-            render: (type: number): React.ReactNode => {
-                return  type === 0 ? '订单总价、总重计算单价' : '产品单价、基数计算总价';
-            }
+            dataIndex: 'deliveryTime',
+            width: 50
         }];
     }
 

@@ -296,7 +296,7 @@ export default function ManagementDetail(): React.ReactNode {
                 { title: "创建时间", dataIndex: 'createTime', type: "date" }
             ]} dataSource={data || {}} />
         </DetailContent>,
-        tab_contract: <>
+        tab_contract: <DetailContent>
             <Tabs>
                 <Tabs.TabPane tab="合同" key="合同">
                     <ManagementContract />
@@ -304,7 +304,7 @@ export default function ManagementDetail(): React.ReactNode {
                 <Tabs.TabPane tab="订单" key="订单">
                     <ManagementOrder />
                 </Tabs.TabPane>
-            </Tabs></>,
+            </Tabs></DetailContent>,
         tab_productGroup: <DetailContent title={[
             <Button key="new" type="primary" onClick={() => history.push(`/project/management/new/productGroup/${params.id}`)}>新增</Button>
         ]}>

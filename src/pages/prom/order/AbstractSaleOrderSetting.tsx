@@ -355,6 +355,12 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             label: "订单工程名称",
                             name: "orderProjectName",
                             initialValue: saleOrder?.contractInfoDto?.orderProjectName,
+                            rules: [
+                                {
+                                    required: true,
+                                    message: "请输入订单工程名称",
+                                },
+                            ],
                             children: <Input />,
                         },
                         {
@@ -413,6 +419,12 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             label: "含税金额",
                             name: "taxAmount",
                             initialValue: saleOrder?.taxAmount || "0.00",
+                            rules: [
+                                {
+                                    required: true,
+                                    message: "请输入含税金额",
+                                },
+                            ],
                             children: (
                                 <InputNumber
                                     min="0"
@@ -435,12 +447,24 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             label: "含税单价",
                             name: "taxPrice",
                             initialValue: saleOrder?.taxPrice || "0.00",
+                            rules: [
+                                {
+                                    required: true,
+                                    message: "请输入含税单价",
+                                },
+                            ],
                             children: <InputNumber onChange={this.getTaxAmount} max={999999999999.99} />,
                         },
                         {
                             label: "不含税单价",
                             name: "price",
                             initialValue: saleOrder?.price || "0.00",
+                            rules: [
+                                {
+                                    required: true,
+                                    message: "请输入不含税单价",
+                                },
+                            ],
                             children: <InputNumber onChange={this.getAmount} max={999999999999.99} />,
                         },
                         {

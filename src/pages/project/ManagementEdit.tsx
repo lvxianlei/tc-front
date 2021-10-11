@@ -107,7 +107,7 @@ export default function BaseInfoEdit(): JSX.Element {
       }}
       showUploadList={false}
       onChange={uploadChange}
-    ><Button key="enclosure" type="default">上传附件</Button></Upload>]} />
+    ><Button key="enclosure" type="primary" ghost>上传附件</Button></Upload>]} />
     <CommonTable columns={[{
       title: "操作", dataIndex: "opration",
       render: (_: any, record: any) => (<>

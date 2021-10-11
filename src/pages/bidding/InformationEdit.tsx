@@ -226,7 +226,7 @@ export default function InfomationNew(): JSX.Element {
             }}
             showUploadList={false}
             onChange={uploadChange}
-        ><Button key="su" type="primary" >上传附件</Button></Upload>]} />
+        ><Button key="su" type="primary" ghost>上传附件</Button></Upload>]} />
         <CommonTable columns={[{
             title: "操作", dataIndex: "opration",
             render: (_: any, record: any) => (<>

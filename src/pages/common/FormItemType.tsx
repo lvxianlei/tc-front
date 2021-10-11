@@ -176,7 +176,7 @@ const SelfSelect: React.FC<SelfSelectProps> = ({ data, ...props }) => {
 const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, ...props }) => {
     const ItemTypes = {
         text: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} />,
-        number: <InputNumber {...props} disabled={data.disabled} max={data?.max} min={data?.min} style={{ width: "100%", height: "100%", ...props.style }} />,
+        number: <InputNumber {...props} disabled={data.disabled} max={data?.max || 999999999999} min={data?.min || 0} step={data?.step || 1} style={{ width: "100%", height: "100%", ...props.style }} />,
         select: <SelfSelect {...props} data={data as SelectData} />,
         date: <DatePicker
             {...data.picker ? { ...props, picker: data.picker } : { ...props }}

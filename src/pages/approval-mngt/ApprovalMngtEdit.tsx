@@ -24,7 +24,7 @@ export default function ApprovalMngtEdit(): JSX.Element {
                     'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
                 }}
                 showUploadList={false}
-            ><Button type="default">上传附件</Button></Upload>
+            ><Button type="primary" ghost>上传附件</Button></Upload>
         ]
         } />
         < CommonTable columns={baseInfo} />

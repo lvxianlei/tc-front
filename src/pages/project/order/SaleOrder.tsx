@@ -185,6 +185,12 @@ class ManagementOrder extends SaleOrder {
     this.props.history.push(`/project/order/new/${(this.props.match.params as any).id}`);
   }
 
+  protected renderExtraOperationContent(item: ITabItem): React.ReactNode {
+    return (
+      <Button type="primary" onClick={this.onNewClick}>新增订单</Button>
+    );
+  }
+
   /**
    * @implements
    * @description Renders filter components

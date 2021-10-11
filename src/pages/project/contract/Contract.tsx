@@ -213,6 +213,12 @@ class ManagementContract extends PromContract {
     this.props.history.push(`/project/contract/new/${(this.props.match.params as any).id}`);
   }
 
+  protected renderExtraOperationContent(item: ITabItem): React.ReactNode {
+    return (
+      <Button type="primary" onClick={this.onNewClick}>新增合同</Button>
+    );
+  }
+
   /**
    * @implements
    * @description Renders filter components
