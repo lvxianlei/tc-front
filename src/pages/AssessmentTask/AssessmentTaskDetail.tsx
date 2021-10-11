@@ -17,7 +17,7 @@ interface IDetail {
     readonly programName?: string;
     readonly status?: string | number;
     readonly fileList?: IFileList[];
-    readonly taskDataRecordList?: ItaskDataRecordList[];
+    readonly statusRecordList?: ItaskDataRecordList[];
 }
 
 export interface IFileList {
@@ -59,22 +59,22 @@ const tableColumns = [
         dataIndex: 'createTime' 
     },
     {
-        key: 'status', 
+        key: 'currentStatus', 
         title: '任务状态', 
-        dataIndex: 'status',
-        render: (status: string): React.ReactNode => {
-            switch (status) {
-                case '0':
+        dataIndex: 'currentStatus',
+        render: (currentStatus: number): React.ReactNode => {
+            switch (currentStatus) {
+                case 0:
                     return '已拒绝';
-                case '1':
+                case 1:
                     return '待接收';
-                case '2':
+                case 2:
                     return '待指派';
-                case '3':
+                case 3:
                     return '待完成';
-                case '4':
+                case 4:
                     return '已完成';
-                case '5':
+                case 5:
                     return '已提交';
             }
         }
@@ -96,7 +96,7 @@ const baseColumns = [
         "title": "客户名称"
     },
     {
-        "dataIndex": "programLeaderId",
+        "dataIndex": "programLeaderName",
         "title": "项目负责人"
     },
     {
@@ -106,7 +106,7 @@ const baseColumns = [
         "format": "YYYY-MM-DD"
     },
     {
-        "dataIndex": "applicantUser",
+        "dataIndex": "applicantUserName",
         "title": "信息申请人"
     },
     {
@@ -182,7 +182,7 @@ export default function AssessmentTaskDetail(): React.ReactNode {
                 pagination={ false }
             />
             <DetailTitle title="操作信息"/>
-            <CommonTable columns={ tableColumns } dataSource={ detailData.taskDataRecordList } pagination={ false }/>
+            <CommonTable columns={ tableColumns } dataSource={ detailData.statusRecordList } pagination={ false }/>
         </DetailContent>
         <Modal 
             visible={ visible } 
