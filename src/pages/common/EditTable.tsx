@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Form, Row, Col, FormInstance } from 'antd'
+import { Button, Form, Row, Col, FormInstance, message } from 'antd'
 import List from 'react-virtualized/dist/commonjs/List'
 import WindowScroller from 'react-virtualized/dist/commonjs/WindowScroller'
 import InfiniteLoader from 'react-virtualized/dist/commonjs/InfiniteLoader'
@@ -43,10 +43,7 @@ export interface EditTableProps {
 }
 
 export default function EditableTable({ columns = [], dataSource = [], form, opration, onChange }: EditTableProps): JSX.Element {
-    const [dataState, setDataState] = useState<any>({
-        data: dataSource || [],
-        loading: false
-    })
+    const [dataState] = useState<any>({ data: dataSource || [], loading: false })
     const baseRowData: { [key: string]: string | number | null } = {}
     columns.forEach(item => baseRowData[item.dataIndex] = null)
     columns = [
@@ -120,7 +117,15 @@ export default function EditableTable({ columns = [], dataSource = [], form, opr
                 {
                     (fields: FormListFieldData[], { add, remove }: FormListOperation): React.ReactNode => (
                         <>
-                            <Row><Button onClick={() => add({ ...baseRowData, uid: dataState.data.length + 1 })} type="primary" style={{ height: 32, margin: "0 16px 16px 0" }}>新增一行</Button>{opration}</Row>
+                            <Row><Button onClick={async () => {
+                                try {
+                                    await form?.validateFields()
+                                    add({ ...baseRowData, uid: dataState.data.length + 1 })
+                                } catch (error) {
+                                    message.error("当前行验证通过后才可以继续新增...")
+                                    console.log(error)
+                                }
+                            }} type="primary" style={{ height: 32, margin: "0 16px 16px 0" }}>新增一行</Button>{opration}</Row>
                             <Row className={styles.FormHeader}>
                                 {columns.map((item, index) => (<Col key={`Editable_${index}`} className={item.required ? styles.required : ""} span={2}>{item.title}</Col>))}
                             </Row>
@@ -136,22 +141,24 @@ export default function EditableTable({ columns = [], dataSource = [], form, opr
                                     })}
                                 </WindowScroller>
                             </Row> */}
-                            {fields.map(({ key, name, fieldKey, ...restField }, index: number) => (
-                                <Row key={`EditableRow_${key}`} className={`${styles.FormHeader} ${styles.FormRow}`}>
-                                    {columns.map((coItem, coIndex) => (<Col key={`EditableCol_${coIndex}`} span={2}>
-                                        <Form.Item
-                                            {...restField}
-                                            className={styles.formItem}
-                                            name={[name, coItem.dataIndex]}
-                                            fieldKey={[fieldKey, coItem.dataIndex]}
-                                            rules={coItem.rules || []}
-                                        >
-                                            {coItem.editable === false ? <EditableCell columnItem={coItem as EditableCellProps['columnItem']} fieldKey={name} index={index} remove={remove} /> : <FormItemType type={coItem.type} data={coItem} />}
-                                        </Form.Item>
-                                    </Col>)
-                                    )}
-                                </Row>
-                            ))}
+                            <div style={{ width: "100%", minHeight: 300, overflowY: 'auto' }}>
+                                {fields.map(({ key, name, fieldKey, ...restField }, index: number) => (
+                                    <Row style={{ width: "100%" }} key={`EditableRow_${key}`} className={`${styles.FormHeader} ${styles.FormRow}`}>
+                                        {columns.map((coItem, coIndex) => (<Col key={`EditableCol_${coIndex}`} span={2}>
+                                            <Form.Item
+                                                {...restField}
+                                                className={styles.formItem}
+                                                name={[name, coItem.dataIndex]}
+                                                fieldKey={[fieldKey, coItem.dataIndex]}
+                                                rules={coItem.rules || []}
+                                            >
+                                                {coItem.editable === false ? <EditableCell columnItem={coItem as EditableCellProps['columnItem']} fieldKey={name} index={index} remove={remove} /> : <FormItemType type={coItem.type} data={coItem} />}
+                                            </Form.Item>
+                                        </Col>)
+                                        )}
+                                    </Row>
+                                ))}
+                            </div>
                         </>
                     )
                 }

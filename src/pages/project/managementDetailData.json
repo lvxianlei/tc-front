@@ -239,7 +239,13 @@
         },
         {
             "title": "货物类别",
-            "dataIndex": "cargoType"
+            "dataIndex": "cargoType",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入货物类别..."
+                }
+            ]
         },
         {
             "title": "包号",
@@ -247,21 +253,45 @@
         },
         {
             "title": "项目单位",
-            "dataIndex": "projectCompany"
+            "dataIndex": "projectCompany",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入项目单位..."
+                }
+            ]
         },
         {
             "title": "投标人名称",
-            "dataIndex": "bidName"
+            "dataIndex": "bidName",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入投标人名称..."
+                }
+            ]
         },
         {
             "title": "总价（万元）",
             "dataIndex": "money",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入总价（万元）..."
+                }
+            ]
         },
         {
             "title": "重量（吨）",
             "dataIndex": "weight",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入重量（吨）..."
+                }
+            ]
         }
     ],
     "bidDocColumns": [

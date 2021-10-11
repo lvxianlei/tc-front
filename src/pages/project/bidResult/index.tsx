@@ -107,6 +107,10 @@ interface TabsCanEditData {
 
 export const EditTableHasForm = forwardRef((props: EditTableProps, ref?: any) => {
   const [form] = Form.useForm()
+  useEffect(() => {
+    form.setFieldsValue({ submit: props.dataSource })
+  }, [props.dataSource])
+
   useImperativeHandle(ref, () => ({ getForm: () => form }), [form])
   return <EditTable form={form} {...props} />
 })
