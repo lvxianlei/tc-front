@@ -18,11 +18,10 @@ interface IResponse {
 
 interface IFileList {
     readonly id?: string;
-    readonly fileName?: string;
     readonly filePath?: string;
     readonly fileSuffix?: string;
     readonly originalName?: string;
-    readonly link?: string;
+    readonly name?: string;
     readonly userName?: string;
 }
 
@@ -140,9 +139,9 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                         <CommonTable 
                             columns={[
                                 { 
-                                    key: 'fileName', 
+                                    key: 'name', 
                                     title: '附件', 
-                                    dataIndex: 'fileName',
+                                    dataIndex: 'name',
                                     width: 250 
                                 },
                                 { 
@@ -194,8 +193,8 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                                                 assessFileList: [
                                                     ...this.state.information?.assessFileList || [],
                                                     { 
-                                                        filePath: resData.link,
-                                                        fileName: resData.originalName,
+                                                        filePath: resData.name,
+                                                        name: resData.originalName,
                                                         userName: resData.userName,
                                                         fileSuffix: resData.originalName?.split('.')[1]
                                                     }
@@ -210,9 +209,9 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                         <CommonTable    
                             columns={[
                                 { 
-                                    key: 'fileName', 
+                                    key: 'name', 
                                     title: '附件', 
-                                    dataIndex: 'fileName',
+                                    dataIndex: 'name',
                                     width: 250
                                 },
                                 { 
@@ -221,7 +220,7 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                                     dataIndex: 'operation', 
                                     render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                         <Space direction="horizontal" size="small">
-                                            <Button type="link">下载</Button>
+                                            <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
                                             <Button type="link">预览</Button>
                                             <Button type="link" onClick={ () => {
                                                 const information: IResponse = this.state.information || {};

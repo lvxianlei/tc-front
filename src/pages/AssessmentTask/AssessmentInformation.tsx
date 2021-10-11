@@ -68,9 +68,9 @@ class AssessmentInformation extends React.Component<IAssessmentInformationRouteP
                     <p className={ styles.topPadding }>评估文件</p>
                     <CommonTable columns={[
                         { 
-                            key: 'fileName', 
+                            key: 'name', 
                             title: '附件', 
-                            dataIndex: 'fileName',
+                            dataIndex: 'name',
                             width: 350 
                         },
                         { 
