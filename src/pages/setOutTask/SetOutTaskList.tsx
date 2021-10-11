@@ -3,7 +3,7 @@ import { Space, Input, DatePicker, Select, Button, Popconfirm } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOutTask.module.less';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Deliverables from './Deliverables';
 import RequestUtil from '../../utils/RequestUtil';
 
