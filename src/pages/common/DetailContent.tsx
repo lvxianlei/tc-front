@@ -9,7 +9,7 @@ interface DetailContentProps {
 const DetailContent: React.FC<DetailContentProps> = ({ title, operation, ...props }) => {
     return (
         <div {...props}>
-            <section className={styles.detailContent}>
+            <section className={operation ? styles.detailContentP : styles.detailContent}>
                 {title && <div className={styles.title}>{title}</div>}
                 <div>{props.children}</div>
             </section>

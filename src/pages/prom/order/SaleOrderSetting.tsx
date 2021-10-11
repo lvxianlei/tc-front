@@ -69,7 +69,7 @@ export class SaleOrderSetting extends AbstractSaleOrderSetting<ISaleOrderSetting
             taxAmount: saleOrder.taxAmount,
             amount: saleOrder.amount,
             taxPrice: saleOrder.taxPrice,
-            taxRate: saleOrder.taxRate === -1 ? '-' : saleOrder.taxRate,
+            taxRate: saleOrder.taxRate === -1 ? undefined : saleOrder.taxRate,
             foreignExchangeAmount: saleOrder.foreignExchangeAmount,
             exchangeRate: saleOrder.exchangeRate === -1 ? '-' : saleOrder.exchangeRate,
             foreignPrice: saleOrder.foreignPrice === -1 ? '-' : saleOrder.foreignPrice,

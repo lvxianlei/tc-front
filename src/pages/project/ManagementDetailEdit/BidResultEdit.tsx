@@ -20,9 +20,11 @@ export default function BidResultEdit(): JSX.Element {
             baseInfoForm.setFieldsValue(result)
             if (result.bidOpenRecordListVos?.length > 0) {
                 const resultBid = result.bidOpenRecordListVos
-                resultBid[resultBid.length - 1].fixed = true
-                console.log((ref.current as any).getData())
-                setBidOpenRecordVos(resultBid)
+                if (resultBid[0].round !== 1) {
+                    setBidOpenRecordVos([...resultBid, ...bidOpenRecordVos])
+                } else {
+                    setBidOpenRecordVos(resultBid)
+                }
             }
             resole(result)
         } catch (error) {
@@ -45,11 +47,19 @@ export default function BidResultEdit(): JSX.Element {
             const baseInfoData = await baseInfoForm.validateFields();
             const _tabsData = await Promise.all(tabsData.map((item: any) => new Promise(async (resove, reject) => {
                 const { refFun, title: roundName, key: round } = item
-                if (refFun?.getForm()) {
-                    const fdata = await refFun?.getForm().validateFields()
-                    resove({ round, roundName, formData: fdata?.submit })
-                } else {
-                    resove({ round, roundName, formData: bidOpenRecordVos.find((item: any) => item.round === round).bidOpenRecordVos || [] })
+                try {
+                    if (refFun?.getForm()) {
+                        const fdata = await refFun?.getForm().validateFields()
+                        if (fdata?.submit.length <= 0) {
+                            message.error("每轮至少新增一行...")
+                            return
+                        }
+                        resove({ round, roundName, formData: fdata?.submit })
+                    } else {
+                        resove({ round, roundName, formData: bidOpenRecordVos.find((item: any) => item.round === round).bidOpenRecordVos || [] })
+                    }
+                } catch (error) {
+                    reject(error)
                 }
             })))
             const postTabsData = _tabsData.reduce((total: any, nextItem: any) => {
@@ -74,6 +84,7 @@ export default function BidResultEdit(): JSX.Element {
                 history.goBack()
             }
         } catch (error) {
+            message.error("请检查是否有必填项尚未填写...")
             console.log(error)
         }
     }
@@ -203,8 +214,7 @@ export default function BidResultEdit(): JSX.Element {
                                         return
                                     }
                                     const resultData = bidOpenRecordVos.find((bidItem: any) => bidItem.round === item.key).bidOpenRecordVos
-                                    const filterUploadData = _data.filter(item => Object.keys(item).every(eItem => eItem))
-                                    console.log(filterUploadData, "---------------")
+                                    // const filterUploadData = _data.filter(item => Object.keys(item).every(eItem => eItem))
                                     const uploadData = _data.map((item: any, index) => {
                                         const rowData: any = { uid: resultData.length + index }
                                         Object.keys(item).forEach((columnItem: string) => {

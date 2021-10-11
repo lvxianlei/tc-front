@@ -261,15 +261,14 @@ export default function ManagementDetail(): React.ReactNode {
                 }]} dataSource={data || {}} col={2} />
             <DetailTitle title="开标信息" />
             <Tabs>
-                {data?.bidOpenRecordListVos?.length > 0 ? data?.bidOpenRecordListVos.reverse().map((item: any, index: number) => <Tabs.TabPane key={index}
+                {data?.bidOpenRecordListVos?.length > 0 && data?.bidOpenRecordListVos.map((item: any, index: number) => <Tabs.TabPane key={index}
                     tab={item.roundName}>
                     <CommonTable columns={bidInfoColumns} dataSource={item.bidOpenRecordVos || []} />
                 </Tabs.TabPane>)
-                    :
-                    <Tabs.TabPane tab="第 1 轮">
-                        <CommonTable columns={bidInfoColumns} dataSource={[]} />
-                    </Tabs.TabPane>
                 }
+                {(!(data?.bidOpenRecordListVos?.length > 0) || (data?.bidOpenRecordListVos?.length > 0 && data?.bidOpenRecordListVos[data?.bidOpenRecordListVos.length - 1].round !== 1)) && <Tabs.TabPane tab="第 1 轮">
+                    <CommonTable columns={bidInfoColumns} dataSource={[]} />
+                </Tabs.TabPane>}
             </Tabs>
         </DetailContent>,
         tab_frameAgreement: <DetailContent operation={[

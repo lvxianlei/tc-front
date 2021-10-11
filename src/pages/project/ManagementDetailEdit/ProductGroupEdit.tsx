@@ -17,7 +17,7 @@ export default function ProductGroupEdit() {
     const [saleOrderId, setSaleOrderId] = useState<string>("")
     const [baseInfoForm] = Form.useForm()
     const [cargoDtoForm] = Form.useForm()
-    const { loading, error, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/productGroup/${match.params.id}`)
             baseInfoForm.setFieldsValue(result)

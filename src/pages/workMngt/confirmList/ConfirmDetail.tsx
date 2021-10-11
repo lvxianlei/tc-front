@@ -362,6 +362,11 @@ export default function ConfirmDetail(): React.ReactNode {
         setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString() }}));
         setAttachInfo([...data.attachInfoList]);
         setDescription(data?.description);
+        let totalNumber = '0';
+        data?.drawProductDetailList.forEach((item:any)=>{
+          totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(4)
+        })
+        setWeight(totalNumber);
     }), {})
     const detailData: any = data;
     const formItemLayout = {

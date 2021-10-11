@@ -55,7 +55,6 @@ export default function BaseInfoEdit(): JSX.Element {
                 <Button key="edit" type="primary" onClick={handleSubmit} loading={saveStatus} style={{ marginRight: 16 }}>保存</Button>,
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
-
             <Spin spinning={loading}>
                 <DetailTitle title="标书制作记录表" />
                 <BaseInfo form={baseInfoForm} columns={bidDocColumns.map(item => item.dataIndex === "bidType" ? ({

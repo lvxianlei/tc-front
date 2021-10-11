@@ -63,7 +63,7 @@ export const UploadXLS = (props: {
   requireKeys?: string[]
 }) => {
   const { readEnd, xlsKeyNameDic, requireKeys } = props
-  return (
+  return (<>
     <Upload
       accept=".xls,.xlsx"
       beforeUpload={(file) => {
@@ -80,14 +80,16 @@ export const UploadXLS = (props: {
       showUploadList={false}
       onChange={() => false}
     >
-      {props.children || <Button type="primary" style={{ marginRight: 5 }}>导入文件</Button>}
-      {props.children || <Tooltip placement="top"
-        title={<>
-          文件导入要求：<br />
-          1、仅Excel文件导入（xls，xlsx均可）。<br />
-          2、列名必须包括包号、投标人名称、分标编号、货物类别、项目单位、总价、重量
-        </>}> <InfoCircleOutlined style={{ fontSize: 20, verticalAlign: "middle" }} /></Tooltip>}
-    </Upload>)
+      {props.children || <Button type="primary" style={{ marginRight: 10 }}>导入文件</Button>}
+    </Upload>
+    {props.children || <Tooltip
+      placement="top"
+      title={<>
+        文件导入要求：<br />
+        1、仅Excel文件导入（xls，xlsx均可）。<br />
+        2、列名必须包括包号、投标人名称、分标编号、货物类别、项目单位、总价、重量
+      </>}><InfoCircleOutlined style={{ fontSize: 20, lineHeight: "32px" }} /></Tooltip>}
+  </>)
 }
 
 interface BidProps {
@@ -107,6 +109,10 @@ interface TabsCanEditData {
 
 export const EditTableHasForm = forwardRef((props: EditTableProps, ref?: any) => {
   const [form] = Form.useForm()
+  useEffect(() => {
+    form.setFieldsValue({ submit: props.dataSource })
+  }, [props.dataSource])
+
   useImperativeHandle(ref, () => ({ getForm: () => form }), [form])
   return <EditTable form={form} {...props} />
 })
