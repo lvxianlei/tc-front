@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Button, Modal, Form, Image } from 'antd';
+import { Space, Input, DatePicker, Button, Modal, Form, Image, message } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import RequestUtil from '../../../utils/RequestUtil';
 
 export default function SampleDraw(): React.ReactNode {
+    const params = useParams<{ id: string }>()
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
+    const [url, setUrl] = useState<string>('');
     const [form] = Form.useForm();
     const handleModalOk = async () => {
         try {
@@ -63,43 +66,63 @@ export default function SampleDraw(): React.ReactNode {
             fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type='link'>删除</Button>
-                    <Button type='link' onClick={() => setVisible(true)}>查看</Button>
+                    <Button type='link' onClick={async () =>  await RequestUtil.delete(`/tower-science/smallSample/${record.id}`).then(()=>{
+                        message.success('删除成功！');
+                    })}>删除</Button>
+                    <Button type='link' onClick={async () => {
+                        const url:any = await RequestUtil.get(`/tower-science/smallSample/sampleView/${record.id}`);
+                        setUrl(url.filePath)
+                        setVisible(true)
+                    }}>查看</Button>
                 </Space>
             )
         }
     ]
 
-    const handleModalCancel = () => setVisible(false)
+    const handleModalCancel = () => setVisible(false);
+    const onFilterSubmit = (value: any) => {
+        if (value.upLoadTime) {
+            const formatDate = value.upLoadTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.uploadTimeStart = formatDate[0]+ ' 00:00:00';
+            value.uploadTimeEnd = formatDate[1]+ ' 23:59:59';
+            delete value.upLoadTime
+        }
+        return value
+    }
     return (
         <>
             <Modal visible={visible} title="图片" footer={false}  onOk={handleModalOk} onCancel={handleModalCancel} width={800}>
                 <Image 
                     src="https://gw.alipayobjects.com/zos/antfincdn/LlvErxo8H9/photo-1503185912284-5271ff81b9a8.webp"
+                    // src={url}
                     preview={false}
                 />
             </Modal>
             <Page
-                path="/tower-market/bidInfo"
+                path="/tower-science/smallSample/sampleList"
                 columns={columns}
+                onFilterSubmit={onFilterSubmit}
+                requestData={{productCategoryId:params.id}}
                 extraOperation={
                     <Space>
                     <Button type="primary">导出</Button>
                     <Button type="primary">导入</Button>
                     <Button type="primary">下载小样图</Button>
-                    <Button type="primary">完成小样图</Button>
+                    <Button type="primary" onClick={async () =>  await RequestUtil.put(`/tower-science/smallSample/sampleComplete/productCategoryId=${params.id}`).then(()=>{
+                                  message.success('提交成功！');
+                              })}>完成小样图</Button>
                     <Button type="primary" onClick={() => history.goBack()}>返回上一级</Button>
                     <span>小样图数：23/100</span>
                     </Space>
                 }
                 searchFormItems={[
                     {
-                        name: 'startBidBuyEndTime',
+                        name: 'upLoadTime',
                         label: '上传时间',
-                        children: <DatePicker />
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                     {
-                        name: 'biddingStatus',
+                        name: 'fuzzyMsg',
                         label: '模糊查询项',
                         children: <Input placeholder="请输入段号/构件编号进行查询" maxLength={200} />
                     },

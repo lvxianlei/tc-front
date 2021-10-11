@@ -101,7 +101,7 @@ export default function ConfirmList(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type='link' onClick={()=>{history.push(`/workMngt/confirmList/confirmMessage/${record.id}`)}}>确认信息</Button>
-                    <Button type='link' onClick={()=>{history.push(`/workMngt/confirmList/confirmDetail/${record.id}`)}} >确认明细</Button>
+                    <Button type='link' onClick={()=>{history.push(`/workMngt/confirmList/confirmDetail/${record.id}`)}} disabled={record.status!==4}>确认明细</Button>
                 </Space>
             )
         }
@@ -152,12 +152,12 @@ export default function ConfirmList(): React.ReactNode {
                     name: 'status',
                     label: '任务状态',
                     children: <Select style={{width:"100px"}}>
-                        <Select.Option value={1} key={1}>待确认</Select.Option>
+                        {/* <Select.Option value={1} key={1}>待确认</Select.Option>
                         <Select.Option value={2} key={2}>待指派</Select.Option>
-                        <Select.Option value={3} key={3}>待完成</Select.Option>
+                        <Select.Option value={3} key={3}>待完成</Select.Option> */}
                         <Select.Option value={4} key={4}>已完成</Select.Option>
                         <Select.Option value={5} key={5}>已提交</Select.Option>
-                        <Select.Option value={0} key={0}>已拒绝</Select.Option>
+                        {/* <Select.Option value={0} key={0}>已拒绝</Select.Option> */}
                     </Select>
                 },
                 {
