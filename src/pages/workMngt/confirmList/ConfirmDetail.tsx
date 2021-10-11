@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Button, Spin, Space, Modal, Form, TableColumnProps, Row, Col, Upload, message } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
-import { towerData } from './confirm.json';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
@@ -11,7 +10,6 @@ import { CloudUploadOutlined } from '@ant-design/icons';
 import AuthUtil from '../../../utils/AuthUtil';
 import { downLoadFile } from '../../../utils';
 import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
-import { Console } from 'node:console';
 interface Item {
   key: string;
   name: string;
