@@ -15,7 +15,7 @@ for (let i = 1; i < 10; ++i) {
             "id": Random.increment(),
             "parentId": Random.increment(),
             "hasChildren": Random.boolean(),
-            "title":Random.natural(11),
+            "title":Random.cword(3,5),
             "key":Random.increment(),
             "value":Random.increment()
         }]
@@ -36,7 +36,7 @@ module.exports = {
             "id": Random.increment(),
             "parentId": Random.increment(),
             "hasChildren": Random.boolean(),
-            "title":Random.natural(11),
+            "title": Random.cword(3,5),
             "key":Random.increment(),
             "value":Random.increment()
         }]
