@@ -131,7 +131,7 @@ export default function EvaluationList(): React.ReactNode {
         refresh={ refresh }
         searchFormItems={ [
             {
-                name: 'startReleaseDate',
+                name: 'fuzzyMsg',
                 label: '模糊查询项',
                 children: <Input placeholder="任务编号/项目名称"/>
             },
@@ -149,18 +149,18 @@ export default function EvaluationList(): React.ReactNode {
                 children: <DatePicker.RangePicker />
             },
             {
-                name: 'startReleaseDate',
+                name: 'assess',
                 label: '评估人',
                 children: <Row>
                     <Col>
-                        <Form.Item name="programLeaderDept">
+                        <Form.Item name="assessUserDept">
                             <TreeSelect placeholder="请选择" onChange={ (value: any) => { onDepartmentChange(value, 'programLeader') } } style={{ width: "150px" }}>
                                 { renderTreeNodes(wrapRole2DataNode(departmentData)) }
                             </TreeSelect>
                         </Form.Item>
                     </Col>
                     <Col>
-                        <Form.Item name="programLeader">
+                        <Form.Item name="assessUser">
                             <Select placeholder="请选择" style={{ width: "150px" }}>
                                 { programLeader && programLeader.map((item: any) => {
                                     return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>

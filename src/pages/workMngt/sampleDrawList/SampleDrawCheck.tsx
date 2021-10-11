@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Button, Modal, Form, Image, Popconfirm, Descriptions, Upload } from 'antd';
+import { Space, Input, DatePicker, Button, Modal, Form, Image, Popconfirm, Descriptions, Upload, message } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import { CommonTable, DetailTitle, Page } from '../../common';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { CloudUploadOutlined } from '@ant-design/icons';
+import RequestUtil from '../../../utils/RequestUtil';
 
 export default function SampleDrawCheck(): React.ReactNode {
+    const params = useParams<{ id: string }>()
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
     const [errorVisible, setErrorVisible] = useState<boolean>(false);
@@ -84,6 +86,15 @@ export default function SampleDrawCheck(): React.ReactNode {
 
     const handleModalCancel = () => setVisible(false);
     const handleErrorModalCancel = () => setErrorVisible(false);
+    const onFilterSubmit = (value: any) => {
+        if (value.upLoadTime) {
+            const formatDate = value.upLoadTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.uploadTimeStart = formatDate[0]+ ' 00:00:00';
+            value.uploadTimeEnd = formatDate[1]+ ' 23:59:59';
+            delete value.upLoadTime
+        }
+        return value
+    }
     return (
         <>
             <Modal visible={visible} title="图片" footer={false}  onCancel={handleModalCancel} width={800}>
@@ -115,14 +126,18 @@ export default function SampleDrawCheck(): React.ReactNode {
                 <CommonTable columns={tableColumns} dataSource={[]} />
             </Modal>
             <Page
-                path="/tower-market/bidInfo"
+                path="/tower-science/smallSample/checkList"
                 columns={columns}
+                onFilterSubmit={onFilterSubmit}
+                requestData={{productCategoryId: params.id}}
                 extraOperation={
                     <Space>
                     <Button type="primary">导出</Button>
                     <Popconfirm
                         title="确认完成校核?"
-                        onConfirm={ () => {} }
+                        onConfirm={ async () =>  await RequestUtil.put(`/tower-science/smallSample/completeCheck/productCategoryId=${params.id}`).then(()=>{
+                            message.success('提交成功！');
+                        })}
                         okText="确认"
                         cancelText="取消"
                     >   
@@ -134,12 +149,12 @@ export default function SampleDrawCheck(): React.ReactNode {
                 }
                 searchFormItems={[
                     {
-                        name: 'startBidBuyEndTime',
+                        name: 'upLoadTime',
                         label: '上传时间',
-                        children: <DatePicker />
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                     {
-                        name: 'biddingStatus',
+                        name: 'fuzzyMsg',
                         label: '模糊查询项',
                         children: <Input placeholder="请输入段号/构件编号进行查询" maxLength={200} />
                     },

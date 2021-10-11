@@ -123,7 +123,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type='link' onClick={()=>history.push(`/confirmTask/ConfirmTaskMngt/ConfirmTaskDetail/${record.id}`)} disabled={ record.status !== 1 }>任务详情</Button>
+                    <Button type='link' onClick={()=>history.push(`/confirmTask/ConfirmTaskMngt/ConfirmTaskDetail/${record.id}/${record.status}`)} >任务详情</Button>
                     <Button type='link' onClick={async () => { 
                         setDrawTaskId(record.id);
                         setVisible(true) 

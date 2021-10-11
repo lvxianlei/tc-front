@@ -9,10 +9,10 @@ import TextArea from 'antd/lib/input/TextArea';
 
 const tableColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '操作部门', dataIndex: 'createDepartment', key: 'createDepartment', },
+    { title: '操作部门', dataIndex: 'createDeptName', key: 'createDeptName', },
     { title: '操作人', dataIndex: 'createUserName', key: 'createUserName' },
     { title: '操作时间', dataIndex: 'createTime', key: 'createTime' },
-    { title: '任务状态', dataIndex: 'status', key: 'status', render: (value: number, record: object): React.ReactNode => {
+    { title: '任务状态', dataIndex: 'currentStatus', key: 'currentStatus', render: (value: number, record: object): React.ReactNode => {
         const renderEnum: any = [
             {
                 value: 0,
@@ -48,7 +48,7 @@ export default function ConfirmTaskDetail(): React.ReactNode {
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string ,status: string}>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/drawTask/getDrawTaskById?drawTaskId=${params.id}`)
         resole(data)
@@ -70,25 +70,31 @@ export default function ConfirmTaskDetail(): React.ReactNode {
     return <>
         <Spin spinning={loading}>
             <DetailContent operation={[
-                <Button 
-                    style={{ marginRight: '10px' }}
-                    type="primary" 
-                    onClick={async () => {
-                        await RequestUtil.post('/tower-science/drawTask/receiveDrawTask',{drawTaskId: params.id}).then(()=>{
-                            message.success('接收成功！');
-                        }).then(()=>{
-                            history.push(`/confirmTask/ConfirmTaskMngt`)
-                        });  
-                    }}
-                >接收</Button>,
-                <Button 
-                    key="edit" 
-                    style={{ marginRight: '10px' }} 
-                    type="primary" 
-                    onClick={() => {
-                        setVisible(true)
-                    }}
-                >拒绝</Button>,
+                <>
+                {
+                    params.status!=='1'?null:
+                    <Space>
+                        <Button 
+                        type="primary"
+                        onClick={async () => {
+                            await RequestUtil.post('/tower-science/drawTask/receiveDrawTask',{drawTaskId: params.id}).then(()=>{
+                                message.success('接收成功！');
+                            }).then(()=>{
+                                history.push(`/confirmTask/ConfirmTaskMngt`)
+                            });  
+                        }}
+                    >接收</Button>
+                    <Button 
+                        key="edit" 
+                        style={{ marginRight: '10px' }} 
+                        type="primary" 
+                        onClick={() => {
+                            setVisible(true)
+                        }}
+                    >拒绝</Button>
+                </Space>
+                }
+                </>,
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
             <Modal 

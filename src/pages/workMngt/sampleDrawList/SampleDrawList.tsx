@@ -1,22 +1,12 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Button, Form } from 'antd';
-import { Link } from 'react-router-dom';
+import { Space, Input, DatePicker, Button, Form, Select } from 'antd';
+import { Link, useHistory } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
 import { Popconfirm } from 'antd';
 
 export default function SampleDrawList(): React.ReactNode {
-    const [visible, setVisible] = useState<boolean>(false);
-    const [form] = Form.useForm();
-    const handleModalOk = async () => {
-        try {
-            const submitData = await form.validateFields()
-            console.log(submitData)
-            setVisible(false)
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    const history = useHistory();
     const columns = [
         {
             key: 'index',
@@ -26,64 +16,106 @@ export default function SampleDrawList(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'projectName',
+            key: 'taskCode',
             title: '放样任务编号',
             width: 100,
-            dataIndex: 'projectName'
+            dataIndex: 'taskCode'
         },
         {
-            key: 'projectName',
+            key: 'priority',
             title: '优先级',
             width: 100,
-            dataIndex: 'projectName'
+            dataIndex: 'priority',
+            render: (value: number, record: object): React.ReactNode => {
+                const renderEnum: any = [
+                  {
+                    value: 1,
+                    label: "高"
+                  },
+                  {
+                    value: 2,
+                    label: "中"
+                  },
+                  {
+                    value: 3,
+                    label: "低"
+                  },
+                ]
+                return <>{value&&renderEnum.find((item: any) => item.value === value).label}</>
+            }
         },
         {
-            key: 'projectName',
+            key: 'taskNumber',
             title: '任务单编号',
             width: 100,
-            dataIndex: 'projectName'
+            dataIndex: 'taskNumber'
         },
         {
-            key: 'projectName',
+            key: 'saleOrderNumber',
             title: '订单编号',
             width: 100,
-            dataIndex: 'projectName'
+            dataIndex: 'saleOrderNumber'
         },
         {
-            key: 'projectName',
+            key: 'internalNumber',
             title: '内部合同编号',
             width: 100,
-            dataIndex: 'projectName'
+            dataIndex: 'internalNumber'
         },
         {
-            key: 'projectName',
+            key: 'productCategoryName',
             title: '塔型',
             width: 100,
-            dataIndex: 'projectName'
+            dataIndex: 'productCategoryName'
         },
         {
-            key: 'bidBuyEndTime',
+            key: 'smallSampleDeliverTime',
             title: '计划交付时间',
             width: 200,
-            dataIndex: 'bidBuyEndTime'
+            dataIndex: 'smallSampleDeliverTime'
         },
         {
-            key: 'biddingAddress',
+            key: 'smallSampleLeaderName',
             title: '样图负责人',
             width: 100,
-            dataIndex: 'biddingAddress'
+            dataIndex: 'smallSampleLeaderName'
         },
         {
-            key: 'biddingAgency',
+            key: 'smallSamplStatus',
             title: '小样图状态',
             width: 100,
-            dataIndex: 'biddingAgency'
+            dataIndex: 'smallSamplStatus',
+            render: (value: number, record: object): React.ReactNode => {
+                const renderEnum: any = [
+                  {
+                    value: 1,
+                    label: "待开始"
+                  },
+                  {
+                    value: 2,
+                    label: "进行中"
+                  },
+                  {
+                    value: 3,
+                    label: "校核中"
+                  },
+                  {
+                    value: 4,
+                    label: "已完成"
+                  },
+                  {
+                    value: 5,
+                    label: "已提交"
+                  },
+                ]
+                return <>{renderEnum.find((item: any) => item.value === value).label}</>
+            }
         },
         {
-            key: 'biddingAddress',
+            key: 'updateStatusTime',
             title: '最新状态变更时间',
             width: 200,
-            dataIndex: 'biddingAddress'
+            dataIndex: 'updateStatusTime'
         },
         {
             key: 'operation',
@@ -93,48 +125,82 @@ export default function SampleDrawList(): React.ReactNode {
             fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={`/workMngt/sampleDrawList/sampleDrawMessage/${record.id}`}>小样图信息</Link>
-                    <Link to={`/workMngt/sampleDrawList/sampleDraw/${record.id}`}>小样图</Link>
-                    <Link to={`/workMngt/sampleDrawList/sampleDrawCheck/${record.id}`}>校核</Link>
+                    <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDrawMessage/${record.id}`)}}>小样图信息</Button>
+                    <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDraw/${record.id}`)}} disabled={record.status!==2}>小样图</Button>
+                    <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDrawCheck/${record.id}`)}}  disabled={record.status!==3}>校核</Button>
                     <Popconfirm
                         title="确认提交?"
                         onConfirm={ () => {} }
                         okText="确认"
                         cancelText="取消"
+                        disabled={record.status!==4}
                     >   
-                        <Button type="link">提交</Button>
+                        <Button type="link" disabled={record.status!==4}>提交</Button>
                     </Popconfirm>
                 </Space>
             )
         }
     ]
 
-    const handleModalCancel = () => setVisible(false)
+    const onFilterSubmit = (value: any) => {
+        if (value.statusUpdateTime) {
+            const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.updateStatusTimeStart = formatDate[0]+ ' 00:00:00';
+            value.updateStatusTimeEnd = formatDate[1]+ ' 23:59:59';
+            delete value.statusUpdateTime
+        }
+        if (value.planTime) {
+            const formatDate = value.planTime.map((item: any) => item.format("YYYY-MM-DD"))
+            // value.plannedDeliveryTimeStart = formatDate[0]+ ' 00:00:00';
+            // value.plannedDeliveryTimeEnd = formatDate[1]+ ' 23:59:59';
+            value.smallSampleDeliverTimeStart = formatDate[0]+ ' 00:00:00';
+            value.smallSampleDeliverTimeEnd = formatDate[1]+ ' 23:59:59';
+            delete value.planTime
+        }
+        return value
+    }
     return (
         <Page
-            path="/tower-market/bidInfo"
+            path="/tower-science/smallSample"
             columns={columns}
+            onFilterSubmit={onFilterSubmit}
             extraOperation={<Button type="primary">导出</Button>}
             searchFormItems={[
                 {
-                    name: 'startBidBuyEndTime',
+                    name: 'statusUpdateTime',
                     label: '最新状态变更时间',
-                    children: <DatePicker />
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'fuzzyQuery',
-                    label:'优先级',
-                    children: <Input placeholder="请输入项目名称/项目编码/审批编号/关联合同/制单人进行查询" maxLength={200} />
+                    name: 'priority',
+                    label:'小样图状态',
+                    children:   <Select style={{width:"100px"}}>
+                                    <Select.Option value={1} key={1}>待开始</Select.Option>
+                                    <Select.Option value={2} key={2}>进行中</Select.Option>
+                                    <Select.Option value={3} key={3}>校核中</Select.Option>
+                                    <Select.Option value={4} key={4}>已完成</Select.Option>
+                                    <Select.Option value={5} key={5}>已提交</Select.Option>
+                                    {/* <Select.Option value={0} key={0}>已拒绝</Select.Option> */}
+                                </Select>
                 },
                 {
-                    name: 'startReleaseDate',
+                    name: 'planTime',
                     label: '计划交付时间',
-                    children: <DatePicker />
+                    children:  <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'biddingStatus',
+                    name: 'priority',
+                    label:'优先级',
+                    children:   <Select style={{width:"100px"}}>
+                                    <Select.Option value={1} key={1}>高</Select.Option>
+                                    <Select.Option value={2} key={2}>中</Select.Option>
+                                    <Select.Option value={3} key={3}>低</Select.Option>
+                                </Select>
+                },
+                {
+                    name: 'fuzzyMsg',
                     label: '模糊查询项',
-                    children: <Input placeholder="请输入放样任务编号/任务单编号/订单编号/内部合同编号进行查询" maxLength={200} />
+                    children: <Input placeholder="请输入放样任务编号/任务单编号/订单编号/内部合同编号/塔型/塔型钢印号进行查询" maxLength={200} />
                 },
             ]}
         />
