@@ -10,10 +10,10 @@ import AuthUtil from '../../../utils/AuthUtil';
 
 interface IResponse {
     readonly id?: string;
-    readonly description?: string;
-    readonly status?: string;
+    readonly assessInfo?: string;
+    readonly status?: string | number;
     readonly assessFileList?: IFileList[];
-    readonly descriptionFileList?: IFileList[];
+    readonly instructionFileList?: IFileList[];
 }
 
 interface IFileList {
@@ -21,12 +21,16 @@ interface IFileList {
     readonly fileName?: string;
     readonly filePath?: string;
     readonly fileSuffix?: string;
+    readonly originalName?: string;
+    readonly link?: string;
+    readonly userName?: string;
 }
 
 
 export interface EvaluationInformationProps {}
 export interface IEvaluationInformationRouteProps extends RouteComponentProps<EvaluationInformationProps>, WithTranslation {
     readonly id: number | string;
+    readonly updateList: () => void;
 }
 
 export interface EvaluationInformationState {
@@ -68,17 +72,22 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
         this.setState({
             visible: true,
             information: data,
-            description: data.description
+            description: data.assessInfo
         })
     }
 
     public onSave(): void {
         if (this.getForm()) {
             this.getForm()?.validateFields().then((res) => {
-                RequestUtil.post(`/tower-science/assessTask/save`, {
-                    description: this.getForm()?.getFieldsValue(true).description,
+                RequestUtil.post(`/tower-science/assessTask/infoSave`, {
+                    assessInfo: this.getForm()?.getFieldsValue(true).description,
                     id: this.props.id,
-                    fileList: this.state.information?.assessFileList
+                    attachInfoDTOList: this.state.information?.assessFileList
+                }).then(res => {
+                    this.setState({
+                        visible: false
+                    })
+                    this.props.updateList();
                 });
             })
         }  
@@ -87,10 +96,15 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
     public onSubmit(): void {
         if (this.getForm()) {
             this.getForm()?.validateFields().then((res) => {
-                RequestUtil.post(`/tower-science/assessTask/submit `, {
-                    description: this.getForm()?.getFieldsValue(true).description,
+                RequestUtil.post(`/tower-science/assessTask/infoSubmit`, {
+                    assessInfo: this.getForm()?.getFieldsValue(true).description,
                     id: this.props.id,
-                    fileList: this.state.information?.assessFileList
+                    attachInfoDTOList: this.state.information?.assessFileList
+                }).then(res => {
+                    this.setState({
+                        visible: false
+                    })
+                    this.props.updateList();
                 });
             })
         } 
@@ -111,7 +125,7 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                     <Space direction="horizontal" size="small">
                         <Button type="ghost" onClick={() => this.modalCancel() }>关闭</Button> 
                         {
-                            this.state.information?.status === '3' ? 
+                            this.state.information?.status === 3 ? 
                             <><Button type="primary" onClick={() => this.onSave() }>保存</Button> 
                             <Button type="primary" onClick={() => this.onSubmit() } ghost>保存并提交</Button></>
                             : null
@@ -143,7 +157,7 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                                     )
                                 }
                             ]}
-                            dataSource={ this.state.information?.descriptionFileList }
+                            dataSource={ this.state.information?.instructionFileList }
                             pagination={ false }
                         />
                         <p className={ styles.topPadding }>评估信息<span style={{ color: 'red' }}>*</span></p>
@@ -173,13 +187,18 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                                         message.warning(info.file.response?.msg)
                                     } 
                                     if(info.file.response && info.file.response?.success) {
-                                        let resData: IFileList[] = info.file.response?.data;
+                                        let resData: IFileList = info.file.response?.data;
                                         this.setState({
                                             information: {
                                                 ...this.state.information,
                                                 assessFileList: [
                                                     ...this.state.information?.assessFileList || [],
-                                                    ...resData
+                                                    { 
+                                                        filePath: resData.link,
+                                                        fileName: resData.originalName,
+                                                        userName: resData.userName,
+                                                        fileSuffix: resData.originalName?.split('.')[1]
+                                                    }
                                                 ]
                                             }
                                         })

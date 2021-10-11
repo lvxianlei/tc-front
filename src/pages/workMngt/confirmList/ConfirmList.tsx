@@ -27,14 +27,15 @@ export default function ConfirmList(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'drawTaskNum',
+            key: 'taskNum',
             title: '确认任务编号',
             width: 100,
-            dataIndex: 'drawTaskNum'
+            dataIndex: 'taskNum'
         },
         {
             key: 'contractName',
             title: '合同名称',
+            width: 100,
             dataIndex: 'contractName'
         },
         {
@@ -99,7 +100,7 @@ export default function ConfirmList(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Link to={`/workMngt/confirmList/confirmMessage/${record.id}`}>确认信息</Link>
-                    <Link to={`/workMngt/confirmList/confirmDetail/${record.id}`}>确认明细</Link>
+                    {record.status === 3?<Link to={`/workMngt/confirmList/confirmDetail/${record.id}`}>确认明细</Link>:null}
                 </Space>
             )
         }
