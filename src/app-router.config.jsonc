@@ -786,28 +786,28 @@
     },
     { // 工作管理-杆塔信息-杆塔放样明细
       "name": "杆塔放样明细",
-      "path": "/workMngt/setOutList/poleInformation/:id/poleLoftingDetails/:id",
+      "path": "/workMngt/setOutList/poleInformation/:id/poleLoftingDetails/:productId",
       "module": "./pages/workMngt/setOut/PoleLoftingDetails",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-杆塔信息-包装清单
       "name": "包装清单",
-      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:id",
+      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:productId",
       "module": "./pages/workMngt/setOut/PackingList",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-杆塔信息-添加包装清单
       "name": "添加包装清单",
-      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:id/packingListNew",
+      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:productId/packingListNew",
       "module": "./pages/workMngt/setOut/PackingListNew",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-杆塔信息-编辑包装清单
       "name": "编辑包装清单",
-      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:id/packingListSetting/id",
+      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:productId/packingListSetting/id",
       "module": "./pages/workMngt/setOut/PackingListSetting",
       "exact": true,
       "authority": "approvalm"
