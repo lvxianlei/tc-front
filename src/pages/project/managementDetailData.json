@@ -240,6 +240,7 @@
         {
             "title": "货物类别",
             "dataIndex": "cargoType",
+            "required": true,
             "rules": [
                 {
                     "required": true,
@@ -254,6 +255,7 @@
         {
             "title": "项目单位",
             "dataIndex": "projectCompany",
+            "required": true,
             "rules": [
                 {
                     "required": true,
@@ -264,6 +266,7 @@
         {
             "title": "投标人名称",
             "dataIndex": "bidName",
+            "required": true,
             "rules": [
                 {
                     "required": true,
@@ -275,6 +278,7 @@
             "title": "总价（万元）",
             "dataIndex": "money",
             "type": "number",
+            "required": true,
             "rules": [
                 {
                     "required": true,
@@ -286,6 +290,7 @@
             "title": "重量（吨）",
             "dataIndex": "weight",
             "type": "number",
+            "required": true,
             "rules": [
                 {
                     "required": true,

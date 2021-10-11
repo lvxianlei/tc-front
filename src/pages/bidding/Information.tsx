@@ -142,7 +142,7 @@ export default function Information(): React.ReactNode {
         searchFormItems={[
             {
                 name: 'fuzzyQuery',
-                children: <Input placeholder="请输入项目名称/项目编码/审批编号/关联合同/制单人进行查询" maxLength={200} />
+                children: <Input placeholder="项目名称/项目编码/审批编号/关联合同/制单人" style={{ width: 280 }} />
             },
             {
                 name: 'startBidBuyEndTime',
@@ -162,7 +162,7 @@ export default function Information(): React.ReactNode {
             {
                 name: 'biddingStatus',
                 label: '是否应标',
-                children: <Select style={{ width: "100px" }}>
+                children: <Select style={{ width: 150 }}>
                     <Select.Option value="0">未决定</Select.Option>
                     <Select.Option value="1">是</Select.Option>
                     <Select.Option value="2">否</Select.Option>
@@ -171,7 +171,7 @@ export default function Information(): React.ReactNode {
             {
                 name: 'source',
                 label: '来源',
-                children: <Select mode="multiple" style={{ minWidth: "100px" }}>
+                children: <Select mode="multiple" style={{ minWidth: 150 }}>
                     {dictionaryOptions.map((item: any, index: number) => <Select.Option key={index} value={item.name}>{item.name}</Select.Option>)}
                 </Select>
             }

@@ -81,8 +81,8 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
         this.fetchTableData({});
     }
 
-    public async componentDidUpdate(nextProps:any){
-        if(nextProps.refresh!==this.props.refresh){
+    public async componentDidUpdate(nextProps: any) {
+        if (nextProps.refresh !== this.props.refresh) {
             this.fetchTableData({})
         }
     }
@@ -111,7 +111,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
     }
 
     public getTabItems(): ITabItem[] {
-        let tab = [{ label: '全部', key: 'item_0' }]
+        let tab = [{ label: '', key: 'item_0' }]
         return this.props.headTabs ? [tab[0], ...this.props.headTabs] : tab;
     }
 

@@ -50,6 +50,10 @@ export default function BidResultEdit(): JSX.Element {
                 try {
                     if (refFun?.getForm()) {
                         const fdata = await refFun?.getForm().validateFields()
+                        if (fdata?.submit.length <= 0) {
+                            message.error("每轮至少新增一行...")
+                            return
+                        }
                         resove({ round, roundName, formData: fdata?.submit })
                     } else {
                         resove({ round, roundName, formData: bidOpenRecordVos.find((item: any) => item.round === round).bidOpenRecordVos || [] })
