@@ -17,7 +17,6 @@ export default function BaseInfoEdit(): JSX.Element {
   const [attachVosData, setAttachVosData] = useState<any[]>([])
   const [baseInfoForm] = Form.useForm()
   const [cargoVOListForm] = Form.useForm()
-  console.log("new-----------------------------")
   const typeNameEnum = dictionaryOptions["121"].map((item: any) => ({ value: item.id, label: item.name }))
   const { loading: saveStatus, data: saveResult, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
     try {
@@ -64,6 +63,7 @@ export default function BaseInfoEdit(): JSX.Element {
         setAttachVosData([...attachVosData, {
           id: "",
           uid: attachVosData.length,
+          link: dataInfo.link,
           name: dataInfo.originalName.split(".")[0],
           description: "",
           filePath: dataInfo.name,
@@ -112,7 +112,7 @@ export default function BaseInfoEdit(): JSX.Element {
       title: "操作", dataIndex: "opration",
       render: (_: any, record: any) => (<>
         <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
-        <Button type="link" onClick={() => downLoadFile(record.filePath)}>下载</Button>
+        <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
       </>)
     }, ...enclosure]} dataSource={attachVosData} />
   </DetailContent>

@@ -167,6 +167,7 @@ export default function Information(): React.ReactNode {
                 setAttachInfo([...attachInfo, {
                     id: "",
                     uid: attachInfo.length,
+                    link: dataInfo.link,
                     name: dataInfo.originalName.split(".")[0],
                     description: "",
                     filePath: dataInfo.name,
@@ -291,7 +292,7 @@ export default function Information(): React.ReactNode {
                 dataIndex: "opration",
                 render: (_: any, records: any) => <>
                     <Button type="link" onClick={() => deleteAttachData(records.uid || records.id)}>删除</Button>
-                    <Button type="link" onClick={() => downLoadFile(records.filePath)}>下载</Button>
+                    <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
                 </>
             },
             ...enclosure]} dataSource={attachInfo} />
@@ -329,7 +330,7 @@ export default function Information(): React.ReactNode {
                 dataIndex: "opration",
                 render: (_: any, records: any) => <>
                     <Button type="link" onClick={() => deleteAttachData(records.uid || records.id)}>删除</Button>
-                    <Button type="link" onClick={() => downLoadFile(records.filePath)}>下载</Button>
+                    <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
                 </>
             },
             ...enclosure]} dataSource={attachInfo} />
