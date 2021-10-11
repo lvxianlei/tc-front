@@ -83,8 +83,7 @@ module.exports = {
         ],
       })
     ),
-    process.env.REACT_APP_ENV === "development" ||
-      process.env.REACT_APP_ENV === "integration"
+    process.env.REACT_APP_ENV === "development"
       ? addWebpackPlugin(
         new MockWebpackPlugin({
           // mock config

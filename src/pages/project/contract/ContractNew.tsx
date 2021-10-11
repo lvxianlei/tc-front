@@ -303,7 +303,7 @@ class ManagementContractNew extends ContractNew {
               initialValue: contract?.isIta,
               rules: [
                 {
-                  required: false,
+                  required: true,
                   message: "请选择技术协议",
                 },
               ],

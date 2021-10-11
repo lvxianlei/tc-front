@@ -10,6 +10,7 @@ import { Table, Input, InputNumber, Popconfirm, Typography, Select } from 'antd'
 import { CloudUploadOutlined } from '@ant-design/icons';
 import AuthUtil from '../../../utils/AuthUtil';
 import { downLoadFile } from '../../../utils';
+import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
 interface Item {
   key: string;
   name: string;
@@ -75,14 +76,13 @@ export default function ConfirmDetail(): React.ReactNode {
       
       return (
         <td {...restProps}>
-          {console.log(enums)}
           {editing ? (
             <Form.Item
               name={dataIndex}
               style={{ margin: 0 }}
               rules={[
                 {
-                  required: true,
+                  required: inputType==='textArea'?false:true,
                   message: `请输入${title}!`,
                 },
               ]}
@@ -159,7 +159,7 @@ export default function ConfirmDetail(): React.ReactNode {
       { 
           title: '* 塔型', 
           dataIndex: 'productCategory', 
-          type:'select',
+          type:'text',
           editable: true,
           key: 'productCategory' 
       },
@@ -175,14 +175,44 @@ export default function ConfirmDetail(): React.ReactNode {
           dataIndex: 'productType', 
           type:'select',
           editable: true,
-          key: 'productType' 
+          key: 'productType',
+          enums:productTypeOptions && productTypeOptions.map(({ id, name }) => {
+            return {
+                label:name,
+                value: id,
+            }
+          }),
+          render: (value: number, record: object): React.ReactNode => {
+            const renderEnum: any = productTypeOptions && productTypeOptions.map(({ id, name }) => {
+              return {
+                  label:name,
+                  value: id,
+              }
+            })
+            return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value).label}</>
+          }
       },
       { 
           title: '* 电压等级（kv）', 
           dataIndex: 'voltageLevel',
           type:'select', 
           editable: true,
-          key: 'voltageLevel' 
+          key: 'voltageLevel',
+          enums:voltageGradeOptions && voltageGradeOptions.map(({ id, name }) => {
+            return {
+                label:name,
+                value: id,
+            }
+          }),
+          render: (value: number, record: object): React.ReactNode => {
+            const renderEnum: any = voltageGradeOptions && voltageGradeOptions.map(({ id, name }) => {
+              return {
+                  label:name,
+                  value: id,
+              }
+            })
+            return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value).label}</>
+          } 
       },
       { 
           title: '* 呼高（m）', 
@@ -250,7 +280,7 @@ export default function ConfirmDetail(): React.ReactNode {
           editable: true,
           key: 'totalWeight',
           render:(_:any,record:any)=>{
-              return <span>{(record.otherWeight+record.productWeight).toFixed(4)}</span>
+              return <span>{(parseInt(record.otherWeight)+parseInt(record.productWeight)).toFixed(4)}</span>
           } 
       },
       { 
@@ -309,7 +339,8 @@ export default function ConfirmDetail(): React.ReactNode {
         const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
         resole(data);
         setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString() }}));
-        setAttachInfo([...data.attachInfoList])
+        setAttachInfo([...data.attachInfoList]);
+        setDescription(data?.description);
     }), {})
     const detailData: any = data;
     const formItemLayout = {
@@ -363,8 +394,12 @@ export default function ConfirmDetail(): React.ReactNode {
                           const saveData:any = {
                               drawTaskId: params.id,
                               attachInfoList:attachInfo,
-                              drawProductDetailList:tableDataSource,
-                              description,
+                              drawProductDetailList:tableDataSource.map((item:any)=>{
+                                return {
+                                  ...item,
+                                  drawTaskId:params.id,
+                              }}),
+                              description
                           }
                           if(tableDataSource.length>0){
                               console.log(saveData)
@@ -382,15 +417,19 @@ export default function ConfirmDetail(): React.ReactNode {
                     <Button type='primary' onClick={async () => {
                         try {
                           const submitData:any = {
-                              drawTaskId: params.id,
-                              attachInfoList:attachInfo,
-                              drawProductDetailList:tableDataSource,
-                              description,
+                            drawTaskId: params.id,
+                            attachInfoList:attachInfo,
+                            drawProductDetailList:tableDataSource.map((item:any)=>{
+                              return {
+                                ...item,
+                                drawTaskId:params.id,
+                            }}),
+                            description
                           }
                           if(tableDataSource.length>0){
                               console.log(submitData)
                               await RequestUtil.post('/tower-science/drawProductDetail/submitDrawProduct', submitData).then(()=>{
-                                  message.success('保存并提交成功！');
+                                  message.success('提交成功！');
                               }).then(()=>{
                                   history.push('/workMngt/confirmList')
                               })
@@ -430,16 +469,17 @@ export default function ConfirmDetail(): React.ReactNode {
                       columns={mergedColumns}
                       rowClassName="editable-row"
                       // rowKey='index'
-                      pagination={{
-                        onChange: cancel,
-                      }}
+                      // pagination={{
+                      //   onChange: cancel,
+                      // }}
+                      pagination={false}
                     />
                 </Form>
                 <DetailTitle title="备注"/>
                 {detailData&&detailData.description?<TextArea maxLength={ 200 } defaultValue={detailData.description} onChange={(e)=>{
                     setDescription(e.target.value)
                 }}/>:null}
-                <Upload
+                {/* <Upload
                     key="sub"
                     name="file"
                     multiple={true}
@@ -451,7 +491,22 @@ export default function ConfirmDetail(): React.ReactNode {
                     }}
                     onChange={uploadChange}
                     showUploadList={false}
-                ><span style={{fontSize:'16px',marginLeft:'13px'}}>附件 </span><CloudUploadOutlined /></Upload>
+                > */}
+                <Upload action={ () => {
+                                    const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                                    return baseUrl+'/sinzetech-resource/oss/put-file'
+                                } } 
+                                headers={
+                                    {
+                                        'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                                        'Tenant-Id': AuthUtil.getTenantId(),
+                                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                                    }
+                                }
+                                showUploadList={ false }
+                                data={ { productCategoryId: params.id } }
+                                onChange={ uploadChange}>
+                  <span style={{fontSize:'16px',marginLeft:'13px'}}>附件 </span><CloudUploadOutlined /></Upload>
                 <CommonTable columns={[
                     {
                         title: '附件名称',
@@ -517,8 +572,11 @@ export default function ConfirmDetail(): React.ReactNode {
                             "message":"请选择产品类型"
                         }]}>
                             <Select>
-                                <Select.Option value={1} key={1}>220</Select.Option>
-                                <Select.Option value={2} key={2}>110</Select.Option>
+                              {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                                  return <Select.Option key={index} value={id}>
+                                      {name}
+                                  </Select.Option>
+                              })}
                             </Select>
                         </Form.Item>
                       </Col>
@@ -528,8 +586,11 @@ export default function ConfirmDetail(): React.ReactNode {
                             "message":"请选择电压等级（kV）"
                         }]}>
                             <Select>
-                                <Select.Option value={1} key={1}>220</Select.Option>
-                                <Select.Option value={2} key={2}>110</Select.Option>
+                              {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
+                                  return <Select.Option key={index} value={id}>
+                                      {name}
+                                  </Select.Option>
+                              })}
                             </Select>
                         </Form.Item>
                       </Col>

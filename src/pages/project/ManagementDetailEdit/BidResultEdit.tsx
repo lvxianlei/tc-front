@@ -21,6 +21,7 @@ export default function BidResultEdit(): JSX.Element {
             if (result.bidOpenRecordListVos?.length > 0) {
                 const resultBid = result.bidOpenRecordListVos
                 resultBid[resultBid.length - 1].fixed = true
+                console.log((ref.current as any).getData())
                 setBidOpenRecordVos(resultBid)
             }
             resole(result)
@@ -118,12 +119,24 @@ export default function BidResultEdit(): JSX.Element {
                         dataIndex: 'date',
                         type: "date",
                         format: "YYYY",
-                        picker: "year"
+                        picker: "year",
+                        rules: [
+                            {
+                                required: true,
+                                message: "请输入年份..."
+                            }
+                        ]
                     },
                     {
                         title: '批次',
                         dataIndex: 'batch',
-                        type: "number"
+                        type: "number",
+                        rules: [
+                            {
+                                required: true,
+                                message: "请输入批次..."
+                            }
+                        ]
                     }, {
                         title: '备注',
                         dataIndex: 'description'
@@ -191,7 +204,7 @@ export default function BidResultEdit(): JSX.Element {
                                     }
                                     const resultData = bidOpenRecordVos.find((bidItem: any) => bidItem.round === item.key).bidOpenRecordVos
                                     const filterUploadData = _data.filter(item => Object.keys(item).every(eItem => eItem))
-                                    console.log(filterUploadData,"---------------")
+                                    console.log(filterUploadData, "---------------")
                                     const uploadData = _data.map((item: any, index) => {
                                         const rowData: any = { uid: resultData.length + index }
                                         Object.keys(item).forEach((columnItem: string) => {

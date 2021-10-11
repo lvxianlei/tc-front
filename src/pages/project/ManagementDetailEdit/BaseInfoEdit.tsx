@@ -78,6 +78,7 @@ export default function BaseInfoEdit(): JSX.Element {
                 setAttachVosData([...attachVosData, {
                     id: "",
                     uid: attachVosData.length,
+                    link: dataInfo.link,
                     name: dataInfo.originalName.split(".")[0],
                     description: "",
                     filePath: dataInfo.name,
@@ -128,7 +129,7 @@ export default function BaseInfoEdit(): JSX.Element {
                     title: "操作", dataIndex: "opration",
                     render: (_: any, record: any) => (<>
                         <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
-                        <Button type="link" onClick={() => downLoadFile(record.filePath)}>下载</Button>
+                        <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
                     </>)
                 }, ...enclosure]} dataSource={attachVosData} />
             </Spin>
