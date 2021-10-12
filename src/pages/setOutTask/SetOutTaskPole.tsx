@@ -96,7 +96,7 @@ export default function SetOutTaskPole(): React.ReactNode {
         headTabs={ [] }
         extraOperation={ 
             <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
-                <Button type="primary">导出</Button>
+                {/* <Button type="primary">导出</Button> */}
                 <Button type="ghost" onClick={() => history.goBack()}>返回上一级</Button>
             </Space> 
         }
