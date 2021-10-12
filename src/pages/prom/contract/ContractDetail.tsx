@@ -8,7 +8,6 @@ import { withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 
 import AbstractDetailComponent from '../../../components/AbstractDetailComponent';
-import ConfirmableButton from '../../../components/ConfirmableButton';
 import { ITabItem } from '../../../components/ITabableComponent';
 import { IContract } from '../../IContract';
 import RequestUtil from '../../../utils/RequestUtil';

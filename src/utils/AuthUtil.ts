@@ -14,6 +14,8 @@ const TENANT_ID_KEY: string = 'SINZETECH_TENANT_ID';
 const TOKEN_KEY: string = 'SINZETECH_TOKEN';
 export default abstract class AuthUtil {
 
+    static time = 50 * 60 * 1000
+    
     /**
      * @description Authorization  of auth util
      */
@@ -67,6 +69,16 @@ export default abstract class AuthUtil {
      * @param [options] 
      */
     public static setSinzetechAuth(token: string): void {
+        sessionStorage.setItem(TOKEN_KEY, token);
+    }
+
+    /**
+     * @static
+     * @description Sets sinzetech auth
+     * @param token 
+     * @param [options] 
+     */
+    public static refrenshToken(token: string): void {
         sessionStorage.setItem(TOKEN_KEY, token);
     }
 }

@@ -26,7 +26,7 @@ class UserNew extends AbstractUserSetting<IUserNewRouteProps, IUserNewState> {
      */
     public async onSubmit(values: Record<string, any>): Promise<void> {
         values.roleIds = values?.roleIds?.join(',');
-        await RequestUtil.post('/sinzetech-user/user', values);
+        return RequestUtil.post('/sinzetech-user/user', values);
     }
 }
 

@@ -15,8 +15,8 @@ import { ITabItem } from '../../../components/ITabableComponent';
 import RequestUtil from '../../../utils/RequestUtil';
 import { IUser } from './IUser';
 
-interface IUserMngtProps {}
-interface IUserRouteProps extends RouteComponentProps<IUserMngtProps>, WithTranslation {}
+interface IUserMngtProps { }
+interface IUserRouteProps extends RouteComponentProps<IUserMngtProps>, WithTranslation { }
 interface IUserMngtState extends IAbstractMngtComponentState, IFIlterValue {
     readonly users: IUser[];
     readonly selectedUserKeys: React.Key[];
@@ -62,7 +62,7 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
         const resData: IResponseData = await RequestUtil.get<IResponseData>('/sinzetech-user/user', {
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
-            size: pagination.pageSize ||this.state.tablePagination?.pageSize,
+            size: pagination.pageSize || this.state.tablePagination?.pageSize,
         });
         this.setState({
             ...filterValues,
@@ -91,7 +91,7 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
      */
     private onDelete(items: IUser[]): () => void {
         return async () => {
-            await RequestUtil.delete(`/sinzetech-user/user?ids=${items.map<number>((item: IUser): number => item?.id as number) }`);
+            await RequestUtil.delete(`/sinzetech-user/user?ids=${items.map<number>((item: IUser): number => item?.id as number)}`);
             this.setState({
                 selectedUsers: [],
                 selectedUserKeys: []
@@ -119,18 +119,18 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
      */
     public getTabItems(): ITabItem[] {
         return [{
-            label: '用户列表',
+            label: '',
             key: 0
         }];
     }
-    
+
     /**
      * @implements
      * @description Determines whether tab change on
      * @param activeKey 
      */
-    public onTabChange(activeKey: string): void {}
-    
+    public onTabChange(activeKey: string): void { }
+
     /**
      * @implements
      * @description Gets filter form item props
@@ -141,11 +141,11 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
         return [{
             label: '账号',
             name: 'account',
-            children: <Input placeholder="请输入账号" maxLength={ 200 }/>
+            children: <Input placeholder="请输入账号" maxLength={200} />
         }, {
             label: '姓名',
             name: 'name',
-            children: <Input placeholder="请输入姓名" maxLength={ 200 }/>
+            children: <Input placeholder="请输入姓名" maxLength={200} />
         }];
     }
 
@@ -157,7 +157,7 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
     public onNewClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
         this.props.history.push('/sys/users/new');
     }
-    
+
     /**
      * @implements
      * @description Determines whether filter submit on
@@ -166,7 +166,7 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
     public onFilterSubmit(values: Record<string, any>): void {
         this.fetchUsers(values);
     }
-    
+
     /**
      * @implements
      * @description Determines whether table change on
@@ -178,7 +178,7 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
             name: this.state.name
         }, pagination);
     }
-    
+
     /**
      * @description Select change of role mngt
      */
@@ -224,16 +224,16 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
     protected renderExtraOperationContent(item: ITabItem): React.ReactNode {
         return (
             <Space direction="horizontal" size="middle">
-                { super.renderExtraOperationContent(item) }
-                <ConfirmableButton confirmTitle="确定删除这些用户吗？" danger={ true }
-                    icon={ <DeleteOutlined /> }
-                    disabled={ !this.state.selectedUsers?.length } onConfirm={ this.onBatchDelete() }>
+                {super.renderExtraOperationContent(item)}
+                <ConfirmableButton confirmTitle="确定删除这些用户吗？" danger={true}
+                    icon={<DeleteOutlined />}
+                    disabled={!this.state.selectedUsers?.length} onConfirm={this.onBatchDelete()}>
                     删除
                 </ConfirmableButton>
             </Space>
         );
     }
-    
+
     /**
      * @implements
      * @description Gets table columns
@@ -259,8 +259,8 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
                 return (
                     <Space direction="horizontal" size="middle">
                         {/* <Link to={ `/sys/users/detail/${ (item as IUser).id }` }>查看</Link> */}
-                        <Link to={ `/sys/users/setting/${ (item as IUser).id }` }>编辑</Link>
-                        <ConfirmableButton confirmTitle="确定要删除该角色吗？" type="link" onConfirm={ this.onDelete([item as IUser]) }>删除</ConfirmableButton>
+                        <Link to={`/sys/users/setting/${(item as IUser).id}`}>编辑</Link>
+                        <ConfirmableButton confirmTitle="确定要删除该角色吗？" type="link" onConfirm={this.onDelete([item as IUser])}>删除</ConfirmableButton>
                     </Space>
                 );
             }

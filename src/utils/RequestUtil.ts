@@ -82,7 +82,11 @@ export default abstract class RequestUtil {
                     } else if (res.code === 200) {
                         resolve(res.data);
                     } else if (res.code === 401) {
-                        setTimeout(this.backToLogin, 10);
+                        if (!path.includes("sinzetech-auth/oauth")) {
+                            setTimeout(this.backToLogin, 10);
+                        } else {
+                            console.log("token过期。。。。")
+                        }
                     } else {
                         message.error(res.msg);
                         reject(res);

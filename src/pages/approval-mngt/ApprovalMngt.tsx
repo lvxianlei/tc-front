@@ -22,6 +22,10 @@ export default function Information(): React.ReactNode {
         value: item.id,
         label: item.name
     }))
+    const paymentCategoryEnum = (ApplicationContext.get().dictionaryOption as any)["136"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
 
     const history = useHistory()
     const [visible, setVisible] = useState(false)
@@ -237,11 +241,23 @@ export default function Information(): React.ReactNode {
             confirmLoading={loading}
         >
             <DetailTitle title="基本信息" />
-            <BaseInfo form={performanceBondForm} onChange={performanceBondChange} columns={bondBaseInfo.map((item: any) => item.dataIndex === "currencyType" ? ({
-                ...item,
-                type: "select",
-                enum: currencyTypeEnum
-            }) : item)} dataSource={{}} edit col={2} />
+            <BaseInfo form={performanceBondForm} onChange={performanceBondChange} columns={bondBaseInfo.map((item: any) => {
+                if (item.dataIndex === "currencyType") {
+                    return ({
+                        ...item,
+                        type: "select",
+                        enum: currencyTypeEnum
+                    })
+                }
+                if (item.dataIndex === "paymentCategory") {
+                    return ({
+                        ...item,
+                        type: "select",
+                        enum: paymentCategoryEnum
+                    })
+                }
+                return item
+            })} dataSource={{}} edit col={2} />
         </Modal>
         <Modal
             title="图纸交接申请"
