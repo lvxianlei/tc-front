@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Button, Form, Modal, Row, Col, Popconfirm, Select } from 'antd'
+import { Space, Input, DatePicker, Button, Form, Modal, Row, Col, Popconfirm, Select, message } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
+import RequestUtil from '../../../utils/RequestUtil';
 
 export default function PickTower(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
+    const params = useParams<{ id: string }>()
     const history = useHistory();
     const [form] = Form.useForm();
     const handleModalOk = async () => {
@@ -68,6 +70,10 @@ export default function PickTower(): React.ReactNode {
                     value: 3,
                     label: "已提交"
                   },
+                  {
+                    value: 4,
+                    label: ""
+                  },
                 ]
                 return <>{value&&value!==-1?renderEnum.find((item: any) => item.value === value).label:null}</>
             }
@@ -86,8 +92,10 @@ export default function PickTower(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type='link' onClick={() => setVisible(true)}>配段</Button>
-                    <Link to={`/workMngt/pickList/pickTower/pickTowerDetail/${record.id}`}>杆塔提料明细</Link>
+                    <Button type='link' onClick={() => {
+                        setVisible(true)
+                    }}>配段</Button>
+                    <Link to={`/workMngt/pickList/pickTower/${params.id}/pickTowerDetail/${record.id}`}>杆塔提料明细</Link>
                 </Space>
             )
         }
@@ -113,12 +121,12 @@ export default function PickTower(): React.ReactNode {
                 <Form form={form} {...formItemLayout}>
                     <Row>
                         <Col span={12}>
-                            <Form.Item name="aaaa" label="塔型">
+                            <Form.Item name="productCategoryName" label="塔型">
                                 <span>JC30153B</span>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="reason" label="杆塔号">
+                            <Form.Item name="productNumber" label="杆塔号">
                                 <span>A001</span>
                             </Form.Item>
                         </Col>
@@ -198,21 +206,27 @@ export default function PickTower(): React.ReactNode {
                 </Form>
             </Modal>
             <Page
-                path="/tower-market/bidInfo"
-                // path="/tower-science/product/material"
+                // path="/tower-market/bidInfo"
+                path="/tower-science/product/material"
                 columns={columns}
                 onFilterSubmit={onFilterSubmit}
-                // requestData={{ productCategoryId: params.id }}
+                requestData={{ productCategoryId: params.id }}
                 extraOperation={
                     <Space>
                     <Button type="primary">导出</Button>
                     <Popconfirm
                         title="确认提交?"
-                        onConfirm={ () => {} }
+                        onConfirm={ async ()=>{
+                            await RequestUtil.post(`/tower-science/product/material/submit?productCategoryId=${params.id}`).then(()=>{
+                                message.success('提交成功！')
+                            }).then(()=>{
+                                history.push('/workMngt/pickList')
+                            })
+                        } }
                         okText="确认"
                         cancelText="取消"
                     >   
-                        <Button type="primary">提交</Button>
+                        <Button type="primary" >提交</Button>
                     </Popconfirm>
                     <Button type="primary" onClick={()=>history.push('/workMngt/pickList')}>返回上一级</Button>
                     </Space>

@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Button, Form, Modal, Row, Col, Popconfirm, Select } from 'antd'
+import { Space, Input, DatePicker, Button, Form, Modal, Row, Col, Popconfirm, Select, message } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
 import { Link, useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import TowerPickAssign from './TowerPickAssign';
+import RequestUtil from '../../../utils/RequestUtil';
 
 export default function PickTowerMessage(): React.ReactNode {
     const history = useHistory();
@@ -90,9 +91,9 @@ export default function PickTowerMessage(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={`/workMngt/pickList/pickTowerMessage/pick/${record.id}`}>提料</Link>
-                    <Link to={`/workMngt/pickList/pickTowerMessage/check/${record.id}`}>校核</Link>
-                    <Link to={`/workMngt/pickList/pickTowerMessage/detail/${record.id}`}>明细</Link>
+                    <Link to={`/workMngt/pickList/pickTowerMessage/${params.id}/pick/${record.id}`}>提料</Link>
+                    <Link to={`/workMngt/pickList/pickTowerMessage/${params.id}/check/${record.id}`}>校核</Link>
+                    <Link to={`/workMngt/pickList/pickTowerMessage/${params.id}/detail/${record.id}`}>明细</Link>
                 </Space>
             )
         }
@@ -109,24 +110,29 @@ export default function PickTowerMessage(): React.ReactNode {
 
     return (
         <Page
-            path="/tower-market/bidInfo"
+            // path="/tower-market/bidInfo"
+            path="/tower-science/drawProductSegment"
             columns={columns}
             refresh={refresh}
             onFilterSubmit={onFilterSubmit}
-            // requestData={{ productCategoryId: params.id }}
+            requestData={{ productCategoryId: params.id }}
             extraOperation={
                 <Space>
                 <Button type="primary">导出</Button>
                 <Popconfirm
                     title="确认提交?"
-                    onConfirm={ () => {} }
+                    onConfirm={ async () => {
+                        await RequestUtil.post(`/tower-science/drawProductSegment/${params.id}/submit`).then(()=>{
+                            message.success('提交成功')
+                        })
+                    } }
                     okText="确认"
                     cancelText="取消"
                 >   
                     <Button type="primary">提交</Button>
                 </Popconfirm>
                 <TowerPickAssign id={ params.id }/>
-                <Button type="primary" onClick={()=>history.goBack()}>返回上一级</Button>
+                <Button type="primary" onClick={()=>history.push('/workMngt/pickList')}>返回上一级</Button>
                 </Space>
             }
             searchFormItems={[
@@ -147,12 +153,12 @@ export default function PickTowerMessage(): React.ReactNode {
                 {
                     name: 'materialLeader',
                     label: '提料人',
-                    children: <DatePicker />
+                    children: <Input />
                 },
                 {
                     name: 'materialCheckLeader',
                     label: '校核人',
-                    children: <DatePicker />
+                    children: <Input />
                 },
             ]}
         />

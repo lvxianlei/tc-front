@@ -285,7 +285,7 @@ export default function ScheduleView(): React.ReactNode {
                             smallSampleDeliverTime:resData.smallSampleDeliverTime? moment(resData.smallSampleDeliverTime):''
                         });
                         setVisible(true);
-                    }} disabled={params.status!=='3'}>指派</Button>
+                    }} disabled={params.status!=='2'}>指派</Button>
                 </Space>
             )
         }
@@ -630,7 +630,7 @@ export default function ScheduleView(): React.ReactNode {
                 columns={ columns }
                 extraOperation={
                     <Space>
-                        <Button type="primary">导出</Button>
+                        {/* <Button type="primary">导出</Button> */}
                         <Button type="primary" onClick={ () => history.goBack() }>返回上一级</Button>
                     </Space>
                 }

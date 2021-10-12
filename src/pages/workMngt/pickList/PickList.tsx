@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Button, Form, Modal, Select } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { CommonTable, Page } from '../../common'
 
 export default function PickList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
+    const history = useHistory();
     const columns = [
         {
             key: 'index',
@@ -65,9 +66,9 @@ export default function PickList(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={`/workMngt/pickList/pickMessage/${record.id}`}>提料信息</Link>
-                    <Link to={`/workMngt/pickList/pickTowerMessage/${record.id}`}>塔型信息</Link>
-                    <Link to={`/workMngt/pickList/pickTower/${record.id}`}>杆塔配段</Link>
+                    <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickMessage/${record.id}`)}}>提料信息</Button>
+                    <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTowerMessage/${record.id}`)}}>塔型信息</Button>
+                    <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTower/${record.id}`)}}>杆塔配段</Button>
                     <Button type='link' onClick={() => setVisible(true)}>交付物</Button>
                 </Space>
             )
@@ -124,6 +125,7 @@ export default function PickList(): React.ReactNode {
             </Modal>
             <Page
                 path="/tower-science/materialTask"
+                // path="/tower-market/bidInfo"
                 columns={columns}
                 onFilterSubmit={onFilterSubmit}
                 extraOperation={<Button type="primary">导出</Button>}

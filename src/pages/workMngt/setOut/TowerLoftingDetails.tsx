@@ -4,13 +4,12 @@
  * @description 工作管理-放样列表-塔型信息-塔型放样明细
 */
 
-
 import React from 'react';
 import { Space, Button } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 const columns = [
     {
@@ -22,192 +21,194 @@ const columns = [
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
     },
     {
-        key: 'projectName',
+        key: 'partName',
         title: '段名',
         width: 150,
-        dataIndex: 'projectName'
+        dataIndex: 'partName'
     },
     {
-        key: 'projectNumber',
+        key: 'code',
         title: '构件编号',
-        dataIndex: 'projectNumber',
+        dataIndex: 'code',
         width: 120
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'materialName',
         title: '材料名称',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'materialName'
     },
     {
-        key: 'biddingEndTime',
+        key: 'structureTexture',
         title: '材质',
         width: 150,
-        dataIndex: 'biddingEndTime',
+        dataIndex: 'structureTexture',
     },
     {
-        key: 'biddingPerson',
+        key: 'specName',
         title: '规格',
-        dataIndex: 'biddingPerson',
+        dataIndex: 'specName',
         width: 200,
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'width',
         title: '宽度（mm）',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'width'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'thickness',
         title: '厚度（mm）',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'thickness'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'length',
         title: '长度（mm）',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'length'
     },
     {
-        key: 'bidBuyEndTime',
-        title: '单基件数',
+        key: 'basicsPartNum',
+        title: '单段件数',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'basicsPartNum'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'basicsWeight',
         title: '单件重量（kg）',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'basicsWeight'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'totalWeight',
         title: '小计重量（kg）',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'totalWeight'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'ncName',
         title: 'NC程序名称',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'ncName'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'description',
         title: '备注',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'description'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'electricWelding',
         title: '电焊',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'electricWelding'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'bend',
         title: '火曲',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'bend'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'chamfer',
         title: '切角',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'chamfer'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'shovelBack',
         title: '铲背',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'shovelBack'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'rootClear',
         title: '清根',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'rootClear'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'squash',
         title: '打扁',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'squash'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'openCloseAngle',
         title: '开合角',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'openCloseAngle'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'perforate',
         title: '钻孔',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'perforate'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'groove',
         title: '坡口',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'groove'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'intersectingLine',
         title: '割相贯线',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'intersectingLine'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'slottedForm',
         title: '开槽形式',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'slottedForm'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'sides',
         title: '边数',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'sides'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'perimeter',
         title: '周长',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'perimeter'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'surfaceArea',
         title: '表面积',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'surfaceArea'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'apertureNumber',
         title: '各孔径孔数',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'apertureNumber'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'weldingEdge',
         title: '焊接边（mm）',
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'weldingEdge'
     }
 ]
 
 export default function TowerLoftingDetails(): React.ReactNode {
     const history = useHistory();
+    const params = useParams<{ id: string, productSegmentId: string }>();
     
     return <Page
-        path="/tower-market/bidInfo"
+        path="/tower-science/productStructure/list"
         columns={ columns }
         headTabs={ [] }
+        requestData={ { productSegmentId: params.productSegmentId } }
         extraOperation={ 
             <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
-                <Button type="primary">导出</Button>
-                <Button type="ghost" onClick={() => history.goBack()}>返回上一级</Button>
+                {/* <Button type="primary">导出</Button> */}
+                <Button type="primary" onClick={() => history.goBack()} ghost>返回上一级</Button>
             </Space> 
         }
         searchFormItems={ [] }

@@ -1,0 +1,30 @@
+{
+	"code": 200,
+	"msg": "",
+	"success": true,
+	"data": {
+		"current": 86579092,
+		"hitCount": true,
+		"pages": 57337404,
+		"records": [{
+			"basicsPartNum": -40297515,
+			"basicsTheoryWeight": 73145270.78909925,
+			"basicsWeight": -31360579.09147288,
+			"code": "ea ex Duis aliquip anim",
+			"description": "qui",
+			"length": 35272361.907128006,
+			"materialName": "dolore",
+			"name": "tempor velit id fugiat consequat",
+			"repeatNumber": 82114722,
+			"segmentName": "amet dolore qui consectetur nisi",
+			"structureSpec": "nisi occaecat irur",
+			"structureTexture": "voluptate id quis anim commodo",
+			"thickness": 85381740.25099403,
+			"totalWeight": 50.32424739,
+			"width": 1
+		}],
+		"searchCount": false,
+		"size": -92617884,
+		"total": 53369899
+	}
+}

@@ -5,7 +5,6 @@ import RequestUtil from '../../../utils/RequestUtil';
 import styles from './TowerLoftingAssign.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
-import useRequest from '@ahooksjs/use-request';
 
 export interface TowerLoftingAssignProps {}
 export interface ITowerLoftingAssignRouteProps extends RouteComponentProps<TowerLoftingAssignProps>, WithTranslation {
@@ -15,16 +14,36 @@ export interface ITowerLoftingAssignRouteProps extends RouteComponentProps<Tower
 export interface TowerLoftingAssignState {
     readonly visible: boolean;
     readonly description?: string;
+    readonly appointed?: IAppointed;
     readonly appointedList?: IAppointedList[];
     readonly repeatModal: boolean;
     readonly repeatNum?: number;
     readonly selectKey?: number;
 }
 
-interface IAppointedList {
-
+interface IAppointed {
+    readonly productCategoryName?: string;
+    readonly productCategory?: string;
+    readonly pattern?: string;
+    readonly sectionNum?: number;
 }
-
+interface IAppointedList {
+    readonly plannedDeliveryTime?: string;
+    readonly id	?: string;
+    readonly checkUser?: string;
+    readonly checkUserDepartment?: string;
+    readonly checkUserDepartmentName?: string;
+    readonly checkUserName?: string;
+    readonly loftingUser?: string;
+    readonly loftingUserDepartment?: string;
+    readonly loftingUserDepartmentName?: string;
+    readonly loftingUserName?: string;
+    readonly name?: string;
+    readonly pattern?: string;
+    readonly productCategoryName?: string;
+    readonly productCategory?: string;
+    readonly index?: number;
+}
 class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, TowerLoftingAssignState> {
 
     private form: React.RefObject<FormInstance> = React.createRef<FormInstance>();
@@ -49,32 +68,22 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
     }
 
     private modalCancel(): void {
+        this.getForm()?.setFieldsValue({
+            appointedList: []
+        })
         this.getForm()?.resetFields();
         this.setState({
-            visible: false
-        })
-    }
-
-    private async modalShow(): Promise<void> {
-        // const data = await RequestUtil.get(`/tower-market/bidInfo/${ this.props.id }`);
-        this.setState({
-            visible: true,
+            visible: false,
             appointedList: []
         })
     }
 
-    /**
-     * @protected
-     * @description Determines whether submit and continue on
-     */
-    protected onSubmitAndContinue(): void {
-        if (this.getForm()) {
-            this.getForm()?.validateFields().then(() => {
-                console.log(this.getForm()?.getFieldsValue())
-                this.getForm()?.resetFields();
-                return Promise.resolve()
-            })
-        }
+    private async modalShow(): Promise<void> {
+        const data = await RequestUtil.get<IAppointed>(`/tower-science/productSegment/detail?productCategoryId=${ this.props.id }`);
+        this.setState({
+            visible: true,
+            appointed: data
+        })
     }
     
     /**
@@ -86,8 +95,24 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
     protected onSubmit(): void {
         if (this.getForm()) {
             this.getForm()?.validateFields().then(() => {
-                console.log(this.getForm()?.getFieldsValue())
+                let values = this.getForm()?.getFieldsValue().appointedList;
+                values = values.map((item: Record<string, any>) => {
+                    return {
+                        ...item,
+                        plannedDeliveryTime: item?.plannedDeliveryTime && item?.plannedDeliveryTime.format('YYYY-MM-DD'),
+                        productCategory: this.state.appointed?.productCategory,
+                        productCategoryName: this.state.appointed?.productCategoryName,
+                        pattern: this.state.appointed?.pattern
+                    }
+                })
+                RequestUtil.post(`/tower-science/productSegment/submit`, { ...values })
                 this.getForm()?.resetFields();
+                this.getForm()?.setFieldsValue({
+                    appointedList: []
+                });
+                this.setState({  
+                    appointedList: []
+                })
                 return Promise.resolve()
             })
         }
@@ -101,15 +126,20 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
     protected addRow(): void {
         let appointedList: IAppointedList[] = this.getForm()?.getFieldsValue(true).appointedList || [];
         appointedList.push({
-            q: '',
-            w: '',
-            e: '',
-            r: '',
-            t: '',
-            y: ''
+            index: appointedList.length + 1,
+            name: '',
+            loftingUserDepartment: '',
+            loftingUser: '',
+            checkUserDepartment: '',
+            checkUser: '',
+            plannedDeliveryTime: ''
         })
         this.setState({
-            appointedList: appointedList
+            appointedList: appointedList,
+            appointed: {
+                ...this.state.appointed,
+                sectionNum: (this.state.appointed?.sectionNum || 0) + 1
+            }
         })
         this.getForm()?.setFieldsValue({
             appointedList: appointedList
@@ -125,7 +155,11 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
         let appointedList: IAppointedList[] = this.getForm()?.getFieldsValue(true).appointedList || [];
         appointedList.splice(index, 1);
         this.setState({
-            appointedList: appointedList
+            appointedList: appointedList,
+            appointed: {
+                ...this.state.appointed,
+                sectionNum: (this.state.appointed?.sectionNum || 0) - 1
+            }
         })
         this.getForm()?.setFieldsValue({
             appointedList: appointedList
@@ -153,11 +187,15 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                     }, () => {
                         let appointedList: IAppointedList[] = this.getForm()?.getFieldsValue(true).appointedList || [];
                         const copyRow: IAppointedList = this.getForm()?.getFieldsValue(true).appointedList[this.state.selectKey || 0];
-                        const copyRowList = Array(this.state.repeatNum).fill({ ...copyRow, q: '' });
+                        const copyRowList = Array(this.state.repeatNum).fill({ ...copyRow, name: '' });
                         appointedList.push( ...copyRowList );
                         this.setState({
                             appointedList: appointedList,
-                            repeatNum: undefined
+                            repeatNum: undefined,
+                            appointed: {
+                                ...this.state.appointed,
+                                sectionNum: (this.state.appointed?.sectionNum || 0) + (this.state.repeatNum || 0)
+                            }
                         })
                         this.getForm()?.setFieldsValue({
                             appointedList: appointedList
@@ -187,42 +225,23 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                 footer={ 
                     <Space direction="horizontal" className={ styles.bottomBtn }>
                         <Button type="ghost" onClick={ () => this.modalCancel() }>关闭</Button>
-                        <Button type="ghost"  onClick={ () => this.onSubmit() }>保存</Button>
-                        <Button type="ghost" onClick={ () => this.onSubmitAndContinue() }>保存并提交</Button>
+                        <Button type="ghost" onClick={ () => this.onSubmit() }>提交</Button>
                     </Space>
                 } 
                 onCancel={ () => this.modalCancel() }
             >
-                <DetailContent>
+                <DetailContent className={ styles.modalHeight }>
                     <p>指派信息</p>
-                    <Form className={ styles.descripForm }>
+                    <Form ref={ this.form } className={ styles.descripForm }>
                         <Descriptions title="" bordered size="small" colon={ false } column={ 9 }>
                             <Descriptions.Item label="塔型" span={ 1 }>
-                                <Form.Item name="a"
-                                    rules={[{
-                                        required: true,
-                                        message: '请输入塔型'
-                                    }]}>
-                                    <Input />
-                                </Form.Item>
+                                { this.state.appointed?.productCategoryName }
                             </Descriptions.Item>
                             <Descriptions.Item label="模式" span={ 3 }>
-                                <Form.Item name="b"
-                                    rules={[{
-                                        required: true,
-                                        message: '请输入模式'
-                                    }]}>
-                                    <Input />
-                                </Form.Item>
+                                { this.state.appointed?.pattern }
                             </Descriptions.Item>
                             <Descriptions.Item label="段数" span={ 3 }>
-                                <Form.Item name="c"
-                                    rules={[{
-                                        required: true,
-                                        message: '请输入段数'
-                                    }]}>
-                                    <Input />
-                                </Form.Item>
+                                { this.state.appointed?.sectionNum || 0 }
                             </Descriptions.Item>
                             <Descriptions.Item children span={ 1 }></Descriptions.Item>
                             <Descriptions.Item span={ 1 }><Button type="primary" ghost size="small" onClick={ () => this.addRow() }>添加</Button></Descriptions.Item>
@@ -230,7 +249,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                 this.state.appointedList?.map((item: IAppointedList, index: number) => {
                                     return  <>  
                                         <Descriptions.Item label="段名" span={ 1 }>
-                                            <Form.Item name={["appointedList", index, "q"]}
+                                            <Form.Item name={["appointedList", index, "name"]}
                                                 rules={[{
                                                     required: true,
                                                     message: '请输入段名'
@@ -239,39 +258,39 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                             </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="放样人"  span={ 3 }>
-                                            <Form.Item name={["appointedList", index, "w"]}
+                                            <Form.Item name={["appointedList", index, "loftingUserDepartment"]}
                                                 rules={[{
                                                     required: true,
-                                                    message: '请输入放样人'
+                                                    message: '请选择部门'
                                                 }]} style={ { width: '50%', display: 'inline-block' } }>
                                                 <Input />
                                             </Form.Item>
-                                            <Form.Item name={["appointedList", index, "e"]}
+                                            <Form.Item name={["appointedList", index, "loftingUser"]}
                                                 rules={[{
                                                     required: true,
-                                                    message: '请输入放样人'
+                                                    message: '请选择人员'
                                                 }]} style={ { width: '50%', display: 'inline-block' } }>
                                                 <Input />
                                             </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="校对人"  span={ 3 }>
-                                            <Form.Item name={["appointedList", index, "r"]}
+                                            <Form.Item name={["appointedList", index, "checkUserDepartment"]}
                                                 rules={[{
                                                     required: true,
-                                                    message: '请输入校对人'
+                                                    message: '请选择部门'
                                                 }]} style={ { width: '50%', display: 'inline-block' } }>
                                                 <Input />
                                             </Form.Item>
-                                            <Form.Item name={["appointedList", index, "t"]}
+                                            <Form.Item name={["appointedList", index, "checkUser"]}
                                                 rules={[{
                                                     required: true,
-                                                    message: '请输入放样人'
+                                                    message: '请选择人员'
                                                 }]} style={ { width: '50%', display: 'inline-block' } }>
                                                 <Input />
                                             </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="交付时间">
-                                            <Form.Item name={["appointedList", index, "y"]}
+                                            <Form.Item name={["appointedList", index, "plannedDeliveryTime"]}
                                                 rules={[{
                                                     required: true,
                                                     message: '请选择交付时间'

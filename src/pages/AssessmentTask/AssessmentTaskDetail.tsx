@@ -44,14 +44,14 @@ const tableColumns = [
         width: 50, 
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
     {
-        key: 'opreateUserDept',
+        key: 'createDeptName',
         title: '操作部门',
-        dataIndex: 'opreateUserDept', 
+        dataIndex: 'createDeptName', 
     },
     {  
-        key: 'opreateUser', 
+        key: 'createUserName', 
         title: '操作人', 
-        dataIndex: 'opreateUser' 
+        dataIndex: 'createUserName' 
     },
     { 
         key: 'createTime', 
@@ -162,9 +162,9 @@ export default function AssessmentTaskDetail(): React.ReactNode {
             <DetailTitle title="相关附件" />
             <CommonTable columns={[
                 { 
-                    key: 'fileName', 
+                    key: 'name', 
                     title: '附件名称', 
-                    dataIndex: 'fileName',
+                    dataIndex: 'name',
                     width: 350 
                 },
                 { 
@@ -174,7 +174,7 @@ export default function AssessmentTaskDetail(): React.ReactNode {
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                         <Space direction="horizontal" size="small">
                             <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
-                            <Button type="link">预览</Button>
+                            <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button>
                         </Space>
                 ) }
             ]}

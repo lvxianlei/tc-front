@@ -36,7 +36,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                 setVisible(false);
                 form.resetFields();
             }).then(()=>{
-                history.push('/confirmTask/ConfirmTaskMngt');
+                setRefresh(!refresh);
             })
         } catch (error) {
             console.log(error)
@@ -231,7 +231,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             path="/tower-science/drawTask"
             columns={columns}
             refresh={ refresh }
-            extraOperation={<Button type="primary">导出</Button>}
+            // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {

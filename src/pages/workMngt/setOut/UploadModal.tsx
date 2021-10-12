@@ -1,22 +1,33 @@
 import React from 'react';
-import { Button, Space, Modal, Upload } from 'antd';
+import { Button, Space, Modal, Upload, message } from 'antd';
 import { DetailContent, CommonTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './TowerLoftingAssign.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
-import useRequest from '@ahooksjs/use-request';
 import { CloudUploadOutlined } from '@ant-design/icons';
+import AuthUtil from '../../../utils/AuthUtil';
+import { downloadTemplate } from './downloadTemplate';
 
 export interface UploadModalProps {}
 export interface IUploadModalRouteProps extends RouteComponentProps<UploadModalProps>, WithTranslation {
     readonly id: number | string;
     readonly btnName: string;
+    readonly path: string;
+    readonly requestData?: {};
+    readonly uploadUrl: string;
 }
 
 export interface UploadModalState {
     readonly visible: boolean;
     readonly description?: string;
+    readonly data?: IData;
+}
+
+interface IData{
+    readonly attachInfoVOList?: [];
+    readonly productSegmentId?: string;
+    readonly productSegmentRecordVOList?: [];
 }
 
 const tableColumns = [
@@ -27,29 +38,29 @@ const tableColumns = [
         width: 50, 
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
     {
-        key: 'partBidNumber',
+        key: 'createUserDepartmentName',
         title: '操作部门',
-        dataIndex: 'partBidNumber', 
+        dataIndex: 'createUserDepartmentName', 
     },
     {  
-        key: 'goodsType', 
+        key: 'createUserName', 
         title: '操作人', 
-        dataIndex: 'goodsType' 
+        dataIndex: 'createUserName' 
     },
     { 
-        key: 'goodsType', 
+        key: 'createTime', 
         title: '操作时间', 
-        dataIndex: 'packageNumber' 
+        dataIndex: 'createTime' 
     },
     {
-        key: 'goodsType', 
+        key: 'action', 
         title: '操作动作', 
-        dataIndex: 'amount' 
+        dataIndex: 'action' 
     },
     { 
-        key: 'goodsType', 
+        key: 'name', 
         title: '对象', 
-        dataIndex: 'unit' 
+        dataIndex: 'name' 
     }
 ]
 
@@ -68,8 +79,15 @@ class UploadModal extends React.Component<IUploadModalRouteProps, UploadModalSta
         })
     }
 
-    private async modalShow(): Promise<void> {
-        // const data = await RequestUtil.get(`/tower-market/bidInfo/${ this.props.id }`);
+    protected async getDetail(): Promise<void> {
+        const data = await RequestUtil.get<IData>(`${ this.props.path }`);
+        this.setState({
+            data: data
+        })
+    }
+
+    private modalShow(): void {
+        this.getDetail();
         this.setState({
             visible: true
         })
@@ -85,12 +103,34 @@ class UploadModal extends React.Component<IUploadModalRouteProps, UploadModalSta
             <Modal
                 visible={ this.state.visible } 
                 width="40%" 
-                title="评估信息" 
+                title={ this.props.btnName }
                 footer={ <Button type="ghost" onClick={() => this.modalCancel() }>关闭</Button> } 
                 onCancel={ () => this.modalCancel() }
             >
                 <DetailContent>
-                    <p>相关附件<Upload ><CloudUploadOutlined /></Upload></p>
+                    <p>相关附件
+                        <Upload action={ () => {
+                            const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                            return baseUrl + this.props.uploadUrl
+                        } } 
+                        headers={
+                            {
+                                'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                                'Tenant-Id': AuthUtil.getTenantId(),
+                                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                            }
+                        }
+                        showUploadList={ false }
+                        data={ this.props.requestData }
+                        onChange={ (info) => {
+                            if(info.file.response && !info.file.response?.success) {
+                                message.warning(info.file.response?.msg)
+                            } 
+                            if(info.file.response && info.file.response?.success) {
+                                this.getDetail();
+                            }
+                        }}><CloudUploadOutlined /></Upload>
+                    </p>
                     <CommonTable columns={[
                         { 
                             key: 'name', 
@@ -104,15 +144,17 @@ class UploadModal extends React.Component<IUploadModalRouteProps, UploadModalSta
                             dataIndex: 'operation', 
                             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                                 <Space direction="horizontal" size="small">
-                                    <Button type="link">下载</Button>
-                                    <Button type="link">删除</Button>
+                                    <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
+                                    <Button type="link" onClick={ () => RequestUtil.delete(`/tower-system/attach?ids=${ record.id }`).then(res => {
+                                        message.success('删除成功');
+                                    }) }>删除</Button>
                                 </Space>
                         ) }
                     ]}
-                        dataSource={ [] }
+                        dataSource={ this.state.data?.attachInfoVOList }
                     />
                     <p className={ styles.topPadding }>操作信息</p>
-                    <CommonTable columns={ tableColumns } dataSource={ [] } />
+                    <CommonTable columns={ tableColumns } dataSource={ this.state.data?.productSegmentRecordVOList } />
                 </DetailContent>
             </Modal>
         </>

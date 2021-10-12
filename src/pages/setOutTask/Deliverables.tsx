@@ -99,7 +99,7 @@ class Deliverables extends React.Component<IDeliverablesRouteProps, Deliverables
         }, {
             name: 'NC程序汇总.zip',
             use: 'NC程序汇总'
-        }, ]
+        }]
         return <>
             <Button type="link" onClick={ () => this.modalShow() }>交付物</Button>
             <Modal
@@ -111,7 +111,7 @@ class Deliverables extends React.Component<IDeliverablesRouteProps, Deliverables
             >
                 <DetailContent>
                     <p>交付物清单</p>
-                    <CommonTable columns={ tableColumns } dataSource={ data } />
+                    <CommonTable columns={ tableColumns } dataSource={ data } pagination={ false }/>
                 </DetailContent>
             </Modal>
         </>

@@ -11,99 +11,141 @@ import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import TowerLoftingAssign from './TowerLoftingAssign';
+import RequestUtil from '../../../utils/RequestUtil';
 
-const columns = [
-    {
-        key: 'index',
-        title: '序号',
-        dataIndex: 'index',
-        width: 50,
-        fixed: 'left' as FixedType,
-        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
-    },
-    {
-        key: 'projectName',
-        title: '塔型',
-        width: 150,
-        dataIndex: 'projectName'
-    },
-    {
-        key: 'projectNumber',
-        title: '优先级',
-        dataIndex: 'projectNumber',
-        width: 120
-    },
-    {
-        key: 'bidBuyEndTime',
-        title: '段名',
-        width: 200,
-        dataIndex: 'bidBuyEndTime'
-    },
-    {
-        key: 'biddingEndTime',
-        title: '模式',
-        width: 150,
-        dataIndex: 'biddingEndTime',
-    },
-    {
-        key: 'biddingPerson',
-        title: '计划交付时间',
-        dataIndex: 'biddingPerson',
-        width: 200,
-    },
-    {
-        key: 'bidBuyEndTime',
-        title: '放样人',
-        width: 200,
-        dataIndex: 'bidBuyEndTime'
-    },
-    {
-        key: 'bidBuyEndTime',
-        title: '校核人',
-        width: 200,
-        dataIndex: 'bidBuyEndTime'
-    },
-    {
-        key: 'bidBuyEndTime',
-        title: '放样状态',
-        width: 200,
-        dataIndex: 'bidBuyEndTime'
-    },
-    {
-        key: 'bidBuyEndTime',
-        title: '最新状态变更时间',
-        width: 200,
-        dataIndex: 'bidBuyEndTime'
-    },
-    {
-        key: 'operation',
-        title: '操作',
-        dataIndex: 'operation',
-        fixed: 'right' as FixedType,
-        width: 250,
-        render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-            <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                <Link to={ `/workMngt/setOutList/towerInformation/${ record.id }/lofting/${ record.id }` }>放样</Link>
-                <Link to={ `/workMngt/setOutList/towerInformation/${ record.id }/NCProgram/${ record.id }` }>NC程序</Link>
-                <Link to={ `/workMngt/setOutList/towerInformation/${ record.id }/towerCheck/${ record.id }` }>校核</Link>
-                <Link to={ `/workMngt/setOutList/towerInformation/${ record.id }/towerLoftingDetails/${ record.id }` }>塔型放样明细</Link>
-            </Space>
-        )
-    }
-]
 
 export default function TowerInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
+
+    const columns = [
+        {
+            key: 'index',
+            title: '序号',
+            dataIndex: 'index',
+            width: 50,
+            fixed: 'left' as FixedType,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+        },
+        {
+            key: 'productCategoryName',
+            title: '塔型',
+            width: 150,
+            dataIndex: 'productCategoryName'
+        },
+        {
+            key: 'priority',
+            title: '优先级',
+            dataIndex: 'priority',
+            width: 120,
+            render: (pattern: number): React.ReactNode => {
+                switch (pattern) {
+                    case 1:
+                        return '高';
+                    case 2:
+                        return '中';
+                    case 3:
+                        return '低';
+                }
+            }
+        },
+        {
+            key: 'name',
+            title: '段名',
+            width: 200,
+            dataIndex: 'name'
+        },
+        {
+            key: 'pattern',
+            title: '模式',
+            width: 150,
+            dataIndex: 'pattern',
+            render: (pattern: number): React.ReactNode => {
+                switch (pattern) {
+                    case 1:
+                        return '新放';
+                    case 2:
+                        return '重新出卡';
+                    case 3:
+                        return '套用';
+                }
+            }
+        },
+        {
+            key: 'plannedDeliveryTime',
+            title: '计划交付时间',
+            dataIndex: 'plannedDeliveryTime',
+            width: 200,
+        },
+        {
+            key: 'loftingUser',
+            title: '放样人',
+            width: 200,
+            dataIndex: 'loftingUser'
+        },
+        {
+            key: 'checkUser',
+            title: '校核人',
+            width: 200,
+            dataIndex: 'checkUser'
+        },
+        {
+            key: 'status',
+            title: '放样状态',
+            width: 200,
+            dataIndex: 'status',
+            render: (pattern: number): React.ReactNode => {
+                switch (pattern) {
+                    case 1:
+                        return '待指派';
+                    case 2:
+                        return '放样中';
+                    case 3:
+                        return '组焊中';
+                    case 4:
+                        return '配段中';
+                    case 5:
+                        return '已完成';
+                    case 6:
+                        return '已提交';
+                }
+            }
+        },
+        {
+            key: 'updateStatusTime',
+            title: '最新状态变更时间',
+            width: 200,
+            dataIndex: 'updateStatusTime'
+        },
+        {
+            key: 'operation',
+            title: '操作',
+            dataIndex: 'operation',
+            fixed: 'right' as FixedType,
+            width: 250,
+            render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                <Space direction="horizontal" size="small" className={ styles.operationBtn }>
+                    <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/lofting/${ record.id }` }>放样</Link>
+                    <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/NCProgram/${ record.id }` }>NC程序</Link>
+                    <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerCheck/${ record.id }` }>校核</Link>
+                    <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerLoftingDetails/${ record.id }` }>塔型放样明细</Link>
+                </Space>
+            )
+        }
+    ]
+
     return <Page
-        path="/tower-market/bidInfo"
+        path={ `/tower-science/productSegment` }
         columns={ columns }
         headTabs={ [] }
+        requestData={{ productCategoryId: params.id }}
         extraOperation={ <Space direction="horizontal" size="small">
-            <Button type="primary" ghost>导出</Button>
+            {/* <Button type="primary" ghost>导出</Button> */}
             <Popconfirm
                 title="确认提交?"
-                onConfirm={ () => {} }
+                onConfirm={ () => {
+                    RequestUtil.post(`/tower-science/product/submit`, { productCategoryId: params.id });
+                } }
                 okText="提交"
                 cancelText="取消"
             >
@@ -111,15 +153,15 @@ export default function TowerInformation(): React.ReactNode {
             </Popconfirm>
             <TowerLoftingAssign id={ params.id }/>
             <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
-        </Space>}
+        </Space> }
         searchFormItems={ [
             {
-                name: 'startReleaseDate',
+                name: 'updateStatusTime',
                 label: '最新状态变更时间',
                 children: <DatePicker />
             },
             {
-                name: 'startBidBuyEndTime',
+                name: 'status',
                 label: '放样状态',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
                     <Select.Option value="0" key="0">放样中</Select.Option>
@@ -129,19 +171,30 @@ export default function TowerInformation(): React.ReactNode {
                 </Select>
             },
             {
-                name: 'startBidBuyEndTime',
+                name: 'loftingUser',
                 label: '放样人',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
                     <Select.Option value="0" key="0">放样人</Select.Option>
                 </Select>
             },
             {
-                name: 'startBidBuyEndTime',
+                name: 'checkUser',
                 label: '校核人',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
                     <Select.Option value="0" key="0">校核人</Select.Option>
                 </Select>
             }
         ] }
+        onFilterSubmit = { (values: Record<string, any>) => {
+            if(values.updateStatusTime) {
+                const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
+                values.updateStatusTimeStart = formatDate[0];
+                values.updateStatusTimeEnd = formatDate[1];
+            }
+            return values;
+        } }
+        tableProps={{
+            pagination: false
+        }}
     />
 }
