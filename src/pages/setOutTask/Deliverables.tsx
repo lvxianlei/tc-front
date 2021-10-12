@@ -111,7 +111,7 @@ class Deliverables extends React.Component<IDeliverablesRouteProps, Deliverables
             >
                 <DetailContent>
                     <p>交付物清单</p>
-                    <CommonTable columns={ tableColumns } dataSource={ data } />
+                    <CommonTable columns={ tableColumns } dataSource={ data } pagination={ false }/>
                 </DetailContent>
             </Modal>
         </>

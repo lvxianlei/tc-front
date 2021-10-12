@@ -163,7 +163,7 @@ export default function AssessmentTaskList(): React.ReactNode {
         path="/tower-science/assessTask"
         columns={ columns }
         headTabs={ [] }
-        extraOperation={ <Button type="primary" ghost>导出</Button> }
+        // extraOperation={ <Button type="primary" ghost>导出</Button> }
         refresh={ refresh }
         searchFormItems={ [
             {
