@@ -82,3 +82,4 @@ export default abstract class AuthUtil {
         sessionStorage.setItem(TOKEN_KEY, token);
     }
 }
+

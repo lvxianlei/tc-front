@@ -232,20 +232,20 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     /**
      * @description 验证合同编号是否重复
      */
-    public checkContractNumber = (value: StoreValue): Promise<void | any> => {
-        return new Promise(async (resolve, reject) => {  // 返回一个promise
-            const resData = await RequestUtil.get('/tower-market/contract/isContractNumberRepeated', {
-                contractId: this.state.contract?.id,
-                contractNumber: value
-            });
-            if (!resData) {
-                resolve(!resData)
-            } else {
-                resolve(false)
-            }
-        }).catch(error => {
-            Promise.reject(error)
-        })
+    public checkContractNumber = (value: StoreValue) => {
+        // return new Promise(async (resolve, reject) => {  // 返回一个promise
+        //     const resData = await RequestUtil.get('/tower-market/contract/isContractNumberRepeated', {
+        //         contractId: this.state.contract?.id,
+        //         contractNumber: value
+        //     });
+        //     if (!resData) {
+        //         resolve(!resData)
+        //     } else {
+        //         resolve(false)
+        //     }
+        // }).catch(error => {
+        //     Promise.reject(error)
+        // })
     }
 
     /**
@@ -401,19 +401,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 initialValue: contract?.contractNumber,
                 rules: [{
                     required: true,
-                    validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
-                        if (value && value != '') {
-                            this.checkContractNumber(value).then(res => {
-                                if (res) {
-                                    callback()
-                                } else {
-                                    callback('合同编号重复')
-                                }
-                            })
-                        } else {
-                            callback('请输入合同编号')
-                        }
-                    }
+                    message:"请输入合同编号"
                 }],
                 children: <Input value={contract?.contractNumber} maxLength={50} />
             }, {

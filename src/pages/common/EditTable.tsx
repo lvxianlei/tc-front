@@ -126,9 +126,7 @@ export default function EditableTable({ columns = [], dataSource = [], form, opr
                                     console.log(error)
                                 }
                             }} type="primary" style={{ height: 32, margin: "0 16px 16px 0" }}>新增一行</Button>{opration}</Row>
-                            <Row className={styles.FormHeader}>
-                                {columns.map((item, index) => (<Col key={`Editable_${index}`} className={item.required ? styles.required : ""} span={2}>{item.title}</Col>))}
-                            </Row>
+
                             {/* <Row style={{ position: "relative", height: 400 }}>
                                 <WindowScroller>
                                     {({ height, isScrolling, onChildScroll, scrollTop }) => autoSizer({
@@ -141,7 +139,13 @@ export default function EditableTable({ columns = [], dataSource = [], form, opr
                                     })}
                                 </WindowScroller>
                             </Row> */}
-                            <div style={{ width: "100%", minHeight: 300, overflowY: 'auto' }}>
+                            <div style={{ overflowX: "auto" }}>
+                                <Row className={styles.FormHeader}>
+                                    {columns.map((item, index) => (<Col
+                                        key={`Editable_${index}`}
+                                        style={{ width: 100, backgroundColor: "#f5f5f5" }}
+                                        className={item.required ? styles.required : ""} span={2}>{item.title}</Col>))}
+                                </Row>
                                 {fields.map(({ key, name, fieldKey, ...restField }, index: number) => (
                                     <Row style={{ width: "100%" }} key={`EditableRow_${key}`} className={`${styles.FormHeader} ${styles.FormRow}`}>
                                         {columns.map((coItem, coIndex) => (<Col key={`EditableCol_${coIndex}`} span={2}>

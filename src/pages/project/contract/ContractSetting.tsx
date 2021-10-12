@@ -34,23 +34,7 @@ class ManagementContractSetting extends ContractSetting {
               rules: [
                 {
                   required: true,
-                  validator: (
-                    rule: RuleObject,
-                    value: StoreValue,
-                    callback: (error?: string) => void
-                  ) => {
-                    if (value && value != "") {
-                      this.checkContractNumber(value).then((res) => {
-                        if (res) {
-                          callback();
-                        } else {
-                          callback("合同编号重复");
-                        }
-                      });
-                    } else {
-                      callback("请输入合同编号");
-                    }
-                  },
+                  message:"请输入合同编号"
                 },
               ],
               children: (

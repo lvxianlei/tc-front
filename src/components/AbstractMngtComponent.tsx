@@ -46,7 +46,7 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
             selectedTabKey: this.getTabItems()[0].key,
             tablePagination: {
                 current: 1,
-                pageSize: 10,
+                pageSize: 20,
                 total: 0,
                 showSizeChanger: false
             }

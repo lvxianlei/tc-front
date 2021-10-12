@@ -102,7 +102,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
     public async onFilterSubmit(values: Record<string, any>) {
         const tablePagination: TablePaginationConfig = {
             current: 1,
-            pageSize: 10,
+            pageSize: 20,
             total: 0,
             showSizeChanger: false
         }
