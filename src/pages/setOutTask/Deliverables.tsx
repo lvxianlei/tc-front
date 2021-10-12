@@ -99,7 +99,7 @@ class Deliverables extends React.Component<IDeliverablesRouteProps, Deliverables
         }, {
             name: 'NC程序汇总.zip',
             use: 'NC程序汇总'
-        }, ]
+        }]
         return <>
             <Button type="link" onClick={ () => this.modalShow() }>交付物</Button>
             <Modal
