@@ -62,7 +62,7 @@ const ViewDetail: React.FC<ApprovalTypesViewProps> = ({ id, path, title }) => {
                 <Radio.Button value="records">审批记录</Radio.Button>
                 <Radio.Button value="attachVos">附件信息</Radio.Button>
             </Radio.Group>
-            {radioValue === "base" && <BaseInfo columns={baseInfo} dataSource={(data as any) || {}} />}
+            {radioValue === "base" && <BaseInfo columns={baseInfo} dataSource={(data?.biddingEvaluation) || {}} />}
             {radioValue === "records" && <CommonTable columns={auditIdRecord} dataSource={data?.records} />}
             {radioValue === "attachVos" && <CommonTable columns={enclosure} dataSource={data?.attachInfo} />}
         </DetailContent>

@@ -381,7 +381,7 @@
             "dataIndex": "mackUser"
         },
         {
-            "title": "接收人接收及日期",
+            "title": "接收人签字及时间",
             "dataIndex": "receiveUserDate",
             "type": "date",
             "format": "YYYY-MM-DD"

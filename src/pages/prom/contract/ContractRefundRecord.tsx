@@ -234,14 +234,6 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                             if (index === Number(tableIndex)) {
                                 return {
                                     ...item,
-                                    refundTime: record.refundTime,
-                                    refundMode: record.refundMode,
-                                    refundAmount: record.refundAmount,
-                                    currencyType: record.currencyType,
-                                    exchangeRate: record.exchangeRate,
-                                    foreignExchangeAmount: record.foreignExchangeAmount,
-                                    refundBank: record.refundBank,
-                                    description: record.description,
                                     customerName: selectedRows[0].name,
                                     customerId: selectedRows[0].id
                                 };
@@ -465,14 +457,12 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
                                                     if (item.id) {
                                                         return {
                                                             ...item,
-                                                            refundTime: (item.refundTime as any)?.format("YYYY-MM-DD HH:mm:ss"),
                                                             customerName: this.props.paymentPlanVos[planIndex].paymentRecordVos[ind].customerName,
                                                             customerId: this.props.paymentPlanVos[planIndex].paymentRecordVos[ind].customerId,
                                                         };
                                                     } else {
                                                         return {
                                                             ...item,
-                                                            refundTime: (item.refundTime as any)?.format("YYYY-MM-DD HH:mm:ss"),
                                                             customerName: '',
                                                             customerId: ''
                                                         };

@@ -12,7 +12,6 @@ import { downLoadFile } from "../../../utils"
 export default function BaseInfoEdit(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ tab: TabTypes, id: string }>()
-    const [projectLeaderId, setProjectLeaderId] = useState<string>("")
     const [attachVosData, setAttachVosData] = useState<any[]>([])
     const [baseInfoForm] = Form.useForm()
     const [cargoVOListForm] = Form.useForm()
@@ -20,7 +19,6 @@ export default function BaseInfoEdit(): JSX.Element {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/projectInfo/${params.id}`)
-            setProjectLeaderId(result.projectLeaderId)
             setAttachVosData(result.attachVos)
             baseInfoForm.setFieldsValue(result)
             cargoVOListForm.setFieldsValue({ submit: result.cargoVOList })
@@ -44,17 +42,14 @@ export default function BaseInfoEdit(): JSX.Element {
         try {
             const baseInfoData = await baseInfoForm.validateFields()
             const cargoVOListData = await cargoVOListForm.validateFields()
-            delete data?.cargoVOList
-            delete data?.attachVos
             const result = await run({
-                ...data,
                 ...baseInfoData,
                 attachInfoDtos: attachVosData,
                 cargoDTOList: cargoVOListData.submit,
-                projectLeaderId,
-                projectLeader: baseInfoData.projectLeader.value || baseInfoData.projectLeader,
-                biddingPerson: baseInfoData.biddingPerson.value || baseInfoData.biddingPerson,
-                biddingAgency: baseInfoData.biddingAgency.value || baseInfoData.biddingAgency
+                projectLeaderId: baseInfoData.projectLeader?.records[0]?.id,
+                projectLeader: baseInfoData.projectLeader?.value,
+                biddingPerson: baseInfoData.biddingPerson?.value,
+                biddingAgency: baseInfoData.biddingAgency?.value
             })
             if (result) {
                 message.success("保存成功...")
@@ -65,11 +60,6 @@ export default function BaseInfoEdit(): JSX.Element {
         }
     }
 
-    const handleBaseInfoChange = (changedFields: any) => {
-        if (Object.keys(changedFields)[0] === "projectLeader") {
-            setProjectLeaderId(changedFields.projectLeader.records[0].id)
-        }
-    }
     const uploadChange = (event: any) => {
         if (event.file.status === "done") {
             if (event.file.response.code === 200) {
@@ -109,7 +99,7 @@ export default function BaseInfoEdit(): JSX.Element {
         ]}>
             <Spin spinning={loading}>
                 <DetailTitle title="基本信息" />
-                <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={baseInfoData} dataSource={data || {}} edit />
+                <BaseInfo form={baseInfoForm} columns={baseInfoData} dataSource={data || {}} edit />
                 <DetailTitle title="货物清单" />
                 <EditTable form={cargoVOListForm} columns={cargoVOListColumns} dataSource={data?.cargoVOList} />
                 <DetailTitle title="附件信息" operation={[<Upload

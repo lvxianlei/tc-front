@@ -20,7 +20,7 @@ export default function BidResultEdit(): JSX.Element {
             baseInfoForm.setFieldsValue(result)
             if (result.bidOpenRecordListVos?.length > 0) {
                 const resultBid = result.bidOpenRecordListVos
-                if (resultBid[0].round !== 1) {
+                if (resultBid[resultBid.length - 1].round !== 1) {
                     setBidOpenRecordVos([...resultBid, ...bidOpenRecordVos])
                 } else {
                     setBidOpenRecordVos(resultBid)
@@ -106,6 +106,8 @@ export default function BidResultEdit(): JSX.Element {
             case "select":
                 value = column.enum.find((enumItem: any) => enumItem.label === data).value
                 break
+            default:
+                value = data
         }
         return value
     }
@@ -214,11 +216,11 @@ export default function BidResultEdit(): JSX.Element {
                                         return
                                     }
                                     const resultData = bidOpenRecordVos.find((bidItem: any) => bidItem.round === item.key).bidOpenRecordVos
-                                    // const filterUploadData = _data.filter(item => Object.keys(item).every(eItem => eItem))
-                                    const uploadData = _data.map((item: any, index) => {
-                                        const rowData: any = { uid: resultData.length + index }
+                                    const filterUploadData = _data.filter(item => Object.keys(item).every(eItem => eItem))
+                                    const uploadData = filterUploadData.map((item: any, index) => {
+                                        let rowData: any = { uid: resultData.length + index }
                                         Object.keys(item).forEach((columnItem: string) => {
-                                            const columnDataIndex = (bidInfoColumns).find(bidItem => bidItem.title === columnItem)
+                                            const columnDataIndex = bidInfoColumns.find(bidItem => bidItem.title === columnItem)
                                             if (columnDataIndex) {
                                                 rowData[columnDataIndex.dataIndex] = generateFormatEditData(columnDataIndex, item[columnItem])
                                             }

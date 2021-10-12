@@ -339,6 +339,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                         <ContractSelectionComponent
                                             onSelect={this.onSelect}
                                             selectKey={[saleOrder?.contractInfoDto?.contractId]}
+                                            projectId={(this.props.match.params as any).projectId}
                                             status={1}
                                         />
                                     }

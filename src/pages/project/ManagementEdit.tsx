@@ -1,24 +1,21 @@
 import React, { useState } from "react"
-import { useHistory, useParams } from "react-router-dom"
-import { Button, Form, message, Spin, Upload } from "antd"
+import { useHistory } from "react-router-dom"
+import { Button, Form, message, Upload } from "antd"
 import { DetailContent, BaseInfo, EditTable, DetailTitle, CommonTable } from '../common'
-import { baseInfoData, enclosure, paths, cargoVOListColumns } from './managementDetailData.json'
+import { baseInfoData, enclosure, cargoVOListColumns } from './managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
-import { TabTypes } from "./ManagementDetail"
 import AuthUtil from "../../utils/AuthUtil"
 import { downLoadFile } from "../../utils"
 import ApplicationContext from "../../configuration/ApplicationContext"
 const dictionaryOptions: any = ApplicationContext.get().dictionaryOption
 export default function BaseInfoEdit(): JSX.Element {
   const history = useHistory()
-  const params = useParams<{ tab: TabTypes, id: string }>()
-  const [projectLeaderId, setProjectLeaderId] = useState<string>("")
   const [attachVosData, setAttachVosData] = useState<any[]>([])
   const [baseInfoForm] = Form.useForm()
   const [cargoVOListForm] = Form.useForm()
   const typeNameEnum = dictionaryOptions["121"].map((item: any) => ({ value: item.id, label: item.name }))
-  const { loading: saveStatus, data: saveResult, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
+  const { loading: saveStatus, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
     try {
       const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/projectInfo`, postData)
       resole(result)
@@ -35,10 +32,10 @@ export default function BaseInfoEdit(): JSX.Element {
         ...baseInfoData,
         attachInfoDtos: attachVosData,
         cargoDTOList: cargoVOListData.submit,
-        projectLeaderId,
-        projectLeader: baseInfoData.projectLeader.value || baseInfoData.projectLeader,
-        biddingPerson: baseInfoData.biddingPerson.value || baseInfoData.biddingPerson,
-        biddingAgency: baseInfoData.biddingAgency.value || baseInfoData.biddingAgency
+        projectLeaderId: baseInfoData.projectLeader?.records[0]?.id,
+        projectLeader: baseInfoData.projectLeader?.value,
+        biddingPerson: baseInfoData.biddingPerson?.value,
+        biddingAgency: baseInfoData.biddingAgency?.value
       })
       if (result) {
         message.success("保存成功...")
@@ -46,12 +43,6 @@ export default function BaseInfoEdit(): JSX.Element {
       }
     } catch (error) {
       console.log(error)
-    }
-  }
-
-  const handleBaseInfoChange = (changedFields: any, allFields: any) => {
-    if (Object.keys(changedFields)[0] === "projectLeader") {
-      setProjectLeaderId(changedFields.projectLeader.records[0].id)
     }
   }
 
@@ -78,6 +69,7 @@ export default function BaseInfoEdit(): JSX.Element {
   const deleteAttachData = (id: number) => {
     setAttachVosData(attachVosData.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
   }
+
   return <DetailContent operation={[
     <Button
       key="save"
@@ -89,7 +81,7 @@ export default function BaseInfoEdit(): JSX.Element {
     <Button key="cacel" onClick={() => history.goBack()}>取消</Button>
   ]}>
     <DetailTitle title="基本信息" />
-    <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={baseInfoData.map((item: any) => item.dataIndex === "biddingPerson" ? ({
+    <BaseInfo form={baseInfoForm} columns={baseInfoData.map((item: any) => item.dataIndex === "biddingPerson" ? ({
       ...item,
       columns: item.columns.map((columnItem: any) => columnItem.dataIndex === "type" ? ({ ...columnItem, enum: typeNameEnum }) : columnItem)
     }) : item)} dataSource={{}} edit />
@@ -112,7 +104,7 @@ export default function BaseInfoEdit(): JSX.Element {
       title: "操作", dataIndex: "opration",
       render: (_: any, record: any) => (<>
         <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
-        <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
+        <Button type="link" onClick={() => downLoadFile(record.link || record.filePath, record.name)}>下载</Button>
       </>)
     }, ...enclosure]} dataSource={attachVosData} />
   </DetailContent>

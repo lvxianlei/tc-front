@@ -184,7 +184,7 @@ export default function ManagementDetail(): React.ReactNode {
                     dataIndex: 'opration',
                     render: (_a: any, _b: any, index: number): React.ReactNode => (<Button
                         type="link"
-                        onClick={() => downLoadFile(_b.filePath)}
+                        onClick={() => downLoadFile(_b.filePath, _b.name)}
                     >下载</Button>)
                 },
                 {

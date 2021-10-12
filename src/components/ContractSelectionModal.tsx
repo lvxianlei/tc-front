@@ -16,6 +16,7 @@ import { saleTypeOptions } from '../configuration/DictionaryOptions';
 const { Option } = Select;
 export interface IContractSelectionComponentProps extends IAbstractSelectableModalProps {
     readonly status?: number;
+    readonly projectId?: string;
 }
 export interface IContractSelectionComponentState extends IAbstractSelectableModalState {
     readonly tableDataSource: [];
@@ -57,6 +58,7 @@ export default class ContractSelectionComponent extends AbstractFilteredSelectio
     public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/contract', {
             ...filterValues,
+            projectId: this.props.projectId,
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize || this.state.tablePagination?.pageSize,
             status: this.props.status
