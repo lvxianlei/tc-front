@@ -11,14 +11,34 @@ const tableColumns = [
     { title: '操作部门', dataIndex: 'createDepartment', key: 'createDepartment', },
     { title: '操作人', dataIndex: 'createUser', key: 'createUser' },
     { title: '操作时间', dataIndex: 'createTime', key: 'createTime' },
-    { title: '任务状态', dataIndex: 'status', key: 'status' }
+    { title: '任务状态', dataIndex: 'status', key: 'status', render: (value: number, record: object): React.ReactNode => {
+        const renderEnum: any = [
+            {
+                value: 1,
+                label: "待修改"
+            },
+            {
+                value: 2,
+                label: "已修改"
+            },
+            {
+                value: 3,
+                label: "已拒绝"
+            },
+            {
+                value: 4,
+                label: "已删除"
+            }
+        ]
+             return <>{renderEnum.find((item: any) => item.value === value).label}</>
+    }}
 ]
 
 export default function PickDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`tower-science/materialTask?id=${params.id}`)
+        const data: any = await RequestUtil.get(`tower-science/materialTask/${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data

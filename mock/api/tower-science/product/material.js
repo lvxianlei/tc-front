@@ -25,7 +25,7 @@ module.exports = {
     code: 200,
     data: {
         records: [{
-            "id": Random.increment(),
+            "id": '7',
             "productNumber": Random.natural(11),
             "materialDeliverTime": Random.date('yyyy-MM-dd'),
             "materialStatus|1-4": 1,
