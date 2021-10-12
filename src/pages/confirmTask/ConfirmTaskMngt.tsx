@@ -36,7 +36,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                 setVisible(false);
                 form.resetFields();
             }).then(()=>{
-                history.push('/confirmTask/ConfirmTaskMngt');
+                setRefresh(!refresh);
             })
         } catch (error) {
             console.log(error)
