@@ -472,13 +472,13 @@ export default function ConfirmDetail(): React.ReactNode {
             ]}>
                 <div style={{display:'flex',justifyContent:'space-between'}}>
                     <Space>
-                        <Button type='primary' ghost onClick={() => history.goBack()}>导出</Button>
-                        <Button type='primary' ghost onClick={() => history.goBack()}>模板下载</Button>
+                        {/* <Button type='primary' ghost onClick={() => history.goBack()}>导出</Button>
+                        <Button type='primary' ghost onClick={() => history.goBack()}>模板下载</Button> */}
                         <span>总基数：{tableDataSource.length}基</span>
                         <span>总重量：{weight}kg</span>
                     </Space>
                     <Space>
-                        <Button type='primary' ghost onClick={() => history.goBack()}>导入</Button>
+                        {/* <Button type='primary' ghost onClick={() => history.goBack()}>导入</Button> */}
                         <Button type='primary' ghost onClick={() => setVisible(true)}>添加</Button>
                     </Space>
                 </div>

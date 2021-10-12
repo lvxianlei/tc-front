@@ -145,7 +145,7 @@ export default function ConfirmList(): React.ReactNode {
         <Page
             path="/tower-science/drawProductDetail"
             columns={columns}
-            extraOperation={<Button type="primary">导出</Button>}
+            // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {

@@ -130,7 +130,7 @@ export default function ScheduleList(): React.ReactNode {
         <Page
             path="/tower-science/loftingTask"
             columns={columns}
-            extraOperation={<Button type="primary">导出</Button>}
+            // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
