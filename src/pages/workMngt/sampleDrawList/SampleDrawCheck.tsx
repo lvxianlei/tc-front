@@ -12,6 +12,7 @@ export default function SampleDrawCheck(): React.ReactNode {
     const params = useParams<{ id: string }>()
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
+    const [refresh, setRefresh] = useState<boolean>(false);
     const [errorVisible, setErrorVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
     const [attachInfo, setAttachInfo] = useState<any>({})
@@ -26,7 +27,8 @@ export default function SampleDrawCheck(): React.ReactNode {
             await RequestUtil.post(`/tower-science/smallSample/saveIssue`, submitData).then(()=>{
                 message.success('提交成功！')
             }).then(()=>{
-                setErrorVisible(false)
+                setErrorVisible(false);
+                setRefresh(!refresh)
             })
         } catch (error) {
             console.log(error)
@@ -201,6 +203,7 @@ export default function SampleDrawCheck(): React.ReactNode {
                 path="/tower-science/smallSample/checkList"
                 columns={columns}
                 onFilterSubmit={onFilterSubmit}
+                refresh={refresh}
                 requestData={{productCategoryId: params.id}}
                 extraOperation={
                     <Space>
@@ -209,6 +212,8 @@ export default function SampleDrawCheck(): React.ReactNode {
                         title="确认完成校核?"
                         onConfirm={ async () =>  await RequestUtil.put(`/tower-science/smallSample/completeCheck/productCategoryId=${params.id}`).then(()=>{
                             message.success('提交成功！');
+                        }).then(()=>{
+                            history.push('/workMngt/sampleDrawList');
                         })}
                         okText="确认"
                         cancelText="取消"

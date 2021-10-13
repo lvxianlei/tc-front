@@ -8,6 +8,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 
 export default function SampleDrawList(): React.ReactNode {
     const history = useHistory();
+    const [refresh, setRefresh] = useState<boolean>(false);
     const columns = [
         {
             key: 'index',
@@ -134,6 +135,8 @@ export default function SampleDrawList(): React.ReactNode {
                         onConfirm={ async () => {
                             await RequestUtil.put(`/tower-science/smallSample/submit?productCategoryId=${record.id}`).then(()=>{
                                 message.success('提交成功！')
+                            }).then(()=>{
+                                setRefresh(!refresh)
                             })
                         } }
                         okText="确认"
@@ -169,6 +172,7 @@ export default function SampleDrawList(): React.ReactNode {
             path="/tower-science/smallSample"
             columns={columns}
             onFilterSubmit={onFilterSubmit}
+            refresh={refresh}
             extraOperation={<Button type="primary">导出</Button>}
             searchFormItems={[
                 {

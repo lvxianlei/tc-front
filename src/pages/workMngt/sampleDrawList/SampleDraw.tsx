@@ -121,9 +121,18 @@ export default function SampleDraw(): React.ReactNode {
                     <Button type="primary">导出</Button>
                     <Button type="primary">导入</Button>
                     <Button type="primary">下载小样图</Button>
-                    <Button type="primary" onClick={async () =>  await RequestUtil.put(`/tower-science/smallSample/sampleComplete/productCategoryId=${params.id}`).then(()=>{
-                                  message.success('提交成功！');
-                              })}>完成小样图</Button>
+                    <Popconfirm
+                        title="确认完成小样图?"
+                        onConfirm={ async () =>  await RequestUtil.put(`/tower-science/smallSample/sampleComplete/productCategoryId=${params.id}`).then(()=>{
+                            message.success('提交成功！');
+                        }).then(()=>{
+                            history.push('/workMngt/sampleDrawList');
+                        })}
+                        okText="确认"
+                        cancelText="取消"
+                    >   
+                        <Button type="primary">完成小样图</Button>
+                    </Popconfirm>
                     <Button type="primary" onClick={() => history.goBack()}>返回上一级</Button>
                     <span>小样图数：23/100</span>
                     </Space>
