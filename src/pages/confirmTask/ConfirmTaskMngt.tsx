@@ -128,7 +128,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                         setDrawTaskId(record.id);
                         setVisible(true) 
                     }} disabled={ record.status !== 2 }>指派</Button>
-                    <Button type='link' onClick={()=>history.push(`/confirmTask/ConfirmTaskMngt/ConfirmDetail/${record.id}`)}>明细</Button>
+                    <Button type='link' onClick={()=>history.push(`/confirmTask/ConfirmTaskMngt/ConfirmDetail/${record.id}`)} disabled={ record.status < 3 }>明细</Button>
                     <Popconfirm
                         title="确认提交任务?"
                         onConfirm={ async () => {
