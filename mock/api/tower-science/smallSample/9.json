@@ -1,0 +1,81 @@
+{
+	"code": 200,
+	"msg": "",
+	"success": true,
+	"data": {
+		"id": -39702966.953023955,
+		"materialSandard": "enim",
+		"materialDemand": "consequat in irure ea Duis",
+		"weldingDemand": "aliquip velit",
+		"galvanizeDemand": "cupidatat labore fugiat",
+		"packDemand": "cillum dolor enim",
+		"description": "ipsum",
+		"productCategoryNum": "deserunt commodo ad",
+		"totalWeight": "ipsum officia",
+		"productNum": "ex labore",
+		"productType": "Excepteur deserunt",
+		"fileList": [{
+			"id": "ut dolor",
+			"filePath": "pariatur anim Lorem nisi",
+			"name": "sed",
+			"fileSuffix": "aliquip"
+		}, {
+			"id": "Ut",
+			"filePath": "do deserunt minim irure cillum",
+			"name": "irure est dolor incididunt",
+			"fileSuffix": "exercitation officia ad"
+		}, {
+			"id": "tempor Ut laborum deserunt nulla",
+			"filePath": "adipisicing veniam laborum Lorem Ut",
+			"name": "esse laborum ut sed aliquip",
+			"fileSuffix": "voluptate"
+		}, {
+			"id": "",
+			"filePath": "magna fu",
+			"name": "dolor in ex id ipsum",
+			"fileSuffix": "ut ad"
+		}, {
+			"id": "ex enim culpa irure sint",
+			"filePath": "o",
+			"name": "aliquip pariatur ad amet",
+			"fileSuffix": "dolore exercitation sint"
+		}],
+		"statusRecordList": [{
+			"id": "minim ad Duis",
+			"createUser": "Ut id cupidatat voluptate irure",
+			"createDept": "tempor nulla de",
+			"createTime": "do",
+			"currentStatus": 4,
+			"createUserName": "qui sit con",
+			"createDeptName": "proident",
+			"description": "Ut commodo velit qui"
+		}, {
+			"id": "et ipsum consectetur tempor",
+			"createUser": "non laboris",
+			"createDept": "consequat sed",
+			"createTime": "dolor i",
+			"currentStatus": 3,
+			"createUserName": "magna",
+			"createDeptName": "eiusmod occaecat pariatur quis",
+			"description": "in"
+		}, {
+			"id": "deserunt",
+			"createUser": "anim minim ad dolore quis",
+			"createDept": "ad id consectetur est magna",
+			"createTime": "sit pariatur mollit nulla",
+			"currentStatus": 2,
+			"createUserName": "ullamco laborum aliqua aliquip reprehende",
+			"createDeptName": "Duis proident",
+			"description": "exercitation fugiat consequat"
+		}, {
+			"id": "qui pariatur proident minim",
+			"createUser": "magn",
+			"createDept": "fugiat",
+			"createTime": "ipsum in",
+			"currentStatus": 1,
+			"createUserName": "in",
+			"createDeptName": "exercitation",
+			"description": "anim"
+		}]
+	}
+}

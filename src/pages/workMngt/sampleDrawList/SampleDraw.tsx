@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Button, Modal, Form, Image, message } from 'antd';
+import { Space, Input, DatePicker, Button, Modal, Form, Image, message, Popconfirm } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
 import { useHistory, useParams } from 'react-router-dom';
@@ -9,6 +9,7 @@ export default function SampleDraw(): React.ReactNode {
     const params = useParams<{ id: string }>()
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
+    const [refresh, setRefresh] = useState<boolean>(false);
     const [url, setUrl] = useState<string>('');
     const [form] = Form.useForm();
     const handleModalOk = async () => {
@@ -29,49 +30,60 @@ export default function SampleDraw(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'projectName',
+            key: 'partName',
             title: '段名',
             width: 50,
-            dataIndex: 'projectName'
+            dataIndex: 'partName'
         },
         {
-            key: 'projectName',
+            key: 'componentCode',
             title: '构建编号',
             width: 100,
-            dataIndex: 'projectName'
+            dataIndex: 'componentCode'
         },
         {
-            key: 'projectName',
+            key: 'materialName',
             title: '材料名称',
             width: 100,
-            dataIndex: 'projectName'
+            dataIndex: 'materialName'
         },
         {
-            key: 'projectName',
+            key: 'smallSample',
             title: '小样图名称',
             width: 100,
-            dataIndex: 'projectName'
+            dataIndex: 'smallSample'
         },
         {
-            key: 'bidBuyEndTime',
+            key: 'uploadTime',
             title: '上传时间',
             width: 200,
-            dataIndex: 'bidBuyEndTime'
+            dataIndex: 'uploadTime'
         },
         {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
-            width: 230,
-            fixed: 'right' as FixedType,
+            width: 50,
+            // fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type='link' onClick={async () =>  await RequestUtil.delete(`/tower-science/smallSample/${record.id}`).then(()=>{
-                        message.success('删除成功！');
-                    })}>删除</Button>
+                    <Popconfirm
+                        title="要删除该条数据吗？"
+                        okText="确认"
+                        cancelText="取消"
+                        onConfirm={async () =>  await RequestUtil.delete(`/tower-science/smallSample/${record.id}`).then(()=>{
+                            message.success('删除成功！');
+                        }).then(()=>{
+                            setRefresh(!refresh)
+                        })}
+                    >
+                        <Button type="link" >
+                            删除
+                        </Button>
+                    </Popconfirm>
                     <Button type='link' onClick={async () => {
                         const url:any = await RequestUtil.get(`/tower-science/smallSample/sampleView/${record.id}`);
-                        setUrl(url.filePath)
+                        setUrl(url?.filePath);
                         setVisible(true)
                     }}>查看</Button>
                 </Space>
@@ -101,6 +113,7 @@ export default function SampleDraw(): React.ReactNode {
             <Page
                 path="/tower-science/smallSample/sampleList"
                 columns={columns}
+                refresh={refresh}
                 onFilterSubmit={onFilterSubmit}
                 requestData={{productCategoryId:params.id}}
                 extraOperation={

@@ -1,0 +1,54 @@
+{
+	"code": 200,
+	"msg": "",
+	"success": true,
+	"data": {
+		"id": 39428593.82366642,
+		"status": 1,
+		"type": 1,
+		"keyId": 36387464.27704996,
+		"newFile": {
+			"id": 1,
+            "fileName": "图片",
+            "fileSuffix": "png",
+            "filePath": "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+            "keyId": 75026357
+		},
+		"currentFile": {
+			"id": -85060311.0199935,
+			"fileSuffix": "magna",
+			"filePath": "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+			"fileName": "in consectetur"
+		},
+		"issueRecordVOList": [{
+			"id": 46374797.27213964,
+			"createUser": -12968118.278075337,
+			"createDept": 2346256.989458933,
+			"status": 1,
+			"createTime": "sint culpa eu",
+			"description": "amet",
+			"createDeptName": "aute aliqua",
+			"createUserName": "eu eiusmod voluptate tempor labore"
+		}, {
+			"id": 64930359.543096155,
+			"createUser": 31049593.424992576,
+			"createDept": -30486747.384172037,
+			"status": 2,
+			"createTime": "Excepteur in ipsum",
+			"description": "aliquip nulla",
+			"createDeptName": "aute consectetur enim",
+			"createUserName": "fugiat magna"
+		}, {
+			"id": 31993111.578843653,
+			"createUser": 74273954.80107224,
+			"createDept": -74112519.59743193,
+			"status": 3,
+			"createTime": "cupidatat",
+			"description": "culpa",
+			"createDeptName": "cupidatat incididunt aliquip",
+			"createUserName": "laborum ea Lorem sed in"
+		}],
+		"description": "quis commodo dolor nisi tempor",
+		"smallSample": "Ut labore"
+	}
+}
