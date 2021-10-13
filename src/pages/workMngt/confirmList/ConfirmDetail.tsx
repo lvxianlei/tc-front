@@ -517,7 +517,7 @@ export default function ConfirmDetail(): React.ReactNode {
                     />
                 </Form>
                 <DetailTitle title="备注"/>
-                {detailData&&detailData.description?<TextArea maxLength={ 200 } defaultValue={detailData.description} onChange={(e)=>{
+                {detailData?<TextArea maxLength={ 200 } defaultValue={detailData?.description} onChange={(e)=>{
                     setDescription(e.target.value)
                 }}/>:null}
                 {/* <Upload
