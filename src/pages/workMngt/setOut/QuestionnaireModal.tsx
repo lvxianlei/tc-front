@@ -1,11 +1,10 @@
 import React from 'react';
-import { Button, Space, Modal, Form, FormInstance, Input } from 'antd';
+import { Button, Space, Modal, Form, FormInstance, Input, message } from 'antd';
 import { DetailContent, CommonTable, BaseInfo } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './SetOut.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
-import useRequest from '@ahooksjs/use-request';
 
 export interface QuestionnaireModalProps {}
 export interface IQuestionnaireModalRouteProps extends RouteComponentProps<QuestionnaireModalProps>, WithTranslation {
@@ -23,6 +22,14 @@ interface IRecord {
     readonly id?: string;
     readonly problemField?: string;
     readonly originalData?: string;
+    readonly description?: string;
+    readonly newValue?: string;
+    readonly issueRecordList?: [];
+    readonly dataType?: number;
+    readonly dataIndex?: string;
+    readonly rowId?: string;
+    readonly currentValue?: string;
+    readonly problemFieldName?: string;
 }
 
 const tableColumns = [
@@ -33,29 +40,41 @@ const tableColumns = [
         width: 50, 
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
     {
-        key: 'partBidNumber',
+        key: 'updateDepartmentName',
         title: '操作部门',
-        dataIndex: 'partBidNumber', 
+        dataIndex: 'updateDepartmentName', 
     },
     {  
-        key: 'goodsType', 
+        key: 'updateUserName', 
         title: '操作人', 
-        dataIndex: 'goodsType' 
+        dataIndex: 'updateUserName' 
     },
     { 
-        key: 'goodsType', 
+        key: 'updateTime', 
         title: '操作时间', 
-        dataIndex: 'packageNumber' 
+        dataIndex: 'updateTime' 
     },
     {
-        key: 'goodsType', 
+        key: 'status', 
         title: '问题单状态', 
-        dataIndex: 'amount' 
+        dataIndex: 'status',
+        render: (pattern: number): React.ReactNode => {
+            switch (pattern) {
+                case 1:
+                    return '待修改';
+                case 2:
+                    return '已修改';
+                case 3:
+                    return '已拒绝';
+                case 4:
+                    return '已删除';
+            }
+        } 
     },
     { 
-        key: 'goodsType', 
+        key: 'description', 
         title: '备注', 
-        dataIndex: 'unit' 
+        dataIndex: 'description' 
     }
 ]
 
@@ -71,10 +90,6 @@ class QuestionnaireModal extends React.Component<IQuestionnaireModalRouteProps, 
     protected getForm(): FormInstance | null {
         return this.form?.current;
     }
-    
-    constructor(props: IQuestionnaireModalRouteProps) {
-        super(props)
-    }
 
     public state: QuestionnaireModalState = {
         
@@ -82,7 +97,20 @@ class QuestionnaireModal extends React.Component<IQuestionnaireModalRouteProps, 
 
     protected submitQuestion(): void {
         this.getForm()?.validateFields().then(() => {
-            console.log( this.props.record,this.getForm()?.getFieldsValue(true) )
+            const value = this.getForm()?.getFieldsValue(true);
+            const record: IRecord = this.props.record;
+            RequestUtil.post(`/tower-science/productStructure/issue`, {
+                currentValue: record.originalData,
+                description: value.description,
+                id: record.id,
+                keyId: record.rowId,
+                newValue: value.newValue,
+                problemField: record.problemField,
+                problemFieldName: record.problemFieldName
+            }).then(res => {
+                message.success('提交问题成功');
+                this.props.modalCancel();
+            });
         })
     }
 
@@ -91,6 +119,8 @@ class QuestionnaireModal extends React.Component<IQuestionnaireModalRouteProps, 
      * @returns render 
      */
     public render(): React.ReactNode {
+        const record: IRecord = this.props.record;
+        this.getForm()?.setFieldsValue({ description: record.description, newValue: record.newValue });
         return <>
             <Modal
                 visible={ this.props.visible } 
@@ -98,8 +128,8 @@ class QuestionnaireModal extends React.Component<IQuestionnaireModalRouteProps, 
                 title={ this.props.title }
                 footer={ 
                     <Space direction="horizontal" size="small">
-                        <Button type="primary" onClick={ () => this.props.modalCancel() } ghost>关闭</Button>
-                        <Button type="primary" onClick={ () => this.submitQuestion() }>提交问题</Button>
+                        <Button type="primary" onClick={ () => {  this.props.modalCancel(); } } ghost>关闭</Button>
+                        {  record.dataType !== 2 ? <Button type="primary" onClick={ () => this.submitQuestion() }>提交问题</Button> : null }
                     </Space> } 
                 onCancel={ () => this.props.modalCancel() }
             >
@@ -107,31 +137,32 @@ class QuestionnaireModal extends React.Component<IQuestionnaireModalRouteProps, 
                     <p>问题信息</p>
                     <BaseInfo col={ 2 } columns={ [
                         {
-                            "dataIndex": "projectName",
+                            "dataIndex": "problemFieldName",
                             "title": "问题字段"
                         },
                         {
-                            "dataIndex": "projectNumber",
+                            "dataIndex": "currentValue",
                             "title": "原字段信息"
                         }]
                     } dataSource={ {
-                        projectName: this.props.record.problemField,
-                        projectNumber: this.props.record.originalData
+                        problemFieldName: record.problemFieldName,
+                        currentValue: record.currentValue
                     } } />
                     <Form ref={ this.form } labelCol={{ span: 4 }} className={ styles.topPadding }>
-                        <Form.Item name="a" label="备注">
-                            <Input.TextArea maxLength={ 300 } placeholder="请输入备注信息" rows={ 1 } showCount/>
+                        <Form.Item name="description" label="备注" initialValue={ record.description }>
+                            <Input.TextArea maxLength={ 300 } placeholder="请输入备注信息" rows={ 1 } showCount disabled={ record.dataType === 2 } />
                         </Form.Item>
-                        <Form.Item name="a" label="校对后信息"
+                        <Form.Item name="newValue" label="校对后信息"
                             rules={[{
                                 required: true,
                                 message: '请输入校对后信息 '
-                            }]}>
-                            <Input maxLength={ 100 } placeholder="请输入"/>
+                            }]}
+                            initialValue={ record.newValue }>
+                            <Input maxLength={ 100 } placeholder="请输入" disabled={ record.dataType === 2 } />
                         </Form.Item>
                     </Form>
                     <p className={ styles.topPadding }>操作信息</p>
-                    <CommonTable columns={ tableColumns } dataSource={ [] } />
+                    <CommonTable columns={ tableColumns } dataSource={ record.issueRecordList } />
                 </DetailContent>
             </Modal>
         </>

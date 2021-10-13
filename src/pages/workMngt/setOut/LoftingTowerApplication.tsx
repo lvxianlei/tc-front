@@ -92,7 +92,7 @@ export default function LoftingTowerApplication(): React.ReactNode {
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Button type='link' onClick={ () => {
                 RequestUtil.post(`/tower-science/productStructure/loftingReuse`, {
                     productSegmentId: record.id,
-                    productId: params.id
+                    passivityProductSegment: params.id
                 }).then(res => {
                     message.success('套用成功'); 
                 });
@@ -119,7 +119,7 @@ export default function LoftingTowerApplication(): React.ReactNode {
         resole(data);
     });
 
-    const { loading, data } = useRequest<IResponseData>(() => getTableDataSource(page, {}), {});
+    const { loading } = useRequest<IResponseData>(() => getTableDataSource(page, {}), {});
 
     const onFinish = (value: Record<string, any>) => {
         getTableDataSource(page, value);

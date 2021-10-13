@@ -7,7 +7,6 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { CloudUploadOutlined } from '@ant-design/icons';
 import AuthUtil from '../../../utils/AuthUtil';
-import { downloadTemplate } from './downloadTemplate';
 
 export interface UploadModalProps {}
 export interface IUploadModalRouteProps extends RouteComponentProps<UploadModalProps>, WithTranslation {
@@ -65,9 +64,6 @@ const tableColumns = [
 ]
 
 class UploadModal extends React.Component<IUploadModalRouteProps, UploadModalState> {
-    constructor(props: IUploadModalRouteProps) {
-        super(props)
-    }
 
     public state: UploadModalState = {
         visible: false

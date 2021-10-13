@@ -44,10 +44,7 @@ const tableColumns = [
 ]
 
 class Deliverables extends React.Component<IDeliverablesRouteProps, DeliverablesState> {
-    constructor(props: IDeliverablesRouteProps) {
-        super(props)
-    }
-
+    
     public state: DeliverablesState = {
         visible: false
     }
