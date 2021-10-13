@@ -20,6 +20,13 @@ function generateRender(type: ColumnsItemsType, data: (SelectData | TextData)) {
                 render: (text: string | number) => <>{((text || text === 0) && data.enum) ? data.enum.find((item: { value: string, label: string }) => item.value === text)?.label : text}</>,
                 ...data
             })
+        case "number":
+            return ({
+                ellipsis: true,
+                onCell: () => ({ className: styles.tableCell }),
+                render: (text: number, record: any) => <>{text && text !== -1 ? text : 0}</>,
+                ...data
+            })
         default:
             return ({ ellipsis: true, onCell: () => ({ className: styles.tableCell }), ...data })
     }

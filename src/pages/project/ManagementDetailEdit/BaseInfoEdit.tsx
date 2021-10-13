@@ -42,14 +42,16 @@ export default function BaseInfoEdit(): JSX.Element {
         try {
             const baseInfoData = await baseInfoForm.validateFields()
             const cargoVOListData = await cargoVOListForm.validateFields()
+            const projectLeaderType = typeof baseInfoData.projectLeader === "string" ? true : false
             const result = await run({
                 ...baseInfoData,
+                id: data?.id,
                 attachInfoDtos: attachVosData,
                 cargoDTOList: cargoVOListData.submit,
-                projectLeaderId: baseInfoData.projectLeader?.records[0]?.id,
-                projectLeader: baseInfoData.projectLeader?.value,
-                biddingPerson: baseInfoData.biddingPerson?.value,
-                biddingAgency: baseInfoData.biddingAgency?.value
+                projectLeaderId: projectLeaderType ? (data as any).projectLeaderId : baseInfoData.projectLeader?.records[0].id,
+                projectLeader: baseInfoData.projectLeader?.value || baseInfoData.projectLeader,
+                biddingPerson: baseInfoData.biddingPerson?.value || baseInfoData.biddingPerson,
+                biddingAgency: baseInfoData.biddingAgency?.value || baseInfoData.biddingAgency
             })
             if (result) {
                 message.success("保存成功...")
