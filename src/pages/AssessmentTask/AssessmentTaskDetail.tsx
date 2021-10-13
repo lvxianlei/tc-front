@@ -174,7 +174,9 @@ export default function AssessmentTaskDetail(): React.ReactNode {
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                         <Space direction="horizontal" size="small">
                             <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
-                            <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button>
+                            {
+                                record.fileSuffix === 'pdf' ? <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : null
+                            }
                         </Space>
                 ) }
             ]}
@@ -192,12 +194,16 @@ export default function AssessmentTaskDetail(): React.ReactNode {
                 setRejectReason(""); 
             } } 
             onOk={ () => {
-                RequestUtil.put(`/tower-science/assessTask/reject`, { id: params.id, rejectReason: rejectReason }).then(res => {
-                    setRejectReason("");
-                    setVisible(false); 
-                    message.success('拒绝成功');
-                    history.go(0);
-                });
+                if(rejectReason) {
+                        RequestUtil.put(`/tower-science/assessTask/reject`, { id: params.id, rejectReason: rejectReason }).then(res => {
+                        setRejectReason("");
+                        setVisible(false); 
+                        message.success('拒绝成功');
+                        history.go(0);
+                    });
+                } else {
+                    message.warning('请输入拒绝原因');
+                }     
             } } 
             cancelText="关闭" 
             okText="提交" 

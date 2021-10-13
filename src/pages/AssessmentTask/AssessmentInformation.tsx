@@ -80,7 +80,9 @@ class AssessmentInformation extends React.Component<IAssessmentInformationRouteP
                             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                                 <Space direction="horizontal" size="small">
                                     <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
-                                    <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button>
+                                    {
+                                        record.fileSuffix === 'pdf' ? <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : null
+                                    }
                                 </Space>
                         ) }
                     ]}

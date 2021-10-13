@@ -59,7 +59,10 @@ export default function ConfirmTaskDetail(): React.ReactNode {
             const refuseData = await form.validateFields();
             refuseData.drawTaskId = params.id;
             await RequestUtil.post('/tower-science/drawTask/refuseDrawTask', refuseData).then(()=>{
+                message.success('提交成功！')
                 setVisible(false)
+            }).then(()=>{
+                history.push(`/confirmTask/ConfirmTaskMngt`)
             })
         
         } catch (error) {

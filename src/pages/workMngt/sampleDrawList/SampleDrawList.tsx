@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Button, Form, Select } from 'antd';
+import { Space, Input, DatePicker, Button, Form, Select, message } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
 import { Popconfirm } from 'antd';
+import RequestUtil from '../../../utils/RequestUtil';
 
 export default function SampleDrawList(): React.ReactNode {
     const history = useHistory();
+    const [refresh, setRefresh] = useState<boolean>(false);
     const columns = [
         {
             key: 'index',
@@ -81,10 +83,10 @@ export default function SampleDrawList(): React.ReactNode {
             dataIndex: 'smallSampleLeaderName'
         },
         {
-            key: 'smallSamplStatus',
+            key: 'smallSampleStatus',
             title: '小样图状态',
             width: 100,
-            dataIndex: 'smallSamplStatus',
+            dataIndex: 'smallSampleStatus',
             render: (value: number, record: object): React.ReactNode => {
                 const renderEnum: any = [
                   {
@@ -108,7 +110,7 @@ export default function SampleDrawList(): React.ReactNode {
                     label: "已提交"
                   },
                 ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
+                return <>{value && renderEnum.find((item: any) => item.value === value).label}</>
             }
         },
         {
@@ -126,16 +128,22 @@ export default function SampleDrawList(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDrawMessage/${record.id}`)}}>小样图信息</Button>
-                    <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDraw/${record.id}`)}} disabled={record.status!==2}>小样图</Button>
-                    <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDrawCheck/${record.id}`)}}  disabled={record.status!==3}>校核</Button>
+                    <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDraw/${record.id}`)}} disabled={record.smallSampleStatus!==2}>小样图</Button>
+                    <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDrawCheck/${record.id}`)}}  disabled={record.smallSampleStatus!==3}>校核</Button>
                     <Popconfirm
                         title="确认提交?"
-                        onConfirm={ () => {} }
+                        onConfirm={ async () => {
+                            await RequestUtil.put(`/tower-science/smallSample/submit?productCategoryId=${record.id}`).then(()=>{
+                                message.success('提交成功！')
+                            }).then(()=>{
+                                setRefresh(!refresh)
+                            })
+                        } }
                         okText="确认"
                         cancelText="取消"
-                        disabled={record.status!==4}
+                        disabled={record.smallSampleStatus!==4}
                     >   
-                        <Button type="link" disabled={record.status!==4}>提交</Button>
+                        <Button type="link" disabled={record.smallSampleStatus!==4}>提交</Button>
                     </Popconfirm>
                 </Space>
             )
@@ -164,6 +172,7 @@ export default function SampleDrawList(): React.ReactNode {
             path="/tower-science/smallSample"
             columns={columns}
             onFilterSubmit={onFilterSubmit}
+            refresh={refresh}
             extraOperation={<Button type="primary">导出</Button>}
             searchFormItems={[
                 {

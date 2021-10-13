@@ -1,0 +1,9 @@
+{
+	"code": 200,
+	"msg": "id",
+	"success": true,
+	"data": {
+		"uploadSmallSampleCount": 100,
+		"noSmallSampleCount": 200
+	}
+}

@@ -109,19 +109,30 @@ export default function SetOutTaskList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                     <Link to={ `/setOutTask/setOutTaskDetail/${ record.id }` }>任务详情</Link>
-                    <Deliverables id={ record.id }/>
-                    <Popconfirm
-                        title="确认提交?"
-                        onConfirm={ () => {
-                            RequestUtil.post(`/tower-science/loftingTask/submit`, { id: record.id }).then(res => {
-                                setRefresh(!refresh);
-                            });
-                        } }
-                        okText="提交"
-                        cancelText="取消"
-                    >
-                        <Button type="link">提交任务</Button>
-                    </Popconfirm>
+                    {
+                        record.status === 4 ? 
+                        <>
+                            <Deliverables id={ record.id }/>
+                            <Popconfirm
+                                title="确认提交?"
+                                onConfirm={ () => {
+                                    RequestUtil.post(`/tower-science/loftingTask/submit`, { id: record.id }).then(res => {
+                                        setRefresh(!refresh);
+                                    });
+                                } }
+                                okText="提交"
+                                cancelText="取消"
+                            >
+                                <Button type="link">提交任务</Button>
+                            </Popconfirm>
+                        </>
+                        : 
+                        <>
+                            <Button type="link" disabled>交付物</Button>
+                            <Button type="link" disabled>提交任务</Button>
+                        </>
+                    }
+                    
                 </Space>
             )
         }

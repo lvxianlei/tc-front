@@ -1,0 +1,12 @@
+{
+	"code": 200,
+	"msg": "",
+	"success": true,
+	"data": {
+		"id": 1,
+		"fileName": "图片",
+		"fileSuffix": "png",
+		"filePath": "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+		"keyId": 75026357
+	}
+}
