@@ -216,10 +216,10 @@ export default function ScheduleView(): React.ReactNode {
             dataIndex: 'boltDeliverTime'
         },
         {
-            key: 'biddingAddress',
+            key: 'description',
             title: '备注',
             width: 200,
-            dataIndex: 'biddingAddress'
+            dataIndex: 'description'
         },
         {
             key: 'operation',
