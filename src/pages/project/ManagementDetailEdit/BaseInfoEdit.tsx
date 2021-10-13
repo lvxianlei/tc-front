@@ -45,6 +45,7 @@ export default function BaseInfoEdit(): JSX.Element {
             const projectLeaderType = typeof baseInfoData.projectLeader === "string" ? true : false
             const result = await run({
                 ...baseInfoData,
+                id: data?.id,
                 attachInfoDtos: attachVosData,
                 cargoDTOList: cargoVOListData.submit,
                 projectLeaderId: projectLeaderType ? (data as any).projectLeaderId : baseInfoData.projectLeader?.records[0].id,
