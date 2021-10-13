@@ -14,11 +14,11 @@ const tableColumns = [
         dataIndex: 'partBidNumber',
         key: 'partBidNumber',
     },
-    { title: '货物类别', dataIndex: 'goodsType' },
+    { title: '物资类别', dataIndex: 'goodsType' },
     { title: '包号', dataIndex: 'packageNumber' },
-    { title: '数量', dataIndex: 'amount' },
+    { title: '数量', dataIndex: 'amount', type: "number" },
     { title: '单位', dataIndex: 'unit' },
-    { title: '交货日期', dataIndex: 'deliveryDate' },
+    { title: '首批交货日期', dataIndex: 'deliveryDate' },
     { title: '交货地点', dataIndex: 'deliveryPlace' }
 ]
 export default function InformationDetail(): React.ReactNode {
@@ -145,8 +145,11 @@ export default function InformationDetail(): React.ReactNode {
                 <Button key="new" onClick={() => history.goBack()}>返回</Button>
             ]}>
             <DetailTitle title="基本信息" />
-            <BaseInfo columns={isBid === "2" ? baseInfoData : baseInfoData.filter((item: any) => item.dataIndex !== "reason")} dataSource={data || {}} col={4} />
-            <DetailTitle title="货物清单" />
+            <BaseInfo
+                columns={isBid === "2" ? baseInfoData : baseInfoData.filter((item: any) => item.dataIndex !== "reason")}
+                dataSource={data || {}}
+                col={4} />
+            <DetailTitle title="物资清单" />
             <CommonTable columns={tableColumns} dataSource={data?.bidPackageInfoVOS} />
             <DetailTitle title="附件" />
             <CommonTable columns={[

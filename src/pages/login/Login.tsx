@@ -1,29 +1,27 @@
-import { LockOutlined, SafetyCertificateOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Card, Form, Input, Layout, Space, Typography, notification, Carousel } from 'antd';
-import React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
-import MD5 from 'crypto-js/md5';
+import { LockOutlined, SafetyCertificateOutlined, UserOutlined } from '@ant-design/icons'
+import { Button, Form, Input, Layout, Space, notification } from 'antd'
+import React from 'react'
+import { RouteComponentProps, withRouter } from 'react-router-dom'
+import MD5 from 'crypto-js/md5'
 
-import AsyncComponent from '../../components/AsyncComponent';
-import ApplicationContext from '../../configuration/ApplicationContext';
-import layoutStyles from '../../layout/Layout.module.less';
-import AuthUtil from '../../utils/AuthUtil';
-import RequestUtil from '../../utils/RequestUtil';
-import { ITenant } from '../system-mngt/ITenant';
-import style from './Login.module.less';
-import { ToolOutlined } from '@ant-design/icons';
-
+import AsyncComponent from '../../components/AsyncComponent'
+import ApplicationContext from '../../configuration/ApplicationContext'
+import layoutStyles from '../../layout/Layout.module.less'
+import AuthUtil from '../../utils/AuthUtil'
+import RequestUtil from '../../utils/RequestUtil'
+import { ITenant } from '../system-mngt/ITenant'
+import style from './Login.module.less'
 interface ILoginProps { }
 interface ILoginRouteProps extends RouteComponentProps<ILoginProps> { }
 
 interface ILoginState {
-    readonly captcha: ICaptcha;
-    readonly tenant: ITenant;
+    readonly captcha: ICaptcha
+    readonly tenant: ITenant
 }
 
 interface ICaptcha {
-    readonly image: string;
-    readonly key: string;
+    readonly image: string
+    readonly key: string
 }
 
 /**
@@ -42,7 +40,7 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
             domain: '',
             logo: ''
         }
-    };
+    }
 
     /**
      * @constructor
@@ -51,23 +49,23 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
      * @param context 
      */
     constructor(props: ILoginRouteProps, context: any) {
-        super(props);
-        this.onSubmit = this.onSubmit.bind(this);
+        super(props)
+        this.onSubmit = this.onSubmit.bind(this)
     }
 
     /**
      * @description Components did mount
      */
     public async componentDidMount() {
-        super.componentDidMount();
+        super.componentDidMount()
         const [captcha, tenant] = await Promise.all<ICaptcha, ITenant>([
             RequestUtil.get<ICaptcha>('/sinzetech-auth/oauth/captcha'),
             RequestUtil.get<ITenant>(`/sinzetech-system/tenantClient/info?domain=${window.location.protocol}//${window.location.host}`)
-        ]);
+        ])
         this.setState({
             captcha: captcha,
             tenant: tenant
-        });
+        })
     }
 
     /**
@@ -75,28 +73,27 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
      * @param values 
      */
     private async onSubmit(values: Record<string, any>) {
-        AuthUtil.setTenantId(this.state.tenant.tenantId, { expires: 7 });
-        values.password = MD5(values.password).toString();
-        const { access_token, ...result } = await RequestUtil.post('/sinzetech-auth/oauth/token', {
+        AuthUtil.setTenantId(this.state.tenant.tenantId, { expires: 7 })
+        values.password = MD5(values.password).toString()
+        const { access_token, refresh_token, ...result } = await RequestUtil.post('/sinzetech-auth/oauth/token', {
             ...values,
             tenantId: this.state.tenant.tenantId
         }, {
             'Content-Type': 'application/x-www-form-urlencoded',
             'Captcha-code': values.code,
             'Captcha-key': this.state.captcha.key
-        });
+        })
         if (result.error) {
             notification.error({
                 message: result.error_description
             })
         } else {
-            AuthUtil.setSinzetechAuth(access_token);
-            console.log("token:", access_token)
+            AuthUtil.setSinzetechAuth(access_token, refresh_token)
             // 暂时有问题，先去掉
-            // let gotoPath: string = decodeURIComponent(new URLSearchParams(this.props.location.search).get('goto') || '');
-            // const index: number = gotoPath.lastIndexOf("=");
-            // gotoPath = gotoPath.slice(index + 1, gotoPath.length);
-            this.props.history.push(ApplicationContext.get().home || '/');
+            // let gotoPath: string = decodeURIComponent(new URLSearchParams(this.props.location.search).get('goto') || '')
+            // const index: number = gotoPath.lastIndexOf("=")
+            // gotoPath = gotoPath.slice(index + 1, gotoPath.length)
+            this.props.history.push(ApplicationContext.get().home || '/')
         }
     }
 
@@ -108,12 +105,12 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
         return (
             <Layout className={layoutStyles.height100}>
                 <Layout.Content className={style.content}>
-                <div className={style.logo}/>
+                    <div className={style.logo} />
                     <div className={style.loginArea}>
                         <div className={style.loginCard}>
                             <div className={style.loginLogo}>
-                                <div className={ style.loginTitleTop}><span>塔云</span><span style={{color:'black'}}>平台</span></div>
-                                <div className={ style.loginTitleBottom }>铁塔设计制造一站式解决方案</div>
+                                <div className={style.loginTitleTop}><span>塔云</span><span style={{ color: 'black' }}>平台</span></div>
+                                <div className={style.loginTitleBottom}>铁塔设计制造一站式解决方案</div>
                             </div>
                             <Form onFinish={this.onSubmit}>
                                 <Form.Item name="username" rules={[
@@ -160,15 +157,15 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
                                 <div>
                                     <Button type="primary" htmlType="submit" size="large" className={style.submitButton}>登录</Button>
                                 </div>
-                                    <Button htmlType="submit" type='link' size='large'>忘记密码</Button>
+                                <Button htmlType="submit" type='link' size='large'>忘记密码</Button>
                             </Form>
                         </div>
-                        <div className={ style.bottom }>© 2019 powered by 德汇科技. All rights reserved</div>
+                        <div className={style.bottom}>© 2019 powered by 德汇科技. All rights reserved</div>
                     </div>
                 </Layout.Content>
             </Layout>
-        );
+        )
     }
 }
 
-export default withRouter(Login);
+export default withRouter(Login)
