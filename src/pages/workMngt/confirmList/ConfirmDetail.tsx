@@ -78,8 +78,8 @@ export default function ConfirmDetail(): React.ReactNode {
       }} min={0} precision={4}/> : inputType === 'select' ?<Select style={{width:'100%'}}>{enums&&enums.map((item:any)=>{
         return <Select.Option value={item.value} key ={item.value}>{item.label}</Select.Option>
       })}</Select> : inputType === 'edit'?<span>保存后自动计算</span>: inputType === 'textArea'?<TextArea maxLength={500} rows={1} showCount/>:<Input />;
-      
-      return (
+      if(dataIndex === 'name'){
+        return (
         <td {...restProps}>
           {editing ? (
             <Form.Item
@@ -87,8 +87,17 @@ export default function ConfirmDetail(): React.ReactNode {
               style={{ margin: 0 }}
               rules={[
                 {
-                  required: inputType==='textArea'?false:true,
-                  message: `请输入${title}!`,
+                  required: true,
+                  validator: (rule: any, value: string, callback: (error?: string) => void) => {
+                    checkProductNumber1(value,index).then(res => {
+                      console.log(res)
+                          if (res) {
+                              callback('请输入* 杆塔号，且同一塔型下杆塔号唯一！')
+                          } else {
+                              callback();
+                          }
+                      })
+                  }
                 },
               ]}
             >
@@ -97,8 +106,31 @@ export default function ConfirmDetail(): React.ReactNode {
           ) : (
             children
           )}
-        </td>
-      );
+        </td>)
+      }
+      else{
+        return (
+          <td {...restProps}>
+            {editing ? (
+              <Form.Item
+                name={dataIndex}
+                style={{ margin: 0 }}
+                rules={[
+                  {
+                    required: inputType==='textArea'?false:true,
+                    message: `请输入${title}!`,
+                  },
+                ]}
+              >
+                {inputNode}
+              </Form.Item>
+            ) : (
+              children
+            )}
+          </td>
+        );
+      }
+     
     };
     const edit = (record: Partial<Item> & { key: React.Key }) => {
       formRef.setFieldsValue({ partBidNumber: '', unit: '', address: '', ...record });
@@ -412,7 +444,7 @@ export default function ConfirmDetail(): React.ReactNode {
               setAttachInfo([...attachInfo, {
                   id: "",
                   uid: attachInfo.length,
-                  name: dataInfo.originalName.split(".")[0],
+                  name: dataInfo.originalName,
                   description: "",
                   filePath: dataInfo.name,
                   link: dataInfo.link,
@@ -427,6 +459,42 @@ export default function ConfirmDetail(): React.ReactNode {
     const deleteAttachData = (id: number) => {
       setAttachInfo(attachInfo.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
     }
+
+    /**
+     * @description 验证杆塔号
+     */
+    const  checkProductNumber = (value: string): Promise<void | any> => {
+      return new Promise(async (resolve, reject) => {  // 返回一个promise
+          const formData = form.getFieldsValue(true)
+          if (value && formData.productCategory) {
+              resolve(tableDataSource.findIndex((item:any) => 
+                item.name === value && formData.productCategory === item.productCategory
+              ))
+          } else {
+              resolve(false)
+          }
+      }).catch(error => {
+          Promise.reject(error)
+      })
+    }
+
+    /**
+     * @description 验证杆塔号
+     */
+     const checkProductNumber1 = (value: string, index: number): Promise<void | any> => {
+      return new Promise(async (resolve, reject) => { 
+          const formData = formRef.getFieldsValue(true)
+          if (value && formData.productCategory) {
+            resolve(tableDataSource.findIndex((item:any) => 
+                item.name === value && formData.productCategory === item.productCategory
+            ))
+          } else {
+              resolve(false)
+          }
+      }).catch(error => {
+          Promise.reject(error)
+      })
+   }
     return <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space>
@@ -517,7 +585,7 @@ export default function ConfirmDetail(): React.ReactNode {
                     />
                 </Form>
                 <DetailTitle title="备注"/>
-                {detailData&&detailData.description?<TextArea maxLength={ 200 } defaultValue={detailData.description} onChange={(e)=>{
+                {detailData?<TextArea maxLength={ 200 } defaultValue={detailData?.description} onChange={(e)=>{
                     setDescription(e.target.value)
                 }}/>:null}
                 {/* <Upload
@@ -581,8 +649,16 @@ export default function ConfirmDetail(): React.ReactNode {
                       </Col>
                       <Col span={12}>
                         <Form.Item name="name" label="杆塔号" rules={[{
-                            "required": true,
-                            "message":"请输入杆塔号"
+                            required: true,
+                            validator: (rule: any, value: string, callback: (error?: string) => void) => {
+                              checkProductNumber(value).then(res => {
+                                    if (res) {
+                                        callback('请输入杆塔号，且同一塔型下杆塔号唯一！')
+                                    } else {
+                                        callback();
+                                    }
+                                })
+                            }
                         }]}>
                             <Input/>
                         </Form.Item>

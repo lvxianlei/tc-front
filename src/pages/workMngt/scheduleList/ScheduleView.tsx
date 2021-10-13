@@ -216,10 +216,10 @@ export default function ScheduleView(): React.ReactNode {
             dataIndex: 'boltDeliverTime'
         },
         {
-            key: 'biddingAddress',
+            key: 'description',
             title: '备注',
             width: 200,
-            dataIndex: 'biddingAddress'
+            dataIndex: 'description'
         },
         {
             key: 'operation',
@@ -259,6 +259,27 @@ export default function ScheduleView(): React.ReactNode {
                         if(resData.boltLeaderDepartment){
                             const boltLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.boltLeaderDepartment}&size=1000`);
                             setBoltUser(boltLeaderDepartment.records);
+                        }
+                        if(resData?.assignConfigVO?.materialWithSectionCompletionTime && resData?.materialPartDeliverTime){
+                            const day = Number(resData.assignConfigVO.materialWithSectionCompletionTime);
+                            let uom = new Date(resData.materialDeliverTime);
+                            let newDate =new Date(uom.setHours(uom.getHours() + day));
+                            resData.materialPartDeliverTime = newDate
+                        }
+                        if(resData?.assignConfigVO?.weldingCompletionTime && resData?.assignConfigVO?.loftingWithSectionCompletionTime && resData?.assignConfigVO.smallSampleCompletionTime && resData?.assignConfigVO.boltCompletionTime && resData?.loftingDeliverTime){
+                            const weldingCompletionTime = Number(resData.assignConfigVO.weldingCompletionTime);
+                            const loftingWithSectionCompletionTime = Number(resData.assignConfigVO.loftingWithSectionCompletionTime);
+                            const smallSampleCompletionTime = Number(resData.assignConfigVO.smallSampleCompletionTime);
+                            const boltCompletionTime = Number(resData.assignConfigVO.boltCompletionTime);
+                            let uom = new Date(resData.loftingDeliverTime);
+                            let newWeldingCompletionTime =new Date(uom.setHours(uom.getHours() + weldingCompletionTime));
+                            let newLoftingWithSectionCompletionTime =new Date(uom.setHours(uom.getHours() + loftingWithSectionCompletionTime));
+                            let newSmallSampleCompletionTime =new Date(uom.setHours(uom.getHours() + smallSampleCompletionTime));
+                            let newBoltCompletionTime =new Date(uom.setHours(uom.getHours() + boltCompletionTime));
+                            resData.weldingDeliverTime=newWeldingCompletionTime
+                            resData.boltDeliverTime=newBoltCompletionTime
+                            resData.smallSampleDeliverTime=newSmallSampleCompletionTime
+                            resData.loftingPartDeliverTime=newLoftingWithSectionCompletionTime
                         }
                         form.setFieldsValue({
                             ...resData,
