@@ -3,6 +3,7 @@
 	"msg": "pariatur",
 	"success": true,
 	"data": {
+		"assignConfigVO":{"materialWithSectionCompletionTime":"160"},
 		"boltDeliverTime": "2005-05-18",
 		"boltLeader": -29607261,
 		"combinedWeldingDeliverTime": "1986-04-06",
