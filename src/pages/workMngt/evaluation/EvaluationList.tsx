@@ -93,6 +93,7 @@ export default function EvaluationList(): React.ReactNode {
     }), {})
     const departmentData: any = data || [];
     const [ programLeader,setProgramLeader ] = useState([]);
+    const [ filterValue, setFilterValue ] = useState({});
 
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles && roles.forEach((role: any & SelectDataNode): void => {
@@ -171,12 +172,14 @@ export default function EvaluationList(): React.ReactNode {
                 </Row>
             }
         ] }
+        filterValue={ filterValue }
         onFilterSubmit = { (values: Record<string, any>) => {
             if(values.expectDeliverTimeAll) {
                 const formatDate = values.expectDeliverTimeAll.map((item: any) => item.format("YYYY-MM-DD"));
                 values.expectDeliverTimeStart = formatDate[0] + ' 00:00:00';
                 values.expectDeliverTimeEnd = formatDate[1] + ' 23:59:59';
             }
+            setFilterValue(values);
             return values;
         } }
     />

@@ -23,6 +23,7 @@ export interface PageProps extends RouteComponentProps, WithTranslation {
     onFilterSubmit?(values: Record<string, any>): Record<string, any>
     requestData?: {}
     refresh?: boolean//刷新
+    filterValue?: {} //查询条件
 }
 
 export interface IResponseData {
@@ -96,7 +97,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
     }
 
     public onTableChange(pagination: TablePaginationConfig): void {
-        this.fetchTableData({ name: this.state.name }, pagination);
+        this.fetchTableData({ ...this.props.filterValue }, pagination);
     }
 
     public async onFilterSubmit(values: Record<string, any>) {

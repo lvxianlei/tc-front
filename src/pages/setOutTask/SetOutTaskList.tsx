@@ -9,6 +9,7 @@ import RequestUtil from '../../utils/RequestUtil';
 
 export default function SetOutTaskList(): React.ReactNode {
     const [ refresh, setRefresh ] = useState<boolean>(false);
+    const [ filterValue, setFilterValue ] = useState({});
     
     const columns = [
         {
@@ -173,6 +174,7 @@ export default function SetOutTaskList(): React.ReactNode {
                 children: <DatePicker.RangePicker />
             },
         ] }
+        filterValue={ filterValue }
         onFilterSubmit = { (values: Record<string, any>) => {
             if(values.updateStatusTime) {
                 const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
@@ -184,6 +186,7 @@ export default function SetOutTaskList(): React.ReactNode {
                 values.plannedDeliveryTimeStart = formatDate[0] + ' 00:00:00';
                 values.plannedDeliveryTimeEnd = formatDate[1] + ' 23:59:59';
             }
+            setFilterValue(values);
             return values;
         } }
     />

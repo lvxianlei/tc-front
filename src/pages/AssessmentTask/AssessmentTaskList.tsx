@@ -14,6 +14,8 @@ import useRequest from '@ahooksjs/use-request';
 
 export default function AssessmentTaskList(): React.ReactNode {
     const [ refresh, setRefresh ] = useState<boolean>(false);
+    const [ filterValue, setFilterValue ] = useState({});
+
     const columns = [
         {
             key: 'index',
@@ -238,6 +240,7 @@ export default function AssessmentTaskList(): React.ReactNode {
                 children: <DatePicker.RangePicker />
             }
         ] }
+        filterValue={ filterValue }
         onFilterSubmit = { (values: Record<string, any>) => {
             if(values.a) {
                 const formatDate = values.a.map((item: any) => item.format("YYYY-MM-DD"));
@@ -249,6 +252,7 @@ export default function AssessmentTaskList(): React.ReactNode {
                 values.bidEndTimeStart = formatDate[0] + ' 00:00:00';
                 values.bidEndTimeEnd = formatDate[1] + ' 23:59:59';
             }
+            setFilterValue(values);
             return values;
         } }
     />
