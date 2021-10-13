@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Spin, Button, Space, Modal, Row, Col, Input } from 'antd';
+import { Spin, Button, Space, Modal, Row, Col, Input, message } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
@@ -131,10 +131,14 @@ export default function SetOutTaskDetail(): React.ReactNode {
                 setRejectReason(""); 
             } } 
             onOk={ () => {
-                RequestUtil.post(`/tower-science/loftingTask/refuse`, { id: params.id, description: rejectReason });
-                setVisible(false); 
-                history.goBack();
-                setRejectReason("");
+                if(rejectReason) {
+                    RequestUtil.post(`/tower-science/loftingTask/refuse`, { id: params.id, description: rejectReason });
+                    setVisible(false); 
+                    history.goBack();
+                    setRejectReason("");
+                } else {
+                    message.warning('请输入拒绝原因');
+                }
             } } 
             cancelText="关闭" 
             okText="提交" 
