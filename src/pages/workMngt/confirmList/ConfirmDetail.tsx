@@ -412,7 +412,7 @@ export default function ConfirmDetail(): React.ReactNode {
               setAttachInfo([...attachInfo, {
                   id: "",
                   uid: attachInfo.length,
-                  name: dataInfo.originalName.split(".")[0],
+                  name: dataInfo.originalName,
                   description: "",
                   filePath: dataInfo.name,
                   link: dataInfo.link,

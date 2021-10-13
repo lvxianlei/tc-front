@@ -1,12 +1,12 @@
 import React from 'react';
-import { Button, Space, Modal, Input, Descriptions, Form, FormInstance, DatePicker, InputNumber } from 'antd';
+import { Button, Space, Modal, Input, Descriptions, Form, FormInstance, DatePicker, InputNumber, Select, Row, Col } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './TowerPickAssign.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
-import useRequest from '@ahooksjs/use-request';
-
+import TreeSelect, { TreeNode } from 'antd/lib/tree-select';
+import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 export interface TowerPickAssignProps {}
 export interface ITowerPickAssignRouteProps extends RouteComponentProps<TowerPickAssignProps>, WithTranslation {
     readonly id: number | string;
@@ -15,16 +15,39 @@ export interface ITowerPickAssignRouteProps extends RouteComponentProps<TowerPic
 export interface TowerPickAssignState {
     readonly visible: boolean;
     readonly description?: string;
+    readonly appointed?: IAppointed;
     readonly appointedList?: IAppointedList[];
     readonly repeatModal: boolean;
     readonly repeatNum?: number;
     readonly selectKey?: number;
+    user?: any[];
+    checkUser?: any[];
+    departmentData?: SelectDataNode[];
 }
 
+interface IAppointed {
+    readonly productCategoryName?: string;
+    readonly productCategory?: string;
+    readonly pattern?: string;
+    readonly sectionNum?: number;
+}
 interface IAppointedList {
-
+    readonly plannedDeliveryTime?: string;
+    readonly id	?: string;
+    readonly checkUser?: string;
+    readonly checkUserDepartment?: string;
+    readonly checkUserDepartmentName?: string;
+    readonly checkUserName?: string;
+    readonly loftingUser?: string;
+    readonly loftingUserDepartment?: string;
+    readonly loftingUserDepartmentName?: string;
+    readonly loftingUserName?: string;
+    readonly name?: string;
+    readonly pattern?: string;
+    readonly productCategoryName?: string;
+    readonly productCategory?: string;
+    readonly index?: number;
 }
-
 class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerPickAssignState> {
 
     private form: React.RefObject<FormInstance> = React.createRef<FormInstance>();
@@ -45,36 +68,31 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
     public state: TowerPickAssignState = {
         visible: false,
         appointedList: [],
-        repeatModal: false
+        repeatModal: false,
+        user: [],
+        checkUser: [],
+        departmentData: [],
     }
 
     private modalCancel(): void {
+        this.getForm()?.setFieldsValue({
+            appointedList: []
+        })
         this.getForm()?.resetFields();
         this.setState({
-            visible: false
-        })
-    }
-
-    private async modalShow(): Promise<void> {
-        // const data = await RequestUtil.get(`/tower-market/bidInfo/${ this.props.id }`);
-        this.setState({
-            visible: true,
+            visible: false,
             appointedList: []
         })
     }
 
-    /**
-     * @protected
-     * @description Determines whether submit and continue on
-     */
-    protected onSubmitAndContinue(): void {
-        if (this.getForm()) {
-            this.getForm()?.validateFields().then(() => {
-                console.log(this.getForm()?.getFieldsValue())
-                this.getForm()?.resetFields();
-                return Promise.resolve()
-            })
-        }
+    private async modalShow(): Promise<void> {
+        const data = await RequestUtil.get<IAppointed>(`/tower-science/productSegment/detail?productCategoryId=${ this.props.id }`);
+        const departmentData = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
+        this.setState({
+            departmentData: departmentData,
+            visible: true,
+            appointed: data
+        })
     }
     
     /**
@@ -86,8 +104,24 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
     protected onSubmit(): void {
         if (this.getForm()) {
             this.getForm()?.validateFields().then(() => {
-                console.log(this.getForm()?.getFieldsValue())
+                let values = this.getForm()?.getFieldsValue().appointedList;
+                values = values.map((item: Record<string, any>) => {
+                    return {
+                        ...item,
+                        plannedDeliveryTime: item?.plannedDeliveryTime && item?.plannedDeliveryTime.format('YYYY-MM-DD'),
+                        productCategory: this.state.appointed?.productCategory,
+                        productCategoryName: this.state.appointed?.productCategoryName,
+                        pattern: this.state.appointed?.pattern
+                    }
+                })
+                RequestUtil.post(`/tower-science/productSegment/submit`, { ...values })
                 this.getForm()?.resetFields();
+                this.getForm()?.setFieldsValue({
+                    appointedList: []
+                });
+                this.setState({  
+                    appointedList: []
+                })
                 return Promise.resolve()
             })
         }
@@ -101,15 +135,20 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
     protected addRow(): void {
         let appointedList: IAppointedList[] = this.getForm()?.getFieldsValue(true).appointedList || [];
         appointedList.push({
-            q: '',
-            w: '',
-            e: '',
-            r: '',
-            t: '',
-            y: ''
+            index: appointedList.length + 1,
+            name: '',
+            loftingUserDepartment: '',
+            loftingUser: '',
+            checkUserDepartment: '',
+            checkUser: '',
+            plannedDeliveryTime: ''
         })
         this.setState({
-            appointedList: appointedList
+            appointedList: appointedList,
+            appointed: {
+                ...this.state.appointed,
+                sectionNum: (this.state.appointed?.sectionNum || 0) + 1
+            }
         })
         this.getForm()?.setFieldsValue({
             appointedList: appointedList
@@ -125,7 +164,11 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
         let appointedList: IAppointedList[] = this.getForm()?.getFieldsValue(true).appointedList || [];
         appointedList.splice(index, 1);
         this.setState({
-            appointedList: appointedList
+            appointedList: appointedList,
+            appointed: {
+                ...this.state.appointed,
+                sectionNum: (this.state.appointed?.sectionNum || 0) - 1
+            }
         })
         this.getForm()?.setFieldsValue({
             appointedList: appointedList
@@ -153,11 +196,15 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                     }, () => {
                         let appointedList: IAppointedList[] = this.getForm()?.getFieldsValue(true).appointedList || [];
                         const copyRow: IAppointedList = this.getForm()?.getFieldsValue(true).appointedList[this.state.selectKey || 0];
-                        const copyRowList = Array(this.state.repeatNum).fill({ ...copyRow, q: '' });
+                        const copyRowList = Array(this.state.repeatNum).fill({ ...copyRow, name: '' });
                         appointedList.push( ...copyRowList );
                         this.setState({
                             appointedList: appointedList,
-                            repeatNum: undefined
+                            repeatNum: undefined,
+                            appointed: {
+                                ...this.state.appointed,
+                                sectionNum: (this.state.appointed?.sectionNum || 0) + (this.state.repeatNum || 0)
+                            }
                         })
                         this.getForm()?.setFieldsValue({
                             appointedList: appointedList
@@ -172,7 +219,48 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
             } } />
         </Modal>
     }
+    /**
+     * onDepartmentChange
+     */
+    public onDepartmentChange = async (value: Record<string, any>, index: number, title: string) => {
+        const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${ value }&size=1000`);
+        if(title==='提料'){
+            const user = this.state.checkUser||[];
+            user[index] = userData.records;
+            this.setState({
+                checkUser:user
+            })
+        }
+        else{
+            const user = this.state.user||[];
+            user[index] = userData.records;
+            this.setState({
+                user
+            })
+        }
+        
+    }
 
+    public wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
+        roles && roles.forEach((role: any & SelectDataNode): void => {
+            role.value = role.id;
+            role.isLeaf = false;
+            if (role.children && role.children.length > 0) {
+                this.wrapRole2DataNode(role.children);
+            }
+        });
+        return roles;
+    }
+
+    public renderTreeNodes = (data:any) => data.map((item:any) => {
+        if (item.children) {
+            item.disabled = true;
+            return (<TreeNode key={ item.id } title={ item.title } value={ item.id } disabled={ item.disabled } className={ styles.node } >
+                { this.renderTreeNodes(item.children) }
+            </TreeNode>);
+        }
+        return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id }/>;
+    });
      /**
      * @description Renders AbstractDetailComponent
      * @returns render 
@@ -187,42 +275,23 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                 footer={ 
                     <Space direction="horizontal" className={ styles.bottomBtn }>
                         <Button type="ghost" onClick={ () => this.modalCancel() }>关闭</Button>
-                        <Button type="ghost"  onClick={ () => this.onSubmit() }>保存</Button>
-                        <Button type="ghost" onClick={ () => this.onSubmitAndContinue() }>保存并提交</Button>
+                        <Button type="ghost" onClick={ () => this.onSubmit() }>提交</Button>
                     </Space>
                 } 
                 onCancel={ () => this.modalCancel() }
             >
-                <DetailContent>
+                <DetailContent className={ styles.modalHeight }>
                     <p>指派信息</p>
-                    <Form className={ styles.descripForm }>
+                    <Form ref={ this.form } className={ styles.descripForm }>
                         <Descriptions title="" bordered size="small" colon={ false } column={ 9 }>
                             <Descriptions.Item label="塔型" span={ 1 }>
-                                <Form.Item name="a"
-                                    rules={[{
-                                        required: true,
-                                        message: '请输入塔型'
-                                    }]}>
-                                    <Input />
-                                </Form.Item>
+                                { this.state.appointed?.productCategoryName }
                             </Descriptions.Item>
                             <Descriptions.Item label="模式" span={ 3 }>
-                                <Form.Item name="b"
-                                    rules={[{
-                                        required: true,
-                                        message: '请输入模式'
-                                    }]}>
-                                    <Input />
-                                </Form.Item>
+                                { this.state.appointed?.pattern === '1'?'新放':this.state.appointed?.pattern === '2'?'重新出卡':'套用' }
                             </Descriptions.Item>
                             <Descriptions.Item label="段数" span={ 3 }>
-                                <Form.Item name="c"
-                                    rules={[{
-                                        required: true,
-                                        message: '请输入段数'
-                                    }]}>
-                                    <Input />
-                                </Form.Item>
+                                { this.state.appointed?.sectionNum || 0 }
                             </Descriptions.Item>
                             <Descriptions.Item children span={ 1 }></Descriptions.Item>
                             <Descriptions.Item span={ 1 }><Button type="primary" ghost size="small" onClick={ () => this.addRow() }>添加</Button></Descriptions.Item>
@@ -230,48 +299,64 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                 this.state.appointedList?.map((item: IAppointedList, index: number) => {
                                     return  <>  
                                         <Descriptions.Item label="段名" span={ 1 }>
-                                            <Form.Item name={["appointedList", index, "q"]}
+                                            <Form.Item name={["appointedList", index, "name"]}
                                                 rules={[{
                                                     required: true,
                                                     message: '请输入段名'
+                                                },
+                                                {
+                                                  pattern: /^[^\s]*$/,
+                                                  message: '禁止输入空格',
                                                 }]}>
                                                 <Input />
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="放样人"  span={ 3 }>
-                                            <Form.Item name={["appointedList", index, "w"]}
+                                        <Descriptions.Item label="提料人"  span={ 3 }>
+                                            <Form.Item name={["appointedList", index, "loftingUserDepartment"]}
                                                 rules={[{
                                                     required: true,
-                                                    message: '请输入放样人'
+                                                    message: '请选择部门'
                                                 }]} style={ { width: '50%', display: 'inline-block' } }>
-                                                <Input />
+                                                <TreeSelect placeholder="请选择" style={{width:'100px'}} onChange={ (value: any) => { this.onDepartmentChange(value,index,'提料') } } className={ styles.width200 }>
+                                                    {this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
+                                                </TreeSelect>
                                             </Form.Item>
-                                            <Form.Item name={["appointedList", index, "e"]}
+                                            <Form.Item name={["appointedList", index, "loftingUser"]}
                                                 rules={[{
                                                     required: true,
-                                                    message: '请输入放样人'
+                                                    message: '请选择人员'
                                                 }]} style={ { width: '50%', display: 'inline-block' } }>
-                                                <Input />
+                                                <Select placeholder="请选择" style={{width:'100px'}}>
+                                                    { this.state?.user && this.state.user[index] && this.state.user[index].map((item: any) => {
+                                                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                                    }) }
+                                                </Select>
                                             </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="校对人"  span={ 3 }>
-                                            <Form.Item name={["appointedList", index, "r"]}
+                                            <Form.Item name={["appointedList", index, "checkUserDepartment"]}
                                                 rules={[{
                                                     required: true,
-                                                    message: '请输入校对人'
+                                                    message: '请选择部门'
                                                 }]} style={ { width: '50%', display: 'inline-block' } }>
-                                                <Input />
+                                                <TreeSelect placeholder="请选择" style={{width:'100px'}} onChange={ (value: any) => { this.onDepartmentChange(value,index,'校对') } } className={ styles.width200 }>
+                                                    {this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
+                                                </TreeSelect>
                                             </Form.Item>
-                                            <Form.Item name={["appointedList", index, "t"]}
+                                            <Form.Item name={["appointedList", index, "checkUser"]}
                                                 rules={[{
                                                     required: true,
-                                                    message: '请输入放样人'
+                                                    message: '请选择人员'
                                                 }]} style={ { width: '50%', display: 'inline-block' } }>
-                                                <Input />
+                                                <Select placeholder="请选择" style={{width:'100px'}}>
+                                                    { this.state?.checkUser && this.state.checkUser[index] && this.state.checkUser[index].map((item: any) => {
+                                                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                                    }) }
+                                                </Select>
                                             </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="交付时间">
-                                            <Form.Item name={["appointedList", index, "y"]}
+                                            <Form.Item name={["appointedList", index, "plannedDeliveryTime"]}
                                                 rules={[{
                                                     required: true,
                                                     message: '请选择交付时间'
