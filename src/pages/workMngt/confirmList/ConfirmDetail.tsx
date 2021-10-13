@@ -64,7 +64,7 @@ export default function ConfirmDetail(): React.ReactNode {
       children,
       ...restProps
     }) => {
-      const inputNode = inputType === 'number' ? <InputNumber onChange={(value:number)=>{
+      const inputNode = inputType === 'number' ? <InputNumber style={{width:'100%'}} onChange={(value:number)=>{
         let number = 0;
         if(dataIndex==='productWeight'){
             number = formRef.getFieldValue('otherWeight')?formRef.getFieldValue('otherWeight'):0;
@@ -75,7 +75,7 @@ export default function ConfirmDetail(): React.ReactNode {
         formRef.setFieldsValue({
             totalWeight:value+number
         })
-      }} min={0} precision={4}/> : inputType === 'select' ?<Select>{enums&&enums.map((item:any)=>{
+      }} min={0} precision={4}/> : inputType === 'select' ?<Select style={{width:'100%'}}>{enums&&enums.map((item:any)=>{
         return <Select.Option value={item.value} key ={item.value}>{item.label}</Select.Option>
       })}</Select> : inputType === 'edit'?<span>保存后自动计算</span>: inputType === 'textArea'?<TextArea maxLength={500} rows={1} showCount/>:<Input />;
       
@@ -155,12 +155,14 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '序号', 
           dataIndex: 'index', 
           key: 'index', 
+          width: 50,
           render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) 
       },
       { 
           title: '* 线路名称', 
           dataIndex: 'lineName',
           type:'text',
+          width: 80,
           editable: true,
           key: 'lineName', 
       },
@@ -168,6 +170,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 杆塔号', 
           dataIndex: 'name', 
           type:'text',
+          width: 80,
           editable: true,
           key: 'name' 
       },
@@ -175,6 +178,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 塔型', 
           dataIndex: 'productCategory', 
           type:'text',
+          width: 80,
           editable: true,
           key: 'productCategory' 
       },
@@ -182,6 +186,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 塔型钢印号', 
           dataIndex: 'steelProductShape', 
           type:'text',
+          width: 80,
           editable: true,
           key: 'steelProductShape' 
       },
@@ -189,6 +194,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 产品类型', 
           dataIndex: 'productType', 
           type:'select',
+          width: 100,
           editable: true,
           key: 'productType',
           enums:productTypeOptions && productTypeOptions.map(({ id, name }) => {
@@ -211,6 +217,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 电压等级（kv）', 
           dataIndex: 'voltageLevel',
           type:'select', 
+          width: 100,
           editable: true,
           key: 'voltageLevel',
           enums:voltageGradeOptions && voltageGradeOptions.map(({ id, name }) => {
@@ -233,6 +240,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 呼高（m）', 
           dataIndex: 'basicHight', 
           type:'number',
+          width: 50,
           editable: true,
           key: 'basicHight' 
       },
@@ -240,6 +248,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 模式', 
           dataIndex: 'pattern', 
           type:'select',
+          width: 100,
           editable: true,
           key: 'pattern',
           enums: [
@@ -278,6 +287,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 杆塔重量（kg）', 
           dataIndex: 'productWeight', 
           type:'number',
+          width: 100,
           editable: true,
           key: 'productWeight' 
       },
@@ -285,6 +295,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '其他增重（kg）', 
           dataIndex: 'otherWeight', 
           type:'number',
+          width: 100,
           editable: true,
           key: 'otherWeight' 
       },
@@ -292,6 +303,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 总重（kg）', 
           dataIndex: 'totalWeight', 
           type:'edit',
+          width: 100,
           editable: true,
           key: 'totalWeight',
           render:(_:any,record:any)=>{
@@ -302,12 +314,14 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '备注', 
           dataIndex: 'description', 
           type:'textArea',
+          width: 250,
           editable: true,
           key: 'description' 
       },
       {
           key: 'operation',
           title: '操作',
+          width: 70,
           dataIndex: 'operation',
           render: (_: any, record: Item) => {
           const editable = isEditing(record);
@@ -357,7 +371,7 @@ export default function ConfirmDetail(): React.ReactNode {
     const handleModalCancel = () => {setVisible(false);form.resetFields();}
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById/${params.id}`)
         resole(data);
         setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString() }}));
         setAttachInfo([...data.attachInfoList]);
@@ -401,6 +415,7 @@ export default function ConfirmDetail(): React.ReactNode {
                   name: dataInfo.originalName.split(".")[0],
                   description: "",
                   filePath: dataInfo.name,
+                  link: dataInfo.link,
                   fileSize: dataInfo.size,
                   fileSuffix: fileInfo[fileInfo.length - 1],
                   userName: dataInfo.userName,
@@ -545,7 +560,7 @@ export default function ConfirmDetail(): React.ReactNode {
                         dataIndex: 'operation',
                         render: (_: undefined, record: any): React.ReactNode => (
                             <Space direction="horizontal" size="small">
-                                <Button type="link" onClick={() => downLoadFile(record.filePath)}>下载</Button>
+                                <Button type="link" onClick={() => downLoadFile(record.id?record.filePath:record.link)}>下载</Button>
                                 {record.fileSuffix==='pdf'?<Button type='link' onClick={()=>{window.open(record.filePath)}}>预览</Button>:null}
                                 <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
                             </Space>
@@ -627,7 +642,7 @@ export default function ConfirmDetail(): React.ReactNode {
                             "required": true,
                             "message":"请输入呼高（m）"
                         }]}>
-                            <InputNumber precision={2} style={{width:'100%'}} min={0}/>
+                            <InputNumber precision={4} style={{width:'100%'}} min={0}/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>
