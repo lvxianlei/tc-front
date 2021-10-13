@@ -23,6 +23,7 @@ interface IFileList {
     readonly originalName?: string;
     readonly name?: string;
     readonly userName?: string;
+    readonly link?: string;
 }
 
 
@@ -193,6 +194,7 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                                                 assessFileList: [
                                                     ...this.state.information?.assessFileList || [],
                                                     { 
+                                                        link: resData.link,
                                                         filePath: resData.name,
                                                         name: resData.originalName,
                                                         userName: resData.userName,
@@ -220,12 +222,16 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                                     dataIndex: 'operation', 
                                     render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                         <Space direction="horizontal" size="small">
-                                            <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
-                                            <Button type="link">预览</Button>
+                                            {
+                                                record.id ? <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button> : <Button type="link" onClick={ () => window.open(record.link) }>下载</Button> 
+                                            }
+                                            
+                                            {
+                                                record.fileSuffix !== 'pdf' ? null : record.id ? <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : <Button type="link" onClick={ () => window.open(record.link) }>预览</Button>
+                                            }
                                             <Button type="link" onClick={ () => {
                                                 const information: IResponse = this.state.information || {};
                                                 information.assessFileList && information.assessFileList.splice(index, 1);
-                                                console.log(information.assessFileList)
                                                 this.setState({
                                                     information: {
                                                         ...information,
