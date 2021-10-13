@@ -6,7 +6,7 @@
 
 
 import React from 'react';
-import { Space, Input, DatePicker, Button, Popconfirm, Upload, message } from 'antd';
+import { Space, Input, DatePicker, Button, Popconfirm, Upload, message, Spin } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -89,6 +89,12 @@ export default function NCProgram(): React.ReactNode {
         const data = await RequestUtil.get(`/tower-science/productNc/count?productSegmentId=${ params.productSegmentId }`);
         resole(data)
     }), {})
+
+    if (loading) {
+        return <Spin spinning={loading}>
+            <div style={{ width: '100%', height: '300px' }}></div>
+        </Spin>
+    }
     
     return <Page
         path="/tower-science/productNc"

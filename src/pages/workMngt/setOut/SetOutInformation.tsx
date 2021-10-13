@@ -13,16 +13,28 @@ import useRequest from '@ahooksjs/use-request';
 import styles from './SetOut.module.less';
 import { specialColums, productColumns } from './SetOutInformation.json';
 
-interface IResponseData {
-    readonly total: number | undefined;
-    readonly size: number | undefined;
-    readonly current: number | undefined;
-    readonly parentCode: string;
-    readonly records: ITower[];
+interface ISetOut {
+    readonly attachVos?: IAttachVos[];
+    readonly taskDataVOList?: ITaskDataVOList[];
 }
 
-interface ITower {
-    
+interface IAttachVos {
+    readonly description?: string;
+    readonly filePath?: string;
+    readonly fileSize?: string;
+    readonly fileSuffix?: string;
+    readonly fileUploadTime?: string;
+    readonly id?: string;
+    readonly name?: string;
+    readonly userName?: string;
+}
+
+interface ITaskDataVOList {
+    readonly createTime?: string;
+    readonly status?: string;
+    readonly createUser?: string;
+    readonly createDepartment?: string;
+    readonly description?: string;
 }
 
 const tableColumns = [
@@ -33,24 +45,45 @@ const tableColumns = [
         width: 100, 
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
     {
-        key: 'partBidNumber',
+        key: 'createDepartment',
         title: '操作部门',
-        dataIndex: 'partBidNumber', 
+        dataIndex: 'createDepartment', 
     },
     {  
-        key: 'goodsType', 
+        key: 'createUser', 
         title: '操作人', 
-        dataIndex: 'goodsType' 
+        dataIndex: 'createUser' 
     },
     { 
-        key: 'goodsType', 
+        key: 'createTime', 
         title: '操作时间', 
-        dataIndex: 'packageNumber' 
+        dataIndex: 'createTime' 
     },
     {
-        key: 'goodsType', 
+        key: 'status', 
         title: '任务状态', 
-        dataIndex: 'amount' 
+        dataIndex: 'status',
+        render: (pattern: number): React.ReactNode => {
+            switch (pattern) {
+                case 1:
+                    return '待指派';
+                case 2:
+                    return '放样中';
+                case 3:
+                    return '组焊中';
+                case 4:
+                    return '配段中';
+                case 5:
+                    return '已完成';
+                case 6:
+                    return '已提交';
+            }
+        }
+    },
+    {
+        key: 'description', 
+        title: '备注', 
+        dataIndex: 'description' 
     }
 ]
 
@@ -58,10 +91,11 @@ export default function SetOutInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const { loading, data }: Record<string, any> = useRequest(() => new Promise(async (resole, reject) => {
-        // const data = await RequestUtil.get(`/tower-market/bidInfo/${ params.id }`)
+        const data = await RequestUtil.get(`/tower-science/loftingList/detail?id=${ params.id }`);
         resole(data)
     }), {})
-    const detailData: IResponseData = data
+    const detailData: ISetOut = data;
+
     if (loading) {
         return <Spin spinning={ loading }>
             <div style={{ width: '100%', height: '300px' }}></div>
@@ -74,16 +108,16 @@ export default function SetOutInformation(): React.ReactNode {
         </Space>
     ] }>
         <DetailTitle title="特殊要求" />
-        <BaseInfo columns={ specialColums } dataSource={ {} } />
+        <BaseInfo columns={ specialColums } dataSource={ detailData } col={ 2 } />
         <DetailTitle title="产品信息" />
-        <BaseInfo columns={ productColumns } dataSource={ {} } />
+        <BaseInfo columns={ productColumns } dataSource={ detailData } col={ 2 } />
         <DetailTitle title="相关附件" />
         <CommonTable columns={[
             { 
                 key: 'name', 
                 title: '附件名称', 
                 dataIndex: 'name',
-                width: 250
+                width: 350
             },
             { 
                 key: 'operation', 
@@ -91,14 +125,17 @@ export default function SetOutInformation(): React.ReactNode {
                 dataIndex: 'operation', 
                 render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                     <Space direction="horizontal" size="small">
-                        <Button type="link">下载</Button>
-                        <Button type="link">预览</Button>
+                        <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
+                        {
+                            record.fileSuffix === 'pdf' ? <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : null
+                        }
                     </Space>
             ) }
         ]}
-            dataSource={ [] }
+            dataSource={ detailData.attachVos }
+            pagination={ false }
         />
         <DetailTitle title="操作信息"/>
-        <CommonTable columns={ tableColumns } dataSource={ [] } />
+        <CommonTable columns={ tableColumns } dataSource={ detailData.taskDataVOList } pagination={ false }/>
     </DetailContent>
 }

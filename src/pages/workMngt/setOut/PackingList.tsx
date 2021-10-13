@@ -5,93 +5,113 @@
 */
 
 import React from 'react';
-import { Space, Button, Popconfirm } from 'antd';
-import { Page } from '../../common';
+import { Space, Button, Popconfirm, Spin } from 'antd';
+import { CommonTable, DetailContent } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { Link, useHistory, useParams } from 'react-router-dom';
-
-const columns = [
-    {
-        key: 'index',
-        title: '序号',
-        dataIndex: 'index',
-        width: 50,
-        fixed: 'left' as FixedType,
-        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
-    },
-    {
-        key: 'projectName',
-        title: '捆号',
-        width: 150,
-        dataIndex: 'projectName'
-    },
-    {
-        key: 'projectNumber',
-        title: '件号',
-        dataIndex: 'projectNumber',
-        width: 120
-    },
-    {
-        key: 'bidBuyEndTime',
-        title: '材料规格',
-        width: 200,
-        dataIndex: 'bidBuyEndTime'
-    },
-    {
-        key: 'biddingEndTime',
-        title: '长度',
-        width: 150,
-        dataIndex: 'biddingEndTime',
-    },
-    {
-        key: 'biddingPerson',
-        title: '数量',
-        dataIndex: 'biddingPerson',
-        width: 200,
-    },
-    {
-        key: 'bidBuyEndTime',
-        title: '备注',
-        width: 200,
-        dataIndex: 'bidBuyEndTime'
-    },
-    {
-        key: 'operation',
-        title: '操作',
-        dataIndex: 'operation',
-        fixed: 'right' as FixedType,
-        width: 100,
-        render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-            <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                <Button type="link">编辑</Button>
-                <Popconfirm
-                    title="确认删除?"
-                    onConfirm={ () => {} }
-                    okText="确认"
-                    cancelText="取消"
-                >
-                    <Button type="link">删除</Button>
-                </Popconfirm>
-            </Space>
-        )
-    }
-]
+import useRequest from '@ahooksjs/use-request';
+import RequestUtil from '../../../utils/RequestUtil';
 
 export default function PackingList(): React.ReactNode {
+    const columns = [
+        {
+            key: 'index',
+            title: '序号',
+            dataIndex: 'index',
+            width: 50,
+            fixed: 'left' as FixedType,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+        },
+        {
+            key: 'balesCode',
+            title: '捆号',
+            width: 150,
+            dataIndex: 'balesCode'
+        },
+        {
+            key: 'pieceCode',
+            title: '件号',
+            dataIndex: 'pieceCode',
+            width: 120
+        },
+        {
+            key: 'materialSpec',
+            title: '材料规格',
+            width: 200,
+            dataIndex: 'materialSpec'
+        },
+        {
+            key: 'length',
+            title: '长度',
+            width: 150,
+            dataIndex: 'length',
+        },
+        {
+            key: 'num',
+            title: '数量',
+            dataIndex: 'num',
+            width: 200,
+        },
+        {
+            key: 'description',
+            title: '备注',
+            width: 200,
+            dataIndex: 'description'
+        },
+        {
+            key: 'operation',
+            title: '操作',
+            dataIndex: 'operation',
+            fixed: 'right' as FixedType,
+            width: 100,
+            render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                <Space direction="horizontal" size="small" className={ styles.operationBtn }>
+                    <Button type="link">编辑</Button>
+                    <Popconfirm
+                        title="确认删除?"
+                        onConfirm={ () => { RequestUtil.delete(`/tower-science/packageRecord`, { id: record.id }).then(res => history.go(0)) } }
+                        okText="确认"
+                        cancelText="取消"
+                    >
+                        <Button type="link">删除</Button>
+                    </Popconfirm>
+                </Space>
+            )
+        }
+    ]
+
     const history = useHistory();
-    const params = useParams<{ id: string }>();
-    return <Page
-        path="/tower-market/bidInfo"
-        columns={ columns }
-        headTabs={ [] }
-        extraOperation={ <Space direction="horizontal" size="small">
-            <Button type="primary" ghost>导出</Button>
-            <span>塔型：HJ2E5SDJA-30M-1基  杆号：N5  捆数3</span>
-            <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ params.id }/packingListNew` }><Button type="primary" ghost>添加</Button></Link>
-            <Button type="primary" ghost>完成</Button>
-            <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
-        </Space>}
-        searchFormItems={ [] }
-    />
+    const params = useParams<{ id: string, productId: string }>();
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get(`/tower-science/packageRecord/list`, { productId: params.productId })
+        resole(data)
+    }), {})
+    const detailData: any = data;
+
+    if (loading) {
+        return <Spin spinning={loading}>
+            <div style={{ width: '100%', height: '300px' }}></div>
+        </Spin>
+    }
+    
+    return <>
+        <Space direction="horizontal" size="small" className={ styles.padding16 }>
+            {/* <Button type="primary" ghost>导出</Button> */}
+            <span>塔型：{ detailData.productCategoryName }  杆号：{ detailData.productNumber }  捆数: { detailData.packageRecordVOList.length }</span>
+            <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ params.productId }/packingListNew` }><Button type="primary" ghost>添加</Button></Link>
+            <Popconfirm
+                title="确认完成?"
+                onConfirm={ () => RequestUtil.post(`/tower-science/packageRecord/submit`, { productId: params.productId }).then(res => history.goBack()) }
+                okText="确认"
+                cancelText="取消"
+            >
+                <Button type="primary">完成</Button>
+            </Popconfirm>
+            <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
+        </Space>
+        <DetailContent>
+            <CommonTable columns={ columns } dataSource={ detailData.packageRecordVOList } pagination={ false }/>
+        </DetailContent>
+    </>
 }

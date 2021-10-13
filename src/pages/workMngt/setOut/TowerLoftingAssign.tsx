@@ -56,11 +56,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
     protected getForm(): FormInstance | null {
         return this.form?.current;
     }
-
-    constructor(props: ITowerLoftingAssignRouteProps) {
-        super(props)
-    }
-
+    
     public state: TowerLoftingAssignState = {
         visible: false,
         appointedList: [],
