@@ -314,6 +314,7 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
                 name: 'priority',
                 label: '优先级',
                 children:  <Select>
+                                <Select.Option value={''} key ={''}>全部</Select.Option>
                                 <Select.Option value={1} key={1}>高</Select.Option>
                                 <Select.Option value={2} key={2}>中</Select.Option>
                                 <Select.Option value={3} key={3}>低</Select.Option>
@@ -323,6 +324,7 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
                 name: 'pattern',
                 label: '模式',
                 children:  <Select>
+                                <Select.Option value={''} key ={''}>全部</Select.Option>
                                 <Select.Option value={1} key={1}>新放</Select.Option>
                                 <Select.Option value={2} key={2}>重新出卡</Select.Option>
                                 <Select.Option value={3} key={3}>套用</Select.Option>

@@ -148,6 +148,7 @@ export default function PickTowerMessage(): React.ReactNode {
                     name: 'status',
                     label: '放样状态',
                     children: <Select style={{width:'100px'}}>
+                        <Select.Option value={''} key ={''}>全部</Select.Option>
                         <Select.Option value={1} key={1}>新放</Select.Option>
                         <Select.Option value={2} key={2}>重新出卡</Select.Option>
                         <Select.Option value={3} key={3}>套用</Select.Option>

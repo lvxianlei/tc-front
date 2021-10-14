@@ -144,107 +144,37 @@ export default function PickTower(): React.ReactNode {
     return (
         <>
             <Modal title='配段信息'  width={1200} visible={visible} onCancel={handleModalCancel} onOk={handleModalOk}>
-                <Form form={form} {...formItemLayout}>
+                {detail?.materialDrawProductSegmentList?<Form initialValues={{ detailData : detail.materialDrawProductSegmentList }} autoComplete="off" form={form}>  
                     <Row>
-                        <Col span={12}>
+                        <Col span={1}></Col>
+                        <Col span={11}>
                             <Form.Item name="productCategoryName" label="塔型">
-                                <span>JC30153B</span>
+                                <span>{detail?.productCategoryName}</span>
                             </Form.Item>
                         </Col>
-                        <Col span={12}>
+                        <Col span={1}></Col>
+                        <Col span={11}>
                             <Form.Item name="productNumber" label="杆塔号">
-                                <span>A001</span>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-{/*                 
-                    <Row>
-                        <Col span={12}>
-                            <Form.Item name="aaaa" label="段号">
-                                <span>1</span>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item name="reason" label="段数">
-                                <Input/>
+                                <span>{detail?.productNumber}</span>
                             </Form.Item>
                         </Col>
                     </Row>
                     <Row>
-                        <Col span={12}>
-                            <Form.Item name="aaaa" label="段号">
-                                <span>2</span>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item name="reason" label="段数">
-                                <Input/>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12}>
-                            <Form.Item name="aaaa" label="段号">
-                                <span>3</span>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item name="reason" label="段数">
-                                <Input/>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12}>
-                            <Form.Item name="aaaa" label="段号">
-                                <span>4</span>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item name="reason" label="段数">
-                                <Input/>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12}>
-                            <Form.Item name="aaaa" label="段号">
-                                <span>5</span>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item name="reason" label="段数">
-                                <Input/>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12}>
-                            <Form.Item name="aaaa" label="段号">
-                                <span>6</span>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item name="reason" label="段数">
-                                <Input/>
-                            </Form.Item>
-                        </Col>
-                    </Row> */}
-                </Form>
-                {detail?<Form initialValues={{ detailData : detail.materialDrawProductSegmentList }} autoComplete="off" form={form}>  
-                    <Row>
+                    
                         <Form.List name="detailData">
+                            
                             {
                                 ( fields , { add, remove }) => fields.map(
                                     field => (
                                     <>
-                                        
-                                        <Col span={ 12 }>
+                                        <Col span={ 1}></Col>
+                                        <Col span={ 11 }>
                                         <Form.Item name={[ field.name , 'value']} label='段数'>
                                             <span>{detail.materialDrawProductSegmentList&&detail.materialDrawProductSegmentList[field.name].count}</span>
                                         </Form.Item>
                                         </Col>
-                                        <Col span={ 12 }>
+                                        <Col span={1}></Col>
+                                        <Col span={ 11 }>
                                         <Form.Item  name={[ field.name , 'type']} label='段号'>
                                             <Input/>
                                         </Form.Item>
@@ -294,6 +224,7 @@ export default function PickTower(): React.ReactNode {
                         name: 'status',
                         label: '杆塔提料状态',
                         children: <Select style={{width:'100px'}}>
+                            <Select.Option value={''} key ={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>配段中</Select.Option>
                             <Select.Option value={2} key={2}>已完成</Select.Option>
                             <Select.Option value={3} key={3}>已提交</Select.Option>

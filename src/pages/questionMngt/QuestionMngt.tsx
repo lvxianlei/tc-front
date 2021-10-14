@@ -145,6 +145,7 @@ export default function QuestionMngt(): React.ReactNode {
                     name: 'status',
                     label: '问题单状态',
                     children:  <Select>
+                                    <Select.Option value={''} key ={''}>全部</Select.Option>
                                     <Select.Option value={1} key={1}>待修改</Select.Option>
                                     <Select.Option value={2} key={2}>已修改</Select.Option>
                                     <Select.Option value={3} key={3}>已拒绝</Select.Option>
@@ -155,6 +156,7 @@ export default function QuestionMngt(): React.ReactNode {
                     name: 'type',
                     label: '问题单类型',
                     children:  <Select>
+                                    <Select.Option value={''} key ={''}>全部</Select.Option>
                                     <Select.Option value={1} key={1}>提料</Select.Option>
                                     <Select.Option value={2} key={2}>放样</Select.Option>
                                     <Select.Option value={3} key={3}>螺栓</Select.Option>
