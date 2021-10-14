@@ -145,6 +145,7 @@ export default function ScheduleList(): React.ReactNode {
                     name: 'status',
                     label:'任务状态',
                     children: <Select style={{width:"100px"}}>
+                        <Select.Option value={''} key ={''}>全部</Select.Option>
                         <Select.Option value={0} key={0}>已拒绝</Select.Option>
                         <Select.Option value={1} key={1}>待确认</Select.Option>
                         <Select.Option value={2} key={2}>待指派</Select.Option>

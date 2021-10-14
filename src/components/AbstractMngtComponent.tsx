@@ -121,7 +121,12 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
         return {
             rowKey: this.getTableRowKey(),
             bordered: false,
-            pagination: this.state.tablePagination || false,
+            // pagination: this.state.tablePagination || false,
+            pagination: {
+                ...this.state.tablePagination || false,
+                showSizeChanger:true,
+                showTotal: (total) => `共${ total } 条记录`,
+            },
             onChange: this.onTableChange,
             dataSource: this.getTableDataSource(item),
             columns: this.getTableColumns(item).map(item => ({ ...item, ellipsis: true, onCell: () => ({ className: styles.tableCell }) })),

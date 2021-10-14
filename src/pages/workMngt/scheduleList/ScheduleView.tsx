@@ -666,6 +666,7 @@ export default function ScheduleView(): React.ReactNode {
                         name: 'pattern',
                         label: '模式',
                         children:   <Select style={{width:"100px"}}>
+                                        <Select.Option value={''} key ={''}>全部</Select.Option>
                                         <Select.Option value='1' key='1'>新放</Select.Option>
                                         <Select.Option value='3' key='3'>套用</Select.Option>
                                         <Select.Option value='2' key='2'>重新出卡</Select.Option>
@@ -675,6 +676,7 @@ export default function ScheduleView(): React.ReactNode {
                         name: 'priority',
                         label:'优先级',
                         children:   <Select style={{width:"100px"}}>
+                                        <Select.Option value={''} key ={''}>全部</Select.Option>
                                         <Select.Option value='1' key='1'>高</Select.Option>
                                         <Select.Option value='2' key='2'>中</Select.Option>
                                         <Select.Option value='3' key='3'>低</Select.Option>

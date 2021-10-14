@@ -142,6 +142,7 @@ export default function PickList(): React.ReactNode {
                         name: 'status',
                         label: '塔型状态',
                         children: <Select style={{width:'100px'}}>
+                            <Select.Option value={''} key ={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>待指派</Select.Option>
                             <Select.Option value={2} key={2}>提料中</Select.Option>
                             <Select.Option value={3} key={3}>配段中</Select.Option>
@@ -158,6 +159,7 @@ export default function PickList(): React.ReactNode {
                         name: 'pattern',
                         label: '模式',
                         children: <Select style={{width:'100px'}}>
+                            <Select.Option value={''} key ={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>新放</Select.Option>
                             <Select.Option value={2} key={2}>重新出卡</Select.Option>
                             <Select.Option value={3} key={3}>套用</Select.Option>

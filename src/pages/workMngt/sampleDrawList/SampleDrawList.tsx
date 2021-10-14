@@ -187,6 +187,7 @@ export default function SampleDrawList(): React.ReactNode {
                     name: 'priority',
                     label:'小样图状态',
                     children:   <Select style={{width:"100px"}}>
+                                    <Select.Option value={''} key ={''}>全部</Select.Option>
                                     <Select.Option value={1} key={1}>待开始</Select.Option>
                                     <Select.Option value={2} key={2}>进行中</Select.Option>
                                     <Select.Option value={3} key={3}>校核中</Select.Option>
@@ -204,6 +205,7 @@ export default function SampleDrawList(): React.ReactNode {
                     name: 'priority',
                     label:'优先级',
                     children:   <Select style={{width:"100px"}}>
+                                    <Select.Option value={''} key ={''}>全部</Select.Option>
                                     <Select.Option value={1} key={1}>高</Select.Option>
                                     <Select.Option value={2} key={2}>中</Select.Option>
                                     <Select.Option value={3} key={3}>低</Select.Option>
