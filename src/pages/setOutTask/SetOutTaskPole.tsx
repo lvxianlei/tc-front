@@ -48,7 +48,19 @@ const columns = [
         key: 'loftingStatus',
         title: '杆塔放样状态',
         width: 200,
-        dataIndex: 'loftingStatus'
+        dataIndex: 'loftingStatus',
+        render: (status: number): React.ReactNode => {
+            switch (status) {
+                case 1:
+                    return '配段中';
+                case 2:
+                    return '出单中';
+                case 3:
+                    return '已完成';
+                case 4:
+                    return '已提交';
+            }
+        }
     },
     {
         key: 'materialLeaderName',

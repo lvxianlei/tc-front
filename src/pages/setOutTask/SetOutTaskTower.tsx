@@ -54,7 +54,23 @@ const columns = [
         key: 'loftingStatus',
         title: '塔型放样状态',
         width: 200,
-        dataIndex: 'loftingStatus'
+        dataIndex: 'loftingStatus',
+        render: (status: number): React.ReactNode => {
+            switch (status) {
+                case 1:
+                    return '待指派';
+                case 2:
+                    return '放样中';
+                case 3:
+                    return '组焊中';
+                case 4:
+                    return '配段中';
+                case 5:
+                    return '已完成';
+                case 6:
+                    return '已提交';
+            }
+        }
     },
     {
         key: 'materialLeaderName',
@@ -78,7 +94,21 @@ const columns = [
         key: 'materialStatus',
         title: '塔型提料状态',
         width: 200,
-        dataIndex: 'materialStatus'
+        dataIndex: 'materialStatus',
+        render: (status: number): React.ReactNode => {
+            switch (status) {
+                case 1:
+                    return '待指派';
+                case 2:
+                    return '提料中';
+                case 3:
+                    return '配段中';
+                case 4:
+                    return '已完成';
+                case 5:
+                    return '已提交';
+            }
+        }
     },
     {
         key: 'boltLeaderName',
@@ -96,7 +126,21 @@ const columns = [
         key: 'boltStatus',
         title: '螺栓清单状态',
         width: 200,
-        dataIndex: 'boltStatus'
+        dataIndex: 'boltStatus',
+        render: (status: number): React.ReactNode => {
+            switch (status) {
+                case 1:
+                    return '待开始';
+                case 2:
+                    return '进行中';
+                case 3:
+                    return '校核中';
+                case 4:
+                    return '已完成';
+                case 5:
+                    return '已提交';
+            }
+        }
     },
     {
         key: 'smallSampleLeaderName',
@@ -114,7 +158,21 @@ const columns = [
         key: 'smallSampleStatus',
         title: '小样图清单状态',
         width: 200,
-        dataIndex: 'smallSampleStatus'
+        dataIndex: 'smallSampleStatus',
+        render: (status: number): React.ReactNode => {
+            switch (status) {
+                case 1:
+                    return '待开始';
+                case 2:
+                    return '进行中';
+                case 3:
+                    return '校核中';
+                case 4:
+                    return '已完成';
+                case 5:
+                    return '已提交';
+            }
+        }
     },
     {
         key: 'combinedWeldingLeaderName',
@@ -132,7 +190,21 @@ const columns = [
         key: 'boltStatus',
         title: '组焊清单状态',
         width: 200,
-        dataIndex: 'boltStatus'
+        dataIndex: 'boltStatus',
+        render: (status: number): React.ReactNode => {
+            switch (status) {
+                case 1:
+                    return '待开始';
+                case 2:
+                    return '进行中';
+                case 3:
+                    return '校核中';
+                case 4:
+                    return '已完成';
+                case 5:
+                    return '已提交';
+            }
+        }
     }
 ]
 
