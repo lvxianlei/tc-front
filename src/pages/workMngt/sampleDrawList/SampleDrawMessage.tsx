@@ -76,9 +76,9 @@ export default function SampleDrawMessage(): React.ReactNode {
                             </Space>
                         )
                     }
-                ]} dataSource={detailData?.fileList} />
+                ]} dataSource={detailData?.fileList} pagination={ false }/>
                 <DetailTitle title="操作信息" />
-                <CommonTable columns={tableColumns} dataSource={detailData?.statusRecordList} />
+                <CommonTable columns={tableColumns} dataSource={detailData?.statusRecordList} pagination={ false }/>
             </DetailContent>
         </Spin>
     </>

@@ -4,13 +4,25 @@ import { FixedType } from 'rc-table/lib/interface';
 import { Link, useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil';
-
+export interface IDetail {
+    productCategory?: string;
+    productCategoryName?: string;
+    productId?: string;
+    productNumber?: string;
+    materialDrawProductSegmentList?: IMaterialDetail[]
+}
+export interface IMaterialDetail{
+    count: string;
+    id: string;
+    name: string;
+}
 export default function PickTower(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const params = useParams<{ id: string }>()
     const history = useHistory();
     const [form] = Form.useForm();
     const [filterValue, setFilterValue] = useState({});
+    const [detail, setDetail] = useState<IDetail>({});
     const handleModalOk = async () => {
         try {
             const submitData = await form.validateFields()
@@ -93,8 +105,20 @@ export default function PickTower(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type='link' onClick={() => {
-                        setVisible(true)
+                    <Button type='link' onClick={async () => {
+                        setVisible(true);
+                            let data: IDetail = await RequestUtil.get<IDetail>(`/tower-science/product/material/${record.id}`)
+                            const detailData: IMaterialDetail[]|undefined = data&&data.materialDrawProductSegmentList&&data.materialDrawProductSegmentList.map((item:IMaterialDetail)=>{
+                                return {
+                                    ...item,
+                                    // value:item.count===-1?0:item.count,
+                                }
+                            })
+                            setDetail({
+                                ...data,
+                                materialDrawProductSegmentList:detailData
+                            })
+                            
                     }}>配段</Button>
                     <Link to={`/workMngt/pickList/pickTower/${params.id}/pickTowerDetail/${record.id}`}>杆塔提料明细</Link>
                 </Space>
@@ -133,6 +157,7 @@ export default function PickTower(): React.ReactNode {
                             </Form.Item>
                         </Col>
                     </Row>
+{/*                 
                     <Row>
                         <Col span={12}>
                             <Form.Item name="aaaa" label="段号">
@@ -204,8 +229,33 @@ export default function PickTower(): React.ReactNode {
                                 <Input/>
                             </Form.Item>
                         </Col>
-                    </Row>
+                    </Row> */}
                 </Form>
+                {detail?<Form initialValues={{ detailData : detail.materialDrawProductSegmentList }} autoComplete="off" form={form}>  
+                    <Row>
+                        <Form.List name="detailData">
+                            {
+                                ( fields , { add, remove }) => fields.map(
+                                    field => (
+                                    <>
+                                        
+                                        <Col span={ 12 }>
+                                        <Form.Item name={[ field.name , 'value']} label='段数'>
+                                            <span>{detail.materialDrawProductSegmentList&&detail.materialDrawProductSegmentList[field.name].count}</span>
+                                        </Form.Item>
+                                        </Col>
+                                        <Col span={ 12 }>
+                                        <Form.Item  name={[ field.name , 'type']} label='段号'>
+                                            <Input/>
+                                        </Form.Item>
+                                        </Col>
+                                    </>
+                                    )
+                                )
+                            }
+                        </Form.List> 
+                    </Row>
+                </Form>:null}
             </Modal>
             <Page
                 // path="/tower-market/bidInfo"
