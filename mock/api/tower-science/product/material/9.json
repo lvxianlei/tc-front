@@ -1,0 +1,24 @@
+{
+	"code": 200,
+	"msg": "",
+	"success": true,
+	"data": {
+		"materialDrawProductSegmentList": [{
+			"count": -43763108,
+			"id": -22252263,
+			"name": "occaecat elit"
+		}, {
+			"count": 7905158,
+			"id": 35382415,
+			"name": "sunt in id proident"
+		}, {
+			"count": 13691915,
+			"id": -14297777,
+			"name": "Ut est adipisicing magna occaecat"
+		}],
+		"productCategory": -55265135,
+		"productCategoryName": "ad dolore incididunt",
+		"productId": 51115935,
+		"productNumber": "in aute nostrud anim e"
+	}
+}

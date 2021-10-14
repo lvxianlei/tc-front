@@ -39,7 +39,7 @@ export default function ConfirmMessage(): React.ReactNode {
                             </Space>
                         )
                     }
-                ]} dataSource={detailData?.attachInfoList} />
+                ]} dataSource={detailData?.attachInfoList} pagination={ false }/>
                 {/* <DetailTitle title="完成信息" />
                 <CommonTable columns={[
                     {
