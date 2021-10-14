@@ -89,7 +89,7 @@ export default function ConfirmDetail(): React.ReactNode {
                   required: true,
                   validator: (rule: any, value: string, callback: (error?: string) => void) => {
                     checkProductNumber1(value,index).then(res => {
-                          if (res>-1) {
+                          if (res > 0) {
                               callback('请输入* 杆塔号，且同一塔型下杆塔号唯一！')
                           } else {
                               callback();
@@ -383,8 +383,9 @@ export default function ConfirmDetail(): React.ReactNode {
     const handleModalOk = async () => {
         try {
             const submitData = await form.validateFields();
-            console.log(submitData)
-            submitData.key = tableDataSource && tableDataSource.length.toString()
+            submitData.key = tableDataSource && tableDataSource.length.toString();
+            submitData.otherWeight = submitData.otherWeight?submitData.otherWeight:0;
+            submitData.index = tableDataSource.length;
             tableDataSource.push(submitData);
             setTableDataSource(tableDataSource);
             let number = '0';
@@ -403,7 +404,7 @@ export default function ConfirmDetail(): React.ReactNode {
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
         resole(data);
-        setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString() }}));
+        setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString(),index: index }}));
         setAttachInfo([...data.attachInfoList]);
         setDescription(data?.description);
         let totalNumber = '0';
@@ -479,20 +480,24 @@ export default function ConfirmDetail(): React.ReactNode {
     /**
      * @description 验证杆塔号
      */
-     const checkProductNumber1 = (value: string, index: number): Promise<void | any> => {
+    const checkProductNumber1 = (value: string, index: number): Promise<void | any> => {
       return new Promise(async (resolve, reject) => { 
           const formData = formRef.getFieldsValue(true)
-          if (value && formData.productCategory) {
-            resolve(tableDataSource.findIndex((item:any) => 
-                item.name === value && formData.productCategory === item.productCategory
-            ))
-          } else {
-              resolve(false)
+          let dataSource = JSON.parse(JSON.stringify(tableDataSource))
+          if (value && formData.productCategory ) {
+            const a = dataSource.filter((item:any)=>{
+                    return item.name === value && formData.productCategory === item.productCategory && item.index!== formData.index
+            })
+            resolve(a.length)
+          }
+          else{
+            resolve(false)
           }
       }).catch(error => {
           Promise.reject(error)
       })
-   }
+    }
+    
     return <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space>
@@ -548,7 +553,7 @@ export default function ConfirmDetail(): React.ReactNode {
                           console.log(error)
                       }
                     }}>保存并提交</Button>
-                     {tableDataSource.length>0?<Popconfirm
+                     {tableDataSource.length>0||attachInfo.length>0||description?<Popconfirm
                         title="是否放弃已添加信息?"
                         onConfirm={ () => history.goBack() }
                         okText="确定"
@@ -628,7 +633,7 @@ export default function ConfirmDetail(): React.ReactNode {
                             </Space>
                         )
                     }
-                ]} dataSource={attachInfo}  />
+                ]} dataSource={attachInfo}  pagination={ false }/>
             </DetailContent>
             <Modal visible={visible} title="添加" onOk={handleModalOk} onCancel={handleModalCancel}  width={ 800 }>
                 <Form form={form} { ...formItemLayout }>
