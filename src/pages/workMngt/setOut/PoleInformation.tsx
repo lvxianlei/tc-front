@@ -164,6 +164,7 @@ export default function PoleInformation(): React.ReactNode {
                 name: 'materialStatus',
                 label: '杆塔放样状态',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
+                    <Select.Option value={ "" } key="5">全部</Select.Option>
                     <Select.Option value={ 1 } key="1">配段中</Select.Option>
                     <Select.Option value={ 2 } key="2">出单中</Select.Option>
                     <Select.Option value={ 3 } key="3">已完成 </Select.Option>

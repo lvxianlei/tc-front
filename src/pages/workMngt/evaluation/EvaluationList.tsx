@@ -135,6 +135,7 @@ export default function EvaluationList(): React.ReactNode {
                 name: 'status',
                 label: '任务状态',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
+                    <Select.Option value="" key="2">全部</Select.Option>
                     <Select.Option value="3" key="3">待完成</Select.Option>
                     <Select.Option value="4" key="4">已完成</Select.Option>
                 </Select>

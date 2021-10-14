@@ -164,6 +164,7 @@ export default function TowerInformation(): React.ReactNode {
                 name: 'status',
                 label: '放样状态',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
+                    <Select.Option value="" key="4">全部</Select.Option>
                     <Select.Option value="0" key="0">放样中</Select.Option>
                     <Select.Option value="1" key="1">校核中</Select.Option>
                     <Select.Option value="2" key="2">已完成</Select.Option>

@@ -134,6 +134,7 @@ export default function SetOutList(): React.ReactNode {
                 name: 'status',
                 label: '塔型状态',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
+                    <Select.Option value="" key="6">全部</Select.Option>
                     <Select.Option value="0" key="0">待指派</Select.Option>
                     <Select.Option value="1" key="1">放样中</Select.Option>
                     <Select.Option value="2" key="2">组焊中</Select.Option>
@@ -151,6 +152,7 @@ export default function SetOutList(): React.ReactNode {
                 name: 'pattern',
                 label: '模式',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
+                    <Select.Option value={ "" } key="4">全部</Select.Option>
                     <Select.Option value={ 1 } key="1">新放</Select.Option>
                     <Select.Option value={ 2 } key="2">重新出卡</Select.Option>
                     <Select.Option value={ 3 } key="3">套用</Select.Option>
