@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Input, Select } from 'antd';
 import { Link } from 'react-router-dom';
 import { Page } from '../common';
+import { fileURLToPath } from 'node:url';
 
 export default function PlanTrack(): React.ReactNode {
+    const [filterValue, setFilterValue] = useState({});
     const columns = [
         {
             key: 'index',
@@ -175,11 +177,13 @@ export default function PlanTrack(): React.ReactNode {
         },
     ];
     const onFilterSubmit=(value: any)=>{
+        setFilterValue(value)
         return value;
     }
     return <Page
         path="/tower-science/assessTask/planTrack"
         columns={columns}
+        filterValue={filterValue}
         onFilterSubmit={onFilterSubmit}
         extraOperation={<Button type="primary">导出</Button>}
         searchFormItems={[

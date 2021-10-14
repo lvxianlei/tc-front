@@ -13,6 +13,7 @@ export default function PickCheckList(): React.ReactNode {
     const history = useHistory();
     const [ visible, setVisible ] = useState(false);
     const [ record, setRecord ] = useState({});
+    const [filterValue, setFilterValue] = useState({});
     const [ title, setTitle ] = useState('提交问题');
 
    
@@ -43,12 +44,17 @@ export default function PickCheckList(): React.ReactNode {
             col.dataIndex === 'index' ? index + 1 : !col.editable? _ :  <span onDoubleClick={ (e) => { questionnaire( _ , record,  index, col.title) } }>{ _ }</span>)
         }  
     })
-   
+    const onFilterSubmit = (value: any) => {
+        setFilterValue(value)
+        return value
+    }
     return (
         <>
             <Page
                 path={`/tower-science/drawProductStructure/${params.productSegmentId}/check`}
                 columns={ columnsSetting }
+                onFilterSubmit={onFilterSubmit}
+                filterValue={ filterValue }
                 extraOperation={
                     <Space>
                         <Button>导出</Button>

@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Space, Input, DatePicker,  Button, Select } from 'antd'
 import { Link } from 'react-router-dom'
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 
 export default function QuestionMngt(): React.ReactNode {
+    const [filterValue, setFilterValue] = useState({});
     const columns = [
         {
             key: 'index',
@@ -119,6 +120,7 @@ export default function QuestionMngt(): React.ReactNode {
         }
     ];
     const onFilterSubmit=(value: any)=>{
+        setFilterValue(value)
         return value;
     }
     return <>
@@ -127,6 +129,7 @@ export default function QuestionMngt(): React.ReactNode {
             columns={columns}
             extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
+            filterValue={filterValue}
             searchFormItems={[
                 {
                     name: 'updateTimeStart',

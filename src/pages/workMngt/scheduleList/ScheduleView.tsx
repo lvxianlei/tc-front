@@ -14,6 +14,7 @@ import styles from './scheduleList.module.less';
 export default function ScheduleView(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [refresh, setRefresh] = useState<boolean>(false);
+    const [filterValue, setFilterValue] = useState({});
     const [scheduleData, setScheduleData] = useState<any|undefined>({});
     const history = useHistory();
     const [form] = Form.useForm();
@@ -339,6 +340,7 @@ export default function ScheduleView(): React.ReactNode {
         wrapperCol: { span: 24 }
     };
     const onFilterSubmit = (value: any) => {
+        setFilterValue(value)
         return value
     }
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
@@ -658,6 +660,7 @@ export default function ScheduleView(): React.ReactNode {
                 requestData={{ loftingTaskId: params.id }}
                 onFilterSubmit={ onFilterSubmit }
                 refresh={ refresh }
+                filterValue={ filterValue }
                 searchFormItems={[
                     {
                         name: 'pattern',

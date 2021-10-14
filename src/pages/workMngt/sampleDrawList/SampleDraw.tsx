@@ -8,6 +8,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 export default function SampleDraw(): React.ReactNode {
     const params = useParams<{ id: string }>()
     const history = useHistory();
+    const [filterValue, setFilterValue] = useState({});
     const [visible, setVisible] = useState<boolean>(false);
     const [refresh, setRefresh] = useState<boolean>(false);
     const [url, setUrl] = useState<string>('');
@@ -99,6 +100,7 @@ export default function SampleDraw(): React.ReactNode {
             value.uploadTimeEnd = formatDate[1]+ ' 23:59:59';
             delete value.upLoadTime
         }
+        setFilterValue(value)
         return value
     }
     return (
@@ -115,6 +117,7 @@ export default function SampleDraw(): React.ReactNode {
                 columns={columns}
                 refresh={refresh}
                 onFilterSubmit={onFilterSubmit}
+                filterValue={filterValue}
                 requestData={{productCategoryId:params.id}}
                 extraOperation={
                     <Space>

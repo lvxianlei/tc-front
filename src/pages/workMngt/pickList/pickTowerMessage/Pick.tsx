@@ -12,6 +12,7 @@ interface Column extends ColumnType<object> {
 export default function Lofting(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string, productSegmentId: string}>();
+    const [filterValue, setFilterValue] = useState({});
     const [ editorLock, setEditorLock ] = useState('编辑');
     const formRef: React.RefObject<FormInstance> = React.createRef<FormInstance>();
 
@@ -95,13 +96,18 @@ export default function Lofting(): React.ReactNode {
         }
     })
     const [ tableColumns, setColumns ] = useState(columnsSetting);
-
+    const onFilterSubmit = (value: any) => {
+        setFilterValue(value)
+        return value
+    }
     return <Form ref={ formRef } className={ styles.descripForm }>
         <Page
             path="/tower-science/drawProductStructure"
             columns={ tableColumns }
             requestData={{productSegmentId:params.id}}
             headTabs={ [] }
+            onFilterSubmit={onFilterSubmit}
+            filterValue={ filterValue }
             tableProps={{ pagination: false }}
             extraOperation={ 
                 <Space direction="horizontal" size="small">

@@ -10,6 +10,7 @@ export default function PickTower(): React.ReactNode {
     const params = useParams<{ id: string }>()
     const history = useHistory();
     const [form] = Form.useForm();
+    const [filterValue, setFilterValue] = useState({});
     const handleModalOk = async () => {
         try {
             const submitData = await form.validateFields()
@@ -113,6 +114,7 @@ export default function PickTower(): React.ReactNode {
             value.updateStatusTimeEnd = formatDate[1]+ ' 23:59:59';
             delete value.statusUpdateTime
         }
+        setFilterValue(value)
         return value
     }
     return (
@@ -210,6 +212,7 @@ export default function PickTower(): React.ReactNode {
                 path="/tower-science/product/material"
                 columns={columns}
                 onFilterSubmit={onFilterSubmit}
+                filterValue={ filterValue }
                 requestData={{ productCategoryId: params.id }}
                 extraOperation={
                     <Space>

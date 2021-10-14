@@ -6,6 +6,7 @@ import { FixedType } from 'rc-table/lib/interface';
 
 export default function SetOutTowerMngt(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
+    const [filterValue, setFilterValue] = useState({});
     const columns = [
         {
             key: 'index',
@@ -73,7 +74,17 @@ export default function SetOutTowerMngt(): React.ReactNode {
             )
         }
     ]
-    const handleModalCancel = () => setVisible(false)
+    const handleModalCancel = () => setVisible(false);
+    const onFilterSubmit = (value: any) => {
+        if (value.planTime) {
+            const formatDate = value.planTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.plannedDeliveryTimeStart = formatDate[0]+ ' 00:00:00';
+            value.plannedDeliveryTimeEnd = formatDate[1]+ ' 23:59:59';
+            delete value.planTime
+        }
+        setFilterValue(value)
+        return value
+    }
     return <>
         <Modal title='附件'  width={1200} visible={visible} onCancel={handleModalCancel} footer={false}>
             <CommonTable columns={[
@@ -107,6 +118,8 @@ export default function SetOutTowerMngt(): React.ReactNode {
         <Page
             path="/tower-market/bidInfo"
             columns={columns}
+            filterValue={filterValue}
+            onFilterSubmit={onFilterSubmit}
             extraOperation={<Button type="primary">导出</Button>}
             searchFormItems={[
                 {

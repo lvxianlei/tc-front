@@ -12,6 +12,7 @@ import styles from './confirm.module.less';
 export default function ConfirmList(): React.ReactNode {
     const [confirmLeader, setConfirmLeader] = useState<any|undefined>([]);
     const [department, setDepartment] = useState<any|undefined>([]);
+    const [filterValue, setFilterValue] = useState({});
     const history = useHistory();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
@@ -139,12 +140,14 @@ export default function ConfirmList(): React.ReactNode {
             value.plannedDeliveryTimeEnd = formatDate[1]+ ' 23:59:59';
             delete value.planTime
         }
+        setFilterValue(value)
         return value
     }
     return (
         <Page
             path="/tower-science/drawProductDetail"
             columns={columns}
+            filterValue={filterValue}
             // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
@@ -153,11 +156,11 @@ export default function ConfirmList(): React.ReactNode {
                     label: '任务状态',
                     children: <Select style={{width:"100px"}}>
                         {/* <Select.Option value={1} key={1}>待确认</Select.Option>
-                        <Select.Option value={2} key={2}>待指派</Select.Option>
-                        <Select.Option value={3} key={3}>待完成</Select.Option> */}
+                        <Select.Option value={2} key={2}>待指派</Select.Option> */}
+                        <Select.Option value={3} key={3}>待完成</Select.Option>
                         <Select.Option value={4} key={4}>已完成</Select.Option>
-                        <Select.Option value={5} key={5}>已提交</Select.Option>
-                        {/* <Select.Option value={0} key={0}>已拒绝</Select.Option> */}
+                        {/* <Select.Option value={5} key={5}>已提交</Select.Option>
+                        <Select.Option value={0} key={0}>已拒绝</Select.Option> */}
                     </Select>
                 },
                 {
