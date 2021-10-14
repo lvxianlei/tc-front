@@ -549,14 +549,14 @@ export default function ConfirmDetail(): React.ReactNode {
                           console.log(error)
                       }
                     }}>保存并提交</Button>
-                     <Popconfirm
+                     {tableDataSource.length>0?<Popconfirm
                         title="是否放弃已添加信息?"
                         onConfirm={ () => history.goBack() }
                         okText="确定"
                         cancelText="取消"
                     >
                          <Button key="goback">返回</Button>
-                    </Popconfirm>
+                    </Popconfirm>: <Button key="goback" onClick={() => history.goBack()}>返回</Button>}
                    
                 </Space>
             ]}>
