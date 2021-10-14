@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Space, Input, Button, Form, Modal, Row, Col, Select, DatePicker, TreeSelect } from 'antd'
-import { Link, useHistory, useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import TextArea from 'antd/lib/input/TextArea';

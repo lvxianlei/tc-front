@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Select, Button, Modal, Form, Popconfirm, Row, Col, TreeSelect, message } from 'antd'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { Page } from '../common';
-import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
 import moment from 'moment';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
