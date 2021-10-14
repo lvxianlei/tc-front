@@ -45,7 +45,7 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
                 RequestUtil.put(`/tower-science/assessTask/assign`, {
                     ...values,
                     id: this.props.id,
-                    expectDeliverTime: values.expectDeliverTime.format("YYYY-MM-DD") + ' 00:00:00'
+                    expectDeliverTime: values.expectDeliverTime.format("YYYY-MM-DD HH:ss:mm")
                 }).then(res => {
                     this.onCancel();
                     this.props.updataList();
@@ -86,6 +86,7 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
      */
     public onDepartmentChange = async (value: Record<string, any>) => {
         const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${ value }&size=1000`);
+        this.getForm()?.setFieldsValue({ 'assessUser': '' })
         this.setState({
             assessUserOptions: userData.records
         })
@@ -154,7 +155,7 @@ class Assign extends AbstractFillableComponent<IAssignRouteProps, AssignState> {
                     required: true,
                     message: '请选择计划交付时间'
                 }],
-                children: <DatePicker className={ styles.width100 }/>
+                children: <DatePicker showTime className={ styles.width100 }/>
             }]
         }]];
     }
