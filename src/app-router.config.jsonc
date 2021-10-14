@@ -130,6 +130,15 @@
       "exact": true,
       "authority": "auth_section"
     },
+
+    { // 成本评估配置
+      "name": "成本评估配置",
+      "path": "/sys/costconfig",
+      "module": "./pages/system-mngt/CostConfig/index",
+      "exact": true,
+      "authority": "auth_section"
+    },
+
     { // 销售任务单管理
       "name": "销售任务单管理",
       "path": "/prom/task",

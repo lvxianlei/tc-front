@@ -21,6 +21,7 @@ import { IUser } from './IUser';
 export interface IAbstractUserSettingState extends IAbstractFillableComponentState {
     readonly user?: IUser;
     readonly roles?: IRole[];
+    readonly department?: IRole[];
 }
 
 /**
@@ -47,8 +48,10 @@ export default abstract class AbstractUserSetting<P extends RouteComponentProps,
     public async componentDidMount() {
         super.componentDidMount();
         const roles: IRole[] = await RequestUtil.get<IRole[]>('/sinzetech-system/role/tree');
+        const department: IRole[] = await RequestUtil.get<IRole[]>('/sinzetech-user/department/tree');
         this.setState({
-            roles: roles
+            roles: roles,
+            department,
         });
     }
 
@@ -57,7 +60,7 @@ export default abstract class AbstractUserSetting<P extends RouteComponentProps,
      * @description Gets return path
      * @returns return path 
      */
-     protected getReturnPath(): string {
+    protected getReturnPath(): string {
         return '/sys/users';
     }
 
@@ -66,7 +69,7 @@ export default abstract class AbstractUserSetting<P extends RouteComponentProps,
      * @param [roles] 
      * @returns role to data node 
      */
-     protected wrapRole2DataNode(roles: (IRole & SelectDataNode)[] = []): SelectDataNode[] {
+    protected wrapRole2DataNode(roles: (IRole & SelectDataNode)[] = []): SelectDataNode[] {
         roles.forEach((role: IRole & SelectDataNode): void => {
             role.value = role.id;
             if (role.children && role.children.length) {
@@ -91,7 +94,7 @@ export default abstract class AbstractUserSetting<P extends RouteComponentProps,
                 label: '登录账号',
                 name: 'account',
                 initialValue: this.state.user?.account,
-                children: <Input placeholder="请输入登录账号"/>,
+                children: <Input placeholder="请输入登录账号" />,
                 rules: [{
                     required: true,
                     message: '请输入登录账号!'
@@ -100,7 +103,7 @@ export default abstract class AbstractUserSetting<P extends RouteComponentProps,
                 label: '用户姓名',
                 name: 'name',
                 initialValue: this.state.user?.name,
-                children: <Input placeholder="请输入用户姓名"/>,
+                children: <Input placeholder="请输入用户姓名" />,
                 rules: [{
                     required: true,
                     message: '请输入用户姓名!'
@@ -110,7 +113,7 @@ export default abstract class AbstractUserSetting<P extends RouteComponentProps,
                 name: 'password',
                 hasFeedback: true,
                 initialValue: this.state.user?.password,
-                children: <Input.Password placeholder="请输入密码"/>,
+                children: <Input.Password placeholder="请输入密码" />,
                 rules: [{
                     required: true,
                     message: '请输入密码!'
@@ -120,7 +123,7 @@ export default abstract class AbstractUserSetting<P extends RouteComponentProps,
                 name: 'confirm',
                 dependencies: ['password'],
                 hasFeedback: true,
-                children: <Input.Password placeholder="请输入确认密码"/>,
+                children: <Input.Password placeholder="请输入确认密码" />,
                 rules: [{
                     required: true,
                     message: '请输入确认密码!'
@@ -144,12 +147,12 @@ export default abstract class AbstractUserSetting<P extends RouteComponentProps,
                 label: '手机号码',
                 name: 'phone',
                 initialValue: this.state.user?.phone,
-                children: <Input placeholder="请输入手机号码"/>
+                children: <Input placeholder="请输入手机号码" />
             }, {
                 label: '电子邮箱',
                 name: 'email',
                 initialValue: this.state.user?.email,
-                children: <Input placeholder="请输入电子邮箱"/>
+                children: <Input placeholder="请输入电子邮箱" />
             }]
         }, {
             title: '职责信息',
@@ -160,8 +163,8 @@ export default abstract class AbstractUserSetting<P extends RouteComponentProps,
                 label: '所属角色',
                 name: 'roleIds',
                 initialValue: this.state.user?.roleIds?.split(','),
-                children: <TreeSelect showSearch={ true } placeholder="请选择所属角色" multiple={ true }
-                    className={ layoutStyles.width100 } treeData={ this.wrapRole2DataNode( this.state.roles ) }/>,
+                children: <TreeSelect showSearch={true} placeholder="请选择所属角色" multiple={true}
+                    className={layoutStyles.width100} treeData={this.wrapRole2DataNode(this.state.roles)} />,
                 rules: [{
                     required: true,
                     message: '请输入所属角色!'
@@ -170,7 +173,12 @@ export default abstract class AbstractUserSetting<P extends RouteComponentProps,
                 label: '所属部门',
                 name: 'departmentId',
                 initialValue: this.state.user?.departmentId,
-                children: <Input placeholder="请选择所属机构"/>
+                children: <TreeSelect showSearch={true} placeholder="请选择所属机构" multiple={true}
+                    className={layoutStyles.width100} treeData={this.wrapRole2DataNode(this.state.department)} />,
+                rules: [{
+                    required: true,
+                    message: '请输入所属机构!'
+                }]
             }]
         }]];
     }

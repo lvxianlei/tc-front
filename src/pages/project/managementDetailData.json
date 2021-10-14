@@ -1228,8 +1228,49 @@
             "dataIndex": "productWeight"
         }
     ],
+    "costBase": [
+        {
+            "title": "评估单号",
+            "dataIndex": "a"
+        },
+        {
+            "title": "发起时间",
+            "dataIndex": "a"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "a"
+        }
+    ],
+    "consultRecords": [
+        {
+            "title": "发起人",
+            "dataIndex": "a"
+        },
+        {
+            "title": "咨询部门",
+            "dataIndex": "b"
+        },
+        {
+            "title": "咨询对象",
+            "dataIndex": "c"
+        },
+        {
+            "title": "咨询时间",
+            "dataIndex": "d"
+        },
+        {
+            "title": "咨询状态",
+            "dataIndex": "e"
+        },
+        {
+            "title": "咨询结果",
+            "dataIndex": "f"
+        }
+    ],
     "paths": {
         "base": "/tower-market/projectInfo",
+        "cost": "/tower-market/cost",
         "bidDoc": "/tower-market/bidDoc",
         "bidResult": "/tower-market/bidBase",
         "frameAgreement": "/tower-market/frameAgreement",
