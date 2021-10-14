@@ -132,11 +132,6 @@ export default function EvaluationList(): React.ReactNode {
         refresh={ refresh }
         searchFormItems={ [
             {
-                name: 'fuzzyMsg',
-                label: '模糊查询项',
-                children: <Input placeholder="任务编号/项目名称"/>
-            },
-            {
                 name: 'status',
                 label: '任务状态',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
@@ -170,6 +165,11 @@ export default function EvaluationList(): React.ReactNode {
                         </Form.Item>
                     </Col>
                 </Row>
+            },
+            {
+                name: 'fuzzyMsg',
+                label: '模糊查询项',
+                children: <Input placeholder="任务编号/项目名称"/>
             }
         ] }
         filterValue={ filterValue }

@@ -173,11 +173,6 @@ export default function AssessmentTaskList(): React.ReactNode {
         refresh={ refresh }
         searchFormItems={ [
             {
-                name: 'fuzzyMsg',
-                label: '模糊查询项',
-                children: <Input placeholder="任务编号/项目名称/客户名称"/>
-            },
-            {
                 name: 'a',
                 label: '最新状态变更时间',
                 children: <DatePicker.RangePicker />
@@ -242,6 +237,11 @@ export default function AssessmentTaskList(): React.ReactNode {
                 name: 'bidEndTime',
                 label: '投标截止时间',
                 children: <DatePicker.RangePicker />
+            },
+            {
+                name: 'fuzzyMsg',
+                label: '模糊查询项',
+                children: <Input placeholder="任务编号/项目名称/客户名称"/>
             }
         ] }
         filterValue={ filterValue }

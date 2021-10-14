@@ -135,15 +135,15 @@ export default function NCProgram(): React.ReactNode {
         </Space>}
         searchFormItems={ [
             {
-                name: 'fuzzyMsg',
-                label: '模糊查询项',
-                children: <Input placeholder="段号/构件编号"/>
-            },
-            {
                 name: 'createTime',
                 label: '上传时间',
                 children: <DatePicker.RangePicker />
             },
+            {
+                name: 'fuzzyMsg',
+                label: '模糊查询项',
+                children: <Input placeholder="段号/构件编号"/>
+            }
         ] }
         onFilterSubmit = { (values: Record<string, any>) => {
             if(values.createTime) {

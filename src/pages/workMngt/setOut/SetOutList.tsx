@@ -126,11 +126,6 @@ export default function SetOutList(): React.ReactNode {
         // extraOperation={ <Button type="primary" ghost>导出</Button> }
         searchFormItems={ [
             {
-                name: 'fuzzyMsg',
-                label: '模糊查询项',
-                children: <Input placeholder="放样任务编号/任务单编号/订单编号/内部合同编号/塔型/塔型钢印号"/>
-            },
-            {
                 name: 'updateStatusTime',
                 label: '最新状态变更时间',
                 children: <DatePicker.RangePicker />
@@ -161,6 +156,11 @@ export default function SetOutList(): React.ReactNode {
                     <Select.Option value={ 3 } key="3">套用</Select.Option>
                 </Select>
             },
+            {
+                name: 'fuzzyMsg',
+                label: '模糊查询项',
+                children: <Input placeholder="放样任务编号/任务单编号/订单编号/内部合同编号/塔型/塔型钢印号"/>
+            }
         ] }
         onFilterSubmit = { (values: Record<string, any>) => {
             if(values.updateStatusTime) {
