@@ -147,11 +147,6 @@ export default function SetOutTaskList(): React.ReactNode {
         refresh={ refresh }
         searchFormItems={ [
             {
-                name: 'fuzzyMsg',
-                label: '模糊查询项',
-                children: <Input placeholder="放样任务编号/任务单编号/订单编号/内部合同编号"/>
-            },
-            {
                 name: 'updateStatusTime',
                 label: '最新状态变更时间',
                 children: <DatePicker.RangePicker />
@@ -173,6 +168,11 @@ export default function SetOutTaskList(): React.ReactNode {
                 label: '计划交付时间',
                 children: <DatePicker.RangePicker />
             },
+            {
+                name: 'fuzzyMsg',
+                label: '模糊查询项',
+                children: <Input placeholder="放样任务编号/任务单编号/订单编号/内部合同编号"/>
+            }
         ] }
         filterValue={ filterValue }
         onFilterSubmit = { (values: Record<string, any>) => {
