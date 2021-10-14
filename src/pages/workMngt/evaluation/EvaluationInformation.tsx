@@ -200,7 +200,7 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                                                         filePath: resData.name,
                                                         name: resData.originalName,
                                                         userName: resData.userName,
-                                                        fileSuffix: resData.originalName?.split('.')[1]
+                                                        fileSuffix: resData.originalName?.split('.')[resData.originalName?.split('.').length - 1]
                                                     }
                                                 ]
                                             }
