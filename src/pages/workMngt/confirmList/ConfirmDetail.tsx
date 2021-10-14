@@ -403,7 +403,7 @@ export default function ConfirmDetail(): React.ReactNode {
     const handleModalCancel = () => {setVisible(false);form.resetFields();}
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById/${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
         resole(data);
         setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString() }}));
         setAttachInfo([...data.attachInfoList]);

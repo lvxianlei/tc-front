@@ -9,6 +9,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 export default function SampleDrawList(): React.ReactNode {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
+    const [filterValue, setFilterValue] = useState({});
     const columns = [
         {
             key: 'index',
@@ -165,6 +166,7 @@ export default function SampleDrawList(): React.ReactNode {
             value.smallSampleDeliverTimeEnd = formatDate[1]+ ' 23:59:59';
             delete value.planTime
         }
+        setFilterValue(value)
         return value
     }
     return (
@@ -172,6 +174,7 @@ export default function SampleDrawList(): React.ReactNode {
             path="/tower-science/smallSample"
             columns={columns}
             onFilterSubmit={onFilterSubmit}
+            filterValue={filterValue}
             refresh={refresh}
             extraOperation={<Button type="primary">导出</Button>}
             searchFormItems={[

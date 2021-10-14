@@ -10,6 +10,7 @@ export default function PickTowerMessage(): React.ReactNode {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
     const params = useParams<{ id: string }>();
+    const [filterValue, setFilterValue] = useState({});
     const columns = [
         {
             key: 'index',
@@ -105,6 +106,7 @@ export default function PickTowerMessage(): React.ReactNode {
             value.updateStatusTimeEnd = formatDate[1]+ ' 23:59:59';
             delete value.statusUpdateTime
         }
+        setFilterValue(value)
         return value
     }
 
@@ -115,6 +117,7 @@ export default function PickTowerMessage(): React.ReactNode {
             columns={columns}
             refresh={refresh}
             onFilterSubmit={onFilterSubmit}
+            filterValue={ filterValue }
             requestData={{ productCategoryId: params.id }}
             extraOperation={
                 <Space>

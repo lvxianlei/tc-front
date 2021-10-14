@@ -16,6 +16,7 @@ export default function SampleDrawCheck(): React.ReactNode {
     const [errorVisible, setErrorVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
     const [attachInfo, setAttachInfo] = useState<any>({})
+    const [filterValue, setFilterValue] = useState({});
     const [questionDetail, setQuestionDetail] = useState<any>({});
     const handleErrorModalOk = async () => {
         try {
@@ -134,6 +135,7 @@ export default function SampleDrawCheck(): React.ReactNode {
             value.uploadTimeEnd = formatDate[1]+ ' 23:59:59';
             delete value.upLoadTime
         }
+        setFilterValue(value)
         return value
     }
     const deleteAttachData = () => {
@@ -203,6 +205,7 @@ export default function SampleDrawCheck(): React.ReactNode {
                 path="/tower-science/smallSample/checkList"
                 columns={columns}
                 onFilterSubmit={onFilterSubmit}
+                filterValue={filterValue}
                 refresh={refresh}
                 requestData={{productCategoryId: params.id}}
                 extraOperation={

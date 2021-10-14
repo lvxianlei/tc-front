@@ -39,7 +39,7 @@ const tableColumns = [
                 label: "已提交"
             }
         ]
-             return <>{value!==-1&&value?renderEnum.find((item: any) => item.value === value).label:''}</>
+             return <>{value!==-1?renderEnum.find((item: any) => item.value === value).label:''}</>
     }},
     { title: '备注', dataIndex: 'description', key: 'description' }
 ]

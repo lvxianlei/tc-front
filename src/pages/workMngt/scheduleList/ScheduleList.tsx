@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { Page } from '../../common'
 
 export default function ScheduleList(): React.ReactNode {
+    const [filterValue, setFilterValue] = useState({});
     const columns = [
         {
             key: 'index',
@@ -123,6 +124,7 @@ export default function ScheduleList(): React.ReactNode {
             value.plannedDeliveryTimeEnd = formatDate[1]+ ' 23:59:59';
             delete value.planTime
         }
+        setFilterValue(value)
         return value
     }
 
@@ -130,6 +132,7 @@ export default function ScheduleList(): React.ReactNode {
         <Page
             path="/tower-science/loftingTask"
             columns={columns}
+            filterValue={filterValue}
             // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[

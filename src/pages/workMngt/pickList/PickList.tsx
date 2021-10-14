@@ -8,6 +8,7 @@ export default function PickList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
     const history = useHistory();
+    const [filterValue, setFilterValue] = useState({});
     const columns = [
         {
             key: 'index',
@@ -89,6 +90,7 @@ export default function PickList(): React.ReactNode {
             value.plannedDeliveryTimeEnd = formatDate[1]+ ' 23:59:59';
             delete value.planTime
         }
+        setFilterValue(value)
         return value
     }
     return (
@@ -127,6 +129,7 @@ export default function PickList(): React.ReactNode {
                 path="/tower-science/materialTask"
                 // path="/tower-market/bidInfo"
                 columns={columns}
+                filterValue={filterValue}
                 onFilterSubmit={onFilterSubmit}
                 extraOperation={<Button type="primary">导出</Button>}
                 searchFormItems={[

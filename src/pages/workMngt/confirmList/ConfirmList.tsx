@@ -12,6 +12,7 @@ import styles from './confirm.module.less';
 export default function ConfirmList(): React.ReactNode {
     const [confirmLeader, setConfirmLeader] = useState<any|undefined>([]);
     const [department, setDepartment] = useState<any|undefined>([]);
+    const [filterValue, setFilterValue] = useState({});
     const history = useHistory();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
@@ -139,12 +140,14 @@ export default function ConfirmList(): React.ReactNode {
             value.plannedDeliveryTimeEnd = formatDate[1]+ ' 23:59:59';
             delete value.planTime
         }
+        setFilterValue(value)
         return value
     }
     return (
         <Page
             path="/tower-science/drawProductDetail"
             columns={columns}
+            filterValue={filterValue}
             // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[

@@ -16,6 +16,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
     const [confirmLeader, setConfirmLeader] = useState<any|undefined>([]);
     const [department, setDepartment] = useState<any|undefined>([]);
     const [assignVisible, setVisible] = useState<boolean>(false);
+    const [filterValue, setFilterValue] = useState({});
     const [drawTaskId, setDrawTaskId] = useState<string>('');
     const [form] = Form.useForm();
     const history = useHistory();
@@ -192,6 +193,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             value.updateStatusTimeEnd = formatDate[1]+ ' 23:59:59';
             delete value.statusUpdateTime
         }
+        setFilterValue(value)
         return value
     }
     
@@ -232,6 +234,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             columns={columns}
             refresh={ refresh }
             // extraOperation={<Button type="primary">导出</Button>}
+            filterValue={ filterValue }
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {

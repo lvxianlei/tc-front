@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Input, Select } from 'antd';
 import { Page } from '../common';
 
 export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负责人直接返回名称，无需增加-Name字段   30号：加Name
+    const [filterValue, setFilterValue] = useState({});
     const columns = [
         {
             key: 'index',
@@ -299,12 +300,14 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
         },
     ];
     const onFilterSubmit=(value: any)=>{
+        setFilterValue(value)
         return value;
     }
     return <Page
         path="/tower-science/assessTask/planLofting"
         columns={columns}
         onFilterSubmit={onFilterSubmit}
+        filterValue={filterValue}
         extraOperation={<Button type="primary">导出</Button>}
         searchFormItems={[
             {
