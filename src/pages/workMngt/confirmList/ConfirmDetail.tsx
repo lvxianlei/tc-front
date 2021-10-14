@@ -636,7 +636,7 @@ export default function ConfirmDetail(): React.ReactNode {
                         render: (_: undefined, record: any): React.ReactNode => (
                             <Space direction="horizontal" size="small">
                                 <Button type="link" onClick={() => downLoadFile(record.id?record.filePath:record.link)}>下载</Button>
-                                {record.fileSuffix==='pdf'?<Button type='link' onClick={()=>{window.open(record.filePath)}}>预览</Button>:null}
+                                {record.fileSuffix==='pdf'?<Button type='link' onClick={()=>{window.open(record.id?record.filePath:record.link)}}>预览</Button>:null}
                                 <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
                             </Space>
                         )
