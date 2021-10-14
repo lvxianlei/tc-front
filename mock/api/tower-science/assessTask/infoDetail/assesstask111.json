@@ -3,45 +3,45 @@
 	"msg": "laborum exercitation sed aliqua ni",
 	"success": true,
 	"data": {
-		"descriptionFileList": [{
+		"instructionFileList": [{
 			"id": "p",
-			"fileName": "anim",
+			"name": "anim",
 			"fileSuffix": "Excepteur velit",
 			"filePath": "mollit sit in eiusmod"
 		}, {
 			"id": "laboris est proident",
-			"fileName": "laboris Lorem incididunt",
+			"name": "laboris Lorem incididunt",
 			"fileSuffix": "id dolor amet ea",
 			"filePath": "aute in nostrud aliqua adipisicing"
 		}, {
 			"id": "deserunt culpa officia cupidatat nisi",
-			"fileName": "mollit id veniam dolore",
+			"name": "mollit id veniam dolore",
 			"fileSuffix": "",
 			"filePath": "sunt ullamco aute consequat"
 		}, {
 			"id": "elit qui pariatur",
-			"fileName": "aliqua Ut non cillum",
+			"name": "aliqua Ut non cillum",
 			"fileSuffix": "minim pr",
 			"filePath": "dolor"
 		}],
 		"id": 29506857,
-        "status": "1",
+        "status": 3,
 		"description": "ut amet nulla",
 		"assessFileList": [{
 			"id": "aliquip",
 			"filePath": "veniam et aliqua in in",
 			"fileSuffix": "adipisicing voluptate in eu et",
-			"fileName": "ut dolor elit dolore nulla"
+			"name": "ut dolor elit dolore nulla"
 		}, {
 			"id": "veniam",
 			"filePath": "mag",
 			"fileSuffix": "veniam anim proident ipsum",
-			"fileName": "cupidatat"
+			"name": "cupidatat"
 		}, {
 			"id": "mollit voluptate labore",
 			"filePath": "elit ad",
 			"fileSuffix": "reprehenderit enim ",
-			"fileName": "ullamco sunt nulla dolor sit"
+			"name": "ullamco sunt nulla dolor sit"
 		}]
 	}
 }

@@ -167,11 +167,14 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                                 rules={[{ required: true, message: '请输入评估信息' }]}
                                 initialValue={ this.state.description }
                             >
-                                <Input.TextArea placeholder="请输入" maxLength={ 300 } showCount />
+                                <Input.TextArea placeholder="请输入" maxLength={ 300 } disabled={ this.state.information?.status === 4 } showCount />
                             </Form.Item>
                         <p className={ styles.topPadding }>评估文件
                         <span style={ { position: 'absolute', right: '1%' } }>
-                            <Upload action={ () => {
+                            {
+                                this.state.information?.status === 4 ? null :
+                                <Upload 
+                                    action={ () => {
                                         const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
                                         return baseUrl+'/sinzetech-resource/oss/put-file'
                                     } } 
@@ -209,6 +212,7 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                                     }}>
                                     <Button type='primary' ghost>添加</Button>
                                 </Upload>
+                            }
                             </span> 
                         </p>
                         <CommonTable    
@@ -232,16 +236,19 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                                             {
                                                 record.fileSuffix !== 'pdf' ? null : record.id ? <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : <Button type="link" onClick={ () => window.open(record.link) }>预览</Button>
                                             }
-                                            <Button type="link" onClick={ () => {
-                                                const information: IResponse = this.state.information || {};
-                                                information.assessFileList && information.assessFileList.splice(index, 1);
-                                                this.setState({
-                                                    information: {
-                                                        ...information,
-                                                        assessFileList: [ ...information.assessFileList || [] ]
-                                                    }
-                                                })
-                                            } }>删除</Button>
+                                            {
+                                                this.state.information?.status === 4 ? null :
+                                                <Button type="link" onClick={ () => {
+                                                    const information: IResponse = this.state.information || {};
+                                                    information.assessFileList && information.assessFileList.splice(index, 1);
+                                                    this.setState({
+                                                        information: {
+                                                            ...information,
+                                                            assessFileList: [ ...information.assessFileList || [] ]
+                                                        }
+                                                    })
+                                                } }>删除</Button>
+                                            }
                                         </Space>
                                     ) 
                                 }
