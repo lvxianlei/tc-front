@@ -5,7 +5,6 @@ import RequestUtil from '../../../utils/RequestUtil';
 import styles from './Evaluation.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { CloudUploadOutlined } from '@ant-design/icons';
 import AuthUtil from '../../../utils/AuthUtil';
 
 interface IResponse {
@@ -171,44 +170,46 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                                 <Input.TextArea placeholder="请输入" maxLength={ 300 } showCount />
                             </Form.Item>
                         <p className={ styles.topPadding }>评估文件
+                        <span style={ { position: 'absolute', right: '1%' } }>
                             <Upload action={ () => {
-                                    const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                                    return baseUrl+'/sinzetech-resource/oss/put-file'
-                                } } 
-                                headers={
-                                    {
-                                        'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
-                                        'Tenant-Id': AuthUtil.getTenantId(),
-                                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                                        const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                                        return baseUrl+'/sinzetech-resource/oss/put-file'
+                                    } } 
+                                    headers={
+                                        {
+                                            'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                                            'Tenant-Id': AuthUtil.getTenantId(),
+                                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                                        }
                                     }
-                                }
-                                showUploadList={ false }
-                                data={ { productCategoryId: this.props.id } }
-                                onChange={ (info) => {
-                                    if(info.file.response && !info.file.response?.success) {
-                                        message.warning(info.file.response?.msg)
-                                    } 
-                                    if(info.file.response && info.file.response?.success) {
-                                        let resData: IFileList = info.file.response?.data;
-                                        this.setState({
-                                            information: {
-                                                ...this.state.information,
-                                                assessFileList: [
-                                                    ...this.state.information?.assessFileList || [],
-                                                    { 
-                                                        link: resData.link,
-                                                        filePath: resData.name,
-                                                        name: resData.originalName,
-                                                        userName: resData.userName,
-                                                        fileSuffix: resData.originalName?.split('.')[resData.originalName?.split('.').length - 1]
-                                                    }
-                                                ]
-                                            }
-                                        })
-                                    }
-                                }}>
-                                <CloudUploadOutlined />
-                            </Upload>
+                                    showUploadList={ false }
+                                    data={ { productCategoryId: this.props.id } }
+                                    onChange={ (info) => {
+                                        if(info.file.response && !info.file.response?.success) {
+                                            message.warning(info.file.response?.msg)
+                                        } 
+                                        if(info.file.response && info.file.response?.success) {
+                                            let resData: IFileList = info.file.response?.data;
+                                            this.setState({
+                                                information: {
+                                                    ...this.state.information,
+                                                    assessFileList: [
+                                                        ...this.state.information?.assessFileList || [],
+                                                        { 
+                                                            link: resData.link,
+                                                            filePath: resData.name,
+                                                            name: resData.originalName,
+                                                            userName: resData.userName,
+                                                            fileSuffix: resData.originalName?.split('.')[resData.originalName?.split('.').length - 1]
+                                                        }
+                                                    ]
+                                                }
+                                            })
+                                        }
+                                    }}>
+                                    <Button type='primary' ghost>添加</Button>
+                                </Upload>
+                            </span> 
                         </p>
                         <CommonTable    
                             columns={[
