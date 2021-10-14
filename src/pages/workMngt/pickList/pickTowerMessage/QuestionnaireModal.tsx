@@ -99,14 +99,14 @@ class QuestionnaireModal extends React.Component<IQuestionnaireModalRouteProps, 
                 footer={ 
                     <Space direction="horizontal" size="small">
                         <Button type="primary" onClick={ () => this.props.modalCancel() } ghost>关闭</Button>
-                        <Popconfirm
+                        {this.props.title==='提交问题'?<Popconfirm
                             title="确认提交问题?"
                             onConfirm={ () => {} }
                             okText="确认"
                             cancelText="取消"
                         >   
                              <Button type="primary" onClick={ () => this.submitQuestion() }>提交问题</Button>
-                        </Popconfirm>
+                        </Popconfirm>:null}
                     </Space> } 
                 onCancel={ () => this.props.modalCancel() }
             >
@@ -127,14 +127,14 @@ class QuestionnaireModal extends React.Component<IQuestionnaireModalRouteProps, 
                     } } />
                     <Form ref={ this.form } labelCol={{ span: 4 }} className={ styles.topPadding }>
                         <Form.Item name="a" label="备注">
-                            <Input.TextArea maxLength={ 300 } placeholder="请输入备注信息" rows={ 1 } showCount/>
+                            <Input.TextArea maxLength={ 300 } placeholder="请输入备注信息" rows={ 1 } showCount disabled={this.props.title!=='提交问题'}/>
                         </Form.Item>
                         <Form.Item name="a" label="校对后信息"
                             rules={[{
                                 required: true,
                                 message: '请输入校对后信息 '
                             }]}>
-                            <Input maxLength={ 100 } placeholder="请输入"/>
+                            <Input maxLength={ 100 } placeholder="请输入" disabled={this.props.title!=='提交问题'}/>
                         </Form.Item>
                     </Form>
                     <p className={ styles.topPadding }>操作信息</p>
