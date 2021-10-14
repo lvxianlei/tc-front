@@ -261,7 +261,7 @@ export default function ScheduleView(): React.ReactNode {
                             const boltLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.boltLeaderDepartment}&size=1000`);
                             setBoltUser(boltLeaderDepartment.records);
                         }
-                        if(resData?.assignConfigVO?.materialWithSectionCompletionTime && resData?.materialPartDeliverTime){
+                        if(resData?.assignConfigVO?.materialWithSectionCompletionTime && resData?.materialDeliverTime){
                             const day = Number(resData.assignConfigVO.materialWithSectionCompletionTime);
                             let uom = new Date(resData.materialDeliverTime);
                             let newDate =new Date(uom.setHours(uom.getHours() + day));
