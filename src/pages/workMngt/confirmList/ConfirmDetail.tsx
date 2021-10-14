@@ -90,7 +90,7 @@ export default function ConfirmDetail(): React.ReactNode {
                   required: true,
                   validator: (rule: any, value: string, callback: (error?: string) => void) => {
                     checkProductNumber1(value,index).then(res => {
-                          if (res>-1) {
+                          if (res && res>-1) {
                               callback('请输入* 杆塔号，且同一塔型下杆塔号唯一！')
                           } else {
                               callback();
@@ -659,7 +659,7 @@ export default function ConfirmDetail(): React.ReactNode {
                             required: true,
                             validator: (rule: any, value: string, callback: (error?: string) => void) => {
                               checkProductNumber(value).then(res => {
-                                    if (res>-1) {
+                                    if (res&&res>-1) {
                                         callback('请输入杆塔号，且同一塔型下杆塔号唯一！')
                                     } else {
                                         callback();
