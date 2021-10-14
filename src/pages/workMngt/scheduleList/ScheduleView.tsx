@@ -261,7 +261,7 @@ export default function ScheduleView(): React.ReactNode {
                             const boltLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.boltLeaderDepartment}&size=1000`);
                             setBoltUser(boltLeaderDepartment.records);
                         }
-                        if(resData?.assignConfigVO?.materialWithSectionCompletionTime && resData?.materialPartDeliverTime){
+                        if(resData?.assignConfigVO?.materialWithSectionCompletionTime && resData?.materialDeliverTime){
                             const day = Number(resData.assignConfigVO.materialWithSectionCompletionTime);
                             let uom = new Date(resData.materialDeliverTime);
                             let newDate =new Date(uom.setHours(uom.getHours() + day));
@@ -285,19 +285,19 @@ export default function ScheduleView(): React.ReactNode {
                         form.setFieldsValue({
                             ...resData,
                             materialLeader:resData.materialLeader && resData.materialLeader!==-1 ?resData.materialLeader:'',
-                            materialLeaderDepartment:resData.materialLeaderDepartment && resData.materialLeaderDepartment!==-1?[resData.materialLeaderDepartment]:'',
+                            materialLeaderDepartment:resData.materialLeaderDepartment && resData.materialLeaderDepartment!==-1?resData.materialLeaderDepartment:'',
                             boltLeader:resData.boltLeader&& resData.boltLeader!==-1?resData.boltLeader:'',
-                            boltLeaderDepartment:resData.boltLeaderDepartment&& resData.boltLeaderDepartment!==-1?[resData.boltLeaderDepartment]:'',
+                            boltLeaderDepartment:resData.boltLeaderDepartment&& resData.boltLeaderDepartment!==-1?resData.boltLeaderDepartment:'',
                             weldingLeader:resData.weldingLeader&& resData.weldingLeader!==-1?resData.weldingLeader:'',
-                            weldingLeaderDepartment:resData.weldingLeaderDepartment&& resData.weldingLeaderDepartment!==-1?[resData.weldingLeaderDepartment]:'',
+                            weldingLeaderDepartment:resData.weldingLeaderDepartment&& resData.weldingLeaderDepartment!==-1?resData.weldingLeaderDepartment:'',
                             loftingLeader:resData.loftingLeader&& resData.loftingLeader!==-1?resData.loftingLeader:'',
-                            loftingLeaderDepartment:resData.loftingLeaderDepartment&& resData.loftingLeaderDepartment!==-1?[resData.loftingLeaderDepartment]:'',
+                            loftingLeaderDepartment:resData.loftingLeaderDepartment&& resData.loftingLeaderDepartment!==-1?resData.loftingLeaderDepartment:'',
                             loftingPartLeader:resData.loftingPartLeader&& resData.loftingPartLeader!==-1?resData.loftingPartLeader:'',
-                            loftingPartLeaderDepartment:resData.loftingPartLeaderDepartment&& resData.loftingPartLeaderDepartment!==-1?[resData.loftingPartLeaderDepartment]:'',
+                            loftingPartLeaderDepartment:resData.loftingPartLeaderDepartment&& resData.loftingPartLeaderDepartment!==-1?resData.loftingPartLeaderDepartment:'',
                             materialPartLeader:resData.materialPartLeader&& resData.materialPartLeader!==-1?resData.materialPartLeader:'',
-                            materialPartLeaderDepartment:resData.materialPartLeaderDepartment&& resData.materialPartLeaderDepartment!==-1?[resData.materialPartLeaderDepartment]:'',
+                            materialPartLeaderDepartment:resData.materialPartLeaderDepartment&& resData.materialPartLeaderDepartment!==-1?resData.materialPartLeaderDepartment:'',
                             smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
-                            smallSampleLeaderDepartment:resData.smallSampleLeaderDepartment&& resData.smallSampleLeaderDepartment!==-1?[resData.smallSampleLeaderDepartment]:'',
+                            smallSampleLeaderDepartment:resData.smallSampleLeaderDepartment&& resData.smallSampleLeaderDepartment!==-1?resData.smallSampleLeaderDepartment:'',
                             boltDeliverTime:resData.boltDeliverTime?moment(resData.boltDeliverTime):'',
                             weldingDeliverTime: resData.weldingDeliverTime?moment(resData.weldingDeliverTime):'',
                             loftingDeliverTime: resData.loftingDeliverTime?moment(resData.loftingDeliverTime):'',
@@ -307,7 +307,7 @@ export default function ScheduleView(): React.ReactNode {
                             smallSampleDeliverTime:resData.smallSampleDeliverTime? moment(resData.smallSampleDeliverTime):''
                         });
                         setVisible(true);
-                    }} disabled={params.status!=='2'}>指派</Button>
+                    }} disabled={params.status!=='2'||record.materialLeaderName}>指派</Button>
                 </Space>
             )
         }
@@ -424,7 +424,7 @@ export default function ScheduleView(): React.ReactNode {
                             </Row>
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="materialDeliverTime" label="计划交付时间" rules={[{required: true,message:'请选择计划交付时间'}]} >
+                            <Form.Item name="materialDeliverTime" label="提料交付时间" rules={[{required: true,message:'请选择提料交付时间'}]} >
                                 <DatePicker  style={{width:'100%'}} format={'YYYY-MM-DD HH:mm:ss'} showTime onChange={(date: any)=>{
                                     const day = Number(scheduleData.assignConfigVO.materialWithSectionCompletionTime);
                                     let uom = new Date(date);
@@ -458,7 +458,7 @@ export default function ScheduleView(): React.ReactNode {
                             </Row>
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="materialPartDeliverTime" label="计划交付时间" rules={[{required: true,message:'请选择计划交付时间'}]} >
+                            <Form.Item name="materialPartDeliverTime" label="提料配段交付时间" rules={[{required: true,message:'请选择提料配段交付时间'}]} >
                                 <DatePicker  style={{width:'100%'}} disabled format={'YYYY-MM-DD HH:mm:ss'} showTime />
                             </Form.Item>
                         </Col>
@@ -487,7 +487,7 @@ export default function ScheduleView(): React.ReactNode {
                             </Row>
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="loftingDeliverTime" label="计划交付时间" rules={[{required: true,message:'请选择计划交付时间'}]} >
+                            <Form.Item name="loftingDeliverTime" label="放样交付时间" rules={[{required: true,message:'请选择放样交付时间'}]} >
                                 <DatePicker  style={{width:'100%'}} format={'YYYY-MM-DD HH:mm:ss'} showTime onChange={(date: any)=>{
                                     const weldingCompletionTime = Number(scheduleData.assignConfigVO.weldingCompletionTime);
                                     const loftingWithSectionCompletionTime = Number(scheduleData.assignConfigVO.loftingWithSectionCompletionTime);
@@ -533,7 +533,7 @@ export default function ScheduleView(): React.ReactNode {
                             
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="weldingDeliverTime" label="计划交付时间" rules={[{required: true,message:'请选择计划交付时间'}]} >
+                            <Form.Item name="weldingDeliverTime" label="组焊清单交付时间" rules={[{required: true,message:'请选择组焊清单交付时间'}]} >
                                 <DatePicker  style={{width:'100%'}} disabled format={'YYYY-MM-DD HH:mm:ss'}/>
                             </Form.Item>
                         </Col>
@@ -562,7 +562,7 @@ export default function ScheduleView(): React.ReactNode {
                             </Row>
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="loftingPartDeliverTime" label="计划交付时间" rules={[{required: true,message:'请选择计划交付时间'}]} >
+                            <Form.Item name="loftingPartDeliverTime" label="放样配段交付时间" rules={[{required: true,message:'请选择放样配段交付时间'}]} >
                                 <DatePicker  style={{width:'100%'}} disabled format={'YYYY-MM-DD HH:mm:ss'}/>
                             </Form.Item>
                         </Col>
@@ -591,7 +591,7 @@ export default function ScheduleView(): React.ReactNode {
                             </Row>
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="smallSampleDeliverTime" label="计划交付时间" rules={[{required: true,message:'请选择计划交付时间'}]}>
+                            <Form.Item name="smallSampleDeliverTime" label="小样图交付时间" rules={[{required: true,message:'请选择小样图交付时间'}]}>
                                 <DatePicker  style={{width:'100%'}} disabled format={'YYYY-MM-DD HH:mm:ss'}/>
                             </Form.Item>
                         </Col>
@@ -621,7 +621,7 @@ export default function ScheduleView(): React.ReactNode {
                             
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="boltDeliverTime" label="计划交付时间" rules={[{required: true,message:'请选择计划交付时间'}]} >
+                            <Form.Item name="boltDeliverTime" label="螺栓清单交付时间" rules={[{required: true,message:'请选择螺栓清单交付时间'}]} >
                                 <DatePicker  style={{width:'100%'}} disabled format={'YYYY-MM-DD HH:mm:ss'}/>
                             </Form.Item>
                         </Col>

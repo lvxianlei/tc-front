@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
-import { Button, Spin, Space, Modal, Form, TableColumnProps, Row, Col, Upload, message } from 'antd';
+import { Button, Spin, Space, Modal, Form, Row, Col, Upload, message } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
+import { DetailContent, CommonTable, DetailTitle } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
 import { Table, Input, InputNumber, Popconfirm, Typography, Select } from 'antd';
-import { CloudUploadOutlined } from '@ant-design/icons';
 import AuthUtil from '../../../utils/AuthUtil';
 import { downLoadFile } from '../../../utils';
 import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
@@ -90,7 +89,7 @@ export default function ConfirmDetail(): React.ReactNode {
                   required: true,
                   validator: (rule: any, value: string, callback: (error?: string) => void) => {
                     checkProductNumber1(value,index).then(res => {
-                          if (res>-1) {
+                          if (res && res>-1) {
                               callback('请输入* 杆塔号，且同一塔型下杆塔号唯一！')
                           } else {
                               callback();
@@ -549,14 +548,14 @@ export default function ConfirmDetail(): React.ReactNode {
                           console.log(error)
                       }
                     }}>保存并提交</Button>
-                     <Popconfirm
+                     {tableDataSource.length>0?<Popconfirm
                         title="是否放弃已添加信息?"
                         onConfirm={ () => history.goBack() }
                         okText="确定"
                         cancelText="取消"
                     >
                          <Button key="goback">返回</Button>
-                    </Popconfirm>
+                    </Popconfirm>: <Button key="goback" onClick={() => history.goBack()}>返回</Button>}
                    
                 </Space>
             ]}>
@@ -595,34 +594,22 @@ export default function ConfirmDetail(): React.ReactNode {
                 {detailData?<TextArea maxLength={ 200 } defaultValue={detailData?.description} onChange={(e)=>{
                     setDescription(e.target.value)
                 }}/>:null}
-                {/* <Upload
-                    key="sub"
-                    name="file"
-                    multiple={true}
-                    action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
-                    headers={{
-                        'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                        'Tenant-Id': AuthUtil.getTenantId(),
-                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                    }}
-                    onChange={uploadChange}
-                    showUploadList={false}
-                > */}
-                <Upload action={ () => {
-                                    const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                                    return baseUrl+'/sinzetech-resource/oss/put-file'
-                                } } 
-                                headers={
-                                    {
-                                        'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
-                                        'Tenant-Id': AuthUtil.getTenantId(),
-                                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                                    }
-                                }
-                                showUploadList={ false }
-                                data={ { productCategoryId: params.id } }
-                                onChange={ uploadChange}>
-                  <span style={{fontSize:'16px',marginLeft:'13px'}}>附件 </span><CloudUploadOutlined /></Upload>
+                <DetailTitle title="附件信息" operation={[<Upload
+                    action={ () => {
+                      const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                      return baseUrl+'/sinzetech-resource/oss/put-file'
+                    } } 
+                    headers={
+                        {
+                            'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                            'Tenant-Id': AuthUtil.getTenantId(),
+                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                        }
+                    }
+                    showUploadList={ false }
+                    data={ { productCategoryId: params.id } }
+                    onChange={ uploadChange}
+                ><Button key="enclosure" type="primary" ghost>添加</Button></Upload>]} />
                 <CommonTable columns={[
                     {
                         title: '附件名称',
@@ -636,7 +623,7 @@ export default function ConfirmDetail(): React.ReactNode {
                         render: (_: undefined, record: any): React.ReactNode => (
                             <Space direction="horizontal" size="small">
                                 <Button type="link" onClick={() => downLoadFile(record.id?record.filePath:record.link)}>下载</Button>
-                                {record.fileSuffix==='pdf'?<Button type='link' onClick={()=>{window.open(record.filePath)}}>预览</Button>:null}
+                                {record.fileSuffix==='pdf'?<Button type='link' onClick={()=>{window.open(record.id?record.filePath:record.link)}}>预览</Button>:null}
                                 <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
                             </Space>
                         )
@@ -659,7 +646,7 @@ export default function ConfirmDetail(): React.ReactNode {
                             required: true,
                             validator: (rule: any, value: string, callback: (error?: string) => void) => {
                               checkProductNumber(value).then(res => {
-                                    if (res>-1) {
+                                    if (res&&res>-1) {
                                         callback('请输入杆塔号，且同一塔型下杆塔号唯一！')
                                     } else {
                                         callback();
