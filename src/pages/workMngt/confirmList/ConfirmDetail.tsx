@@ -89,7 +89,7 @@ export default function ConfirmDetail(): React.ReactNode {
                   required: true,
                   validator: (rule: any, value: string, callback: (error?: string) => void) => {
                     checkProductNumber1(value,index).then(res => {
-                          if (res && res>-1) {
+                          if (res>-1) {
                               callback('请输入* 杆塔号，且同一塔型下杆塔号唯一！')
                           } else {
                               callback();
@@ -464,12 +464,12 @@ export default function ConfirmDetail(): React.ReactNode {
     const  checkProductNumber = (value: string): Promise<void | any> => {
       return new Promise(async (resolve, reject) => {  // 返回一个promise
           const formData = form.getFieldsValue(true)
-          if (value && formData.productCategory) {
+          if (value && formData.productCategory && tableDataSource.length>0) {
               resolve(tableDataSource.findIndex((item:any) => 
                 item.name === value && formData.productCategory === item.productCategory
               ))
           } else {
-              resolve(false)
+              resolve( !formData.productCategory || tableDataSource.length===0? -1 : false)
           }
       }).catch(error => {
           Promise.reject(error)
@@ -646,7 +646,7 @@ export default function ConfirmDetail(): React.ReactNode {
                             required: true,
                             validator: (rule: any, value: string, callback: (error?: string) => void) => {
                               checkProductNumber(value).then(res => {
-                                    if (res&&res>-1) {
+                                    if (res>-1) {
                                         callback('请输入杆塔号，且同一塔型下杆塔号唯一！')
                                     } else {
                                         callback();
