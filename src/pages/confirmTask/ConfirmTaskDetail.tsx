@@ -109,7 +109,14 @@ export default function ConfirmTaskDetail(): React.ReactNode {
                 cancelText='关闭'
             >
                 <Form form={form} >
-                    <Form.Item name="reason" label="拒绝原因" rules={[{required:true, message:'请填写拒绝原因'}]}>
+                    <Form.Item name="reason" label="拒绝原因" rules={[{
+                        required:true, 
+                        message:'请填写拒绝原因'
+                    },
+                    {
+                        pattern: /^[^\s]*$/,
+                        message: '禁止输入空格',
+                    }]}>
                         <TextArea showCount maxLength={500}/>
                     </Form.Item>
                 </Form>
