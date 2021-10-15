@@ -5,6 +5,7 @@ import { DetailContent, CommonTable, DetailTitle } from '../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
+import { productTypeOptions, voltageGradeOptions } from '../../configuration/DictionaryOptions';
 
 const towerColumns=[
     {
@@ -42,13 +43,31 @@ const towerColumns=[
         key: 'productType',
         title: '产品类型',
         width: 100,
-        dataIndex: 'productType'
+        dataIndex: 'productType',
+        render: (value: number, record: object): React.ReactNode => {
+            const renderEnum: any = productTypeOptions && productTypeOptions.map(({ id, name }) => {
+              return {
+                  label:name,
+                  value: id,
+              }
+            })
+            return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value).label}</>
+        }
     },
     {
         key: 'voltageLevel',
         title: '电压等级（kv）',
         width: 100,
-        dataIndex: 'voltageLevel'
+        dataIndex: 'voltageLevel',
+        render: (value: number, record: object): React.ReactNode => {
+            const renderEnum: any = voltageGradeOptions && voltageGradeOptions.map(({ id, name }) => {
+              return {
+                  label:name,
+                  value: id,
+              }
+            })
+            return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value).label}</>
+        }
     },
     {
         key: 'basicHight',

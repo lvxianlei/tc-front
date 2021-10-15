@@ -1,10 +1,12 @@
 import React from 'react';
-import { Button, Space, Modal, Input, Descriptions, Form, FormInstance, DatePicker, InputNumber } from 'antd';
+import { Button, Space, Modal, Input, Descriptions, Form, FormInstance, DatePicker, InputNumber, TreeSelect, Select } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './TowerLoftingAssign.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
+import { TreeNode } from 'antd/lib/tree-select';
+import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 
 export interface TowerLoftingAssignProps {}
 export interface ITowerLoftingAssignRouteProps extends RouteComponentProps<TowerLoftingAssignProps>, WithTranslation {
@@ -19,6 +21,9 @@ export interface TowerLoftingAssignState {
     readonly repeatModal: boolean;
     readonly repeatNum?: number;
     readonly selectKey?: number;
+    user?: any[];
+    checkUser?: any[];
+    departmentData?: SelectDataNode[];
 }
 
 interface IAppointed {
@@ -56,15 +61,14 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
     protected getForm(): FormInstance | null {
         return this.form?.current;
     }
-
-    constructor(props: ITowerLoftingAssignRouteProps) {
-        super(props)
-    }
-
+    
     public state: TowerLoftingAssignState = {
         visible: false,
         appointedList: [],
-        repeatModal: false
+        repeatModal: false,
+        user: [],
+        checkUser: [],
+        departmentData: [],
     }
 
     private modalCancel(): void {
@@ -80,7 +84,9 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
 
     private async modalShow(): Promise<void> {
         const data = await RequestUtil.get<IAppointed>(`/tower-science/productSegment/detail?productCategoryId=${ this.props.id }`);
+        const departmentData = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
         this.setState({
+            departmentData: departmentData,
             visible: true,
             appointed: data
         })
@@ -210,7 +216,48 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
             } } />
         </Modal>
     }
+    /**
+     * onDepartmentChange
+     */
+    public onDepartmentChange = async (value: Record<string, any>, index: number, title: string) => {
+        const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${ value }&size=1000`);
+        if(title==='提料'){
+            const user = this.state.checkUser||[];
+            user[index] = userData.records;
+            this.setState({
+                checkUser:user
+            })
+        }
+        else{
+            const user = this.state.user||[];
+            user[index] = userData.records;
+            this.setState({
+                user
+            })
+        }
+        
+    }
 
+    public wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
+        roles && roles.forEach((role: any & SelectDataNode): void => {
+            role.value = role.id;
+            role.isLeaf = false;
+            if (role.children && role.children.length > 0) {
+                this.wrapRole2DataNode(role.children);
+            }
+        });
+        return roles;
+    }
+
+    public renderTreeNodes = (data:any) => data.map((item:any) => {
+        if (item.children) {
+            item.disabled = true;
+            return (<TreeNode key={ item.id } title={ item.title } value={ item.id } disabled={ item.disabled } className={ styles.node } >
+                { this.renderTreeNodes(item.children) }
+            </TreeNode>);
+        }
+        return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id }/>;
+    });
      /**
      * @description Renders AbstractDetailComponent
      * @returns render 
@@ -253,6 +300,10 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                                 rules={[{
                                                     required: true,
                                                     message: '请输入段名'
+                                                },
+                                                {
+                                                  pattern: /^[^\s]*$/,
+                                                  message: '禁止输入空格',
                                                 }]}>
                                                 <Input />
                                             </Form.Item>
@@ -263,14 +314,20 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                                     required: true,
                                                     message: '请选择部门'
                                                 }]} style={ { width: '50%', display: 'inline-block' } }>
-                                                <Input />
+                                                <TreeSelect placeholder="请选择" style={{width:'100px'}} onChange={ (value: any) => { this.onDepartmentChange(value,index,'提料') } } className={ styles.width200 }>
+                                                    {this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
+                                                </TreeSelect>
                                             </Form.Item>
                                             <Form.Item name={["appointedList", index, "loftingUser"]}
                                                 rules={[{
                                                     required: true,
                                                     message: '请选择人员'
                                                 }]} style={ { width: '50%', display: 'inline-block' } }>
-                                                <Input />
+                                                <Select placeholder="请选择" style={{width:'100px'}}>
+                                                    { this.state?.user && this.state.user[index] && this.state.user[index].map((item: any) => {
+                                                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                                    }) }
+                                                </Select>
                                             </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="校对人"  span={ 3 }>
@@ -279,14 +336,20 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                                     required: true,
                                                     message: '请选择部门'
                                                 }]} style={ { width: '50%', display: 'inline-block' } }>
-                                                <Input />
+                                                <TreeSelect placeholder="请选择" style={{width:'100px'}} onChange={ (value: any) => { this.onDepartmentChange(value,index,'校对') } } className={ styles.width200 }>
+                                                    {this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
+                                                </TreeSelect>
                                             </Form.Item>
                                             <Form.Item name={["appointedList", index, "checkUser"]}
                                                 rules={[{
                                                     required: true,
                                                     message: '请选择人员'
                                                 }]} style={ { width: '50%', display: 'inline-block' } }>
-                                                <Input />
+                                                <Select placeholder="请选择" style={{width:'100px'}}>
+                                                    { this.state?.checkUser && this.state.checkUser[index] && this.state.checkUser[index].map((item: any) => {
+                                                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                                    }) }
+                                                </Select>
                                             </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="交付时间">

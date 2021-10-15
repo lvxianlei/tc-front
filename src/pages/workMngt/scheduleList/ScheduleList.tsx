@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Button, Form, Select } from 'antd'
+import { Space, Input, DatePicker, Select } from 'antd'
 import { Link } from 'react-router-dom'
 import { Page } from '../../common'
 
 export default function ScheduleList(): React.ReactNode {
+    const [filterValue, setFilterValue] = useState({});
     const columns = [
         {
             key: 'index',
@@ -123,6 +124,7 @@ export default function ScheduleList(): React.ReactNode {
             value.plannedDeliveryTimeEnd = formatDate[1]+ ' 23:59:59';
             delete value.planTime
         }
+        setFilterValue(value)
         return value
     }
 
@@ -130,6 +132,7 @@ export default function ScheduleList(): React.ReactNode {
         <Page
             path="/tower-science/loftingTask"
             columns={columns}
+            filterValue={filterValue}
             // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
@@ -142,12 +145,13 @@ export default function ScheduleList(): React.ReactNode {
                     name: 'status',
                     label:'任务状态',
                     children: <Select style={{width:"100px"}}>
-                        <Select.Option value={0} key={0}>已拒绝</Select.Option>
-                        <Select.Option value={1} key={1}>待确认</Select.Option>
+                        <Select.Option value={''} key ={''}>全部</Select.Option>
+                        {/* <Select.Option value={0} key={0}>已拒绝</Select.Option>
+                        <Select.Option value={1} key={1}>待确认</Select.Option> */}
                         <Select.Option value={2} key={2}>待指派</Select.Option>
                         <Select.Option value={3} key={3}>待完成</Select.Option>
-                        <Select.Option value={4} key={4}>已完成</Select.Option>
-                        <Select.Option value={5} key={5}>已提交</Select.Option>
+                        {/* <Select.Option value={4} key={4}>已完成</Select.Option>
+                        <Select.Option value={5} key={5}>已提交</Select.Option> */}
                     </Select>
                 },
                 {

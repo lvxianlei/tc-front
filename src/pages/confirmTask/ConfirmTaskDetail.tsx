@@ -39,7 +39,7 @@ const tableColumns = [
                 label: "已提交"
             }
         ]
-             return <>{value!==-1&&value?renderEnum.find((item: any) => item.value === value).label:''}</>
+             return <>{value!==-1?renderEnum.find((item: any) => item.value === value).label:''}</>
     }},
     { title: '备注', dataIndex: 'description', key: 'description' }
 ]
@@ -109,7 +109,14 @@ export default function ConfirmTaskDetail(): React.ReactNode {
                 cancelText='关闭'
             >
                 <Form form={form} >
-                    <Form.Item name="reason" label="拒绝原因" rules={[{required:true, message:'请填写拒绝原因'}]}>
+                    <Form.Item name="reason" label="拒绝原因" rules={[{
+                        required:true, 
+                        message:'请填写拒绝原因'
+                    },
+                    {
+                        pattern: /^[^\s]*$/,
+                        message: '禁止输入空格',
+                    }]}>
                         <TextArea showCount maxLength={500}/>
                     </Form.Item>
                 </Form>
@@ -134,9 +141,9 @@ export default function ConfirmTaskDetail(): React.ReactNode {
                             </Space>
                         )
                     }
-                ]} dataSource={detailData?.attachInfoList} />
+                ]} dataSource={detailData?.attachInfoList} pagination={ false } />
                 <DetailTitle title="操作信息" />
-                <CommonTable columns={tableColumns} dataSource={detailData?.statusRecordList} />
+                <CommonTable columns={tableColumns} dataSource={detailData?.statusRecordList} pagination={ false } />
             </DetailContent>
         </Spin>
     </>

@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Select, Button, Modal, Form, Popconfirm, Row, Col, TreeSelect, message } from 'antd'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { Page } from '../common';
-import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
 import moment from 'moment';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
@@ -16,6 +15,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
     const [confirmLeader, setConfirmLeader] = useState<any|undefined>([]);
     const [department, setDepartment] = useState<any|undefined>([]);
     const [assignVisible, setVisible] = useState<boolean>(false);
+    const [filterValue, setFilterValue] = useState({});
     const [drawTaskId, setDrawTaskId] = useState<string>('');
     const [form] = Form.useForm();
     const history = useHistory();
@@ -128,7 +128,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                         setDrawTaskId(record.id);
                         setVisible(true) 
                     }} disabled={ record.status !== 2 }>指派</Button>
-                    <Button type='link' onClick={()=>history.push(`/confirmTask/ConfirmTaskMngt/ConfirmDetail/${record.id}`)} disabled={ record.status < 3 }>明细</Button>
+                    <Button type='link' onClick={()=>history.push(`/confirmTask/ConfirmTaskMngt/ConfirmDetail/${record.id}`)} disabled={ record.status < 4 }>明细</Button>
                     <Popconfirm
                         title="确认提交任务?"
                         onConfirm={ async () => {
@@ -160,6 +160,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             case "confirmDept":
                 return setConfirmLeader(userData.records);
             case "user":
+                form.setFieldsValue({ 'assignorId': '' })
                 return setUser(userData.records);
         }
     }
@@ -192,6 +193,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             value.updateStatusTimeEnd = formatDate[1]+ ' 23:59:59';
             delete value.statusUpdateTime
         }
+        setFilterValue(value)
         return value
     }
     
@@ -232,6 +234,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             columns={columns}
             refresh={ refresh }
             // extraOperation={<Button type="primary">导出</Button>}
+            filterValue={ filterValue }
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
@@ -243,6 +246,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                     name: 'status',
                     label: '任务状态',
                     children: <Select style={{width:"100px"}}>
+                        <Select.Option value={''} key ={''}>全部</Select.Option>
                         <Select.Option value={1} key={1}>待确认</Select.Option>
                         <Select.Option value={2} key={2}>待指派</Select.Option>
                         <Select.Option value={3} key={3}>待完成</Select.Option>
@@ -270,7 +274,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                                 </Select>
                 },
                 {
-                    name: 'fuzzyQueryItem',
+                    name: 'fuzzyMsg',
                     label: '模糊查询项',
                     children: <Input placeholder="请输入任务编号/合同名称/业务经理进行查询" maxLength={200} />
                 },

@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
-import { Button, Spin, Space, Modal, Form, TableColumnProps, Row, Col, Upload, message } from 'antd';
+import { Button, Spin, Space, Modal, Form, Row, Col, Upload, message, Image } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
+import { DetailContent, CommonTable, DetailTitle } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
 import { Table, Input, InputNumber, Popconfirm, Typography, Select } from 'antd';
-import { CloudUploadOutlined } from '@ant-design/icons';
 import AuthUtil from '../../../utils/AuthUtil';
 import { downLoadFile } from '../../../utils';
 import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
@@ -44,12 +43,15 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 export default function ConfirmDetail(): React.ReactNode {
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
+    const [pictureVisible, setPictureVisible] = useState<boolean>(false);
+    const [pictureUrl, setPictureUrl] = useState('');
     const [tableDataSource, setTableDataSource] = useState<object[]>([]);
     const [weight,setWeight] = useState<string>('0');
     const [description, setDescription] = useState('');
     const [attachInfo, setAttachInfo] = useState<any[]>([])
     const [form] = Form.useForm();
     const [formRef] = Form.useForm();
+
     const [editingKey, setEditingKey] = useState('');
     const isEditing = (record: Item) => record.key === editingKey;
 
@@ -64,7 +66,7 @@ export default function ConfirmDetail(): React.ReactNode {
       children,
       ...restProps
     }) => {
-      const inputNode = inputType === 'number' ? <InputNumber onChange={(value:number)=>{
+      const inputNode = inputType === 'number' ? <InputNumber style={{width:'100%'}} onChange={(value:number)=>{
         let number = 0;
         if(dataIndex==='productWeight'){
             number = formRef.getFieldValue('otherWeight')?formRef.getFieldValue('otherWeight'):0;
@@ -75,11 +77,11 @@ export default function ConfirmDetail(): React.ReactNode {
         formRef.setFieldsValue({
             totalWeight:value+number
         })
-      }} min={0} precision={4}/> : inputType === 'select' ?<Select>{enums&&enums.map((item:any)=>{
+      }} min={0} precision={4}/> : inputType === 'select' ?<Select style={{width:'100%'}}>{enums&&enums.map((item:any)=>{
         return <Select.Option value={item.value} key ={item.value}>{item.label}</Select.Option>
       })}</Select> : inputType === 'edit'?<span>保存后自动计算</span>: inputType === 'textArea'?<TextArea maxLength={500} rows={1} showCount/>:<Input />;
-      
-      return (
+      if(dataIndex === 'name'){
+        return (
         <td {...restProps}>
           {editing ? (
             <Form.Item
@@ -87,8 +89,16 @@ export default function ConfirmDetail(): React.ReactNode {
               style={{ margin: 0 }}
               rules={[
                 {
-                  required: inputType==='textArea'?false:true,
-                  message: `请输入${title}!`,
+                  required: true,
+                  validator: (rule: any, value: string, callback: (error?: string) => void) => {
+                    checkProductNumber1(value,index).then(res => {
+                          if (res > 0) {
+                              callback('请输入* 杆塔号，且同一塔型下杆塔号唯一！')
+                          } else {
+                              callback();
+                          }
+                      })
+                  }
                 },
               ]}
             >
@@ -97,8 +107,31 @@ export default function ConfirmDetail(): React.ReactNode {
           ) : (
             children
           )}
-        </td>
-      );
+        </td>)
+      }
+      else{
+        return (
+          <td {...restProps}>
+            {editing ? (
+              <Form.Item
+                name={dataIndex}
+                style={{ margin: 0 }}
+                rules={[
+                  {
+                    required: inputType==='textArea'?false:true,
+                    message: `请输入${title}!`,
+                  },
+                ]}
+              >
+                {inputNode}
+              </Form.Item>
+            ) : (
+              children
+            )}
+          </td>
+        );
+      }
+     
     };
     const edit = (record: Partial<Item> & { key: React.Key }) => {
       formRef.setFieldsValue({ partBidNumber: '', unit: '', address: '', ...record });
@@ -155,12 +188,14 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '序号', 
           dataIndex: 'index', 
           key: 'index', 
+          width: 50,
           render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) 
       },
       { 
           title: '* 线路名称', 
           dataIndex: 'lineName',
           type:'text',
+          width: 80,
           editable: true,
           key: 'lineName', 
       },
@@ -168,6 +203,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 杆塔号', 
           dataIndex: 'name', 
           type:'text',
+          width: 80,
           editable: true,
           key: 'name' 
       },
@@ -175,6 +211,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 塔型', 
           dataIndex: 'productCategory', 
           type:'text',
+          width: 80,
           editable: true,
           key: 'productCategory' 
       },
@@ -182,6 +219,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 塔型钢印号', 
           dataIndex: 'steelProductShape', 
           type:'text',
+          width: 80,
           editable: true,
           key: 'steelProductShape' 
       },
@@ -189,6 +227,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 产品类型', 
           dataIndex: 'productType', 
           type:'select',
+          width: 100,
           editable: true,
           key: 'productType',
           enums:productTypeOptions && productTypeOptions.map(({ id, name }) => {
@@ -211,6 +250,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 电压等级（kv）', 
           dataIndex: 'voltageLevel',
           type:'select', 
+          width: 100,
           editable: true,
           key: 'voltageLevel',
           enums:voltageGradeOptions && voltageGradeOptions.map(({ id, name }) => {
@@ -233,6 +273,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 呼高（m）', 
           dataIndex: 'basicHight', 
           type:'number',
+          width: 70,
           editable: true,
           key: 'basicHight' 
       },
@@ -240,6 +281,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 模式', 
           dataIndex: 'pattern', 
           type:'select',
+          width: 90,
           editable: true,
           key: 'pattern',
           enums: [
@@ -278,6 +320,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 杆塔重量（kg）', 
           dataIndex: 'productWeight', 
           type:'number',
+          width: 100,
           editable: true,
           key: 'productWeight' 
       },
@@ -285,6 +328,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '其他增重（kg）', 
           dataIndex: 'otherWeight', 
           type:'number',
+          width: 100,
           editable: true,
           key: 'otherWeight' 
       },
@@ -292,6 +336,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 总重（kg）', 
           dataIndex: 'totalWeight', 
           type:'edit',
+          width: 100,
           editable: true,
           key: 'totalWeight',
           render:(_:any,record:any)=>{
@@ -302,12 +347,14 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '备注', 
           dataIndex: 'description', 
           type:'textArea',
+          width: 250,
           editable: true,
           key: 'description' 
       },
       {
           key: 'operation',
           title: '操作',
+          width: 70,
           dataIndex: 'operation',
           render: (_: any, record: Item) => {
           const editable = isEditing(record);
@@ -339,8 +386,9 @@ export default function ConfirmDetail(): React.ReactNode {
     const handleModalOk = async () => {
         try {
             const submitData = await form.validateFields();
-            console.log(submitData)
-            submitData.key = tableDataSource && tableDataSource.length.toString()
+            submitData.key = tableDataSource && tableDataSource.length.toString();
+            submitData.otherWeight = submitData.otherWeight?submitData.otherWeight:0;
+            submitData.index = tableDataSource.length;
             tableDataSource.push(submitData);
             setTableDataSource(tableDataSource);
             let number = '0';
@@ -355,11 +403,12 @@ export default function ConfirmDetail(): React.ReactNode {
         }
     }
     const handleModalCancel = () => {setVisible(false);form.resetFields();}
+    const handlePictureModalCancel = () => {setPictureVisible(false)}
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
         resole(data);
-        setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString() }}));
+        setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString(),index: index }}));
         setAttachInfo([...data.attachInfoList]);
         setDescription(data?.description);
         let totalNumber = '0';
@@ -398,9 +447,10 @@ export default function ConfirmDetail(): React.ReactNode {
               setAttachInfo([...attachInfo, {
                   id: "",
                   uid: attachInfo.length,
-                  name: dataInfo.originalName.split(".")[0],
+                  name: dataInfo.originalName,
                   description: "",
                   filePath: dataInfo.name,
+                  link: dataInfo.link,
                   fileSize: dataInfo.size,
                   fileSuffix: fileInfo[fileInfo.length - 1],
                   userName: dataInfo.userName,
@@ -412,6 +462,46 @@ export default function ConfirmDetail(): React.ReactNode {
     const deleteAttachData = (id: number) => {
       setAttachInfo(attachInfo.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
     }
+
+    /**
+     * @description 验证杆塔号
+     */
+    const  checkProductNumber = (value: string): Promise<void | any> => {
+      return new Promise(async (resolve, reject) => {  // 返回一个promise
+          const formData = form.getFieldsValue(true)
+          if (value && formData.productCategory && tableDataSource.length>0) {
+              resolve(tableDataSource.findIndex((item:any) => 
+                item.name === value && formData.productCategory === item.productCategory
+              ))
+          } else {
+              resolve( !formData.productCategory || tableDataSource.length===0? -1 : false)
+          }
+      }).catch(error => {
+          Promise.reject(error)
+      })
+    }
+
+    /**
+     * @description 验证杆塔号
+     */
+    const checkProductNumber1 = (value: string, index: number): Promise<void | any> => {
+      return new Promise(async (resolve, reject) => { 
+          const formData = formRef.getFieldsValue(true)
+          let dataSource = JSON.parse(JSON.stringify(tableDataSource))
+          if (value && formData.productCategory ) {
+            const a = dataSource.filter((item:any)=>{
+                    return item.name === value && formData.productCategory === item.productCategory && item.index!== formData.index
+            })
+            resolve(a.length)
+          }
+          else{
+            resolve(false)
+          }
+      }).catch(error => {
+          Promise.reject(error)
+      })
+    }
+    
     return <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space>
@@ -427,10 +517,21 @@ export default function ConfirmDetail(): React.ReactNode {
                               }}),
                               description
                           }
-                          if(tableDataSource.length>0){
+                          let saveDisabled = false;
+                          tableDataSource.forEach((item:any)=>{
+                            if(isEditing(item)){
+                              saveDisabled = true;
+                            }
+                          })
+                          if(saveDisabled){
+                            message.error('存在塔信息未保存！')
+                          }
+                          else if(tableDataSource.length>0){
                               console.log(saveData)
                               await RequestUtil.post('/tower-science/drawProductDetail/saveDrawProduct', saveData).then(()=>{
                                   message.success('保存成功！');
+                              }).then(()=>{
+                                history.push('/workMngt/confirmList')
                               })
                           }
                           else{
@@ -452,7 +553,16 @@ export default function ConfirmDetail(): React.ReactNode {
                             }}),
                             description
                           }
-                          if(tableDataSource.length>0){
+                          let saveDisabled = false;
+                          tableDataSource.forEach((item:any)=>{
+                            if(isEditing(item)){
+                              saveDisabled = true;
+                            }
+                          })
+                          if(saveDisabled){
+                            message.error('存在塔信息未保存！')
+                          }
+                          else if(tableDataSource.length>0){
                               console.log(submitData)
                               await RequestUtil.post('/tower-science/drawProductDetail/submitDrawProduct', submitData).then(()=>{
                                   message.success('提交成功！');
@@ -467,7 +577,15 @@ export default function ConfirmDetail(): React.ReactNode {
                           console.log(error)
                       }
                     }}>保存并提交</Button>
-                    <Button key="goback" onClick={() => history.goBack()}>返回</Button>
+                     {tableDataSource.length>0||attachInfo.length>0||description?<Popconfirm
+                        title="是否放弃已添加信息?"
+                        onConfirm={ () => history.goBack() }
+                        okText="确定"
+                        cancelText="取消"
+                    >
+                         <Button key="goback">返回</Button>
+                    </Popconfirm>: <Button key="goback" onClick={() => history.goBack()}>返回</Button>}
+                   
                 </Space>
             ]}>
                 <div style={{display:'flex',justifyContent:'space-between'}}>
@@ -502,37 +620,25 @@ export default function ConfirmDetail(): React.ReactNode {
                     />
                 </Form>
                 <DetailTitle title="备注"/>
-                {detailData&&detailData.description?<TextArea maxLength={ 200 } defaultValue={detailData.description} onChange={(e)=>{
+                {detailData?<TextArea maxLength={ 200 } defaultValue={detailData?.description} onChange={(e)=>{
                     setDescription(e.target.value)
                 }}/>:null}
-                {/* <Upload
-                    key="sub"
-                    name="file"
-                    multiple={true}
-                    action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
-                    headers={{
-                        'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                        'Tenant-Id': AuthUtil.getTenantId(),
-                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                    }}
-                    onChange={uploadChange}
-                    showUploadList={false}
-                > */}
-                <Upload action={ () => {
-                                    const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                                    return baseUrl+'/sinzetech-resource/oss/put-file'
-                                } } 
-                                headers={
-                                    {
-                                        'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
-                                        'Tenant-Id': AuthUtil.getTenantId(),
-                                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                                    }
-                                }
-                                showUploadList={ false }
-                                data={ { productCategoryId: params.id } }
-                                onChange={ uploadChange}>
-                  <span style={{fontSize:'16px',marginLeft:'13px'}}>附件 </span><CloudUploadOutlined /></Upload>
+                <DetailTitle title="附件信息" operation={[<Upload
+                    action={ () => {
+                      const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                      return baseUrl+'/sinzetech-resource/oss/put-file'
+                    } } 
+                    headers={
+                        {
+                            'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                            'Tenant-Id': AuthUtil.getTenantId(),
+                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                        }
+                    }
+                    showUploadList={ false }
+                    data={ { productCategoryId: params.id } }
+                    onChange={ uploadChange}
+                ><Button key="enclosure" type="primary" ghost>添加</Button></Upload>]} />
                 <CommonTable columns={[
                     {
                         title: '附件名称',
@@ -545,14 +651,19 @@ export default function ConfirmDetail(): React.ReactNode {
                         dataIndex: 'operation',
                         render: (_: undefined, record: any): React.ReactNode => (
                             <Space direction="horizontal" size="small">
-                                <Button type="link" onClick={() => downLoadFile(record.filePath)}>下载</Button>
-                                {record.fileSuffix==='pdf'?<Button type='link' onClick={()=>{window.open(record.filePath)}}>预览</Button>:null}
+                                <Button type="link" onClick={() => downLoadFile(record.id?record.filePath:record.link)}>下载</Button>
+                                {record.fileSuffix==='pdf'?<Button type='link' onClick={()=>{window.open(record.id?record.filePath:record.link)}}>预览</Button>:null}
+                                {['jpg','jpeg', 'png', 'gif'].includes(record.fileSuffix)?<Button type='link' onClick={()=>{setPictureUrl(record.id?record.filePath:record.link);setPictureVisible(true);}}>预览</Button>:null}
                                 <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
+
                             </Space>
                         )
                     }
-                ]} dataSource={attachInfo}  />
+                ]} dataSource={attachInfo}  pagination={ false }/>
             </DetailContent>
+            <Modal visible={pictureVisible} onCancel={handlePictureModalCancel} footer={false}>
+                <Image src={pictureUrl} preview={false}/>
+            </Modal>
             <Modal visible={visible} title="添加" onOk={handleModalOk} onCancel={handleModalCancel}  width={ 800 }>
                 <Form form={form} { ...formItemLayout }>
                     <Row>
@@ -566,8 +677,16 @@ export default function ConfirmDetail(): React.ReactNode {
                       </Col>
                       <Col span={12}>
                         <Form.Item name="name" label="杆塔号" rules={[{
-                            "required": true,
-                            "message":"请输入杆塔号"
+                            required: true,
+                            validator: (rule: any, value: string, callback: (error?: string) => void) => {
+                              checkProductNumber(value).then(res => {
+                                    if (res>-1) {
+                                        callback('请输入杆塔号，且同一塔型下杆塔号唯一！')
+                                    } else {
+                                        callback();
+                                    }
+                                })
+                            }
                         }]}>
                             <Input/>
                         </Form.Item>
@@ -627,7 +746,7 @@ export default function ConfirmDetail(): React.ReactNode {
                             "required": true,
                             "message":"请输入呼高（m）"
                         }]}>
-                            <InputNumber precision={2} style={{width:'100%'}} min={0}/>
+                            <InputNumber precision={4} style={{width:'100%'}} min={0}/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>

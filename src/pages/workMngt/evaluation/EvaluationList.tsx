@@ -93,6 +93,7 @@ export default function EvaluationList(): React.ReactNode {
     }), {})
     const departmentData: any = data || [];
     const [ programLeader,setProgramLeader ] = useState([]);
+    const [ filterValue, setFilterValue ] = useState({});
 
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles && roles.forEach((role: any & SelectDataNode): void => {
@@ -131,14 +132,10 @@ export default function EvaluationList(): React.ReactNode {
         refresh={ refresh }
         searchFormItems={ [
             {
-                name: 'fuzzyMsg',
-                label: '模糊查询项',
-                children: <Input placeholder="任务编号/项目名称"/>
-            },
-            {
                 name: 'status',
                 label: '任务状态',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
+                    <Select.Option value="" key="2">全部</Select.Option>
                     <Select.Option value="3" key="3">待完成</Select.Option>
                     <Select.Option value="4" key="4">已完成</Select.Option>
                 </Select>
@@ -169,14 +166,21 @@ export default function EvaluationList(): React.ReactNode {
                         </Form.Item>
                     </Col>
                 </Row>
+            },
+            {
+                name: 'fuzzyMsg',
+                label: '模糊查询项',
+                children: <Input placeholder="任务编号/项目名称"/>
             }
         ] }
+        filterValue={ filterValue }
         onFilterSubmit = { (values: Record<string, any>) => {
             if(values.expectDeliverTimeAll) {
                 const formatDate = values.expectDeliverTimeAll.map((item: any) => item.format("YYYY-MM-DD"));
                 values.expectDeliverTimeStart = formatDate[0] + ' 00:00:00';
                 values.expectDeliverTimeEnd = formatDate[1] + ' 23:59:59';
             }
+            setFilterValue(values);
             return values;
         } }
     />

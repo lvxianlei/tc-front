@@ -6,6 +6,7 @@ import { CommonTable, Page } from '../../../common'
 import QuestionnaireModal from './QuestionnaireModal';
 import { Popconfirm } from 'antd';
 import RequestUtil from '../../../../utils/RequestUtil';
+import styles from './SetOut.module.less';
 
 export default function PickCheckList(): React.ReactNode {
     const [form] = Form.useForm();
@@ -13,6 +14,7 @@ export default function PickCheckList(): React.ReactNode {
     const history = useHistory();
     const [ visible, setVisible ] = useState(false);
     const [ record, setRecord ] = useState({});
+    const [filterValue, setFilterValue] = useState({});
     const [ title, setTitle ] = useState('提交问题');
 
    
@@ -32,23 +34,54 @@ export default function PickCheckList(): React.ReactNode {
         { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight', editable: true },
         { title: '备注', dataIndex: 'description', key: 'description', editable: true }
     ];
-    const questionnaire = (_: undefined, record: Record<string,  any>, index: number, e: any) => {
+    const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {
         setVisible(true);
-        setRecord({ ...record, problemField: e, originalData: _ });
+        if(tip !== 'normal') {
+            const data: {} = await RequestUtil.get<{}>(`/tower-science/productStructure/issue/detail?id=${ params.productSegmentId }`);
+            setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data });
+            if(tip!=='red')setTitle('查看问题');
+        } else {
+            setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id });
+        }
     }
+
+    const checkColor = (record: Record<string, any>, dataIndex: string) => {
+        const red: number = record.redColumn.indexOf(dataIndex);
+        const green: number = record.greenColumn.indexOf(dataIndex);
+        const yellow: number = record.yellowColumn.indexOf(dataIndex);
+        if(red !== -1) {
+            return 'red';
+        } else if(green !== -1) {
+            return 'green';
+        } else if(yellow !== -1) {
+            return 'yellow';
+        } else {
+            return 'normal'
+        }
+    }
+    
     const columnsSetting = columns.map(col => {
         return {
             ...col,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            col.dataIndex === 'index' ? index + 1 : !col.editable? _ :  <span onDoubleClick={ (e) => { questionnaire( _ , record,  index, col.title) } }>{ _ }</span>)
-        }  
+                col.dataIndex === 'index' ? index + 1 
+                : !col.editable ? _ 
+                : <p onDoubleClick={ (e) => { questionnaire( _, record, col, checkColor(record, col.dataIndex)) }} className={ checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow : '' }>{ _ }</p>
+            )  
+        }     
     })
-   
+    const onFilterSubmit = (value: any) => {
+        setFilterValue(value)
+        return value
+    }
     return (
         <>
             <Page
-                path={`/tower-science/drawProductStructure/${params.productSegmentId}/check`}
+                // path={`/tower-science/drawProductStructure/${params.productSegmentId}/check`}
+                path={`/tower-science/productStructure/list`}
                 columns={ columnsSetting }
+                onFilterSubmit={onFilterSubmit}
+                filterValue={ filterValue }
                 extraOperation={
                     <Space>
                         <Button>导出</Button>

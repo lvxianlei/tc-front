@@ -1,3 +1,11 @@
+@import "../../../../App.module.less";
+.tableRow{
+    height: @tableRowHeight;
+    &:nth-child(even){
+        background-color: @backgroundColor;
+    }
+}
+
 .operationBtn {
     :global(.ant-btn) {
         padding: 0;
@@ -9,4 +17,38 @@
 
 .topPadding {
     padding-top: 20px;
+}
+
+.rightPadding5 {
+    padding-right: 5px;
+}
+
+.topForm {
+    padding-bottom: 20px;
+    width: 100%;
+    .btnRight {
+        position: absolute;
+        right: 5%;
+    }
+}
+
+:global(p) {
+    margin-bottom: 0;
+}
+
+.red {
+    background-color: #F9A1A1 !important;
+    color: #FFF;
+}
+.green {
+    background-color: #89DF88 !important;
+    color: #FFF;
+}
+.yellow {
+    background-color: #FFB401 !important;
+    color: #FFF;
+}
+
+.padding16 {
+    padding: 16px;
 }

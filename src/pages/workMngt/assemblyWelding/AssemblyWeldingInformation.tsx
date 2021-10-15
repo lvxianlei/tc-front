@@ -1,7 +1,7 @@
 /**
  * @author zyc
  * @copyright © 2021 
- * @description 工作管理-放样列表-放样信息
+ * @description 工作管理-组焊列表-组焊信息
 */
 
 import React from 'react';
@@ -10,49 +10,24 @@ import { useHistory, useParams } from 'react-router-dom';
 import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-import styles from './SetOut.module.less';
-import { specialColums, productColumns } from './SetOutInformation.json';
-
-interface ISetOut {
-    readonly attachVos?: IAttachVos[];
-    readonly taskDataVOList?: ITaskDataVOList[];
-}
-
-interface IAttachVos {
-    readonly description?: string;
-    readonly filePath?: string;
-    readonly fileSize?: string;
-    readonly fileSuffix?: string;
-    readonly fileUploadTime?: string;
-    readonly id?: string;
-    readonly name?: string;
-    readonly userName?: string;
-}
-
-interface ITaskDataVOList {
-    readonly createTime?: string;
-    readonly status?: string;
-    readonly createUser?: string;
-    readonly createDepartment?: string;
-    readonly description?: string;
-}
 
 const tableColumns = [
     { 
         key: 'index', 
         title: '序号', 
         dataIndex: 'index', 
-        width: 100, 
-        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
+        width: 50, 
+        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) 
+    },
     {
-        key: 'createDepartment',
+        key: 'createDeptName',
         title: '操作部门',
-        dataIndex: 'createDepartment', 
+        dataIndex: 'createDeptName', 
     },
     {  
-        key: 'createUser', 
+        key: 'createUserName', 
         title: '操作人', 
-        dataIndex: 'createUser' 
+        dataIndex: 'createUserName' 
     },
     { 
         key: 'createTime', 
@@ -60,51 +35,92 @@ const tableColumns = [
         dataIndex: 'createTime' 
     },
     {
-        key: 'status', 
+        key: 'currentStatus', 
         title: '任务状态', 
-        dataIndex: 'status',
-        render: (pattern: number): React.ReactNode => {
-            switch (pattern) {
+        dataIndex: 'currentStatus',
+        render: (status: number): React.ReactNode => {
+            switch (status) {
+                case 0:
+                    return '已拒绝';
                 case 1:
-                    return '待指派';
+                    return '待开始';
                 case 2:
-                    return '放样中';
-                case 3:
                     return '组焊中';
+                case 3:
+                    return '校核中';
                 case 4:
-                    return '配段中';
-                case 5:
                     return '已完成';
-                case 6:
+                case 5:
                     return '已提交';
             }
         }
-    },
-    {
-        key: 'description', 
-        title: '备注', 
-        dataIndex: 'description' 
     }
 ]
 
-export default function SetOutInformation(): React.ReactNode {
+const specialColums = [
+    {
+        "dataIndex": "materialStandard",
+        "title": "原材料标准"
+    },
+    {
+        "dataIndex": "materialDemand",
+        "title": "原材料要求"
+    },
+    {
+        "dataIndex": "weldingDemand",
+        "title": "焊接要求"
+    },
+    {
+        "dataIndex": "packDemand",
+        "title": "包装要求"
+    },
+    {
+        "dataIndex": "galvanizeDemand",
+        "title": "镀锌要求"
+    },
+    {
+        "dataIndex": "peculiarDescription",
+        "title": "备注",
+        "type": "textarea"
+    }
+]
+
+const productColumns = [
+    {
+        "dataIndex": "productModelNum",
+        "title": "塔型（个）"
+    },
+    {
+        "dataIndex": "productNum",
+        "title": "杆塔（基）"
+    },
+    {
+        "dataIndex": "productType",
+        "title": "产品类型"
+    },
+    {
+        "dataIndex": "totalWeight",
+        "title": "总重量（kg）"
+    }
+]
+
+export default function AssemblyWeldingInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
-    const { loading, data }: Record<string, any> = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-science/loftingList/detail?id=${ params.id }`);
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get(`/tower-science/welding/getWaldingTaskById?weldingGroupId=${ params.id }`)
         resole(data)
     }), {})
-    const detailData: ISetOut = data;
-
+    const detailData: any = data
     if (loading) {
-        return <Spin spinning={ loading }>
+        return <Spin spinning={loading}>
             <div style={{ width: '100%', height: '300px' }}></div>
         </Spin>
     }
 
     return <DetailContent operation={ [
-        <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
-            <Button type="ghost" onClick={ () => history.goBack() }>关闭</Button>
+        <Space direction="horizontal" size="small" >
+            <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
         </Space>
     ] }>
         <DetailTitle title="特殊要求" />
@@ -117,7 +133,7 @@ export default function SetOutInformation(): React.ReactNode {
                 key: 'name', 
                 title: '附件名称', 
                 dataIndex: 'name',
-                width: 350
+                width: 250
             },
             { 
                 key: 'operation', 
@@ -132,10 +148,10 @@ export default function SetOutInformation(): React.ReactNode {
                     </Space>
             ) }
         ]}
-            dataSource={ detailData.attachVos }
+            dataSource={ detailData.attachInfoList }
             pagination={ false }
         />
         <DetailTitle title="操作信息"/>
-        <CommonTable columns={ tableColumns } dataSource={ detailData.taskDataVOList } pagination={ false }/>
+        <CommonTable columns={ tableColumns } dataSource={ detailData.statusRecordList } pagination={ false } />
     </DetailContent>
 }

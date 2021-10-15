@@ -9,6 +9,7 @@ import RequestUtil from '../../utils/RequestUtil';
 
 export default function SetOutTaskList(): React.ReactNode {
     const [ refresh, setRefresh ] = useState<boolean>(false);
+    const [ filterValue, setFilterValue ] = useState({});
     
     const columns = [
         {
@@ -146,11 +147,6 @@ export default function SetOutTaskList(): React.ReactNode {
         refresh={ refresh }
         searchFormItems={ [
             {
-                name: 'fuzzyMsg',
-                label: '模糊查询项',
-                children: <Input placeholder="放样任务编号/任务单编号/订单编号/内部合同编号"/>
-            },
-            {
                 name: 'updateStatusTime',
                 label: '最新状态变更时间',
                 children: <DatePicker.RangePicker />
@@ -159,6 +155,7 @@ export default function SetOutTaskList(): React.ReactNode {
                 name: 'status',
                 label: '任务状态',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
+                    <Select.Option value={ "" } key="6">全部</Select.Option>
                     <Select.Option value={ 0 } key="0">已拒绝</Select.Option>
                     <Select.Option value={ 1 } key="1">待确认</Select.Option>
                     <Select.Option value={ 2 } key="2">待指派</Select.Option>
@@ -172,7 +169,13 @@ export default function SetOutTaskList(): React.ReactNode {
                 label: '计划交付时间',
                 children: <DatePicker.RangePicker />
             },
+            {
+                name: 'fuzzyMsg',
+                label: '模糊查询项',
+                children: <Input placeholder="放样任务编号/任务单编号/订单编号/内部合同编号"/>
+            }
         ] }
+        filterValue={ filterValue }
         onFilterSubmit = { (values: Record<string, any>) => {
             if(values.updateStatusTime) {
                 const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
@@ -184,6 +187,7 @@ export default function SetOutTaskList(): React.ReactNode {
                 values.plannedDeliveryTimeStart = formatDate[0] + ' 00:00:00';
                 values.plannedDeliveryTimeEnd = formatDate[1] + ' 23:59:59';
             }
+            setFilterValue(values);
             return values;
         } }
     />

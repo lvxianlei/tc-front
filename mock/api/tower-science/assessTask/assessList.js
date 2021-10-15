@@ -18,7 +18,7 @@ for (let i = 1; i < 10; ++i) {
         "programName": Random.cword(3,10), 
         "taskCode":  Random.increment(), 
         "updateStatusTime": Random.date('yyyy-MM-dd HH:mm'), 
-        "status": "1"
+        "status|3-4": 4
     });
 }
 
@@ -40,7 +40,7 @@ module.exports = {
             "programName": Random.cword(3,10), 
             "taskCode":  Random.increment(), 
             "updateStatusTime": Random.date('yyyy-MM-dd HH:mm'), 
-            "status": "1"
+            "status": 3
         }].concat(records),
         current: Random.natural(1, 20),
         size: 10,

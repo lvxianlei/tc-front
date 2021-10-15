@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Space, Input, DatePicker,  Button, Select } from 'antd'
 import { Link } from 'react-router-dom'
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 
 export default function QuestionMngt(): React.ReactNode {
+    const [filterValue, setFilterValue] = useState({});
     const columns = [
         {
             key: 'index',
@@ -119,6 +120,7 @@ export default function QuestionMngt(): React.ReactNode {
         }
     ];
     const onFilterSubmit=(value: any)=>{
+        setFilterValue(value)
         return value;
     }
     return <>
@@ -127,6 +129,7 @@ export default function QuestionMngt(): React.ReactNode {
             columns={columns}
             extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
+            filterValue={filterValue}
             searchFormItems={[
                 {
                     name: 'updateTimeStart',
@@ -142,6 +145,7 @@ export default function QuestionMngt(): React.ReactNode {
                     name: 'status',
                     label: '问题单状态',
                     children:  <Select>
+                                    <Select.Option value={''} key ={''}>全部</Select.Option>
                                     <Select.Option value={1} key={1}>待修改</Select.Option>
                                     <Select.Option value={2} key={2}>已修改</Select.Option>
                                     <Select.Option value={3} key={3}>已拒绝</Select.Option>
@@ -152,6 +156,7 @@ export default function QuestionMngt(): React.ReactNode {
                     name: 'type',
                     label: '问题单类型',
                     children:  <Select>
+                                    <Select.Option value={''} key ={''}>全部</Select.Option>
                                     <Select.Option value={1} key={1}>提料</Select.Option>
                                     <Select.Option value={2} key={2}>放样</Select.Option>
                                     <Select.Option value={3} key={3}>螺栓</Select.Option>

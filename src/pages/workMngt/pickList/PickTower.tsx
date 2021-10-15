@@ -4,12 +4,25 @@ import { FixedType } from 'rc-table/lib/interface';
 import { Link, useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil';
-
+export interface IDetail {
+    productCategory?: string;
+    productCategoryName?: string;
+    productId?: string;
+    productNumber?: string;
+    materialDrawProductSegmentList?: IMaterialDetail[]
+}
+export interface IMaterialDetail{
+    count: string;
+    id: string;
+    name: string;
+}
 export default function PickTower(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const params = useParams<{ id: string }>()
     const history = useHistory();
     const [form] = Form.useForm();
+    const [filterValue, setFilterValue] = useState({});
+    const [detail, setDetail] = useState<IDetail>({});
     const handleModalOk = async () => {
         try {
             const submitData = await form.validateFields()
@@ -92,8 +105,20 @@ export default function PickTower(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type='link' onClick={() => {
-                        setVisible(true)
+                    <Button type='link' onClick={async () => {
+                        setVisible(true);
+                            let data: IDetail = await RequestUtil.get<IDetail>(`/tower-science/product/material/${record.id}`)
+                            const detailData: IMaterialDetail[]|undefined = data&&data.materialDrawProductSegmentList&&data.materialDrawProductSegmentList.map((item:IMaterialDetail)=>{
+                                return {
+                                    ...item,
+                                    // value:item.count===-1?0:item.count,
+                                }
+                            })
+                            setDetail({
+                                ...data,
+                                materialDrawProductSegmentList:detailData
+                            })
+                            
                     }}>配段</Button>
                     <Link to={`/workMngt/pickList/pickTower/${params.id}/pickTowerDetail/${record.id}`}>杆塔提料明细</Link>
                 </Space>
@@ -113,103 +138,61 @@ export default function PickTower(): React.ReactNode {
             value.updateStatusTimeEnd = formatDate[1]+ ' 23:59:59';
             delete value.statusUpdateTime
         }
+        setFilterValue(value)
         return value
     }
     return (
         <>
             <Modal title='配段信息'  width={1200} visible={visible} onCancel={handleModalCancel} onOk={handleModalOk}>
-                <Form form={form} {...formItemLayout}>
+                {detail?.materialDrawProductSegmentList?<Form initialValues={{ detailData : detail.materialDrawProductSegmentList }} autoComplete="off" form={form}>  
                     <Row>
-                        <Col span={12}>
+                        <Col span={1}></Col>
+                        <Col span={11}>
                             <Form.Item name="productCategoryName" label="塔型">
-                                <span>JC30153B</span>
+                                <span>{detail?.productCategoryName}</span>
                             </Form.Item>
                         </Col>
-                        <Col span={12}>
+                        <Col span={1}></Col>
+                        <Col span={11}>
                             <Form.Item name="productNumber" label="杆塔号">
-                                <span>A001</span>
+                                <span>{detail?.productNumber}</span>
                             </Form.Item>
                         </Col>
                     </Row>
                     <Row>
-                        <Col span={12}>
-                            <Form.Item name="aaaa" label="段号">
-                                <span>1</span>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item name="reason" label="段数">
-                                <Input/>
-                            </Form.Item>
-                        </Col>
+                    
+                        <Form.List name="detailData">
+                            
+                            {
+                                ( fields , { add, remove }) => fields.map(
+                                    field => (
+                                    <>
+                                        <Col span={ 1}></Col>
+                                        <Col span={ 11 }>
+                                        <Form.Item name={[ field.name , 'value']} label='段数'>
+                                            <span>{detail.materialDrawProductSegmentList&&detail.materialDrawProductSegmentList[field.name].count}</span>
+                                        </Form.Item>
+                                        </Col>
+                                        <Col span={1}></Col>
+                                        <Col span={ 11 }>
+                                        <Form.Item  name={[ field.name , 'type']} label='段号'>
+                                            <Input/>
+                                        </Form.Item>
+                                        </Col>
+                                    </>
+                                    )
+                                )
+                            }
+                        </Form.List> 
                     </Row>
-                    <Row>
-                        <Col span={12}>
-                            <Form.Item name="aaaa" label="段号">
-                                <span>2</span>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item name="reason" label="段数">
-                                <Input/>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12}>
-                            <Form.Item name="aaaa" label="段号">
-                                <span>3</span>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item name="reason" label="段数">
-                                <Input/>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12}>
-                            <Form.Item name="aaaa" label="段号">
-                                <span>4</span>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item name="reason" label="段数">
-                                <Input/>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12}>
-                            <Form.Item name="aaaa" label="段号">
-                                <span>5</span>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item name="reason" label="段数">
-                                <Input/>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12}>
-                            <Form.Item name="aaaa" label="段号">
-                                <span>6</span>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item name="reason" label="段数">
-                                <Input/>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                </Form>
+                </Form>:null}
             </Modal>
             <Page
                 // path="/tower-market/bidInfo"
                 path="/tower-science/product/material"
                 columns={columns}
                 onFilterSubmit={onFilterSubmit}
+                filterValue={ filterValue }
                 requestData={{ productCategoryId: params.id }}
                 extraOperation={
                     <Space>
@@ -241,6 +224,7 @@ export default function PickTower(): React.ReactNode {
                         name: 'status',
                         label: '杆塔提料状态',
                         children: <Select style={{width:'100px'}}>
+                            <Select.Option value={''} key ={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>配段中</Select.Option>
                             <Select.Option value={2} key={2}>已完成</Select.Option>
                             <Select.Option value={3} key={3}>已提交</Select.Option>

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Input, Select } from 'antd';
 import { Link } from 'react-router-dom';
 import { Page } from '../common';
 
 export default function PlanTrack(): React.ReactNode {
+    const [filterValue, setFilterValue] = useState({});
     const columns = [
         {
             key: 'index',
@@ -175,11 +176,13 @@ export default function PlanTrack(): React.ReactNode {
         },
     ];
     const onFilterSubmit=(value: any)=>{
+        setFilterValue(value)
         return value;
     }
     return <Page
         path="/tower-science/assessTask/planTrack"
         columns={columns}
+        filterValue={filterValue}
         onFilterSubmit={onFilterSubmit}
         extraOperation={<Button type="primary">导出</Button>}
         searchFormItems={[
@@ -187,6 +190,7 @@ export default function PlanTrack(): React.ReactNode {
                 name: 'priority',
                 label: '优先级',
                 children:   <Select>
+                                <Select.Option value={''} key ={''}>全部</Select.Option>
                                 <Select.Option value={1} key={1}>高</Select.Option>
                                 <Select.Option value={2} key={2}>中</Select.Option>
                                 <Select.Option value={3} key={3}>低</Select.Option>
@@ -196,6 +200,7 @@ export default function PlanTrack(): React.ReactNode {
                 name: 'materialStatus',
                 label: '塔型提料状态',
                 children:   <Select>
+                                <Select.Option value={''} key ={''}>全部</Select.Option>
                                 <Select.Option value={1} key={1}>待指派</Select.Option>
                                 <Select.Option value={2} key={2}>提料中</Select.Option>
                                 <Select.Option value={3} key={3}>配段中</Select.Option>
@@ -207,6 +212,7 @@ export default function PlanTrack(): React.ReactNode {
                 name: 'loftingStatus',
                 label: '塔型放样状态',
                 children:   <Select>
+                                <Select.Option value={''} key ={''}>全部</Select.Option>
                                 <Select.Option value={1} key={1}>待指派</Select.Option>
                                 <Select.Option value={2} key={2}>放样中</Select.Option>
                                 <Select.Option value={3} key={3}>组焊中</Select.Option>

@@ -1,11 +1,10 @@
 import React from 'react';
-import { Button, Space, Modal, Input, Upload, Form, FormInstance, message } from 'antd';
+import { Button, Space, Modal, Input, Upload, Form, FormInstance, message, Image } from 'antd';
 import { DetailContent, CommonTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './Evaluation.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { CloudUploadOutlined } from '@ant-design/icons';
 import AuthUtil from '../../../utils/AuthUtil';
 
 interface IResponse {
@@ -37,6 +36,8 @@ export interface EvaluationInformationState {
     readonly visible: boolean;
     readonly description?: string;
     readonly information?: IResponse;
+    readonly pictureVisible: boolean;
+    readonly pictureUrl?: string;
 }
 
 class EvaluationInformation extends React.Component<IEvaluationInformationRouteProps, EvaluationInformationState> {
@@ -57,7 +58,8 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
     }
 
     public state: EvaluationInformationState = {
-        visible: false
+        visible: false,
+        pictureVisible: false
     }
 
     private modalCancel(): void {
@@ -153,7 +155,13 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                                         <Space direction="horizontal" size="small">
                                             <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
                                             {
-                                                record.fileSuffix === 'pdf' ? <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : null
+                                                record.fileSuffix === 'pdf' 
+                                                ? 
+                                                <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> 
+                                                : ['jpg', 'jpeg', 'png', 'gif'].includes(record.fileSuffix) 
+                                                ? 
+                                                <Button type='link' onClick={ () => { this.setState({ pictureUrl: record.filePath, pictureVisible: true }) } }>预览</Button> 
+                                                : null 
                                             }
                                         </Space>
                                     )
@@ -168,47 +176,54 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                                 rules={[{ required: true, message: '请输入评估信息' }]}
                                 initialValue={ this.state.description }
                             >
-                                <Input.TextArea placeholder="请输入" maxLength={ 300 } showCount />
+                                <Input.TextArea placeholder="请输入" maxLength={ 300 } disabled={ this.state.information?.status === 4 } showCount />
                             </Form.Item>
                         <p className={ styles.topPadding }>评估文件
-                            <Upload action={ () => {
-                                    const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                                    return baseUrl+'/sinzetech-resource/oss/put-file'
-                                } } 
-                                headers={
-                                    {
-                                        'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
-                                        'Tenant-Id': AuthUtil.getTenantId(),
-                                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                        <span style={ { position: 'absolute', right: '1%' } }>
+                            {
+                                this.state.information?.status === 4 ? null :
+                                <Upload 
+                                    action={ () => {
+                                        const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                                        return baseUrl+'/sinzetech-resource/oss/put-file'
+                                    } } 
+                                    headers={
+                                        {
+                                            'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                                            'Tenant-Id': AuthUtil.getTenantId(),
+                                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                                        }
                                     }
-                                }
-                                showUploadList={ false }
-                                data={ { productCategoryId: this.props.id } }
-                                onChange={ (info) => {
-                                    if(info.file.response && !info.file.response?.success) {
-                                        message.warning(info.file.response?.msg)
-                                    } 
-                                    if(info.file.response && info.file.response?.success) {
-                                        let resData: IFileList = info.file.response?.data;
-                                        this.setState({
-                                            information: {
-                                                ...this.state.information,
-                                                assessFileList: [
-                                                    ...this.state.information?.assessFileList || [],
-                                                    { 
-                                                        link: resData.link,
-                                                        filePath: resData.name,
-                                                        name: resData.originalName,
-                                                        userName: resData.userName,
-                                                        fileSuffix: resData.originalName?.split('.')[1]
-                                                    }
-                                                ]
-                                            }
-                                        })
-                                    }
-                                }}>
-                                <CloudUploadOutlined />
-                            </Upload>
+                                    showUploadList={ false }
+                                    data={ { productCategoryId: this.props.id } }
+                                    onChange={ (info) => {
+                                        if(info.file.response && !info.file.response?.success) {
+                                            message.warning(info.file.response?.msg)
+                                        } 
+                                        if(info.file.response && info.file.response?.success) {
+                                            let resData: IFileList = info.file.response?.data;
+                                            this.setState({
+                                                information: {
+                                                    ...this.state.information,
+                                                    assessFileList: [
+                                                        ...this.state.information?.assessFileList || [],
+                                                        { 
+                                                            link: resData.link,
+                                                            // filePath: resData.name,
+                                                            filePath: resData.link,
+                                                            name: resData.originalName,
+                                                            userName: resData.userName,
+                                                            fileSuffix: resData.originalName?.split('.')[resData.originalName?.split('.').length - 1]
+                                                        }
+                                                    ]
+                                                }
+                                            })
+                                        }
+                                    }}>
+                                    <Button type='primary' ghost>添加</Button>
+                                </Upload>
+                            }
+                            </span> 
                         </p>
                         <CommonTable    
                             columns={[
@@ -227,20 +242,27 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                                             {
                                                 record.id ? <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button> : <Button type="link" onClick={ () => window.open(record.link) }>下载</Button> 
                                             }
-                                            
                                             {
-                                                record.fileSuffix !== 'pdf' ? null : record.id ? <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : <Button type="link" onClick={ () => window.open(record.link) }>预览</Button>
+                                                record.fileSuffix === 'pdf' 
+                                                ? 
+                                                <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : ['jpg', 'jpeg', 'png', 'gif'].includes(record.fileSuffix) 
+                                                ? 
+                                                <Button type='link' onClick={ () => { this.setState({ pictureUrl: record.id ? record.filePath : record.link, pictureVisible: true }) } }>预览</Button> 
+                                                : null 
                                             }
-                                            <Button type="link" onClick={ () => {
-                                                const information: IResponse = this.state.information || {};
-                                                information.assessFileList && information.assessFileList.splice(index, 1);
-                                                this.setState({
-                                                    information: {
-                                                        ...information,
-                                                        assessFileList: [ ...information.assessFileList || [] ]
-                                                    }
-                                                })
-                                            } }>删除</Button>
+                                            {
+                                                this.state.information?.status === 4 ? null :
+                                                <Button type="link" onClick={ () => {
+                                                    const information: IResponse = this.state.information || {};
+                                                    information.assessFileList && information.assessFileList.splice(index, 1);
+                                                    this.setState({
+                                                        information: {
+                                                            ...information,
+                                                            assessFileList: [ ...information.assessFileList || [] ]
+                                                        }
+                                                    })
+                                                } }>删除</Button>
+                                            }
                                         </Space>
                                     ) 
                                 }
@@ -250,6 +272,13 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                         />
                     </DetailContent>
                 </Form>
+            </Modal>
+            <Modal visible={ this.state.pictureVisible } onCancel={ () => {
+                this.setState({
+                    pictureVisible: false
+                })
+            } } footer={ false }>
+                <Image src={ this.state.pictureUrl } preview={ false } />
             </Modal>
         </>
     }

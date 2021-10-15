@@ -5,9 +5,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import styles from './TowerLoftingAssign.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { CloudUploadOutlined } from '@ant-design/icons';
 import AuthUtil from '../../../utils/AuthUtil';
-import { downloadTemplate } from './downloadTemplate';
 
 export interface UploadModalProps {}
 export interface IUploadModalRouteProps extends RouteComponentProps<UploadModalProps>, WithTranslation {
@@ -65,9 +63,6 @@ const tableColumns = [
 ]
 
 class UploadModal extends React.Component<IUploadModalRouteProps, UploadModalState> {
-    constructor(props: IUploadModalRouteProps) {
-        super(props)
-    }
 
     public state: UploadModalState = {
         visible: false
@@ -108,28 +103,32 @@ class UploadModal extends React.Component<IUploadModalRouteProps, UploadModalSta
                 onCancel={ () => this.modalCancel() }
             >
                 <DetailContent>
-                    <p>相关附件
-                        <Upload action={ () => {
-                            const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                            return baseUrl + this.props.uploadUrl
-                        } } 
-                        headers={
-                            {
-                                'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
-                                'Tenant-Id': AuthUtil.getTenantId(),
-                                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                            }
-                        }
-                        showUploadList={ false }
-                        data={ this.props.requestData }
-                        onChange={ (info) => {
-                            if(info.file.response && !info.file.response?.success) {
-                                message.warning(info.file.response?.msg)
-                            } 
-                            if(info.file.response && info.file.response?.success) {
-                                this.getDetail();
-                            }
-                        }}><CloudUploadOutlined /></Upload>
+                    <p className={ styles.topPadding }>相关附件
+                        <span style={ { position: 'absolute', right: '1%' } }>
+                            <Upload 
+                                action={ () => {
+                                    const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                                    return baseUrl + this.props.uploadUrl
+                                } } 
+                                headers={
+                                    {
+                                        'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                                        'Tenant-Id': AuthUtil.getTenantId(),
+                                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                                    }
+                                }
+                                showUploadList={ false }
+                                data={ this.props.requestData }
+                                onChange={ (info) => {
+                                    if(info.file.response && !info.file.response?.success) {
+                                        message.warning(info.file.response?.msg)
+                                    } 
+                                    if(info.file.response && info.file.response?.success) {
+                                        this.getDetail();
+                                    }
+                                }}> <Button type='primary' ghost>添加</Button>
+                            </Upload>
+                        </span>
                     </p>
                     <CommonTable columns={[
                         { 

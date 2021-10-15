@@ -9,6 +9,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 export default function SampleDrawList(): React.ReactNode {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
+    const [filterValue, setFilterValue] = useState({});
     const columns = [
         {
             key: 'index',
@@ -165,6 +166,7 @@ export default function SampleDrawList(): React.ReactNode {
             value.smallSampleDeliverTimeEnd = formatDate[1]+ ' 23:59:59';
             delete value.planTime
         }
+        setFilterValue(value)
         return value
     }
     return (
@@ -172,6 +174,7 @@ export default function SampleDrawList(): React.ReactNode {
             path="/tower-science/smallSample"
             columns={columns}
             onFilterSubmit={onFilterSubmit}
+            filterValue={filterValue}
             refresh={refresh}
             extraOperation={<Button type="primary">导出</Button>}
             searchFormItems={[
@@ -184,6 +187,7 @@ export default function SampleDrawList(): React.ReactNode {
                     name: 'priority',
                     label:'小样图状态',
                     children:   <Select style={{width:"100px"}}>
+                                    <Select.Option value={''} key ={''}>全部</Select.Option>
                                     <Select.Option value={1} key={1}>待开始</Select.Option>
                                     <Select.Option value={2} key={2}>进行中</Select.Option>
                                     <Select.Option value={3} key={3}>校核中</Select.Option>
@@ -201,6 +205,7 @@ export default function SampleDrawList(): React.ReactNode {
                     name: 'priority',
                     label:'优先级',
                     children:   <Select style={{width:"100px"}}>
+                                    <Select.Option value={''} key ={''}>全部</Select.Option>
                                     <Select.Option value={1} key={1}>高</Select.Option>
                                     <Select.Option value={2} key={2}>中</Select.Option>
                                     <Select.Option value={3} key={3}>低</Select.Option>

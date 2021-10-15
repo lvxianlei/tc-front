@@ -8,6 +8,7 @@ export default function PickList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
     const history = useHistory();
+    const [filterValue, setFilterValue] = useState({});
     const columns = [
         {
             key: 'index',
@@ -67,8 +68,8 @@ export default function PickList(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickMessage/${record.id}`)}}>提料信息</Button>
-                    <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTowerMessage/${record.id}`)}}>塔型信息</Button>
-                    <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTower/${record.id}`)}}>杆塔配段</Button>
+                    <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTowerMessage/${record.productCategory}`)}}>塔型信息</Button>
+                    <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTower/${record.productCategory}`)}}>杆塔配段</Button>
                     <Button type='link' onClick={() => setVisible(true)}>交付物</Button>
                 </Space>
             )
@@ -89,6 +90,7 @@ export default function PickList(): React.ReactNode {
             value.plannedDeliveryTimeEnd = formatDate[1]+ ' 23:59:59';
             delete value.planTime
         }
+        setFilterValue(value)
         return value
     }
     return (
@@ -127,6 +129,7 @@ export default function PickList(): React.ReactNode {
                 path="/tower-science/materialTask"
                 // path="/tower-market/bidInfo"
                 columns={columns}
+                filterValue={filterValue}
                 onFilterSubmit={onFilterSubmit}
                 extraOperation={<Button type="primary">导出</Button>}
                 searchFormItems={[
@@ -139,6 +142,7 @@ export default function PickList(): React.ReactNode {
                         name: 'status',
                         label: '塔型状态',
                         children: <Select style={{width:'100px'}}>
+                            <Select.Option value={''} key ={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>待指派</Select.Option>
                             <Select.Option value={2} key={2}>提料中</Select.Option>
                             <Select.Option value={3} key={3}>配段中</Select.Option>
@@ -155,6 +159,7 @@ export default function PickList(): React.ReactNode {
                         name: 'pattern',
                         label: '模式',
                         children: <Select style={{width:'100px'}}>
+                            <Select.Option value={''} key ={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>新放</Select.Option>
                             <Select.Option value={2} key={2}>重新出卡</Select.Option>
                             <Select.Option value={3} key={3}>套用</Select.Option>

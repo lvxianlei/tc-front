@@ -68,9 +68,9 @@ export default function PickDetail(): React.ReactNode {
                             </Space>
                         )
                     }
-                ]} dataSource={detailData?.attachVos} />
+                ]} dataSource={detailData?.attachVos} pagination={ false }/>
                 <DetailTitle title="操作信息" />
-                <CommonTable columns={tableColumns} dataSource={detailData?.cargoVOList} />
+                <CommonTable columns={tableColumns} dataSource={detailData?.cargoVOList} pagination={ false }/>
             </DetailContent>
         </Spin>
     </>

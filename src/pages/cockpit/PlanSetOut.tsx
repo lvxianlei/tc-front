@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Input, Select } from 'antd';
 import { Page } from '../common';
 
 export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负责人直接返回名称，无需增加-Name字段   30号：加Name
+    const [filterValue, setFilterValue] = useState({});
     const columns = [
         {
             key: 'index',
@@ -299,18 +300,21 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
         },
     ];
     const onFilterSubmit=(value: any)=>{
+        setFilterValue(value)
         return value;
     }
     return <Page
         path="/tower-science/assessTask/planLofting"
         columns={columns}
         onFilterSubmit={onFilterSubmit}
+        filterValue={filterValue}
         extraOperation={<Button type="primary">导出</Button>}
         searchFormItems={[
             {
                 name: 'priority',
                 label: '优先级',
                 children:  <Select>
+                                <Select.Option value={''} key ={''}>全部</Select.Option>
                                 <Select.Option value={1} key={1}>高</Select.Option>
                                 <Select.Option value={2} key={2}>中</Select.Option>
                                 <Select.Option value={3} key={3}>低</Select.Option>
@@ -320,6 +324,7 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
                 name: 'pattern',
                 label: '模式',
                 children:  <Select>
+                                <Select.Option value={''} key ={''}>全部</Select.Option>
                                 <Select.Option value={1} key={1}>新放</Select.Option>
                                 <Select.Option value={2} key={2}>重新出卡</Select.Option>
                                 <Select.Option value={3} key={3}>套用</Select.Option>

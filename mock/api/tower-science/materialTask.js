@@ -38,7 +38,7 @@ module.exports = {
             "taskCode": Random.increment(), 
             "internalNumber":  Random.increment(), 
             "productCategoryEndNum": Random.increment(),
-            "productCategoryNum": Random.increment(),
+            "productCategory": '9',
             "productEndNum": Random.increment(),
             "productNum": Random.increment(),
             "steelProductShape": Random.increment(),

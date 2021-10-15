@@ -10,10 +10,13 @@ import Assign from './Assign';
 import RequestUtil from '../../utils/RequestUtil';
 import { TreeNode } from 'rc-tree-select';
 import useRequest from '@ahooksjs/use-request';
+import { useForm } from 'antd/es/form/Form';
 
 
 export default function AssessmentTaskList(): React.ReactNode {
     const [ refresh, setRefresh ] = useState<boolean>(false);
+    const [ filterValue, setFilterValue ] = useState({});
+
     const columns = [
         {
             key: 'index',
@@ -100,7 +103,11 @@ export default function AssessmentTaskList(): React.ReactNode {
                         <Assign id={ record.id } updataList={ () => { setRefresh(!refresh); } } />
                         : <Button type="link" disabled>指派</Button>
                     }
-                    <AssessmentInformation id={ record.id } />
+                    {
+                        record.status === 4 ? 
+                        <AssessmentInformation id={ record.id } />
+                        : <Button type="link" disabled>评估信息</Button>
+                    }
                     <Popconfirm
                         title="确认提交?"
                         onConfirm={ () => {
@@ -167,11 +174,6 @@ export default function AssessmentTaskList(): React.ReactNode {
         refresh={ refresh }
         searchFormItems={ [
             {
-                name: 'fuzzyMsg',
-                label: '模糊查询项',
-                children: <Input placeholder="任务编号/项目名称/客户名称"/>
-            },
-            {
                 name: 'a',
                 label: '最新状态变更时间',
                 children: <DatePicker.RangePicker />
@@ -180,6 +182,7 @@ export default function AssessmentTaskList(): React.ReactNode {
                 name: 'status',
                 label: '任务状态',
                 children: <Select placeholder="请选择" style={{ width: "150px" }}>
+                    <Select.Option value="" key="6">全部</Select.Option>
                     <Select.Option value="0" key="0">已拒绝</Select.Option>
                     <Select.Option value="1" key="1">待确认</Select.Option>
                     <Select.Option value="2" key="2">待指派</Select.Option>
@@ -236,8 +239,14 @@ export default function AssessmentTaskList(): React.ReactNode {
                 name: 'bidEndTime',
                 label: '投标截止时间',
                 children: <DatePicker.RangePicker />
+            },
+            {
+                name: 'fuzzyMsg',
+                label: '模糊查询项',
+                children: <Input placeholder="任务编号/项目名称/客户名称"/>
             }
         ] }
+        filterValue={ filterValue }
         onFilterSubmit = { (values: Record<string, any>) => {
             if(values.a) {
                 const formatDate = values.a.map((item: any) => item.format("YYYY-MM-DD"));
@@ -249,6 +258,7 @@ export default function AssessmentTaskList(): React.ReactNode {
                 values.bidEndTimeStart = formatDate[0] + ' 00:00:00';
                 values.bidEndTimeEnd = formatDate[1] + ' 23:59:59';
             }
+            setFilterValue(values);
             return values;
         } }
     />

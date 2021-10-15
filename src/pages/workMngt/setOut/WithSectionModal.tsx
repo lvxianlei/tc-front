@@ -10,7 +10,6 @@ import RequestUtil from '../../../utils/RequestUtil';
 import styles from './TowerLoftingAssign.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
-import useRequest from '@ahooksjs/use-request';
 
 export interface WithSectionModalProps {}
 export interface IWithSectionModalRouteProps extends RouteComponentProps<WithSectionModalProps>, WithTranslation {
@@ -44,10 +43,6 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
 
     private getForm = (): FormInstance | null => {
         return this.form?.current;
-    }
-
-    constructor(props: IWithSectionModalRouteProps) {
-        super(props)
     }
 
     public state: WithSectionModalState = {

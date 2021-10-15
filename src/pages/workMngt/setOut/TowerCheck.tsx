@@ -4,14 +4,15 @@
  * @description 工作管理-放样列表-塔型信息-校核
 */
 
-
 import React, { useState } from 'react';
-import { Space, Select, Button } from 'antd';
+import { Space, Button, Input } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import QuestionnaireModal from './QuestionnaireModal';
+import RequestUtil from '../../../utils/RequestUtil';
+import { downloadTemplate } from './downloadTemplate';
 
 
 const columns = [
@@ -27,261 +28,286 @@ const columns = [
         }
     },
     {
-        key: 'projectName',
+        key: 'partName',
         title: '段名',
         width: 150,
-        dataIndex: 'bidBuyEndTime',
+        dataIndex: 'partName',
         editable: false
     },
     {
-        key: 'projectNumber',
+        key: 'code',
         title: '构件编号',
-        dataIndex: 'projectNumber',
+        dataIndex: 'code',
         editable: true,
         width: 120
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'materialName',
         title: '材料名称',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'materialName'
     },
     {
-        key: 'biddingEndTime',
+        key: 'structureTexture',
         title: '材质',
         editable: true,
         width: 150,
-        dataIndex: 'biddingEndTime',
+        dataIndex: 'structureTexture',
     },
     {
-        key: 'biddingPerson',
+        key: 'specName',
         title: '规格',
-        dataIndex: 'biddingPerson',
+        dataIndex: 'specName',
         editable: true,
         width: 200,
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'width',
         title: '宽度（mm）',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'width'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'thickness',
         title: '厚度（mm）',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'thickness'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'length',
         title: '长度（mm）',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'length'
     },
     {
-        key: 'bidBuyEndTime',
-        title: '单基件数',
+        key: 'basicsPartNum',
+        title: '单段件数',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'basicsPartNum'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'basicsWeight',
         title: '单件重量（kg）',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'basicsWeight'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'totalWeight',
         title: '小计重量（kg）',
         width: 200,
         editable: false,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'totalWeight'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'ncName',
         title: 'NC程序名称',
         width: 200,
         editable: false,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'ncName'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'description',
         title: '备注',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'description'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'electricWelding',
         title: '电焊',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'electricWelding'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'bend',
         title: '火曲',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'bend'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'chamfer',
         title: '切角',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'chamfer'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'shovelBack',
         title: '铲背',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'shovelBack'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'rootClear',
         title: '清根',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'rootClear'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'squash',
         title: '打扁',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'squash'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'openCloseAngle',
         title: '开合角',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'openCloseAngle'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'perforate',
         title: '钻孔',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'perforate'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'groove',
         title: '坡口',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'groove'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'intersectingLine',
         title: '割相贯线',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'intersectingLine'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'slottedForm',
         title: '开槽形式',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'slottedForm'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'sides',
         title: '边数',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'sides'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'perimeter',
         title: '周长',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'perimeter'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'surfaceArea',
         title: '表面积',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'surfaceArea'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'apertureNumber',
         title: '各孔径孔数',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'apertureNumber'
     },
     {
-        key: 'bidBuyEndTime',
+        key: 'weldingEdge',
         title: '焊接边（mm）',
         editable: true,
         width: 200,
-        dataIndex: 'bidBuyEndTime'
+        dataIndex: 'weldingEdge'
     }
 ]
 
 export default function TowerCheck(): React.ReactNode {
     const history = useHistory();
+    const params = useParams<{ id: string, productSegmentId: string }>();
     const [ visible, setVisible ] = useState(false);
     const [ record, setRecord ] = useState({});
     const [ title, setTitle ] = useState('提交问题');
+    const [ refresh, setRefresh ] = useState(false);
 
-    const questionnaire = (_: undefined, record: Record<string,  any>, index: number, e: any) => {
+    const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {
         setVisible(true);
-        setRecord({ ...record, problemField: e, originalData: _ });
+        if(tip !== 'normal') {
+            const data: {} = await RequestUtil.get<{}>(`/tower-science/productStructure/issue/detail?id=${ params.productSegmentId }`);
+            setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data });
+            setTitle('查看问题');
+        } else {
+            setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id });
+        }
+    }
+
+    const checkColor = (record: Record<string, any>, dataIndex: string) => {
+        const red: number = record.redColumn.indexOf(dataIndex);
+        const green: number = record.greenColumn.indexOf(dataIndex);
+        const yellow: number = record.yellowColumn.indexOf(dataIndex);
+        if(red !== -1) {
+            return 'red';
+        } else if(green !== -1) {
+            return 'green';
+        } else if(yellow !== -1) {
+            return 'yellow';
+        } else {
+            return 'normal'
+        }
     }
     
     const columnsSetting = columns.map(col => {
         return {
             ...col,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            col.dataIndex === 'index' ? index + 1 : !col.editable? _ :  <span onDoubleClick={ (e) => { questionnaire( _ , record,  index, col.title) } }>{ _ }</span>)
-        }  
+                col.dataIndex === 'index' ? index + 1 
+                : !col.editable ? _ 
+                : <p onDoubleClick={ (e) => { questionnaire( _, record, col, checkColor(record, col.dataIndex)) }} className={ checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow : '' }>{ _ }</p>
+            )  
+        }     
     })
     
     return<> 
         <Page
-            path="/tower-market/bidInfo"
+            path="/tower-science/productStructure/list"
             columns={ columnsSetting }
+            requestData={{ productSegmentId: params.productSegmentId }}
             headTabs={ [] }
+            refresh={ refresh }
             extraOperation={ <Space direction="horizontal" size="small">
-                <Button type="primary" ghost>导出</Button>
-                <Button type="primary" ghost>完成校核</Button>
-                <Button type="primary" ghost>模型下载</Button>
-                <Button type="primary" ghost>样图下载</Button>
-                <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
+                {/* <Button type="primary" ghost>导出</Button> */}
+                <Button type="primary" onClick={ () => { 
+                    RequestUtil.get<{}>(`/tower-science/productSegment/completed/check?productSegmentId=${ params.productSegmentId }`).then(res => {
+                        history.goBack();
+                    }) 
+                } } ghost>完成校核</Button>
+                <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productSegment/segmentModelDownload', '模型', { productSegmentId: params.productSegmentId }) } ghost>模型下载</Button>
+                <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productSegment/segmentDrawDownload', '样图', { productSegmentId: params.productSegmentId }) } ghost>样图下载</Button>
+                <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
             </Space>}
             searchFormItems={ [
                 {
-                    name: 'startBidBuyEndTime',
+                    name: 'materialName',
                     label: '材料名称',
-                    children: <Select style={{ width: '120px' }} placeholder="请选择">
-                        <Select.Option value="0" key="0">11111</Select.Option>
-                        <Select.Option value="1" key="1">22222222</Select.Option>
-                        <Select.Option value="2" key="2">3333</Select.Option>
-                        <Select.Option value="3" key="3">4444444</Select.Option>
-                    </Select>
+                    children: <Input placeholder="请输入"/>
                 },
                 {
-                    name: 'startBidBuyEndTime',
+                    name: 'structureTexture',
                     label: '材质',
-                    children: <Select style={{ width: '120px' }} placeholder="请选择">
-                        <Select.Option value="0" key="0">放样人</Select.Option>
-                    </Select>
+                    children: <Input placeholder="请输入"/>
                 }
             ] }
         />
-        <QuestionnaireModal visible={ visible } record={ record } title={ title } modalCancel={ () => setVisible(false) }/>
+        <QuestionnaireModal visible={ visible } record={ record } title={ title } modalCancel={ () => { setVisible(false); setRefresh(!refresh); } }/>
     </>
 }
