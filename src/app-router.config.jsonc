@@ -807,7 +807,7 @@
     },
     { // 工作管理-杆塔信息-编辑包装清单
       "name": "编辑包装清单",
-      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:productId/packingListSetting/id",
+      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:productId/packingListSetting/:id",
       "module": "./pages/workMngt/setOut/PackingListSetting",
       "exact": true,
       "authority": "approvalm"
@@ -828,15 +828,28 @@
     },
     { // 工作管理-组焊列表-组焊清单
       "name": "组焊清单",
-      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId",
       "module": "./pages/workMngt/assemblyWelding/AssemblyWeldingListing",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-组焊列表-校核
-      "name": "组焊清单",
-      "path": "/workMngt/assemblyWeldingList/assemblyWeldingCheck/:id",
+      "name": "校核",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingCheck/:id/:productCategoryId",
       "module": "./pages/workMngt/assemblyWelding/AssemblyWeldingCheck",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-组焊列表-校核-问题单
+      "name": "问题单",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingCheck/:id/:productCategoryId/questionnaire/:segmentId",
+      "module": "./pages/workMngt/assemblyWelding/Questionnaire",
+      "exact": true,
+      "authority": "approvalm"
+    },{ // 工作管理-组焊列表-校核-查看问题单
+      "name": "查看问题单",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingCheck/:id/:productCategoryId/questionnairedetail/:segmentId",
+      "module": "./pages/workMngt/assemblyWelding/QuestionnaireDetail",
       "exact": true,
       "authority": "approvalm"
     },
