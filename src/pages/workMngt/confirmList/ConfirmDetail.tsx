@@ -9,7 +9,6 @@ import { Table, Input, InputNumber, Popconfirm, Typography, Select } from 'antd'
 import AuthUtil from '../../../utils/AuthUtil';
 import { downLoadFile } from '../../../utils';
 import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
-import { table } from 'node:console';
 interface Item {
   key: string;
   name: string;
