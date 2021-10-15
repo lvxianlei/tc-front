@@ -860,10 +860,17 @@
       "exact": true,
       "authority": "approvalm"
     },
-    { // 工作管理-螺栓信息
+    { // 工作管理-螺栓列表-螺栓信息
       "name": "螺栓信息",
       "path": "/workMngt/boltList/boltInformation/:id",
       "module": "./pages/workMngt/bolt/BoltInformation",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-螺栓列表-螺栓清单
+      "name": "螺栓清单",
+      "path": "/workMngt/boltList/boltListing/:id",
+      "module": "./pages/workMngt/bolt/BoltListing",
       "exact": true,
       "authority": "approvalm"
     },

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Spin, Button, Space, Modal, Row, Col, Input, message } from 'antd';
+import { Spin, Button, Space, Modal, Row, Col, Input, message, Image } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
@@ -67,6 +67,10 @@ export default function SetOutTaskDetail(): React.ReactNode {
     const detailData: any = data;
     const [ visible, setVisible ] = useState(false);
     const [ rejectReason, setRejectReason ] = useState("");
+    const [ pictureVisible, setPictureVisible ] = useState<boolean>(false);
+    const [ pictureUrl, setPictureUrl ] = useState('');
+    const handlePictureModalCancel = () => { setPictureVisible(false) }
+
 
     if (loading) {
         return <Spin spinning={loading}>
@@ -112,7 +116,12 @@ export default function SetOutTaskDetail(): React.ReactNode {
                         <Space direction="horizontal" size="small">
                             <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
                             {
-                                record.fileSuffix === 'pdf' ? <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : null
+                                record.fileSuffix === 'pdf' 
+                                ? 
+                                <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : ['jpg', 'jpeg', 'png', 'gif'].includes(record.fileSuffix) 
+                                ? 
+                                <Button type='link' onClick={ () => { setPictureUrl(record.id ? record.filePath : record.link); setPictureVisible(true); } }>预览</Button> 
+                                : null 
                             }
                         </Space>
                 ) }
@@ -132,10 +141,14 @@ export default function SetOutTaskDetail(): React.ReactNode {
             } } 
             onOk={ () => {
                 if(rejectReason) {
-                    RequestUtil.post(`/tower-science/loftingTask/refuse`, { id: params.id, description: rejectReason });
-                    setVisible(false); 
-                    history.goBack();
-                    setRejectReason("");
+                    if(/^[^(\s)]*$/.test(rejectReason)) {
+                        RequestUtil.post(`/tower-science/loftingTask/refuse`, { id: params.id, description: rejectReason });
+                        setVisible(false); 
+                        history.goBack();
+                        setRejectReason("");
+                    } else {
+                        message.warning('禁止输入空格');
+                    }
                 } else {
                     message.warning('请输入拒绝原因');
                 }
@@ -148,6 +161,9 @@ export default function SetOutTaskDetail(): React.ReactNode {
                 <Col span={ 4 }>拒绝原因<span style={{ color: 'red' }}>*</span></Col>
                 <Col span={ 19 } offset={ 1 }><Input placeholder="请输入" value={ rejectReason } onChange={ (e) => setRejectReason(e.target.value) }/></Col>
             </Row>
+        </Modal>
+        <Modal visible={ pictureVisible } onCancel={ handlePictureModalCancel } footer={ false }>
+            <Image src={ pictureUrl } preview={ false } />
         </Modal>
     </>
 }

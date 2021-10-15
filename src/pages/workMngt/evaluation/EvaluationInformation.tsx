@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Space, Modal, Input, Upload, Form, FormInstance, message } from 'antd';
+import { Button, Space, Modal, Input, Upload, Form, FormInstance, message, Image } from 'antd';
 import { DetailContent, CommonTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './Evaluation.module.less';
@@ -36,6 +36,8 @@ export interface EvaluationInformationState {
     readonly visible: boolean;
     readonly description?: string;
     readonly information?: IResponse;
+    readonly pictureVisible: boolean;
+    readonly pictureUrl?: string;
 }
 
 class EvaluationInformation extends React.Component<IEvaluationInformationRouteProps, EvaluationInformationState> {
@@ -56,7 +58,8 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
     }
 
     public state: EvaluationInformationState = {
-        visible: false
+        visible: false,
+        pictureVisible: false
     }
 
     private modalCancel(): void {
@@ -152,7 +155,13 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                                         <Space direction="horizontal" size="small">
                                             <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
                                             {
-                                                record.fileSuffix === 'pdf' ? <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : null
+                                                record.fileSuffix === 'pdf' 
+                                                ? 
+                                                <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> 
+                                                : ['jpg', 'jpeg', 'png', 'gif'].includes(record.fileSuffix) 
+                                                ? 
+                                                <Button type='link' onClick={ () => { this.setState({ pictureUrl: record.filePath, pictureVisible: true }) } }>预览</Button> 
+                                                : null 
                                             }
                                         </Space>
                                     )
@@ -233,9 +242,13 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                                             {
                                                 record.id ? <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button> : <Button type="link" onClick={ () => window.open(record.link) }>下载</Button> 
                                             }
-                                            
                                             {
-                                                record.fileSuffix !== 'pdf' ? null : record.id ? <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : <Button type="link" onClick={ () => window.open(record.link) }>预览</Button>
+                                                record.fileSuffix === 'pdf' 
+                                                ? 
+                                                <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : ['jpg', 'jpeg', 'png', 'gif'].includes(record.fileSuffix) 
+                                                ? 
+                                                <Button type='link' onClick={ () => { this.setState({ pictureUrl: record.id ? record.filePath : record.link, pictureVisible: true }) } }>预览</Button> 
+                                                : null 
                                             }
                                             {
                                                 this.state.information?.status === 4 ? null :
@@ -259,6 +272,13 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                         />
                     </DetailContent>
                 </Form>
+            </Modal>
+            <Modal visible={ this.state.pictureVisible } onCancel={ () => {
+                this.setState({
+                    pictureVisible: false
+                })
+            } } footer={ false }>
+                <Image src={ this.state.pictureUrl } preview={ false } />
             </Modal>
         </>
     }
