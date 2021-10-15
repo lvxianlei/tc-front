@@ -102,8 +102,7 @@ const baseColumns = [
     {
         "dataIndex": "bidEndTime",
         "title": "投标截止时间",
-        "type": "date",
-        "format": "YYYY-MM-DD"
+        "type": "date"
     },
     {
         "dataIndex": "applicantUserName",
@@ -112,8 +111,7 @@ const baseColumns = [
     {
         "dataIndex": "applicantTime",
         "title": "申请时间",
-        "type": "date",
-        "format": "YYYY-MM-DD"
+        "type": "date"
     },
     {
         "dataIndex": "description",
