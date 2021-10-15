@@ -527,6 +527,8 @@ export default function ConfirmDetail(): React.ReactNode {
                               console.log(saveData)
                               await RequestUtil.post('/tower-science/drawProductDetail/saveDrawProduct', saveData).then(()=>{
                                   message.success('保存成功！');
+                              }).then(()=>{
+                                history.push('/workMngt/confirmList')
                               })
                           }
                           else{
