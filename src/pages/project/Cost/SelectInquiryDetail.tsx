@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Modal, Upload, Button } from "antd"
 import { DetailTitle, CommonTable, BaseInfo } from "../../common"
-import { enclosure } from "../../project/managementDetailData.json"
+import { enclosure } from "../managementDetailData.json"
 import AuthUtil from "../../../utils/AuthUtil"
 import { downLoadFile } from "../../../utils"
 export type SelectType = "selectA" | "selectB" | "selectC"

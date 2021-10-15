@@ -1231,15 +1231,18 @@
     "costBase": [
         {
             "title": "评估单号",
-            "dataIndex": "a"
+            "dataIndex": "askCode",
+            "disabled": true
         },
         {
-            "title": "发起时间",
-            "dataIndex": "a"
+            "title": "发起日期",
+            "dataIndex": "createTime",
+            "disabled": true
         },
         {
             "title": "备注",
-            "dataIndex": "a"
+            "dataIndex": "des",
+            "type": "textarea"
         }
     ],
     "consultRecords": [

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, Row, Tabs, Radio, Spin, Modal, message } from 'antd'
 import { useHistory, useParams, Link } from 'react-router-dom'
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common'
-import CostDetail from './CostDetail'
+import CostDetail from './Cost'
 import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
 import {
     baseInfoData, productGroupColumns, bidDocColumns, paths,

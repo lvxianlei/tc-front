@@ -130,7 +130,6 @@
       "exact": true,
       "authority": "auth_section"
     },
-
     { // 成本评估配置
       "name": "成本评估配置",
       "path": "/sys/costconfig",
@@ -138,7 +137,20 @@
       "exact": true,
       "authority": "auth_section"
     },
-
+    { // 成本评估配置编辑
+      "name": "成本评估配置编辑",
+      "path": "/sys/costconfig/edit/:id",
+      "module": "./pages/system-mngt/CostConfig/CostEdit",
+      "exact": true,
+      "authority": "auth_section"
+    },
+    { // 成本评估配置编辑
+      "name": "成本评估配置编辑",
+      "path": "/sys/costconfig/detail/:id",
+      "module": "./pages/system-mngt/CostConfig/CostDetail",
+      "exact": true,
+      "authority": "auth_section"
+    },
     { // 销售任务单管理
       "name": "销售任务单管理",
       "path": "/prom/task",
@@ -435,9 +447,16 @@
       "authority": "sale_order"
     },
     { // 项目管理基础信息编辑
-      "name": "项目管理基础信息编辑",
+      "name": "基础信息编辑",
       "path": "/project/management/edit/base/:id",
       "module": "./pages/project/ManagementDetailEdit/BaseInfoEdit",
+      "exact": true,
+      "authority": "project_detail"
+    },
+    { // 项目管理成本评估编辑
+      "name": "成本评估编辑",
+      "path": "/project/management/edit/cost/:id",
+      "module": "./pages/project/Cost/CostEdit",
       "exact": true,
       "authority": "project_detail"
     },

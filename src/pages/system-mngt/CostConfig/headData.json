@@ -1,0 +1,53 @@
+{
+    "baseInfo": [
+        {
+            "title": "产品名称",
+            "dataIndex": "productName",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "角钢塔",
+                    "value": "角钢塔"
+                },
+                {
+                    "label": "钢管塔",
+                    "value": "钢管塔"
+                },
+                {
+                    "label": "四管塔",
+                    "value": "四管塔"
+                },
+                {
+                    "label": "架构",
+                    "value": "架构"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择产品类型..."
+                }
+            ]
+        },
+        {
+            "title": "钢材消耗定额(%)",
+            "dataIndex": "quota"
+        },
+        {
+            "title": "镀锌成本(元/吨)",
+            "dataIndex": "cost"
+        },
+        {
+            "title": "加工费(元/吨)",
+            "dataIndex": "laborCost"
+        },
+        {
+            "title": "公司税费(元/吨)",
+            "dataIndex": "taxation"
+        },
+        {
+            "title": "利润(元/吨)",
+            "dataIndex": "profit"
+        }
+    ]
+}
