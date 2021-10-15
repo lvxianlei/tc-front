@@ -15,7 +15,8 @@ for (let i = 1; i < 10; ++i) {
         "taskCode": Random.increment(), 
         "taskNumber": Random.increment(), 
         "updateStatusTime": Random.date('yyyy-MM-dd HH:mm'), 
-        "weldingLeader":  Random.cword(3,10)
+        "weldingLeader":  Random.cword(3,10),
+        "productCategoryId":  Random.increment()
     });
 }
 
@@ -34,7 +35,8 @@ module.exports = {
             "taskCode": Random.increment(), 
             "taskNumber": Random.increment(), 
             "updateStatusTime": Random.date('yyyy-MM-dd HH:mm'), 
-            "weldingLeader":  Random.cword(3,10)
+            "weldingLeader":  Random.cword(3,10),
+            "productCategoryId":  Random.increment()
         }].concat(records),
         current: Random.natural(1, 20),
         size: 10,
