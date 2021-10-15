@@ -160,6 +160,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             case "confirmDept":
                 return setConfirmLeader(userData.records);
             case "user":
+                form.setFieldsValue({ 'assignorId': '' })
                 return setUser(userData.records);
         }
     }

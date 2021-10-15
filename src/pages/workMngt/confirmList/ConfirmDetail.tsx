@@ -270,7 +270,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 呼高（m）', 
           dataIndex: 'basicHight', 
           type:'number',
-          width: 50,
+          width: 70,
           editable: true,
           key: 'basicHight' 
       },
@@ -278,7 +278,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '* 模式', 
           dataIndex: 'pattern', 
           type:'select',
-          width: 100,
+          width: 90,
           editable: true,
           key: 'pattern',
           enums: [
@@ -513,10 +513,21 @@ export default function ConfirmDetail(): React.ReactNode {
                               }}),
                               description
                           }
-                          if(tableDataSource.length>0){
+                          let saveDisabled = false;
+                          tableDataSource.forEach((item:any)=>{
+                            if(isEditing(item)){
+                              saveDisabled = true;
+                            }
+                          })
+                          if(saveDisabled){
+                            message.error('存在塔信息未保存！')
+                          }
+                          else if(tableDataSource.length>0){
                               console.log(saveData)
                               await RequestUtil.post('/tower-science/drawProductDetail/saveDrawProduct', saveData).then(()=>{
                                   message.success('保存成功！');
+                              }).then(()=>{
+                                history.push('/workMngt/confirmList')
                               })
                           }
                           else{
@@ -538,7 +549,16 @@ export default function ConfirmDetail(): React.ReactNode {
                             }}),
                             description
                           }
-                          if(tableDataSource.length>0){
+                          let saveDisabled = false;
+                          tableDataSource.forEach((item:any)=>{
+                            if(isEditing(item)){
+                              saveDisabled = true;
+                            }
+                          })
+                          if(saveDisabled){
+                            message.error('存在塔信息未保存！')
+                          }
+                          else if(tableDataSource.length>0){
                               console.log(submitData)
                               await RequestUtil.post('/tower-science/drawProductDetail/submitDrawProduct', submitData).then(()=>{
                                   message.success('提交成功！');
