@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Spin, Space, Modal, Form, Row, Col, Upload, message } from 'antd';
+import { Button, Spin, Space, Modal, Form, Row, Col, Upload, message, Image } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle } from '../../common';
 import useRequest from '@ahooksjs/use-request';
@@ -43,12 +43,15 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 export default function ConfirmDetail(): React.ReactNode {
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
+    const [pictureVisible, setPictureVisible] = useState<boolean>(false);
+    const [pictureUrl, setPictureUrl] = useState('');
     const [tableDataSource, setTableDataSource] = useState<object[]>([]);
     const [weight,setWeight] = useState<string>('0');
     const [description, setDescription] = useState('');
     const [attachInfo, setAttachInfo] = useState<any[]>([])
     const [form] = Form.useForm();
     const [formRef] = Form.useForm();
+
     const [editingKey, setEditingKey] = useState('');
     const isEditing = (record: Item) => record.key === editingKey;
 
@@ -400,6 +403,7 @@ export default function ConfirmDetail(): React.ReactNode {
         }
     }
     const handleModalCancel = () => {setVisible(false);form.resetFields();}
+    const handlePictureModalCancel = () => {setPictureVisible(false)}
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
@@ -649,12 +653,17 @@ export default function ConfirmDetail(): React.ReactNode {
                             <Space direction="horizontal" size="small">
                                 <Button type="link" onClick={() => downLoadFile(record.id?record.filePath:record.link)}>下载</Button>
                                 {record.fileSuffix==='pdf'?<Button type='link' onClick={()=>{window.open(record.id?record.filePath:record.link)}}>预览</Button>:null}
+                                {['jpg','jpeg', 'png', 'gif'].includes(record.fileSuffix)?<Button type='link' onClick={()=>{setPictureUrl(record.id?record.filePath:record.link);setPictureVisible(true);}}>预览</Button>:null}
                                 <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
+
                             </Space>
                         )
                     }
                 ]} dataSource={attachInfo}  pagination={ false }/>
             </DetailContent>
+            <Modal visible={pictureVisible} onCancel={handlePictureModalCancel} footer={false}>
+                <Image src={pictureUrl} preview={false}/>
+            </Modal>
             <Modal visible={visible} title="添加" onOk={handleModalOk} onCancel={handleModalCancel}  width={ 800 }>
                 <Form form={form} { ...formItemLayout }>
                     <Row>

@@ -5,6 +5,7 @@ import { DetailContent, CommonTable } from '../../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../../utils/RequestUtil';
 import AuthUtil from '../../../../utils/AuthUtil';
+import { useState } from 'react';
 
 const towerColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
@@ -27,7 +28,10 @@ const towerColumns = [
 
 export default function PickTowerDetail(): React.ReactNode {
     const history = useHistory()
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string, productSegmentId: string }>()
+    const [ url, setUrl ] = useState<string>('')
+    const [ urlBase, setUrlBase ] = useState<undefined|any>('')
+    const [ tableDataSource, setTableDataSource ] = useState<undefined|any[]>([])
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         // const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
         resole(data)
@@ -38,13 +42,19 @@ export default function PickTowerDetail(): React.ReactNode {
             <DetailContent operation={[
                 <Popconfirm
                     title="确认保存数据?"
-                    onConfirm={ () => {} }
+                    onConfirm={ async () => {
+                        await RequestUtil.post(`/tower-science/drawProductStructure/ocr/${params.productSegmentId}/save`).then(()=>{
+                            message.success('保存成功！')
+                        }).then(()=>{
+                            history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/pick/${params.productSegmentId}`)
+                        })
+                    } }
                     okText="确认"
                     cancelText="取消"
                 >   
-                    <Button  onClick={() => history.goBack()}>保存数据</Button>
+                    <Button type='primary'>保存数据</Button>
                 </Popconfirm>,
-                <Button key="goback" onClick={() => history.goBack()}>返回</Button>
+                <Button key="goback" onClick={() => history.goBack()} style={{marginLeft:"10px"}}>返回</Button>
             ]}>
                 <Space>
                 <Upload
@@ -63,66 +73,38 @@ export default function PickTowerDetail(): React.ReactNode {
                     }
                     beforeUpload = { 
                         (file) => {
-                            const isLt10M = file.size / 1024 / 1024 > 10;
+                            const reader = new FileReader();
+                            reader.readAsDataURL(file); // 读取图片文件
+                            reader.onload = (file) => {
+                                const params = {
+                                    myBase64: file?.target?.result, // 把 本地图片的base64编码传给后台，调接口，生成图片的url
+                                };
+                                setUrlBase(params.myBase64);
+                            }
                             return new Promise((resolve, reject) => {
-                                // if(this.state.contract.attachInfoDtos && this.state.contract.attachInfoDtos.length >= 10 ) {
-                                //     message.error('文件最多上传10个！')
-                                //     reject()
-                                // } else {
-                                //     resolve()
-                                // }
-                                // if (isLt10M) {
-                                //     message.error('上传文件不能大于10M')
-                                //     reject()
-                                // } else {
-                                //     resolve()
-                                // }
+                                resolve()
                             })
                         }
                     }
                     onChange={ (info)=>{
                         if (info.file.status === 'done') {
-                            // let index: number = 1;
-                            // if(this.state.contract.attachInfoDtos) {
-                            //     index = this.state.contract.attachInfoDtos.length + 1;
-                            // } else {
-                            //     index = 1;
-                            // } 
-                            // const contract: IContractInfo = this.state.contract;
-                            // let attachInfoDtos: IAttachDTO[] = contract.attachInfoDtos;
-                            // const attachInfoItem: IAttachDTO = {
-                            //     name: info.file.response.data.originalName,
-                            //     userName: info.file.response.data.userName,
-                            //     fileSize: info.file.response.data.size,
-                            //     description: '',
-                            //     filePath: info.file.response.data.name,
-                            //     fileUploadTime: info.file.response.data.fileUploadTime,
-                            //     fileSuffix: info.file.response.data.fileSuffix
-                            // };
-                            // operation.add(attachInfoItem);
-                            // if(attachInfoDtos) {
-                            //     attachInfoDtos.push(attachInfoItem);  
-                            // } else {
-                            //     attachInfoDtos = [attachInfoItem];
-                            // }
-                            // this.setState({
-                            //     contract: {
-                            //         ...(contract || {}),
-                            //         attachInfoDtos: attachInfoDtos
-                            //     }
-                            // })
+                            setUrl(info.file.response.data.link);
                         } else if (info.file.status === 'error') {
                             console.log(info.file, info.fileList);
                         }
                     } } showUploadList= {false}>
                         <Button type="primary">选择图片</Button>
                     </Upload>
-                    {/* <Button type='primary' onClick={()=>{window.open()}}>选择图片</Button> */}
-                    <Button type='primary' onClick={()=>{window.open()}}>识别文字</Button>
+                    <Button type='primary' onClick={async ()=>{
+                        const tableDataSource: any[]|undefined  = await RequestUtil.post(`/tower-science/drawProductStructure/ocr`,{file: urlBase});
+                        setTableDataSource(tableDataSource);
+                    }}>识别文字</Button>
                 </Space>
                 <div style={{ display: 'flex' }}>
-                <CommonTable dataSource={[]} columns={towerColumns}/>
-                <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
+                    <CommonTable dataSource={tableDataSource} columns={towerColumns}/>
+                    <div style={{ boxShadow:'0px 0px 5px 5px #ccc', width:'100%', marginLeft:'10px', textAlign:'center'}}>
+                        {url?<Image src={url} />:<span style={{lineHeight:"200px"}}>当前暂无图片</span>}
+                    </div>
                 </div>
             </DetailContent>
         </Spin>
