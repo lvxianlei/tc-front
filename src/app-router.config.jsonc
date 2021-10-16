@@ -455,7 +455,7 @@
     },
     { // 项目管理成本评估编辑
       "name": "成本评估编辑",
-      "path": "/project/management/edit/cost/:id",
+      "path": "/project/management/edit/cost/:id/:projectId",
       "module": "./pages/project/Cost/CostEdit",
       "exact": true,
       "authority": "project_detail"

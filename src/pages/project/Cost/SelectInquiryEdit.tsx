@@ -1,8 +1,9 @@
 import React, { useState } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, useHistory } from "react-router-dom"
 import { Modal, Upload, Button, Form, message } from "antd"
 import { DetailTitle, CommonTable, BaseInfo } from "../../common"
 import { enclosure } from "../managementDetailData.json"
+import { supplyBaseInfo, logisticBaseInfo, workmanshipBaseInfo } from "./costData.json"
 import AuthUtil from "../../../utils/AuthUtil"
 import { downLoadFile } from "../../../utils"
 import useRequest from '@ahooksjs/use-request'
@@ -21,97 +22,10 @@ const auditCode: any = {
     "selectC": 2
 }
 
-const supplyBaseInfo = [
-    {
-        title: "项目名称",
-        dataIndex: "projectName",
-        disabled: true
-    },
-    {
-        title: "客户名称",
-        dataIndex: "biddingPerson",
-        disabled: true
-    },
-    {
-        title: "投标截止日期",
-        dataIndex: "biddingEndTime",
-        disabled: true
-    },
-    {
-        title: "项目负责人",
-        dataIndex: "projectLeader",
-        disabled: true
-    },
-    {
-        title: "备注",
-        dataIndex: "remark",
-        type: "textarea"
-    }
-]
-
-const logisticBaseInfo = [
-    {
-        title: "项目名称",
-        dataIndex: "projectName",
-        disabled: true
-    },
-    {
-        title: "客户名称",
-        dataIndex: "biddingPerson",
-        disabled: true
-    },
-    {
-        title: "投标截止日期",
-        dataIndex: "biddingEndTime",
-        disabled: true
-    },
-    {
-        title: "项目负责人",
-        dataIndex: "projectLeader",
-        disabled: true
-    },
-    {
-        title: "备注",
-        dataIndex: "remark",
-        type: "textarea"
-    }
-]
-
-const workmanshipBaseInfo = [
-    {
-        title: "项目名称",
-        dataIndex: "projectName",
-        disabled: true
-    },
-    {
-        title: "客户名称",
-        dataIndex: "biddingPerson",
-        disabled: true
-    },
-    {
-        title: "投标截止日期",
-        dataIndex: "biddingEndTime",
-        disabled: true
-    },
-    {
-        title: "项目负责人",
-        dataIndex: "projectLeader",
-        disabled: true
-    },
-    {
-        title: "产品类型",
-        dataIndex: "productType"
-    },
-    {
-        title: "备注",
-        dataIndex: "remark",
-        type: "textarea"
-    }
-]
-
 export default function SelectInquiryEdit(props: any): JSX.Element {
     const [attachInfo, setAttachInfo] = useState<any[]>([])
     const { id } = useParams<{ id: string }>()
+    const history = useHistory()
     const [baseForm] = Form.useForm()
     const { loading, run } = useRequest<{ [key: string]: any }>((saveData: any) => new Promise(async (resole, reject) => {
         try {
@@ -161,16 +75,19 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
             const baseInfo = await baseForm.validateFields()
             const saveResult = await run({ ...baseInfo, attachInfoDTOS: attachInfo })
             message.success("保存成功...")
+            props.onOk && props.onOk(true)
             resove(true)
         } catch (error) {
             reject(false)
         }
     })
-    // {
-    // props.onOk && props.onOk(selectValue)
-    // }
 
-    return <Modal {...props} width={1011} title={auditEnum[props.type]} confirmLoading={loading} onOk={handleOk} destroyOnClose>
+    const handleCancel = () => {
+        props.onCancel && props.onCancel()
+        history.go(0)
+    }
+
+    return <Modal {...props} width={1011} title={auditEnum[props.type]} confirmLoading={loading} onCancel={handleCancel} onOk={handleOk} destroyOnClose>
         {props.type === "selectA" && <>
             <DetailTitle title="询价类型：供应询价" />
             <BaseInfo form={baseForm} columns={supplyBaseInfo} dataSource={data || {}} edit />

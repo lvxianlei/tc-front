@@ -41,7 +41,7 @@ export default function Information(): React.ReactNode {
     const [drawHForm] = Form.useForm()
     const [drawingCofirmForm] = Form.useForm()
     const [bidingForm] = Form.useForm()
-    const { loading, error, data, run } = useRequest((postData: { path: string, data: {} }) => new Promise(async (resolve, reject) => {
+    const { loading, run } = useRequest((postData: { path: string, data: {} }) => new Promise(async (resolve, reject) => {
         try {
             const result = await RequestUtil.post(postData.path, postData.data)
             resolve(result)
