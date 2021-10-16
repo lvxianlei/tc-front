@@ -87,7 +87,7 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                 {radioValue === "base" && <>
                     <BaseInfo columns={logisticAskInfo} dataSource={data || {}} />
                     <DetailTitle title="产品类型信息" />
-                    <CommonTable columns={logisticProductType} dataSource={data?.askLogisticsVOS || {}} />
+                    <CommonTable columns={logisticProductType} dataSource={data?.askLogisticsVOS || []} />
                     <DetailTitle title="咨询附件" />
                     <CommonTable columns={[{
                         title: "操作",

@@ -28,13 +28,14 @@ const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref
                 form: formRef,
                 editableKeys: [0]
             }}
+            scroll={{ x: true }}
             columns={data.head.map((cItem: any) => {
                 return ({
                     ...cItem,
+                    width: "200px",
                     valueType: data.type,
                     formItemProps: {
-                        rules: cItem.rules,
-                        validateTrigger: "onChange"
+                        rules: cItem.rules
                     },
                     valueEnum: cItem.enum
                 })
@@ -65,7 +66,7 @@ export default function CostEdit() {
     const [askProductDtos, setAskProductDtos] = useState<any[]>([])
     const { run } = useRequest<{ [key: string]: any }>((productName: string) => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-market/ProductType/getProductParamProportion?productName=${productName}`)
+            const result: any = await RequestUtil.get(`/tower-market/askInfo/getAskProductParam?productName=${productName}&voltage=`)
             setAskProductDtos([...askProductDtos, { ...result, data: [{ id: 0 }] }])
             resole(result)
         } catch (error) {

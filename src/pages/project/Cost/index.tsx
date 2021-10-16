@@ -28,6 +28,7 @@ export default function CostDetail() {
     const handleNewAudit = () => setVisible(true)
 
     const handleCatAudit = (type: any, catAskPriceId: string) => {
+        console.log((Object.keys(auditCode).find((item: string) => auditCode[item] === type) as any), catAskPriceId)
         setDetailType((Object.keys(auditCode).find((item: string) => auditCode[item] === type) as any))
         setCatAskPriceId(catAskPriceId)
     }
