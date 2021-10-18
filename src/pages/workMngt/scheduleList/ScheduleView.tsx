@@ -272,11 +272,10 @@ export default function ScheduleView(): React.ReactNode {
                             const loftingWithSectionCompletionTime = Number(resData.assignConfigVO.loftingWithSectionCompletionTime);
                             const smallSampleCompletionTime = Number(resData.assignConfigVO.smallSampleCompletionTime);
                             const boltCompletionTime = Number(resData.assignConfigVO.boltCompletionTime);
-                            let uom = new Date(resData.loftingDeliverTime);
-                            let newWeldingCompletionTime =new Date(uom.setHours(uom.getHours() + weldingCompletionTime));
-                            let newLoftingWithSectionCompletionTime =new Date(uom.setHours(uom.getHours() + loftingWithSectionCompletionTime));
-                            let newSmallSampleCompletionTime =new Date(uom.setHours(uom.getHours() + smallSampleCompletionTime));
-                            let newBoltCompletionTime =new Date(uom.setHours(uom.getHours() + boltCompletionTime));
+                            let newWeldingCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + weldingCompletionTime));
+                            let newLoftingWithSectionCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + loftingWithSectionCompletionTime));
+                            let newSmallSampleCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + smallSampleCompletionTime));
+                            let newBoltCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + boltCompletionTime + loftingWithSectionCompletionTime));
                             resData.weldingDeliverTime=newWeldingCompletionTime
                             resData.boltDeliverTime=newBoltCompletionTime
                             resData.smallSampleDeliverTime=newSmallSampleCompletionTime
@@ -501,11 +500,10 @@ export default function ScheduleView(): React.ReactNode {
                                     const loftingWithSectionCompletionTime = Number(scheduleData.assignConfigVO.loftingWithSectionCompletionTime);
                                     const smallSampleCompletionTime = Number(scheduleData.assignConfigVO.smallSampleCompletionTime);
                                     const boltCompletionTime = Number(scheduleData.assignConfigVO.boltCompletionTime);
-                                    let uom = new Date(date);
-                                    let newWeldingCompletionTime =new Date(uom.setHours(uom.getHours() + weldingCompletionTime));
-                                    let newLoftingWithSectionCompletionTime =new Date(uom.setHours(uom.getHours() + loftingWithSectionCompletionTime));
-                                    let newSmallSampleCompletionTime =new Date(uom.setHours(uom.getHours() + smallSampleCompletionTime));
-                                    let newBoltCompletionTime =new Date(uom.setHours(uom.getHours() + boltCompletionTime));
+                                    let newWeldingCompletionTime =new Date(new Date(date).setHours(new Date(date).getHours() + weldingCompletionTime));
+                                    let newLoftingWithSectionCompletionTime =new Date(new Date(date).setHours(new Date(date).getHours() + loftingWithSectionCompletionTime));
+                                    let newSmallSampleCompletionTime =new Date(new Date(date).setHours(new Date(date).getHours() + smallSampleCompletionTime));
+                                    let newBoltCompletionTime =new Date(new Date(date).setHours(new Date(date).getHours() + boltCompletionTime + loftingWithSectionCompletionTime));
                                     form.setFieldsValue({ 
                                         weldingDeliverTime: moment(newWeldingCompletionTime),
                                         boltDeliverTime: moment(newBoltCompletionTime), 
