@@ -69,6 +69,8 @@ const columns = [
                     return '已完成';
                 case 6:
                     return '已提交';
+                default:
+                    return '-';
             }
         }
     },
@@ -107,6 +109,8 @@ const columns = [
                     return '已完成';
                 case 5:
                     return '已提交';
+                default:
+                    return '-';
             }
         }
     },
@@ -139,6 +143,8 @@ const columns = [
                     return '已完成';
                 case 5:
                     return '已提交';
+                default:
+                    return '-';
             }
         }
     },
@@ -171,6 +177,8 @@ const columns = [
                     return '已完成';
                 case 5:
                     return '已提交';
+                default:
+                    return '-';
             }
         }
     },
@@ -203,6 +211,8 @@ const columns = [
                     return '已完成';
                 case 5:
                     return '已提交';
+                default:
+                    return '-';
             }
         }
     }

@@ -50,7 +50,7 @@ module.exports = {
             "loftingUserName": Random.cword(5,10),
             "materialDeliverTime": Random.date('yyyy-MM-dd'),
             "materialLeaderName": Random.cword(5,10),
-            "materialStatus":  Random.natural(11),
+            "materialStatus":  -1,
             "materialUserName": Random.cword(5,10),
             "name": Random.cword(5,10),
             "num":  Random.natural(11),

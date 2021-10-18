@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { Button, Row, Tabs, Radio, Spin, Upload, Modal, message } from 'antd'
+import { Button, Row, Tabs, Radio, Spin, Modal, message } from 'antd'
 import { useHistory, useParams, Link } from 'react-router-dom'
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common'
+import CostDetail from './Cost'
 import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
 import {
     baseInfoData, productGroupColumns, bidDocColumns, paths,
@@ -42,7 +43,7 @@ export default function ManagementDetail(): React.ReactNode {
         productAssistStatisticsVos: []
     })
     const [salesPlanStatus, setSalesPlanStatus] = useState<string>("")
-    const { loading, error, data, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
+    const { loading, data, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
         if (params.tab === "contract") {
             resole({})
             return;
@@ -50,6 +51,11 @@ export default function ManagementDetail(): React.ReactNode {
         if (["productGroup", "salesPlan"].includes(params.tab as string)) {
             const result: { [key: string]: any } = await RequestUtil.get(`${paths[params.tab || 'base']}`, { projectId: params.id, ...postData })
             resole(result)
+            return
+        }
+        if (["cost"].includes(params.tab as string)) {
+            // const result: { [key: string]: any } = await RequestUtil.get(`${paths[params.tab || 'base']}`, { projectId: params.id, ...postData })
+            resole({})
             return
         }
         const result: { [key: string]: any } = await RequestUtil.get(`${paths[params.tab || 'base']}/${params.id}`)
@@ -196,6 +202,7 @@ export default function ManagementDetail(): React.ReactNode {
                 ...enclosure
             ]} dataSource={data?.attachVos} />
         </DetailContent>,
+        tab_cost: <CostDetail />,
         tab_bidDoc: <DetailContent
             operation={[
                 <Button key="edit" type="primary" style={{ marginRight: 16 }}

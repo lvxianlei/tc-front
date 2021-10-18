@@ -59,6 +59,8 @@ const columns = [
                     return '已完成';
                 case 4:
                     return '已提交';
+                default:
+                    return '-';
             }
         }
     },
@@ -93,6 +95,8 @@ const columns = [
                     return '已完成';
                 case 3:
                     return '已提交';
+                default:
+                    return '-';
             }
         }
     }

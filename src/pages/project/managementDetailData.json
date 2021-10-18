@@ -54,6 +54,11 @@
             "format": "YYYY-MM-DD"
         },
         {
+            "title": "地区",
+            "dataIndex": "address",
+            "type": "select"
+        },
+        {
             "title": "招标人",
             "dataIndex": "biddingPerson",
             "type": "popTable",
@@ -1228,8 +1233,74 @@
             "dataIndex": "productWeight"
         }
     ],
+    "costBase": [
+        {
+            "title": "评估单号",
+            "dataIndex": "askCode",
+            "disabled": true
+        },
+        {
+            "title": "发起日期",
+            "dataIndex": "createTime",
+            "disabled": true
+        },
+        {
+            "title": "备注",
+            "dataIndex": "des",
+            "type": "textarea"
+        }
+    ],
+    "consultRecords": [
+        {
+            "title": "发起人",
+            "dataIndex": "createUserName"
+        },
+        {
+            "title": "咨询部门",
+            "dataIndex": "askType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "供应"
+                },
+                {
+                    "value": 1,
+                    "label": "物流"
+                },
+                {
+                    "value": 2,
+                    "label": "工艺"
+                }
+            ]
+        },
+        {
+            "title": "咨询对象",
+            "dataIndex": "askPersonName"
+        },
+        {
+            "title": "咨询时间",
+            "dataIndex": "createTime"
+        },
+        {
+            "title": "咨询状态",
+            "dataIndex": "askStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "已发送申请"
+                },
+                {
+                    "value": 1,
+                    "label": "已回复"
+                }
+            ]
+        }
+    ],
     "paths": {
         "base": "/tower-market/projectInfo",
+        "cost": "/tower-market/cost",
         "bidDoc": "/tower-market/bidDoc",
         "bidResult": "/tower-market/bidBase",
         "frameAgreement": "/tower-market/frameAgreement",

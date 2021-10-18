@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Space, Modal, Input } from 'antd';
+import { Button, Space, Modal, Input, Image } from 'antd';
 import { DetailContent, CommonTable } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import styles from './AssessmentTask.module.less';
@@ -23,6 +23,8 @@ export interface AssessmentInformationState {
     readonly visible: boolean;
     readonly description?: string;
     readonly assessFileList?: IFileList[];
+    readonly pictureVisible: boolean;
+    readonly pictureUrl?: string;
 }
 class AssessmentInformation extends React.Component<IAssessmentInformationRouteProps, AssessmentInformationState> {
     constructor(props: IAssessmentInformationRouteProps) {
@@ -30,7 +32,8 @@ class AssessmentInformation extends React.Component<IAssessmentInformationRouteP
     }
 
     public state: AssessmentInformationState = {
-        visible: false
+        visible: false,
+        pictureVisible: false
     }
 
     private modalCancel(): void {
@@ -81,7 +84,12 @@ class AssessmentInformation extends React.Component<IAssessmentInformationRouteP
                                 <Space direction="horizontal" size="small">
                                     <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
                                     {
-                                        record.fileSuffix === 'pdf' ? <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : null
+                                        record.fileSuffix === 'pdf' 
+                                        ? 
+                                        <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : ['jpg', 'jpeg', 'png', 'gif'].includes(record.fileSuffix) 
+                                        ? 
+                                        <Button type='link' onClick={ () => { this.setState({ pictureUrl: record.id ? record.filePath : record.link, pictureVisible: true }) } }>预览</Button> 
+                                        : null 
                                     }
                                 </Space>
                         ) }
@@ -90,6 +98,13 @@ class AssessmentInformation extends React.Component<IAssessmentInformationRouteP
                         pagination={ false }
                     />
                 </DetailContent>
+            </Modal>
+            <Modal visible={ this.state.pictureVisible } onCancel={ () => {
+                this.setState({
+                    pictureVisible: false
+                })
+            } } footer={ false }>
+                <Image src={ this.state.pictureUrl } preview={ false } />
             </Modal>
         </>
     }

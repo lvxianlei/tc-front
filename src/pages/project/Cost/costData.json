@@ -1,0 +1,384 @@
+{
+    "supplyBaseInfo": [
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName",
+            "disabled": true
+        },
+        {
+            "title": "客户名称",
+            "dataIndex": "biddingPerson",
+            "disabled": true
+        },
+        {
+            "title": "投标截止日期",
+            "dataIndex": "biddingEndTime",
+            "disabled": true
+        },
+        {
+            "title": "项目负责人",
+            "dataIndex": "projectLeader",
+            "disabled": true
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark",
+            "type": "textarea"
+        }
+    ],
+    "supplyAskInfo": [
+        {
+            "title": "咨询时间",
+            "dataIndex": "createTime"
+        },
+        {
+            "title": "咨询对象",
+            "dataIndex": "askPersonName"
+        },
+        {
+            "title": "咨询状态",
+            "dataIndex": "askStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "未回复"
+                },
+                {
+                    "value": 0,
+                    "label": "已回复"
+                }
+            ]
+        },
+        {
+            "title": "回复时间",
+            "dataIndex": "updateTime"
+        }
+    ],
+    "logisticBaseInfo": [
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName",
+            "disabled": true
+        },
+        {
+            "title": "客户名称",
+            "dataIndex": "biddingPerson",
+            "disabled": true
+        },
+        {
+            "title": "投标截止日期",
+            "dataIndex": "biddingEndTime",
+            "disabled": true
+        },
+        {
+            "title": "项目负责人",
+            "dataIndex": "projectLeader",
+            "disabled": true
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark",
+            "type": "textarea"
+        }
+    ],
+    "logisticAskInfo": [
+        {
+            "title": "询价类型",
+            "dataIndex": "askType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "供应"
+                },
+                {
+                    "value": 1,
+                    "label": "物流"
+                },
+                {
+                    "value": 1,
+                    "label": "工艺"
+                }
+            ]
+        },
+        {
+            "title": "咨询时间",
+            "dataIndex": "createTime"
+        },
+        {
+            "title": "咨询对象",
+            "dataIndex": "askPersonName"
+        },
+        {
+            "title": "咨询状态",
+            "dataIndex": "askStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "未回复"
+                },
+                {
+                    "value": 1,
+                    "label": "已回复"
+                }
+            ]
+        },
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName"
+        },
+        {
+            "title": "回复时间",
+            "dataIndex": "updateTime"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark"
+        }
+    ],
+    "logisticProductType": [
+        {
+            "title": "产品类型",
+            "dataIndex": "productType"
+        },
+        {
+            "title": "重量(吨)",
+            "dataIndex": "weight"
+        },
+        {
+            "title": "收货地址",
+            "dataIndex": "address"
+        },
+        {
+            "title": "是否地面交货",
+            "dataIndex": "isGroundReceiving",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "否"
+                },
+                {
+                    "value": 1,
+                    "label": "是"
+                }
+            ]
+        },
+        {
+            "title": "地面交货价格(元/吨)",
+            "dataIndex": "groundReceivingPrice"
+        },
+        {
+            "title": "物流价格(元/吨)",
+            "dataIndex": "logisticsPrice"
+        }
+    ],
+    "logisticProductReverdType": [
+        {
+            "title": "产品类型",
+            "dataIndex": "productType"
+        },
+        {
+            "title": "收货地址",
+            "dataIndex": "address"
+        },
+        {
+            "title": "是否地面交货",
+            "dataIndex": "isGroundReceiving",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "否"
+                },
+                {
+                    "value": 1,
+                    "label": "是"
+                }
+            ]
+        }
+    ],
+    "workmanshipReverd": [
+        {
+            "title": "询价类型",
+            "dataIndex": "askType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "供应"
+                },
+                {
+                    "value": 1,
+                    "label": "物流"
+                },
+                {
+                    "value": 1,
+                    "label": "工艺"
+                }
+            ]
+        },
+        {
+            "title": "咨询时间",
+            "dataIndex": "createTime"
+        },
+        {
+            "title": "咨询对象",
+            "dataIndex": "askPersonName"
+        },
+        {
+            "title": "咨询状态",
+            "dataIndex": "askStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "未回复"
+                },
+                {
+                    "value": 1,
+                    "label": "已回复"
+                }
+            ]
+        },
+        {
+            "title": "特殊工艺",
+            "dataIndex": "specialProcess"
+        },
+        {
+            "title": "回复时间",
+            "dataIndex": "updateTime"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark"
+        }
+    ],
+    "workmanshipBaseInfo": [
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName",
+            "disabled": true
+        },
+        {
+            "title": "客户名称",
+            "dataIndex": "biddingPerson",
+            "disabled": true
+        },
+        {
+            "title": "投标截止日期",
+            "dataIndex": "biddingEndTime",
+            "disabled": true
+        },
+        {
+            "title": "项目负责人",
+            "dataIndex": "projectLeader",
+            "disabled": true
+        },
+        {
+            "title": "产品类型",
+            "dataIndex": "productType"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark",
+            "type": "textarea"
+        }
+    ],
+    "materialPriceHead": [
+        {
+            "title": "询价id",
+            "dataIndex": "askId"
+        },
+        {
+            "title": "批次",
+            "dataIndex": "batch"
+        },
+        {
+            "title": "钢板Q235",
+            "dataIndex": "gbqBce"
+        },
+        {
+            "title": "钢板Q355",
+            "dataIndex": "gbqCee"
+        },
+        {
+            "title": "钢板Q420",
+            "dataIndex": "gbqDbj"
+        },
+        {
+            "title": "钢板Q460",
+            "dataIndex": "gbqDfj"
+        },
+        {
+            "title": "焊管Q235",
+            "dataIndex": "hgqBce"
+        },
+        {
+            "title": "焊管Q355",
+            "dataIndex": "hgqCee"
+        },
+        {
+            "title": "焊管Q420",
+            "dataIndex": "hgqDbj"
+        },
+        {
+            "title": "焊管Q460",
+            "dataIndex": "hgqDfj"
+        },
+        {
+            "title": "原材料报价id",
+            "dataIndex": "id"
+        },
+        {
+            "title": "角钢Q235",
+            "dataIndex": "jgqBce"
+        },
+        {
+            "title": "角钢Q355",
+            "dataIndex": "jgqCee"
+        },
+        {
+            "title": "角钢Q420",
+            "dataIndex": "jgqDbj"
+        },
+        {
+            "title": "Q355大角钢(220-250)",
+            "dataIndex": "qceeDjg"
+        },
+        {
+            "title": "Q420大角钢(220-250)",
+            "dataIndex": "qdbjDjg"
+        },
+        {
+            "title": "报价日期",
+            "dataIndex": "quoteDate"
+        },
+        {
+            "title": "圆钢35#",
+            "dataIndex": "ygCe"
+        },
+        {
+            "title": "圆钢42CRMO",
+            "dataIndex": "ygDb"
+        },
+        {
+            "title": "圆钢45#",
+            "dataIndex": "ygDe"
+        },
+        {
+            "title": "圆钢40CR",
+            "dataIndex": "ygDj"
+        },
+        {
+            "title": "圆刚Q235",
+            "dataIndex": "ygqBce"
+        },
+        {
+            "title": "圆钢Q355",
+            "dataIndex": "ygqCee"
+        }
+    ]
+}
