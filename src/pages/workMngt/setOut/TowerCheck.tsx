@@ -294,7 +294,7 @@ export default function TowerCheck(): React.ReactNode {
                 <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productSegment/segmentModelDownload', '模型', { productSegmentId: params.productSegmentId }) } ghost>模型下载</Button>
                 <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productSegment/segmentDrawDownload', '样图', { productSegmentId: params.productSegmentId }) } ghost>样图下载</Button>
                 <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
-            </Space>}
+            </Space> }
             searchFormItems={ [
                 {
                     name: 'materialName',
