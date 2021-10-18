@@ -24,6 +24,7 @@ export interface AssemblyWeldingNewState {
     readonly selectedRowKeys?: [];
     readonly weldingDetailedStructureList?: IComponentList[];
     readonly baseData?: IBaseData;
+    readonly mainPartId?: string;
 }
 
 export interface IComponentList {
@@ -209,6 +210,7 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                         id: this.props.segmentId,
                         ...this.props.record,
                         ...values,
+                        mainPartId: this.state.mainPartId,
                         weldingDetailedStructureList: [ ...(weldingDetailedStructureList || []) ]
                     }
                     RequestUtil.get(`/tower-science/welding`, { ...value }).then(res => {
@@ -322,8 +324,10 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                 render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                     <Radio key={ record.structureId } checked={ this.state.weldingDetailedStructureList && this.state.weldingDetailedStructureList[index].isMainPart === 1 } onChange={ (e) => {           
                         let weldingDetailedStructureList: IComponentList[] = this.state.weldingDetailedStructureList || [];
-                        console.log(e.target.checked)
                         if(e.target.checked) {
+                            this.setState({
+                                mainPartId: record.code
+                            })
                             weldingDetailedStructureList = weldingDetailedStructureList.map((item: IComponentList, ind: number) => {
                                 if(index === ind) {
                                     return {
