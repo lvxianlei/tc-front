@@ -4,6 +4,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
 import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
+import useRequest from '@ahooksjs/use-request';
 
 export default function SampleDraw(): React.ReactNode {
     const params = useParams<{ id: string }>()
@@ -13,6 +14,11 @@ export default function SampleDraw(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [url, setUrl] = useState<string>('');
     const [form] = Form.useForm();
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get(`/tower-science/smallSample/sampleStat/${params.id}`)
+        resole(data)
+    }), {})
+    const headerName:any = data;
     const handleModalOk = async () => {
         try {
             const submitData = await form.validateFields()
@@ -31,16 +37,16 @@ export default function SampleDraw(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'partName',
+            key: 'segmentName',
             title: '段名',
             width: 50,
-            dataIndex: 'partName'
+            dataIndex: 'segmentName'
         },
         {
-            key: 'componentCode',
+            key: 'code',
             title: '构建编号',
             width: 100,
-            dataIndex: 'componentCode'
+            dataIndex: 'code'
         },
         {
             key: 'materialName',
@@ -137,7 +143,7 @@ export default function SampleDraw(): React.ReactNode {
                         <Button type="primary">完成小样图</Button>
                     </Popconfirm>
                     <Button type="primary" onClick={() => history.goBack()}>返回上一级</Button>
-                    <span>小样图数：23/100</span>
+                    <span>小样图数：{headerName?.uploadSmallSampleCount}/{headerName?.noSmallSampleCount}</span>
                     </Space>
                 }
                 searchFormItems={[

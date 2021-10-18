@@ -19,10 +19,10 @@ export default function SampleDrawList(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'taskCode',
+            key: 'taskNum',
             title: '放样任务编号',
             width: 100,
-            dataIndex: 'taskCode'
+            dataIndex: 'taskNum'
         },
         {
             key: 'priority',
@@ -48,10 +48,10 @@ export default function SampleDrawList(): React.ReactNode {
             }
         },
         {
-            key: 'taskNumber',
+            key: 'externalTaskNum',
             title: '任务单编号',
             width: 100,
-            dataIndex: 'taskNumber'
+            dataIndex: 'externalTaskNum'
         },
         {
             key: 'saleOrderNumber',
@@ -184,7 +184,7 @@ export default function SampleDrawList(): React.ReactNode {
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'priority',
+                    name: 'smallSampleStatus',
                     label:'小样图状态',
                     children:   <Select style={{width:"100px"}}>
                                     <Select.Option value={''} key ={''}>全部</Select.Option>

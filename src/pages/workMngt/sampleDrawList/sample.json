@@ -35,7 +35,7 @@
             "title": "杆塔（基）"
         },
         {
-            "dataIndex": "productCategoryType",
+            "dataIndex": "productType",
             "title": "产品类型"
         },
         {
