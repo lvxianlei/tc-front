@@ -242,7 +242,7 @@ export default function TowerCheck(): React.ReactNode {
 
     const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {
         setVisible(true);
-        if(tip !== 'normal') {
+        if(tip === 'normal') {
             const data: {} = await RequestUtil.get<{}>(`/tower-science/productStructure/issue/detail?id=${ params.productSegmentId }`);
             setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data });
             setTitle('查看问题');
