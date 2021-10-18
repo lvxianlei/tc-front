@@ -917,6 +917,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 工作管理-螺栓列表-校核
+      "name": "螺栓清单",
+      "path": "/workMngt/boltList/boltCheck/:id",
+      "module": "./pages/workMngt/bolt/BoltCheck",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 工作管理-小样图列表
       "name": "小样图列表",
       "path": "/workMngt/sampleDrawList",
