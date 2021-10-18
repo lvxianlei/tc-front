@@ -34,14 +34,15 @@ const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref
             }}
             scroll={{ x: true }}
             columns={data.head.map((cItem: any) => {
+                console.log(cItem)
                 return ({
                     ...cItem,
                     colSize: 4,
-                    valueType: data.type,
+                    valueType: cItem.type,
                     formItemProps: {
                         rules: cItem.rules
                     },
-                    valueEnum: cItem.enum
+                    valueEnum: cItem.enum && new Map(cItem.enum.map((enumItem: any) => [enumItem.value, { text: enumItem.label }]))
                 })
             })}
             value={[data.data]}
