@@ -83,7 +83,7 @@ export default function EvaluationList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                     {
-                        AuthUtil.getUserId().userId !== record.assessUser ? <Button type="link" disabled>评估信息</Button>
+                        AuthUtil.getUserId() !== record.assessUser ? <Button type="link" disabled>评估信息</Button>
                         : <EvaluationInformation id={ record.id } updateList={ () => setRefresh(!refresh) }/>
                     }
                 </Space>
