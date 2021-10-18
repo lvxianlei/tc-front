@@ -72,6 +72,10 @@ export default abstract class AuthUtil {
         return sessionStorage.getItem(REFRENSH_TOKEN) || ''
     }
 
+    public static getUserId(): any {
+        return JSON.parse(localStorage.getItem('USER_INFO') || '');
+    }
+
     /**
      * @static
      * @description Sets sinzetech auth
