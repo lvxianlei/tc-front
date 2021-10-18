@@ -49,6 +49,15 @@ export default function CostDetail() {
         }
     }))
 
+    // const { loading: deleteLoading, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    //     try {
+    //         const result: any = await RequestUtil.delete(`/tower-market/askInfo/delAskInfoByProId/${id}`)
+    //         resole(result)
+    //     } catch (error) {
+    //         reject(error)
+    //     }
+    // }))
+
     return <>
         <SelectInquiryEdit type={selectType} visible={!!selectType} onOk={() => setSelectType("")} onCancel={() => setSelectType("")} destroyOnClose />
         <SelectInquiryDetail type={detailType} visible={!!detailType} onOk={() => setDetailType("")} onCancel={() => setDetailType("")} id={catAskPriceId} destroyOnClose />
@@ -74,7 +83,7 @@ export default function CostDetail() {
                 <BaseInfo columns={costBase.map((item: any) => ["projectLeader", "biddingPerson"].includes(item.dataIndex) ? ({ title: item.title, dataIndex: item.dataIndex }) : item)} dataSource={{}} />
                 <DetailTitle title="产品类型成本评估" />
                 {data?.askInfo?.productArr.map((item: any, index: number) => <div key={index}>
-                    <DetailTitle title={item.title} operation={[<Button type="primary" key="delete">删除产品</Button>]} />
+                    <DetailTitle title={item.title} />
                     <CommonTable columns={[
                         {
                             title: '序号',
