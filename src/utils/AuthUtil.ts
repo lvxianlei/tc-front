@@ -11,6 +11,7 @@ import RequestUtil from './RequestUtil'
 const TENANT_ID_KEY: string = 'SINZETECH_TENANT_ID'
 const TOKEN_KEY: string = 'SINZETECH_TOKEN'
 const REFRENSH_TOKEN: string = 'SINZETECH_REFRENSH_TOKEN'
+const USER_ID: string = 'USER_ID'
 export default abstract class AuthUtil {
 
     static timeLength = 50 * 60 * 1000
@@ -71,9 +72,11 @@ export default abstract class AuthUtil {
     public static getRefreshToken(): string {
         return sessionStorage.getItem(REFRENSH_TOKEN) || ''
     }
-
+    public static setUserId(userId: string): void {
+        sessionStorage.setItem(USER_ID, userId)
+    }
     public static getUserId(): any {
-        return JSON.parse(localStorage.getItem('USER_INFO') || '');
+        return sessionStorage.getItem(USER_ID)||'';
     }
 
     /**

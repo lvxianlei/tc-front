@@ -242,7 +242,7 @@ export default function TowerCheck(): React.ReactNode {
 
     const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {
         setVisible(true);
-        if(tip !== 'normal') {
+        if(tip === 'normal') {
             const data: {} = await RequestUtil.get<{}>(`/tower-science/productStructure/issue/detail?id=${ params.productSegmentId }`);
             setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data });
             setTitle('查看问题');
@@ -294,7 +294,7 @@ export default function TowerCheck(): React.ReactNode {
                 <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productSegment/segmentModelDownload', '模型', { productSegmentId: params.productSegmentId }) } ghost>模型下载</Button>
                 <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productSegment/segmentDrawDownload', '样图', { productSegmentId: params.productSegmentId }) } ghost>样图下载</Button>
                 <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
-            </Space>}
+            </Space> }
             searchFormItems={ [
                 {
                     name: 'materialName',

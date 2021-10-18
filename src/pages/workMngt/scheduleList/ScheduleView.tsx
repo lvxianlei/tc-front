@@ -272,11 +272,10 @@ export default function ScheduleView(): React.ReactNode {
                             const loftingWithSectionCompletionTime = Number(resData.assignConfigVO.loftingWithSectionCompletionTime);
                             const smallSampleCompletionTime = Number(resData.assignConfigVO.smallSampleCompletionTime);
                             const boltCompletionTime = Number(resData.assignConfigVO.boltCompletionTime);
-                            let uom = new Date(resData.loftingDeliverTime);
-                            let newWeldingCompletionTime =new Date(uom.setHours(uom.getHours() + weldingCompletionTime));
-                            let newLoftingWithSectionCompletionTime =new Date(uom.setHours(uom.getHours() + loftingWithSectionCompletionTime));
-                            let newSmallSampleCompletionTime =new Date(uom.setHours(uom.getHours() + smallSampleCompletionTime));
-                            let newBoltCompletionTime =new Date(uom.setHours(uom.getHours() + boltCompletionTime));
+                            let newWeldingCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + weldingCompletionTime));
+                            let newLoftingWithSectionCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + loftingWithSectionCompletionTime));
+                            let newSmallSampleCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + smallSampleCompletionTime));
+                            let newBoltCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + boltCompletionTime + loftingWithSectionCompletionTime));
                             resData.weldingDeliverTime=newWeldingCompletionTime
                             resData.boltDeliverTime=newBoltCompletionTime
                             resData.smallSampleDeliverTime=newSmallSampleCompletionTime
@@ -318,20 +317,28 @@ export default function ScheduleView(): React.ReactNode {
         const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
         switch (title) {
             case "materialLeaderDepartment":
+                form.setFieldsValue({materialLeader:''});
                 return setMaterialUser(userData.records);
             case "materialPartLeaderDepartment":
+                form.setFieldsValue({materialPartLeader:''});
                 return setMaterialPartUser(userData.records);
             case "smallSampleLeaderDepartment":
+                form.setFieldsValue({smallSampleLeader:''});
                 return setSmallSampleUser(userData.records);
             case "loftingPartLeaderDepartment":
+                form.setFieldsValue({loftingPartLeader:''});
                 return setLoftingPartUser(userData.records);
             case "loftingLeaderDepartment":
+                form.setFieldsValue({loftingLeader:''});
                 return setLoftingUser(userData.records);
             case "weldingLeaderDepartment":
+                form.setFieldsValue({weldingLeader:''});
                 return setWeldingUser(userData.records);
             case "boltLeaderDepartment":
+                form.setFieldsValue({boltLeader:''});
                 return setBoltUser(userData.records);
             case "materialLeaderDepartmentQuery":
+                form.setFieldsValue({materialLeader:''});
                 return setMaterialLeader(userData.records);
         };
     }
@@ -493,11 +500,10 @@ export default function ScheduleView(): React.ReactNode {
                                     const loftingWithSectionCompletionTime = Number(scheduleData.assignConfigVO.loftingWithSectionCompletionTime);
                                     const smallSampleCompletionTime = Number(scheduleData.assignConfigVO.smallSampleCompletionTime);
                                     const boltCompletionTime = Number(scheduleData.assignConfigVO.boltCompletionTime);
-                                    let uom = new Date(date);
-                                    let newWeldingCompletionTime =new Date(uom.setHours(uom.getHours() + weldingCompletionTime));
-                                    let newLoftingWithSectionCompletionTime =new Date(uom.setHours(uom.getHours() + loftingWithSectionCompletionTime));
-                                    let newSmallSampleCompletionTime =new Date(uom.setHours(uom.getHours() + smallSampleCompletionTime));
-                                    let newBoltCompletionTime =new Date(uom.setHours(uom.getHours() + boltCompletionTime));
+                                    let newWeldingCompletionTime =new Date(new Date(date).setHours(new Date(date).getHours() + weldingCompletionTime));
+                                    let newLoftingWithSectionCompletionTime =new Date(new Date(date).setHours(new Date(date).getHours() + loftingWithSectionCompletionTime));
+                                    let newSmallSampleCompletionTime =new Date(new Date(date).setHours(new Date(date).getHours() + smallSampleCompletionTime));
+                                    let newBoltCompletionTime =new Date(new Date(date).setHours(new Date(date).getHours() + boltCompletionTime + loftingWithSectionCompletionTime));
                                     form.setFieldsValue({ 
                                         weldingDeliverTime: moment(newWeldingCompletionTime),
                                         boltDeliverTime: moment(newBoltCompletionTime), 

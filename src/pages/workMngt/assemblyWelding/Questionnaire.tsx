@@ -15,272 +15,273 @@ import { FixedType } from 'rc-table/lib/interface';
 import { IComponentList } from './AssemblyWeldingNew';
 
 export default function Questionnaire(): React.ReactNode {
-const tableColumns = [
-    { 
-        key: 'index', 
-        title: '序号', 
-        dataIndex: 'index', 
-        width: 50, 
-        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) 
-    },
-    {
-        key: 'createDeptName',
-        title: '操作部门',
-        dataIndex: 'createDeptName', 
-    },
-    {  
-        key: 'createUserName', 
-        title: '操作人', 
-        dataIndex: 'createUserName' 
-    },
-    { 
-        key: 'createTime', 
-        title: '操作时间', 
-        dataIndex: 'createTime' 
-    },
-    {
-        key: 'currentStatus', 
-        title: '问题单状态', 
-        dataIndex: 'currentStatus',
-        render: (status: number): React.ReactNode => {
-            switch (status) {
-                case 1:
-                    return '待修改';
-                case 2:
-                    return '已修改';
-                case 3:
-                    return '已拒绝';
-                case 4:
-                    return '已删除';
+    const tableColumns = [
+        { 
+            key: 'index', 
+            title: '序号', 
+            dataIndex: 'index', 
+            width: 50, 
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) 
+        },
+        {
+            key: 'createDeptName',
+            title: '操作部门',
+            dataIndex: 'createDeptName', 
+        },
+        {  
+            key: 'createUserName', 
+            title: '操作人', 
+            dataIndex: 'createUserName' 
+        },
+        { 
+            key: 'createTime', 
+            title: '操作时间', 
+            dataIndex: 'createTime' 
+        },
+        {
+            key: 'currentStatus', 
+            title: '问题单状态', 
+            dataIndex: 'currentStatus',
+            render: (status: number): React.ReactNode => {
+                switch (status) {
+                    case 1:
+                        return '待修改';
+                    case 2:
+                        return '已修改';
+                    case 3:
+                        return '已拒绝';
+                    case 4:
+                        return '已删除';
+                }
             }
+        },
+        { 
+            key: 'description', 
+            title: '备注', 
+            dataIndex: 'description' 
         }
-    },
-    { 
-        key: 'description', 
-        title: '备注', 
-        dataIndex: 'description' 
-    }
-]
+    ]
 
-const paragraphColumns = [
-    { 
-        title: '零件号', 
-        dataIndex: 'code', 
-        key: 'code'
-    },
-    { 
-        title: '材料', 
-        dataIndex: 'materialName', 
-        key: 'materialName' 
-    },
-    { 
-        title: '材质',
-        dataIndex: 'structureTexture', 
-        key: 'structureTexture' 
-    },
-    { 
-        title: '规格', 
-        dataIndex: 'structureSpec', 
-        key: 'structureSpec' 
-    },
-    { 
-        title: '长度（mm）', 
-        dataIndex: 'length', 
-        key: 'length' 
-    },
-    { 
-        title: '单组件数', 
-        dataIndex: 'singleNum', 
-        key: 'singleNum' 
-    }, 
-    { 
-        title: '是否主件', 
-        dataIndex: 'length', 
-        key: 'length' 
-    },
-    {
-        title: '电焊长度（mm）',
-        dataIndex: 'weldingLength', 
-        key: 'weldingLength' 
-    }
-]
+    const paragraphColumns = [
+        { 
+            title: '零件号', 
+            dataIndex: 'code', 
+            key: 'code'
+        },
+        { 
+            title: '材料', 
+            dataIndex: 'materialName', 
+            key: 'materialName' 
+        },
+        { 
+            title: '材质',
+            dataIndex: 'structureTexture', 
+            key: 'structureTexture' 
+        },
+        { 
+            title: '规格', 
+            dataIndex: 'structureSpec', 
+            key: 'structureSpec' 
+        },
+        { 
+            title: '长度（mm）', 
+            dataIndex: 'length', 
+            key: 'length' 
+        },
+        { 
+            title: '单组件数', 
+            dataIndex: 'singleNum', 
+            key: 'singleNum' 
+        }, 
+        { 
+            title: '是否主件', 
+            dataIndex: 'length', 
+            key: 'length' 
+        },
+        {
+            title: '电焊长度（mm）',
+            dataIndex: 'weldingLength', 
+            key: 'weldingLength' 
+        }
+    ]
 
-const componentColumns = [
-    { 
-        title: '序号', 
-        dataIndex: 'index', 
-        key: 'index', 
-        fixed: 'left' as FixedType,
-        render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) 
-    },
-    { 
-        title: '段名', 
-        dataIndex: 'segmentName', 
-        key: 'segmentName'
-    },
-    { 
-        title: '构件编号', 
-        dataIndex: 'code', 
-        key: 'code'
-    },
-    { 
-        title: '材料名称', 
-        dataIndex: 'materialName', 
-        key: 'materialName'
-    },
-    { 
-        title: '材质', 
-        dataIndex: 'structureTexture', 
-        key: 'structureTexture'
-    },
-    { 
-        title: '规格', 
-        dataIndex: 'structureSpec', 
-        key: 'structureSpec'
-    },
-    { 
-        title: '单段件数', 
-        dataIndex: 'basicsPartNum', 
-        key: 'basicsPartNum'
-    },
-    { 
-        title: '长度', 
-        dataIndex: 'length', 
-        key: 'length'
-    },
-    { 
-        title: '宽度', 
-        dataIndex: 'width', 
-        key: 'width'
-    },
-    { 
-        title: '单件重量（kg）', 
-        dataIndex: 'basicsWeight', 
-        key: 'basicsWeight'
-    },
-    { 
-        title: '小计重量（kg）', 
-        dataIndex: 'totalWeight', 
-        key: 'totalWeight'
-    },
-    { 
-        title: '备注', 
-        dataIndex: 'description', 
-        key: 'description'
-    }
-]
+    const componentColumns = [
+        { 
+            title: '序号', 
+            dataIndex: 'index', 
+            key: 'index', 
+            fixed: 'left' as FixedType,
+            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) 
+        },
+        { 
+            title: '段名', 
+            dataIndex: 'segmentName', 
+            key: 'segmentName'
+        },
+        { 
+            title: '构件编号', 
+            dataIndex: 'code', 
+            key: 'code'
+        },
+        { 
+            title: '材料名称', 
+            dataIndex: 'materialName', 
+            key: 'materialName'
+        },
+        { 
+            title: '材质', 
+            dataIndex: 'structureTexture', 
+            key: 'structureTexture'
+        },
+        { 
+            title: '规格', 
+            dataIndex: 'structureSpec', 
+            key: 'structureSpec'
+        },
+        { 
+            title: '单段件数', 
+            dataIndex: 'basicsPartNum', 
+            key: 'basicsPartNum'
+        },
+        { 
+            title: '长度', 
+            dataIndex: 'length', 
+            key: 'length'
+        },
+        { 
+            title: '宽度', 
+            dataIndex: 'width', 
+            key: 'width'
+        },
+        { 
+            title: '单件重量（kg）', 
+            dataIndex: 'basicsWeight', 
+            key: 'basicsWeight'
+        },
+        { 
+            title: '小计重量（kg）', 
+            dataIndex: 'totalWeight', 
+            key: 'totalWeight'
+        },
+        { 
+            title: '备注', 
+            dataIndex: 'description', 
+            key: 'description'
+        }
+    ]
 
-const newColumns = [
-    { 
-        title: '零件号', 
-        dataIndex: 'code', 
-        key: 'code'
-    },
-    { 
-        title: '材料', 
-        dataIndex: 'materialName', 
-        key: 'materialName' 
-    },
-    { 
-        title: '材质',
-        dataIndex: 'structureTexture', 
-        key: 'structureTexture' 
-    },
-    { 
-        title: '规格', 
-        dataIndex: 'structureSpec', 
-        key: 'structureSpec' 
-    },
-    { 
-        title: '长度（mm）', 
-        dataIndex: 'length', 
-        key: 'length' 
-    },
-    { 
-        title: '单组件数', 
-        dataIndex: 'singleNum', 
-        key: 'singleNum',
-        render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            <InputNumber 
-                key={ record.structureId + new Date() } 
-                defaultValue={ record.singleNum } 
-                onChange={ (e) => {
-                    weldingDetailedStructureList[index] = {
-                        ...weldingDetailedStructureList[index],
-                        singleNum: Number(e)
-                    }
-                    setElectricWeldingMeters(Number(electricWeldingMeters)  - Number(record.weldingLength) * Number(record.singleNum) + Number(record.weldingLength) * Number(e));
-                    setSingleGroupWeight(Number(singleGroupWeight) - Number(record.singleNum) * Number(record.basicsWeight) + Number(e) * Number(record.basicsWeight));
-                    setWeldingDetailedStructureList([...weldingDetailedStructureList]);
-                } } 
-                bordered={false} 
-                max={ Number(record.basicsPartNum) }
-                min={ 1 }
-            />
-        )  
-    },
-    { 
-        title: '是否主件', 
-        dataIndex: 'isMainPart', 
-        key: 'isMainPart',
-        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            <Radio key={ record.structureId } checked={ weldingDetailedStructureList && weldingDetailedStructureList[index].isMainPart === 1 } onChange={ (e) => {    
-                if(e.target.checked) {
-                    weldingDetailedStructureList = weldingDetailedStructureList.map((item: IComponentList, ind: number) => {
-                        if(index === ind) {
-                            return {
-                                ...item,
-                                isMainPart: 1
-                            }
-                        } else {
-                            return {
-                                ...item,
-                                isMainPart: 0
-                            }
+    const newColumns = [
+        { 
+            title: '零件号', 
+            dataIndex: 'code', 
+            key: 'code'
+        },
+        { 
+            title: '材料', 
+            dataIndex: 'materialName', 
+            key: 'materialName' 
+        },
+        { 
+            title: '材质',
+            dataIndex: 'structureTexture', 
+            key: 'structureTexture' 
+        },
+        { 
+            title: '规格', 
+            dataIndex: 'structureSpec', 
+            key: 'structureSpec' 
+        },
+        { 
+            title: '长度（mm）', 
+            dataIndex: 'length', 
+            key: 'length' 
+        },
+        { 
+            title: '单组件数', 
+            dataIndex: 'singleNum', 
+            key: 'singleNum',
+            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <InputNumber 
+                    key={ record.structureId + new Date() } 
+                    defaultValue={ record.singleNum } 
+                    onChange={ (e) => {
+                        weldingDetailedStructureList[index] = {
+                            ...weldingDetailedStructureList[index],
+                            singleNum: Number(e)
                         }
-                    })
-                } else {
+                        setElectricWeldingMeters(Number(electricWeldingMeters)  - Number(record.weldingLength) * Number(record.singleNum) + Number(record.weldingLength) * Number(e));
+                        setSingleGroupWeight(Number(singleGroupWeight) - Number(record.singleNum) * Number(record.basicsWeight) + Number(e) * Number(record.basicsWeight));
+                        setWeldingDetailedStructureList([...weldingDetailedStructureList]);
+                    } } 
+                    bordered={false} 
+                    max={ Number(record.basicsPartNum) }
+                    min={ 1 }
+                />
+            )  
+        },
+        { 
+            title: '是否主件', 
+            dataIndex: 'isMainPart', 
+            key: 'isMainPart',
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Radio key={ record.structureId } checked={ weldingDetailedStructureList && weldingDetailedStructureList[index].isMainPart === 1 } onChange={ (e) => {    
+                    if(e.target.checked) {   
+                        setMainPartId(record.code);
+                        weldingDetailedStructureList = weldingDetailedStructureList.map((item: IComponentList, ind: number) => {
+                            if(index === ind) {
+                                return {
+                                    ...item,
+                                    isMainPart: 1
+                                }
+                            } else {
+                                return {
+                                    ...item,
+                                    isMainPart: 0
+                                }
+                            }
+                        })
+                    } else {
+                        weldingDetailedStructureList[index] = {
+                            ...weldingDetailedStructureList[index],
+                            isMainPart: 0
+                        }
+                    }
+                    setWeldingDetailedStructureList([ ...weldingDetailedStructureList ]);
+                } }></Radio>
+            )
+        },
+        { 
+            title: '电焊长度（mm）', 
+            dataIndex: 'weldingLength', 
+            key: 'weldingLength',
+            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Input type="number" min={ 0 } key={ record.structureId } defaultValue={ record.weldingLength } onChange={ (e) => {
                     weldingDetailedStructureList[index] = {
                         ...weldingDetailedStructureList[index],
-                        isMainPart: 0
+                        weldingLength: Number(e.target.value)
                     }
-                }
-                setWeldingDetailedStructureList([ ...weldingDetailedStructureList ]);
-            } }></Radio>
-        )
-    },
-    { 
-        title: '电焊长度（mm）', 
-        dataIndex: 'weldingLength', 
-        key: 'weldingLength',
-        render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            <Input type="number" min={ 0 } key={ record.structureId } defaultValue={ record.weldingLength } onChange={ (e) => {
-                weldingDetailedStructureList[index] = {
-                    ...weldingDetailedStructureList[index],
-                    weldingLength: Number(e.target.value)
-                }
-                setElectricWeldingMeters(Number(electricWeldingMeters) - Number(record.weldingLength) * Number(record.singleNum) + Number(e.target.value) * Number(record.singleNum));
-                setWeldingDetailedStructureList([ ...weldingDetailedStructureList ]);
-            } } bordered={false} />
-        )  
-    },
-    { 
-        title: '操作', 
-        dataIndex: 'operation', 
-        key:'operation', 
-        fixed: 'right' as FixedType,
-        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            <Popconfirm
-                title="确认移除?"
-                onConfirm={ () => removeRow(index) }
-                okText="移除"
-                cancelText="取消"
-            >
-                <Button type="link">移除</Button>
-            </Popconfirm>
-        )
-    }
-]
+                    setElectricWeldingMeters(Number(electricWeldingMeters) - Number(record.weldingLength) * Number(record.singleNum) + Number(e.target.value) * Number(record.singleNum));
+                    setWeldingDetailedStructureList([ ...weldingDetailedStructureList ]);
+                } } bordered={false} />
+            )  
+        },
+        { 
+            title: '操作', 
+            dataIndex: 'operation', 
+            key:'operation', 
+            fixed: 'right' as FixedType,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Popconfirm
+                    title="确认移除?"
+                    onConfirm={ () => removeRow(index) }
+                    okText="移除"
+                    cancelText="取消"
+                >
+                    <Button type="link">移除</Button>
+                </Popconfirm>
+            )
+        }
+    ]
 
     const history = useHistory();
     const params = useParams<{ id: string, productCategoryId: string, segmentId: string }>();
@@ -292,12 +293,18 @@ const newColumns = [
     let [ weldingDetailedStructureList, setWeldingDetailedStructureList ] = useState<IComponentList[]>([]);
     const [ singleGroupWeight, setSingleGroupWeight ] = useState(0);
     const [ electricWeldingMeters, setElectricWeldingMeters ] = useState(0);
+    const [ weldingDetailedList, setWeldingDetailedList ] = useState([]);
+    const [ mainPartId, setMainPartId ] = useState('');
+    // const [ issueWeldingDetailed, setIssueWeldingDetailed ] = useState<any>({});
+
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-science/welding/getIssueById?segmentId=${ params.segmentId }`)
-        resole(data)
+        const resData: [] = await RequestUtil.get(`/tower-science/welding/getStructureById`, { segmentId: params.segmentId });
+        const data = await RequestUtil.get<any>(`/tower-science/welding/getIssueById?segmentId=${ params.segmentId }`);
+        setWeldingDetailedList(resData);
+        // setIssueWeldingDetailed({ ...data.weldingDetailedVO, mainPartId: '', electricWeldingMeters: 0 })
+        resole(data);
     }), {})
     const detailData: any = data;
-
 
     if (loading) {
         return <Spin spinning={loading}>
@@ -311,12 +318,11 @@ const newColumns = [
      */
     const getComponentList = async () => {
         const data: IComponentList[] = await RequestUtil.get(`/tower-science/welding/getStructure`, {
-            segmentName: detailData.issueWeldingDetailedVO.segmentName,
+            segmentName: detailData.weldingDetailedVO.segmentName,
             productCategoryId: params.productCategoryId
         }); 
         let newData: IComponentList[] = data?.filter((item: IComponentList) => {
             return weldingDetailedStructureList.every((items: IComponentList) => {
-                
                 if(items.singleNum === item.basicsPartNum) { 
                     console.log(item.id,items.structureId)
                     return item.id !== items.structureId;
@@ -414,14 +420,25 @@ const newColumns = [
         } else {
             const value = {
                 weldingGroupId: params.id,
-                id: params.segmentId,
-                componentId: detailData.weldingDetailedVO.segmentName,
-                mainPartId: detailData.weldingDetailedVO.mainPartId,
                 description: description,
-                pasegmentNamertName: detailData.weldingDetailedVO.segmentName,
-                electricWeldingMeters: electricWeldingMeters,
-                singleGroupWeight: singleGroupWeight,
-                weldingDetailedStructureList: [ ...(weldingDetailedStructureList || []) ]
+                issueWeldingDetailedDTO: {
+                    id: params.segmentId,
+                    componentId: detailData.weldingDetailedVO.componentId,
+                    mainPartId: mainPartId,
+                    segmentName: detailData.weldingDetailedVO.segmentName,
+                    electricWeldingMeters: electricWeldingMeters,
+                    singleGroupWeight: singleGroupWeight,
+                    weldingDetailedStructureList: [ ...(weldingDetailedStructureList || []) ]
+                },
+                weldingDetailedDTO: {
+                    id: params.segmentId,
+                    componentId: detailData.weldingDetailedVO.componentId,
+                    mainPartId: detailData.weldingDetailedVO.mainPartId,
+                    segmentName: detailData.weldingDetailedVO.segmentName,
+                    electricWeldingMeters: electricWeldingMeters,
+                    singleGroupWeight: singleGroupWeight,
+                    weldingDetailedStructureList: [ ...(weldingDetailedList || []) ]
+                }
             }
             console.log(value)
             RequestUtil.get(`/tower-science/welding/saveVerification`, { ...value }).then(res => {
@@ -440,8 +457,8 @@ const newColumns = [
         ] }>
             <DetailTitle title="问题信息" />
             <Row className={ styles.header }><Col>校核前</Col><Col offset={ 1 }>段号：{ detailData.weldingDetailedVO.segmentName } </Col><Col>组件号：{ detailData.weldingDetailedVO.componentId }</Col><Col>主件号：{ detailData.weldingDetailedVO.mainPartId }</Col><Col>电焊米数：{ detailData.weldingDetailedVO.electricWeldingMeters }</Col></Row>
-            <CommonTable columns={ paragraphColumns } dataSource={ [] } pagination={ false } />
-            <Row className={ styles.header }><Col>校核后</Col><Col offset={ 1 }>段号：{ detailData.issueWeldingDetailedVO.segmentName } </Col><Col>组件号：{ detailData.issueWeldingDetailedVO.componentId }</Col><Col>主件号：{ detailData.issueWeldingDetailedVO.mainPartId }</Col><Col>电焊米数：{ detailData.issueWeldingDetailedVO.electricWeldingMeters }</Col><Button type="primary" onClick={ () => getComponentList() } className={ styles.btnright } ghost>选择</Button></Row>
+            <CommonTable columns={ paragraphColumns } dataSource={ weldingDetailedList } pagination={ false } />
+            <Row className={ styles.header }><Col>校核后</Col><Col offset={ 1 }>段号：{ detailData.weldingDetailedVO.segmentName } </Col><Col>组件号：{ detailData.weldingDetailedVO.componentId }</Col><Col>主件号：{ mainPartId }</Col><Col>电焊米数：{ electricWeldingMeters }</Col><Button type="primary" onClick={ () => getComponentList() } className={ styles.btnright } ghost>选择</Button></Row>
             <CommonTable columns={ newColumns } dataSource={ weldingDetailedStructureList } pagination={ false } />
             <DetailTitle title="备注" />
             <Input.TextArea value={ description } onChange={(e) => {

@@ -29,7 +29,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
         try {
             const submitData = await form.validateFields();
             submitData.drawTaskId = drawTaskId;
-            submitData.plannedDeliveryTime = moment(submitData.plannedDeliveryTime).format('YYYY-MM-DD');
+            submitData.plannedDeliveryTime = moment(submitData.plannedDeliveryTime).format("YYYY-MM-DD HH:ss:mm");
             await RequestUtil.post('/tower-science/drawTask/assignDrawTask', submitData).then(()=>{
                 message.success('指派成功！')
             }).then(()=>{
@@ -223,7 +223,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                 <Row>
                     <Col span={12}>
                         <Form.Item name="plannedDeliveryTime" label="计划交付时间" rules={[{required:true,message:"请选择计划交付时间"}]}>
-                            <DatePicker format='YYYY-MM-DD' style={{width:'100%'}}/>
+                            <DatePicker style={{width:'100%'}} showTime/>
                         </Form.Item>
                     </Col>
                 </Row>
