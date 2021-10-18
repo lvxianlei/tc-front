@@ -104,7 +104,7 @@ export default function ConfirmList(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type='link' onClick={()=>{history.push(`/workMngt/confirmList/confirmMessage/${record.id}`)}} disabled={AuthUtil.getUserId().userId!==record.confirmId}>确认信息</Button>
-                    <Button type='link' onClick={()=>{history.push(`/workMngt/confirmList/confirmDetail/${record.id}`)}} disabled={record.status!==3 || AuthUtil.getUserId().userId!==record.confirmId}>确认明细</Button>
+                    <Button type='link' onClick={()=>{history.push(`/workMngt/confirmList/confirmDetail/${record.id}`)}} disabled={record.status!==3 || AuthUtil.getUserId()!==record.confirmId}>确认明细</Button>
                 </Space>
             )
         }
