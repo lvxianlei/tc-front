@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Row, Col, Form, TreeSelect } from 'antd';
+import { Space, Input, DatePicker, Select, Row, Col, Form, TreeSelect, Button } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './Evaluation.module.less';
@@ -8,6 +8,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import { TreeNode } from 'antd/lib/tree-select';
 import useRequest from '@ahooksjs/use-request';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
+import AuthUtil from '../../../utils/AuthUtil';
 
 export default function EvaluationList(): React.ReactNode {
 
@@ -81,7 +82,10 @@ export default function EvaluationList(): React.ReactNode {
             width: 150,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    <EvaluationInformation id={ record.id } updateList={ () => setRefresh(!refresh) }/>
+                    {
+                        AuthUtil.getUserId().userId !== record.assessUser ? <Button type="link" disabled>评估信息</Button>
+                        : <EvaluationInformation id={ record.id } updateList={ () => setRefresh(!refresh) }/>
+                    }
                 </Space>
             )
         }
