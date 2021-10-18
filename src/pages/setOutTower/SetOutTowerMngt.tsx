@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker,  Button, Modal } from 'antd'
+import { Space, Input, DatePicker,  Button, Modal, Select } from 'antd'
 import { Link } from 'react-router-dom'
 import { CommonTable, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -16,46 +16,87 @@ export default function SetOutTowerMngt(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'projectName',
+            key: 'name',
             title: '塔型',
             width: 100,
-            dataIndex: 'projectName'
+            dataIndex: 'name'
         },
         {
-            key: 'projectName',
+            key: 'steelProductShape',
             title: '塔型钢印号',
             width: 100,
-            dataIndex: 'projectName'
+            dataIndex: 'steelProductShape'
         },
         {
-            key: 'projectNumber',
-            title: '塔型',
+            key: 'pattern',
+            title: '模式',
             width: 100,
-            dataIndex: 'projectNumber'
+            dataIndex: 'pattern',
+            render: (value: number, record: object): React.ReactNode => {
+                const renderEnum: any = [
+                  {
+                    value: 1,
+                    label: "新放"
+                  },
+                  {
+                    value: 2,
+                    label: "重新出卡"
+                  },
+                  {
+                    value: 3,
+                    label: "套用"
+                  },
+                ]
+                return <>{renderEnum.find((item: any) => item.value === value).label}</>
+            }
         },
         {
-            key: 'bidBuyEndTime',
-            title: '最新状态变更时间',
+            key: 'taskNumber',
+            title: '任务单编号',
+            width: 100,
+            dataIndex: 'taskNumber'
+        },
+        {
+            key: 'saleOrderNumber',
+            title: '订单编号',
+            width: 100,
+            dataIndex: 'saleOrderNumber'
+        },
+        {
+            key: 'structureCount',
+            title: '件号数',
+            width: 100,
+            dataIndex: 'structureCount'
+        },
+        {
+            key: 'internalNumber',
+            title: '内部合同编号',
+            width: 100,
+            dataIndex: 'internalNumber'
+        },
+        {
+            key: 'steelAngleCount',
+            title: '角钢件号数',
+            width: 100,
+            dataIndex: 'steelAngleCount'
+        },
+        {
+            key: 'steelPlateCount',
+            title: '钢板件号数',
+            width: 100,
+            dataIndex: 'steelPlateCount'
+        },
+        {
+            key: 'updateUserName',
+            title: '最后更新人',
             width: 200,
-            dataIndex: 'bidBuyEndTime'
+            dataIndex: 'updateUserName'
         },
         {
-            key: 'biddingEndTime',
-            title: '问题单类型',
+            key: 'updateTime',
+            title: '最后更新时间',
             width: 200,
-            dataIndex: 'biddingEndTime'
-        },
-        {
-            key: 'biddingAgency',
-            title: '接收人',
-            width: 100,
-            dataIndex: 'biddingAgency'
-        },
-        {
-            key: 'biddingAddress',
-            title: '创建人',
-            width: 100,
-            dataIndex: 'biddingAddress'
+            dataIndex: 'updateTime'
         },
         {
             key: 'operation',
@@ -76,11 +117,11 @@ export default function SetOutTowerMngt(): React.ReactNode {
     ]
     const handleModalCancel = () => setVisible(false);
     const onFilterSubmit = (value: any) => {
-        if (value.planTime) {
-            const formatDate = value.planTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.plannedDeliveryTimeStart = formatDate[0]+ ' 00:00:00';
-            value.plannedDeliveryTimeEnd = formatDate[1]+ ' 23:59:59';
-            delete value.planTime
+        if (value.createTime) {
+            const formatDate = value.createTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.creationTimeStart = formatDate[0]+ ' 00:00:00';
+            value.creationTimeEnd = formatDate[1]+ ' 23:59:59';
+            delete value.createTime
         }
         setFilterValue(value)
         return value
@@ -123,17 +164,22 @@ export default function SetOutTowerMngt(): React.ReactNode {
             extraOperation={<Button type="primary">导出</Button>}
             searchFormItems={[
                 {
-                    name: 'startBidBuyEndTime',
+                    name: 'pattern',
                     label: '类型',
-                    children: <DatePicker />
+                    children:   <Select>
+                                    <Select.Option value={''} key={''}>全部</Select.Option>
+                                    <Select.Option value={1} key={1}>新放</Select.Option>
+                                    <Select.Option value={3} key={3}>套用</Select.Option>
+                                    <Select.Option value={2} key={2}>重新出卡</Select.Option>
+                                </Select>
                 },
                 {
-                    name: 'startReleaseDate',
+                    name: 'createTime',
                     label: '创建时间',
                     children: <DatePicker />
                 },
                 {
-                    name: 'biddingStatus',
+                    name: 'fuzzyMsg',
                     label: '模糊查询项',
                     children: <Input placeholder="请输入塔型/塔型钢印号/任务单编号/订单编号/内部合同编号进行查询" maxLength={200} />
                 },

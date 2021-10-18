@@ -18,10 +18,10 @@ export default function PickList(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'taskCode',
+            key: 'taskNum',
             title: '放样任务编号',
             width: 100,
-            dataIndex: 'taskCode'
+            dataIndex: 'taskNum'
         },
         {
             key: 'taskNumber',
@@ -166,7 +166,7 @@ export default function PickList(): React.ReactNode {
                         </Select>
                     },
                     {
-                        name: 'biddingStatus',
+                        name: 'fuzzyMsg',
                         label: '模糊查询项',
                         children: <Input placeholder="请输入放样任务编号/任务单编号/订单编号/内部合同编号/塔型/塔型钢印号进行查询" maxLength={200} />
                     },
