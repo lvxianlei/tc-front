@@ -72,7 +72,7 @@ export default function SampleDrawMessage(): React.ReactNode {
                         dataIndex: 'operation',
                         render: (_: undefined, record: any): React.ReactNode => (
                             <Space direction="horizontal" size="small">
-                                <Button type='link'>下载</Button>
+                                <Button type='link' onClick={()=>{window.open(record.filePath)}}>下载</Button>
                             </Space>
                         )
                     }
