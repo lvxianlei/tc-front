@@ -13,17 +13,22 @@ export default function BaseInfoEdit(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ tab: TabTypes, id: string }>()
     const [attachVosData, setAttachVosData] = useState<any[]>([])
+    const [address, setAddress] = useState<string>("")
     const [baseInfoForm] = Form.useForm()
     const [cargoVOListForm] = Form.useForm()
     const [attachVosForm] = Form.useForm()
+
+
+
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/projectInfo/${params.id}`)
+            const addressList: any[] = await RequestUtil.get(`/tower-system/region/00`)
             setAttachVosData(result.attachVos)
             baseInfoForm.setFieldsValue(result)
             cargoVOListForm.setFieldsValue({ submit: result.cargoVOList })
             attachVosForm.setFieldsValue(result.attachVos)
-            resole(result)
+            resole({ ...result, addressList: [...addressList.map(item => ({ value: item.code, label: item.name })), { value: "其他-国外", label: "其他-国外" }] })
         } catch (error) {
             reject(error)
         }
@@ -101,7 +106,13 @@ export default function BaseInfoEdit(): JSX.Element {
         ]}>
             <Spin spinning={loading}>
                 <DetailTitle title="基本信息" />
-                <BaseInfo form={baseInfoForm} columns={baseInfoData} dataSource={data || {}} edit />
+                <BaseInfo
+                 form={baseInfoForm}
+                    columns={
+                        address === "其他-国外" ?
+                            baseInfoData.map((item: any) => item.dataIndex === "address" ? ({ ...item, type: "select", enum: data?.addressList }) : item) :
+                            baseInfoData.map((item: any) => item.dataIndex === "address" ? ({ ...item, type: "select", enum: data?.addressList }) : item).filter((item: any) => item.dataIndex !== "country")
+                    } dataSource={data || {}} edit />
                 <DetailTitle title="货物清单" />
                 <EditTable form={cargoVOListForm} columns={cargoVOListColumns} dataSource={data?.cargoVOList} />
                 <DetailTitle title="附件信息" operation={[<Upload

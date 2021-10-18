@@ -318,20 +318,28 @@ export default function ScheduleView(): React.ReactNode {
         const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
         switch (title) {
             case "materialLeaderDepartment":
+                form.setFieldsValue({materialLeader:''});
                 return setMaterialUser(userData.records);
             case "materialPartLeaderDepartment":
+                form.setFieldsValue({materialPartLeader:''});
                 return setMaterialPartUser(userData.records);
             case "smallSampleLeaderDepartment":
+                form.setFieldsValue({smallSampleLeader:''});
                 return setSmallSampleUser(userData.records);
             case "loftingPartLeaderDepartment":
+                form.setFieldsValue({loftingPartLeader:''});
                 return setLoftingPartUser(userData.records);
             case "loftingLeaderDepartment":
+                form.setFieldsValue({loftingLeader:''});
                 return setLoftingUser(userData.records);
             case "weldingLeaderDepartment":
+                form.setFieldsValue({weldingLeader:''});
                 return setWeldingUser(userData.records);
             case "boltLeaderDepartment":
+                form.setFieldsValue({boltLeader:''});
                 return setBoltUser(userData.records);
             case "materialLeaderDepartmentQuery":
+                form.setFieldsValue({materialLeader:''});
                 return setMaterialLeader(userData.records);
         };
     }

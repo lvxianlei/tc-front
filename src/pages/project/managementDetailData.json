@@ -56,7 +56,23 @@
         {
             "title": "地区",
             "dataIndex": "address",
-            "type": "select"
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择地区..."
+                }
+            ]
+        },
+        {
+            "title": "国家",
+            "dataIndex": "country",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入国家..."
+                }
+            ]
         },
         {
             "title": "招标人",
