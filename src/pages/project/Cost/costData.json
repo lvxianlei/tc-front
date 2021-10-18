@@ -380,5 +380,35 @@
             "title": "圆钢Q355",
             "dataIndex": "ygqCee"
         }
+    ],
+    "askLogistics": [
+        {
+            "title": "产品类型",
+            "dataIndex": "productType",
+            "editable": false
+        },
+        {
+            "title": "重量",
+            "dataIndex": "weight"
+        },
+        {
+            "title": "收货地址",
+            "dataIndex": "address"
+        },
+        {
+            "title": "是否地面交货",
+            "dataIndex": "isGroundReceiving",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "否"
+                },
+                {
+                    "value": 1,
+                    "label": "是"
+                }
+            ]
+        }
     ]
 }

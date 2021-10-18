@@ -1,9 +1,9 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useParams, useHistory } from "react-router-dom"
 import { Modal, Upload, Button, Form, message } from "antd"
-import { DetailTitle, CommonTable, BaseInfo } from "../../common"
+import { DetailTitle, CommonTable, BaseInfo, EditTable } from "../../common"
 import { enclosure } from "../managementDetailData.json"
-import { supplyBaseInfo, logisticBaseInfo, workmanshipBaseInfo } from "./costData.json"
+import { supplyBaseInfo, logisticBaseInfo, workmanshipBaseInfo, askLogistics } from "./costData.json"
 import AuthUtil from "../../../utils/AuthUtil"
 import { downLoadFile } from "../../../utils"
 import useRequest from '@ahooksjs/use-request'
@@ -27,6 +27,7 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
     const { id } = useParams<{ id: string }>()
     const history = useHistory()
     const [baseForm] = Form.useForm()
+    const [askForm] = Form.useForm()
     const { loading, run } = useRequest<{ [key: string]: any }>((saveData: any) => new Promise(async (resole, reject) => {
         try {
             const productType: any = await RequestUtil.post(`/tower-market/askPrice`, { ...saveData, projectId: id, askType: auditCode[props.type] })
@@ -44,6 +45,20 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
             reject(error)
         }
     }))
+
+    const { data: askData, run: getAskProduct } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const productType: any = await RequestUtil.get(`/tower-market/askInfo/getAskProductByProId?projectId=${id}`)
+            askForm.setFieldsValue({ submit: productType.map((item: any) => ({ productType: `${item.voltage}${item.productName}` })) })
+            resole(productType)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    useEffect(() => {
+        props.type === "selectB" && getAskProduct()
+    }, [props.type])
 
     const uploadChange = (event: any) => {
         if (event.file.status === "done") {
@@ -73,7 +88,13 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
             const baseInfo = await baseForm.validateFields()
-            const saveResult = await run({ ...baseInfo, attachInfoDTOS: attachInfo })
+            const saveAskData = await askForm.validateFields()
+            const saveResult = await run({
+                ...baseInfo, attachInfoDTOS: attachInfo, startAskLogisticsDTOS: askData?.map((item: any, index: number) => ({
+                    ...item,
+                    ...saveAskData.submit[index]
+                }))
+            })
             message.success("保存成功...")
             props.onOk && props.onOk(true)
             resove(true)
@@ -118,6 +139,9 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
         {props.type === "selectB" && <>
             <DetailTitle title="询价类型：物流询价" />
             <BaseInfo form={baseForm} columns={logisticBaseInfo} dataSource={data || {}} edit />
+
+            <EditTable form={askForm} haveNewButton={false} haveOpration={false} columns={askLogistics} dataSource={(askData as any) || []} />
+
             <DetailTitle title="附件" operation={[
                 <Upload
                     key="sub"
