@@ -24,6 +24,10 @@ const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref
             rowKey="id"
             maxLength={5}
             recordCreatorProps={false}
+            form={{
+                wrapperCol: { span: 24 },
+                labelCol: { span: 24 }
+            }}
             editable={{
                 form: formRef,
                 editableKeys: [0]
@@ -32,7 +36,7 @@ const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref
             columns={data.head.map((cItem: any) => {
                 return ({
                     ...cItem,
-                    width: "200px",
+                    colSize: 4,
                     valueType: data.type,
                     formItemProps: {
                         rules: cItem.rules
@@ -40,7 +44,7 @@ const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref
                     valueEnum: cItem.enum
                 })
             })}
-            value={data.data}
+            value={[data.data]}
         />
     </>
 })
@@ -64,10 +68,22 @@ export default function CostEdit() {
     const [visible, setVisible] = useState<boolean>(false)
     const [productName, setProductName] = useState("")
     const [askProductDtos, setAskProductDtos] = useState<any[]>([])
+
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const askInfo: any = await RequestUtil.get(`/tower-market/askInfo?projectId=${params.projectId}`)
+            setAskProductDtos(askInfo.productArr.map((item: any, index: number) => ({ ...item, data: ({ ...item.data, id: index }) })))
+            baseInfo.setFieldsValue(askInfo.askInfoVo)
+            resole(askInfo)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: params.id === "new" })
+
     const { run } = useRequest<{ [key: string]: any }>((productName: string) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-market/askInfo/getAskProductParam?productName=${productName}&voltage=`)
-            setAskProductDtos([...askProductDtos, { ...result, data: [{ id: 0 }] }])
+            setAskProductDtos([...askProductDtos, { ...result, data: [{ id: result.length }] }])
             resole(result)
         } catch (error) {
             reject(error)
