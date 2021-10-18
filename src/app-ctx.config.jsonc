@@ -142,6 +142,11 @@
                                 "label": "项目管理",
                                 "path": "/project/management",
                                 "authority": "project"
+                            },
+                            {
+                                "label": "开票申请",
+                                "path": "/project/invoicing",
+                                "authority": "project"
                             }
                         ]
                     },

@@ -382,6 +382,20 @@
       "exact": true,
       "authority": "project"
     },
+    { // 开票申请
+      "name": "开票申请",
+      "path": "/project/invoicing",
+      "module": "./pages/Invoicing/index",
+      "exact": true,
+      "authority": "project"
+    },
+    { // 开票申请
+      "name": "新增开票申请",
+      "path": "/project/invoicing/:id",
+      "module": "./pages/Invoicing/Edit",
+      "exact": true,
+      "authority": "project"
+    },
     {
       // 项目新建/编辑
       "name": "项目新建",
@@ -874,7 +888,8 @@
       "module": "./pages/workMngt/assemblyWelding/Questionnaire",
       "exact": true,
       "authority": "approvalm"
-    },{ // 工作管理-组焊列表-校核-查看问题单
+    },
+    { // 工作管理-组焊列表-校核-查看问题单
       "name": "查看问题单",
       "path": "/workMngt/assemblyWeldingList/assemblyWeldingCheck/:id/:productCategoryId/questionnairedetail/:segmentId",
       "module": "./pages/workMngt/assemblyWelding/QuestionnaireDetail",
