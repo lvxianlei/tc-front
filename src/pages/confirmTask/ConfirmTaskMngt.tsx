@@ -223,7 +223,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                 <Row>
                     <Col span={12}>
                         <Form.Item name="plannedDeliveryTime" label="计划交付时间" rules={[{required:true,message:"请选择计划交付时间"}]}>
-                            <DatePicker style={{width:'100%'}} format="YYYY-MM-DD HH:ss:mm"/>
+                            <DatePicker style={{width:'100%'}} showTime/>
                         </Form.Item>
                     </Col>
                 </Row>
