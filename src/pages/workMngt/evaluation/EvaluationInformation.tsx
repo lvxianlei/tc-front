@@ -209,8 +209,7 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                                                         ...this.state.information?.assessFileList || [],
                                                         { 
                                                             link: resData.link,
-                                                            // filePath: resData.name,
-                                                            filePath: resData.link,
+                                                            filePath: resData.name,
                                                             name: resData.originalName,
                                                             userName: resData.userName,
                                                             fileSuffix: resData.originalName?.split('.')[resData.originalName?.split('.').length - 1]
