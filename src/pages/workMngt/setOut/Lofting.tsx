@@ -22,12 +22,6 @@ interface Column extends ColumnType<object> {
 
 export default function Lofting(): React.ReactNode {
 
-    const form: React.RefObject<FormInstance> = React.createRef<FormInstance>();
-
-    const getForm = (): FormInstance | null => {
-        return form?.current;
-    }
-
     const columns = [
         {
             key: 'id',
@@ -441,8 +435,9 @@ export default function Lofting(): React.ReactNode {
     const [ editorLock, setEditorLock ] = useState('编辑');
     const [ rowChangeList, setRowChangeList ] = useState<number[]>([]);
     const [ tableColumns, setColumns ] = useState(columnsSetting);
+    const [ form ] = Form.useForm();
 
-    return <Form ref={ form } className={ styles.descripForm }>  
+    return <Form form={ form } className={ styles.descripForm }>  
         <Page
             path="/tower-science/productStructure/list"
             columns={ tableColumns }
@@ -487,7 +482,7 @@ export default function Lofting(): React.ReactNode {
                         setEditorLock('锁定');   
                     } else {
                         const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
-                        let values = getForm()?.getFieldsValue(true).data;
+                        let values = form.getFieldsValue(true).data;
                         if(values) {
                             let changeValues = values.filter((item: any, index: number) => {
                                 return newRowChangeList.indexOf(index) !== -1;
@@ -496,6 +491,7 @@ export default function Lofting(): React.ReactNode {
                                 setColumns(columnsSetting);
                                 setEditorLock('编辑');
                                 setRowChangeList([]);    
+                                form.resetFields();
                             });
                         }
                     }
