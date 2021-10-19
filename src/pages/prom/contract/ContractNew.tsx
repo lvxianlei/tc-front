@@ -51,31 +51,35 @@ export class ContractNew extends AbstractContractSetting<IContractNewRouteProps,
             customerPhone: values.customerPhone
         };
         values.signCustomerId = this.state.contract?.signCustomerId;
-
-        if (totalRate < 100) {
-            message.error('计划回款总占比必须等于100');
-            return Promise.reject(false);
-        } else if (totalRate > 100) {
-            message.error('计划回款总占比必须等于100');
-            return Promise.reject(false);
-        } else if (totalAmount < values.contractAmount) {
-            message.error('计划回款总金额必须等于合同总价');
-            return Promise.reject(false);
-        } else if (totalAmount > values.contractAmount) {
-            message.error('计划回款总金额必须等于合同总价');
-            return Promise.reject(false);
-        } else {
-            console.log(!values.contractPrice)
-            if (!values.contractPrice) {
-                values.contractPrice = "0"
+        if(planValue.length>0){
+            if (totalRate < 100) {
+                message.error('计划回款总占比必须等于100');
+                return Promise.reject(false);
+            } else if (totalRate > 100) {
+                message.error('计划回款总占比必须等于100');
+                return Promise.reject(false);
+            } else if (totalAmount < values.contractAmount) {
+                message.error('计划回款总金额必须等于合同总价');
+                return Promise.reject(false);
+            } else if (totalAmount > values.contractAmount) {
+                message.error('计划回款总金额必须等于合同总价');
+                return Promise.reject(false);
+            } else {
+                console.log(!values.contractPrice)
+                if (!values.contractPrice) {
+                    values.contractPrice = "0"
+                }
+                if (!values.contractAmount) {
+                    values.contractAmount = "0"
+                }
+                if (!values.contractTotalWeight) {
+                    values.contractTotalWeight = "0"
+                }
+                return await RequestUtil.post('/tower-market/contract', { ...values, projectId: (this.props.match.params as any).projectId });
             }
-            if (!values.contractAmount) {
-                values.contractAmount = "0"
-            }
-            if (!values.contractTotalWeight) {
-                values.contractTotalWeight = "0"
-            }
-            return await RequestUtil.post('/tower-market/contract', { ...values, projectId: (this.props.match.params as any).projectId });
+        }else{
+            message.error('回款计划无数据，需新增！');
+            return Promise.reject(false);
         }
     }
 }

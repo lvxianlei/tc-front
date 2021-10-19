@@ -57,7 +57,7 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
     }), { manual: true })
 
     useEffect(() => {
-        props.type === "selectB" && getAskProduct()
+        ["selectB", "selectC"].includes(props.type) && getAskProduct()
     }, [props.type])
 
     const uploadChange = (event: any) => {
@@ -168,7 +168,10 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
         </>}
         {props.type === "selectC" && <>
             <DetailTitle title="询价类型：工艺询价" />
-            <BaseInfo form={baseForm} columns={workmanshipBaseInfo} dataSource={data || {}} edit />
+            <BaseInfo form={baseForm} columns={workmanshipBaseInfo.map((item: any) => item.dataIndex === "productType" ? ({
+                ...item,
+                enum: askData?.map((ask: any) => ({ value: `${ask.voltage}-${ask.productName}`, label: `${ask.voltage}${ask.productName}` })) || []
+            }) : item)} dataSource={data || {}} edit />
             <DetailTitle title="附件" operation={[
                 <Upload
                     key="sub"

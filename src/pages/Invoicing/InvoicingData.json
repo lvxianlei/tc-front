@@ -1,5 +1,316 @@
 {
-    "invoicingListHead": [],
-    "baseInfoHead": [],
-    "invoiceHead": []
+    "invoicingListHead": [
+        {
+            "title": "申请编号",
+            "dataIndex": "invoicingCode"
+        },
+        {
+            "title": "项目编号",
+            "dataIndex": "projectCode"
+        },
+        {
+            "title": "内部合同编号",
+            "dataIndex": "contractCode"
+        },
+        {
+            "title": "计划号",
+            "dataIndex": "planCode"
+        },
+        {
+            "title": "票面单位",
+            "dataIndex": "ticketCompany"
+        },
+        {
+            "title": "工程名称",
+            "dataIndex": ""
+        },
+        {
+            "title": "合计金额(元)",
+            "dataIndex": "ticketMoney"
+        },
+        {
+            "title": "合计重量(元/吨)",
+            "dataIndex": "ticketWeight"
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": "business"
+        },
+        {
+            "title": "发票类型",
+            "dataIndex": "ticketType"
+        },
+        {
+            "title": "开票日期",
+            "dataIndex": "ticketTime"
+        },
+        {
+            "title": "是否已全开",
+            "dataIndex": "isOpen"
+        },
+        {
+            "title": "开票时合同状态",
+            "dataIndex": "contractType"
+        },
+        {
+            "title": "承诺回款时间",
+            "dataIndex": "businessBackTime"
+        },
+        {
+            "title": "承诺回款比例",
+            "dataIndex": "backProportion"
+        },
+        {
+            "title": "验收单",
+            "dataIndex": "isCheck"
+        },
+        {
+            "title": "合同单位",
+            "dataIndex": "contractCompany"
+        },
+        {
+            "title": "合同签订日期",
+            "dataIndex": ""
+        },
+        {
+            "title": "开票方式",
+            "dataIndex": "openTicketType"
+        },
+        {
+            "title": "开票依据",
+            "dataIndex": "ticketBasis"
+        },
+        {
+            "title": "最后发货日期",
+            "dataIndex": "contractLastTime"
+        },
+        {
+            "title": "开票次数",
+            "dataIndex": "ticketCount"
+        },
+        {
+            "title": "申请时间",
+            "dataIndex": "createTime"
+        },
+        {
+            "title": "制单",
+            "dataIndex": ""
+        },
+        {
+            "title": "制单时间",
+            "dataIndex": ""
+        },
+        {
+            "title": "状态",
+            "dataIndex": "status"
+        }
+    ],
+    "baseInfoHead": [
+        {
+            "title": "申请编号",
+            "dataIndex": "invoicingCode"
+        },
+        {
+            "title": "内部合同编号",
+            "dataIndex": "contractCode"
+        },
+        {
+            "title": "合同单位",
+            "dataIndex": "contractCompany"
+        },
+        {
+            "title": "项目编号",
+            "dataIndex": "projectCode"
+        },
+        {
+            "title": "票面单位",
+            "dataIndex": "ticketCompany"
+        },
+        {
+            "title": "订单工程名称",
+            "dataIndex": "contractCompany"
+        },
+        {
+            "title": "产品类型",
+            "dataIndex": "productTypeId"
+        },
+        {
+            "title": "电压等级",
+            "dataIndex": "voltage"
+        },
+        {
+            "title": "合同签订日期",
+            "dataIndex": "contractSignTime"
+        },
+        {
+            "title": "开票合计重量(吨)",
+            "dataIndex": "ticketWeight"
+        },
+        {
+            "title": "开票金额(元)",
+            "dataIndex": ""
+        },
+        {
+            "title": "合同交货日期",
+            "dataIndex": "contractDevTime"
+        },
+        {
+            "title": "开票日期",
+            "dataIndex": "ticketTime"
+        },
+        {
+            "title": "开票次数",
+            "dataIndex": "ticketCount"
+        },
+        {
+            "title": "合同最后发货日期",
+            "dataIndex": "contractLastTime"
+        },
+        {
+            "title": "计划号",
+            "dataIndex": "planCode"
+        },
+        {
+            "title": "是否已全开",
+            "dataIndex": "isOpen"
+        },
+        {
+            "title": "发票类型",
+            "dataIndex": "ticketType"
+        },
+        {
+            "title": "开票方式",
+            "dataIndex": "openTicketType"
+        },
+        {
+            "title": "开票金额",
+            "dataIndex": "ticketBasis"
+        },
+        {
+            "title": "开票时合同状态",
+            "dataIndex": "contractType"
+        },
+        {
+            "title": "理重（吨）",
+            "dataIndex": "reasonWeight"
+        },
+        {
+            "title": "过磅重量(吨)",
+            "dataIndex": "weigh"
+        },
+        {
+            "title": " 业务经理",
+            "dataIndex": "business"
+        },
+        {
+            "title": " 是否有验收单",
+            "dataIndex": "isCheck"
+        },
+        {
+            "title": " 业务经理承诺回款时间",
+            "dataIndex": "businessBackTime"
+        },
+        {
+            "title": " 承诺回款比例",
+            "dataIndex": "backProportion"
+        },
+        {
+            "title": " 承诺回款金额",
+            "dataIndex": "backMoney"
+        }
+    ],
+    "invoiceHead": [
+        {
+            "title": "名称",
+            "dataIndex": "name"
+        },
+        {
+            "title": "纳税人识别号",
+            "dataIndex": "taxCode"
+        },
+        {
+            "title": "地址、电话",
+            "dataIndex": "address"
+        },
+        {
+            "title": "开户行及账号",
+            "dataIndex": "bankCode"
+        },
+        {
+            "title": "发票备注栏",
+            "dataIndex": "invoicingDes"
+        },
+        {
+            "title": "开票内容与合同内容不符原因",
+            "dataIndex": "content"
+        }
+    ],
+    "billingHead": [
+        {
+            "title": " 产品名称(票面)",
+            "dataIndex": "productName"
+        },
+        {
+            "title": " 生产名称(实际)",
+            "dataIndex": "devName"
+        },
+        {
+            "title": " 规格型号",
+            "dataIndex": "model"
+        },
+        {
+            "title": " 基数",
+            "dataIndex": "baseNum"
+        },
+        {
+            "title": " 单位",
+            "dataIndex": "company"
+        },
+        {
+            "title": " 重量(吨)",
+            "dataIndex": "weight"
+        },
+        {
+            "title": " 单价（元/吨）",
+            "dataIndex": "money"
+        },
+        {
+            "title": " 金额(元)",
+            "dataIndex": "moneyCount"
+        }
+    ],
+    "billingHeader": [
+        {
+            "title": " 操作",
+            "dataIndex": ""
+        },
+        {
+            "title": " 生产名称(实际)",
+            "dataIndex": "devName"
+        },
+        {
+            "title": " 规格型号",
+            "dataIndex": "model"
+        },
+        {
+            "title": " 基数",
+            "dataIndex": "baseNum"
+        },
+        {
+            "title": " 单位",
+            "dataIndex": "company"
+        },
+        {
+            "title": " 重量(吨)",
+            "dataIndex": "weight"
+        },
+        {
+            "title": " 单价（元/吨）",
+            "dataIndex": "money"
+        },
+        {
+            "title": " 金额(元)",
+            "dataIndex": "moneyCount"
+        }
+    ]
 }

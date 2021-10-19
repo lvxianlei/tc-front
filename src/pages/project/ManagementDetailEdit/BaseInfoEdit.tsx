@@ -94,7 +94,9 @@ export default function BaseInfoEdit(): JSX.Element {
     }
 
     const handleBaseInfoChange = (fields: any) => {
-
+        if (fields.address) {
+            setAddress(fields.address)
+        }
     }
 
     return <>
