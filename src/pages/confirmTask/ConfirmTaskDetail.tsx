@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Spin, Space, Modal, Form, message } from 'antd';
+import { Button, Spin, Space, Modal, Form, message, Image } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common';
 import { baseInfoData } from './confirmTaskData.json';
@@ -48,7 +48,9 @@ export default function ConfirmTaskDetail(): React.ReactNode {
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
-    const params = useParams<{ id: string ,status: string}>()
+    const params = useParams<{ id: string ,status: string}>();
+    const [pictureVisible, setPictureVisible] = useState<boolean>(false);
+    const [pictureUrl, setPictureUrl] = useState('');
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/drawTask/getDrawTaskById?drawTaskId=${params.id}`)
         resole(data)
@@ -70,6 +72,7 @@ export default function ConfirmTaskDetail(): React.ReactNode {
         }
     }
     const handleModalCancel = () => setVisible(false);
+    const handlePictureModalCancel = () => {setPictureVisible(false)}
     return <>
         <Spin spinning={loading}>
             <DetailContent operation={[
@@ -138,6 +141,7 @@ export default function ConfirmTaskDetail(): React.ReactNode {
                             <Space direction="horizontal" size="small">
                                 <Button type='link' onClick={()=>{window.open(record.filePath)}}>下载</Button>
                                 {record.fileSuffix==='pdf'?<Button type='link' onClick={()=>{window.open(record.filePath)}}>预览</Button>:null}
+                                {['jpg','jpeg', 'png', 'gif'].includes(record.fileSuffix)?<Button type='link' onClick={()=>{setPictureUrl(record.id?record.filePath:record.link);setPictureVisible(true);}}>预览</Button>:null}
                             </Space>
                         )
                     }
@@ -145,6 +149,9 @@ export default function ConfirmTaskDetail(): React.ReactNode {
                 <DetailTitle title="操作信息" />
                 <CommonTable columns={tableColumns} dataSource={detailData?.statusRecordList} pagination={ false } />
             </DetailContent>
+            <Modal visible={pictureVisible} onCancel={handlePictureModalCancel} footer={false}>
+                <Image src={pictureUrl} preview={false}/>
+            </Modal>
         </Spin>
     </>
 }
