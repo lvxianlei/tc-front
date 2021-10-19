@@ -99,7 +99,17 @@ export default function CostEdit() {
     const { run } = useRequest<{ [key: string]: any }>((productName: string, voltage: string) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-market/askInfo/getAskProductParam?productName=${productName}&voltage=${voltage}`)
-            setAskProductDtos([...askProductDtos, { ...result, data: [{ id: result.length, voltage, productName }] }])
+            const initValues: any = {}
+            result.head.forEach((item: any) => item.type !== "select" && (initValues[item.dataIndex] = 0))
+            setAskProductDtos([...askProductDtos, {
+                ...result,
+                data: [{
+                    ...initValues,
+                    id: result.length,
+                    voltage,
+                    productName
+                }]
+            }])
             resole(result)
         } catch (error) {
             reject(error)
@@ -137,8 +147,8 @@ export default function CostEdit() {
                 id: data?.askInfoVo.id,
                 askProductDtos: askProductDtoDatas.map((item: any, index: number) => ({
                     params: Object.keys(item).map((itemKey: any) => `${itemKey}-${item[itemKey]}`).join(","),
-                    productName: askProductDtos[index].data[0].productName,
-                    voltage: askProductDtos[index].data[0].voltage
+                    productName: askProductDtos[index].productName,
+                    voltage: askProductDtos[index].voltage
                 }))
             })
             message.success("保存成功...")

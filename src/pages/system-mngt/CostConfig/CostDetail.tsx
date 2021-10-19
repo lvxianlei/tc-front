@@ -22,9 +22,7 @@ export default function CostEdit() {
     }))
 
     return <DetailContent operation={[
-        <Button
-            key="save"
-            type="primary"
+        <Button key="save" type="primary"
             style={{ marginRight: 16 }}
             onClick={() => history.push(`/sys/costconfig/edit/${id}`)}
         >编辑</Button>,

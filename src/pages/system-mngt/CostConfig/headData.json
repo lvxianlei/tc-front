@@ -1,7 +1,7 @@
 {
     "baseInfo": [
         {
-            "title": "产品名称",
+            "title": "产品类型",
             "dataIndex": "productName",
             "type": "select",
             "enum": [
