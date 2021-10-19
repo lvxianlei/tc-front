@@ -220,7 +220,8 @@
         },
         {
             "title": "备注",
-            "dataIndex": "backMoney"
+            "dataIndex": "",
+            "type": "textarea"
         }
     ],
     "invoiceHead": [
@@ -242,11 +243,13 @@
         },
         {
             "title": "发票备注栏",
-            "dataIndex": "invoicingDes"
+            "dataIndex": "invoicingDes",
+            "type": "textarea"
         },
         {
             "title": "开票内容与合同内容不符原因",
-            "dataIndex": "content"
+            "dataIndex": "content",
+            "type": "textarea"
         }
     ],
     "billingHead": [
@@ -284,10 +287,6 @@
         }
     ],
     "billingHeader": [
-        {
-            "title": " 操作",
-            "dataIndex": ""
-        },
         {
             "title": " 生产名称(实际)",
             "dataIndex": "devName"
