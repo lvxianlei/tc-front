@@ -51,9 +51,9 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
             labelCol={{ style: { width: '80px', whiteSpace: "break-spaces" } }}
         >
             <Row>
-                {columns.map((item: any, index: number) => <Col key={`form_item_${index}`} span={24 / col}>
+                {columns.map((item: any, index: number) => <Col key={`form_item_${index}`} span={item.type === "textarea" ? 24 : (24 / col)}>
                     <Col span={24} >
-                        <div style={{ height: 56 }}>
+                        <div style={{ height: item.type === "textarea" ? 112 : 56 }}>
                             <Form.Item className="baseInfoForm" name={item.dataIndex} label={item.title} rules={item.rules || []}>
                                 {item.render ? item.render() : <FormItemType type={item.type} data={item} />}
                             </Form.Item>

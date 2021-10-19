@@ -39,19 +39,26 @@ export interface EditTableProps {
     dataSource: any[]
     form?: FormInstance
     opration?: React.ReactNode[]
+    haveNewButton?: boolean
+    newButtonTitle?: string
+    haveOpration?: boolean
     onChange?: (changeFiled: any, allChangeFileds: any) => void
 }
 
-export default function EditableTable({ columns = [], dataSource = [], form, opration, onChange }: EditTableProps): JSX.Element {
+export default function EditableTable({ columns = [], dataSource = [], form,
+    haveNewButton = true, newButtonTitle, haveOpration = true, opration, onChange }: EditTableProps): JSX.Element {
     const [dataState] = useState<any>({ data: dataSource || [], loading: false })
     const baseRowData: { [key: string]: string | number | null } = {}
     columns.forEach(item => baseRowData[item.dataIndex] = null)
-    columns = [
+    columns = haveOpration ? [
         { title: '序号', dataIndex: 'index', width: 50, editable: false, render: (key: number, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+        ...columns,
         {
             title: '操作', dataIndex: 'opration', width: 50, editable: false,
             render: (key: number, _: number, remove: (index: number | number[]) => void): JSX.Element => <Button type="link" onClick={() => handleRemove(remove, key)}>删除</Button>
-        },
+        }
+    ] : [
+        { title: '序号', dataIndex: 'index', width: 50, editable: false, render: (key: number, index: number): React.ReactNode => (<span>{index + 1}</span>) },
         ...columns
     ]
     const handleRemove = (remove: any, key: any) => {
@@ -117,7 +124,7 @@ export default function EditableTable({ columns = [], dataSource = [], form, opr
                 {
                     (fields: FormListFieldData[], { add, remove }: FormListOperation): React.ReactNode => (
                         <>
-                            <Row><Button onClick={async () => {
+                            {haveNewButton && <Row><Button onClick={async () => {
                                 try {
                                     await form?.validateFields()
                                     add({ ...baseRowData, uid: dataState.data.length + 1 })
@@ -125,7 +132,7 @@ export default function EditableTable({ columns = [], dataSource = [], form, opr
                                     message.error("当前行验证通过后才可以继续新增...")
                                     console.log(error)
                                 }
-                            }} type="primary" style={{ height: 32, margin: "0 16px 16px 0" }}>新增一行</Button>{opration}</Row>
+                            }} type="primary" style={{ height: 32, margin: "0 16px 16px 0" }}>{newButtonTitle || "新增一行"}</Button>{opration}</Row>}
 
                             {/* <Row style={{ position: "relative", height: 400 }}>
                                 <WindowScroller>

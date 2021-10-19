@@ -71,10 +71,12 @@ export default function CostDetail() {
                 <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
             ]}>
                 <DetailTitle title="基本信息" />
-                <BaseInfo columns={costBase.map((item: any) => ["projectLeader", "biddingPerson"].includes(item.dataIndex) ? ({ title: item.title, dataIndex: item.dataIndex }) : item)} dataSource={{}} />
+                <BaseInfo
+                    columns={costBase.map((item: any) => ["projectLeader", "biddingPerson"].includes(item.dataIndex) ? ({ title: item.title, dataIndex: item.dataIndex }) : item)}
+                    dataSource={data?.askInfo?.askInfoVo || {}} />
                 <DetailTitle title="产品类型成本评估" />
                 {data?.askInfo?.productArr.map((item: any, index: number) => <div key={index}>
-                    <DetailTitle title={item.title} operation={[<Button type="primary" key="delete">删除产品</Button>]} />
+                    <DetailTitle title={item.title} />
                     <CommonTable columns={[
                         {
                             title: '序号',

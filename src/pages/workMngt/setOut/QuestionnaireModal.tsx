@@ -91,16 +91,12 @@ class QuestionnaireModal extends React.Component<IQuestionnaireModalRouteProps, 
         return this.form?.current;
     }
 
-    public state: QuestionnaireModalState = {
-        
-    }
-
     protected submitQuestion(): void {
         this.getForm()?.validateFields().then(() => {
             const value = this.getForm()?.getFieldsValue(true);
             const record: IRecord = this.props.record;
             RequestUtil.post(`/tower-science/productStructure/issue`, {
-                currentValue: record.originalData,
+                currentValue: record.currentValue,
                 description: value.description,
                 id: record.id,
                 keyId: record.rowId,
