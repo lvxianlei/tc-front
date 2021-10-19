@@ -108,31 +108,103 @@
     "baseInfoHead": [
         {
             "title": "申请编号",
-            "dataIndex": "invoicingCode"
+            "dataIndex": "invoicingCode",
+            "disabled": true
         },
         {
             "title": "内部合同编号",
-            "dataIndex": "contractCode"
+            "dataIndex": "contractCode",
+            "type": "popTable",
+            "path": "/tower-market/contract",
+            "width": 1011,
+            "value": "contractName",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "合同编号",
+                    "dataIndex": "contractNumber",
+                    "search": true
+                },
+                {
+                    "title": "合同名称",
+                    "dataIndex": "contractName"
+                },
+                {
+                    "title": "销售类型",
+                    "dataIndex": "saleType"
+                },
+                {
+                    "title": "业主单位",
+                    "dataIndex": "customerCompany",
+                    "search": true
+                },
+                {
+                    "title": "合同签订单位",
+                    "dataIndex": "signCustomerName"
+                },
+                {
+                    "title": "合同签订日期",
+                    "dataIndex": "signContractTime"
+                },
+                {
+                    "title": "要求交货日期",
+                    "dataIndex": "deliveryTime"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择内部合同编号"
+                }
+            ]
         },
         {
             "title": "合同单位",
-            "dataIndex": "contractCompany"
+            "dataIndex": "contractCompany",
+            "disabled": true
         },
         {
             "title": "项目编号",
-            "dataIndex": "projectCode"
+            "dataIndex": "projectCode",
+            "disabled": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "项目编号必填..."
+                }
+            ]
         },
         {
             "title": "票面单位",
-            "dataIndex": "ticketCompany"
+            "dataIndex": "ticketCompany",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入票面单位..."
+                }
+            ]
         },
         {
-            "title": "订单工程名称",
-            "dataIndex": "contractCompany"
+            "title": "合同/项目名称",
+            "dataIndex": "contractCompany",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入合同/项目名称..."
+                }
+            ]
         },
         {
             "title": "产品类型",
-            "dataIndex": "productTypeId"
+            "dataIndex": "productTypeId",
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择产品类型..."
+                }
+            ]
         },
         {
             "title": "电压等级",
@@ -140,23 +212,47 @@
         },
         {
             "title": "合同签订日期",
-            "dataIndex": "contractSignTime"
+            "dataIndex": "contractSignTime",
+            "disabled": true,
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择合同签订日期..."
+                }
+            ]
         },
         {
             "title": "开票合计重量(吨)",
-            "dataIndex": "ticketWeight"
+            "dataIndex": "ticketWeight",
+            "disabled": true,
+            "type": "number"
         },
         {
-            "title": "开票金额(元)",
-            "dataIndex": ""
+            "title": "开票合计金额(元)",
+            "dataIndex": "ticketMoney",
+            "disabled": true,
+            "type": "number"
         },
         {
             "title": "合同交货日期",
-            "dataIndex": "contractDevTime"
+            "dataIndex": "contractDevTime",
+            "disabled": true,
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择合同交货日期..."
+                }
+            ]
         },
         {
             "title": "开票日期",
-            "dataIndex": "ticketTime"
+            "dataIndex": "ticketTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "开票次数",
@@ -164,59 +260,189 @@
         },
         {
             "title": "合同最后发货日期",
-            "dataIndex": "contractLastTime"
-        },
-        {
-            "title": "计划号",
-            "dataIndex": "planCode"
+            "dataIndex": "contractLastTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "是否已全开",
-            "dataIndex": "isOpen"
+            "dataIndex": "isOpen",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "预开"
+                },
+                {
+                    "value": 2,
+                    "label": "发票未开完"
+                },
+                {
+                    "value": 3,
+                    "label": "发票已开完"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择是否已全开..."
+                }
+            ]
         },
         {
             "title": "发票类型",
-            "dataIndex": "ticketType"
+            "dataIndex": "ticketType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "增值税普通发票"
+                },
+                {
+                    "value": 2,
+                    "label": "增值税专项发票完"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择发票类型..."
+                }
+            ]
         },
         {
-            "title": "开票方式",
-            "dataIndex": "openTicketType"
+            "title": "计划号",
+            "dataIndex": "planCode",
+            "disabled": true
         },
         {
-            "title": "开票金额",
-            "dataIndex": "ticketBasis"
+            "title": "开票金额依据",
+            "dataIndex": "ticketBasis",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "理重"
+                },
+                {
+                    "value": 2,
+                    "label": "过磅重量"
+                },
+                {
+                    "value": 3,
+                    "label": "合同约定"
+                },
+                {
+                    "value": 4,
+                    "label": "海关出口报关单"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择开票金额依据..."
+                }
+            ]
         },
         {
             "title": "开票时合同状态",
-            "dataIndex": "contractType"
+            "dataIndex": "contractType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "不下计划"
+                },
+                {
+                    "value": 2,
+                    "label": "未下计划"
+                },
+                {
+                    "value": 3,
+                    "label": "未下完计划"
+                },
+                {
+                    "value": 4,
+                    "label": "未发完货"
+                },
+                {
+                    "value": 5,
+                    "label": "已发完货"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择开票时合同状态..."
+                }
+            ]
+        },
+        {
+            "title": "开票方式",
+            "dataIndex": "openTicketType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "按重量开"
+                },
+                {
+                    "value": 2,
+                    "label": "按基数开"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择开票方式..."
+                }
+            ]
         },
         {
             "title": "理重（吨）",
-            "dataIndex": "reasonWeight"
+            "dataIndex": "reasonWeight",
+            "type": "number"
         },
         {
             "title": "过磅重量(吨)",
-            "dataIndex": "weigh"
+            "dataIndex": "weigh",
+            "type": "number"
         },
         {
             "title": " 业务经理",
-            "dataIndex": "business"
+            "dataIndex": "business",
+            "disabled": true
         },
         {
             "title": " 是否有验收单",
-            "dataIndex": "isCheck"
+            "dataIndex": "isCheck",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "无"
+                },
+                {
+                    "value": 2,
+                    "label": "有"
+                }
+            ],
+            "type": "select"
         },
         {
             "title": " 业务经理承诺回款时间",
-            "dataIndex": "businessBackTime"
+            "dataIndex": "businessBackTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": " 承诺回款比例",
-            "dataIndex": "backProportion"
+            "dataIndex": "backProportion",
+            "type": "number"
         },
         {
             "title": " 承诺回款金额",
-            "dataIndex": "backMoney"
+            "dataIndex": "backMoney",
+            "type": "number"
         },
         {
             "title": "备注",

@@ -53,7 +53,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
             <Row>
                 {columns.map((item: any, index: number) => <Col key={`form_item_${index}`} span={item.type === "textarea" ? 24 : (24 / col)}>
                     <Col span={24} >
-                        <div style={{ height: item.type === "textarea" ? 112 : 56 }}>
+                        <div style={{ height: 56, marginBottom: item.type === "textarea" ? 20 : 0 }}>
                             <Form.Item className="baseInfoForm" name={item.dataIndex} label={item.title} rules={item.rules || []}>
                                 {item.render ? item.render() : <FormItemType type={item.type} data={item} />}
                             </Form.Item>
@@ -66,6 +66,10 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
     }
 
     return <Descriptions bordered column={col} size="small" >
-        {columns.map((item: any, index: number) => <Descriptions.Item contentStyle={{ width: `${100 / (col * 2)}%` }} key={`desc_${index}`} label={item.title}>{formatDataType(item, dataSource)}</Descriptions.Item>)}
+        {columns.map((item: any, index: number) => <Descriptions.Item
+            contentStyle={{ width: `${100 / (col * 2)}%` }}
+            span={item.type === "textarea" ? col : 1}
+            key={`desc_${index}`}
+            label={item.title}>{formatDataType(item, dataSource)}</Descriptions.Item>)}
     </Descriptions>
 }

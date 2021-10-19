@@ -20,7 +20,7 @@ export default function Invoicing() {
         return value
     }
     return <Page
-        path="/tower-market/projectInfo"
+        path="/invoicing"
         columns={invoicingListHead}
         extraOperation={<Link to="/project/invoicing/new"><Button type="primary">新增开票申请</Button></Link>}
         onFilterSubmit={onFilterSubmit}
