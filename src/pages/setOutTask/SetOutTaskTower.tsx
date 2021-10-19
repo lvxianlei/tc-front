@@ -195,10 +195,10 @@ const columns = [
         dataIndex: 'weldingDeliverTime'
     },
     {
-        key: 'boltStatus',
+        key: 'weldingStatus',
         title: '组焊清单状态',
         width: 200,
-        dataIndex: 'boltStatus',
+        dataIndex: 'weldingStatus',
         render: (status: number): React.ReactNode => {
             switch (status) {
                 case 1:
