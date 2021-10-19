@@ -279,7 +279,8 @@
         },
         {
             "title": "产品类型",
-            "dataIndex": "productType"
+            "dataIndex": "productType",
+            "type": "select"
         },
         {
             "title": "备注",
