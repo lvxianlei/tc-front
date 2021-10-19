@@ -1,9 +1,8 @@
-import React, { useState, useRef, useImperativeHandle, useEffect, forwardRef } from "react"
-import { Button, Form, message } from "antd"
+import React, { useState, useRef, useImperativeHandle, forwardRef } from "react"
+import { Button, Form, message, Spin, Modal, Select, Input } from "antd"
 import { useHistory, useParams } from "react-router-dom"
 import { BaseInfo, DetailContent, DetailTitle } from '../../common'
 import { costBase } from '../managementDetailData.json'
-import NewProductType from "./NewProductType"
 import type { TabTypes } from "../ManagementDetail"
 import { EditableProTable, } from '@ant-design/pro-table'
 import useRequest from '@ahooksjs/use-request'
@@ -11,53 +10,67 @@ import RequestUtil from '../../../utils/RequestUtil'
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 export type SelectType = "selectA" | "selectB" | "selectC"
 
-
+const productTypeEnum = [
+    {
+        "label": "角钢塔",
+        "value": "角钢塔"
+    },
+    {
+        "label": "钢管塔",
+        "value": "钢管塔"
+    },
+    {
+        "label": "四管塔",
+        "value": "四管塔"
+    },
+    {
+        "label": "架构",
+        "value": "架构"
+    }
+]
 
 const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref) => {
     const [formRef] = Form.useForm()
 
     useImperativeHandle(ref, () => ({ formRef, index }), [])
 
-    return <>
-        <DetailTitle title="产品类型：" />
-        <EditableProTable
-            rowKey="id"
-            maxLength={5}
-            recordCreatorProps={false}
-            form={{
-                wrapperCol: { span: 24 },
-                labelCol: { span: 24 }
-            }}
-            editable={{
-                form: formRef,
-                editableKeys: [0]
-            }}
-            scroll={{ x: true }}
-            columns={data.head.map((cItem: any) => {
-                console.log(cItem)
-                return ({
-                    ...cItem,
-                    colSize: 4,
-                    valueType: cItem.type,
-                    formItemProps: {
-                        rules: cItem.rules
-                    },
-                    valueEnum: cItem.enum && new Map(cItem.enum.map((enumItem: any) => [enumItem.value, { text: enumItem.label }]))
-                })
-            })}
-            value={[data.data]}
-        />
-    </>
+    return <EditableProTable
+        rowKey="id"
+        maxLength={5}
+        recordCreatorProps={false}
+        form={{
+            wrapperCol: { span: 24 },
+            labelCol: { span: 24 }
+        }}
+        editable={{
+            form: formRef,
+            editableKeys: [0]
+        }}
+        scroll={{ x: 'max-content' }}
+        size="small"
+        columns={data.head.map((cItem: any) => ({
+            ...cItem,
+            valueType: cItem.type,
+            formItemProps: {
+                rules: cItem.rules
+            },
+            valueEnum: cItem.enum && new Map(cItem.enum.map((enumItem: any) => [enumItem.value, { text: enumItem.label }]))
+        }))}
+        value={data.data}
+    />
 })
 
-const EditableProTableList: React.FC<any> = forwardRef(({ data }, ref) => {
+const EditableProTableList: React.FC<any> = forwardRef(({ data, deleteProduct }, ref) => {
     const currentRef = useRef(data || [])
     useImperativeHandle(ref, () => ({
         data: currentRef.current
     }), [data.length])
 
     return <>
-        {data.map((item: any, index: number) => <EditableProTableListItem data={item} index={index} key={index} ref={(itemRef: any) => { currentRef.current[index] = itemRef }} />)}
+        {data.map((item: any, index: number) => <>
+            <DetailTitle title={`产品类型:${item.voltage}${item.productName}`} operation={[<Button type="primary" key="delete" onClick={() => deleteProduct && deleteProduct(item)}>删除产品</Button>]} />
+            <EditableProTableListItem data={item} index={index} key={index} ref={(itemRef: any) => { currentRef.current[index] = itemRef }} />
+        </>)}
     </>
 })
 
@@ -67,13 +80,15 @@ export default function CostEdit() {
     const formRef = useRef([])
     const params = useParams<{ id: string, projectId: string, tab?: TabTypes }>()
     const [visible, setVisible] = useState<boolean>(false)
-    const [productName, setProductName] = useState("")
     const [askProductDtos, setAskProductDtos] = useState<any[]>([])
-
+    const [form] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const askInfo: any = await RequestUtil.get(`/tower-market/askInfo?projectId=${params.projectId}`)
-            setAskProductDtos(askInfo.productArr.map((item: any, index: number) => ({ ...item, data: ({ ...item.data, id: index }) })))
+            setAskProductDtos(askInfo.productArr.map((item: any, index: number) => ({
+                ...item,
+                data: [({ ...item.data, id: index })]
+            })))
             baseInfo.setFieldsValue(askInfo.askInfoVo)
             resole(askInfo)
         } catch (error) {
@@ -81,10 +96,10 @@ export default function CostEdit() {
         }
     }), { manual: params.id === "new" })
 
-    const { run } = useRequest<{ [key: string]: any }>((productName: string) => new Promise(async (resole, reject) => {
+    const { run } = useRequest<{ [key: string]: any }>((productName: string, voltage: string) => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-market/askInfo/getAskProductParam?productName=${productName}&voltage=`)
-            setAskProductDtos([...askProductDtos, { ...result, data: [{ id: result.length }] }])
+            const result: any = await RequestUtil.get(`/tower-market/askInfo/getAskProductParam?productName=${productName}&voltage=${voltage}`)
+            setAskProductDtos([...askProductDtos, { ...result, data: [{ id: result.length, voltage, productName }] }])
             resole(result)
         } catch (error) {
             reject(error)
@@ -102,21 +117,28 @@ export default function CostEdit() {
 
     const handleNewProduct = () => setVisible(true)
 
-    const handleNewProductTypeOk = async (value: SelectType | "") => {
+    const handleNewProductTypeOk = async () => {
+        const data = await form.validateFields()
         setVisible(false)
-        setProductName(value)
-        await run(value)
+        form.resetFields()
+        await run(data.productName, data.voltage)
     }
 
     const handleSave = async () => {
         try {
             const baseInfoData = await baseInfo.validateFields();
+            if ((formRef.current as any).data.length <= 0) {
+                message.error("至少新增一个产品类型")
+                return
+            }
             const askProductDtoDatas = await Promise.all((formRef.current as any).data.map((item: any) => item.formRef.validateFields()))
             await saveRun({
-                ...baseInfoData, askProductDtos: askProductDtoDatas.map((item: any) => ({
+                ...baseInfoData,
+                id: data?.askInfoVo.id,
+                askProductDtos: askProductDtoDatas.map((item: any, index: number) => ({
                     params: Object.keys(item).map((itemKey: any) => `${itemKey}-${item[itemKey]}`).join(","),
-                    productName,
-                    voltage: item.vd
+                    productName: askProductDtos[index].data[0].productName,
+                    voltage: askProductDtos[index].data[0].voltage
                 }))
             })
             message.success("保存成功...")
@@ -129,17 +151,47 @@ export default function CostEdit() {
         }
     }
 
+    const deleteProduct = (item: any) => {
+        setAskProductDtos(askProductDtos.filter((askItem: any) => !(askItem.productName === item.productName && askItem.voltage === item.voltage)))
+    }
+
     return <>
         <ManagementDetailTabsTitle />
-        <NewProductType visible={visible} title="新增产品类型" okText="创建" onOk={handleNewProductTypeOk} onCancel={() => setVisible(false)} />
-        <DetailContent operation={[
-            <Button key="save" style={{ marginRight: '16px' }} type="primary" loading={saveLoading} onClick={handleSave}>保存</Button>,
-            <Button key="goback" onClick={() => history.go(-1)}>取消</Button>
-        ]}>
-            <DetailTitle title="基本信息" />
-            <BaseInfo form={baseInfo} columns={costBase} dataSource={{}} edit col={3} />
-            <DetailTitle title="产品类型成本评估" operation={[<Button key="newType" type="primary" onClick={handleNewProduct} >新增产品类型</Button>]} />
-            <EditableProTableList data={askProductDtos} ref={formRef} />
-        </DetailContent>
+        <Modal visible={visible} title="新增产品类型" okText="创建" onOk={handleNewProductTypeOk} onCancel={() => {
+            setVisible(false)
+            form.resetFields()
+        }} destroyOnClose>
+            <Form form={form}>
+                <Form.Item label="产品类型" name="productName" rules={[
+                    {
+                        "required": true,
+                        "message": "请选择产品类型..."
+                    }
+                ]}>
+                    <Select style={{ width: "100%" }}>
+                        {productTypeEnum.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
+                    </Select>
+                </Form.Item>
+                <Form.Item label="电压等级(kv)" name="voltage" rules={[
+                    {
+                        "required": true,
+                        "message": "请输入电压等级(kv)..."
+                    }
+                ]}>
+                    <Input style={{ width: "100%" }} />
+                </Form.Item>
+            </Form>
+        </Modal>
+        <Spin spinning={loading}>
+            <DetailContent operation={[
+                <Button key="save" style={{ marginRight: '16px' }} type="primary" loading={saveLoading} onClick={handleSave}>保存</Button>,
+                <Button key="goback" onClick={() => history.go(-1)}>取消</Button>
+            ]}>
+                <DetailTitle title="基本信息" />
+                <BaseInfo form={baseInfo} columns={costBase} dataSource={{}} edit col={3} />
+                <DetailTitle title="产品类型成本评估" operation={[<Button key="newType" type="primary" onClick={handleNewProduct} >新增产品类型</Button>]} />
+                <EditableProTableList data={askProductDtos} ref={formRef} deleteProduct={deleteProduct} />
+            </DetailContent>
+        </Spin>
     </>
 }

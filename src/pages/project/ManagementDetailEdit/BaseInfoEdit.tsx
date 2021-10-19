@@ -9,6 +9,7 @@ import RequestUtil from "../../../utils/RequestUtil"
 import { TabTypes } from "../ManagementDetail"
 import AuthUtil from "../../../utils/AuthUtil"
 import { downLoadFile } from "../../../utils"
+
 export default function BaseInfoEdit(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ tab: TabTypes, id: string }>()
@@ -92,6 +93,10 @@ export default function BaseInfoEdit(): JSX.Element {
         setAttachVosData(attachVosData.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
     }
 
+    const handleBaseInfoChange = (fields: any) => {
+
+    }
+
     return <>
         <ManagementDetailTabsTitle />
         <DetailContent operation={[
@@ -107,7 +112,8 @@ export default function BaseInfoEdit(): JSX.Element {
             <Spin spinning={loading}>
                 <DetailTitle title="基本信息" />
                 <BaseInfo
-                 form={baseInfoForm}
+                    onChange={handleBaseInfoChange}
+                    form={baseInfoForm}
                     columns={
                         address === "其他-国外" ?
                             baseInfoData.map((item: any) => item.dataIndex === "address" ? ({ ...item, type: "select", enum: data?.addressList }) : item) :
