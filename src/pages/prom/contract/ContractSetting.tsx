@@ -158,24 +158,29 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
         values.signCustomerId = this.state.contract?.signCustomerId;
         console.log(totalAmount, values.contractAmount)
         values.region = Array.isArray(values?.region) ? values?.region?.[0] : values?.region;
-        if (totalRate < 100) {
-            message.error('计划回款总占比必须等于100');
+        if(planValue.length>0){
+            if (totalRate < 100) {
+                message.error('计划回款总占比必须等于100');
+                return Promise.reject(false);
+            } else if (totalRate > 100) {
+                message.error('计划回款总占比必须等于100');
+                return Promise.reject(false);
+            } else if (totalAmount < values.contractAmount) {
+                message.error('计划回款总金额必须等于合同总价');
+                return Promise.reject(false);
+            } else if (totalAmount > values.contractAmount) {
+                message.error('计划回款总金额必须等于合同总价');
+                return Promise.reject(false);
+            } else {
+                return await RequestUtil.put('/tower-market/contract', {
+                    ...values,
+                    id: this.props.match.params.id,
+                    projectId: (this.state.contract as any).projectId
+                });
+            }
+        }else{
+            message.error('回款计划无数据，需新增！');
             return Promise.reject(false);
-        } else if (totalRate > 100) {
-            message.error('计划回款总占比必须等于100');
-            return Promise.reject(false);
-        } else if (totalAmount < values.contractAmount) {
-            message.error('计划回款总金额必须等于合同总价');
-            return Promise.reject(false);
-        } else if (totalAmount > values.contractAmount) {
-            message.error('计划回款总金额必须等于合同总价');
-            return Promise.reject(false);
-        } else {
-            return await RequestUtil.put('/tower-market/contract', {
-                ...values,
-                id: this.props.match.params.id,
-                projectId: (this.state.contract as any).projectId
-            });
         }
     }
 

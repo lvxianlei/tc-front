@@ -121,7 +121,7 @@
             "columns": [
                 {
                     "title": "客户类型",
-                    "dataIndex": "typeName",
+                    "dataIndex": "type",
                     "type": "select",
                     "enum": [
                         {

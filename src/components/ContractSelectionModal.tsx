@@ -114,32 +114,32 @@ export default class ContractSelectionComponent extends AbstractFilteredSelectio
             key: 'contractNumber',
             title: '合同编号',
             dataIndex: 'contractNumber',
-            width: 50
+            width: '15%',
         }, {
             key: 'contractName',
             title: '合同名称',
             dataIndex: 'contractName',
-            width: 50
+            width: '15%',
         }, {
             key: 'saleType',
             title: '销售类型',
             dataIndex: 'saleType',
-            width: 50
+            width: '15%',
         }, {
             key: 'customerCompany',
             title: '业主单位',
             dataIndex: 'customerCompany',
-            width: 50
+            width: '15%',
         }, {
             key: 'signCustomerName',
             title: '合同签订单位',
             dataIndex: 'signCustomerName',
-            width: 50
+            width: '15%',
         }, {
             key: 'deliveryTime',
             title: '要求交货日期',
             dataIndex: 'deliveryTime',
-            width: 50
+            width: '15%',
         }];
     }
 
