@@ -115,7 +115,7 @@ export default function AssemblyWeldingCheck(): React.ReactNode {
     const [ paragraphData, setParagraphData ] = useState([] as undefined | any);
 
     const getTableDataSource = (pagination: TablePaginationConfig) => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<IResponseData>(`/tower-science/welding/getVerificationById`, { weldingGroupId: params.id, ...pagination });
+        const data = await RequestUtil.get<IResponseData>(`/tower-science/welding/getVerificationById`, { weldingId: params.id, ...pagination });
         setDetailData(data);
         resole(data);
     });
@@ -126,7 +126,7 @@ export default function AssemblyWeldingCheck(): React.ReactNode {
             <DetailContent className={ styles.check }>
                 <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
                     {/* <Button type="primary" ghost>导出</Button> */}
-                    <Button type="primary"  onClick={ () => RequestUtil.post<IResponseData>(`/tower-science/welding/completeWelding`, { weldingGroupId: params.id }).then(res => {
+                    <Button type="primary"  onClick={ () => RequestUtil.post<IResponseData>(`/tower-science/welding/completeWelding`, { weldingId: params.id }).then(res => {
                         history.goBack();
                     }) } >完成校核</Button>
                     <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>

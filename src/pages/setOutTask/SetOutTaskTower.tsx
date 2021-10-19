@@ -186,19 +186,19 @@ const columns = [
         key: 'weldingLeaderName',
         title: '组焊负责人',
         width: 200,
-        dataIndex: 'combinedWeldingLeaderName'
+        dataIndex: 'weldingLeaderName'
     },
     {
         key: 'weldingDeliverTime',
         title: '组焊交付时间',
         width: 200,
-        dataIndex: 'combinedWeldingDeliverTime'
+        dataIndex: 'weldingDeliverTime'
     },
     {
-        key: 'boltStatus',
+        key: 'weldingStatus',
         title: '组焊清单状态',
         width: 200,
-        dataIndex: 'boltStatus',
+        dataIndex: 'weldingStatus',
         render: (status: number): React.ReactNode => {
             switch (status) {
                 case 1:
