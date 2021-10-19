@@ -239,12 +239,14 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                                     render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                         <Space direction="horizontal" size="small">
                                             {
-                                                record.id ? <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button> : <Button type="link" onClick={ () => window.open(record.link) }>下载</Button> 
+                                                record.id ? <Button type="link" onClick={ () => window.open(record.id ? record.filePath : record.link) }>下载</Button> : <Button type="link" onClick={ () => window.open(record.id ? record.filePath : record.link) }>下载</Button> 
                                             }
                                             {
                                                 record.fileSuffix === 'pdf' 
                                                 ? 
-                                                <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : ['jpg', 'jpeg', 'png', 'gif'].includes(record.fileSuffix) 
+                                                <Button type="link" onClick={ () => window.open(record.id ? record.filePath : record.link) }>预览</Button> 
+                                                : 
+                                                ['jpg', 'jpeg', 'png', 'gif'].includes(record.fileSuffix) 
                                                 ? 
                                                 <Button type='link' onClick={ () => { this.setState({ pictureUrl: record.id ? record.filePath : record.link, pictureVisible: true }) } }>预览</Button> 
                                                 : null 
