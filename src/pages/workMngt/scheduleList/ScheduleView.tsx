@@ -163,10 +163,10 @@ export default function ScheduleView(): React.ReactNode {
             dataIndex: 'loftingLeaderName'
         },
         {
-            key: 'loftingPartDeliverTime',
+            key: 'loftingDeliverTime',
             title: '放样计划交付时间',
             width: 200,
-            dataIndex: 'loftingPartDeliverTime'
+            dataIndex: 'loftingDeliverTime'
         },
         {
             key: 'weldingLeaderName',

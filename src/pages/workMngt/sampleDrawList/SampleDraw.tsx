@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Button, Modal, Form, Image, message, Popconfirm } from 'antd';
+import { Space, Input, DatePicker, Button, Modal, Form, Image, message, Popconfirm, Upload } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
 import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
+import AuthUtil from '../../../utils/AuthUtil';
 
 export default function SampleDraw(): React.ReactNode {
     const params = useParams<{ id: string }>()
@@ -78,7 +79,7 @@ export default function SampleDraw(): React.ReactNode {
                         title="要删除该条数据吗？"
                         okText="确认"
                         cancelText="取消"
-                        onConfirm={async () =>  await RequestUtil.delete(`/tower-science/smallSample/${record.id}`).then(()=>{
+                        onConfirm={async () =>  await RequestUtil.delete(`/tower-science/smallSample/sampleDelete/${record.id}`).then(()=>{
                             message.success('删除成功！');
                         }).then(()=>{
                             setRefresh(!refresh)
@@ -89,7 +90,7 @@ export default function SampleDraw(): React.ReactNode {
                         </Button>
                     </Popconfirm>
                     <Button type='link' onClick={async () => {
-                        const url:any = await RequestUtil.get(`/tower-science/smallSample/sampleView/${record.id}`);
+                        const url:any = await RequestUtil.get(`/tower-science/smallSample/smallSample/sampleView/${record.id}`);
                         setUrl(url?.filePath);
                         setVisible(true)
                     }}>查看</Button>
@@ -109,12 +110,31 @@ export default function SampleDraw(): React.ReactNode {
         setFilterValue(value)
         return value
     }
+    const uploadChange = async (event: any) => {
+      if (event.file.status === "done") {
+          if (event.file.response.code === 200) {
+              const dataInfo = event.file.response.data
+              const fileInfo = dataInfo.name.split(".");
+              const value=[{
+                  name: dataInfo.originalName,
+                  fileSuffix:fileInfo[fileInfo.length - 1],
+                  filePath: dataInfo.name,
+                  userName:dataInfo.userName
+              }]
+              await RequestUtil.post(`/tower-science/smallSample/sampleUpload/${params.id}`,value).then(()=>{
+                  message.success('导入成功！')
+              }).then(()=>{
+                  setRefresh(!refresh)
+              })
+          }
+      }
+    }
     return (
         <>
             <Modal visible={visible} title="图片" footer={false}  onOk={handleModalOk} onCancel={handleModalCancel} width={800}>
                 <Image 
-                    src="https://gw.alipayobjects.com/zos/antfincdn/LlvErxo8H9/photo-1503185912284-5271ff81b9a8.webp"
-                    // src={url}
+                    // src="https://gw.alipayobjects.com/zos/antfincdn/LlvErxo8H9/photo-1503185912284-5271ff81b9a8.webp"
+                    src={url}
                     preview={false}
                 />
             </Modal>
@@ -128,11 +148,23 @@ export default function SampleDraw(): React.ReactNode {
                 extraOperation={
                     <Space>
                     <Button type="primary">导出</Button>
-                    <Button type="primary">导入</Button>
+                    <Upload
+                        key="sub"
+                        name="file"
+                        multiple={true}
+                        action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
+                        headers={{
+                            'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                            'Tenant-Id': AuthUtil.getTenantId(),
+                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                        }}
+                        onChange={uploadChange}
+                        showUploadList={false}
+                    ><Button type="primary" >导入</Button></Upload>
                     <Button type="primary">下载小样图</Button>
                     <Popconfirm
                         title="确认完成小样图?"
-                        onConfirm={ async () =>  await RequestUtil.put(`/tower-science/smallSample/sampleComplete/productCategoryId=${params.id}`).then(()=>{
+                        onConfirm={ async () =>  await RequestUtil.put(`/tower-science/smallSample/sampleComplete?productCategoryId=${params.id}`).then(()=>{
                             message.success('提交成功！');
                         }).then(()=>{
                             history.push('/workMngt/sampleDrawList');
