@@ -961,7 +961,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                         this.setState({
                                                                             isVisible: true,
                                                                             url: {
-                                                                                link: attachInfoDtos.link || attachInfoDtos.filePath,
+                                                                                link: attachInfoDtos.id?attachInfoDtos.filePath:attachInfoDtos.link,
                                                                                 fileSuffix: attachInfoDtos
                                                                             }
                                                                         })
