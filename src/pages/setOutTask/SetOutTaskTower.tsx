@@ -186,13 +186,13 @@ const columns = [
         key: 'weldingLeaderName',
         title: '组焊负责人',
         width: 200,
-        dataIndex: 'combinedWeldingLeaderName'
+        dataIndex: 'weldingLeaderName'
     },
     {
         key: 'weldingDeliverTime',
         title: '组焊交付时间',
         width: 200,
-        dataIndex: 'combinedWeldingDeliverTime'
+        dataIndex: 'weldingDeliverTime'
     },
     {
         key: 'boltStatus',
