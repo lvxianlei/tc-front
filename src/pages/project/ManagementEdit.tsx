@@ -12,6 +12,7 @@ const dictionaryOptions: any = ApplicationContext.get().dictionaryOption
 export default function BaseInfoEdit(): JSX.Element {
   const history = useHistory()
   const [attachVosData, setAttachVosData] = useState<any[]>([])
+  const [selectAdress, setSelectAdress] = useState<string>("")
   const [baseInfoForm] = Form.useForm()
   const [cargoVOListForm] = Form.useForm()
   const typeNameEnum = dictionaryOptions["121"].map((item: any) => ({ value: item.id, label: item.name }))
@@ -23,6 +24,15 @@ export default function BaseInfoEdit(): JSX.Element {
       reject(error)
     }
   }), { manual: true })
+
+  const { data: address } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    try {
+      const result: any[] = await RequestUtil.get(`/tower-system/region/00`)
+      resole([...result.map((item: any) => ({ value: item.code, label: item.name })), { value: "其他-国外", label: "其他-国外" }])
+    } catch (error) {
+      reject(error)
+    }
+  }))
 
   const handleSubmit = async () => {
     try {
@@ -70,6 +80,12 @@ export default function BaseInfoEdit(): JSX.Element {
     setAttachVosData(attachVosData.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
   }
 
+  const handleBaseInfoChange = (fields: any) => {
+    if (fields.address) {
+      setSelectAdress(fields.address)
+    }
+  }
+
   return <DetailContent operation={[
     <Button
       key="save"
@@ -81,13 +97,26 @@ export default function BaseInfoEdit(): JSX.Element {
     <Button key="cacel" onClick={() => history.goBack()}>取消</Button>
   ]}>
     <DetailTitle title="基本信息" />
-    <BaseInfo form={baseInfoForm} columns={baseInfoData.map((item: any) => item.dataIndex === "biddingPerson" ? ({
-      ...item,
-      columns: item.columns.map((columnItem: any) => columnItem.dataIndex === "type" ? ({
-        ...columnItem,
-        enum: typeNameEnum
-      }) : columnItem)
-    }) : item)} dataSource={{}} edit />
+    <BaseInfo onChange={handleBaseInfoChange} form={baseInfoForm} columns={baseInfoData.map((item: any) => {
+      if (item.dataIndex === "biddingPerson") {
+        return ({
+          ...item,
+          columns: item.columns.map((columnItem: any) => columnItem.dataIndex === "type" ? ({
+            ...columnItem,
+            enum: typeNameEnum
+          }) : columnItem)
+        })
+      }
+      if (item.dataIndex === "address") {
+        return ({ ...item, type: "select", enum: address || [] })
+      }
+      return item
+    }).filter((item: any) => {
+      if (item.dataIndex === "country") {
+        return selectAdress === "其他-国外"
+      }
+      return true
+    })} dataSource={{}} edit />
     <DetailTitle title="货物清单" />
     <EditTable form={cargoVOListForm} columns={cargoVOListColumns} dataSource={[]} />
     <DetailTitle title="附件信息" operation={[<Upload
