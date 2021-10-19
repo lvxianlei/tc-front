@@ -4,8 +4,8 @@
  * @description 工作管理-组焊列表-组焊信息
 */
 
-import React from 'react';
-import { Spin, Button, Space } from 'antd';
+import React, { useState } from 'react';
+import { Spin, Button, Space, Modal, Image } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -107,51 +107,64 @@ const productColumns = [
 export default function AssemblyWeldingInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
+    const [ pictureVisible, setPictureVisible ] = useState(false);
+    const [ pictureUrl, setPictureUrl ] = useState('');
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-science/welding/getWaldingTaskById?weldingGroupId=${ params.id }`)
+        const data = await RequestUtil.get(`/tower-science/welding/getWaldingTaskById?weldingId=${ params.id }`)
         resole(data)
     }), {})
-    const detailData: any = data
+    const detailData: any = data;
     if (loading) {
         return <Spin spinning={loading}>
             <div style={{ width: '100%', height: '300px' }}></div>
         </Spin>
     }
 
-    return <DetailContent operation={ [
-        <Space direction="horizontal" size="small" >
-            <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
-        </Space>
-    ] }>
-        <DetailTitle title="特殊要求" />
-        <BaseInfo columns={ specialColums } dataSource={ detailData } col={ 2 } />
-        <DetailTitle title="产品信息" />
-        <BaseInfo columns={ productColumns } dataSource={ detailData } col={ 2 } />
-        <DetailTitle title="相关附件" />
-        <CommonTable columns={[
-            { 
-                key: 'name', 
-                title: '附件名称', 
-                dataIndex: 'name',
-                width: 250
-            },
-            { 
-                key: 'operation', 
-                title: '操作', 
-                dataIndex: 'operation', 
-                render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                    <Space direction="horizontal" size="small">
-                        <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
-                        {
-                            record.fileSuffix === 'pdf' ? <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : null
-                        }
-                    </Space>
-            ) }
-        ]}
-            dataSource={ detailData.attachInfoList }
-            pagination={ false }
-        />
-        <DetailTitle title="操作信息"/>
-        <CommonTable columns={ tableColumns } dataSource={ detailData.statusRecordList } pagination={ false } />
-    </DetailContent>
+    return <>
+        <DetailContent operation={ [
+            <Space direction="horizontal" size="small" >
+                <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
+            </Space>
+        ] }>
+            <DetailTitle title="特殊要求" />
+            <BaseInfo columns={ specialColums } dataSource={ detailData } col={ 2 } />
+            <DetailTitle title="产品信息" />
+            <BaseInfo columns={ productColumns } dataSource={ detailData } col={ 2 } />
+            <DetailTitle title="相关附件" />
+            <CommonTable columns={[
+                { 
+                    key: 'name', 
+                    title: '附件名称', 
+                    dataIndex: 'name',
+                    width: 250
+                },
+                { 
+                    key: 'operation', 
+                    title: '操作', 
+                    dataIndex: 'operation', 
+                    render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                        <Space direction="horizontal" size="small">
+                            <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
+                            {
+                                record.fileSuffix === 'pdf' 
+                                ? 
+                                <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> 
+                                : ['jpg', 'jpeg', 'png', 'gif'].includes(record.fileSuffix) 
+                                ? 
+                                <Button type='link' onClick={ () => { setPictureUrl(record.filePath); setPictureVisible(true) } }>预览</Button> 
+                                : null 
+                            }
+                        </Space>
+                ) }
+            ]}
+                dataSource={ detailData.attachInfoList }
+                pagination={ false }
+            />
+            <DetailTitle title="操作信息"/>
+            <CommonTable columns={ tableColumns } dataSource={ detailData.statusRecordList } pagination={ false } />
+        </DetailContent>
+        <Modal visible={ pictureVisible } onCancel={ () => setPictureVisible(false) } footer={ false }>
+            <Image src={ pictureUrl } preview={ false } />
+        </Modal>
+    </>
 }

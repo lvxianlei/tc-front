@@ -13,9 +13,9 @@ import { Link } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 
 enum PriorityType {
-    HIGH = 1,              
-    MIDDLE =2,         
-    LOW = 3,                       
+    HIGH = '1',              
+    MIDDLE ='2',         
+    LOW = '3',                       
 }
 
 export default function AssemblyWeldingList(): React.ReactNode {
@@ -28,17 +28,17 @@ export default function AssemblyWeldingList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
         },
         {
-            key: 'taskCode',
+            key: 'taskNum',
             title: '放样任务编号',
             width: 150,
-            dataIndex: 'taskCode'
+            dataIndex: 'taskNum'
         },
         {
             key: 'priority',
             title: '优先级',
             width: 150,
             dataIndex: 'priority',
-            render: (priority: number): React.ReactNode => {
+            render: (priority: string): React.ReactNode => {
                 switch (priority) {
                     case PriorityType.HIGH:
                         return '高';
@@ -80,10 +80,10 @@ export default function AssemblyWeldingList(): React.ReactNode {
             width: 200,
         },
         {
-            key: 'weldingLeader',
+            key: 'weldingLeaderName',
             title: '组焊负责人',
             width: 200,
-            dataIndex: 'weldingLeader'
+            dataIndex: 'weldingLeaderName'
         },
         {
             key: 'status',
@@ -132,14 +132,14 @@ export default function AssemblyWeldingList(): React.ReactNode {
                         record.status === 4 ? 
                         <Popconfirm
                             title="确认提交?"
-                            onConfirm={ () => RequestUtil.get(`/tower-science/welding/submitForVerification?weldingGroupId=${ record.id }`).then(res => {
+                            onConfirm={ () => RequestUtil.post(`/tower-science/welding/submitWelding?weldingId=${ record.id }`).then(res => {
                                 setRefresh(!refresh)
                             }) }
                             okText="提交"
                             cancelText="取消"
                         >
-                            <Button type="link">提交任务</Button>
-                        </Popconfirm> : <Button type="link" disabled>提交任务</Button>
+                            <Button type="link">提交</Button>
+                        </Popconfirm> : <Button type="link" disabled>提交</Button>
                     }
                 </Space>
             )
@@ -195,13 +195,13 @@ export default function AssemblyWeldingList(): React.ReactNode {
         onFilterSubmit = { (values: Record<string, any>) => {
             if(values.updateTime) {
                 const formatDate = values.updateTime.map((item: any) => item.format("YYYY-MM-DD"));
-                values.updateStatusTimeStart = formatDate[0];
-                values.updateStatusTimeEnd = formatDate[1];
+                values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
+                values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             }
             if(values.plannedTime) {
                 const formatDate = values.plannedTime.map((item: any) => item.format("YYYY-MM-DD"));
-                values.plannedDeliveryTimeStart = formatDate[0];
-                values.plannedDeliveryTimeEnd = formatDate[1];
+                values.plannedDeliveryTimeStart = formatDate[0] + ' 00:00:00';;
+                values.plannedDeliveryTimeEnd = formatDate[1] + ' 23:59:59';;
             }
             return values;
         } }

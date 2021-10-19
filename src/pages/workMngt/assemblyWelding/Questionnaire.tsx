@@ -419,7 +419,7 @@ export default function Questionnaire(): React.ReactNode {
             message.warning('请选择主件');
         } else {
             const value = {
-                weldingGroupId: params.id,
+                weldingId: params.id,
                 description: description,
                 issueWeldingDetailedDTO: {
                     id: params.segmentId,

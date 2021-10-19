@@ -13,7 +13,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import { useState } from 'react';
 import styles from './AssemblyWelding.module.less';
 import { downloadTemplate } from '../setOut/downloadTemplate';
-import AssemblyWeldingNew from './AssemblyWeldingNew';
+import AssemblyWeldingNew, { IBaseData, IComponentList } from './AssemblyWeldingNew';
 
 interface IResponseData {
     readonly id: number;
@@ -64,7 +64,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                     <Popconfirm
                         title="确认删除?"
-                        onConfirm={ () => RequestUtil.get(`/tower-science/welding/deleteWelding`, { segmentId: record.id }).then(res => {
+                        onConfirm={ () => RequestUtil.delete(`/tower-science/welding/deleteWelding`, { segmentId: record.id }).then(res => {
                             message.success('删除成功');
                             history.go(0);
                         }) }
@@ -73,8 +73,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                     >
                         <Button type="link">删除</Button>
                     </Popconfirm>
-                    
-                    <AssemblyWeldingNew id={ params.id } segmentId={ record.id } productCategoryId={ params.productCategoryId } record={ record } name="编辑" />
+                    <Button type="link" onClick={ () => { setVisible(true); setName('编辑'); setRecord(record) } }>编辑</Button>
                 </Space>
             )
         }
@@ -137,9 +136,12 @@ export default function AssemblyWeldingListing(): React.ReactNode {
     const [ detailData, setDetailData ] = useState<IResponseData | undefined>(undefined);
     const params = useParams<{ id: string, productCategoryId: string }>();
     const [ paragraphData, setParagraphData ] = useState([] as undefined | any);
+    const [ visible, setVisible ] = useState(false);
+    const [ name, setName ] = useState('');
+    const [ record, setRecord ] = useState<IBaseData>({});
 
     const getTableDataSource = (pagination: TablePaginationConfig) => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<IResponseData>(`/tower-science/welding/getDetailedById`, { weldingGroupId: params.id, ...pagination });
+        const data = await RequestUtil.get<IResponseData>(`/tower-science/welding/getDetailedById`, { weldingId: params.id, ...pagination });
         setDetailData(data);
         resole(data);
     });
@@ -151,11 +153,11 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                 <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
                     {/* <Button type="primary" ghost>导出</Button> */}
                     <Button type="primary" onClick={ () => downloadTemplate('/tower-science/welding/exportTemplate', '模板') } ghost>模板下载</Button>
-                    <Button type="primary"  onClick={ () => RequestUtil.post<IResponseData>(`/tower-science/welding/submitWelding`, { weldingGroupId: params.id }).then(res => {
+                    <Button type="primary"  onClick={ () => RequestUtil.post<IResponseData>(`/tower-science/welding/submitForVerification`, { weldingId: params.id }).then(res => {
                         history.goBack();
                     }) } >完成组焊清单</Button>
-                    <AssemblyWeldingNew id={ params.id } productCategoryId={ params.productCategoryId }  name="添加组焊" />
-                    <Button type="primary" ghost>导入</Button>
+                    <Button type="primary" onClick={ () => { setVisible(true); setName('添加组焊'); } }>添加组焊</Button>
+                    {/* <Button type="primary" ghost>导入</Button> */}
                     <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
                 </Space>
                 <CommonTable 
@@ -163,6 +165,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                     columns={ towerColumns }
                     onRow={ (record: Record<string, any>, index: number) => ({
                         onClick: async () => { 
+                            console.log(record);
                             const resData: [] = await RequestUtil.get(`/tower-science/welding/getStructureById`, { segmentId: record.id });
                             setParagraphData([...resData]);
                         },
@@ -182,5 +185,6 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                 <CommonTable dataSource={ paragraphData } columns={ paragraphColumns } pagination={ false }/>
             </DetailContent>
         </Spin>
+        { visible ? <AssemblyWeldingNew id={ params.id } segmentId={ record.id } record={ record } productCategoryId={ params.productCategoryId } name={ name } updateList={ () => history.go(0) } visible={ visible } modalCancel={ () => setVisible(false) }/> : null}
     </>
 }
