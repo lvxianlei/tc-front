@@ -88,31 +88,35 @@ export default function SampleDrawList(): React.ReactNode {
             title: '小样图状态',
             width: 100,
             dataIndex: 'smallSampleStatus',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                  {
-                    value: 1,
-                    label: "待开始"
-                  },
-                  {
-                    value: 2,
-                    label: "进行中"
-                  },
-                  {
-                    value: 3,
-                    label: "校核中"
-                  },
-                  {
-                    value: 4,
-                    label: "已完成"
-                  },
-                  {
-                    value: 5,
-                    label: "已提交"
-                  },
-                ]
-                return <>{value && renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            // render: (value: number, record: object): React.ReactNode => {
+            //     const renderEnum: any = [
+            //         {
+            //             value: 0,
+            //             label: ""
+            //         },
+            //         {
+            //             value: 1,
+            //             label: "待开始"
+            //         },
+            //         {
+            //             value: 2,
+            //             label: "进行中"
+            //         },
+            //         {
+            //             value: 3,
+            //             label: "校核中"
+            //         },
+            //         {
+            //             value: 4,
+            //             label: "已完成"
+            //         },
+            //         {
+            //             value: 5,
+            //             label: "已提交"
+            //         },
+            //     ]
+            //     return <>{value && renderEnum.find((item: any) => item.value === value).label}</>
+            // }
         },
         {
             key: 'updateStatusTime',
@@ -128,8 +132,8 @@ export default function SampleDrawList(): React.ReactNode {
             fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDrawMessage/${record.id}`)}}>小样图信息</Button>
-                    <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDraw/${record.id}`)}} disabled={record.smallSampleStatus!==2}>小样图</Button>
+                    <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDrawMessage/${record.loftingTask}`)}}>小样图信息</Button>
+                    <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDraw/${record.id}`)}}>小样图</Button>
                     <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDrawCheck/${record.id}`)}}  disabled={record.smallSampleStatus!==3}>校核</Button>
                     <Popconfirm
                         title="确认提交?"

@@ -1,5 +1,5 @@
-import React from 'react'
-import { Button, Spin, Space } from 'antd';
+import React, { useState } from 'react'
+import { Button, Spin, Space, Modal, Image } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
 import { specialInfoData, productInfoData } from './sample.json';
@@ -44,12 +44,15 @@ const tableColumns = [
 
 export default function SampleDrawMessage(): React.ReactNode {
     const history = useHistory()
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string }>();
+    const [pictureVisible, setPictureVisible] = useState<boolean>(false);
+    const [pictureUrl, setPictureUrl] = useState('');
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/smallSample/${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-science/smallSample/detail/${params.id}`)
         resole(data)
     }), {})
-    const detailData: any = data
+    const detailData: any = data;
+    const handlePictureModalCancel = () => {setPictureVisible(false)}
     return <>
         <Spin spinning={loading}>
             <DetailContent operation={[
@@ -73,6 +76,8 @@ export default function SampleDrawMessage(): React.ReactNode {
                         render: (_: undefined, record: any): React.ReactNode => (
                             <Space direction="horizontal" size="small">
                                 <Button type='link' onClick={()=>{window.open(record.filePath)}}>下载</Button>
+                                {record.fileSuffix==='pdf'?<Button type='link' onClick={()=>{window.open(record.filePath)}}>预览</Button>:null}
+                                {['jpg','jpeg', 'png', 'gif'].includes(record.fileSuffix)?<Button type='link' onClick={()=>{setPictureUrl(record.filePath);setPictureVisible(true);}}>预览</Button>:null}
                             </Space>
                         )
                     }
@@ -80,6 +85,9 @@ export default function SampleDrawMessage(): React.ReactNode {
                 <DetailTitle title="操作信息" />
                 <CommonTable columns={tableColumns} dataSource={detailData?.statusRecordList} pagination={ false }/>
             </DetailContent>
+            <Modal visible={pictureVisible} onCancel={handlePictureModalCancel} footer={false}>
+                <Image src={pictureUrl} preview={false}/>
+            </Modal>
         </Spin>
     </>
 }
