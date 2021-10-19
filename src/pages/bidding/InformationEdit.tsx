@@ -93,6 +93,7 @@ export default function InfomationNew(): JSX.Element {
                     name: dataInfo.originalName.split(".")[0],
                     description: "",
                     filePath: dataInfo.name,
+                    link: dataInfo.link,
                     fileSize: dataInfo.size,
                     fileSuffix: fileInfo[fileInfo.length - 1],
                     userName: dataInfo.userName,
@@ -233,7 +234,7 @@ export default function InfomationNew(): JSX.Element {
                 <Button type="link" onClick={() => deleteAttachData(record.id || record.uid)}>删除</Button>
                 <Button
                     type="link"
-                    onClick={() => downLoadFile(record.filePath)}
+                    onClick={() => downLoadFile(record.id?record.filePath:record.link)}
                 >下载</Button>
             </>)
         },
