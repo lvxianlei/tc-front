@@ -3,7 +3,7 @@
  * @copyright © 2021 
  */
 import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Radio, Row, Select, Space, Upload, Checkbox, Cascader, TablePaginationConfig, RadioChangeEvent, message } from 'antd';
+import { Button, Col, DatePicker, Form, FormProps, Input, InputNumber, Radio, Row, Select, Space, Upload, Checkbox, Cascader, TablePaginationConfig, RadioChangeEvent, message, Image } from 'antd';
 import { FormListFieldData, FormListOperation } from 'antd/lib/form/FormList';
 import moment from 'moment';
 import React from 'react';
@@ -673,7 +673,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             {super.render()}
             <Modal visible={this.state.isVisible} onCancel={this.modalCancel} onOk={this.modalCancel} width={"60%"}>
                 {this.state.url.fileSuffix && this.state.url.fileSuffix === "pdf" && <iframe src={this.state.url.link} frameBorder="0" className={styles.iframe}></iframe>}
-                {this.state.url.fileSuffix && this.state.url.fileSuffix !== "pdf" && <img src={this.state.url.link} />}
+                {this.state.url.fileSuffix && this.state.url.fileSuffix !== "pdf" && <Image src={this.state.url.link} />}
                 {!this.state.url.fileSuffix && this.state.url.link && this.state.url.link.substr((this.state.url.link.lastIndexOf(".")) + 1) === 'pdf' ? <iframe src={this.state.url.link} frameBorder="0" className={styles.iframe}></iframe> : <img src={this.state.url.link} />}
             </Modal>
         </>
