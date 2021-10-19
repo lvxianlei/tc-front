@@ -13,6 +13,7 @@ export default function CostEdit() {
     const history = useHistory()
     const { id } = useParams<{ id: string }>()
     const [productName, setProductName] = useState(id || "")
+    const [editableKeys, setEditableRowKeys] = useState<any[]>([])
     const [dataSource, setDataSource] = useState<any[]>([])
     const [baseForm] = Form.useForm()
     const [tableRowForm] = Form.useForm()
@@ -130,9 +131,11 @@ export default function CostEdit() {
                 recordCreatorProps={false}
                 editable={{
                     form: tableRowForm,
+                    editableKeys,
                     onlyOneLineEditorAlertMessage: "不能同时编辑多行",
                     onlyAddOneLineAlertMessage: "新增行保存前不能新增...",
                     onSave: handleSave,
+                    onChange: setEditableRowKeys,
                     actionRender: (_a, _b, dom) => [dom.save, dom.cancel]
                 }}
                 columns={[...data?.proport.head.map((item: any) => ({
