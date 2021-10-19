@@ -505,7 +505,9 @@
         },
         {
             "title": " 单价（元/吨）",
-            "dataIndex": "money"
+            "dataIndex": "money",
+            "type":"number",
+            "disabled": true
         },
         {
             "title": " 金额(元)",

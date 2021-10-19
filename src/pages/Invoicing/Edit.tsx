@@ -83,8 +83,9 @@ export default function Edit() {
         }
     }
 
-    const handleEditTableChange = (fields: any) => {
-        console.log("---edit---", fields.submit)
+    const handleEditTableChange = (fields: any, allFields: any) => {
+        const currentRowData = fields.submit[fields.submit.length - 1]
+
     }
 
     return <DetailContent operation={[
