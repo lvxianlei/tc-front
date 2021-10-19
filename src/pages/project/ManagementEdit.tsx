@@ -83,7 +83,10 @@ export default function BaseInfoEdit(): JSX.Element {
     <DetailTitle title="基本信息" />
     <BaseInfo form={baseInfoForm} columns={baseInfoData.map((item: any) => item.dataIndex === "biddingPerson" ? ({
       ...item,
-      columns: item.columns.map((columnItem: any) => columnItem.dataIndex === "type" ? ({ ...columnItem, enum: typeNameEnum }) : columnItem)
+      columns: item.columns.map((columnItem: any) => columnItem.dataIndex === "type" ? ({
+        ...columnItem,
+        enum: typeNameEnum
+      }) : columnItem)
     }) : item)} dataSource={{}} edit />
     <DetailTitle title="货物清单" />
     <EditTable form={cargoVOListForm} columns={cargoVOListColumns} dataSource={[]} />

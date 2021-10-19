@@ -57,7 +57,7 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
     }), { manual: true })
 
     useEffect(() => {
-        props.type === "selectB" && getAskProduct()
+        ["selectB", "selectC"].includes(props.type) && getAskProduct()
     }, [props.type])
 
     const uploadChange = (event: any) => {
