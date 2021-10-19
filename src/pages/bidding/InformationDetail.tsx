@@ -16,7 +16,7 @@ const tableColumns = [
     },
     { title: '物资类别', dataIndex: 'goodsType' },
     { title: '包号', dataIndex: 'packageNumber' },
-    { title: '数量', dataIndex: 'amount', type: "number" },
+    { title: '数量', dataIndex: 'amount', type: "number", render:(value:number)=>{return value===-1?0:value}},
     { title: '单位', dataIndex: 'unit' },
     { title: '首批交货日期', dataIndex: 'deliveryDate' },
     { title: '交货地点', dataIndex: 'deliveryPlace' }

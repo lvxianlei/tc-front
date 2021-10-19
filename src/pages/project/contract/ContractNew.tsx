@@ -360,7 +360,7 @@ class ManagementContractNew extends ContractNew {
               initialValue: contract?.description,
               children: (
                 <Input.TextArea
-                  rows={2}
+                  rows={1}
                   showCount={true}
                   maxLength={300}
                   autoSize={false}

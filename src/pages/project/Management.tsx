@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import ConfirmableButton from '../../components/ConfirmableButton'
@@ -41,6 +41,7 @@ const currentProjectStage = [
 
 export default function Management(): React.ReactNode {
     const history = useHistory()
+    const [filterValue, setFilterValue] = useState({});
     const columns: TableColumnProps<object>[] = [
         {
             key: 'index',
@@ -154,12 +155,14 @@ export default function Management(): React.ReactNode {
             value.startBiddingEndTime = formatDate[0]
             value.endBiddingEndTime = formatDate[1]
         }
+        setFilterValue(value)
         return value
     }
 
     return <Page
         path="/tower-market/projectInfo"
         columns={columns}
+        filterValue={filterValue}
         extraOperation={<Link to="/project/management/new"><Button type="primary">新建项目</Button></Link>}
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
