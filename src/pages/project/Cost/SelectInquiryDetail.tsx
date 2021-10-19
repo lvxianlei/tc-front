@@ -52,8 +52,9 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                 <DetailTitle title="询价类型：供应询价" />
                 {radioValue === "base" && <>
                     <BaseInfo columns={supplyBaseInfo} dataSource={data || {}} />
+
                     <Row style={{ fontSize: 16, textAlign: "center", width: "100%" }}>国网批次招标投标原材料报价</Row>
-                    <CommonTable columns={materialPriceHead} data={data?.askLogisticsVOS || []} />
+                    <CommonTable columns={materialPriceHead} data={data?.materialPriceVOS || []} />
                     <DetailTitle title="相关附件" />
                     <CommonTable columns={[{
                         title: "操作",

@@ -39,10 +39,10 @@ export default function Edit() {
         <Button key="cancel">取消</Button>
     ]}>
         <DetailTitle title="基本信息" />
-        <BaseInfo columns={baseInfoHead} dataSource={{}} />
+        <BaseInfo columns={baseInfoHead} dataSource={{}} edit />
 
         <DetailTitle title="发票信息" />
-        <BaseInfo columns={invoiceHead} dataSource={{}} />
+        <BaseInfo columns={invoiceHead} dataSource={{}} edit />
 
         <DetailTitle title="开票明细" operation={[]} />
 
