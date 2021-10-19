@@ -107,7 +107,9 @@ export default function CostEdit() {
         }
     })
 
-    return <DetailContent>
+    return <DetailContent operation={[
+        <Button key="goback" onClick={() => history.go(-1)}>返回</Button>
+    ]}>
         <DetailTitle title="公共费用" operation={[
             <Button
                 key="save" type="primary"
