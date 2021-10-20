@@ -202,7 +202,7 @@ export default function Questionnaire(): React.ReactNode {
             key: 'singleNum',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <InputNumber 
-                    key={ record.structureId + new Date() } 
+                    key={ record.structureId + record.basicsPartNum } 
                     defaultValue={ record.singleNum } 
                     onChange={ (e) => {
                         weldingDetailedStructureList[index] = {
@@ -440,8 +440,7 @@ export default function Questionnaire(): React.ReactNode {
                     weldingDetailedStructureList: [ ...(weldingDetailedList || []) ]
                 }
             }
-            console.log(value)
-            RequestUtil.get(`/tower-science/welding/saveVerification`, { ...value }).then(res => {
+            RequestUtil.post(`/tower-science/welding/saveVerification`, { ...value }).then(res => {
                 message.success('问题单提交成功');
                 history.goBack()
             });

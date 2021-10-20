@@ -275,7 +275,10 @@ export default function ConfirmDetail(): React.ReactNode {
           type:'number',
           width: 70,
           editable: true,
-          key: 'basicHight' 
+          key: 'basicHight',
+          render:(value:any)=>{
+            return value.toFixed(4)
+          }  
       },
       { 
           title: '* 模式', 
@@ -322,7 +325,10 @@ export default function ConfirmDetail(): React.ReactNode {
           type:'number',
           width: 100,
           editable: true,
-          key: 'productWeight' 
+          key: 'productWeight', 
+          render:(value:any)=>{
+            return value.toFixed(4)
+          }  
       },
       { 
           title: '其他增重（kg）', 
@@ -330,7 +336,10 @@ export default function ConfirmDetail(): React.ReactNode {
           type:'number',
           width: 100,
           editable: true,
-          key: 'otherWeight' 
+          key: 'otherWeight',
+          render:(value:any)=>{
+            return value.toFixed(4)
+          }  
       },
       { 
           title: '* 总重（kg）', 

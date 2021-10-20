@@ -132,7 +132,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
                         record.status === 4 ? 
                         <Popconfirm
                             title="确认提交?"
-                            onConfirm={ () => RequestUtil.post(`/tower-science/welding/submitWelding?weldingId=${ record.id }`).then(res => {
+                            onConfirm={ () => RequestUtil.post(`/tower-science/welding/submitWelding`, { weldingId: record.id }).then(res => {
                                 setRefresh(!refresh)
                             }) }
                             okText="提交"
