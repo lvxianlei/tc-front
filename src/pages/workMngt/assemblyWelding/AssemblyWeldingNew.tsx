@@ -114,10 +114,10 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                 weldingDetailedStructureList.forEach((items: IComponentList, index: number) => {
                     newData = newData.map((item: IComponentList) => {
                         if(item.id === items.structureId) {
-                            const num = this.state.settingData && this.state.settingData[index].singleNum || 0;
+                            const num = this.state.settingData && this.state.settingData[index]?.singleNum || 0;
                             return {
                                 ...item,
-                                basicsPartNum: !items.id ? Number(item.basicsPartNum || 0) - Number(items.singleNum || 0) : Number(item.basicsPartNum || 0) - Number(items.singleNum || 0) + num
+                                basicsPartNum: items.id ? Number(item.basicsPartNum || 0) - Number(items.singleNum || 0) + num : Number(item.basicsPartNum || 0) - Number(items.singleNum || 0)
                             };
                         } else {
                             return item
@@ -160,17 +160,19 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                 weldingLength: 0,
                 isMainPart: 0
             }
-        })
+        })    
         selectedRows.forEach((items: IComponentList) => {
             weldingDetailedStructureList = weldingDetailedStructureList.map((item: IComponentList) => {
                 if(item.structureId === items.id) {
                     return {
                         ...item,
-                        singleNum: Number(item.singleNum) + 1
+                        singleNum: Number(item.singleNum) + 1,
+                        basicsPartNum: Number(items.basicsPartNum || 0) + Number(item.singleNum || 0)
                     }
                 } else {
                     return {
-                        ...item
+                        ...item,
+                        basicsPartNum: Number(items.basicsPartNum || 0) + Number(item.singleNum || 0)
                     }
                 }
             })
@@ -275,8 +277,8 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
             dataIndex: 'singleNum', 
             key: 'singleNum',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <InputNumber 
-                    key={ record.structureId + new Date() } 
+                <InputNumber
+                    key={ record.structureId + record.basicsPartNum } 
                     defaultValue={ record.singleNum } 
                     onChange={ (e) => {
                         const weldingDetailedStructureList: IComponentList[] = this.state.weldingDetailedStructureList || [];
@@ -290,9 +292,10 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                             weldingDetailedStructureList: [ ...weldingDetailedStructureList ]
                         })
                         this.getForm()?.setFieldsValue({ 'singleGroupWeight': Number(singleGroupWeight) - Number(record.singleNum) * Number(record.basicsWeight) + Number(e) * Number(record.basicsWeight), 'electricWeldingMeters': Number(electricWeldingMeters) - Number(record.weldingLength) * Number(record.singleNum) + Number(record.weldingLength) * Number(e) });
+                        console.log(record.basicsPartNum)
                     } } 
                     bordered={false} 
-                    max={ Number(record.basicsPartNum) }
+                    max={ record.basicsPartNum ? Number(record.basicsPartNum || 0) : Number(record.surplusNum || 0) + Number(this.state.settingData && this.state.settingData[index]?.singleNum || 0) }
                     min={ 1 }
                 />
             )  
@@ -523,7 +526,9 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                         selectedRows: selectedRows,
                         selectedRowKeys: selectedKeys
                     })
-                } } } />
+                }, getCheckboxProps: (record: Record<string, any>) => ({
+                    disabled: record.basicsPartNum === 0
+                }) } } />
             </Modal>
         </> 
     }
