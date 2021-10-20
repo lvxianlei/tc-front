@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Space, Button, Popconfirm, Input, Form, FormInstance, Upload, message } from 'antd';
+import { Space, Button, Popconfirm, Input, Form, Upload, message } from 'antd';
 import { Page } from '../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
 import styles from './TowerLoftingAssign.module.less';
