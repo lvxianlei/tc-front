@@ -948,14 +948,14 @@
     },
     { // 工作管理-小样图
       "name": "小样图",
-      "path": "/workMngt/sampleDrawList/sampleDraw/:id",
+      "path": "/workMngt/sampleDrawList/sampleDraw/:id/:status",
       "module": "./pages/workMngt/sampleDrawList/SampleDraw",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-校核
       "name": "小样图校核",
-      "path": "/workMngt/sampleDrawList/sampleDrawCheck/:id",
+      "path": "/workMngt/sampleDrawList/sampleDrawCheck/:id/:status",
       "module": "./pages/workMngt/sampleDrawList/SampleDrawCheck",
       "exact": true,
       "authority": "approvalm"
