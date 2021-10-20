@@ -75,28 +75,28 @@ class TCHeader extends AsyncComponent<ITCHeaderRouteProps, ITCHeaderState> {
                     pathSnippets.map<React.ReactNode>((item: string, index: number): React.ReactNode => {
                         let path: string = `/${pathSnippets.slice(0, index + 1).join('/')}`;
                         const routerItem: IRouterItem | null = ApplicationContext.getRouterItemByPath(path);
-                        if (routerItem?.path.includes("/project/management/:tab") && !pathSnippets.includes("/edit")) {
-                            path = `/${pathSnippets.filter(pathItem => pathItem !== "edit").join('/')}/${pathSnippets[pathSnippets.length - 1]}`
-                        }
-                        if (pathSnippets.includes("productGroup") && routerItem?.path.includes("/project/management/:tab")) {
-                            if (pathSnippets.includes("new")) {
-                                path = `/${pathSnippets.filter(pathItem => pathItem !== "new").join('/')}`
-                            } else if (pathSnippets.includes("edit")) {
-                                const basePath = pathSnippets.filter(pathItem => pathItem !== "edit")
-                                path = `/${basePath.slice(0, basePath.length - 1).join('/')}`
-                            }
-                        }
-                        if (pathSnippets.includes("salesPlan") && routerItem?.path.includes("/project/management/:tab")) {
-                            if (pathSnippets.includes("new")) {
-                                path = `/${pathSnippets.filter(pathItem => pathItem !== "new").join('/')}`
-                            } else if (pathSnippets.includes("edit")) {
-                                const basePath = pathSnippets.filter(pathItem => pathItem !== "edit")
-                                path = `/${basePath.slice(0, basePath.length - 1).join('/')}`
-                            } else if (pathSnippets.includes("cat")) {
-                                const basePath = pathSnippets.filter(pathItem => pathItem !== "cat")
-                                path = `/${basePath.slice(0, basePath.length - 1).join('/')}`
-                            }
-                        }
+                        // if (routerItem?.path.includes("/project/management/:tab") && !pathSnippets.includes("/edit")) {
+                        //     path = `/${pathSnippets.filter(pathItem => pathItem !== "edit").join('/')}/${pathSnippets[pathSnippets.length - 1]}`
+                        // }
+                        // if (pathSnippets.includes("productGroup") && routerItem?.path.includes("/project/management/:tab")) {
+                        //     if (pathSnippets.includes("new")) {
+                        //         path = `/${pathSnippets.filter(pathItem => pathItem !== "new").join('/')}`
+                        //     } else if (pathSnippets.includes("edit")) {
+                        //         const basePath = pathSnippets.filter(pathItem => pathItem !== "edit")
+                        //         path = `/${basePath.slice(0, basePath.length - 1).join('/')}`
+                        //     }
+                        // }
+                        // if (pathSnippets.includes("salesPlan") && routerItem?.path.includes("/project/management/:tab")) {
+                        //     if (pathSnippets.includes("new")) {
+                        //         path = `/${pathSnippets.filter(pathItem => pathItem !== "new").join('/')}`
+                        //     } else if (pathSnippets.includes("edit")) {
+                        //         const basePath = pathSnippets.filter(pathItem => pathItem !== "edit")
+                        //         path = `/${basePath.slice(0, basePath.length - 1).join('/')}`
+                        //     } else if (pathSnippets.includes("cat")) {
+                        //         const basePath = pathSnippets.filter(pathItem => pathItem !== "cat")
+                        //         path = `/${basePath.slice(0, basePath.length - 1).join('/')}`
+                        //     }
+                        // }
                         // routerItem && console.log(path)
                         return (
                             routerItem

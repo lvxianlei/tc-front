@@ -102,7 +102,7 @@
         },
         {
             "title": "状态",
-            "dataIndex": "status"
+            "dataIndex": "stateName"
         }
     ],
     "baseInfoHead": [

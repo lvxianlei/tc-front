@@ -20,7 +20,9 @@ export default function Edit() {
         }
     }))
 
-    return <DetailContent operation={[
+    return <DetailContent title={[
+        <Button type="primary">发起审批</Button>
+    ]} operation={[
         <Button key="cancel" onClick={() => history.go(-1)}>返回</Button>
     ]}>
         <Spin spinning={loading}>
@@ -42,6 +44,10 @@ export default function Edit() {
                     <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
                 </>)
             }, ...enclosure]} dataSource={data?.attachInfoVos || []} />
+
+            <DetailTitle title="审批记录" />
+
+            <CommonTable columns={[]} dataSource={data?.invoicingBatchVos || []} />
         </Spin>
     </DetailContent>
 }

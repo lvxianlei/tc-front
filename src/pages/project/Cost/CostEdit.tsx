@@ -78,7 +78,7 @@ export default function CostEdit() {
     const history = useHistory()
     const [baseInfo] = Form.useForm()
     const formRef = useRef([])
-    const params = useParams<{ id: string, projectId: string, tab?: TabTypes }>()
+    const params = useParams<{ type: "new" | "edit", projectId: string, tab?: TabTypes }>()
     const [visible, setVisible] = useState<boolean>(false)
     const [askProductDtos, setAskProductDtos] = useState<any[]>([])
     const [form] = Form.useForm()
@@ -94,7 +94,7 @@ export default function CostEdit() {
         } catch (error) {
             reject(error)
         }
-    }), { manual: params.id === "new" })
+    }), { manual: params.type === "new" })
 
     const { run } = useRequest<{ [key: string]: any }>((productName: string, voltage: string) => new Promise(async (resole, reject) => {
         try {

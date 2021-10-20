@@ -404,21 +404,6 @@
       "exact": true,
       "authority": "project"
     },
-    {
-      // 项目新建/编辑
-      "name": "项目新建",
-      "path": "/project/management/new",
-      "module": "./pages/project/ManagementEdit",
-      "exact": true,
-      "authority": "project_edit"
-    },
-    { // 项目管理子项详情
-      "name": "项目管理子项详情",
-      "path": "/project/management/:tab/:id",
-      "module": "./pages/project/ManagementDetail",
-      "exact": true,
-      "authority": "project_detail"
-    },
     { // 合同详情
       "name": "合同详情",
       "path": "/project/contract/detail/:projectId/:id",
@@ -468,6 +453,21 @@
       "exact": true,
       "authority": "sale_order"
     },
+    {
+      // 项目新建/编辑
+      "name": "项目新建",
+      "path": "/project/management/new",
+      "module": "./pages/project/ManagementEdit",
+      "exact": true,
+      "authority": "project_edit"
+    },
+    { // 项目管理子项详情
+      "name": "项目管理子项详情",
+      "path": "/project/management/detail/:tab/:id",
+      "module": "./pages/project/ManagementDetail",
+      "exact": true,
+      "authority": "project_detail"
+    },
     { // 项目管理基础信息编辑
       "name": "基础信息编辑",
       "path": "/project/management/edit/base/:id",
@@ -477,7 +477,7 @@
     },
     { // 项目管理成本评估编辑
       "name": "成本评估编辑",
-      "path": "/project/management/edit/cost/:id/:projectId",
+      "path": "/project/management/:type/cost/:projectId",
       "module": "./pages/project/Cost/CostEdit",
       "exact": true,
       "authority": "project_detail"

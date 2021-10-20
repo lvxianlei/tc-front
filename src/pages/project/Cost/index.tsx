@@ -62,12 +62,12 @@ export default function CostDetail() {
             />
             {!data?.askInfo?.askInfoVo && <Result title="当前项目还未做成本评估" extra={
                 <>
-                    点击<Link to={`/project/management/edit/cost/new/${params.id}`}>创建</Link>开始成本评估
+                    点击<Link to={`/project/management/new/cost/${params.id}`}>创建</Link>开始成本评估
                 </>
             } />}
             {data?.askInfo?.askInfoVo && <DetailContent title={[
                 <Button key="push" style={{ marginRight: '16px' }} type="primary" onClick={handleNewAudit}>发起询价任务</Button>,
-                <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={() => history.push(`/project/management/edit/cost/edit/${params.id}`)}>编辑</Button>,
+                <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={() => history.push(`/project/management/edit/cost/${params.id}`)}>编辑</Button>,
                 <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
             ]}>
                 <DetailTitle title="基本信息" />
