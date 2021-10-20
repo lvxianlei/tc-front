@@ -10,7 +10,6 @@ export function downloadTemplate(path: string, name: string, requestData?: {}, t
         mode: 'cors',
         method: 'POST',
         headers: {
-        //   'Content-Type': 'application/x-www-form-urlencoded',
           'Content-Type': 'application/json',
           'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
           'Tenant-Id': AuthUtil.getTenantId(),
