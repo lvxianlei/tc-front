@@ -54,7 +54,7 @@ export default function Invoicing() {
             title: "操作",
             dataIndex: "opration",
             fixed: "right",
-            width: 200,
+            width: 100,
             render: (_: any, record: any) => {
                 return <>
                     <Button type="link" onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</Button>
