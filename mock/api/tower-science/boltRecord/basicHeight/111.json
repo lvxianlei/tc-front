@@ -1,0 +1,17 @@
+{
+    "code": 200,
+    "msg": "",
+    "success":false,
+    "data":[
+        {
+            "basicHeight": "33m呼高",
+            "id": 144456165212,
+            "productCategoryId": 111
+        },
+        {
+            "basicHeight":"27m呼高",
+            "id":598794651652,
+            "productCategoryId": 111
+        }
+    ]
+}
