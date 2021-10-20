@@ -390,9 +390,16 @@
       "exact": true,
       "authority": "project"
     },
+    { // 开票申请详情
+      "name": "开票申请详情",
+      "path": "/project/invoicing/detail/:id",
+      "module": "./pages/Invoicing/Overview",
+      "exact": true,
+      "authority": "project"
+    },
     { // 开票申请
       "name": "新增开票申请",
-      "path": "/project/invoicing/:id",
+      "path": "/project/invoicing/edit/:id",
       "module": "./pages/Invoicing/Edit",
       "exact": true,
       "authority": "project"
