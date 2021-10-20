@@ -53,10 +53,6 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
         return this.form?.current;
     }
 
-    constructor(props: IEvaluationInformationRouteProps) {
-        super(props)
-    }
-
     public state: EvaluationInformationState = {
         visible: false,
         pictureVisible: false

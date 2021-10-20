@@ -1044,10 +1044,24 @@
       "exact": true,
       "authority": "approvalm"
     },
-    { // 图纸塔型-构件信息
-      "name": "构件信息",
-      "path": "/drawTower/drawTowerMngt/componentInformation/:id",
+    { // 图纸塔型-塔型信息-构件详情
+      "name": "构件详情",
+      "path": "/drawTower/drawTowerMngt/towerInformation/:id/componentDetail/:segmentId/:data",
+      "module": "./pages/drawTower/ComponentDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 图纸塔型-塔型构件
+      "name": "塔型构件",
+      "path": "/drawTower/drawTowerMngt/componentInformation/:id/:structureCount",
       "module": "./pages/drawTower/ComponentInformation",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作台
+      "name": "工作台",
+      "path": "/workBench/workBenchMngt",
+      "module": "./pages/workBench/WorkBenchMngt",
       "exact": true,
       "authority": "approvalm"
     }
