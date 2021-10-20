@@ -30,14 +30,37 @@ interface BaseInfoProps {
 function formatDataType(dataItem: any, dataSource: any): string {
     const value = dataSource[dataItem.dataIndex]
     const types: any = {
-        number: value && value !== -1 ? value : "-",
+        number: (value && value !== -1 && value !== 0 && value !== "0") ? value : "-",
         select: ((value || value === 0) && dataItem.enum) ? (dataItem.enum.find((item: any) => item.value === value)?.label || "-") : "-",
         date: value ? moment(value).format(dataItem.format || "YYYY-MM-DD HH:mm:ss") : "-",
-        string: value || "-",
+        string: (value && !["-1", -1, "0", 0].includes(value)) ? value : "-",
         textarea: value || "-",
         popTable: value || "-"
     }
     return types[dataItem.type || "string"]
+}
+
+export function formatData(columns: any[], dataSource: any): object {
+    const formatedData: { [key: string]: any } = {}
+    Object.keys(dataSource).forEach((dataSourceKey: string) => {
+        const dataItem = columns.find((columnItem: any) => columnItem.dataIndex === dataSourceKey)
+        if (!dataItem) {
+            formatedData[dataSourceKey] = ""
+        } else {
+            const value = dataSource[dataItem.dataIndex]
+            const types: any = {
+                number: (value && value !== -1) ? value : 0,
+                select: ((value || value === 0) && dataItem.enum) ? (dataItem.enum.find((item: any) => item.value === value)?.label || undefined) : undefined,
+                date: value ? moment(value).format(dataItem.format || "YYYY-MM-DD HH:mm:ss") : undefined,
+                string: (value && !["-1", -1, "0", 0].includes(value)) ? value : "",
+                textarea: value || "",
+                popTable: value || ""
+            }
+            formatedData[dataSourceKey] = types[dataItem.type || "string"]
+        }
+
+    })
+    return formatedData
 }
 
 export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onChange = () => { } }: BaseInfoProps): JSX.Element {
@@ -45,7 +68,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
         return <Form
             onValuesChange={(changedFields, allFields) => onChange(changedFields, allFields, dataSource)}
             form={form}
-            initialValues={dataSource}
+            initialValues={formatData(columns, dataSource)}
             labelAlign="right"
             layout="inline"
             labelCol={{ style: { width: '80px', whiteSpace: "break-spaces" } }}

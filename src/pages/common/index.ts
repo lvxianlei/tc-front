@@ -1,7 +1,7 @@
 export { default as Page } from './Page'
 export { default as Detail } from './Detail'
 export { default as EditTable } from './EditTable'
-export { default as BaseInfo } from './BaseInfo'
+export { default as BaseInfo, formatData } from './BaseInfo'
 export { default as FormItemType } from './FormItemType'
 export { PopTable } from './FormItemType'
 export { default as DetailContent } from './DetailContent'

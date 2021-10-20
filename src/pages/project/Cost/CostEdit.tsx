@@ -8,32 +8,13 @@ import { EditableProTable, } from '@ant-design/pro-table'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
-export type SelectType = "selectA" | "selectB" | "selectC"
+import ApplicationContext from "../../../configuration/ApplicationContext"
 
-const productTypeEnum = [
-    {
-        "label": "角钢塔",
-        "value": "角钢塔"
-    },
-    {
-        "label": "钢管塔",
-        "value": "钢管塔"
-    },
-    {
-        "label": "四管塔",
-        "value": "四管塔"
-    },
-    {
-        "label": "架构",
-        "value": "架构"
-    }
-]
+export type SelectType = "selectA" | "selectB" | "selectC"
 
 const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref) => {
     const [formRef] = Form.useForm()
-
     useImperativeHandle(ref, () => ({ formRef, index }), [])
-
     return <EditableProTable
         rowKey="id"
         maxLength={5}
@@ -48,14 +29,17 @@ const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref
         }}
         scroll={{ x: 'max-content' }}
         size="small"
-        columns={data.head.map((cItem: any) => ({
-            ...cItem,
-            valueType: cItem.type,
-            formItemProps: {
-                rules: cItem.rules
-            },
-            valueEnum: cItem.enum && new Map(cItem.enum.map((enumItem: any) => [enumItem.value, { text: enumItem.label }]))
-        }))}
+        columns={data.head.map((cItem: any) => {
+            return ({
+                ...cItem,
+                valueType: cItem.type,
+                formItemProps: {
+                    rules: cItem.rules
+                },
+                editable: !cItem.disabled,
+                valueEnum: cItem.enum && new Map(cItem.enum.map((enumItem: any) => [enumItem.value, { text: enumItem.label }]))
+            })
+        })}
         value={data.data}
     />
 })
@@ -67,14 +51,15 @@ const EditableProTableList: React.FC<any> = forwardRef(({ data, deleteProduct },
     }), [data.length])
 
     return <>
-        {data.map((item: any, index: number) => <>
+        {data.map((item: any, index: number) => <div key={index}>
             <DetailTitle title={`产品类型:${item.voltage}${item.productName}`} operation={[<Button type="primary" key="delete" onClick={() => deleteProduct && deleteProduct(item)}>删除产品</Button>]} />
             <EditableProTableListItem data={item} index={index} key={index} ref={(itemRef: any) => { currentRef.current[index] = itemRef }} />
-        </>)}
+        </div>)}
     </>
 })
 
 export default function CostEdit() {
+    const productTypeEnum: any = (ApplicationContext.get().dictionaryOption as any)["101"].map((dic: any) => ({ label: dic.name, value: dic.name }))
     const history = useHistory()
     const [baseInfo] = Form.useForm()
     const formRef = useRef([])

@@ -375,7 +375,6 @@
       "exact": true,
       "authority": "bidding_edit"
     },
-    
     { // 项目管理
       "name": "项目管理",
       "path": "/project/management",
@@ -477,7 +476,14 @@
     },
     { // 项目管理成本评估编辑
       "name": "成本评估编辑",
-      "path": "/project/management/:type/cost/:projectId",
+      "path": "/project/management/edit/cost/:projectId",
+      "module": "./pages/project/Cost/CostEdit",
+      "exact": true,
+      "authority": "project_detail"
+    },
+    { // 项目管理成本评估编辑
+      "name": "成本评估编辑",
+      "path": "/project/management/new/cost/:projectId",
       "module": "./pages/project/Cost/CostEdit",
       "exact": true,
       "authority": "project_detail"

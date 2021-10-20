@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Button, Upload, Form, message, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable, EditTable } from '../common'
+import { DetailContent, DetailTitle, BaseInfo, CommonTable, EditTable, formatData } from '../common'
 import { baseInfoHead, invoiceHead, billingHead } from "./InvoicingData.json"
 import { enclosure } from '../project/managementDetailData.json'
 import RequestUtil from '../../utils/RequestUtil'
@@ -21,7 +21,7 @@ export default function Edit() {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/invoicing/getInvoicingInfo/${params.id}`)
-            baseInfo.setFieldsValue({ ...result })
+            baseInfo.setFieldsValue({ ...formatData(baseInfoHead, result) })
             invoicForm.setFieldsValue({ ...result.invoicingInfoVo })
             billingForm.setFieldsValue({ submit: result.invoicingDetailVos })
             setAttachVosData(result.attachInfoVos)
@@ -164,10 +164,17 @@ export default function Edit() {
     ]}>
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
-            <BaseInfo onChange={handleBaseInfoChange} form={baseInfo} columns={baseInfoHead.map((item: any) => item.dataIndex === "productTypeId" ? ({
-                ...item,
-                enum: productType.map((product: any) => ({ value: product.id, label: product.name }))
-            }) : item)} dataSource={generateInitValues(baseInfoHead)} edit />
+            <BaseInfo
+                onChange={handleBaseInfoChange}
+                form={baseInfo}
+                columns={baseInfoHead.map((item: any) => item.dataIndex === "productTypeId" ? ({
+                    ...item,
+                    enum: productType.map((product: any) => ({
+                        value: product.id,
+                        label: product.name
+                    }))
+                }) : item)}
+                dataSource={generateInitValues(baseInfoHead)} edit />
 
             <DetailTitle title="发票信息" />
             <BaseInfo form={invoicForm} columns={invoiceHead} dataSource={generateInitValues(invoiceHead)} edit />
