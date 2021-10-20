@@ -7,6 +7,8 @@ import { CloudUploadOutlined } from '@ant-design/icons';
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import { downLoadFile } from '../../../utils';
+import useRequest from '@ahooksjs/use-request';
+import styles from './sample.module.less'
 
 export default function SampleDrawCheck(): React.ReactNode {
     const params = useParams<{ id: string }>()
@@ -18,12 +20,13 @@ export default function SampleDrawCheck(): React.ReactNode {
     const [attachInfo, setAttachInfo] = useState<any>({})
     const [filterValue, setFilterValue] = useState({});
     const [questionDetail, setQuestionDetail] = useState<any>({});
+    const [url, setUrl] = useState<string>('');
     const handleErrorModalOk = async () => {
         try {
             const submitData = {
-                id: questionDetail.id,
-                keyId: questionDetail.keyId,
-                currentFile:{}
+                keyId: questionDetail.id,
+                currentFile: questionDetail.currentFile,
+                newFile: attachInfo
             }
             await RequestUtil.post(`/tower-science/smallSample/saveIssue`, submitData).then(()=>{
                 message.success('提交成功！')
@@ -35,6 +38,11 @@ export default function SampleDrawCheck(): React.ReactNode {
             console.log(error)
         }
     }
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get(`/tower-science/smallSample/sampleStat/${params.id}`)
+        resole(data)
+    }), {})
+    const headerName:any = data;
 
     const tableColumns = [
         { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
@@ -74,16 +82,16 @@ export default function SampleDrawCheck(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'partName',
+            key: 'segmentName',
             title: '段名',
             width: 50,
-            dataIndex: 'partName'
+            dataIndex: 'segmentName'
         },
         {
-            key: 'componentCode',
+            key: 'code',
             title: '构建编号',
             width: 100,
-            dataIndex: 'componentCode'
+            dataIndex: 'code'
         },
         {
             key: 'materialName',
@@ -111,14 +119,13 @@ export default function SampleDrawCheck(): React.ReactNode {
             // fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type='link' onClick={async () => {
+                    {/* <Button type='link' onClick={async () => {
                         // await RequestUtil.get(`/tower-science/smallSample/issueDetail?boltId=${record.id}`)
-                        const data:any = await RequestUtil.get(`/tower-science/smallSample/issueDetail/${record.id}`)
-                        setQuestionDetail(data);
-                        setAttachInfo(data.newFile)
-                        setErrorVisible(true)
-                    }}>报错</Button>
-                    <Button type='link' onClick={() => {
+                        
+                    }}>报错</Button> */}
+                    <Button type='link' onClick={async () => {
+                        const url:any = await RequestUtil.get(`/tower-science/smallSample/sampleView/${record.id}`);
+                        setUrl(url?.filePath);
                         setVisible(true)
                     }}>查看</Button>
                 </Space>
@@ -126,7 +133,7 @@ export default function SampleDrawCheck(): React.ReactNode {
         }
     ]
 
-    const handleModalCancel = () => setVisible(false);
+    const handleModalCancel = () => {setVisible(false); setUrl('');};
     const handleErrorModalCancel = () => setErrorVisible(false);
     const onFilterSubmit = (value: any) => {
         if (value.upLoadTime) {
@@ -145,7 +152,7 @@ export default function SampleDrawCheck(): React.ReactNode {
         <>
             <Modal visible={visible} title="图片" footer={false}  onCancel={handleModalCancel} width={800}>
                 <Image 
-                    src="https://gw.alipayobjects.com/zos/antfincdn/LlvErxo8H9/photo-1503185912284-5271ff81b9a8.webp"
+                    src={url}
                     preview={false}
                 />
             </Modal>
@@ -176,11 +183,12 @@ export default function SampleDrawCheck(): React.ReactNode {
                                     const dataInfo = event.file.response.data
                                     const fileInfo = dataInfo.name.split(".")
                                     setAttachInfo({
-                                        id: "",
+                                        // id: "",
                                         uid: attachInfo.length,
                                         name: dataInfo.originalName.split(".")[0],
                                         description: "",
                                         filePath: dataInfo.name,
+                                        link: dataInfo.link,
                                         fileSize: dataInfo.size,
                                         fileSuffix: fileInfo[fileInfo.length - 1],
                                         userName: dataInfo.userName,
@@ -192,9 +200,13 @@ export default function SampleDrawCheck(): React.ReactNode {
                         showUploadList={false}
                     >校核后图片 <CloudUploadOutlined /></Upload>}>
                         <div style={{display:'flex',alignItems:'center'}}> 
-                        <Image src={attachInfo.filePath||''} height={100}/>
-                        <Button type='link' onClick={()=>{downLoadFile(attachInfo.filePath)}}>下载</Button>
-                        <Button type='link' onClick={()=>{deleteAttachData()}}>删除</Button>
+                        { attachInfo.link ? 
+                            <>
+                            <Image src={ attachInfo.link } height={100}/>
+                            <Button type='link' onClick={()=>{downLoadFile(attachInfo.link)}}>下载</Button>
+                            <Button type='link' onClick={()=>{deleteAttachData()}}>删除</Button>
+                            </>
+                        :null }
                         </div>
                     </Descriptions.Item>
                 </Descriptions>
@@ -213,7 +225,7 @@ export default function SampleDrawCheck(): React.ReactNode {
                     <Button type="primary">导出</Button>
                     <Popconfirm
                         title="确认完成校核?"
-                        onConfirm={ async () =>  await RequestUtil.put(`/tower-science/smallSample/completeCheck/productCategoryId=${params.id}`).then(()=>{
+                        onConfirm={ async () =>  await RequestUtil.put(`/tower-science/smallSample/completeCheck?productCategoryId=${params.id}`).then(()=>{
                             message.success('提交成功！');
                         }).then(()=>{
                             history.push('/workMngt/sampleDrawList');
@@ -224,9 +236,21 @@ export default function SampleDrawCheck(): React.ReactNode {
                         <Button type="primary">完成校核</Button>
                     </Popconfirm>
                     <Button type="primary" onClick={() => history.goBack()}>返回上一级</Button>
-                    <span>小样图数：23/100</span>
+                    <span>小样图数：{headerName?.uploadSmallSampleCount}/{headerName?.noSmallSampleCount}</span>
                     </Space>
                 }
+                tableProps={{
+                    onRow:(record:any) => ({
+                        onDoubleClick: async () => {
+                            const data:any = await RequestUtil.get(`/tower-science/smallSample/issueDetail?keyId=${record.id}`)
+                            setQuestionDetail(data);
+                            setAttachInfo(data.newFile)
+                            setErrorVisible(true)
+                        },
+                        className: record.issueSmallSampleVO.status===1? styles.red: record.issueSmallSampleVO.status===2? styles.green:record.issueSmallSampleVO.status===3?styles.yellow :styles.tableRow
+                        // className:[record.verificationStatus === 1 ? styles.red : record.verificationStatus === 2 ? styles.green : record.verificationStatus === 3 ? styles.yellow : null, styles.tableRow]
+                    })
+                }}
                 searchFormItems={[
                     {
                         name: 'upLoadTime',

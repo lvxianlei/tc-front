@@ -6,9 +6,10 @@ import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import AuthUtil from '../../../utils/AuthUtil';
+import { downloadTemplate } from '../setOut/downloadTemplate';
 
 export default function SampleDraw(): React.ReactNode {
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string, status: string }>()
     const history = useHistory();
     const [filterValue, setFilterValue] = useState({});
     const [visible, setVisible] = useState<boolean>(false);
@@ -90,7 +91,7 @@ export default function SampleDraw(): React.ReactNode {
                         </Button>
                     </Popconfirm>
                     <Button type='link' onClick={async () => {
-                        const url:any = await RequestUtil.get(`/tower-science/smallSample/smallSample/sampleView/${record.id}`);
+                        const url:any = await RequestUtil.get(`/tower-science/smallSample/sampleView/${record.id}`);
                         setUrl(url?.filePath);
                         setVisible(true)
                     }}>查看</Button>
@@ -99,7 +100,7 @@ export default function SampleDraw(): React.ReactNode {
         }
     ]
 
-    const handleModalCancel = () => setVisible(false);
+    const handleModalCancel = () => {setVisible(false); setUrl('');};
     const onFilterSubmit = (value: any) => {
         if (value.upLoadTime) {
             const formatDate = value.upLoadTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -116,7 +117,7 @@ export default function SampleDraw(): React.ReactNode {
               const dataInfo = event.file.response.data
               const fileInfo = dataInfo.name.split(".");
               const value=[{
-                  name: dataInfo.originalName,
+                  name: dataInfo.originalName.split('.')[0],
                   fileSuffix:fileInfo[fileInfo.length - 1],
                   filePath: dataInfo.name,
                   userName:dataInfo.userName
@@ -133,7 +134,6 @@ export default function SampleDraw(): React.ReactNode {
         <>
             <Modal visible={visible} title="图片" footer={false}  onOk={handleModalOk} onCancel={handleModalCancel} width={800}>
                 <Image 
-                    // src="https://gw.alipayobjects.com/zos/antfincdn/LlvErxo8H9/photo-1503185912284-5271ff81b9a8.webp"
                     src={url}
                     preview={false}
                 />
@@ -161,8 +161,10 @@ export default function SampleDraw(): React.ReactNode {
                         onChange={uploadChange}
                         showUploadList={false}
                     ><Button type="primary" >导入</Button></Upload>
-                    <Button type="primary">下载小样图</Button>
-                    <Popconfirm
+                    <Button type="primary" onClick={()=>{
+                        downloadTemplate(`/tower-science/smallSample/download/${params.id}`, '小样图', {} , true)
+                    }}>下载小样图</Button>
+                    {params.status==='2'?<Popconfirm
                         title="确认完成小样图?"
                         onConfirm={ async () =>  await RequestUtil.put(`/tower-science/smallSample/sampleComplete?productCategoryId=${params.id}`).then(()=>{
                             message.success('提交成功！');
@@ -173,7 +175,7 @@ export default function SampleDraw(): React.ReactNode {
                         cancelText="取消"
                     >   
                         <Button type="primary">完成小样图</Button>
-                    </Popconfirm>
+                    </Popconfirm>:null}
                     <Button type="primary" onClick={() => history.goBack()}>返回上一级</Button>
                     <span>小样图数：{headerName?.uploadSmallSampleCount}/{headerName?.noSmallSampleCount}</span>
                     </Space>

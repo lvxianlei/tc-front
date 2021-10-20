@@ -1,0 +1,33 @@
+@import "../../../App.module.less";
+
+.tableRow{
+    height: @tableRowHeight;
+    &:nth-child(even){
+        background-color: @backgroundColor;
+    }
+}
+
+.check {
+    :global(.ant-table-tbody){
+        tr:hover:not(.ant-table-expanded-row) > td,.ant-table-row-hover,.ant-table-row-hover>td{
+            background:rgba(0, 0, 0, 0)!important;
+        }
+    }
+}
+.operationBtn {
+    :global(.ant-btn) {
+        padding: 0;
+    }
+}
+.red {
+    background-color: #F9A1A1 !important;
+    color: #FFF;
+}
+.green {
+    background-color: #89DF88 !important;
+    color: #FFF;
+}
+.yellow {
+    background-color: #FFB401 !important;
+    color: #FFF;
+}
