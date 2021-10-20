@@ -110,8 +110,14 @@ export default function ConfirmList(): React.ReactNode {
         }
     ];
     const onDepartmentChange = async (value: Record<string, any>) => {
-        const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
-        setConfirmLeader(userData.records);
+        if(value){
+            const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
+            setConfirmLeader(userData.records);
+        }else{
+            
+            setConfirmLeader([]);
+        }
+       
     }
     const renderTreeNodes = (data:any) =>
     data.map((item:any) => {
@@ -175,6 +181,7 @@ export default function ConfirmList(): React.ReactNode {
                     name: 'confirmDept',
                     label: '确认人',
                     children:  <TreeSelect style={{width:'200px'}}
+                                    allowClear
                                     onChange={ onDepartmentChange }
                                 >
                                     {renderTreeNodes(wrapRole2DataNode( department ))}
@@ -183,7 +190,7 @@ export default function ConfirmList(): React.ReactNode {
                 {
                     name: 'confirmId',
                     label:'',
-                    children:   <Select style={{width:'100px'}}>
+                    children:   <Select style={{width:'100px'}} allowClear>
                                     { confirmLeader && confirmLeader.map((item:any)=>{
                                         return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
                                     }) }
