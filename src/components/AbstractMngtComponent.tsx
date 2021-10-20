@@ -124,8 +124,8 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
             // pagination: this.state.tablePagination || false,
             pagination: {
                 ...this.state.tablePagination || false,
-                showSizeChanger:true,
-                showTotal: (total) => `共${ total } 条记录`,
+                showSizeChanger: true,
+                showTotal: (total) => `共${total} 条记录`,
             },
             onChange: this.onTableChange,
             dataSource: this.getTableDataSource(item),
@@ -156,7 +156,7 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      */
     protected getTabsProps(): TabsProps {
         const tabItems = this.getTabItems();
-        const dontNeedHeader = tabItems.every( tab => !tab.label )
+        const dontNeedHeader = tabItems.every(tab => !tab.label)
         return {
             tabBarStyle: {
                 display: dontNeedHeader ? "none" : 'block'
@@ -170,7 +170,7 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      */
     public render(): React.ReactNode {
         return (
-            <Tabs {...this.getTabsProps()} type="card" className={ styles.tab } onChange={ this.handleTabChange }>
+            <Tabs {...this.getTabsProps()} type="card" className={styles.tab} onChange={this.handleTabChange}>
                 {
                     this.getTabItems().map<React.ReactNode>((item: ITabItem): React.ReactNode => (
                         <Tabs.TabPane key={item.key} tab={item.label}>{this.renderTabContent(item)}</Tabs.TabPane>
@@ -246,7 +246,7 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      */
     protected renderTableContent(item: ITabItem): React.ReactNode {
         return (
-            <Table {...this.getTableProps(item)} className={styles.table} scroll={{ x: true }} />
+            <Table {...this.getTableProps(item)} className={styles.table} scroll={{ x: 'max-content' }} />
         );
     }
 

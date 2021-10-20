@@ -107,7 +107,7 @@ export default function Edit() {
                 attachInfoDtos: attachVosData,
                 invoicingInfoDto: invoicData
             }
-            const result = params.id === "new" ? await createRun(saveData) : await saveRun(saveData)
+            const result = params.id === "new" ? await createRun(saveData) : await saveRun({ ...saveData, id: data?.id })
             if (result) {
                 message.success("数据保存成功...")
                 history.go(-1)
@@ -158,6 +158,7 @@ export default function Edit() {
         <Button
             type="primary" key="save"
             style={{ marginRight: 16 }}
+            loading={saveLoading}
             onClick={handleSave}>保存</Button>,
         <Button key="cancel" onClick={() => history.go(-1)}>取消</Button>
     ]}>

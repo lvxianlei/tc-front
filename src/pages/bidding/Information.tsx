@@ -37,6 +37,7 @@ const columns = [
     {
         key: 'projectNumber',
         title: '项目编码',
+        width: 120,
         dataIndex: 'projectNumber'
     },
     {
