@@ -24,7 +24,7 @@ export default function SampleDrawCheck(): React.ReactNode {
     const handleErrorModalOk = async () => {
         try {
             const submitData = {
-                keyId: questionDetail.id,
+                keyId: questionDetail.keyId,
                 currentFile: questionDetail.currentFile,
                 newFile: attachInfo
             }

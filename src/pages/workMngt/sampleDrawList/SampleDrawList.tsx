@@ -5,6 +5,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
 import { Popconfirm } from 'antd';
 import RequestUtil from '../../../utils/RequestUtil';
+import AuthUtil from '../../../utils/AuthUtil';
 
 export default function SampleDrawList(): React.ReactNode {
     const history = useHistory();
@@ -119,10 +120,10 @@ export default function SampleDrawList(): React.ReactNode {
             }
         },
         {
-            key: 'updateStatusTime',
+            key: 'smallSampleUpdateStatusTime',
             title: '最新状态变更时间',
             width: 200,
-            dataIndex: 'updateStatusTime'
+            dataIndex: 'smallSampleUpdateStatusTime'
         },
         {
             key: 'operation',
@@ -133,8 +134,8 @@ export default function SampleDrawList(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDrawMessage/${record.loftingTask}`)}}>小样图信息</Button>
-                    <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDraw/${record.id}/${record.smallSampleStatus}`)}}>小样图</Button>
-                    <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDrawCheck/${record.id}/${record.smallSampleStatus}`)}}  disabled={record.smallSampleStatus!==3}>校核</Button>
+                    <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDraw/${record.id}/${record.smallSampleStatus}`)}} disabled={AuthUtil.getUserId()!==record.smallSampleLeader}>小样图</Button>
+                    <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDrawCheck/${record.id}/${record.smallSampleStatus}`)}}  disabled={record.smallSampleStatus!==3||AuthUtil.getUserId()!==record.loftingLeader}>校核</Button>
                     <Popconfirm
                         title="确认提交?"
                         onConfirm={ async () => {
@@ -146,9 +147,9 @@ export default function SampleDrawList(): React.ReactNode {
                         } }
                         okText="确认"
                         cancelText="取消"
-                        disabled={record.smallSampleStatus!==4}
+                        disabled={record.smallSampleStatus!==4||AuthUtil.getUserId()!==record.loftingLeader}
                     >   
-                        <Button type="link" disabled={record.smallSampleStatus!==4}>提交</Button>
+                        <Button type="link" disabled={record.smallSampleStatus!==4||AuthUtil.getUserId()!==record.loftingLeader}>提交</Button>
                     </Popconfirm>
                 </Space>
             )
