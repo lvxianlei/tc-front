@@ -468,7 +468,8 @@
         {
             "title": "承诺回款金额",
             "dataIndex": "backMoney",
-            "type": "number"
+            "type": "number",
+            "disabled": true
         },
         {
             "title": "备注",
@@ -528,7 +529,13 @@
         {
             "title": "重量(吨)",
             "dataIndex": "weight",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入重量..."
+                }
+            ]
         },
         {
             "title": "单价（元/吨）",
@@ -539,7 +546,13 @@
         {
             "title": "金额(元)",
             "dataIndex": "moneyCount",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入金额..."
+                }
+            ]
         }
     ],
     "billingHeader": [

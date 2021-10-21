@@ -1,5 +1,5 @@
 import React from "react"
-import { Button, Spin } from 'antd'
+import { Button, message, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../common'
 import { baseInfoHead, invoiceHead, billingHead, batchHead } from "./InvoicingData.json"
@@ -41,6 +41,7 @@ export default function Edit() {
             <CommonTable columns={[{
                 title: "操作", dataIndex: "opration",
                 render: (_: any, record: any) => (<>
+                    <Button type="link" onChange={() => message.info("功能正在加速开发中，敬请期待...")}>预览</Button>
                     <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
                 </>)
             }, ...enclosure]} dataSource={data?.attachInfoVos || []} />

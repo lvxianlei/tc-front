@@ -134,10 +134,17 @@ export default function Edit() {
                 business: contractValue.salesman
             })
         }
+        if (fields.backProportion) {
+            const ticketMoney = baseInfo.getFieldValue("ticketMoney")
+            baseInfo.setFieldsValue({
+                backMoney: (parseFloat(fields.backProportion) * parseFloat(ticketMoney || 0)).toFixed(2)
+            })
+        }
     }
 
     const handleEditTableChange = (fields: any, allFields: any) => {
         const currentRowData = fields.submit[fields.submit.length - 1]
+        const backMoney = baseInfo.getFieldValue("backMoney")
         if (currentRowData.weight || currentRowData.moneyCount) {
             const { weight, moneyCount } = allFields.submit.reduce((result: { weight: string, moneyCount: string }, item: any) => ({
                 weight: parseFloat(result.weight || "0") + parseFloat(item.weight || 0),
@@ -150,7 +157,8 @@ export default function Edit() {
             billingForm.setFieldsValue({ submit: newFields })
             baseInfo.setFieldsValue({
                 ticketWeight: weight,
-                ticketMoney: moneyCount
+                ticketMoney: moneyCount,
+                backMoney: (parseFloat(backMoney) * parseFloat(moneyCount || 0)).toFixed(2)
             })
         }
     }
