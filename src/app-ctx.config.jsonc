@@ -88,24 +88,24 @@
                             }
                         ]
                     },
-                    // {
-                    //     "label": "放样外协服务",
-                    //     "icon": "lofting",
-                    //     "path": "/outsource",
-                    //     "authority": "outsource_section",
-                    //     "items": [
-                    //         {
-                    //             "label": "委托列表",
-                    //             "path": "/outsource/entrust",
-                    //             "authority": "outsource_entrust"
-                    //         },
-                    //         {
-                    //             "label": "已完成塔型",
-                    //             "path": "/outsource/towershape",
-                    //             "authority": "outsource_towershape"
-                    //         }
-                    //     ]
-                    // },
+                    {
+                        "label": "放样外协服务",
+                        "icon": "lofting",
+                        "path": "/outsource",
+                        "authority": " entrust_page",
+                        "items": [
+                            {
+                                "label": "委托列表",
+                                "path": "/outsource/entrust",
+                                "authority": " entrust_page"
+                            },
+                            {
+                                "label": "已完成塔型",
+                                "path": "/outsource/towershape",
+                                "authority": "entrust_product_category_complete"
+                            }
+                        ]
+                    },
                     // {
                     //     "label": "产品管理",
                     //     "icon": "product",

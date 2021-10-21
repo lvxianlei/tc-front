@@ -31,7 +31,7 @@ import { downLoadFile } from '../../../utils';
 export interface IAbstractContractSettingState extends IAbstractFillableComponentState {
     readonly tablePagination: TablePaginationConfig;
     readonly contract: IContractInfo;
-    readonly checkList: [];
+    readonly checkList?: number[];
     readonly tableDataSource: [];
     readonly regionInfoData: [] | IRegion[];
     readonly childData: [] | undefined;
@@ -117,7 +117,6 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
 
     public state: S = {
         contract: {},
-        checkList: [],
         url: { link: "", fileSuffix: "" },
         isVisible: false
     } as S;
@@ -161,7 +160,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
      * @returns 
      */
     public checkChange = (record: Record<string, any>): void => {
-        let checked: any = this.state.checkList;
+        let checked: number[] = this.state.checkList || [];
         if (record.target.checked) {
             checked.push(record.target.value);
         } else {
@@ -897,7 +896,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                 </Upload>
                                                 <Button type="primary" onClick={async () => {
                                                     let attachInfoDtos: any[] = this.getForm()?.getFieldValue("attachInfoDtos");
-                                                    let checked: any[] = this.state.checkList;
+                                                    let checked: number[] = this.state.checkList || [];
                                                     let batchId: any[] = [];
                                                     checked.map((item: any) => {
                                                         batchId.push(attachInfoDtos[item].id);
@@ -915,7 +914,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                         contract: {
                                                             ...contract,
                                                             attachInfoDtos: contract.attachInfoDtos
-                                                        }
+                                                        },
+                                                        checkList: []
                                                     })
                                                 }}>删除</Button>
                                             </Space>
@@ -923,7 +923,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                 fields.map<React.ReactNode>((field: FormListFieldData, index: number): React.ReactNode => (
                                                     <Row key={`${field.name}_${index}`} className={styles.FormItem}>
                                                         <Col span={1}>
-                                                            <Checkbox value={index} onChange={this.checkChange}></Checkbox>
+                                                            <Checkbox checked={ this.state.checkList && this.state?.checkList.includes(index) } value={index} onChange={this.checkChange}></Checkbox>
                                                         </Col>
                                                         <Col span={6}>
                                                             <Form.Item {...field} name={[field.name, 'name']} fieldKey={[field.fieldKey, 'name']}>

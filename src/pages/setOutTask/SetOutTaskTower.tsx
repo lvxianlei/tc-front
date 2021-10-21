@@ -39,12 +39,6 @@ const columns = [
         dataIndex: 'loftingLeaderName'
     },
     {
-        key: 'loftingUserName',
-        title: '放样人',
-        dataIndex: 'loftingUserName',
-        width: 200
-    },
-    {
         key: 'loftingDeliverTime',
         title: '放样交付时间',
         width: 200,
@@ -79,12 +73,6 @@ const columns = [
         title: '提料负责人',
         width: 200,
         dataIndex: 'materialLeaderName'
-    },
-    {
-        key: 'materialUserName',
-        title: '提料人',
-        width: 200,
-        dataIndex: 'materialUserName'
     },
     {
         key: 'materialDeliverTime',
