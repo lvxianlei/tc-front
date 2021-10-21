@@ -672,9 +672,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         return <>
             {super.render()}
             <Modal visible={this.state.isVisible} onCancel={this.modalCancel} onOk={this.modalCancel} width={"60%"}>
-                {this.state.url.fileSuffix && this.state.url.fileSuffix === "pdf" && <iframe src={this.state.url.link} frameBorder="0" className={styles.iframe}></iframe>}
-                {this.state.url.fileSuffix && this.state.url.fileSuffix !== "pdf" && <Image src={this.state.url.link} />}
-                {!this.state.url.fileSuffix && this.state.url.link && this.state.url.link.substr((this.state.url.link.lastIndexOf(".")) + 1) === 'pdf' ? <iframe src={this.state.url.link} frameBorder="0" className={styles.iframe}></iframe> : <img src={this.state.url.link} />}
+                {this.state.url.fileSuffix && this.state.url.fileSuffix !== "pdf" && <Image src={this.state.url.link} preview={ false } />}
             </Modal>
         </>
     }
@@ -957,7 +955,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                 <Button type="link" onClick={async () => {
                                                                     let attachInfoDtos: any = this.state.contract?.attachInfoDtos[index];
                                                                     const suffix: string = attachInfoDtos.fileSuffix
-                                                                    if (['jpg', 'pdf', 'jpeg', 'png'].includes(suffix)) {
+                                                                    if (['jpg', 'jpeg', 'png'].includes(suffix)) {
                                                                         this.setState({
                                                                             isVisible: true,
                                                                             url: {
@@ -965,6 +963,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                                 fileSuffix: attachInfoDtos
                                                                             }
                                                                         })
+                                                                    } else if(suffix === 'pdf') {
+                                                                        window.open(attachInfoDtos.id?attachInfoDtos.filePath:attachInfoDtos.link)
                                                                     } else {
                                                                         message.info('仅图片、pdf支持预览')
                                                                     }
