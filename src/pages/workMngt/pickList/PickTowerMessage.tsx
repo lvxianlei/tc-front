@@ -113,12 +113,12 @@ export default function PickTowerMessage(): React.ReactNode {
     return (
         <Page
             // path="/tower-market/bidInfo"
-            path="/tower-science/drawProductSegment"
+            path={`/tower-science/drawProductSegment`}
             columns={columns}
             refresh={refresh}
             onFilterSubmit={onFilterSubmit}
             filterValue={ filterValue }
-            requestData={{ productCategoryId: params.id }}
+            requestData={{ productCategory: params.id }}
             extraOperation={
                 <Space>
                 <Button type="primary">导出</Button>

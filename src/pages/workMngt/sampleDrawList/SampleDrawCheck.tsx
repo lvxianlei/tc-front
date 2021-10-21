@@ -21,6 +21,7 @@ export default function SampleDrawCheck(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
     const [questionDetail, setQuestionDetail] = useState<any>({});
     const [url, setUrl] = useState<string>('');
+    const [questionStatus, setQuestionStatus] = useState<string>('');
     const handleErrorModalOk = async () => {
         try {
             const submitData = {
@@ -133,7 +134,7 @@ export default function SampleDrawCheck(): React.ReactNode {
         }
     ]
 
-    const handleModalCancel = () => {setVisible(false); setUrl('');};
+    const handleModalCancel = () => {setVisible(false); setUrl('');setQuestionStatus('');};
     const handleErrorModalCancel = () => setErrorVisible(false);
     const onFilterSubmit = (value: any) => {
         if (value.upLoadTime) {
@@ -156,7 +157,7 @@ export default function SampleDrawCheck(): React.ReactNode {
                     preview={false}
                 />
             </Modal>
-            <Modal visible={errorVisible} title="问题单"  onCancel={handleErrorModalCancel} width={1200} onOk={handleErrorModalOk}>
+            <Modal visible={errorVisible} title={questionStatus?"查看问题单":"创建问题单"}  onCancel={handleErrorModalCancel} width={1200} onOk={handleErrorModalOk} footer={questionStatus}>
                 <DetailTitle title="问题信息" />
                 <Descriptions
                     bordered
@@ -167,7 +168,7 @@ export default function SampleDrawCheck(): React.ReactNode {
                     <Descriptions.Item label="校核前图片">
                         <Image src={questionDetail?.currentFile?.filePath||''} height={100}/>
                     </Descriptions.Item>
-                    <Descriptions.Item label={<Upload 
+                    {!questionStatus?<Descriptions.Item label={<Upload 
                         key="sub"
                         name="file"
                         multiple={true}
@@ -208,10 +209,13 @@ export default function SampleDrawCheck(): React.ReactNode {
                             </>
                         :null }
                         </div>
-                    </Descriptions.Item>
+                    </Descriptions.Item>:
+                    <Descriptions.Item label="校核后图片">
+                        <Image src={questionDetail?.newFile?.filePath||''} height={100}/>
+                    </Descriptions.Item>}
                 </Descriptions>
                 <DetailTitle title="操作信息" />
-                <CommonTable columns={tableColumns} dataSource={questionDetail?.issueRecordVOList} />
+                <CommonTable columns={tableColumns} dataSource={questionDetail?.issueRecordList} />
             </Modal>
             <Page
                 path="/tower-science/smallSample/checkList"
@@ -242,13 +246,13 @@ export default function SampleDrawCheck(): React.ReactNode {
                 tableProps={{
                     onRow:(record:any) => ({
                         onDoubleClick: async () => {
+                            setQuestionStatus(record.issueSmallSampleVO.status);
                             const data:any = await RequestUtil.get(`/tower-science/smallSample/issueDetail?keyId=${record.id}`)
                             setQuestionDetail(data);
                             setAttachInfo(data.newFile)
-                            setErrorVisible(true)
+                            setErrorVisible(true);
                         },
                         className: record.issueSmallSampleVO.status===1? styles.red: record.issueSmallSampleVO.status===2? styles.green:record.issueSmallSampleVO.status===3?styles.yellow :styles.tableRow
-                        // className:[record.verificationStatus === 1 ? styles.red : record.verificationStatus === 2 ? styles.green : record.verificationStatus === 3 ? styles.yellow : null, styles.tableRow]
                     })
                 }}
                 searchFormItems={[

@@ -38,7 +38,7 @@ export default function PickDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`tower-science/materialTask/${params.id}`)
+        const data: any = await RequestUtil.get(`tower-science/materialTask?productCategoryId=${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data
