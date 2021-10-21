@@ -22,7 +22,7 @@
         },
         {
             "title": "备注",
-            "dataIndex": "remark",
+            "dataIndex": "replyMessage",
             "type": "textarea"
         }
     ],
@@ -53,6 +53,11 @@
         {
             "title": "回复时间",
             "dataIndex": "updateTime"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark",
+            "type": "textarea"
         }
     ],
     "logisticBaseInfo": [
@@ -135,7 +140,7 @@
         },
         {
             "title": "备注",
-            "dataIndex": "remark"
+            "dataIndex": "replyMessage"
         }
     ],
     "logisticProductType": [
@@ -145,11 +150,20 @@
         },
         {
             "title": "重量(吨)",
-            "dataIndex": "weight"
+            "dataIndex": "weight",
+            "type": "number",
+            "rules": {
+                "requied": true,
+                "message": "请输入重量..."
+            }
         },
         {
             "title": "收货地址",
-            "dataIndex": "address"
+            "dataIndex": "address",
+            "rules": {
+                "requied": true,
+                "message": "请输入收货地址..."
+            }
         },
         {
             "title": "是否地面交货",
@@ -164,7 +178,11 @@
                     "value": 1,
                     "label": "是"
                 }
-            ]
+            ],
+            "rules": {
+                "requied": true,
+                "message": "请选择是否地面交货..."
+            }
         },
         {
             "title": "地面交货价格(元/吨)",
@@ -250,10 +268,6 @@
         {
             "title": "回复时间",
             "dataIndex": "updateTime"
-        },
-        {
-            "title": "备注",
-            "dataIndex": "remark"
         }
     ],
     "workmanshipBaseInfo": [
@@ -290,12 +304,12 @@
     ],
     "materialPriceHead": [
         {
-            "title": "询价id",
-            "dataIndex": "askId"
-        },
-        {
             "title": "批次",
             "dataIndex": "batch"
+        },
+        {
+            "title": "报价日期",
+            "dataIndex": "quoteDate"
         },
         {
             "title": "钢板Q235",
@@ -330,10 +344,6 @@
             "dataIndex": "hgqDfj"
         },
         {
-            "title": "原材料报价id",
-            "dataIndex": "id"
-        },
-        {
             "title": "角钢Q235",
             "dataIndex": "jgqBce"
         },
@@ -352,10 +362,6 @@
         {
             "title": "Q420大角钢(220-250)",
             "dataIndex": "qdbjDjg"
-        },
-        {
-            "title": "报价日期",
-            "dataIndex": "quoteDate"
         },
         {
             "title": "圆钢35#",
@@ -390,11 +396,24 @@
         },
         {
             "title": "重量",
-            "dataIndex": "weight"
+            "dataIndex": "weight",
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入重量..."
+                }
+            ]
         },
         {
             "title": "收货地址",
-            "dataIndex": "address"
+            "dataIndex": "address",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入收货地址..."
+                }
+            ]
         },
         {
             "title": "是否地面交货",
@@ -408,6 +427,12 @@
                 {
                     "value": 1,
                     "label": "是"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择是否地面交货..."
                 }
             ]
         }

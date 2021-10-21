@@ -2,7 +2,7 @@ import React from "react"
 import { Button, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../common'
-import { baseInfoHead, invoiceHead, billingHead } from "./InvoicingData.json"
+import { baseInfoHead, invoiceHead, billingHead, batchHead } from "./InvoicingData.json"
 import { enclosure } from '../project/managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
@@ -21,7 +21,7 @@ export default function Edit() {
     }))
 
     return <DetailContent title={[
-        <Button type="primary">发起审批</Button>
+        <Button type="primary" key="ab">发起审批</Button>
     ]} operation={[
         <Button key="cancel" onClick={() => history.go(-1)}>返回</Button>
     ]}>
@@ -47,7 +47,7 @@ export default function Edit() {
 
             <DetailTitle title="审批记录" />
 
-            <CommonTable columns={[]} dataSource={data?.invoicingBatchVos || []} />
+            <CommonTable columns={batchHead} dataSource={data?.invoicingBatchVos || []} />
         </Spin>
     </DetailContent>
 }

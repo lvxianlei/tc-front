@@ -41,8 +41,11 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
     }, [props.id])
 
     const radioOnchange = (value: radioTypes) => setRadioValue(value)
-
-    return <Modal {...props} width={1011} title={auditEnum[props.type]} onOk={() => props.onOk && props.onOk()} destroyOnClose>
+    const handleCancel = () => {
+        setRadioValue("base")
+        props.onCancel && props.onCancel()
+    }
+    return <Modal {...props} width={1011} title={auditEnum[props.type]} onOk={() => props.onOk && props.onOk()} onCancel={handleCancel} destroyOnClose>
         <Spin spinning={loading}>
             {props.type === "selectA" && <>
                 <Radio.Group defaultValue={radioValue} onChange={(event: any) => radioOnchange(event.target.value)}>
@@ -52,9 +55,8 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                 <DetailTitle title="询价类型：供应询价" />
                 {radioValue === "base" && <>
                     <BaseInfo columns={supplyBaseInfo} dataSource={data || {}} />
-
                     <Row style={{ fontSize: 16, textAlign: "center", width: "100%" }}>国网批次招标投标原材料报价</Row>
-                    <CommonTable columns={materialPriceHead} data={data?.materialPriceVOS || []} />
+                    <CommonTable columns={materialPriceHead} dataSource={data?.materialPriceVOS || []} />
                     <DetailTitle title="相关附件" />
                     <CommonTable columns={[{
                         title: "操作",
@@ -88,7 +90,10 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                 {radioValue === "base" && <>
                     <BaseInfo columns={logisticAskInfo} dataSource={data || {}} />
                     <DetailTitle title="产品类型信息" />
-                    <CommonTable columns={logisticProductType} dataSource={data?.materialPriceVOS || []} />
+                    <CommonTable columns={logisticProductType.map((item: any) => item.dataIndex === "productType" ? ({
+                        ...item,
+                        render: (_a: any, record: any) => `${record.voltage}${record.productName}`
+                    }) : item)} dataSource={data?.askLogisticsVOS || []} />
                     <DetailTitle title="咨询附件" />
                     <CommonTable columns={[{
                         title: "操作",
@@ -102,7 +107,10 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                 {radioValue === "records" && <>
                     <BaseInfo columns={logisticBaseInfo} dataSource={data || {}} />
                     <DetailTitle title="产品类型信息" />
-                    <CommonTable columns={logisticProductReverdType} dataSource={data?.askLogisticsVOS || {}} />
+                    <CommonTable columns={logisticProductReverdType.map((item: any) => item.dataIndex === "productType" ? ({
+                        ...item,
+                        render: (_a: any, record: any) => `${record.voltage}${record.productName}`
+                    }) : item)} dataSource={data?.askLogisticsVOS || {}} />
                     <DetailTitle title="附件" />
                     <CommonTable columns={[{
                         title: "操作",

@@ -17,6 +17,7 @@ export default function Edit() {
     const [invoicForm] = Form.useForm()
     const [billingForm] = Form.useForm()
     const productType: any = (ApplicationContext.get().dictionaryOption as any)["101"]
+    const saleTypeEnum: any = (ApplicationContext.get().dictionaryOption as any)["123"].map((item: any) => ({ value: item.code, label: item.name }))
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -167,13 +168,27 @@ export default function Edit() {
             <BaseInfo
                 onChange={handleBaseInfoChange}
                 form={baseInfo}
-                columns={baseInfoHead.map((item: any) => item.dataIndex === "productTypeId" ? ({
-                    ...item,
-                    enum: productType.map((product: any) => ({
-                        value: product.id,
-                        label: product.name
-                    }))
-                }) : item)}
+                columns={baseInfoHead.map((item: any) => {
+                    if (item.dataIndex === "productTypeId") {
+                        return ({
+                            ...item,
+                            enum: productType.map((product: any) => ({
+                                value: product.id,
+                                label: product.name
+                            }))
+                        })
+                    }
+                    if (item.dataIndex === "contractCode") {
+                        return ({
+                            ...item, columns: item.columns.map(((coItem: any) => coItem.dataIndex === "saleType" ? ({
+                                ...coItem,
+                                type: "select",
+                                enum: saleTypeEnum
+                            }) : coItem))
+                        })
+                    }
+                    return item
+                })}
                 dataSource={generateInitValues(baseInfoHead)} edit />
 
             <DetailTitle title="发票信息" />
