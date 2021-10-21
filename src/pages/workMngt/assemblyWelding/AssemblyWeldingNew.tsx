@@ -34,7 +34,7 @@ export interface AssemblyWeldingNewState {
 export interface IComponentList {
     readonly basicsWeight?: number;
     readonly id?: string;
-    readonly basicsPartNum?: number;
+    readonly basicsPartNumNow?: number;
     readonly weldingLength?: number;
     readonly singleNum?: number;
     readonly isMainPart?: number;
@@ -104,7 +104,7 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                 const weldingDetailedStructureList = this.state.weldingDetailedStructureList || [];
                 let newData: IComponentList[] = data?.filter((item: IComponentList) => {
                     return weldingDetailedStructureList.every((items: IComponentList) => {
-                        if(items.singleNum === item.basicsPartNum) { 
+                        if(items.singleNum === item.basicsPartNumNow) { 
                             return item.id !== items.structureId;
                         } else {
                             return item
@@ -117,10 +117,14 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                             const num = this.state.settingData && this.state.settingData[index]?.singleNum || 0;
                             return {
                                 ...item,
-                                basicsPartNum: items.id ? Number(item.basicsPartNum || 0) - Number(items.singleNum || 0) + num : Number(item.basicsPartNum || 0) - Number(items.singleNum || 0)
+                                basicsPartNumNow: items.id ? Number(item.basicsPartNumNow || 0) - Number(items.singleNum || 0) + num : Number(item.basicsPartNumNow || 0) - Number(items.singleNum || 0),
+                                totalWeight: Number(item.basicsPartNumNow || 0) *  Number(item.basicsWeight || 0) 
                             };
                         } else {
-                            return item
+                            return {
+                                ...item,
+                                totalWeight: Number(item.basicsPartNumNow || 0) *  Number(item.basicsWeight || 0) 
+                            }
                         }
                     })
                 })
@@ -167,12 +171,12 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                     return {
                         ...item,
                         singleNum: Number(item.singleNum) + 1,
-                        basicsPartNum: Number(items.basicsPartNum || 0) + Number(item.singleNum || 0)
+                        basicsPartNumNow: Number(items.basicsPartNumNow || 0) + Number(item.singleNum || 0)
                     }
                 } else {
                     return {
                         ...item,
-                        basicsPartNum: Number(items.basicsPartNum || 0) + Number(item.singleNum || 0)
+                        basicsPartNumNow: Number(items.basicsPartNumNow || 0) + Number(item.singleNum || 0)
                     }
                 }
             })
@@ -278,7 +282,7 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
             key: 'singleNum',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <InputNumber
-                    key={ record.structureId + record.basicsPartNum } 
+                    key={ record.structureId + record.basicsPartNumNow } 
                     defaultValue={ record.singleNum } 
                     onChange={ (e) => {
                         const weldingDetailedStructureList: IComponentList[] = this.state.weldingDetailedStructureList || [];
@@ -292,10 +296,10 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                             weldingDetailedStructureList: [ ...weldingDetailedStructureList ]
                         })
                         this.getForm()?.setFieldsValue({ 'singleGroupWeight': Number(singleGroupWeight) - Number(record.singleNum) * Number(record.basicsWeight) + Number(e) * Number(record.basicsWeight), 'electricWeldingMeters': Number(electricWeldingMeters) - Number(record.weldingLength) * Number(record.singleNum) + Number(record.weldingLength) * Number(e) });
-                        console.log(record.basicsPartNum)
+                        console.log(record.basicsPartNumNow)
                     } } 
                     bordered={false} 
-                    max={ record.basicsPartNum ? Number(record.basicsPartNum || 0) : Number(record.surplusNum || 0) + Number(this.state.settingData && this.state.settingData[index]?.singleNum || 0) }
+                    max={ record.basicsPartNumNow ? Number(record.basicsPartNumNow || 0) : Number(record.surplusNum || 0) + Number(this.state.settingData && this.state.settingData[index]?.singleNum || 0) }
                     min={ 1 }
                 />
             )  
@@ -413,8 +417,8 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
         },
         { 
             title: '单段件数', 
-            dataIndex: 'basicsPartNum', 
-            key: 'basicsPartNum'
+            dataIndex: 'basicsPartNumNow', 
+            key: 'basicsPartNumNow'
         },
         { 
             title: '长度', 
@@ -527,7 +531,7 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                         selectedRowKeys: selectedKeys
                     })
                 }, getCheckboxProps: (record: Record<string, any>) => ({
-                    disabled: record.basicsPartNum === 0
+                    disabled: record.basicsPartNumNow === 0
                 }) } } />
             </Modal>
         </> 

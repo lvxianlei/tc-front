@@ -140,8 +140,8 @@ export default function Questionnaire(): React.ReactNode {
         },
         { 
             title: '单段件数', 
-            dataIndex: 'basicsPartNum', 
-            key: 'basicsPartNum'
+            dataIndex: 'basicsPartNumNow', 
+            key: 'basicsPartNumNow'
         },
         { 
             title: '长度', 
@@ -202,7 +202,7 @@ export default function Questionnaire(): React.ReactNode {
             key: 'singleNum',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <InputNumber 
-                    key={ record.structureId + record.basicsPartNum } 
+                    key={ record.structureId + record.basicsPartNumNow } 
                     defaultValue={ record.singleNum } 
                     onChange={ (e) => {
                         weldingDetailedStructureList[index] = {
@@ -214,7 +214,7 @@ export default function Questionnaire(): React.ReactNode {
                         setWeldingDetailedStructureList([...weldingDetailedStructureList]);
                     } } 
                     bordered={false} 
-                    max={ Number(record.basicsPartNum) }
+                    max={ Number(record.basicsPartNumNow) }
                     min={ 1 }
                 />
             )  
@@ -295,13 +295,11 @@ export default function Questionnaire(): React.ReactNode {
     const [ electricWeldingMeters, setElectricWeldingMeters ] = useState(0);
     const [ weldingDetailedList, setWeldingDetailedList ] = useState([]);
     const [ mainPartId, setMainPartId ] = useState('');
-    // const [ issueWeldingDetailed, setIssueWeldingDetailed ] = useState<any>({});
 
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const resData: [] = await RequestUtil.get(`/tower-science/welding/getStructureById`, { segmentId: params.segmentId });
         const data = await RequestUtil.get<any>(`/tower-science/welding/getIssueById?segmentId=${ params.segmentId }`);
         setWeldingDetailedList(resData);
-        // setIssueWeldingDetailed({ ...data.weldingDetailedVO, mainPartId: '', electricWeldingMeters: 0 })
         resole(data);
     }), {})
     const detailData: any = data;
@@ -323,8 +321,7 @@ export default function Questionnaire(): React.ReactNode {
         }); 
         let newData: IComponentList[] = data?.filter((item: IComponentList) => {
             return weldingDetailedStructureList.every((items: IComponentList) => {
-                if(items.singleNum === item.basicsPartNum) { 
-                    console.log(item.id,items.structureId)
+                if(items.singleNum === item.basicsPartNumNow) { 
                     return item.id !== items.structureId;
                 } else {
                     return item
@@ -336,7 +333,8 @@ export default function Questionnaire(): React.ReactNode {
                 if(item.id === items.structureId) {
                     return {
                         ...item,
-                        basicsPartNum: Number(item.basicsPartNum || 0) - Number(items.singleNum || 0)
+                        basicsPartNumNow: Number(item.basicsPartNumNow || 0) - Number(items.singleNum || 0),
+                        totalWeight: Number(item.basicsPartNumNow || 0) *  Number(item.basicsWeight || 0) 
                     };
                 } else {
                     return item
