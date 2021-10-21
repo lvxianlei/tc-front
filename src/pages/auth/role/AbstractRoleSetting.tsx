@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Input, InputNumber, Select, Tree, TreeSelect } from 'antd';
+import { Input, InputNumber, message, Select, Tree, TreeSelect } from 'antd';
 import { DataNode } from 'rc-tree/lib/interface';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import React from 'react';
@@ -146,6 +146,24 @@ export default abstract class AbstractRoleSetting<P extends RouteComponentProps,
     //中间按钮null
     protected renderExtraOperationArea(): React.ReactNode {
         return null;
+    }
+
+    /**
+     * @protected
+     * @description Determines whether submit and continue on
+     */
+     protected async onSubmitAndContinue() {
+        if (this.getForm()) {
+            const result: any = (this.getForm() as any).validateFields()
+            const saveResult: any = this.onSubmit(result);
+            if (!!saveResult) {
+                message.success("保存成功！");
+                this.getForm()?.resetFields();
+                this.setState({
+                    checkedFunctionKeys:[]
+                })
+            }
+        }
     }
     /**
      * @implements
