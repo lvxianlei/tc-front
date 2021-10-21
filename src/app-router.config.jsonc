@@ -240,35 +240,35 @@
       "path": "/outsource/entrust",
       "module": "./pages/entrust/EntrustList",
       "exact": true,
-      "authority": "outsource_entrust"
+      "authority": "entrust_page"
     },
     { // 委托新增
       "name": "委托新增",
       "path": "/outsource/entrust/new",
       "module": "./pages/entrust/EntrustNew",
       "exact": true,
-      "authority": "outsource_entrust"
+      "authority": "entrust_save"
     },
     { // 委托编辑
-      "name": "委托列表",
+      "name": "委托编辑",
       "path": "/outsource/entrust/sstting/:id",
       "module": "./pages/entrust/EntrustSetting",
       "exact": true,
-      "authority": "outsource_entrust"
+      "authority": "entrust_update_save"
     },
     { // 委托详情
       "name": "委托详情",
       "path": "/outsource/entrust/detail/:id",
       "module": "./pages/entrust/EntrustDetail",
       "exact": true,
-      "authority": "outsource_entrust"
+      "authority": "entrust_detail"
     },
     { // 已完成塔型
       "name": "已完成塔型",
       "path": "/outsource/towershape",
       "module": "./pages/entrust/TowerShape",
       "exact": true,
-      "authority": "outsource_towershape"
+      "authority": "entrust_product_category_complete"
     },
     { // 原材料类型管理
       "name": "原材料类型管理",
