@@ -277,7 +277,7 @@ export default function ConfirmDetail(): React.ReactNode {
           editable: true,
           key: 'basicHight',
           render:(value:any)=>{
-            return value.toFixed(4)
+            return parseFloat(value).toFixed(4)
           }  
       },
       { 
@@ -327,7 +327,7 @@ export default function ConfirmDetail(): React.ReactNode {
           editable: true,
           key: 'productWeight', 
           render:(value:any)=>{
-            return value.toFixed(4)
+            return parseFloat(value).toFixed(4)
           }  
       },
       { 
@@ -338,7 +338,7 @@ export default function ConfirmDetail(): React.ReactNode {
           editable: true,
           key: 'otherWeight',
           render:(value:any)=>{
-            return value.toFixed(4)
+            return parseFloat(value).toFixed(4)
           }  
       },
       { 

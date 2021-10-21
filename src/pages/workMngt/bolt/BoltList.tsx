@@ -28,10 +28,10 @@ export default function BoltList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
         },
         {
-            key: 'taskCode',
+            key: 'taskNum',
             title: '放样任务编号',
             width: 150,
-            dataIndex: 'taskCode'
+            dataIndex: 'taskNum'
         },
         {
             key: 'priority',
@@ -50,10 +50,10 @@ export default function BoltList(): React.ReactNode {
             }         
         },
         {
-            key: 'taskNumber',
+            key: 'externalTaskNum',
             title: '任务单编号',
             width: 150,
-            dataIndex: 'taskNumber'
+            dataIndex: 'externalTaskNum'
         },
         {
             key: 'saleOrderNumber',
@@ -114,10 +114,10 @@ export default function BoltList(): React.ReactNode {
             }    
         },
         {
-            key: 'updateStatusTime',
+            key: 'boltUpdateStatusTime',
             title: '最新状态变更时间',
             width: 200,
-            dataIndex: 'updateStatusTime'
+            dataIndex: 'boltUpdateStatusTime'
         },
         {
             key: 'operation',
@@ -201,13 +201,13 @@ export default function BoltList(): React.ReactNode {
         onFilterSubmit = { (values: Record<string, any>) => {
             if(values.updateTime) {
                 const formatDate = values.updateTime.map((item: any) => item.format("YYYY-MM-DD"));
-                values.updateStatusTimeStart = formatDate[0];
-                values.updateStatusTimeEnd = formatDate[1];
+                values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
+                values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             }
             if(values.plannedTime) {
                 const formatDate = values.plannedTime.map((item: any) => item.format("YYYY-MM-DD"));
-                values.boltDeliverTimeStart = formatDate[0];
-                values.boltDeliverTimeEnd = formatDate[1];
+                values.boltDeliverTimeStart = formatDate[0] + ' 00:00:00';
+                values.boltDeliverTimeEnd = formatDate[1] + ' 23:59:59';
             }
             return values;
         } }

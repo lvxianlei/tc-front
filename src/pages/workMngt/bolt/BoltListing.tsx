@@ -215,7 +215,7 @@ export default function BoltList(): React.ReactNode {
 
     const { loading, data } = useRequest<ITab[]>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<ITab[]>(`/tower-science/boltRecord/basicHeight/${ params.id }`);
-        if(data[0]) {
+        if(data && data[0]) {
             getDataSource(data[0].id);
             setActiveKey(data[0].id || '');
         }
@@ -249,7 +249,8 @@ export default function BoltList(): React.ReactNode {
             <Space direction="horizontal" size="small" className={ styles.topbtn }>
                 {/* <Button type="primary" ghost>导出</Button> */}
                 <Button type="primary" ghost>模板下载</Button>
-                <Button type="primary" ghost>导出</Button>
+            </Space>
+            <Space direction="horizontal" size="small" className={ `${ styles.topbtn } ${ styles.btnRight }` }>
                 <Popconfirm
                     title="确认完成?"
                     onConfirm={ () => RequestUtil.put(`/tower-science/boltRecord/complete`, { id: params.id }).then(res => {
