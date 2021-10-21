@@ -1,83 +1,39 @@
 {
     "code":200,
-    "msg":"",
-    "success": true,
+    "msg":"ullamco eu",
+    "success":true,
     "data":{
-        "id":231231234324,
-        "materialStandard":"labore adipisicing",
-        "materialDemand":"incididunt",
-        "weldingDemand":"non",
-        "galvanizeDemand":"voluptate veniam",
-        "packDemand":"in co",
-        "description":"aute quis",
-        "productVO":{
-            "productCategoryNum":432423423454,
-            "productNum":"sed elit sint sunt",
-            "productCategoryType":"incididunt nisi",
-            "totalWeight":"id mollit cupidatat laboris"
-        },
+        "id":40719663,
+        "materialSandard":"ullamco aliqua mollit",
+        "materialDemand":"ex dolore",
+        "weldingDemand":"qui Excepteur cupidatat",
+        "galvanizeDemand":"nisi exercitation enim",
+        "packDemand":"quis aliqua proident cupidatat",
+        "description":"dolor ex anim cillum",
+        "productCategoryNum":"eiusmod dolor pariatur",
+        "totalWeight":"mollit ipsum id ex laborum",
+        "productNum":"in fugiat esse",
+        "productType":"consequat",
         "fileList":[
             {
-                "fileId":"qui",
-                "filePath":"sit",
-                "name":"ea",
-                "fileSuffix":"sint consequat reprehenderit irure fugiat"
-            },
-            {
-                "fileId":"anim aliqua occaecat",
-                "filePath":"veniam occaecat consequat",
-                "name":"consectetur incididunt magna",
-                "fileSuffix":"ea adipisicing sint dolore ut"
-            },
-            {
-                "fileId":"nostrud",
-                "filePath":"Ut ullamco laborum cupidatat dolor",
-                "name":"dolor enim esse",
-                "fileSuffix":"deserunt mollit velit occaecat"
-            },
-            {
-                "fileId":"ipsum cillum elit",
-                "filePath":"incididun",
-                "name":"laborum",
-                "fileSuffix":"quis occaecat est pariatur"
+                "fileId":"voluptate tempor aliquip",
+                "filePath":"nisi",
+                "fileName":"Lorem qui est sunt consequat",
+                "fileSuffix":"qui ut exercitation"
             }
         ],
-        "taskDataRecordList":[
+        "statusRecordList":[
             {
-                "id":"dolore nisi",
-                "operateUser":"in veniam id sit consectetur",
-                "operateUserDeptName":"eiusmod sunt Lorem quis id",
-                "createTime":"exercitation reprehenderit ut",
-                "status":"ullamco veniam irure deserunt e"
-            },
-            {
-                "id":"magn",
-                "operateUser":"Duis ullamco dolor",
-                "operateUserDeptName":"sit",
-                "createTime":"magna et ex",
-                "status":"culpa molli"
-            },
-            {
-                "id":"enim Ut minim",
-                "operateUser":"ad veniam",
-                "operateUserDeptName":"consequat officia reprehenderit tempor",
-                "createTime":"Excepteur quis ipsum magna",
-                "status":"qui laborum aliquip"
-            },
-            {
-                "id":"minim",
-                "operateUser":"deserunt laborum",
-                "operateUserDeptName":"Excepteur qui cillum laborum",
-                "createTime":"ipsum",
-                "status":"dolore reprehenderit sed ut laborum"
-            },
-            {
-                "id":"pariatur do",
-                "operateUser":"in fugiat",
-                "operateUserDept":"voluptate ut nisi in do",
-                "createTime":"in magna",
-                "status":"et ut"
+                "id":"ea qui",
+                "createDept":"eu",
+                "createDeptName":"eiusmod",
+                "createUser":"enim Ut",
+                "createUserName":"pariatur laborum",
+                "createTime":"sed ea ut",
+                "currentStatus":"mollit sint qui paria",
+                "description":"Duis aute in irure"
             }
         ]
     }
 }
+
