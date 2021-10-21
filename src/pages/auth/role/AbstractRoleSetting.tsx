@@ -143,6 +143,10 @@ export default abstract class AbstractRoleSetting<P extends RouteComponentProps,
         })
     }
 
+    //中间按钮null
+    protected renderExtraOperationArea(): React.ReactNode {
+        return null;
+    }
     /**
      * @implements
      * @description Gets form item groups

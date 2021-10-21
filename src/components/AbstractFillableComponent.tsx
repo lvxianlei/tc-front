@@ -91,8 +91,8 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      */
     protected async onSubmitAndContinue() {
         if (this.getForm()) {
-            const result: any = await (this.getForm() as any).validateFields()
-            const saveResult: any = await this.onSubmit(result)
+            const result: any = (this.getForm() as any).validateFields()
+            const saveResult: any = this.onSubmit(result);
             if (!!saveResult) {
                 message.success("保存成功！");
                 this.getForm()?.resetFields();
