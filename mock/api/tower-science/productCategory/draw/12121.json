@@ -1,0 +1,55 @@
+{
+    "code": 200,
+    "msg":"ut proident aliqua",
+    "success": true,
+    "data":{
+        "description":"aliqua",
+        "drawProductSegmentMergeList":[
+            {
+                "description":"ipsum Lorem",
+                "id":123456,
+                "name":"irure dolore nisi exercitation Ut",
+                "singleCount":45300735,
+                "singleNumberCount":40945656,
+                "singleWeight":6321381.052417636
+            },
+            {
+                "description":"et cupidatat velit aliqua Ut",
+                "id":95991051,
+                "name":"proident minim ipsum",
+                "singleCount":95185167,
+                "singleNumberCount":48976345,
+                "singleWeight":99351632.20774114
+            },
+            {
+                "description":"et",
+                "id":38638989,
+                "name":"aliqua elit commodo sit officia",
+                "singleCount":11931175,
+                "singleNumberCount":27729184,
+                "singleWeight":37048488.85749552
+            },
+            {
+                "description":"cillum id laboris nulla",
+                "id":39978754,
+                "name":"culpa pariatur consequat ad Lorem",
+                "singleCount":95435726,
+                "singleNumberCount":29254645,
+                "singleWeight":88484877.74294287
+            }
+        ],
+        "id": 12121,
+        "internalNumber":"nisi id tempor",
+        "name":"veniam nostrud ipsum Excepteur eu",
+        "pattern":16394552,
+        "saleOrderNumber":"quis officia elit dolore eiusmod",
+        "steelAngleCount":37041729,
+        "steelPlateCount":1692207,
+        "steelProductShape":"mollit Duis sint enim",
+        "structureCount":76039412,
+        "taskCode":"velit ullamco cillum incididunt",
+        "updateTime":"19790828T10:54:04.511Z",
+        "updateUser":1182816,
+        "updateUserName":"irure exercitation ad est"
+    }
+}
