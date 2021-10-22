@@ -1,10 +1,11 @@
-import React from 'react'
-import { Button, Spin } from 'antd';
+import React, { useState } from 'react'
+import { Button, Form, message, Modal, Spin } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common';
 import { baseInfoData } from './question.json';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
+import TextArea from 'antd/lib/input/TextArea';
 
 const tableColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
@@ -52,37 +53,78 @@ const towerColumns = [
 ]
 
 export default function OtherDetail(): React.ReactNode {
-    const history = useHistory()
-    const params = useParams<{ id: string, type: string }>()
+    const history = useHistory();
+    const [visible, setVisible] = useState<boolean>(false);
+    const [form] = Form.useForm();
+    const params = useParams<{ id: string, type: string, keyId: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         let data:any = {};
-        if(params.type==='1'){
-            data = await RequestUtil.get(`/tower-science/issue/material/${params.id}`);
+        if(params.type==='WTD-TL'){
+            data = await RequestUtil.get(`/tower-science/issue/material?id=${params.id}`);
         }
-        else if(params.type==='2'){
-            data = await RequestUtil.get(`/tower-science/issue/lifting/${params.id}`);
+        else if(params.type==='WTD-FY'){
+            data = await RequestUtil.get(`/tower-science/issue/lifting?id=${params.id}`);
         }
-        else if(params.type==='3'){
-            data= await RequestUtil.get(`/tower-science/issue/bolt/${params.id}`);
+        else if(params.type==='WTD-LS'){
+            data= await RequestUtil.get(`/tower-science/issue/bolt?id=${params.id}`);
         }
         resole(data)
     }), {})
-    const detailData: any = data
+    const detailData: any = data;
+    const handleModalOk = async () => {
+        try {
+            const refuseData = await form.validateFields();
+            // refuseData.drawTaskId = params.id;
+            await RequestUtil.post(`/tower-science/issue/refuse/${params.id}`).then(()=>{
+                message.success('提交成功！')
+                setVisible(false)
+            }).then(()=>{
+                history.goBack()
+            })
+        
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const handleModalCancel = () => setVisible(false);
     return <>
         <Spin spinning={loading}>
+            <Modal 
+                title='拒绝'
+                visible={visible} 
+                onCancel={handleModalCancel}
+                onOk={handleModalOk}
+                okText='提交'
+                cancelText='关闭'
+            >
+                <Form form={form} >
+                    <Form.Item name="reason" label="拒绝原因" rules={[{
+                        required:true, 
+                        message:'请填写拒绝原因'
+                    },
+                    {
+                        pattern: /^[^\s]*$/,
+                        message: '禁止输入空格',
+                    }]}>
+                        <TextArea showCount maxLength={500}/>
+                    </Form.Item>
+                </Form>
+            </Modal>
             <DetailContent operation={[
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
-                    await RequestUtil.post(`/tower-science/issue/verify/${params.id}`).then(()=>{
+                    await RequestUtil.post(`/tower-science/issue/verify`,{id:params.id}).then(()=>{
+                        message.success('修改成功！')
+                    }).then(()=>{
                         history.goBack()
                     })
                 }}>确认修改</Button>,
-                <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
-                    await RequestUtil.post(`/tower-science/issue/refuse/${params.id}`).then(()=>{
-                        history.goBack()
-                    })
+                <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => {
+                    setVisible(true);
                 }}>拒绝修改</Button>,
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
-                    await RequestUtil.delete(`/tower-science/issue/${params.id}`).then(()=>{
+                    await RequestUtil.delete(`/tower-science/issue?id=${params.id}`).then(()=>{
+                        message.success('删除成功！')
+                    }).then(()=>{
                         history.goBack()
                     })
                 }}>删除</Button>,

@@ -1,5 +1,5 @@
-import React from 'react'
-import { Button, Spin, Space } from 'antd';
+import React, { useState } from 'react'
+import { Button, Spin, Space, Form, message, Modal } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle } from '../common';
 import useRequest from '@ahooksjs/use-request';
@@ -36,38 +36,79 @@ const tableColumns = [
 ]
 
 const towerColumns = [
-    { title: '零件号', dataIndex: 'partId', key: 'partId', },
+    { title: '零件号', dataIndex: 'code', key: 'code', },
     { title: '材料', dataIndex: 'materialName', key: 'materialName' },
     { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture' },
     { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec' },
     { title: '长度（mm）', dataIndex: 'length', key: 'length' },
     { title: '单组件数', dataIndex: 'singleNum', key: 'singleNum' },
-    { title: '电焊长度（mm）', dataIndex: 'electricWeldingMeters', key: 'electricWeldingMeters' }
+    { title: '电焊长度（mm）', dataIndex: 'weldingLength', key: 'weldingLength' }
 ]
 
 export default function AssemblyWeldDetail(): React.ReactNode {
-    const history = useHistory()
+    const history = useHistory();
+    const [visible, setVisible] = useState<boolean>(false);
+    const [form] = Form.useForm();
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/issue/combinedWelding/${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-science/issue/issue/welding?id=${params.id}`)
         resole(data)
     }), {})
-    const detailData: any = data
+    const detailData: any = data;
+    const handleModalOk = async () => {
+        try {
+            const refuseData = await form.validateFields();
+            // refuseData.drawTaskId = params.id;
+            await RequestUtil.post(`/tower-science/issue/refuse/${params.id}`).then(()=>{
+                message.success('提交成功！')
+                setVisible(false)
+            }).then(()=>{
+                history.goBack()
+            })
+        
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const handleModalCancel = () => setVisible(false);
     return <>
         <Spin spinning={loading}>
+            <Modal 
+                title='拒绝'
+                visible={visible} 
+                onCancel={handleModalCancel}
+                onOk={handleModalOk}
+                okText='提交'
+                cancelText='关闭'
+            >
+                <Form form={form} >
+                    <Form.Item name="reason" label="拒绝原因" rules={[{
+                        required:true, 
+                        message:'请填写拒绝原因'
+                    },
+                    {
+                        pattern: /^[^\s]*$/,
+                        message: '禁止输入空格',
+                    }]}>
+                        <TextArea showCount maxLength={500}/>
+                    </Form.Item>
+                </Form>
+            </Modal>
             <DetailContent operation={[
                <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
-                    await RequestUtil.post(`/tower-science/issue/verify/${params.id}`).then(()=>{
+                    await RequestUtil.post(`/tower-science/issue/verify?id=${params.id}`).then(()=>{
+                        message.success('修改成功！')
+                    }).then(()=>{
                         history.goBack()
                     })
                 }}>确认修改</Button>,
-                <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
-                    await RequestUtil.post(`/tower-science/issue/refuse/${params.id}`).then(()=>{
-                        history.goBack()
-                    })
+                <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => {
+                    setVisible(true);
                 }}>拒绝修改</Button>,
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
-                    await RequestUtil.delete(`/tower-science/issue/${params.id}`).then(()=>{
+                    await RequestUtil.delete(`/tower-science/issue?id=${params.id}`).then(()=>{
+                        message.success('删除成功！')
+                    }).then(()=>{
                         history.goBack()
                     })
                 }}>删除</Button>,
@@ -75,21 +116,21 @@ export default function AssemblyWeldDetail(): React.ReactNode {
                 ]}>
                 <DetailTitle title="问题信息" />
                 <span>校核前</span>
-                <CommonTable columns={towerColumns} dataSource={detailData?.weldingDetailedStructureList} title={()=>{
+                <CommonTable columns={towerColumns} dataSource={detailData?.issueWeldingDetailedVO?.weldingDetailedStructureList} title={()=>{
                     return <Space >
-                        <span>段号：1</span>
-                        <span>组件号：101</span>
-                        <span>主见号：101</span>
-                        <span>电焊米数（mm）：5</span>
+                        <span>段号：{detailData?.issueWeldingDetailedVO?.segmentName}</span>
+                        <span>组件号：{detailData?.issueWeldingDetailedVO?.componentId}</span>
+                        <span>主见号：{detailData?.issueWeldingDetailedVO?.mainPartId}</span>
+                        <span>电焊米数（mm）：{detailData?.issueWeldingDetailedVO?.electricWeldingMeters}</span>
                     </Space>
                 }}/>
                 <span>校核后</span>
-                <CommonTable columns={towerColumns} dataSource={detailData?.weldingDetailedStructureVOList} title={()=>{
+                <CommonTable columns={towerColumns} dataSource={detailData?.weldingDetailedVO?.weldingDetailedStructureList} title={()=>{
                     return <Space>
-                        <span>段号：1</span>
-                        <span>组件号：101</span>
-                        <span>主见号：101</span>
-                        <span>电焊米数（mm）：5</span>
+                        <span>段号：{detailData?.issueWeldingDetailedVO?.segmentName}</span>
+                        <span>组件号：{detailData?.issueWeldingDetailedVO?.componentId}</span>
+                        <span>主见号：{detailData?.issueWeldingDetailedVO?.mainPartId}</span>
+                        <span>电焊米数（mm）：{detailData?.issueWeldingDetailedVO?.electricWeldingMeters}</span>
                     </Space>
                 }}/>
                 <DetailTitle title="备注" />
