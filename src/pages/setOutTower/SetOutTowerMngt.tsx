@@ -47,7 +47,7 @@ export default function SetOutTowerMngt(): React.ReactNode {
                     label: "套用"
                   },
                 ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
+                return <>{value&&renderEnum.find((item: any) => item.value === value).label}</>
             }
         },
         {
