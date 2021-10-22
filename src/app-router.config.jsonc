@@ -595,6 +595,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 驾驶舱-库存看板
+      "name": "库存看板",
+      "path": "/stock/viewPanel",
+      "module": "./pages/stock/viewPanel/viewPanel",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 库存管理-原材料库存
       "name": "原材料库存",
       "path": "/stock/rawMaterialStock",
@@ -620,6 +627,13 @@
       "name": "余料入库",
       "path": "/stock/surplusMaterialWarehousing",
       "module": "./pages/stock/surplusMaterialWarehousing/surplusMaterialWarehousing",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 配置管理-安全库存配置
+      "name": "安全库存配置",
+      "path": "/stock/securitySetting",
+      "module": "./pages/stock/securitySetting/securitySetting",
       "exact": true,
       "authority": "approvalm"
     },
