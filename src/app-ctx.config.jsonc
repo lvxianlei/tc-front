@@ -195,6 +195,34 @@
                         ]
                     },
                     {
+                        "label": "库存管理",
+                        "icon": "technology",
+                        "path": "/stock",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "原材料库存",
+                                "path": "/stock/rawMaterialStock",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "原材料入库",
+                                "path": "/stock/rawMaterialWarehousing",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "原材料出库",
+                                "path": "/stock/rawMaterialExWarehouse",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "余料入库",
+                                "path": "/stock/surplusMaterialWarehousing",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
                         "label": "评估任务",
                         "icon": "technology",
                         "path": "/assessmentTask",

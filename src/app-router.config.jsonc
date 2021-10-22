@@ -595,6 +595,34 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 库存管理-原材料库存
+      "name": "原材料库存",
+      "path": "/stock/rawMaterialStock",
+      "module": "./pages/stock/rawMaterialStock/rawMaterialStock",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 库存管理-原材料入库
+      "name": "原材料入库",
+      "path": "/stock/rawMaterialWarehousing",
+      "module": "./pages/stock/rawMaterialWarehousing/rawMaterialWarehousing",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 库存管理-原材料出库
+      "name": "原材料出库",
+      "path": "/stock/rawMaterialExWarehouse",
+      "module": "./pages/stock/rawMaterialExWarehouse/rawMaterialExWarehouse",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 库存管理-余料入库
+      "name": "余料入库",
+      "path": "/stock/surplusMaterialWarehousing",
+      "module": "./pages/stock/surplusMaterialWarehousing/surplusMaterialWarehousing",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 确认任务
       "name": "确认任务",
       "path": "/confirmTask/ConfirmTaskMngt",
