@@ -442,6 +442,7 @@
         {
             "title": "是否有验收单",
             "dataIndex": "isCheck",
+            "type": "select",
             "enum": [
                 {
                     "value": 1,
@@ -451,8 +452,7 @@
                     "value": 2,
                     "label": "有"
                 }
-            ],
-            "type": "select"
+            ]
         },
         {
             "title": "业务经理承诺回款时间",
@@ -473,7 +473,7 @@
         },
         {
             "title": "备注",
-            "dataIndex": "",
+            "dataIndex": "des",
             "type": "textarea"
         }
     ],

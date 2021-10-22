@@ -115,7 +115,7 @@ export default function InfomationNew(): JSX.Element {
                         setBinddingStatus(biddingStatus)
                     },
                     onCancel: () => {
-                        baseInfoForm.setFieldsValue({ biddingStatus: 1 })
+                        baseInfoForm.setFieldsValue({ biddingStatus: binddingStatus })
                     }
                 })
                 return
@@ -128,7 +128,7 @@ export default function InfomationNew(): JSX.Element {
                         setBinddingStatus(biddingStatus)
                     },
                     onCancel: () => {
-                        baseInfoForm.setFieldsValue({ biddingStatus: 1 })
+                        baseInfoForm.setFieldsValue({ biddingStatus: binddingStatus })
                     }
                 })
                 return

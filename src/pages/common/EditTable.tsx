@@ -41,11 +41,12 @@ export interface EditTableProps {
     opration?: React.ReactNode[]
     haveNewButton?: boolean
     newButtonTitle?: string
+    addRowData?: { [key: string]: any }
     haveOpration?: boolean
     onChange?: (changeFiled: any, allChangeFileds: any) => void
 }
 
-export default function EditableTable({ columns = [], dataSource = [], form,
+export default function EditableTable({ columns = [], dataSource = [], form, addRowData = {},
     haveNewButton = true, newButtonTitle, haveOpration = true, opration, onChange }: EditTableProps): JSX.Element {
     const [dataState] = useState<any>({ data: dataSource || [], loading: false })
     const baseRowData: { [key: string]: string | number | null } = {}
@@ -127,7 +128,7 @@ export default function EditableTable({ columns = [], dataSource = [], form,
                             {haveNewButton && <Row><Button onClick={async () => {
                                 try {
                                     await form?.validateFields()
-                                    add({ ...baseRowData, uid: dataState.data.length + 1 })
+                                    add({ ...baseRowData, uid: dataState.data.length + 1, ...(addRowData) })
                                 } catch (error) {
                                     message.error("当前行验证通过后才可以继续新增...")
                                     console.log(error)

@@ -55,14 +55,7 @@
         },
         {
             "title": "地区",
-            "dataIndex": "address",
-            "type": "select",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择地区..."
-                }
-            ]
+            "dataIndex": "address"
         },
         {
             "title": "国家",

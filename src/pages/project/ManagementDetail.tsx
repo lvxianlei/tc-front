@@ -172,7 +172,12 @@ export default function ManagementDetail(): React.ReactNode {
             <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
         ]}>
             <DetailTitle title="基本信息" />
-            <BaseInfo columns={baseInfoData.map((item: any) => ["projectLeader", "biddingPerson"].includes(item.dataIndex) ? ({ title: item.title, dataIndex: item.dataIndex }) : item)} dataSource={data || {}} />
+            <BaseInfo columns={baseInfoData.map((item: any) => {
+                if (["projectLeader", "biddingPerson"].includes(item.dataIndex)) {
+                    return ({ title: item.title, dataIndex: item.dataIndex })
+                }
+                return item
+            }).filter((item: any) => !(item.dataIndex === "country" && data?.address !== "其他-国外"))} dataSource={data || {}} />
             <DetailTitle title="货物清单" />
             <CommonTable columns={[
                 {
