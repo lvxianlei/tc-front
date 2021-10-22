@@ -250,13 +250,13 @@ export default function SampleDrawCheck(): React.ReactNode {
                 tableProps={{
                     onRow:(record:any) => ({
                         onDoubleClick: async () => {
-                            setQuestionStatus(record.issueSmallSampleVO.status);
+                            setQuestionStatus(record.issueStatus);
                             const data:any = await RequestUtil.get(`/tower-science/smallSample/issueDetail?keyId=${record.id}`)
                             setQuestionDetail(data);
                             setAttachInfo(data.newFile)
                             setErrorVisible(true);
                         },
-                        className: record.issueSmallSampleVO.status===1? styles.red: record.issueSmallSampleVO.status===2? styles.green:record.issueSmallSampleVO.status===3?styles.yellow :styles.tableRow
+                        className: record.issueStatus===1? styles.red: record.issueStatus===2? styles.green:record.issueStatus===3?styles.yellow :styles.tableRow
                     })
                 }}
                 searchFormItems={[
