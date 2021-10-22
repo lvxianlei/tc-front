@@ -462,7 +462,7 @@ export default function Questionnaire(): React.ReactNode {
                 setDescription(e.target.value)
             } } />
             <DetailTitle title="操作信息"/>
-            <CommonTable columns={ tableColumns } dataSource={ detailData.statusRecordList } pagination={ false } />
+            <CommonTable columns={ tableColumns } dataSource={ detailData.issueRecordList } pagination={ false } />
         </DetailContent>
         <Modal
             visible={ selectVisible } 

@@ -202,7 +202,7 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
         let weight: number = 0;
         let electricWeldingMeters: number = 0;
         weldingDetailedStructureList.forEach((item: IComponentList) => {
-            weight = Number(weight || 0) + (Number(item.basicsWeight) || 0);
+            weight = Number(weight || 0) + (Number(item.basicsWeight) || 0) * (Number(item.singleNum) || 1);
             electricWeldingMeters = Number(electricWeldingMeters || 0) + (Number(item.singleNum) || 0) * Number(item.weldingLength || 0);
         })
         this.getForm()?.setFieldsValue({ 'singleGroupWeight': weight, 'electricWeldingMeters': electricWeldingMeters });
