@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { Space, Button, TableColumnProps, Select, } from 'antd'
+import { Button, TableColumnProps, Select, } from 'antd'
 import { Link, } from 'react-router-dom'
 import { Page } from '../../common'
-import { IClient } from '../../IClient'
 const projectType = [
     {
         value: 0,
@@ -50,34 +49,34 @@ export default function RawMaterialStock(): React.ReactNode {
         },
         {
             key: 'projectName',
-            title: '品名',
+            title: '编号',
             dataIndex: 'projectName',
             render: (_a: any, _b: any) => <Link to={`/project/management/detail/base/${_b.id}`}>{_b.projectName}</Link>
         },
         {
             key: 'projectNumber',
-            title: '标准',
+            title: '仓库名称',
             dataIndex: 'projectNumber'
         },
         {
             key: 'projectType',
-            title: '规格',
+            title: '分类',
             dataIndex: 'projectType',
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{projectType.find(item => item.value === Number(_a))?.label}</span>)
         },
         {
             key: 'bidBuyEndTime',
-            title: '材质',
+            title: '负责人',
             dataIndex: 'bidBuyEndTime'
         },
         {
             key: 'biddingEndTime',
-            title: '安全库存（吨）',
+            title: '保管员',
             dataIndex: 'biddingEndTime'
         },
         {
             key: 'currentProjectStage',
-            title: '告警库存（吨）',
+            title: '车间',
             dataIndex: 'currentProjectStage',
             render: (_a: number) => <span>{currentProjectStage.find(item => item.value === _a)?.label}</span>
         },
@@ -85,9 +84,14 @@ export default function RawMaterialStock(): React.ReactNode {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
-            render: (text, item: any, index: number): React.ReactNode => (
-                <span>编辑</span>
-            )
+            render: (text, item: any, index: number): React.ReactNode => {
+                return (
+                    <div>
+                        <span>编辑</span>
+                        <span>删除</span>
+                    </div>
+                )
+            }
         }]
 
 
@@ -117,34 +121,6 @@ export default function RawMaterialStock(): React.ReactNode {
             searchFormItems={[
                 {
                     name: 'currentProjectStage',
-                    label: '仓库',
-                    children: <Select style={{ width: "100px" }}>
-                        {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
-                    </Select>
-                },
-                {
-                    name: 'currentProjectStage',
-                    label: '材质',
-                    children: <Select style={{ width: "100px" }}>
-                        {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
-                    </Select>
-                },
-                {
-                    name: 'currentProjectStage',
-                    label: '品名',
-                    children: <Select style={{ width: "100px" }}>
-                        {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
-                    </Select>
-                },
-                {
-                    name: 'currentProjectStage',
-                    label: '标准',
-                    children: <Select style={{ width: "100px" }}>
-                        {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
-                    </Select>
-                },
-                {
-                    name: 'currentProjectStage',
                     label: '分类',
                     children: <Select style={{ width: "100px" }}>
                         {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
@@ -152,14 +128,21 @@ export default function RawMaterialStock(): React.ReactNode {
                 },
                 {
                     name: 'currentProjectStage',
-                    label: '长度',
+                    label: '仓库',
                     children: <Select style={{ width: "100px" }}>
                         {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                     </Select>
                 },
                 {
                     name: 'currentProjectStage',
-                    label: '规格',
+                    label: '负责人',
+                    children: <Select style={{ width: "100px" }}>
+                        {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+                    </Select>
+                },
+                {
+                    name: 'currentProjectStage',
+                    label: '保管员查询',
                     children: <Select style={{ width: "100px" }}>
                         {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                     </Select>
