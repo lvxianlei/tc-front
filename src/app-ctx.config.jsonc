@@ -92,12 +92,12 @@
                         "label": "放样外协服务",
                         "icon": "lofting",
                         "path": "/outsource",
-                        "authority": " entrust_page",
+                        "authority": "entrust_page",
                         "items": [
                             {
                                 "label": "委托列表",
                                 "path": "/outsource/entrust",
-                                "authority": " entrust_page"
+                                "authority": "entrust_page"
                             },
                             {
                                 "label": "已完成塔型",
