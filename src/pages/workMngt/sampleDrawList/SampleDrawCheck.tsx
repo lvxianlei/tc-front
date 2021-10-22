@@ -21,7 +21,7 @@ export default function SampleDrawCheck(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
     const [questionDetail, setQuestionDetail] = useState<any>({});
     const [url, setUrl] = useState<string>('');
-    const [questionStatus, setQuestionStatus] = useState<string>('');
+    const [questionStatus, setQuestionStatus] = useState<number>(0);
     const handleErrorModalOk = async () => {
         try {
             const submitData = {
@@ -134,7 +134,7 @@ export default function SampleDrawCheck(): React.ReactNode {
         }
     ]
 
-    const handleModalCancel = () => {setVisible(false); setUrl('');setQuestionStatus('');};
+    const handleModalCancel = () => {setVisible(false); setUrl('');setQuestionStatus(0);};
     const handleErrorModalCancel = () => setErrorVisible(false);
     const onFilterSubmit = (value: any) => {
         if (value.upLoadTime) {
@@ -157,7 +157,7 @@ export default function SampleDrawCheck(): React.ReactNode {
                     preview={false}
                 />
             </Modal>
-            <Modal visible={errorVisible} title={questionStatus?"查看问题单":"创建问题单"}  onCancel={handleErrorModalCancel} width={1200} onOk={handleErrorModalOk} footer={questionStatus}>
+            <Modal visible={errorVisible} title={questionStatus===1?"查看问题单":"创建问题单"}  onCancel={handleErrorModalCancel} width={1200} footer={false}>
                 <DetailTitle title="问题信息" />
                 <Descriptions
                     bordered
@@ -168,7 +168,7 @@ export default function SampleDrawCheck(): React.ReactNode {
                     <Descriptions.Item label="校核前图片">
                         <Image src={questionDetail?.currentFile?.filePath||''} height={100}/>
                     </Descriptions.Item>
-                    {!questionStatus?<Descriptions.Item label={<Upload 
+                    {questionStatus!==1?<Descriptions.Item label={<Upload 
                         key="sub"
                         name="file"
                         multiple={true}
@@ -215,7 +215,11 @@ export default function SampleDrawCheck(): React.ReactNode {
                     </Descriptions.Item>}
                 </Descriptions>
                 <DetailTitle title="操作信息" />
-                <CommonTable columns={tableColumns} dataSource={questionDetail?.issueRecordList} />
+                <CommonTable columns={tableColumns} dataSource={questionDetail?.issueRecordList} pagination={false}/>
+                {questionStatus!==1?<Space style={{position:'relative',left:'90%'}}>
+                    <Button onClick={handleErrorModalCancel}>取消</Button>
+                    <Button type='primary' onClick={handleErrorModalOk}>确定</Button>
+                </Space>:null}
             </Modal>
             <Page
                 path="/tower-science/smallSample/checkList"
