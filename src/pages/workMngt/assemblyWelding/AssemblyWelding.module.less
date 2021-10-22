@@ -8,10 +8,8 @@
 }
 
 .check {
-    :global(.ant-table-tbody){
-        tr:hover:not(.ant-table-expanded-row) > td,.ant-table-row-hover,.ant-table-row-hover>td{
-            background:rgba(0, 0, 0, 0)!important;
-        }
+    :global(.ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td:not(.ant-table-cell-fix-right)) {
+        background:rgba(0, 0, 0, 0)!important;
     }
 }
 .operationBtn {
