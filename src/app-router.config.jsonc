@@ -130,6 +130,27 @@
       "exact": true,
       "authority": "auth_section"
     },
+    { // 部门管理
+      "name": "部门管理",
+      "path": "/auth/dept",
+      "module": "./pages/auth/dept/DepartmentMngt",
+      "exact": true,
+      "authority": "auth_section"
+    },
+    { // 部门修改
+      "name": "部门修改",
+      "path": "/auth/dept/setting/:id",
+      "module": "./pages/auth/dept/DepartmentSetting",
+      "exact": true,
+      "authority": "auth_section"
+    },
+    { // 部门新增
+      "name": "部门新增",
+      "path": "/auth/dept/new/:id",
+      "module": "./pages/auth/dept/DepartmentNew",
+      "exact": true,
+      "authority": "auth_section"
+    },
     { // 成本评估配置
       "name": "成本评估配置",
       "path": "/sys/costconfig",
