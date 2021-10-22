@@ -28,7 +28,6 @@ export default function CostDetail() {
     const handleNewAudit = () => setVisible(true)
 
     const handleCatAudit = (type: any, catAskPriceId: string) => {
-        console.log((Object.keys(auditCode).find((item: string) => auditCode[item] === type) as any), catAskPriceId)
         setDetailType((Object.keys(auditCode).find((item: string) => auditCode[item] === type) as any))
         setCatAskPriceId(catAskPriceId)
     }
@@ -50,7 +49,10 @@ export default function CostDetail() {
     }))
 
     return <>
-        <SelectInquiryEdit type={selectType} visible={!!selectType} onOk={() => setSelectType("")} onCancel={() => setSelectType("")} destroyOnClose />
+        <SelectInquiryEdit type={selectType} visible={!!selectType} onOk={() => {
+            setSelectType("")
+            history.go(0)
+        }} onCancel={() => setSelectType("")} destroyOnClose />
         <SelectInquiryDetail type={detailType} visible={!!detailType} onOk={() => setDetailType("")} onCancel={() => setDetailType("")} id={catAskPriceId} destroyOnClose />
         <Spin spinning={loading} >
             <SelectAuditType

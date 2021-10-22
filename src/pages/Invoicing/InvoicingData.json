@@ -38,7 +38,18 @@
         },
         {
             "title": "发票类型",
-            "dataIndex": "ticketType"
+            "dataIndex": "ticketType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "增值税普通发票"
+                },
+                {
+                    "value": 2,
+                    "label": "增值税专项发票完"
+                }
+            ]
         },
         {
             "title": "开票日期",
@@ -46,7 +57,22 @@
         },
         {
             "title": "是否已全开",
-            "dataIndex": "isOpen"
+            "dataIndex": "isOpen",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "预开"
+                },
+                {
+                    "value": 2,
+                    "label": "发票未开完"
+                },
+                {
+                    "value": 3,
+                    "label": "发票已开完"
+                }
+            ]
         },
         {
             "title": "开票时合同状态",
@@ -409,12 +435,12 @@
             "type": "number"
         },
         {
-            "title": " 业务经理",
+            "title": "业务经理",
             "dataIndex": "business",
             "disabled": true
         },
         {
-            "title": " 是否有验收单",
+            "title": "是否有验收单",
             "dataIndex": "isCheck",
             "enum": [
                 {
@@ -429,20 +455,21 @@
             "type": "select"
         },
         {
-            "title": " 业务经理承诺回款时间",
+            "title": "业务经理承诺回款时间",
             "dataIndex": "businessBackTime",
             "type": "date",
             "format": "YYYY-MM-DD"
         },
         {
-            "title": " 承诺回款比例",
+            "title": "承诺回款比例",
             "dataIndex": "backProportion",
             "type": "number"
         },
         {
-            "title": " 承诺回款金额",
+            "title": "承诺回款金额",
             "dataIndex": "backMoney",
-            "type": "number"
+            "type": "number",
+            "disabled": true
         },
         {
             "title": "备注",
@@ -480,70 +507,108 @@
     ],
     "billingHead": [
         {
-            "title": " 产品名称(票面)",
+            "title": "产品名称(票面)",
             "dataIndex": "productName"
         },
         {
-            "title": " 生产名称(实际)",
+            "title": "生产名称(实际)",
             "dataIndex": "devName"
         },
         {
-            "title": " 规格型号",
+            "title": "规格型号",
             "dataIndex": "model"
         },
         {
-            "title": " 基数",
+            "title": "基数",
             "dataIndex": "baseNum"
         },
         {
-            "title": " 单位",
+            "title": "单位",
             "dataIndex": "company"
         },
         {
-            "title": " 重量(吨)",
+            "title": "重量(吨)",
             "dataIndex": "weight",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入重量..."
+                }
+            ]
         },
         {
-            "title": " 单价（元/吨）",
+            "title": "单价（元/吨）",
             "dataIndex": "money",
             "type": "number",
             "disabled": true
         },
         {
-            "title": " 金额(元)",
+            "title": "金额(元)",
             "dataIndex": "moneyCount",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入金额..."
+                }
+            ]
         }
     ],
     "billingHeader": [
         {
-            "title": " 生产名称(实际)",
+            "title": "生产名称(实际)",
             "dataIndex": "devName"
         },
         {
-            "title": " 规格型号",
+            "title": "规格型号",
             "dataIndex": "model"
         },
         {
-            "title": " 基数",
+            "title": "基数",
             "dataIndex": "baseNum"
         },
         {
-            "title": " 单位",
+            "title": "单位",
             "dataIndex": "company"
         },
         {
-            "title": " 重量(吨)",
+            "title": "重量(吨)",
             "dataIndex": "weight"
         },
         {
-            "title": " 单价（元/吨）",
+            "title": "单价（元/吨）",
             "dataIndex": "money"
         },
         {
-            "title": " 金额(元)",
+            "title": "金额(元)",
             "dataIndex": "moneyCount"
+        }
+    ],
+    "batchHead": [
+        {
+            "title": "部门",
+            "dataIndex": "department"
+        },
+        {
+            "title": "审批人",
+            "dataIndex": "approver"
+        },
+        {
+            "title": "职位",
+            "dataIndex": "position"
+        },
+        {
+            "title": "审批时间",
+            "dataIndex": "batchTime"
+        },
+        {
+            "title": "审批结果",
+            "dataIndex": "batchResult"
+        },
+        {
+            "title": "意见",
+            "dataIndex": "opinion"
         }
     ]
 }

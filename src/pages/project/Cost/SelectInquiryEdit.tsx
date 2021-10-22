@@ -90,22 +90,27 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
             const baseInfo = await baseForm.validateFields()
             const saveAskData = await askForm.validateFields()
             const saveResult = await run({
-                ...baseInfo, attachInfoDTOS: attachInfo, startAskLogisticsDTOS: askData?.map((item: any, index: number) => ({
+                ...baseInfo,
+                attachInfoDTOS: attachInfo,
+                startAskLogisticsDTOS: props.type === "selectB" ? askData?.map((item: any, index: number) => ({
                     ...item,
                     ...saveAskData.submit[index]
-                }))
+                })) : []
             })
             message.success("保存成功...")
             props.onOk && props.onOk(true)
             resove(true)
         } catch (error) {
-            reject(false)
+            message.error("保存失败...")
+            reject(error)
         }
     })
 
     const handleCancel = () => {
         props.onCancel && props.onCancel()
-        history.go(0)
+        baseForm.resetFields()
+        askForm.resetFields()
+        setAttachInfo([])
     }
 
     return <Modal {...props} width={1011} title={auditEnum[props.type]} confirmLoading={loading} onCancel={handleCancel} onOk={handleOk} destroyOnClose>

@@ -86,7 +86,6 @@ export default function InfomationNew(): JSX.Element {
             if (event.file.response.code === 200) {
                 const dataInfo = event.file.response.data
                 const fileInfo = dataInfo.name.split(".")
-                let uid = attachVosData.length
                 setAttachVosData([...attachVosData, {
                     id: "",
                     uid: attachVosData.length,

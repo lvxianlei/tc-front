@@ -18,16 +18,10 @@ export default function Invoicing() {
     }), { manual: true })
 
     const onFilterSubmit = (value: any) => {
-        if (value.startBidBuyEndTime) {
-            const formatDate = value.startBidBuyEndTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startBidBuyEndTime = formatDate[0]
-            value.endBidBuyEndTime = formatDate[1]
-        }
-
-        if (value.startBiddingEndTime) {
-            const formatDate = value.startBiddingEndTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startBiddingEndTime = formatDate[0]
-            value.endBiddingEndTime = formatDate[1]
+        if (value.startLaunchTime) {
+            const formatDate = value.startLaunchTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startLaunchTime = formatDate[0]
+            value.endLaunchTime = formatDate[1]
         }
         return value
     }
@@ -50,19 +44,21 @@ export default function Invoicing() {
 
     return <Page
         path="/tower-market/invoicing"
-        columns={[...invoicingListHead, {
-            title: "操作",
-            dataIndex: "opration",
-            fixed: "right",
-            width: 100,
-            render: (_: any, record: any) => {
-                return <>
-                    <Button type="link" onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</Button>
-                    <Button type="link" onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>
-                    <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>
-                </>
-            }
-        }]}
+        columns={[
+            ...invoicingListHead,
+            {
+                title: "操作",
+                dataIndex: "opration",
+                fixed: "right",
+                width: 100,
+                render: (_: any, record: any) => {
+                    return <>
+                        <Button type="link" onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</Button>
+                        <Button type="link" onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>
+                        <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>
+                    </>
+                }
+            }]}
         extraOperation={<Link to="/project/invoicing/edit/new"><Button type="primary">新增开票申请</Button></Link>}
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
@@ -71,7 +67,7 @@ export default function Invoicing() {
                 children: <Input placeholder="编号/内部合同编号/工程名称/票面单位/业务经理" style={{ width: 300 }} />
             },
             {
-                name: 'a',
+                name: 'isOpen',
                 label: '是否已全开',
                 children: <Select style={{ width: 200 }}>
                     <Select.Option value="a">全部</Select.Option>
@@ -81,7 +77,7 @@ export default function Invoicing() {
                 </Select>
             },
             {
-                name: 'b',
+                name: 'contractType',
                 label: '开票时合同状态',
                 children: <Select style={{ width: 200 }}>
                     <Select.Option value="a">全部</Select.Option>
@@ -93,7 +89,7 @@ export default function Invoicing() {
                 </Select>
             },
             {
-                name: 'c',
+                name: 'startLaunchTime',
                 label: '申请日期',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
             }

@@ -111,7 +111,7 @@ module.exports = {
       proxy[`/${dirname}`] = envConfig.parsed.REQUEST_API_REAL_HOST_NAME; // mock server url
     });
     return Object.assign(config || {}, {
-      port: 3000,
+      port: 4000,
       proxy: proxy,
       headers: {
         "Access-Control-Allow-Origin": "*",

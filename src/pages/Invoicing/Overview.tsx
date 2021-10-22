@@ -1,8 +1,8 @@
 import React from "react"
-import { Button, Spin } from 'antd'
+import { Button, message, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../common'
-import { baseInfoHead, invoiceHead, billingHead } from "./InvoicingData.json"
+import { baseInfoHead, invoiceHead, billingHead, batchHead } from "./InvoicingData.json"
 import { enclosure } from '../project/managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
@@ -21,7 +21,7 @@ export default function Edit() {
     }))
 
     return <DetailContent title={[
-        <Button type="primary">发起审批</Button>
+        <Button type="primary" key="ab">发起审批</Button>
     ]} operation={[
         <Button key="cancel" onClick={() => history.go(-1)}>返回</Button>
     ]}>
@@ -41,13 +41,14 @@ export default function Edit() {
             <CommonTable columns={[{
                 title: "操作", dataIndex: "opration",
                 render: (_: any, record: any) => (<>
+                    <Button type="link" onChange={() => message.info("功能正在加速开发中，敬请期待...")}>预览</Button>
                     <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
                 </>)
             }, ...enclosure]} dataSource={data?.attachInfoVos || []} />
 
             <DetailTitle title="审批记录" />
 
-            <CommonTable columns={[]} dataSource={data?.invoicingBatchVos || []} />
+            <CommonTable columns={batchHead} dataSource={data?.invoicingBatchVos || []} />
         </Spin>
     </DetailContent>
 }

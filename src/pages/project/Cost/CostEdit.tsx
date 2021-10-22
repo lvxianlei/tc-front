@@ -85,7 +85,7 @@ export default function CostEdit() {
         try {
             const result: any = await RequestUtil.get(`/tower-market/askInfo/getAskProductParam?productName=${productName}&voltage=${voltage}`)
             const initValues: any = {}
-            result.head.forEach((item: any) => item.type !== "select" && (initValues[item.dataIndex] = 0))
+            result.head.forEach((item: any) => item.type !== "select" && (initValues[item.dataIndex] = (result.data[item.dataIndex] && result.data[item.dataIndex] !== -1) ? result.data[item.dataIndex] : 0))
             setAskProductDtos([...askProductDtos, {
                 ...result,
                 data: [{
