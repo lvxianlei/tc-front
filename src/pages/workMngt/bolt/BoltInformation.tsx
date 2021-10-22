@@ -43,11 +43,11 @@ const tableColumns = [
                 case 0:
                     return '已拒绝';
                 case 1:
-                    return '待开始';
+                    return '待确认';
                 case 2:
-                    return '组焊中';
+                    return '待指派';
                 case 3:
-                    return '校核中';
+                    return '待完成';
                 case 4:
                     return '已完成';
                 case 5:

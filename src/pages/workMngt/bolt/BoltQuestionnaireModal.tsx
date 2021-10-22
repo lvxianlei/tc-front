@@ -18,14 +18,14 @@ interface BoltQuestionnaireModalState {
     readonly description?: string;
 }
 
-interface IRecord {
+export interface IRecord {
     readonly id?: string;
     readonly problemField?: string;
     readonly originalData?: string;
     readonly description?: string;
     readonly newValue?: string;
-    readonly issueRecordList?: [];
-    readonly dataType?: number;
+    readonly issueRecordVOList?: [];
+    readonly status?: number;
     readonly dataIndex?: string;
     readonly rowId?: string;
     readonly currentValue?: string;
@@ -126,7 +126,7 @@ class BoltQuestionnaireModal extends React.Component<IBoltQuestionnaireModalRout
                 footer={ 
                     <Space direction="horizontal" size="small">
                         <Button type="primary" onClick={ () => {  this.props.modalCancel(); } } ghost>关闭</Button>
-                        {  record.dataType !== 2 ? <Button type="primary" onClick={ () => this.submitQuestion() }>提交问题</Button> : null }
+                        {  record.status !== 2 ? <Button type="primary" onClick={ () => this.submitQuestion() }>提交问题</Button> : null }
                     </Space> } 
                 onCancel={ () => this.props.modalCancel() }
             >
@@ -147,7 +147,7 @@ class BoltQuestionnaireModal extends React.Component<IBoltQuestionnaireModalRout
                     } } />
                     <Form ref={ this.form } labelCol={{ span: 4 }} className={ styles.topPadding }>
                         <Form.Item name="description" label="备注" initialValue={ record.description }>
-                            <Input.TextArea maxLength={ 300 } placeholder="请输入备注信息" rows={ 1 } showCount disabled={ record.dataType === 2 } />
+                            <Input.TextArea maxLength={ 300 } placeholder="请输入备注信息" rows={ 1 } showCount disabled={ record.status === 2 } />
                         </Form.Item>
                         <Form.Item name="newValue" label="校对后信息"
                             rules={[{
@@ -155,11 +155,11 @@ class BoltQuestionnaireModal extends React.Component<IBoltQuestionnaireModalRout
                                 message: '请输入校对后信息 '
                             }]}
                             initialValue={ record.newValue }>
-                            <Input maxLength={ 100 } placeholder="请输入" disabled={ record.dataType === 2 } />
+                            <Input maxLength={ 100 } placeholder="请输入" disabled={ record.status === 2 } />
                         </Form.Item>
                     </Form>
                     <p className={ styles.topPadding }>操作信息</p>
-                    <CommonTable columns={ tableColumns } dataSource={ record.issueRecordList } />
+                    <CommonTable columns={ tableColumns } dataSource={ record.issueRecordVOList } />
                 </DetailContent>
             </Modal>
         </>

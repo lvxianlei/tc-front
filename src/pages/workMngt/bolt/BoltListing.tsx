@@ -253,7 +253,7 @@ export default function BoltList(): React.ReactNode {
             <Space direction="horizontal" size="small" className={ `${ styles.topbtn } ${ styles.btnRight }` }>
                 <Popconfirm
                     title="确认完成?"
-                    onConfirm={ () => RequestUtil.put(`/tower-science/boltRecord/complete`, { id: params.id }).then(res => {
+                    onConfirm={ () => RequestUtil.put(`/tower-science/boltRecord/complete?id=${ params.id }&basicHeightId=${ activeKey }`).then(res => {
                         history.goBack();
                     }) }
                     okText="确认"

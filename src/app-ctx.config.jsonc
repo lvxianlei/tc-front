@@ -92,12 +92,12 @@
                         "label": "放样外协服务",
                         "icon": "lofting",
                         "path": "/outsource",
-                        "authority": " entrust_page",
+                        "authority": "entrust_page",
                         "items": [
                             {
                                 "label": "委托列表",
                                 "path": "/outsource/entrust",
-                                "authority": " entrust_page"
+                                "authority": "entrust_page"
                             },
                             {
                                 "label": "已完成塔型",
@@ -190,6 +190,39 @@
                             {
                                 "label": "放样计划",
                                 "path": "/cockpit/planSetOut",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "库存看板",
+                                "path": "/stock/viewPanel",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "库存管理",
+                        "icon": "technology",
+                        "path": "/stock",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "原材料库存",
+                                "path": "/stock/rawMaterialStock",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "原材料入库",
+                                "path": "/stock/rawMaterialWarehousing",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "原材料出库",
+                                "path": "/stock/rawMaterialExWarehouse",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "余料入库",
+                                "path": "/stock/surplusMaterialWarehousing",
                                 "authority": "approvalm"
                             }
                         ]
@@ -316,6 +349,19 @@
                             {
                                 "label": "问题单",
                                 "path": "/question/questionMngt",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "配置管理",
+                        "icon": "technology",
+                        "path": "/configure",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "安全库存配置",
+                                "path": "/stock/securitySetting",
                                 "authority": "approvalm"
                             }
                         ]

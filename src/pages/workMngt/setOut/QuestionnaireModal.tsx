@@ -18,7 +18,7 @@ interface QuestionnaireModalState {
     readonly description?: string;
 }
 
-interface IRecord {
+export interface IRecord {
     readonly id?: string;
     readonly problemField?: string;
     readonly originalData?: string;

@@ -135,7 +135,7 @@ export default function SampleDrawList(): React.ReactNode {
                 <Space direction="horizontal" size="small">
                     <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDrawMessage/${record.loftingTask}`)}}>小样图信息</Button>
                     <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDraw/${record.id}/${record.smallSampleStatus}`)}} disabled={AuthUtil.getUserId()!==record.smallSampleLeader}>小样图</Button>
-                    <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDrawCheck/${record.id}/${record.smallSampleStatus}`)}}  >校核</Button>
+                    <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDrawCheck/${record.id}/${record.smallSampleStatus}`)}}  disabled={record.smallSampleStatus!==3||AuthUtil.getUserId()!==record.loftingLeader}>校核</Button>
                     <Popconfirm
                         title="确认提交?"
                         onConfirm={ async () => {

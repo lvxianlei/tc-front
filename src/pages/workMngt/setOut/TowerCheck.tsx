@@ -10,7 +10,7 @@ import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { useHistory, useParams } from 'react-router-dom';
-import QuestionnaireModal from './QuestionnaireModal';
+import QuestionnaireModal, { IRecord } from './QuestionnaireModal';
 import RequestUtil from '../../../utils/RequestUtil';
 import { downloadTemplate } from './downloadTemplate';
 
@@ -242,12 +242,12 @@ export default function TowerCheck(): React.ReactNode {
 
     const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {
         setVisible(true);
+        const data: IRecord = await RequestUtil.get<{}>(`/tower-science/productStructure/issue/detail?id=${ params.productSegmentId }`);
         if(tip === 'normal') {
-            const data: {} = await RequestUtil.get<{}>(`/tower-science/productStructure/issue/detail?id=${ params.productSegmentId }`);
             setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data });
             setTitle('查看问题');
         } else {
-            setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id });
+            setRecord({ issueRecordList: data.issueRecordList, problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id });
         }
     }
 

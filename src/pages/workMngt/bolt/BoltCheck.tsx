@@ -11,7 +11,7 @@ import styles from './BoltList.module.less';
 import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-import BoltQuestionnaireModal from './BoltQuestionnaireModal';
+import BoltQuestionnaireModal, { IRecord } from './BoltQuestionnaireModal';
 
 interface ITab {
     readonly basicHeight?: string;
@@ -98,12 +98,13 @@ export default function BoltCheck(): React.ReactNode {
 
     const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {
         setVisible(true);
-        if(tip === 'red') {
-            const data: {} = await RequestUtil.get<{}>(`/tower-science/boltRecord/issueDetail`, { keyId: record.id, problemField: col.dataIndex });
+        const data: IRecord = await RequestUtil.get<{}>(`/tower-science/boltRecord/issueDetail`, { keyId: record.id, problemField: col.dataIndex });
+        if(tip === 'red') {    
             setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data });
-            setTitle('查看问题');
+            setTitle('查看问题单');
         } else {
-            setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id });
+            setRecord({ issueRecordVOList: data.issueRecordVOList, problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id });
+            setTitle('提交问题单');
         }
     }
 
@@ -146,7 +147,7 @@ export default function BoltCheck(): React.ReactNode {
     const getDataSource = async (basicHeightId?: string) => {
         const data: [] = await RequestUtil.get(`/tower-science/boltRecord/checkList`, {
             basicHeightId: basicHeightId,
-            id: params.id
+            productCategoryId: params.id
         })
         setDataSource(data);
     }
@@ -178,7 +179,7 @@ export default function BoltCheck(): React.ReactNode {
                 {/* <Button type="primary" ghost>导出</Button> */}
                 <Popconfirm
                     title="确认完成?"
-                    onConfirm={ () => RequestUtil.put(`/tower-science/boltRecord/completeCheck`, { id: params.id }).then(res => {
+                    onConfirm={ () => RequestUtil.put(`/tower-science/boltRecord/completeCheck`, { productCategoryId: params.id }).then(res => {
                         history.goBack();
                     }) }
                     okText="确认"

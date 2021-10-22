@@ -5,7 +5,7 @@ const Random = Mock.Random;
 const records = [];
 for (let i = 1; i < 10; ++i) {
     records.push({
-        "basicsPartNum|1-100": 1, 
+        "basicsPartNumNow|1-100": 1, 
         "basicsWeight": Random.increment(), 
         "description": Random.cword(3,10), 
         "id": Random.increment(), 
@@ -24,7 +24,7 @@ module.exports = {
     msg: "",
     code: 200,
     data: [{
-        "basicsPartNum": 5, 
+        "basicsPartNumNow": 5, 
         "basicsWeight": 999, 
         "description": Random.cword(3,10), 
         "id": 1211111, 
@@ -37,7 +37,7 @@ module.exports = {
         "totalWeight": Random.increment(), 
         "width": Random.increment()
     }, {
-        "basicsPartNum": 1, 
+        "basicsPartNumNow": 1, 
         "basicsWeight": 555, 
         "description": Random.cword(3,10), 
         "id": 121, 
@@ -50,7 +50,7 @@ module.exports = {
         "totalWeight": Random.increment(), 
         "width": Random.increment()
     }].concat(records).concat({
-        "basicsPartNum": 11, 
+        "basicsPartNumNow": 11, 
         "basicsWeight": Random.increment(), 
         "description": Random.cword(3,10), 
         "id": 7987, 

@@ -36,9 +36,9 @@ export default function QuestionnaireDetail(): React.ReactNode {
             dataIndex: 'createTime' 
         },
         {
-            key: 'currentStatus', 
+            key: 'status', 
             title: '问题单状态', 
-            dataIndex: 'currentStatus',
+            dataIndex: 'status',
             render: (status: number): React.ReactNode => {
                 switch (status) {
                     case 1:
@@ -130,7 +130,7 @@ export default function QuestionnaireDetail(): React.ReactNode {
             <DetailTitle title="备注" />
             <Input.TextArea value={ detailData.description } disabled />
             <DetailTitle title="操作信息"/>
-            <CommonTable columns={ tableColumns } dataSource={ detailData.statusRecordList } pagination={ false } />
+            <CommonTable columns={ tableColumns } dataSource={ detailData.issueRecordList } pagination={ false } />
         </DetailContent>
     </>
 }
