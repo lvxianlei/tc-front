@@ -191,6 +191,11 @@
                                 "label": "放样计划",
                                 "path": "/cockpit/planSetOut",
                                 "authority": "approvalm"
+                            },
+                            {
+                                "label": "库存看板",
+                                "path": "/stock/viewPanel",
+                                "authority": "approvalm"
                             }
                         ]
                     },
@@ -344,6 +349,19 @@
                             {
                                 "label": "问题单",
                                 "path": "/question/questionMngt",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "配置管理",
+                        "icon": "technology",
+                        "path": "/configure",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "安全库存配置",
+                                "path": "/stock/securitySetting",
                                 "authority": "approvalm"
                             }
                         ]
