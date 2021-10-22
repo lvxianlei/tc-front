@@ -93,7 +93,7 @@ export default function DepartmentMngt(): React.ReactNode {
      * @returns batch delete 
      */
     const onBatchDelete = () => {
-        RequestUtil.delete(`/sinzetech-system/role?ids=${ selectedRoles.map<number>((item: IDept): number => item.id) }`).then(res => {
+        RequestUtil.delete(`/sinzetech-user/department?ids=${ selectedRoles.map<number>((item: IDept): number => item.id) }`).then(res => {
             setSelectedRoleKeys([]);
             setSelectedRoles([]);
             setRefresh(!refresh);
