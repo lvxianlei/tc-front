@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { Space, Select, Button, Popconfirm, Input, Form, FormInstance, message, InputNumber } from 'antd';
+import { Space, Select, Button, Popconfirm, Input, Form, FormInstance, message, InputNumber, Upload } from 'antd';
 import { Page } from '../../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
 import styles from './Pick.module.less';
 import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
+import { Console } from 'node:console';
+import AuthUtil from '../../../../utils/AuthUtil';
+import { downloadTemplate } from '../../setOut/downloadTemplate';
 
 interface Column extends ColumnType<object> {
     editable?: boolean;
@@ -24,12 +27,14 @@ export default function Lofting(): React.ReactNode {
 
     const columns = [
         {
-            key: 'index',
+            key: 'id',
             title: '序号',
-            dataIndex: 'index',
+            dataIndex: 'id',
             width: 50,
             fixed: 'left' as FixedType,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<><span>{ index + 1 }</span><Form.Item name={['data',index, "id"]} initialValue={ _ } style={{ display: "none" }}>
+                    <Input size="small" onChange={ () => rowChange(index) }/>
+                </Form.Item></>)
         },
         {
             key: 'segmentName',
@@ -39,7 +44,7 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'segmentName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data',index, "segmentName"]} initialValue={ _ }>
-                    <Input size="small"/>
+                    <Input size="small" onChange={ () => rowChange(index) }/>
                 </Form.Item>
             )
         },
@@ -51,7 +56,7 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data',index, "code"]} initialValue={ _ }>
-                    <Input size="small"/>
+                    <Input size="small" onChange={ () => rowChange(index) }/>
                 </Form.Item>
             )
         },
@@ -63,7 +68,7 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data',index, "materialName"]} initialValue={ _ }>
-                    <Input size="small"/>
+                    <Input size="small" onChange={ () => rowChange(index) }/>
                 </Form.Item>
             ) 
         },
@@ -75,7 +80,7 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data',index, "structureTexture"]} initialValue={ _ }>
-                    <Input size="small"/>
+                    <Input size="small" onChange={ () => rowChange(index) }/>
                 </Form.Item>
             ) 
         },
@@ -87,7 +92,7 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data',index, "structureSpec"]} initialValue={ _ }>
-                    <Input size="small"/>
+                    <Input size="small" onChange={ () => rowChange(index) }/>
                 </Form.Item>
             ) 
         },
@@ -99,7 +104,7 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data',index, "code"]} initialValue={ _ }>
-                    <InputNumber size="small" precision={0}/>
+                    <InputNumber size="small" precision={0} onChange={ () => rowChange(index) }/>
                 </Form.Item>
             ) 
         },
@@ -111,7 +116,7 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data',index, "length"]} initialValue={ _ }>
-                    <InputNumber size="small" precision={2} min={0}/>
+                    <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
                 </Form.Item>
             ) 
         },
@@ -123,7 +128,7 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data',index, "width"]} initialValue={ _ }>
-                    <InputNumber size="small" precision={2} min={0}/>
+                    <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
                 </Form.Item>
             )
         },
@@ -135,7 +140,7 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data',index, "basicsTheoryWeight"]} initialValue={ _ }>
-                    <InputNumber size="small" precision={2} min={0}/>
+                    <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
                 </Form.Item>
             ) 
         },
@@ -147,7 +152,7 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data',index, "basicsWeight"]} initialValue={ _ }>
-                    <InputNumber size="small" precision={2} min={0}/>
+                    <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
                 </Form.Item>
             ) 
         },
@@ -159,7 +164,7 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data',index, "totalWeight"]} initialValue={ _ }>
-                    <InputNumber size="small" precision={2} min={0}/>
+                    <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
                 </Form.Item>
             ) 
         },
@@ -171,7 +176,7 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data',index, "description"]} initialValue={ _ }>
-                    <TextArea size="small" rows={1} showCount maxLength={300}/>
+                    <TextArea size="small" rows={1} showCount maxLength={300} onChange={ () => rowChange(index) }/>
                 </Form.Item>
             ) 
         },
@@ -199,7 +204,7 @@ export default function Lofting(): React.ReactNode {
                     <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                         <Popconfirm
                             title="确认删除?"
-                            onConfirm={ async () => await RequestUtil.get(`/tower-science/drawProductStructure?productSegmentId=${params.id}`).then(()=>{
+                            onConfirm={ async () => await RequestUtil.delete(`/tower-science/drawProductStructure/${record.id}`).then(()=>{
                                 message.success('删除成功！')
                             }).then(()=>{
                                 setRefresh(!refresh)
@@ -233,7 +238,7 @@ export default function Lofting(): React.ReactNode {
         <Page
             path="/tower-science/drawProductStructure"
             columns={ tableColumns }
-            requestData={{productSegmentId:params.id}}
+            requestData={{productSegmentId:params.productSegmentId}}
             headTabs={ [] }
             onFilterSubmit={onFilterSubmit}
             filterValue={ filterValue }
@@ -241,14 +246,41 @@ export default function Lofting(): React.ReactNode {
             tableProps={{ pagination: false }}
             extraOperation={ 
                 <Space direction="horizontal" size="small">
-                    <Button type="primary">导出</Button>
-                    <Button type="primary">导入</Button>
-                    <Button type="primary" onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/pick/${params.productSegmentId}/drawApply`)}}>图纸塔型套用</Button>
-                    <Button type="primary" onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/pick/${params.productSegmentId}/setOutApply`)}}>放样塔型套用</Button>
+                    <Button type="primary" ghost>导出</Button>
+                    <Button type="primary" ghost onClick={ () => downloadTemplate('/tower-science/drawProductStructure/exportTemplate', '构建明细') }>模板下载</Button>
+                    <Upload 
+                        accept=".xls,.xlsx"
+                        action={ () => {
+                            const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                            return baseUrl+'/tower-science/drawProductStructure/import'
+                        } } 
+                        headers={
+                            {
+                                'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                                'Tenant-Id': AuthUtil.getTenantId(),
+                                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                            }
+                        }
+                        data={ { productSegmentId: params.productSegmentId } }
+                        showUploadList={ false }
+                        onChange={ (info) => {
+                            if(info.file.response && !info.file.response?.success) {
+                                message.warning(info.file.response?.msg)
+                            }else if(info.file.response && info.file.response?.success){
+                                message.success('导入成功！');
+                                setRefresh(!refresh);
+                            }
+                            
+                        } }
+                    >
+                        <Button type="primary" ghost>导入</Button>
+                    </Upload>
+                    <Button type="primary" ghost  onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/pick/${params.productSegmentId}/drawApply`)}}>图纸塔型套用</Button>
+                    <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/pick/${params.productSegmentId}/setOutApply`)}}>放样塔型套用</Button>
                     <Popconfirm
                         title="确认完成提料?"
                         onConfirm={ async () => {
-                            await RequestUtil.post(`/tower-science/drawProductSegment/completedLofting`,{productSegmentId:params.productSegmentId}).then(()=>{
+                            await RequestUtil.post(`/tower-science/drawProductSegment/completedLofting?productSegmentId=${params.productSegmentId}`).then(()=>{
                                 message.success('提料成功！')
                             }).then(()=>{
                                 history.push(`/workMngt/pickList/pickTowerMessage/${params.id}`)
@@ -257,7 +289,7 @@ export default function Lofting(): React.ReactNode {
                         okText="确认"
                         cancelText="取消"
                     >
-                        <Button type="primary">完成提料</Button>
+                        <Button type="primary" ghost>完成提料</Button>
                     </Popconfirm>
                     <Button type="primary" ghost onClick={ () => { 
                         if(editorLock === '编辑') {
@@ -265,23 +297,26 @@ export default function Lofting(): React.ReactNode {
                             setEditorLock('锁定');
                         } else {
                             const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
+                            console.log(rowChangeList)
+                            console.log(newRowChangeList)
                             let values = getForm()?.getFieldsValue(true).data;
                             if(values) {
                                 let changeValues = values.filter((item: any, index: number) => {
                                     return newRowChangeList.indexOf(index) !== -1;
                                 })
-                                RequestUtil.post(`/tower-science/productStructure/save`, [ ...changeValues ]).then(res => {
+                                RequestUtil.post(`/tower-science/drawProductStructure/submit?productCategoryId=${params.id}`, [ ...changeValues ]).then(res => {
                                     setColumns(columnsSetting);
                                     setEditorLock('编辑');
-                                    setRowChangeList([]);    
+                                    setRowChangeList([]);
+                                    setRefresh(!refresh);    
                                 });
                             }
                             
                         }
                         console.log(getForm()?.getFieldsValue(true)) 
                     } }>{ editorLock }</Button>
-                    <Button type="primary" onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/pick/${params.productSegmentId}/recognize`)}}>识别</Button>
-                    <Button type="primary" onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}`)}}>返回上一级</Button>
+                    <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/pick/${params.productSegmentId}/recognize`)}}>识别</Button>
+                    <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}`)}}>返回上一级</Button>
                 </Space>
             }
             searchFormItems={[

@@ -10,12 +10,13 @@ import styles from './SetOut.module.less';
 
 export default function PickCheckList(): React.ReactNode {
     const [form] = Form.useForm();
-    const params = useParams<{ productSegmentId: string,id: string }>();
+    const params = useParams<{ productSegmentId: string, id: string, materialLeaderId: string}>();
     const history = useHistory();
     const [ visible, setVisible ] = useState(false);
+    const [ refresh, setRefresh] = useState(false);
     const [ record, setRecord ] = useState({});
     const [filterValue, setFilterValue] = useState({});
-    const [ title, setTitle ] = useState('提交问题');
+    const [ title, setTitle ] = useState('创建问题单');
 
    
     const columns = [
@@ -37,11 +38,18 @@ export default function PickCheckList(): React.ReactNode {
     const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {
         setVisible(true);
         if(tip !== 'normal') {
-            const data: {} = await RequestUtil.get<{}>(`/tower-science/productStructure/issue/detail?id=${ params.productSegmentId }`);
-            setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data });
-            if(tip!=='red')setTitle('查看问题');
+            const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/issue/${ record.id }/${col.dataIndex}`);
+            if(tip==='red'){ 
+                setTitle('查看问题单') 
+            }
+            else{
+                setTitle('创建问题单');
+            }
+            setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data,issueRecordList: data.issueRecordList,  });
+            
         } else {
             setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id });
+            setTitle('创建问题单');
         }
     }
 
@@ -77,18 +85,19 @@ export default function PickCheckList(): React.ReactNode {
     return (
         <>
             <Page
-                // path={`/tower-science/drawProductStructure/${params.productSegmentId}/check`}
-                path={`/tower-science/productStructure/list`}
+                path={`/tower-science/drawProductStructure/check`}
+                requestData={{productSegmentId:params.productSegmentId}}
                 columns={ columnsSetting }
                 onFilterSubmit={onFilterSubmit}
+                refresh={refresh}
                 filterValue={ filterValue }
                 extraOperation={
                     <Space>
-                        <Button>导出</Button>
+                        <Button type='primary' ghost>导出</Button>
                         <Popconfirm
                             title="确认完成校核?"
                             onConfirm={ async () => {
-                                await RequestUtil.post(`/tower-science/drawProductStructure/${params.productSegmentId}/completed/check`).then(()=>{
+                                await RequestUtil.post(`/tower-science/drawProductStructure/completed/check?productSegmentId=${params.productSegmentId}`).then(()=>{
                                     message.success('校核成功！')
                                 }).then(()=>{
                                     history.push(`/workMngt/pickList/pickTowerMessage/${params.id}`)
@@ -97,9 +106,9 @@ export default function PickCheckList(): React.ReactNode {
                             okText="确认"
                             cancelText="取消"
                         > 
-                            <Button>完成校核</Button>
+                            <Button type='primary' ghost >完成校核</Button>
                         </Popconfirm>
-                        <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}`)}}>返回上一级</Button>
+                        <Button type='primary' ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}`)}}>返回上一级</Button>
                     </Space>
                 }
                 searchFormItems={[
@@ -115,7 +124,7 @@ export default function PickCheckList(): React.ReactNode {
                     },
                 ]}
             />
-            <QuestionnaireModal visible={ visible } record={ record } title={ title } modalCancel={ () => setVisible(false) }/>
+            <QuestionnaireModal visible={ visible } record={ record } title={ title } modalCancel={ () => {setVisible(false);setRefresh(!refresh)} } materialLeaderId={params.materialLeaderId} productCategoryId={params.id}/>
         </>
     )
 }
