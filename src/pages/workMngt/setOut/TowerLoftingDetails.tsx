@@ -45,9 +45,9 @@ const columns = [
         dataIndex: 'structureTexture',
     },
     {
-        key: 'specName',
+        key: 'structureSpec',
         title: '规格',
-        dataIndex: 'specName',
+        dataIndex: 'structureSpec',
         width: 200,
     },
     {

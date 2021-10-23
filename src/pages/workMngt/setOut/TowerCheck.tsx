@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Space, Button, Input } from 'antd';
+import { Space, Button, Input, Popconfirm } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -28,10 +28,10 @@ const columns = [
         }
     },
     {
-        key: 'partName',
+        key: 'segmentName',
         title: '段名',
         width: 150,
-        dataIndex: 'partName',
+        dataIndex: 'segmentName',
         editable: false
     },
     {
@@ -56,9 +56,9 @@ const columns = [
         dataIndex: 'structureTexture',
     },
     {
-        key: 'specName',
+        key: 'structureSpec',
         title: '规格',
-        dataIndex: 'specName',
+        dataIndex: 'structureSpec',
         editable: true,
         width: 200,
     },
@@ -237,15 +237,15 @@ export default function TowerCheck(): React.ReactNode {
     const params = useParams<{ id: string, productSegmentId: string }>();
     const [ visible, setVisible ] = useState(false);
     const [ record, setRecord ] = useState({});
-    const [ title, setTitle ] = useState('提交问题');
+    const [ title, setTitle ] = useState('提交问题单');
     const [ refresh, setRefresh ] = useState(false);
 
     const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {
         setVisible(true);
-        const data: IRecord = await RequestUtil.get<{}>(`/tower-science/productStructure/issue/detail?id=${ params.productSegmentId }`);
-        if(tip === 'normal') {
+        const data: IRecord = await RequestUtil.get<{}>(`/tower-science/productStructure/issue/detail?id=${ record.id }&&problemField=${ col.dataIndex }`);
+        if(tip === 'red') {
             setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data });
-            setTitle('查看问题');
+            setTitle('查看问题单');
         } else {
             setRecord({ issueRecordList: data.issueRecordList, problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id });
         }
@@ -286,13 +286,21 @@ export default function TowerCheck(): React.ReactNode {
             refresh={ refresh }
             extraOperation={ <Space direction="horizontal" size="small">
                 {/* <Button type="primary" ghost>导出</Button> */}
-                <Button type="primary" onClick={ () => { 
-                    RequestUtil.get<{}>(`/tower-science/productSegment/completed/check?productSegmentId=${ params.productSegmentId }`).then(res => {
-                        history.goBack();
-                    }) 
-                } } ghost>完成校核</Button>
-                <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productSegment/segmentModelDownload', '模型', { productSegmentId: params.productSegmentId }) } ghost>模型下载</Button>
-                <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productSegment/segmentDrawDownload', '样图', { productSegmentId: params.productSegmentId }) } ghost>样图下载</Button>
+                <Popconfirm
+                    title="确认完成校核?"
+                    onConfirm={ () => { 
+                        RequestUtil.post<{}>(`/tower-science/productSegment/completed/check?productSegmentId=${ params.productSegmentId }`).then(res => {
+                            history.goBack();
+                        }) 
+                    } }
+                    okText="确认"
+                    cancelText="取消"
+                >
+                    <Button type="primary" ghost>完成校核</Button>
+                </Popconfirm>
+                
+                <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productSegment/segmentModelDownload', '模型', { productSegmentId: params.productSegmentId }, true )} ghost>模型下载</Button>
+                <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productSegment/segmentDrawDownload', '样图', { productSegmentId: params.productSegmentId }, true) } ghost>样图下载</Button>
                 <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
             </Space> }
             searchFormItems={ [
@@ -308,6 +316,6 @@ export default function TowerCheck(): React.ReactNode {
                 }
             ] }
         />
-        <QuestionnaireModal visible={ visible } record={ record } title={ title } modalCancel={ () => { setVisible(false); setRefresh(!refresh); } }/>
+        <QuestionnaireModal visible={ visible } record={ record } title={ title } modalCancel={ () => { setVisible(false); setRefresh(!refresh); } } update={ () => setRefresh(!refresh) }/>
     </>
 }
