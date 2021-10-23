@@ -84,10 +84,7 @@ export default function LoftingTowerApplication(): React.ReactNode {
             dataIndex: 'operation', 
             key:'operation', 
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Button type='link' onClick={ () => {
-                RequestUtil.post(`/tower-science/productStructure/reuse`, {
-                    productSegmentId: record.id,
-                    passivityProductSegment: params.id
-                }).then(() => {
+                RequestUtil.post(`/tower-science/productStructure/reuse?productSegmentId=${params.productSegmentId}&passivityProductSegment=${record.id}`).then(() => {
                     message.success('套用成功'); 
                 }).then(()=>{
                     history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/pick/${params.productSegmentId}`)
