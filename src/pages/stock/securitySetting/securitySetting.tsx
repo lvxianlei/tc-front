@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Space, Button, TableColumnProps, Select, } from 'antd'
-import { Link,  } from 'react-router-dom'
+import { Link, } from 'react-router-dom'
 import { Page } from '../../common'
 import { IClient } from '../../IClient'
 const projectType = [
@@ -50,86 +50,43 @@ export default function RawMaterialStock(): React.ReactNode {
         },
         {
             key: 'projectName',
-            title: '所在仓库',
+            title: '品名',
             dataIndex: 'projectName',
             render: (_a: any, _b: any) => <Link to={`/project/management/detail/base/${_b.id}`}>{_b.projectName}</Link>
         },
         {
             key: 'projectNumber',
-            title: '收货批次',
+            title: '标准',
             dataIndex: 'projectNumber'
         },
         {
             key: 'projectType',
-            title: '库位',
+            title: '规格',
             dataIndex: 'projectType',
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{projectType.find(item => item.value === Number(_a))?.label}</span>)
         },
         {
             key: 'bidBuyEndTime',
-            title: '区位',
+            title: '材质',
             dataIndex: 'bidBuyEndTime'
         },
         {
             key: 'biddingEndTime',
-            title: '物料编码',
+            title: '安全库存（吨）',
             dataIndex: 'biddingEndTime'
         },
         {
             key: 'currentProjectStage',
-            title: '分类',
+            title: '告警库存（吨）',
             dataIndex: 'currentProjectStage',
             render: (_a: number) => <span>{currentProjectStage.find(item => item.value === _a)?.label}</span>
-        },
-        {
-            key: 'projectLeader',
-            title: '标准',
-            dataIndex: 'projectLeader'
-        },
-        {
-            key: 'createTime',
-            title: '品名',
-            dataIndex: 'createTime'
-        },
-        {
-            key: 'releaseDate',
-            title: '材质',
-            dataIndex: 'releaseDate'
-        },
-        {
-            key: 'bidExplain',
-            title: '规格',
-            dataIndex: 'bidExplain'
-        },
-        {
-            key: 'bidExplain',
-            title: '长度',
-            dataIndex: 'bidExplain'
-        },
-        {
-            key: 'bidExplain',
-            title: '宽度',
-            dataIndex: 'bidExplain'
-        },
-        {
-            key: 'bidExplain',
-            title: '数量',
-            dataIndex: 'bidExplain'
-        },
-        {
-            key: 'bidExplain',
-            title: '重量',
-            dataIndex: 'bidExplain'
         },
         {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
-            render: (_: undefined, record: object): React.ReactNode => (
-                <Space direction="horizontal" size="small">
-                    <Link to={`/project/management/detail/base/${(record as IClient).id}`}>质保单</Link>
-                    <Link to={`/project/management/edit/base/${(record as IClient).id}`}>质检单</Link>
-                </Space>
+            render: (text, item: any, index: number): React.ReactNode => (
+                <span>编辑</span>
             )
         }]
 

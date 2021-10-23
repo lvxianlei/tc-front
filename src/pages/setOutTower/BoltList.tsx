@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Spin } from 'antd';
+import { Button, Spin, Tabs } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle } from '../common';
 import useRequest from '@ahooksjs/use-request';
@@ -16,16 +16,15 @@ export default function BoltInfo(): React.ReactNode {
     const detailData: any = data;
     const columns = [
         { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-        { title: '名称', dataIndex: 'partBidNumber', key: 'partBidNumber', },
-        { title: '规格', dataIndex: 'goodsType', key: 'goodsType' },
-        { title: '无扣长', dataIndex: 'packageNumber', key: 'packgeNumber' },
-        { title: '等级', dataIndex: 'amount', key: 'amount' },
-        { title: '1', dataIndex: 'goodsType', key: 'goodsType' },
-        { title: '2', dataIndex: 'packageNumber', key: 'packgeNumber' },
-        { title: '3', dataIndex: 'goodsType', key: 'goodsType' },
-        { title: '4', dataIndex: 'unit', key: 'unit' },
-        { title: '5', dataIndex: 'goodsType', key: 'goodsType' },
-        { title: '总计', dataIndex: 'unit', key: 'unit' },
+        { title: '类型', dataIndex: 'partBidNumber', key: 'partBidNumber', },
+        { title: '名称', dataIndex: 'goodsType', key: 'goodsType' },
+        { title: '等级', dataIndex: 'packageNumber', key: 'packgeNumber' },
+        { title: '规格', dataIndex: 'amount', key: 'amount' },
+        { title: '无扣长（mm）', dataIndex: 'goodsType', key: 'goodsType' },
+        { title: '小计', dataIndex: 'packageNumber', key: 'packgeNumber' },
+        { title: '合计', dataIndex: 'goodsType', key: 'goodsType' },
+        { title: '单重（kg）', dataIndex: 'unit', key: 'unit' },
+        { title: '合计重（kg）', dataIndex: 'goodsType', key: 'goodsType' },
     ]
     return <>
         <Spin spinning={loading}>
@@ -34,6 +33,17 @@ export default function BoltInfo(): React.ReactNode {
             ]}>
                 <DetailTitle title="螺栓清单" />
                 <CommonTable columns={columns} dataSource={detailData?.cargoVOList} />
+                {/* <Tabs onChange={ tabChange } type="card">
+                {
+                    detailData.map((item: ITab) => {
+                        return <Tabs.TabPane tab={ item.basicHeight } key={ item.id }>
+                            <Form form={ form } className={ styles.descripForm }>
+                                <CommonTable columns={ columnsSetting } dataSource={ dataSource } pagination={ false } />
+                            </Form>
+                        </Tabs.TabPane>
+                    })
+                }
+                </Tabs> */}
             </DetailContent>
         </Spin>
     </>

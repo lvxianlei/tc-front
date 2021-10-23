@@ -84,8 +84,8 @@ export default function LoftingTowerApplication(): React.ReactNode {
             key:'operation', 
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Button type='link' onClick={ () => {
                 RequestUtil.post(`/tower-science/drawProductStructure/reuse`, {
-                    productSegmentId: record.id,
-                    passivityProductSegment: params.id
+                    productSegmentId: params.productSegmentId,
+                    passivityProductSegment: record.id
                 }).then(() => {
                     message.success('套用成功'); 
                 }).then(()=>{

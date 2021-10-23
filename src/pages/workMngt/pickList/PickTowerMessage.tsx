@@ -109,7 +109,9 @@ export default function PickTowerMessage(): React.ReactNode {
         setFilterValue(value)
         return value
     }
-
+    const onRefresh=()=>{
+        setRefresh(!refresh);
+    }
     return (
         <Page
             // path="/tower-market/bidInfo"
@@ -134,7 +136,7 @@ export default function PickTowerMessage(): React.ReactNode {
                 >   
                     <Button type="primary">提交</Button>
                 </Popconfirm>
-                <TowerPickAssign id={ params.id }/>
+                <TowerPickAssign id={ params.id } onRefresh={onRefresh}/>
                 <Button type="primary" onClick={()=>history.push('/workMngt/pickList')}>返回上一级</Button>
                 </Space>
             }

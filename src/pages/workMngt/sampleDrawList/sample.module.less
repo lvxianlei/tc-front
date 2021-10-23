@@ -1,4 +1,5 @@
 @import "../../../App.module.less";
+@import '~antd/es/style/themes/index.less';
 
 .tableRow{
     height: @tableRowHeight;
@@ -7,13 +8,6 @@
     }
 }
 
-.check {
-    :global(.ant-table-tbody){
-        tr:hover:not(.ant-table-expanded-row) > td,.ant-table-row-hover,.ant-table-row-hover>td{
-            background:rgba(0, 0, 0, 0)!important;
-        }
-    }
-}
 .operationBtn {
     :global(.ant-btn) {
         padding: 0;
@@ -30,4 +24,9 @@
 .yellow {
     background-color: #FFB401 !important;
     color: #FFF;
+}
+.check{
+    :global(.ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td:not(.ant-table-cell-fix-right):not(.ant-table-cell-fix-right-first)) {
+        background:rgba(0, 0, 0, 0)!important;
+    }
 }

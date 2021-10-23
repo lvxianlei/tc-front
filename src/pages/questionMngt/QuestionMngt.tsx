@@ -113,15 +113,21 @@ export default function QuestionMngt(): React.ReactNode {
                     {
                         record.type==='WTD-TL'||record.type==='WTD-FY'||record.type==='WTD-LS'? <Link to={`/question/questionMngt/otherDetail/${record.id}/${record.type}`}>查看详情</Link>:
                         record.type==='WTD-ZH'? <Link to={`/question/questionMngt/assemblyWeldDetail/${record.id}`}>查看详情</Link>:
-                        <Link to={`/question/questionMngt/sampleDrawDetail/${record.id}`}>查看详情</Link>
+                        <Link to={`/question/questionMngt/sampleDrawDetail/${record.keyId}`}>查看详情</Link>
                     }
                 </Space>
             )
         }
     ];
-    const onFilterSubmit=(value: any)=>{
+    const onFilterSubmit = (value: any) => {
+        if (value.updateTime) {
+            const formatDate = value.updateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.updateTimeStart = formatDate[0]+ ' 00:00:00';
+            value.updateTimeEnd = formatDate[1]+ ' 23:59:59';
+            delete value.updateTime
+        }
         setFilterValue(value)
-        return value;
+        return value
     }
     return <>
         <Page
@@ -132,14 +138,9 @@ export default function QuestionMngt(): React.ReactNode {
             filterValue={filterValue}
             searchFormItems={[
                 {
-                    name: 'updateTimeStart',
+                    name: 'updateTime',
                     label:'状态时间',
-                    children: <DatePicker/>
-                },
-                {
-                    name: 'updateTimeEnd',
-                    label:'',
-                    children: <DatePicker/>
+                    children:  <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
                     name: 'status',

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Space, Modal, Input, Descriptions, Form, FormInstance, DatePicker, InputNumber, Select, Row, Col } from 'antd';
+import { Button, Space, Modal, Input, Descriptions, Form, FormInstance, DatePicker, InputNumber, Select, Row, Col, message } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './TowerPickAssign.module.less';
@@ -10,6 +10,7 @@ import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 export interface TowerPickAssignProps {}
 export interface ITowerPickAssignRouteProps extends RouteComponentProps<TowerPickAssignProps>, WithTranslation {
     readonly id: number | string;
+    onRefresh: () => void;
 }
 
 export interface TowerPickAssignState {
@@ -21,7 +22,7 @@ export interface TowerPickAssignState {
     readonly repeatNum?: number;
     readonly selectKey?: number;
     user?: any[];
-    checkUser?: any[];
+    materialCheckLeader?: any[];
     departmentData?: SelectDataNode[];
 }
 
@@ -34,14 +35,14 @@ interface IAppointed {
 interface IAppointedList {
     readonly plannedDeliveryTime?: string;
     readonly id	?: string;
-    readonly checkUser?: string;
-    readonly checkUserDepartment?: string;
-    readonly checkUserDepartmentName?: string;
-    readonly checkUserName?: string;
-    readonly loftingUser?: string;
-    readonly loftingUserDepartment?: string;
-    readonly loftingUserDepartmentName?: string;
-    readonly loftingUserName?: string;
+    readonly materialCheckLeader?: string;
+    readonly materialCheckLeaderDepartment?: string;
+    readonly materialCheckLeaderDepartmentName?: string;
+    readonly materialCheckLeaderName?: string;
+    readonly materialLeader?: string;
+    readonly materialLeaderDepartment?: string;
+    readonly materialLeaderDepartmentName?: string;
+    readonly materialLeaderName?: string;
     readonly name?: string;
     readonly pattern?: string;
     readonly productCategoryName?: string;
@@ -70,7 +71,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
         appointedList: [],
         repeatModal: false,
         user: [],
-        checkUser: [],
+        materialCheckLeader: [],
         departmentData: [],
     }
 
@@ -104,24 +105,32 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
     protected onSubmit(): void {
         if (this.getForm()) {
             this.getForm()?.validateFields().then(() => {
-                let values = this.getForm()?.getFieldsValue().appointedList;
-                values = values.map((item: Record<string, any>) => {
-                    return {
-                        ...item,
-                        plannedDeliveryTime: item?.plannedDeliveryTime && item?.plannedDeliveryTime.format('YYYY-MM-DD'),
-                        productCategory: this.state.appointed?.productCategory,
-                        productCategoryName: this.state.appointed?.productCategoryName,
-                        pattern: this.state.appointed?.pattern
-                    }
+                let values = {
+                    drawProductSegmentList:this.getForm()?.getFieldsValue().appointedList.map((item: Record<string, any>) => {
+                        return {
+                            ...item,
+                            plannedDeliveryTime: item?.plannedDeliveryTime && item?.plannedDeliveryTime.format('YYYY-MM-DD')+ ' 00:00:00',
+                            // productCategory: this.state.appointed?.productCategory,
+                            // productCategoryName: this.state.appointed?.productCategoryName,
+                            // pattern: this.state.appointed?.pattern
+                        }
+                    }),
+                    productCategoryId: this.props.id
+                }
+                RequestUtil.post(`/tower-science/drawProductSegment/assign`, { ...values }).then(()=>{
+                    message.success('提交成功！')
+                }).then(()=>{
+                    this.getForm()?.resetFields();
+                    this.getForm()?.setFieldsValue({
+                        appointedList: []
+                    });
+                    this.setState({  
+                        appointedList: [],
+                        visible:false 
+                    });
+                    this.props.onRefresh()
                 })
-                RequestUtil.post(`/tower-science/productSegment/submit`, { ...values })
-                this.getForm()?.resetFields();
-                this.getForm()?.setFieldsValue({
-                    appointedList: []
-                });
-                this.setState({  
-                    appointedList: []
-                })
+                
                 return Promise.resolve()
             })
         }
@@ -137,10 +146,10 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
         appointedList.push({
             index: appointedList.length + 1,
             name: '',
-            loftingUserDepartment: '',
-            loftingUser: '',
-            checkUserDepartment: '',
-            checkUser: '',
+            materialLeaderDepartment: '',
+            materialLeader: '',
+            materialCheckLeaderDepartment: '',
+            materialCheckLeader: '',
             plannedDeliveryTime: ''
         })
         this.setState({
@@ -225,17 +234,17 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
     public onDepartmentChange = async (value: Record<string, any>, index: number, title: string) => {
         const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${ value }&size=1000`);
         if(title==='提料'){
-            const user = this.state.checkUser||[];
+            const user = this.state.materialCheckLeader||[];
             user[index] = userData.records;
             this.setState({
-                checkUser:user
+                user:user
             })
         }
         else{
             const user = this.state.user||[];
             user[index] = userData.records;
             this.setState({
-                user
+                materialCheckLeader:user
             })
         }
         
@@ -312,7 +321,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                             </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="提料人"  span={ 3 }>
-                                            <Form.Item name={["appointedList", index, "loftingUserDepartment"]}
+                                            <Form.Item name={["appointedList", index, "materialLeaderDepartment"]}
                                                 rules={[{
                                                     required: true,
                                                     message: '请选择部门'
@@ -321,7 +330,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                                     {this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
                                                 </TreeSelect>
                                             </Form.Item>
-                                            <Form.Item name={["appointedList", index, "loftingUser"]}
+                                            <Form.Item name={["appointedList", index, "materialLeader"]}
                                                 rules={[{
                                                     required: true,
                                                     message: '请选择人员'
@@ -334,7 +343,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                             </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="校对人"  span={ 3 }>
-                                            <Form.Item name={["appointedList", index, "checkUserDepartment"]}
+                                            <Form.Item name={["appointedList", index, "materialCheckLeaderDepartment"]}
                                                 rules={[{
                                                     required: true,
                                                     message: '请选择部门'
@@ -343,13 +352,13 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                                     {this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
                                                 </TreeSelect>
                                             </Form.Item>
-                                            <Form.Item name={["appointedList", index, "checkUser"]}
+                                            <Form.Item name={["appointedList", index, "materialCheckLeader"]}
                                                 rules={[{
                                                     required: true,
                                                     message: '请选择人员'
                                                 }]} style={ { width: '50%', display: 'inline-block' } }>
                                                 <Select placeholder="请选择" style={{width:'100px'}}>
-                                                    { this.state?.checkUser && this.state.checkUser[index] && this.state.checkUser[index].map((item: any) => {
+                                                    { this.state?.materialCheckLeader && this.state.materialCheckLeader[index] && this.state.materialCheckLeader[index].map((item: any) => {
                                                         return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
                                                     }) }
                                                 </Select>
