@@ -199,6 +199,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                 }) 
             } } 
             onOk={ () => {
+                const { user, materialCheckLeader } = this.state;
                 if(this.state.repeatNum && this.state.repeatNum > 0) {
                   this.setState({ 
                         repeatModal: false
@@ -213,8 +214,15 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                             appointed: {
                                 ...this.state.appointed,
                                 sectionNum: (this.state.appointed?.sectionNum || 0) + (this.state.repeatNum || 0)
-                            }
+                            },
+                            user: user&&appointedList.forEach((_:any,index:number)=>{
+                                user[index+1] = user[0]||''
+                            })||[],
+                            materialCheckLeader:materialCheckLeader&&appointedList.forEach((_:any,index:number)=>{
+                                materialCheckLeader[index+1] = materialCheckLeader[0]||''
+                            })||[]
                         })
+                        console.log(appointedList)
                         this.getForm()?.setFieldsValue({
                             appointedList: appointedList
                         })

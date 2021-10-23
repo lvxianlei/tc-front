@@ -786,7 +786,7 @@
     },
     { // 工作管理-提料-杆塔信息-校核
       "name": "校核",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/check/:productSegmentId",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/check/:productSegmentId/:materialLeaderId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Check",
       "exact": true,
       "authority": "approvalm"
