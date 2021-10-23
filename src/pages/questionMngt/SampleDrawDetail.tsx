@@ -48,14 +48,13 @@ export default function SampleDrawDetail(): React.ReactNode {
     const handleModalOk = async () => {
         try {
             const refuseData = await form.validateFields();
-            // refuseData.drawTaskId = params.id;
-            await RequestUtil.post(`/tower-science/issue/refuse/${params.id}`).then(()=>{
+            refuseData.id = params.id;
+            await RequestUtil.post(`/tower-science/issue/refuse`,refuseData).then(()=>{
                 message.success('提交成功！')
                 setVisible(false)
             }).then(()=>{
                 history.goBack()
             })
-        
         } catch (error) {
             console.log(error)
         }
@@ -72,7 +71,7 @@ export default function SampleDrawDetail(): React.ReactNode {
                 cancelText='关闭'
             >
                 <Form form={form} >
-                    <Form.Item name="reason" label="拒绝原因" rules={[{
+                    <Form.Item name="description" label="拒绝原因" rules={[{
                         required:true, 
                         message:'请填写拒绝原因'
                     },
@@ -86,7 +85,7 @@ export default function SampleDrawDetail(): React.ReactNode {
             </Modal>
             <DetailContent operation={[
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
-                    await RequestUtil.post(`/tower-science/issue/verify/id=${params.id}`).then(()=>{
+                    await RequestUtil.post(`/tower-science/issue/verify`,{id:params.id}).then(()=>{
                         message.success('修改成功！')
                     }).then(()=>{
                         history.goBack()
@@ -109,13 +108,13 @@ export default function SampleDrawDetail(): React.ReactNode {
                     bordered
                     column={2}
                 >
-                    <Descriptions.Item label="小样图名称">{detailData?.problemFieldName}</Descriptions.Item>
+                    <Descriptions.Item label="小样图名称">{detailData?.smallSample}</Descriptions.Item>
                     <Descriptions.Item label="备注">{detailData?.description}</Descriptions.Item>
                     <Descriptions.Item label="校核前图片">
-                        <Image src="https://gw.alipayobjects.com/zos/antfincdn/LlvErxo8H9/photo-1503185912284-5271ff81b9a8.webp" height={100}/>
+                        <Image src={detailData?.currentFile.filePath} height={100}/>
                     </Descriptions.Item>
                     <Descriptions.Item label="校核后图片">
-                        <Image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" height={100}/>
+                        <Image src={detailData?.newFile.filePath} height={100}/>
                     </Descriptions.Item>
                 </Descriptions>
                 <DetailTitle title="操作信息" />

@@ -74,14 +74,13 @@ export default function OtherDetail(): React.ReactNode {
     const handleModalOk = async () => {
         try {
             const refuseData = await form.validateFields();
-            // refuseData.drawTaskId = params.id;
-            await RequestUtil.post(`/tower-science/issue/refuse/${params.id}`).then(()=>{
+            refuseData.id = params.id;
+            await RequestUtil.post(`/tower-science/issue/refuse`,refuseData).then(()=>{
                 message.success('提交成功！')
                 setVisible(false)
             }).then(()=>{
                 history.goBack()
             })
-        
         } catch (error) {
             console.log(error)
         }
@@ -98,7 +97,7 @@ export default function OtherDetail(): React.ReactNode {
                 cancelText='关闭'
             >
                 <Form form={form} >
-                    <Form.Item name="reason" label="拒绝原因" rules={[{
+                    <Form.Item name="description" label="拒绝原因" rules={[{
                         required:true, 
                         message:'请填写拒绝原因'
                     },

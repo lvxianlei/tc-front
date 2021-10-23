@@ -58,8 +58,8 @@ export default function AssemblyWeldDetail(): React.ReactNode {
     const handleModalOk = async () => {
         try {
             const refuseData = await form.validateFields();
-            // refuseData.drawTaskId = params.id;
-            await RequestUtil.post(`/tower-science/issue/refuse/${params.id}`).then(()=>{
+            refuseData.id = params.id;
+            await RequestUtil.post(`/tower-science/issue/refuse`,refuseData).then(()=>{
                 message.success('提交成功！')
                 setVisible(false)
             }).then(()=>{
@@ -82,7 +82,7 @@ export default function AssemblyWeldDetail(): React.ReactNode {
                 cancelText='关闭'
             >
                 <Form form={form} >
-                    <Form.Item name="reason" label="拒绝原因" rules={[{
+                    <Form.Item name="description" label="拒绝原因" rules={[{
                         required:true, 
                         message:'请填写拒绝原因'
                     },
@@ -96,7 +96,7 @@ export default function AssemblyWeldDetail(): React.ReactNode {
             </Modal>
             <DetailContent operation={[
                <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
-                    await RequestUtil.post(`/tower-science/issue/verify?id=${params.id}`).then(()=>{
+                    await RequestUtil.post(`/tower-science/issue/verify`,{id:params.id}).then(()=>{
                         message.success('修改成功！')
                     }).then(()=>{
                         history.goBack()
