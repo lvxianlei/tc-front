@@ -44,7 +44,7 @@ export default function QuestionMngt(): React.ReactNode {
                         label: "已删除"
                     },
                   ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
+                return <>{value&&(renderEnum.find((item: any) => item.value === value).label)}</>
             }
         },
         {
@@ -64,30 +64,30 @@ export default function QuestionMngt(): React.ReactNode {
             title: '问题单类型',
             width: 200,
             dataIndex: 'type',
-            render: (value: number, record: object): React.ReactNode => {
+            render: (value: string, record: object): React.ReactNode => {
                 const renderEnum: any = [
                     {
-                        value: 1,
+                        value: 'WTD-TL',
                         label: "提料"
                     },
                     {
-                        value: 2,
+                        value: 'WTD-FY',
                         label: "放样"
                     },
                     {
-                        value: 3,
+                        value: 'WTD-LS',
                         label: "螺栓"
                     },
                     {
-                        value: 4,
+                        value: 'WTD-ZH',
                         label: "组焊"
                     },
                     {
-                        value: 5,
+                        value: 'WTD-YT',
                         label: "小样图"
                     },
                   ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
+                return <>{value&&(renderEnum.find((item: any) => item.value === value).label)}</>
             }
         },
         {
@@ -106,22 +106,28 @@ export default function QuestionMngt(): React.ReactNode {
             key: 'operation',
             title: '操作',
             fixed: 'right' as FixedType,
-            width: 250,
+            width: 80,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     {
-                        record.type<4? <Link to={`/question/questionMngt/otherDetail/${record.id}/${record.type}`}>查看详情</Link>:
-                        record.type<5? <Link to={`/question/questionMngt/assemblyWeldDetail/${record.id}`}>查看详情</Link>:
-                        <Link to={`/question/questionMngt/sampleDrawDetail/${record.id}`}>查看详情</Link>
+                        record.type==='WTD-TL'||record.type==='WTD-FY'||record.type==='WTD-LS'? <Link to={`/question/questionMngt/otherDetail/${record.id}/${record.type}`}>查看详情</Link>:
+                        record.type==='WTD-ZH'? <Link to={`/question/questionMngt/assemblyWeldDetail/${record.id}`}>查看详情</Link>:
+                        <Link to={`/question/questionMngt/sampleDrawDetail/${record.keyId}`}>查看详情</Link>
                     }
                 </Space>
             )
         }
     ];
-    const onFilterSubmit=(value: any)=>{
+    const onFilterSubmit = (value: any) => {
+        if (value.updateTime) {
+            const formatDate = value.updateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.updateTimeStart = formatDate[0]+ ' 00:00:00';
+            value.updateTimeEnd = formatDate[1]+ ' 23:59:59';
+            delete value.updateTime
+        }
         setFilterValue(value)
-        return value;
+        return value
     }
     return <>
         <Page
@@ -132,14 +138,9 @@ export default function QuestionMngt(): React.ReactNode {
             filterValue={filterValue}
             searchFormItems={[
                 {
-                    name: 'updateTimeStart',
+                    name: 'updateTime',
                     label:'状态时间',
-                    children: <DatePicker/>
-                },
-                {
-                    name: 'updateTimeEnd',
-                    label:'',
-                    children: <DatePicker/>
+                    children:  <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
                     name: 'status',
@@ -157,11 +158,11 @@ export default function QuestionMngt(): React.ReactNode {
                     label: '问题单类型',
                     children:  <Select>
                                     <Select.Option value={''} key ={''}>全部</Select.Option>
-                                    <Select.Option value={1} key={1}>提料</Select.Option>
-                                    <Select.Option value={2} key={2}>放样</Select.Option>
-                                    <Select.Option value={3} key={3}>螺栓</Select.Option>
-                                    <Select.Option value={4} key={4}>组焊</Select.Option>
-                                    <Select.Option value={5} key={5}>小样图</Select.Option>
+                                    <Select.Option value={'WTD-TL'} key={'WTD-TL'}>提料</Select.Option>
+                                    <Select.Option value={'WTD-FY'} key={'WTD-FY'}>放样</Select.Option>
+                                    <Select.Option value={'WTD-LS'} key={'WTD-LS'}>螺栓</Select.Option>
+                                    <Select.Option value={'WTD-ZH'} key={'WTD-ZH'}>组焊</Select.Option>
+                                    <Select.Option value={'WTD-YT'} key={'WTD-YT'}>小样图</Select.Option>
                                 </Select>
                 },
                 {

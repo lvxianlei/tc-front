@@ -11,6 +11,7 @@ import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 export interface TowerLoftingAssignProps {}
 export interface ITowerLoftingAssignRouteProps extends RouteComponentProps<TowerLoftingAssignProps>, WithTranslation {
     readonly id: number | string;
+    readonly update: () => void;
 }
 
 export interface TowerLoftingAssignState {
@@ -28,7 +29,7 @@ export interface TowerLoftingAssignState {
 
 interface IAppointed {
     readonly productCategoryName?: string;
-    readonly productCategory?: string;
+    readonly productCategoryId?: string;
     readonly pattern?: string;
     readonly sectionNum?: number;
 }
@@ -46,7 +47,7 @@ interface IAppointedList {
     readonly name?: string;
     readonly pattern?: string;
     readonly productCategoryName?: string;
-    readonly productCategory?: string;
+    readonly productCategoryId?: string;
     readonly index?: number;
 }
 class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, TowerLoftingAssignState> {
@@ -105,20 +106,22 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                 values = values.map((item: Record<string, any>) => {
                     return {
                         ...item,
-                        plannedDeliveryTime: item?.plannedDeliveryTime && item?.plannedDeliveryTime.format('YYYY-MM-DD'),
-                        productCategory: this.state.appointed?.productCategory,
+                        plannedDeliveryTime: item?.plannedDeliveryTime && item?.plannedDeliveryTime.format('YYYY-MM-DD') + ' 00:00:00',
+                        productCategoryId: this.state.appointed?.productCategoryId,
                         productCategoryName: this.state.appointed?.productCategoryName,
                         pattern: this.state.appointed?.pattern
                     }
                 })
-                RequestUtil.post(`/tower-science/productSegment/submit`, { ...values })
+                RequestUtil.post(`/tower-science/productSegment/submit`, [ ...values ])
                 this.getForm()?.resetFields();
                 this.getForm()?.setFieldsValue({
                     appointedList: []
                 });
                 this.setState({  
-                    appointedList: []
+                    appointedList: [],
+                    visible: false
                 })
+                this.props.update()
                 return Promise.resolve()
             })
         }
@@ -221,7 +224,8 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
      */
     public onDepartmentChange = async (value: Record<string, any>, index: number, title: string) => {
         const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${ value }&size=1000`);
-        if(title==='提料'){
+        console.log(value)
+        if(title==='校对'){
             const user = this.state.checkUser||[];
             user[index] = userData.records;
             this.setState({
@@ -258,6 +262,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
         }
         return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id }/>;
     });
+    
      /**
      * @description Renders AbstractDetailComponent
      * @returns render 
@@ -272,7 +277,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                 footer={ 
                     <Space direction="horizontal" className={ styles.bottomBtn }>
                         <Button type="ghost" onClick={ () => this.modalCancel() }>关闭</Button>
-                        <Button type="ghost" onClick={ () => this.onSubmit() }>提交</Button>
+                        <Button type="primary" onClick={ () => this.onSubmit() } ghost>提交</Button>
                     </Space>
                 } 
                 onCancel={ () => this.modalCancel() }
@@ -314,8 +319,8 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                                     required: true,
                                                     message: '请选择部门'
                                                 }]} style={ { width: '50%', display: 'inline-block' } }>
-                                                <TreeSelect placeholder="请选择" style={{width:'100px'}} onChange={ (value: any) => { this.onDepartmentChange(value,index,'提料') } } className={ styles.width200 }>
-                                                    {this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
+                                                <TreeSelect placeholder="请选择" style={{width:'100px'}} onChange={ (value: any) => { this.onDepartmentChange(value,index,'放样') } } className={ styles.width200 }>
+                                                    { this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
                                                 </TreeSelect>
                                             </Form.Item>
                                             <Form.Item name={["appointedList", index, "loftingUser"]}
@@ -337,7 +342,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                                     message: '请选择部门'
                                                 }]} style={ { width: '50%', display: 'inline-block' } }>
                                                 <TreeSelect placeholder="请选择" style={{width:'100px'}} onChange={ (value: any) => { this.onDepartmentChange(value,index,'校对') } } className={ styles.width200 }>
-                                                    {this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
+                                                    { this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
                                                 </TreeSelect>
                                             </Form.Item>
                                             <Form.Item name={["appointedList", index, "checkUser"]}

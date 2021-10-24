@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { Space, Input, DatePicker, Select } from 'antd';
+import { Space, Input, DatePicker, Select, Button } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -108,9 +108,13 @@ const columns = [
         width: 300,
         render: (_: undefined, record: Record<string, any>): React.ReactNode => (
             <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                <Link to={ `/workMngt/setOutList/setOutInformation/${ record.id }` }>放样信息</Link>
-                <Link to={ `/workMngt/setOutList/towerInformation/${ record.id }` }>塔型信息</Link>
-                <Link to={ `/workMngt/setOutList/poleInformation/${ record.id }` }>杆塔配段</Link>
+                <Link to={ `/workMngt/setOutList/setOutInformation/${ record.loftingTask }` }>放样信息</Link>
+                {
+                    record.status === 1 || record.status === 2 ? <Link to={ `/workMngt/setOutList/towerInformation/${ record.id }` }>塔型信息</Link> : <Button type="link" disabled>塔型信息</Button>
+                }
+                {
+                    record.status === 3 ? <Link to={ `/workMngt/setOutList/poleInformation/${ record.id }` }>杆塔配段</Link> : <Button type="link" disabled>杆塔配段</Button>
+                }
                 <Deliverables id={ record.id } name={ record.name }/>
                 <Link to={ `` }>图纸上传</Link>
             </Space>
@@ -135,18 +139,18 @@ export default function SetOutList(): React.ReactNode {
                 label: '塔型状态',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
                     <Select.Option value="" key="6">全部</Select.Option>
-                    <Select.Option value="0" key="0">待指派</Select.Option>
-                    <Select.Option value="1" key="1">放样中</Select.Option>
-                    <Select.Option value="2" key="2">组焊中</Select.Option>
-                    <Select.Option value="3" key="3">配段中</Select.Option>
-                    <Select.Option value="4" key="4">已完成</Select.Option>
-                    <Select.Option value="5" key="5">已提交</Select.Option>
+                    <Select.Option value="1" key="1">待指派</Select.Option>
+                    <Select.Option value="2" key="2">放样中</Select.Option>
+                    <Select.Option value="3" key="3">组焊中</Select.Option>
+                    <Select.Option value="4" key="4">配段中</Select.Option>
+                    <Select.Option value="5" key="5">已完成</Select.Option>
+                    <Select.Option value="6" key="6">已提交</Select.Option>
                 </Select>
             },
             {
                 name: 'plannedDeliveryTime',
                 label: '计划交付时间',
-                children: <DatePicker />
+                children: <DatePicker.RangePicker />
             },
             {
                 name: 'pattern',
@@ -167,13 +171,13 @@ export default function SetOutList(): React.ReactNode {
         onFilterSubmit = { (values: Record<string, any>) => {
             if(values.updateStatusTime) {
                 const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
-                values.updateStatusTimeStart = formatDate[0];
-                values.updateStatusTimeEnd = formatDate[1];
+                values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
+                values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             }
             if(values.plannedDeliveryTime) {
                 const formatDate = values.plannedDeliveryTime.map((item: any) => item.format("YYYY-MM-DD"));
-                values.plannedDeliveryTimeStart = formatDate[0];
-                values.plannedDeliveryTimeEnd = formatDate[1];
+                values.plannedDeliveryTimeStart = formatDate[0] + ' 00:00:00';
+                values.plannedDeliveryTimeEnd = formatDate[1] + ' 23:59:59';
             }
             return values;
         } }

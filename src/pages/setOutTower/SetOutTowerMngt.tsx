@@ -47,7 +47,7 @@ export default function SetOutTowerMngt(): React.ReactNode {
                     label: "套用"
                   },
                 ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
+                return <>{value&&renderEnum.find((item: any) => item.value === value).label}</>
             }
         },
         {
@@ -157,7 +157,7 @@ export default function SetOutTowerMngt(): React.ReactNode {
             ]} dataSource={[]} />
         </Modal>
         <Page
-            path="/tower-market/bidInfo"
+            path="/tower-science/productCategory/lofting/page"
             columns={columns}
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
@@ -176,7 +176,7 @@ export default function SetOutTowerMngt(): React.ReactNode {
                 {
                     name: 'createTime',
                     label: '创建时间',
-                    children: <DatePicker />
+                    children:  <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
                     name: 'fuzzyMsg',

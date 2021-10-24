@@ -76,7 +76,28 @@ export default function PickTowerMessage(): React.ReactNode {
             key: 'status',
             title: '提料状态',
             width: 100,
-            dataIndex: 'status'
+            dataIndex: 'status',
+            render: (value: number, record: object): React.ReactNode => {
+                const renderEnum: any = [
+                    {
+                        value: 1,
+                        label: "提料中"
+                    },
+                    {
+                        value: 2,
+                        label: "校核中"
+                    },
+                    {
+                        value: 3,
+                        label: "已完成"
+                    },
+                    {
+                        value: 4,
+                        label: "已提交"
+                    }
+                ]
+                     return <>{value&&renderEnum.find((item: any) => item.value === value).label}</>
+            }
         },
         {
             key: 'updateStatusTime',
@@ -92,9 +113,9 @@ export default function PickTowerMessage(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={`/workMngt/pickList/pickTowerMessage/${params.id}/pick/${record.id}`}>提料</Link>
-                    <Link to={`/workMngt/pickList/pickTowerMessage/${params.id}/check/${record.id}`}>校核</Link>
-                    <Link to={`/workMngt/pickList/pickTowerMessage/${params.id}/detail/${record.id}`}>明细</Link>
+                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/pick/${record.id}`)}} type='link' disabled={record.status!==1}>提料</Button>
+                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/check/${record.id}/${record.materialLeader}`)}} type='link' disabled={record.status!==2}>校核</Button>
+                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/detail/${record.id}`)}} type='link' disabled={record.status<3}>明细</Button>
                 </Space>
             )
         }
@@ -109,7 +130,9 @@ export default function PickTowerMessage(): React.ReactNode {
         setFilterValue(value)
         return value
     }
-
+    const onRefresh=()=>{
+        setRefresh(!refresh);
+    }
     return (
         <Page
             // path="/tower-market/bidInfo"
@@ -121,7 +144,7 @@ export default function PickTowerMessage(): React.ReactNode {
             requestData={{ productCategory: params.id }}
             extraOperation={
                 <Space>
-                <Button type="primary">导出</Button>
+                <Button type="primary" ghost>导出</Button>
                 <Popconfirm
                     title="确认提交?"
                     onConfirm={ async () => {
@@ -132,10 +155,10 @@ export default function PickTowerMessage(): React.ReactNode {
                     okText="确认"
                     cancelText="取消"
                 >   
-                    <Button type="primary">提交</Button>
+                    <Button type="primary" ghost>提交</Button>
                 </Popconfirm>
-                <TowerPickAssign id={ params.id }/>
-                <Button type="primary" onClick={()=>history.push('/workMngt/pickList')}>返回上一级</Button>
+                <TowerPickAssign id={ params.id } onRefresh={onRefresh}/>
+                <Button type="primary" onClick={()=>history.push('/workMngt/pickList')} ghost>返回上一级</Button>
                 </Space>
             }
             searchFormItems={[
@@ -146,12 +169,13 @@ export default function PickTowerMessage(): React.ReactNode {
                 },
                 {
                     name: 'status',
-                    label: '放样状态',
+                    label: '提料状态',
                     children: <Select style={{width:'100px'}}>
                         <Select.Option value={''} key ={''}>全部</Select.Option>
-                        <Select.Option value={1} key={1}>新放</Select.Option>
-                        <Select.Option value={2} key={2}>重新出卡</Select.Option>
-                        <Select.Option value={3} key={3}>套用</Select.Option>
+                        <Select.Option value={1} key={1}>提料中</Select.Option>
+                        <Select.Option value={2} key={2}>校核中</Select.Option>
+                        <Select.Option value={3} key={3}>已完成</Select.Option>
+                        <Select.Option value={4} key={4}>已提交</Select.Option>
                     </Select>
                 },
                 {

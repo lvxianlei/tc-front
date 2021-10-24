@@ -111,7 +111,7 @@ export default function AssemblyWeldingInformation(): React.ReactNode {
     const [ pictureUrl, setPictureUrl ] = useState('');
     const handlePictureModalCancel = () => { setPictureVisible(false) }
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-science/boltRecord/${ params.id }`)
+        const data = await RequestUtil.get(`/tower-science/boltRecord/detail/${ params.id }`)
         resole(data)
     }), {})
     const detailData: any = data

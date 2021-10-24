@@ -91,10 +91,11 @@ export default function LoftingTowerApplication(): React.ReactNode {
             key:'operation', 
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Button type='link' onClick={ () => {
                 RequestUtil.post(`/tower-science/productStructure/loftingReuse`, {
-                    productSegmentId: record.id,
-                    passivityProductSegment: params.id
+                    productSegmentId: params.loftId,
+                    passivityProductSegment: record.id
                 }).then(res => {
-                    message.success('套用成功'); 
+                    message.success('套用成功');
+                    history.goBack();
                 });
             } }>选择套用</Button>)
         }
@@ -103,7 +104,7 @@ export default function LoftingTowerApplication(): React.ReactNode {
     const [ form ] = useForm();
     const history = useHistory();
     const [ paragraphData, setParagraphData ] = useState([] as undefined | any);
-    const params = useParams<{ id: string }>();
+    const params = useParams<{ id: string, loftId: string }>();
     const page = {
         current: 1,
         pageSize: 10

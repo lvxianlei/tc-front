@@ -85,25 +85,25 @@ export default function SampleDrawCheck(): React.ReactNode {
         {
             key: 'segmentName',
             title: '段名',
-            width: 50,
+            width: 100,
             dataIndex: 'segmentName'
         },
         {
             key: 'code',
             title: '构建编号',
-            width: 100,
+            width: 200,
             dataIndex: 'code'
         },
         {
             key: 'materialName',
             title: '材料名称',
-            width: 100,
+            width: 200,
             dataIndex: 'materialName'
         },
         {
             key: 'smallSample',
             title: '小样图名称',
-            width: 100,
+            width: 200,
             dataIndex: 'smallSample'
         },
         {
@@ -116,19 +116,22 @@ export default function SampleDrawCheck(): React.ReactNode {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
-            width: 50,
-            // fixed: 'right' as FixedType,
+            width: 100,
+            fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    {/* <Button type='link' onClick={async () => {
-                        // await RequestUtil.get(`/tower-science/smallSample/issueDetail?boltId=${record.id}`)
-                        
-                    }}>报错</Button> */}
                     <Button type='link' onClick={async () => {
                         const url:any = await RequestUtil.get(`/tower-science/smallSample/sampleView/${record.id}`);
                         setUrl(url?.filePath);
                         setVisible(true)
                     }}>查看</Button>
+                    <Button type='link' onClick={async () => {
+                        setQuestionStatus(record.issueStatus);
+                        const data:any = await RequestUtil.get(`/tower-science/smallSample/issueDetail?keyId=${record.id}`)
+                        setQuestionDetail(data);
+                        setAttachInfo(data.newFile)
+                        setErrorVisible(true);
+                    }}>{record.issueStatus!==1?'提交问题单':'查看问题单'}</Button>
                 </Space>
             )
         }
@@ -150,7 +153,7 @@ export default function SampleDrawCheck(): React.ReactNode {
         setAttachInfo({})
     }
     return (
-        <>
+        <div className={styles.check}>
             <Modal visible={visible} title="图片" footer={false}  onCancel={handleModalCancel} width={800}>
                 <Image 
                     src={url}
@@ -249,14 +252,14 @@ export default function SampleDrawCheck(): React.ReactNode {
                 }
                 tableProps={{
                     onRow:(record:any) => ({
-                        onDoubleClick: async () => {
-                            setQuestionStatus(record.issueSmallSampleVO.status);
-                            const data:any = await RequestUtil.get(`/tower-science/smallSample/issueDetail?keyId=${record.id}`)
-                            setQuestionDetail(data);
-                            setAttachInfo(data.newFile)
-                            setErrorVisible(true);
-                        },
-                        className: record.issueSmallSampleVO.status===1? styles.red: record.issueSmallSampleVO.status===2? styles.green:record.issueSmallSampleVO.status===3?styles.yellow :styles.tableRow
+                        // onDoubleClick: async () => {
+                        //     setQuestionStatus(record.issueStatus);
+                        //     const data:any = await RequestUtil.get(`/tower-science/smallSample/issueDetail?keyId=${record.id}`)
+                        //     setQuestionDetail(data);
+                        //     setAttachInfo(data.newFile)
+                        //     setErrorVisible(true);
+                        // },
+                        className: record.issueStatus===1? styles.red: record.issueStatus===2? styles.green:record.issueStatus===3?styles.yellow :styles.tableRow
                     })
                 }}
                 searchFormItems={[
@@ -272,6 +275,6 @@ export default function SampleDrawCheck(): React.ReactNode {
                     },
                 ]}
             />
-        </>
+        </div>
     )
 }

@@ -1,9 +1,10 @@
 import React from 'react'
-import { Button, Spin, Space } from 'antd';
+import { Button, Spin, Space, TablePaginationConfig, Table } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable } from '../../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../../utils/RequestUtil';
+import { useState } from 'react';
 
 const towerColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
@@ -25,20 +26,55 @@ const towerColumns = [
 ]
 
 export default function PickTowerDetail(): React.ReactNode {
-    const history = useHistory()
-    const params = useParams<{ productSegmentId: string }>()
+    const history = useHistory();
+    const params = useParams<{ productSegmentId: string }>();
+    const [tableDataSource,setTableDataSource] = useState([]);
+    const [tablePagination,setTablePagination] =useState({
+        current: 1,
+        pageSize: 20,
+        total: 0,
+        showSizeChanger: false
+    });
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/${params.productSegmentId}/check`)
+        const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/check`,{productSegmentId:params.productSegmentId,...tablePagination})
+        setTableDataSource(data.records);
+        setTablePagination({
+            ...tablePagination,
+            current: data.current,
+            pageSize: data.size,
+            total: data.total
+        })
         resole(data)
-    }), {})
-    const detailData: any = data
+    }), {});
+    
+    const onTableChange=async (pagination: TablePaginationConfig)=> {
+        console.log(pagination)
+        const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/check`,{productSegmentId:params.productSegmentId,...pagination})
+        setTableDataSource(data.records);
+        setTablePagination({
+            ...tablePagination,
+            current: data.current,
+            pageSize: data.size,
+            total: data.total
+        })
+    }
     return <>
         <Spin spinning={loading}>
             <DetailContent operation={[
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
-                <Button type='primary' onClick={()=>{window.open()}}>导出</Button>
-                <CommonTable dataSource={detailData?.records} columns={towerColumns}/>
+                {/* <Button type='primary' onClick={()=>{window.open()}}>导出</Button> */}
+                <Table 
+                    dataSource={tableDataSource} 
+                    columns={towerColumns}
+                    
+                    pagination={{
+                        ...tablePagination,
+                        showSizeChanger: true,
+                        showTotal: (total: any) => `共${total} 条记录`,
+                    }}
+                    onChange={onTableChange}
+                />
             </DetailContent>
         </Spin>
     </>

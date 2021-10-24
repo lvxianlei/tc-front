@@ -12,6 +12,7 @@ import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { useState } from 'react';
 import styles from './AssemblyWelding.module.less';
+import { FixedType } from 'rc-table/lib/interface';
 
 interface IResponseData {
     readonly id: number;
@@ -53,6 +54,23 @@ export default function AssemblyWeldingCheck(): React.ReactNode {
             title: '电焊米数（mm）', 
             dataIndex: 'electricWeldingMeters', 
             key: 'electricWeldingMeters' 
+        }, 
+        { 
+            title: '操作', 
+            dataIndex: 'operation', 
+            key:'operation', 
+            fixed: 'right' as FixedType,
+            render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                <Space direction="horizontal" size="small" className={ styles.operationBtn }>
+                    <Button type="link" onClick={ () => { 
+                        if(record.verificationStatus === 1) {
+                            history.push(`/workMngt/assemblyWeldingList/assemblyWeldingCheck/${ params.id }/${ params.productCategoryId }/questionnairedetail/${ record.id }`)
+                        } else {
+                            history.push(`/workMngt/assemblyWeldingList/assemblyWeldingCheck/${ params.id }/${ params.productCategoryId }/questionnaire/${ record.id }`)
+                        }
+                     } }>{ record.verificationStatus === 1 ? '查看问题单' : '提交问题单' }</Button>
+                </Space>
+            )
         }
     ]
 
@@ -139,13 +157,13 @@ export default function AssemblyWeldingCheck(): React.ReactNode {
                             const resData: [] = await RequestUtil.get(`/tower-science/welding/getStructureById`, { segmentId: record.id });
                             setParagraphData([...resData]);
                         },
-                        onDoubleClick: () => {
-                            if(record.verificationStatus === 1) {
-                                history.push(`/workMngt/assemblyWeldingList/assemblyWeldingCheck/${ params.id }/${ params.productCategoryId }/questionnairedetail/${ record.id }`)
-                            } else {
-                                history.push(`/workMngt/assemblyWeldingList/assemblyWeldingCheck/${ params.id }/${ params.productCategoryId }/questionnaire/${ record.id }`)
-                            }
-                        },
+                        // onDoubleClick: () => {
+                        //     if(record.verificationStatus === 1) {
+                        //         history.push(`/workMngt/assemblyWeldingList/assemblyWeldingCheck/${ params.id }/${ params.productCategoryId }/questionnairedetail/${ record.id }`)
+                        //     } else {
+                        //         history.push(`/workMngt/assemblyWeldingList/assemblyWeldingCheck/${ params.id }/${ params.productCategoryId }/questionnaire/${ record.id }`)
+                        //     }
+                        // },
                         className: [record.verificationStatus === 1 ? styles.red : record.verificationStatus === 2 ? styles.green : record.verificationStatus === 3 ? styles.yellow : null, styles.tableRow]
                     })
                 }

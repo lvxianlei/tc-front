@@ -103,26 +103,26 @@ export default function ConfirmTaskDetail(): React.ReactNode {
                 </>,
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
-            <Modal 
-                title='拒绝'
-                visible={visible} 
-                onCancel={handleModalCancel}
-                onOk={handleModalOk}
-                okText='提交'
-                cancelText='关闭'
-            >
-                <Form form={form} >
-                    <Form.Item name="reason" label="拒绝原因" rules={[{
-                        required:true, 
-                        message:'请填写拒绝原因'
-                    },
-                    {
-                        pattern: /^[^\s]*$/,
-                        message: '禁止输入空格',
-                    }]}>
-                        <TextArea showCount maxLength={500}/>
-                    </Form.Item>
-                </Form>
+                <Modal 
+                    title='拒绝'
+                    visible={visible} 
+                    onCancel={handleModalCancel}
+                    onOk={handleModalOk}
+                    okText='提交'
+                    cancelText='关闭'
+                >
+                    <Form form={form} >
+                        <Form.Item name="reason" label="拒绝原因" rules={[{
+                            required:true, 
+                            message:'请填写拒绝原因'
+                        },
+                        {
+                            pattern: /^[^\s]*$/,
+                            message: '禁止输入空格',
+                        }]}>
+                            <TextArea showCount maxLength={500}/>
+                        </Form.Item>
+                    </Form>
                 </Modal>
                 <DetailTitle title="基本信息" />
                 <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>

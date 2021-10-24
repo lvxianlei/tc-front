@@ -108,7 +108,7 @@ class UploadModal extends React.Component<IUploadModalRouteProps, UploadModalSta
                             <Upload 
                                 action={ () => {
                                     const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                                    return baseUrl + this.props.uploadUrl
+                                    return baseUrl + '/sinzetech-resource/oss/put-file'
                                 } } 
                                 headers={
                                     {
@@ -118,13 +118,26 @@ class UploadModal extends React.Component<IUploadModalRouteProps, UploadModalSta
                                     }
                                 }
                                 showUploadList={ false }
-                                data={ this.props.requestData }
                                 onChange={ (info) => {
                                     if(info.file.response && !info.file.response?.success) {
                                         message.warning(info.file.response?.msg)
                                     } 
                                     if(info.file.response && info.file.response?.success) {
-                                        this.getDetail();
+                                        const dataInfo = info.file.response.data
+                                        const fileInfo = dataInfo.name.split(".")
+                                        RequestUtil.post(this.props.uploadUrl, {
+                                            attachInfoDTOList: [{
+                                                filePath: dataInfo.name,
+                                                fileSize: dataInfo.size,
+                                                fileUploadTime: dataInfo.fileUploadTime,
+                                                name: dataInfo.originalName,
+                                                userName: dataInfo.userName,
+                                                fileSuffix: fileInfo[fileInfo.length - 1]
+                                            }],
+                                            ...this.props.requestData
+                                        }).then(res => {
+                                            this.getDetail();
+                                        })
                                     }
                                 }}> <Button type='primary' ghost>添加</Button>
                             </Upload>
@@ -151,9 +164,10 @@ class UploadModal extends React.Component<IUploadModalRouteProps, UploadModalSta
                         ) }
                     ]}
                         dataSource={ this.state.data?.attachInfoVOList }
+                        pagination={ false }
                     />
                     <p className={ styles.topPadding }>操作信息</p>
-                    <CommonTable columns={ tableColumns } dataSource={ this.state.data?.productSegmentRecordVOList } />
+                    <CommonTable columns={ tableColumns } dataSource={ this.state.data?.productSegmentRecordVOList }  pagination={ false } />
                 </DetailContent>
             </Modal>
         </>
