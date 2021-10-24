@@ -1,10 +1,9 @@
 import React, { useState, useRef, useImperativeHandle, forwardRef } from "react"
 import { Button, Form, message, Spin, Modal, Select, Input } from "antd"
 import { useHistory, useParams } from "react-router-dom"
-import { BaseInfo, DetailContent, DetailTitle } from '../../common'
+import { BaseInfo, DetailContent, DetailTitle, EditTable } from '../../common'
 import { costBase } from '../managementDetailData.json'
 import type { TabTypes } from "../ManagementDetail"
-import { EditableProTable, } from '@ant-design/pro-table'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
@@ -14,33 +13,60 @@ export type SelectType = "selectA" | "selectB" | "selectC"
 
 const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref) => {
     const [formRef] = Form.useForm()
+    const yclHead: any[] = data.head.filter((headItem: any) => {
+        if (headItem.title.includes("单价")) {
+            const cl = headItem.title.replace("单价", "")
+            const bl = data.head.find((hI: any) => hI.title === `${cl}比例`)
+            return !!bl
+        }
+        if (headItem.title.includes("比例")) {
+            const cl = headItem.title.replace("比例", "")
+            const bl = data.head.find((hI: any) => hI.title === `${cl}单价`)
+            return !!bl
+        }
+        return false
+    })
+    const ycl: { dj: string, bl: string }[] = []
+    yclHead.forEach((headItem: any) => {
+        if (headItem.title.includes("单价")) {
+            const cl = headItem.title.replace("单价", "")
+            const bl = data.head.find((hI: any) => hI.title === `${cl}比例`)
+            !!bl && ycl.push({ dj: headItem.dataIndex, bl: bl.dataIndex })
+        }
+    })
     useImperativeHandle(ref, () => ({ formRef, index }), [])
-    return <EditableProTable
-        rowKey="id"
-        maxLength={5}
-        recordCreatorProps={false}
-        form={{
-            wrapperCol: { span: 24 },
-            labelCol: { span: 24 }
-        }}
-        editable={{
-            form: formRef,
-            editableKeys: [0]
-        }}
-        scroll={{ x: 'max-content' }}
-        size="small"
-        columns={data.head.map((cItem: any) => {
-            return ({
-                ...cItem,
-                valueType: cItem.type,
-                formItemProps: {
-                    rules: cItem.rules
-                },
-                editable: !cItem.disabled,
-                valueEnum: cItem.enum && new Map(cItem.enum.map((enumItem: any) => [enumItem.value, { text: enumItem.label }]))
-            })
-        })}
-        value={data.data}
+    
+    // 公式：
+    // 原材料均价=相同材料规格*对应的比例之合
+    // 废料损耗=钢材消耗定额 * （原材料均价 - 废料均价）
+    // 不含螺栓价格=原材料均价+废料损耗+镀锌成本+加工费+公司税费
+    // 螺栓成本均价 = （含螺栓单价 - 不含螺栓价格） *  螺栓占比
+    // 核算价格 = 螺栓成本均价+ 不含螺栓价格 + 利润 + 地面交货 + 物流费用
+
+    const handleChange = (fields: any, allfields: any) => {
+        const changeValue = fields.submit[0]
+        const allValue = allfields.submit[0]
+        const fljj: number = parseFloat(allfields.fljj || 0)
+        const gcxh: number = parseFloat(allfields.fljj || 0)
+        const dxcb: number = parseFloat(allfields.dxcb || 0)
+        const jgf: number = parseFloat(allfields.jgf || 0)
+        const allRatio: string[] = yclHead.map((ycl: any) => ycl.dataIndex)
+        if (allRatio.includes(Object.keys(changeValue)[0])) {
+            const cc: number = ycl.reduce((result: number, item: any) => {
+                const aa: string = (parseFloat(allValue[item.dj]) * parseFloat(allValue[item.bl])).toFixed(2)
+                return result + parseFloat(aa)
+            }, 0)
+            const flsh: number = parseFloat((gcxh * (cc - fljj)).toFixed(2))
+            const bhls: number = cc + flsh + dxcb + jgf
+
+        }
+    }
+    return <EditTable
+        form={formRef}
+        onChange={handleChange}
+        haveOpration={false}
+        columns={data.head || []}
+        dataSource={data.data || []}
     />
 })
 
@@ -131,7 +157,7 @@ export default function CostEdit() {
                 ...baseInfoData,
                 id: data?.askInfoVo.id,
                 askProductDtos: askProductDtoDatas.map((item: any, index: number) => ({
-                    params: Object.keys(item).map((itemKey: any) => `${itemKey}-${item[itemKey]}`).join(","),
+                    params: Object.keys(item.submit[0]).map((itemKey: any) => `${itemKey}-${item.submit[0][itemKey]}`).join(","),
                     productName: askProductDtos[index].productName,
                     voltage: askProductDtos[index].voltage
                 }))
@@ -147,7 +173,11 @@ export default function CostEdit() {
     }
 
     const deleteProduct = (item: any) => {
-        setAskProductDtos(askProductDtos.filter((askItem: any) => !(askItem.productName === item.productName && askItem.voltage === item.voltage)))
+        Modal.confirm({
+            title: "删除",
+            content: "是否确认删除该产品？",
+            onOk: () => setAskProductDtos(askProductDtos.filter((askItem: any) => !(askItem.productName === item.productName && askItem.voltage === item.voltage)))
+        })
     }
 
     return <>
