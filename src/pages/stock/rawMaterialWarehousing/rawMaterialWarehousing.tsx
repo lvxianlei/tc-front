@@ -149,7 +149,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     }
     return (
         <Page
-            path="/tower-market/projectInfo"
+            path="/tower-science/productCategory/lofting/page"
             columns={columns}
             filterValue={filterValue}
             extraOperation={<Link to="/project/management/new"><Button type="primary">导出</Button></Link>}
