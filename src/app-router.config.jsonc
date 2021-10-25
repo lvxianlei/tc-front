@@ -623,6 +623,20 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 驾驶舱-原材料看板
+      "name": "原材料看板",
+      "path": "/stock/viewRawMaterial",
+      "module": "./pages/stock/viewRawMaterial/viewRawMaterial",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 驾驶舱-收货单看板
+      "name": "原材料看板",
+      "path": "/stock/viewReceivingNote",
+      "module": "./pages/stock/viewReceivingNote/viewReceivingNote",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 库存管理-原材料库存
       "name": "原材料库存",
       "path": "/stock/rawMaterialStock",
