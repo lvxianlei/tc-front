@@ -14,6 +14,10 @@ const tableColumns = [
     { title: '任务状态', dataIndex: 'status', key: 'status', render: (value: number, record: object): React.ReactNode => {
         const renderEnum: any = [
             {
+                value: 0,
+                label: "已拒绝"
+            },
+            {
                 value: 1,
                 label: "待修改"
             },
@@ -23,14 +27,10 @@ const tableColumns = [
             },
             {
                 value: 3,
-                label: "已拒绝"
-            },
-            {
-                value: 4,
                 label: "已删除"
-            }
+            },
         ]
-             return <>{renderEnum.find((item: any) => item.value === value).label}</>
+        return <>{renderEnum.find((item: any) => item.value === value).label}</>
     }},
     { title: '备注', dataIndex: 'description', key: 'description' }
 ]
@@ -39,7 +39,7 @@ export default function SampleDrawDetail(): React.ReactNode {
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string,status: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/issue/smallSample?id=${params.id}`)
         resole(data)
@@ -83,7 +83,7 @@ export default function SampleDrawDetail(): React.ReactNode {
                     </Form.Item>
                 </Form>
             </Modal>
-            <DetailContent operation={[
+            <DetailContent operation={params.status==='1'?[
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
                     await RequestUtil.post(`/tower-science/issue/verify`,{id:params.id}).then(()=>{
                         message.success('修改成功！')
@@ -102,7 +102,7 @@ export default function SampleDrawDetail(): React.ReactNode {
                     })
                 }}>删除</Button>,
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
-            ]}>
+            ]:[<Button key="goback" onClick={() => history.goBack()}>返回</Button>]}>
                 <DetailTitle title="问题信息" />
                 <Descriptions
                     bordered

@@ -1045,21 +1045,21 @@
     },
     { // 问题单-提料/放样/螺栓
       "name": "问题单详情",
-      "path": "/question/questionMngt/otherDetail/:id/:type",
+      "path": "/question/questionMngt/otherDetail/:id/:type/:status",
       "module": "./pages/questionMngt/OtherDetail",
       "exact": true,
       "authority": "approvalm"
     },
     { // 问题单-组焊
       "name": "问题单详情",
-      "path": "/question/questionMngt/assemblyWeldDetail/:id",
+      "path": "/question/questionMngt/assemblyWeldDetail/:id/:status",
       "module": "./pages/questionMngt/AssemblyWeldDetail",
       "exact": true,
       "authority": "approvalm"
     },
     { // 问题单-小样图详情
       "name": "问题单详情",
-      "path": "/question/questionMngt/sampleDrawDetail/:id",
+      "path": "/question/questionMngt/sampleDrawDetail/:id/:status",
       "module": "./pages/questionMngt/SampleDrawDetail",
       "exact": true,
       "authority": "approvalm"

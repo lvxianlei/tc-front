@@ -28,6 +28,10 @@ export default function QuestionMngt(): React.ReactNode {
             render: (value: number, record: object): React.ReactNode => {
                 const renderEnum: any = [
                     {
+                        value: 0,
+                        label: "已拒绝"
+                    },
+                    {
                         value: 1,
                         label: "待修改"
                     },
@@ -37,14 +41,10 @@ export default function QuestionMngt(): React.ReactNode {
                     },
                     {
                         value: 3,
-                        label: "已拒绝"
-                    },
-                    {
-                        value: 4,
                         label: "已删除"
                     },
-                  ]
-                return <>{value&&(renderEnum.find((item: any) => item.value === value).label)}</>
+                ]
+                return <>{renderEnum.find((item: any) => item.value === value).label}</>
             }
         },
         {
@@ -111,9 +111,9 @@ export default function QuestionMngt(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     {
-                        record.type==='WTD-TL'||record.type==='WTD-FY'||record.type==='WTD-LS'? <Link to={`/question/questionMngt/otherDetail/${record.id}/${record.type}`}>查看详情</Link>:
-                        record.type==='WTD-ZH'? <Link to={`/question/questionMngt/assemblyWeldDetail/${record.id}`}>查看详情</Link>:
-                        <Link to={`/question/questionMngt/sampleDrawDetail/${record.id}`}>查看详情</Link>
+                        record.type==='WTD-TL'||record.type==='WTD-FY'||record.type==='WTD-LS'? <Link to={`/question/questionMngt/otherDetail/${record.id}/${record.type}/${record.status}`}>查看详情</Link>:
+                        record.type==='WTD-ZH'? <Link to={`/question/questionMngt/assemblyWeldDetail/${record.id}/${record.status}`}>查看详情</Link>:
+                        <Link to={`/question/questionMngt/sampleDrawDetail/${record.id}/${record.status}`}>查看详情</Link>
                     }
                 </Space>
             )
