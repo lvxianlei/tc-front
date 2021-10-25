@@ -20,10 +20,10 @@ export default function PlanTrack(): React.ReactNode {
             width: 100,
         },
         {
-            key: 'taskCode',
+            key: 'taskNum',
             title: '放样任务编号',
             width: 100,
-            dataIndex: 'taskCode'
+            dataIndex: 'taskNum'
         },
         {
             key: 'internalNumber',
@@ -32,10 +32,10 @@ export default function PlanTrack(): React.ReactNode {
             dataIndex: 'internalNumber'
         },
         {
-            key: 'taskNumber',
+            key: 'externalTaskNum',
             title: '任务单编号',
             width: 100,
-            dataIndex: 'taskNumber'
+            dataIndex: 'externalTaskNum'
         },
         {
             key: 'productCategoryName',
@@ -85,26 +85,30 @@ export default function PlanTrack(): React.ReactNode {
             dataIndex: 'materialStatus',
             render: (value: number, record: object): React.ReactNode => {
                 const renderEnum: any = [
-                  {
-                    value: 1,
-                    label: "待指派"
-                  },
-                  {
-                    value: 2,
-                    label: "提料中"
-                  },
-                  {
-                    value: 3,
-                    label: "配段中"
-                  },
-                  {
-                    value: 4,
-                    label: "已完成"
-                  },
-                  {
-                    value: 5,
-                    label: "已提交"
-                  },
+                    {
+                        value: -1,
+                        label: "-"
+                    },
+                    {
+                        value: 1,
+                        label: "待指派"
+                    },
+                    {
+                        value: 2,
+                        label: "提料中"
+                    },
+                    {
+                        value: 3,
+                        label: "配段中"
+                    },
+                    {
+                        value: 4,
+                        label: "已完成"
+                    },
+                    {
+                        value: 5,
+                        label: "已提交"
+                    },
                 ]
                 return <>{renderEnum.find((item: any) => item.value === value).label}</>
             }
@@ -128,6 +132,10 @@ export default function PlanTrack(): React.ReactNode {
             dataIndex: 'loftingStatus',
             render: (value: number, record: object): React.ReactNode => {
                 const renderEnum: any = [
+                    {
+                        value: -1,
+                        label: "-"
+                    },
                     {
                         value: 1,
                         label: "待指派"
@@ -180,7 +188,7 @@ export default function PlanTrack(): React.ReactNode {
         return value;
     }
     return <Page
-        path="/tower-science/assessTask/planTrack"
+        path="/tower-science/loftingTask/planTrack"
         columns={columns}
         filterValue={filterValue}
         onFilterSubmit={onFilterSubmit}
@@ -189,7 +197,7 @@ export default function PlanTrack(): React.ReactNode {
             {
                 name: 'priority',
                 label: '优先级',
-                children:   <Select>
+                children:   <Select style={{width:'100px'}}>
                                 <Select.Option value={''} key ={''}>全部</Select.Option>
                                 <Select.Option value={1} key={1}>高</Select.Option>
                                 <Select.Option value={2} key={2}>中</Select.Option>
@@ -199,7 +207,7 @@ export default function PlanTrack(): React.ReactNode {
             {
                 name: 'materialStatus',
                 label: '塔型提料状态',
-                children:   <Select>
+                children:   <Select style={{width:'100px'}}>
                                 <Select.Option value={''} key ={''}>全部</Select.Option>
                                 <Select.Option value={1} key={1}>待指派</Select.Option>
                                 <Select.Option value={2} key={2}>提料中</Select.Option>
@@ -211,7 +219,7 @@ export default function PlanTrack(): React.ReactNode {
             {
                 name: 'loftingStatus',
                 label: '塔型放样状态',
-                children:   <Select>
+                children:   <Select style={{width:'100px'}}>
                                 <Select.Option value={''} key ={''}>全部</Select.Option>
                                 <Select.Option value={1} key={1}>待指派</Select.Option>
                                 <Select.Option value={2} key={2}>放样中</Select.Option>
