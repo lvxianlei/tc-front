@@ -201,6 +201,16 @@
                                 "label": "库存看板",
                                 "path": "/stock/viewPanel",
                                 "authority": "approvalm"
+                            },
+                            {
+                                "label": "原材料看板",
+                                "path": "/stock/viewRawMaterial",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "收货单看板",
+                                "path": "/stock/viewReceivingNote",
+                                "authority": "approvalm"
                             }
                         ]
                     },
