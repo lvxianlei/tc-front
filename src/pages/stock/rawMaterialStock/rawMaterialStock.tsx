@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message, Table } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import ConfirmableButton from '../../../components/ConfirmableButton';
@@ -8,11 +8,18 @@ import RequestUtil from '../../../utils/RequestUtil';
 import '../StockPublicStyle.less';
 
 export default function RawMaterialStock(): React.ReactNode {
-    const history = useHistory()
-    const [warehouseId, setWarehouseId] = useState('');
-    const [current, setCurrent] = useState(1);
-    const [total, setTotal] = useState(100);
-    const [pageSize, setPageSize] = useState<number>(10);
+    const history = useHistory(),
+        [current, setCurrent] = useState(1),
+        [total, setTotal] = useState(100),
+        [pageSize, setPageSize] = useState<number>(10),
+        [warehouseId, setWarehouseId] = useState(''),//仓库
+        [textureId, setTextureId] = useState(''),//材质
+        [productId, setProductId] = useState(''),//品名
+        [standardId, setStandardId] = useState(''),//标准
+        [classificationId, setClassificationId] = useState(''),//分类
+        [lengthId, setLengthId] = useState(''),//长度
+        [lengthTowId, setLengthTowId] = useState(''),//长度2
+        [specificationsId, setSpecificationsId] = useState('')//规格
     const columns = [
         {
             title: '序号',
@@ -21,7 +28,6 @@ export default function RawMaterialStock(): React.ReactNode {
         {
             title: '所在仓库',
             dataIndex: 'name',
-            key: 'name',
             render: (text: any) => <a>{text}</a>,
         }, {
             title: '收货批次',
@@ -60,6 +66,7 @@ export default function RawMaterialStock(): React.ReactNode {
         {
             title: '操作',
             dataIndex: 'key',
+            width: 120,
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Link to={``}>质保单</Link>
@@ -76,68 +83,93 @@ export default function RawMaterialStock(): React.ReactNode {
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '2',
             receivingBatch: '2021-1223-TT'
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '3',
             receivingBatch: '2021-1223-TT'
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '4',
             receivingBatch: '2021-1223-TT'
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '5',
             receivingBatch: '2021-1223-TT'
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '6',
             receivingBatch: '2021-1223-TT'
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '7',
             receivingBatch: '2021-1223-TT'
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '8',
             receivingBatch: '2021-1223-TT'
         }, {
             name: '仓库1',
-            key: '1',
+            key: '9',
             receivingBatch: '2021-1223-TT'
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '10',
             receivingBatch: '2021-1223-TT'
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '11',
             receivingBatch: '2021-1223-TT'
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '12',
             receivingBatch: '2021-1223-TT'
         }, {
             name: '仓库1',
-            key: '1',
+            key: '13',
             receivingBatch: '2021-1223-TT'
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '14',
             receivingBatch: '2021-1223-TT'
         },
     ]
+    //获取列表数据
+    const loadData = async () => {
+        console.log('请求数据')
+        const data: any[] = await RequestUtil.get(`/tower-system/dictionary/allDictionary`, {
+            current,
+            pageSize,
+        });
+    }
+    // 重置
+    const reset = () => {
+        setCurrent(1);
+        setPageSize(10);
+        setWarehouseId('');
+        setTextureId('');
+        setProductId('');
+        setStandardId('');
+        setClassificationId('');
+        setLengthId('');
+        setLengthTowId('');
+        setSpecificationsId('');
+    }
+    //进入页面刷新
+    useEffect(() => {
+        loadData()
+    }, [current, pageSize])
     return (
         <div id="RawMaterialStock">
             <div className="Search_public_Stock">
@@ -174,23 +206,23 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={warehouseId ? warehouseId : '请选择'}
-                            onChange={(val) => { setWarehouseId(val) }}
+                            value={textureId ? textureId : '请选择'}
+                            onChange={(val) => { setTextureId(val) }}
                         >
                             <Select.Option
                                 value="1"
                             >
-                                仓库1
+                                材质1
                             </Select.Option>
                             <Select.Option
                                 value="2"
                             >
-                                仓库2
+                                材质2
                             </Select.Option>
                             <Select.Option
                                 value="3"
                             >
-                                仓库3
+                                材质3
                             </Select.Option>
                         </Select>
                     </div>
@@ -201,23 +233,23 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={warehouseId ? warehouseId : '请选择'}
-                            onChange={(val) => { setWarehouseId(val) }}
+                            value={productId ? productId : '请选择'}
+                            onChange={(val) => { setProductId(val) }}
                         >
                             <Select.Option
                                 value="1"
                             >
-                                仓库1
+                                品名1
                             </Select.Option>
                             <Select.Option
                                 value="2"
                             >
-                                仓库2
+                                品名2
                             </Select.Option>
                             <Select.Option
                                 value="3"
                             >
-                                仓库3
+                                品名3
                             </Select.Option>
                         </Select>
                     </div>
@@ -228,23 +260,23 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={warehouseId ? warehouseId : '请选择'}
-                            onChange={(val) => { setWarehouseId(val) }}
+                            value={standardId ? standardId : '请选择'}
+                            onChange={(val) => { setStandardId(val) }}
                         >
                             <Select.Option
                                 value="1"
                             >
-                                仓库1
+                                标准1
                             </Select.Option>
                             <Select.Option
                                 value="2"
                             >
-                                仓库2
+                                标准2
                             </Select.Option>
                             <Select.Option
                                 value="3"
                             >
-                                仓库3
+                                标准3
                             </Select.Option>
                         </Select>
                     </div>
@@ -255,23 +287,23 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={warehouseId ? warehouseId : '请选择'}
-                            onChange={(val) => { setWarehouseId(val) }}
+                            value={classificationId ? classificationId : '请选择'}
+                            onChange={(val) => { setClassificationId(val) }}
                         >
                             <Select.Option
                                 value="1"
                             >
-                                仓库1
+                                分类1
                             </Select.Option>
                             <Select.Option
                                 value="2"
                             >
-                                仓库2
+                                分类2
                             </Select.Option>
                             <Select.Option
                                 value="3"
                             >
-                                仓库3
+                                分类3
                             </Select.Option>
                         </Select>
                     </div>
@@ -282,45 +314,45 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={warehouseId ? warehouseId : '请选择'}
-                            onChange={(val) => { setWarehouseId(val) }}
+                            value={lengthId ? lengthId : '请选择'}
+                            onChange={(val) => { setLengthId(val) }}
                         >
                             <Select.Option
                                 value="1"
                             >
-                                仓库1
+                                长度1
                             </Select.Option>
                             <Select.Option
                                 value="2"
                             >
-                                仓库2
+                                长度2
                             </Select.Option>
                             <Select.Option
                                 value="3"
                             >
-                                仓库3
+                                长度3
                             </Select.Option>
                         </Select>-
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={warehouseId ? warehouseId : '请选择'}
-                            onChange={(val) => { setWarehouseId(val) }}
+                            value={lengthTowId ? lengthTowId : '请选择'}
+                            onChange={(val) => { setLengthTowId(val) }}
                         >
                             <Select.Option
                                 value="1"
                             >
-                                仓库1
+                                长度1-1
                             </Select.Option>
                             <Select.Option
                                 value="2"
                             >
-                                仓库2
+                                长度1-2
                             </Select.Option>
                             <Select.Option
                                 value="3"
                             >
-                                仓库3
+                                长度1-3
                             </Select.Option>
                         </Select>
                     </div>
@@ -331,23 +363,23 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={warehouseId ? warehouseId : '请选择'}
-                            onChange={(val) => { setWarehouseId(val) }}
+                            value={specificationsId ? specificationsId : '请选择'}
+                            onChange={(val) => { setSpecificationsId(val) }}
                         >
                             <Select.Option
                                 value="1"
                             >
-                                仓库1
+                                规格1
                             </Select.Option>
                             <Select.Option
                                 value="2"
                             >
-                                仓库2
+                                规格2
                             </Select.Option>
                             <Select.Option
                                 value="3"
                             >
-                                仓库3
+                                规格3
                             </Select.Option>
                         </Select>
                     </div>
@@ -360,6 +392,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         >查询</Button>
                         <Button
                             className="btn"
+                            onClick={reset}
                         >重置</Button>
                     </div>
                 </div>
@@ -383,7 +416,6 @@ export default function RawMaterialStock(): React.ReactNode {
                     }
                     pagination={{
                         size: 'small',
-                        defaultPageSize: 5,
                         showQuickJumper: true,
                         current: current,
                         total: total,
