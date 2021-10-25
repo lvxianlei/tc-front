@@ -989,7 +989,7 @@
     },
     { // 工作管理-螺栓列表-螺栓信息
       "name": "螺栓信息",
-      "path": "/workMngt/boltList/boltInformation/:id",
+      "path": "/workMngt/boltList/boltInformation/:loftId/:id",
       "module": "./pages/workMngt/bolt/BoltInformation",
       "exact": true,
       "authority": "approvalm"
