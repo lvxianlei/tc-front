@@ -9,7 +9,7 @@ import { useState } from 'react';
 const towerColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
     { title: '段名', dataIndex: 'segmentName', key: 'segmentName', },
-    { title: '段重复数', dataIndex: 'amount', key: 'amount' },
+    // { title: '段重复数', dataIndex: 'amount', key: 'amount' },
     { title: '构件编号', dataIndex: 'code', key: 'code' },
     { title: '材料名称', dataIndex: 'materialName', key: 'materialName' },
     { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture' },
@@ -20,8 +20,8 @@ const towerColumns = [
     { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum' },
     { title: '理算重量（kg）', dataIndex: 'basicsTheoryWeight', key: 'basicsTheoryWeight' },
     { title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight' },
-    { title: '小计重量（kg）', dataIndex: 'amount', key: 'amount' },
-    { title: '总计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight' },
+    { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight' },
+    // { title: '总计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight' },
     { title: '备注', dataIndex: 'description', key: 'description' }
 ]
 
