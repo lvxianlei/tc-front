@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Spin, Space, Image } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { DetailContent, CommonTable, DetailTitle } from '../common';
+import { DetailContent, CommonTable, DetailTitle, Page } from '../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
 import Modal from 'antd/lib/modal/Modal';
@@ -9,12 +9,12 @@ import Modal from 'antd/lib/modal/Modal';
 export default function TowerMemberInfo(): React.ReactNode {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false);
-    const params = useParams<{ id: string }>()
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
-        resole(data)
-    }), {})
-    const detailData: any = data;
+    const params = useParams<{ id: string, number: string }>()
+    // const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+    //     const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
+    //     resole(data)
+    // }), {})
+    // const detailData: any = data;
     const columns = [
         { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
         { title: '段号', dataIndex: 'partBidNumber', key: 'partBidNumber', },
@@ -49,14 +49,19 @@ export default function TowerMemberInfo(): React.ReactNode {
         <Modal title='查看图片'  width={800} visible={visible} onCancel={handleModalCancel} footer={false}>
             <Image src="https://gw.alipayobjects.com/zos/antfincdn/LlvErxo8H9/photo-1503185912284-5271ff81b9a8.webp"/>
         </Modal>
-        <Spin spinning={loading}>
-            <DetailContent operation={[
-                <Button key="goback" onClick={() => history.goBack()}>返回</Button>
-            ]}>
-                <DetailTitle title="构件信息" />
-                <span>件号数：50  </span>
-                <CommonTable columns={columns} dataSource={detailData?.cargoVOList} />
-            </DetailContent>
-        </Spin>
+        <DetailContent operation={[
+            <Button key="goback" onClick={() => history.goBack()}>返回</Button>
+        ]}>
+            <DetailTitle title="构件信息" />
+            <Page
+                path="/tower-science/productStructure/getDetailList"
+                columns={columns}
+                requestData={{ productCategoryId: params.id }}
+                // filterValue={filterValue}
+                // onFilterSubmit={onFilterSubmit}
+                extraOperation={ <span>件号数：{params.number}</span> }
+                searchFormItems={[]}
+            />
+        </DetailContent>
     </>
 }

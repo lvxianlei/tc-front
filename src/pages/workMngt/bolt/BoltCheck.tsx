@@ -98,12 +98,17 @@ export default function BoltCheck(): React.ReactNode {
 
     const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {
         setVisible(true);
-        const data: IRecord = await RequestUtil.get<{}>(`/tower-science/boltRecord/issueDetail`, { keyId: record.id, problemField: col.dataIndex });
-        if(tip === 'red') {    
-            setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data });
-            setTitle('查看问题单');
+        if(tip !== 'normal') {   
+            const data: IRecord = await RequestUtil.get<{}>(`/tower-science/boltRecord/issueDetail`, { keyId: record.id, problemField: col.dataIndex }); 
+            if( tip === 'red' ) {
+                setRecord({ dataSource: [record], problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data });
+                setTitle('查看问题单');
+            } else {
+                setRecord({ issueRecordList: data.issueRecordList, problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id });
+                setTitle('提交问题单');
+            }
         } else {
-            setRecord({ issueRecordVOList: data.issueRecordVOList, problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id });
+            setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id });
             setTitle('提交问题单');
         }
     }
@@ -129,7 +134,7 @@ export default function BoltCheck(): React.ReactNode {
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 col.dataIndex === 'index' ? index + 1 
                 : !col.editable ? _ 
-                : <p onDoubleClick={ (e) => { questionnaire( _, record, col, checkColor(record, col.dataIndex)) }} className={ checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow : '' }>{ _ }</p>
+                : <p onDoubleClick={ (e) => { questionnaire( _, record, col, checkColor(record, col.dataIndex)) }} className={ checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow : '' }>{  _ === -1 ? "" :  _ }</p>
             )  
         }     
     })
@@ -179,7 +184,7 @@ export default function BoltCheck(): React.ReactNode {
                 {/* <Button type="primary" ghost>导出</Button> */}
                 <Popconfirm
                     title="确认完成?"
-                    onConfirm={ () => RequestUtil.put(`/tower-science/boltRecord/completeCheck`, { productCategoryId: params.id }).then(res => {
+                    onConfirm={ () => RequestUtil.put(`/tower-science/boltRecord/completeCheck?productCategoryId=${ params.id }`).then(res => {
                         history.goBack();
                     }) }
                     okText="确认"
@@ -201,6 +206,6 @@ export default function BoltCheck(): React.ReactNode {
                 }
             </Tabs>
         </DetailContent>
-        <BoltQuestionnaireModal title={ title } visible={ visible }  modalCancel={ () => { setVisible(false); getDataSource(activeKey) } } record={ record } />
+        <BoltQuestionnaireModal title={ title } visible={ visible }  modalCancel={ () => { setVisible(false); getDataSource(activeKey) } } record={ record } update={ () => getDataSource(activeKey) } productCategory={ params.id } />
     </>
 }

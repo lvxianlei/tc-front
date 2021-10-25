@@ -1,50 +1,69 @@
 {
     "baseInfoData": [
         {
-            "dataIndex": "projectName",
+            "dataIndex": "name",
             "title": "塔型"
         },
         {
-            "dataIndex": "projectNumber",
+            "dataIndex": "steelProductShape",
             "title": "塔型钢印号"
         },
         {
-            "dataIndex": "description",
-            "title": "类型"
+            "dataIndex": "pattern",
+            "title": "模式",
+            "type": "select",
+            "enum": [
+                {
+                    "value": -1,
+                    "label": "-"
+                },
+                {
+                    "value": 1,
+                    "label": "新放"
+                },
+                {
+                    "value": 2,
+                    "label": "重新出卡"
+                },
+                {
+                    "value": 3,
+                    "label": "套用"
+                }
+            ]
+
         },
         {
-            "dataIndex": "message",
+            "dataIndex": "taskNumber",
             "title": "任务单编号"
         },
         {
-            "dataIndex": "message",
+            "dataIndex": "saleOrderNumber",
             "title": "订单编号"
         },
         {
-            "dataIndex": "message",
+            "dataIndex": "internalNumber",
             "title": "内部合同编号"
         },
         {
-            "dataIndex": "message",
+            "dataIndex": "structureCount",
             "title": "件号数"
         },
         {
-            "dataIndex": "message",
+            "dataIndex": "steelAngleCount",
             "title": "角钢件号数"
         },
         {
-            "dataIndex": "message",
+            "dataIndex": "steelPlateCount",
             "title": "钢板件号数"
         },
         {
-            "dataIndex": "message",
+            "dataIndex": "updateUserName",
             "title": "最后更新人"
         },
         {
-            "dataIndex": "message",
+            "dataIndex": "updateTime",
             "title": "最后更新时间"
-        }
-        ,
+        },
         {
             "dataIndex": "description",
             "title": "备注"

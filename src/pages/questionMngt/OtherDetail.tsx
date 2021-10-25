@@ -120,6 +120,9 @@ export default function OtherDetail(): React.ReactNode {
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => {
                     setVisible(true);
                 }}>拒绝修改</Button>,
+                // <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={() => {
+                //     history.push(`/workMngt/pickList/pickTowerMessage/${params.id}`)
+                // }}>跳转页面</Button>,
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
                     await RequestUtil.delete(`/tower-science/issue?id=${params.id}`).then(()=>{
                         message.success('删除成功！')
@@ -133,7 +136,7 @@ export default function OtherDetail(): React.ReactNode {
                 <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
                 <CommonTable columns={towerColumns} dataSource={detailData?.drawProductStructure} />
                 <DetailTitle title="操作信息" />
-                <CommonTable columns={tableColumns} dataSource={detailData?.issueRecordList} />
+                <CommonTable columns={tableColumns} dataSource={detailData?.issueRecordList} pagination={false}/>
             </DetailContent>
         </Spin>
     </>
