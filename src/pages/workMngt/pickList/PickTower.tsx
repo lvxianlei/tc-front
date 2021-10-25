@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Button, Form, Modal, Row, Col, Popconfirm, Select, message } from 'antd'
+import { Space, Input, DatePicker, Button, Form, Modal, Row, Col, Popconfirm, Select, message, InputNumber } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
 import { Link, useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
@@ -22,12 +22,42 @@ export default function PickTower(): React.ReactNode {
     const history = useHistory();
     const [form] = Form.useForm();
     const [filterValue, setFilterValue] = useState({});
+    const [productId, setProductId] = useState('');
     const [detail, setDetail] = useState<IDetail>({});
     const handleModalOk = async () => {
         try {
-            const submitData = await form.validateFields()
-            console.log(submitData)
-            setVisible(false)
+            const data = await form.validateFields()
+            const submitData = data.detailData.map((item:any,index:number)=>{
+                return{
+                    segmentId: detail?.materialDrawProductSegmentList&&detail?.materialDrawProductSegmentList[index].id,
+                    segmentName: item.name,
+                    count: item.count
+                }
+            });
+            RequestUtil.post(`/tower-science/product/material/segment/submit?productCategoryId=${params.id}&productId=${productId}`,submitData).then(()=>{
+                message.success('提交成功！');
+                setVisible(false);
+                setProductId('')
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const handleModalSave =  async () => {
+        try {
+            const data = await form.validateFields();
+            const saveData = data.detailData.map((item:any,index:number)=>{
+                return{
+                    segmentId: detail?.materialDrawProductSegmentList&&detail?.materialDrawProductSegmentList[index].id,
+                    segmentName: item.name,
+                    count: item.count
+                }
+            });
+            RequestUtil.post(`/tower-science/product/material/segment/save?productCategoryId=${params.id}&productId=${productId}`,saveData).then(()=>{
+                message.success('保存成功！');
+                setVisible(false);
+                setProductId('')
+            })
         } catch (error) {
             console.log(error)
         }
@@ -73,19 +103,23 @@ export default function PickTower(): React.ReactNode {
                 const renderEnum: any = [
                   {
                     value: 1,
-                    label: "配段中"
+                    label: "待指派"
                   },
                   {
                     value: 2,
-                    label: "已完成"
+                    label: "提料中"
                   },
                   {
                     value: 3,
-                    label: "已提交"
+                    label: "配段中"
                   },
                   {
                     value: 4,
-                    label: ""
+                    label: "已完成"
+                  },
+                  {
+                    value: 5,
+                    label: "已提交"
                   },
                 ]
                 return <>{value&&value!==-1?renderEnum.find((item: any) => item.value === value).label:null}</>
@@ -114,6 +148,7 @@ export default function PickTower(): React.ReactNode {
                                     // value:item.count===-1?0:item.count,
                                 }
                             })
+                            setProductId(record.id);
                             setDetail({
                                 ...data,
                                 materialDrawProductSegmentList:detailData
@@ -126,7 +161,7 @@ export default function PickTower(): React.ReactNode {
         }
     ]
 
-    const handleModalCancel = () => setVisible(false)
+    const handleModalCancel = () => {setVisible(false);setProductId('')};
     const formItemLayout = {
         labelCol: { span: 4 },
         wrapperCol: { span: 17 }
@@ -143,7 +178,7 @@ export default function PickTower(): React.ReactNode {
     }
     return (
         <>
-            <Modal title='配段信息'  width={1200} visible={visible} onCancel={handleModalCancel} onOk={handleModalOk}>
+            <Modal title='配段信息'  width={1200} visible={visible} onCancel={handleModalCancel} footer={false}>
                 {detail?.materialDrawProductSegmentList?<Form initialValues={{ detailData : detail.materialDrawProductSegmentList }} autoComplete="off" form={form}>  
                     <Row>
                         <Col span={1}></Col>
@@ -169,14 +204,14 @@ export default function PickTower(): React.ReactNode {
                                     <>
                                         <Col span={ 1}></Col>
                                         <Col span={ 11 }>
-                                        <Form.Item name={[ field.name , 'value']} label='段数'>
-                                            <span>{detail.materialDrawProductSegmentList&&detail.materialDrawProductSegmentList[field.name].count}</span>
+                                        <Form.Item name={[ field.name , 'segmentName']} label='段号'>
+                                            <span>{detail.materialDrawProductSegmentList&&detail.materialDrawProductSegmentList[field.name].name}</span>
                                         </Form.Item>
                                         </Col>
                                         <Col span={1}></Col>
                                         <Col span={ 11 }>
-                                        <Form.Item  name={[ field.name , 'type']} label='段号'>
-                                            <Input/>
+                                        <Form.Item  name={[ field.name , 'count']} label='段数' initialValue={[ field.name , 'count']}>
+                                            <InputNumber min={0} precision={0} style={{width:'100%'}}/>
                                         </Form.Item>
                                         </Col>
                                     </>
@@ -186,9 +221,13 @@ export default function PickTower(): React.ReactNode {
                         </Form.List> 
                     </Row>
                 </Form>:null}
+                <Space style={{position:'relative',left:'80%'}}>
+                    <Button type="primary" ghost onClick={()=>handleModalCancel()}>取消</Button>
+                    <Button type="primary" onClick={()=>handleModalSave()}>保存</Button>
+                    <Button type="primary" onClick={()=>handleModalOk()}>保存并提交</Button>
+                </Space>
             </Modal>
             <Page
-                // path="/tower-market/bidInfo"
                 path="/tower-science/product/material"
                 columns={columns}
                 onFilterSubmit={onFilterSubmit}
@@ -231,9 +270,9 @@ export default function PickTower(): React.ReactNode {
                         </Select>
                     },
                     {
-                        name: 'planTime',
+                        name: 'loftingUser',
                         label:'配段人',
-                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                        children: <Input/>
                     }
                 ]}
             />

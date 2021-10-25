@@ -93,8 +93,8 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                     message: '请选择类型'
                 }],
                 children: <Select style={{ width: '100%' }} placeholder="请选择">
-                    <Select.Option value="1" key="1">普通</Select.Option>
-                    <Select.Option value="2" key="2">防盗</Select.Option>
+                    <Select.Option value={ 1 } key="1">普通</Select.Option>
+                    <Select.Option value={ 2 } key="2">防盗</Select.Option>
                 </Select>
             }, {
                 label: '名称',
@@ -140,7 +140,7 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                     message: '请输入单重'
                 }],
                 children: (
-                    <Input onChange={ (e) => {
+                    <Input type="number" min={ 0 } onChange={ (e) => {
                         if(this.getForm()?.getFieldsValue(true).total) {
                             this.getForm()?.setFieldsValue({ totalWeight: Number(e.target.value) * this.getForm()?.getFieldsValue(true).total })
                         }
@@ -164,7 +164,7 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                     message: '请输入合计'
                 }],
                 children: (
-                    <Input onChange={ (e) => {
+                    <Input type="number" min={ 0 } onChange={ (e) => {
                         if(this.getForm()?.getFieldsValue(true).singleWeight) {
                             this.getForm()?.setFieldsValue({ totalWeight: Number(e.target.value) * this.getForm()?.getFieldsValue(true).singleWeight })
                         }
