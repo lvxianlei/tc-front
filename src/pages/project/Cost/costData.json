@@ -262,6 +262,11 @@
             ]
         },
         {
+            "title": "产品类型",
+            "dataIndex": "productType",
+            "disabled": true
+        },
+        {
             "title": "特殊工艺",
             "dataIndex": "specialProcess"
         },

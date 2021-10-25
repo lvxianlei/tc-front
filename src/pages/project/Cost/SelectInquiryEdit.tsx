@@ -105,7 +105,11 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
                 reject(false)
             }
         } catch (error) {
-            message.error("保存失败...")
+            if ((error as any).errorFields) {
+                message.warning("请检查是否有必填项未填写...")
+            } else {
+                message.error("保存失败...")
+            }
             reject(error)
         }
     })
