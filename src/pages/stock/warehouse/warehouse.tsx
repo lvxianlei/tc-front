@@ -200,14 +200,16 @@ const Warehouse = (): React.ReactNode => {
                     pagination={false}
                     size='small'
                 />
-                <Pagination
-                    className='page'
-                    showSizeChanger
-                    showQuickJumper
-                    total={total}
-                    pageSize={size}
-                    current={current}
-                />
+                <div className='page_content'>
+                    <Pagination
+                        className='page'
+                        showSizeChanger
+                        showQuickJumper
+                        total={total}
+                        pageSize={size}
+                        current={current}
+                    />
+                </div>
             </div>
         </div>
     )

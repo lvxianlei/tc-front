@@ -652,7 +652,7 @@
       "authority": "approvalm"
     },
     { // 配置管理-仓库管理
-      "name": "安全库存配置",
+      "name": "仓库管理",
       "path": "/stock/warehouse",
       "module": "./pages/stock/warehouse/warehouse",
       "exact": true,
