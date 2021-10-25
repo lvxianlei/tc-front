@@ -128,7 +128,6 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                     <Radio.Button value="base">咨询结果</Radio.Button>
                     <Radio.Button value="records">咨询信息</Radio.Button>
                 </Radio.Group>
-                <DetailTitle title="询价类型：工艺询价" />
                 {radioValue === "base" && <>
                     <BaseInfo columns={workmanshipReverd} dataSource={data || {}} />
                     <DetailTitle title="附件" />

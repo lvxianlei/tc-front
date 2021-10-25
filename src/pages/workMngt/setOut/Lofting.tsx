@@ -19,7 +19,6 @@ interface Column extends ColumnType<object> {
     editable?: boolean;
 }
 
-
 export default function Lofting(): React.ReactNode {
 
     const columns = [
@@ -34,13 +33,13 @@ export default function Lofting(): React.ReactNode {
                 </Form.Item></>)
         },
         {
-            key: 'partName',
+            key: 'segmentName',
             title: '段名',
             width: 150,
             editable: true,
-            dataIndex: 'partName',
+            dataIndex: 'segmentName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "partName"]} initialValue={ _ }>
+                <Form.Item name={['data',index, "segmentName"]} initialValue={ _ }>
                     <Input size="small" onChange={ () => rowChange(index) }/>
                 </Form.Item>
             )
@@ -405,11 +404,11 @@ export default function Lofting(): React.ReactNode {
                     <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                         <Popconfirm
                             title="确认删除?"
-                            onConfirm={ () => RequestUtil.delete(`/tower-science/productStructure`, { productStructureId: record.id }).then(res => {
+                            onConfirm={ () => RequestUtil.delete(`/tower-science/productStructure?productStructureId=${ record.id }`).then(res => {
                                 message.success('删除成功');
-                                history.go(0);
+                                setRefresh(!refresh);
                             }) }
-                            okText="提交"
+                            okText="确认"
                             cancelText="取消"
                         >
                             <Button type="link">删除</Button>
@@ -436,6 +435,7 @@ export default function Lofting(): React.ReactNode {
     const [ rowChangeList, setRowChangeList ] = useState<number[]>([]);
     const [ tableColumns, setColumns ] = useState(columnsSetting);
     const [ form ] = Form.useForm();
+    const [ refresh, setRefresh ] = useState(false);
 
     return <Form form={ form } className={ styles.descripForm }>  
         <Page
@@ -443,13 +443,21 @@ export default function Lofting(): React.ReactNode {
             columns={ tableColumns }
             headTabs={ [] }
             tableProps={{ pagination: false }}
+            refresh={ refresh }
             requestData={{ productSegmentId: params.productSegmentId }}
             extraOperation={ <Space direction="horizontal" size="small">
                 {/* <Button type="primary" ghost>导出</Button> */}
                 <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productStructure/exportTemplate', '模板') } ghost>模板下载</Button>
-                <Button type="primary" onClick={ () => RequestUtil.post(`/tower-science/productSegment/complete`, { productSegmentId: params.productSegmentId }).then(res => {
-                    history.goBack();
-                }) } ghost>完成放样</Button>
+                <Popconfirm
+                    title="确认完成放样?"
+                    onConfirm={ () => RequestUtil.post(`/tower-science/productSegment/complete?productSegmentId=${ params.productSegmentId }`).then(res => {
+                        history.goBack();
+                    }) }
+                    okText="确认"
+                    cancelText="取消"
+                >
+                    <Button type="primary" ghost>完成放样</Button>
+                </Popconfirm>
                 <Upload 
                     action={ () => {
                         const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
@@ -469,7 +477,7 @@ export default function Lofting(): React.ReactNode {
                             message.warning(info.file.response?.msg)
                         } 
                         if(info.file.response && info.file.response?.success){
-                            history.go(0);
+                            setRefresh(!refresh);
                         }
                     } }
                 >
@@ -492,12 +500,13 @@ export default function Lofting(): React.ReactNode {
                                 setEditorLock('编辑');
                                 setRowChangeList([]);    
                                 form.resetFields();
+                                setRefresh(!refresh);
                             });
                         }
                     }
                 } }>{ editorLock }</Button>
-                <UploadModal id={ params.productSegmentId } path={ `/tower-science/productSegment/segmentModelDetail?productCategoryId=${ params.productSegmentId }` } uploadUrl="/tower-science/productSegment/segmentModelUpload" btnName="模型上传" />
-                <UploadModal id={ params.productSegmentId } path={ `/tower-science/productSegment/segmentModelDetail?productCategoryId=${ params.productSegmentId }` } uploadUrl="/tower-science/productSegment/segmentDrawUpload" btnName="样图上传" />
+                <UploadModal id={ params.productSegmentId } path={ `/tower-science/productSegment/segmentModelDetail?productSegmentId=${ params.productSegmentId }` } requestData={ { productSegmentId: params.productSegmentId } } uploadUrl="/tower-science/productSegment/segmentModelUpload" btnName="模型上传" />
+                <UploadModal id={ params.productSegmentId } path={ `/tower-science/productSegment/segmentDrawDetail?productSegmentId=${ params.productSegmentId }` } requestData={ { productSegmentId: params.productSegmentId } } uploadUrl="/tower-science/productSegment/segmentDrawUpload" btnName="样图上传" />
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
             </Space> }
             searchFormItems={ [

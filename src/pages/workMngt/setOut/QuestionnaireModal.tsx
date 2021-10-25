@@ -12,6 +12,7 @@ export interface IQuestionnaireModalRouteProps extends RouteComponentProps<Quest
     readonly title: string;
     readonly modalCancel: () => void;
     readonly visible: boolean;
+    readonly update: () => void;
 }
 
 interface QuestionnaireModalState {
@@ -25,7 +26,7 @@ export interface IRecord {
     readonly description?: string;
     readonly newValue?: string;
     readonly issueRecordList?: [];
-    readonly dataType?: number;
+    readonly status?: number;
     readonly dataIndex?: string;
     readonly rowId?: string;
     readonly currentValue?: string;
@@ -40,19 +41,19 @@ const tableColumns = [
         width: 50, 
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
     {
-        key: 'updateDepartmentName',
+        key: 'createDeptName',
         title: '操作部门',
-        dataIndex: 'updateDepartmentName', 
+        dataIndex: 'createDeptName', 
     },
     {  
-        key: 'updateUserName', 
+        key: 'createUserName', 
         title: '操作人', 
-        dataIndex: 'updateUserName' 
+        dataIndex: 'createUserName' 
     },
     { 
-        key: 'updateTime', 
+        key: 'createTime', 
         title: '操作时间', 
-        dataIndex: 'updateTime' 
+        dataIndex: 'createTime' 
     },
     {
         key: 'status', 
@@ -125,7 +126,7 @@ class QuestionnaireModal extends React.Component<IQuestionnaireModalRouteProps, 
                 footer={ 
                     <Space direction="horizontal" size="small">
                         <Button type="primary" onClick={ () => {  this.props.modalCancel(); } } ghost>关闭</Button>
-                        {  record.dataType !== 2 ? <Button type="primary" onClick={ () => this.submitQuestion() }>提交问题</Button> : null }
+                        {  record.status !== 1 ? <Button type="primary" onClick={ () => this.submitQuestion() }>提交问题</Button> : null }
                     </Space> } 
                 onCancel={ () => this.props.modalCancel() }
             >
@@ -146,7 +147,7 @@ class QuestionnaireModal extends React.Component<IQuestionnaireModalRouteProps, 
                     } } />
                     <Form ref={ this.form } labelCol={{ span: 4 }} className={ styles.topPadding }>
                         <Form.Item name="description" label="备注" initialValue={ record.description }>
-                            <Input.TextArea maxLength={ 300 } placeholder="请输入备注信息" rows={ 1 } showCount disabled={ record.dataType === 2 } />
+                            <Input.TextArea maxLength={ 300 } placeholder="请输入备注信息" rows={ 1 } showCount disabled={ record.status === 1 } />
                         </Form.Item>
                         <Form.Item name="newValue" label="校对后信息"
                             rules={[{
@@ -154,7 +155,7 @@ class QuestionnaireModal extends React.Component<IQuestionnaireModalRouteProps, 
                                 message: '请输入校对后信息 '
                             }]}
                             initialValue={ record.newValue }>
-                            <Input maxLength={ 100 } placeholder="请输入" disabled={ record.dataType === 2 } />
+                            <Input maxLength={ 100 } placeholder="请输入" disabled={ record.status === 1 } />
                         </Form.Item>
                     </Form>
                     <p className={ styles.topPadding }>操作信息</p>

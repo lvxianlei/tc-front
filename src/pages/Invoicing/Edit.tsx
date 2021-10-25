@@ -87,7 +87,10 @@ export default function Edit() {
         columns.forEach((columnItem: any) => {
             if (columnItem.type === "numbe") {
                 values[columnItem.dataIndex] = 0
+            } else if (columnItem.type === "select") {
+                values[columnItem.dataIndex] = null
             }
+
         })
         return values
     }
@@ -106,7 +109,7 @@ export default function Edit() {
                 contractCode: baseInfoData.contractCode.id || data?.contractCode,
                 invoicingDetailDtos: billingData.submit,
                 attachInfoDtos: attachVosData,
-                invoicingInfoDto: invoicData
+                invoicingInfoDto: { ...invoicData, id: data?.invoicingInfoVo.id || "", invoicingId: data?.invoicingInfoVo.invoicingId || "" }
             }
             const result = params.id === "new" ? await createRun(saveData) : await saveRun({ ...saveData, id: data?.id })
             if (result) {
@@ -200,11 +203,11 @@ export default function Edit() {
                 dataSource={generateInitValues(baseInfoHead)} edit />
 
             <DetailTitle title="发票信息" />
-            <BaseInfo form={invoicForm} columns={invoiceHead} dataSource={generateInitValues(invoiceHead)} edit />
+            <BaseInfo form={invoicForm} columns={invoiceHead} dataSource={data?.invoicingInfoVo || {}} edit />
 
             <DetailTitle title="开票明细" operation={[]} />
 
-            <EditTable onChange={handleEditTableChange} form={billingForm} columns={billingHead} dataSource={[]} />
+            <EditTable onChange={handleEditTableChange} form={billingForm} columns={billingHead} dataSource={data?.invoicingDetailDtos || []} />
 
             <DetailTitle title="附件" operation={[<Upload
                 key="sub"

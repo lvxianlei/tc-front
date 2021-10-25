@@ -50,7 +50,8 @@
     "build:test": "cross-env REACT_APP_ENV=test GENERATE_SOURCEMAP=false DISABLE_ESLINT_PLUGIN=true react-app-rewired build",
     "build:uat": "cross-env REACT_APP_ENV=uat GENERATE_SOURCEMAP=false DISABLE_ESLINT_PLUGIN=true react-app-rewired build",
     "test": "cross-env REACT_APP_ENV=development GENERATE_SOURCEMAP=false react-app-rewired test",
-    "eject": "cross-env REACT_APP_ENV=development GENERATE_SOURCEMAP=false react-app-rewired eject"
+    "eject": "cross-env REACT_APP_ENV=development GENERATE_SOURCEMAP=false react-app-rewired eject",
+    "gen:ts": "npx ytt -c ytt.config.ts"
   },
   "eslintConfig": {
     "extends": [
@@ -86,6 +87,7 @@
     "mock-webpack-plugin": "^3.0.0",
     "mockjs": "^1.1.0",
     "modify-source-webpack-plugin": "^1.1.0-beta.3",
-    "react-app-rewired": "^2.1.8"
+    "react-app-rewired": "^2.1.8",
+    "yapi-to-typescript": "^3.26.0"
   }
 }

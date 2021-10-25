@@ -45,7 +45,7 @@
                     "label": "未回复"
                 },
                 {
-                    "value": 0,
+                    "value": 1,
                     "label": "已回复"
                 }
             ]
@@ -233,7 +233,7 @@
                     "label": "物流"
                 },
                 {
-                    "value": 1,
+                    "value": 2,
                     "label": "工艺"
                 }
             ]
@@ -294,7 +294,7 @@
         {
             "title": "产品类型",
             "dataIndex": "productType",
-            "type": "select"
+            "disabled": true
         },
         {
             "title": "备注",

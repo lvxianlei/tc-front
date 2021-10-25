@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { useParams, useHistory } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { Modal, Upload, Button, Form, message } from "antd"
 import { DetailTitle, CommonTable, BaseInfo, EditTable } from "../../common"
 import { enclosure } from "../managementDetailData.json"
@@ -25,7 +25,6 @@ const auditCode: any = {
 export default function SelectInquiryEdit(props: any): JSX.Element {
     const [attachInfo, setAttachInfo] = useState<any[]>([])
     const { id } = useParams<{ id: string }>()
-    const history = useHistory()
     const [baseForm] = Form.useForm()
     const [askForm] = Form.useForm()
     const { loading, run } = useRequest<{ [key: string]: any }>((saveData: any) => new Promise(async (resole, reject) => {
@@ -50,6 +49,7 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
         try {
             const productType: any = await RequestUtil.get(`/tower-market/askInfo/getAskProductByProId?projectId=${id}`)
             askForm.setFieldsValue({ submit: productType.map((item: any) => ({ productType: `${item.voltage}${item.productName}` })) })
+            baseForm.setFieldsValue({ productType: askData?.map((ask: any) => `${ask.voltage}${ask.productName}`).join(",") })
             resole(productType)
         } catch (error) {
             reject(error)
@@ -97,9 +97,13 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
                     ...saveAskData.submit[index]
                 })) : []
             })
-            message.success("保存成功...")
-            props.onOk && props.onOk(true)
-            resove(true)
+            if (saveResult) {
+                message.success("保存成功...")
+                props.onOk && props.onOk(true)
+                resove(true)
+            } else {
+                reject(false)
+            }
         } catch (error) {
             message.error("保存失败...")
             reject(error)
@@ -173,10 +177,7 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
         </>}
         {props.type === "selectC" && <>
             <DetailTitle title="询价类型：工艺询价" />
-            <BaseInfo form={baseForm} columns={workmanshipBaseInfo.map((item: any) => item.dataIndex === "productType" ? ({
-                ...item,
-                enum: askData?.map((ask: any) => ({ value: `${ask.voltage}-${ask.productName}`, label: `${ask.voltage}${ask.productName}` })) || []
-            }) : item)} dataSource={data || {}} edit />
+            <BaseInfo form={baseForm} columns={workmanshipBaseInfo} dataSource={data || {}} edit />
             <DetailTitle title="附件" operation={[
                 <Upload
                     key="sub"

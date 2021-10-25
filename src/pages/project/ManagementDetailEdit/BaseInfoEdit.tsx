@@ -19,8 +19,6 @@ export default function BaseInfoEdit(): JSX.Element {
     const [cargoVOListForm] = Form.useForm()
     const [attachVosForm] = Form.useForm()
 
-
-
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/projectInfo/${params.id}`)
@@ -29,7 +27,8 @@ export default function BaseInfoEdit(): JSX.Element {
             baseInfoForm.setFieldsValue(result)
             cargoVOListForm.setFieldsValue({ submit: result.cargoVOList })
             attachVosForm.setFieldsValue(result.attachVos)
-            resole({ ...result, addressList: [...addressList.map(item => ({ value: item.code, label: item.name })), { value: "其他-国外", label: "其他-国外" }] })
+            setAddress(result.address)
+            resole({ ...result, addressList: [...addressList.map(item => ({ value: item.name, label: item.name })), { value: "其他-国外", label: "其他-国外" }] })
         } catch (error) {
             reject(error)
         }

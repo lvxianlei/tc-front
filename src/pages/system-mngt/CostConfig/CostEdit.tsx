@@ -1,13 +1,11 @@
-import React, { useState, useRef } from "react"
-import { Row, Button, Form, message, Spin, Modal } from "antd"
+import React, { useState, useEffect } from "react"
+import { Button, Form, message, Spin } from "antd"
 import { useParams, useHistory } from "react-router-dom"
 import { DetailContent, DetailTitle, BaseInfo, formatData, EditTable } from "../../common"
-import type { ActionType } from '@ant-design/pro-table';
 import { baseInfo } from "./headData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 export default function CostEdit() {
-    const ref = useRef<ActionType>()
     const history = useHistory()
     const { id } = useParams<{ id: string }>()
     const [productName, setProductName] = useState(id || "")
@@ -43,7 +41,7 @@ export default function CostEdit() {
             setProductName(fields.productName)
             const { productType } = await run(fields.productName)
             delete productType.productName
-            baseForm.setFieldsValue({ ...productType })
+            baseForm.setFieldsValue({ ...formatData(baseInfo, productType) })
         }
     }
 
@@ -59,11 +57,18 @@ export default function CostEdit() {
                 }))
             })
             message.success("数据保存成功...")
+            history.go(-1)
         } catch (error) {
             console.log(error)
         }
     }
-
+    const initData: any = {}
+    useEffect(() => {
+        data?.proport.head.forEach((item: any) => {
+            const value = dataSource[item.dataIndex]
+            initData[item.dataIndex] = (!value || value === -1) ? 0 : value
+        })
+    }, [data])
     return <DetailContent operation={[
         <Button key="save" type="primary" style={{ marginRight: 16 }} onClick={handleSaveAllData}>保存</Button>,
         <Button key="goback" onClick={() => history.go(-1)}>返回</Button>
@@ -71,30 +76,7 @@ export default function CostEdit() {
         <Spin spinning={loading}>
             <BaseInfo onChange={onSelectChange} form={baseForm} columns={baseInfo} dataSource={data || {}} edit />
             <DetailTitle title="材质比例" />
-            {data?.proport && <EditTable form={tableRowForm} columns={data?.proport.head || []} dataSource={dataSource} />}
+            {data?.proport && <EditTable addRowData={initData} form={tableRowForm} columns={data?.proport.head || []} dataSource={dataSource} />}
         </Spin>
     </DetailContent>
 }
-
-
-{/* <Row><Button type="primary" onClick={handleNewRow}>新增一行</Button></Row>
-<EditableProTable
-    rowKey="id"
-    actionRef={ref}
-    headerTitle="材质比例"
-    maxLength={5}
-    recordCreatorProps={false}
-    editable={{
-        form: tableRowForm,
-        editableKeys,
-        onlyOneLineEditorAlertMessage: "不能同时编辑多行",
-        onlyAddOneLineAlertMessage: "新增行保存前不能新增...",
-        onSave: handleSave,
-        onChange: setEditableRowKeys,
-        actionRender: (_a, _b, dom) => [dom.save, dom.cancel]
-    }}
-    columns={}
-    value={dataSource}
-    onChange={setDataSource}
-/>
-</> */}

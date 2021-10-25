@@ -50,7 +50,7 @@ export function formatData(columns: any[], dataSource: any): object {
             const value = dataSource[dataItem.dataIndex]
             const types: any = {
                 number: (value && value !== -1) ? value : 0,
-                select: (value || value === 0) ? value : undefined,
+                select: [-1, "-1"].includes(value) || !value ? null : value,
                 date: value ? moment(value).format(dataItem.format || "YYYY-MM-DD HH:mm:ss") : undefined,
                 string: (value && !["-1", -1, "0", 0].includes(value)) ? value : "",
                 textarea: value || "",

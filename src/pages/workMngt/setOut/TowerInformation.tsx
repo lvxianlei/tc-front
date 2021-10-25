@@ -4,7 +4,7 @@
  * @description 工作管理-放样列表-塔型信息
 */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Space, DatePicker, Select, Button, Popconfirm } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -17,6 +17,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 export default function TowerInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
+    const [ refresh, setRefresh ] = useState(false);
 
     const columns = [
         {
@@ -78,16 +79,16 @@ export default function TowerInformation(): React.ReactNode {
             width: 200,
         },
         {
-            key: 'loftingUser',
+            key: 'loftingUserName',
             title: '放样人',
             width: 200,
-            dataIndex: 'loftingUser'
+            dataIndex: 'loftingUserName'
         },
         {
-            key: 'checkUser',
+            key: 'checkUserName',
             title: '校核人',
             width: 200,
-            dataIndex: 'checkUser'
+            dataIndex: 'checkUserName'
         },
         {
             key: 'status',
@@ -97,17 +98,13 @@ export default function TowerInformation(): React.ReactNode {
             render: (pattern: number): React.ReactNode => {
                 switch (pattern) {
                     case 1:
-                        return '待指派';
-                    case 2:
                         return '放样中';
+                    case 2:
+                        return '校核中';
                     case 3:
-                        return '组焊中';
-                    case 4:
-                        return '配段中';
-                    case 5:
                         return '已完成';
-                    case 6:
-                        return '已提交';
+                    case 4:
+                        return '校核中';
                 }
             }
         },
@@ -125,9 +122,18 @@ export default function TowerInformation(): React.ReactNode {
             width: 250,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/lofting/${ record.id }` }>放样</Link>
-                    <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/NCProgram/${ record.id }` }>NC程序</Link>
-                    <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerCheck/${ record.id }` }>校核</Link>
+                    {
+                        record.status === 1 ? 
+                        <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/lofting/${ record.id }` }>放样</Link> : <Button type="link" disabled>放样</Button>
+                    }
+                    {
+                        record.status === 1 ? 
+                        <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/NCProgram/${ record.id }` }>NC程序</Link> : <Button type="link" disabled>NC程序</Button>
+                    }
+                    {
+                        record.status === 2 ? 
+                        <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerCheck/${ record.id }` }>校核</Link> : <Button type="link" disabled>校核</Button>
+                    }
                     <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerLoftingDetails/${ record.id }` }>塔型放样明细</Link>
                 </Space>
             )
@@ -138,6 +144,7 @@ export default function TowerInformation(): React.ReactNode {
         path={ `/tower-science/productSegment` }
         columns={ columns }
         headTabs={ [] }
+        refresh={ refresh }
         requestData={{ productCategoryId: params.id }}
         extraOperation={ <Space direction="horizontal" size="small">
             {/* <Button type="primary" ghost>导出</Button> */}
@@ -151,7 +158,7 @@ export default function TowerInformation(): React.ReactNode {
             >
                 <Button type="primary" ghost>提交</Button>
             </Popconfirm>
-            <TowerLoftingAssign id={ params.id }/>
+            <TowerLoftingAssign id={ params.id } update={ () => setRefresh(!refresh) } />
             <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
         </Space> }
         searchFormItems={ [
