@@ -113,7 +113,7 @@ export default function QuestionMngt(): React.ReactNode {
                     {
                         record.type==='WTD-TL'||record.type==='WTD-FY'||record.type==='WTD-LS'? <Link to={`/question/questionMngt/otherDetail/${record.id}/${record.type}`}>查看详情</Link>:
                         record.type==='WTD-ZH'? <Link to={`/question/questionMngt/assemblyWeldDetail/${record.id}`}>查看详情</Link>:
-                        <Link to={`/question/questionMngt/sampleDrawDetail/${record.keyId}`}>查看详情</Link>
+                        <Link to={`/question/questionMngt/sampleDrawDetail/${record.id}`}>查看详情</Link>
                     }
                 </Space>
             )

@@ -102,9 +102,9 @@ export default function Lofting(): React.ReactNode {
              key: 'basicsPartNum',
              width: 120,
             editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "code"]} initialValue={ _ }>
-                    <InputNumber size="small" precision={0} onChange={ () => rowChange(index) }/>
+            render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data',index, "basicsPartNum"]} initialValue={_===-1?0:_}>
+                    <InputNumber size="small" precision={0}  min={0} onChange={ () => rowChange(index) }/>
                 </Form.Item>
             ) 
         },
@@ -114,8 +114,8 @@ export default function Lofting(): React.ReactNode {
             key: 'length',
             width: 120,
             editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "length"]} initialValue={ _ }>
+            render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data',index, "length"]} initialValue={ _===-1?0:_}>
                     <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
                 </Form.Item>
             ) 
@@ -126,8 +126,8 @@ export default function Lofting(): React.ReactNode {
             key: 'width' ,
             width: 120,
             editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "width"]} initialValue={ _ }>
+            render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data',index, "width"]} initialValue={ _===-1?0:_}>
                     <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
                 </Form.Item>
             )
@@ -138,8 +138,8 @@ export default function Lofting(): React.ReactNode {
             key: 'basicsTheoryWeight',
             width: 120,
             editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "basicsTheoryWeight"]} initialValue={ _ }>
+            render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data',index, "basicsTheoryWeight"]} initialValue={_===-1?0:_}>
                     <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
                 </Form.Item>
             ) 
@@ -150,8 +150,8 @@ export default function Lofting(): React.ReactNode {
             key: 'basicsWeight' ,
             width: 120,
             editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "basicsWeight"]} initialValue={ _ }>
+            render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data',index, "basicsWeight"]} initialValue={ _===-1?0:_}>
                     <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
                 </Form.Item>
             ) 
@@ -162,10 +162,8 @@ export default function Lofting(): React.ReactNode {
             key: 'totalWeight',
             width: 120,
             editable: true,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "totalWeight"]} initialValue={ _ }>
-                    <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
-                </Form.Item>
+            render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>锁定后，系统自动计算</span>
             ) 
         },
         {
@@ -197,6 +195,7 @@ export default function Lofting(): React.ReactNode {
         if (!col.editable) {
             return col;
         }
+        
         if(col.dataIndex === 'operation') {
             return {
                 ...col,
@@ -218,7 +217,15 @@ export default function Lofting(): React.ReactNode {
                 )
             }
         } else {
-            return {
+            if(['basicsPartNum','length','width','basicsTheoryWeight','basicsWeight','totalWeight'].includes(col.dataIndex as string)){
+                return {
+                    ...col,
+                    render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                        <span>{_===-1?0:_}</span>
+                    )
+                }
+            }
+            else return {
                 ...col,
                 render: undefined,
             }
