@@ -68,19 +68,37 @@ export default function DrawTowerMngt(): React.ReactNode {
             key: 'structureCount',
             title: '件号数',
             width: 200,
-            dataIndex: 'structureCount'
+            dataIndex: 'structureCount',
+            render: (structureCount: number): React.ReactNode => {
+                switch (structureCount) {
+                    case -1:
+                        return '';
+                }
+            }    
         },
         {
             key: 'steelAngleCount',
             title: '角钢件号数',
             width: 200,
-            dataIndex: 'steelAngleCount'
+            dataIndex: 'steelAngleCount',
+            render: (steelAngleCount: number): React.ReactNode => {
+                switch (steelAngleCount) {
+                    case -1:
+                        return '';
+                }
+            }    
         },
         {
             key: 'steelPlateCount',
             title: '钢板件号数',
             width: 200,
-            dataIndex: 'steelPlateCount'
+            dataIndex: 'steelPlateCount',
+            render: (steelPlateCount: number): React.ReactNode => {
+                switch (steelPlateCount) {
+                    case -1:
+                        return '';
+                }
+            }    
         },
         {
             key: 'updateUserName',
@@ -103,7 +121,7 @@ export default function DrawTowerMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                     <Link to={ `/drawTower/drawTowerMngt/towerInformation/${ record.id }` }>塔型信息</Link>
-                    <Link to={ `/drawTower/drawTowerMngt/componentInformation/${ record.id }/${ record.structureCount }` }>塔型构件</Link>
+                    <Link to={ `/drawTower/drawTowerMngt/componentInformation/${ record.id }/${ record.structureCount === -1 ? 0 : record.structureCount }` }>塔型构件</Link>
                     <DeliverablesListing id={ record.id } />
                 </Space>
             )

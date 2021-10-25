@@ -49,13 +49,13 @@ export default function BoltList(): React.ReactNode {
                 </Form.Item></>)
         },
         {
-            key: 'type',
+            key: 'typeName',
             title: '类型',
             width: 150,
-            dataIndex: 'type',
+            dataIndex: 'typeName',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "type"]} initialValue={ _ } rules={[{
+                <Form.Item name={['data',index, "type"]} initialValue={ record.type } rules={[{
                     required: true,
                     message: '请选择类型'
                 }]}>
