@@ -6,7 +6,7 @@ import styles from './Pick.module.less';
 import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
-import { Console } from 'node:console';
+// import { Console } from 'node:console';
 import AuthUtil from '../../../../utils/AuthUtil';
 import { downloadTemplate } from '../../setOut/downloadTemplate';
 
