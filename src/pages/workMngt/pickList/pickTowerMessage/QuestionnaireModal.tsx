@@ -120,7 +120,7 @@ class QuestionnaireModal extends React.Component<IQuestionnaireModalRouteProps, 
      */
     public render(): React.ReactNode {
         const record: IRecord = this.props.record;
-        this.getForm()?.setFieldsValue({ description: record.description, newValue: record.newValue });
+        {this.props.title!=='查看问题单'?this.getForm()?.setFieldsValue({ description: '', newValue: ''}):this.getForm()?.setFieldsValue({ description: record.description, newValue: record.newValue })};
         return <>
             <Modal
                 visible={ this.props.visible } 

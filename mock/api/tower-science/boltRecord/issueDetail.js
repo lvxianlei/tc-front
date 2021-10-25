@@ -10,7 +10,7 @@ module.exports = {
         "problemField":"ut in comm",
         "newValue":"incididunt ",
         "currentValue":"dolor occaec",
-        "issueRecordVOList":[
+        "issueRecordList":[
             {
                 "id":54521963.403819025,
                 "createUser":40089346.446286455,
