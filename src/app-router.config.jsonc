@@ -1080,7 +1080,7 @@
     },
     { // 放样塔型-塔型构件
       "name": "塔型构件",
-      "path": "/setOutTower/setOutTowerMngt/towerMember/:id",
+      "path": "/setOutTower/setOutTowerMngt/towerMember/:id/:number",
       "module": "./pages/setOutTower/TowerMemberList",
       "exact": true,
       "authority": "approvalm"

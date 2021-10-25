@@ -136,7 +136,7 @@ export default function AssemblyWeldDetail(): React.ReactNode {
                 <DetailTitle title="备注" />
                 <TextArea disabled rows={5} value={detailData?.description}></TextArea>
                 <DetailTitle title="操作信息" />
-                <CommonTable columns={tableColumns} dataSource={detailData?.issueRecordList} />
+                <CommonTable columns={tableColumns} dataSource={detailData?.issueRecordList} pagination={false}/>
             </DetailContent>
         </Spin>
     </>
