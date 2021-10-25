@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker,  Button, Modal, Select } from 'antd'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { CommonTable, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 
 export default function SetOutTowerMngt(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
+    const history = useHistory();
     const columns = [
         {
             key: 'index',
@@ -66,7 +67,8 @@ export default function SetOutTowerMngt(): React.ReactNode {
             key: 'structureCount',
             title: '件号数',
             width: 100,
-            dataIndex: 'structureCount'
+            dataIndex: 'structureCount',
+            render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>)
         },
         {
             key: 'internalNumber',
@@ -78,13 +80,15 @@ export default function SetOutTowerMngt(): React.ReactNode {
             key: 'steelAngleCount',
             title: '角钢件号数',
             width: 100,
-            dataIndex: 'steelAngleCount'
+            dataIndex: 'steelAngleCount',
+            render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>)
         },
         {
             key: 'steelPlateCount',
             title: '钢板件号数',
             width: 100,
-            dataIndex: 'steelPlateCount'
+            dataIndex: 'steelPlateCount',
+            render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>)
         },
         {
             key: 'updateUserName',
@@ -106,10 +110,10 @@ export default function SetOutTowerMngt(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={`/setOutTower/setOutTowerMngt/towerDetail/${record.id}`}>塔型信息</Link>
-                    <Link to={`/setOutTower/setOutTowerMngt/towerMember/${record.id}`}>塔型构件</Link>
-                    <Link to={`/setOutTower/setOutTowerMngt/assemblyWeld/${record.id}`}>组焊清单</Link>
-                    <Link to={`/setOutTower/setOutTowerMngt/bolt/${record.id}`}>螺栓清单</Link>
+                    <Button type='link' onClick={()=>{history.push(`/setOutTower/setOutTowerMngt/towerDetail/${record.id}`)}}>塔型信息</Button>
+                    <Button type='link' onClick={()=>{history.push(`/setOutTower/setOutTowerMngt/towerMember/${record.id}/${record.structureCount===-1?0:record.structureCount}`)}}>塔型构件</Button>
+                    <Button type='link' onClick={()=>{history.push(`/setOutTower/setOutTowerMngt/assemblyWeld/${record.id}`)}}>组焊清单</Button>
+                    <Button type='link' onClick={()=>{history.push(`/setOutTower/setOutTowerMngt/bolt/${record.id}`)}}>螺栓清单</Button>
                     <Button type='link' onClick={()=>{setVisible(true)}}>附件</Button>
                 </Space>
             )
@@ -166,7 +170,7 @@ export default function SetOutTowerMngt(): React.ReactNode {
                 {
                     name: 'pattern',
                     label: '类型',
-                    children:   <Select>
+                    children:   <Select style={{width:'100px'}}>
                                     <Select.Option value={''} key={''}>全部</Select.Option>
                                     <Select.Option value={1} key={1}>新放</Select.Option>
                                     <Select.Option value={3} key={3}>套用</Select.Option>

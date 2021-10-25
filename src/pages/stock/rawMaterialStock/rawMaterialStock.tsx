@@ -137,77 +137,77 @@ export default function RawMaterialStock(): React.ReactNode {
 
 
     const onFilterSubmit = (value: any) => {
-        if (value.startBidBuyEndTime) {
-            const formatDate = value.startBidBuyEndTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startBidBuyEndTime = formatDate[0]
-            value.endBidBuyEndTime = formatDate[1]
-        }
+        // if (value.startBidBuyEndTime) {
+        //     const formatDate = value.startBidBuyEndTime.map((item: any) => item.format("YYYY-MM-DD"))
+        //     value.startBidBuyEndTime = formatDate[0]
+        //     value.endBidBuyEndTime = formatDate[1]
+        // }
 
-        if (value.startBiddingEndTime) {
-            const formatDate = value.startBiddingEndTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startBiddingEndTime = formatDate[0]
-            value.endBiddingEndTime = formatDate[1]
-        }
+        // if (value.startBiddingEndTime) {
+        //     const formatDate = value.startBiddingEndTime.map((item: any) => item.format("YYYY-MM-DD"))
+        //     value.startBiddingEndTime = formatDate[0]
+        //     value.endBiddingEndTime = formatDate[1]
+        // }
         setFilterValue(value)
         return value
     }
-
+    const seachForm = [
+        {
+            name: 'currentProjectStage',
+            label: '仓库',
+            children: <Select style={{ width: "100px" }}>
+                {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+            </Select>
+        },
+        {
+            name: 'currentProjectStage',
+            label: '材质',
+            children: <Select style={{ width: "100px" }}>
+                {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+            </Select>
+        },
+        {
+            name: 'currentProjectStage',
+            label: '品名',
+            children: <Select style={{ width: "100px" }}>
+                {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+            </Select>
+        },
+        {
+            name: 'currentProjectStage',
+            label: '标准',
+            children: <Select style={{ width: "100px" }}>
+                {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+            </Select>
+        },
+        {
+            name: 'currentProjectStage',
+            label: '分类',
+            children: <Select style={{ width: "100px" }}>
+                {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+            </Select>
+        },
+        {
+            name: 'currentProjectStage',
+            label: '长度',
+            children: <Select style={{ width: "100px" }}>
+                {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+            </Select>
+        },
+        {
+            name: 'currentProjectStage',
+            label: '规格',
+            children: <Select style={{ width: "100px" }}>
+                {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+            </Select>
+        },
+    ]
     return <Page
-        path="/tower-market/projectInfo"
+        path="/tower-science/productCategory/lofting/page"
+        onFilterSubmit={onFilterSubmit}
         columns={columns}
         filterValue={filterValue}
         extraOperation={<Link to="/project/management/new"><Button type="primary">导出</Button></Link>}
-        onFilterSubmit={onFilterSubmit}
-        searchFormItems={[
-            {
-                name: 'currentProjectStage',
-                label: '仓库',
-                children: <Select style={{ width: "100px" }}>
-                    {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
-                </Select>
-            },
-            {
-                name: 'currentProjectStage',
-                label: '材质',
-                children: <Select style={{ width: "100px" }}>
-                    {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
-                </Select>
-            },
-            {
-                name: 'currentProjectStage',
-                label: '品名',
-                children: <Select style={{ width: "100px" }}>
-                    {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
-                </Select>
-            },
-            {
-                name: 'currentProjectStage',
-                label: '标准',
-                children: <Select style={{ width: "100px" }}>
-                    {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
-                </Select>
-            },
-            {
-                name: 'currentProjectStage',
-                label: '分类',
-                children: <Select style={{ width: "100px" }}>
-                    {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
-                </Select>
-            },
-            {
-                name: 'currentProjectStage',
-                label: '长度',
-                children: <Select style={{ width: "100px" }}>
-                    {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
-                </Select>
-            },
-            {
-                name: 'currentProjectStage',
-                label: '规格',
-                children: <Select style={{ width: "100px" }}>
-                    {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
-                </Select>
-            },
-        ]}
+        searchFormItems={seachForm}
     />
 }

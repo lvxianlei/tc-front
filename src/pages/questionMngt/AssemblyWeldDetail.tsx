@@ -8,11 +8,15 @@ import TextArea from 'antd/lib/input/TextArea';
 
 const tableColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '操作部门', dataIndex: 'updateDepartmentName', key: 'updateDepartmentName', },
-    { title: '操作人', dataIndex: 'updateUserName', key: 'updateUserName' },
-    { title: '操作时间', dataIndex: 'updateTime', key: 'updateTime' },
+    { title: '操作部门', dataIndex: 'createDeptName', key: 'createDeptName', },
+    { title: '操作人', dataIndex: 'createUserName', key: 'createUserName' },
+    { title: '操作时间', dataIndex: 'createTime', key: 'createTime' },
     { title: '任务状态', dataIndex: 'status', key: 'status', render: (value: number, record: object): React.ReactNode => {
         const renderEnum: any = [
+            {
+                value: 0,
+                label: "已拒绝"
+            },
             {
                 value: 1,
                 label: "待修改"
@@ -23,14 +27,10 @@ const tableColumns = [
             },
             {
                 value: 3,
-                label: "已拒绝"
-            },
-            {
-                value: 4,
                 label: "已删除"
-            }
+            },
         ]
-             return <>{renderEnum.find((item: any) => item.value === value).label}</>
+        return <>{renderEnum.find((item: any) => item.value === value).label}</>
     }},
     { title: '备注', dataIndex: 'description', key: 'description' }
 ]
@@ -49,7 +49,7 @@ export default function AssemblyWeldDetail(): React.ReactNode {
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string,status: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/issue/issue/welding?id=${params.id}`)
         resole(data)
@@ -94,8 +94,8 @@ export default function AssemblyWeldDetail(): React.ReactNode {
                     </Form.Item>
                 </Form>
             </Modal>
-            <DetailContent operation={[
-               <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
+            <DetailContent operation={params.status==='1'?[
+                <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
                     await RequestUtil.post(`/tower-science/issue/verify`,{id:params.id}).then(()=>{
                         message.success('修改成功！')
                     }).then(()=>{
@@ -112,8 +112,8 @@ export default function AssemblyWeldDetail(): React.ReactNode {
                         history.goBack()
                     })
                 }}>删除</Button>,
-                    <Button key="goback" onClick={() => history.goBack()}>返回</Button>
-                ]}>
+                <Button key="goback" onClick={() => history.goBack()}>返回</Button>
+            ]:[<Button key="goback" onClick={() => history.goBack()}>返回</Button>]}>
                 <DetailTitle title="问题信息" />
                 <span>校核前</span>
                 <CommonTable columns={towerColumns} dataSource={detailData?.issueWeldingDetailedVO?.weldingDetailedStructureList} title={()=>{
@@ -136,7 +136,7 @@ export default function AssemblyWeldDetail(): React.ReactNode {
                 <DetailTitle title="备注" />
                 <TextArea disabled rows={5} value={detailData?.description}></TextArea>
                 <DetailTitle title="操作信息" />
-                <CommonTable columns={tableColumns} dataSource={detailData?.issueRecordList} />
+                <CommonTable columns={tableColumns} dataSource={detailData?.issueRecordList} pagination={false}/>
             </DetailContent>
         </Spin>
     </>
