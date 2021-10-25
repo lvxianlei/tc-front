@@ -38,7 +38,9 @@ const currentProjectStage = [
 
 export default function RawMaterialStock(): React.ReactNode {
     // const history = useHistory()
-    const [filterValue, setFilterValue] = useState({});
+    const [filterValue, setFilterValue] = useState({
+        currentProjectStage:1,
+    });
     const columns: TableColumnProps<object>[] = [
         {
             key: 'index',
@@ -133,7 +135,13 @@ export default function RawMaterialStock(): React.ReactNode {
                 {
                     name: 'currentProjectStage',
                     label: '材质',
-                    children: <Select style={{ width: "100px" }}>
+                    children: <Select style={{ width: "100px" }}
+                    onChange={()=>{
+                        filterValue.currentProjectStage = 5
+                        console.log(filterValue,'filterValue')
+                        setFilterValue(filterValue)
+                    }}
+                    >
                         {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                     </Select>
                 },
