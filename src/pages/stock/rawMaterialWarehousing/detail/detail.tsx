@@ -9,15 +9,18 @@ import RequestUtil from '../../../../utils/RequestUtil';
 import '../../StockPublicStyle.less';
 
 const { RangePicker } = DatePicker;
+const { TextArea } = Input;
 export default function RawMaterialStock(): React.ReactNode {
     const history = useHistory(),
         [current, setCurrent] = useState(1),
         [total, setTotal] = useState(100),
         [pageSize, setPageSize] = useState<number>(10),
+        [isModal, setIsModal] = useState<boolean>(false),
         [status, setStatus] = useState(''),//状态
         [dateValue, setDateValue] = useState<any>([]),//时间
         [dateString, setDateString] = useState<any>([]),//时间字符串格式
         [keyword, setKeyword] = useState<any>('');//关键字搜索
+    const [rejectionText, setRejectionText] = useState<any>('');//拒收原因
     const columns = [
         {
             title: '序号',
@@ -25,51 +28,54 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 50,
         },
         {
-            title: '详情',
+            title: '材质名称',
             dataIndex: 'name',
             width: 120,
             render: (text: any) => <a>{text}</a>,
         }, {
-            title: '状态',
+            title: '标准',
             dataIndex: 'receivingBatch',
             width: 120,
         }, {
-            title: '最新状态变更时间',
+            title: '规格',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '供应商',
+            title: '材质',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '联系人',
+            title: '长度',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '联系电话',
+            title: '宽度',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '合同编号',
+            title: '数量',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '约定到货时间',
+            title: '合同单价(元/吨)',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '重量(度)',
+            title: '价税合计(元)',
             dataIndex: 'key',
             width: 120,
         },
         {
             title: '操作',
             dataIndex: 'key',
-            width: 40,
+            width: 240,
             fixed: 'right' as FixedType,
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={``}>详情</Link>
+                    <span>质检单</span>
+                    <span>质保单</span>
+                    <Button type='link'>收货</Button>
+                    <Button type='link' onClick={() => { setIsModal(true) }}>拒收</Button>
                 </Space>
             )
         }
@@ -162,6 +168,15 @@ export default function RawMaterialStock(): React.ReactNode {
         setDateValue([]);
         setDateString([]);
         setKeyword('')
+    }
+    // submit拒收弹框提交
+    const rejectionSubmit = () => {
+
+    }
+    // 拒收弹框取消
+    const onRejectionCancel = () => {
+        setIsModal(false);
+        setRejectionText('');
     }
     //进入页面刷新
     useEffect(() => {
@@ -291,6 +306,34 @@ export default function RawMaterialStock(): React.ReactNode {
                     }}
                 />
             </div>
+            {/* 拒收弹框 */}
+            <Modal
+                visible={isModal}
+                title="拒收原因*"
+                onCancel={onRejectionCancel}
+                maskClosable={false}
+                footer={
+                    <>
+                        <Button onClick={onRejectionCancel}>取消</Button>
+                        <Button type='primary' onClick={rejectionSubmit}>提交</Button>
+                    </>
+                }
+            >
+                {/* <div>拒收原因<span>*</span>：</div> */}
+                <TextArea
+                    placeholder="请输入拒收原因"
+                    value={rejectionText}
+                    rows={4}
+                    maxLength={200}
+                    onChange={(e) => {
+                        console.log(e.target.value)
+                        setRejectionText(e.target.value)
+                    }}
+                    onPressEnter={() => {
+                        // 回车键回调
+                    }}
+                ></TextArea>
+            </Modal>
         </div>
     )
 }

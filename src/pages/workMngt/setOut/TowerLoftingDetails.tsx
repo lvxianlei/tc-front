@@ -168,19 +168,28 @@ const columns = [
         key: 'sides',
         title: '边数',
         width: 200,
-        dataIndex: 'sides'
+        dataIndex: 'sides',
+        render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+            <span>{ _ === -1  ? undefined : _ }</span>
+        )
     },
     {
         key: 'perimeter',
         title: '周长',
         width: 200,
-        dataIndex: 'perimeter'
+        dataIndex: 'perimeter',
+        render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+            <span>{ _ === -1  ? undefined : _ }</span>
+        )
     },
     {
         key: 'surfaceArea',
         title: '表面积',
         width: 200,
-        dataIndex: 'surfaceArea'
+        dataIndex: 'surfaceArea',
+        render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+            <span>{ _ === -1  ? undefined : _ }</span>
+        )
     },
     {
         key: 'apertureNumber',
@@ -192,7 +201,10 @@ const columns = [
         key: 'weldingEdge',
         title: '焊接边（mm）',
         width: 200,
-        dataIndex: 'weldingEdge'
+        dataIndex: 'weldingEdge',
+        render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+            <span>{ _ === -1  ? undefined : _ }</span>
+        )
     }
 ]
 

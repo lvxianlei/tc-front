@@ -92,6 +92,12 @@ export default function DrawTowerMngt(): React.ReactNode {
             )  
         },
         {
+            key: 'createTime',
+            title: '创建时间',
+            width: 200,
+            dataIndex: 'createTime'
+        },
+        {
             key: 'updateUserName',
             title: '最后更新人',
             width: 200,

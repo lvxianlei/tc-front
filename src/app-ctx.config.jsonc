@@ -342,6 +342,16 @@
                                 "label": "组焊列表",
                                 "path": "/workMngt/assemblyWeldingList",
                                 "authority": "approvalm"
+                            },
+                            {
+                                "label": "询价列表",
+                                "path": "/workMngt/enquiryList",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "采购配料",
+                                "path": "/workMngt/buyBurdening",
+                                "authority": "approvalm"
                             }
                         ]
                     },
