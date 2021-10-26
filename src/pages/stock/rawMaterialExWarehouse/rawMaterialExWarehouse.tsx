@@ -45,7 +45,7 @@ export default function RawMaterialStock(): React.ReactNode {
         {
             title: '操作',
             dataIndex: 'key',
-            width: 120,
+            width: 40,
             fixed: 'right' as FixedType,
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
