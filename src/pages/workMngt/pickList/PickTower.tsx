@@ -4,6 +4,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import { Link, useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil';
+import AuthUtil from '../../../utils/AuthUtil';
 export interface IDetail {
     productCategory?: string;
     productCategoryName?: string;
@@ -14,10 +15,11 @@ export interface IDetail {
 export interface IMaterialDetail{
     count: string;
     id: string;
-    name: string;
+    segmentName: string;
 }
 export default function PickTower(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
+    const [refresh, setRefresh] = useState<boolean>(false);
     const params = useParams<{ id: string }>()
     const history = useHistory();
     const [form] = Form.useForm();
@@ -27,17 +29,25 @@ export default function PickTower(): React.ReactNode {
     const handleModalOk = async () => {
         try {
             const data = await form.validateFields()
-            const submitData = data.detailData.map((item:any,index:number)=>{
+            const submitTableData = data.detailData.map((item:any,index:number)=>{
                 return{
-                    segmentId: detail?.materialDrawProductSegmentList&&detail?.materialDrawProductSegmentList[index].id,
-                    segmentName: item.name,
-                    count: item.count
+                    segmentId: item.id,
+                    ...item,
+                    id: item.id===-1?'':item.id,
                 }
             });
-            RequestUtil.post(`/tower-science/product/material/segment/submit?productCategoryId=${params.id}&productId=${productId}`,submitData).then(()=>{
+            const submitData={
+                productCategoryId: params.id,
+                productId: productId,
+                productSegmentListDTOList: submitTableData
+            }
+            RequestUtil.post(`/tower-science/product/material/segment/submit`,submitData).then(()=>{
                 message.success('提交成功！');
                 setVisible(false);
-                setProductId('')
+                setProductId('');
+                form.resetFields()
+            }).then(()=>{
+                setRefresh(!refresh);
             })
         } catch (error) {
             console.log(error)
@@ -46,17 +56,25 @@ export default function PickTower(): React.ReactNode {
     const handleModalSave =  async () => {
         try {
             const data = await form.validateFields();
-            const saveData = data.detailData.map((item:any,index:number)=>{
+            const saveTableData = data.detailData.map((item:any,index:number)=>{
                 return{
-                    segmentId: detail?.materialDrawProductSegmentList&&detail?.materialDrawProductSegmentList[index].id,
-                    segmentName: item.name,
-                    count: item.count
+                    segmentId: item.id,
+                    ...item,
+                    id: item.id===-1?'':item.id,
                 }
             });
-            RequestUtil.post(`/tower-science/product/material/segment/save?productCategoryId=${params.id}&productId=${productId}`,saveData).then(()=>{
+            const saveData={
+                productCategoryId: params.id,
+                productId: productId,
+                productSegmentListDTOList: saveTableData
+            }
+            RequestUtil.post(`/tower-science/product/material/segment/save`,saveData).then(()=>{
                 message.success('保存成功！');
                 setVisible(false);
-                setProductId('')
+                setProductId('');
+                form.resetFields();
+            }).then(()=>{
+                setRefresh(!refresh);
             })
         } catch (error) {
             console.log(error)
@@ -89,10 +107,10 @@ export default function PickTower(): React.ReactNode {
             dataIndex: 'materialDeliverTime'
         },
         {
-            key: 'materialUser',
+            key: 'materialUserName',
             title: '配段人',
             width: 100,
-            dataIndex: 'materialUser'
+            dataIndex: 'materialUserName'
         },
         {
             key: 'materialStatus',
@@ -153,15 +171,16 @@ export default function PickTower(): React.ReactNode {
                                 ...data,
                                 materialDrawProductSegmentList:detailData
                             })
+                            form.setFieldsValue({detailData:detailData});
                             
-                    }}>配段</Button>
-                    <Link to={`/workMngt/pickList/pickTower/${params.id}/pickTowerDetail/${record.id}`}>杆塔提料明细</Link>
+                    }} disabled={record.materialStatus===5||AuthUtil.getUserId()!==record.materialUser}>配段</Button>
+                    <Button type='link' onClick={()=>{history.push(`/workMngt/pickList/pickTower/${params.id}/pickTowerDetail/${record.id}`)}} disabled={record.materialStatus!==4}>杆塔提料明细</Button>
                 </Space>
             )
         }
     ]
 
-    const handleModalCancel = () => {setVisible(false);setProductId('')};
+    const handleModalCancel = () => {setVisible(false);setProductId('');form.resetFields()};
     const formItemLayout = {
         labelCol: { span: 4 },
         wrapperCol: { span: 17 }
@@ -205,7 +224,7 @@ export default function PickTower(): React.ReactNode {
                                         <Col span={ 1}></Col>
                                         <Col span={ 11 }>
                                         <Form.Item name={[ field.name , 'segmentName']} label='段号'>
-                                            <span>{detail.materialDrawProductSegmentList&&detail.materialDrawProductSegmentList[field.name].name}</span>
+                                            <span>{detail.materialDrawProductSegmentList&&detail.materialDrawProductSegmentList[field.name].segmentName}</span>
                                         </Form.Item>
                                         </Col>
                                         <Col span={1}></Col>
@@ -232,6 +251,7 @@ export default function PickTower(): React.ReactNode {
                 columns={columns}
                 onFilterSubmit={onFilterSubmit}
                 filterValue={ filterValue }
+                refresh={ refresh }
                 requestData={{ productCategoryId: params.id }}
                 extraOperation={
                     <Space>

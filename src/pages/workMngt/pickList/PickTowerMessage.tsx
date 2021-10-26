@@ -5,11 +5,12 @@ import { Link, useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import TowerPickAssign from './TowerPickAssign';
 import RequestUtil from '../../../utils/RequestUtil';
+import AuthUtil from '../../../utils/AuthUtil';
 
 export default function PickTowerMessage(): React.ReactNode {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
-    const params = useParams<{ id: string }>();
+    const params = useParams<{ id: string, status: string }>();
     const [filterValue, setFilterValue] = useState({});
     const columns = [
         {
@@ -113,9 +114,9 @@ export default function PickTowerMessage(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/pick/${record.id}`)}} type='link' disabled={record.status!==1}>提料</Button>
-                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/check/${record.id}/${record.materialLeader}`)}} type='link' disabled={record.status!==2}>校核</Button>
-                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/detail/${record.id}`)}} type='link' disabled={record.status<3}>明细</Button>
+                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>提料</Button>
+                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/check/${record.id}/${record.materialLeader}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>校核</Button>
+                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/detail/${record.id}`)}} type='link' disabled={record.status<3}>明细</Button>
                 </Space>
             )
         }
@@ -157,7 +158,7 @@ export default function PickTowerMessage(): React.ReactNode {
                 >   
                     <Button type="primary" ghost>提交</Button>
                 </Popconfirm>
-                <TowerPickAssign id={ params.id } onRefresh={onRefresh}/>
+                { params.status==='1' ? <TowerPickAssign id={ params.id } onRefresh={onRefresh}/> : null }
                 <Button type="primary" onClick={()=>history.push('/workMngt/pickList')} ghost>返回上一级</Button>
                 </Space>
             }

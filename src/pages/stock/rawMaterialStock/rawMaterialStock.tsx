@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message, Table } from 'antd';
+import { FixedType } from 'rc-table/lib/interface';
 import { Link, useHistory } from 'react-router-dom';
 import ConfirmableButton from '../../../components/ConfirmableButton';
 import { Page } from '../../common';
@@ -24,49 +25,63 @@ export default function RawMaterialStock(): React.ReactNode {
         {
             title: '序号',
             dataIndex: 'key',
+            width: 50,
         },
         {
             title: '所在仓库',
             dataIndex: 'name',
+            width: 120,
             render: (text: any) => <a>{text}</a>,
         }, {
             title: '收货批次',
             dataIndex: 'receivingBatch',
+            width: 120,
         }, {
             title: '库位',
             dataIndex: 'key',
+            width: 120,
         }, {
             title: '区位',
             dataIndex: 'key',
+            width: 120,
         }, {
             title: '物料编码',
             dataIndex: 'key',
+            width: 120,
         }, {
             title: '分类',
             dataIndex: 'key',
+            width: 120,
         }, {
             title: '标准',
             dataIndex: 'key',
+            width: 120,
         }, {
             title: '品名',
             dataIndex: 'key',
+            width: 120,
         }, {
             title: '材质',
             dataIndex: 'key',
+            width: 120,
         }, {
             title: '规格',
             dataIndex: 'key',
+            width: 120,
         }, {
             title: '长度',
             dataIndex: 'key',
+            width: 120,
         }, {
             title: '宽度',
             dataIndex: 'key',
+            width: 120,
         },
         {
             title: '操作',
             dataIndex: 'key',
             width: 120,
+            fixed: 'right' as FixedType,
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Link to={``}>质保单</Link>
@@ -409,6 +424,11 @@ export default function RawMaterialStock(): React.ReactNode {
                 <Table
                     columns={columns}
                     dataSource={Listdata}
+                    size='small'
+                    className="table_antd_wrap"
+                    rowClassName={(item, index) => {
+                        return index % 2 ? 'aaa' : ''
+                    }}
                     scroll={
                         {
                             y: 400
