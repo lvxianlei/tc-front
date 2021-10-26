@@ -200,21 +200,30 @@ const columns = [
         title: '边数',
         editable: true,
         width: 200,
-        dataIndex: 'sides'
+        dataIndex: 'sides',
+        render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+            <span>{ _ === -1  ? undefined : _ }</span>
+        )
     },
     {
         key: 'perimeter',
         title: '周长',
         editable: true,
         width: 200,
-        dataIndex: 'perimeter'
+        dataIndex: 'perimeter',
+        render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+            <span>{ _ === -1  ? undefined : _ }</span>
+        )
     },
     {
         key: 'surfaceArea',
         title: '表面积',
         editable: true,
         width: 200,
-        dataIndex: 'surfaceArea'
+        dataIndex: 'surfaceArea',
+        render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+            <span>{ _ === -1  ? undefined : _ }</span>
+        )
     },
     {
         key: 'apertureNumber',
@@ -228,7 +237,10 @@ const columns = [
         title: '焊接边（mm）',
         editable: true,
         width: 200,
-        dataIndex: 'weldingEdge'
+        dataIndex: 'weldingEdge',
+        render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+            <span>{ _ === -1  ? undefined : _ }</span>
+        )
     }
 ]
 
@@ -299,8 +311,8 @@ export default function TowerCheck(): React.ReactNode {
                     <Button type="primary" ghost>完成校核</Button>
                 </Popconfirm>
                 
-                <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productSegment/segmentModelDownload', '模型', { productSegmentId: params.productSegmentId }, true )} ghost>模型下载</Button>
-                <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productSegment/segmentDrawDownload', '样图', { productSegmentId: params.productSegmentId }, true) } ghost>样图下载</Button>
+                <Button type="primary" onClick={ () => downloadTemplate(`/tower-science/productSegment/segmentModelDownload?productSegmentId=${ params.productSegmentId }`, '模型', {}, true )} ghost>模型下载</Button>
+                <Button type="primary" onClick={ () => downloadTemplate(`/tower-science/productSegment/segmentDrawDownload?productSegmentId=${ params.productSegmentId }`, '样图', {}, true) } ghost>样图下载</Button>
                 <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
             </Space> }
             searchFormItems={ [
