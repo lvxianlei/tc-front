@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Button, Form, Modal, Select } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
-import { Link, useHistory } from 'react-router-dom'
-import { CommonTable, Page } from '../../common'
+import { Link, useHistory } from 'react-router-dom';
+import { CommonTable, Page } from '../../common';
+import { downloadTemplate } from '../setOut/downloadTemplate';
 
 export default function PickList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
     const history = useHistory();
+    const [taskId,setTaskId] = useState('');
     const [filterValue, setFilterValue] = useState({});
     const columns = [
         {
@@ -96,6 +98,10 @@ export default function PickList(): React.ReactNode {
             render: (value: number, record: object): React.ReactNode => {
                 const renderEnum: any = [
                     {
+                        value: -1,
+                        label: "-"
+                    },
+                    {
                       value: 1,
                       label: "待指派"
                     },
@@ -136,13 +142,13 @@ export default function PickList(): React.ReactNode {
                     <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickMessage/${record.loftingId}`)}}>提料信息</Button>
                     <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTowerMessage/${record.id}/${record.status}`)}} disabled={record.status!==1&&record.status!==2}>塔型信息</Button>
                     <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTower/${record.id}`)}} disabled={record.status!==3}>杆塔配段</Button>
-                    <Button type='link' onClick={() => setVisible(true)} disabled={record.status!==5}>交付物</Button>
+                    <Button type='link' onClick={() =>{setTaskId(record.id); setVisible(true)}} disabled={record.status<4}>交付物</Button>
                 </Space>
             )
         }
     ]
 
-    const handleModalCancel = () => setVisible(false);
+    const handleModalCancel = () => {setVisible(false);setTaskId('')};
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -187,9 +193,19 @@ export default function PickList(): React.ReactNode {
                         width: 50, 
                         dataIndex: 'operation', 
                         render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                            <Button type="link">下载</Button>
+                            <Button type="link" onClick={() => downloadTemplate(record.path,record.downName, { materialTaskId: taskId })}>下载</Button>
                     ) }
-                ]} dataSource={[{name:'塔型名称构件明细.excel',function:'提料塔型构件明细'},{name:'杆塔构件明细汇总表.excel',function:'提料杆塔构件明细汇总'}]} />
+                ]} dataSource={[{
+                        name:'塔型名称构件明细.excel',
+                        downName: "塔型名称构件明细",
+                        function:'提料塔型构件明细',
+                        path:`/tower-science/productCategory/material/productCategoryStructure/download`
+                    },{
+                        name:'杆塔构件明细汇总表.excel',
+                        downName: "杆塔构件明细汇总表",
+                        function:'提料杆塔构件明细汇总',
+                        path:'/tower-science/productCategory/material/productStructure/download'
+                    }]} />
             </Modal>
             <Page
                 path="/tower-science/materialTask"
