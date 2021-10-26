@@ -134,7 +134,9 @@ export default function OtherDetail(): React.ReactNode {
             ]:[<Button key="goback" onClick={() => history.goBack()}>返回</Button>]}>
                 <DetailTitle title="问题信息" />
                 <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
-                <CommonTable columns={towerColumns} dataSource={detailData?.drawProductStructure} />
+                {params.type==='WTD-TL'?<CommonTable columns={towerColumns} dataSource={detailData?.drawProductStructure} />:null}
+                {params.type==='WTD-FY'?<CommonTable columns={towerColumns} dataSource={detailData?.drawProductStructure} />:null}
+                {params.type==='WTD-LS'?<CommonTable columns={towerColumns} dataSource={detailData?.drawProductStructure} />:null}
                 <DetailTitle title="操作信息" />
                 <CommonTable columns={tableColumns} dataSource={detailData?.issueRecordList} pagination={false}/>
             </DetailContent>

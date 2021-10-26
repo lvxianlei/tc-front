@@ -11,7 +11,7 @@ import { useState } from 'react';
 
 export default function PickTowerDetail(): React.ReactNode {
     const history = useHistory()
-    const params = useParams<{ id: string, productSegmentId: string }>()
+    const params = useParams<{ id: string, productSegmentId: string, status: string }>()
     const [ url, setUrl ] = useState<string>('')
     const [ urlBase, setUrlBase ] = useState<undefined|any>('')
     const [ tableDataSource, setTableDataSource ] = useState<undefined|any[]>([])
@@ -50,7 +50,7 @@ export default function PickTowerDetail(): React.ReactNode {
                             await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save`,tableDataSource).then(()=>{
                                 message.success('保存成功！')
                             }).then(()=>{
-                                history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/pick/${params.productSegmentId}`)
+                                history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}`)
                             })
                         }else{
                             message.success('当前无数据，不可保存！')
