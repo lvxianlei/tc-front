@@ -626,21 +626,21 @@
     { // 驾驶舱-原材料看板
       "name": "原材料看板",
       "path": "/stock/viewRawMaterial",
-      "module": "./pages/stock/viewRawMaterial/viewRawMaterial",
+      "module": "./pages/stock/viewRawMaterial/ViewRawMaterial",
       "exact": true,
       "authority": "approvalm"
     },
     { // 驾驶舱-收货单看板
       "name": "收货单看板",
       "path": "/stock/viewReceivingNote",
-      "module": "./pages/stock/viewReceivingNote/viewReceivingNote",
+      "module": "./pages/stock/viewReceivingNote/ViewReceivingNote",
       "exact": true,
       "authority": "approvalm"
     },
     { // 驾驶舱-合同看板
       "name": "合同看板",
       "path": "/stock/viewContract",
-      "module": "./pages/stock/viewContract/viewContract",
+      "module": "./pages/stock/viewContract/ViewContract",
       "exact": true,
       "authority": "approvalm"
     },
@@ -1054,6 +1054,20 @@
       "name": "小样图校核",
       "path": "/workMngt/sampleDrawList/sampleDrawCheck/:id/:status",
       "module": "./pages/workMngt/sampleDrawList/SampleDrawCheck",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-询价列表
+      "name": "询价列表",
+      "path": "/workMngt/enquiryList",
+      "module": "./pages/workMngt/enquiryList/EnquiryList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-采购配料
+      "name": "采购配料",
+      "path": "/workMngt/buyBurdening",
+      "module": "./pages/workMngt/buyBurdening/BuyBurdening",
       "exact": true,
       "authority": "approvalm"
     },
