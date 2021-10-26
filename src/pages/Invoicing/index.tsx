@@ -80,12 +80,11 @@ export default function Invoicing() {
                 name: 'contractType',
                 label: '开票时合同状态',
                 children: <Select style={{ width: 200 }}>
-                    <Select.Option value="a">全部</Select.Option>
-                    <Select.Option value="b">不下计划</Select.Option>
-                    <Select.Option value="c">未下计划</Select.Option>
-                    <Select.Option value="d">未下完计划</Select.Option>
-                    <Select.Option value="e">未发完货</Select.Option>
-                    <Select.Option value="f">已发完货</Select.Option>
+                    <Select.Option value="1">不下计划</Select.Option>
+                    <Select.Option value="2">未下计划</Select.Option>
+                    <Select.Option value="3">未下完计划</Select.Option>
+                    <Select.Option value="4">未发完货</Select.Option>
+                    <Select.Option value="5">已发完货</Select.Option>
                 </Select>
             },
             {

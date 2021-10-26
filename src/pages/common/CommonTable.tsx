@@ -4,13 +4,13 @@ import styles from "./CommonTable.module.less"
 import moment from "moment"
 type ColumnsItemsType = "text" | "string" | "number" | "select" | "date" | undefined
 
-function generateRender(type: ColumnsItemsType, data: (SelectData | TextData)) {
+export function generateRender(type: ColumnsItemsType, data: (SelectData | TextData)) {
     switch (type) {
         case "date":
             return ({
                 ellipsis: true,
                 onCell: () => ({ className: styles.tableCell }),
-                render: (text: string, record: any) => <>{text ? moment(text).format(data.format || "YYYY-MM-DD HH:mm:ss") : "-"}</>,
+                render: (text: string) => <>{text ? moment(text).format(data.format || "YYYY-MM-DD HH:mm:ss") : "-"}</>,
                 ...data
             })
         case "select":
@@ -24,7 +24,7 @@ function generateRender(type: ColumnsItemsType, data: (SelectData | TextData)) {
             return ({
                 ellipsis: true,
                 onCell: () => ({ className: styles.tableCell }),
-                render: (text: number, record: any) => <>{text && text !== -1 ? text : 0}</>,
+                render: (text: number) => <>{text && text !== -1 ? text : 0}</>,
                 ...data
             })
         default:

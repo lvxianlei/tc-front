@@ -39,9 +39,10 @@ export default function CostEdit() {
     const onSelectChange = async (fields: any) => {
         if (fields.productName) {
             setProductName(fields.productName)
-            const { productType } = await run(fields.productName)
+            const { productType, proport } = await run(fields.productName)
             delete productType.productName
             baseForm.setFieldsValue({ ...formatData(baseInfo, productType) })
+            tableRowForm.setFieldsValue({ submit: (proport as any)?.data?.map((item: any, index: number) => ({ ...item, id: index })) })
         }
     }
 
@@ -74,7 +75,10 @@ export default function CostEdit() {
         <Button key="goback" onClick={() => history.go(-1)}>返回</Button>
     ]}>
         <Spin spinning={loading}>
-            <BaseInfo onChange={onSelectChange} form={baseForm} columns={baseInfo} dataSource={data || {}} edit />
+            <BaseInfo onChange={onSelectChange} form={baseForm} columns={baseInfo.map((item: any) => item.dataIndex === "productName" ? ({
+                ...item,
+                disabled: id !== "new"
+            }) : item)} dataSource={data || {}} edit />
             <DetailTitle title="材质比例" />
             {data?.proport && <EditTable addRowData={initData} form={tableRowForm} columns={data?.proport.head || []} dataSource={dataSource} />}
         </Spin>

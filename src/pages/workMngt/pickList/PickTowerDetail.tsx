@@ -40,7 +40,7 @@ export default function PickTowerDetail(): React.ReactNode {
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
                 <Button type='primary' onClick={()=>{window.open()}}>导出</Button>
-                <CommonTable dataSource={detailData?.records} columns={towerColumns}/>
+                <CommonTable dataSource={detailData?.data} columns={towerColumns}/>
             </DetailContent>
         </Spin>
     </>

@@ -27,12 +27,14 @@ export default function PickTower(): React.ReactNode {
     const handleModalOk = async () => {
         try {
             const data = await form.validateFields()
-            const submitData = {
-                productCategoryId: params.id,
-                productId: productId,
-                list: data.detailData
-            }
-            RequestUtil.post('/tower-science/product/material/segment/submit',submitData).then(()=>{
+            const submitData = data.detailData.map((item:any,index:number)=>{
+                return{
+                    segmentId: detail?.materialDrawProductSegmentList&&detail?.materialDrawProductSegmentList[index].id,
+                    segmentName: item.name,
+                    count: item.count
+                }
+            });
+            RequestUtil.post(`/tower-science/product/material/segment/submit?productCategoryId=${params.id}&productId=${productId}`,submitData).then(()=>{
                 message.success('提交成功！');
                 setVisible(false);
                 setProductId('')
@@ -44,12 +46,14 @@ export default function PickTower(): React.ReactNode {
     const handleModalSave =  async () => {
         try {
             const data = await form.validateFields();
-            const saveData = {
-                productCategoryId: params.id,
-                productId: productId,
-                list: data.detailData
-            }
-            RequestUtil.post('/tower-science/product/material/segment/save',saveData).then(()=>{
+            const saveData = data.detailData.map((item:any,index:number)=>{
+                return{
+                    segmentId: detail?.materialDrawProductSegmentList&&detail?.materialDrawProductSegmentList[index].id,
+                    segmentName: item.name,
+                    count: item.count
+                }
+            });
+            RequestUtil.post(`/tower-science/product/material/segment/save?productCategoryId=${params.id}&productId=${productId}`,saveData).then(()=>{
                 message.success('保存成功！');
                 setVisible(false);
                 setProductId('')
@@ -99,14 +103,22 @@ export default function PickTower(): React.ReactNode {
                 const renderEnum: any = [
                   {
                     value: 1,
-                    label: "配段中"
+                    label: "待指派"
                   },
                   {
                     value: 2,
-                    label: "已完成"
+                    label: "提料中"
                   },
                   {
                     value: 3,
+                    label: "配段中"
+                  },
+                  {
+                    value: 4,
+                    label: "已完成"
+                  },
+                  {
+                    value: 5,
                     label: "已提交"
                   },
                 ]
@@ -192,7 +204,7 @@ export default function PickTower(): React.ReactNode {
                                     <>
                                         <Col span={ 1}></Col>
                                         <Col span={ 11 }>
-                                        <Form.Item name={[ field.name , 'name']} label='段号'>
+                                        <Form.Item name={[ field.name , 'segmentName']} label='段号'>
                                             <span>{detail.materialDrawProductSegmentList&&detail.materialDrawProductSegmentList[field.name].name}</span>
                                         </Form.Item>
                                         </Col>
@@ -258,9 +270,9 @@ export default function PickTower(): React.ReactNode {
                         </Select>
                     },
                     {
-                        name: 'planTime',
+                        name: 'loftingUser',
                         label:'配段人',
-                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                        children: <Input/>
                     }
                 ]}
             />
