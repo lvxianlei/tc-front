@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message, Table } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import ConfirmableButton from '../../../components/ConfirmableButton';
-import { Page } from '../../common';
-import { IClient } from '../../IClient';
-import RequestUtil from '../../../utils/RequestUtil';
-import '../StockPublicStyle.less';
+import ConfirmableButton from '../../../../components/ConfirmableButton';
+import { Page } from '../../../common';
+import { IClient } from '../../../IClient';
+import RequestUtil from '../../../../utils/RequestUtil';
+import '../../StockPublicStyle.less';
 
 const { RangePicker } = DatePicker;
 export default function RawMaterialStock(): React.ReactNode {
@@ -18,6 +18,8 @@ export default function RawMaterialStock(): React.ReactNode {
         [dateValue, setDateValue] = useState<any>([]),//时间
         [dateString, setDateString] = useState<any>([]),//时间字符串格式
         [keyword, setKeyword] = useState<any>('');//关键字搜索
+    const [departmentId, setDepartmentId] = useState('');//部门
+    const [personnelId, setPersonnelId] = useState('');//人员
     const columns = [
         {
             title: '序号',
@@ -25,7 +27,7 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 50,
         },
         {
-            title: '收货单号',
+            title: '品名',
             dataIndex: 'name',
             width: 120,
             render: (text: any) => <a>{text}</a>,
@@ -34,42 +36,63 @@ export default function RawMaterialStock(): React.ReactNode {
             dataIndex: 'receivingBatch',
             width: 120,
         }, {
-            title: '最新状态变更时间',
+            title: '最新状态变更',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '供应商',
+            title: '规格',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '联系人',
+            title: '标准',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '联系电话',
+            title: '材质',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '合同编号',
+            title: '长度(mm)',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '约定到货时间',
+            title: '宽度(mm)',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '重量(度)',
+            title: '重量(吨)',
+            dataIndex: 'key',
+            width: 120,
+        }, {
+            title: '炉批号',
+            dataIndex: 'key',
+            width: 120,
+        }, {
+            title: '内部合同号',
+            dataIndex: 'key',
+            width: 120,
+        }, {
+            title: '塔型',
+            dataIndex: 'key',
+            width: 120,
+        }, {
+            title: '塔杆号',
+            dataIndex: 'key',
+            width: 120,
+        }, {
+            title: '出库人',
             dataIndex: 'key',
             width: 120,
         },
         {
             title: '操作',
             dataIndex: 'key',
-            width: 40,
+            width: 140,
             fixed: 'right' as FixedType,
-            render: (_: undefined, record: any): React.ReactNode => (
+            render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={`/stock/rawMaterialWarehousing/detail/${record.key}`}>详情</Link>
+                    <Button type='link'>出库</Button>
+                    <Button type='link'>详情</Button>
                 </Space>
             )
         }
@@ -211,10 +234,60 @@ export default function RawMaterialStock(): React.ReactNode {
                     </div>
                 </div>
                 <div className="search_item">
+                    <span className="tip">出库人：</span>
+                    <div className='selectOrInput'>
+                        <Select
+                            className="select"
+                            style={{ width: "100px" }}
+                            value={departmentId ? departmentId : '请选择'}
+                            onChange={(val) => { setDepartmentId(val) }}
+                        >
+                            <Select.Option
+                                value="1"
+                            >
+                                部门1
+                            </Select.Option>
+                            <Select.Option
+                                value="2"
+                            >
+                                部门2
+                            </Select.Option>
+                            <Select.Option
+                                value="3"
+                            >
+                                部门3
+                            </Select.Option>
+                        </Select>-
+                        <Select
+                            className="select"
+                            style={{ width: "100px" }}
+                            value={personnelId ? personnelId : '请选择'}
+                            onChange={(val) => { setPersonnelId(val) }}
+                        >
+                            <Select.Option
+                                value="1"
+                            >
+                                人员1
+                            </Select.Option>
+                            <Select.Option
+                                value="2"
+                            >
+                                人员2
+                            </Select.Option>
+                            <Select.Option
+                                value="3"
+                            >
+                                人员3
+                            </Select.Option>
+                        </Select>
+                    </div>
+                </div>
+                <div className="search_item">
                     <span className="tip">关键字：</span>
                     <div className='selectOrInput'>
                         <Input
-                            placeholder="收货单号/供应商/合同编号"
+                            style={{ width: "200px" }}
+                            placeholder="品名/炉批号/内部合同号/杆塔号"
                             value={keyword}
                             onChange={(e) => {
                                 setKeyword(e.target.value)
@@ -242,7 +315,19 @@ export default function RawMaterialStock(): React.ReactNode {
             <div className="func_public_Stock">
                 <Button
                     type="primary"
+                    className='func_btn'
                 >导出</Button>
+                <Button
+                    className='func_btn'
+                    type="primary"
+                    ghost
+                    onClick={() => {
+                        history.go(-1)
+                    }}
+                >返回上一级</Button>
+            </div>
+            <div className="tip_public_Stock">
+                <div>总重量： 12334.232 吨    缺料总重量：123.123吨</div>
             </div>
             <div className="page_public_Stock">
                 <Table

@@ -176,6 +176,11 @@
                                 "label": "审批管理",
                                 "path": "/approvalm/management",
                                 "authority": "approvalm"
+                            },
+                            {
+                                "label": "申请价",
+                                "path": "/approvalm/management",
+                                "authority": "approvalm"
                             }
                         ]
                     },

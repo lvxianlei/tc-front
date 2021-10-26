@@ -84,8 +84,10 @@ export default function RawMaterialStock(): React.ReactNode {
             fixed: 'right' as FixedType,
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={``}>质保单</Link>
-                    <Link to={``}>质检单</Link>
+                    {/* <Link to={``}>质保单</Link>
+                    <Link to={``}>质检单</Link> */}
+                    <span>质保单</span>
+                    <span>质检单</span>
                 </Space>
             )
         }

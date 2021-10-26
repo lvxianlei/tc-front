@@ -58,7 +58,6 @@ export default function Payment() {
                     </>
                 }
             }]}
-        extraOperation={<Link to="/project/payment/edit/new"><Button type="primary">新增开票申请</Button></Link>}
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {
@@ -68,7 +67,7 @@ export default function Payment() {
             {
                 name: 'isOpen',
                 label: '付款类型',
-                children: <Select style={{ width: 200 }}>
+                children: <Select style={{ width: 100 }}>
                     <Select.Option value="a">请款</Select.Option>
                     <Select.Option value="b">报销</Select.Option>
                 </Select>
@@ -76,7 +75,7 @@ export default function Payment() {
             {
                 name: 'contractType',
                 label: '付款状态',
-                children: <Select style={{ width: 200 }}>
+                children: <Select style={{ width: 100 }}>
                     <Select.Option value="e">待付款</Select.Option>
                     <Select.Option value="f">已付款</Select.Option>
                 </Select>
@@ -84,7 +83,7 @@ export default function Payment() {
             {
                 name: 'bbbb',
                 label: '审批状态',
-                children: <Select style={{ width: 200 }}>
+                children: <Select style={{ width: 100 }}>
                     <Select.Option value="e">待审批</Select.Option>
                     <Select.Option value="f">被驳回</Select.Option>
                     <Select.Option value="2">已通过</Select.Option>
