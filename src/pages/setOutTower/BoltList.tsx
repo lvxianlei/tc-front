@@ -25,8 +25,8 @@ export default function BoltInfo(): React.ReactNode {
     }), {})
     const columns = [
         { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-        { title: '类型', dataIndex: 'partBidNumber', key: 'partBidNumber', },
-        { title: '名称', dataIndex: 'type', key: 'type' },
+        { title: '类型', dataIndex: 'typeName', key: 'typeName'},
+        { title: '名称', dataIndex: 'name', key: 'name' },
         { title: '等级', dataIndex: 'level', key: 'level' },
         { title: '规格', dataIndex: 'specs', key: 'specs' },
         { title: '无扣长（mm）', dataIndex: 'unbuckleLength', key: 'unbuckleLength' },
