@@ -1050,8 +1050,8 @@
     },
     { // 工作管理-杆塔信息-编辑包装清单
       "name": "编辑包装清单",
-      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:productId/packingListSetting/:id",
-      "module": "./pages/workMngt/setOut/PackingListSetting",
+      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:productId/packingListSetting",
+      "module": "./pages/workMngt/setOut/PackingListNew",
       "exact": true,
       "authority": "approvalm"
     },
