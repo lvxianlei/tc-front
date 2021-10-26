@@ -193,18 +193,18 @@ export default function PickList(): React.ReactNode {
                         width: 50, 
                         dataIndex: 'operation', 
                         render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                            <Button type="link" onClick={() => downloadTemplate(record.path,record.downName, {}, true)}>下载</Button>
+                            <Button type="link" onClick={() => downloadTemplate(record.path,record.downName)}>下载</Button>
                     ) }
                 ]} dataSource={[{
                         name:'塔型名称构件明细.zip',
                         downName: "塔型名称构件明细",
                         function:'提料塔型构件明细',
-                        path:`/tower-science/productCategory/material/productCategoryStructure/download?materialTaskId=${taskId}`
+                        path:`/tower-sciencematerial/productCategoryStructure/download/excel?productCategoryId=${taskId}`
                     },{
                         name:'杆塔构件明细汇总表.zip',
                         downName: "杆塔构件明细汇总表",
                         function:'提料杆塔构件明细汇总',
-                        path: `/tower-science/productCategory/material/productStructure/download?materialTaskId=${taskId}`
+                        path: `/tower-science/material/productStructure/download/excel?productCategoryId=${taskId}`
                 }]} />
             </Modal>
             <Page

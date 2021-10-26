@@ -181,6 +181,11 @@
                                 "label": "申请价",
                                 "path": "/approvalm/management",
                                 "authority": "approvalm"
+                            },
+                            {
+                                "label": "相关费用",
+                                "path": "/approvalm/management",
+                                "authority": "approvalm"
                             }
                         ]
                     },
@@ -346,6 +351,16 @@
                             {
                                 "label": "组焊列表",
                                 "path": "/workMngt/assemblyWeldingList",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "询价列表",
+                                "path": "/workMngt/enquiryList",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "采购配料",
+                                "path": "/workMngt/buyBurdening",
                                 "authority": "approvalm"
                             }
                         ]
