@@ -60,6 +60,72 @@ export default function PickList(): React.ReactNode {
             dataIndex: 'plannedDeliveryTime'
         },
         {
+            key: 'pattern',
+            title: '模式',
+            width: 100,
+            dataIndex: 'pattern',
+            render: (value: number, record: object): React.ReactNode => {
+                const renderEnum: any = [
+                  {
+                    value: 1,
+                    label: "新放"
+                  },
+                  {
+                    value: 2,
+                    label: "重新出卡"
+                  },
+                  {
+                    value: 3,
+                    label: "套用"
+                  },
+                ]
+                return <>{renderEnum.find((item: any) => item.value === value).label}</>
+            }
+        },
+        {
+            key: 'materialLeaderName',
+            title: '提料负责人',
+            width: 100,
+            dataIndex: 'materialLeaderName'
+        },
+        {
+            key: 'status',
+            title: '塔型提料状态',
+            width: 100,
+            dataIndex: 'status',
+            render: (value: number, record: object): React.ReactNode => {
+                const renderEnum: any = [
+                    {
+                      value: 1,
+                      label: "待指派"
+                    },
+                    {
+                      value: 2,
+                      label: "提料中"
+                    },
+                    {
+                      value: 3,
+                      label: "配段中"
+                    },
+                    {
+                      value: 4,
+                      label: "已完成"
+                    },
+                    {
+                      value: 5,
+                      label: "已提交"
+                    },
+                ]
+                return <>{renderEnum.find((item: any) => item.value === value).label}</>
+            }
+        },
+        {
+            key: 'updateStatusTime',
+            title: '最新状态变更时间',
+            width: 150,
+            dataIndex: 'updateStatusTime'
+        },
+        {
             key: 'operation',
             title: '操作',
             fixed: 'right' as FixedType,
@@ -68,9 +134,9 @@ export default function PickList(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickMessage/${record.loftingId}`)}}>提料信息</Button>
-                    <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTowerMessage/${record.id}`)}}>塔型信息</Button>
-                    <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTower/${record.id}`)}}>杆塔配段</Button>
-                    <Button type='link' onClick={() => setVisible(true)}>交付物</Button>
+                    <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTowerMessage/${record.id}/${record.status}`)}} disabled={record.status!==1&&record.status!==2}>塔型信息</Button>
+                    <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTower/${record.id}`)}} disabled={record.status!==3}>杆塔配段</Button>
+                    <Button type='link' onClick={() => setVisible(true)} disabled={record.status!==5}>交付物</Button>
                 </Space>
             )
         }

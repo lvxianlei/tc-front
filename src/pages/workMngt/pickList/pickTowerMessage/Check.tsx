@@ -10,7 +10,7 @@ import styles from './SetOut.module.less';
 
 export default function PickCheckList(): React.ReactNode {
     const [form] = Form.useForm();
-    const params = useParams<{ productSegmentId: string, id: string, materialLeaderId: string}>();
+    const params = useParams<{ productSegmentId: string, id: string, materialLeaderId: string,status: string}>();
     const history = useHistory();
     const [ visible, setVisible ] = useState(false);
     const [ refresh, setRefresh] = useState(false);
@@ -100,7 +100,7 @@ export default function PickCheckList(): React.ReactNode {
                                 await RequestUtil.post(`/tower-science/drawProductStructure/completed/check?productSegmentId=${params.productSegmentId}`).then(()=>{
                                     message.success('校核成功！')
                                 }).then(()=>{
-                                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}`)
+                                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}`)
                                 })
                             } }
                             okText="确认"
@@ -108,7 +108,7 @@ export default function PickCheckList(): React.ReactNode {
                         > 
                             <Button type='primary' ghost >完成校核</Button>
                         </Popconfirm>
-                        <Button type='primary' ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}`)}}>返回上一级</Button>
+                        <Button type='primary' ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}`)}}>返回上一级</Button>
                     </Space>
                 }
                 searchFormItems={[

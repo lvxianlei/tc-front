@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message, Table } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
+import { FixedType } from 'rc-table/lib/interface';
 import ConfirmableButton from '../../../components/ConfirmableButton';
 import { Page } from '../../common';
 import { IClient } from '../../IClient';
@@ -17,40 +18,51 @@ export default function RawMaterialStock(): React.ReactNode {
         {
             title: '序号',
             dataIndex: 'key',
+            width: 120,
         },
         {
             title: '余料出库编号',
-            dataIndex: 'name',
-            key: 'name',
+            dataIndex: 'name',            
+            width: 120,
             render: (text: any) => <a>{text}</a>,
         }, {
             title: '生产批次',
             dataIndex: 'receivingBatch',
+            width: 120,
         }, {
             title: '状态',
             dataIndex: 'key',
+            width: 120,
         }, {
             title: '最新状态变更时间',
             dataIndex: 'key',
+            width: 130,
         }, {
             title: '材质',
             dataIndex: 'key',
+            width: 120,
         }, {
             title: '规格',
             dataIndex: 'key',
+            width: 120,
         }, {
             title: '应收余料长度',
             dataIndex: 'key',
+            width: 120,
         }, {
             title: '实收余料长度',
             dataIndex: 'key',
+            width: 120,
         }, {
             title: '入库人',
             dataIndex: 'key',
+            width: 120,
         },
         {
             title: '操作',
             dataIndex: 'key',
+            width: 120,
+            fixed: 'right' as FixedType,
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Link to={``}>入库</Link>
@@ -367,6 +379,10 @@ export default function RawMaterialStock(): React.ReactNode {
                 <Table
                     columns={columns}
                     dataSource={Listdata}
+                    size='small'
+                    rowClassName={(item, index) => {
+                        return index % 2 ? 'aaa' : ''
+                    }}
                     scroll={
                         {
                             y: 400
