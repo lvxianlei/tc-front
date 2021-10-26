@@ -211,6 +211,11 @@
                                 "label": "收货单看板",
                                 "path": "/stock/viewReceivingNote",
                                 "authority": "approvalm"
+                            },
+                            {
+                                "label": "合同看板",
+                                "path": "/stock/viewContract",
+                                "authority": "approvalm"
                             }
                         ]
                     },

@@ -631,9 +631,16 @@
       "authority": "approvalm"
     },
     { // 驾驶舱-收货单看板
-      "name": "原材料看板",
+      "name": "收货单看板",
       "path": "/stock/viewReceivingNote",
       "module": "./pages/stock/viewReceivingNote/viewReceivingNote",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 驾驶舱-合同看板
+      "name": "合同看板",
+      "path": "/stock/viewContract",
+      "module": "./pages/stock/viewContract/viewContract",
       "exact": true,
       "authority": "approvalm"
     },
