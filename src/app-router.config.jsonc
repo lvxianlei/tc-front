@@ -439,16 +439,9 @@
       "exact": true,
       "authority": "project"
     },
-    { // 付款申请
-      "name": "新增开票申请",
-      "path": "/project/payment/edit/:id",
-      "module": "./pages/Payment/Edit",
-      "exact": true,
-      "authority": "project"
-    },
 
-    { // 回款申请--已确认
-      "name": "回款申请--已确认",
+    { // 回款申请
+      "name": "回款申请",
       "path": "/project/collection",
       "module": "./pages/Collection/index",
       "exact": true,
@@ -458,35 +451,6 @@
       "name": "回款申请详情",
       "path": "/project/collection/detail/:id",
       "module": "./pages/Collection/Overview",
-      "exact": true,
-      "authority": "project"
-    },
-    { // 回款申请
-      "name": "新增开票申请",
-      "path": "/project/collection/edit/:id",
-      "module": "./pages/Collection/Edit",
-      "exact": true,
-      "authority": "project"
-    },
-
-    { // 回款申请--未确认
-      "name": "回款申请--未确认",
-      "path": "/project/CollectionNot",
-      "module": "./pages/CollectionNot/index",
-      "exact": true,
-      "authority": "project"
-    },
-    { // 回款申请详情
-      "name": "回款申请详情",
-      "path": "/project/CollectionNot/detail/:id",
-      "module": "./pages/CollectionNot/Overview",
-      "exact": true,
-      "authority": "project"
-    },
-    { // 回款申请
-      "name": "新增开票申请",
-      "path": "/project/CollectionNot/edit/:id",
-      "module": "./pages/CollectionNot/Edit",
       "exact": true,
       "authority": "project"
     },
@@ -668,34 +632,34 @@
       "authority": "approvalm_edit"
     },
     
-    { // 申请价
-      "name": "申请价",
-      "path": "/approvalm/management",
-      "module": "./pages/Applicationprice/ApprovalMngt",
-      "exact": true,
-      "authority": "approvalm"
-    },
-    { // 申请价详情
-      "name": "申请价详情",
-      "path": "/approvalm/management/detail/:id",
-      "module": "./pages/Applicationprice/ApprovalMngtDetail",
-      "exact": true,
-      "authority": "approvalm_detail"
-    },
-    { // 申请价新建
-      "name": "申请价详情",
-      "path": "/approvalm/management/edit/new/:type",
-      "module": "./pages/Applicationprice/ApprovalMngtEdit",
-      "exact": true,
-      "authority": "approvalm_edit"
-    },
-    { // 申请价详情
-      "name": "申请价详情",
-      "path": "/approvalm/management/edit/:id",
-      "module": "./pages/Applicationprice/ApprovalMngtEdit",
-      "exact": true,
-      "authority": "approvalm_edit"
-    },
+    // { // 申请价
+    //   "name": "申请价",
+    //   "path": "/approvalm/management",
+    //   "module": "./pages/Applicationprice/ApprovalMngt",
+    //   "exact": true,
+    //   "authority": "approvalm"
+    // },
+    // { // 申请价详情
+    //   "name": "申请价详情",
+    //   "path": "/approvalm/management/detail/:id",
+    //   "module": "./pages/Applicationprice/ApprovalMngtDetail",
+    //   "exact": true,
+    //   "authority": "approvalm_detail"
+    // },
+    // { // 申请价新建
+    //   "name": "申请价详情",
+    //   "path": "/approvalm/management/edit/new/:type",
+    //   "module": "./pages/Applicationprice/ApprovalMngtEdit",
+    //   "exact": true,
+    //   "authority": "approvalm_edit"
+    // },
+    // { // 申请价详情
+    //   "name": "申请价详情",
+    //   "path": "/approvalm/management/edit/:id",
+    //   "module": "./pages/Applicationprice/ApprovalMngtEdit",
+    //   "exact": true,
+    //   "authority": "approvalm_edit"
+    // },
 
     //rd
     { // 驾驶舱-计划跟踪
