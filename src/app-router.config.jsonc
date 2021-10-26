@@ -715,7 +715,7 @@
       "exact": true,
       "authority": "approvalm"
     },
-    { // 库存管理-原材料入库
+    { // 库存管理-原材料入库-详情
       "name": "原材料入库详情",
       "path": "/stock/rawMaterialWarehousing/detail/:id",
       "module": "./pages/stock/rawMaterialWarehousing/detail/detail",
@@ -728,6 +728,14 @@
       "module": "./pages/stock/rawMaterialExWarehouse/rawMaterialExWarehouse",
       "exact": true,
       "authority": "approvalm"
+    },
+    
+    { // 库存管理-原材料出-详情
+        "name": "原材料出库详情",
+        "path": "/stock/rawMaterialExWarehouse/detail/:id",
+        "module": "./pages/stock/rawMaterialExWarehouse/detail/detail",
+        "exact": true,
+        "authority": "approvalm"
     },
     { // 库存管理-余料入库
       "name": "余料入库",

@@ -25,51 +25,54 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 50,
         },
         {
-            title: '详情',
+            title: '材质名称',
             dataIndex: 'name',
             width: 120,
             render: (text: any) => <a>{text}</a>,
         }, {
-            title: '状态',
+            title: '标准',
             dataIndex: 'receivingBatch',
             width: 120,
         }, {
-            title: '最新状态变更时间',
+            title: '规格',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '供应商',
+            title: '材质',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '联系人',
+            title: '长度',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '联系电话',
+            title: '宽度',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '合同编号',
+            title: '数量',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '约定到货时间',
+            title: '合同单价(元/吨)',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '重量(度)',
+            title: '价税合计(元)',
             dataIndex: 'key',
             width: 120,
         },
         {
             title: '操作',
             dataIndex: 'key',
-            width: 40,
+            width: 240,
             fixed: 'right' as FixedType,
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={``}>详情</Link>
+                    <span>质检单</span>
+                    <span>质保单</span>
+                    <Button type='link'>收货</Button>
+                    <Button type='link'>拒收</Button>
                 </Space>
             )
         }
