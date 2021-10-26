@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Result, Button, Spin } from "antd"
 import { Link, useHistory, useParams } from "react-router-dom"
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common'
-import { consultRecords, costBase } from '../managementDetailData.json'
+import { consultRecords, paths } from '../managementDetailData.json'
 import type { TabTypes } from "../ManagementDetail"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -13,10 +13,9 @@ export default function PayInfo() {
     // const [visible, setVisible] = useState<boolean>(false)
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const [askInfo, askPrice] = await Promise.all([
-                RequestUtil.get(`/tower-market/askInfo?projectId=${params.id}`),
-                RequestUtil.get(`/tower-market/askPrice?projectId=${params.id}`)])
-            resole({ askInfo, askPrice })
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/payApply/getPayInfo`, { id: params.id })
+            resole(result)
+            return
         } catch (error) {
             reject(error)
         }
