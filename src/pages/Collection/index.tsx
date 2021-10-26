@@ -1,5 +1,5 @@
 import React from "react"
-import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
+import { Button, Input, DatePicker, Select, Modal, message, Radio } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { Page } from '../common'
 import { collectionListHead } from "./CollectionData.json"
@@ -42,8 +42,12 @@ export default function Collection() {
         })
     }
 
+    const operationChange = (event: any) => {
+        console.log("----", event.target.value)
+    }
+
     return <Page
-        path="/tower-market/Payment"
+        path="/tower-market/backMoney"
         columns={[
             ...collectionListHead,
             {
@@ -51,46 +55,23 @@ export default function Collection() {
                 dataIndex: "opration",
                 fixed: "right",
                 width: 100,
-                render: (_: any, record: any) => {
-                    return <>
-                        <Button type="link" onClick={() => history.push(`/project/Collection/detail/${record.id}`)}>查看</Button>
-                        <Button type="link" onClick={() => history.push(`/project/Collection/edit/${record.id}`)}>编辑</Button>
-                        <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>
-                    </>
-                }
+                render: (_: any, record: any) => <Button type="link" onClick={() => history.push(`/project/collection/detail/${record.id}`)}>确认信息</Button>
             }]}
-        extraOperation={<Link to="/project/Collection/edit/new"><Button type="primary">新增开票申请</Button></Link>}
+        extraOperation={<>
+            <Radio.Group defaultValue={1} onChange={operationChange}>
+                <Radio.Button value={1}>待确认</Radio.Button>
+                <Radio.Button value={2}>已确认</Radio.Button>
+            </Radio.Group>
+        </>}
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {
                 name: 'fuzzyQuery',
-                children: <Input placeholder="编号/内部合同编号/工程名称/票面单位/业务经理" style={{ width: 300 }} />
-            },
-            {
-                name: 'isOpen',
-                label: '是否已全开',
-                children: <Select style={{ width: 200 }}>
-                    <Select.Option value="a">全部</Select.Option>
-                    <Select.Option value="b">预开</Select.Option>
-                    <Select.Option value="c">发票已开全</Select.Option>
-                    <Select.Option value="d">发票未开全</Select.Option>
-                </Select>
-            },
-            {
-                name: 'contractType',
-                label: '开票时合同状态',
-                children: <Select style={{ width: 200 }}>
-                    <Select.Option value="a">全部</Select.Option>
-                    <Select.Option value="b">不下计划</Select.Option>
-                    <Select.Option value="c">未下计划</Select.Option>
-                    <Select.Option value="d">未下完计划</Select.Option>
-                    <Select.Option value="e">未发完货</Select.Option>
-                    <Select.Option value="f">已发完货</Select.Option>
-                </Select>
+                children: <Input placeholder="编号/客户名称/来款银行" style={{ width: 300 }} />
             },
             {
                 name: 'startLaunchTime',
-                label: '申请日期',
+                label: '来款时间',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
             }
         ]}
