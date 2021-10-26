@@ -424,6 +424,34 @@
       "exact": true,
       "authority": "project"
     },
+    { // 付款申请
+      "name": "付款申请",
+      "path": "/project/payment",
+      "module": "./pages/Payment/index",
+      "exact": true,
+      "authority": "project"
+    },
+    { // 付款申请详情
+      "name": "付款申请详情",
+      "path": "/project/payment/detail/:id",
+      "module": "./pages/Payment/Overview",
+      "exact": true,
+      "authority": "project"
+    },
+    { // 回款申请
+      "name": "回款申请",
+      "path": "/project/collection",
+      "module": "./pages/Collection/index",
+      "exact": true,
+      "authority": "project"
+    },
+    { // 回款申请详情
+      "name": "回款申请详情",
+      "path": "/project/collection/detail/:id",
+      "module": "./pages/Collection/Overview",
+      "exact": true,
+      "authority": "project"
+    },
     { // 合同详情
       "name": "合同详情",
       "path": "/project/contract/detail/:projectId/:id",
@@ -599,9 +627,9 @@
       "module": "./pages/approval-mngt/ApprovalMngtEdit",
       "exact": true,
       "authority": "approvalm_edit"
-    }
+    },
+
     //rd
-    ,
     { // 驾驶舱-计划跟踪
       "name": "计划跟踪",
       "path": "/cockpit/planTrack",
@@ -658,12 +686,27 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 库存管理-原材料入库-详情
+      "name": "原材料入库详情",
+      "path": "/stock/rawMaterialWarehousing/detail/:id",
+      "module": "./pages/stock/rawMaterialWarehousing/detail/detail",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 库存管理-原材料出库
       "name": "原材料出库",
       "path": "/stock/rawMaterialExWarehouse",
       "module": "./pages/stock/rawMaterialExWarehouse/rawMaterialExWarehouse",
       "exact": true,
       "authority": "approvalm"
+    },
+    
+    { // 库存管理-原材料出-详情
+        "name": "原材料出库详情",
+        "path": "/stock/rawMaterialExWarehouse/detail/:id",
+        "module": "./pages/stock/rawMaterialExWarehouse/detail/detail",
+        "exact": true,
+        "authority": "approvalm"
     },
     { // 库存管理-余料入库
       "name": "余料入库",
@@ -772,49 +815,49 @@
     },
     { // 工作管理-提料-杆塔信息
       "name": "杆塔信息",
-      "path": "/workMngt/pickList/pickTowerMessage/:id",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status",
       "module": "./pages/workMngt/pickList/PickTowerMessage",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-提料-杆塔信息-提料
       "name": "提料",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/pick/:productSegmentId",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Pick",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-提料-杆塔信息-提料-放样塔型套用
       "name": "放样塔型套用",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/pick/:productSegmentId/setOutApply",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId/setOutApply",
       "module": "./pages/workMngt/pickList/pickTowerMessage/SetOutApply",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-提料-杆塔信息-提料-图形塔型套用
       "name": "图形塔型套用",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/pick/:productSegmentId/drawApply",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId/drawApply",
       "module": "./pages/workMngt/pickList/pickTowerMessage/DrawApply",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-提料-杆塔信息-提料-识别
       "name": "识别",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/pick/:productSegmentId/recognize",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId/recognize",
       "module": "./pages/workMngt/pickList/pickTowerMessage/ImageRecognize",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-提料-杆塔信息-校核
       "name": "校核",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/check/:productSegmentId/:materialLeaderId",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/check/:productSegmentId/:materialLeaderId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Check",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-提料-杆塔信息-明细
       "name": "明细",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/detail/:productSegmentId",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/detail/:productSegmentId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Detail",
       "exact": true,
       "authority": "approvalm"
@@ -954,8 +997,8 @@
     },
     { // 工作管理-杆塔信息-编辑包装清单
       "name": "编辑包装清单",
-      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:productId/packingListSetting/:id",
-      "module": "./pages/workMngt/setOut/PackingListSetting",
+      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:productId/packingListSetting",
+      "module": "./pages/workMngt/setOut/PackingListNew",
       "exact": true,
       "authority": "approvalm"
     },

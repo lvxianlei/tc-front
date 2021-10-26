@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Input, Select } from 'antd';
 import { Link } from 'react-router-dom';
 import { Page } from '../common';
+import moment from 'moment';
 
 export default function PlanTrack(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
@@ -187,9 +188,22 @@ export default function PlanTrack(): React.ReactNode {
         setFilterValue(value)
         return value;
     }
+
+    const columnsSetting = columns.map(col => {
+
+        return {
+            ...col,
+            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                col.dataIndex === 'index' ? index + 1 
+                : col.dataIndex === 'loftingDeliverRealTime'&&moment(record.loftingDeliverTime)<moment(record.loftingDeliverRealTime?record.loftingDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
+                : col.dataIndex === 'materialDeliverRealTime'&& record.materialDeliverTime && moment(record.materialDeliverTime)<moment(record.materialDeliverRealTime?record.materialDeliverRealTime:undefined)?<div style={{backgroundColor:'#F9A1A1', color: '#fff'}}>{ _?_:'-' }</div>
+                : <span>{ _?_:'-' }</span>
+            )  
+        }     
+    })
     return <Page
         path="/tower-science/loftingTask/planTrack"
-        columns={columns}
+        columns={columnsSetting}
         filterValue={filterValue}
         onFilterSubmit={onFilterSubmit}
         extraOperation={<Button type="primary">导出</Button>}

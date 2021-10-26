@@ -110,7 +110,7 @@ export default function AssemblyWeldingInformation(): React.ReactNode {
     const [ pictureVisible, setPictureVisible ] = useState(false);
     const [ pictureUrl, setPictureUrl ] = useState('');
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-science/welding/getWaldingTaskById?weldingId=${ params.id }`)
+        const data = await RequestUtil.get(`/tower-science/welding/getWeldingTaskById?weldingId=${ params.id }`)
         resole(data)
     }), {})
     const detailData: any = data;

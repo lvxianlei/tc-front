@@ -159,7 +159,7 @@ class QuestionnaireModal extends React.Component<IQuestionnaireModalRouteProps, 
                         </Form.Item>
                     </Form>
                     <p className={ styles.topPadding }>操作信息</p>
-                    <CommonTable columns={ tableColumns } dataSource={ record.issueRecordList } />
+                    <CommonTable columns={ tableColumns } dataSource={ record.issueRecordList } padination={ false }/>
                 </DetailContent>
             </Modal>
         </>

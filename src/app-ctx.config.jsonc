@@ -152,6 +152,17 @@
                                 "label": "开票申请",
                                 "path": "/project/invoicing",
                                 "authority": "project"
+                            },
+                            
+                            {
+                                "label": "付款申请",
+                                "path": "/project/payment",
+                                "authority": "project"
+                            },
+                            {
+                                "label": "回款确认",
+                                "path": "/project/collection",
+                                "authority": "project"
                             }
                         ]
                     },
@@ -163,6 +174,16 @@
                         "items": [
                             {
                                 "label": "审批管理",
+                                "path": "/approvalm/management",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "申请价",
+                                "path": "/approvalm/management",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "相关费用",
                                 "path": "/approvalm/management",
                                 "authority": "approvalm"
                             }

@@ -1303,6 +1303,7 @@
         "bidResult": "/tower-market/bidBase",
         "frameAgreement": "/tower-market/frameAgreement",
         "productGroup": "/tower-market/productGroup",
-        "salesPlan": "/tower-market/taskNotice"
+        "salesPlan": "/tower-market/taskNotice",
+        "payInfo": "/tower-market/payApply/getPayInfo"
     }
 }

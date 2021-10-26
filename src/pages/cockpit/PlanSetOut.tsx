@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Input, Select } from 'antd';
 import { Page } from '../common';
+import moment from 'moment';
 
 export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负责人直接返回名称，无需增加-Name字段   30号：加Name
     const [filterValue, setFilterValue] = useState({});
@@ -136,10 +137,10 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             }
         },
         {
-            key: 'materialUserName',
+            key: 'materialLeaderName',
             title: '提料负责人',
             width: 100,
-            dataIndex: 'materialUserName'
+            dataIndex: 'materialLeaderName'
         },
         {
             key: 'materialDeliverTime',
@@ -154,22 +155,22 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             dataIndex: 'materialDeliverRealTime'
         },
         {
-            key: 'loftingPartLeaderName',
+            key: 'materialPartLeaderName',
             title: '提料配段负责人',
             width: 100,
-            dataIndex: 'loftingPartLeaderName'
+            dataIndex: 'materialPartLeaderName'
         },
         {
-            key: 'loftingPartDeliverTime',
+            key: 'materialPartDeliverTime',
             title: '提料配段计划交付时间',
             width: 200,
-            dataIndex: 'loftingPartDeliverTime'
+            dataIndex: 'materialPartDeliverTime'
         },
         {
-            key: 'loftingPartDeliverRealTime',
+            key: 'materialPartDeliverRealTime',
             title: '提料配段实际交付时间',
             width: 200,
-            dataIndex: 'loftingPartDeliverRealTime'
+            dataIndex: 'materialPartDeliverRealTime'
         },
         {
             key: 'loftingStatus',
@@ -311,9 +312,27 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
         setFilterValue(value)
         return value;
     }
+
+
+    const columnsSetting = columns.map(col => {
+        return {
+            ...col,
+            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                col.dataIndex === 'index' ? index + 1 
+                : col.dataIndex === 'boltDeliverRealTime'&& moment(record.boltDeliverTime)<moment(record.boltDeliverRealTime?record.boltDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
+                : col.dataIndex === 'smallSampleDeliverRealTime'&& moment(record.smallSampleDeliverTime)<moment(record.smallSampleDeliverRealTime?record.smallSampleDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
+                : col.dataIndex === 'weldingDeliverRealTime'&& moment(record.weldingDeliverTime)<moment(record.weldingDeliverRealTime?record.weldingDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
+                : col.dataIndex === 'loftingPartDeliverRealTime'&& moment(record.loftingPartDeliverTime)<moment(record.loftingPartDeliverRealTime?record.loftingPartDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
+                : col.dataIndex === 'loftingDeliverRealTime'&& moment(record.loftingDeliverTime)<moment(record.loftingDeliverRealTime?record.loftingDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
+                : col.dataIndex === 'materialPartDeliverRealTime'&& moment(record.materialPartDeliverTime)<moment(record.materialPartDeliverRealTime?record.materialPartDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
+                : col.dataIndex === 'materialDeliverRealTime'&& moment(record.materialDeliverTime)<moment(record.materialDeliverRealTime?record.materialDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
+                : <div>{ _?_:'-' }</div>
+            )  
+        }     
+    })
     return <Page
         path="/tower-science/loftingTask/planLofting"
-        columns={columns}
+        columns={columnsSetting}
         onFilterSubmit={onFilterSubmit}
         filterValue={filterValue}
         extraOperation={<Button type="primary">导出</Button>}

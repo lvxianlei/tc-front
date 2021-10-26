@@ -20,8 +20,8 @@ export function downloadTemplate(path: string, name: string, requestData?: {}, t
         return res.blob();
     }).then((data) => {
         let blob = data;
-        if( type ){
-            blob = new Blob([data], {type: 'application/zip'})
+        if(type){
+            blob = new Blob([data], { type: 'application/zip' })
         }
         let blobUrl = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
