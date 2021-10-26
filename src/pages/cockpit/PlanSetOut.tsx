@@ -137,10 +137,10 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             }
         },
         {
-            key: 'materialUserName',
+            key: 'materialLeaderName',
             title: '提料负责人',
             width: 100,
-            dataIndex: 'materialUserName'
+            dataIndex: 'materialLeaderName'
         },
         {
             key: 'materialDeliverTime',

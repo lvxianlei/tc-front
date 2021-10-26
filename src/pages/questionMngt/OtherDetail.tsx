@@ -52,6 +52,19 @@ const towerColumns = [
     { title: '备注', dataIndex: 'description', key: 'description' }
 ]
 
+const boltColumns = [
+    { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+    { title: '类型', dataIndex: 'typeName', key: 'typeName'},
+    { title: '名称', dataIndex: 'name', key: 'name' },
+    { title: '等级', dataIndex: 'level', key: 'level' },
+    { title: '规格', dataIndex: 'specs', key: 'specs' },
+    { title: '无扣长（mm）', dataIndex: 'unbuckleLength', key: 'unbuckleLength' },
+    { title: '小计', dataIndex: 'subtotal', key: 'subtotal' },
+    { title: '合计', dataIndex: 'total', key: 'total' },
+    { title: '单重（kg）', dataIndex: 'singleWeight', key: 'singleWeight' },
+    { title: '合计重（kg）', dataIndex: 'totalWeight', key: 'totalWeight' },
+]
+
 export default function OtherDetail(): React.ReactNode {
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
@@ -134,7 +147,9 @@ export default function OtherDetail(): React.ReactNode {
             ]:[<Button key="goback" onClick={() => history.goBack()}>返回</Button>]}>
                 <DetailTitle title="问题信息" />
                 <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
-                <CommonTable columns={towerColumns} dataSource={detailData?.drawProductStructure} />
+                {params.type==='WTD-TL'?<CommonTable columns={towerColumns} dataSource={detailData?.drawProductStructure} />:null}
+                {params.type==='WTD-FY'?<CommonTable columns={towerColumns} dataSource={detailData?.drawProductStructure} />:null}
+                {params.type==='WTD-LS'?<CommonTable columns={boltColumns} dataSource={[detailData?.productBoltRecordVO]} />:null}
                 <DetailTitle title="操作信息" />
                 <CommonTable columns={tableColumns} dataSource={detailData?.issueRecordList} pagination={false}/>
             </DetailContent>

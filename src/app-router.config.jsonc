@@ -671,28 +671,28 @@
     { // 申请价
       "name": "申请价",
       "path": "/approvalm/management",
-      "module": "./pages/Applicationprice/ApprovalMngt",
+      "module": "./pages/applicationprice/ApplicationpriceMngt",
       "exact": true,
       "authority": "approvalm"
     },
     { // 申请价详情
       "name": "申请价详情",
       "path": "/approvalm/management/detail/:id",
-      "module": "./pages/Applicationprice/ApprovalMngtDetail",
+      "module": "./pages/applicationprice/ApplicationpriceMngtDetail",
       "exact": true,
       "authority": "approvalm_detail"
     },
     { // 申请价新建
       "name": "申请价详情",
       "path": "/approvalm/management/edit/new/:type",
-      "module": "./pages/Applicationprice/ApprovalMngtEdit",
+      "module": "./pages/applicationprice/ApplicationpriceMngtEdit",
       "exact": true,
       "authority": "approvalm_edit"
     },
     { // 申请价详情
       "name": "申请价详情",
       "path": "/approvalm/management/edit/:id",
-      "module": "./pages/Applicationprice/ApprovalMngtEdit",
+      "module": "./pages/applicationprice/ApplicationpriceMngtEdit",
       "exact": true,
       "authority": "approvalm_edit"
     },
@@ -868,49 +868,49 @@
     },
     { // 工作管理-提料-杆塔信息
       "name": "杆塔信息",
-      "path": "/workMngt/pickList/pickTowerMessage/:id",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status",
       "module": "./pages/workMngt/pickList/PickTowerMessage",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-提料-杆塔信息-提料
       "name": "提料",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/pick/:productSegmentId",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Pick",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-提料-杆塔信息-提料-放样塔型套用
       "name": "放样塔型套用",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/pick/:productSegmentId/setOutApply",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId/setOutApply",
       "module": "./pages/workMngt/pickList/pickTowerMessage/SetOutApply",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-提料-杆塔信息-提料-图形塔型套用
       "name": "图形塔型套用",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/pick/:productSegmentId/drawApply",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId/drawApply",
       "module": "./pages/workMngt/pickList/pickTowerMessage/DrawApply",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-提料-杆塔信息-提料-识别
       "name": "识别",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/pick/:productSegmentId/recognize",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId/recognize",
       "module": "./pages/workMngt/pickList/pickTowerMessage/ImageRecognize",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-提料-杆塔信息-校核
       "name": "校核",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/check/:productSegmentId/:materialLeaderId",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/check/:productSegmentId/:materialLeaderId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Check",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-提料-杆塔信息-明细
       "name": "明细",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/detail/:productSegmentId",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/detail/:productSegmentId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Detail",
       "exact": true,
       "authority": "approvalm"

@@ -86,7 +86,7 @@ export default function LoftingTowerApplication(): React.ReactNode {
                 RequestUtil.post(`/tower-science/drawProductStructure/reuse?productSegmentId=${params.productSegmentId}&passivityProductSegment=${record.id}`).then(() => {
                     message.success('套用成功'); 
                 }).then(()=>{
-                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/pick/${params.productSegmentId}`)
+                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}`)
                 });
             } }>选择套用</Button>)
         }
@@ -95,7 +95,7 @@ export default function LoftingTowerApplication(): React.ReactNode {
     const [ form ] = useForm();
     const history = useHistory();
     const [ paragraphData, setParagraphData ] = useState([] as undefined | any);
-    const params = useParams<{ id: string ,productSegmentId: string}>();
+    const params = useParams<{ id: string ,productSegmentId: string,status:string}>();
     const page = {
         current: 1,
         pageSize: 10

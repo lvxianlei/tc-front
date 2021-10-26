@@ -1,0 +1,53 @@
+{
+    "baseInfo": [
+        {
+            "title": "审批编码",
+            "dataIndex": "businessNumber"
+        },
+        {
+            "title": "项目编码",
+            "dataIndex": "projectNumber"
+        },
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName"
+        },
+        {
+            "title": "项目单位",
+            "dataIndex": "biddingPerson"
+        },
+        {
+            "title": "关联合同",
+            "dataIndex": "internalNumber"
+        },
+        {
+            "title": "审批类型",
+            "dataIndex": "type"
+        },
+        {
+            "title": "审批状态",
+            "dataIndex": "auditStatus",
+            "type": "string",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "未审理"
+                },
+                {
+                    "value": 1,
+                    "label": "审理中"
+                },
+                {
+                    "value": 2,
+                    "label": "已通过"
+                },
+                {
+                    "value": 3,
+                    "label": "已拒绝"
+                }
+               
+            ]
+        }
+    ]
+   
+}

@@ -18,9 +18,9 @@ const towerColumns = [
     { title: '厚度（mm）', dataIndex: 'thickness', key: 'thickness' },
     { title: '长度（mm）', dataIndex: 'length', key: 'length' },
     { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum' },
-    { title: '理算重量（kg）', dataIndex: 'unit', key: 'unit' },
-    { title: '单件重量（kg）', dataIndex: 'basicsTheoryWeight', key: 'basicsTheoryWeight' },
-    { title: '小计重量（kg）', dataIndex: 'amount', key: 'amount' },
+    { title: '理算重量（kg）', dataIndex: 'basicsTheoryWeight', key: 'basicsTheoryWeight' },
+    { title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight' },
+    { title: '小计重量（kg）', dataIndex: 'subtotalWeight', key: 'subtotalWeight' },
     { title: '总计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight' },
     { title: '备注', dataIndex: 'description', key: 'description' }
 ]
@@ -40,7 +40,7 @@ export default function PickTowerDetail(): React.ReactNode {
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
                 <Button type='primary' onClick={()=>{window.open()}}>导出</Button>
-                <CommonTable dataSource={detailData?.data} columns={towerColumns}/>
+                <CommonTable dataSource={detailData} columns={towerColumns} pagination={false}/>
             </DetailContent>
         </Spin>
     </>
