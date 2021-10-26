@@ -642,55 +642,51 @@
             "type": "textarea"
         }
     ],
-    "outFactoryHead":[
+    "outFactoryHead": [
         {
             "title": "费用类型",
-            "dataIndex": "costType",
-            "type":"integer"
+            "dataIndex": "costType"
         },
         {
             "title": "费用名称",
-            "dataIndex": "costName",
-            "type":"string"
+            "dataIndex": "costName"
         },
         {
             "title": "付款日期",
             "dataIndex": "",
-            "type":""
+            "type": "date"
         },
         {
             "title": "金额",
-            "dataIndex": "money"
+            "dataIndex": "money",
+            "type": "number"
         },
         {
             "title": "申请人",
-            "dataIndex": "applicantName",
-            "type":"string"
+            "dataIndex": "applicantName"
         },
         {
             "title": "申请时间",
             "dataIndex": "applicantTime",
-            "type":"string"
+            "type": "date"
         },
         {
             "title": "发票号",
-            "dataIndex": "invoiceNo",
-            "type":"string"
+            "dataIndex": "invoiceNo"
         },
         {
             "title": "发票时间",
             "dataIndex": "invoiceTime",
-            "type":"string"
+            "type": "date"
         },
         {
             "title": "付款单号",
-            "dataIndex": "payNumber",
-            "type":"string"
+            "dataIndex": "payNumber"
         },
         {
             "title": "备注",
             "dataIndex": "remark",
-            "type":"string"
+            "type": "textarea"
         }
     ],
     "enclosure": [

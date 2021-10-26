@@ -1,35 +1,27 @@
 import React from "react"
-import { Button, message, Spin } from 'antd'
+import { Button, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../common'
-import {collectionListHead } from "./CollectionData.json"
-import { enclosure } from '../project/managementDetailData.json'
+import { DetailContent, DetailTitle, BaseInfo } from '../common'
+import { promotionalTourism } from "./CollectionData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
-import { downLoadFile } from "../../utils"
 export default function Edit() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/Payment/getPaymentInfo/${params.id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/backMoney/${params.id}`)
             resole(result)
         } catch (error) {
             reject(error)
         }
     }))
 
-    return <DetailContent title={[
-        <Button type="primary" key="ab">发起审批</Button>
-    ]} operation={[
-        <Button key="cancel" onClick={() => history.go(-1)}>返回</Button>
-    ]}>
+    return <DetailContent operation={[<Button key="cancel" onClick={() => history.go(-1)}>返回</Button>]}>
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
-            <BaseInfo columns={collectionListHead} dataSource={data || {}} />
-
-            
+            <BaseInfo columns={promotionalTourism} dataSource={data || {}} />
         </Spin>
     </DetailContent>
 }

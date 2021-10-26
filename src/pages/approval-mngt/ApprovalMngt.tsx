@@ -6,7 +6,7 @@ import ApprovalTypesView from "./ApprovalTypesView"
 import SelectAuditType from './SelectAuditType'
 import useRequest from '@ahooksjs/use-request'
 import { auditHead } from "./approvalHeadData.json"
-import { bondBaseInfo, enclosure, drawH, drawingCofirm, baseInfo } from "./approvalHeadData.json"
+import { bondBaseInfo, enclosure, drawH, drawingCofirm, baseInfo, outFactoryHead } from "./approvalHeadData.json"
 import RequestUtil from '../../utils/RequestUtil'
 import AuthUtil from "../../utils/AuthUtil"
 import { downLoadFile } from "../../utils"
@@ -43,6 +43,7 @@ export default function Information(): React.ReactNode {
     const [drawHForm] = Form.useForm()
     const [drawingCofirmForm] = Form.useForm()
     const [bidingForm] = Form.useForm()
+    const [outFactoryForm] = Form.useForm()
     const { loading, run } = useRequest((postData: { path: string, data: {} }) => new Promise(async (resolve, reject) => {
         try {
             const result = await RequestUtil.post(postData.path, postData.data)
@@ -370,7 +371,7 @@ export default function Information(): React.ReactNode {
             confirmLoading={loading}
         >
             <DetailTitle title="基本信息" />
-            <BaseInfo form={bidingForm} onChange={handleBidingChange} columns={baseInfo} dataSource={{}} edit col={3} />
+            <BaseInfo form={outFactoryForm} onChange={handleBidingChange} columns={outFactoryHead} dataSource={{}} edit col={3} />
             <DetailTitle title="申请明细" />
             <EditTable columns={[]} dataSource={[]} />
         </Modal>
