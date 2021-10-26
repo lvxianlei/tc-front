@@ -87,34 +87,25 @@ export default function TowerInformation(): React.ReactNode {
             key: 'singleNumberCount', 
             title: '单段件号数', 
             dataIndex: 'singleNumberCount',
-            render: (singleNumberCount: number): React.ReactNode => {
-                switch (singleNumberCount) {
-                    case -1:
-                        return '';
-                }
-            }    
+            render: (_: number): React.ReactNode => ( 
+                <span>{ _ === -1 ? undefined : _ }</span>
+            ) 
         },
         { 
             key: 'singleCount', 
             title: '单段件数', 
             dataIndex: 'singleCount',
-            render: (singleCount: number): React.ReactNode => {
-                switch (singleCount) {
-                    case -1:
-                        return '';
-                }
-            }     
+            render: (_: number): React.ReactNode => ( 
+                <span>{ _ === -1 ? undefined : _ }</span>
+            )
         },
         { 
             key: 'singleWeight', 
             title: '单段重量', 
             dataIndex: 'singleWeight',
-            render: (singleWeight: number): React.ReactNode => {
-                switch (singleWeight) {
-                    case -1:
-                        return '';
-                }
-            }     
+            render: (_: number): React.ReactNode => ( 
+                <span>{ _ === -1 ? undefined : _ }</span>
+            )  
         },
         { 
             key: 'description', 

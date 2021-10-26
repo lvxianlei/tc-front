@@ -69,36 +69,27 @@ export default function DrawTowerMngt(): React.ReactNode {
             title: '件号数',
             width: 200,
             dataIndex: 'structureCount',
-            render: (structureCount: number): React.ReactNode => {
-                switch (structureCount) {
-                    case -1:
-                        return '';
-                }
-            }    
+            render: (_: number): React.ReactNode => ( 
+                <span>{ _ === -1 ? undefined : _ }</span>
+            )
         },
         {
             key: 'steelAngleCount',
             title: '角钢件号数',
             width: 200,
             dataIndex: 'steelAngleCount',
-            render: (steelAngleCount: number): React.ReactNode => {
-                switch (steelAngleCount) {
-                    case -1:
-                        return '';
-                }
-            }    
+            render: (_: number): React.ReactNode => ( 
+                <span>{ _ === -1 ? undefined : _ }</span>
+            )
         },
         {
             key: 'steelPlateCount',
             title: '钢板件号数',
             width: 200,
             dataIndex: 'steelPlateCount',
-            render: (steelPlateCount: number): React.ReactNode => {
-                switch (steelPlateCount) {
-                    case -1:
-                        return '';
-                }
-            }    
+            render: (_: number): React.ReactNode => ( 
+                <span>{ _ === -1 ? undefined : _ }</span>
+            )  
         },
         {
             key: 'updateUserName',

@@ -84,7 +84,10 @@ const tableColumns = [
         title: '单段数量',
         width: 200,
         editable: false,
-        dataIndex: 'basicsPartNum'
+        dataIndex: 'basicsPartNum',
+        render: (_: number): React.ReactNode => ( 
+            <span>{ _ === -1 ? undefined : _ }</span>
+        )
     },
     {
         key: 'basicsPartWeight',
