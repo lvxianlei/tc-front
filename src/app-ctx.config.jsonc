@@ -181,6 +181,11 @@
                                 "label": "申请价",
                                 "path": "/approvalm/management",
                                 "authority": "approvalm"
+                            },
+                            {
+                                "label": "相关费用",
+                                "path": "/approvalm/management",
+                                "authority": "approvalm"
                             }
                         ]
                     },
