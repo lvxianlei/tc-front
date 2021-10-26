@@ -26,11 +26,13 @@
         },
         {
             "title": "合计金额(元)",
-            "dataIndex": "ticketMoney"
+            "dataIndex": "ticketMoney",
+            "type": "number"
         },
         {
             "title": "合计重量(元/吨)",
-            "dataIndex": "ticketWeight"
+            "dataIndex": "ticketWeight",
+            "type": "number"
         },
         {
             "title": "业务经理",
@@ -76,7 +78,30 @@
         },
         {
             "title": "开票时合同状态",
-            "dataIndex": "contractType"
+            "dataIndex": "contractType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "不下计划"
+                },
+                {
+                    "value": 2,
+                    "label": "未下计划"
+                },
+                {
+                    "value": 3,
+                    "label": "未下完计划"
+                },
+                {
+                    "value": 4,
+                    "label": "未发完货"
+                },
+                {
+                    "value": 5,
+                    "label": "已发完货"
+                }
+            ]
         },
         {
             "title": "承诺回款时间",
@@ -84,7 +109,8 @@
         },
         {
             "title": "承诺回款比例",
-            "dataIndex": "backProportion"
+            "dataIndex": "backProportion",
+            "type": "number"
         },
         {
             "title": "验收单",
@@ -100,7 +126,18 @@
         },
         {
             "title": "开票方式",
-            "dataIndex": "openTicketType"
+            "dataIndex": "openTicketType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "按重量开"
+                },
+                {
+                    "value": 2,
+                    "label": "按基数开"
+                }
+            ]
         },
         {
             "title": "开票依据",

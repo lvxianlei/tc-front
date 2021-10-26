@@ -62,10 +62,10 @@ export default function CostDetail() {
                 onOk={handleSelectInquiryTypeOk}
                 onCancel={() => setVisible(false)}
             />
-            {!data?.askInfo?.askInfoVo && <Result title="当前项目还未做成本评估" extra={
-                <>
+            {!data?.askInfo?.askInfoVo && <Result style={{ paddingTop: 200 }} title="当前项目还未做成本评估" extra={
+                <nav style={{ fontSize: 20 }}>
                     点击<Link to={`/project/management/new/cost/${params.id}`}>创建</Link>开始成本评估
-                </>
+                </nav>
             } />}
             {data?.askInfo?.askInfoVo && <DetailContent title={[
                 <Button key="push" style={{ marginRight: '16px' }} type="primary" onClick={handleNewAudit}>发起询价任务</Button>,

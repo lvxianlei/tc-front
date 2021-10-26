@@ -264,7 +264,7 @@ class BoltQuestionnaireModal extends React.Component<IBoltQuestionnaireModalRout
                             <Input maxLength={ 100 } placeholder="请输入" disabled={ record.status === 1 } />
                         </Form.Item>
                     </Form>
-                    <CommonTable columns={ columnsSetting } dataSource={ this.props.record.dataSource } pagination={ false } />
+                    { record.status === 1 ? <CommonTable columns={ columnsSetting } dataSource={ this.props.record.dataSource } pagination={ false } /> : null}
                     <p className={ styles.topPadding }>操作信息</p>
                     <CommonTable columns={ tableColumns } dataSource={ record.issueRecordList } />
                 </DetailContent>

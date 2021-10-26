@@ -64,6 +64,7 @@ export default function EditableTable({ columns = [], dataSource = [], form, add
     ]
     const handleRemove = (remove: any, key: any) => {
         remove(key)
+        onchange && (onChange as any)({ submit: [] }, form?.getFieldsValue())
     }
     const vlist: React.FC<any> = ({
         height,
