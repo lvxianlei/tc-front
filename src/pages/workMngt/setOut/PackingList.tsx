@@ -36,24 +36,6 @@ export default function PackingList(): React.ReactNode {
             width: 120
         },
         {
-            key: 'materialSpec',
-            title: '材料规格',
-            width: 200,
-            dataIndex: 'materialSpec'
-        },
-        {
-            key: 'length',
-            title: '长度',
-            width: 150,
-            dataIndex: 'length',
-        },
-        {
-            key: 'num',
-            title: '数量',
-            dataIndex: 'num',
-            width: 200,
-        },
-        {
             key: 'description',
             title: '备注',
             width: 200,
@@ -67,7 +49,7 @@ export default function PackingList(): React.ReactNode {
             width: 100,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    <Button type="link">编辑</Button>
+                    <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ params.productId }/packingListSetting` }><Button type="link">编辑</Button></Link>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => { RequestUtil.delete(`/tower-science/packageRecord`, { id: record.id }).then(res => history.go(0)) } }

@@ -2,22 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message, Table } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import ConfirmableButton from '../../../components/ConfirmableButton';
-import { Page } from '../../common';
-import { IClient } from '../../IClient';
-import RequestUtil from '../../../utils/RequestUtil';
-import '../StockPublicStyle.less';
-const { RangePicker } = DatePicker;
+import ConfirmableButton from '../../../../components/ConfirmableButton';
+import { Page } from '../../../common';
+import { IClient } from '../../../IClient';
+import RequestUtil from '../../../../utils/RequestUtil';
+import '../../StockPublicStyle.less';
 
+const { RangePicker } = DatePicker;
 export default function RawMaterialStock(): React.ReactNode {
-    const history = useHistory()
-    const [current, setCurrent] = useState(1);
-    const [total, setTotal] = useState(100);
-    const [pageSize, setPageSize] = useState<number>(10);
-    const [dateValue, setDateValue] = useState<any>([]);//时间
-    const [dateString, setDateString] = useState<any>([]);//时间字符串格式
-    const [keyword, setKeyword] = useState<any>('');//关键字搜索
-    const [status, setStatus] = useState('');//状态
+    const history = useHistory(),
+        [current, setCurrent] = useState(1),
+        [total, setTotal] = useState(100),
+        [pageSize, setPageSize] = useState<number>(10),
+        [status, setStatus] = useState(''),//状态
+        [dateValue, setDateValue] = useState<any>([]),//时间
+        [dateString, setDateString] = useState<any>([]),//时间字符串格式
+        [keyword, setKeyword] = useState<any>('');//关键字搜索
     const [departmentId, setDepartmentId] = useState('');//部门
     const [personnelId, setPersonnelId] = useState('');//人员
     const columns = [
@@ -27,35 +27,72 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 50,
         },
         {
-            title: '领料编号',
+            title: '品名',
             dataIndex: 'name',
             width: 120,
             render: (text: any) => <a>{text}</a>,
         }, {
-            title: '生产批次',
+            title: '状态',
             dataIndex: 'receivingBatch',
             width: 120,
         }, {
-            title: '状态',
+            title: '最新状态变更',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '最新状态变更时间',
+            title: '规格',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '申请人',
+            title: '标准',
+            dataIndex: 'key',
+            width: 120,
+        }, {
+            title: '材质',
+            dataIndex: 'key',
+            width: 120,
+        }, {
+            title: '长度(mm)',
+            dataIndex: 'key',
+            width: 120,
+        }, {
+            title: '宽度(mm)',
+            dataIndex: 'key',
+            width: 120,
+        }, {
+            title: '重量(吨)',
+            dataIndex: 'key',
+            width: 120,
+        }, {
+            title: '炉批号',
+            dataIndex: 'key',
+            width: 120,
+        }, {
+            title: '内部合同号',
+            dataIndex: 'key',
+            width: 120,
+        }, {
+            title: '塔型',
+            dataIndex: 'key',
+            width: 120,
+        }, {
+            title: '塔杆号',
+            dataIndex: 'key',
+            width: 120,
+        }, {
+            title: '出库人',
             dataIndex: 'key',
             width: 120,
         },
         {
             title: '操作',
             dataIndex: 'key',
-            width: 40,
+            width: 140,
             fixed: 'right' as FixedType,
-            render: (_: undefined, record: any): React.ReactNode => (
+            render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={`/stock/rawMaterialExWarehouse/detail/${record.key}`}>明细</Link>
+                    <Button type='link'>出库</Button>
+                    <Button type='link'>详情</Button>
                 </Space>
             )
         }
@@ -68,65 +105,65 @@ export default function RawMaterialStock(): React.ReactNode {
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '2',
             receivingBatch: '2021-1223-TT'
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '3',
             receivingBatch: '2021-1223-TT'
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '4',
             receivingBatch: '2021-1223-TT'
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '15',
             receivingBatch: '2021-1223-TT'
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '6',
             receivingBatch: '2021-1223-TT'
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '17',
             receivingBatch: '2021-1223-TT'
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '51',
             receivingBatch: '2021-1223-TT'
         }, {
             name: '仓库1',
-            key: '1',
+            key: '18',
             receivingBatch: '2021-1223-TT'
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '8',
             receivingBatch: '2021-1223-TT'
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '9',
             receivingBatch: '2021-1223-TT'
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '10',
             receivingBatch: '2021-1223-TT'
         }, {
             name: '仓库1',
-            key: '1',
+            key: '31',
             receivingBatch: '2021-1223-TT'
         },
         {
             name: '仓库1',
-            key: '1',
+            key: '51',
             receivingBatch: '2021-1223-TT'
         },
     ]
@@ -147,9 +184,7 @@ export default function RawMaterialStock(): React.ReactNode {
         setStatus('');
         setDateValue([]);
         setDateString([]);
-        setKeyword('');
-        setDepartmentId('');
-        setPersonnelId('');
+        setKeyword('')
     }
     //进入页面刷新
     useEffect(() => {
@@ -172,7 +207,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     </div>
                 </div>
                 <div className="search_item">
-                    <span className="tip">状态：</span>
+                    <span className="tip">状态： </span>
                     <div className='selectOrInput'>
                         <Select
                             className="select"
@@ -199,7 +234,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     </div>
                 </div>
                 <div className="search_item">
-                    <span className="tip">申请人：</span>
+                    <span className="tip">出库人：</span>
                     <div className='selectOrInput'>
                         <Select
                             className="select"
@@ -251,7 +286,8 @@ export default function RawMaterialStock(): React.ReactNode {
                     <span className="tip">关键字：</span>
                     <div className='selectOrInput'>
                         <Input
-                            placeholder="任务编号/项目名称"
+                            style={{ width: "200px" }}
+                            placeholder="品名/炉批号/内部合同号/杆塔号"
                             value={keyword}
                             onChange={(e) => {
                                 setKeyword(e.target.value)
@@ -280,8 +316,18 @@ export default function RawMaterialStock(): React.ReactNode {
                 <Button
                     type="primary"
                     className='func_btn'
-                    onClick={() => { }}
                 >导出</Button>
+                <Button
+                    className='func_btn'
+                    type="primary"
+                    ghost
+                    onClick={() => {
+                        history.go(-1)
+                    }}
+                >返回上一级</Button>
+            </div>
+            <div className="tip_public_Stock">
+                <div>总重量： 12334.232 吨    缺料总重量：123.123吨</div>
             </div>
             <div className="page_public_Stock">
                 <Table

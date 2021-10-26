@@ -71,8 +71,8 @@ export default function RawMaterialStock(): React.ReactNode {
             fixed: 'right' as FixedType,
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={``}>入库</Link>
-                    <Link to={``}>详情</Link>
+                    <Button type='link'>入库</Button>
+                    <Button type='link'>详情</Button>
                 </Space>
             )
         }

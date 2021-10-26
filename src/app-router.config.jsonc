@@ -629,35 +629,6 @@
       "authority": "approvalm_edit"
     },
 
-    { // 申请价
-      "name": "申请价",
-      "path": "/approvalm/management",
-      "module": "./pages/applicationprice/ApplicationpriceMngt",
-      "exact": true,
-      "authority": "approvalm"
-    },
-    { // 申请价详情
-      "name": "申请价详情",
-      "path": "/approvalm/management/detail/:id",
-      "module": "./pages/applicationprice/ApplicationpriceMngtDetail",
-      "exact": true,
-      "authority": "approvalm_detail"
-    },
-    { // 申请价新建
-      "name": "申请价详情",
-      "path": "/approvalm/management/edit/new/:type",
-      "module": "./pages/applicationprice/ApplicationpriceMngtEdit",
-      "exact": true,
-      "authority": "approvalm_edit"
-    },
-    { // 申请价详情
-      "name": "申请价详情",
-      "path": "/approvalm/management/edit/:id",
-      "module": "./pages/applicationprice/ApplicationpriceMngtEdit",
-      "exact": true,
-      "authority": "approvalm_edit"
-    },
-
     //rd
     { // 驾驶舱-计划跟踪
       "name": "计划跟踪",
@@ -715,7 +686,7 @@
       "exact": true,
       "authority": "approvalm"
     },
-    { // 库存管理-原材料入库
+    { // 库存管理-原材料入库-详情
       "name": "原材料入库详情",
       "path": "/stock/rawMaterialWarehousing/detail/:id",
       "module": "./pages/stock/rawMaterialWarehousing/detail/detail",
@@ -728,6 +699,14 @@
       "module": "./pages/stock/rawMaterialExWarehouse/rawMaterialExWarehouse",
       "exact": true,
       "authority": "approvalm"
+    },
+    
+    { // 库存管理-原材料出-详情
+        "name": "原材料出库详情",
+        "path": "/stock/rawMaterialExWarehouse/detail/:id",
+        "module": "./pages/stock/rawMaterialExWarehouse/detail/detail",
+        "exact": true,
+        "authority": "approvalm"
     },
     { // 库存管理-余料入库
       "name": "余料入库",
