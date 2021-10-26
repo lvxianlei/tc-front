@@ -22,7 +22,7 @@ const projectType = [
     }
 ]
 
-export default function ViewReceivingNote(): React.ReactNode {
+export default function ViewContract(): React.ReactNode {
     // const history = useHistory()
     const [filterValue, setFilterValue] = useState({});
     const { RangePicker } = DatePicker;
@@ -41,45 +41,45 @@ export default function ViewReceivingNote(): React.ReactNode {
             // render: (_a: any, _b: any) => <Link to={`/project/management/detail/base/${_b.id}`}>{_b.projectName}</Link>
         },
         {
-            key: 'receivingNoteNumber',
-            title: '收货单编号',
-            dataIndex: 'receivingNoteNumber'
+            key: 'contractNumber',
+            title: '合同编号',
+            dataIndex: 'contractNumber'
         },
         {
-            key: 'receivingTime',
-            title: '收货完成时间',
-            dataIndex: 'receivingTime',
+            key: 'contractState',
+            title: '合同状态',
+            dataIndex: 'contractState',
             // render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{projectType.find(item => item.value === Number(_a))?.label}</span>)
         },
         {
-            key: 'weight',
-            title: '重量合集(吨)',
-            dataIndex: 'weight'
+            key: 'TimeOfLastStateChange',
+            title: '最新状态变更时间',
+            dataIndex: 'TimeOfLastStateChange'
         },
         {
-            key: 'tax',
-            title: '价税合计(元)',
-            dataIndex: 'tax'
+            key: 'operator',
+            title: '经办人',
+            dataIndex: 'operator'
         },
         {
-            key: 'freight',
-            title: '运费(元)',
-            dataIndex: 'freight'
+            key: 'finish/sum',
+            title: '完成/总数',
+            dataIndex: 'finish/sum'
         },
         {
-            key: 'loansFreight',
-            title: '贷款运费合计(元)',
-            dataIndex: 'loansFreight',
+            key: 'signTime',
+            title: '签订时间',
+            dataIndex: 'signTime',
         },
         {
-            key: 'AssociatedPaymentRequestNumber',
-            title: '关联请款编号',
-            dataIndex: 'AssociatedPaymentRequestNumber'
+            key: 'contractActualAmount',
+            title: '合同实际金额',
+            dataIndex: 'contractActualAmount'
         },
         {
-            key: 'AssociatedBillNumber',
-            title: '关联票据编号',
-            dataIndex: 'AssociatedBillNumber'
+            key: 'operation',
+            title: '操作',
+            dataIndex: 'operation'
         },]
 
 

@@ -41,7 +41,7 @@ const currentProjectStage = [
     }
 ]
 
-export default function RawMaterialStock(): React.ReactNode {
+export default function ViewRawMaterial(): React.ReactNode {
     // const history = useHistory()
     const [filterValue, setFilterValue] = useState({});
     const { RangePicker } = DatePicker;
