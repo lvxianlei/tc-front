@@ -5,13 +5,14 @@
 */
 
 import React, { useState } from 'react';
-import { Space, Button, Popconfirm, Modal, Input, Col, Row, message, Form, Checkbox, Spin } from 'antd';
+import { Space, Button, Popconfirm, Modal, Input, Col, Row, message, Form, Checkbox, Spin, InputNumber, Descriptions } from 'antd';
 import { BaseInfo, CommonTable, DetailContent, DetailTitle } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import { useHistory, useParams } from 'react-router-dom';
 import styles from './SetOut.module.less';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
+import ContractAttachment from '../../prom/contract/ContractAttachment';
 
 interface IBundle {
     readonly id?: string;
@@ -19,11 +20,13 @@ interface IBundle {
     readonly productCategoryId?: string;
     readonly balesCode?: string;
     readonly productId?: string;
-    readonly num?: string;
+    readonly num?: number;
     readonly code?: string;
     readonly structureSpec?: string;
     readonly length?: string;
     readonly description?: string;
+    readonly basicsPartNum?: number;
+    readonly allNum?: number;
 }
 
 interface IPackingList {
@@ -37,113 +40,122 @@ interface IPackingList {
     readonly id?: string;
 }
 
-const baseColumns= [
-    {
-        "dataIndex": "productCategoryName",
-        "title": "塔型"
-    },
-    {
-        "dataIndex": "productNumber",
-        "title": "杆塔号"
-    }
-]
-
-const chooseColumns = [
-    {
-        key: 'index',
-        title: '序号',
-        dataIndex: 'index',
-        width: 50,
-        fixed: 'left' as FixedType,
-        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
-    },
-    {
-        key: 'partName',
-        title: '段名',
-        width: 150,
-        dataIndex: 'partName'
-    },
-    {
-        key: 'code',
-        title: '构件编号',
-        width: 150,
-        dataIndex: 'code'
-    },
-    {
-        key: 'materialName',
-        title: '材料名称',
-        width: 150,
-        dataIndex: 'materialName'
-    },
-    {
-        key: 'structureTexture',
-        title: '材质',
-        width: 150,
-        dataIndex: 'structureTexture'
-    },
-    {
-        key: 'structureSpec',
-        title: '规格',
-        width: 150,
-        dataIndex: 'structureSpec'
-    },
-    {
-        key: 'basicsPartNum',
-        title: '单段件数',
-        width: 150,
-        dataIndex: 'basicsPartNum'
-    },
-    {
-        key: 'length',
-        title: '长度',
-        width: 150,
-        dataIndex: 'length'
-    },
-    {
-        key: 'width',
-        title: '宽度',
-        width: 150,
-        dataIndex: 'width'
-    },
-    {
-        key: 'basicsWeight',
-        title: '重量',
-        width: 150,
-        dataIndex: 'basicsWeight'
-    },
-    {
-        key: 'electricWelding',
-        title: '电焊',
-        width: 150,
-        dataIndex: 'electricWelding'
-    },
-    {
-        key: 'bend',
-        title: '火曲',
-        width: 150,
-        dataIndex: 'bend'
-    },
-    {
-        key: 'rootClear',
-        title: '清根',
-        width: 150,
-        dataIndex: 'rootClear'
-    },
-    {
-        key: 'shovelBack',
-        title: '铲背',
-        width: 150,
-        dataIndex: 'shovelBack'
-    },
-    {
-        key: 'description',
-        title: '备注',
-        width: 150,
-        dataIndex: 'description'
-    }
-]
-
 export default function PackingListNew(): React.ReactNode {
+    const history = useHistory();
+    const params = useParams<{ id: string, productId: string }>();
+    const [ form ] = Form.useForm();
+    const [ selectedRows, setSelectedRows ] = useState([]);
+    const [ selectedRowKeys, setSelectedRowKeys ] = useState([]);
+    const [ packagingData, setPackagingData ] = useState<IBundle[]>([]);
+    const [ stayDistrict, setStayDistrict ] = useState<IBundle[]>([]);
+    const [ balesCode, setBalesCode ] = useState<string>();
+    const [ description, setDescription ] = useState("");
+
+    const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get<IPackingList>(`/tower-science/packageRecord/structure/list`, { productId: params.productId });
+        const list = await RequestUtil.get<IBundle[]>(`/tower-science/productStructure/listByProduct`, { productId: params.productId, ...filterValues })
+        setPackagingData(data?.packageStructureVOList || []);
+        setStayDistrict(list);
+        resole(data);
+    });
+
+    const { loading, data } = useRequest<IPackingList>(() => getTableDataSource({}), {});
+    const detailData: IPackingList = data || {};
+
+    const chooseColumns = [
+        {
+            key: 'index',
+            title: '序号',
+            dataIndex: 'index',
+            width: 50,
+            fixed: 'left' as FixedType,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+        },
+        {
+            key: 'partName',
+            title: '段名',
+            width: 150,
+            dataIndex: 'partName'
+        },
+        {
+            key: 'code',
+            title: '构件编号',
+            width: 150,
+            dataIndex: 'code'
+        },
+        {
+            key: 'materialName',
+            title: '材料名称',
+            width: 150,
+            dataIndex: 'materialName'
+        },
+        {
+            key: 'structureTexture',
+            title: '材质',
+            width: 150,
+            dataIndex: 'structureTexture'
+        },
+        {
+            key: 'structureSpec',
+            title: '规格',
+            width: 150,
+            dataIndex: 'structureSpec'
+        },
+        {
+            key: 'basicsPartNum',
+            title: '单段件数',
+            width: 150,
+            dataIndex: 'basicsPartNum'
+        },
+        {
+            key: 'length',
+            title: '长度',
+            width: 150,
+            dataIndex: 'length'
+        },
+        {
+            key: 'width',
+            title: '宽度',
+            width: 150,
+            dataIndex: 'width'
+        },
+        {
+            key: 'basicsWeight',
+            title: '重量',
+            width: 150,
+            dataIndex: 'basicsWeight'
+        },
+        {
+            key: 'electricWelding',
+            title: '电焊',
+            width: 150,
+            dataIndex: 'electricWelding'
+        },
+        {
+            key: 'bend',
+            title: '火曲',
+            width: 150,
+            dataIndex: 'bend'
+        },
+        {
+            key: 'rootClear',
+            title: '清根',
+            width: 150,
+            dataIndex: 'rootClear'
+        },
+        {
+            key: 'shovelBack',
+            title: '铲背',
+            width: 150,
+            dataIndex: 'shovelBack'
+        },
+        {
+            key: 'description',
+            title: '备注',
+            width: 150,
+            dataIndex: 'description'
+        }
+    ]
 
     const PackingColumns = [
         {
@@ -182,7 +194,17 @@ export default function PackingListNew(): React.ReactNode {
             key: 'num',
             title: '数量',
             width: 150,
-            dataIndex: 'num'
+            dataIndex: 'num',
+            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <InputNumber
+                    key={ record.id } 
+                    bordered={false} 
+                    defaultValue={ record.num } 
+                    min={ 1 }
+                    max={ record.allNum }
+                    onChange={ (e) => numChange(e, record.allNum, index) }
+                />
+            )
         },
         {
             key: 'description',
@@ -214,64 +236,81 @@ export default function PackingListNew(): React.ReactNode {
             return item.id !== value.id;
         })
         setPackagingData(newPackagingData);
-        setStayDistrict([ ...stayDistrict, value ])
+        stayDistrict.forEach((item: IBundle, ind: number) => {
+            if(item.id === value.id) {
+                stayDistrict[ind] = {
+                    ...item,
+                    basicsPartNum: value.allNum
+                }  
+                setStayDistrict([...stayDistrict])
+            } else {
+                setStayDistrict([ ...stayDistrict, value ]);
+            }
+        })
     }
     
-    const history = useHistory();
-    const params = useParams<{ id: string, productId: string }>();
-    const [ form ] = Form.useForm();
-    const [ selectedRows, setSelectedRows ] = useState([]);
-    const [ selectedRowKeys, setSelectedRowKeys ] = useState([]);
-    const [ visible, setVisible ] = useState(false);
-    const [ balesCode, setBundle ] = useState('');
-    const [ packagingData, setPackagingData ] = useState<IBundle[]>([]);
-    const [ stayDistrict, setStayDistrict ] = useState<IBundle[]>([]);
-
-    const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<IPackingList>(`/tower-science/packageRecord/structure/list`, { productId: params.productId });
-        const list = await RequestUtil.get<IBundle[]>(`/tower-science/productStructure/listByProduct`, { productId: params.productId, ...filterValues })
-        setPackagingData(data?.packageStructureVOList || []);
-        setStayDistrict(list);
-        resole(data);
-    });
-
-    const { loading, data } = useRequest<IPackingList>(() => getTableDataSource({}), {});
-    const detailData: IPackingList = data || {};
-    
     const packaging = () => {
-        if(balesCode) {
-            const data: IBundle[] = selectedRows.map((item: IBundle) => {
-                return {
-                    code: item.code,
-                    structureSpec: item.structureSpec,
-                    id: item.id,
-                    length: item.length,
-                    num: item.num,
-                    balesCode: balesCode,
-                    productCategoryId: detailData.productCategoryId,
-                    productId: detailData.productId,
-                    towerStructureId: item.id,
-                    description: item.description
-                }
+        const data: IBundle[] = selectedRows.map((item: IBundle) => {
+            return {
+                ...item,
+                code: item.code,
+                structureSpec: item.structureSpec,
+                id: item.id,
+                length: item.length,
+                num: item.basicsPartNum,
+                balesCode: balesCode,
+                productCategoryId: detailData.productCategoryId,
+                productId: detailData.productId,
+                towerStructureId: item.id,
+                description: item.description,
+                allNum: item.basicsPartNum
+            }
+        })
+        setPackagingData([ ...data, ...packagingData ]);
+        let newStayDistrict: IBundle[] = stayDistrict?.filter((item: IBundle) => {
+            return selectedRows.every((items: IBundle) => {
+                return item.id !== items.id;
             })
-            setPackagingData([ ...data, ...packagingData ]);
-            setVisible(false);
-            setBundle('');
-            let newStayDistrict: IBundle[] = stayDistrict?.filter((item: IBundle) => {
-                return selectedRows.every((items: IBundle) => {
-                    return item.id !== items.id;
-                })
-            })
-            setStayDistrict(newStayDistrict);
-            setSelectedRows([]);
-            setSelectedRowKeys([]);
-        } else {
-            message.warning("请输入捆号");
-        }
+        })
+        setStayDistrict(newStayDistrict);
+        setSelectedRows([]);
+        setSelectedRowKeys([]);
     }
 
     const onFinish = (value: Record<string, any>) => {
         getTableDataSource({ ...value });
+    }
+
+    const balesCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setBalesCode(e.target.value);
+        const data: IBundle[] = packagingData.map((item: IBundle) => {
+            return {
+                ...item,
+                balesCode: e.target.value,
+            }
+        })
+        setPackagingData([...data]);
+    } 
+
+    const numChange = (e: number, allNum: number, index: number) => {
+        if(e < allNum) {
+            stayDistrict.forEach((item: IBundle, ind: number) => {
+                if(item.id === packagingData[index].id) {
+                    stayDistrict[ind] = {
+                        ...item,
+                        basicsPartNum: (packagingData[index]?.allNum || 0) - (e || 0)
+                    }  
+                    setStayDistrict([...stayDistrict])
+                } else {
+                    setStayDistrict([...stayDistrict, { ...packagingData[index], basicsPartNum: (packagingData[index]?.allNum || 0) - (e || 0) }])
+                }
+            })
+        } else {
+            const data = stayDistrict.filter((item: IBundle) => {
+                return item.id !== packagingData[index].id;
+            })
+            setStayDistrict([ ...data ])
+        }
     }
 
     if (loading) {
@@ -293,7 +332,20 @@ export default function PackingListNew(): React.ReactNode {
             </Space>
         ] }>
             <DetailTitle title="包装信息" />
-            <BaseInfo columns={ baseColumns } dataSource={ detailData } col={ 2 }/>
+            <Descriptions title="" bordered size="small" column={ 4 }>
+                <Descriptions.Item label="塔型">
+                    { detailData.productCategoryName }
+                </Descriptions.Item>
+                <Descriptions.Item label="杆塔号">
+                    { detailData.productNumber }
+                </Descriptions.Item>
+                <Descriptions.Item label="捆号">
+                    <Input placeholder="请输入捆号" bordered={ false } onChange={ (e) => balesCodeChange(e) } />   
+                </Descriptions.Item>
+                <Descriptions.Item label="备注">
+                    <Input placeholder="请输入备注" bordered={ false } onChange={ (e) => setDescription(e.target.value) } />   
+                </Descriptions.Item>
+            </Descriptions>                
             <Form form={ form } className={ styles.topPadding } onFinish={ (value: Record<string, any>) => onFinish(value) }>
                 <Form.Item name="aaaa">
                     <Checkbox.Group style={ { width: '100%' } }> 
@@ -348,9 +400,7 @@ export default function PackingListNew(): React.ReactNode {
                     </Col>
                 </Row>
             </Form>
-            <DetailTitle title="待选区" operation={[ <Button type="primary" onClick={ () => {
-                setVisible(true);
-            } } ghost disabled={ selectedRows.length === 0 }>选择</Button> ]}/>
+            <DetailTitle title="待选区" operation={[ <Button type="primary" onClick={ () => packaging() } ghost disabled={ selectedRows.length === 0 }>添加</Button> ]}/>
             <CommonTable 
                 columns={ chooseColumns } 
                 pagination={ false } 
@@ -358,16 +408,10 @@ export default function PackingListNew(): React.ReactNode {
                     setSelectedRows(selectedRows);
                     setSelectedRowKeys(selectedKeys);
                 } } } 
-                dataSource={ stayDistrict } 
+                dataSource={ [...stayDistrict] } 
             />
             <DetailTitle title="包装区" />
             <CommonTable columns={ PackingColumns } pagination={ false } dataSource={ packagingData } />
         </DetailContent>
-        <Modal title="选择" visible={ visible } okText="保存" cancelText="关闭" onCancel={ () => setVisible(false) } onOk={ () => packaging() }>
-            <Row>
-                <Col span={ 4 }><p>捆号</p></Col>
-                <Col span={ 20 }><Input onChange={ (e) => setBundle(e.target.value) } value={ balesCode } placeholder="请输入"/></Col>
-            </Row>
-        </Modal>
     </>
 }
