@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Space, Button, Input, Modal, Form, message, Upload, Select, DatePicker } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { Page, BaseInfo, DetailTitle, CommonTable } from '../common'
+import { Page, BaseInfo, DetailTitle, CommonTable, EditTable } from '../common'
 import ApprovalTypesView from "./ApprovalTypesView"
 import SelectAuditType from './SelectAuditType'
 import useRequest from '@ahooksjs/use-request'
@@ -15,7 +15,8 @@ const auditEnum: any = {
     "performance_bond": "履约保证金申请",
     "drawing_handover": "图纸交接申请",
     "drawing_confirmation": "图纸交接确认申请",
-    "bidding_evaluation": "招标评审申请"
+    "bidding_evaluation": "招标评审申请",
+    "out_factory": "出厂价申请"
 }
 export default function Information(): React.ReactNode {
     const currencyTypeEnum = (ApplicationContext.get().dictionaryOption as any)["111"].map((item: { id: string, name: string }) => ({
@@ -33,6 +34,7 @@ export default function Information(): React.ReactNode {
     const [drawHVisible, setDrawHVisible] = useState<boolean>(false)
     const [drawingCofirmVisible, setDrawingCofirmVisible] = useState<boolean>(false)
     const [bidingVisible, setBidingVisible] = useState<boolean>(false)
+    const [outFactoryVisible, setOutFactoryVisible] = useState<boolean>(false)
     const [attachInfo, setAttachInfo] = useState<any[]>([])
     const [currentView, setCurrentView] = useState<string>("performance_bond")
     const [currentViewId, setCurrentViewId] = useState<string>("")
@@ -69,6 +71,9 @@ export default function Information(): React.ReactNode {
                 break
             case "bidding_evaluation":
                 setBidingVisible(true)
+                break
+            case "out_factory":
+                setOutFactoryVisible(true)
                 break
             default:
                 break
@@ -350,6 +355,24 @@ export default function Information(): React.ReactNode {
                 </>
             },
             ...enclosure]} dataSource={attachInfo} />
+        </Modal>
+        <Modal
+            title="出厂价申请"
+            width={1011}
+            visible={outFactoryVisible}
+            okText="审请"
+            onCancel={() => {
+                setOutFactoryVisible(false)
+                handleCancel()
+            }}
+            onOk={bidingOk}
+            destroyOnClose
+            confirmLoading={loading}
+        >
+            <DetailTitle title="基本信息" />
+            <BaseInfo form={bidingForm} onChange={handleBidingChange} columns={baseInfo} dataSource={{}} edit col={3} />
+            <DetailTitle title="申请明细" />
+            <EditTable columns={[]} dataSource={[]} />
         </Modal>
         <SelectAuditType visible={visible} title="新建审批" okText="创建" onOk={handleOk} onCancel={() => setVisible(false)} />
         <ApprovalTypesView

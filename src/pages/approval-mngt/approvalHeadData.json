@@ -642,6 +642,62 @@
             "type": "textarea"
         }
     ],
+    "outFactoryHead": [
+        {
+            "title": "项目名称",
+            "dataIndex": "contractId",
+            "type": "popTable",
+            "path": "/tower-market/contract",
+            "width": 1011,
+            "value": "contractName",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "合同编号",
+                    "dataIndex": "contractNumber",
+                    "search": true
+                },
+                {
+                    "title": "合同名称",
+                    "dataIndex": "contractName"
+                },
+                {
+                    "title": "销售类型",
+                    "dataIndex": "saleType"
+                },
+                {
+                    "title": "业主单位",
+                    "dataIndex": "customerCompany",
+                    "search": true
+                },
+                {
+                    "title": "合同签订单位",
+                    "dataIndex": "signCustomerName"
+                },
+                {
+                    "title": "合同签订日期",
+                    "dataIndex": "signContractTime"
+                },
+                {
+                    "title": "要求交货日期",
+                    "dataIndex": "deliveryTime"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择相关合同..."
+                }
+            ]
+        },
+        
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea"
+        }
+    ],
     "enclosure": [
         {
             "title": "文件名",
