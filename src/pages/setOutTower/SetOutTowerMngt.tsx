@@ -3,9 +3,11 @@ import { Space, Input, DatePicker,  Button, Modal, Select } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { CommonTable, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
+import { downloadTemplate } from '../workMngt/setOut/downloadTemplate';
 
 export default function SetOutTowerMngt(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
+    const [taskId, setTaskId] = useState('');
     const [filterValue, setFilterValue] = useState({});
     const history = useHistory();
     const columns = [
@@ -114,12 +116,12 @@ export default function SetOutTowerMngt(): React.ReactNode {
                     <Button type='link' onClick={()=>{history.push(`/setOutTower/setOutTowerMngt/towerMember/${record.id}/${record.structureCount===-1?0:record.structureCount}`)}}>塔型构件</Button>
                     <Button type='link' onClick={()=>{history.push(`/setOutTower/setOutTowerMngt/assemblyWeld/${record.id}`)}}>组焊清单</Button>
                     <Button type='link' onClick={()=>{history.push(`/setOutTower/setOutTowerMngt/bolt/${record.id}`)}}>螺栓清单</Button>
-                    <Button type='link' onClick={()=>{setVisible(true)}}>附件</Button>
+                    <Button type='link' onClick={()=>{setTaskId(record.id);setVisible(true)}}>附件</Button>
                 </Space>
             )
         }
     ]
-    const handleModalCancel = () => setVisible(false);
+    const handleModalCancel = () => {setVisible(false);setTaskId('')};
     const onFilterSubmit = (value: any) => {
         if (value.createTime) {
             const formatDate = value.createTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -146,19 +148,55 @@ export default function SetOutTowerMngt(): React.ReactNode {
                     width: 150 
                 },
                 { 
-                    key: 'name', 
+                    key: 'function', 
                     title: '用途', 
-                    dataIndex: 'name',
+                    dataIndex: 'function',
                     width: 230
                 },
                 { 
                     key: 'operation', 
                     title: '操作', 
+                    width: 50, 
                     dataIndex: 'operation', 
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                        <Button type="link">下载</Button>
+                        <Button type="link" onClick={() => downloadTemplate(record.path,record.downName, {}, true)}>下载</Button>
                 ) }
-            ]} dataSource={[]} />
+            ]} dataSource={[{
+                    name:'提料塔型构件明细汇总.zip',
+                    downName: "提料塔型构件明细汇总",
+                    function:'提料塔型构件明细汇总',
+                    path:`/tower-science/productCategory/material/productCategoryStructure/download`
+                },{
+                    name:'放样塔型构件明细汇总.zip',
+                    downName: "放样塔型构件明细汇总",
+                    function:'放样塔型构件明细汇总',
+                    path:`/tower-science/productCategory/material/productStructure/download`
+                },{
+                    name:'塔型图纸汇总.zip',
+                    downName: "塔型图纸汇总",
+                    function:'塔型图纸汇总',
+                    path:`/tower-science/productCategory/lofting/draw/summary?productCategoryId=${taskId}`
+                },{
+                    name:'组焊清单汇总.zip',
+                    downName: "组焊清单汇总",
+                    function:'组焊清单汇总',
+                    path:`/tower-science/welding/downloadSummary?productCategoryId=${taskId}`
+                },{
+                    name:'小样图汇总.zip',
+                    downName: "小样图汇总",
+                    function:'小样图汇总',
+                    path:`/tower-science/smallSample/download/${taskId}`
+                },{
+                    name:'螺栓清单汇总.zip',
+                    downName: "螺栓清单汇总",
+                    function:'螺栓清单汇总',
+                    path:`/tower-science/boltRecord/downloadSummary?productCategoryId=${taskId}`
+                },{
+                    name:'NC程序汇总.zip',
+                    downName: "NC程序汇总",
+                    function:'NC程序汇总',
+                    path:`/tower-science/productNc/downloadSummary?productCategoryId=${taskId}`
+            }]} />
         </Modal>
         <Page
             path="/tower-science/productCategory/lofting/page"
