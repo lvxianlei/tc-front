@@ -644,49 +644,204 @@
     ],
     "outFactoryHead": [
         {
-            "title": "费用类型",
-            "dataIndex": "costType"
+            "title": "编号",
+            "dataIndex": "outNum",
+            "disabled": true
         },
         {
-            "title": "费用名称",
-            "dataIndex": "costName"
+            "title": "项目名称",
+            "dataIndex": "projectName",
+            "type": "popTable",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入项目名称..."
+                }
+            ],
+            "path": "/tower-market/projectInfo",
+            "width": 1011,
+            "value": "projectName",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "项目名称",
+                    "dataIndex": "projectName",
+                    "search": true
+                },
+                {
+                    "title": "项目编码",
+                    "dataIndex": "projectNumber",
+                    "search": true
+                }
+            ]
         },
         {
-            "title": "付款日期",
-            "dataIndex": "",
-            "type": "date"
+            "title": "招标人",
+            "dataIndex": "biddingPerson",
+            "disabled": true
         },
         {
-            "title": "金额",
-            "dataIndex": "money",
-            "type": "number"
+            "title": "招标代理单位",
+            "dataIndex": "biddingAgency",
+            "disabled": true
         },
         {
-            "title": "申请人",
-            "dataIndex": "applicantName"
+            "title": "总金额",
+            "dataIndex": "sumMoney",
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入总金额..."
+                }
+            ]
         },
         {
-            "title": "申请时间",
-            "dataIndex": "applicantTime",
-            "type": "date"
+            "title": "业务经理",
+            "dataIndex": "projectLeader",
+            "disabled": true
         },
         {
-            "title": "发票号",
-            "dataIndex": "invoiceNo"
+            "title": "联系人",
+            "dataIndex": "linkMan"
         },
         {
-            "title": "发票时间",
-            "dataIndex": "invoiceTime",
-            "type": "date"
+            "title": "联系电话",
+            "dataIndex": "phone"
         },
         {
-            "title": "付款单号",
-            "dataIndex": "payNumber"
+            "title": "传真",
+            "dataIndex": "fax"
+        },
+        {
+            "title": "邮箱",
+            "dataIndex": "mail"
         },
         {
             "title": "备注",
             "dataIndex": "remark",
             "type": "textarea"
+        }
+    ],
+    "applicationdetails": [
+        {
+            "title": "货物名称",
+            "dataIndex": ""
+        },
+        {
+            "title": "包号",
+            "dataIndex": "packageNum"
+        },
+        {
+            "title": "电压等级",
+            "dataIndex": "voltage"
+        },
+        {
+            "title": "重量(吨)",
+            "dataIndex": "weight"
+        },
+        {
+            "title": "基数",
+            "dataIndex": "base"
+        },
+        {
+            "title": "卸货地点",
+            "dataIndex": "cargoAddress",
+            "type": "string"
+        },
+        {
+            "title": "单价",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "运费",
+            "dataIndex": "logisticsPrice",
+            "type": "number"
+        },
+        {
+            "title": "价格",
+            "dataIndex": "price",
+            "type": "number"
+        },
+        {
+            "title": "申请价格",
+            "dataIndex": "applyPrice",
+            "type": "number"
+        },
+        {
+            "title": "报价差值",
+            "dataIndex": "offerDiff",
+            "type": "number"
+        },
+        {
+            "title": "交货日期",
+            "dataIndex": "deliveryTime",
+            "type": "string"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark",
+            "type": "string"
+        }
+    ],
+    "addanewone": [
+        {
+            "title": "产品类型",
+            "dataIndex": "productType"
+        },
+        {
+            "title": "包号",
+            "dataIndex": "packageNum"
+        },
+        {
+            "title": "电压等级",
+            "dataIndex": "voltage"
+        },
+        {
+            "title": "重量(吨)",
+            "dataIndex": "weight"
+        },
+        {
+            "title": "基数",
+            "dataIndex": "base"
+        },
+        {
+            "title": "卸货地点",
+            "dataIndex": "cargoAddress"
+        },
+        {
+            "title": "单价",
+            "dataIndex": "outFactoryPrice"
+        },
+        {
+            "title": "运费",
+            "dataIndex": "logisticsPrice",
+            "type": "number"
+        },
+        {
+            "title": "价格",
+            "dataIndex": "price",
+            "type": "number"
+        },
+        {
+            "title": "申请价格",
+            "dataIndex": "applyPrice",
+            "type": "number"
+        },
+        {
+            "title": "报价差值",
+            "dataIndex": "offerDiff",
+            "type": "number"
+        },
+        {
+            "title": "交货日期",
+            "dataIndex": "deliveryTime"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark"
         }
     ],
     "enclosure": [
