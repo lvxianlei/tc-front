@@ -1,3 +1,4 @@
+import { message } from "antd";
 import { stringify } from "query-string";
 import AuthUtil from "../../../utils/AuthUtil";
 
@@ -17,20 +18,32 @@ export function downloadTemplate(path: string, name: string, requestData?: {}, t
         },
         body: stringify(requestData || {})
     }).then((res) => {
-        return res.blob();
+        if (res.status === 200) {
+            return res.blob();
+        } else {
+            return res.json();
+        }
+        
     }).then((data) => {
-        let blob = data;
-        if(type){
-            blob = new Blob([data], { type: 'application/zip' })
+        if(data.code) {
+            message.error(data.msg);
+            Promise.reject()
+        } else {
+            let blob = data;
+            if(type){
+                blob = new Blob([data], { type: 'application/zip' })
+            }
+            let blobUrl = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.download = name;
+            a.href = blobUrl;
+            a.click();
+            if(document.body.contains(a)) {
+                document.body.removeChild(a);
+            }
         }
-        let blobUrl = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.download = name;
-        a.href = blobUrl;
-        a.click();
-        if(document.body.contains(a)) {
-            document.body.removeChild(a);
-        }
-    })
+    }).catch((e: Error) => {
+        message.error(e.message);
+    });
 }
