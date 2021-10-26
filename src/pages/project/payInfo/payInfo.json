@@ -1,0 +1,58 @@
+{
+    "servicecharge":[
+        {
+            "title": "费用名称",
+            "dataIndex": "costName",
+            "type":"string"
+        },
+        {
+            "title": "付款日期",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "金额",
+            "dataIndex": "money"
+        },
+        {
+            "title": "申请人",
+            "dataIndex": "applicantName",
+            "type":"string"
+        },
+        {
+            "title": "申请时间",
+            "dataIndex": "applicantTime",
+            "type":"string"
+        },
+        {
+            "title": "发票号",
+            "dataIndex": "invoiceNo",
+            "type":"string"
+        },
+        {
+            "title": "发票时间",
+            "dataIndex": "invoiceTime",
+            "type":"string"
+        }, 
+        {
+            "title": "中标包号",
+            "dataIndex": "",
+            "type":""
+        }, 
+        {
+            "title": "中标价",
+            "dataIndex": "",
+            "type":""
+        }, 
+        {
+            "title": "中标重量",
+            "dataIndex": "",
+            "type":""
+        }, 
+        {
+            "title": "备注",
+            "dataIndex": "remark",
+            "type":"string"
+        }
+    ]
+}
