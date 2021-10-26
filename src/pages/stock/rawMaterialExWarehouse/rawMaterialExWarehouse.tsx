@@ -247,7 +247,6 @@ export default function RawMaterialStock(): React.ReactNode {
                         </Select>
                     </div>
                 </div>
-
                 <div className="search_item">
                     <span className="tip">关键字：</span>
                     <div className='selectOrInput'>
