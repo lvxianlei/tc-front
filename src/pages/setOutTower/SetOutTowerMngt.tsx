@@ -165,12 +165,12 @@ export default function SetOutTowerMngt(): React.ReactNode {
                     name:'提料塔型构件明细汇总.zip',
                     downName: "提料塔型构件明细汇总",
                     function:'提料塔型构件明细汇总',
-                    path:`/tower-science/productCategory/material/productCategoryStructure/download`
+                    path:`/tower-science/productCategory/material/productCategoryStructure/download?materialTaskId=${taskId}`
                 },{
                     name:'放样塔型构件明细汇总.zip',
                     downName: "放样塔型构件明细汇总",
                     function:'放样塔型构件明细汇总',
-                    path:`/tower-science/productCategory/material/productStructure/download`
+                    path:`/tower-science/productCategory/material/productStructure/download?materialTaskId=${taskId}`
                 },{
                     name:'塔型图纸汇总.zip',
                     downName: "塔型图纸汇总",
