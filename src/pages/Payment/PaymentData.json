@@ -42,13 +42,8 @@
         },
         {
             "title": "审批状态",
-            "dataIndex": "applyStatus"  
-        },
-        {
-            "title": "操作",
-            "dataIndex": ""
+            "dataIndex": "applyStatus"
         }
-      
     ],
     "paymentinfo": [
         {
@@ -92,7 +87,7 @@
             "dataIndex": "applyStatus"
         }
     ],
-    "paymentdetail":[
+    "paymentdetail": [
         {
             "title": "费用类型",
             "dataIndex": "costType"
@@ -110,27 +105,27 @@
             "dataIndex": "money"
         },
         {
-            "title":"付款时间",
+            "title": "付款时间",
             "dataIndex": "payTime"
         },
         {
-            "title":"收款方",
+            "title": "收款方",
             "dataIndex": "payee"
         },
         {
-            "title":"账号",
+            "title": "账号",
             "dataIndex": "accNum"
         },
         {
-            "title":"开户行",
+            "title": "开户行",
             "dataIndex": "bankName"
         },
         {
-            "title":"备注",
+            "title": "备注",
             "dataIndex": "remark"
         }
     ],
-    "reimbursementdta":[
+    "reimbursementdta": [
         {
             "title": "费用类型",
             "dataIndex": "costType"
@@ -148,31 +143,31 @@
             "dataIndex": "money"
         },
         {
-            "title":"付款时间",
+            "title": "付款时间",
             "dataIndex": "payTime"
         },
         {
-            "title":"收款方",
+            "title": "收款方",
             "dataIndex": "payee"
         },
         {
-            "title":"账号",
+            "title": "账号",
             "dataIndex": "accNum"
         },
         {
-            "title":"开户行",
+            "title": "开户行",
             "dataIndex": "bankName"
         },
         {
-            "title":"发票号",
+            "title": "发票号",
             "dataIndex": "invoiceNo"
         },
         {
-            "title":"发票时间",
+            "title": "发票时间",
             "dataIndex": "invoiceTime"
         },
         {
-            "title":"备注",
+            "title": "备注",
             "dataIndex": "remark"
         }
     ]
