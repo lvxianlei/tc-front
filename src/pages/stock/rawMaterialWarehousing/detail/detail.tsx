@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message, Table } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import ConfirmableButton from '../../../components/ConfirmableButton';
-import { Page } from '../../common';
-import { IClient } from '../../IClient';
-import RequestUtil from '../../../utils/RequestUtil';
-import '../StockPublicStyle.less';
+import ConfirmableButton from '../../../../components/ConfirmableButton';
+import { Page } from '../../../common';
+import { IClient } from '../../../IClient';
+import RequestUtil from '../../../../utils/RequestUtil';
+import '../../StockPublicStyle.less';
 
 const { RangePicker } = DatePicker;
 export default function RawMaterialStock(): React.ReactNode {
@@ -25,7 +25,7 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 50,
         },
         {
-            title: '收货单号',
+            title: '详情',
             dataIndex: 'name',
             width: 120,
             render: (text: any) => <a>{text}</a>,
@@ -67,9 +67,9 @@ export default function RawMaterialStock(): React.ReactNode {
             dataIndex: 'key',
             width: 40,
             fixed: 'right' as FixedType,
-            render: (_: undefined, record: any): React.ReactNode => (
+            render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={`/stock/rawMaterialWarehousing/detail/${record.key}`}>详情</Link>
+                    <Link to={``}>详情</Link>
                 </Space>
             )
         }
@@ -184,7 +184,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     </div>
                 </div>
                 <div className="search_item">
-                    <span className="tip">状态： </span>
+                    <span className="tip">采购状态： </span>
                     <div className='selectOrInput'>
                         <Select
                             className="select"
@@ -214,7 +214,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     <span className="tip">关键字：</span>
                     <div className='selectOrInput'>
                         <Input
-                            placeholder="收货单号/供应商/合同编号"
+                            placeholder="材料名称/标准/规格/材质"
                             value={keyword}
                             onChange={(e) => {
                                 setKeyword(e.target.value)
@@ -242,7 +242,24 @@ export default function RawMaterialStock(): React.ReactNode {
             <div className="func_public_Stock">
                 <Button
                     type="primary"
+                    className='func_btn'
                 >导出</Button>
+                <Button
+                    type="primary"
+                    ghost
+                    className='func_btn'
+                >申请质检</Button>
+                <Button
+                    className='func_btn'
+                    type="primary"
+                    ghost
+                    onClick={() => {
+                        history.go(-1)
+                    }}
+                >返回上一级</Button>
+            </div>
+            <div className="tip_public_Stock">
+                <div>已收货：重量(支)合计：2209.90     价税合计(元)合计：51425.00   待收货：重量(支)合计：2209.90     价税合计(元)合计：51425.00</div>
             </div>
             <div className="page_public_Stock">
                 <Table

@@ -628,6 +628,36 @@
       "exact": true,
       "authority": "approvalm_edit"
     },
+
+    { // 申请价
+      "name": "申请价",
+      "path": "/approvalm/management",
+      "module": "./pages/applicationprice/ApplicationpriceMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 申请价详情
+      "name": "申请价详情",
+      "path": "/approvalm/management/detail/:id",
+      "module": "./pages/applicationprice/ApplicationpriceMngtDetail",
+      "exact": true,
+      "authority": "approvalm_detail"
+    },
+    { // 申请价新建
+      "name": "申请价详情",
+      "path": "/approvalm/management/edit/new/:type",
+      "module": "./pages/applicationprice/ApplicationpriceMngtEdit",
+      "exact": true,
+      "authority": "approvalm_edit"
+    },
+    { // 申请价详情
+      "name": "申请价详情",
+      "path": "/approvalm/management/edit/:id",
+      "module": "./pages/applicationprice/ApplicationpriceMngtEdit",
+      "exact": true,
+      "authority": "approvalm_edit"
+    },
+
     //rd
     { // 驾驶舱-计划跟踪
       "name": "计划跟踪",
@@ -682,6 +712,13 @@
       "name": "原材料入库",
       "path": "/stock/rawMaterialWarehousing",
       "module": "./pages/stock/rawMaterialWarehousing/rawMaterialWarehousing",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 库存管理-原材料入库
+      "name": "原材料入库详情",
+      "path": "/stock/rawMaterialWarehousing/detail/:id",
+      "module": "./pages/stock/rawMaterialWarehousing/detail/detail",
       "exact": true,
       "authority": "approvalm"
     },
@@ -981,8 +1018,8 @@
     },
     { // 工作管理-杆塔信息-编辑包装清单
       "name": "编辑包装清单",
-      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:productId/packingListSetting/:id",
-      "module": "./pages/workMngt/setOut/PackingListSetting",
+      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:productId/packingListSetting",
+      "module": "./pages/workMngt/setOut/PackingListNew",
       "exact": true,
       "authority": "approvalm"
     },

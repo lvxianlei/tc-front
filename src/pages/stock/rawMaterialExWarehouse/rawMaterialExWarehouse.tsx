@@ -247,7 +247,6 @@ export default function RawMaterialStock(): React.ReactNode {
                         </Select>
                     </div>
                 </div>
-
                 <div className="search_item">
                     <span className="tip">关键字：</span>
                     <div className='selectOrInput'>
@@ -270,6 +269,8 @@ export default function RawMaterialStock(): React.ReactNode {
                         >查询</Button>
                         <Button
                             className="btn"
+                            type="primary"
+                            ghost
                             onClick={reset}
                         >重置</Button>
                     </div>
@@ -278,6 +279,7 @@ export default function RawMaterialStock(): React.ReactNode {
             <div className="func_public_Stock">
                 <Button
                     type="primary"
+                    className='func_btn'
                     onClick={() => { }}
                 >导出</Button>
             </div>
