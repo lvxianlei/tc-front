@@ -2,7 +2,7 @@ import React from "react"
 import { Row } from 'antd'
 import { useParams, useHistory, useRouteMatch, useLocation } from 'react-router-dom'
 import styles from './ManagementDetail.module.less'
-type TabTypes = "base" | "cost" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | undefined
+type TabTypes = "base" | "cost" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | "payInfo" | undefined
 export default function ManagementDetailTabsTitle(): JSX.Element {
     const location = useLocation()
     const history = useHistory()
@@ -23,5 +23,6 @@ export default function ManagementDetailTabsTitle(): JSX.Element {
         <span className={(params.tab && params.tab === 'contract') ? styles.default : ""} key="contract" onClick={() => history.push(`/project/management/detail/contract/${params.id}`)}>合同及订单</span>
         <span className={(params.tab && params.tab === 'productGroup') ? styles.default : ""} key='productGroup' onClick={() => history.push(`/project/management/detail/productGroup/${params.id}`)}>杆塔明细</span>
         <span className={(params.tab && params.tab === 'salesPlan') ? styles.default : ""} key='salesPlan' onClick={() => history.push(`/project/management/detail/salesPlan/${params.id}`)}>销售计划</span>
+        <span className={(params.tab && params.tab === 'payInfo') ? styles.default : ""} key='payInfo' onClick={() => history.push(`/project/management/detail/payInfo/${params.id}`)}>相关费用</span>
     </Row>
 }

@@ -3,6 +3,7 @@ import { Button, Row, Tabs, Radio, Spin, Modal, message } from 'antd'
 import { useHistory, useParams, Link } from 'react-router-dom'
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common'
 import CostDetail from './Cost'
+import PayInfo from './payInfo'
 import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
 import {
     baseInfoData, productGroupColumns, bidDocColumns, paths,
@@ -15,7 +16,7 @@ import ManagementContract from './contract/Contract'
 import ManagementOrder from './order/SaleOrder'
 import ApplicationContext from "../../configuration/ApplicationContext"
 import { downLoadFile } from "../../utils"
-export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | undefined
+export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | "payInfo" | undefined
 const productAssistStatistics = [
     {
         "title": "塔型",
@@ -53,7 +54,7 @@ export default function ManagementDetail(): React.ReactNode {
             resole(result)
             return
         }
-        if (["cost"].includes(params.tab as string)) {
+        if (["cost", "payInfo"].includes(params.tab as string)) {
             // const result: { [key: string]: any } = await RequestUtil.get(`${paths[params.tab || 'base']}`, { projectId: params.id, ...postData })
             resole({})
             return
@@ -390,7 +391,8 @@ export default function ManagementDetail(): React.ReactNode {
                     </>
                 }
             }]} dataSource={data?.records} />
-        </DetailContent>
+        </DetailContent>,
+        tab_payInfo: <PayInfo />
     }
     return <>
         <ManagementDetailTabsTitle />

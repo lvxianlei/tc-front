@@ -1,16 +1,16 @@
-import React from "react"
-import { Button, Input, DatePicker, Select, Modal, message, Radio } from 'antd'
-import { Link, useHistory } from 'react-router-dom'
+import React, { useState } from "react"
+import { Button, Input, DatePicker, Radio } from 'antd'
+import { useHistory } from 'react-router-dom'
 import { Page } from '../common'
 import { collectionListHead } from "./CollectionData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 export default function Collection() {
     const history = useHistory()
-
-    const { loading, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    const [confirmStatus, setConfirmStatus] = useState<number>(0)
+    const { loading, data, run } = useRequest<{ [key: string]: any }>((params: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/Collection?id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/backMoney`, { ...params })
             resole(result)
         } catch (error) {
             reject(error)
@@ -26,24 +26,8 @@ export default function Collection() {
         return value
     }
 
-    const handleDelete = (id: string) => {
-        Modal.confirm({
-            title: "删除",
-            content: "确定删除此开票申请吗？",
-            onOk: () => new Promise(async (resove, reject) => {
-                try {
-                    resove(await deleteRun(id))
-                    message.success("删除成功...")
-                    history.go(0)
-                } catch (error) {
-                    reject(error)
-                }
-            })
-        })
-    }
-
     const operationChange = (event: any) => {
-        console.log("----", event.target.value)
+        setConfirmStatus(parseFloat(`${event.target.value}`))
     }
 
     return <Page
@@ -58,12 +42,13 @@ export default function Collection() {
                 render: (_: any, record: any) => <Button type="link" onClick={() => history.push(`/project/collection/detail/${record.id}`)}>确认信息</Button>
             }]}
         extraOperation={<>
-            <Radio.Group defaultValue={1} onChange={operationChange}>
-                <Radio.Button value={1}>待确认</Radio.Button>
-                <Radio.Button value={2}>已确认</Radio.Button>
+            <Radio.Group defaultValue={confirmStatus} onChange={operationChange}>
+                <Radio.Button value={0}>待确认</Radio.Button>
+                <Radio.Button value={1}>已确认</Radio.Button>
             </Radio.Group>
         </>}
         onFilterSubmit={onFilterSubmit}
+        filterValue={{ confirmStatus }}
         searchFormItems={[
             {
                 name: 'fuzzyQuery',
