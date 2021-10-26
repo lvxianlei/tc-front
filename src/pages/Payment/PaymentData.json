@@ -1,0 +1,179 @@
+{
+    "PaymentListHead": [
+        {
+            "title": "付款单号",
+            "dataIndex": "payNumber"
+        },
+        {
+            "title": "项目编号",
+            "dataIndex": "projectNumber"
+        },
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName"
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": "projectLeader"
+        },
+        {
+            "title": "费用名称",
+            "dataIndex": "costName"
+        },
+        {
+            "title": "付款类型",
+            "dataIndex": "payType"
+        },
+        {
+            "title": "付款状态",
+            "dataIndex": "payStatus"
+        },
+        {
+            "title": "金额",
+            "dataIndex": ""
+        },
+        {
+            "title": "申请时间",
+            "dataIndex": "applicantTime"
+        },
+        {
+            "title": "申请人",
+            "dataIndex": "applicantName"
+        },
+        {
+            "title": "审批状态",
+            "dataIndex": "applyStatus"  
+        },
+        {
+            "title": "操作",
+            "dataIndex": ""
+        }
+      
+    ],
+    "paymentinfo": [
+        {
+            "title": "付款单号",
+            "dataIndex": "payNumber"
+        },
+        {
+            "title": "项目编号",
+            "dataIndex": "projectNumber"
+        },
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName"
+        },
+        {
+            "title": " 付款类型",
+            "dataIndex": "payType"
+        },
+        {
+            "title": " 业务经理",
+            "dataIndex": "projectLeader"
+        },
+        {
+            "title": " 申请人",
+            "dataIndex": "applicantName"
+        },
+        {
+            "title": " 申请时间",
+            "dataIndex": "applicantTime"
+        },
+        {
+            "title": " 总金额",
+            "dataIndex": "sumMoney"
+        },
+        {
+            "title": " 付款状态",
+            "dataIndex": "payStatus"
+        },
+        {
+            "title": " 审批状态",
+            "dataIndex": "applyStatus"
+        }
+    ],
+    "paymentdetail":[
+        {
+            "title": "费用类型",
+            "dataIndex": "costType"
+        },
+        {
+            "title": "费用名称",
+            "dataIndex": "costName"
+        },
+        {
+            "title": "支付类型",
+            "dataIndex": "payType"
+        },
+        {
+            "title": "金额",
+            "dataIndex": "money"
+        },
+        {
+            "title":"付款时间",
+            "dataIndex": "payTime"
+        },
+        {
+            "title":"收款方",
+            "dataIndex": "payee"
+        },
+        {
+            "title":"账号",
+            "dataIndex": "accNum"
+        },
+        {
+            "title":"开户行",
+            "dataIndex": "bankName"
+        },
+        {
+            "title":"备注",
+            "dataIndex": "remark"
+        }
+    ],
+    "reimbursementdta":[
+        {
+            "title": "费用类型",
+            "dataIndex": "costType"
+        },
+        {
+            "title": "费用名称",
+            "dataIndex": "costName"
+        },
+        {
+            "title": "支付类型",
+            "dataIndex": "payType"
+        },
+        {
+            "title": "金额",
+            "dataIndex": "money"
+        },
+        {
+            "title":"付款时间",
+            "dataIndex": "payTime"
+        },
+        {
+            "title":"收款方",
+            "dataIndex": "payee"
+        },
+        {
+            "title":"账号",
+            "dataIndex": "accNum"
+        },
+        {
+            "title":"开户行",
+            "dataIndex": "bankName"
+        },
+        {
+            "title":"发票号",
+            "dataIndex": "invoiceNo"
+        },
+        {
+            "title":"发票时间",
+            "dataIndex": "invoiceTime"
+        },
+        {
+            "title":"备注",
+            "dataIndex": "remark"
+        }
+    ]
+}

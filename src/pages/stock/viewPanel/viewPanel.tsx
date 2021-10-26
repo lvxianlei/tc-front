@@ -1,5 +1,8 @@
-import React, { useState } from 'react'
-import { Button, Table, Pagination, TableColumnProps, } from 'antd'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react'
+import { Button, Table, Pagination, TableColumnProps, Row, Col, Select, } from 'antd'
+import RequestUtil from '../../../utils/RequestUtil';
+const { Option } = Select;
 const ViewPanel = (): React.ReactNode => {
     // const history = useHistory()
     const [columnsData, setColumnsData] = useState([]);
@@ -69,10 +72,124 @@ const ViewPanel = (): React.ReactNode => {
             dataIndex: 'currentProjectStage',
         },
     ]
-
+    useEffect(() => {
+        getColumnsData()
+    }, [current, size]);
+    const getColumnsData = async () => {
+        const data: any = await RequestUtil.get('/tower-storage/warehouse', {
+            current,
+            size,
+        })
+        setTotal(data.data)
+        setColumnsData(data.records)
+    }
 
     return (
         <div className='public_page'>
+            <Row className='search_content'>
+                <Col
+                    xxl={6}
+                    xl={6}
+                    md={12}
+                    className='search_item'
+                >
+                    <span className='tip'>材质：</span>
+                    <Select
+                        className='input'
+                        // value={this.state.entryStatus}
+                        style={{ width: 120 }}
+                        onChange={(value) => {
+                        }}
+                    >
+                        <Option value={''}>全部</Option>
+                        <Option value={0}>未生成</Option>
+                        <Option value={1}>已生成</Option>
+                    </Select>
+                </Col>
+                <Col
+                    xxl={6}
+                    xl={6}
+                    md={12}
+                    className='search_item'
+                >
+                    <span className='tip'>标准：</span>
+                    <Select
+                        className='input'
+                        // value={this.state.entryStatus}
+                        style={{ width: 120 }}
+                        onChange={(value) => {
+                        }}
+                    >
+                        <Option value={''}>全部</Option>
+                        <Option value={0}>未生成</Option>
+                        <Option value={1}>已生成</Option>
+                    </Select>
+                </Col>
+                <Col
+                    xxl={6}
+                    xl={6}
+                    md={12}
+                    className='search_item'
+                >
+                    <span className='tip'>品名：</span>
+                    <Select
+                        className='input'
+                        // value={this.state.entryStatus}
+                        style={{ width: 120 }}
+                        onChange={(value) => {
+                        }}
+                    >
+                        <Option value={''}>全部</Option>
+                        <Option value={0}>未生成</Option>
+                        <Option value={1}>已生成</Option>
+                    </Select>
+                </Col>
+                <Col
+                    xxl={6}
+                    xl={6}
+                    md={12}
+                    className='search_item'
+                >
+                    <span className='tip'>规格：</span>
+                    <Select
+                        className='input'
+                        // value={this.state.entryStatus}
+                        style={{ width: 120 }}
+                        onChange={(value) => {
+                        }}
+                    >
+                        <Option value={''}>全部</Option>
+                        <Option value={0}>未生成</Option>
+                        <Option value={1}>已生成</Option>
+                    </Select>
+                </Col>
+                <Col
+                    xxl={6}
+                    xl={6}
+                    md={12}
+                    className='search_item'
+                >
+                    <span className='tip'>库存情况：</span>
+                    <Select
+                        className='input'
+                        // value={this.state.entryStatus}
+                        style={{ width: 120 }}
+                        onChange={(value) => {
+                        }}
+                    >
+                        <Option value={''}>全部</Option>
+                        <Option value={0}>未生成</Option>
+                        <Option value={1}>已生成</Option>
+                    </Select>
+                </Col>
+                <Col
+                    className='search_btn_box'
+                >
+                    <Button
+                        className='btn_item'
+                    >重置</Button>
+                </Col>
+            </Row>
             <div className='public_content'>
                 <div className='func_box'>
                     <div className='func'>
@@ -106,6 +223,10 @@ const ViewPanel = (): React.ReactNode => {
                         total={total}
                         pageSize={size}
                         current={current}
+                        onChange={(page: number, size: any) => {
+                            setCurrent(page)
+                            setSize(size)
+                        }}
                     />
                 </div>
             </div>

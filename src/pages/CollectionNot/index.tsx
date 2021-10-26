@@ -2,15 +2,15 @@ import React from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { Page } from '../common'
-import { invoicingListHead } from "./InvoicingData.json"
+import { collectionNotListHead } from "./CollectionNotData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
-export default function Invoicing() {
+export default function CollectionNot() {
     const history = useHistory()
 
     const { loading, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/invoicing?id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/Collection?id=${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -43,9 +43,9 @@ export default function Invoicing() {
     }
 
     return <Page
-        path="/tower-market/invoicing"
+        path="/tower-market/Payment"
         columns={[
-            ...invoicingListHead,
+            ...collectionNotListHead,
             {
                 title: "操作",
                 dataIndex: "opration",
@@ -53,13 +53,13 @@ export default function Invoicing() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <Button type="link" onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</Button>
-                        <Button type="link" onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>
+                        <Button type="link" onClick={() => history.push(`/project/Collection/detail/${record.id}`)}>查看</Button>
+                        <Button type="link" onClick={() => history.push(`/project/Collection/edit/${record.id}`)}>编辑</Button>
                         <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>
                     </>
                 }
             }]}
-        extraOperation={<Link to="/project/invoicing/edit/new"><Button type="primary">新增开票申请</Button></Link>}
+        extraOperation={<Link to="/project/Collection/edit/new"><Button type="primary">新增开票申请</Button></Link>}
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {
@@ -70,20 +70,22 @@ export default function Invoicing() {
                 name: 'isOpen',
                 label: '是否已全开',
                 children: <Select style={{ width: 200 }}>
-                    <Select.Option value="1">预开</Select.Option>
-                    <Select.Option value="2">发票已开全</Select.Option>
-                    <Select.Option value="3">发票未开全</Select.Option>
+                    <Select.Option value="a">全部</Select.Option>
+                    <Select.Option value="b">预开</Select.Option>
+                    <Select.Option value="c">发票已开全</Select.Option>
+                    <Select.Option value="d">发票未开全</Select.Option>
                 </Select>
             },
             {
                 name: 'contractType',
                 label: '开票时合同状态',
                 children: <Select style={{ width: 200 }}>
-                    <Select.Option value="1">不下计划</Select.Option>
-                    <Select.Option value="2">未下计划</Select.Option>
-                    <Select.Option value="3">未下完计划</Select.Option>
-                    <Select.Option value="4">未发完货</Select.Option>
-                    <Select.Option value="5">已发完货</Select.Option>
+                    <Select.Option value="a">全部</Select.Option>
+                    <Select.Option value="b">不下计划</Select.Option>
+                    <Select.Option value="c">未下计划</Select.Option>
+                    <Select.Option value="d">未下完计划</Select.Option>
+                    <Select.Option value="e">未发完货</Select.Option>
+                    <Select.Option value="f">已发完货</Select.Option>
                 </Select>
             },
             {

@@ -40,7 +40,7 @@ const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref
     // 原材料均价=相同材料规格*对应的比例之合
     // 废料损耗=钢材消耗定额 * （原材料均价 - 废料均价）
     // 不含螺栓价格=原材料均价+废料损耗+镀锌成本+加工费+公司税费
-    // 螺栓成本均价 = （含螺栓单价 - 不含螺栓价格） *  螺栓占比
+    // 螺栓成本均价 = （螺栓单价 - 不含螺栓价格） *  螺栓占比
     // 核算价格 = 螺栓成本均价+ 不含螺栓价格 + 利润 + 地面交货 + 物流费用
 
     const handleChange = (fields: any, allfields: any) => {

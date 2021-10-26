@@ -424,6 +424,73 @@
       "exact": true,
       "authority": "project"
     },
+    
+    { // 付款申请
+      "name": "付款申请",
+      "path": "/project/payment",
+      "module": "./pages/Payment/index",
+      "exact": true,
+      "authority": "project"
+    },
+    { // 付款申请详情
+      "name": "付款申请详情",
+      "path": "/project/payment/detail/:id",
+      "module": "./pages/Payment/Overview",
+      "exact": true,
+      "authority": "project"
+    },
+    { // 付款申请
+      "name": "新增开票申请",
+      "path": "/project/payment/edit/:id",
+      "module": "./pages/Payment/Edit",
+      "exact": true,
+      "authority": "project"
+    },
+
+    { // 回款申请--已确认
+      "name": "回款申请--已确认",
+      "path": "/project/collection",
+      "module": "./pages/Collection/index",
+      "exact": true,
+      "authority": "project"
+    },
+    { // 回款申请详情
+      "name": "回款申请详情",
+      "path": "/project/collection/detail/:id",
+      "module": "./pages/Collection/Overview",
+      "exact": true,
+      "authority": "project"
+    },
+    { // 回款申请
+      "name": "新增开票申请",
+      "path": "/project/collection/edit/:id",
+      "module": "./pages/Collection/Edit",
+      "exact": true,
+      "authority": "project"
+    },
+
+    { // 回款申请--未确认
+      "name": "回款申请--未确认",
+      "path": "/project/CollectionNot",
+      "module": "./pages/CollectionNot/index",
+      "exact": true,
+      "authority": "project"
+    },
+    { // 回款申请详情
+      "name": "回款申请详情",
+      "path": "/project/CollectionNot/detail/:id",
+      "module": "./pages/CollectionNot/Overview",
+      "exact": true,
+      "authority": "project"
+    },
+    { // 回款申请
+      "name": "新增开票申请",
+      "path": "/project/CollectionNot/edit/:id",
+      "module": "./pages/CollectionNot/Edit",
+      "exact": true,
+      "authority": "project"
+    },
+
     { // 合同详情
       "name": "合同详情",
       "path": "/project/contract/detail/:projectId/:id",
@@ -599,9 +666,38 @@
       "module": "./pages/approval-mngt/ApprovalMngtEdit",
       "exact": true,
       "authority": "approvalm_edit"
-    }
+    },
+    
+    { // 申请价
+      "name": "申请价",
+      "path": "/approvalm/management",
+      "module": "./pages/Applicationprice/ApprovalMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 申请价详情
+      "name": "申请价详情",
+      "path": "/approvalm/management/detail/:id",
+      "module": "./pages/Applicationprice/ApprovalMngtDetail",
+      "exact": true,
+      "authority": "approvalm_detail"
+    },
+    { // 申请价新建
+      "name": "申请价详情",
+      "path": "/approvalm/management/edit/new/:type",
+      "module": "./pages/Applicationprice/ApprovalMngtEdit",
+      "exact": true,
+      "authority": "approvalm_edit"
+    },
+    { // 申请价详情
+      "name": "申请价详情",
+      "path": "/approvalm/management/edit/:id",
+      "module": "./pages/Applicationprice/ApprovalMngtEdit",
+      "exact": true,
+      "authority": "approvalm_edit"
+    },
+
     //rd
-    ,
     { // 驾驶舱-计划跟踪
       "name": "计划跟踪",
       "path": "/cockpit/planTrack",
@@ -631,9 +727,16 @@
       "authority": "approvalm"
     },
     { // 驾驶舱-收货单看板
-      "name": "原材料看板",
+      "name": "收货单看板",
       "path": "/stock/viewReceivingNote",
       "module": "./pages/stock/viewReceivingNote/viewReceivingNote",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 驾驶舱-合同看板
+      "name": "合同看板",
+      "path": "/stock/viewContract",
+      "module": "./pages/stock/viewContract/viewContract",
       "exact": true,
       "authority": "approvalm"
     },
