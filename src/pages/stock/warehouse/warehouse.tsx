@@ -1,57 +1,28 @@
-import React, { useState } from 'react'
-import { Button, TableColumnProps, Select, } from 'antd'
-import { Link, } from 'react-router-dom'
-import { Page } from '../../common'
-const projectType = [
-    {
-        value: 0,
-        label: "公开招标"
-    },
-    {
-        value: 1,
-        label: "用户工程"
-    }
-]
-
-const currentProjectStage = [
-    {
-        value: 0,
-        label: "准备投标"
-    },
-    {
-        value: 1,
-        label: "投标"
-    },
-    {
-        value: 2,
-        label: "合同签订"
-    },
-    {
-        value: 3,
-        label: "合同执行"
-    },
-    {
-        value: 4,
-        label: "项目结束"
-    }
-]
-
-export default function RawMaterialStock(): React.ReactNode {
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react'
+import { Button, Col, Pagination, Row, Select, TableColumnProps, Table, } from 'antd'
+import RequestUtil from "../../../utils/RequestUtil"
+import { RouteProps } from '../public'
+import WarehouseModal from './WarehouseModal'
+const { Option } = Select;
+const Warehouse = (props: RouteProps) => {
     // const history = useHistory()
-    const [filterValue, setFilterValue] = useState({});
+    const [columnsData, setColumnsData] = useState([]);
+    const [total, setTotal] = useState(0);
+    const [size, setSize] = useState(10);
+    const [current, setCurrent] = useState(1);
+    const [isModal, setIsModal] = useState(false);
     const columns: TableColumnProps<object>[] = [
         {
             key: 'index',
             title: '序号',
             dataIndex: 'index',
             width: 50,
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
             key: 'projectName',
             title: '编号',
             dataIndex: 'projectName',
-            render: (_a: any, _b: any) => <Link to={`/project/management/detail/base/${_b.id}`}>{_b.projectName}</Link>
         },
         {
             key: 'projectNumber',
@@ -62,7 +33,6 @@ export default function RawMaterialStock(): React.ReactNode {
             key: 'projectType',
             title: '分类',
             dataIndex: 'projectType',
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{projectType.find(item => item.value === Number(_a))?.label}</span>)
         },
         {
             key: 'bidBuyEndTime',
@@ -78,13 +48,12 @@ export default function RawMaterialStock(): React.ReactNode {
             key: 'currentProjectStage',
             title: '车间',
             dataIndex: 'currentProjectStage',
-            render: (_a: number) => <span>{currentProjectStage.find(item => item.value === _a)?.label}</span>
         },
         {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
-            render: (text, item: any, index: number): React.ReactNode => {
+            render: (_text: any, item: any, index: number): React.ReactNode => {
                 return (
                     <div>
                         <span>编辑</span>
@@ -93,61 +62,72 @@ export default function RawMaterialStock(): React.ReactNode {
                 )
             }
         }]
-
-
-    const onFilterSubmit = (value: any) => {
-        if (value.startBidBuyEndTime) {
-            const formatDate = value.startBidBuyEndTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startBidBuyEndTime = formatDate[0]
-            value.endBidBuyEndTime = formatDate[1]
-        }
-
-        if (value.startBiddingEndTime) {
-            const formatDate = value.startBiddingEndTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startBiddingEndTime = formatDate[0]
-            value.endBiddingEndTime = formatDate[1]
-        }
-        setFilterValue(value)
-        return value
+    useEffect(() => {
+        getColumnsData()
+    }, [current, size]);
+    const getColumnsData = async () => {
+        const data: any = await RequestUtil.get('/tower-storage/warehouse', {
+            current,
+            size,
+        })
+        setTotal(data.data)
+        setColumnsData(data.records)
     }
-
+    const cancelModal = () =>{
+        setIsModal(false)
+    }
     return (
-        <Page
-            path="/tower-market/projectInfo"
-            columns={columns}
-            filterValue={filterValue}
-            extraOperation={<Link to="/project/management/new"><Button type="primary">导出</Button></Link>}
-            onFilterSubmit={onFilterSubmit}
-            searchFormItems={[
-                {
-                    name: 'currentProjectStage',
-                    label: '分类',
-                    children: <Select style={{ width: "100px" }}>
-                        {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
-                    </Select>
-                },
-                {
-                    name: 'currentProjectStage',
-                    label: '仓库',
-                    children: <Select style={{ width: "100px" }}>
-                        {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
-                    </Select>
-                },
-                {
-                    name: 'currentProjectStage',
-                    label: '负责人',
-                    children: <Select style={{ width: "100px" }}>
-                        {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
-                    </Select>
-                },
-                {
-                    name: 'currentProjectStage',
-                    label: '保管员查询',
-                    children: <Select style={{ width: "100px" }}>
-                        {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
-                    </Select>
-                },
-            ]}
-        />
+        <div className='public_page'>
+            <div className='public_content'>
+                <div className='func_box'>
+                    <div className='func'>
+                        <Button
+                            className='func_item'
+                            type='primary'
+                        >导出</Button>
+                    </div>
+                    <div className='func_right'>
+                        <Button
+                            className='func_right_item'
+                            onClick={()=>{
+                                setIsModal(true)
+                            }}
+                        >创建</Button>
+                        <Button
+                            className='func_right_item'
+                        >返回上一级</Button>
+                    </div>
+                </div>
+                <Table
+                    className='public_table'
+                    scroll={{ x: true }}
+                    columns={columns}
+                    dataSource={columnsData}
+                    pagination={false}
+                    size='small'
+                />
+                <div className='page_content'>
+                    <Pagination
+                        className='page'
+                        showSizeChanger
+                        showQuickJumper
+                        total={total}
+                        pageSize={size}
+                        current={current}
+                        onChange={(page: number, size: any) => {
+                            setCurrent(page)
+                            setSize(size)
+                        }}
+                    />
+                </div>
+            </div>
+            <WarehouseModal
+                {...props}
+                isModal={isModal}
+                cancelModal={cancelModal}
+            />
+        </div>
     )
 }
+
+export default Warehouse;

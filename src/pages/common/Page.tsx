@@ -9,6 +9,7 @@ import { TablePaginationConfig, TableColumnType, TableProps, FormItemProps, Spac
 import { RouteComponentProps, withRouter } from 'react-router'
 import { WithTranslation, withTranslation } from 'react-i18next'
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../components/AbstractMngtComponent'
+import { generateRender } from "./CommonTable"
 import { ITabItem } from '../../components/ITabableComponent'
 import RequestUtil from '../../utils/RequestUtil'
 import { IClient } from '../IClient'
@@ -93,7 +94,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
     }
 
     public getTableColumns(): TableColumnType<object>[] {
-        return this.props.columns || []
+        return (this.props.columns || []).map((item: any) => generateRender(item.type || "text", item))
     }
 
     public onTableChange(pagination: TablePaginationConfig): void {

@@ -35,35 +35,39 @@ const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref
         }
     })
     useImperativeHandle(ref, () => ({ formRef, index }), [])
-    
+
     // 公式：
     // 原材料均价=相同材料规格*对应的比例之合
     // 废料损耗=钢材消耗定额 * （原材料均价 - 废料均价）
     // 不含螺栓价格=原材料均价+废料损耗+镀锌成本+加工费+公司税费
-    // 螺栓成本均价 = （含螺栓单价 - 不含螺栓价格） *  螺栓占比
+    // 螺栓成本均价 = （螺栓单价 - 不含螺栓价格） *  螺栓占比
     // 核算价格 = 螺栓成本均价+ 不含螺栓价格 + 利润 + 地面交货 + 物流费用
 
     const handleChange = (fields: any, allfields: any) => {
-        const changeValue = fields.submit[0]
         const allValue = allfields.submit[0]
         const fljj: number = parseFloat(allfields.fljj || 0)
         const gcxh: number = parseFloat(allfields.fljj || 0)
         const dxcb: number = parseFloat(allfields.dxcb || 0)
         const jgf: number = parseFloat(allfields.jgf || 0)
-        const allRatio: string[] = yclHead.map((ycl: any) => ycl.dataIndex)
-        if (allRatio.includes(Object.keys(changeValue)[0])) {
-            const cc: number = ycl.reduce((result: number, item: any) => {
-                const aa: string = (parseFloat(allValue[item.dj]) * parseFloat(allValue[item.bl])).toFixed(2)
-                return result + parseFloat(aa)
-            }, 0)
-            const flsh: number = parseFloat((gcxh * (cc - fljj)).toFixed(2))
-            const bhls: number = cc + flsh + dxcb + jgf
-
-        }
+        const gsfs: number = parseFloat(allfields.gsfs || 0)
+        const lszb: number = parseFloat(allfields.lszb || 0)
+        const lsdj: number = parseFloat(allfields.lsdj || 0)
+        const logistics_price: number = parseFloat(allfields.logistics_price || 0)
+        const yc: number = ycl.reduce((result: number, item: any) => {
+            const aa: string = (parseFloat(allValue[item.dj]) * parseFloat(allValue[item.bl])).toFixed(2)
+            return result + parseFloat(aa)
+        }, 0)
+        const flsh: number = parseFloat((gcxh * (yc - fljj)).toFixed(2))
+        const bhls: number = parseFloat((yc + flsh + dxcb + jgf + gsfs).toFixed(2))
+        const lscb: number = parseFloat((parseFloat((lsdj - bhls).toFixed(2)) * lszb).toFixed(2))
+        const cc: number = parseFloat((yc + logistics_price).toFixed(2))
+        console.log(cc, yc, flsh, bhls, lscb)
+        formRef.setFieldsValue({ submit: [{ ...allValue, cc, yc, flsh, bhls, lscb }] })
     }
     return <EditTable
         form={formRef}
         onChange={handleChange}
+        haveNewButton={false}
         haveOpration={false}
         columns={data.head || []}
         dataSource={data.data || []}
@@ -85,7 +89,7 @@ const EditableProTableList: React.FC<any> = forwardRef(({ data, deleteProduct },
 })
 
 export default function CostEdit() {
-    const productTypeEnum: any = (ApplicationContext.get().dictionaryOption as any)["101"].map((dic: any) => ({ label: dic.name, value: dic.name }))
+    const voltageEnum: any = (ApplicationContext.get().dictionaryOption as any)["102"].map((dic: any) => ({ label: dic.name, value: dic.name }))
     const history = useHistory()
     const [baseInfo] = Form.useForm()
     const formRef = useRef([])
@@ -93,6 +97,16 @@ export default function CostEdit() {
     const [visible, setVisible] = useState<boolean>(false)
     const [askProductDtos, setAskProductDtos] = useState<any[]>([])
     const [form] = Form.useForm()
+
+    const { data: productTypeEnum } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const productType: any = await RequestUtil.get(`/tower-market/ProductType/getProduct`)
+            resole(productType.map((item: any) => ({ value: item.productName, label: item.productName })))
+        } catch (error) {
+            reject(error)
+        }
+    }))
+
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const askInfo: any = await RequestUtil.get(`/tower-market/askInfo?projectId=${params.projectId}`)
@@ -148,7 +162,7 @@ export default function CostEdit() {
     const handleSave = async () => {
         try {
             const baseInfoData = await baseInfo.validateFields();
-            if ((formRef.current as any).data.length <= 0) {
+            if ((formRef.current as any).data.length <= 0 || !(formRef.current as any).data[0]) {
                 message.error("至少新增一个产品类型")
                 return
             }
@@ -194,7 +208,7 @@ export default function CostEdit() {
                     }
                 ]}>
                     <Select style={{ width: "100%" }}>
-                        {productTypeEnum.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
+                        {productTypeEnum?.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
                     </Select>
                 </Form.Item>
                 <Form.Item label="电压等级(kv)" name="voltage" rules={[
@@ -203,7 +217,9 @@ export default function CostEdit() {
                         "message": "请输入电压等级(kv)..."
                     }
                 ]}>
-                    <Input style={{ width: "100%" }} />
+                    <Select style={{ width: "100%" }}>
+                        {voltageEnum.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
+                    </Select>
                 </Form.Item>
             </Form>
         </Modal>

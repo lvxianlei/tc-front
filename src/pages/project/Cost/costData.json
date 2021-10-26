@@ -53,11 +53,6 @@
         {
             "title": "回复时间",
             "dataIndex": "updateTime"
-        },
-        {
-            "title": "备注",
-            "dataIndex": "remark",
-            "type": "textarea"
         }
     ],
     "logisticBaseInfo": [
@@ -260,6 +255,11 @@
                     "label": "已回复"
                 }
             ]
+        },
+        {
+            "title": "产品类型",
+            "dataIndex": "productType",
+            "disabled": true
         },
         {
             "title": "特殊工艺",

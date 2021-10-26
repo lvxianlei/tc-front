@@ -24,7 +24,7 @@ export default function Edit() {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/invoicing/getInvoicingInfo/${params.id}`)
             baseInfo.setFieldsValue({ ...formatData(baseInfoHead, result) })
             invoicForm.setFieldsValue({ ...result.invoicingInfoVo })
-            billingForm.setFieldsValue({ submit: result.invoicingDetailVos })
+            billingForm.setFieldsValue({ submit: result.invoicingDetailVos.map((item: any) => formatData(billingHead, item)) })
             setAttachVosData(result.attachInfoVos)
             resole(result)
         } catch (error) {
@@ -146,22 +146,30 @@ export default function Edit() {
     }
 
     const handleEditTableChange = (fields: any, allFields: any) => {
-        const currentRowData = fields.submit[fields.submit.length - 1]
-        const backMoney = baseInfo.getFieldValue("backMoney")
-        if (currentRowData.weight || currentRowData.moneyCount) {
-            const { weight, moneyCount } = allFields.submit.reduce((result: { weight: string, moneyCount: string }, item: any) => ({
-                weight: parseFloat(result.weight || "0") + parseFloat(item.weight || 0),
-                moneyCount: parseFloat(result.moneyCount || "0") + parseFloat(item.moneyCount || 0)
-            }), { weight: 0, moneyCount: 0 })
-            const newFields = allFields.submit.map((item: any, index: number) => index === fields.submit.length - 1 ? ({
-                ...item,
-                money: (item.moneyCount / item.weight).toFixed(2)
-            }) : item)
-            billingForm.setFieldsValue({ submit: newFields })
+        if (fields.submit.length - 1 >= 0) {
+            const currentRowData = fields.submit[fields.submit.length - 1]
+            const backMoney = baseInfo.getFieldValue("backMoney") || 0
+            if (currentRowData.weight || currentRowData.moneyCount) {
+                const { weight, moneyCount } = allFields.submit.reduce((result: { weight: string, moneyCount: string }, item: any) => ({
+                    weight: parseFloat(result.weight || "0") + parseFloat(item.weight || 0),
+                    moneyCount: parseFloat(result.moneyCount || "0") + parseFloat(item.moneyCount || 0)
+                }), { weight: 0, moneyCount: 0 })
+                const newFields = allFields.submit.map((item: any, index: number) => index === fields.submit.length - 1 ? ({
+                    ...item,
+                    money: (item.moneyCount / item.weight).toFixed(2)
+                }) : item)
+                billingForm.setFieldsValue({ submit: newFields })
+                baseInfo.setFieldsValue({
+                    ticketWeight: weight,
+                    ticketMoney: moneyCount,
+                    backMoney: (parseFloat(backMoney === -1 ? 0 : backMoney) * parseFloat(moneyCount || 0)).toFixed(2)
+                })
+            }
+        } else {
             baseInfo.setFieldsValue({
-                ticketWeight: weight,
-                ticketMoney: moneyCount,
-                backMoney: (parseFloat(backMoney) * parseFloat(moneyCount || 0)).toFixed(2)
+                ticketWeight: 0,
+                ticketMoney: 0,
+                backMoney: 0
             })
         }
     }

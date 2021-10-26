@@ -26,7 +26,7 @@ export default function CostEdit() {
             style={{ marginRight: 16 }}
             onClick={() => history.push(`/sys/costconfig/edit/${id}`)}
         >编辑</Button>,
-        <Button key="cancel" onClick={() => history.go(-1)}>取消</Button>
+        <Button key="cancel" onClick={() => history.go(-1)}>返回</Button>
     ]}>
         <Spin spinning={loading}>
             <DetailTitle title="公共费用" />

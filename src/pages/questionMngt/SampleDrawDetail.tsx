@@ -118,7 +118,7 @@ export default function SampleDrawDetail(): React.ReactNode {
                     </Descriptions.Item>
                 </Descriptions>
                 <DetailTitle title="操作信息" />
-                <CommonTable columns={tableColumns} dataSource={detailData?.issueRecordList} />
+                <CommonTable columns={tableColumns} dataSource={detailData?.issueRecordList} pagination={false}/>
             </DetailContent>
         </Spin>
     </>

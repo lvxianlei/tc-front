@@ -106,12 +106,12 @@ const productColumns = [
 
 export default function AssemblyWeldingInformation(): React.ReactNode {
     const history = useHistory();
-    const params = useParams<{ id: string }>();
+    const params = useParams<{ id: string, loftId: string }>();
     const [ pictureVisible, setPictureVisible ] = useState<boolean>(false);
     const [ pictureUrl, setPictureUrl ] = useState('');
     const handlePictureModalCancel = () => { setPictureVisible(false) }
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-science/boltRecord/detail/${ params.id }`)
+        const data = await RequestUtil.get(`/tower-science/boltRecord/detail`, { loftingTask: params.loftId, productCategory: params.id })
         resole(data)
     }), {})
     const detailData: any = data

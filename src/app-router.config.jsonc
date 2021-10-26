@@ -719,6 +719,27 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 驾驶舱-原材料看板
+      "name": "原材料看板",
+      "path": "/stock/viewRawMaterial",
+      "module": "./pages/stock/viewRawMaterial/viewRawMaterial",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 驾驶舱-收货单看板
+      "name": "收货单看板",
+      "path": "/stock/viewReceivingNote",
+      "module": "./pages/stock/viewReceivingNote/viewReceivingNote",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 驾驶舱-合同看板
+      "name": "合同看板",
+      "path": "/stock/viewContract",
+      "module": "./pages/stock/viewContract/viewContract",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 库存管理-原材料库存
       "name": "原材料库存",
       "path": "/stock/rawMaterialStock",
@@ -748,7 +769,7 @@
       "authority": "approvalm"
     },
     { // 配置管理-仓库管理
-      "name": "安全库存配置",
+      "name": "仓库管理",
       "path": "/stock/warehouse",
       "module": "./pages/stock/warehouse/warehouse",
       "exact": true,
@@ -1085,7 +1106,7 @@
     },
     { // 工作管理-螺栓列表-螺栓信息
       "name": "螺栓信息",
-      "path": "/workMngt/boltList/boltInformation/:id",
+      "path": "/workMngt/boltList/boltInformation/:loftId/:id",
       "module": "./pages/workMngt/bolt/BoltInformation",
       "exact": true,
       "authority": "approvalm"
@@ -1176,7 +1197,7 @@
     },
     { // 放样塔型-塔型构件
       "name": "塔型构件",
-      "path": "/setOutTower/setOutTowerMngt/towerMember/:id",
+      "path": "/setOutTower/setOutTowerMngt/towerMember/:id/:number",
       "module": "./pages/setOutTower/TowerMemberList",
       "exact": true,
       "authority": "approvalm"

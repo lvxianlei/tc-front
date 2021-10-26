@@ -15,6 +15,7 @@ import LangUtil, { Lang } from './utils/LangUtil';
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 import 'moment/locale/zh-cn';
+import './index.less'
 const lang: Lang = LangUtil.getLang();
 
 i18n
