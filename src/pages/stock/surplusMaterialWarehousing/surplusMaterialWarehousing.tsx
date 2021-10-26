@@ -286,6 +286,8 @@ export default function RawMaterialStock(): React.ReactNode {
                         >查询</Button>
                         <Button
                             className="btn"
+                            type="primary"
+                            ghost
                             onClick={reset}
                         >重置</Button>
                     </div>
@@ -294,6 +296,7 @@ export default function RawMaterialStock(): React.ReactNode {
             <div className="func_public_Stock">
                 <Button
                     type="primary"
+                    className='func_btn'
                 >导出</Button>
             </div>
             <div className="page_public_Stock">
