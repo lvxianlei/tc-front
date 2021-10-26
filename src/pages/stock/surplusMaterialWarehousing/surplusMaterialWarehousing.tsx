@@ -71,8 +71,8 @@ export default function RawMaterialStock(): React.ReactNode {
             fixed: 'right' as FixedType,
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={``}>入库</Link>
-                    <Link to={``}>详情</Link>
+                    <Button type='link'>入库</Button>
+                    <Button type='link'>详情</Button>
                 </Space>
             )
         }
@@ -286,6 +286,8 @@ export default function RawMaterialStock(): React.ReactNode {
                         >查询</Button>
                         <Button
                             className="btn"
+                            type="primary"
+                            ghost
                             onClick={reset}
                         >重置</Button>
                     </div>
@@ -294,6 +296,7 @@ export default function RawMaterialStock(): React.ReactNode {
             <div className="func_public_Stock">
                 <Button
                     type="primary"
+                    className='func_btn'
                 >导出</Button>
             </div>
             <div className="page_public_Stock">

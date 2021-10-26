@@ -19,9 +19,9 @@ module.exports = {
         "productCategoryId":Random.increment(),
         "productId":Random.increment(),
         "productNumber": Random.increment(),
-        "packageStructureVOList": [{
-            "packageRecordId": Random.increment(),
-            "towerStructureId": Random.increment()
-        }].concat(records)
+        // "packageStructureVOList": [{
+        //     "packageRecordId": Random.increment(),
+        //     "towerStructureId": Random.increment()
+        // }].concat(records)
     }
 }

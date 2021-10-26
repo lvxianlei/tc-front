@@ -111,7 +111,7 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'thickness',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "thickness"]} initialValue={ _ }>
+                <Form.Item name={['data',index, "thickness"]} initialValue={ _ === -1  ? undefined : _ }>
                     <Input size="small" onChange={ () => rowChange(index) }/>
                 </Form.Item>
             )
@@ -123,7 +123,7 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'length',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "length"]} initialValue={ _ }>
+                <Form.Item name={['data',index, "length"]} initialValue={ _ === -1  ? undefined : _ }>
                     <Input size="small" onChange={ () => rowChange(index) }/>
                 </Form.Item>
             )
@@ -327,7 +327,7 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'sides',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "sides"]} initialValue={ _ }>
+                <Form.Item name={['data',index, "sides"]} initialValue={ _ === -1  ? undefined : _ }>
                     <Input size="small" onChange={ () => rowChange(index) }/>
                 </Form.Item>
             )
@@ -339,7 +339,7 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'perimeter',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "perimeter"]} initialValue={ _ }>
+                <Form.Item name={['data',index, "perimeter"]} initialValue={ _ === -1  ? undefined : _ }>
                     <Input size="small" onChange={ () => rowChange(index) }/>
                 </Form.Item>
             )
@@ -351,7 +351,7 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'surfaceArea',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "surfaceArea"]} initialValue={ _ }>
+                <Form.Item name={['data',index, "surfaceArea"]} initialValue={ _ === -1  ? undefined : _ }>
                     <Input size="small" onChange={ () => rowChange(index) }/>
                 </Form.Item>
             )
@@ -375,7 +375,7 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'weldingEdge',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "weldingEdge"]} initialValue={ _ }>
+                <Form.Item name={['data',index, "weldingEdge"]} initialValue={ _ === -1  ? undefined : _ }>
                     <Input size="small" onChange={ () => rowChange(index) }/>
                 </Form.Item>
             )
@@ -419,7 +419,9 @@ export default function Lofting(): React.ReactNode {
         } else {
             return {
                 ...col,
-                render: undefined,
+                render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                    <span>{ _ === -1  ? undefined : _ }</span>
+                )
             }
         }
     })

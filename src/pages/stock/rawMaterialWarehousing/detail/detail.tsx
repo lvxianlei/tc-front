@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message, Table } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import ConfirmableButton from '../../../components/ConfirmableButton';
-import { Page } from '../../common';
-import { IClient } from '../../IClient';
-import RequestUtil from '../../../utils/RequestUtil';
-import '../StockPublicStyle.less';
+import ConfirmableButton from '../../../../components/ConfirmableButton';
+import { Page } from '../../../common';
+import { IClient } from '../../../IClient';
+import RequestUtil from '../../../../utils/RequestUtil';
+import '../../StockPublicStyle.less';
 
 const { RangePicker } = DatePicker;
 export default function RawMaterialStock(): React.ReactNode {
@@ -25,51 +25,54 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 50,
         },
         {
-            title: '收货单号',
+            title: '材质名称',
             dataIndex: 'name',
             width: 120,
             render: (text: any) => <a>{text}</a>,
         }, {
-            title: '状态',
+            title: '标准',
             dataIndex: 'receivingBatch',
             width: 120,
         }, {
-            title: '最新状态变更时间',
+            title: '规格',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '供应商',
+            title: '材质',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '联系人',
+            title: '长度',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '联系电话',
+            title: '宽度',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '合同编号',
+            title: '数量',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '约定到货时间',
+            title: '合同单价(元/吨)',
             dataIndex: 'key',
             width: 120,
         }, {
-            title: '重量(度)',
+            title: '价税合计(元)',
             dataIndex: 'key',
             width: 120,
         },
         {
             title: '操作',
             dataIndex: 'key',
-            width: 40,
+            width: 240,
             fixed: 'right' as FixedType,
-            render: (_: undefined, record: any): React.ReactNode => (
+            render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={`/stock/rawMaterialWarehousing/detail/${record.key}`}>详情</Link>
+                    <span>质检单</span>
+                    <span>质保单</span>
+                    <Button type='link'>收货</Button>
+                    <Button type='link'>拒收</Button>
                 </Space>
             )
         }
@@ -184,7 +187,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     </div>
                 </div>
                 <div className="search_item">
-                    <span className="tip">状态： </span>
+                    <span className="tip">采购状态： </span>
                     <div className='selectOrInput'>
                         <Select
                             className="select"
@@ -214,7 +217,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     <span className="tip">关键字：</span>
                     <div className='selectOrInput'>
                         <Input
-                            placeholder="收货单号/供应商/合同编号"
+                            placeholder="材料名称/标准/规格/材质"
                             value={keyword}
                             onChange={(e) => {
                                 setKeyword(e.target.value)
@@ -242,7 +245,24 @@ export default function RawMaterialStock(): React.ReactNode {
             <div className="func_public_Stock">
                 <Button
                     type="primary"
+                    className='func_btn'
                 >导出</Button>
+                <Button
+                    type="primary"
+                    ghost
+                    className='func_btn'
+                >申请质检</Button>
+                <Button
+                    className='func_btn'
+                    type="primary"
+                    ghost
+                    onClick={() => {
+                        history.go(-1)
+                    }}
+                >返回上一级</Button>
+            </div>
+            <div className="tip_public_Stock">
+                <div>已收货：重量(支)合计：2209.90     价税合计(元)合计：51425.00   待收货：重量(支)合计：2209.90     价税合计(元)合计：51425.00</div>
             </div>
             <div className="page_public_Stock">
                 <Table

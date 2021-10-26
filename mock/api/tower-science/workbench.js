@@ -6,8 +6,8 @@ module.exports = {
     "data":{
         "director":{
             // "assessToBeAssigned": 1,
-            "assessToBeConfirmed": 5,
-            "assessToBeSubmitted": 5,
+            "assessToBeConfirmed": "",
+            "assessToBeSubmitted": undefined,
             "confirmToBeAssigned": 46,
             "confirmToBeConfirmed":8,
             "confirmToBeSubmitted":23,
@@ -27,21 +27,21 @@ module.exports = {
             "materialToBeSummarized":5
         },
         "staffToDoVO":{
-            // "assessToBeComplete":7,
-            // "boltToBeCheck":10,
-            // "boltToBeMade":5,
-            // "confirmToBeComplete":1,
-            // "loftingToBeCheck":5,
-            // "loftingToBeIssue":9,
-            // "loftingToBeLofting":5,
-            // "loftingToBeMatch":4,
-            // "materialToBeCheck":2,
-            // "materialToBeMatch":4,
-            // "materialToBeMaterial":5,
-            // "sampleToBeCheck":1,
-            // "sampleToBeUploaded":2,
-            // "weldingToBeCheck":7,
-            // "weldingToBeWelding":5
+            "assessToBeComplete":7,
+            "boltToBeCheck":10,
+            "boltToBeMade":5,
+            "confirmToBeComplete":1,
+            "loftingToBeCheck":5,
+            "loftingToBeIssue":9,
+            "loftingToBeLofting":5,
+            "loftingToBeMatch":4,
+            "materialToBeCheck":2,
+            "materialToBeMatch":4,
+            "materialToBeMaterial":5,
+            "sampleToBeCheck":1,
+            "sampleToBeUploaded":2,
+            "weldingToBeCheck":7,
+            "weldingToBeWelding":5
         }
     }
 }
