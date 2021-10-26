@@ -75,7 +75,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                 }
             });
         } catch (error) {
-            console.log(error, "==========")
+            console.log(error)
         }
     }
 
