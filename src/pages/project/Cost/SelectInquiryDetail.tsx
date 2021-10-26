@@ -54,7 +54,7 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                 </Radio.Group>
                 <DetailTitle title="询价类型：供应询价" />
                 {radioValue === "base" && <>
-                    <BaseInfo columns={supplyBaseInfo} dataSource={data || {}} />
+                    <BaseInfo columns={supplyAskInfo} dataSource={data || {}} />
                     <Row style={{ fontSize: 16, textAlign: "center", width: "100%" }}>国网批次招标投标原材料报价</Row>
                     <CommonTable columns={materialPriceHead} dataSource={data?.materialPriceVOS || []} />
                     <DetailTitle title="相关附件" />
@@ -68,7 +68,7 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                     }, ...enclosure]} dataSource={data?.replyAttachVos || []} />
                 </>}
                 {radioValue === "records" && <>
-                    <BaseInfo columns={supplyAskInfo} dataSource={data || {}} />
+                    <BaseInfo columns={supplyBaseInfo} dataSource={data || {}} />
                     <DetailTitle title="相关附件" />
                     <CommonTable columns={[{
                         title: "操作",

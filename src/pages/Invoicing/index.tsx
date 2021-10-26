@@ -70,10 +70,9 @@ export default function Invoicing() {
                 name: 'isOpen',
                 label: '是否已全开',
                 children: <Select style={{ width: 200 }}>
-                    <Select.Option value="a">全部</Select.Option>
-                    <Select.Option value="b">预开</Select.Option>
-                    <Select.Option value="c">发票已开全</Select.Option>
-                    <Select.Option value="d">发票未开全</Select.Option>
+                    <Select.Option value="1">预开</Select.Option>
+                    <Select.Option value="2">发票已开全</Select.Option>
+                    <Select.Option value="3">发票未开全</Select.Option>
                 </Select>
             },
             {

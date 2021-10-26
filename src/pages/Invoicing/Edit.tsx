@@ -24,7 +24,7 @@ export default function Edit() {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/invoicing/getInvoicingInfo/${params.id}`)
             baseInfo.setFieldsValue({ ...formatData(baseInfoHead, result) })
             invoicForm.setFieldsValue({ ...result.invoicingInfoVo })
-            billingForm.setFieldsValue({ submit: result.invoicingDetailVos })
+            billingForm.setFieldsValue({ submit: result.invoicingDetailVos.map((item: any) => formatData(billingHead, item)) })
             setAttachVosData(result.attachInfoVos)
             resole(result)
         } catch (error) {
