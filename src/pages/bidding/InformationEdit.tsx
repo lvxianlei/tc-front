@@ -11,7 +11,18 @@ import { downLoadFile } from "../../utils"
 const columns = [
     { title: '分标编号', dataIndex: 'partBidNumber' },
     { title: '货物类别', dataIndex: 'goodsType' },
-    { title: '包号', dataIndex: 'packageNumber' },
+    {
+        "title": "包名称",
+        "dataIndex": "packageName"
+    },
+    {
+        "title": "包号",
+        "dataIndex": "packageNumber"
+    },
+    {
+        "title": "工程电压等级",
+        "dataIndex": "projectVoltageLevel"
+    },
     { title: '数量', dataIndex: 'amount', type: "number" },
     { title: '单位', dataIndex: 'unit' },
     { title: '交货日期', dataIndex: 'deliveryDate', type: "date", format: "YYYY-MM-DD" },
@@ -233,7 +244,7 @@ export default function InfomationNew(): JSX.Element {
                 <Button type="link" onClick={() => deleteAttachData(record.id || record.uid)}>删除</Button>
                 <Button
                     type="link"
-                    onClick={() => downLoadFile(record.id?record.filePath:record.link)}
+                    onClick={() => downLoadFile(record.id ? record.filePath : record.link)}
                 >下载</Button>
             </>)
         },

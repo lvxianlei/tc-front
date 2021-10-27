@@ -684,8 +684,16 @@
             "dataIndex": "goodsType"
         },
         {
+            "title": "包名称",
+            "dataIndex": "packageName"
+        },
+        {
             "title": "包号",
             "dataIndex": "packageNumber"
+        },
+        {
+            "title": "工程电压等级",
+            "dataIndex": "projectVoltageLevel"
         },
         {
             "title": "数量",
