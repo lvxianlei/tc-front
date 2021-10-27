@@ -6,6 +6,7 @@ import ConfirmableButton from '../../../components/ConfirmableButton';
 import { Page } from '../../common';
 import { IClient } from '../../IClient';
 import RequestUtil from '../../../utils/RequestUtil';
+import ApplicationContext from "../../../configuration/ApplicationContext"
 import '../StockPublicStyle.less';
 
 export default function RawMaterialStock(): React.ReactNode {
@@ -23,14 +24,14 @@ export default function RawMaterialStock(): React.ReactNode {
         [spec, setSpec] = useState(''),//规格
         [Listdata, setListdata] = useState<any[]>([]),//列表数据
         [weight, setWeight] = useState<number>(0),//合计重量
-        [quantity, setQuantity] = useState<number>(0)//合计数量
+        [quantity, setQuantity] = useState<number>(0);//合计数量
+        console.log((ApplicationContext.get().dictionaryOption as any)["111"],'ssss')
     const columns = [
         {
             title: '序号',
             dataIndex: 'id',
             width: 50,
             render: (text: any, item: any, index: any) => {
-                console.log(item, 'item')
                 return <span>{index + 1}</span>
             }
         },
