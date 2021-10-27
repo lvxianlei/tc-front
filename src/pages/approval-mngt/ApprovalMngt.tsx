@@ -6,7 +6,7 @@ import ApprovalTypesView from "./ApprovalTypesView"
 import SelectAuditType from './SelectAuditType'
 import useRequest from '@ahooksjs/use-request'
 import { auditHead } from "./approvalHeadData.json"
-import { bondBaseInfo, enclosure, drawH, drawingCofirm, baseInfo } from "./approvalHeadData.json"
+import { bondBaseInfo, enclosure, drawH, drawingCofirm, baseInfo, outFactoryHead, addanewone } from "./approvalHeadData.json"
 import RequestUtil from '../../utils/RequestUtil'
 import AuthUtil from "../../utils/AuthUtil"
 import { downLoadFile } from "../../utils"
@@ -43,6 +43,8 @@ export default function Information(): React.ReactNode {
     const [drawHForm] = Form.useForm()
     const [drawingCofirmForm] = Form.useForm()
     const [bidingForm] = Form.useForm()
+    const [outFactoryForm] = Form.useForm()
+    const [outFactoryTableForm] = Form.useForm()
     const { loading, run } = useRequest((postData: { path: string, data: {} }) => new Promise(async (resolve, reject) => {
         try {
             const result = await RequestUtil.post(postData.path, postData.data)
@@ -81,8 +83,7 @@ export default function Information(): React.ReactNode {
         setVisible(false)
     }
     const performanceBondOk = async () => {
-        await performanceBondForm.validateFields()
-        const postData = await performanceBondForm.getFieldsValue()
+        const postData = await performanceBondForm.validateFields()
         postData.projectId = postData.projectId?.id || ""
         const result = await run({ path: "/tower-market/performanceBond", data: postData })
         if (result) {
@@ -95,8 +96,7 @@ export default function Information(): React.ReactNode {
     }
 
     const drawHOk = async () => {
-        await drawHForm.validateFields()
-        const postData = await drawHForm.getFieldsValue()
+        const postData = await drawHForm.validateFields()
         postData.contractId = postData.contractId?.id || ""
         postData.signedUser = postData.signedUser?.value || ""
         const result = await run({ path: "/tower-market/drawingHandover", data: postData })
@@ -110,8 +110,7 @@ export default function Information(): React.ReactNode {
     }
 
     const drawingCofirmOk = async () => {
-        await drawingCofirmForm.validateFields()
-        const postData = await drawingCofirmForm.getFieldsValue()
+        const postData = await drawingCofirmForm.validateFields()
         postData.contractId = postData.contractId?.id || ""
         postData.attachInfoDtos = attachInfo
         const result = await run({ path: "/tower-market/drawingConfirmation", data: postData })
@@ -125,12 +124,24 @@ export default function Information(): React.ReactNode {
     }
 
     const bidingOk = async () => {
-        await bidingForm.validateFields()
-        const postData = await bidingForm.getFieldsValue()
+        const postData = await bidingForm.validateFields()
         postData.attachInfoDtos = attachInfo
         postData.projectId = postData.projectName?.id || ""
         postData.projectName = postData.projectName?.value || ""
         const result = await run({ path: "/tower-market/biddingEvaluation/submitAudit", data: postData })
+        if (result) {
+            message.success("成功创建申请...")
+            setBidingVisible(false)
+            history.go(0)
+        } else {
+            message.error(`创建申请失败！原因：${result}`)
+        }
+    }
+    const outFactoryOk = async () => {
+        const postData = await outFactoryForm.validateFields()
+        postData.projectName = postData.projectName?.value || ""
+        const auditOutInfoDTOList = await outFactoryTableForm.validateFields()
+        const result = await run({ path: "/tower-market/OutFactory/submitAudit", data: { ...postData, auditOutInfoDTOList: auditOutInfoDTOList.submit } })
         if (result) {
             message.success("成功创建申请...")
             setBidingVisible(false)
@@ -217,6 +228,27 @@ export default function Information(): React.ReactNode {
             })
         }
     }
+
+    const handleOutFactoryChange = (changedFields: any) => {
+        if (Object.keys(changedFields).length > 0 && Object.keys(changedFields)[0] === "projectName") {
+            const {
+                biddingEndTime,
+                biddingPerson,
+                projectNumber,
+                projectLeader,
+                biddingAgency
+            } = changedFields.projectName?.records[0]
+
+            outFactoryForm.setFieldsValue({
+                bidDeadline: biddingEndTime,
+                biddingPerson,
+                projectNumber,
+                projectLeader,
+                biddingAgency
+            })
+        }
+    }
+
     const onFilterSubmit = (value: any) => {
         if (value.marketAuditTime) {
             const formatDate = value.marketAuditTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -365,14 +397,14 @@ export default function Information(): React.ReactNode {
                 setOutFactoryVisible(false)
                 handleCancel()
             }}
-            onOk={bidingOk}
+            onOk={outFactoryOk}
             destroyOnClose
             confirmLoading={loading}
         >
             <DetailTitle title="基本信息" />
-            <BaseInfo form={bidingForm} onChange={handleBidingChange} columns={baseInfo} dataSource={{}} edit col={3} />
+            <BaseInfo form={outFactoryForm} onChange={handleOutFactoryChange} columns={outFactoryHead} dataSource={{}} edit col={3} />
             <DetailTitle title="申请明细" />
-            <EditTable columns={[]} dataSource={[]} />
+            <EditTable form={outFactoryTableForm} columns={addanewone} dataSource={[]} />
         </Modal>
         <SelectAuditType visible={visible} title="新建审批" okText="创建" onOk={handleOk} onCancel={() => setVisible(false)} />
         <ApprovalTypesView

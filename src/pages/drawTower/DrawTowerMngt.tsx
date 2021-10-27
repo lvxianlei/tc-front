@@ -157,8 +157,8 @@ export default function DrawTowerMngt(): React.ReactNode {
         onFilterSubmit = { (values: Record<string, any>) => {
             if(values.time) {
                 const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"));
-                values.createTimeStart = formatDate[0] + ' 00:00:00';
-                values.createTimeEnd = formatDate[1] + ' 23:59:59';
+                values.creationTimeStart = formatDate[0] + ' 00:00:00';
+                values.creationTimeEnd = formatDate[1] + ' 23:59:59';
             }
             setFilterValue(values);
             return values;
