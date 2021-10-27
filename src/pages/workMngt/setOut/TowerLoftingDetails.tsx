@@ -21,10 +21,10 @@ const columns = [
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
     },
     {
-        key: 'partName',
+        key: 'segmentName',
         title: '段名',
         width: 150,
-        dataIndex: 'partName'
+        dataIndex: 'segmentName'
     },
     {
         key: 'code',

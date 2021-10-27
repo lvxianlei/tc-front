@@ -85,7 +85,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
 
     public async componentDidUpdate(nextProps: any) {
         if (nextProps.refresh !== this.props.refresh) {
-            this.fetchTableData({})
+            this.fetchTableData({},{ current: 1, pageSize: 20 })
         }
     }
 

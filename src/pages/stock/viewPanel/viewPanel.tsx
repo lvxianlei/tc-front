@@ -2,10 +2,11 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Table, Pagination, TableColumnProps, Row, Col, Select, } from 'antd'
 import RequestUtil from '../../../utils/RequestUtil';
+import ApplicationContext from "../../../configuration/ApplicationContext"
 const { Option } = Select;
 const ViewPanel = (): React.ReactNode => {
     // const history = useHistory()
-    const [columnsData, setColumnsData] = useState([]);
+    const [columnsData, setColumnsData] = useState<any[]>([{}]);
     const [total, setTotal] = useState(0);
     const [size, setSize] = useState(10);
     const [current, setCurrent] = useState(1);
@@ -15,68 +16,84 @@ const ViewPanel = (): React.ReactNode => {
             title: '序号',
             dataIndex: 'index',
             width: 50,
+            render: (text, item, index) => {
+                return <span>{index + 1}</span>
+            }
         },
         {
-            key: 'projectName',
+            key: 'productName',
             title: '品名',
-            dataIndex: 'projectName',
+            dataIndex: 'productName',
         },
         {
-            key: 'projectNumber',
+            key: 'standard',
             title: '标准',
-            dataIndex: 'projectNumber'
+            dataIndex: 'standard'
         },
         {
-            key: 'projectType',
+            key: 'spec',
             title: '规格',
-            dataIndex: 'projectType',
+            dataIndex: 'spec',
         },
         {
-            key: 'bidBuyEndTime',
+            key: 'materialTexture',
             title: '材质',
-            dataIndex: 'bidBuyEndTime'
+            dataIndex: 'materialTexture'
         },
         {
-            key: 'biddingEndTime',
+            key: 'stockWeight',
             title: '库存重量（吨）',
-            dataIndex: 'biddingEndTime'
+            dataIndex: 'stockWeight'
         },
         {
-            key: 'biddingEndTime',
+            key: 'onWayWeight',
             title: '在途重量（吨）',
-            dataIndex: 'biddingEndTime'
+            dataIndex: 'onWayWeight'
         },
         {
-            key: 'biddingEndTime',
+            key: 'canUseWeight',
             title: '可用库存（吨）',
-            dataIndex: 'biddingEndTime'
+            dataIndex: 'canUseWeight'
         },
         {
-            key: 'biddingEndTime',
+            key: 'noPickWeight',
             title: '生产未领料（吨）',
-            dataIndex: 'biddingEndTime'
+            dataIndex: 'noPickWeight'
         },
         {
-            key: 'biddingEndTime',
+            key: 'safeWeight',
             title: '安全库存（吨）',
-            dataIndex: 'biddingEndTime'
+            dataIndex: 'safeWeight'
         },
         {
-            key: 'biddingEndTime',
+            key: 'alarmWeight',
             title: '告警库存（吨）',
-            dataIndex: 'biddingEndTime'
+            dataIndex: 'alarmWeight'
         },
         {
             key: 'currentProjectStage',
             title: '库存状态',
             dataIndex: 'currentProjectStage',
+            render: (text, item: any, index) => {
+                return (
+                    <div>
+                        {
+                            item.type === 0 ?
+                                <span style={{ padding: '5px 8px', backgroundColor: 'yello', color: '#fff' }}>告警库存</span> :
+                                item.type === 1 ?
+                                    <span style={{ padding: '5px 8px', backgroundColor: 'red', color: '#fff' }}>可用库存</span> :
+                                    <span></span>
+                        }
+                    </div>
+                )
+            }
         },
     ]
     useEffect(() => {
         getColumnsData()
     }, [current, size]);
     const getColumnsData = async () => {
-        const data: any = await RequestUtil.get('/tower-storage/warehouse', {
+        const data: any = await RequestUtil.get('/tower-storage/safetyStock/board', {
             current,
             size,
         })
@@ -101,9 +118,16 @@ const ViewPanel = (): React.ReactNode => {
                         onChange={(value) => {
                         }}
                     >
-                        <Option value={''}>全部</Option>
-                        <Option value={0}>未生成</Option>
-                        <Option value={1}>已生成</Option>
+                        {
+                            (ApplicationContext.get().dictionaryOption as any)["111"].map((item: { id: string, name: string }) => ({
+                                value: item.id,
+                                label: item.name
+                            })).map(() => {
+                                return (
+                                    <Option value={''}>全部</Option>
+                                )
+                            })
+                        }
                     </Select>
                 </Col>
                 <Col
