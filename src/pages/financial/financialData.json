@@ -168,7 +168,48 @@
             "dataIndex": "",
             "type": ""
         }
+    ],
+    "billinformation":[
+        {
+            "title": "票据编号",
+            "dataIndex": "billNumber",
+            "type":"string"
+        },
+        {
+            "title": "所属供应商 ",
+            "dataIndex": "supplierName",
+            "type": "string"
+        },
+        {
+            "title": "开票单位 ",
+            "dataIndex": "invoiceUnit",
+            "type": "string"
+        },
+        {
+            "title": "发票号",
+            "dataIndex": "invoiceNumber"
+        },
+        {
+            "title": "发票类型",
+            "dataIndex": "invoiceType",
+            "type": "string"
+        },
+        {
+            "title": "发票金额",
+            "dataIndex": "invoiceAmount",
+            "type": "number"
+        },
+        {
+            "title": "收货单",
+            "dataIndex": "receiptNumber"
+        },
+        {
+            "title": "收票日",
+            "dataIndex": "collectInvoiceDate",
+            "type": "string"
+        }
     ]
+   
    
    
 }
