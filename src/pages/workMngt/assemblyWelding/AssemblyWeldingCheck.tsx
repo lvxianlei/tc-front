@@ -164,7 +164,7 @@ export default function AssemblyWeldingCheck(): React.ReactNode {
                         //         history.push(`/workMngt/assemblyWeldingList/assemblyWeldingCheck/${ params.id }/${ params.productCategoryId }/questionnaire/${ record.id }`)
                         //     }
                         // },
-                        className: [record.verificationStatus === 1 ? styles.red : record.verificationStatus === 2 ? styles.green : record.verificationStatus === 3 ? styles.yellow : null, styles.tableRow]
+                        className: [record.verificationStatus === 1 ? styles.red : record.verificationStatus === 2 ? styles.green : record.verificationStatus === 0 ? styles.yellow : null, styles.tableRow]
                     })
                 }
                     onChange={ (pagination: TablePaginationConfig) => { 
