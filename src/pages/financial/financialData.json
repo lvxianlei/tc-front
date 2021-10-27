@@ -93,7 +93,81 @@
             "title": "收票日",
             "dataIndex": "collectInvoiceDate",
             "type": "string"
+        }
+    ],
+    "operation":[
+        {
+            "title": "序号",
+            "dataIndex": "",
+            "type": ""
         },
+        {
+            "title": "操作部门",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "",
+            "type": ""
+        }
+    ],
+    "associatedreceipt":[
+        {
+            "title": "序号",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "收货单号",
+            "dataIndex": "receiptNumber",
+            "type": "string"
+        },
+        {
+            "title": "联系人",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "合同编号",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "完成时间",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "创建人",
+            "dataIndex": "createUser",
+            "type": "integer"
+        },
+        {
+            "title": "材料名称",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "重量（吨）合计",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "价税合计（元）",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "备注",
+            "dataIndex": "",
+            "type": ""
+        }
     ]
    
    
