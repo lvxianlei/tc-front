@@ -14,6 +14,7 @@ export interface IUploadModalRouteProps extends RouteComponentProps<UploadModalP
     readonly path: string;
     readonly requestData?: {};
     readonly uploadUrl: string;
+    readonly delPath: string;
 }
 
 export interface UploadModalState {
@@ -53,7 +54,15 @@ const tableColumns = [
     {
         key: 'action', 
         title: '操作动作', 
-        dataIndex: 'action' 
+        dataIndex: 'action',
+        render: (status: number): React.ReactNode => {
+            switch (status) {
+                case 1:
+                    return '上传';
+                case 2:
+                    return '删除';
+            }
+        }
     },
     { 
         key: 'name', 
@@ -157,8 +166,9 @@ class UploadModal extends React.Component<IUploadModalRouteProps, UploadModalSta
                             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                                 <Space direction="horizontal" size="small">
                                     <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
-                                    <Button type="link" onClick={ () => RequestUtil.delete(`/tower-system/attach?ids=${ record.id }`).then(res => {
+                                    <Button type="link" onClick={ () => RequestUtil.delete(this.props.delPath + `?productSegmentId=${ this.props.id }&attachId=${ record.id }`).then(res => {
                                         message.success('删除成功');
+                                        this.getDetail();
                                     }) }>删除</Button>
                                 </Space>
                         ) }

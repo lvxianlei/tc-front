@@ -134,7 +134,7 @@ export default function BoltCheck(): React.ReactNode {
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 col.dataIndex === 'index' ? index + 1 
                 : !col.editable ? _ 
-                : <p onDoubleClick={ (e) => { questionnaire( _, record, col, checkColor(record, col.dataIndex)) }} className={ checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow : '' }>{  _ === -1 ? "" :  _ }</p>
+                : <p onDoubleClick={ (e) => { questionnaire( _, record, col, checkColor(record, col.dataIndex)) }} className={ checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow : '' }>{  _ === -1 ? "-" :  _ }</p>
             )  
         }     
     })
