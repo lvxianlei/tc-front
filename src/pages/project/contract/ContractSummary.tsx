@@ -30,6 +30,16 @@ class ManagementContractSummary extends ContractSummary {
       rows: [
         [
           {
+            label: "采购订单编号",
+            value: baseInfo?.contractNumber
+          },
+          {
+            label: "ECP合同编号",
+            value: baseInfo?.contractNumber
+          }
+        ],
+        [
+          {
             label: "合同编号",
             value: baseInfo?.contractNumber,
           },
@@ -40,7 +50,7 @@ class ManagementContractSummary extends ContractSummary {
         ],
         [
           {
-            label: "合同名称",
+            label: "合同/工程名称",
             value: baseInfo?.contractName,
           },
           {
@@ -85,6 +95,16 @@ class ManagementContractSummary extends ContractSummary {
           },
           {
             label: "合同签订单位",
+            value: baseInfo?.signCustomerName,
+          },
+        ],
+        [
+          {
+            label: "付款方式",
+            value: baseInfo?.customerInfoVo?.customerPhone,
+          },
+          {
+            label: "结算单位",
             value: baseInfo?.signCustomerName,
           },
         ],

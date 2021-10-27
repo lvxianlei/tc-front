@@ -222,7 +222,7 @@ export default function InfomationNew(): JSX.Element {
 
         <DetailTitle title="基础信息" />
         <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={filterBaseInfoData(baseInfoData)} dataSource={detailData} edit />
-        <DetailTitle title="货物清单" />
+        <DetailTitle title="物资清单" />
         <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoVOS} />
         <DetailTitle title="附件" operation={[<Upload
             key="sub"

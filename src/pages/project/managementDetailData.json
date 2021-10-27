@@ -592,7 +592,33 @@
         },
         {
             "title": "业主单位",
-            "dataIndex": "ownerCompany"
+            "dataIndex": "ownerCompany",
+            "type": "popTable",
+            "path": "/tower-customer/customer",
+            "readOnly": false,
+            "value": "name",
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "客户类型",
+                    "dataIndex": "type",
+                    "type": "select",
+                    "enum": []
+                },
+                {
+                    "title": "客户名称",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "首要联系人",
+                    "dataIndex": "linkman"
+                },
+                {
+                    "title": "联系电话",
+                    "dataIndex": "phone"
+                }
+            ]
         },
         {
             "title": "业主联系人",
@@ -604,7 +630,33 @@
         },
         {
             "title": "签订单位",
-            "dataIndex": "signCompany"
+            "dataIndex": "signCompany",
+            "type": "popTable",
+            "path": "/tower-customer/customer",
+            "readOnly": false,
+            "value": "name",
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "客户类型",
+                    "dataIndex": "type",
+                    "type": "select",
+                    "enum": []
+                },
+                {
+                    "title": "客户名称",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "首要联系人",
+                    "dataIndex": "linkman"
+                },
+                {
+                    "title": "联系电话",
+                    "dataIndex": "phone"
+                }
+            ]
         },
         {
             "title": "签订日期",
@@ -638,6 +690,30 @@
                 {
                     "value": 2,
                     "label": "复印件"
+                }
+            ]
+        },
+        {
+            "title": "合同接管人",
+            "dataIndex": "takeOverUser"
+        },
+        {
+            "title": "合同接管日期",
+            "dataIndex": "takeOverTime",
+            "type": "date"
+        },
+        {
+            "title": "是否收到原件",
+            "dataIndex": "isReceivedContract",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "否"
+                },
+                {
+                    "value": 1,
+                    "label": "是"
                 }
             ]
         },
