@@ -18,10 +18,10 @@ module.exports = {
             "questionnaire":3
         },
         "leaderToDoVO":{
-            "loftingToBeAssigned":7,
-            "loftingToBeSubmittedLofting":7,
-            "loftingToBeSubmittedWelding":5,
-            "loftingToBeSummarized":4,
+            "productToBeAssigned":7,
+            "productToBeSubmittedLofting":7,
+            "productToBeSubmittedWelding":5,
+            "productToBeSummarized":4,
             "materialToBeAssigned":1,
             "materialToBeSubmittedMaterial":51,
             "materialToBeSummarized":5
@@ -35,9 +35,9 @@ module.exports = {
             "loftingToBeIssue":9,
             "loftingToBeLofting":5,
             "loftingToBeMatch":4,
-            "materialToBeCheck":2,
-            "materialToBeMatch":4,
-            "materialToBeMaterial":5,
+            "segmentMaterialToBeMaterial":2,
+            "segmentMaterialToBeCheck":4,
+            "rodMaterialToBeMatch":5,
             "sampleToBeCheck":1,
             "sampleToBeUploaded":2,
             "weldingToBeCheck":7,
