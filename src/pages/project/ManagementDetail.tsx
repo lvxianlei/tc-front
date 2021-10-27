@@ -249,9 +249,6 @@ export default function ManagementDetail(): React.ReactNode {
                     title: '批次',
                     dataIndex: 'batch',
                     type: "number"
-                }, {
-                    title: '备注',
-                    dataIndex: 'description'
                 },
                 {
                     title: '是否中标',
@@ -271,7 +268,24 @@ export default function ManagementDetail(): React.ReactNode {
                             label: "否"
                         }
                     ]
-                }]} dataSource={data || {}} col={2} />
+                },
+                {
+                    title: '中标包号',
+                    dataIndex: "packageNum"
+                },
+                {
+                    title: '中标价(元)',
+                    dataIndex: "bidMoney"
+                },
+                {
+                    title: '中标重量(吨)',
+                    dataIndex: "bidWeight"
+                },
+                {
+                    title: '备注',
+                    dataIndex: 'description'
+                }
+            ]} dataSource={data || {}} col={2} />
             <DetailTitle title="开标信息" />
             <Tabs>
                 {data?.bidOpenRecordListVos?.length > 0 && data?.bidOpenRecordListVos.map((item: any, index: number) => <Tabs.TabPane key={index}
