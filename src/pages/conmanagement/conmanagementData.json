@@ -106,6 +106,18 @@
             "dataIndex": "locatorName",
             "type":"string"
         }
+    ],
+    "listdata":[
+        {
+            "title": "编号",
+            "dataIndex": "code",
+            "type":"string"
+        },
+        {
+            "title": "名称",
+            "dataIndex": "name",
+            "type":"string"
+        }
     ]
    
    
