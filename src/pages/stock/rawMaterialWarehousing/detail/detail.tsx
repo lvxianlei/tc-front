@@ -7,6 +7,7 @@ import { Page } from '../../../common';
 import { IClient } from '../../../IClient';
 import RequestUtil from '../../../../utils/RequestUtil';
 import '../../StockPublicStyle.less';
+import './detail.less';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -17,11 +18,15 @@ export default function RawMaterialStock(): React.ReactNode {
         [pageSize, setPageSize] = useState<number>(10),
         [isRejectionModal, setRejectionModal] = useState<boolean>(false),//拒收弹框
         [isReceivingModal, setisReceivingModal] = useState<boolean>(false),//拒收弹框
-        [status, setStatus] = useState(''),//状态
+        [status, setStatus] = useState(''),//采购状态
         [dateValue, setDateValue] = useState<any>([]),//时间
         [dateString, setDateString] = useState<any>([]),//时间字符串格式
         [keyword, setKeyword] = useState<any>('');//关键字搜索
     const [rejectionText, setRejectionText] = useState<any>('');//拒收原因
+    const [warehouseId, setWarehouseId] = useState('');//收货弹框选择仓库
+    const [locatorId, setLocatorId] = useState('');//收货弹框选择库位
+    const [reservoirId, setReservoirId] = useState('');//收货弹框选择库位
+    const [furnaceBatchNo, setFurnaceBatchNo] = useState('');//收货弹框输入炉批号
     const columns = [
         {
             title: '序号',
@@ -182,6 +187,10 @@ export default function RawMaterialStock(): React.ReactNode {
     // 收货弹框取消
     const onReceivingCancel = () => {
         setisReceivingModal(false);
+        setWarehouseId('');
+        setLocatorId('');
+        setReservoirId('');
+        setFurnaceBatchNo('');
     }
     // submit收货弹框提交
     const receivingSubmit = () => {
@@ -346,6 +355,7 @@ export default function RawMaterialStock(): React.ReactNode {
 
             {/* 收货弹框 */}
             <Modal
+                className="receiving_modal"
                 visible={isReceivingModal}
                 title="收货"
                 maskClosable={false}
@@ -357,7 +367,115 @@ export default function RawMaterialStock(): React.ReactNode {
                     </>
                 }
             >
-                收货
+                <div className="receiving_info">
+                    <div className="part">
+                        <div className="item">
+                            <div className='tip'>收货批次</div>
+                            <div className='info'>
+                                自动产生
+                            </div>
+                        </div>
+                        <div className="item">
+                            <div className='tip'>仓库<span>*</span></div>
+                            <div className='info'>
+                                <Select
+                                    className="select"
+                                    style={{ width: "100%" }}
+                                    value={warehouseId ? warehouseId : '请选择'}
+                                    onChange={(val) => { setWarehouseId(val) }}
+                                >
+                                    <Select.Option
+                                        value="1"
+                                    >
+                                        仓库1
+                                    </Select.Option>
+                                    <Select.Option
+                                        value="2"
+                                    >
+                                        仓库12
+                                    </Select.Option>
+                                    <Select.Option
+                                        value="3"
+                                    >
+                                        仓库13
+                                    </Select.Option>
+                                </Select>
+                            </div>
+                        </div>
+                        <div className="item">
+                            <div className='tip'>库位<span>*</span></div>
+                            <div className='info'>
+                                <Select
+                                    className="select"
+                                    style={{ width: "100%" }}
+                                    value={locatorId ? locatorId : '请选择'}
+                                    onChange={(val) => { setLocatorId(val) }}
+                                >
+                                    <Select.Option
+                                        value="1"
+                                    >
+                                        库位1
+                                    </Select.Option>
+                                    <Select.Option
+                                        value="2"
+                                    >
+                                        库位2
+                                    </Select.Option>
+                                    <Select.Option
+                                        value="3"
+                                    >
+                                        库位3
+                                    </Select.Option>
+                                </Select>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="part">
+                        <div className="item">
+                            <div className="tip"></div>
+                            <div className="info"></div>
+                        </div>
+                        <div className="item">
+                            <div className='tip'>库区<span>*</span></div>
+                            <div className='info'>
+                                <Select
+                                    className="select"
+                                    style={{ width: "100%" }}
+                                    value={reservoirId ? reservoirId : '请选择'}
+                                    onChange={(val) => { setReservoirId(val) }}
+                                >
+                                    <Select.Option
+                                        value="1"
+                                    >
+                                        库区1
+                                    </Select.Option>
+                                    <Select.Option
+                                        value="2"
+                                    >
+                                        库区12
+                                    </Select.Option>
+                                    <Select.Option
+                                        value="3"
+                                    >
+                                        库区13
+                                    </Select.Option>
+                                </Select>
+                            </div>
+                        </div>
+                        <div className="item">
+                            <div className='tip'>炉批号<span>*</span></div>
+                            <div className='info'>
+                                <Input
+                                    placeholder='请输入'
+                                    value={furnaceBatchNo}
+                                    onChange={(e) => {
+                                        setFurnaceBatchNo(e.target.value)
+                                    }}
+                                ></Input>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </Modal>
         </div>
     )
