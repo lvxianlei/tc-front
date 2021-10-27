@@ -120,7 +120,7 @@ export default function BaseInfoEdit(): JSX.Element {
                             baseInfoData.map((item: any) => item.dataIndex === "address" ? ({ ...item, type: "select", enum: data?.addressList }) : item) :
                             baseInfoData.map((item: any) => item.dataIndex === "address" ? ({ ...item, type: "select", enum: data?.addressList }) : item).filter((item: any) => item.dataIndex !== "country")
                     } dataSource={data || {}} edit />
-                <DetailTitle title="货物清单" />
+                <DetailTitle title="物资清单" />
                 <EditTable form={cargoVOListForm} columns={cargoVOListColumns} dataSource={data?.cargoVOList} />
                 <DetailTitle title="附件信息" operation={[<Upload
                     key="sub"

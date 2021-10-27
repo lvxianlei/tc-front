@@ -30,7 +30,7 @@
 
             .input {
                 border-radius: 2px;
-                flex: 1
+                flex: 1;
             }
 
             .input_wrap {
@@ -127,6 +127,51 @@
                 justify-content: flex-end;
                 margin: 10px 20px 10px 0;
             }
+        }
+    }
+
+    .public_table {
+        .ant-table-content {
+            .ant-table-row {
+                .ant-table-cell {
+                    .yello {
+                        color: #FF8C00 !important;
+                        cursor: pointer !important;
+                        margin: 0 6px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.public_modal_input {
+    .edit-item {
+        width: 100%;
+        height: 32px;
+        line-height: 32px;
+        display: flex;
+        justify-content: flex-start;
+        margin: 10px 0;
+
+        &:nth-child(1) {
+            margin-top: 0;
+        }
+
+        &:nth-last-child(1) {
+            margin-bottom: 0;
+        }
+
+        .tip {
+            width: 100px;
+            text-align: right;
+            margin-right: 2px;
+            font-size: 14px;
+        }
+
+        .input {
+            border-radius: 4px;
+            flex: 1
         }
     }
 }

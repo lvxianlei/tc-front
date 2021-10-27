@@ -105,7 +105,7 @@ export default function QuestionMngt(): React.ReactNode {
         {
             key: 'operation',
             title: '操作',
-            fixed: 'right' as FixedType,
+            // fixed: 'right' as FixedType,
             width: 80,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (

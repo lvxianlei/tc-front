@@ -1,0 +1,242 @@
+{
+    "baseinfo": [
+        {
+            "title": "票据编号",
+            "dataIndex": "billNumber",
+            "type": "string"
+        },
+        {
+            "title": "请款编号",
+            "dataIndex": "reqFundsNumber",
+            "type": "string"
+        },
+        {
+            "title": "发票号",
+            "dataIndex": "invoiceNumber"
+        },
+        {
+            "title": "关联收货单",
+            "dataIndex": ""
+        },
+        {
+            "title": "票据金额",
+            "dataIndex": "invoiceAmount"
+        },
+        {
+            "title": "开票单位",
+            "dataIndex": "invoiceUnit",
+            "type": "string"
+        },
+        {
+            "title": "收票日",
+            "dataIndex": "collectInvoiceDate",
+            "type": "string"
+        },
+        {
+            "title": "所属供应商",
+            "dataIndex": "description"
+        },
+        {
+            "title": "发票类型",
+            "dataIndex": "invoiceType",
+            "type": "string"
+        },
+        {
+            "title": "状态",
+            "dataIndex": "status"
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "updateTime",
+            "type": "string"
+        }
+    ],
+    "bilinformation": [
+        {
+            "title": "票据编号",
+            "dataIndex": "billNumber",
+            "type": "string"
+        },
+        {
+            "title": "所属供应商 ",
+            "dataIndex": "supplierName",
+            "type": "string"
+        },
+        {
+            "title": "开票单位 ",
+            "dataIndex": "invoiceUnit",
+            "type": "string"
+        },
+        {
+            "title": "发票号",
+            "dataIndex": "invoiceNumber"
+        },
+        {
+            "title": "发票类型",
+            "dataIndex": "invoiceType",
+            "type": "string"
+        },
+        {
+            "title": "发票金额",
+            "dataIndex": "invoiceAmount",
+            "type": "number"
+        },
+        {
+            "title": "关联收货单",
+            "dataIndex": "receiptVos",
+            "type": "popTable",
+            "path": "/tower-market/contract",
+            "width": 1011,
+            "value": "contractName",
+            "selectType": "checkbox",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "合同编号",
+                    "dataIndex": "contractNumber",
+                    "search": true
+                },
+                {
+                    "title": "合同名称",
+                    "dataIndex": "contractName"
+                },
+                {
+                    "title": "销售类型",
+                    "dataIndex": "saleType"
+                },
+                {
+                    "title": "业主单位",
+                    "dataIndex": "customerCompany",
+                    "search": true
+                },
+                {
+                    "title": "合同签订单位",
+                    "dataIndex": "signCustomerName"
+                },
+                {
+                    "title": "合同签订日期",
+                    "dataIndex": "signContractTime"
+                },
+                {
+                    "title": "要求交货日期",
+                    "dataIndex": "deliveryTime"
+                }
+            ]
+        },
+        {
+            "title": "收票日",
+            "dataIndex": "collectInvoiceDate",
+            "type": "string"
+        }
+    ],
+    "operation": [
+        {
+            "title": "操作部门",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "",
+            "type": ""
+        }
+    ],
+    "associatedreceipt": [
+        {
+            "title": "序号",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "收货单号",
+            "dataIndex": "receiptNumber",
+            "type": "string"
+        },
+        {
+            "title": "联系人",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "合同编号",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "完成时间",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "创建人",
+            "dataIndex": "createUser",
+            "type": "integer"
+        },
+        {
+            "title": "材料名称",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "重量（吨）合计",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "价税合计（元）",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "备注",
+            "dataIndex": "",
+            "type": ""
+        }
+    ],
+    "billinformation": [
+        {
+            "title": "票据编号",
+            "dataIndex": "billNumber",
+            "type": "string"
+        },
+        {
+            "title": "所属供应商 ",
+            "dataIndex": "supplierName",
+            "type": "string"
+        },
+        {
+            "title": "开票单位 ",
+            "dataIndex": "invoiceUnit",
+            "type": "string"
+        },
+        {
+            "title": "发票号",
+            "dataIndex": "invoiceNumber"
+        },
+        {
+            "title": "发票类型",
+            "dataIndex": "invoiceType",
+            "type": "string"
+        },
+        {
+            "title": "发票金额",
+            "dataIndex": "invoiceAmount",
+            "type": "number"
+        },
+        {
+            "title": "收货单",
+            "dataIndex": "receiptNumber"
+        },
+        {
+            "title": "收票日",
+            "dataIndex": "collectInvoiceDate",
+            "type": "string"
+        }
+    ]
+}

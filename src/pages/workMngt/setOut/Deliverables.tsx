@@ -3,6 +3,7 @@ import { Button, Modal } from 'antd';
 import { DetailContent, CommonTable } from '../../common';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
+import { downloadTemplate } from './downloadTemplate';
 
 export interface DeliverablesProps {}
 export interface IDeliverablesRouteProps extends RouteComponentProps<DeliverablesProps>, WithTranslation {
@@ -14,34 +15,6 @@ export interface DeliverablesState {
     readonly visible: boolean;
     readonly description?: string;
 }
-
-const tableColumns = [
-    { 
-        key: 'index', 
-        title: '序号', 
-        dataIndex: 'index', 
-        width: 50, 
-        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
-    {
-        key: 'name',
-        title: '交付物名称',
-        dataIndex: 'name', 
-    },
-    {  
-        key: 'use', 
-        title: '用途', 
-        dataIndex: 'use' 
-    }, 
-    {
-        key: 'operation',
-        title: '操作',
-        dataIndex: 'operation',
-        width: 120,
-        render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-            <Button type="link">下载</Button>
-        )
-    }
-]
 
 class Deliverables extends React.Component<IDeliverablesRouteProps, DeliverablesState> {
     
@@ -66,43 +39,87 @@ class Deliverables extends React.Component<IDeliverablesRouteProps, Deliverables
      * @returns render 
      */
     public render(): React.ReactNode {
+        
+        const tableColumns = [
+            { 
+                key: 'index', 
+                title: '序号', 
+                dataIndex: 'index', 
+                width: 50, 
+                render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
+            {
+                key: 'name',
+                title: '交付物名称',
+                dataIndex: 'name', 
+            },
+            {  
+                key: 'use', 
+                title: '用途', 
+                dataIndex: 'use' 
+            }, 
+            {
+                key: 'operation',
+                title: '操作',
+                dataIndex: 'operation',
+                width: 120,
+                render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                    <Button type="link" onClick={ () => { 
+                        if(record.requestType === 'zip') {
+                            downloadTemplate(record.path + this.props.id , record.use, {}, true)
+                        } else {
+                            downloadTemplate(record.path + this.props.id , record.use)
+                        } 
+                    } }>下载</Button>
+                )
+            }
+        ]
+
         const data = [{
-            name: '塔型图纸.pdf',
-            use: '塔型交付图纸'
+            name: '提料塔型构件明细汇总.xls',
+            use: '提料塔型构件明细汇总',
+            path: '/tower-science/productCategory/material/productCategoryStructure/download/excel?productCategoryId='
         }, {
-            name: '塔型构件明细.pdf',
-            use: '塔型构件明细'
+            name: '提料杆塔构件明细汇总.xls',
+            use: '提料杆塔构件明细汇总',
+            path: '/tower-science/productCategory/material/productStructure/download/excel?productCategoryId='
         }, {
-            name: '塔型螺栓清单.pdf',
-            use: '塔型螺栓清单'
+            name: '放样塔型构件明细汇总.xls',
+            use: '放样塔型构件明细汇总',
+            path: '/tower-science/productStructure/productCategory/exportByProductCategoryId?productCategoryId='
         }, {
-            name: '塔型组焊清单.pdf',
-            use: '塔型组焊清单'
+            name: '放样杆塔构件明细汇总.xls',
+            use: '放样杆塔构件明细汇总',
+            path: '/tower-science/productStructure/product/exportByProductCategoryId?productCategoryId='
         }, {
-            name: '塔型NC程序.zip',
-            use: '塔型NC程序'
+            name: '包装清单汇总.xls',
+            use: '包装清单汇总',
+            path: '/tower-science/packageStructure/exportByProductCategoryId?productCategoryId='
         }, {
-            name: '塔型小样图.zip',
-            use: '塔型小样图'
+            name: '塔型图纸汇总.zip',
+            use: '塔型图纸汇总',
+            requestType: 'zip',
+            path: '/tower-science/productCategory/lofting/draw/summary?productCategoryId=',
         }, {
-            name: '杆塔构件明细汇总.zip',
-            use: '杆塔构件明细汇总'
+            name: '组焊清单汇总.xls',
+            use: '组焊清单汇总',
+            path: '/tower-science/welding/downloadSummary?productCategoryId=',
         }, {
-            name: '杆塔螺栓清单汇总.zip',
-            use: '杆塔螺栓清单汇总'
+            name: '小样图汇总.zip',
+            use: '小样图汇总',
+            path: '/tower-science/smallSample/download/',
+            requestType: 'zip'
         }, {
-            name: '杆塔组焊清单汇总.zip',
-            use: '杆塔组焊清单汇总'
+            name: '螺栓清单汇总.xls',
+            use: '螺栓清单汇总',
+            path: '/tower-science/boltRecord/downloadSummary?productCategoryId=',
+
         }, {
-            name: '杆塔NC程序汇总.zip',
-            use: '杆塔NC程序'
-        }, {
-            name: '杆塔小样图汇总.zip',
-            use: '杆塔小样图汇总'
-        }, {
-            name: '杆塔包装图纸汇总.zip',
-            use: '杆塔包装图纸汇总'
+            name: 'NC程序汇总.zip',
+            use: 'NC程序汇总',
+            path: '/tower-science/productNc/downloadSummary?productCategoryId=',
+            requestType: 'zip'
         }]
+
         return <>
             <Button type="link" onClick={ () => this.modalShow() }>交付物</Button>
             <Modal

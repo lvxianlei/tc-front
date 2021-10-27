@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message, Table } from 'antd';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import ConfirmableButton from '../../../../components/ConfirmableButton';
 import { Page } from '../../../common';
 import { IClient } from '../../../IClient';
 import RequestUtil from '../../../../utils/RequestUtil';
 import '../../StockPublicStyle.less';
+import './detail.less';
 
 const { RangePicker } = DatePicker;
 export default function RawMaterialStock(): React.ReactNode {
+    const params = useParams<{ id: string }>();
     const history = useHistory(),
         [current, setCurrent] = useState(1),
         [total, setTotal] = useState(100),
@@ -19,163 +21,371 @@ export default function RawMaterialStock(): React.ReactNode {
         [dateString, setDateString] = useState<any>([]),//时间字符串格式
         [keyword, setKeyword] = useState<any>('');//关键字搜索
     const [departmentId, setDepartmentId] = useState('');//部门
-    const [personnelId, setPersonnelId] = useState('');//人员
+    const [outStockStaffId, setPersonnelId] = useState('');//人员
+    const [Listdata, setListdata] = useState<any[]>([]);//列表数据
+    const [supplierListdata, setSupplierListdata] = useState<any[]>([{}]);//详情-供应商信息列表数据
+    const [WarehousingListdata, setWarehousingListdata] = useState<any[]>([{}]);//详情-入库信息列表数据
+    const [ExWarehousingListdata, setExWarehousingListdata] = useState<any[]>([{}]);//详情-出库信息列表数据
+    const [OutLibraryListdata, setOutLibraryListdata] = useState<any[]>([{}]);//出库-原材料信息列表数据
+    const [ApplyListdata, setApplyListdata] = useState<any[]>([{}]);//出库-缺料申请-信息列表数据
+    const [totalWeight, setTotalWeight] = useState<number>(0);//总重量
+    const [MaterialShortageTotalWeight, setMaterialShortageTotalWeight] = useState<number>(0);//缺料总重量
+    const [isDetailModal, setIsDetailModal] = useState<boolean>(false);//详情弹框显示
+    const [isOutLibraryModal, setIsOutLibraryModal] = useState<boolean>(false);//出库弹框显示
+    const [isApplyModal, setIsApplyModal] = useState<boolean>(false);//出库弹框显示
     const columns = [
         {
             title: '序号',
-            dataIndex: 'key',
+            dataIndex: 'id',
             width: 50,
+            render: (text: any, item: any, index: any) => {
+                console.log(item, 'item')
+                return <span>{index + 1}</span>
+            }
         },
         {
             title: '品名',
-            dataIndex: 'name',
+            dataIndex: 'productName',
             width: 120,
             render: (text: any) => <a>{text}</a>,
         }, {
             title: '状态',
-            dataIndex: 'receivingBatch',
+            dataIndex: 'outStockItemStatus',
             width: 120,
         }, {
             title: '最新状态变更',
-            dataIndex: 'key',
-            width: 120,
+            dataIndex: 'createTime',
+            width: 160,
         }, {
             title: '规格',
-            dataIndex: 'key',
+            dataIndex: 'spec',
             width: 120,
         }, {
             title: '标准',
-            dataIndex: 'key',
+            dataIndex: 'standard',
             width: 120,
         }, {
             title: '材质',
-            dataIndex: 'key',
+            dataIndex: 'materialTexture',
             width: 120,
         }, {
             title: '长度(mm)',
-            dataIndex: 'key',
+            dataIndex: 'length',
             width: 120,
         }, {
             title: '宽度(mm)',
-            dataIndex: 'key',
+            dataIndex: 'width',
             width: 120,
         }, {
             title: '重量(吨)',
-            dataIndex: 'key',
+            dataIndex: 'weight',
             width: 120,
         }, {
             title: '炉批号',
-            dataIndex: 'key',
+            dataIndex: 'furnaceBatch',
             width: 120,
         }, {
             title: '内部合同号',
-            dataIndex: 'key',
+            dataIndex: 'contractNumber',
             width: 120,
         }, {
             title: '塔型',
-            dataIndex: 'key',
+            dataIndex: 'productCategoryId',
             width: 120,
         }, {
             title: '塔杆号',
-            dataIndex: 'key',
+            dataIndex: 'productNumber',
             width: 120,
         }, {
             title: '出库人',
-            dataIndex: 'key',
+            dataIndex: 'outStockStaffId',
             width: 120,
         },
         {
             title: '操作',
-            dataIndex: 'key',
             width: 140,
             fixed: 'right' as FixedType,
             render: (_: undefined, record: object): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type='link'>出库</Button>
-                    <Button type='link'>详情</Button>
+                    <Button type='link' onClick={() => { setIsOutLibraryModal(true) }}>出库</Button>
+                    <Button type='link' onClick={() => { setIsDetailModal(true) }}>详情</Button>
                 </Space>
             )
         }
-    ]
-    const Listdata = [
+    ];//列表表头
+    const supplierColumns = [
         {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
+            title: '收货单号',
+            dataIndex: 'id',
+            width: 50,
+            render: (text: any, item: any, index: any) => {
+                console.log(item, 'item')
+                return <span>{index + 1}</span>
+            }
         },
         {
-            name: '仓库1',
-            key: '2',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '3',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '4',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '15',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '6',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '17',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '51',
-            receivingBatch: '2021-1223-TT'
+            title: '供应商',
+            dataIndex: 'productName',
+            width: 120,
+            render: (text: any) => <a>{text}</a>,
         }, {
-            name: '仓库1',
-            key: '18',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '8',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '9',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '10',
-            receivingBatch: '2021-1223-TT'
+            title: '联系人',
+            dataIndex: 'outStockItemStatus',
+            width: 120,
         }, {
-            name: '仓库1',
-            key: '31',
-            receivingBatch: '2021-1223-TT'
+            title: '联系电话',
+            dataIndex: 'createTime',
+            width: 160,
+        }, {
+            title: '合同编号',
+            dataIndex: 'spec',
+            width: 120,
+        }
+    ];//详情-供应商列表表头
+    const WarehousingColumns = [
+        {
+            title: '材质名称',
+            dataIndex: 'id',
+            width: 50,
+            render: (text: any, item: any, index: any) => {
+                console.log(item, 'item')
+                return <span>{index + 1}</span>
+            }
         },
         {
-            name: '仓库1',
-            key: '51',
-            receivingBatch: '2021-1223-TT'
+            title: '标准',
+            dataIndex: 'productName',
+            width: 120,
+            render: (text: any) => <a>{text}</a>,
+        }, {
+            title: '规格',
+            dataIndex: 'outStockItemStatus',
+            width: 120,
+        }, {
+            title: '材质',
+            dataIndex: 'createTime',
+            width: 160,
+        }, {
+            title: '长度',
+            dataIndex: 'spec',
+            width: 120,
+        }, {
+            title: '宽度',
+            dataIndex: 'standard',
+            width: 120,
+        }, {
+            title: '入库人',
+            dataIndex: 'materialTexture',
+            width: 120,
+        }, {
+            title: '入库时间',
+            dataIndex: 'length',
+            width: 120,
+        }, {
+            title: '炉批号',
+            dataIndex: 'width',
+            width: 120,
+        }, {
+            title: '仓库',
+            dataIndex: 'weight',
+            width: 120,
+        }, {
+            title: '库位',
+            dataIndex: 'furnaceBatch',
+            width: 120,
+        }, {
+            title: '库区',
+            dataIndex: 'contractNumber',
+            width: 120,
+        }, {
+            title: '备注',
+            dataIndex: 'productCategoryId',
+            width: 120,
+        }
+    ];//详情-入库表头
+    const ExWarehousingColumns = [
+        {
+            title: '领料编号',
+            dataIndex: 'id',
+            width: 50,
+            render: (text: any, item: any, index: any) => {
+                console.log(item, 'item')
+                return <span>{index + 1}</span>
+            }
         },
-    ]
+        {
+            title: '任务编号',
+            dataIndex: 'productName',
+            width: 120,
+            render: (text: any) => <a>{text}</a>,
+        }, {
+            title: '生产批次',
+            dataIndex: 'outStockItemStatus',
+            width: 120,
+        }, {
+            title: '申请人',
+            dataIndex: 'createTime',
+            width: 160,
+        }, {
+            title: '出库人',
+            dataIndex: 'spec',
+            width: 120,
+        }, {
+            title: '出库时间',
+            dataIndex: 'standard',
+            width: 120,
+        },
+    ];//详情-出库表头
+    const OutLibraryColumns = [
+        {
+            title: '序号',
+            dataIndex: 'id',
+            width: 50,
+            render: (text: any, item: any, index: any) => {
+                console.log(item, 'item')
+                return <span>{index + 1}</span>
+            }
+        },
+        {
+            title: '所在仓库',
+            dataIndex: 'productName',
+            width: 100,
+            render: (text: any) => <a>{text}</a>,
+        }, {
+            title: '收货批次',
+            dataIndex: 'outStockItemStatus',
+            width: 100,
+        }, {
+            title: '库位',
+            dataIndex: 'createTime',
+            width: 100,
+        }, {
+            title: '区位',
+            dataIndex: 'spec',
+            width: 100,
+        }, {
+            title: '物料编码',
+            dataIndex: 'standard',
+            width: 100,
+        }, {
+            title: '分类',
+            dataIndex: 'standard',
+            width: 100,
+        }, {
+            title: '标准',
+            dataIndex: 'standard',
+            width: 100,
+        }, {
+            title: '品名',
+            dataIndex: 'standard',
+            width: 100,
+        }, {
+            title: '材质',
+            dataIndex: 'standard',
+            width: 100,
+        }, {
+            title: '规格',
+            dataIndex: 'standard',
+            width: 100,
+        }, {
+            title: '长度（mm）',
+            dataIndex: 'standard',
+            width: 100,
+        }, {
+            title: '宽度（mm）',
+            dataIndex: 'standard',
+            width: 100,
+        }, {
+            title: '数量',
+            dataIndex: 'standard',
+            width: 100,
+        }, {
+            title: '重量（吨）',
+            dataIndex: 'standard',
+            width: 100,
+        }, {
+            title: '库存数量',
+            dataIndex: 'standard',
+            width: 100,
+        }, {
+            title: '出库数量',
+            dataIndex: 'standard',
+            width: 100,
+        },
+    ];//出库弹框-原材料信息表头
+    const ApplyColumns = [
+        {
+            title: '序号',
+            dataIndex: 'id',
+            width: 50,
+            render: (text: any, item: any, index: any) => {
+                console.log(item, 'item')
+                return <span>{index + 1}</span>
+            }
+        }, {
+            title: '物料编码',
+            dataIndex: 'standard',
+            width: 100,
+        }, {
+            title: '分类',
+            dataIndex: 'standard',
+            width: 100,
+        }, {
+            title: '标准',
+            dataIndex: 'standard',
+            width: 100,
+        }, {
+            title: '品名',
+            dataIndex: 'standard',
+            width: 100,
+        }, {
+            title: '材质',
+            dataIndex: 'standard',
+            width: 100,
+        }, {
+            title: '规格',
+            dataIndex: 'standard',
+            width: 100,
+        }, {
+            title: '长度（mm）',
+            dataIndex: 'standard',
+            width: 100,
+        }, {
+            title: '宽度（mm）',
+            dataIndex: 'standard',
+            width: 100,
+        }, {
+            title: '数量',
+            dataIndex: 'standard',
+            width: 100,
+        }, {
+            title: '重量（吨）',
+            dataIndex: 'standard',
+            width: 100,
+        }, {
+            title: '缺料数量',
+            dataIndex: 'standard',
+            width: 100,
+        },
+    ];//出库弹框-缺料申请原材料信息表头
+
     //获取列表数据
     const loadData = async () => {
         console.log('请求数据')
-        const data: any[] = await RequestUtil.get(`/tower-system/dictionary/allDictionary`, {
+        const data: any = await RequestUtil.get(`/tower-storage/outStock/detail`, {
             current,
-            pageSize,
+            size: pageSize,
             keyword,
-            dateString
+            id: params.id,
+            departmentId,
+            outStockStaffId,
+            selectName: keyword,
+            status,
+            updateTimeStart: dateString[0],
+            updateTimeEnd: dateString[1],
         });
+        setListdata(data.records);
+        setTotal(data.total);
     }
     // 重置
     const reset = () => {
@@ -185,6 +395,18 @@ export default function RawMaterialStock(): React.ReactNode {
         setDateValue([]);
         setDateString([]);
         setKeyword('')
+    }
+    // 详情弹框取消
+    const onDetailCancel = () => {
+        setIsDetailModal(false)
+    }
+    // 出库弹框取消
+    const onOutLibraryCancel = () => {
+        setIsOutLibraryModal(false)
+    }
+    // 缺料申请弹框取消
+    const onApplyModalCancel = () => {
+        setIsApplyModal(false)
     }
     //进入页面刷新
     useEffect(() => {
@@ -261,7 +483,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={personnelId ? personnelId : '请选择'}
+                            value={outStockStaffId ? outStockStaffId : '请选择'}
                             onChange={(val) => { setPersonnelId(val) }}
                         >
                             <Select.Option
@@ -327,7 +549,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 >返回上一级</Button>
             </div>
             <div className="tip_public_Stock">
-                <div>总重量： 12334.232 吨    缺料总重量：123.123吨</div>
+                <div>总重量： {totalWeight} 吨    缺料总重量：{MaterialShortageTotalWeight} 吨</div>
             </div>
             <div className="page_public_Stock">
                 <Table
@@ -359,6 +581,152 @@ export default function RawMaterialStock(): React.ReactNode {
                     }}
                 />
             </div>
+
+            {/* 详情弹框 */}
+            <Modal
+                className="Detail_modal"
+                visible={isDetailModal}
+                title="详细"
+                width={1000}
+                maskClosable={false}
+                onCancel={onDetailCancel}
+                footer={
+                    <>
+                        <Button onClick={onDetailCancel}>关闭</Button>
+                    </>
+                }
+            >
+                <div className="supplier_info">
+                    <div className="title">供应商信息</div>
+                    <div className="table_wrap">
+                        <Table
+                            columns={supplierColumns}
+                            dataSource={supplierListdata}
+                            size='small'
+                            rowClassName={(item, index) => {
+                                return index % 2 ? 'aaa' : ''
+                            }}
+                            scroll={
+                                {
+                                    y: 400
+                                }
+                            }
+                            pagination={false}
+                        />
+                    </div>
+                </div>
+                <div className="Warehousing_info">
+                    <div className="title">入库信息</div>
+                    <div className="table_wrap">
+                        <Table
+                            columns={WarehousingColumns}
+                            dataSource={WarehousingListdata}
+                            size='small'
+                            rowClassName={(item, index) => {
+                                return index % 2 ? 'aaa' : ''
+                            }}
+                            scroll={
+                                {
+                                    y: 400
+                                }
+                            }
+                            pagination={false}
+                        />
+                    </div>
+                </div>
+                <div className="ExWarehouse_info">
+                    <div className="title">出库信息</div>
+                    <div className="table_wrap">
+                        <Table
+                            columns={ExWarehousingColumns}
+                            dataSource={ExWarehousingListdata}
+                            size='small'
+                            rowClassName={(item, index) => {
+                                return index % 2 ? 'aaa' : ''
+                            }}
+                            scroll={
+                                {
+                                    y: 400
+                                }
+                            }
+                            pagination={false}
+                        />
+                    </div>
+                </div>
+            </Modal>
+            {/* 出库弹框 */}
+            <Modal
+                className="out_library_modal"
+                visible={isOutLibraryModal}
+                title="出库"
+                width={1000}
+                maskClosable={false}
+                onCancel={onOutLibraryCancel}
+                footer={
+                    <>
+                        <Button onClick={onOutLibraryCancel}>关闭</Button>
+                        <Button type='primary' onClick={() => { setIsApplyModal(true) }}>缺料申请</Button>
+                        <Button type='primary' onClick={onOutLibraryCancel}>保存</Button>
+                    </>
+                }
+            >
+                <div className="out_library_info">
+                    <div className="title">
+                        出库原材料信息
+                        <span className='cont'>需求量：30</span>
+                    </div>
+                    <div className="table_wrap">
+                        <Table
+                            columns={OutLibraryColumns}
+                            dataSource={OutLibraryListdata}
+                            size='small'
+                            rowClassName={(item, index) => {
+                                return index % 2 ? 'aaa' : ''
+                            }}
+                            scroll={
+                                {
+                                    y: 400
+                                }
+                            }
+                            pagination={false}
+                        />
+                    </div>
+                </div>
+            </Modal>
+            {/* 缺料申请弹框 */}
+            <Modal
+                className="apply_modal"
+                visible={isApplyModal}
+                title="缺料申请"
+                width={1000}
+                maskClosable={false}
+                onCancel={onApplyModalCancel}
+                footer={
+                    <>
+                        <Button onClick={onApplyModalCancel}>关闭</Button>
+                        <Button type='primary' onClick={() => { }}>保存并提交</Button>
+                    </>
+                }
+            >
+                <div className="out_library_info">
+                    <div className="table_wrap">
+                        <Table
+                            columns={ApplyColumns}
+                            dataSource={ApplyListdata}
+                            size='small'
+                            rowClassName={(item, index) => {
+                                return index % 2 ? 'aaa' : ''
+                            }}
+                            scroll={
+                                {
+                                    y: 400
+                                }
+                            }
+                            pagination={false}
+                        />
+                    </div>
+                </div>
+            </Modal>
         </div>
     )
 }

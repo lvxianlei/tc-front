@@ -1,54 +1,174 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Row, Select, Modal, Input, Button, Table, TableColumnProps, } from 'antd';
 import { RouteProps } from '../public';
+import RequestUtil from "../../../utils/RequestUtil"
 import './WarehouseModal.less';
+import AuthUtil from '../../../utils/AuthUtil';
 const { Option } = Select;
 
 interface Props extends RouteProps {
     isModal: boolean,
     cancelModal: Function,
+    id: string | null,
 }
+
+// interface BaseInfo {
+//     warehouseNo: string,//仓库编号
+//     name: string,//仓库名称
+//     warehouseCategoryId: string,//仓库分类id
+//     shopId: string,//车间id
+// }
 
 const WarehouseModal = (props: Props) => {
     // const history = useHistory()
-    const [columnsData, setColumnsData] = useState([]);
+    let [columnsData, setColumnsData] = useState<any[]>([{}]);
+    let [baseInfo, setBaseInfo] = useState<any>({
+        warehouseNo: '',//仓库编号
+        name: '',//仓库名称
+        warehouseCategoryId: '',//仓库分类id
+        shopId: '',//车间id
+    });//基本信息
+    let [department, setDepartment] = useState<any[]>([{}]);//部门列表
+    let [departmentId, setDepartmentId] = useState<any>(null);//部门
+    let [userList, setUserList] = useState<any[]>([{}]);//用户列表
+    let [userId, setUserId] = useState<any>(null);//部门
+    let [keeperList, setKeeperList] = useState([{
+        reservoirName: '',//库区
+        locatorName: '',//库位
+    }, {
+        reservoirName: '',//库区
+        locatorName: '',//库位
+    }]);//保管员信息
     const columns: TableColumnProps<object>[] = [
         {
             key: 'index',
             title: '序号',
             dataIndex: 'index',
             width: 50,
+            render: (text, item, index) => {
+                return <span>{index + 1}</span>
+            }
         },
         {
-            key: 'projectName',
+            key: 'reservoirName',
             title: '库区',
-            dataIndex: 'projectName',
-        },
-        {
-            key: 'projectNumber',
-            title: '库位',
-            dataIndex: 'projectNumber'
-        },
-        {
-            key: 'projectNumber',
-            title: '操作',
-            dataIndex: 'projectNumber',
-            render: () => {
+            dataIndex: 'reservoirName',
+            render: (text, item: any, index) => {
                 return (
-                    <span>删除</span>
+                    <Input
+                        value={item.reservoirName}
+                        onChange={(ev) => {
+                            changeInputList(ev, item, 'reservoirName', index)
+                        }}
+                    />
+                )
+            }
+        },
+        {
+            key: 'locatorName',
+            title: '库位',
+            dataIndex: 'locatorName',
+            render: (text, item: any, index) => {
+                return (
+                    <Input
+                        value={item.locatorName}
+                        onChange={(ev) => {
+                            changeInputList(ev, item, 'locatorName', index)
+                        }}
+                    />
+                )
+            }
+        },
+        {
+            key: 'operation',
+            title: '操作',
+            dataIndex: 'operation',
+            render: (text, item, index) => {
+                return (
+                    <span
+                        className='yello'
+                        onClick={() => {
+                            columnsData.splice(index, 1)
+                            columnsData = [...columnsData]
+                            setColumnsData(columnsData)
+                        }}
+                    >删除</span>
                 )
             }
         },
     ]
+    useEffect(() => {
+        getDepartment()
+    }, [])
+    useEffect(() => {
+        getUserList()
+    }, [departmentId])
+    // 获取部门信息
+    const getDepartment = async () => {
+        const data: any = await RequestUtil.get(`/sinzetech-user/department/tree`, {
+            tenantId: AuthUtil.getTenantId()
+        })
+        setDepartment(data)
+    }
+    // 获取部门下用户信息
+    const getUserList = async () => {
+        const data: any = await RequestUtil.get(`/sinzetech-user/user`, {
+            departmentId: AuthUtil.getTenantId(),
+        })
+        setUserList(data.records)
+    }
+    // 库区库位信息监听
+    const changeInputList = (ev: React.ChangeEvent<HTMLInputElement>, item: any, key: string, index: number) => {
+        console.log(columnsData, 'columnsDatacolumnsData')
+        columnsData[index][key] = ev.target.value;
+        columnsData = [...columnsData]
+        setColumnsData(columnsData)
+    }
+    // 基本信息改变
+    const baseInfoChange = (ev: any, type: string, key: string,) => {
+        if (type === 'input') {
+            baseInfo[key] = ev.target.value;
+        } else if (type === 'select') {
+            baseInfo[key] = ev;
+        }
+        baseInfo = { ...baseInfo }
+        setBaseInfo(baseInfo)
+    }
+    // 保存
+    const submit = async () => {
+        if (props.id) {
+            await RequestUtil.put(`/tower-storage/warehouse`, {
+                id:props.id,
+                ...baseInfo,
+                item: columnsData,
+                staffs: keeperList,
+                person: {
+                    departmentId,
+                    userId,
+                },
+            })
+        } else {
+            await RequestUtil.post(`/tower-storage/warehouse`, {
+                ...baseInfo,
+                item: columnsData,
+                staffs: keeperList,
+                person: {
+                    departmentId,
+                    userId,
+                },
+            })
+        }
+        props.cancelModal()
+    }
     return (
         <div>
             <Modal
                 className='WarehouseModal'
-                title={"创建"}
+                title={props.id?"编辑":"创建"}
                 visible={props.isModal}
                 onOk={() => {
-                    // props.setIsModal(true)
+                    submit()
                 }}
                 onCancel={() => {
                     props.cancelModal()
@@ -60,49 +180,43 @@ const WarehouseModal = (props: Props) => {
                     <h3>基本信息</h3>
                     <Row className='search_content'>
                         <Col
-                            xl={8}
+                            md={8}
                             className='search_item'
                         >
                             <span className='tip'>*仓库编号：</span>
-                            <Select
+                            <Input
                                 className='input'
-                                // value={this.state.entryStatus}
-                                style={{ width: 120 }}
-                                onChange={(value) => {
+                                placeholder='请输入'
+                                value={baseInfo.warehouseNo}
+                                onChange={(ev) => {
+                                    baseInfoChange(ev, 'input', 'warehouseNo')
                                 }}
-                            >
-                                <Option value={''}>全部</Option>
-                                <Option value={0}>未生成</Option>
-                                <Option value={1}>已生成</Option>
-                            </Select>
+                            />
                         </Col>
                         <Col
-                            xl={8}
+                            md={8}
                             className='search_item'
                         >
                             <span className='tip'>*仓库名称：</span>
-                            <Select
+                            <Input
                                 className='input'
-                                // value={this.state.entryStatus}
-                                style={{ width: 120 }}
-                                onChange={(value) => {
+                                placeholder='请输入'
+                                value={baseInfo.name}
+                                onChange={(ev) => {
+                                    baseInfoChange(ev, 'input', 'name')
                                 }}
-                            >
-                                <Option value={''}>全部</Option>
-                                <Option value={0}>未生成</Option>
-                                <Option value={1}>已生成</Option>
-                            </Select>
+                            />
                         </Col>
                         <Col
-                            xl={8}
+                            md={8}
                             className='search_item'
                         >
                             <span className='tip'>*分类：</span>
                             <Select
                                 className='input'
-                                // value={this.state.entryStatus}
-                                style={{ width: 120 }}
+                                value={baseInfo.warehouseCategoryId}
                                 onChange={(value) => {
+                                    baseInfoChange(value, 'select', 'warehouseCategoryId')
                                 }}
                             >
                                 <Option value={''}>全部</Option>
@@ -111,104 +225,141 @@ const WarehouseModal = (props: Props) => {
                             </Select>
                         </Col>
                         <Col
-                            xl={8}
+                            md={8}
                             className='search_item'
                         >
-                            <span className='tip'>*发票号：</span>
-                            <Input
+                            <span className='tip'>*车间：</span>
+                            <Select
                                 className='input'
-                                placeholder='请输入'
-                            />
+                                value={baseInfo.shopId}
+                                style={{ width: 120 }}
+                                onChange={(value) => {
+                                    baseInfoChange(value, 'select', 'shopId')
+                                }}
+                            >
+                                <Option value={''}>全部</Option>
+                                <Option value={0}>未生成</Option>
+                                <Option value={1}>已生成</Option>
+                            </Select>
                         </Col>
                         <Col
-                            xl={8}
+                            md={8}
                             className='search_item'
+                            style={{marginTop:0}}
                         >
                             <span className='tip'>负责人：</span>
                             <Select
                                 className='input'
-                                // value={this.state.entryStatus}
+                                value={departmentId}
                                 style={{ width: 120 }}
                                 onChange={(value) => {
+                                    setDepartmentId(value)
                                 }}
                             >
-                                <Option value={''}>全部</Option>
-                                <Option value={0}>未生成</Option>
-                                <Option value={1}>已生成</Option>
+                                {
+                                    department.map((item, index) => {
+                                        return (
+                                            <Option value={item.id} key={index}>{item.title}</Option>
+                                        )
+                                    })
+                                }
                             </Select>
                             <Select
                                 className='input'
-                                // value={this.state.entryStatus}
+                                value={userId}
                                 style={{ width: 120, marginLeft: 10 }}
                                 onChange={(value) => {
+                                    setUserId(value)
                                 }}
                             >
-                                <Option value={''}>全部</Option>
-                                <Option value={0}>未生成</Option>
-                                <Option value={1}>已生成</Option>
+                                {
+                                    userList.map((item, index) => {
+                                        return (
+                                            <Option value={item.tenantId} key={index}>{item.name}</Option>
+                                        )
+                                    })
+                                }
                             </Select>
                         </Col>
                     </Row>
                 </div>
                 <div className='content keeper'>
                     <h3>保管员信息</h3>
-                    <div className='keeper_item'>
-                        <span className='tip'>保管员</span>
-                        <Select
-                            className='input'
-                            // value={this.state.entryStatus}
-                            style={{ width: 120 }}
-                            onChange={(value) => {
-                            }}
-                        >
-                            <Option value={''}>全部</Option>
-                            <Option value={0}>未生成</Option>
-                            <Option value={1}>已生成</Option>
-                        </Select>
-                        <Select
-                            className='input'
-                            // value={this.state.entryStatus}
-                            style={{ width: 120 }}
-                            onChange={(value) => {
-                            }}
-                        >
-                            <Option value={''}>全部</Option>
-                            <Option value={0}>未生成</Option>
-                            <Option value={1}>已生成</Option>
-                        </Select>
-                        <Button className='button'>删除</Button>
-                    </div>
-                    <div className='keeper_item'>
-                        <span className='tip'>保管员</span>
-                        <Select
-                            className='input'
-                            // value={this.state.entryStatus}
-                            style={{ width: 120 }}
-                            onChange={(value) => {
-                            }}
-                        >
-                            <Option value={''}>全部</Option>
-                            <Option value={0}>未生成</Option>
-                            <Option value={1}>已生成</Option>
-                        </Select>
-                        <Select
-                            className='input'
-                            // value={this.state.entryStatus}
-                            style={{ width: 120 }}
-                            onChange={(value) => {
-                            }}
-                        >
-                            <Option value={''}>全部</Option>
-                            <Option value={0}>未生成</Option>
-                            <Option value={1}>已生成</Option>
-                        </Select>
-                        <Button className='button'>删除</Button>
-                    </div>
+                    {
+                        keeperList.map((item, index) => {
+                            return (
+                                <div className='keeper_item' key={Math.random()}>
+                                    <span className='tip'>保管员</span>
+                                    <Select
+                                        className='input'
+                                        // value={this.state.entryStatus}
+                                        style={{ width: 120 }}
+                                        onChange={(value) => {
+                                        }}
+                                    >
+                                        {
+                                            department.map((item, index) => {
+                                                return (
+                                                    <Option value={item.id} key={index}>{item.title}</Option>
+                                                )
+                                            })
+                                        }
+                                    </Select>
+                                    <Select
+                                        className='input'
+                                        // value={this.state.entryStatus}
+                                        style={{ width: 120 }}
+                                        onChange={(value) => {
+                                        }}
+                                    >
+                                        {
+                                            userList.map((item, index) => {
+                                                return (
+                                                    <Option value={item.tenantId} key={index}>{item.name}</Option>
+                                                )
+                                            })
+                                        }
+                                    </Select>
+                                    {
+                                        keeperList.length - 1 === index ?
+                                            <Button
+                                                className='button'
+                                                onClick={() => {
+                                                    keeperList = [...keeperList, {
+                                                        reservoirName: '',//库区
+                                                        locatorName: '',//库位
+                                                    }]
+                                                    setKeeperList(keeperList)
+                                                }}
+                                            >新增</Button> :
+                                            <Button
+                                                className='button'
+                                                onClick={() => {
+                                                    keeperList.splice(index, 1)
+                                                    keeperList = [...keeperList]
+                                                    setKeeperList(keeperList)
+                                                }}
+                                            >删除</Button>
+                                    }
+                                </div>
+                            )
+                        })
+                    }
                 </div>
-                <div className='content '>
+                <div className='content public_page'>
                     <h3>
                         库区库位信息
-                        <Button className='button'>添加行</Button>
+                        <Button
+                            className='button'
+                            onClick={() => {
+                                columnsData = [...columnsData, {
+                                    reservoirName: '',
+                                    locatorName: '',
+                                }]
+                                console.log(columnsData, 'columnsDatacolumnsData')
+                                setColumnsData(columnsData)
+                            }}
+                        >添加行</Button>
                     </h3>
                     <Table
                         className='public_table'

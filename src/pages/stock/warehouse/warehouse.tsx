@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
-import { Button, Col, Pagination, Row, Select, TableColumnProps, Table, } from 'antd'
+import { Button, Pagination, TableColumnProps, Table, } from 'antd'
 import RequestUtil from "../../../utils/RequestUtil"
 import { RouteProps } from '../public'
 import WarehouseModal from './WarehouseModal'
-const { Option } = Select;
 const Warehouse = (props: RouteProps) => {
     // const history = useHistory()
     const [columnsData, setColumnsData] = useState([]);
@@ -12,56 +11,74 @@ const Warehouse = (props: RouteProps) => {
     const [size, setSize] = useState(10);
     const [current, setCurrent] = useState(1);
     const [isModal, setIsModal] = useState(false);
+    const [id, setId] = useState<string | null>(null);
     const columns: TableColumnProps<object>[] = [
         {
             key: 'index',
             title: '序号',
             dataIndex: 'index',
             width: 50,
+            render: (text, item, index) => {
+                return <span>{index + 1}</span>
+            }
         },
         {
-            key: 'projectName',
+            key: 'warehouseNumber',
             title: '编号',
-            dataIndex: 'projectName',
+            dataIndex: 'warehouseNumber',
         },
         {
-            key: 'projectNumber',
+            key: 'name',
             title: '仓库名称',
-            dataIndex: 'projectNumber'
+            dataIndex: 'name'
         },
         {
-            key: 'projectType',
+            key: 'warehouseCategoryName',
             title: '分类',
-            dataIndex: 'projectType',
+            dataIndex: 'warehouseCategoryName',
         },
         {
-            key: 'bidBuyEndTime',
+            key: 'personName',
             title: '负责人',
-            dataIndex: 'bidBuyEndTime'
+            dataIndex: 'personName'
         },
         {
-            key: 'biddingEndTime',
+            key: 'staffName',
             title: '保管员',
-            dataIndex: 'biddingEndTime'
+            dataIndex: 'staffName'
         },
         {
-            key: 'currentProjectStage',
+            key: 'shopName',
             title: '车间',
-            dataIndex: 'currentProjectStage',
+            dataIndex: 'shopName',
         },
         {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
+            align: 'center',
             render: (_text: any, item: any, index: number): React.ReactNode => {
                 return (
-                    <div>
-                        <span>编辑</span>
-                        <span>删除</span>
+                    <div className='operation'>
+                        <span
+                            className='yello'
+                            onClick={() => {
+                                setIsModal(true)
+                                setId(item.id)
+                            }}
+                        >编辑</span>
+                        <span
+                            className='yello'
+                            onClick={() => {
+                                setIsModal(true)
+                                setId(item.id)
+                            }}
+                        >删除</span>
                     </div>
                 )
             }
-        }]
+        }
+    ]
     useEffect(() => {
         getColumnsData()
     }, [current, size]);
@@ -73,8 +90,9 @@ const Warehouse = (props: RouteProps) => {
         setTotal(data.data)
         setColumnsData(data.records)
     }
-    const cancelModal = () =>{
+    const cancelModal = () => {
         setIsModal(false)
+        setId(null)
     }
     return (
         <div className='public_page'>
@@ -89,12 +107,16 @@ const Warehouse = (props: RouteProps) => {
                     <div className='func_right'>
                         <Button
                             className='func_right_item'
-                            onClick={()=>{
+                            onClick={() => {
                                 setIsModal(true)
+                                setId(null)
                             }}
                         >创建</Button>
                         <Button
                             className='func_right_item'
+                            onClick={() => {
+                                props.history.go(-1)
+                            }}
                         >返回上一级</Button>
                     </div>
                 </div>
@@ -121,11 +143,15 @@ const Warehouse = (props: RouteProps) => {
                     />
                 </div>
             </div>
-            <WarehouseModal
-                {...props}
-                isModal={isModal}
-                cancelModal={cancelModal}
-            />
+            {
+                isModal ?
+                    <WarehouseModal
+                        {...props}
+                        isModal={isModal}
+                        id={id}
+                        cancelModal={cancelModal}
+                    /> : null
+            }
         </div>
     )
 }
