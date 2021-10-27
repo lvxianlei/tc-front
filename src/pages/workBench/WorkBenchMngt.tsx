@@ -121,19 +121,19 @@ const groupLeaderList = [
 		child: [
 			{
 				title: '待指派',
-				dataIndex: 'loftingToBeAssigned',
+				dataIndex: 'productToBeAssigned',
 				path: '/workMngt/setOutList'
 			}, {
 				title: '待提交放样',
-				dataIndex: 'loftingToBeSubmittedLofting',
+				dataIndex: 'productToBeSubmittedLofting',
 				path: '/workMngt/setOutList'
 			}, {
 				title: '待提交组焊',
-				dataIndex: 'loftingToBeSubmittedWelding',
+				dataIndex: 'productToBeSubmittedWelding',
 				path: '/workMngt/setOutList'
 			}, {
 				title: '待汇总',
-				dataIndex: 'loftingToBeSummarized',
+				dataIndex: 'productToBeSummarized',
 				path: '/workMngt/setOutList'
 			}
 		]
@@ -166,15 +166,15 @@ const workmanList = [
 		child: [
 			{
 				title: '待提料',
-				dataIndex: 'materialToBeMaterial',
+				dataIndex: 'segmentMaterialToBeMaterial',
 				path: '/workMngt/pickList'
 			}, {
 				title: '待校核',
-				dataIndex: 'materialToBeCheck',
+				dataIndex: 'segmentMaterialToBeCheck',
 				path: '/workMngt/pickList'
 			}, {
 				title: '待配段',
-				dataIndex: 'materialToBeMatch',
+				dataIndex: 'rodMaterialToBeMatch',
 				path: '/workMngt/pickList'
 			}
 		]
@@ -183,19 +183,19 @@ const workmanList = [
 		child: [
 			{
 				title: '待放样',
-				dataIndex: 'loftingToBeLofting',
+				dataIndex: 'segmentProductToBeLofting',
 				path: '/workMngt/setOutList'
 			}, {
 				title: '待校核',
-				dataIndex: 'loftingToBeCheck',
+				dataIndex: 'segmentProductToBeCheck',
 				path: '/workMngt/setOutList'
 			}, {
 				title: '待配段',
-				dataIndex: 'loftingToBeMatch',
+				dataIndex: 'rodProductToBeMatch',
 				path: '/workMngt/setOutList'
 			}, {
 				title: '待出单',
-				dataIndex: 'loftingToBeIssue',
+				dataIndex: 'rodProductToBeIssue',
 				path: '/workMngt/setOutList'
 			}
 		]
@@ -266,7 +266,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 									const dataIndex: string | undefined = item.dataIndex;
 									return <div className={ res.col !== 2 ? styles.content : styles.content2 } key={ ind + '_' + index }>
 										<p onClick={ () => { if( item.path) history.push(item.path) } }><CheckCircleOutlined />{ item.title }<span className={ styles.rightoutlined }><RightOutlined /></span></p>
-										<p className={ styles.total }>{ detailData.director && detailData.director[dataIndex || ''] || 0 }</p>
+										<p className={ styles.total }>{ detailData.director && detailData.director[dataIndex || ''] === -1 ? 0 : detailData.director && detailData.director[dataIndex || ''] || 0 }</p>
 										<div className={ styles.draw }><Line keyIndex={ dataIndex +'_'+index  } valueList={ [Math.ceil(Math.random()*80), Math.ceil(Math.random()*100), Math.ceil(Math.random()*150), Math.ceil(Math.random()*100), Math.ceil(Math.random()*90), Math.ceil(Math.random()*100), Math.ceil(Math.random()*100)] }/></div>
 									</div>
 								})
@@ -285,8 +285,8 @@ export default function WorkBenchMngt(): React.ReactNode {
 								res?.child && res?.child.map((item: IList, index: number) => {
 									const dataIndex: string | undefined = item.dataIndex;
 									return <div className={ res.col !== 2 ? styles.content : styles.content2 } key={ dataIndex + '_' + index }>
-										<p><CheckCircleOutlined />{ item.title }<span className={ styles.rightoutlined }><RightOutlined /></span></p>
-										<p className={ styles.total }>{ detailData.leaderToDoVO && detailData.leaderToDoVO[dataIndex || ''] || 0 }</p>
+										<p onClick={ () => { if( item.path) history.push(item.path) } }><CheckCircleOutlined />{ item.title }<span className={ styles.rightoutlined }><RightOutlined /></span></p>
+										<p className={ styles.total }>{ detailData.leaderToDoVO && detailData.leaderToDoVO[dataIndex || ''] === -1 ? 0 : detailData.leaderToDoVO && detailData.leaderToDoVO[dataIndex || ''] || 0 }</p>
 										<div className={ styles.draw }><Line keyIndex={ dataIndex + '_' +index  } valueList={ [Math.ceil(Math.random()*80), Math.ceil(Math.random()*100), Math.ceil(Math.random()*150), Math.ceil(Math.random()*100), Math.ceil(Math.random()*90), Math.ceil(Math.random()*100), Math.ceil(Math.random()*100)] }/></div>
 									</div>
 								})
@@ -305,8 +305,8 @@ export default function WorkBenchMngt(): React.ReactNode {
 								res?.child && res?.child.map((item: IList, index: number) => {
 									const dataIndex: string | undefined = item.dataIndex;
 									return <div className={ res.col !== 2 ? styles.content : styles.content2 } key={ dataIndex + '_' + index }>
-										<p><CheckCircleOutlined />{ item.title }<span className={ styles.rightoutlined }><RightOutlined /></span></p>
-										<p className={ styles.total }>{ detailData.staffToDoVO && detailData.staffToDoVO[dataIndex || ''] || 0 }</p>
+										<p onClick={ () => { if( item.path) history.push(item.path) } }><CheckCircleOutlined />{ item.title }<span className={ styles.rightoutlined }><RightOutlined /></span></p>
+										<p className={ styles.total }>{ detailData.staffToDoVO && detailData.staffToDoVO[dataIndex || ''] === -1 ? 0 : detailData.staffToDoVO && detailData.staffToDoVO[dataIndex || ''] || 0 }</p>
 										<div className={ styles.draw }><Line keyIndex={ ind + '_' + index  } valueList={ [Math.ceil(Math.random()*80), Math.ceil(Math.random()*100), Math.ceil(Math.random()*150), Math.ceil(Math.random()*100), Math.ceil(Math.random()*90), Math.ceil(Math.random()*100), Math.ceil(Math.random()*100)] }/></div>
 									</div>
 								})
