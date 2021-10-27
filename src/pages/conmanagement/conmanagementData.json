@@ -1,0 +1,112 @@
+{
+    "baseInfo": [
+        {
+            "title": "序号",
+            "dataIndex": ""
+        },
+        {
+            "title": "配置名称",
+            "dataIndex": ""
+        }   
+    ],
+    "warehouse":[
+        {
+            "title": "序号",
+            "dataIndex": ""
+        },
+        {
+            "title": "编号",
+            "dataIndex": "warehouseNo",
+            "type":"string"
+        },
+        {
+            "title": "仓库名称",
+            "dataIndex": "name",
+            "type":"string"
+        },
+        {
+            "title": "分类",
+            "dataIndex": "warehouseCategoryId",
+            "type":"string"
+        },
+        {
+            "title": "负责人",
+            "dataIndex": "person",
+            "type":"object"
+        },
+        {
+            "title": "保管员",
+            "dataIndex": "staffs",
+            "type":"object"
+        },
+        {
+            "title": "车间",
+            "dataIndex": "shopId",
+            "type":"string"
+        }
+    ],
+    "establishbaseinfo":[
+        {
+            "title": "仓库编号",
+            "dataIndex": "warehouseNo",
+            "type":"string"
+        },
+        {
+            "title": "仓库名称",
+            "dataIndex": "name",
+            "type":"string"
+        },
+        {
+            "title": "分类",
+            "dataIndex": "warehouseCategoryId",
+            "type":"string"
+        },
+        {
+            "title": "车间",
+            "dataIndex": "shopId",
+            "type":"string"
+        },
+        {
+            "title": "负责人",
+            "dataIndex": "person",
+            "type":"object"
+        }
+       
+    ],
+    "custodian":[
+        {
+            "title": "保管员",
+            "dataIndex": "staffs",
+            "type":"object",
+            "columns": [
+                {
+                    "title": "用户",
+                    "dataIndex": "userId"  
+                },
+                {
+                    "title": "部门",
+                    "dataIndex": "departmentId"
+                    
+                }
+            ]
+        }
+    ],
+    "locationinformation":[
+        {
+            "title": "序号",
+            "dataIndex": ""
+        },
+        {
+            "title": "库区",
+            "dataIndex": "reservoirName",
+            "type":"string"
+        },
+        {
+            "title": "库位",
+            "dataIndex": "locatorName",
+            "type":"string"
+        }
+    ]
+   
+   
+}

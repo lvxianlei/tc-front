@@ -142,7 +142,7 @@ export default function PickList(): React.ReactNode {
                     <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickMessage/${record.loftingId}`)}}>提料信息</Button>
                     <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTowerMessage/${record.id}/${record.status}`)}} disabled={record.status!==1&&record.status!==2}>塔型信息</Button>
                     <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTower/${record.id}`)}} disabled={record.status!==3}>杆塔配段</Button>
-                    <Button type='link' onClick={() =>{setTaskId(record.loftingId); setVisible(true)}} >交付物</Button>
+                    <Button type='link' onClick={() =>{setTaskId(record.loftingId); setVisible(true)}} disabled={record.status<4} >交付物</Button>
                 </Space>
             )
         }
@@ -196,15 +196,15 @@ export default function PickList(): React.ReactNode {
                             <Button type="link" onClick={() => downloadTemplate(record.path,record.downName)}>下载</Button>
                     ) }
                 ]} dataSource={[{
-                        name:'塔型名称构件明细.zip',
+                        name:'塔型名称构件明细.excel',
                         downName: "塔型名称构件明细",
                         function:'提料塔型构件明细',
-                        path:`/tower-sciencematerial/productCategoryStructure/download/excel?productCategoryId=${taskId}`
+                        path:`/tower-science/productCategory/material/productCategoryStructure/download/excel?productCategoryId=${taskId}`
                     },{
-                        name:'杆塔构件明细汇总表.zip',
+                        name:'杆塔构件明细汇总表.excel',
                         downName: "杆塔构件明细汇总表",
                         function:'提料杆塔构件明细汇总',
-                        path: `/tower-science/material/productStructure/download/excel?productCategoryId=${taskId}`
+                        path: `/tower-science/productCategory/material/productStructure/download/excel?productCategoryId=${taskId}`
                 }]} />
             </Modal>
             <Page
