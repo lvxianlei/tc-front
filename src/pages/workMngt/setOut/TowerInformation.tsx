@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Space, DatePicker, Select, Button, Popconfirm } from 'antd';
+import { Space, DatePicker, Select, Button, Popconfirm, Input } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -158,7 +158,7 @@ export default function TowerInformation(): React.ReactNode {
             >
                 <Button type="primary" ghost>提交</Button>
             </Popconfirm>
-            <TowerLoftingAssign id={ params.id } update={ () => setRefresh(!refresh) } />
+            <TowerLoftingAssign id={ params.id } update={ () => setRefresh(true) } />
             <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
         </Space> }
         searchFormItems={ [
@@ -181,16 +181,12 @@ export default function TowerInformation(): React.ReactNode {
             {
                 name: 'loftingUser',
                 label: '放样人',
-                children: <Select style={{ width: '120px' }} placeholder="请选择">
-                    <Select.Option value="0" key="0">放样人</Select.Option>
-                </Select>
+                children: <Input placeholder="请输入" />
             },
             {
                 name: 'checkUser',
                 label: '校核人',
-                children: <Select style={{ width: '120px' }} placeholder="请选择">
-                    <Select.Option value="0" key="0">校核人</Select.Option>
-                </Select>
+                children: <Input placeholder="请输入" />
             }
         ] }
         onFilterSubmit = { (values: Record<string, any>) => {

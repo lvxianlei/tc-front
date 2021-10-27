@@ -117,7 +117,7 @@ export default function BaseInfoEdit(): JSX.Element {
       }
       return true
     })} dataSource={{}} edit />
-    <DetailTitle title="货物清单" />
+    <DetailTitle title="物资清单" />
     <EditTable form={cargoVOListForm} columns={cargoVOListColumns} dataSource={[]} />
     <DetailTitle title="附件信息" operation={[<Upload
       key="sub"

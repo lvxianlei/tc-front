@@ -5,6 +5,7 @@ import styles from './AssessmentTask.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGroup } from '../../../components/AbstractFillableComponent';
+import { boltTypeOptions } from '../../../configuration/DictionaryOptions';
 
 export interface BoltNewModalProps {}
 export interface IBoltNewModalRouteProps extends RouteComponentProps<BoltNewModalProps>, WithTranslation {
@@ -92,9 +93,12 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                     required: true,
                     message: '请选择类型'
                 }],
-                children: <Select style={{ width: '100%' }} placeholder="请选择">
-                    <Select.Option value={ 1 } key="1">普通</Select.Option>
-                    <Select.Option value={ 2 } key="2">防盗</Select.Option>
+                children: <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                    { boltTypeOptions && boltTypeOptions.map(({ id, name }, index) => {
+                        return <Select.Option key={index} value={id}>
+                            {name}
+                        </Select.Option>
+                    }) }
                 </Select>
             }, {
                 label: '名称',

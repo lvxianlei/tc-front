@@ -65,7 +65,7 @@ const setOutColumns = [
     { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum' },
     { title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight' ,render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
     { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight' ,render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>) },
-    // { title: '单件孔数', dataIndex: 'basicsWeight', key: 'basicsWeight' },
+    { title: '单件孔数', dataIndex: 'holesNum', key: 'holesNum' },
     { title: 'NC程序名称', dataIndex: 'ncName', key: 'ncName' },
     { title: '备注', dataIndex: 'description', key: 'description' },
     { title: '电焊', dataIndex: 'electricWelding', key: 'electricWelding' },
@@ -183,7 +183,7 @@ export default function OtherDetail(): React.ReactNode {
                 <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
                 <DetailTitle title="源数据" />
                 {params.type==='WTD-TL'?<CommonTable columns={towerColumns} dataSource={[detailData?.drawProductStructure]} />:null}
-                {params.type==='WTD-FY'?<CommonTable columns={setOutColumns} dataSource={detailData?.drawProductStructure} />:null}
+                {params.type==='WTD-FY'?<CommonTable columns={setOutColumns} dataSource={[detailData?.productStructureVO]} />:null}
                 {params.type==='WTD-LS'?<CommonTable columns={boltColumns} dataSource={[detailData?.productBoltRecordVO]} />:null}
                 <DetailTitle title="操作信息" />
                 <CommonTable columns={tableColumns} dataSource={detailData?.issueRecordList} pagination={false}/>
