@@ -54,6 +54,43 @@
             "dataIndex": "description",
             "type":"string"
         }
+    ],
+    "baseinfo":[
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture",
+            "type":"string"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture",
+            "type":"string"
+        },
+        {
+            "title": "厚度mm",
+            "dataIndex": "thickness",
+            "type":"string"
+        },
+        {
+            "title": "宽度mm",
+            "dataIndex": "width",
+            "type":"string"
+        },
+        {
+            "title": "夹钳总耗损mm",
+            "dataIndex": "clampLoss",
+            "type":"number"
+        },
+        {
+            "title": "每刀口耗损mm",
+            "dataIndex": "edgeLoss",
+            "type":"number"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type":"string"
+        }
     ]
    
    
