@@ -43,7 +43,7 @@ export default function ApplyPayment() {
     }
 
     return <Page
-        path="/tower-market/applyPayment"
+        path="/tower-supply/applyPayment"
         columns={[
             ...baseinfo,
             {

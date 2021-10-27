@@ -231,6 +231,32 @@
                         ]
                     },
                     {
+                        "label": "询价任务",
+                        "icon": "technology",
+                        "path": "/enquiryTask",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "询价任务",
+                                "path": "/enquiryTask/index",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "供应商管理",
+                        "icon": "technology",
+                        "path": "/supplier-mngt",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "供应商管理",
+                                "path": "/supplier-mngt/index",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
                         "label": "库存管理",
                         "icon": "technology",
                         "path": "/stock",
