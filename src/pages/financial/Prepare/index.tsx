@@ -1,6 +1,6 @@
 import React from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { Page } from '../../common'
 import { baseinfo } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
