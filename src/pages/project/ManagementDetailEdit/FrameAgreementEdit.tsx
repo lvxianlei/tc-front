@@ -44,7 +44,14 @@ export default function FrameAgreementEdit(): JSX.Element {
             const baseInfoData = await baseInfoForm.validateFields()
             const contractCargoDtosData = await cargoDtoForm.validateFields()
             delete data?.contractCargoVos
-            const result = await run({ ...data, ...baseInfoData, projectId: params.id, contractCargoDtos: contractCargoDtosData.submit })
+            const result = await run({
+                ...data,
+                ...baseInfoData,
+                projectId: params.id,
+                ownerCompany: baseInfoData.ownerCompany.records ? baseInfoData.ownerCompany.records[0].name : baseInfoData.ownerCompany,
+                signCompany: baseInfoData.signCompany.records ? baseInfoData.signCompany.records[0].name : baseInfoData.signCompany,
+                contractCargoDtos: contractCargoDtosData.submit
+            })
             if (result) {
                 message.success("保存成功...")
                 history.goBack()

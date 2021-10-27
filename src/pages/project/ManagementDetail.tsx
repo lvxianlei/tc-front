@@ -179,7 +179,7 @@ export default function ManagementDetail(): React.ReactNode {
                 }
                 return item
             }).filter((item: any) => !(item.dataIndex === "country" && data?.address !== "其他-国外"))} dataSource={data || {}} />
-            <DetailTitle title="货物清单" />
+            <DetailTitle title="物资清单" />
             <CommonTable columns={[
                 {
                     title: '序号',
