@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import { Col, Row, Select, Modal, Input, Button, Table, TableColumnProps, } from 'antd';
+import { Col, Row, Select, Modal, Input, Button, Table, TableColumnProps, message, } from 'antd';
 import { RouteProps } from '../public';
 import RequestUtil from "../../../utils/RequestUtil"
 import './WarehouseModal.less';
@@ -14,32 +14,13 @@ interface Props extends RouteProps {
 }
 
 // interface BaseInfo {
-//     warehouseNo: string,//仓库编号
+//     warehouseNumber: string,//仓库编号
 //     name: string,//仓库名称
 //     warehouseCategoryId: string,//仓库分类id
 //     shopId: string,//车间id
 // }
 
 const WarehouseModal = (props: Props) => {
-    // const history = useHistory()
-    let [columnsData, setColumnsData] = useState<any[]>([{}]);
-    let [baseInfo, setBaseInfo] = useState<any>({
-        warehouseNo: '',//仓库编号
-        name: '',//仓库名称
-        warehouseCategoryId: '',//仓库分类id
-        shopId: '',//车间id
-    });//基本信息
-    let [department, setDepartment] = useState<any[]>([{}]);//部门列表
-    let [departmentId, setDepartmentId] = useState<any>(null);//部门
-    let [userList, setUserList] = useState<any[]>([{}]);//用户列表
-    let [userId, setUserId] = useState<any>(null);//部门
-    let [keeperList, setKeeperList] = useState([{
-        reservoirName: '',//库区
-        locatorName: '',//库位
-    }, {
-        reservoirName: '',//库区
-        locatorName: '',//库位
-    }]);//保管员信息
     const columns: TableColumnProps<object>[] = [
         {
             key: 'index',
@@ -87,6 +68,7 @@ const WarehouseModal = (props: Props) => {
             render: (text, item, index) => {
                 return (
                     <span
+                        hidden={columnsData.length === 1}
                         className='yello'
                         onClick={() => {
                             columnsData.splice(index, 1)
@@ -98,6 +80,27 @@ const WarehouseModal = (props: Props) => {
             }
         },
     ]
+    let [columnsData, setColumnsData] = useState<any[]>([{
+        reservoirName: '',
+        locatorName: '',
+        key: '1'
+    }]);
+    let [baseInfo, setBaseInfo] = useState<any>({
+        warehouseNumber: '',//仓库编号
+        name: '',//仓库名称
+        warehouseCategoryId: '',//仓库分类id
+        shopId: '',//车间id
+    });//基本信息
+    let [department, setDepartment] = useState<any[]>([{}]);//部门列表
+    let [departmentId, setDepartmentId] = useState<any>(null);//部门
+    let [userList, setUserList] = useState<any[]>([{}]);//用户列表
+    let [userId, setUserId] = useState<any>(null);//部门
+    let [staffs, setStaffs] = useState([
+        {
+            departmentId: '',//部门
+            userId: '',//人员
+        }
+    ]);//保管员信息
     useEffect(() => {
         getDepartment()
     }, [])
@@ -137,12 +140,40 @@ const WarehouseModal = (props: Props) => {
     }
     // 保存
     const submit = async () => {
+        if (!baseInfo.warehouseNumber) {
+            message.error('请输入仓库编号')
+            return;
+        }
+        if (!baseInfo.name) {
+            message.error('请输入仓库名称')
+            return;
+        }
+        if (!baseInfo.warehouseCategoryId) {
+            message.error('请选择分类')
+            return;
+        }
+        if (!baseInfo.shopId) {
+            message.error('请选择车间')
+            return;
+        }
+        if (!userId) {
+            message.error('请选择负责人')
+            return;
+        }
+        if (staffs.some(item=>!item.userId)) {
+            message.error('请完善保管员信息')
+            return;
+        }
+        if (columnsData.some(item=>!item.reservoirName || !item.locatorName)) {
+            message.error('请完善保管员信息')
+            return;
+        }
         if (props.id) {
             await RequestUtil.put(`/tower-storage/warehouse`, {
-                id:props.id,
+                id: props.id,
                 ...baseInfo,
-                item: columnsData,
-                staffs: keeperList,
+                warehouseDetail: columnsData,
+                staffs,
                 person: {
                     departmentId,
                     userId,
@@ -151,8 +182,8 @@ const WarehouseModal = (props: Props) => {
         } else {
             await RequestUtil.post(`/tower-storage/warehouse`, {
                 ...baseInfo,
-                item: columnsData,
-                staffs: keeperList,
+                warehouseDetail: columnsData,
+                staffs,
                 person: {
                     departmentId,
                     userId,
@@ -165,7 +196,7 @@ const WarehouseModal = (props: Props) => {
         <div>
             <Modal
                 className='WarehouseModal'
-                title={props.id?"编辑":"创建"}
+                title={props.id ? "编辑" : "创建"}
                 visible={props.isModal}
                 onOk={() => {
                     submit()
@@ -187,9 +218,9 @@ const WarehouseModal = (props: Props) => {
                             <Input
                                 className='input'
                                 placeholder='请输入'
-                                value={baseInfo.warehouseNo}
+                                value={baseInfo.warehouseNumber}
                                 onChange={(ev) => {
-                                    baseInfoChange(ev, 'input', 'warehouseNo')
+                                    baseInfoChange(ev, 'input', 'warehouseNumber')
                                 }}
                             />
                         </Col>
@@ -245,9 +276,9 @@ const WarehouseModal = (props: Props) => {
                         <Col
                             md={8}
                             className='search_item'
-                            style={{marginTop:0}}
+                            style={{ marginTop: 0 }}
                         >
-                            <span className='tip'>负责人：</span>
+                            <span className='tip'>负责人*：</span>
                             <Select
                                 className='input'
                                 value={departmentId}
@@ -286,7 +317,7 @@ const WarehouseModal = (props: Props) => {
                 <div className='content keeper'>
                     <h3>保管员信息</h3>
                     {
-                        keeperList.map((item, index) => {
+                        staffs.map((item, index) => {
                             return (
                                 <div className='keeper_item' key={Math.random()}>
                                     <span className='tip'>保管员</span>
@@ -295,6 +326,7 @@ const WarehouseModal = (props: Props) => {
                                         // value={this.state.entryStatus}
                                         style={{ width: 120 }}
                                         onChange={(value) => {
+
                                         }}
                                     >
                                         {
@@ -310,6 +342,7 @@ const WarehouseModal = (props: Props) => {
                                         // value={this.state.entryStatus}
                                         style={{ width: 120 }}
                                         onChange={(value) => {
+                                            
                                         }}
                                     >
                                         {
@@ -321,23 +354,23 @@ const WarehouseModal = (props: Props) => {
                                         }
                                     </Select>
                                     {
-                                        keeperList.length - 1 === index ?
+                                        staffs.length - 1 === index ?
                                             <Button
                                                 className='button'
                                                 onClick={() => {
-                                                    keeperList = [...keeperList, {
-                                                        reservoirName: '',//库区
-                                                        locatorName: '',//库位
+                                                    staffs = [...staffs, {
+                                                        departmentId: '',//部门
+                                                        userId: '',//人员
                                                     }]
-                                                    setKeeperList(keeperList)
+                                                    setStaffs(staffs)
                                                 }}
                                             >新增</Button> :
                                             <Button
                                                 className='button'
                                                 onClick={() => {
-                                                    keeperList.splice(index, 1)
-                                                    keeperList = [...keeperList]
-                                                    setKeeperList(keeperList)
+                                                    staffs.splice(index, 1)
+                                                    staffs = [...staffs]
+                                                    setStaffs(staffs)
                                                 }}
                                             >删除</Button>
                                     }
