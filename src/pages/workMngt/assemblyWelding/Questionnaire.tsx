@@ -44,13 +44,13 @@ export default function Questionnaire(): React.ReactNode {
             dataIndex: 'currentStatus',
             render: (status: number): React.ReactNode => {
                 switch (status) {
+                    case 0:
+                        return '已拒绝';
                     case 1:
                         return '待修改';
                     case 2:
                         return '已修改';
                     case 3:
-                        return '已拒绝';
-                    case 4:
                         return '已删除';
                 }
             }
@@ -433,8 +433,8 @@ export default function Questionnaire(): React.ReactNode {
                     componentId: detailData.weldingDetailedVO.componentId,
                     mainPartId: detailData.weldingDetailedVO.mainPartId,
                     segmentName: detailData.weldingDetailedVO.segmentName,
-                    electricWeldingMeters: electricWeldingMeters,
-                    singleGroupWeight: singleGroupWeight,
+                    electricWeldingMeters: detailData.weldingDetailedVO.electricWeldingMeters,
+                    singleGroupWeight:  detailData.weldingDetailedVO.singleGroupWeight,
                     weldingDetailedStructureList: [ ...(weldingDetailedList || []) ]
                 }
             }

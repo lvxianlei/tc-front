@@ -159,42 +159,49 @@ export default function SetOutTowerMngt(): React.ReactNode {
                     width: 50, 
                     dataIndex: 'operation', 
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                        <Button type="link" onClick={() => downloadTemplate(record.path,record.downName, {}, true)}>下载</Button>
+                        <Button type="link" onClick={() => downloadTemplate(record.path,record.downName, {}, record.zip)}>下载</Button>
                 ) }
             ]} dataSource={[{
-                    name:'提料塔型构件明细汇总.zip',
+                    name:'提料塔型构件明细汇总.excel',
                     downName: "提料塔型构件明细汇总",
                     function:'提料塔型构件明细汇总',
-                    path:`/tower-science/productCategory/material/productCategoryStructure/download`
+                    zip:false,
+                    path:`/tower-science/productCategory/material/productCategoryStructure/download/excel?productCategoryId=${taskId}`
                 },{
-                    name:'放样塔型构件明细汇总.zip',
+                    name:'放样塔型构件明细汇总.excel',
                     downName: "放样塔型构件明细汇总",
                     function:'放样塔型构件明细汇总',
-                    path:`/tower-science/productCategory/material/productStructure/download`
+                    zip:false,
+                    path:`/tower-science/productStructure/productCategory/exportByProductCategoryId?productCategoryId=${taskId}`
                 },{
                     name:'塔型图纸汇总.zip',
                     downName: "塔型图纸汇总",
                     function:'塔型图纸汇总',
+                    zip:true,
                     path:`/tower-science/productCategory/lofting/draw/summary?productCategoryId=${taskId}`
                 },{
-                    name:'组焊清单汇总.zip',
+                    name:'组焊清单汇总.excel',
                     downName: "组焊清单汇总",
                     function:'组焊清单汇总',
+                    zip:false,
                     path:`/tower-science/welding/downloadSummary?productCategoryId=${taskId}`
                 },{
                     name:'小样图汇总.zip',
                     downName: "小样图汇总",
                     function:'小样图汇总',
+                    zip:true,
                     path:`/tower-science/smallSample/download/${taskId}`
                 },{
-                    name:'螺栓清单汇总.zip',
+                    name:'螺栓清单汇总.excel',
                     downName: "螺栓清单汇总",
                     function:'螺栓清单汇总',
+                    zip:false,
                     path:`/tower-science/boltRecord/downloadSummary?productCategoryId=${taskId}`
                 },{
                     name:'NC程序汇总.zip',
                     downName: "NC程序汇总",
                     function:'NC程序汇总',
+                    zip:true,
                     path:`/tower-science/productNc/downloadSummary?productCategoryId=${taskId}`
             }]} />
         </Modal>

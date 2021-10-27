@@ -1,0 +1,138 @@
+{
+    "baseInfo": [
+        {
+            "title": "序号",
+            "dataIndex": ""
+        },
+        {
+            "title": "策略项",
+            "dataIndex": "policy"
+        },
+        {
+            "title": "配置数据",
+            "dataIndex": "configData",
+            "type":"string"
+        },
+        {
+            "title": "说明",
+            "dataIndex": "description",
+            "type":"string"
+        } 
+    ],
+    "material":[
+        {
+            "title": "序号",
+            "dataIndex": ""
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture",
+            "type":"string"
+        },
+        {
+            "title": "厚度mm",
+            "dataIndex": "thickness",
+            "type":"string"
+        },
+        {
+            "title": "宽度mm",
+            "dataIndex": "width",
+            "type":"string"
+        },
+        {
+            "title": "夹钳总耗损mm",
+            "dataIndex": "clampLoss",
+            "type":"number"
+        },
+        {
+            "title": "每刀口耗损mm",
+            "dataIndex": "edgeLoss",
+            "type":"number"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type":"string"
+        }
+    ],
+    "baseinfo":[
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture",
+            "type":"string"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture",
+            "type":"string"
+        },
+        {
+            "title": "厚度mm",
+            "dataIndex": "thickness",
+            "type":"string"
+        },
+        {
+            "title": "宽度mm",
+            "dataIndex": "width",
+            "type":"string"
+        },
+        {
+            "title": "夹钳总耗损mm",
+            "dataIndex": "clampLoss",
+            "type":"number"
+        },
+        {
+            "title": "每刀口耗损mm",
+            "dataIndex": "edgeLoss",
+            "type":"number"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type":"string"
+        }
+    ],
+    "safetyStock":[
+        {
+            "title": "序号",
+            "dataIndex": ""
+        },
+        {
+            "title": "品名",
+            "dataIndex": "productName",
+            "type":"string"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "standard",
+            "type":"string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec",
+            "type":"string"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture",
+            "type":"string"
+        },
+        {
+            "title": "安全库存（吨）",
+            "dataIndex": "safeWeight",
+            "type":"number"
+        },
+        {
+            "title": "安全库存（吨）",
+            "dataIndex": "safeWeight",
+            "type":"number"
+        },
+        {
+            "title": "警告库存（吨）",
+            "dataIndex": "alarmWeight",
+            "type":"number"
+        }
+    ]
+   
+   
+}

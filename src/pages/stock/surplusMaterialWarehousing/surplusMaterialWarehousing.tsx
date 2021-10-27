@@ -20,53 +20,60 @@ export default function RawMaterialStock(): React.ReactNode {
     const [status, setStatus] = useState('');//状态
     const [departmentId, setDepartmentId] = useState('');//部门
     const [personnelId, setPersonnelId] = useState('');//人员
+    const [Listdata, setListdata] = useState<any[]>([]);//数据列表
     const columns = [
         {
             title: '序号',
-            dataIndex: 'key',
+            dataIndex: 'id',
             width: 50,
+            render: (text: any, item: any, index: any) => {
+                console.log(item, 'item')
+                return <span>{index + 1}</span>
+            }
         },
         {
             title: '余料出库编号',
-            dataIndex: 'name',
+            dataIndex: 'excessStockNumber',
             width: 120,
             render: (text: any) => <a>{text}</a>,
         }, {
             title: '生产批次',
-            dataIndex: 'receivingBatch',
+            dataIndex: 'productionBatchNumber',
             width: 120,
         }, {
             title: '状态',
-            dataIndex: 'key',
+            dataIndex: 'receiveStatus',
             width: 120,
+            render: (text: any, item: any, index: any) => {
+                return <span>{text == 0 ? '待完成' : '已完成'}</span>
+            }
         }, {
             title: '最新状态变更时间',
             dataIndex: 'key',
             width: 130,
         }, {
             title: '材质',
-            dataIndex: 'key',
+            dataIndex: 'materialTexture',
             width: 120,
         }, {
             title: '规格',
-            dataIndex: 'key',
+            dataIndex: 'spec',
             width: 120,
         }, {
             title: '应收余料长度',
-            dataIndex: 'key',
+            dataIndex: 'excessStockNumber',
             width: 120,
         }, {
             title: '实收余料长度',
-            dataIndex: 'key',
+            dataIndex: 'excessLength',
             width: 120,
         }, {
             title: '入库人',
-            dataIndex: 'key',
+            dataIndex: 'stockUser',
             width: 120,
         },
         {
             title: '操作',
-            dataIndex: 'key',
             width: 120,
             fixed: 'right' as FixedType,
             render: (_: undefined, record: object): React.ReactNode => (
@@ -77,85 +84,17 @@ export default function RawMaterialStock(): React.ReactNode {
             )
         }
     ]
-    const Listdata = [
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        }, {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        }, {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-    ]
     //获取列表数据
     const loadData = async () => {
         console.log('请求数据')
-        const data: any[] = await RequestUtil.get(`/tower-system/dictionary/allDictionary`, {
+        const data: any = await RequestUtil.get(`/tower-storage/receiveStock/excess`, {
             current,
             pageSize,
             keyword,
             dateString
         });
+        setListdata(data.records);
+        setTotal(data.total);
     }
     // 重置
     const reset = () => {

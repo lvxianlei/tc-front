@@ -15,7 +15,8 @@ export default function RawMaterialStock(): React.ReactNode {
         [current, setCurrent] = useState(1),
         [total, setTotal] = useState(100),
         [pageSize, setPageSize] = useState<number>(10),
-        [isModal, setIsModal] = useState<boolean>(false),
+        [isRejectionModal, setRejectionModal] = useState<boolean>(false),//拒收弹框
+        [isReceivingModal, setisReceivingModal] = useState<boolean>(false),//拒收弹框
         [status, setStatus] = useState(''),//状态
         [dateValue, setDateValue] = useState<any>([]),//时间
         [dateString, setDateString] = useState<any>([]),//时间字符串格式
@@ -74,8 +75,8 @@ export default function RawMaterialStock(): React.ReactNode {
                 <Space direction="horizontal" size="small">
                     <span>质检单</span>
                     <span>质保单</span>
-                    <Button type='link'>收货</Button>
-                    <Button type='link' onClick={() => { setIsModal(true) }}>拒收</Button>
+                    <Button type='link' onClick={() => { setisReceivingModal(true) }}>收货</Button>
+                    <Button type='link' onClick={() => { setRejectionModal(true) }}>拒收</Button>
                 </Space>
             )
         }
@@ -171,12 +172,20 @@ export default function RawMaterialStock(): React.ReactNode {
     }
     // submit拒收弹框提交
     const rejectionSubmit = () => {
-
+        // 拒收
     }
     // 拒收弹框取消
     const onRejectionCancel = () => {
-        setIsModal(false);
+        setRejectionModal(false);
         setRejectionText('');
+    }
+    // 收货弹框取消
+    const onReceivingCancel = () => {
+        setisReceivingModal(false);
+    }
+    // submit收货弹框提交
+    const receivingSubmit = () => {
+        //收货
     }
     //进入页面刷新
     useEffect(() => {
@@ -308,7 +317,7 @@ export default function RawMaterialStock(): React.ReactNode {
             </div>
             {/* 拒收弹框 */}
             <Modal
-                visible={isModal}
+                visible={isRejectionModal}
                 title="拒收原因*"
                 onCancel={onRejectionCancel}
                 maskClosable={false}
@@ -333,6 +342,22 @@ export default function RawMaterialStock(): React.ReactNode {
                         // 回车键回调
                     }}
                 ></TextArea>
+            </Modal>
+
+            {/* 收货弹框 */}
+            <Modal
+                visible={isReceivingModal}
+                title="收货"
+                maskClosable={false}
+                onCancel={onReceivingCancel}
+                footer={
+                    <>
+                        <Button onClick={onReceivingCancel}>关闭</Button>
+                        <Button type='primary' onClick={receivingSubmit}>保存并提交</Button>
+                    </>
+                }
+            >
+                收货
             </Modal>
         </div>
     )
