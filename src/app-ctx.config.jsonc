@@ -259,6 +259,25 @@
                         ]
                     },
                     {
+                        "label": "财务管理",
+                        "icon": "technology",
+                        "path": "/financial",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "票据管理",
+                                "path": "/financial/bill",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "请款申请",
+                                "path": "/financial/prepare",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+
+                    {
                         "label": "评估任务",
                         "icon": "technology",
                         "path": "/assessmentTask",
