@@ -51,7 +51,7 @@ export default function AssemblyWeldDetail(): React.ReactNode {
     const [form] = Form.useForm();
     const params = useParams<{ id: string,status: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/issue/issue/welding?id=${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-science/issue/welding?id=${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data;
