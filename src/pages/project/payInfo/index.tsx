@@ -21,18 +21,15 @@ export default function PayInfo() {
         }
     }))
 
-    return <>
-        <Spin spinning={loading} >
-            {!data?.askInfo?.askInfoVo && <Result style={{ paddingTop: 200 }} title="当前项目还未做成本评估" extra={
-                <nav style={{ fontSize: 20 }}>
-                    点击<Link to={`/project/management/new/cost/${params.id}`}>创建</Link>开始成本评估
-                </nav>
-            } />}
-            {data?.askInfo?.askInfoVo && <DetailContent>
-                <CommonTable columns={[
-                    ...consultRecords
-                ]} dataSource={data?.askPrice || []} />
-            </DetailContent>}
-        </Spin>
-    </>
+    if (!data?.askInfo?.askInfoVo) {
+        return <Result style={{ paddingTop: 200 }} title="当前项目还未产生费用" />
+    }
+
+    return <Spin spinning={loading} >
+        {data?.askInfo?.askInfoVo && <DetailContent>
+            <CommonTable columns={[
+                ...consultRecords
+            ]} dataSource={data?.askPrice || []} />
+        </DetailContent>}
+    </Spin>
 }

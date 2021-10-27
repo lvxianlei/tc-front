@@ -150,10 +150,19 @@ export default function BidResultEdit(): JSX.Element {
                                 message: "请输入批次..."
                             }
                         ]
-                    }, {
-                        title: '备注',
-                        dataIndex: 'description'
                     },
+                    // {
+                    //     title: "中标包号",
+                    //     dataIndex: ""
+                    // },
+                    // {
+                    //     title: "中标价(元)",
+                    //     dataIndex: ""
+                    // },
+                    // {
+                    //     title: "中标重量(吨)",
+                    //     dataIndex: ""
+                    // },
                     {
                         title: '是否中标',
                         dataIndex: "isBid",
@@ -171,8 +180,14 @@ export default function BidResultEdit(): JSX.Element {
                                 value: 1,
                                 label: "否"
                             }
-                        ]
-                    }]} dataSource={data || {}} />
+                        ],
+                        disable: true
+                    },
+                    {
+                        title: '备注',
+                        dataIndex: 'description'
+                    },
+                ]} dataSource={data || {}} />
                 <DetailTitle title="开标信息" operation={[<Button key="new"
                     type="primary"
                     onClick={() => setBidOpenRecordVos([
