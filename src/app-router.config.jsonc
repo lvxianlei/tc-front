@@ -672,6 +672,41 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { //询价任务
+      "name": "询价任务",
+      "path": "/enquiryTask/index",
+      "module": "./pages/enquiryTask/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    {//供应商管理
+      "name": "供应商管理",
+      "path": "/supplier-mngt/index",
+      "module": "./pages/supplier-mngt/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    {//供应商管理-创建
+      "name": "供应商管理创建",
+      "path": "/supplier-mngt/index/supplierAdd",
+      "module": "./pages/supplier-mngt/supplierAdd",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    {//供应商管理-编辑
+      "name": "供应商管理编辑",
+      "path": "/supplier-mngt/index/supplierEdit",
+      "module": "./pages/supplier-mngt/supplierEdit",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    {//供应商管理-详情
+      "name": "供应商管理详情",
+      "path": "/supplier-mngt/supplierDetail",
+      "module": "./pages/supplier-mngt/supplierDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 库存管理-原材料库存
       "name": "原材料库存",
       "path": "/stock/rawMaterialStock",
