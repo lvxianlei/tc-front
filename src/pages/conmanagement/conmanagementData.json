@@ -118,6 +118,48 @@
             "dataIndex": "name",
             "type":"string"
         }
+    ],
+    "rawmateriaList":[
+        {
+            "title": "物料编号",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "品名",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "快捷码",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "标准",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "材料",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "材质",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "规格",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "计量单位",
+            "dataIndex": "",
+            "type":""
+        }
     ]
    
    
