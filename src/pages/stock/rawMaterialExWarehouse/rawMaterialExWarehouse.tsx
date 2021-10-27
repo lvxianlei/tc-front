@@ -19,12 +19,12 @@ export default function RawMaterialStock(): React.ReactNode {
     const [keyword, setKeyword] = useState<any>('');//关键字搜索
     const [status, setStatus] = useState('');//状态
     const [departmentId, setDepartmentId] = useState('');//部门
-    const [personnelId, setPersonnelId] = useState('');//人员
+    const [applyStaffId, setPersonnelId] = useState('');//人员
     const [Listdata, setListdata] = useState<any[]>([]);//列表数据
     const columns = [
         {
             title: '序号',
-            dataIndex: 'key',
+            dataIndex: 'id',
             width: 50,
             render: (text: any, item: any, index: any) => {
                 console.log(item, 'item')
@@ -63,7 +63,7 @@ export default function RawMaterialStock(): React.ReactNode {
             fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={`/stock/rawMaterialExWarehouse/detail/${record.key}`}>明细</Link>
+                    <Link to={`/stock/rawMaterialExWarehouse/detail/${record.id}`}>明细</Link>
                 </Space>
             )
         }
@@ -73,9 +73,14 @@ export default function RawMaterialStock(): React.ReactNode {
         console.log('请求数据')
         const data: any = await RequestUtil.get(`/tower-storage/outStock`, {
             current,
-            pageSize,
+            size:pageSize,
             keyword,
-            dateString
+            applyStaffId,
+            departmentId,
+            status,
+            updateTimeEnd: dateString[1],
+            updateTimeStart: dateString[0],
+            selectName: keyword,
         });
         setListdata(data.records);
         setTotal(data.total);
@@ -166,7 +171,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={personnelId ? personnelId : '请选择'}
+                            value={applyStaffId ? applyStaffId : '请选择'}
                             onChange={(val) => { setPersonnelId(val) }}
                         >
                             <Select.Option
