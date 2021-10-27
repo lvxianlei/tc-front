@@ -1,18 +1,14 @@
 {
     "baseinfo": [
         {
-            "title": "序号",
-            "dataIndex": ""
-        },
-        {
             "title": "票据编号",
             "dataIndex": "billNumber",
-            "type":"string"
+            "type": "string"
         },
         {
             "title": "请款编号",
             "dataIndex": "reqFundsNumber",
-            "type":"string"
+            "type": "string"
         },
         {
             "title": "发票号",
@@ -55,11 +51,11 @@
             "type": "string"
         }
     ],
-    "bilinformation":[
+    "bilinformation": [
         {
             "title": "票据编号",
             "dataIndex": "billNumber",
-            "type":"string"
+            "type": "string"
         },
         {
             "title": "所属供应商 ",
@@ -87,7 +83,46 @@
         },
         {
             "title": "关联收货单",
-            "dataIndex": "receiptVos"
+            "dataIndex": "receiptVos",
+            "type": "popTable",
+            "path": "/tower-market/contract",
+            "width": 1011,
+            "value": "contractName",
+            "selectType": "checkbox",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "合同编号",
+                    "dataIndex": "contractNumber",
+                    "search": true
+                },
+                {
+                    "title": "合同名称",
+                    "dataIndex": "contractName"
+                },
+                {
+                    "title": "销售类型",
+                    "dataIndex": "saleType"
+                },
+                {
+                    "title": "业主单位",
+                    "dataIndex": "customerCompany",
+                    "search": true
+                },
+                {
+                    "title": "合同签订单位",
+                    "dataIndex": "signCustomerName"
+                },
+                {
+                    "title": "合同签订日期",
+                    "dataIndex": "signContractTime"
+                },
+                {
+                    "title": "要求交货日期",
+                    "dataIndex": "deliveryTime"
+                }
+            ]
         },
         {
             "title": "收票日",
@@ -95,12 +130,7 @@
             "type": "string"
         }
     ],
-    "operation":[
-        {
-            "title": "序号",
-            "dataIndex": "",
-            "type": ""
-        },
+    "operation": [
         {
             "title": "操作部门",
             "dataIndex": "",
@@ -117,7 +147,7 @@
             "type": ""
         }
     ],
-    "associatedreceipt":[
+    "associatedreceipt": [
         {
             "title": "序号",
             "dataIndex": "",
@@ -169,11 +199,11 @@
             "type": ""
         }
     ],
-    "billinformation":[
+    "billinformation": [
         {
             "title": "票据编号",
             "dataIndex": "billNumber",
-            "type":"string"
+            "type": "string"
         },
         {
             "title": "所属供应商 ",
@@ -209,7 +239,4 @@
             "type": "string"
         }
     ]
-   
-   
-   
 }
