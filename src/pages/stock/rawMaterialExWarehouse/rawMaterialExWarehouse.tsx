@@ -20,32 +20,40 @@ export default function RawMaterialStock(): React.ReactNode {
     const [status, setStatus] = useState('');//状态
     const [departmentId, setDepartmentId] = useState('');//部门
     const [personnelId, setPersonnelId] = useState('');//人员
+    const [Listdata, setListdata] = useState<any[]>([]);//列表数据
     const columns = [
         {
             title: '序号',
             dataIndex: 'key',
             width: 50,
+            render: (text: any, item: any, index: any) => {
+                console.log(item, 'item')
+                return <span>{index + 1}</span>
+            }
         },
         {
             title: '领料编号',
-            dataIndex: 'name',
+            dataIndex: 'pickingNumber',
             width: 120,
             render: (text: any) => <a>{text}</a>,
         }, {
             title: '生产批次',
-            dataIndex: 'receivingBatch',
+            dataIndex: 'productionBatch',
             width: 120,
         }, {
             title: '状态',
-            dataIndex: 'key',
+            dataIndex: 'outStockStatus',
             width: 120,
+            render: (text: any, item: any, index: any) => {
+                return <span>{text == 0 ? '待完成' : '已完成'}</span>
+            }
         }, {
             title: '最新状态变更时间',
-            dataIndex: 'key',
+            dataIndex: 'updateTime',
             width: 120,
         }, {
             title: '申请人',
-            dataIndex: 'key',
+            dataIndex: 'applyStaffName',
             width: 120,
         },
         {
@@ -60,85 +68,17 @@ export default function RawMaterialStock(): React.ReactNode {
             )
         }
     ]
-    const Listdata = [
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        }, {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        }, {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-    ]
     //获取列表数据
     const loadData = async () => {
         console.log('请求数据')
-        const data: any[] = await RequestUtil.get(`/tower-system/dictionary/allDictionary`, {
+        const data: any = await RequestUtil.get(`/tower-storage/outStock`, {
             current,
             pageSize,
             keyword,
             dateString
         });
+        setListdata(data.records);
+        setTotal(data.total);
     }
     // 重置
     const reset = () => {

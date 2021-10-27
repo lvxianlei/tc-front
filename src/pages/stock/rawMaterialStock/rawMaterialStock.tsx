@@ -14,67 +14,74 @@ export default function RawMaterialStock(): React.ReactNode {
         [total, setTotal] = useState(100),
         [pageSize, setPageSize] = useState<number>(10),
         [warehouseId, setWarehouseId] = useState(''),//仓库
-        [textureId, setTextureId] = useState(''),//材质
-        [productId, setProductId] = useState(''),//品名
-        [standardId, setStandardId] = useState(''),//标准
-        [classificationId, setClassificationId] = useState(''),//分类
-        [lengthId, setLengthId] = useState(''),//长度
-        [lengthTowId, setLengthTowId] = useState(''),//长度2
-        [specificationsId, setSpecificationsId] = useState('')//规格
+        [materialTexture, setMaterialTexture] = useState(''),//材质
+        [productName, setProductName] = useState(''),//品名
+        [standard, setStandard] = useState(''),//标准
+        [classify, setClassify] = useState(''),//分类
+        [lengthMin, setLengthMin] = useState(''),//长度
+        [lengthMax, setLengthMax] = useState(''),//长度2
+        [spec, setSpec] = useState(''),//规格
+        [Listdata, setListdata] = useState<any[]>([]),//列表数据
+        [weight, setWeight] = useState<number>(0),//合计重量
+        [quantity, setQuantity] = useState<number>(0)//合计数量
     const columns = [
         {
             title: '序号',
-            dataIndex: 'key',
+            dataIndex: 'id',
             width: 50,
+            render: (text: any, item: any, index: any) => {
+                console.log(item, 'item')
+                return <span>{index + 1}</span>
+            }
         },
         {
             title: '所在仓库',
-            dataIndex: 'name',
+            dataIndex: 'warehouseName',
             width: 120,
             render: (text: any) => <a>{text}</a>,
         }, {
             title: '收货批次',
-            dataIndex: 'receivingBatch',
+            dataIndex: 'receiveBatchNumber',
             width: 120,
         }, {
             title: '库位',
-            dataIndex: 'key',
+            dataIndex: 'locatorName',
             width: 120,
         }, {
             title: '区位',
-            dataIndex: 'key',
+            dataIndex: 'reservoirName',
             width: 120,
         }, {
             title: '物料编码',
-            dataIndex: 'key',
+            dataIndex: 'materialCode',
             width: 120,
         }, {
             title: '分类',
-            dataIndex: 'key',
+            dataIndex: 'classify',
             width: 120,
         }, {
             title: '标准',
-            dataIndex: 'key',
+            dataIndex: 'standard',
             width: 120,
         }, {
             title: '品名',
-            dataIndex: 'key',
+            dataIndex: 'productName',
             width: 120,
         }, {
             title: '材质',
-            dataIndex: 'key',
+            dataIndex: 'materialTexture',
             width: 120,
         }, {
             title: '规格',
-            dataIndex: 'key',
+            dataIndex: 'spec',
             width: 120,
         }, {
             title: '长度',
-            dataIndex: 'key',
+            dataIndex: 'length',
             width: 120,
         }, {
             title: '宽度',
-            dataIndex: 'key',
+            dataIndex: 'width',
             width: 120,
         },
         {
@@ -92,96 +99,52 @@ export default function RawMaterialStock(): React.ReactNode {
             )
         }
     ]
-    const Listdata = [
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '2',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '3',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '4',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '5',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '6',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '7',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '8',
-            receivingBatch: '2021-1223-TT'
-        }, {
-            name: '仓库1',
-            key: '9',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '10',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '11',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '12',
-            receivingBatch: '2021-1223-TT'
-        }, {
-            name: '仓库1',
-            key: '13',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '14',
-            receivingBatch: '2021-1223-TT'
-        },
-    ]
+
+    // 计算重量
+    let calculation = (data: any) => {
+        let weight = 0;
+        let quantity = 0;
+        data.map((item: any, index: any) => {
+            weight = weight + Number(item.weight ? item.weight : 0)
+            quantity = quantity + Number(item.quantity ? item.quantity : 0)
+        })
+        console.log(weight)
+        console.log(quantity)
+        setWeight(weight);
+        setQuantity(quantity);
+    }
     //获取列表数据
     const loadData = async () => {
         console.log('请求数据')
-        const data: any[] = await RequestUtil.get(`/tower-system/dictionary/allDictionary`, {
+        const data: any = await RequestUtil.get(`/tower-storage/materialStock`, {
             current,
             pageSize,
+            warehouseId,
+            materialTexture,
+            productName,
+            standard,
+            classify,
+            lengthMin,
+            lengthMax,
+            spec,
         });
+        console.log(data, 'res')
+        setListdata(data.records);
+        setTotal(data.total);
+        calculation(Listdata)
     }
     // 重置
     const reset = () => {
         setCurrent(1);
         setPageSize(10);
         setWarehouseId('');
-        setTextureId('');
-        setProductId('');
-        setStandardId('');
-        setClassificationId('');
-        setLengthId('');
-        setLengthTowId('');
-        setSpecificationsId('');
+        setMaterialTexture('');
+        setProductName('');
+        setStandard('');
+        setClassify('');
+        setLengthMin('');
+        setLengthMax('');
+        setSpec('');
     }
     //进入页面刷新
     useEffect(() => {
@@ -223,8 +186,8 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={textureId ? textureId : '请选择'}
-                            onChange={(val) => { setTextureId(val) }}
+                            value={materialTexture ? materialTexture : '请选择'}
+                            onChange={(val) => { setMaterialTexture(val) }}
                         >
                             <Select.Option
                                 value="1"
@@ -250,8 +213,8 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={productId ? productId : '请选择'}
-                            onChange={(val) => { setProductId(val) }}
+                            value={productName ? productName : '请选择'}
+                            onChange={(val) => { setProductName(val) }}
                         >
                             <Select.Option
                                 value="1"
@@ -277,8 +240,8 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={standardId ? standardId : '请选择'}
-                            onChange={(val) => { setStandardId(val) }}
+                            value={standard ? standard : '请选择'}
+                            onChange={(val) => { setStandard(val) }}
                         >
                             <Select.Option
                                 value="1"
@@ -304,8 +267,8 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={classificationId ? classificationId : '请选择'}
-                            onChange={(val) => { setClassificationId(val) }}
+                            value={classify ? classify : '请选择'}
+                            onChange={(val) => { setClassify(val) }}
                         >
                             <Select.Option
                                 value="1"
@@ -331,8 +294,8 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={lengthId ? lengthId : '请选择'}
-                            onChange={(val) => { setLengthId(val) }}
+                            value={lengthMin ? lengthMin : '请选择'}
+                            onChange={(val) => { setLengthMin(val) }}
                         >
                             <Select.Option
                                 value="1"
@@ -353,8 +316,8 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={lengthTowId ? lengthTowId : '请选择'}
-                            onChange={(val) => { setLengthTowId(val) }}
+                            value={lengthMax ? lengthMax : '请选择'}
+                            onChange={(val) => { setLengthMax(val) }}
                         >
                             <Select.Option
                                 value="1"
@@ -380,8 +343,8 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={specificationsId ? specificationsId : '请选择'}
-                            onChange={(val) => { setSpecificationsId(val) }}
+                            value={spec ? spec : '请选择'}
+                            onChange={(val) => { setSpec(val) }}
                         >
                             <Select.Option
                                 value="1"
@@ -406,6 +369,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Button
                             className="btn"
                             type="primary"
+                            onClick={() => { loadData() }}
                         >查询</Button>
                         <Button
                             className="btn"
@@ -417,10 +381,11 @@ export default function RawMaterialStock(): React.ReactNode {
             <div className="func_public_Stock">
                 <Button
                     type="primary"
+                    className='func_btn'
                 >导出</Button>
             </div>
             <div className="tip_public_Stock">
-                <div>数量合计：335,重量合计：555</div>
+                <div>数量合计：{quantity},重量合计：{weight}</div>
             </div>
             <div className="page_public_Stock">
                 <Table
