@@ -116,23 +116,23 @@ export default function AssemblyWeldDetail(): React.ReactNode {
             ]:[<Button key="goback" onClick={() => history.goBack()}>返回</Button>]}>
                 <DetailTitle title="问题信息" />
                 <span>校核前</span>
-                <CommonTable columns={towerColumns} dataSource={detailData?.issueWeldingDetailedVO?.weldingDetailedStructureList} title={()=>{
-                    return <Space >
-                        <span>段号：{detailData?.issueWeldingDetailedVO?.segmentName}</span>
-                        <span>组件号：{detailData?.issueWeldingDetailedVO?.componentId}</span>
-                        <span>主见号：{detailData?.issueWeldingDetailedVO?.mainPartId}</span>
-                        <span>电焊米数（mm）：{detailData?.issueWeldingDetailedVO?.electricWeldingMeters}</span>
-                    </Space>
-                }}/>
-                <span>校核后</span>
                 <CommonTable columns={towerColumns} dataSource={detailData?.weldingDetailedVO?.weldingDetailedStructureList} title={()=>{
+                    return <Space >
+                        <span>段号：{detailData?.weldingDetailedVO?.segmentName}</span>
+                        <span>组件号：{detailData?.weldingDetailedVO?.componentId}</span>
+                        <span>主件号：{detailData?.weldingDetailedVO?.mainPartId}</span>
+                        <span>电焊米数（mm）：{detailData?.weldingDetailedVO?.electricWeldingMeters}</span>
+                    </Space>
+                }} pagination={false}/>
+                <span>校核后</span>
+                <CommonTable columns={towerColumns} dataSource={detailData?.issueWeldingDetailedVO?.weldingDetailedStructureList} title={()=>{
                     return <Space>
                         <span>段号：{detailData?.issueWeldingDetailedVO?.segmentName}</span>
                         <span>组件号：{detailData?.issueWeldingDetailedVO?.componentId}</span>
-                        <span>主见号：{detailData?.issueWeldingDetailedVO?.mainPartId}</span>
+                        <span>主件号：{detailData?.issueWeldingDetailedVO?.mainPartId}</span>
                         <span>电焊米数（mm）：{detailData?.issueWeldingDetailedVO?.electricWeldingMeters}</span>
                     </Space>
-                }}/>
+                }} pagination={false}/>
                 <DetailTitle title="备注" />
                 <TextArea disabled rows={5} value={detailData?.description}></TextArea>
                 <DetailTitle title="操作信息" />
