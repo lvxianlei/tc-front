@@ -118,6 +118,130 @@
             "dataIndex": "name",
             "type":"string"
         }
+    ],
+    "rawmateriaList":[
+        {
+            "title": "物料编号",
+            "dataIndex": "materialCode",
+            "type":"string"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "type":"string"
+        },
+        {
+            "title": "快捷码",
+            "dataIndex": "shortcutCode",
+            "type":"string"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "standard",
+            "type":"string"
+        },
+        {
+            "title": "材料",
+            "dataIndex": "rowMaterial",
+            "type":"string"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture",
+            "type":"string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec",
+            "type":"string"
+        },
+        {
+            "title": "计量单位",
+            "dataIndex": "unit",
+            "type":"string"
+        },
+        {
+            "title": "比重",
+            "dataIndex": "proportion",
+            "type":"number"
+        },
+        {
+            "title": "重量算法",
+            "dataIndex": "weightAlgorithm",
+            "type":"string"
+        },
+        {
+            "title": "原材料标准",
+            "dataIndex": "materialCategory",
+            "type":"integer"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type":"string"
+        }
+    ],
+    "rawMaterialInformation":[
+        {
+            "title": "类型",
+            "dataIndex": "type",
+            "type":"string"
+        },
+        {
+            "title": "物料编号",
+            "dataIndex": "materialCode",
+            "type":"string"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "type":"string"
+        },
+        {
+            "title": "快捷码",
+            "dataIndex": "shortcutCode",
+            "type":"string"
+        },
+        {
+            "title": "材料",
+            "dataIndex": "rowMaterial",
+            "type":"string"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture",
+            "type":"string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec",
+            "type":"string"
+        },
+        {
+            "title": "计量单位",
+            "dataIndex": "unit",
+            "type":"string"
+        },
+        {
+            "title": "比重",
+            "dataIndex": "proportion",
+            "type":"number"
+        },
+        {
+            "title": "重量算法",
+            "dataIndex": "weightAlgorithm",
+            "type":"string"
+        },
+        {
+            "title": "原材料标准",
+            "dataIndex": "materialCategory",
+            "type":"integer"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type":"string"
+        }
     ]
    
    

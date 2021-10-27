@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message, Table } from 'antd';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import ConfirmableButton from '../../../../components/ConfirmableButton';
 import { Page } from '../../../common';
@@ -10,6 +10,7 @@ import '../../StockPublicStyle.less';
 
 const { RangePicker } = DatePicker;
 export default function RawMaterialStock(): React.ReactNode {
+    const params = useParams<{ id: string }>();
     const history = useHistory(),
         [current, setCurrent] = useState(1),
         [total, setTotal] = useState(100),
@@ -19,74 +20,80 @@ export default function RawMaterialStock(): React.ReactNode {
         [dateString, setDateString] = useState<any>([]),//时间字符串格式
         [keyword, setKeyword] = useState<any>('');//关键字搜索
     const [departmentId, setDepartmentId] = useState('');//部门
-    const [personnelId, setPersonnelId] = useState('');//人员
+    const [outStockStaffId, setPersonnelId] = useState('');//人员
+    const [Listdata, setListdata] = useState<any[]>([]);//列表数据
+    const [totalWeight, setTotalWeight] = useState<number>(0);//总重量
+    const [MaterialShortageTotalWeight, setMaterialShortageTotalWeight] = useState<number>(0);//缺料总重量
     const columns = [
         {
             title: '序号',
-            dataIndex: 'key',
+            dataIndex: 'id',
             width: 50,
+            render: (text: any, item: any, index: any) => {
+                console.log(item, 'item')
+                return <span>{index + 1}</span>
+            }
         },
         {
             title: '品名',
-            dataIndex: 'name',
+            dataIndex: 'productName',
             width: 120,
             render: (text: any) => <a>{text}</a>,
         }, {
             title: '状态',
-            dataIndex: 'receivingBatch',
+            dataIndex: 'outStockItemStatus',
             width: 120,
         }, {
             title: '最新状态变更',
-            dataIndex: 'key',
-            width: 120,
+            dataIndex: 'createTime',
+            width: 160,
         }, {
             title: '规格',
-            dataIndex: 'key',
+            dataIndex: 'spec',
             width: 120,
         }, {
             title: '标准',
-            dataIndex: 'key',
+            dataIndex: 'standard',
             width: 120,
         }, {
             title: '材质',
-            dataIndex: 'key',
+            dataIndex: 'materialTexture',
             width: 120,
         }, {
             title: '长度(mm)',
-            dataIndex: 'key',
+            dataIndex: 'length',
             width: 120,
         }, {
             title: '宽度(mm)',
-            dataIndex: 'key',
+            dataIndex: 'width',
             width: 120,
         }, {
             title: '重量(吨)',
-            dataIndex: 'key',
+            dataIndex: 'weight',
             width: 120,
         }, {
             title: '炉批号',
-            dataIndex: 'key',
+            dataIndex: 'furnaceBatch',
             width: 120,
         }, {
             title: '内部合同号',
-            dataIndex: 'key',
+            dataIndex: 'contractNumber',
             width: 120,
         }, {
             title: '塔型',
-            dataIndex: 'key',
+            dataIndex: 'productCategoryId',
             width: 120,
         }, {
             title: '塔杆号',
-            dataIndex: 'key',
+            dataIndex: 'productNumber',
             width: 120,
         }, {
             title: '出库人',
-            dataIndex: 'key',
+            dataIndex: 'outStockStaffId',
             width: 120,
         },
         {
             title: '操作',
-            dataIndex: 'key',
             width: 140,
             fixed: 'right' as FixedType,
             render: (_: undefined, record: object): React.ReactNode => (
@@ -97,85 +104,23 @@ export default function RawMaterialStock(): React.ReactNode {
             )
         }
     ]
-    const Listdata = [
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '2',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '3',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '4',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '15',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '6',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '17',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '51',
-            receivingBatch: '2021-1223-TT'
-        }, {
-            name: '仓库1',
-            key: '18',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '8',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '9',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '10',
-            receivingBatch: '2021-1223-TT'
-        }, {
-            name: '仓库1',
-            key: '31',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '51',
-            receivingBatch: '2021-1223-TT'
-        },
-    ]
     //获取列表数据
     const loadData = async () => {
         console.log('请求数据')
-        const data: any[] = await RequestUtil.get(`/tower-system/dictionary/allDictionary`, {
+        const data: any = await RequestUtil.get(`/tower-storage/outStock/detail`, {
             current,
-            pageSize,
+            size: pageSize,
             keyword,
-            dateString
+            id: params.id,
+            departmentId,
+            outStockStaffId,
+            selectName: keyword,
+            status,
+            updateTimeStart: dateString[0],
+            updateTimeEnd: dateString[1],
         });
+        setListdata(data.records);
+        setTotal(data.total);
     }
     // 重置
     const reset = () => {
@@ -261,7 +206,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={personnelId ? personnelId : '请选择'}
+                            value={outStockStaffId ? outStockStaffId : '请选择'}
                             onChange={(val) => { setPersonnelId(val) }}
                         >
                             <Select.Option
@@ -327,7 +272,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 >返回上一级</Button>
             </div>
             <div className="tip_public_Stock">
-                <div>总重量： 12334.232 吨    缺料总重量：123.123吨</div>
+                <div>总重量： {totalWeight} 吨    缺料总重量：{MaterialShortageTotalWeight} 吨</div>
             </div>
             <div className="page_public_Stock">
                 <Table
