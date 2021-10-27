@@ -1,14 +1,79 @@
 {
-    "servicecharge":[
+    "payInfoListHead": [
+        {
+            "title": "费用类型",
+            "dataIndex": "costType",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "标书费",
+                    "value": 0
+                },
+                {
+                    "label": "投标服务费",
+                    "value": 1
+                },
+                {
+                    "label": "投标保证金",
+                    "value": 2
+                },
+                {
+                    "label": "中标服务费",
+                    "value": 3
+                },
+                {
+                    "label": "杂费",
+                    "value": 4
+                }
+            ]
+        },
+        {
+            "title": "费用名称",
+            "dataIndex": "costName"
+        },
+        {
+            "title": "付款日期",
+            "dataIndex": "payTime"
+        },
+        {
+            "title": "金额",
+            "dataIndex": "sumMoney"
+        },
+        {
+            "title": "申请人",
+            "dataIndex": "applicantName"
+        },
+        {
+            "title": "申请时间",
+            "dataIndex": "applicantTime"
+        },
+        {
+            "title": "发票号",
+            "dataIndex": "invoiceNo"
+        },
+        {
+            "title": "发票时间",
+            "dataIndex": "invoiceTime"
+        },
+        {
+            "title": "付款单号",
+            "dataIndex": "payNumber"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark"
+        }
+    ],
+    "servicecharge": [
         {
             "title": "费用名称",
             "dataIndex": "costName",
-            "type":"string"
+            "type": "string"
         },
         {
             "title": "付款日期",
             "dataIndex": "",
-            "type":""
+            "type": ""
         },
         {
             "title": "金额",
@@ -17,54 +82,54 @@
         {
             "title": "申请人",
             "dataIndex": "applicantName",
-            "type":"string"
+            "type": "string"
         },
         {
             "title": "申请时间",
             "dataIndex": "applicantTime",
-            "type":"string"
+            "type": "string"
         },
         {
             "title": "发票号",
             "dataIndex": "invoiceNo",
-            "type":"string"
+            "type": "string"
         },
         {
             "title": "发票时间",
             "dataIndex": "invoiceTime",
-            "type":"string"
-        }, 
+            "type": "string"
+        },
         {
             "title": "中标包号",
             "dataIndex": "",
-            "type":""
-        }, 
+            "type": ""
+        },
         {
             "title": "中标价",
             "dataIndex": "",
-            "type":""
-        }, 
+            "type": ""
+        },
         {
             "title": "中标重量",
             "dataIndex": "",
-            "type":""
-        }, 
+            "type": ""
+        },
         {
             "title": "备注",
             "dataIndex": "remark",
-            "type":"string"
+            "type": "string"
         }
     ],
-    "promotiondetails":[
+    "promotiondetails": [
         {
             "title": "费用名称",
             "dataIndex": "costName",
-            "type":"string"
+            "type": "string"
         },
         {
             "title": "付款日期",
             "dataIndex": "",
-            "type":""
+            "type": ""
         },
         {
             "title": "金额",
@@ -73,47 +138,47 @@
         {
             "title": "申请人",
             "dataIndex": "applicantName",
-            "type":"string"
+            "type": "string"
         },
         {
             "title": "申请时间",
             "dataIndex": "applicantTime",
-            "type":"string"
+            "type": "string"
         },
         {
             "title": "付款单号",
             "dataIndex": "payNumber",
-            "type":"string"
+            "type": "string"
         },
         {
             "title": "投保证金利息",
             "dataIndex": "",
-            "type":""
+            "type": ""
         },
         {
             "title": "保证金退回日期",
             "dataIndex": "returnTime",
-            "type":"string"
+            "type": "string"
         },
         {
             "title": "保证金退回账户",
             "dataIndex": "return_bank_number",
-            "type":"string"
+            "type": "string"
         },
         {
             "title": "保证金退回金额",
             "dataIndex": "payMoney",
-            "type":"number"
+            "type": "number"
         },
         {
             "title": "保证金退回单位",
             "dataIndex": "payCompany",
-            "type":"string"
+            "type": "string"
         },
         {
             "title": "备注",
             "dataIndex": "remark",
-            "type":"string"
+            "type": "string"
         }
     ]
 }

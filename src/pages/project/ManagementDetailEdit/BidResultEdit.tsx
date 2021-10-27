@@ -151,18 +151,38 @@ export default function BidResultEdit(): JSX.Element {
                             }
                         ]
                     },
-                    // {
-                    //     title: "中标包号",
-                    //     dataIndex: ""
-                    // },
-                    // {
-                    //     title: "中标价(元)",
-                    //     dataIndex: ""
-                    // },
-                    // {
-                    //     title: "中标重量(吨)",
-                    //     dataIndex: ""
-                    // },
+                    {
+                        title: '中标包号',
+                        dataIndex: "packageNum",
+                        rules: [
+                            {
+                                required: true,
+                                message: "请输入中标包号..."
+                            }
+                        ]
+                    },
+                    {
+                        title: '中标价(元)',
+                        dataIndex: "bidMoney",
+                        type: "number",
+                        rules: [
+                            {
+                                required: true,
+                                message: "请输入中标价(元)..."
+                            }
+                        ]
+                    },
+                    {
+                        title: '中标重量(吨)',
+                        dataIndex: "bidWeight",
+                        type: "number",
+                        rules: [
+                            {
+                                required: true,
+                                message: "请输入中标重量(吨)..."
+                            }
+                        ]
+                    },
                     {
                         title: '是否中标',
                         dataIndex: "isBid",
