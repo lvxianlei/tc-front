@@ -6,15 +6,17 @@
         },
         {
             "title": "票据编号",
-            "dataIndex": "projectCode"
+            "dataIndex": "billNumber",
+            "type":"string"
         },
         {
             "title": "请款编号",
-            "dataIndex": ""
+            "dataIndex": "reqFundsNumber",
+            "type":"string"
         },
         {
             "title": "发票号",
-            "dataIndex": ""
+            "dataIndex": "invoiceNumber"
         },
         {
             "title": "关联收货单",
@@ -22,17 +24,17 @@
         },
         {
             "title": "票据金额",
-            "dataIndex": "ticketBasis"
+            "dataIndex": "invoiceAmount"
         },
         {
             "title": "开票单位",
-            "dataIndex": "ticketCompany",
+            "dataIndex": "invoiceUnit",
             "type": "string"
         },
         {
             "title": "收票日",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "collectInvoiceDate",
+            "type": "string"
         },
         {
             "title": "所属供应商",
@@ -40,65 +42,58 @@
         },
         {
             "title": "发票类型",
-            "dataIndex": "ticketType"
+            "dataIndex": "invoiceType",
+            "type": "string"
         },
         {
             "title": "状态",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "status"
         },
         {
             "title": "最新状态变更时间",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "updateTime",
+            "type": "string"
         }
     ],
     "bilinformation":[
         {
             "title": "票据编号",
-            "dataIndex": "projectCode",
-            "type": "string"
-        },
-        {
-            "title": "自动生成",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "billNumber",
+            "type":"string"
         },
         {
             "title": "所属供应商 ",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "supplierName",
+            "type": "string"
         },
         {
             "title": "开票单位 ",
-            "dataIndex": "ticketCompany",
+            "dataIndex": "invoiceUnit",
             "type": "string"
         },
         {
             "title": "发票号",
-            "dataIndex": "",
-            "type": "string"
+            "dataIndex": "invoiceNumber"
         },
         {
             "title": "发票类型",
-            "dataIndex": "ticketType",
-            "type": "integer"
+            "dataIndex": "invoiceType",
+            "type": "string"
         },
         {
             "title": "发票金额",
-            "dataIndex": "ticketBasis",
-            "type": "integer"
+            "dataIndex": "invoiceAmount",
+            "type": "number"
         },
         {
             "title": "关联收货单",
-            "dataIndex": "ticketBasis",
-            "type": "integer"
+            "dataIndex": "receiptVos"
         },
         {
             "title": "收票日",
-            "dataIndex": "",
-            "type": ""
-        }
+            "dataIndex": "collectInvoiceDate",
+            "type": "string"
+        },
     ]
    
    
