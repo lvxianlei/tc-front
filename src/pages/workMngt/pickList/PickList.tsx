@@ -27,10 +27,10 @@ export default function PickList(): React.ReactNode {
             dataIndex: 'taskNum'
         },
         {
-            key: 'taskNumber',
+            key: 'externalTaskNum',
             title: '任务单编号',
             width: 100,
-            dataIndex: 'taskNumber'
+            dataIndex: 'externalTaskNum'
         },
         {
             key: 'internalNumber',
@@ -39,10 +39,10 @@ export default function PickList(): React.ReactNode {
             dataIndex: 'internalNumber'
         },
         {
-            key: 'productCategoryName',
+            key: 'name',
             title: '塔型',
             width: 100,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'name'
         },
         {
             key: 'steelProductShape',
