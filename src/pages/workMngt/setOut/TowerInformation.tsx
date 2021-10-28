@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Space, DatePicker, Select, Button, Popconfirm, Input } from 'antd';
+import { Space, DatePicker, Select, Button, Popconfirm, Input, message } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -151,7 +151,10 @@ export default function TowerInformation(): React.ReactNode {
             <Popconfirm
                 title="确认提交?"
                 onConfirm={ () => {
-                    RequestUtil.post(`/tower-science/product/submit`, { productCategoryId: params.id });
+                    RequestUtil.post(`/tower-science/productCategory/submit`, { productCategoryId: params.id }).then(res => {
+                        message.success('提交成功');
+                        history.goBack();
+                    });
                 } }
                 okText="提交"
                 cancelText="取消"
