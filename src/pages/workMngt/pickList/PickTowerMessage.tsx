@@ -193,7 +193,7 @@ export default function PickTowerMessage(): React.ReactNode {
             requestData={{ productCategory: params.id }}
             extraOperation={
                 <Space>
-                <Button type="primary" ghost>导出</Button>
+                {/* <Button type="primary" ghost>导出</Button> */}
                 <Popconfirm
                     title="确认提交?"
                     onConfirm={ async () => {

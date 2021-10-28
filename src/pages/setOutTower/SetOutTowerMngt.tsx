@@ -210,7 +210,7 @@ export default function SetOutTowerMngt(): React.ReactNode {
             columns={columns}
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
-            extraOperation={<Button type="primary">导出</Button>}
+            // extraOperation={<Button type="primary">导出</Button>}
             searchFormItems={[
                 {
                     name: 'pattern',

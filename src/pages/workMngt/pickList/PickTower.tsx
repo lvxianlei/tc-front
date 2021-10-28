@@ -294,7 +294,7 @@ export default function PickTower(): React.ReactNode {
                 requestData={{ productCategoryId: params.id }}
                 extraOperation={
                     <Space>
-                    <Button type="primary">导出</Button>
+                    {/* <Button type="primary">导出</Button> */}
                     <Popconfirm
                         title="确认提交?"
                         onConfirm={ async ()=>{
