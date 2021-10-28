@@ -93,7 +93,7 @@ export default function PickCheckList(): React.ReactNode {
                 filterValue={ filterValue }
                 extraOperation={
                     <Space>
-                        <Button type='primary' ghost>导出</Button>
+                        {/* <Button type='primary' ghost>导出</Button> */}
                         <Popconfirm
                             title="确认完成校核?"
                             onConfirm={ async () => {
