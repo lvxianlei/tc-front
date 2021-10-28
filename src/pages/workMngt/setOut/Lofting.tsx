@@ -40,7 +40,7 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'segmentName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data',index, "segmentName"]} initialValue={ _ }>
-                    <Input size="small" onChange={ () => rowChange(index) }/>
+                    <Input size="small" onChange={ () => rowChange(index) } disabled/>
                 </Form.Item>
             )
         },

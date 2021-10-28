@@ -30,7 +30,7 @@ export interface TowerLoftingAssignState {
 interface IAppointed {
     readonly productCategoryName?: string;
     readonly productCategoryId?: string;
-    readonly pattern?: string;
+    readonly pattern?: string | number;
     readonly sectionNum?: number;
 }
 interface IAppointedList {
@@ -290,7 +290,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                 { this.state.appointed?.productCategoryName }
                             </Descriptions.Item>
                             <Descriptions.Item label="模式" span={ 3 }>
-                                { this.state.appointed?.pattern }
+                                { this.state.appointed?.pattern === 1 ? '新放' :  this.state.appointed?.pattern === 2 ? '重新出卡' : '套用' }
                             </Descriptions.Item>
                             <Descriptions.Item label="段数" span={ 3 }>
                                 { this.state.appointed?.sectionNum || 0 }
