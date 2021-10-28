@@ -1113,7 +1113,7 @@
       "authority": "approvalm"
     },
     { // 工作管理-螺栓列表-校核
-      "name": "螺栓清单",
+      "name": "校核",
       "path": "/workMngt/boltList/boltCheck/:id",
       "module": "./pages/workMngt/bolt/BoltCheck",
       "exact": true,
