@@ -180,8 +180,8 @@ export default function PickTower(): React.ReactNode {
                             })
                             form.setFieldsValue({detailData:detailData});
                             
-                    }} disabled={record.materialStatus===3||AuthUtil.getUserId()!==record.materialUser}>配段</Button>
-                    <Button type='link' onClick={()=>{history.push(`/workMngt/pickList/pickTower/${params.id}/pickTowerDetail/${record.id}`)}} disabled={record.materialStatus!==2}>杆塔提料明细</Button>
+                    }} disabled={record.materialStatus!==2||AuthUtil.getUserId()!==record.materialUser}>配段</Button>
+                    <Button type='link' onClick={()=>{history.push(`/workMngt/pickList/pickTower/${params.id}/pickTowerDetail/${record.id}`)}} disabled={record.materialStatus!==3}>杆塔提料明细</Button>
                 </Space>
             )
         }
