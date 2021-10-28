@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Button, Form, Modal, Row, Col, Popconfirm, Select, message, InputNumber } from 'antd'
+import { Space, Input, DatePicker, Button, Form, Modal, Row, Col, Popconfirm, Select, message, InputNumber, TreeSelect } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
 import { Link, useHistory, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
+import { TreeNode } from 'antd/lib/tree-select';
+import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
+import styles from './pick.module.less';
+import useRequest from '@ahooksjs/use-request';
 export interface IDetail {
     productCategory?: string;
     productCategoryName?: string;
@@ -20,12 +24,19 @@ export interface IMaterialDetail{
 export default function PickTower(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [refresh, setRefresh] = useState<boolean>(false);
+    const [matchLeader, setMatchLeader] = useState<any|undefined>([]);
+    const [department, setDepartment] = useState<any|undefined>([]);
     const params = useParams<{ id: string }>()
     const history = useHistory();
     const [form] = Form.useForm();
     const [filterValue, setFilterValue] = useState({});
     const [productId, setProductId] = useState('');
     const [detail, setDetail] = useState<IDetail>({});
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
+        setDepartment(departmentData);
+        resole(data)
+    }), {})
     const handleModalOk = async () => {
         try {
             const data = await form.validateFields()
@@ -185,6 +196,38 @@ export default function PickTower(): React.ReactNode {
         labelCol: { span: 4 },
         wrapperCol: { span: 17 }
     };
+    const onDepartmentChange = async (value: Record<string, any>) => {
+        if(value){
+            const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
+            setMatchLeader(userData.records);
+        }else{
+            
+            setMatchLeader([]);
+        }
+       
+    }
+    const renderTreeNodes = (data:any) =>
+    data.map((item:any) => {
+        if (item.children) {
+            item.disabled = true;
+            return (
+            <TreeNode key={item.id} title={item.title} value={item.id} disabled={item.disabled} className={styles.node}>
+                {renderTreeNodes(item.children)}
+            </TreeNode>
+            );
+        }
+        return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
+    });
+    const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
+        roles.forEach((role: any & SelectDataNode): void => {
+            role.value = role.id;
+            role.isLeaf = false;
+            if (role.children && role.children.length > 0) {
+                wrapRole2DataNode(role.children);
+            }
+        });
+        return roles;
+    }
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -290,10 +333,24 @@ export default function PickTower(): React.ReactNode {
                         </Select>
                     },
                     {
-                        name: 'loftingUser',
-                        label:'配段人',
-                        children: <Input/>
-                    }
+                        name: 'materialUserDepartment',
+                        label: '配段人',
+                        children:  <TreeSelect style={{width:'200px'}}
+                                        allowClear
+                                        onChange={ onDepartmentChange }
+                                    >
+                                        {renderTreeNodes(wrapRole2DataNode( department ))}
+                                    </TreeSelect>
+                    },
+                    {
+                        name: 'materialUser',
+                        label:'',
+                        children:   <Select style={{width:'100px'}} allowClear>
+                                        { matchLeader && matchLeader.map((item:any)=>{
+                                            return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                        }) }
+                                    </Select>
+                    },
                 ]}
             />
         </>

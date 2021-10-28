@@ -9,10 +9,11 @@ import { TreeNode } from 'antd/lib/tree-select';
 import useRequest from '@ahooksjs/use-request';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import AuthUtil from '../../../utils/AuthUtil';
+import { useLocation } from 'react-router-dom';
 
 export default function EvaluationList(): React.ReactNode {
-
     const [ refresh, setRefresh ] = useState(false);
+    const location = useLocation<{ state: {} }>();
 
     const columns = [
         {
@@ -134,6 +135,7 @@ export default function EvaluationList(): React.ReactNode {
         headTabs={ [] }
         // extraOperation={ <Button type="primary" ghost>导出</Button> }
         refresh={ refresh }
+        requestData={ { status: location.state } }
         searchFormItems={ [
             {
                 name: 'status',

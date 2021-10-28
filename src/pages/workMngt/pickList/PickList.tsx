@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Button, Form, Modal, Select } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { CommonTable, Page } from '../../common';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 
@@ -11,6 +11,7 @@ export default function PickList(): React.ReactNode {
     const history = useHistory();
     const [taskId,setTaskId] = useState('');
     const [filterValue, setFilterValue] = useState({});
+    const location = useLocation<{ state: {} }>();
     const columns = [
         {
             key: 'index',
@@ -214,6 +215,7 @@ export default function PickList(): React.ReactNode {
                 filterValue={filterValue}
                 onFilterSubmit={onFilterSubmit}
                 extraOperation={<Button type="primary">导出</Button>}
+                requestData={ { status: location.state } }
                 searchFormItems={[
                     {
                         name: 'statusUpdateTime',

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Select, Button, Popconfirm, Form, Row, Col, TreeSelect } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { Page } from '../common';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { FixedType } from 'rc-table/lib/interface';
@@ -10,12 +10,12 @@ import Assign from './Assign';
 import RequestUtil from '../../utils/RequestUtil';
 import { TreeNode } from 'rc-tree-select';
 import useRequest from '@ahooksjs/use-request';
-import { useForm } from 'antd/es/form/Form';
 
 
 export default function AssessmentTaskList(): React.ReactNode {
     const [ refresh, setRefresh ] = useState<boolean>(false);
     const [ filterValue, setFilterValue ] = useState({});
+    const location = useLocation<{ state: {} }>();
 
     const columns = [
         {
@@ -171,6 +171,7 @@ export default function AssessmentTaskList(): React.ReactNode {
         columns={ columns }
         headTabs={ [] }
         // extraOperation={ <Button type="primary" ghost>导出</Button> }
+        requestData={ { status: location.state } }
         refresh={ refresh }
         searchFormItems={ [
             {
