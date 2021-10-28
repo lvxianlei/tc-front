@@ -9,7 +9,7 @@ import TextArea from 'antd/lib/input/TextArea';
 
 const tableColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '操作部门', dataIndex: 'createDeptName', key: 'createDeptName', },
+    { title: '操作部门', dataIndex: 'ptcreateDeName', key: 'createDeptName', },
     { title: '操作人', dataIndex: 'createUserName', key: 'createUserName' },
     { title: '操作时间', dataIndex: 'createTime', key: 'createTime' },
     { title: '任务状态', dataIndex: 'currentStatus', key: 'currentStatus', render: (value: number, record: object): React.ReactNode => {

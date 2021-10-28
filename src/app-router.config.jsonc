@@ -657,6 +657,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 驾驶舱-原材料看板-价格维护
+      "name": "价格维护",
+      "path": "/stock/viewRawMaterial/priceMaintain",
+      "module": "./pages/stock/viewRawMaterial/priceMaintain",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 驾驶舱-收货单看板
       "name": "收货单看板",
       "path": "/stock/viewReceivingNote",
@@ -687,14 +694,14 @@
     },
     {//供应商管理-创建
       "name": "供应商管理创建",
-      "path": "/supplier-mngt/index/supplierAdd",
+      "path": "/supplier-mngt/supplierAdd",
       "module": "./pages/supplier-mngt/supplierAdd",
       "exact": true,
       "authority": "approvalm"
     },
     {//供应商管理-编辑
       "name": "供应商管理编辑",
-      "path": "/supplier-mngt/index/supplierEdit",
+      "path": "/supplier-mngt/supplierEdit",
       "module": "./pages/supplier-mngt/supplierEdit",
       "exact": true,
       "authority": "approvalm"
