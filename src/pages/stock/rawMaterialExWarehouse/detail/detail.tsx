@@ -39,7 +39,6 @@ export default function RawMaterialStock(): React.ReactNode {
             dataIndex: 'id',
             width: 50,
             render: (text: any, item: any, index: any) => {
-                console.log(item, 'item')
                 return <span>{index + 1}</span>
             }
         },
@@ -52,9 +51,10 @@ export default function RawMaterialStock(): React.ReactNode {
             title: '状态',
             dataIndex: 'outStockItemStatus',
             width: 120,
+            render: (text: any) => text == 0 ? '待出库' : text == 1 ? '已出库' : '缺料中'
         }, {
             title: '最新状态变更',
-            dataIndex: 'createTime',
+            dataIndex: 'updateTime',
             width: 160,
         }, {
             title: '规格',
@@ -98,151 +98,138 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 120,
         }, {
             title: '出库人',
-            dataIndex: 'outStockStaffId',
+            dataIndex: 'outStockUserName',
             width: 120,
         },
         {
             title: '操作',
-            width: 140,
+            width: 80,
             fixed: 'right' as FixedType,
-            render: (_: undefined, record: object): React.ReactNode => (
+            render: (_: undefined, record: any): React.ReactNode => (
+                // 0待出库 1 已出库 2 缺料中
                 <Space direction="horizontal" size="small">
-                    <Button type='link' onClick={() => { setIsOutLibraryModal(true) }}>出库</Button>
-                    <Button type='link' onClick={() => { setIsDetailModal(true) }}>详情</Button>
+                    {record.outStockItemStatus == 0 ? <Button type='link' onClick={() => { IssueOperation(record) }}>出库</Button> : null}
+                    {record.outStockItemStatus == 1 ? <Button type='link' onClick={() => { getDetailData(record.id) }}>详情</Button> : null}
                 </Space>
             )
         }
     ];//列表表头
+
     const supplierColumns = [
         {
             title: '收货单号',
-            dataIndex: 'id',
-            width: 50,
-            render: (text: any, item: any, index: any) => {
-                console.log(item, 'item')
-                return <span>{index + 1}</span>
-            }
+            dataIndex: 'receiveNumber',
+            width: 120,
         },
         {
             title: '供应商',
-            dataIndex: 'productName',
+            dataIndex: 'supplierName',
             width: 120,
-            render: (text: any) => <a>{text}</a>,
         }, {
             title: '联系人',
-            dataIndex: 'outStockItemStatus',
+            dataIndex: 'contactsUser',
             width: 120,
         }, {
             title: '联系电话',
-            dataIndex: 'createTime',
+            dataIndex: 'contactsPhone',
             width: 160,
         }, {
             title: '合同编号',
-            dataIndex: 'spec',
+            dataIndex: 'contractNumber',
             width: 120,
         }
     ];//详情-供应商列表表头
     const WarehousingColumns = [
         {
             title: '材质名称',
-            dataIndex: 'id',
-            width: 50,
-            render: (text: any, item: any, index: any) => {
-                console.log(item, 'item')
-                return <span>{index + 1}</span>
-            }
+            dataIndex: 'materialTexture',
+            width: 120,
         },
         {
             title: '标准',
-            dataIndex: 'productName',
-            width: 120,
-            render: (text: any) => <a>{text}</a>,
-        }, {
-            title: '规格',
-            dataIndex: 'outStockItemStatus',
-            width: 120,
-        }, {
-            title: '材质',
-            dataIndex: 'createTime',
-            width: 160,
-        }, {
-            title: '长度',
-            dataIndex: 'spec',
-            width: 120,
-        }, {
-            title: '宽度',
             dataIndex: 'standard',
             width: 120,
         }, {
-            title: '入库人',
-            dataIndex: 'materialTexture',
+            title: '规格',
+            dataIndex: 'spec',
             width: 120,
         }, {
-            title: '入库时间',
+            title: '材质',
+            dataIndex: 'materialTexture',
+            width: 160,
+        }, {
+            title: '长度',
             dataIndex: 'length',
             width: 120,
         }, {
-            title: '炉批号',
+            title: '宽度',
             dataIndex: 'width',
             width: 120,
         }, {
-            title: '仓库',
-            dataIndex: 'weight',
+            title: '入库人',
+            dataIndex: 'receiveStockUser',
             width: 120,
         }, {
-            title: '库位',
+            title: '入库时间',
+            dataIndex: 'receiveStockTime',
+            width: 120,
+        }, {
+            title: '炉批号',
             dataIndex: 'furnaceBatch',
             width: 120,
         }, {
+            title: '仓库',
+            dataIndex: 'warehouseName',
+            width: 120,
+        }, {
+            title: '库位',
+            dataIndex: 'locatorName',
+            width: 120,
+        }, {
             title: '库区',
-            dataIndex: 'contractNumber',
+            dataIndex: 'reservoirName',
             width: 120,
         }, {
             title: '备注',
-            dataIndex: 'productCategoryId',
+            dataIndex: 'remark',
             width: 120,
         }
     ];//详情-入库表头
     const ExWarehousingColumns = [
         {
             title: '领料编号',
-            dataIndex: 'id',
-            width: 50,
-            render: (text: any, item: any, index: any) => {
-                console.log(item, 'item')
-                return <span>{index + 1}</span>
-            }
+            dataIndex: 'pickingNumber',
+            width: 120,
         },
         {
             title: '任务编号',
-            dataIndex: 'productName',
+            dataIndex: 'taskNumber',
             width: 120,
-            render: (text: any) => <a>{text}</a>,
         }, {
             title: '生产批次',
-            dataIndex: 'outStockItemStatus',
+            dataIndex: 'productionBatchNumber',
             width: 120,
         }, {
             title: '申请人',
-            dataIndex: 'createTime',
+            dataIndex: 'applyStaffName',
             width: 160,
         }, {
             title: '出库人',
-            dataIndex: 'spec',
+            dataIndex: 'outStockUserName',
             width: 120,
         }, {
             title: '出库时间',
-            dataIndex: 'standard',
+            dataIndex: 'updateTime',
             width: 120,
         },
     ];//详情-出库表头
+
     const OutLibraryColumns = [
         {
             title: '序号',
             dataIndex: 'id',
             width: 50,
             render: (text: any, item: any, index: any) => {
-                console.log(item, 'item')
                 return <span>{index + 1}</span>
             }
         },
@@ -319,7 +306,6 @@ export default function RawMaterialStock(): React.ReactNode {
             dataIndex: 'id',
             width: 50,
             render: (text: any, item: any, index: any) => {
-                console.log(item, 'item')
                 return <span>{index + 1}</span>
             }
         }, {
@@ -370,7 +356,7 @@ export default function RawMaterialStock(): React.ReactNode {
     ];//出库弹框-缺料申请原材料信息表头
 
     //获取列表数据
-    const loadData = async () => {
+    const getLoadData = async () => {
         console.log('请求数据')
         const data: any = await RequestUtil.get(`/tower-storage/outStock/detail`, {
             current,
@@ -386,6 +372,52 @@ export default function RawMaterialStock(): React.ReactNode {
         });
         setListdata(data.records);
         setTotal(data.total);
+    }
+    //获取列表详情数据数据
+    const getDetailData = async (id: any) => {
+        const data: any = await RequestUtil.get(`/tower-storage/outStock/detail/${id}`);
+        let supplierObj = {
+            receiveNumber: data.receiveNumber,
+            supplierName: data.supplierName,
+            contactsUser: data.contactsUser,
+            contactsPhone: data.contactsPhone,
+            contractNumber: data.contractNumber,
+            key: 1,
+        }
+        let WarehousingObj = {
+            materialTexture: data.materialTexture,
+            spec: data.spec,
+            standard: data.standard,
+            receiveNumber: data.receiveNumber,
+            length: data.length,
+            width: data.width,
+            receiveStockUser: data.receiveStockUser,
+            receiveStockTime: data.receiveStockTime,
+            furnaceBatch: data.furnaceBatch,
+            warehouseName: data.warehouseName,
+            locatorName: data.locatorName,
+            reservoirName: data.reservoirName,
+            remark: data.remark,
+            key: 2,
+        }
+        let ExwarehousingObj = {
+            pickingNumber: data.pickingNumber,
+            taskNumber: data.taskNumber,
+            productionBatchNumber: data.productionBatchNumber,
+            applyStaffName: data.applyStaffName,
+            outStockUserName: data.outStockUserName,
+            updateTime: data.updateTime,
+            key: 3,
+        }
+        setSupplierListdata([supplierObj])
+        setWarehousingListdata([WarehousingObj])
+        setExWarehousingListdata([ExwarehousingObj])
+        setIsDetailModal(true)
+    }
+    // 出库操作
+    const IssueOperation = async (record: any) => {
+        const data: any = await RequestUtil.get(`/tower-storage/materialStock`);
+        setIsOutLibraryModal(true)
     }
     // 重置
     const reset = () => {
@@ -410,7 +442,7 @@ export default function RawMaterialStock(): React.ReactNode {
     }
     //进入页面刷新
     useEffect(() => {
-        loadData()
+        getLoadData()
     }, [current, pageSize])
     return (
         <div id="RawMaterialStock">
@@ -523,7 +555,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Button
                             className="btn"
                             type="primary"
-                            onClick={() => { loadData() }}
+                            onClick={() => { getLoadData() }}
                         >查询</Button>
                         <Button
                             className="btn"
@@ -606,11 +638,6 @@ export default function RawMaterialStock(): React.ReactNode {
                             rowClassName={(item, index) => {
                                 return index % 2 ? 'aaa' : ''
                             }}
-                            scroll={
-                                {
-                                    y: 400
-                                }
-                            }
                             pagination={false}
                         />
                     </div>
@@ -625,11 +652,6 @@ export default function RawMaterialStock(): React.ReactNode {
                             rowClassName={(item, index) => {
                                 return index % 2 ? 'aaa' : ''
                             }}
-                            scroll={
-                                {
-                                    y: 400
-                                }
-                            }
                             pagination={false}
                         />
                     </div>
@@ -644,11 +666,6 @@ export default function RawMaterialStock(): React.ReactNode {
                             rowClassName={(item, index) => {
                                 return index % 2 ? 'aaa' : ''
                             }}
-                            scroll={
-                                {
-                                    y: 400
-                                }
-                            }
                             pagination={false}
                         />
                     </div>

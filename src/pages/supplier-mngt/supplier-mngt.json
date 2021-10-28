@@ -1,70 +1,3 @@
-<<<<<<< HEAD
-{
-    "supplierMngt": [
-        {
-            "title": "序号",
-            "dataIndex": "index"
-        },
-        {
-            "title": "供应商编号",
-            "dataIndex": "supplierCode"
-        },
-        {
-            "title": "供应商类型",
-            "dataIndex": "supplierType"
-        },
-        {
-            "title": "供应商名称",
-            "dataIndex": "supplierName"
-        },
-        {
-            "title": "添加时间",
-            "dataIndex": "addTime"
-        },
-        {
-            "title": "联系人",
-            "dataIndex": "contactMan"
-        },
-        {
-            "title": "联系电话",
-            "dataIndex": "contactNumber"
-        },
-        {
-            "title": "质量保证体系",
-            "dataIndex": "qualityAssurance"
-        },
-        {
-            "title": "供货产品",
-            "dataIndex": "supplyProducts"
-        },
-        {
-            "title": "开户银行",
-            "dataIndex": "depositBank"
-        }
-    ],
-    "AddEditDetail":[
-        {
-            "title": "序号",
-            "dataIndex": "index"
-        },
-        {
-            "title": "操作部门",
-            "dataIndex": "createDeptName"
-        },
-        {
-            "title": "操作人",
-            "dataIndex": "createUserName"
-        },
-        {
-            "title": "操作时间",
-            "dataIndex": "createTime"
-        },
-        {
-            "title": "操作",
-            "dataIndex": "operation"
-        }
-    ]
-=======
 {
     "supplierMngt": [
         {
@@ -104,5 +37,4 @@
             "dataIndex": "depositBank"
         }
     ]
->>>>>>> 25ed075f42dd4f88cf9cc91386a97f3540db2079
 }

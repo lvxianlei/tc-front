@@ -25,7 +25,7 @@ export default function RawMaterialStock(): React.ReactNode {
         [Listdata, setListdata] = useState<any[]>([]),//列表数据
         [weight, setWeight] = useState<number>(0),//合计重量
         [quantity, setQuantity] = useState<number>(0);//合计数量
-        console.log((ApplicationContext.get().dictionaryOption as any)["111"],'ssss')
+        // console.log((ApplicationContext.get().dictionaryOption as any)["111"],'ssss')
     const columns = [
         {
             title: '序号',
