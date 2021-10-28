@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Space, DatePicker, Select, Button, Popconfirm } from 'antd';
+import { Space, DatePicker, Select, Button, Popconfirm, Input, message } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -151,14 +151,17 @@ export default function TowerInformation(): React.ReactNode {
             <Popconfirm
                 title="确认提交?"
                 onConfirm={ () => {
-                    RequestUtil.post(`/tower-science/product/submit`, { productCategoryId: params.id });
+                    RequestUtil.post(`/tower-science/productCategory/submit`, { productCategoryId: params.id }).then(res => {
+                        message.success('提交成功');
+                        history.goBack();
+                    });
                 } }
                 okText="提交"
                 cancelText="取消"
             >
                 <Button type="primary" ghost>提交</Button>
             </Popconfirm>
-            <TowerLoftingAssign id={ params.id } update={ () => setRefresh(!refresh) } />
+            <TowerLoftingAssign id={ params.id } update={ () => setRefresh(true) } />
             <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
         </Space> }
         searchFormItems={ [
@@ -181,16 +184,12 @@ export default function TowerInformation(): React.ReactNode {
             {
                 name: 'loftingUser',
                 label: '放样人',
-                children: <Select style={{ width: '120px' }} placeholder="请选择">
-                    <Select.Option value="0" key="0">放样人</Select.Option>
-                </Select>
+                children: <Input placeholder="请输入" />
             },
             {
                 name: 'checkUser',
                 label: '校核人',
-                children: <Select style={{ width: '120px' }} placeholder="请选择">
-                    <Select.Option value="0" key="0">校核人</Select.Option>
-                </Select>
+                children: <Input placeholder="请输入" />
             }
         ] }
         onFilterSubmit = { (values: Record<string, any>) => {

@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
-import { Button, Col, Pagination, Row, Select, TableColumnProps, Table, } from 'antd'
+import { Button, Pagination, TableColumnProps, Table, } from 'antd'
 import RequestUtil from "../../../utils/RequestUtil"
 import { RouteProps } from '../public'
 import WarehouseModal from './WarehouseModal'
-const { Option } = Select;
 const Warehouse = (props: RouteProps) => {
     // const history = useHistory()
     const [columnsData, setColumnsData] = useState([]);
@@ -62,16 +61,24 @@ const Warehouse = (props: RouteProps) => {
                 return (
                     <div className='operation'>
                         <span
+                            className='yello'
                             onClick={() => {
                                 setIsModal(true)
                                 setId(item.id)
                             }}
                         >编辑</span>
-                        <span>删除</span>
+                        <span
+                            className='yello'
+                            onClick={() => {
+                                setIsModal(true)
+                                setId(item.id)
+                            }}
+                        >删除</span>
                     </div>
                 )
             }
-        }]
+        }
+    ]
     useEffect(() => {
         getColumnsData()
     }, [current, size]);
@@ -107,6 +114,9 @@ const Warehouse = (props: RouteProps) => {
                         >创建</Button>
                         <Button
                             className='func_right_item'
+                            onClick={() => {
+                                props.history.go(-1)
+                            }}
                         >返回上一级</Button>
                     </div>
                 </div>
@@ -133,12 +143,15 @@ const Warehouse = (props: RouteProps) => {
                     />
                 </div>
             </div>
-            <WarehouseModal
-                {...props}
-                isModal={isModal}
-                id={id}
-                cancelModal={cancelModal}
-            />
+            {
+                isModal ?
+                    <WarehouseModal
+                        {...props}
+                        isModal={isModal}
+                        id={id}
+                        cancelModal={cancelModal}
+                    /> : null
+            }
         </div>
     )
 }

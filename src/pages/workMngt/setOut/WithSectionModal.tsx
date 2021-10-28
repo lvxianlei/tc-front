@@ -4,7 +4,7 @@
  * @description 工作管理-放样列表-杆塔配段-配段
 */
 import React from 'react';
-import { Button, Space, Modal, Form, Input, FormInstance, Descriptions } from 'antd';
+import { Button, Space, Modal, Form, Input, FormInstance, Descriptions, message } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './TowerLoftingAssign.module.less';
@@ -70,26 +70,29 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                 const productSegmentVOList = this.state.detailData?.productSegmentVOList;
                 value.productCategoryId = this.state.detailData?.productCategoryId;
                 value.productId = this.state.detailData?.productId;
-                value.productSegmentListDTOList = value.productSegmentVOList?.map((items: IProductSegmentList, index: number) => {
-                    if(items) {
-                        return {
-                            id: productSegmentVOList && productSegmentVOList[index].id,
-                            name: productSegmentVOList && productSegmentVOList[index].name,
-                            count: items.count
+                if(value.productSegmentVOList) {
+                    value.productSegmentListDTOList = value.productSegmentVOList?.map((items: IProductSegmentList, index: number) => {
+                        if(items) {
+                            return {
+                                id: productSegmentVOList && productSegmentVOList[index].id,
+                                name: productSegmentVOList && productSegmentVOList[index].name,
+                                count: items.count
+                            }
+                        } else {
+                            return undefined
                         }
-                    } else {
-                        return undefined
-                    }
-                });
-                value.productSegmentListDTOList = value.productSegmentListDTOList.filter((item: IProductSegmentList)=>{ return item !== undefined });
-                RequestUtil.post(path, { ...value }).then(res => {
-                    this.props.updateList();
-                    this.modalCancel();
-                });
+                    });
+                    value.productSegmentListDTOList = value.productSegmentListDTOList.filter((item: IProductSegmentList)=>{ return item !== undefined });
+                    RequestUtil.post(path, { ...value }).then(res => {
+                        this.props.updateList();
+                        this.modalCancel();
+                    }); 
+                } else {
+                    message.warning('暂无段名信息，无法保存')
+                }
             })
         }
     }
-
 
      /**
      * @description Renders AbstractDetailComponent

@@ -43,64 +43,64 @@ const AngleSteel = (props: RouteProps) => {
             dataIndex: 'operation',
             align: 'center',
         }]
-        const column: TableColumnProps<object>[] = [
-            {
-                key: 'index',
-                title: '序号',
-                dataIndex: 'index',
-                width: 50,
-                render: (text, item, index) => {
-                    return <span>{index + 1}</span>
-                }
-            },
-            {
-                key: 'policy',
-                title: '材质',
-                dataIndex: 'materialTexture',
-            },
-            {
-                key: 'thickness',
-                title: "厚度mm",
-                dataIndex: "thickness",
-            },
-            {
-                key: 'width',
-                title: "宽度mm",
-                dataIndex: "width",
-            },
-            {
-                key: 'clampLoss',
-                title: "夹钳总耗损mm",
-                dataIndex: "clampLoss",
-            },
-            {
-                key: 'edgeLoss',
-                title: "每刀口耗损mm",
-                dataIndex: "edgeLoss",
-            },
-            {
-                key: 'description',
-                title: "备注",
-                dataIndex: "description",
-            },
-            {
-                key: 'operation',
-                title: '操作',
-                dataIndex: 'operation',
-                align: 'center',
-                render: (_text: any, item: any, index: number): React.ReactNode => {
-                    return (
-                        <div className='operation'>
-                            <span
-                                onClick={() => {
-                                    setIsModal(true)
-                                    setId(item.id)
-                                }}
-                            >编辑</span>
-                        </div>
-                    )
-                }
-            }]
+        // const column: TableColumnProps<object>[] = [
+        //     {
+        //         key: 'index',
+        //         title: '序号',
+        //         dataIndex: 'index',
+        //         width: 50,
+        //         render: (text, item, index) => {
+        //             return <span>{index + 1}</span>
+        //         }
+        //     },
+        //     {
+        //         key: 'materialTexture',
+        //         title: '材质',
+        //         dataIndex: 'materialTexture',
+        //     },
+        //     {
+        //         key: 'thickness',
+        //         title: "厚度mm",
+        //         dataIndex: "thickness",
+        //     },
+        //     {
+        //         key: 'width',
+        //         title: "宽度mm",
+        //         dataIndex: "width",
+        //     },
+        //     {
+        //         key: 'clampLoss',
+        //         title: "夹钳总耗损mm",
+        //         dataIndex: "clampLoss",
+        //     },
+        //     {
+        //         key: 'edgeLoss',
+        //         title: "每刀口耗损mm",
+        //         dataIndex: "edgeLoss",
+        //     },
+        //     {
+        //         key: 'description',
+        //         title: "备注",
+        //         dataIndex: "description",
+        //     },
+        //     {
+        //         key: 'operation',
+        //         title: '操作',
+        //         dataIndex: 'operation',
+        //         align: 'center',
+        //         render: (_text: any, item: any, index: number): React.ReactNode => {
+        //             return (
+        //                 <div className='operation'>
+        //                     <span
+        //                         onClick={() => {
+        //                             setIsModal(true)
+        //                             setId(item.id)
+        //                         }}
+        //                     >编辑</span>
+        //                 </div>
+        //             )
+        //         }
+        //     }]
     useEffect(() => {
         getColumnsData()
     }, [current, size]);
@@ -123,7 +123,7 @@ const AngleSteel = (props: RouteProps) => {
                     <div className='func'>
                     <span>配料基础配置</span>
                     </div>
-                    {/* <div className='func_right'>
+                    <div className='func_right'>
                         <Button
                             className='func_right_item'
                             onClick={() => {
@@ -134,7 +134,7 @@ const AngleSteel = (props: RouteProps) => {
                         <Button
                             className='func_right_item'
                         >返回上一级</Button>
-                    </div> */}
+                    </div>
                 </div>
                 <Table
                     className='public_table'
@@ -159,7 +159,7 @@ const AngleSteel = (props: RouteProps) => {
                     />
                 </div>
             </div>
-           
+          
         </div>
     )
 

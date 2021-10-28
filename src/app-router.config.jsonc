@@ -628,7 +628,6 @@
       "exact": true,
       "authority": "approvalm_edit"
     },
-
     //rd
     { // 驾驶舱-计划跟踪
       "name": "计划跟踪",
@@ -672,6 +671,41 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { //询价任务
+      "name": "询价任务",
+      "path": "/enquiryTask/index",
+      "module": "./pages/enquiryTask/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    {//供应商管理
+      "name": "供应商管理",
+      "path": "/supplier-mngt/index",
+      "module": "./pages/supplier-mngt/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    {//供应商管理-创建
+      "name": "供应商管理创建",
+      "path": "/supplier-mngt/index/supplierAdd",
+      "module": "./pages/supplier-mngt/supplierAdd",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    {//供应商管理-编辑
+      "name": "供应商管理编辑",
+      "path": "/supplier-mngt/index/supplierEdit",
+      "module": "./pages/supplier-mngt/supplierEdit",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    {//供应商管理-详情
+      "name": "供应商管理详情",
+      "path": "/supplier-mngt/supplierDetail",
+      "module": "./pages/supplier-mngt/supplierDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 库存管理-原材料库存
       "name": "原材料库存",
       "path": "/stock/rawMaterialStock",
@@ -700,13 +734,12 @@
       "exact": true,
       "authority": "approvalm"
     },
-    
     { // 库存管理-原材料出-详情
-        "name": "原材料出库详情",
-        "path": "/stock/rawMaterialExWarehouse/detail/:id",
-        "module": "./pages/stock/rawMaterialExWarehouse/detail/detail",
-        "exact": true,
-        "authority": "approvalm"
+      "name": "原材料出库详情",
+      "path": "/stock/rawMaterialExWarehouse/detail/:id",
+      "module": "./pages/stock/rawMaterialExWarehouse/detail/detail",
+      "exact": true,
+      "authority": "approvalm"
     },
     { // 库存管理-余料入库
       "name": "余料入库",
@@ -1223,6 +1256,21 @@
       "name": "工作台",
       "path": "/workBench/workBenchMngt",
       "module": "./pages/workBench/WorkBenchMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    //财务管理
+    { // 票据管理
+      "name": "工作台",
+      "path": "/financial/bill",
+      "module": "./pages/financial/Bill/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 请款申请
+      "name": "工作台",
+      "path": "/financial/prepare",
+      "module": "./pages/financial/Prepare/index",
       "exact": true,
       "authority": "approvalm"
     }

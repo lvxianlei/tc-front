@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Col, Pagination, Row, Select, TableColumnProps,Table } from 'antd'
 const { Option } = Select;
-const AngleSteel = (): React.ReactNode => {
+const SecuritySetting = (): React.ReactNode => {
     // const history = useHistory()
     const [columnsData, setColumnsData] = useState([]);
     const [total, setTotal] = useState(0);
@@ -213,4 +213,4 @@ const AngleSteel = (): React.ReactNode => {
     )
 }
 
-export default AngleSteel;
+export default SecuritySetting;
