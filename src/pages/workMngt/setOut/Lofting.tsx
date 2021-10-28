@@ -36,7 +36,7 @@ export default function Lofting(): React.ReactNode {
             key: 'segmentName',
             title: '段名',
             width: 150,
-            editable: true,
+            editable: false,
             dataIndex: 'segmentName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data',index, "segmentName"]} initialValue={ _ }>
@@ -406,7 +406,7 @@ export default function Lofting(): React.ReactNode {
                             title="确认删除?"
                             onConfirm={ () => RequestUtil.delete(`/tower-science/productStructure?productStructureId=${ record.id }`).then(res => {
                                 message.success('删除成功');
-                                setRefresh(!refresh);
+                                history.go(0);
                             }) }
                             okText="确认"
                             cancelText="取消"
@@ -504,6 +504,11 @@ export default function Lofting(): React.ReactNode {
                                 form.resetFields();
                                 setRefresh(!refresh);
                             });
+                        } else {
+                            setColumns(columnsSetting);
+                            setEditorLock('编辑');
+                            setRowChangeList([]);    
+                            form.resetFields();
                         }
                     }
                 } }>{ editorLock }</Button>

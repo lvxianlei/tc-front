@@ -44,7 +44,7 @@ const Warehouse = (props: RouteProps) => {
         },
         {
             key: 'staffName',
-            title: '保管员',
+            title: '保管员', 
             dataIndex: 'staffName'
         },
         {

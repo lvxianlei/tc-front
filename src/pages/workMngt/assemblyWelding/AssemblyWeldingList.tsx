@@ -9,7 +9,7 @@ import { Space, Input, DatePicker, Select, Button, Popconfirm } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './AssemblyWelding.module.less';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 
 enum PriorityType {
@@ -147,11 +147,13 @@ export default function AssemblyWeldingList(): React.ReactNode {
     ]
 
     const [ refresh, setRefresh ] = useState(false);
+    const location = useLocation<{ state: {} }>();
     return <Page
         path="/tower-science/welding"
         columns={ columns }
         headTabs={ [] }
         refresh={ refresh }
+        requestData={ { status: location.state } }
         // extraOperation={ <Button type="primary" ghost>导出</Button> }
         searchFormItems={ [
             {

@@ -4,7 +4,7 @@
  * @description 工作管理-放样列表-杆塔配段-配段
 */
 import React from 'react';
-import { Button, Space, Modal, Form, Input, FormInstance, Descriptions } from 'antd';
+import { Button, Space, Modal, Form, Input, FormInstance, Descriptions, message } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './TowerLoftingAssign.module.less';
@@ -27,14 +27,15 @@ interface IDetailData {
     readonly productCategoryName?: string;
     readonly productId?: string;
     readonly productNumber?: string;
-    readonly productSegmentVOList?: IProductSegmentList[];
+    readonly loftingProductSegmentList?: IProductSegmentList[];
 }
 
 interface IProductSegmentList {
     readonly productCategoryId?: string;
-    readonly name?: string;
-    readonly id?: string;
+    readonly segmentName?: string;
+    readonly id?: string | number;
     readonly count?: string;
+    readonly segmentId?: string;
 }
 
 class WithSectionModal extends React.Component<IWithSectionModalRouteProps, WithSectionModalState> {
@@ -67,29 +68,33 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
         if(this.getForm()) {
             this.getForm()?.validateFields().then(res => {
                 const value = this.getForm()?.getFieldsValue(true);
-                const productSegmentVOList = this.state.detailData?.productSegmentVOList;
+                const loftingProductSegmentList = this.state.detailData?.loftingProductSegmentList;
                 value.productCategoryId = this.state.detailData?.productCategoryId;
                 value.productId = this.state.detailData?.productId;
-                value.productSegmentListDTOList = value.productSegmentVOList?.map((items: IProductSegmentList, index: number) => {
-                    if(items) {
-                        return {
-                            id: productSegmentVOList && productSegmentVOList[index].id,
-                            name: productSegmentVOList && productSegmentVOList[index].name,
-                            count: items.count
+                if(value.productSegmentListDTOList) {
+                    value.productSegmentListDTOList = value.productSegmentListDTOList?.map((items: IProductSegmentList, index: number) => {
+                        if(items) {
+                            return {
+                                id: loftingProductSegmentList && loftingProductSegmentList[index].id === -1 ? '' : loftingProductSegmentList && loftingProductSegmentList[index].id,
+                                segmentName: loftingProductSegmentList && loftingProductSegmentList[index].segmentName,
+                                count: items.count,
+                                segmentId: loftingProductSegmentList && loftingProductSegmentList[index].segmentId,
+                            }
+                        } else {
+                            return undefined
                         }
-                    } else {
-                        return undefined
-                    }
-                });
-                value.productSegmentListDTOList = value.productSegmentListDTOList.filter((item: IProductSegmentList)=>{ return item !== undefined });
-                RequestUtil.post(path, { ...value }).then(res => {
-                    this.props.updateList();
-                    this.modalCancel();
-                });
+                    });
+                    value.productSegmentListDTOList = value.productSegmentListDTOList.filter((item: IProductSegmentList)=>{ return item !== undefined });
+                    RequestUtil.post(path, { ...value }).then(res => {
+                        this.props.updateList();
+                        this.modalCancel();
+                    }); 
+                } else {
+                    message.warning('暂无段名信息，无法保存')
+                }
             })
         }
     }
-
 
      /**
      * @description Renders AbstractDetailComponent
@@ -121,15 +126,15 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                                     <span>{ detailData?.productNumber }</span>
                                 </Descriptions.Item>
                                 {
-                                    detailData?.productSegmentVOList?.map((items: IProductSegmentList, index: number) => {
+                                    detailData?.loftingProductSegmentList?.map((items: IProductSegmentList, index: number) => {
                                         return <>
                                         <Descriptions.Item label="段号">    
-                                            <Form.Item name={ ["productSegmentVOList", index, "name"] }>
-                                                <span>{ items.name }</span>
+                                            <Form.Item name={ ["productSegmentListDTOList", index, "segmentName"] }>
+                                                <span>{ items.segmentName }</span>
                                             </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="段数">    
-                                            <Form.Item name={ ["productSegmentVOList", index, "count"] } initialValue={ items.count }>
+                                            <Form.Item name={ ["productSegmentListDTOList", index, "count"] } initialValue={ items.count }>
                                                 <Input placeholder="请输入"/>
                                             </Form.Item>
                                         </Descriptions.Item>

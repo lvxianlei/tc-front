@@ -259,7 +259,7 @@ export default function SampleDrawCheck(): React.ReactNode {
                         //     setAttachInfo(data.newFile)
                         //     setErrorVisible(true);
                         // },
-                        className: record.issueStatus===1? styles.red: record.issueStatus===2? styles.green:record.issueStatus===3?styles.yellow :styles.tableRow
+                        className: record.issueStatus===1? styles.red: record.issueStatus===2? styles.green:record.issueStatus===0?styles.yellow :styles.tableRow
                     })
                 }}
                 searchFormItems={[
