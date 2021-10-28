@@ -233,7 +233,7 @@ export default function SampleDrawCheck(): React.ReactNode {
                 requestData={{productCategoryId: params.id}}
                 extraOperation={
                     <Space>
-                    <Button type="primary">导出</Button>
+                    {/* <Button type="primary">导出</Button> */}
                     <Popconfirm
                         title="确认完成校核?"
                         onConfirm={ async () =>  await RequestUtil.put(`/tower-science/smallSample/completeCheck?productCategoryId=${params.id}`).then(()=>{
@@ -259,7 +259,7 @@ export default function SampleDrawCheck(): React.ReactNode {
                         //     setAttachInfo(data.newFile)
                         //     setErrorVisible(true);
                         // },
-                        className: record.issueStatus===1? styles.red: record.issueStatus===2? styles.green:record.issueStatus===3?styles.yellow :styles.tableRow
+                        className: record.issueStatus===1? styles.red: record.issueStatus===2? styles.green:record.issueStatus===0?styles.yellow :styles.tableRow
                     })
                 }}
                 searchFormItems={[

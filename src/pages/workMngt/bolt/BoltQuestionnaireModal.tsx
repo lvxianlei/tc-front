@@ -1,10 +1,11 @@
 import React from 'react';
-import { Button, Space, Modal, Form, FormInstance, Input, message } from 'antd';
+import { Button, Space, Modal, Form, FormInstance, Input, message, Select } from 'antd';
 import { DetailContent, CommonTable, BaseInfo } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './BoltList.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
+import { boltTypeOptions } from '../../../configuration/DictionaryOptions';
 
 export interface BoltQuestionnaireModalProps {}
 export interface IBoltQuestionnaireModalRouteProps extends RouteComponentProps<BoltQuestionnaireModalProps>, WithTranslation {
@@ -261,7 +262,13 @@ class BoltQuestionnaireModal extends React.Component<IBoltQuestionnaireModalRout
                                 message: '请输入校对后信息 '
                             }]}
                             initialValue={ record.newValue }>
-                            <Input maxLength={ 100 } placeholder="请输入" disabled={ record.status === 1 } />
+                            { record.problemFieldName === '类型' ? <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                                { boltTypeOptions && boltTypeOptions.map(({ id, name }, index) => {
+                                    return <Select.Option key={index} value={id}>
+                                        {name}
+                                    </Select.Option>
+                                }) }
+                            </Select> : <Input maxLength={ 100 } placeholder="请输入" disabled={ record.status === 1 } /> }
                         </Form.Item>
                     </Form>
                     { record.status === 1 ? <CommonTable columns={ columnsSetting } dataSource={ this.props.record.dataSource } pagination={ false } /> : null}

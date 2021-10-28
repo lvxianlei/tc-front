@@ -22,6 +22,7 @@ interface IList {
 	readonly dataIndex?: string;
 	readonly col?: number;
 	readonly path?: string;
+	readonly state?: number;
 }
 
 const directorList = [
@@ -32,14 +33,17 @@ const directorList = [
 				title: '待确认',
 				dataIndex: 'assessToBeConfirmed',
 				path: '/assessmentTask',
+				state: 1
 			}, {
 				title: '待指派',
 				dataIndex: 'assessToBeAssigned',
 				path: '/assessmentTask',
+				state: 2
 			}, {
 				title: '待提交',
 				dataIndex: 'assessToBeSubmitted',
 				path: '/assessmentTask',
+				state: 4
 			}
 		]
 	}, {
@@ -49,14 +53,17 @@ const directorList = [
 				title: '待确认',
 				dataIndex: 'confirmToBeConfirmed',
 				path: '/confirmTask/ConfirmTaskMngt',
+				state: 1
 			}, {
 				title: '待指派',
 				dataIndex: 'confirmToBeAssigned',
 				path: '/confirmTask/ConfirmTaskMngt',
+				state: 2
 			}, {
 				title: '待提交',
 				dataIndex: 'confirmToBeSubmitted',
 				path: '/confirmTask/ConfirmTaskMngt',
+				state: 4
 			}
 		]
 	}, {
@@ -66,14 +73,17 @@ const directorList = [
 				title: '待确认',
 				dataIndex: 'loftingToBeConfirmed',
 				path: '/setOutTask',
+				state: 1
 			}, {
 				title: '待指派',
 				dataIndex: 'loftingToBeAssigned',
 				path: '/setOutTask',
+				state: 2
 			}, {
 				title: '待提交',
 				dataIndex: 'loftingToBeSubmitted',
 				path: '/setOutTask',
+				state: 4
 			}
 		]
 	},{
@@ -105,15 +115,18 @@ const groupLeaderList = [
 			{
 				title: '待指派',
 				dataIndex: 'materialToBeAssigned',
-				path: '/workMngt/pickList'
+				path: '/workMngt/pickList',
+				state: 1
 			}, {
 				title: '待提交提料',
 				dataIndex: 'materialToBeSubmittedMaterial',
-				path: '/workMngt/pickList'
+				path: '/workMngt/pickList',
+				state: 2
 			}, {
 				title: '待汇总',
 				dataIndex: 'materialToBeSummarized',
-				path: '/workMngt/pickList'
+				path: '/workMngt/pickList',
+				state: 3
 			}
 		]
 	}, {
@@ -122,19 +135,23 @@ const groupLeaderList = [
 			{
 				title: '待指派',
 				dataIndex: 'productToBeAssigned',
-				path: '/workMngt/setOutList'
+				path: '/workMngt/setOutList',
+				state: 1
 			}, {
 				title: '待提交放样',
 				dataIndex: 'productToBeSubmittedLofting',
-				path: '/workMngt/setOutList'
+				path: '/workMngt/setOutList',
+				state: 2
 			}, {
 				title: '待提交组焊',
 				dataIndex: 'productToBeSubmittedWelding',
-				path: '/workMngt/setOutList'
+				path: '/workMngt/setOutList',
+				state: 3
 			}, {
 				title: '待汇总',
 				dataIndex: 'productToBeSummarized',
-				path: '/workMngt/setOutList'
+				path: '/workMngt/setOutList',
+				state: 4
 			}
 		]
 	} 
@@ -148,7 +165,8 @@ const workmanList = [
 			{
 				title: '待完成',
 				dataIndex: 'assessToBeComplete',
-				path: '/workMngt/evaluationList'
+				path: '/workMngt/evaluationList',
+				state: 3
 			}
 		]
 	}, {
@@ -158,7 +176,8 @@ const workmanList = [
 			{
 				title: '待完成',
 				dataIndex: 'confirmToBeComplete',
-				path: '/workMngt/confirmList'
+				path: '/workMngt/confirmList',
+				state: 3
 			}
 		]
 	}, {
@@ -167,15 +186,18 @@ const workmanList = [
 			{
 				title: '待提料',
 				dataIndex: 'segmentMaterialToBeMaterial',
-				path: '/workMngt/pickList'
+				path: '/workMngt/pickList',
+				state: 2
 			}, {
 				title: '待校核',
 				dataIndex: 'segmentMaterialToBeCheck',
-				path: '/workMngt/pickList'
+				path: '/workMngt/pickList',
+				state: 3
 			}, {
 				title: '待配段',
 				dataIndex: 'rodMaterialToBeMatch',
-				path: '/workMngt/pickList'
+				path: '/workMngt/pickList',
+				state: 3
 			}
 		]
 	}, {
@@ -184,19 +206,23 @@ const workmanList = [
 			{
 				title: '待放样',
 				dataIndex: 'segmentProductToBeLofting',
-				path: '/workMngt/setOutList'
+				path: '/workMngt/setOutList',
+				state: 2
 			}, {
 				title: '待校核',
 				dataIndex: 'segmentProductToBeCheck',
-				path: '/workMngt/setOutList'
+				path: '/workMngt/setOutList',
+				state: 2
 			}, {
 				title: '待配段',
 				dataIndex: 'rodProductToBeMatch',
-				path: '/workMngt/setOutList'
+				path: '/workMngt/setOutList',
+				state: 4
 			}, {
 				title: '待出单',
 				dataIndex: 'rodProductToBeIssue',
-				path: '/workMngt/setOutList'
+				path: '/workMngt/setOutList',
+				state: 4
 			}
 		]
 	}, {
@@ -205,11 +231,13 @@ const workmanList = [
 			{
 				title: '待组焊',
 				dataIndex: 'weldingToBeWelding',
-				path: '/workMngt/assemblyWeldingList'
+				path: '/workMngt/assemblyWeldingList',
+				state: 2
 			}, {
 				title: '待校核',
 				dataIndex: 'weldingToBeCheck',
-				path: '/workMngt/assemblyWeldingList'
+				path: '/workMngt/assemblyWeldingList',
+				state: 3
 			}
 		]
 	}, {
@@ -218,11 +246,13 @@ const workmanList = [
 			{
 				title: '待上传',
 				dataIndex: 'sampleToBeUploaded',
-				path: '/workMngt/sampleDrawList'
+				path: '/workMngt/sampleDrawList',
+				state: 2
 			}, {
 				title: '待校核',
 				dataIndex: 'sampleToBeCheck',
-				path: '/workMngt/sampleDrawList'
+				path: '/workMngt/sampleDrawList',
+				state: 3
 			}
 		]
 	}, {
@@ -231,11 +261,13 @@ const workmanList = [
 			{
 				title: '待制作',
 				dataIndex: 'boltToBeMade',
-				path: '/workMngt/boltList'
+				path: '/workMngt/boltList',
+				state: 2
 			}, {
 				title: '待校核',
 				dataIndex: 'boltToBeCheck',
-				path: '/workMngt/boltList'
+				path: '/workMngt/boltList',
+				state: 3
 			}
 		]
 	},
@@ -265,7 +297,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 								res?.child && res?.child.map((item: IList, index: number) => {
 									const dataIndex: string | undefined = item.dataIndex;
 									return <div className={ res.col !== 2 ? styles.content : styles.content2 } key={ ind + '_' + index }>
-										<p onClick={ () => { if( item.path) history.push(item.path) } }><CheckCircleOutlined />{ item.title }<span className={ styles.rightoutlined }><RightOutlined /></span></p>
+										<p onClick={ () => { if( item.path) history.push({ pathname: item.path, state: item.state }) } }><CheckCircleOutlined />{ item.title }<span className={ styles.rightoutlined }><RightOutlined /></span></p>
 										<p className={ styles.total }>{ detailData.director && detailData.director[dataIndex || ''] === -1 ? 0 : detailData.director && detailData.director[dataIndex || ''] || 0 }</p>
 										<div className={ styles.draw }><Line keyIndex={ dataIndex +'_'+index  } valueList={ [Math.ceil(Math.random()*80), Math.ceil(Math.random()*100), Math.ceil(Math.random()*150), Math.ceil(Math.random()*100), Math.ceil(Math.random()*90), Math.ceil(Math.random()*100), Math.ceil(Math.random()*100)] }/></div>
 									</div>
@@ -285,7 +317,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 								res?.child && res?.child.map((item: IList, index: number) => {
 									const dataIndex: string | undefined = item.dataIndex;
 									return <div className={ res.col !== 2 ? styles.content : styles.content2 } key={ dataIndex + '_' + index }>
-										<p onClick={ () => { if( item.path) history.push(item.path) } }><CheckCircleOutlined />{ item.title }<span className={ styles.rightoutlined }><RightOutlined /></span></p>
+										<p onClick={ () => { if( item.path) history.push({ pathname: item.path, state: item.state }) } }><CheckCircleOutlined />{ item.title }<span className={ styles.rightoutlined }><RightOutlined /></span></p>
 										<p className={ styles.total }>{ detailData.leaderToDoVO && detailData.leaderToDoVO[dataIndex || ''] === -1 ? 0 : detailData.leaderToDoVO && detailData.leaderToDoVO[dataIndex || ''] || 0 }</p>
 										<div className={ styles.draw }><Line keyIndex={ dataIndex + '_' +index  } valueList={ [Math.ceil(Math.random()*80), Math.ceil(Math.random()*100), Math.ceil(Math.random()*150), Math.ceil(Math.random()*100), Math.ceil(Math.random()*90), Math.ceil(Math.random()*100), Math.ceil(Math.random()*100)] }/></div>
 									</div>
@@ -305,7 +337,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 								res?.child && res?.child.map((item: IList, index: number) => {
 									const dataIndex: string | undefined = item.dataIndex;
 									return <div className={ res.col !== 2 ? styles.content : styles.content2 } key={ dataIndex + '_' + index }>
-										<p onClick={ () => { if( item.path) history.push(item.path) } }><CheckCircleOutlined />{ item.title }<span className={ styles.rightoutlined }><RightOutlined /></span></p>
+										<p onClick={ () => { if( item.path) history.push({ pathname: item.path, state: item.state }) } }><CheckCircleOutlined />{ item.title }<span className={ styles.rightoutlined }><RightOutlined /></span></p>
 										<p className={ styles.total }>{ detailData.staffToDoVO && detailData.staffToDoVO[dataIndex || ''] === -1 ? 0 : detailData.staffToDoVO && detailData.staffToDoVO[dataIndex || ''] || 0 }</p>
 										<div className={ styles.draw }><Line keyIndex={ ind + '_' + index  } valueList={ [Math.ceil(Math.random()*80), Math.ceil(Math.random()*100), Math.ceil(Math.random()*150), Math.ceil(Math.random()*100), Math.ceil(Math.random()*90), Math.ceil(Math.random()*100), Math.ceil(Math.random()*100)] }/></div>
 									</div>

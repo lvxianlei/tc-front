@@ -3,13 +3,14 @@ import { Space, Input, DatePicker, Select, Button, Popconfirm } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOutTask.module.less';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Deliverables from './Deliverables';
 import RequestUtil from '../../utils/RequestUtil';
 
 export default function SetOutTaskList(): React.ReactNode {
     const [ refresh, setRefresh ] = useState<boolean>(false);
     const [ filterValue, setFilterValue ] = useState({});
+    const location = useLocation<{ state: {} }>();
     
     const columns = [
         {
@@ -142,6 +143,7 @@ export default function SetOutTaskList(): React.ReactNode {
         path="/tower-science/loftingTask/taskPage"
         columns={ columns }
         headTabs={ [] }
+        requestData={ { status: location.state } }
         // extraOperation={ <Button type="primary" ghost>导出</Button> }
         refresh={ refresh }
         searchFormItems={ [

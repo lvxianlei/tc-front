@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { Button, TableColumnProps, Select, DatePicker, Input, Modal } from 'antd'
+import { Button, TableColumnProps, Select, DatePicker, Input, Modal, Descriptions } from 'antd'
 import { Link, useHistory, } from 'react-router-dom'
-import { materialPrice, dataSource, priceInformation } from "./ViewRawMaterial.json"
-import AntdCharts from "./antdCharts"
+import { priceMaintain, dataSource } from "./ViewRawMaterial.json"
 import { Page } from '../../common'
 //原材料类型
 const projectType = [
@@ -23,7 +22,7 @@ const projectType = [
         label: "大角钢"
     }
 ]
-
+//原材料标准
 const currentProjectStage = [
     {
         value: 0,
@@ -43,7 +42,7 @@ const currentProjectStage = [
     }
 ]
 
-export default function ViewRawMaterial(): React.ReactNode {
+export default function PriceMaintain(): React.ReactNode {
     const history = useHistory()
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisible1, setIsModalVisible1] = useState(false);
@@ -66,37 +65,44 @@ export default function ViewRawMaterial(): React.ReactNode {
         return value
     }
 
-    const historyPrice = () => {
+    const edit = () => {
         setIsModalVisible(true);
     }
     const handleCancel = () => {
         setIsModalVisible(false);
     };
-    const state = () => {
-        setIsModalVisible1(true);
+    const del = () => {
+        //调接口
     }
     const handleCancel1 = () => {
         setIsModalVisible1(false);
     };
-    const goPrice = () => {
-        history.push(`/stock/viewRawMaterial/priceMaintain`)
-    }
     return (
         <div>
             <Page
                 path="/tower-supply/materialPrice"
                 columns={[
-                    ...materialPrice
+                    ...priceMaintain,
+                    {
+                        key: 'operation',
+                        title: '操作',
+                        dataIndex: 'operation',
+                        fixed: 'right',
+                        width: 100,
+                        render: (_: undefined, record: any): React.ReactNode => (
+                            <div></div>
+                        )
+                    }
                 ]}
                 filterValue={filterValue}
-                extraOperation={<div><Link to="/project/management/new"><Button type="primary">导出</Button></Link><Button type="link" style={{ marginLeft: "1050px" }} onClick={() => { goPrice() }}>价格维护</Button></div>}
+                extraOperation={<div>
+                    <Link to="/project/management/new"><Button type="primary">导出</Button></Link>
+                    <Button type="primary" style={{ marginLeft: "50px" }}>导入</Button>
+                    <Button type="primary" style={{ marginLeft: "50px" }} onClick={() => setIsModalVisible1(true)}>添加</Button>
+                    <Button type="primary" style={{ marginLeft: "50px" }} onClick={() => history.push(`/stock/viewRawMaterial`)}>返回上一级</Button>
+                </div>}
                 onFilterSubmit={onFilterSubmit}
                 searchFormItems={[
-                    {
-                        name: 'updateTime',
-                        label: '更新时间',
-                        children: <RangePicker />
-                    },
                     {
                         name: 'rawMaterialType',
                         label: '原材料类型',
@@ -113,46 +119,45 @@ export default function ViewRawMaterial(): React.ReactNode {
                     },
                     {
                         name: 'inquire',
-                        label: '查询',
+                        label: '原材料名称',
                         children: <Input placeholder="原材料名称/规格" />
                     },
                 ]}
             />
             <Button onClick={() => {
-                historyPrice();
+                edit();
             }}>
-                历史价格
+                编辑
             </Button>
-            <Modal width="1000px" title="历史价格" visible={isModalVisible} onCancel={handleCancel}>
-                <div style={{display:"flex"}}>
-                    {/* 折线图 */}
-                    <div>
-                        <AntdCharts />
-                    </div>
-                    <div style={{width: "500px",height:"400px",marginLeft:"50px"}}>
-                        <Page
-                            path="/tower-supply/materialPrice/history/{materialPriceId}"
-                            columns={[
-                                ...priceInformation
-                            ]}
-                            searchFormItems={[]}
-                        />
-                    </div>
-                </div>
+            <Modal width="700px" title="历史价格" visible={isModalVisible} onCancel={handleCancel}>
+                <Descriptions title="价格信息" bordered column={2} labelStyle={{ textAlign: 'right' }}>
+                    <Descriptions.Item label="原材料名称">Zhou Maomao</Descriptions.Item>
+                    <Descriptions.Item label="原材料规格">Zhou Maomao</Descriptions.Item>
+                    <Descriptions.Item label="原材料标准">Zhou Maomao</Descriptions.Item>
+                    <Descriptions.Item label="原材料类型">Zhou Maomao</Descriptions.Item>
+                    <Descriptions.Item label="价格 *">Zhou Maomao</Descriptions.Item>
+                    <Descriptions.Item label="价格来源 *">Zhou Maomao</Descriptions.Item>
+                    <Descriptions.Item label="报价时间 *">Zhou Maomao</Descriptions.Item>
+                    <Descriptions.Item label="UserName">Zhou Maomao</Descriptions.Item>
+                </Descriptions>
             </Modal>
             <Button onClick={() => {
-                state();
+                del();
             }}>
-                数据源
+                删除
             </Button>
+            {/* 添加 */}
             <Modal width="700px" title="数据源" visible={isModalVisible1} onCancel={handleCancel1}>
-                <Page
-                    path="/tower-supply/materialPrice/priceSource/{materialPriceId}"
-                    columns={[
-                        ...dataSource
-                    ]}
-                    searchFormItems={[]}
-                />
+                <Descriptions title="价格信息" bordered column={2} labelStyle={{ textAlign: 'right' }}>
+                    <Descriptions.Item label="原材料名称 *">Zhou Maomao</Descriptions.Item>
+                    <Descriptions.Item label="原材料规格 *">Zhou Maomao</Descriptions.Item>
+                    <Descriptions.Item label="原材料标准 *">Zhou Maomao</Descriptions.Item>
+                    <Descriptions.Item label="原材料类型 *">Zhou Maomao</Descriptions.Item>
+                    <Descriptions.Item label="价格 *">Zhou Maomao</Descriptions.Item>
+                    <Descriptions.Item label="价格来源 *">Zhou Maomao</Descriptions.Item>
+                    <Descriptions.Item label="报价时间 *">Zhou Maomao</Descriptions.Item>
+                    <Descriptions.Item label="">Zhou Maomao</Descriptions.Item>
+                </Descriptions>
             </Modal>
         </div>
     )

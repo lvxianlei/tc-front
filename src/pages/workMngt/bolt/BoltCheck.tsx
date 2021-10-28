@@ -32,10 +32,10 @@ export default function BoltCheck(): React.ReactNode {
             }
         },
         {
-            key: 'type',
+            key: 'typeName',
             title: '类型',
             width: 150,
-            dataIndex: 'type',
+            dataIndex: 'typeName',
             editable: true,
         },
         {

@@ -253,7 +253,7 @@ export default function Lofting(): React.ReactNode {
             tableProps={{ pagination: false }}
             extraOperation={ 
                 <Space direction="horizontal" size="small">
-                    <Button type="primary" ghost>导出</Button>
+                    {/* <Button type="primary" ghost>导出</Button> */}
                     <Button type="primary" ghost onClick={ () => downloadTemplate('/tower-science/drawProductStructure/exportTemplate', '构建明细') }>模板下载</Button>
                     <Upload 
                         accept=".xls,.xlsx"

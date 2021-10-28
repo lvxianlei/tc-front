@@ -39,9 +39,9 @@ export default function Questionnaire(): React.ReactNode {
             dataIndex: 'createTime' 
         },
         {
-            key: 'currentStatus', 
+            key: 'status', 
             title: '问题单状态', 
-            dataIndex: 'currentStatus',
+            dataIndex: 'status',
             render: (status: number): React.ReactNode => {
                 switch (status) {
                     case 0:
@@ -315,10 +315,16 @@ export default function Questionnaire(): React.ReactNode {
      * @description 点击选择获取构件明细列表 
      */
     const getComponentList = async () => {
-        const data: IComponentList[] = await RequestUtil.get(`/tower-science/welding/getStructure`, {
+        const resData: IComponentList[] = await RequestUtil.get(`/tower-science/welding/getStructure`, {
             segmentName: detailData.weldingDetailedVO.segmentName,
             productCategoryId: params.productCategoryId
         }); 
+        const data = resData.map((item: IComponentList) => {
+            return { 
+                ...item,
+                basicsPartNumNow: item.basicsPartNumNow
+            }
+        })
         let newData: IComponentList[] = data?.filter((item: IComponentList) => {
             return weldingDetailedStructureList.every((items: IComponentList) => {
                 if(items.singleNum === item.basicsPartNumNow) { 

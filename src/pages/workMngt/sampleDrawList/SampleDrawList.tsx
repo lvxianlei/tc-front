@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Button, Form, Select, message } from 'antd';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
 import { Popconfirm } from 'antd';
@@ -11,6 +11,7 @@ export default function SampleDrawList(): React.ReactNode {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
+    const location = useLocation<{ state: {} }>();
     const columns = [
         {
             key: 'index',
@@ -181,7 +182,8 @@ export default function SampleDrawList(): React.ReactNode {
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
             refresh={refresh}
-            extraOperation={<Button type="primary">导出</Button>}
+            requestData={ { smallSampleStatus: location.state } }
+            // extraOperation={<Button type="primary">导出</Button>}
             searchFormItems={[
                 {
                     name: 'statusUpdateTime',

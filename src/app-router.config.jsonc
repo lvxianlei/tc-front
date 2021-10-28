@@ -664,6 +664,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 驾驶舱-原材料看板-价格维护
+      "name": "价格维护",
+      "path": "/stock/viewRawMaterial/priceMaintain",
+      "module": "./pages/stock/viewRawMaterial/priceMaintain",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 驾驶舱-收货单看板
       "name": "收货单看板",
       "path": "/stock/viewReceivingNote",
@@ -694,14 +701,14 @@
     },
     {//供应商管理-创建
       "name": "供应商管理创建",
-      "path": "/supplier-mngt/index/supplierAdd",
+      "path": "/supplier-mngt/supplierAdd",
       "module": "./pages/supplier-mngt/supplierAdd",
       "exact": true,
       "authority": "approvalm"
     },
     {//供应商管理-编辑
       "name": "供应商管理编辑",
-      "path": "/supplier-mngt/index/supplierEdit",
+      "path": "/supplier-mngt/supplierEdit",
       "module": "./pages/supplier-mngt/supplierEdit",
       "exact": true,
       "authority": "approvalm"
@@ -766,6 +773,13 @@
       "name": "安全库存配置",
       "path": "/stock/securitySetting",
       "module": "./pages/stock/securitySetting/securitySetting",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 配置管理-角钢配料策略
+      "name": "角钢配料策略",
+      "path": "/stock/angleSteel",
+      "module": "./pages/stock/angleSteel/angleSteel",
       "exact": true,
       "authority": "approvalm"
     },
@@ -1037,7 +1051,7 @@
     },
     { // 工作管理-杆塔信息-编辑包装清单
       "name": "编辑包装清单",
-      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:productId/packingListSetting",
+      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:productId/packingListSetting/:packId",
       "module": "./pages/workMngt/setOut/PackingListNew",
       "exact": true,
       "authority": "approvalm"
@@ -1106,7 +1120,7 @@
       "authority": "approvalm"
     },
     { // 工作管理-螺栓列表-校核
-      "name": "螺栓清单",
+      "name": "校核",
       "path": "/workMngt/boltList/boltCheck/:id",
       "module": "./pages/workMngt/bolt/BoltCheck",
       "exact": true,
