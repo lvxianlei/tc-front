@@ -343,7 +343,7 @@ export default function PickTower(): React.ReactNode {
                                     </TreeSelect>
                     },
                     {
-                        name: 'loftingUser',
+                        name: 'materialUser',
                         label:'',
                         children:   <Select style={{width:'100px'}} allowClear>
                                         { matchLeader && matchLeader.map((item:any)=>{
