@@ -406,7 +406,7 @@ export default function Lofting(): React.ReactNode {
                             title="确认删除?"
                             onConfirm={ () => RequestUtil.delete(`/tower-science/productStructure?productStructureId=${ record.id }`).then(res => {
                                 message.success('删除成功');
-                                setRefresh(!refresh);
+                                history.go(0);
                             }) }
                             okText="确认"
                             cancelText="取消"
@@ -504,11 +504,16 @@ export default function Lofting(): React.ReactNode {
                                 form.resetFields();
                                 setRefresh(!refresh);
                             });
+                        } else {
+                            setColumns(columnsSetting);
+                            setEditorLock('编辑');
+                            setRowChangeList([]);    
+                            form.resetFields();
                         }
                     }
                 } }>{ editorLock }</Button>
-                <UploadModal id={ params.productSegmentId } path={ `/tower-science/productSegment/segmentModelDetail?productSegmentId=${ params.productSegmentId }` } requestData={ { productSegmentId: params.productSegmentId } } uploadUrl="/tower-science/productSegment/segmentModelUpload" btnName="模型上传" />
-                <UploadModal id={ params.productSegmentId } path={ `/tower-science/productSegment/segmentDrawDetail?productSegmentId=${ params.productSegmentId }` } requestData={ { productSegmentId: params.productSegmentId } } uploadUrl="/tower-science/productSegment/segmentDrawUpload" btnName="样图上传" />
+                <UploadModal id={ params.productSegmentId } path={ `/tower-science/productSegment/segmentModelDetail?productSegmentId=${ params.productSegmentId }` } requestData={ { productSegmentId: params.productSegmentId } } uploadUrl="/tower-science/productSegment/segmentModelUpload" btnName="模型上传" delPath="/tower-science/productSegment/segmentModelDelete" />
+                <UploadModal id={ params.productSegmentId } path={ `/tower-science/productSegment/segmentDrawDetail?productSegmentId=${ params.productSegmentId }` } requestData={ { productSegmentId: params.productSegmentId } } uploadUrl="/tower-science/productSegment/segmentDrawUpload" btnName="样图上传"  delPath="/tower-science/productSegment/segmentDrawDelete"/>
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
             </Space> }
             searchFormItems={ [

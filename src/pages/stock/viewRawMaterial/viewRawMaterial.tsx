@@ -125,7 +125,7 @@ export default function ViewRawMaterial(): React.ReactNode {
 
     return (
         <Page
-            path="/tower-market/projectInfo"
+            path="/tower-system/material"
             columns={columns}
             filterValue={filterValue}
             extraOperation={<Link to="/project/management/new"><Button type="primary">导出</Button></Link>}

@@ -231,6 +231,32 @@
                         ]
                     },
                     {
+                        "label": "询价任务",
+                        "icon": "technology",
+                        "path": "/enquiryTask",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "询价任务",
+                                "path": "/enquiryTask/index",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "供应商管理",
+                        "icon": "technology",
+                        "path": "/supplier-mngt",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "供应商管理",
+                                "path": "/supplier-mngt/index",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
                         "label": "库存管理",
                         "icon": "technology",
                         "path": "/stock",
@@ -258,6 +284,25 @@
                             }
                         ]
                     },
+                    {
+                        "label": "财务管理",
+                        "icon": "technology",
+                        "path": "/financial",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "票据管理",
+                                "path": "/financial/bill",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "请款申请",
+                                "path": "/financial/prepare",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+
                     {
                         "label": "评估任务",
                         "icon": "technology",
