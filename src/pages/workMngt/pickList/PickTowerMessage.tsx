@@ -6,12 +6,24 @@ import { Page } from '../../common'
 import TowerPickAssign from './TowerPickAssign';
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
+import TreeSelect, { TreeNode } from 'antd/lib/tree-select';
+import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
+import styles from './pick.module.less';
+import useRequest from '@ahooksjs/use-request';
 
 export default function PickTowerMessage(): React.ReactNode {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
     const params = useParams<{ id: string, status: string }>();
     const [filterValue, setFilterValue] = useState({});
+    const [pickLeader, setPickLeader] = useState<any|undefined>([]);
+    const [checkLeader, setCheckLeader] = useState<any|undefined>([]);
+    const [department, setDepartment] = useState<any|undefined>([]);
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
+        setDepartment(departmentData);
+        resole(data)
+    }), {})
     const columns = [
         {
             key: 'index',
@@ -120,7 +132,44 @@ export default function PickTowerMessage(): React.ReactNode {
                 </Space>
             )
         }
-    ]
+    ];
+    const onDepartmentChange = async (value: Record<string, any>, name: string) => {
+        if(value){
+            const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
+            if(name==='提料'){
+                setPickLeader(userData.records);
+            }
+            else{
+                setCheckLeader(userData.records);
+            }
+        }else{
+            setPickLeader([]);
+            setCheckLeader([]);
+        }
+       
+    }
+    const renderTreeNodes = (data:any) =>
+    data.map((item:any) => {
+        if (item.children) {
+            item.disabled = true;
+            return (
+            <TreeNode key={item.id} title={item.title} value={item.id} disabled={item.disabled} className={styles.node}>
+                {renderTreeNodes(item.children)}
+            </TreeNode>
+            );
+        }
+        return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
+    });
+    const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
+        roles.forEach((role: any & SelectDataNode): void => {
+            role.value = role.id;
+            role.isLeaf = false;
+            if (role.children && role.children.length > 0) {
+                wrapRole2DataNode(role.children);
+            }
+        });
+        return roles;
+    }
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -136,7 +185,6 @@ export default function PickTowerMessage(): React.ReactNode {
     }
     return (
         <Page
-            // path="/tower-market/bidInfo"
             path={`/tower-science/drawProductSegment`}
             columns={columns}
             refresh={refresh}
@@ -180,15 +228,43 @@ export default function PickTowerMessage(): React.ReactNode {
                     </Select>
                 },
                 {
-                    name: 'materialLeader',
+                    name: 'materialLeaderDepartment',
                     label: '提料人',
-                    children: <Input />
+                    children:  <TreeSelect style={{width:'200px'}}
+                                    allowClear
+                                    onChange={ (value: any) => { onDepartmentChange(value, '提料') }  }
+                                >
+                                    {renderTreeNodes(wrapRole2DataNode( department ))}
+                                </TreeSelect>
+                },
+                {
+                    name: 'materialLeader',
+                    label:'',
+                    children:   <Select style={{width:'100px'}} allowClear>
+                                    { pickLeader && pickLeader.map((item:any)=>{
+                                        return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                    }) }
+                                </Select>
+                },
+                {
+                    name: 'materialCheckLeaderDepartment',
+                    label: '校核人',
+                    children:  <TreeSelect style={{width:'200px'}}
+                                    allowClear
+                                    onChange={ (value: any) => { onDepartmentChange(value, '校核') }  }
+                                >
+                                    {renderTreeNodes(wrapRole2DataNode( department ))}
+                                </TreeSelect>
                 },
                 {
                     name: 'materialCheckLeader',
-                    label: '校核人',
-                    children: <Input />
-                },
+                    label:'',
+                    children:   <Select style={{width:'100px'}} allowClear>
+                                    { checkLeader && checkLeader.map((item:any)=>{
+                                        return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                    }) }
+                                </Select>
+                }
             ]}
         />
     )
