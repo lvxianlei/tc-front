@@ -39,40 +39,42 @@ export default function PoleInformation(): React.ReactNode {
             width: 120
         },
         {
-            key: 'materialDeliverTime',
+            key: 'loftingDeliverTime',
             title: '计划交付时间',
             width: 200,
-            dataIndex: 'materialDeliverTime'
+            dataIndex: 'loftingDeliverTime'
         },
         {
-            key: 'materialUserName',
+            key: 'loftingUserName',
             title: '配段人',
             width: 150,
-            dataIndex: 'materialUserName',
+            dataIndex: 'loftingUserName',
         },
         {
-            key: 'materialStatus',
+            key: 'loftingStatus',
             title: '杆塔放样状态',
-            dataIndex: 'materialStatus',
+            dataIndex: 'loftingStatus',
             width: 200,
-            render: (materialStatus: number): React.ReactNode => {
-                switch (materialStatus) {
+            render: (loftingStatus: number): React.ReactNode => {
+                switch (loftingStatus) {
                     case 1:
-                        return '配段中';
+                        return '待开始';
                     case 2:
-                        return '出单中';
+                        return '配段中';
                     case 3:
-                        return '已完成';
+                        return '出单中';
                     case 4:
+                        return '已完成';
+                    case 5:
                         return '已提交';
                 }
             }
         },
         {
-            key: 'materialUpdateStatusTime',
+            key: 'loftingDeliverTime',
             title: '最新状态变更时间',
             width: 200,
-            dataIndex: 'materialUpdateStatusTime'
+            dataIndex: 'loftingDeliverTime'
         },
         {
             key: 'operation',
@@ -83,11 +85,11 @@ export default function PoleInformation(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                     {  
-                        record.materialStatus === 1 ? <WithSectionModal id={ record.id } updateList={ () => setRefresh(!refresh) }/> : <Button type="link" disabled>配段</Button> 
+                        record.loftingStatus === 2 ? <WithSectionModal id={ record.id } updateList={ () => setRefresh(!refresh) }/> : <Button type="link" disabled>配段</Button> 
                     }
                     <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/poleLoftingDetails/${ record.id }` }>杆塔放样明细</Link>
                     {  
-                        record.materialStatus === 2 ? <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ record.id }` }>包装清单</Link> : <Button type="link" disabled>包装清单</Button> 
+                        record.loftingStatus === 3 ? <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ record.id }` }>包装清单</Link> : <Button type="link" disabled>包装清单</Button> 
                     }
                 </Space>
             )
@@ -141,7 +143,7 @@ export default function PoleInformation(): React.ReactNode {
     }
     
     return <Page
-        path="/tower-science/product/material"
+        path="/tower-science/product/lofting"
         columns={ columns }
         headTabs={ [] }
         requestData={{ productCategoryId: params.id }}

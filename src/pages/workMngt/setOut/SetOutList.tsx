@@ -167,7 +167,7 @@ export default function SetOutList(): React.ReactNode {
     ]
 
     const [ refresh, setRefresh ] = useState(false);
-    const location = useLocation<{ state: {} }>();
+    const location = useLocation<{ state: number }>();
     return <Page
         path="/tower-science/loftingList/loftingPage"
         columns={ columns }

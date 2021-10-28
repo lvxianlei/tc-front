@@ -5,14 +5,13 @@
 */
 
 import React, { useState } from 'react';
-import { Space, Button, Popconfirm, Modal, Input, Col, Row, message, Form, Checkbox, Spin, InputNumber, Descriptions } from 'antd';
-import { BaseInfo, CommonTable, DetailContent, DetailTitle } from '../../common';
+import { Space, Button, Popconfirm, Input, Col, Row, message, Form, Checkbox, Spin, InputNumber, Descriptions } from 'antd';
+import { CommonTable, DetailContent, DetailTitle } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import styles from './SetOut.module.less';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
-import ContractAttachment from '../../prom/contract/ContractAttachment';
 
 interface IBundle {
     readonly id?: string;
@@ -50,16 +49,21 @@ export default function PackingListNew(): React.ReactNode {
     const [ stayDistrict, setStayDistrict ] = useState<IBundle[]>([]);
     const [ balesCode, setBalesCode ] = useState<string>();
     const [ description, setDescription ] = useState("");
+    const location = useLocation<{productCategoryName: string, productNumber: string}>()
 
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<IPackingList>(`/tower-science/packageRecord/structure/list`, { productId: params.productId });
-        const list = await RequestUtil.get<IBundle[]>(`/tower-science/productStructure/listByProduct`, { productId: params.productId, ...filterValues })
-        setPackagingData(data?.packageStructureVOList || []);
+        if(!location.state) {
+            const data = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${ params.productId }`);
+            setPackagingData(data?.packageStructureVOList || []);
+            resole(data);
+        }
+        const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...filterValues })
         setStayDistrict(list);
-        resole(data);
+        resole({ productCategoryName: location.state.productCategoryName, productNumber:location.state.productNumber });
     });
 
-    const { loading, data } = useRequest<IPackingList>(() => getTableDataSource({}), {});
+    const { loading, data } = useRequest<IPackingList>(() => getTableDataSource({}));
+
     const detailData: IPackingList = data || {};
 
     const chooseColumns = [
@@ -261,7 +265,7 @@ export default function PackingListNew(): React.ReactNode {
                 balesCode: balesCode,
                 productCategoryId: detailData.productCategoryId,
                 productId: detailData.productId,
-                towerStructureId: item.id,
+                structureId: item.id,
                 description: item.description,
                 allNum: item.basicsPartNum
             }
@@ -278,6 +282,18 @@ export default function PackingListNew(): React.ReactNode {
     }
 
     const onFinish = (value: Record<string, any>) => {
+        if(value.checkList?.indexOf('electricWelding') >= 0) {
+            value.electricWelding = 1
+        }
+        if(value.checkList?.indexOf('bend') >= 0) {
+            value.bend = 1
+        }
+        if(value.checkList?.indexOf('rootClear') >= 0) {
+            value.rootClear = 1
+        }
+        if(value.checkList?.indexOf('shovelBack') >= 0) {
+            value.shovelBack = 1
+        }
         getTableDataSource({ ...value });
     }
 
@@ -323,7 +339,17 @@ export default function PackingListNew(): React.ReactNode {
         <DetailContent operation={ [
             <Space direction="horizontal" size="small" >
                 <Button type="primary" onClick={ () => {
-                    RequestUtil.post(`/tower-science/packageRecord/save`, packagingData).then(res => {
+                    const value = {
+                        balesCode: balesCode,
+                        id: detailData.id,
+                        productCategoryId: params.id,
+                        productCategoryName: detailData.productCategoryName,
+                        productId: params.productId,
+                        productNumber: detailData.productNumber,
+                        packageRecordSaveDTOList: packagingData,
+                        description: description
+                    };
+                    RequestUtil.post(`/tower-science/packageStructure/save`, value).then(res => {
                         message.success('包装清单保存成功');
                         history.goBack();
                     })
@@ -347,48 +373,42 @@ export default function PackingListNew(): React.ReactNode {
                 </Descriptions.Item>
             </Descriptions>                
             <Form form={ form } className={ styles.topPadding } onFinish={ (value: Record<string, any>) => onFinish(value) }>
-                <Form.Item name="aaaa">
+                <Form.Item name="checkList">
                     <Checkbox.Group style={ { width: '100%' } }> 
                         <Row>
                             <Col span={6}>
-                                <Checkbox value="A">是否电焊</Checkbox>
+                                <Checkbox value="electricWelding" key="1">是否电焊</Checkbox>
                             </Col>
                             <Col span={6}>
-                                <Checkbox value="B">是否火曲</Checkbox>
+                                <Checkbox value="bend" key="2">是否火曲</Checkbox>
                             </Col>
                             <Col span={6}>
-                                <Checkbox value="c">是否清根</Checkbox>
+                                <Checkbox value="rootClear" key="3">是否清根</Checkbox>
                             </Col>
                             <Col span={6}>
-                                <Checkbox value="d">是否铲背</Checkbox>
+                                <Checkbox value="shovelBack" key="4">是否铲背</Checkbox>
                             </Col>
                         </Row>
                     </Checkbox.Group>
                 </Form.Item>
                 <Row>
                     <Col span={ 3 }>
-                        <Form.Item name="v" label="规格范围" className={ styles.rightPadding5 }>
+                        <Form.Item name="materialSpec" label="规格范围" className={ styles.rightPadding5 }>
                            <Input placeholder="请输入"/>
                         </Form.Item>
                     </Col>
-                    <Col span={ 2 }>
-                        <Form.Item name="d">
-                           <Input placeholder="请输入"/>
-                        </Form.Item>
-                    </Col>
-                    
                     <Col offset={ 1 } span={ 3 }>
-                        <Form.Item name="v" label="长度范围" className={ styles.rightPadding5 }>
+                        <Form.Item name="minLength" label="长度范围" className={ styles.rightPadding5 }>
                            <Input placeholder="请输入" />
                         </Form.Item>
                     </Col>
                     <Col span={ 2 }>
-                        <Form.Item name="d">
+                        <Form.Item name="maxLength">
                            <Input placeholder="请输入" />
                         </Form.Item>
                     </Col>
                     <Col offset={ 1 } span={ 5 }>
-                        <Form.Item name="v" label="段名">
+                        <Form.Item name="segmentName" label="段名">
                            <Input placeholder="示例：1-10或1,10" />
                         </Form.Item>
                     </Col>

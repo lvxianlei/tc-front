@@ -159,7 +159,7 @@ export default function BoltList(): React.ReactNode {
         columns={ columns }
         headTabs={ [] }
         refresh={ refresh }
-        requestData={ { status: location.state } }
+        requestData={ { boltStatus: location.state } }
         // extraOperation={ <Button type="primary" ghost>导出</Button> }
         searchFormItems={ [
             {
