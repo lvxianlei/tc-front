@@ -400,7 +400,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 initialValue: contract?.contractNumber,
                 rules: [{
                     required: true,
-                    message:"请输入合同编号"
+                    message: "请输入合同编号"
                 }],
                 children: <Input value={contract?.contractNumber} maxLength={50} />
             }, {
@@ -671,7 +671,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         return <>
             {super.render()}
             <Modal visible={this.state.isVisible} onCancel={this.modalCancel} onOk={this.modalCancel} width={"60%"}>
-                {this.state.url.fileSuffix && this.state.url.fileSuffix !== "pdf" && <Image src={this.state.url.link} preview={ false } />}
+                {this.state.url.fileSuffix && this.state.url.fileSuffix !== "pdf" && <Image src={this.state.url.link} preview={false} />}
             </Modal>
         </>
     }
@@ -708,17 +708,31 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                             <Button type="primary" onClick={() => (operation.add({ returnedRate: 0, returnedAmount: 0 }))} className={styles.btn}>新增</Button>
                                             <Row className={styles.FormHeader}>
                                                 <Col span={2}>期次</Col>
-                                                <Col span={5}>计划回款日期</Col>
-                                                <Col span={5}>计划回款占比(%)</Col>
-                                                <Col span={5}>计划回款金额</Col>
-                                                <Col span={5}>备注</Col>
+                                                <Col span={4}>计划名称</Col>
+                                                <Col span={4}>计划回款日期</Col>
+                                                <Col span={4}>计划回款占比(%)</Col>
+                                                <Col span={4}>计划回款金额</Col>
+                                                <Col span={4}>备注</Col>
                                                 <Col span={2}>操作</Col>
                                             </Row>
                                             {
                                                 fields.map<React.ReactNode>((field: FormListFieldData, index: number): React.ReactNode => (
                                                     <Row key={`${field.name}_${index}`} className={styles.FormItem}>
                                                         <Col span={2}>{index + 1}</Col>
-                                                        <Col span={5}>
+                                                        <Col span={4}>
+                                                            <Form.Item
+                                                                {...field}
+                                                                name={[field.name, 'name']}
+                                                                fieldKey={[field.fieldKey, 'name']}
+                                                                rules={[{
+                                                                    required: true,
+                                                                    message: '请填写计划名称'
+                                                                }]}
+                                                            >
+                                                                <Input />
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={4}>
                                                             <Form.Item
                                                                 {...field}
                                                                 name={[field.name, 'returnedTime']}
@@ -731,7 +745,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                 <DatePicker format="YYYY-MM-DD" />
                                                             </Form.Item>
                                                         </Col>
-                                                        <Col span={5}>
+                                                        <Col span={4}>
                                                             <Form.Item {...field} name={[field.name, 'returnedRate']} fieldKey={[field.fieldKey, 'returnedRate']} rules={[{
                                                                 required: this.state.contract?.planType === planType.PROPORTION || this.state.contract?.planType === undefined,
                                                                 message: '请输入计划回款占比'
@@ -754,7 +768,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                     className={layoutStyles.width100} />
                                                             </Form.Item>
                                                         </Col>
-                                                        <Col span={5}>
+                                                        <Col span={4}>
                                                             <Form.Item {...field} name={[field.name, 'returnedAmount']} fieldKey={[field.fieldKey, 'returnedAmount']} rules={[{
                                                                 required: this.state.contract?.planType === planType.AMOUNT,
                                                                 message: '请输入计划回款金额'
@@ -777,7 +791,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                     className={layoutStyles.width100} />
                                                             </Form.Item>
                                                         </Col>
-                                                        <Col span={5}>
+                                                        <Col span={4}>
                                                             <Form.Item {...field} name={[field.name, 'description']} fieldKey={[field.fieldKey, 'description']}>
                                                                 <Input.TextArea rows={1} maxLength={300} />
                                                             </Form.Item>
@@ -923,7 +937,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                 fields.map<React.ReactNode>((field: FormListFieldData, index: number): React.ReactNode => (
                                                     <Row key={`${field.name}_${index}`} className={styles.FormItem}>
                                                         <Col span={1}>
-                                                            <Checkbox checked={ this.state.checkList && this.state?.checkList.includes(index) } value={index} onChange={this.checkChange}></Checkbox>
+                                                            <Checkbox checked={this.state.checkList && this.state?.checkList.includes(index)} value={index} onChange={this.checkChange}></Checkbox>
                                                         </Col>
                                                         <Col span={6}>
                                                             <Form.Item {...field} name={[field.name, 'name']} fieldKey={[field.fieldKey, 'name']}>
@@ -959,12 +973,12 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                         this.setState({
                                                                             isVisible: true,
                                                                             url: {
-                                                                                link: attachInfoDtos.id?attachInfoDtos.filePath:attachInfoDtos.link,
+                                                                                link: attachInfoDtos.id ? attachInfoDtos.filePath : attachInfoDtos.link,
                                                                                 fileSuffix: attachInfoDtos
                                                                             }
                                                                         })
-                                                                    } else if(suffix === 'pdf') {
-                                                                        window.open(attachInfoDtos.id?attachInfoDtos.filePath:attachInfoDtos.link)
+                                                                    } else if (suffix === 'pdf') {
+                                                                        window.open(attachInfoDtos.id ? attachInfoDtos.filePath : attachInfoDtos.link)
                                                                     } else {
                                                                         message.info('仅图片、pdf支持预览')
                                                                     }
