@@ -9,7 +9,7 @@ import { Space, Input, DatePicker, Select, Button, Upload, message } from 'antd'
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Deliverables from './Deliverables';
 import AuthUtil from '../../../utils/AuthUtil';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -117,7 +117,7 @@ export default function SetOutList(): React.ReactNode {
                         record.status === 1 || record.status === 2 ? <Link to={ `/workMngt/setOutList/towerInformation/${ record.id }` }>塔型信息</Link> : <Button type="link" disabled>塔型信息</Button>
                     }
                     {
-                        record.status === 3 ? <Link to={ `/workMngt/setOutList/poleInformation/${ record.id }` }>杆塔配段</Link> : <Button type="link" disabled>杆塔配段</Button>
+                        record.status === 4 ? <Link to={ `/workMngt/setOutList/poleInformation/${ record.id }` }>杆塔配段</Link> : <Button type="link" disabled>杆塔配段</Button>
                     }
                     <Deliverables id={ record.id } name={ record.name }/>
                     {
@@ -167,11 +167,13 @@ export default function SetOutList(): React.ReactNode {
     ]
 
     const [ refresh, setRefresh ] = useState(false);
+    const location = useLocation<{ state: {} }>();
     return <Page
         path="/tower-science/loftingList/loftingPage"
         columns={ columns }
         headTabs={ [] }
         // extraOperation={ <Button type="primary" ghost>导出</Button> }
+        requestData={ { status: location.state } }
         refresh={ refresh }
         searchFormItems={ [
             {

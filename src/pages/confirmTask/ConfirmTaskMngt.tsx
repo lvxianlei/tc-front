@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Select, Button, Modal, Form, Popconfirm, Row, Col, TreeSelect, message } from 'antd'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { Page } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import moment from 'moment';
@@ -19,6 +19,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
     const [drawTaskId, setDrawTaskId] = useState<string>('');
     const [form] = Form.useForm();
     const history = useHistory();
+    const location = useLocation<{ state: {} }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
         setDepartment(departmentData);
@@ -239,6 +240,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             // extraOperation={<Button type="primary">导出</Button>}
             filterValue={ filterValue }
             onFilterSubmit={onFilterSubmit}
+            requestData={ { status: location.state } }
             searchFormItems={[
                 {
                     name: 'statusUpdateTime',
