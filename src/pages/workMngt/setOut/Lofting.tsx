@@ -36,7 +36,7 @@ export default function Lofting(): React.ReactNode {
             key: 'segmentName',
             title: '段名',
             width: 150,
-            editable: true,
+            editable: false,
             dataIndex: 'segmentName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data',index, "segmentName"]} initialValue={ _ }>

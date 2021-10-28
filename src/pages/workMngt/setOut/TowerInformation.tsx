@@ -104,7 +104,7 @@ export default function TowerInformation(): React.ReactNode {
                     case 3:
                         return '已完成';
                     case 4:
-                        return '校核中';
+                        return '已提交';
                 }
             }
         },
