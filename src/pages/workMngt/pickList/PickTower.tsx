@@ -132,24 +132,16 @@ export default function PickTower(): React.ReactNode {
                 const renderEnum: any = [
                   {
                     value: 1,
-                    label: "待指派"
-                  },
-                  {
-                    value: 2,
-                    label: "提料中"
-                  },
-                  {
-                    value: 3,
                     label: "配段中"
                   },
                   {
-                    value: 4,
+                    value: 2,
                     label: "已完成"
                   },
                   {
-                    value: 5,
+                    value: 3,
                     label: "已提交"
-                  },
+                  }
                 ]
                 return <>{value&&value!==-1?renderEnum.find((item: any) => item.value === value).label:null}</>
             }
@@ -184,8 +176,8 @@ export default function PickTower(): React.ReactNode {
                             })
                             form.setFieldsValue({detailData:detailData});
                             
-                    }} disabled={record.materialStatus===5||AuthUtil.getUserId()!==record.materialUser}>配段</Button>
-                    <Button type='link' onClick={()=>{history.push(`/workMngt/pickList/pickTower/${params.id}/pickTowerDetail/${record.id}`)}} disabled={record.materialStatus!==4}>杆塔提料明细</Button>
+                    }} disabled={record.materialStatus===3||AuthUtil.getUserId()!==record.materialUser}>配段</Button>
+                    <Button type='link' onClick={()=>{history.push(`/workMngt/pickList/pickTower/${params.id}/pickTowerDetail/${record.id}`)}} disabled={record.materialStatus!==2}>杆塔提料明细</Button>
                 </Space>
             )
         }
@@ -324,7 +316,7 @@ export default function PickTower(): React.ReactNode {
                     },
                     {
                         name: 'status',
-                        label: '杆塔提料状态',
+                        label: '杆塔配段状态',
                         children: <Select style={{width:'100px'}}>
                             <Select.Option value={''} key ={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>配段中</Select.Option>
