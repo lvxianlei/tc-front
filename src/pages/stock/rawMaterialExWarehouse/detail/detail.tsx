@@ -6,6 +6,7 @@ import ConfirmableButton from '../../../../components/ConfirmableButton';
 import { Page } from '../../../common';
 import { IClient } from '../../../IClient';
 import RequestUtil from '../../../../utils/RequestUtil';
+import ApplicationContext from "../../../../configuration/ApplicationContext"
 import '../../StockPublicStyle.less';
 import './detail.less';
 
@@ -33,6 +34,8 @@ export default function RawMaterialStock(): React.ReactNode {
     const [isDetailModal, setIsDetailModal] = useState<boolean>(false);//详情弹框显示
     const [isOutLibraryModal, setIsOutLibraryModal] = useState<boolean>(false);//出库弹框显示
     const [isApplyModal, setIsApplyModal] = useState<boolean>(false);//出库弹框显示
+    const [requirement, setRequirement] = useState<number | string>('');//出库-弹框需求量
+    const [OutboundId, setOutboundId] = useState<number | string>('');//出库-弹框
     const columns = [
         {
             title: '序号',
@@ -235,28 +238,28 @@ export default function RawMaterialStock(): React.ReactNode {
         },
         {
             title: '所在仓库',
-            dataIndex: 'productName',
+            dataIndex: 'warehouseName',
             width: 100,
             render: (text: any) => <a>{text}</a>,
         }, {
             title: '收货批次',
-            dataIndex: 'outStockItemStatus',
+            dataIndex: 'receiveBatchNo',
             width: 100,
         }, {
             title: '库位',
-            dataIndex: 'createTime',
+            dataIndex: 'locatorName',
             width: 100,
         }, {
             title: '区位',
-            dataIndex: 'spec',
+            dataIndex: 'reservoirName',
             width: 100,
         }, {
             title: '物料编码',
-            dataIndex: 'standard',
+            dataIndex: 'materialCode',
             width: 100,
         }, {
             title: '分类',
-            dataIndex: 'standard',
+            dataIndex: 'classify',
             width: 100,
         }, {
             title: '标准',
@@ -264,40 +267,50 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 100,
         }, {
             title: '品名',
-            dataIndex: 'standard',
+            dataIndex: 'productName',
             width: 100,
         }, {
             title: '材质',
-            dataIndex: 'standard',
+            dataIndex: 'materialTexture',
             width: 100,
         }, {
             title: '规格',
-            dataIndex: 'standard',
+            dataIndex: 'spec',
             width: 100,
         }, {
             title: '长度（mm）',
-            dataIndex: 'standard',
+            dataIndex: 'length',
             width: 100,
         }, {
             title: '宽度（mm）',
-            dataIndex: 'standard',
+            dataIndex: 'width',
             width: 100,
         }, {
             title: '数量',
-            dataIndex: 'standard',
+            dataIndex: 'quantity',
             width: 100,
         }, {
             title: '重量（吨）',
-            dataIndex: 'standard',
+            dataIndex: 'weight',
             width: 100,
         }, {
             title: '库存数量',
-            dataIndex: 'standard',
+            dataIndex: 'quantity',
             width: 100,
         }, {
             title: '出库数量',
             dataIndex: 'standard',
             width: 100,
+            fixed: 'right' as FixedType,
+            render: (text: any, item: any, index: any) => {
+                return (
+                    <Input
+                        placeholder="请输入"
+                        value={item.outboundQuantity}
+                        onChange={(e) => { inputChange(e, item, index) }}
+                    ></Input>
+                )
+            }
         },
     ];//出库弹框-原材料信息表头
     const ApplyColumns = [
@@ -369,8 +382,10 @@ export default function RawMaterialStock(): React.ReactNode {
             status,
             updateTimeStart: dateString[0],
             updateTimeEnd: dateString[1],
-        });
-        setListdata(data.records);
+        })
+        setListdata(data.outStockDetailPage.records);
+        setTotalWeight(data.width)
+        setMaterialShortageTotalWeight(data.excessWidth)
         setTotal(data.total);
     }
     //获取列表详情数据数据
@@ -414,10 +429,47 @@ export default function RawMaterialStock(): React.ReactNode {
         setExWarehousingListdata([ExwarehousingObj])
         setIsDetailModal(true)
     }
-    // 出库操作
+    // 点击出库显示弹框内容
     const IssueOperation = async (record: any) => {
-        const data: any = await RequestUtil.get(`/tower-storage/materialStock`);
+        setRequirement(record.quantity);
+        setOutboundId(record.id);
+        const data: any = await RequestUtil.get(`/tower-storage/materialStock`, {
+            params: {
+                warehouseId: record.id,//仓库id
+                materialTexture: record.materialTexture,//材质
+                productName: record.productName,//品名
+                standard: record.standard,//标准
+                lengthMin: record.length,//长度最小值
+                lengthMax: record.length,//长度最大值
+                spec: record.spec,//规格
+            }
+        });
+        setOutLibraryListdata(data.materialStockPage.records);
         setIsOutLibraryModal(true)
+    }
+    // 出库弹框列表输入框
+    const inputChange = (e: any, item: any, index: any) => {
+        let ary = JSON.parse(JSON.stringify(OutLibraryListdata));
+        ary[index].outboundQuantity = e.target.value.replace(/[^0-9]/g, '')
+        setOutLibraryListdata(ary)
+    }
+    // 出库保存
+    const IssueSave = async () => {
+        let obj: any = {};
+        let ary: any = [];
+        await OutLibraryListdata.map((item, index) => {
+            if (item.outboundQuantity) {
+                obj.quantity = item.outboundQuantity
+                obj.id = item.id
+                ary.push(obj)
+            }
+        })
+        if (ary.length == 0) return message.error('所有数据无出库数量')
+        const data: any = await RequestUtil.post(`/tower-storage/materialStock`, {
+            id: OutboundId,
+            materialStockList: ary
+        });
+
     }
     // 重置
     const reset = () => {
@@ -683,14 +735,14 @@ export default function RawMaterialStock(): React.ReactNode {
                     <>
                         <Button onClick={onOutLibraryCancel}>关闭</Button>
                         <Button type='primary' onClick={() => { setIsApplyModal(true) }}>缺料申请</Button>
-                        <Button type='primary' onClick={onOutLibraryCancel}>保存</Button>
+                        <Button type='primary' onClick={IssueSave}>保存</Button>
                     </>
                 }
             >
                 <div className="out_library_info">
                     <div className="title">
                         出库原材料信息
-                        <span className='cont'>需求量：30</span>
+                        <span className='cont'>需求量：{requirement}</span>
                     </div>
                     <div className="table_wrap">
                         <Table

@@ -23,9 +23,9 @@ export default function RawMaterialStock(): React.ReactNode {
         [lengthMax, setLengthMax] = useState(''),//长度2
         [spec, setSpec] = useState(''),//规格
         [Listdata, setListdata] = useState<any[]>([]),//列表数据
-        [weight, setWeight] = useState<number>(0),//合计重量
-        [quantity, setQuantity] = useState<number>(0);//合计数量
-        // console.log((ApplicationContext.get().dictionaryOption as any)["111"],'ssss')
+        [weight, setWeight] = useState<number | string>(0),//合计重量
+        [quantity, setQuantity] = useState<number | string>(0);//合计数量
+    // console.log((ApplicationContext.get().dictionaryOption as any)["111"],'ssss')
     const columns = [
         {
             title: '序号',
@@ -101,25 +101,13 @@ export default function RawMaterialStock(): React.ReactNode {
         }
     ]
 
-    // 计算重量
-    let calculation = (data: any) => {
-        let weight = 0;
-        let quantity = 0;
-        data.map((item: any, index: any) => {
-            weight = weight + Number(item.weight ? item.weight : 0)
-            quantity = quantity + Number(item.quantity ? item.quantity : 0)
-        })
-        console.log(weight)
-        console.log(quantity)
-        setWeight(weight);
-        setQuantity(quantity);
-    }
+
     //获取列表数据
     const loadData = async () => {
         console.log('请求数据')
         const data: any = await RequestUtil.get(`/tower-storage/materialStock`, {
             current,
-            size:pageSize,
+            size: pageSize,
             warehouseId,
             materialTexture,
             productName,
@@ -130,9 +118,10 @@ export default function RawMaterialStock(): React.ReactNode {
             spec,
         });
         console.log(data, 'res')
-        setListdata(data.records);
+        setListdata(data.materialStockPage.records);
+        setWeight(data.weight)
+        setQuantity(data.quantity);
         setTotal(data.total);
-        calculation(Listdata)
     }
     // 重置
     const reset = () => {
