@@ -17,6 +17,10 @@
             "dataIndex": "supplierName"
         },
         {
+            "title": "添加时间",
+            "dataIndex": "addTime"
+        },
+        {
             "title": "联系人",
             "dataIndex": "contactMan"
         },
@@ -35,6 +39,28 @@
         {
             "title": "开户银行",
             "dataIndex": "depositBank"
+        }
+    ],
+    "AddEditDetail":[
+        {
+            "title": "序号",
+            "dataIndex": "index"
+        },
+        {
+            "title": "操作部门",
+            "dataIndex": "createDeptName"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "createUserName"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "createTime"
+        },
+        {
+            "title": "操作",
+            "dataIndex": "operation"
         }
     ]
 }

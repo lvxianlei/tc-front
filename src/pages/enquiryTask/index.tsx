@@ -142,7 +142,7 @@ export default function EnquiryTask(): React.ReactNode {
             <Descriptions title="操作信息">
             </Descriptions>
             <Page
-                path="/tower-market/inquiryTask"
+                path="/tower-supply/inquiryTask/{inquiryId}"
                 columns={[
                     ...enquiryTaskAction,
                 ]}
@@ -153,7 +153,7 @@ export default function EnquiryTask(): React.ReactNode {
             <Descriptions title="当前价格信息">
             </Descriptions>
             <Page
-                path="/tower-market/inquiryTask"
+                path="/tower-supply/inquiryTask/taskResult/{inquiryId}"
                 columns={[
                     ...CurrentPriceInformation
                 ]}

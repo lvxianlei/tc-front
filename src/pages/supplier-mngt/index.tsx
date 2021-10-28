@@ -28,13 +28,13 @@ export default function SupplierMngt(): React.ReactNode {
         return value
     }
     const add=()=>{
-        history.push(`/pages/supplier-mngt/supplierAdd`);
+        history.push(`/supplier-mngt/supplierAdd`);
     }
     const edit=()=>{
-        history.push(`/pages/supplier-mngt/supplierEdit`);
+        history.push(`/supplier-mngt/supplierEdit`);
     }
     const detail=()=>{
-        history.push(`/pages/supplier-mngt/supplierDetail`);
+        history.push(`/supplier-mngt/supplierDetail`);
     }
     //调接口删除
     const handleDelete = (id: string) => {
