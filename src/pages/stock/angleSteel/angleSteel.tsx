@@ -3,9 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { Button, Col, Pagination, Row, Select, TableColumnProps, Table, } from 'antd'
 import RequestUtil from "../../../utils/RequestUtil"
 import { RouteProps } from '../public'
-import WarehouseModal from './WarehouseModal'
 const { Option } = Select;
-const Warehouse = (props: RouteProps) => {
+const AngleSteel = (props: RouteProps) => {
     // const history = useHistory()
     const [columnsData, setColumnsData] = useState([]);
     const [total, setTotal] = useState(0);
@@ -24,59 +23,89 @@ const Warehouse = (props: RouteProps) => {
             }
         },
         {
-            key: 'warehouseNumber',
-            title: '编号',
-            dataIndex: 'warehouseNumber',
+            key: 'policy',
+            title: '策略项',
+            dataIndex: 'policy',
         },
         {
-            key: 'name',
-            title: '仓库名称',
-            dataIndex: 'name'
+            key: 'configData',
+            title: '配置数据',
+            dataIndex: 'configData',
         },
         {
-            key: 'warehouseCategoryName',
-            title: '分类',
-            dataIndex: 'warehouseCategoryName',
-        },
-        {
-            key: 'personName',
-            title: '负责人',
-            dataIndex: 'personName'
-        },
-        {
-            key: 'staffName',
-            title: '保管员', 
-            dataIndex: 'staffName'
-        },
-        {
-            key: 'shopName',
-            title: '车间',
-            dataIndex: 'shopName',
+            key: 'description',
+            title: '说明',
+            dataIndex: 'description'
         },
         {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
             align: 'center',
-            render: (_text: any, item: any, index: number): React.ReactNode => {
-                return (
-                    <div className='operation'>
-                        <span
-                            onClick={() => {
-                                setIsModal(true)
-                                setId(item.id)
-                            }}
-                        >编辑</span>
-                        <span>删除</span>
-                    </div>
-                )
-            }
         }]
+        const column: TableColumnProps<object>[] = [
+            {
+                key: 'index',
+                title: '序号',
+                dataIndex: 'index',
+                width: 50,
+                render: (text, item, index) => {
+                    return <span>{index + 1}</span>
+                }
+            },
+            {
+                key: 'policy',
+                title: '材质',
+                dataIndex: 'materialTexture',
+            },
+            {
+                key: 'thickness',
+                title: "厚度mm",
+                dataIndex: "thickness",
+            },
+            {
+                key: 'width',
+                title: "宽度mm",
+                dataIndex: "width",
+            },
+            {
+                key: 'clampLoss',
+                title: "夹钳总耗损mm",
+                dataIndex: "clampLoss",
+            },
+            {
+                key: 'edgeLoss',
+                title: "每刀口耗损mm",
+                dataIndex: "edgeLoss",
+            },
+            {
+                key: 'description',
+                title: "备注",
+                dataIndex: "description",
+            },
+            {
+                key: 'operation',
+                title: '操作',
+                dataIndex: 'operation',
+                align: 'center',
+                render: (_text: any, item: any, index: number): React.ReactNode => {
+                    return (
+                        <div className='operation'>
+                            <span
+                                onClick={() => {
+                                    setIsModal(true)
+                                    setId(item.id)
+                                }}
+                            >编辑</span>
+                        </div>
+                    )
+                }
+            }]
     useEffect(() => {
         getColumnsData()
     }, [current, size]);
     const getColumnsData = async () => {
-        const data: any = await RequestUtil.get('/tower-storage/warehouse', {
+        const data: any = await RequestUtil.get('/tower-storage/angleSteel', {
             current,
             size,
         })
@@ -92,23 +121,20 @@ const Warehouse = (props: RouteProps) => {
             <div className='public_content'>
                 <div className='func_box'>
                     <div className='func'>
-                        <Button
-                            className='func_item'
-                            type='primary'
-                        >导出</Button>
+                    <span>配料基础配置</span>
                     </div>
-                    <div className='func_right'>
+                    {/* <div className='func_right'>
                         <Button
                             className='func_right_item'
                             onClick={() => {
                                 setIsModal(true)
                                 setId(null)
                             }}
-                        >创建</Button>
+                        >添加</Button>
                         <Button
                             className='func_right_item'
                         >返回上一级</Button>
-                    </div>
+                    </div> */}
                 </div>
                 <Table
                     className='public_table'
@@ -133,14 +159,11 @@ const Warehouse = (props: RouteProps) => {
                     />
                 </div>
             </div>
-            <WarehouseModal
-                {...props}
-                isModal={isModal}
-                id={id}
-                cancelModal={cancelModal}
-            />
+           
         </div>
     )
+
+    
 }
 
-export default Warehouse;
+export default AngleSteel;

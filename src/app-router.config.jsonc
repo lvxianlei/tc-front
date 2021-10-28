@@ -729,6 +729,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 配置管理-角钢配料策略
+      "name": "角钢配料策略",
+      "path": "/stock/angleSteel",
+      "module": "./pages/stock/angleSteel/angleSteel",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 确认任务
       "name": "确认任务",
       "path": "/confirmTask/ConfirmTaskMngt",

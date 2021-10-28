@@ -409,6 +409,11 @@
                                 "label": "安全库存配置",
                                 "path": "/stock/securitySetting",
                                 "authority": "approvalm"
+                            },
+                            {
+                                "label": "角钢配料策略",
+                                "path": "/stock/angleSteel",
+                                "authority": "approvalm"
                             }
                         ]
                     },
