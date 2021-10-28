@@ -39,9 +39,9 @@ export default function Questionnaire(): React.ReactNode {
             dataIndex: 'createTime' 
         },
         {
-            key: 'currentStatus', 
+            key: 'status', 
             title: '问题单状态', 
-            dataIndex: 'currentStatus',
+            dataIndex: 'status',
             render: (status: number): React.ReactNode => {
                 switch (status) {
                     case 0:
