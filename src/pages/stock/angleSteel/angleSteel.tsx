@@ -48,7 +48,7 @@ const AngleSteel = (props: RouteProps) => {
         getColumnsData()
     }, [current, size]);
     const getColumnsData = async () => {
-        const data: any = await RequestUtil.get('/tower-storage/angleSteel', {
+        const data: any = await RequestUtil.get('/tower-supply/angleConfigStrategy', {
             current,
             size,
         })
