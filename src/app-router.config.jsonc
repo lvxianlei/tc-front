@@ -1044,7 +1044,7 @@
     },
     { // 工作管理-杆塔信息-编辑包装清单
       "name": "编辑包装清单",
-      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:productId/packingListSetting",
+      "path": "/workMngt/setOutList/poleInformation/:id/packingList/:productId/packingListSetting/:packId",
       "module": "./pages/workMngt/setOut/PackingListNew",
       "exact": true,
       "authority": "approvalm"
