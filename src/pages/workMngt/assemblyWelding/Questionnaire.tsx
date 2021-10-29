@@ -334,7 +334,6 @@ export default function Questionnaire(): React.ReactNode {
                 }
             })
         })
-        console.log(resData)
         let newData: IComponentList[] = resData?.filter((item: IComponentList) => {
             return weldingDetailedStructureList.every((items: IComponentList) => {
                 if(items.singleNum === item.basicsPartNumNow) { 
