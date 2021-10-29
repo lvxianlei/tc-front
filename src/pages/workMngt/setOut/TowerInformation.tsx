@@ -5,19 +5,61 @@
 */
 
 import React, { useState } from 'react';
-import { Space, DatePicker, Select, Button, Popconfirm, Input, message } from 'antd';
+import { Space, DatePicker, Select, Button, Popconfirm, message, Row, Col, Form, TreeSelect } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import TowerLoftingAssign from './TowerLoftingAssign';
 import RequestUtil from '../../../utils/RequestUtil';
+import { TreeNode } from 'antd/lib/tree-select';
+import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
+import useRequest from '@ahooksjs/use-request';
 
 
 export default function TowerInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const [ refresh, setRefresh ] = useState(false);
+    const [ loftingUser, setLoftingUser ] = useState([]);
+    const [ checkUser, setcheckUser ] = useState([]);
+    
+    const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
+        resole(data);
+    }), {})
+    const departmentData: any = data || [];
+
+    const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
+        roles && roles.forEach((role: any & SelectDataNode): void => {
+            role.value = role.id;
+            role.isLeaf = false;
+            if (role.children && role.children.length > 0) {
+                wrapRole2DataNode(role.children);
+            }
+        });
+        return roles;
+    }
+
+    const renderTreeNodes = (data:any) => data.map((item:any) => {
+        if (item.children) {
+            item.disabled = true;
+            return (<TreeNode key={ item.id } title={ item.title } value={ item.id } disabled={ item.disabled } className={ styles.node } >
+                { renderTreeNodes(item.children) }
+            </TreeNode>);
+        }
+        return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id } />;
+    });
+
+    const onDepartmentChange = async (value: Record<string, any>, title?: string) => {
+        const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${ value }&size=1000`);
+        switch (title) {
+            case "loftingUserDept":
+                return setLoftingUser(userData.records);
+            case "checkUserDept":
+                return setcheckUser(userData.records);
+        };
+    }
 
     const columns = [
         {
@@ -175,21 +217,55 @@ export default function TowerInformation(): React.ReactNode {
                 label: '放样状态',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
                     <Select.Option value="" key="4">全部</Select.Option>
-                    <Select.Option value="0" key="0">放样中</Select.Option>
-                    <Select.Option value="1" key="1">校核中</Select.Option>
-                    <Select.Option value="2" key="2">已完成</Select.Option>
-                    <Select.Option value="3" key="3">已提交</Select.Option>
+                    <Select.Option value="1" key="1">放样中</Select.Option>
+                    <Select.Option value="2" key="2">校核中</Select.Option>
+                    <Select.Option value="3" key="3">已完成</Select.Option>
+                    <Select.Option value="4" key="4">已提交</Select.Option>
                 </Select>
             },
             {
                 name: 'loftingUser',
                 label: '放样人',
-                children: <Input placeholder="请输入" />
+                children: <Row>
+                    <Col>
+                        <Form.Item name="loftingUserDept">
+                            <TreeSelect placeholder="请选择" onChange={ (value: any) => { onDepartmentChange(value, 'loftingUserDept') } } style={{ width: "150px" }}>
+                                { renderTreeNodes(wrapRole2DataNode(departmentData)) }
+                            </TreeSelect>
+                        </Form.Item>
+                    </Col>
+                    <Col>
+                        <Form.Item name="loftingUser">
+                            <Select placeholder="请选择" style={{ width: "150px" }}>
+                                { loftingUser && loftingUser.map((item: any) => {
+                                    return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                }) }
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                </Row>
             },
             {
                 name: 'checkUser',
                 label: '校核人',
-                children: <Input placeholder="请输入" />
+                children: <Row>
+                    <Col>
+                        <Form.Item name="checkUserDept">
+                            <TreeSelect placeholder="请选择" onChange={ (value: any) => { onDepartmentChange(value, 'checkUserDept') } } style={{ width: "150px" }}>
+                                { renderTreeNodes(wrapRole2DataNode(departmentData)) }
+                            </TreeSelect>
+                        </Form.Item>
+                    </Col>
+                    <Col>
+                        <Form.Item name="checkUser">
+                            <Select placeholder="请选择" style={{ width: "150px" }}>
+                                { checkUser && checkUser.map((item: any) => {
+                                    return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                }) }
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                </Row>
             }
         ] }
         onFilterSubmit = { (values: Record<string, any>) => {

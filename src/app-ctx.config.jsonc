@@ -62,17 +62,17 @@
                                 "path": "/sys/costconfig",
                                 "authority": "dxnry"
                             }
-                            // ,
-                            // {
-                            //     "label": "原材料类型管理",
-                            //     "path": "/sys/materialType",
-                            //     "authority": "bidding"
-                            // },
-                            // {
-                            //     "label": "原材料管理",
-                            //     "path": "/sys/material",
-                            //     "authority": "bidding"
-                            // }
+                            ,
+                            {
+                                "label": "原材料类型管理",
+                                "path": "/sys/materialType",
+                                "authority": "material_management"
+                            },
+                            {
+                                "label": "原材料管理",
+                                "path": "/sys/material",
+                                "authority": "material_management"
+                            }
                         ]
                     },
                     {
@@ -183,12 +183,12 @@
                         "label": "工作台",
                         "icon": "technology",
                         "path": "/workBench",
-                        "authority": "approvalm",
+                        "authority": "rd_workbench",
                         "items": [
                             {
                                 "label": "工作台",
                                 "path": "/workBench/workBenchMngt",
-                                "authority": "approvalm"
+                                "authority": "rd_workbench"
                             }
                         ]
                     },
@@ -201,12 +201,12 @@
                             {
                                 "label": "计划跟踪",
                                 "path": "/cockpit/planTrack",
-                                "authority": "approvalm"
+                                "authority": "rd_plan_track_management"
                             },
                             {
                                 "label": "放样计划",
                                 "path": "/cockpit/planSetOut",
-                                "authority": "approvalm"
+                                "authority": "rd_plan_lofting_management"
                             },
                             {
                                 "label": "库存看板",
@@ -320,12 +320,12 @@
                         "label": "确认任务",
                         "icon": "technology",
                         "path": "/confirmTask",
-                        "authority": "approvalm",
+                        "authority": "rd_draw_page",
                         "items": [
                             {
                                 "label": "确认任务",
                                 "path": "/confirmTask/ConfirmTaskMngt",
-                                "authority": "approvalm"
+                                "authority": "rd_draw_page"
                             }
                         ]
                     },
@@ -356,7 +356,7 @@
                             {
                                 "label": "确认列表",
                                 "path": "/workMngt/confirmList",
-                                "authority": "approvalm"
+                                "authority": "rd_draw_product_detail_page"
                             },
                             {
                                 "label": "指派列表",
@@ -366,7 +366,7 @@
                             {
                                 "label": "提料列表",
                                 "path": "/workMngt/pickList",
-                                "authority": "approvalm"
+                                "authority": "product_material_list"
                             },
                             {
                                 "label": "放样列表",
@@ -376,17 +376,17 @@
                             {
                                 "label": "螺栓列表",
                                 "path": "/workMngt/boltList",
-                                "authority": "approvalm"
+                                "authority": "rd_bolt_management"
                             },
                             {
                                 "label": "小样图列表",
                                 "path": "/workMngt/sampleDrawList",
-                                "authority": "approvalm"
+                                "authority": "rd_small_sample_management"
                             },
                             {
                                 "label": "组焊列表",
                                 "path": "/workMngt/assemblyWeldingList",
-                                "authority": "approvalm"
+                                "authority": "rd_welding_page"
                             },
                             {
                                 "label": "询价列表",
@@ -404,12 +404,12 @@
                         "label": "图纸塔型",
                         "icon": "technology",
                         "path": "/drawTower",
-                        "authority": "approvalm",
+                        "authority": "rd_draw_product_category_management",
                         "items": [
                             {
                                 "label": "图纸塔型",
                                 "path": "/drawTower/drawTowerMngt",
-                                "authority": "approvalm"
+                                "authority": "rd_draw_product_category_management"
                             }
                         ]
                     },
