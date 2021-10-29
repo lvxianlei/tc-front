@@ -366,7 +366,7 @@
                             {
                                 "label": "提料列表",
                                 "path": "/workMngt/pickList",
-                                "authority": "approvalm"
+                                "authority": "product_material_list"
                             },
                             {
                                 "label": "放样列表",
