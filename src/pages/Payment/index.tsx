@@ -8,9 +8,9 @@ import RequestUtil from '../../utils/RequestUtil'
 export default function Payment() {
     const history = useHistory()
     const [filterValue, setFilterValue] = useState({})
-    const { loading, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/Payment?id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/payment?id=${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -55,7 +55,7 @@ export default function Payment() {
                 render: (_: any, record: any) => {
                     return <>
                         <Button type="link" onClick={() => history.push(`/project/payment/detail/${record.id}`)}>查看</Button>
-                        <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>
+                        {record.applyStatus === 4 && <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>}
                     </>
                 }
             }]}
