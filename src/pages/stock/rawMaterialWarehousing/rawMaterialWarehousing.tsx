@@ -12,9 +12,10 @@ const { RangePicker } = DatePicker;
 export default function RawMaterialStock(): React.ReactNode {
     const history = useHistory(),
         [current, setCurrent] = useState(1),
-        [total, setTotal] = useState(100),
+        [total, setTotal] = useState(0),
         [pageSize, setPageSize] = useState<number>(10),
         [status, setStatus] = useState(''),//状态
+        [Listdata, setListdata] = useState<any>([]),//数据
         [dateValue, setDateValue] = useState<any>([]),//时间
         [dateString, setDateString] = useState<any>([]),//时间字符串格式
         [keyword, setKeyword] = useState<any>('');//关键字搜索
@@ -23,43 +24,49 @@ export default function RawMaterialStock(): React.ReactNode {
             title: '序号',
             dataIndex: 'key',
             width: 50,
+            render: (text: any, item: any, index: any) => {
+                console.log(item, 'item')
+                return <span>{index + 1}</span>
+            }
         },
         {
             title: '收货单号',
-            dataIndex: 'name',
+            dataIndex: 'receiveNumber',
             width: 120,
-            render: (text: any) => <a>{text}</a>,
         }, {
             title: '状态',
             dataIndex: 'receivingBatch',
             width: 120,
+            render: (text: any, item: any, index: any) => {
+                return text == 0 ? '待完成' : '已完成'
+            }
         }, {
             title: '最新状态变更时间',
-            dataIndex: 'key',
+            dataIndex: 'updateTime',
             width: 120,
         }, {
             title: '供应商',
-            dataIndex: 'key',
+            dataIndex: 'supplierName',
             width: 120,
         }, {
             title: '联系人',
-            dataIndex: 'key',
+            dataIndex: 'contactsUser',
             width: 120,
         }, {
             title: '联系电话',
-            dataIndex: 'key',
+            dataIndex: 'contactsPhone',
             width: 120,
         }, {
             title: '合同编号',
-            dataIndex: 'key',
+            dataIndex: 'contractNumber',
             width: 120,
         }, {
             title: '约定到货时间',
-            dataIndex: 'key',
+            dataIndex: 'receiveTime',
             width: 120,
         }, {
             title: '重量(度)',
-            dataIndex: 'key',
+            dataIndex: 'weight',
             width: 120,
         },
         {
@@ -69,90 +76,24 @@ export default function RawMaterialStock(): React.ReactNode {
             fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={`/stock/rawMaterialWarehousing/detail/${record.key}`}>详情</Link>
+                    <Link to={`/stock/rawMaterialWarehousing/detail/${record.id}`}>详情</Link>
                 </Space>
             )
         }
     ]
-    const Listdata = [
-        {
-            name: '仓库1',
-            key: '1',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '2',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '3',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '4',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '15',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '6',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '17',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '51',
-            receivingBatch: '2021-1223-TT'
-        }, {
-            name: '仓库1',
-            key: '18',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '8',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '9',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '10',
-            receivingBatch: '2021-1223-TT'
-        }, {
-            name: '仓库1',
-            key: '31',
-            receivingBatch: '2021-1223-TT'
-        },
-        {
-            name: '仓库1',
-            key: '51',
-            receivingBatch: '2021-1223-TT'
-        },
-    ]
     //获取列表数据
     const loadData = async () => {
         console.log('请求数据')
-        const data: any[] = await RequestUtil.get(`/tower-system/dictionary/allDictionary`, {
+        const data: any = await RequestUtil.get(`/tower-storage/receiveStock`, {
             current,
             pageSize,
-            keyword,
-            dateString
+            fuzzyQuery: keyword,
+            receiveStatus: status,
+            startStatusUpdateTime: dateString[0] ? dateString[0] + ' 00:00:00' : '',
+            endStatusUpdateTime: dateString[1] ? dateString[1] + ' 23:59:59' : '',
         });
+        setListdata(data.records);
+        setTotal(data.total)
     }
     // 重置
     const reset = () => {
@@ -166,7 +107,7 @@ export default function RawMaterialStock(): React.ReactNode {
     //进入页面刷新
     useEffect(() => {
         loadData()
-    }, [current, pageSize])
+    }, [current, pageSize, status, dateString])
     return (
         <div id="RawMaterialStock">
             <div className="Search_public_Stock">
@@ -193,19 +134,19 @@ export default function RawMaterialStock(): React.ReactNode {
                             onChange={(val) => { setStatus(val) }}
                         >
                             <Select.Option
+                                value=""
+                            >
+                                全部
+                            </Select.Option>
+                            <Select.Option
+                                value="0"
+                            >
+                                待完成
+                            </Select.Option>
+                            <Select.Option
                                 value="1"
                             >
-                                状态1
-                            </Select.Option>
-                            <Select.Option
-                                value="2"
-                            >
-                                状态2
-                            </Select.Option>
-                            <Select.Option
-                                value="3"
-                            >
-                                状态3
+                                已完成
                             </Select.Option>
                         </Select>
                     </div>
@@ -218,6 +159,9 @@ export default function RawMaterialStock(): React.ReactNode {
                             value={keyword}
                             onChange={(e) => {
                                 setKeyword(e.target.value)
+                            }}
+                            onPressEnter={() => {
+                                loadData()
                             }}
                         >
                         </Input>

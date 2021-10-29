@@ -104,7 +104,6 @@ export default function RawMaterialStock(): React.ReactNode {
 
     //获取列表数据
     const loadData = async () => {
-        console.log('请求数据')
         const data: any = await RequestUtil.get(`/tower-storage/materialStock`, {
             current,
             size: pageSize,
