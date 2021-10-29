@@ -62,17 +62,17 @@
                                 "path": "/sys/costconfig",
                                 "authority": "dxnry"
                             }
-                            // ,
-                            // {
-                            //     "label": "原材料类型管理",
-                            //     "path": "/sys/materialType",
-                            //     "authority": "bidding"
-                            // },
-                            // {
-                            //     "label": "原材料管理",
-                            //     "path": "/sys/material",
-                            //     "authority": "bidding"
-                            // }
+                            ,
+                            {
+                                "label": "原材料类型管理",
+                                "path": "/sys/materialType",
+                                "authority": "material_management"
+                            },
+                            {
+                                "label": "原材料管理",
+                                "path": "/sys/material",
+                                "authority": "material_management"
+                            }
                         ]
                     },
                     {
@@ -201,12 +201,12 @@
                             {
                                 "label": "计划跟踪",
                                 "path": "/cockpit/planTrack",
-                                "authority": "approvalm"
+                                "authority": "rd_plan_track_management"
                             },
                             {
                                 "label": "放样计划",
                                 "path": "/cockpit/planSetOut",
-                                "authority": "approvalm"
+                                "authority": "rd_plan_lofting_management"
                             },
                             {
                                 "label": "库存看板",
@@ -376,12 +376,12 @@
                             {
                                 "label": "螺栓列表",
                                 "path": "/workMngt/boltList",
-                                "authority": "approvalm"
+                                "authority": "rd_bolt_management"
                             },
                             {
                                 "label": "小样图列表",
                                 "path": "/workMngt/sampleDrawList",
-                                "authority": "approvalm"
+                                "authority": "rd_small_sample_management"
                             },
                             {
                                 "label": "组焊列表",
@@ -404,12 +404,12 @@
                         "label": "图纸塔型",
                         "icon": "technology",
                         "path": "/drawTower",
-                        "authority": "approvalm",
+                        "authority": "rd_draw_product_category_management",
                         "items": [
                             {
                                 "label": "图纸塔型",
                                 "path": "/drawTower/drawTowerMngt",
-                                "authority": "approvalm"
+                                "authority": "rd_draw_product_category_management"
                             }
                         ]
                     },
