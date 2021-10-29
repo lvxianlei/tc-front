@@ -1,7 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
-import { Button, Col, Pagination, Row, Select, TableColumnProps, Table } from 'antd'
+import { Button, Col, Pagination, Row, Select, TableColumnProps, Table, } from 'antd'
 import { CommonTable } from '../../common'
+// import { Page } from '../../common'
+import { baseInfo, material } from './configurationData.json'
 import RequestUtil from "../../../utils/RequestUtil"
 import { RouteProps } from '../public'
 const { Option } = Select;
@@ -14,36 +16,8 @@ const AngleSteel = (props: RouteProps) => {
     const [isModal, setIsModal] = useState(false);
     const [id, setId] = useState<string | null>(null);
     const columns: TableColumnProps<object>[] = [
-        {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            width: 50,
-            render: (text, item, index) => {
-                return <span>{index + 1}</span>
-            }
-        },
-        {
-            key: 'policy',
-            title: '策略项',
-            dataIndex: 'policy',
-        },
-        {
-            key: 'configData',
-            title: '配置数据',
-            dataIndex: 'configData',
-        },
-        {
-            key: 'description',
-            title: '说明',
-            dataIndex: 'description'
-        },
-        {
-            key: 'operation',
-            title: '操作',
-            dataIndex: 'operation',
-            align: 'center',
-        }]
+        ...baseInfo
+    ]
     useEffect(() => {
         getColumnsData()
     }, [current, size]);
@@ -62,7 +36,10 @@ const AngleSteel = (props: RouteProps) => {
     return (
         <div className='public_page'>
             <div className='public_content'>
-                <CommonTable         
+            <div className='func'>
+                      <span>配料基础配置</span>  
+                    </div>
+                <CommonTable
                     columns={columns}
                     dataSource={columnsData}
                 />
@@ -80,10 +57,21 @@ const AngleSteel = (props: RouteProps) => {
                         }}
                     />
                 </div>
+              
             </div>
-
+            {/* <Page
+                path="/"
+                columns={
+                    [
+                       ...material
+                    ]
+                }
+                searchFormItems={[]}
+            /> */}
         </div>
+        
     )
+
 
 
 }

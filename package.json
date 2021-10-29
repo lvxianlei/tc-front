@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@ahooksjs/use-request": "^2.8.10",
+    "@ant-design/charts": "^1.2.14",
     "@ant-design/pro-form": "^1.39.0",
     "@ant-design/pro-table": "^2.52.0",
     "@loadable/component": "^5.14.1",
