@@ -115,7 +115,7 @@
             "title": "关联收货单",
             "dataIndex": "receiptVos",
             "type": "popTable",
-            "path": "/tower-storage/receiveStock/1",
+            "path": "/tower-storage/receiveStock",
             "width": 1011,
             "value": "contractName",
             "selectType": "checkbox",
@@ -142,6 +142,10 @@
                 {
                     "title": "创建人",
                     "dataIndex": "createUser"
+                },
+                {
+                    "title": "材料名称",
+                    "dataIndex": "productName"
                 },
                 {
                     "title": "重量（吨）合计",
