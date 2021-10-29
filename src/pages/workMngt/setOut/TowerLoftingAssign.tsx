@@ -258,6 +258,9 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                 loftingUser: ''
             }
         }
+        this.setState({
+            appointedList: [...appointedList]
+        })
         this.getForm()?.setFieldsValue({ appointedList: [...appointedList] })
     }
 

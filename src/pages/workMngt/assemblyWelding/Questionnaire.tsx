@@ -492,7 +492,9 @@ export default function Questionnaire(): React.ReactNode {
             <CommonTable columns={ componentColumns } dataSource={ componentList } pagination={ false } rowSelection={ { selectedRowKeys: selectedRowKeys || [], onChange: (selectedKeys: [], selectedRows: []) => {
                 setSelectedRowKeys(selectedKeys);
                 setSelectedRows(selectedRows);
-            } } } />
+            }, getCheckboxProps: (record: Record<string, any>) => ({
+                disabled: record.basicsPartNumNow === 0
+            })  } } />
         </Modal>
     </>
 }
