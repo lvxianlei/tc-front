@@ -8,20 +8,6 @@ import { useHistory } from 'react-router';
 const { Option } = Select;
 const ViewPanel = (): React.ReactNode => {
     const history = useHistory()
-    let [columnsData, setColumnsData] = useState<any[]>([]);
-    let [selects, setSelects] = useState<any>({
-        materialNames: [],
-        materialTextures: [],
-        specs: [],
-    });
-    // let [total, setTotal] = useState(0);
-    let [size, setSize] = useState(10);
-    let [current, setCurrent] = useState(1);
-    let [condition, setCondition] = useState('');
-    let [materialTexture, setMaterialTexture] = useState('');
-    let [productName, setProductName] = useState('');
-    let [spec, setSpec] = useState('');
-    let [standard, setStandard] = useState('');
     const columns: TableColumnProps<object>[] = [
         {
             key: 'index',
@@ -78,29 +64,43 @@ const ViewPanel = (): React.ReactNode => {
             dataIndex: 'safeWeight'
         },
         {
-            key: 'typeName',
+            key: 'alarmWeight',
             title: '告警库存（吨）',
-            dataIndex: 'typeName'
+            dataIndex: 'alarmWeight'
         },
         {
-            key: 'currentProjectStage',
+            key: 'typeName',
             title: '库存状态',
-            dataIndex: 'currentProjectStage',
+            dataIndex: 'typeName',
             render: (text, item: any, index) => {
                 return (
                     <div>
                         {
                             item.type === 0 ?
-                                <span style={{ padding: '5px 8px', backgroundColor: 'yello', color: '#fff' }}>告警库存</span> :
+                                <span style={{ padding: '5px 8px', backgroundColor: 'yellow' , color: '#000' }}>告警库存</span> :
                                 item.type === 1 ?
                                     <span style={{ padding: '5px 8px', backgroundColor: 'red', color: '#fff' }}>可用库存</span> :
-                                    <span></span>
+                                    <span style={{ padding: '5px 8px', backgroundColor: '#ccc', color: '#FF8C00' }}>安全库存</span>
                         }
                     </div>
                 )
             }
         },
     ]
+    let [columnsData, setColumnsData] = useState<any[]>([]);
+    let [selects, setSelects] = useState<any>({
+        materialNames: [],
+        materialTextures: [],
+        specs: [],
+    });
+    // let [total, setTotal] = useState(0);
+    let [size, setSize] = useState(10);
+    let [current, setCurrent] = useState(1);
+    let [condition, setCondition] = useState('');
+    let [materialTexture, setMaterialTexture] = useState('');
+    let [productName, setProductName] = useState('');
+    let [spec, setSpec] = useState('');
+    let [standard, setStandard] = useState('');
     useEffect(() => {
         getColumnsData()
     }, [condition, materialTexture, productName, spec, standard, current, size,]);
@@ -179,7 +179,7 @@ const ViewPanel = (): React.ReactNode => {
                     >
                         <Option value={''}>全部</Option>
                         {
-                            (ApplicationContext.get().dictionaryOption as any)["111"].map((item: { id: string, name: string }) => ({
+                            (ApplicationContext.get().dictionaryOption as any)["138"].map((item: { id: string, name: string }) => ({
                                 value: item.id,
                                 label: item.name
                             })).map((t: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }, i: any) => {

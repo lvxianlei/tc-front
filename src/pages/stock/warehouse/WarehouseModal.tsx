@@ -9,10 +9,10 @@ import { Key } from 'rc-select/lib/interface/generator';
 // import { SelectValue } from 'antd/lib/select';
 const { Option } = Select;
 
-interface Props  {
+interface Props {
     isModal: boolean,
     cancelModal: Function,
-    getColumnsData:Function,
+    getColumnsData: Function,
     id: string | null,
 }
 
@@ -99,7 +99,9 @@ const WarehouseModal = (props: Props) => {
     let [staffs, setStaffs] = useState<any[]>([
         {
             departmentId: '',//部门
+            departmentName: '',
             userId: '',//人员
+            userName: '',
             userList: [],
             id: null,
         }
@@ -128,7 +130,9 @@ const WarehouseModal = (props: Props) => {
         let userStaffs = data.staffs.map((item: any) => {
             return {
                 departmentId: item.departmentId,
+                departmentName: item.departmentName,
                 userId: item.userId,
+                userName: item.userName,
                 userList: [],
                 id: item.id,
             }
@@ -281,7 +285,7 @@ const WarehouseModal = (props: Props) => {
                             <span className='tip'>*分类：</span>
                             <Select
                                 className='input'
-                                value={baseInfo.warehouseCategoryId}
+                                value={baseInfo.warehouseCategoryId ? baseInfo.warehouseCategoryId : '请选择'}
                                 onChange={(value) => {
                                     baseInfoChange(value, 'select', 'warehouseCategoryId')
                                 }}
@@ -290,9 +294,9 @@ const WarehouseModal = (props: Props) => {
                                     (ApplicationContext.get().dictionaryOption as any)["127"].map((item: { id: string, name: string }) => ({
                                         value: item.id,
                                         label: item.name
-                                    })).map((t: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; },i: any) => {
+                                    })).map((t: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }, i: any) => {
                                         return (
-                                            <Option value={t.value}>{t.label}</Option>
+                                            <Option value={t.value} key={i}>{t.label}</Option>
                                         )
                                     })
                                 }
@@ -354,7 +358,7 @@ const WarehouseModal = (props: Props) => {
                                 {
                                     userList.map((item, index) => {
                                         return (
-                                            <Option value={item.tenantId} key={index}>{item.name}</Option>
+                                            <Option value={item.id} key={index}>{item.name}</Option>
                                         )
                                     })
                                 }
@@ -371,7 +375,7 @@ const WarehouseModal = (props: Props) => {
                                     <span className='tip'>保管员</span>
                                     <Select
                                         className='input'
-                                        value={item.departmentId ? item.departmentId : '请选择'}
+                                        value={item.departmentName ? item.departmentName : item.departmentId ? item.departmentId : '请选择'}
                                         style={{ width: 120 }}
                                         onChange={(value) => {
                                             staffs[index].departmentId = value;
@@ -390,7 +394,7 @@ const WarehouseModal = (props: Props) => {
                                     </Select>
                                     <Select
                                         className='input'
-                                        value={item.userId ? item.userId : '请选择'}
+                                        value={item.userName ? item.userName : item.userId? item.userId : '请选择'}
                                         style={{ width: 120 }}
                                         onChange={(value) => {
                                             staffs[index].userId = value;
@@ -401,13 +405,13 @@ const WarehouseModal = (props: Props) => {
                                         {
                                             item.userList.map((item: any, index: number) => {
                                                 return (
-                                                    <Option value={item.tenantId} key={index}>{item.name}</Option>
+                                                    <Option value={item.id} key={index}>{item.name}</Option>
                                                 )
                                             })
                                         }
                                     </Select>
                                     {
-                                        staffs.length - 1 === index ?
+                                        staffs.length - 1 === index && staffs.length <= 10 ?
                                             <Button
                                                 className='button'
                                                 onClick={() => {
