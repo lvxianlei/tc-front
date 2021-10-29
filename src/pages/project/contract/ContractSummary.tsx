@@ -3,7 +3,7 @@ import { Table } from "antd";
 import { withRouter } from "react-router-dom";
 import { ContractSummary } from "../../prom/contract/ContractSummary";
 import RequestUtil from "../../../utils/RequestUtil";
-
+import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions'
 const isIta: any = {
   0: "无",
   1: "原件",
@@ -187,6 +187,16 @@ class ManagementContractSummary extends ContractSummary {
       {
         title: "订单工程名称",
         dataIndex: "orderProjectName",
+      },
+      {
+        title: "产品类型",
+        dataIndex: "productName",
+        render: (text: any) => <>{text}</>
+      },
+      {
+        title: "电压等级",
+        dataIndex: "voltageGrade",
+        render: (text: any) => <>{text}</>
       },
       {
         title: "含税金额(元)",

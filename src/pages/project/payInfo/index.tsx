@@ -15,12 +15,10 @@ const payTypeEnum: { [key: number]: any } = {
 }
 
 export default function PayInfo() {
-    const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
     const [payType, setPayType] = useState<PayTypes>(2)
     const [payInfoData, setPayInfoData] = useState<any>()
     const params = useParams<{ id: string, tab?: TabTypes }>()
-    // const [visible, setVisible] = useState<boolean>(false)
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/payApply/getPayInfo`, { projectId: params.id })

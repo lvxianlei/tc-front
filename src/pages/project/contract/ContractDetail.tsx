@@ -69,7 +69,7 @@ class ManagementContractDetail extends ContractDetail {
             `/tower-market/contract?id=${this.props.match.params.id}`
           );
           if (resData) {
-            this.props.history.push(`/project/contract`);
+            this.props.history.goBack();
           }
         }}
         disabled={this.state.detail.isRelateOrder === 1}

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { Page } from '../common'
@@ -7,7 +7,7 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 export default function Payment() {
     const history = useHistory()
-
+    const [filterValue, setFilterValue] = useState({})
     const { loading, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/Payment?id=${id}`)
@@ -18,11 +18,12 @@ export default function Payment() {
     }), { manual: true })
 
     const onFilterSubmit = (value: any) => {
-        if (value.startLaunchTime) {
-            const formatDate = value.startLaunchTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startLaunchTime = formatDate[0]
-            value.endLaunchTime = formatDate[1]
+        if (value.startApplicantTime) {
+            const formatDate = value.startApplicantTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startApplicantTime = formatDate[0]
+            value.endApplicantTime = formatDate[1]
         }
+        setFilterValue(value)
         return value
     }
 
@@ -59,38 +60,43 @@ export default function Payment() {
                 }
             }]}
         onFilterSubmit={onFilterSubmit}
+        filterValue={filterValue}
         searchFormItems={[
             {
                 name: 'fuzzyQuery',
                 children: <Input placeholder="请款单号/项目编号/项目名称/票面单位/业务经理" style={{ width: 300 }} />
             },
             {
-                name: 'isOpen',
+                name: 'payType',
                 label: '付款类型',
                 children: <Select style={{ width: 100 }}>
-                    <Select.Option value="a">请款</Select.Option>
-                    <Select.Option value="b">报销</Select.Option>
+                    <Select.Option value="0">请款</Select.Option>
+                    <Select.Option value="1">报销</Select.Option>
                 </Select>
             },
             {
-                name: 'contractType',
+                name: 'payStatus',
                 label: '付款状态',
                 children: <Select style={{ width: 100 }}>
-                    <Select.Option value="e">待付款</Select.Option>
-                    <Select.Option value="f">已付款</Select.Option>
+                    <Select.Option value="0">待付款</Select.Option>
+                    <Select.Option value="1">已付款</Select.Option>
                 </Select>
             },
             {
-                name: 'bbbb',
+                name: 'applyStatus',
                 label: '审批状态',
                 children: <Select style={{ width: 100 }}>
-                    <Select.Option value="e">待审批</Select.Option>
-                    <Select.Option value="f">被驳回</Select.Option>
+                    <Select.Option value="1">审批中</Select.Option>
                     <Select.Option value="2">已通过</Select.Option>
+                    <Select.Option value="3">已驳回</Select.Option>
+                    <Select.Option value="4">已撤销</Select.Option>
+                    <Select.Option value="6">通过后撤销</Select.Option>
+                    <Select.Option value="7">已删除</Select.Option>
+                    <Select.Option value="10">已支付</Select.Option>
                 </Select>
             },
             {
-                name: 'startLaunchTime',
+                name: 'startApplicantTime',
                 label: '申请时间',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
             }
