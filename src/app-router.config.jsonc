@@ -1061,42 +1061,42 @@
       "path": "/workMngt/assemblyWeldingList",
       "module": "./pages/workMngt/assemblyWelding/AssemblyWeldingList",
       "exact": true,
-      "authority": "rd_welding_page"
+      "authority": "rd_welding"
     },
     { // 工作管理-组焊列表-组焊信息
       "name": "组焊信息",
       "path": "/workMngt/assemblyWeldingList/assemblyWeldingInformation/:id",
       "module": "./pages/workMngt/assemblyWelding/AssemblyWeldingInformation",
       "exact": true,
-      "authority": "rd_welding_get"
+      "authority": "rd_welding"
     },
     { // 工作管理-组焊列表-组焊清单
       "name": "组焊清单",
       "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId",
       "module": "./pages/workMngt/assemblyWelding/AssemblyWeldingListing",
       "exact": true,
-      "authority": "rd_welding_segment_page"
+      "authority": "rd_welding"
     },
     { // 工作管理-组焊列表-校核
       "name": "校核",
       "path": "/workMngt/assemblyWeldingList/assemblyWeldingCheck/:id/:productCategoryId",
       "module": "./pages/workMngt/assemblyWelding/AssemblyWeldingCheck",
       "exact": true,
-      "authority": "rd_welding_get_check_page"
+      "authority": "rd_welding"
     },
     { // 工作管理-组焊列表-校核-问题单
       "name": "问题单",
       "path": "/workMngt/assemblyWeldingList/assemblyWeldingCheck/:id/:productCategoryId/questionnaire/:segmentId",
       "module": "./pages/workMngt/assemblyWelding/Questionnaire",
       "exact": true,
-      "authority": "rd_welding_get_check"
+      "authority": "rd_welding"
     },
     { // 工作管理-组焊列表-校核-查看问题单
       "name": "查看问题单",
       "path": "/workMngt/assemblyWeldingList/assemblyWeldingCheck/:id/:productCategoryId/questionnairedetail/:segmentId",
       "module": "./pages/workMngt/assemblyWelding/QuestionnaireDetail",
       "exact": true,
-      "authority": "rd_welding_get_check"
+      "authority": "rd_welding"
     },
     { // 工作管理-螺栓列表
       "name": "螺栓列表",
