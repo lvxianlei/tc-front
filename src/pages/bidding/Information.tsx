@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Space, Input, DatePicker, Select } from 'antd'
 import { Link } from 'react-router-dom'
 import { Page } from '../common'
@@ -112,6 +112,7 @@ const columns = [
     }
 ]
 export default function Information(): React.ReactNode {
+    const [filterValue, setFilterValue] = useState({})
     const dictionaryOptions: any = (ApplicationContext.get().dictionaryOption as any)["125"]
     const onFilterSubmit = (value: any) => {
         if (value.startBidBuyEndTime) {
@@ -132,6 +133,7 @@ export default function Information(): React.ReactNode {
         if (value.source) {
             value.source = value.source.join(",")
         }
+        setFilterValue(value)
         return value
     }
 
@@ -140,6 +142,7 @@ export default function Information(): React.ReactNode {
         columns={columns as any}
         headTabs={[]}
         onFilterSubmit={onFilterSubmit}
+        filterValue={filterValue}
         searchFormItems={[
             {
                 name: 'fuzzyQuery',
