@@ -22,11 +22,33 @@
         },
         {
             "title": "付款类型",
-            "dataIndex": "payType"
+            "dataIndex": "payType",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "请款",
+                    "value": 0
+                },
+                {
+                    "label": "报销",
+                    "value": 1
+                }
+            ]
         },
         {
             "title": "付款状态",
-            "dataIndex": "payStatus"
+            "dataIndex": "payStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "待付款",
+                    "value": 0
+                },
+                {
+                    "label": "已付款",
+                    "value": 1
+                }
+            ]
         },
         {
             "title": "金额",

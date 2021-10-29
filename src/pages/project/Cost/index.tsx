@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Result, Button, Spin } from "antd"
+import { Result, Button, Spin, Modal, message } from "antd"
 import { Link, useHistory, useParams } from "react-router-dom"
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common'
 import { consultRecords, costBase } from '../managementDetailData.json'
@@ -48,6 +48,27 @@ export default function CostDetail() {
         }
     }))
 
+    const { run: deleteRun } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.delete(`/tower-market/askInfo/delAskInfoByProId/${params.id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const hadleDelete = () => {
+        Modal.confirm({
+            title: "删除",
+            content: "确定删除此成本评估吗？",
+            onOk: async () => {
+                await deleteRun()
+                message.success("删除成功...")
+                history.go(0)
+            }
+        })
+    }
+
     return <>
         <SelectInquiryEdit type={selectType} visible={!!selectType} onOk={() => {
             setSelectType("")
@@ -70,6 +91,7 @@ export default function CostDetail() {
             {data?.askInfo?.askInfoVo && <DetailContent title={[
                 <Button key="push" style={{ marginRight: '16px' }} type="primary" onClick={handleNewAudit}>发起询价任务</Button>,
                 <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={() => history.push(`/project/management/edit/cost/${params.id}`)}>编辑</Button>,
+                <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={hadleDelete}>删除</Button>,
                 <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
             ]}>
                 <DetailTitle title="基本信息" />
