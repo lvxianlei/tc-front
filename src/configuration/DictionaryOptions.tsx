@@ -14,7 +14,7 @@ export enum DictionaryEnums {
     CLIENT_TYPE = 121,
     WIN_BID_TYPE = 122,
     SALE_TYPE = 123,
-    BOLT_TYPE = 105,
+    BOLT_TYPE = 105
 }
 
 let productType: IDict[] | undefined = [];
@@ -28,7 +28,7 @@ let clientType: IDict[] | undefined = [];
 let winBidType: IDict[] | undefined = [];
 let saleType: IDict[] | undefined = [];
 let boltType: IDict[] | undefined = [];
-if(dictionary) {
+if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
     voltageGrade = dictionary[DictionaryEnums.VOLTAGE_GRADE];
     unit = dictionary[DictionaryEnums.UNIT];

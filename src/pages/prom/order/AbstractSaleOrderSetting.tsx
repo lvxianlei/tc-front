@@ -76,6 +76,8 @@ export interface IContractInfoDto extends IContract {
     readonly orderDeliveryTime?: object;
     readonly contractId?: string;
     readonly orderProjectName?: string;
+    readonly saleOrderNumber?: string;
+    readonly purchaseOrderNumber?: string;
 }
 
 interface IOption {
@@ -167,9 +169,9 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 orderQuantity: 0
             })
             if (selectedRows[0].chargeType === ChargeType.UNIT_PRICE) {
-                this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, orderProductDtos: []});
+                this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, orderProductDtos: [] });
             } else {
-                this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, orderProductDtos: []});
+                this.getForm()?.setFieldsValue({ contractInfoDto: { ...modalSelectedValue }, ...modalSelectedValue, orderProductDtos: [] });
             }
             this.getUnitByChargeType();
             this.getColumnsChange(selectedRows[0].chargeType);
@@ -387,6 +389,48 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             name: "deliveryTime",
                             initialValue: saleOrder?.contractInfoDto?.deliveryTime,
                             children: <Input disabled={true} />,
+                        },
+                        {
+                            label: "产品类型",
+                            name: "productType",
+                            initialValue: saleOrder?.contractInfoDto?.productType,
+                            children: <Select>
+                                {productTypeOptions &&
+                                    productTypeOptions.map(({ id, name }, index) => {
+                                        return (
+                                            <Select.Option key={index} value={id}>
+                                                {name}
+                                            </Select.Option>
+                                        );
+                                    })}
+                            </Select>,
+                            rules: [
+                                {
+                                    required: true,
+                                    message: "请选择产品类型",
+                                },
+                            ]
+                        },
+                        {
+                            label: "电压等级",
+                            name: "voltageGrade",
+                            initialValue: saleOrder?.contractInfoDto?.voltageGrade,
+                            children: <Select>
+                                {voltageGradeOptions &&
+                                    voltageGradeOptions.map(({ id, name }, index) => {
+                                        return (
+                                            <Select.Option key={index} value={id}>
+                                                {name}
+                                            </Select.Option>
+                                        );
+                                    })}
+                            </Select>,
+                            rules: [
+                                {
+                                    required: true,
+                                    message: "请选择电压等级",
+                                },
+                            ]
                         },
                         {
                             label: "币种",

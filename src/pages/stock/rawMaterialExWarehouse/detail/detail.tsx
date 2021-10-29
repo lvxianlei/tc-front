@@ -15,7 +15,7 @@ export default function RawMaterialStock(): React.ReactNode {
     const params = useParams<{ id: string }>();
     const history = useHistory(),
         [current, setCurrent] = useState(1),
-        [total, setTotal] = useState(100),
+        [total, setTotal] = useState(0),
         [pageSize, setPageSize] = useState<number>(10),
         [status, setStatus] = useState(''),//状态
         [dateValue, setDateValue] = useState<any>([]),//时间
@@ -35,7 +35,8 @@ export default function RawMaterialStock(): React.ReactNode {
     const [isOutLibraryModal, setIsOutLibraryModal] = useState<boolean>(false);//出库弹框显示
     const [isApplyModal, setIsApplyModal] = useState<boolean>(false);//出库弹框显示
     const [requirement, setRequirement] = useState<number | string>('');//出库-弹框需求量
-    const [OutboundId, setOutboundId] = useState<number | string>('');//出库-弹框
+    const [OutboundId, setOutboundId] = useState<number | string>('');//出库-弹框-需要的列表id
+    const [tempApplyData, setTempApplyData] = useState<number | string>('');//出库-弹框-缺料申请需要的列表数据
     const columns = [
         {
             title: '序号',
@@ -117,7 +118,6 @@ export default function RawMaterialStock(): React.ReactNode {
             )
         }
     ];//列表表头
-
     const supplierColumns = [
         {
             title: '收货单号',
@@ -226,7 +226,6 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 120,
         },
     ];//详情-出库表头
-
     const OutLibraryColumns = [
         {
             title: '序号',
@@ -307,7 +306,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     <Input
                         placeholder="请输入"
                         value={item.outboundQuantity}
-                        onChange={(e) => { inputChange(e, item, index) }}
+                        onChange={(e) => { inputChange(e, item, index, 'OutLibrary') }}
                     ></Input>
                 )
             }
@@ -335,53 +334,60 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 100,
         }, {
             title: '品名',
-            dataIndex: 'standard',
+            dataIndex: 'productName',
             width: 100,
         }, {
             title: '材质',
-            dataIndex: 'standard',
+            dataIndex: 'materialTexture',
             width: 100,
         }, {
             title: '规格',
-            dataIndex: 'standard',
+            dataIndex: 'spec',
             width: 100,
         }, {
             title: '长度（mm）',
-            dataIndex: 'standard',
+            dataIndex: 'length',
             width: 100,
         }, {
             title: '宽度（mm）',
-            dataIndex: 'standard',
+            dataIndex: 'width',
             width: 100,
         }, {
             title: '数量',
-            dataIndex: 'standard',
+            dataIndex: 'quantity',
             width: 100,
         }, {
             title: '重量（吨）',
-            dataIndex: 'standard',
+            dataIndex: 'weight',
             width: 100,
         }, {
             title: '缺料数量',
-            dataIndex: 'standard',
+            dataIndex: 'shortageNum',
             width: 100,
+            render: (text: any, item: any, index: any) => {
+                return (
+                    <Input
+                        placeholder="请输入"
+                        value={item.shortageNum}
+                        onChange={(e) => { inputChange(e, item, index, 'shortage') }}
+                    ></Input>
+                )
+            }
         },
     ];//出库弹框-缺料申请原材料信息表头
-
     //获取列表数据
     const getLoadData = async () => {
         console.log('请求数据')
         const data: any = await RequestUtil.get(`/tower-storage/outStock/detail`, {
             current,
             size: pageSize,
-            keyword,
             id: params.id,
             departmentId,
             outStockStaffId,
             selectName: keyword,
-            status,
-            updateTimeStart: dateString[0],
-            updateTimeEnd: dateString[1],
+            status: status,
+            updateTimeStart: dateString[0] ? dateString[0] + ' 00:00:00' : '',
+            updateTimeEnd: dateString[1] ? dateString[1] + ' 23:59:59' : '',
         })
         setListdata(data.outStockDetailPage.records);
         setTotalWeight(data.width)
@@ -433,6 +439,8 @@ export default function RawMaterialStock(): React.ReactNode {
     const IssueOperation = async (record: any) => {
         setRequirement(record.quantity);
         setOutboundId(record.id);
+        setApplyListdata([record]);
+        console.log(record)
         const data: any = await RequestUtil.get(`/tower-storage/materialStock`, {
             params: {
                 warehouseId: record.id,//仓库id
@@ -448,10 +456,17 @@ export default function RawMaterialStock(): React.ReactNode {
         setIsOutLibraryModal(true)
     }
     // 出库弹框列表输入框
-    const inputChange = (e: any, item: any, index: any) => {
-        let ary = JSON.parse(JSON.stringify(OutLibraryListdata));
-        ary[index].outboundQuantity = e.target.value.replace(/[^0-9]/g, '')
-        setOutLibraryListdata(ary)
+    const inputChange = (e: any, item: any, index: any, type: string) => {
+        let ary = []
+        if (type == 'OutLibrary') {
+            ary = JSON.parse(JSON.stringify(OutLibraryListdata))
+            ary[index].outboundQuantity = e.target.value.replace(/[^0-9]/g, '')
+            setOutLibraryListdata(ary)
+        } else {
+            ary = JSON.parse(JSON.stringify(ApplyListdata))
+            ary[index].shortageNum = e.target.value.replace(/[^0-9]/g, '')
+            setApplyListdata(ary)
+        }
     }
     // 出库保存
     const IssueSave = async () => {
@@ -465,11 +480,35 @@ export default function RawMaterialStock(): React.ReactNode {
             }
         })
         if (ary.length == 0) return message.error('所有数据无出库数量')
-        const data: any = await RequestUtil.post(`/tower-storage/materialStock`, {
+        const data: any = await RequestUtil.post(`/tower-storage/outStock`, {
             id: OutboundId,
             materialStockList: ary
         });
+        console.log(data)
+        if (data) {
+            message.success('操作成功')
+            setIsOutLibraryModal(false)
+            getLoadData()
+        }
 
+    }
+    // 点击出库-缺料申请-按钮
+    const MaterialShortageApplication = async () => {
+        console.log(ApplyListdata,'ApplyListdata')
+        if (OutLibraryListdata.length != 0) {
+            message.error('库存未用完')
+            return
+        }
+        setIsApplyModal(true)
+    }
+    // 缺料申请
+    const shortage = async () => {
+        const data: any = await RequestUtil.put(`/tower-storage/outStock/lack?id=${OutboundId}`);
+        if (data) {
+            message.success('申请成功')
+            setIsApplyModal(false)
+            setIsOutLibraryModal(false)
+        }
     }
     // 重置
     const reset = () => {
@@ -492,10 +531,15 @@ export default function RawMaterialStock(): React.ReactNode {
     const onApplyModalCancel = () => {
         setIsApplyModal(false)
     }
+    // 状态选择
+    const statusChange = async (val: string) => {
+        await setStatus(val);
+        getLoadData()
+    }
     //进入页面刷新
     useEffect(() => {
         getLoadData()
-    }, [current, pageSize])
+    }, [current, pageSize, status, dateString])
     return (
         <div id="RawMaterialStock">
             <div className="Search_public_Stock">
@@ -522,19 +566,24 @@ export default function RawMaterialStock(): React.ReactNode {
                             onChange={(val) => { setStatus(val) }}
                         >
                             <Select.Option
+                                value=""
+                            >
+                                全部
+                            </Select.Option>
+                            <Select.Option
+                                value="0"
+                            >
+                                待出库
+                            </Select.Option>
+                            <Select.Option
                                 value="1"
                             >
-                                状态1
+                                已出库
                             </Select.Option>
                             <Select.Option
                                 value="2"
                             >
-                                状态2
-                            </Select.Option>
-                            <Select.Option
-                                value="3"
-                            >
-                                状态3
+                                缺料中
                             </Select.Option>
                         </Select>
                     </div>
@@ -548,7 +597,17 @@ export default function RawMaterialStock(): React.ReactNode {
                             value={departmentId ? departmentId : '请选择'}
                             onChange={(val) => { setDepartmentId(val) }}
                         >
-                            <Select.Option
+                            {
+                                (ApplicationContext.get().dictionaryOption as any)["105"].map((item: { id: string, name: string }) => ({
+                                    value: item.id,
+                                    label: item.name
+                                })).map((item: any) => {
+                                    return (
+                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                    )
+                                })
+                            }
+                            {/* <Select.Option
                                 value="1"
                             >
                                 部门1
@@ -562,7 +621,7 @@ export default function RawMaterialStock(): React.ReactNode {
                                 value="3"
                             >
                                 部门3
-                            </Select.Option>
+                            </Select.Option> */}
                         </Select>-
                         <Select
                             className="select"
@@ -570,7 +629,17 @@ export default function RawMaterialStock(): React.ReactNode {
                             value={outStockStaffId ? outStockStaffId : '请选择'}
                             onChange={(val) => { setPersonnelId(val) }}
                         >
-                            <Select.Option
+                            {
+                                (ApplicationContext.get().dictionaryOption as any)["105"].map((item: { id: string, name: string }) => ({
+                                    value: item.id,
+                                    label: item.name
+                                })).map((item: any) => {
+                                    return (
+                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                    )
+                                })
+                            }
+                            {/* <Select.Option
                                 value="1"
                             >
                                 人员1
@@ -584,7 +653,7 @@ export default function RawMaterialStock(): React.ReactNode {
                                 value="3"
                             >
                                 人员3
-                            </Select.Option>
+                            </Select.Option> */}
                         </Select>
                     </div>
                 </div>
@@ -595,8 +664,12 @@ export default function RawMaterialStock(): React.ReactNode {
                             style={{ width: "200px" }}
                             placeholder="品名/炉批号/内部合同号/杆塔号"
                             value={keyword}
+                            allowClear
                             onChange={(e) => {
                                 setKeyword(e.target.value)
+                            }}
+                            onPressEnter={() => {
+                                getLoadData()
                             }}
                         >
                         </Input>
@@ -633,7 +706,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 >返回上一级</Button>
             </div>
             <div className="tip_public_Stock">
-                <div>总重量： {totalWeight} 吨    缺料总重量：{MaterialShortageTotalWeight} 吨</div>
+                <div>总重量： {totalWeight} 吨， 缺料总重量：{MaterialShortageTotalWeight} 吨</div>
             </div>
             <div className="page_public_Stock">
                 <Table
@@ -734,7 +807,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 footer={
                     <>
                         <Button onClick={onOutLibraryCancel}>关闭</Button>
-                        <Button type='primary' onClick={() => { setIsApplyModal(true) }}>缺料申请</Button>
+                        <Button type='primary' onClick={() => { MaterialShortageApplication() }}>缺料申请</Button>
                         <Button type='primary' onClick={IssueSave}>保存</Button>
                     </>
                 }
@@ -773,7 +846,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 footer={
                     <>
                         <Button onClick={onApplyModalCancel}>关闭</Button>
-                        <Button type='primary' onClick={() => { }}>保存并提交</Button>
+                        <Button type='primary' onClick={() => { shortage() }}>保存并提交</Button>
                     </>
                 }
             >

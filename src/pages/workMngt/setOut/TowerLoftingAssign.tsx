@@ -174,12 +174,45 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
             appointedList: appointedList
         })
     };
+
+    protected repeatAdd = () => {
+        const { user, checkUser } = this.state;
+        if(this.state.repeatNum && this.state.repeatNum > 0) {
+            this.setState({ 
+                repeatModal: false
+            }, () => {
+                let appointedList: IAppointedList[] = this.getForm()?.getFieldsValue(true).appointedList || [];
+                const copyRow: IAppointedList = this.getForm()?.getFieldsValue(true).appointedList[this.state.selectKey || 0];
+                const copyRowList = Array(this.state.repeatNum).fill({ ...copyRow, name: '' });
+                appointedList.push( ...copyRowList );
+                user && appointedList.forEach((_: any, index: number)=>{
+                    user[index] = user[this.state.selectKey || 0]
+                })
+                checkUser && appointedList.forEach((_: any, index: number)=>{
+                    checkUser[index] = checkUser[this.state.selectKey || 0]
+                })
+                this.setState({
+                    appointedList: appointedList,
+                    repeatNum: undefined,
+                    appointed: {
+                        ...this.state.appointed,
+                        sectionNum: (this.state.appointed?.sectionNum || 0) + (this.state.repeatNum || 0)
+                    },
+                    user: user,
+                    checkUser: checkUser
+                })
+                this.getForm()?.setFieldsValue({
+                    appointedList: appointedList
+                })
+            })   
+        }
+    }
     
     /**
      * @description Gets primary operation button
      * @returns primary operation button
      */
-    protected getRepeatModal(): React.ReactNode {
+     protected getRepeatModal(): React.ReactNode {
         return <Modal 
             title="重复添加"
             visible={ this.state.repeatModal } 
@@ -189,29 +222,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                     repeatNum: undefined
                 }) 
             } } 
-            onOk={ () => {
-                if(this.state.repeatNum && this.state.repeatNum > 0) {
-                  this.setState({ 
-                        repeatModal: false
-                    }, () => {
-                        let appointedList: IAppointedList[] = this.getForm()?.getFieldsValue(true).appointedList || [];
-                        const copyRow: IAppointedList = this.getForm()?.getFieldsValue(true).appointedList[this.state.selectKey || 0];
-                        const copyRowList = Array(this.state.repeatNum).fill({ ...copyRow, name: '' });
-                        appointedList.push( ...copyRowList );
-                        this.setState({
-                            appointedList: appointedList,
-                            repeatNum: undefined,
-                            appointed: {
-                                ...this.state.appointed,
-                                sectionNum: (this.state.appointed?.sectionNum || 0) + (this.state.repeatNum || 0)
-                            }
-                        })
-                        this.getForm()?.setFieldsValue({
-                            appointedList: appointedList
-                        })
-                    })   
-                }
-            } }>
+            onOk={ () => this.repeatAdd()  }>
             <InputNumber value={ this.state.repeatNum } min={ 1 } step={ 1 } style={{ width: '100%' }} placeholder="请输入重复添加的行数" onChange={ (e) => {
                 this.setState({
                     repeatNum: e
@@ -224,22 +235,33 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
      */
     public onDepartmentChange = async (value: Record<string, any>, index: number, title: string) => {
         const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${ value }&size=1000`);
-        console.log(value)
-        if(title==='校对'){
+        let appointedList = this.getForm()?.getFieldsValue(true).appointedList;
+        if(title === '校对'){
             const user = this.state.checkUser||[];
             user[index] = userData.records;
             this.setState({
-                checkUser:user
+                checkUser: user
             })
+            appointedList[index] = {
+                ...appointedList[index],
+                checkUser: ''
+            }
         }
         else{
             const user = this.state.user||[];
             user[index] = userData.records;
             this.setState({
-                user
+                user: user
             })
+            appointedList[index] = {
+                ...appointedList[index],
+                loftingUser: ''
+            }
         }
-        
+        this.setState({
+            appointedList: [...appointedList]
+        })
+        this.getForm()?.setFieldsValue({ appointedList: [...appointedList] })
     }
 
     public wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
@@ -327,8 +349,8 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                                 rules={[{
                                                     required: true,
                                                     message: '请选择人员'
-                                                }]} style={ { width: '50%', display: 'inline-block' } }>
-                                                <Select placeholder="请选择" style={{width:'100px'}}>
+                                                }]} style={ { width: '50%', display: 'inline-block' } } key={ index }>
+                                                <Select placeholder="请选择" style={{width:'100px'}} key={ index }>
                                                     { this.state?.user && this.state.user[index] && this.state.user[index].map((item: any) => {
                                                         return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
                                                     }) }
@@ -350,7 +372,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                                     required: true,
                                                     message: '请选择人员'
                                                 }]} style={ { width: '50%', display: 'inline-block' } }>
-                                                <Select placeholder="请选择" style={{width:'100px'}}>
+                                                <Select placeholder="请选择" style={{width:'100px'}} key={ index }>
                                                     { this.state?.checkUser && this.state.checkUser[index] && this.state.checkUser[index].map((item: any) => {
                                                         return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
                                                     }) }
