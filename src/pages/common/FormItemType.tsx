@@ -54,7 +54,7 @@ interface PagenationProps {
     pageSize: number
 }
 
-const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: any) => void }> = ({ data, onChange }) => {
+export const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: any) => void }> = ({ data, onChange }) => {
     const [select, setSelect] = useState<any[]>([])
     const [pagenation, setPagenation] = useState<PagenationProps>({
         current: 1,

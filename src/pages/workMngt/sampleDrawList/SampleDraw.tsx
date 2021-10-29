@@ -147,7 +147,7 @@ export default function SampleDraw(): React.ReactNode {
                 requestData={{productCategoryId:params.id}}
                 extraOperation={
                     <Space>
-                    <Button type="primary">导出</Button>
+                    {/* <Button type="primary">导出</Button> */}
                     <Upload
                         key="sub"
                         name="file"

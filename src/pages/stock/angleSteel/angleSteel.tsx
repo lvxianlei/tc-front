@@ -1,18 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react'
-import { Button, Col, Pagination, Row, Select, TableColumnProps, Table } from 'antd'
-import { CommonTable } from '../../common'
+import React, { useState, useRef } from 'react'
+import { Button, TableColumnProps, Modal, message } from 'antd'
+import { CommonTable, DetailContent, DetailTitle } from '../../common'
 import RequestUtil from "../../../utils/RequestUtil"
+import Edit from "./Edit"
 import { RouteProps } from '../public'
-const { Option } = Select;
+type typeProps = "new" | "edit"
 const AngleSteel = (props: RouteProps) => {
     // const history = useHistory()
+    const editRef = useRef<{ onSubmit: () => Promise<boolean> }>()
+    const [visible, setVisible] = useState<boolean>(false);
+    const [type, setType] = useState<typeProps>("new");
     const [columnsData, setColumnsData] = useState([]);
-    const [total, setTotal] = useState(0);
-    const [size, setSize] = useState(10);
-    const [current, setCurrent] = useState(1);
-    const [isModal, setIsModal] = useState(false);
-    const [id, setId] = useState<string | null>(null);
     const columns: TableColumnProps<object>[] = [
         {
             key: 'index',
@@ -44,46 +43,49 @@ const AngleSteel = (props: RouteProps) => {
             dataIndex: 'operation',
             align: 'center',
         }]
-    useEffect(() => {
-        getColumnsData()
-    }, [current, size]);
-    const getColumnsData = async () => {
-        const data: any = await RequestUtil.get('/tower-supply/angleConfigStrategy', {
-            current,
-            size,
-        })
-        setTotal(data.data)
-        setColumnsData(data.records)
-    }
-    const cancelModal = () => {
-        setIsModal(false)
-        setId(null)
-    }
-    return (
-        <div className='public_page'>
-            <div className='public_content'>
-                <CommonTable         
-                    columns={columns}
-                    dataSource={columnsData}
-                />
-                <div className='page_content'>
-                    <Pagination
-                        className='page'
-                        showSizeChanger
-                        showQuickJumper
-                        total={total}
-                        pageSize={size}
-                        current={current}
-                        onChange={(page: number, size: any) => {
-                            setCurrent(page)
-                            setSize(size)
-                        }}
-                    />
-                </div>
-            </div>
 
-        </div>
-    )
+
+    // const getColumnsData = async () => {
+    //     const data: any = await RequestUtil.get('/tower-supply/angleConfigStrategy', {
+    //         current,
+    //         size,
+    //     })
+    //     setTotal(data.data)
+    //     setColumnsData(data.records)
+    // }
+    const handleModalOk = () => new Promise(async (resove, reject) => {
+        const isClose = await editRef.current?.onSubmit()
+        if (isClose) {
+            message.success("票据创建成功...")
+            setVisible(false)
+            resove(true)
+        }
+    })
+    return <>
+        <Modal visible={visible} width={1011} title="创建" onOk={handleModalOk} onCancel={() => setVisible(false)}>
+            <Edit type={type} ref={editRef} />
+        </Modal>
+        <DetailContent>
+            <DetailTitle title="配置基础配置" />
+            <CommonTable
+                columns={columns}
+                dataSource={columnsData}
+            />
+            <DetailTitle title="材质配料设定" operation={[
+                <Button key="add" type="primary" ghost style={{ marginRight: 16 }} onClick={() => {
+                    setVisible(true)
+                    setType("new")
+                }}>添加</Button>,
+                <Button key="goback" type="primary" ghost>返回上一级</Button>
+            ]} />
+            <CommonTable
+                columns={columns}
+                dataSource={columnsData}
+            />
+        </DetailContent>
+    </>
+
+
 
 
 }

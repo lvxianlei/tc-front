@@ -30,9 +30,9 @@ export default function PackingList(): React.ReactNode {
             dataIndex: 'balesCode'
         },
         {
-            key: 'pieceCode',
+            key: 'structureCodes',
             title: '件号',
-            dataIndex: 'pieceCode',
+            dataIndex: 'structureCodes',
             width: 120
         },
         {
@@ -49,7 +49,7 @@ export default function PackingList(): React.ReactNode {
             width: 100,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ params.productId }/packingListSetting` }><Button type="link">编辑</Button></Link>
+                    <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ params.productId }/packingListSetting/${ record.id }` }><Button type="link">编辑</Button></Link>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => { RequestUtil.delete(`/tower-science/packageRecord`, { id: record.id }).then(res => history.go(0)) } }
@@ -84,7 +84,7 @@ export default function PackingList(): React.ReactNode {
             <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ params.productId }/packingListNew`, state: { productCategoryName: detailData.productCategoryName, productNumber: detailData.productNumber } }}><Button type="primary" ghost>添加</Button></Link>
             <Popconfirm
                 title="确认完成?"
-                onConfirm={ () => RequestUtil.post(`/tower-science/packageRecord/submit`, { productId: params.productId }).then(res => history.goBack()) }
+                onConfirm={ () => RequestUtil.post(`/tower-science/packageStructure/submit?productId=${ params.productId }`).then(res => history.goBack()) }
                 okText="确认"
                 cancelText="取消"
             >

@@ -233,7 +233,7 @@ export default function SampleDrawCheck(): React.ReactNode {
                 requestData={{productCategoryId: params.id}}
                 extraOperation={
                     <Space>
-                    <Button type="primary">导出</Button>
+                    {/* <Button type="primary">导出</Button> */}
                     <Popconfirm
                         title="确认完成校核?"
                         onConfirm={ async () =>  await RequestUtil.put(`/tower-science/smallSample/completeCheck?productCategoryId=${params.id}`).then(()=>{

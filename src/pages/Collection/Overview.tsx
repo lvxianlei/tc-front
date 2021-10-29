@@ -5,7 +5,7 @@ import { DetailContent, DetailTitle, BaseInfo } from '../common'
 import { promotionalTourism } from "./CollectionData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
-export default function Edit() {
+export default function Overview() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
 

@@ -25,9 +25,9 @@ export default function Edit() {
     ]}>
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
-            <BaseInfo columns={PaymentListHead} dataSource={[]} />
+            <BaseInfo columns={PaymentListHead} dataSource={(data as any) || {}} />
             <DetailTitle title="请款明细" />
-            <CommonTable columns={paymentdetail} dataSource={[]} />
+            <CommonTable columns={paymentdetail} dataSource={data?.payInfoVOList || []} />
         </Spin>
     </DetailContent>
 }

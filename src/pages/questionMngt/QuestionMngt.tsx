@@ -133,7 +133,7 @@ export default function QuestionMngt(): React.ReactNode {
         <Page
             path="/tower-science/issue"
             columns={columns}
-            extraOperation={<Button type="primary">导出</Button>}
+            // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
             searchFormItems={[

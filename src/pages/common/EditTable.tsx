@@ -56,7 +56,7 @@ export default function EditableTable({ columns = [], dataSource = [], form, add
         ...columns,
         {
             title: '操作', dataIndex: 'opration', width: 50, editable: false,
-            render: (key: number, _: number, remove: (index: number | number[]) => void): JSX.Element => <Button type="link" onClick={() => handleRemove(remove, key)}>删除</Button>
+            render: (fieldKey: number, index: number, remove: (index: number | number[]) => void): JSX.Element => <Button type="link" onClick={() => handleRemove(remove, fieldKey)}>删除</Button>
         }
     ] : [
         { title: '序号', dataIndex: 'index', width: 50, editable: false, render: (key: number, index: number): React.ReactNode => (<span>{index + 1}</span>) },
