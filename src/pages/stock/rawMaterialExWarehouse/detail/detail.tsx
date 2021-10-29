@@ -326,7 +326,7 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 100,
         }, {
             title: '分类',
-            dataIndex: 'standard',
+            dataIndex: 'classify',
             width: 100,
         }, {
             title: '标准',
