@@ -76,7 +76,7 @@ export default function RawMaterialStock(): React.ReactNode {
             fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Link to={`/stock/rawMaterialWarehousing/detail/${record.key}`}>详情</Link>
+                    <Link to={`/stock/rawMaterialWarehousing/detail/${record.id}`}>详情</Link>
                 </Space>
             )
         }
