@@ -36,5 +36,27 @@
             "title": "开户银行",
             "dataIndex": "depositBank"
         }
+    ],
+    "AddEditDetail":[
+        {
+            "title": "序号",
+            "dataIndex": "index"
+        },
+        {
+            "title": "操作部门",
+            "dataIndex": "index"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "index"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "index"
+        },
+        {
+            "title": "操作",
+            "dataIndex": "index"
+        }
     ]
 }

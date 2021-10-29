@@ -243,17 +243,22 @@ export default function PackingListNew(): React.ReactNode {
             return item.id !== value.id;
         })
         setPackagingData(newPackagingData);
-        stayDistrict.forEach((item: IBundle, ind: number) => {
-            if(item.id === value.id) {
-                stayDistrict[ind] = {
-                    ...item,
-                    basicsPartNum: value.allNum
-                }  
-                setStayDistrict([...stayDistrict])
-            } else {
-                setStayDistrict([ ...stayDistrict, value ]);
-            }
-        })
+        if(stayDistrict.length > 0) {
+            stayDistrict.forEach((item: IBundle, ind: number) => {
+                if(item.id === value.id) {
+                    stayDistrict[ind] = {
+                        ...item,
+                        basicsPartNum: value.allNum
+                    }  
+                    setStayDistrict([...stayDistrict])
+                } else {
+                    setStayDistrict([ ...stayDistrict, value ]);
+                }
+            })
+        } else {
+            setStayDistrict([ ...stayDistrict, value ]);
+        }
+        
     }
     
     const packaging = () => {
