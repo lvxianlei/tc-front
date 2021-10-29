@@ -199,6 +199,8 @@ export default function PickTowerMessage(): React.ReactNode {
                     onConfirm={ async () => {
                         await RequestUtil.post(`/tower-science/drawProductSegment/${params.id}/submit`).then(()=>{
                             message.success('提交成功')
+                        }).then(()=>{
+                            history.push('/workMngt/pickList');
                         })
                     } }
                     okText="确认"

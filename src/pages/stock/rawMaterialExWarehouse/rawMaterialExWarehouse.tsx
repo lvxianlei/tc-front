@@ -6,13 +6,14 @@ import ConfirmableButton from '../../../components/ConfirmableButton';
 import { Page } from '../../common';
 import { IClient } from '../../IClient';
 import RequestUtil from '../../../utils/RequestUtil';
+import ApplicationContext from "../../../configuration/ApplicationContext"
 import '../StockPublicStyle.less';
 const { RangePicker } = DatePicker;
 
 export default function RawMaterialStock(): React.ReactNode {
     const history = useHistory()
     const [current, setCurrent] = useState(1);
-    const [total, setTotal] = useState(100);
+    const [total, setTotal] = useState(0);
     const [pageSize, setPageSize] = useState<number>(10);
     const [dateValue, setDateValue] = useState<any>([]);//时间
     const [dateString, setDateString] = useState<any>([]);//时间字符串格式
@@ -35,7 +36,6 @@ export default function RawMaterialStock(): React.ReactNode {
             title: '领料编号',
             dataIndex: 'pickingNumber',
             width: 120,
-            render: (text: any) => <a>{text}</a>,
         }, {
             title: '生产批次',
             dataIndex: 'productionBatch',
@@ -73,13 +73,12 @@ export default function RawMaterialStock(): React.ReactNode {
         console.log('请求数据')
         const data: any = await RequestUtil.get(`/tower-storage/outStock`, {
             current,
-            size:pageSize,
-            keyword,
+            size: pageSize,
             applyStaffId,
             departmentId,
             status,
-            updateTimeEnd: dateString[1],
-            updateTimeStart: dateString[0],
+            updateTimeStart: dateString[0] ? dateString[0] + ' 00:00:00' : '',
+            updateTimeEnd: dateString[1] ? dateString[1] + ' 23:59:59' : '',
             selectName: keyword,
         });
         setListdata(data.records);
@@ -99,7 +98,7 @@ export default function RawMaterialStock(): React.ReactNode {
     //进入页面刷新
     useEffect(() => {
         loadData()
-    }, [current, pageSize])
+    }, [current, pageSize, applyStaffId, status, dateString])
     return (
         <div id="RawMaterialStock">
             <div className="Search_public_Stock">
@@ -126,19 +125,14 @@ export default function RawMaterialStock(): React.ReactNode {
                             onChange={(val) => { setStatus(val) }}
                         >
                             <Select.Option
-                                value="1"
+                                value="0"
                             >
-                                状态1
+                                待完成
                             </Select.Option>
                             <Select.Option
                                 value="2"
                             >
-                                状态2
-                            </Select.Option>
-                            <Select.Option
-                                value="3"
-                            >
-                                状态3
+                                已完成
                             </Select.Option>
                         </Select>
                     </div>
@@ -152,7 +146,17 @@ export default function RawMaterialStock(): React.ReactNode {
                             value={departmentId ? departmentId : '请选择'}
                             onChange={(val) => { setDepartmentId(val) }}
                         >
-                            <Select.Option
+                            {
+                                (ApplicationContext.get().dictionaryOption as any)["105"].map((item: { id: string, name: string }) => ({
+                                    value: item.id,
+                                    label: item.name
+                                })).map((item: any) => {
+                                    return (
+                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                    )
+                                })
+                            }
+                            {/* <Select.Option
                                 value="1"
                             >
                                 部门1
@@ -166,7 +170,7 @@ export default function RawMaterialStock(): React.ReactNode {
                                 value="3"
                             >
                                 部门3
-                            </Select.Option>
+                            </Select.Option> */}
                         </Select>-
                         <Select
                             className="select"
@@ -174,7 +178,17 @@ export default function RawMaterialStock(): React.ReactNode {
                             value={applyStaffId ? applyStaffId : '请选择'}
                             onChange={(val) => { setPersonnelId(val) }}
                         >
-                            <Select.Option
+                            {
+                                (ApplicationContext.get().dictionaryOption as any)["105"].map((item: { id: string, name: string }) => ({
+                                    value: item.id,
+                                    label: item.name
+                                })).map((item: any) => {
+                                    return (
+                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                    )
+                                })
+                            }
+                            {/* <Select.Option
                                 value="1"
                             >
                                 人员1
@@ -188,7 +202,7 @@ export default function RawMaterialStock(): React.ReactNode {
                                 value="3"
                             >
                                 人员3
-                            </Select.Option>
+                            </Select.Option> */}
                         </Select>
                     </div>
                 </div>
@@ -200,6 +214,9 @@ export default function RawMaterialStock(): React.ReactNode {
                             value={keyword}
                             onChange={(e) => {
                                 setKeyword(e.target.value)
+                            }}
+                            onPressEnter={() => {
+                                loadData()
                             }}
                         >
                         </Input>

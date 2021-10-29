@@ -49,7 +49,7 @@ export default function PlanTrack(): React.ReactNode {
             title: '优先级',
             width: 100,
             dataIndex: 'priority',
-            render: (value: number, record: object): React.ReactNode => {
+            render: (value: any, record: object): React.ReactNode => {
                 const renderEnum: any = [
                   {
                     value: 1,
@@ -193,12 +193,12 @@ export default function PlanTrack(): React.ReactNode {
 
         return {
             ...col,
-            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+            render:  col.render?col.render:(_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 col.dataIndex === 'index' ? index + 1 
                 : col.dataIndex === 'loftingDeliverRealTime'&&moment(record.loftingDeliverTime)<moment(record.loftingDeliverRealTime?record.loftingDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
                 : col.dataIndex === 'materialDeliverRealTime'&& record.materialDeliverTime && moment(record.materialDeliverTime)<moment(record.materialDeliverRealTime?record.materialDeliverRealTime:undefined)?<div style={{backgroundColor:'#F9A1A1', color: '#fff'}}>{ _?_:'-' }</div>
                 : <span>{ _?_:'-' }</span>
-            )  
+            )   
         }     
     })
     return <Page
