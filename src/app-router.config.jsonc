@@ -942,119 +942,119 @@
       "path": "/setOutTask",
       "module": "./pages/setOutTask/SetOutTaskList",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_lofting_task_page"
     },
     { // 放样任务详情
       "name": "放样任务详情",
       "path": "/setOutTask/setOutTaskDetail/:id",
       "module": "./pages/setOutTask/SetOutTaskDetail",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_lofting_task_detail"
     },
     { // 放样任务-塔型
       "name": "塔型",
       "path": "/setOutTask/setOutTaskTower/:id",
       "module": "./pages/setOutTask/SetOutTaskTower",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_product_category_list"
     },
     { // 放样任务-杆塔
       "name": "杆塔",
       "path": "/setOutTask/setOutTaskPole/:id",
       "module": "./pages/setOutTask/SetOutTaskPole",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_product_page"
     },
     { // 工作管理-放样列表
       "name": "放样列表",
       "path": "/workMngt/setOutList",
       "module": "./pages/workMngt/setOut/SetOutList",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_lofting_list_page"
     },
     { // 工作管理-放样信息
       "name": "放样信息",
       "path": "/workMngt/setOutList/setOutInformation/:id",
       "module": "./pages/workMngt/setOut/SetOutInformation",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_lofting_list_detail"
     },
     { // 工作管理-塔型信息
       "name": "塔型信息",
       "path": "/workMngt/setOutList/towerInformation/:id",
       "module": "./pages/workMngt/setOut/TowerInformation",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_product_segment_list"
     },
     { // 工作管理-塔型信息-放样
       "name": "放样",
       "path": "/workMngt/setOutList/towerInformation/:id/lofting/:productSegmentId",
       "module": "./pages/workMngt/setOut/Lofting",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_package_structure_detail_list"
     },
     { // 工作管理-塔型信息-NC程序
       "name": "NC程序",
       "path": "/workMngt/setOutList/towerInformation/:id/NCProgram/:productSegmentId",
       "module": "./pages/workMngt/setOut/NCProgram",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_product_nc_page"
     },
     { // 工作管理-塔型信息-校核
       "name": "校核",
       "path": "/workMngt/setOutList/towerInformation/:id/towerCheck/:productSegmentId",
       "module": "./pages/workMngt/setOut/TowerCheck",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_package_structure_detail_list"
     },
     { // 工作管理-塔型信息-塔型放样明细
       "name": "塔型放样明细",
       "path": "/workMngt/setOutList/towerInformation/:id/towerLoftingDetails/:productSegmentId",
       "module": "./pages/workMngt/setOut/TowerLoftingDetails",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_product_category_structure_list"
     },
     { // 工作管理-塔型信息-放样-放样塔型套用
       "name": "放样塔型套用",
       "path": "/workMngt/setOutList/towerInformation/:id/lofting/:loftId/loftingTowerApplication",
       "module": "./pages/workMngt/setOut/LoftingTowerApplication",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_product_structure_lofting_reuse"
     },
     { // 工作管理-杆塔信息
       "name": "杆塔信息",
       "path": "/workMngt/setOutList/poleInformation/:id",
       "module": "./pages/workMngt/setOut/PoleInformation",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_product_list"
     },
     { // 工作管理-杆塔信息-杆塔放样明细
       "name": "杆塔放样明细",
       "path": "/workMngt/setOutList/poleInformation/:id/poleLoftingDetails/:productId",
       "module": "./pages/workMngt/setOut/PoleLoftingDetails",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_product_structure_list"
     },
     { // 工作管理-杆塔信息-包装清单
       "name": "包装清单",
       "path": "/workMngt/setOutList/poleInformation/:id/packingList/:productId",
       "module": "./pages/workMngt/setOut/PackingList",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_package_structure_list"
     },
     { // 工作管理-杆塔信息-添加包装清单
       "name": "添加包装清单",
       "path": "/workMngt/setOutList/poleInformation/:id/packingList/:productId/packingListNew",
       "module": "./pages/workMngt/setOut/PackingListNew",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_package_structure_save"
     },
     { // 工作管理-杆塔信息-编辑包装清单
       "name": "编辑包装清单",
       "path": "/workMngt/setOutList/poleInformation/:id/packingList/:productId/packingListSetting/:packId",
       "module": "./pages/workMngt/setOut/PackingListNew",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_package_structure_save"
     },
     { // 工作管理-组焊列表
       "name": "组焊列表",
