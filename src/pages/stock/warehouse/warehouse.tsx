@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
-import { Button, Pagination, TableColumnProps, Table, } from 'antd'
+import { Button, Pagination, TableColumnProps, Table, message, } from 'antd'
 import RequestUtil from "../../../utils/RequestUtil"
 import { RouteProps } from '../public'
 import WarehouseModal from './WarehouseModal'
@@ -94,7 +94,8 @@ const Warehouse = (props: RouteProps) => {
         setId(null)
     }
     const deleteItem =async (id:string) =>{
-        await RequestUtil.delete(`/tower-storage/warehouse/${id}`)
+        await RequestUtil.delete(`/tower-storage/warehouse?id=${id}`)
+        message.success('删除成功')
     }
     return (
         <div className='public_page'>
@@ -152,6 +153,7 @@ const Warehouse = (props: RouteProps) => {
                         isModal={isModal}
                         id={id}
                         cancelModal={cancelModal}
+                        getColumnsData={getColumnsData}
                     /> : null
             }
         </div>

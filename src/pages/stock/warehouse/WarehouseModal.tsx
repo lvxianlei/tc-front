@@ -5,19 +5,22 @@ import { RouteProps } from '../public';
 import RequestUtil from "../../../utils/RequestUtil"
 import './WarehouseModal.less';
 import AuthUtil from '../../../utils/AuthUtil';
+import ApplicationContext from '../../../configuration/ApplicationContext';
+import { Key } from 'rc-select/lib/interface/generator';
+// import { SelectValue } from 'antd/lib/select';
 const { Option } = Select;
 
 interface Props extends RouteProps {
     isModal: boolean,
     cancelModal: Function,
+    getColumnsData:Function,
     id: string | null,
 }
 
-// interface BaseInfo {
-//     warehouseNumber: string,//仓库编号
-//     name: string,//仓库名称
-//     warehouseCategoryId: string,//仓库分类id
-//     shopId: string,//车间id
+// interface StaffsItem {
+//     departmentId: SelectValue,
+//     userId: SelectValue,
+//     userList: any[],
 // }
 
 const WarehouseModal = (props: Props) => {
@@ -82,28 +85,58 @@ const WarehouseModal = (props: Props) => {
     ]
     let [columnsData, setColumnsData] = useState<any[]>([{
         reservoirName: '',
-        locatorName: '',
-        key: '1'
-    }]);
+        locatorName: ''
+    }]);//库区信息
     let [baseInfo, setBaseInfo] = useState<any>({
         warehouseNumber: '',//仓库编号
         name: '',//仓库名称
         warehouseCategoryId: '',//仓库分类id
         shopId: '',//车间id
     });//基本信息
-    let [department, setDepartment] = useState<any[]>([{}]);//部门列表
-    let [departmentId, setDepartmentId] = useState<any>(null);//部门
-    let [userList, setUserList] = useState<any[]>([{}]);//用户列表
-    let [userId, setUserId] = useState<any>(null);//部门
-    let [staffs, setStaffs] = useState([
+    let [department, setDepartment] = useState<any[]>([]);//部门列表
+    let [departmentId, setDepartmentId] = useState<any>(null);//负责人部门
+    let [userList, setUserList] = useState<any[]>([]);//用户列表
+    let [userId, setUserId] = useState<any>(null);//负责人id
+    let [staffs, setStaffs] = useState<any[]>([
         {
             departmentId: '',//部门
             userId: '',//人员
+            userList: [],
+            id: null,
         }
     ]);//保管员信息
     useEffect(() => {
         getDepartment()
     }, [])
+    // 如果有id，就获取详情
+    useEffect(() => {
+        if (props.id) {
+            getDetail()
+        }
+    }, [])
+    // 获取详情
+    const getDetail = async () => {
+        let data: any = await RequestUtil.get(`/tower-storage/warehouse/${props.id}`)
+        baseInfo.name = data.name;
+        baseInfo.warehouseNumber = data.warehouseNumber;
+        baseInfo.warehouseCategoryId = data.warehouseCategoryId;
+        baseInfo.shopId = data.shopId;
+        setDepartmentId(data.person.departmentId)
+        //回显需要拿到部门id获取用户数据
+        getUserList(data.departmentId)
+        setUserId(data.person.userId)
+        setBaseInfo(baseInfo)
+        let userStaffs = data.staffs.map((item: any) => {
+            return {
+                departmentId: item.departmentId,
+                userId: item.userId,
+                userList: [],
+                id: item.id,
+            }
+        })
+        setStaffs(userStaffs)
+        setColumnsData(data.warehouseDetails)
+    }
     // 获取部门信息
     const getDepartment = async () => {
         const data: any = await RequestUtil.get(`/sinzetech-user/department/tree`, {
@@ -112,11 +145,17 @@ const WarehouseModal = (props: Props) => {
         setDepartment(data)
     }
     // 获取部门下用户信息
-    const getUserList = async () => {
+    const getUserList = async (departmentId: any, index: number | null = null) => {
         const data: any = await RequestUtil.get(`/sinzetech-user/user`, {
             departmentId,
         })
-        setUserList(data.records)
+        if (index === null) {
+            setUserList(data.records)
+        } else {
+            staffs[index].userList = data.records;
+            staffs = [...staffs]
+            setStaffs(staffs)
+        }
     }
     // 库区库位信息监听
     const changeInputList = (ev: React.ChangeEvent<HTMLInputElement>, item: any, key: string, index: number) => {
@@ -157,11 +196,11 @@ const WarehouseModal = (props: Props) => {
             message.error('请选择负责人')
             return;
         }
-        if (staffs.some(item=>!item.userId)) {
+        if (staffs.some(item => !item.userId)) {
             message.error('请完善保管员信息')
             return;
         }
-        if (columnsData.some(item=>!item.reservoirName || !item.locatorName)) {
+        if (columnsData.some(item => !item.reservoirName || !item.locatorName)) {
             message.error('请完善保管员信息')
             return;
         }
@@ -169,8 +208,8 @@ const WarehouseModal = (props: Props) => {
             await RequestUtil.put(`/tower-storage/warehouse`, {
                 id: props.id,
                 ...baseInfo,
-                warehouseDetail: columnsData,
-                staffs,
+                warehouseDetails: columnsData,
+                staffs: staffs.map((item) => { return { departmentId: item.departmentId, userId: item.userId } }),
                 person: {
                     departmentId,
                     userId,
@@ -179,14 +218,15 @@ const WarehouseModal = (props: Props) => {
         } else {
             await RequestUtil.post(`/tower-storage/warehouse`, {
                 ...baseInfo,
-                warehouseDetail: columnsData,
-                staffs,
+                warehouseDetails: columnsData,
+                staffs: staffs.map((item) => { return { departmentId: item.departmentId, userId: item.userId } }),
                 person: {
                     departmentId,
                     userId,
                 },
             })
         }
+        props.getColumnsData()
         props.cancelModal()
     }
     return (
@@ -247,9 +287,16 @@ const WarehouseModal = (props: Props) => {
                                     baseInfoChange(value, 'select', 'warehouseCategoryId')
                                 }}
                             >
-                                <Option value={''}>全部</Option>
-                                <Option value={0}>未生成</Option>
-                                <Option value={1}>已生成</Option>
+                                {
+                                    (ApplicationContext.get().dictionaryOption as any)["127"].map((item: { id: string, name: string }) => ({
+                                        value: item.id,
+                                        label: item.name
+                                    })).map((t: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; },i: any) => {
+                                        return (
+                                            <Option value={t.value}>{t.label}</Option>
+                                        )
+                                    })
+                                }
                             </Select>
                         </Col>
                         <Col
@@ -259,15 +306,19 @@ const WarehouseModal = (props: Props) => {
                             <span className='tip'>*车间：</span>
                             <Select
                                 className='input'
-                                value={baseInfo.shopId}
+                                value={baseInfo.shopId ? baseInfo.shopId : '请选择'}
                                 style={{ width: 120 }}
                                 onChange={(value) => {
                                     baseInfoChange(value, 'select', 'shopId')
                                 }}
                             >
-                                <Option value={''}>全部</Option>
-                                <Option value={0}>未生成</Option>
-                                <Option value={1}>已生成</Option>
+                                {
+                                    department.map((item, index) => {
+                                        return (
+                                            <Option value={item.id} key={index}>{item.title}</Option>
+                                        )
+                                    })
+                                }
                             </Select>
                         </Col>
                         <Col
@@ -278,11 +329,11 @@ const WarehouseModal = (props: Props) => {
                             <span className='tip'>负责人*：</span>
                             <Select
                                 className='input'
-                                value={departmentId}
+                                value={departmentId ? departmentId : '请选择'}
                                 style={{ width: 120 }}
                                 onChange={(value) => {
                                     setDepartmentId(value)
-                                    getUserList()
+                                    getUserList(value)
                                 }}
                             >
                                 {
@@ -295,7 +346,7 @@ const WarehouseModal = (props: Props) => {
                             </Select>
                             <Select
                                 className='input'
-                                value={userId}
+                                value={userId ? userId : '请选择'}
                                 style={{ width: 120, marginLeft: 10 }}
                                 onChange={(value) => {
                                     setUserId(value)
@@ -321,10 +372,13 @@ const WarehouseModal = (props: Props) => {
                                     <span className='tip'>保管员</span>
                                     <Select
                                         className='input'
-                                        // value={this.state.entryStatus}
+                                        value={item.departmentId ? item.departmentId : '请选择'}
                                         style={{ width: 120 }}
                                         onChange={(value) => {
-
+                                            staffs[index].departmentId = value;
+                                            staffs = [...staffs]
+                                            setStaffs(staffs)
+                                            getUserList(value, index)
                                         }}
                                     >
                                         {
@@ -337,14 +391,16 @@ const WarehouseModal = (props: Props) => {
                                     </Select>
                                     <Select
                                         className='input'
-                                        // value={this.state.entryStatus}
+                                        value={item.userId ? item.userId : '请选择'}
                                         style={{ width: 120 }}
                                         onChange={(value) => {
-                                            
+                                            staffs[index].userId = value;
+                                            staffs = [...staffs]
+                                            setStaffs(staffs)
                                         }}
                                     >
                                         {
-                                            userList.map((item, index) => {
+                                            item.userList.map((item: any, index: number) => {
                                                 return (
                                                     <Option value={item.tenantId} key={index}>{item.name}</Option>
                                                 )
@@ -359,6 +415,8 @@ const WarehouseModal = (props: Props) => {
                                                     staffs = [...staffs, {
                                                         departmentId: '',//部门
                                                         userId: '',//人员
+                                                        id: null,
+                                                        userList: [],
                                                     }]
                                                     setStaffs(staffs)
                                                 }}
