@@ -187,6 +187,7 @@ export default function BidResultEdit(): JSX.Element {
                         title: '是否中标',
                         dataIndex: "isBid",
                         type: "select",
+                        disabled: "true",
                         enum: [
                             {
                                 value: -1,

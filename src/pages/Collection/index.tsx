@@ -39,7 +39,12 @@ export default function Collection() {
                 dataIndex: "opration",
                 fixed: "right",
                 width: 100,
-                render: (_: any, record: any) => <Button type="link" onClick={() => history.push(`/project/collection/detail/${record.id}`)}>确认信息</Button>
+                render: (_: any, record: any) => {
+                    if (record.confirmStatus === 0) {
+                        return <Button type="link" onClick={() => history.push(`/project/collection/edit/${record.id}`)}>确认信息</Button>
+                    }
+                    return <Button type="link" onClick={() => history.push(`/project/collection/detail/${record.id}`)}>查看</Button>
+                }
             }]}
         extraOperation={<>
             <Radio.Group defaultValue={confirmStatus} onChange={operationChange}>

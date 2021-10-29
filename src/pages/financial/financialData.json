@@ -55,37 +55,67 @@
         {
             "title": "票据编号",
             "dataIndex": "billNumber",
-            "type": "string"
+            "disabled": true
         },
         {
             "title": "所属供应商 ",
             "dataIndex": "supplierName",
-            "type": "string"
+            "type": "string",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入所属供应商..."
+                }
+            ]
         },
         {
             "title": "开票单位 ",
             "dataIndex": "invoiceUnit",
-            "type": "string"
+            "type": "string",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入开票单位..."
+                }
+            ]
         },
         {
             "title": "发票号",
-            "dataIndex": "invoiceNumber"
+            "dataIndex": "invoiceNumber",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入发票号..."
+                }
+            ]
         },
         {
             "title": "发票类型",
             "dataIndex": "invoiceType",
-            "type": "string"
+            "type": "string",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入发票类型..."
+                }
+            ]
         },
         {
             "title": "发票金额",
             "dataIndex": "invoiceAmount",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入发票金额..."
+                }
+            ]
         },
         {
             "title": "关联收货单",
             "dataIndex": "receiptVos",
             "type": "popTable",
-            "path": "/tower-market/contract",
+            "path": "/tower-storage/receiveStock",
             "width": 1011,
             "value": "contractName",
             "selectType": "checkbox",
@@ -93,41 +123,60 @@
             "readOnly": true,
             "columns": [
                 {
+                    "title": "收货单号",
+                    "dataIndex": "receiveNumber",
+                    "type": "string"
+                },
+                {
+                    "title": "联系人",
+                    "dataIndex": "contactsUser"
+                },
+                {
                     "title": "合同编号",
-                    "dataIndex": "contractNumber",
-                    "search": true
+                    "dataIndex": "contractNumber"
                 },
                 {
-                    "title": "合同名称",
-                    "dataIndex": "contractName"
+                    "title": "完成时间",
+                    "dataIndex": "receiveTime"
                 },
                 {
-                    "title": "销售类型",
-                    "dataIndex": "saleType"
+                    "title": "创建人",
+                    "dataIndex": "createUser"
                 },
                 {
-                    "title": "业主单位",
-                    "dataIndex": "customerCompany",
-                    "search": true
+                    "title": "材料名称",
+                    "dataIndex": "productName"
                 },
                 {
-                    "title": "合同签订单位",
-                    "dataIndex": "signCustomerName"
+                    "title": "重量（吨）合计",
+                    "dataIndex": "weight"
                 },
                 {
-                    "title": "合同签订日期",
-                    "dataIndex": "signContractTime"
+                    "title": "价税合计（元）",
+                    "dataIndex": "price"
                 },
                 {
-                    "title": "要求交货日期",
-                    "dataIndex": "deliveryTime"
+                    "title": "备注",
+                    "dataIndex": "remark"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择关联收货单..."
                 }
             ]
         },
         {
             "title": "收票日",
             "dataIndex": "collectInvoiceDate",
-            "type": "string"
+            "type": "date",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入收票日..."
+                }
+            ]
         }
     ],
     "operation": [
