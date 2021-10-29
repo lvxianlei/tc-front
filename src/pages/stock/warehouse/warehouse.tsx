@@ -2,10 +2,10 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Pagination, TableColumnProps, Table, message, } from 'antd'
 import RequestUtil from "../../../utils/RequestUtil"
-import { RouteProps } from '../public'
 import WarehouseModal from './WarehouseModal'
-const Warehouse = (props: RouteProps) => {
-    // const history = useHistory()
+import { useHistory } from 'react-router-dom'
+const Warehouse = () => {
+    const history = useHistory()
     const [columnsData, setColumnsData] = useState([]);
     const [total, setTotal] = useState(0);
     const [size, setSize] = useState(10);
@@ -96,6 +96,7 @@ const Warehouse = (props: RouteProps) => {
     const deleteItem =async (id:string) =>{
         await RequestUtil.delete(`/tower-storage/warehouse?id=${id}`)
         message.success('删除成功')
+        getColumnsData()
     }
     return (
         <div className='public_page'>
@@ -118,7 +119,7 @@ const Warehouse = (props: RouteProps) => {
                         <Button
                             className='func_right_item'
                             onClick={() => {
-                                props.history.go(-1)
+                                history.go(-1)
                             }}
                         >返回上一级</Button>
                     </div>
@@ -149,7 +150,7 @@ const Warehouse = (props: RouteProps) => {
             {
                 isModal ?
                     <WarehouseModal
-                        {...props}
+                        // {...props}
                         isModal={isModal}
                         id={id}
                         cancelModal={cancelModal}

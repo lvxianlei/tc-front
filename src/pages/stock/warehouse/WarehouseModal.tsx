@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Col, Row, Select, Modal, Input, Button, Table, TableColumnProps, message, } from 'antd';
-import { RouteProps } from '../public';
 import RequestUtil from "../../../utils/RequestUtil"
 import './WarehouseModal.less';
 import AuthUtil from '../../../utils/AuthUtil';
@@ -10,7 +9,7 @@ import { Key } from 'rc-select/lib/interface/generator';
 // import { SelectValue } from 'antd/lib/select';
 const { Option } = Select;
 
-interface Props extends RouteProps {
+interface Props  {
     isModal: boolean,
     cancelModal: Function,
     getColumnsData:Function,
