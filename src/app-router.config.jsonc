@@ -1201,21 +1201,21 @@
       "path": "/setOutTower/setOutTowerMngt",
       "module": "./pages/setOutTower/SetOutTowerMngt",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_product_category_lofting_page "
     },
     { // 放样塔型-塔型详情
       "name": "塔型详情",
       "path": "/setOutTower/setOutTowerMngt/towerDetail/:id",
       "module": "./pages/setOutTower/TowerDetail",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_product_category_lofting_detail"
     },
     { // 放样塔型-塔型构件
       "name": "塔型构件",
       "path": "/setOutTower/setOutTowerMngt/towerMember/:id/:number",
       "module": "./pages/setOutTower/TowerMemberList",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_product_structure_page"
     },
     { // 放样塔型-组焊清单
       "name": "组焊清单",
@@ -1229,7 +1229,7 @@
       "path": "/setOutTower/setOutTowerMngt/bolt/:id",
       "module": "./pages/setOutTower/BoltList",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "bolt_record_lofting_list"
     },
     { // 基础设置
       "name": "基础设置",

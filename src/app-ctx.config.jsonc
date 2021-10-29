@@ -417,12 +417,12 @@
                         "label": "放样塔型",
                         "icon": "technology",
                         "path": "/setOutTower",
-                        "authority": "approvalm",
+                        "authority": "rd_product_category_lofting_page ",
                         "items": [
                             {
                                 "label": "放样塔型",
                                 "path": "/setOutTower/setOutTowerMngt",
-                                "authority": "approvalm"
+                                "authority": "rd_product_category_lofting_page "
                             }
                         ]
                     },
