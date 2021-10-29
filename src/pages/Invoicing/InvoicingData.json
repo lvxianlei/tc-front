@@ -114,7 +114,18 @@
         },
         {
             "title": "验收单",
-            "dataIndex": "isCheck"
+            "dataIndex": "isCheck",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "无"
+                },
+                {
+                    "value": 2,
+                    "label": "有"
+                }
+            ]
         },
         {
             "title": "合同单位",
@@ -149,23 +160,43 @@
         },
         {
             "title": "开票次数",
-            "dataIndex": "ticketCount"
+            "dataIndex": "ticketCount",
+            "type": "number"
         },
         {
             "title": "申请时间",
             "dataIndex": "createTime"
         },
         {
-            "title": "制单",
-            "dataIndex": ""
+            "title": "制单人",
+            "dataIndex": "createUser"
         },
         {
             "title": "制单时间",
-            "dataIndex": ""
+            "dataIndex": "createTime"
         },
         {
             "title": "状态",
-            "dataIndex": "stateName"
+            "dataIndex": "state",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "已创建",
+                    "value": 0
+                },
+                {
+                    "label": "审批中",
+                    "value": 1
+                },
+                {
+                    "label": "审批通过",
+                    "value": 2
+                },
+                {
+                    "label": "被驳回",
+                    "value": 3
+                }
+            ]
         }
     ],
     "baseInfoHead": [
