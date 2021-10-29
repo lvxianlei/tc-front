@@ -70,8 +70,7 @@ const Warehouse = (props: RouteProps) => {
                         <span
                             className='yello'
                             onClick={() => {
-                                setIsModal(true)
-                                setId(item.id)
+                                deleteItem(item.id)
                             }}
                         >删除</span>
                     </div>
@@ -93,6 +92,9 @@ const Warehouse = (props: RouteProps) => {
     const cancelModal = () => {
         setIsModal(false)
         setId(null)
+    }
+    const deleteItem =async (id:string) =>{
+        await RequestUtil.delete(`/tower-storage/warehouse/${id}`)
     }
     return (
         <div className='public_page'>

@@ -296,28 +296,28 @@
       "path": "/sys/materialType",
       "module": "./pages/system-mngt/material/MaterialTypeMngt",
       "exact": true,
-      "authority": "system_material_type"
+      "authority": "material_management"
     },
     { // 原材料管理
       "name": "原材料管理",
       "path": "/sys/material",
       "module": "./pages/system-mngt/material/MaterialMngt",
       "exact": true,
-      "authority": "system_material"
+      "authority": "material_management"
     },
     { // 新增原材料
       "name": "新增原材料",
       "path": "/sys/material/new",
       "module": "./pages/system-mngt/material/MaterialNew",
       "exact": true,
-      "authority": "system_material"
+      "authority": "material_management"
     },
     { // 编辑原材料
       "name": "编辑原材料",
       "path": "/sys/material/view/:id",
       "module": "./pages/system-mngt/material/MaterialView",
       "exact": true,
-      "authority": "system_material"
+      "authority": "material_management"
     },
     { //塔型管理
       "name": "塔型管理",
@@ -641,14 +641,14 @@
       "path": "/cockpit/planTrack",
       "module": "./pages/cockpit/PlanTrack",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_plan_track_management"
     },
     { // 驾驶舱-放样计划
       "name": "放样计划",
       "path": "/cockpit/planSetOut",
       "module": "./pages/cockpit/PlanSetOut",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_plan_lofting_management"
     },
     { // 驾驶舱-库存看板
       "name": "库存看板",
@@ -858,77 +858,77 @@
       "path": "/workMngt/pickList",
       "module": "./pages/workMngt/pickList/PickList",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "product_material_list"
     },
     { // 工作管理-提料-提料信息
       "name": "提料信息",
       "path": "/workMngt/pickList/pickMessage/:id",
       "module": "./pages/workMngt/pickList/PickMessage",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "product_material_list"
     },
     { // 工作管理-提料-杆塔信息
       "name": "杆塔信息",
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status",
       "module": "./pages/workMngt/pickList/PickTowerMessage",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "product_material_list"
     },
     { // 工作管理-提料-杆塔信息-提料
       "name": "提料",
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Pick",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "product_material_list"
     },
     { // 工作管理-提料-杆塔信息-提料-放样塔型套用
       "name": "放样塔型套用",
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId/setOutApply",
       "module": "./pages/workMngt/pickList/pickTowerMessage/SetOutApply",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "product_material_list"
     },
     { // 工作管理-提料-杆塔信息-提料-图形塔型套用
       "name": "图形塔型套用",
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId/drawApply",
       "module": "./pages/workMngt/pickList/pickTowerMessage/DrawApply",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "product_material_list"
     },
     { // 工作管理-提料-杆塔信息-提料-识别
       "name": "识别",
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId/recognize",
       "module": "./pages/workMngt/pickList/pickTowerMessage/ImageRecognize",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "product_material_list"
     },
     { // 工作管理-提料-杆塔信息-校核
       "name": "校核",
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/check/:productSegmentId/:materialLeaderId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Check",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "product_material_list"
     },
     { // 工作管理-提料-杆塔信息-明细
       "name": "明细",
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/detail/:productSegmentId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Detail",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "product_material_list"
     },
     { // 工作管理-提料-杆塔配段
       "name": "杆塔配段",
       "path": "/workMngt/pickList/pickTower/:id",
       "module": "./pages/workMngt/pickList/PickTower",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "product_material_list"
     },
     { // 工作管理-提料-杆塔配段-杆塔信息
       "name": "杆塔配段",
       "path": "/workMngt/pickList/pickTower/:id/pickTowerDetail/:productId",
       "module": "./pages/workMngt/pickList/PickTowerDetail",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "product_material_list"
     },
     { // 工作管理-评估列表
       "name": "评估列表",
@@ -1103,56 +1103,56 @@
       "path": "/workMngt/boltList",
       "module": "./pages/workMngt/bolt/BoltList",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_bolt_management"
     },
     { // 工作管理-螺栓列表-螺栓信息
       "name": "螺栓信息",
       "path": "/workMngt/boltList/boltInformation/:loftId/:id",
       "module": "./pages/workMngt/bolt/BoltInformation",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_bolt_management"
     },
     { // 工作管理-螺栓列表-螺栓清单
       "name": "螺栓清单",
       "path": "/workMngt/boltList/boltListing/:id",
       "module": "./pages/workMngt/bolt/BoltListing",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_bolt_management"
     },
     { // 工作管理-螺栓列表-校核
       "name": "校核",
       "path": "/workMngt/boltList/boltCheck/:id",
       "module": "./pages/workMngt/bolt/BoltCheck",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_bolt_management"
     },
     { // 工作管理-小样图列表
       "name": "小样图列表",
       "path": "/workMngt/sampleDrawList",
       "module": "./pages/workMngt/sampleDrawList/SampleDrawList",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_small_sample_management"
     },
     { // 工作管理-小样图信息
       "name": "小样图信息",
       "path": "/workMngt/sampleDrawList/sampleDrawMessage/:id",
       "module": "./pages/workMngt/sampleDrawList/SampleDrawMessage",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_small_sample_management"
     },
     { // 工作管理-小样图
       "name": "小样图",
       "path": "/workMngt/sampleDrawList/sampleDraw/:id/:status",
       "module": "./pages/workMngt/sampleDrawList/SampleDraw",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_small_sample_management"
     },
     { // 工作管理-校核
       "name": "小样图校核",
       "path": "/workMngt/sampleDrawList/sampleDrawCheck/:id/:status",
       "module": "./pages/workMngt/sampleDrawList/SampleDrawCheck",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_small_sample_management"
     },
     { // 工作管理-询价列表
       "name": "询价列表",
@@ -1243,28 +1243,28 @@
       "path": "/drawTower/drawTowerMngt",
       "module": "./pages/drawTower/DrawTowerMngt",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_draw_product_category_management"
     },
     { // 图纸塔型-塔型信息
       "name": "塔型信息",
       "path": "/drawTower/drawTowerMngt/towerInformation/:id",
       "module": "./pages/drawTower/TowerInformation",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_draw_product_category_management"
     },
     { // 图纸塔型-塔型信息-构件详情
       "name": "构件详情",
       "path": "/drawTower/drawTowerMngt/towerInformation/:id/componentDetail/:segmentId/:data",
       "module": "./pages/drawTower/ComponentDetail",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_draw_product_category_management"
     },
     { // 图纸塔型-塔型构件
       "name": "塔型构件",
       "path": "/drawTower/drawTowerMngt/componentInformation/:id/:structureCount",
       "module": "./pages/drawTower/ComponentInformation",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "rd_draw_product_category_management"
     },
     { // 工作台
       "name": "工作台",

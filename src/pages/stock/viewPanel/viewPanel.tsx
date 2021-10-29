@@ -1,15 +1,34 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react'
-import { Button, Table, Pagination, TableColumnProps, Row, Col, Select, } from 'antd'
+import React, { useEffect, useState,  } from 'react'
+import { Button, Table, Pagination, TableColumnProps, Row, Col, Select, } from 'antd';
 import RequestUtil from '../../../utils/RequestUtil';
 import ApplicationContext from "../../../configuration/ApplicationContext"
 const { Option } = Select;
+// interface SelectInfo {
+//     condition: string,
+//     materialTexture: string,
+//     productName: string,
+//     spec: string,
+//     standard: string,
+// }
 const ViewPanel = (): React.ReactNode => {
     // const history = useHistory()
-    const [columnsData, setColumnsData] = useState<any[]>([{}]);
-    const [total, setTotal] = useState(0);
-    const [size, setSize] = useState(10);
-    const [current, setCurrent] = useState(1);
+    let [columnsData, setColumnsData] = useState<any[]>([]);
+    // let [total, setTotal] = useState(0);
+    let [size, setSize] = useState(10);
+    let [current, setCurrent] = useState(1);
+    let [condition, setCondition] = useState('');
+    let [materialTexture, setMaterialTexture] = useState('');
+    let [productName, setProductName] = useState('');
+    let [spec, setSpec] = useState('');
+    let [standard, setStandard] = useState('');
+    // let [selectInfo, setSelectInfo] = useState<any>({
+    //     condition: '',
+    //     materialTexture: '',
+    //     productName: '',
+    //     spec: '',
+    //     standard: '',
+    // });
     const columns: TableColumnProps<object>[] = [
         {
             key: 'index',
@@ -66,9 +85,9 @@ const ViewPanel = (): React.ReactNode => {
             dataIndex: 'safeWeight'
         },
         {
-            key: 'alarmWeight',
+            key: 'typeName',
             title: '告警库存（吨）',
-            dataIndex: 'alarmWeight'
+            dataIndex: 'typeName'
         },
         {
             key: 'currentProjectStage',
@@ -90,17 +109,29 @@ const ViewPanel = (): React.ReactNode => {
         },
     ]
     useEffect(() => {
+        console.log('11111')
         getColumnsData()
-    }, [current, size]);
+    }, [condition, materialTexture, productName, spec, standard, current, size,]);
     const getColumnsData = async () => {
         const data: any = await RequestUtil.get('/tower-storage/safetyStock/board', {
             current,
             size,
+            condition,
+            materialTexture,
+            productName,
+            spec,
+            standard,
         })
-        setTotal(data.data)
-        setColumnsData(data.records)
+        // setTotal(data.data)
+        setColumnsData(data)
     }
-
+    // 筛选条件变化
+    // const changeSelectInfo = (value: string, key: string) => {
+    //     selectInfo[key] = value;
+    //     selectInfo = {...selectInfo}
+    //     setSelectInfo(selectInfo)
+    //     console.log(selectInfo)
+    // }
     return (
         <div className='public_page'>
             <Row className='search_content'>
@@ -113,9 +144,10 @@ const ViewPanel = (): React.ReactNode => {
                     <span className='tip'>材质：</span>
                     <Select
                         className='input'
-                        // value={this.state.entryStatus}
+                        value={materialTexture}
                         style={{ width: 120 }}
                         onChange={(value) => {
+                            setMaterialTexture(value)
                         }}
                     >
                         {
@@ -139,9 +171,10 @@ const ViewPanel = (): React.ReactNode => {
                     <span className='tip'>标准：</span>
                     <Select
                         className='input'
-                        // value={this.state.entryStatus}
+                        value={standard}
                         style={{ width: 120 }}
                         onChange={(value) => {
+                            setStandard(value)
                         }}
                     >
                         <Option value={''}>全部</Option>
@@ -158,9 +191,10 @@ const ViewPanel = (): React.ReactNode => {
                     <span className='tip'>品名：</span>
                     <Select
                         className='input'
-                        // value={this.state.entryStatus}
+                        value={productName}
                         style={{ width: 120 }}
                         onChange={(value) => {
+                            setProductName(value)
                         }}
                     >
                         <Option value={''}>全部</Option>
@@ -177,9 +211,10 @@ const ViewPanel = (): React.ReactNode => {
                     <span className='tip'>规格：</span>
                     <Select
                         className='input'
-                        // value={this.state.entryStatus}
+                        value={spec}
                         style={{ width: 120 }}
                         onChange={(value) => {
+                            setSpec(value)
                         }}
                     >
                         <Option value={''}>全部</Option>
@@ -196,14 +231,16 @@ const ViewPanel = (): React.ReactNode => {
                     <span className='tip'>库存情况：</span>
                     <Select
                         className='input'
-                        // value={this.state.entryStatus}
+                        value={condition}
                         style={{ width: 120 }}
                         onChange={(value) => {
+                            setCondition(value)
                         }}
                     >
                         <Option value={''}>全部</Option>
-                        <Option value={0}>未生成</Option>
-                        <Option value={1}>已生成</Option>
+                        <Option value={'0'}>正常</Option>
+                        <Option value={'1'}>提醒</Option>
+                        <Option value={'2'}>告警</Option>
                     </Select>
                 </Col>
                 <Col
@@ -225,9 +262,6 @@ const ViewPanel = (): React.ReactNode => {
                     <div className='func_right'>
                         <Button
                             className='func_right_item'
-                        >创建</Button>
-                        <Button
-                            className='func_right_item'
                         >返回上一级</Button>
                     </div>
                 </div>
@@ -244,7 +278,7 @@ const ViewPanel = (): React.ReactNode => {
                         className='page'
                         showSizeChanger
                         showQuickJumper
-                        total={total}
+                        total={columnsData.length}
                         pageSize={size}
                         current={current}
                         onChange={(page: number, size: any) => {

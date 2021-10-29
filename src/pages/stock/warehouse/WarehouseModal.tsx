@@ -104,9 +104,6 @@ const WarehouseModal = (props: Props) => {
     useEffect(() => {
         getDepartment()
     }, [])
-    useEffect(() => {
-        getUserList()
-    }, [departmentId])
     // 获取部门信息
     const getDepartment = async () => {
         const data: any = await RequestUtil.get(`/sinzetech-user/department/tree`, {
@@ -117,7 +114,7 @@ const WarehouseModal = (props: Props) => {
     // 获取部门下用户信息
     const getUserList = async () => {
         const data: any = await RequestUtil.get(`/sinzetech-user/user`, {
-            departmentId: AuthUtil.getTenantId(),
+            departmentId,
         })
         setUserList(data.records)
     }
@@ -285,6 +282,7 @@ const WarehouseModal = (props: Props) => {
                                 style={{ width: 120 }}
                                 onChange={(value) => {
                                     setDepartmentId(value)
+                                    getUserList()
                                 }}
                             >
                                 {
