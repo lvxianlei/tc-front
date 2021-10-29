@@ -11,6 +11,8 @@ interface ManagementSaleOrderBaseInfo extends ISaleOrderBaseInfo {
   createUser?: number;
   createTime?: string;
   orderWeight?: number;
+  productType?: number;
+  voltageGrade?: number;
 }
 
 class ManagementSaleOrderSummary extends SaleOrderSummary {
@@ -111,6 +113,16 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
         span: 8,
       },
       rows: [
+        [
+          {
+            label: "产品类型",
+            value: baseInfo?.productType,
+          },
+          {
+            label: "电压等级",
+            value: baseInfo?.voltageGrade,
+          },
+        ],
         [
           {
             label: "订单总重",
