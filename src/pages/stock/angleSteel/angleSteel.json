@@ -1,0 +1,28 @@
+{
+    "angleConfigStrategy": [
+        {
+            "title": "材质",
+            "dataIndex": ""
+        },
+        {
+            "title": "厚度",
+            "dataIndex": ""
+        },
+        {
+            "title": "宽度",
+            "dataIndex": ""
+        },
+        {
+            "title": "夹钳总损耗",
+            "dataIndex": ""
+        },
+        {
+            "title": "每刀口耗损",
+            "dataIndex": ""
+        },
+        {
+            "title": "备注",
+            "dataIndex": ""
+        }
+    ]
+}

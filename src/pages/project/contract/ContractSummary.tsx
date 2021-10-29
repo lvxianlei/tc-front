@@ -31,11 +31,11 @@ class ManagementContractSummary extends ContractSummary {
         [
           {
             label: "采购订单编号",
-            value: baseInfo?.contractNumber
+            value: baseInfo?.purchaseOrderNumber
           },
           {
             label: "ECP合同编号",
-            value: baseInfo?.contractNumber
+            value: baseInfo?.ecpContractNumber
           }
         ],
         [
@@ -105,7 +105,7 @@ class ManagementContractSummary extends ContractSummary {
           },
           {
             label: "结算单位",
-            value: baseInfo?.signCustomerName,
+            value: baseInfo?.payCompanyName,
           },
         ],
         [

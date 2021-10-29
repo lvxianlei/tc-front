@@ -315,11 +315,26 @@ export default function Questionnaire(): React.ReactNode {
      * @description 点击选择获取构件明细列表 
      */
     const getComponentList = async () => {
-        const data: IComponentList[] = await RequestUtil.get(`/tower-science/welding/getStructure`, {
+        let resData: IComponentList[] = await RequestUtil.get(`/tower-science/welding/getStructure`, {
             segmentName: detailData.weldingDetailedVO.segmentName,
             productCategoryId: params.productCategoryId
         }); 
-        let newData: IComponentList[] = data?.filter((item: IComponentList) => {
+        weldingDetailedList.forEach((res: IComponentList) => {
+            resData = resData.map((item: IComponentList) => {
+                if(item.id === res.structureId) {
+                   return {
+                        ...item,
+                        basicsPartNumNow: Number(res.singleNum || 0) + Number(item.basicsPartNumNow || 0)
+                    }
+                } else {
+                    resData.push(res);
+                    return {
+                        ...item
+                    }
+                }
+            })
+        })
+        let newData: IComponentList[] = resData?.filter((item: IComponentList) => {
             return weldingDetailedStructureList.every((items: IComponentList) => {
                 if(items.singleNum === item.basicsPartNumNow) { 
                     return item.id !== items.structureId;

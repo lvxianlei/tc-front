@@ -446,9 +446,16 @@
       "authority": "project"
     },
     { // 回款申请详情
-      "name": "回款申请详情",
+      "name": "回款确认详情",
       "path": "/project/collection/detail/:id",
       "module": "./pages/Collection/Overview",
+      "exact": true,
+      "authority": "project"
+    },
+    { // 回款申请详情
+      "name": "回款确认",
+      "path": "/project/collection/edit/:id",
+      "module": "./pages/Collection/Edit",
       "exact": true,
       "authority": "project"
     },
@@ -653,7 +660,7 @@
     { // 驾驶舱-原材料看板
       "name": "原材料看板",
       "path": "/stock/viewRawMaterial",
-      "module": "./pages/stock/viewRawMaterial/ViewRawMaterial",
+      "module": "./pages/stock/viewRawMaterial/viewRawMaterial",
       "exact": true,
       "authority": "approvalm"
     },
@@ -667,14 +674,14 @@
     { // 驾驶舱-收货单看板
       "name": "收货单看板",
       "path": "/stock/viewReceivingNote",
-      "module": "./pages/stock/viewReceivingNote/ViewReceivingNote",
+      "module": "./pages/stock/viewReceivingNote/viewReceivingNote",
       "exact": true,
       "authority": "approvalm"
     },
     { // 驾驶舱-合同看板
       "name": "合同看板",
       "path": "/stock/viewContract",
-      "module": "./pages/stock/viewContract/ViewContract",
+      "module": "./pages/stock/viewContract/viewContract",
       "exact": true,
       "authority": "approvalm"
     },

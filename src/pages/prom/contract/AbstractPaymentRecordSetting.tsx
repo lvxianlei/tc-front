@@ -120,7 +120,8 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                     returnedTime: selectedRows[0].returnedTime,
                     returnedRate: selectedRows[0].returnedRate,
                     returnedAmount: selectedRows[0].returnedAmount,
-                    period: selectedRows[0].period
+                    period: selectedRows[0].period,
+                    name: selectedRows[0].name
                 },
             })
             this.getForm()?.setFieldsValue({
@@ -128,7 +129,8 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 returnedTime: moment(selectedRows[0].returnedTime),
                 returnedRate: selectedRows[0].returnedRate,
                 returnedAmount: selectedRows[0].returnedAmount,
-                period: selectedRows[0].period
+                period: selectedRows[0].period,
+                name: selectedRows[0].name
             })
         }
     }
@@ -201,14 +203,14 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
             }, {
                 label: '回款计划',
                 name: 'period',
-                initialValue: paymentRecord?.period,
+                initialValue: paymentRecord?.name,
                 rules: [{
                     required: true,
                     message: '请选择回款计划'
                 }],
                 children:
                     <>
-                        <Input value={paymentRecord?.period} suffix={
+                        <Input value={paymentRecord?.name} suffix={
                             <PaymentPlanSelectionComponent onSelect={this.onPlanSelect} id={this.state.id} selectKey={[paymentRecord?.paymentPlanId]} />
                         } />
                     </>

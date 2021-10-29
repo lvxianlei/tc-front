@@ -54,6 +54,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
         this.setState({
             visible: false
         })
+        this.getForm()?.resetFields();
     }
 
     private async modalShow(): Promise<void> {
