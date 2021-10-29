@@ -12,8 +12,24 @@ export default function EnquiryTask(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisible1, setIsModalVisible1] = useState(false);
+    const [isModalVisible2, setIsModalVisible2] = useState(false);
+    const [obj, setObj] = useState({});
+    const [id, setId] = useState("");
+    const [deptId, setDeptId] = useState("");
+    const [inquirerId, setInquirerId] = useState("");
+    const [plannedDeliveryTime, setPlannedDeliveryTime] = useState("");
     const [form] = Form.useForm();
     const history = useHistory();
+
+    // const { loading, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    //     try {
+    //         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryTask/initTask`)
+    //         console.log(result);
+    //         resole(result)
+    //     } catch (error) {
+    //         reject(error)
+    //     }
+    // }), { manual: true })
 
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
@@ -26,29 +42,98 @@ export default function EnquiryTask(): React.ReactNode {
         return value
     }
 
-    const aa = () => {
+    const aa = async (id: string) => {
         setIsModalVisible(true);
+        const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryTask/${id}`)
+        console.log(result);
+        setObj(result);
+    }
+    const bbb = async (deptId: string, id: string, inquirerId: string, plannedDeliveryTime: string) => {
+        ///tower-supply/inquiryTask/taskAssignments
+        const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/inquiryTask/taskAssignments`, { deptId, id, inquirerId, plannedDeliveryTime }, { "Content-Type": "application/json" })
+        console.log(result);
+    }
+    // console.log(obj);
+
+    const ccc = async (id: string) => {
+        setIsModalVisible1(true);
+        const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryTask/taskResult/${id}`)
+        console.log(result);
     }
 
-    const handleOk = () => {
-        setIsModalVisible(false);
-    };
+    const ddd = async () => {
+        const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/inquiryTask/finish`)
+        console.log(result);
+    }
+
+    const refuse = async () => {
+        ///tower-supply/inquiryTask/taskRejection
+        const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/inquiryTask/taskRejection`)
+        console.log(result);
+    }
+
+    const receive = async () => {
+        ///tower-supply/inquiryTask/taskReceive
+        const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/inquiryTask/taskReceive`)
+        console.log(result);
+    }
+
+    const eee = (id1: string) => {
+        setIsModalVisible2(true)
+        setId(id1);
+        // console.log(id1,id);     
+    }
+
+    const handleChange = (value: any) => {
+        console.log(`selected ${value}`);
+        setDeptId(value);
+    }
+
+    const handleChange1 = (value: any) => {
+        console.log(`selected ${value}`);
+        setInquirerId(value);
+    }
+
+    const onChange = (date: any, dateString: any) => {
+        console.log(date, dateString);
+        setPlannedDeliveryTime(date.$d)
+    }
 
     const handleCancel = () => {
         setIsModalVisible(false);
-    };
-    const bb = () => {
-        setIsModalVisible1(true);
-    }
-
-    const handleOk1 = () => {
-        setIsModalVisible1(false);
     };
 
     const handleCancel1 = () => {
         setIsModalVisible1(false);
     };
 
+    const handleCancel2 = () => {
+        setIsModalVisible2(false);
+    };
+
+    const buttons: {} | null | undefined = [
+        <div>
+            <Button onClick={() => { handleCancel() }}>关闭</Button>
+            <Button onClick={() => { refuse() }}>拒绝</Button>
+            <Button onClick={() => { receive() }}>接收</Button>
+        </div>
+    ]
+    const buttons1: {} | null | undefined = [
+        <div>
+            <Button onClick={() => handleCancel1()}>关闭</Button>
+        </div>
+    ]
+    const buttons2: {} | null | undefined = [
+        <div>
+            <Button onClick={() => handleCancel2()}>关闭</Button>
+            <Button onClick={() => { bbb(deptId, id, inquirerId, plannedDeliveryTime) }}>提交</Button>
+        </div>
+    ]
+    //添加10条数据
+    // const cc = async () => {
+    //     const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryTask/initTask`)
+    //     console.log(result);
+    // }
     return <>
         <Page
             path="/tower-supply/inquiryTask"
@@ -56,7 +141,8 @@ export default function EnquiryTask(): React.ReactNode {
                 {
                     title: "序号",
                     dataIndex: "index",
-                    fixed: "left"
+                    fixed: "left",
+                    render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                 },
                 ...enquiryTaskList,
                 {
@@ -65,11 +151,12 @@ export default function EnquiryTask(): React.ReactNode {
                     fixed: "right",
                     width: 100,
                     render: (_: any, record: any) => {
-                        console.log(record);
+                        // console.log(record);
                         return <>
-                            {/* <Button type="link" onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</Button>
-                            <Button type="link" onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button> */}
-                            {/* <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button> */}
+                            <Button type="link" onClick={() => { aa(record.id) }}>任务详情</Button>
+                            <Button type="link" onClick={() => { eee(record.id) }}>指派</Button>
+                            <Button type="link" onClick={() => { ccc(record.id) }}>询价结果</Button>
+                            <Button type="link" onClick={() => { ddd() }}>提交任务</Button>
                         </>
                     }
                 }]}
@@ -118,7 +205,7 @@ export default function EnquiryTask(): React.ReactNode {
                 },
             ]}
         />
-        <Modal width="700px" title="询价任务详情" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} >
+        <Modal width="700px" title="询价任务详情" visible={isModalVisible} footer={buttons} onCancel={handleCancel} >
             <Descriptions title="基础信息" bordered column={2} labelStyle={{ textAlign: 'center' }}>
                 <Descriptions.Item label="编号">Cloud Database</Descriptions.Item>
                 <Descriptions.Item label="项目名称">Cloud Database</Descriptions.Item>
@@ -131,29 +218,29 @@ export default function EnquiryTask(): React.ReactNode {
             </Descriptions>
             <Descriptions title="相关附件" bordered column={1} labelStyle={{ textAlign: 'center' }}>
                 <Descriptions.Item label="附件名称附件名称附件名称附件名称附件名称.pdf">
-                    <span style={{color:"#FF8C00"}}>下载</span>
+                    <span style={{ color: "#FF8C00" }}>下载</span>
                     &nbsp;
-                    <span style={{color:"#FF8C00"}}>预览</span>
+                    <span style={{ color: "#FF8C00" }}>预览</span>
                 </Descriptions.Item>
                 <Descriptions.Item label="附件名称附件名称附件名称附件名称附件名称.rar">
-                    <span style={{color:"#FF8C00"}}>下载</span>
+                    <span style={{ color: "#FF8C00" }}>下载</span>
                 </Descriptions.Item>
             </Descriptions>
             <Descriptions title="操作信息">
             </Descriptions>
             <Page
-                path="/tower-market/inquiryTask"
+                path="/tower-supply/inquiryTask"
                 columns={[
                     ...enquiryTaskAction,
                 ]}
                 searchFormItems={[]}
             />
         </Modal>
-        <Modal width="700px" title="询价结果" visible={isModalVisible1} onOk={handleOk1} onCancel={handleCancel1}>
+        <Modal width="700px" title="询价结果" visible={isModalVisible1} footer={buttons1} onCancel={handleCancel1}>
             <Descriptions title="当前价格信息">
             </Descriptions>
             <Page
-                path="/tower-market/inquiryTask"
+                path="/tower-supply/inquiryTask/taskResult"
                 columns={[
                     ...CurrentPriceInformation
                 ]}
@@ -164,18 +251,30 @@ export default function EnquiryTask(): React.ReactNode {
             </div>
             <Descriptions title="相关附件" bordered column={1} labelStyle={{ textAlign: 'center' }}>
                 <Descriptions.Item label="附件名称附件名称附件名称附件名称附件名称.rar">
-                    <span style={{color:"#FF8C00"}}>下载</span>
+                    <span style={{ color: "#FF8C00" }}>下载</span>
                     &nbsp;
-                    <span style={{color:"#FF8C00"}}>预览</span>
+                    <span style={{ color: "#FF8C00" }}>预览</span>
                 </Descriptions.Item>
             </Descriptions>
         </Modal>
-        <button onClick={() => {
-            aa();
-        }}>按钮1</button>
-        <button onClick={() => {
-            bb();
-        }}>按钮2</button>
+        <Modal width="700px" title="指派" visible={isModalVisible2} footer={buttons2} onCancel={handleCancel2}>
+            部门 *<Select defaultValue="lucy" style={{ width: 120 }} onChange={handleChange}>
+                <Select.Option value="jack" id="1">Jack</Select.Option>
+                <Select.Option value="lucy" id="2">Lucy</Select.Option>
+                <Select.Option value="Yiminghe" id="3">yiminghe</Select.Option>
+            </Select>
+            人员 *<Select defaultValue="lucy" style={{ width: 120 }} onChange={handleChange1}>
+                <Select.Option value="jack">Jack</Select.Option>
+                <Select.Option value="lucy">Lucy</Select.Option>
+                <Select.Option value="Yiminghe">yiminghe</Select.Option>
+            </Select>
+            <div>
+                计划交付时间 *<DatePicker onChange={onChange} />
+            </div>
+        </Modal>
+        {/* <Button onClick={() => {
+            cc();
+        }}>aa</Button> */}
     </>
 }
 

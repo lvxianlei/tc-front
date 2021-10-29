@@ -60,7 +60,7 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
         super.componentDidMount()
         const [captcha, tenant] = await Promise.all<ICaptcha, ITenant>([
             RequestUtil.get<ICaptcha>('/sinzetech-auth/oauth/captcha'),
-            RequestUtil.get<ITenant>(`/sinzetech-system/tenantClient/info?domain=${window.location.protocol}//${window.location.host}`)
+            RequestUtil.get<ITenant>(`/sinzetech-system/tenantClient/info?domain=${window.location.protocol}//${'localhost:3000'}`)
         ])
         this.setState({
             captcha: captcha,

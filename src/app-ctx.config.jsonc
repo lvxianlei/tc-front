@@ -66,7 +66,7 @@
                             {
                                 "label": "原材料类型管理",
                                 "path": "/sys/materialType",
-                                "authority": "material_management"
+                                "authority": "material_category_management"
                             },
                             {
                                 "label": "原材料管理",
@@ -183,12 +183,12 @@
                         "label": "工作台",
                         "icon": "technology",
                         "path": "/workBench",
-                        "authority": "approvalm",
+                        "authority": "rd_workbench",
                         "items": [
                             {
                                 "label": "工作台",
                                 "path": "/workBench/workBenchMngt",
-                                "authority": "approvalm"
+                                "authority": "rd_workbench"
                             }
                         ]
                     },
@@ -320,12 +320,12 @@
                         "label": "确认任务",
                         "icon": "technology",
                         "path": "/confirmTask",
-                        "authority": "approvalm",
+                        "authority": "rd_draw",
                         "items": [
                             {
                                 "label": "确认任务",
                                 "path": "/confirmTask/ConfirmTaskMngt",
-                                "authority": "approvalm"
+                                "authority": "rd_draw"
                             }
                         ]
                     },
@@ -356,7 +356,7 @@
                             {
                                 "label": "确认列表",
                                 "path": "/workMngt/confirmList",
-                                "authority": "approvalm"
+                                "authority": "rd_draw_product_detail"
                             },
                             {
                                 "label": "指派列表",
@@ -386,7 +386,7 @@
                             {
                                 "label": "组焊列表",
                                 "path": "/workMngt/assemblyWeldingList",
-                                "authority": "approvalm"
+                                "authority": "rd_welding_page"
                             },
                             {
                                 "label": "询价列表",
@@ -417,12 +417,12 @@
                         "label": "放样塔型",
                         "icon": "technology",
                         "path": "/setOutTower",
-                        "authority": "approvalm",
+                        "authority": "rd_product_category",
                         "items": [
                             {
                                 "label": "放样塔型",
                                 "path": "/setOutTower/setOutTowerMngt",
-                                "authority": "approvalm"
+                                "authority": "rd_product_category"
                             }
                         ]
                     },

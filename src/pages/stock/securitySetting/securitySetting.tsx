@@ -65,7 +65,7 @@ const SecuritySetting = (): React.ReactNode => {
     ]
     const [columnsData, setColumnsData] = useState<any[]>([]);
     const [isModal, setIsModal] = useState<boolean>(false);
-    const [total, setTotal] = useState<number>(0);
+    // const [total, setTotal] = useState<number>(0);
     const [size, setSize] = useState<number>(10);
     const [current, setCurrent] = useState<number>(1);
     const [id, setId] = useState<string | null>(null);
@@ -76,17 +76,16 @@ const SecuritySetting = (): React.ReactNode => {
     }, [current, size]);
     // 获取列表
     const getColumnsData = async () => {
-        const data: any = await RequestUtil.get('/tower-storage/safetystock', {
+        const data: any = await RequestUtil.get('/tower-storage/safetyStock', {
             current,
             size,
         })
-        setTotal(data.data)
-        setColumnsData(data.records)
+        // setTotal(data.data)
+        setColumnsData(data)
     }
     // 编辑
     const submit = async () => {
-        await RequestUtil.put('/tower-storage/safetystock', {
-            id,
+        await RequestUtil.put(`/tower-storage/safetyStock/${id}`, {
             safetyStock,
             alarmStock,
         })
@@ -122,7 +121,7 @@ const SecuritySetting = (): React.ReactNode => {
                         className='page'
                         showSizeChanger
                         showQuickJumper
-                        total={total}
+                        total={columnsData.length}
                         pageSize={size}
                         current={current}
                         onChange={(page: number, size: any) => {

@@ -258,7 +258,6 @@ export default function PackingListNew(): React.ReactNode {
         } else {
             setStayDistrict([ ...stayDistrict, value ]);
         }
-        
     }
     
     const packaging = () => {

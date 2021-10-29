@@ -208,6 +208,15 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                         const copyRow: IAppointedList = this.getForm()?.getFieldsValue(true).appointedList[this.state.selectKey || 0];
                         const copyRowList = Array(this.state.repeatNum).fill({ ...copyRow, name: '' });
                         appointedList.push( ...copyRowList );
+                        user && appointedList.forEach((_: any, index: number)=>{
+                            user[index] = user[this.state.selectKey || 0]
+                        })
+                        materialCheckLeader && appointedList.forEach((_: any, index: number)=>{
+                            materialCheckLeader[index] = materialCheckLeader[this.state.selectKey || 0]
+                        })
+                        this.getForm()?.setFieldsValue({
+                            appointedList: appointedList
+                        })
                         this.setState({
                             appointedList: appointedList,
                             repeatNum: undefined,
@@ -215,16 +224,8 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                 ...this.state.appointed,
                                 sectionNum: (this.state.appointed?.sectionNum || 0) + (this.state.repeatNum || 0)
                             },
-                            user: user&&appointedList.forEach((_:any,index:number)=>{
-                                user[index+1] = user[0]||''
-                            })||[],
-                            materialCheckLeader:materialCheckLeader&&appointedList.forEach((_:any,index:number)=>{
-                                materialCheckLeader[index+1] = materialCheckLeader[0]||''
-                            })||[]
-                        })
-                        console.log(appointedList)
-                        this.getForm()?.setFieldsValue({
-                            appointedList: appointedList
+                            user: user,
+                            materialCheckLeader:materialCheckLeader
                         })
                     })   
                 }
@@ -247,12 +248,24 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
             this.setState({
                 user:user
             })
+            const value = this.getForm()?.getFieldsValue(true).appointedList
+            value[index].materialLeader = '';
+            this.getForm()?.setFieldsValue({appointedList: value});
+            this.setState({
+                appointedList: value
+            })
         }
         else{
             const user = this.state.user||[];
             user[index] = userData.records;
             this.setState({
                 materialCheckLeader:user
+            })
+            const value = this.getForm()?.getFieldsValue(true).appointedList
+            value[index].materialCheckLeader = '';
+            this.getForm()?.setFieldsValue({appointedList: value});
+            this.setState({
+                appointedList: value
             })
         }
         
