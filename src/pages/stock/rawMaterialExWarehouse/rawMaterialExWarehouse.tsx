@@ -12,7 +12,7 @@ const { RangePicker } = DatePicker;
 export default function RawMaterialStock(): React.ReactNode {
     const history = useHistory()
     const [current, setCurrent] = useState(1);
-    const [total, setTotal] = useState(100);
+    const [total, setTotal] = useState(0);
     const [pageSize, setPageSize] = useState<number>(10);
     const [dateValue, setDateValue] = useState<any>([]);//时间
     const [dateString, setDateString] = useState<any>([]);//时间字符串格式

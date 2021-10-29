@@ -15,7 +15,7 @@ export default function RawMaterialStock(): React.ReactNode {
     const params = useParams<{ id: string }>();
     const history = useHistory(),
         [current, setCurrent] = useState(1),
-        [total, setTotal] = useState(100),
+        [total, setTotal] = useState(0),
         [pageSize, setPageSize] = useState<number>(10),
         [status, setStatus] = useState(''),//状态
         [dateValue, setDateValue] = useState<any>([]),//时间
