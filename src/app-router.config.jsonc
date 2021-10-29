@@ -660,7 +660,7 @@
     { // 驾驶舱-原材料看板
       "name": "原材料看板",
       "path": "/stock/viewRawMaterial",
-      "module": "./pages/stock/viewRawMaterial/viewRawMaterial",
+      "module": "./pages/stock/viewRawMaterial/ViewRawMaterial",
       "exact": true,
       "authority": "approvalm"
     },
