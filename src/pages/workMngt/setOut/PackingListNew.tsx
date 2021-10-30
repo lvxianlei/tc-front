@@ -24,7 +24,7 @@ interface IBundle {
     readonly structureSpec?: string;
     readonly length?: string;
     readonly description?: string;
-    readonly basicsPartNum?: number;
+    readonly structureNum?: number;
     readonly allNum?: number;
     readonly materialSpec?: string;
 }
@@ -250,7 +250,7 @@ export default function PackingListNew(): React.ReactNode {
             //     if(item.id === value.id) {
             //         stayDistrict[ind] = {
             //             ...item,
-            //             basicsPartNum: value.allNum
+            //             structureNum: value.allNum
             //         }  
             //         setStayDistrict([...stayDistrict])
             //     } else {
@@ -271,12 +271,12 @@ export default function PackingListNew(): React.ReactNode {
                 id: item.id,
                 length: item.length,
                 pieceCode: item.code,
-                num: item.basicsPartNum,
+                num: item.structureNum,
                 materialSpec: item.structureSpec,
                 productCategoryId: detailData.productCategoryId,
                 productId: detailData.productId,
                 structureId: item.id,
-                allNum: item.basicsPartNum
+                allNum: item.structureNum
             }
         })
         setPackagingData([ ...data, ...packagingData ]);
@@ -328,11 +328,11 @@ export default function PackingListNew(): React.ReactNode {
         //         if(item.id === packagingData[index].id) {
         //             stayDistrict[ind] = {
         //                 ...item,
-        //                 basicsPartNum: (packagingData[index]?.allNum || 0) - (e || 0)
+        //                 structureNum: (packagingData[index]?.allNum || 0) - (e || 0)
         //             }  
         //             setStayDistrict([...stayDistrict])
         //         } else {
-        //             setStayDistrict([...stayDistrict, { ...packagingData[index], basicsPartNum: (packagingData[index]?.allNum || 0) - (e || 0) }])
+        //             setStayDistrict([...stayDistrict, { ...packagingData[index], structureNum: (packagingData[index]?.allNum || 0) - (e || 0) }])
         //         }
         //     })
         // } else {
