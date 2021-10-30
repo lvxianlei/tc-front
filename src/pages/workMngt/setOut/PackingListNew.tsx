@@ -267,7 +267,7 @@ export default function PackingListNew(): React.ReactNode {
             return {
                 ...item,
                 balesCode: balesCode,
-                description: item.description,
+                description: description,
                 id: item.id,
                 length: item.length,
                 pieceCode: item.code,
