@@ -844,14 +844,14 @@
       "path": "/assessmentTask",
       "module": "./pages/AssessmentTask/AssessmentTaskList",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "assess_task_management"
     },
     { // 评估任务详情
       "name": "评估任务详情",
       "path": "/assessmentTask/assessmentTaskDetail/:id",
       "module": "./pages/AssessmentTask/AssessmentTaskDetail",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "assess_task_management"
     },
     { // 工作管理-提料列表
       "name": "提料列表",
@@ -935,7 +935,7 @@
       "path": "/workMngt/evaluationList",
       "module": "./pages/workMngt/evaluation/EvaluationList",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "assess_list_management"
     },
     { // 放样任务
       "name": "放样任务",

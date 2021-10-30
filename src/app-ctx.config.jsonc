@@ -307,12 +307,12 @@
                         "label": "评估任务",
                         "icon": "technology",
                         "path": "/assessmentTask",
-                        "authority": "approvalm",
+                        "authority": "assess_task_management",
                         "items": [
                             {
                                 "label": "评估任务",
                                 "path": "/assessmentTask",
-                                "authority": "approvalm"
+                                "authority": "assess_task_management"
                             }
                         ]
                     },
@@ -333,12 +333,12 @@
                         "label": "放样任务",
                         "icon": "technology",
                         "path": "/setOutTask",
-                        "authority": "approvalm",
+                        "authority": "rd_lofting_task_page",
                         "items": [
                             {
                                 "label": "放样任务",
                                 "path": "/setOutTask",
-                                "authority": "approvalm"
+                                "authority": "rd_lofting_task_page"
                             }
                         ]
                     },
@@ -351,7 +351,7 @@
                             {
                                 "label": "评估列表",
                                 "path": "/workMngt/evaluationList",
-                                "authority": "approvalm"
+                                "authority": "assess_list_management"
                             },
                             {
                                 "label": "确认列表",
@@ -371,7 +371,7 @@
                             {
                                 "label": "放样列表",
                                 "path": "/workMngt/setOutList",
-                                "authority": "approvalm"
+                                "authority": "rd_lofting_list_page"
                             },
                             {
                                 "label": "螺栓列表",
@@ -386,7 +386,7 @@
                             {
                                 "label": "组焊列表",
                                 "path": "/workMngt/assemblyWeldingList",
-                                "authority": "rd_welding_page"
+                                "authority": "rd_welding"
                             },
                             {
                                 "label": "询价列表",
