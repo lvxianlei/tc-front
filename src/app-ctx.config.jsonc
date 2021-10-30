@@ -183,12 +183,14 @@
                         "label": "工作台",
                         "icon": "technology",
                         "path": "/workBench",
-                        "authority": "rd_workbench",
+                        // "authority": "rd_workbench",
+                        "authority": "approvalm",
                         "items": [
                             {
                                 "label": "工作台",
                                 "path": "/workBench/workBenchMngt",
-                                "authority": "rd_workbench"
+                                // "authority": "rd_workbench"
+                                "authority": "approvalm"
                             }
                         ]
                     },
@@ -201,12 +203,14 @@
                             {
                                 "label": "计划跟踪",
                                 "path": "/cockpit/planTrack",
-                                "authority": "rd_plan_track_management"
+                                // "authority": "rd_plan_track_management"
+                                "authority": "approvalm"
                             },
                             {
                                 "label": "放样计划",
                                 "path": "/cockpit/planSetOut",
-                                "authority": "rd_plan_lofting_management"
+                                // "authority": "rd_plan_lofting_management"
+                                "authority": "approvalm"
                             },
                             {
                                 "label": "库存看板",
@@ -307,12 +311,14 @@
                         "label": "评估任务",
                         "icon": "technology",
                         "path": "/assessmentTask",
-                        "authority": "assess_task_management",
+                        // "authority": "assess_task_management",
+                        "authority": "approvalm",
                         "items": [
                             {
                                 "label": "评估任务",
                                 "path": "/assessmentTask",
-                                "authority": "assess_task_management"
+                                // "authority": "assess_task_management"
+                                "authority": "approvalm"
                             }
                         ]
                     },
@@ -320,12 +326,14 @@
                         "label": "确认任务",
                         "icon": "technology",
                         "path": "/confirmTask",
-                        "authority": "rd_draw",
+                        // "authority": "rd_draw",
+                        "authority": "approvalm",
                         "items": [
                             {
                                 "label": "确认任务",
                                 "path": "/confirmTask/ConfirmTaskMngt",
-                                "authority": "rd_draw"
+                                // "authority": "rd_draw"
+                                "authority": "approvalm"
                             }
                         ]
                     },
@@ -333,12 +341,14 @@
                         "label": "放样任务",
                         "icon": "technology",
                         "path": "/setOutTask",
-                        "authority": "rd_lofting_task_page",
+                        // "authority": "rd_lofting_task_page",
+                        "authority": "approvalm",
                         "items": [
                             {
                                 "label": "放样任务",
                                 "path": "/setOutTask",
-                                "authority": "rd_lofting_task_page"
+                                // "authority": "rd_lofting_task_page"
+                                "authority": "approvalm"
                             }
                         ]
                     },
@@ -351,12 +361,14 @@
                             {
                                 "label": "评估列表",
                                 "path": "/workMngt/evaluationList",
-                                "authority": "assess_list_management"
+                                // "authority": "assess_list_management"
+                                "authority": "approvalm"
                             },
                             {
                                 "label": "确认列表",
                                 "path": "/workMngt/confirmList",
-                                "authority": "rd_draw_product_detail"
+                                // "authority": "rd_draw_product_detail"
+                                "authority": "approvalm"
                             },
                             {
                                 "label": "指派列表",
@@ -366,27 +378,32 @@
                             {
                                 "label": "提料列表",
                                 "path": "/workMngt/pickList",
-                                "authority": "product_material_list"
+                                // "authority": "product_material_list"
+                                "authority": "approvalm"
                             },
                             {
                                 "label": "放样列表",
                                 "path": "/workMngt/setOutList",
-                                "authority": "rd_lofting_list_page"
+                                // "authority": "rd_lofting_list_page"
+                                "authority": "approvalm"
                             },
                             {
                                 "label": "螺栓列表",
                                 "path": "/workMngt/boltList",
-                                "authority": "rd_bolt_management"
+                                // "authority": "rd_bolt_management"
+                                "authority": "approvalm"
                             },
                             {
                                 "label": "小样图列表",
                                 "path": "/workMngt/sampleDrawList",
-                                "authority": "rd_small_sample_management"
+                                // "authority": "rd_small_sample_management"
+                                "authority": "approvalm"
                             },
                             {
                                 "label": "组焊列表",
                                 "path": "/workMngt/assemblyWeldingList",
-                                "authority": "rd_welding"
+                                // "authority": "rd_welding"
+                                "authority": "approvalm"
                             },
                             {
                                 "label": "询价列表",
@@ -404,12 +421,14 @@
                         "label": "图纸塔型",
                         "icon": "technology",
                         "path": "/drawTower",
-                        "authority": "rd_draw_product_category_management",
+                        // "authority": "rd_draw_product_category_management",
+                        "authority": "approvalm",
                         "items": [
                             {
                                 "label": "图纸塔型",
                                 "path": "/drawTower/drawTowerMngt",
-                                "authority": "rd_draw_product_category_management"
+                                // "authority": "rd_draw_product_category_management"
+                                "authority": "approvalm"
                             }
                         ]
                     },
@@ -417,12 +436,14 @@
                         "label": "放样塔型",
                         "icon": "technology",
                         "path": "/setOutTower",
-                        "authority": "rd_product_category",
+                        // "authority": "rd_product_category",
+                        "authority": "approvalm",
                         "items": [
                             {
                                 "label": "放样塔型",
                                 "path": "/setOutTower/setOutTowerMngt",
-                                "authority": "rd_product_category"
+                                // "authority": "rd_product_category"
+                                "authority": "approvalm"
                             }
                         ]
                     },
