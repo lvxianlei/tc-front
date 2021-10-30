@@ -63,10 +63,6 @@
             "type": "select",
             "enum": [
                 {
-                    "value": 1,
-                    "label": "预开"
-                },
-                {
                     "value": 2,
                     "label": "发票未开完"
                 },
@@ -363,10 +359,6 @@
             "dataIndex": "isOpen",
             "type": "select",
             "enum": [
-                {
-                    "value": 1,
-                    "label": "预开"
-                },
                 {
                     "value": 2,
                     "label": "发票未开完"

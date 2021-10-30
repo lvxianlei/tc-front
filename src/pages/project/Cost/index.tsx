@@ -91,7 +91,7 @@ export default function CostDetail() {
             {data?.askInfo?.askInfoVo && <DetailContent title={[
                 <Button key="push" style={{ marginRight: '16px' }} type="primary" onClick={handleNewAudit}>发起询价任务</Button>,
                 <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={() => history.push(`/project/management/edit/cost/${params.id}`)}>编辑</Button>,
-                <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={hadleDelete}>删除</Button>,
+                <Button key="delete" style={{ marginRight: '16px' }} type="primary" onClick={hadleDelete}>删除</Button>,
                 <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
             ]}>
                 <DetailTitle title="基本信息" />

@@ -10,7 +10,7 @@ export default function Payment() {
     const [filterValue, setFilterValue] = useState({})
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/payment?id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/payapply?id=${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -55,7 +55,7 @@ export default function Payment() {
                 render: (_: any, record: any) => {
                     return <>
                         <Button type="link" onClick={() => history.push(`/project/payment/detail/${record.id}`)}>查看</Button>
-                        {record.applyStatus === 4 && <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>}
+                        {[4, 6].includes(record.applyStatus) && <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>}
                     </>
                 }
             }]}
@@ -91,8 +91,6 @@ export default function Payment() {
                     <Select.Option value="3">已驳回</Select.Option>
                     <Select.Option value="4">已撤销</Select.Option>
                     <Select.Option value="6">通过后撤销</Select.Option>
-                    <Select.Option value="7">已删除</Select.Option>
-                    <Select.Option value="10">已支付</Select.Option>
                 </Select>
             },
             {

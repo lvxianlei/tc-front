@@ -105,7 +105,7 @@ class ManagementContractSummary extends ContractSummary {
           },
           {
             label: "结算单位",
-            value: baseInfo?.payCompanyName,
+            value: baseInfo?.payCompanyName, 
           },
         ],
         [

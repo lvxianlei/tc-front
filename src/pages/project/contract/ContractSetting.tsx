@@ -28,13 +28,33 @@ class ManagementContractSetting extends ContractSetting {
           },
           itemProps: [
             {
+              label: "采购订单编号",
+              name: "purchaseOrderNumber",
+              initialValue: contract?.purchaseOrderNumber,
+              rules: [
+                {
+                  required: true,
+                  message: "请输入合同编号"
+                },
+              ],
+              children: (
+                <Input value={contract?.contractNumber} maxLength={50} />
+              ),
+            },
+            {
+              label: "ECP合同编号",
+              name: "ecpContractNumber",
+              initialValue: contract?.ecpContractNumber,
+              children: <Input placeholder="内部合同编号自动生成" disabled />,
+            },
+            {
               label: "合同编号",
               name: "contractNumber",
               initialValue: contract?.contractNumber,
               rules: [
                 {
                   required: true,
-                  message:"请输入合同编号"
+                  message: "请输入合同编号"
                 },
               ],
               children: (
@@ -224,6 +244,48 @@ class ManagementContractSetting extends ContractSetting {
                     suffix={
                       <ClientSelectionComponent
                         onSelect={this.onSelect}
+                        selectKey={[contract?.signCustomerId]}
+                      />
+                    }
+                  />
+                </>
+              ),
+            },
+            {
+              label: "付款方式",
+              name: "payType",
+              initialValue: contract?.payType,
+              children: (
+                <>
+                  <Select
+                    value={contract?.payType}
+                  >
+                    <Select.Option value="1">转账</Select.Option>
+                    <Select.Option value="2">现金</Select.Option>
+                    <Select.Option value="3">支票</Select.Option>
+                    <Select.Option value="4">电汇</Select.Option>
+                    <Select.Option value="5">承兑</Select.Option>
+                  </Select>
+                </>
+              ),
+            },
+            {
+              label: "结算单位",
+              name: "payCompanyName",
+              initialValue: contract?.payCompanyName,
+              rules: [
+                {
+                  required: true,
+                  message: "请选择结算单位",
+                },
+              ],
+              children: (
+                <>
+                  <Input
+                    value={contract?.payCompanyName}
+                    suffix={
+                      <ClientSelectionComponent
+                        onSelect={this.onPayCompanyNameSelect}
                         selectKey={[contract?.signCustomerId]}
                       />
                     }

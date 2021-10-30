@@ -59,6 +59,10 @@ export interface ProjectContractInfo extends IContractInfo {
     readonly contractTotalWeight: number;
     readonly contractPrice: number;
     readonly isIta: 0 | 1 | 2;
+    readonly purchaseOrderNumber: string;
+    readonly ecpContractNumber: string;
+    readonly payCompanyName: string;
+    readonly payType: string;
 }
 
 export interface ICustomerInfoDto {
@@ -203,6 +207,20 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 }
             })
             this.getForm()?.setFieldsValue({ signCustomerName: selectedRows[0].name });
+        }
+    }
+
+    public onPayCompanyNameSelect = (selectedRows: DataType[]): void => {
+        const contract: IContractInfo | undefined = this.state.contract;
+        if (selectedRows && selectedRows.length > 0) {
+            this.setState(({
+                contract: {
+                    ...(contract || {}),
+                    payCompanyName: selectedRows[0].name,
+                    payCompanyId: selectedRows[0].id
+                }
+            }) as any)
+            this.getForm()?.setFieldsValue({ payCompanyName: selectedRows[0].name });
         }
     }
 
