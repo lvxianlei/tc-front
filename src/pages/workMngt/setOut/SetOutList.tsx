@@ -112,7 +112,7 @@ export default function SetOutList(): React.ReactNode {
             width: 300,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    <Link to={ `/workMngt/setOutList/setOutInformation/${ record.loftingTask }` }>放样信息</Link>
+                    <Link to={ `/workMngt/setOutList/setOutInformation/${ record.id }` }>放样信息</Link>
                     {
                         record.status === 1 || record.status === 2 ? <Link to={ `/workMngt/setOutList/towerInformation/${ record.id }` }>塔型信息</Link> : <Button type="link" disabled>塔型信息</Button>
                     }

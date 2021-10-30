@@ -109,7 +109,11 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                         plannedDeliveryTime: item?.plannedDeliveryTime && item?.plannedDeliveryTime.format('YYYY-MM-DD') + ' 00:00:00',
                         productCategoryId: this.state.appointed?.productCategoryId,
                         productCategoryName: this.state.appointed?.productCategoryName,
-                        pattern: this.state.appointed?.pattern
+                        pattern: this.state.appointed?.pattern,
+                        loftingUser: item.loftingUser.split('-')[0],
+                        loftingUserName: item.loftingUser.split('-')[1],
+                        checkUser: item.checkUser.split('-')[0],
+                        checkUserName: item.checkUser.split('-')[1],
                     }
                 })
                 RequestUtil.post(`/tower-science/productSegment/submit`, [ ...values ])
@@ -352,7 +356,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                                 }]} style={ { width: '50%', display: 'inline-block' } } key={ index }>
                                                 <Select placeholder="请选择" style={{width:'100px'}} key={ index }>
                                                     { this.state?.user && this.state.user[index] && this.state.user[index].map((item: any) => {
-                                                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                                        return <Select.Option key={ item.id } value={ item.id + '-' + item.name }>{ item.name }</Select.Option>
                                                     }) }
                                                 </Select>
                                             </Form.Item>
@@ -374,7 +378,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                                 }]} style={ { width: '50%', display: 'inline-block' } }>
                                                 <Select placeholder="请选择" style={{width:'100px'}} key={ index }>
                                                     { this.state?.checkUser && this.state.checkUser[index] && this.state.checkUser[index].map((item: any) => {
-                                                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                                        return <Select.Option key={ item.id } value={ item.id + '-' + item.name }>{ item.name }</Select.Option>
                                                     }) }
                                                 </Select>
                                             </Form.Item>

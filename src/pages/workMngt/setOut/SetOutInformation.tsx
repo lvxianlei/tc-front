@@ -91,7 +91,7 @@ export default function SetOutInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const { loading, data }: Record<string, any> = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-science/loftingList/detail?id=${ params.id }`);
+        const data = await RequestUtil.get(`/tower-science/loftingList/detail?productCategoryId=${ params.id }`);
         resole(data)
     }), {})
     const detailData: ISetOut = data;
