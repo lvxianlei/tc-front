@@ -70,7 +70,7 @@ export default function SetOutTowerMngt(): React.ReactNode {
             title: '件号数',
             width: 100,
             dataIndex: 'structureCount',
-            render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>)
+            render: (_: number, _b: any, index: number): React.ReactNode => (<span>{(_b.steelAngleCount===-1?0:_b.steelAngleCount)+(_b.steelPlateCount===-1?0:_b.steelPlateCount)}</span>)
         },
         {
             key: 'internalNumber',
@@ -113,7 +113,7 @@ export default function SetOutTowerMngt(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type='link' onClick={()=>{history.push(`/setOutTower/setOutTowerMngt/towerDetail/${record.id}`)}}>塔型信息</Button>
-                    <Button type='link' onClick={()=>{history.push(`/setOutTower/setOutTowerMngt/towerMember/${record.id}/${record.structureCount===-1?0:record.structureCount}`)}}>塔型构件</Button>
+                    <Button type='link' onClick={()=>{history.push(`/setOutTower/setOutTowerMngt/towerMember/${record.id}/${record.steelAngleCount+record.steelPlateCount}`)}}>塔型构件</Button>
                     <Button type='link' onClick={()=>{history.push(`/setOutTower/setOutTowerMngt/assemblyWeld/${record.id}`)}}>组焊清单</Button>
                     <Button type='link' onClick={()=>{history.push(`/setOutTower/setOutTowerMngt/bolt/${record.id}`)}}>螺栓清单</Button>
                     <Button type='link' onClick={()=>{setTaskId(record.id);setVisible(true)}}>附件</Button>
