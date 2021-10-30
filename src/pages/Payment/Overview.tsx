@@ -3,7 +3,7 @@ import { Button, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../common'
 import { PaymentListHead, paymentdetail } from "./PaymentData.json"
-import { enclosure } from '../project/managementDetailData.json'
+import { enclosure, auditIdRecord } from "../approval-mngt/approvalHeadData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import { downLoadFile } from "../../utils"
@@ -26,8 +26,22 @@ export default function Edit() {
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
             <BaseInfo columns={PaymentListHead} dataSource={(data as any) || {}} />
-            <DetailTitle title="请款明细" />
-            <CommonTable columns={paymentdetail} dataSource={data?.payInfoVOList || []} />
+            <DetailTitle title={data?.payType === 0 ? "请款明细" : "报销明细"} />
+            <CommonTable columns={[
+                ...paymentdetail,
+                ...(data?.payType === 1 ? [
+                    {
+                        "title": "发票号",
+                        "dataIndex": "invoiceNo"
+                    },
+                    {
+                        "title": "发票时间",
+                        "dataIndex": "invoiceTime",
+                        "type": "date",
+                        "format": "YYYY-MM-DD"
+                    },
+                ] as any : [])
+            ]} dataSource={data?.payInfoVOList || []} />
             <DetailTitle title="附件信息" />
             <CommonTable columns={[{
                 title: '操作',
@@ -44,6 +58,8 @@ export default function Edit() {
                 key: 'index',
                 render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
             }, ...enclosure]} dataSource={data?.attachVos || []} />
+            {/* <DetailTitle title="审批记录" />
+            <CommonTable columns={auditIdRecord} dataSource={data?.payInfoVOList || []} /> */}
         </Spin>
     </DetailContent>
 }

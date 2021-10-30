@@ -284,5 +284,31 @@
             "title": "备注",
             "dataIndex": "remark"
         }
+    ],
+    "auditIdRecord": [
+        {
+            "title": "部门",
+            "dataIndex": ""
+        },
+        {
+            "title": "审批人",
+            "dataIndex": ""
+        },
+        {
+            "title": "职位",
+            "dataIndex": ""
+        },
+        {
+            "title": "审批时间",
+            "dataIndex": ""
+        },
+        {
+            "title": "审批结果",
+            "dataIndex": ""
+        },
+        {
+            "title": "意见",
+            "dataIndex": ""
+        }
     ]
 }

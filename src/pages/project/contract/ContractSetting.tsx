@@ -17,6 +17,7 @@ import layoutStyles from "../../../layout/Layout.module.less";
 import { ProjectContractInfo } from "../../prom/contract/AbstractContractSetting";
 
 class ManagementContractSetting extends ContractSetting {
+
   public getFormItemGroups(): IFormItemGroup[][] {
     const contract = this.state.contract as ProjectContractInfo | undefined;
     return [
@@ -94,6 +95,7 @@ class ManagementContractSetting extends ContractSetting {
                   min="0"
                   stringMode={false}
                   className={layoutStyles.width100}
+                  onChange={() => this.onContractTotalWeightChange()}
                 />
               ),
             },
@@ -110,6 +112,7 @@ class ManagementContractSetting extends ContractSetting {
               children: (
                 <InputNumber
                   min="0.01"
+                  disabled
                   max="10000000000.00"
                   step="0.01"
                   stringMode={false}
@@ -401,6 +404,7 @@ class ManagementContractSetting extends ContractSetting {
                       </Select.Option>
                     );
                   })}
+                  <Select.Option value="其他-国外">其他-国外</Select.Option>
                 </Select>
 
                 // <Cascader

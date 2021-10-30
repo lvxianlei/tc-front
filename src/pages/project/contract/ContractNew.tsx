@@ -94,6 +94,7 @@ class ManagementContractNew extends ContractNew {
                   min="0"
                   stringMode={false}
                   className={layoutStyles.width100}
+                  onChange={() => this.onContractTotalWeightChange()}
                 />
               ),
             },
@@ -110,6 +111,7 @@ class ManagementContractNew extends ContractNew {
               children: (
                 <InputNumber
                   min="0.01"
+                  disabled
                   max="10000000000.00"
                   step="0.01"
                   stringMode={false}
@@ -401,6 +403,7 @@ class ManagementContractNew extends ContractNew {
                       </Select.Option>
                     );
                   })}
+                  <Select.Option value="其他-国外">其他-国外</Select.Option>
                 </Select>
               ),
             },

@@ -361,6 +361,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     public contractAmountBlur(): void {
         let planValue: IPaymentPlanDto[] = this.getForm()?.getFieldsValue(true).paymentPlanDtos;
         const contractAmount: number = this.getForm()?.getFieldValue("contractAmount");
+        const contractTotalWeight: number = this.getForm()?.getFieldValue("contractTotalWeight");
         planValue.map<void>((item: IPaymentPlanDto, index: number): void => {
             if (this.getForm()?.getFieldValue("contractAmount") && planValue[index] && planValue[index].returnedRate !== undefined) {
                 planValue[index] = {
@@ -396,7 +397,17 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
 
         })
         this.getForm()?.setFieldsValue({
-            planValue: planValue
+            planValue: planValue,
+            contractPrice: parseFloat((contractAmount / contractTotalWeight).toFixed(2))
+        })
+    }
+
+    public onContractTotalWeightChange() {
+        const contractAmount: number = this.getForm()?.getFieldValue("contractAmount");
+        const contractTotalWeight: number = this.getForm()?.getFieldValue("contractTotalWeight");
+
+        this.getForm()?.setFieldsValue({
+            contractPrice: parseFloat((contractAmount / contractTotalWeight).toFixed(2))
         })
     }
 

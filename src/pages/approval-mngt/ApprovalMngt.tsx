@@ -54,6 +54,15 @@ export default function Information(): React.ReactNode {
         }
     }), { manual: true })
 
+    const { loading: getProductLoading, run: productRun } = useRequest((id: string) => new Promise(async (resolve, reject) => {
+        try {
+            const result = await RequestUtil.get(`/tower-market/askInfo?projectId=${id}`)
+            resolve(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     const { data: auditType } = useRequest<any>(() => new Promise(async (resolve, reject) => {
         const result = await RequestUtil.get("/tower-market/audit/getAuditType")
         resolve(result)
@@ -82,6 +91,7 @@ export default function Information(): React.ReactNode {
         }
         setVisible(false)
     }
+
     const performanceBondOk = async () => {
         const postData = await performanceBondForm.validateFields()
         postData.projectId = postData.projectId?.id || ""
@@ -204,6 +214,8 @@ export default function Information(): React.ReactNode {
         drawHForm.resetFields()
         drawingCofirmForm.resetFields()
         bidingForm.resetFields()
+        outFactoryForm.resetFields()
+        outFactoryTableForm.resetFields()
         setAttachInfo([])
     }
 
@@ -229,22 +241,22 @@ export default function Information(): React.ReactNode {
         }
     }
 
-    const handleOutFactoryChange = (changedFields: any) => {
+    const handleOutFactoryChange = async (changedFields: any) => {
         if (Object.keys(changedFields).length > 0 && Object.keys(changedFields)[0] === "projectName") {
-            const {
-                biddingEndTime,
-                biddingPerson,
-                projectNumber,
-                projectLeader,
-                biddingAgency
-            } = changedFields.projectName?.records[0]
-
-            outFactoryForm.setFieldsValue({
-                bidDeadline: biddingEndTime,
-                biddingPerson,
-                projectNumber,
-                projectLeader,
-                biddingAgency
+            const { biddingEndTime, biddingPerson, projectNumber, projectLeader, biddingAgency, id } = changedFields.projectName?.records[0]
+            const result: any = await productRun(id)
+            const sorceData: any = outFactoryTableForm.getFieldsValue().submit
+            outFactoryForm.setFieldsValue({ bidDeadline: biddingEndTime, biddingPerson, projectNumber, projectLeader, biddingAgency })
+            outFactoryTableForm.setFieldsValue({
+                submit: [
+                    ...sorceData,
+                    ...result.productArr?.map((item: any) => ({
+                        ...item,
+                        productType: item.productName,
+                        price: item.data.cc || "0",
+                        logisticsPrice: item.logistics_price || "0"
+                    })) || []
+                ]
             })
         }
     }
@@ -261,6 +273,39 @@ export default function Information(): React.ReactNode {
 
     const deleteAttachData = (id: number) => {
         setAttachInfo(attachInfo.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
+    }
+
+    const calculate = (data: any) => {
+        const price = parseFloat(data.price || "0")
+        const logisticsPrice = parseFloat(data.logisticsPrice || "0")
+        const applyPrice = parseFloat(data.applyPrice || "0")
+        const outFactoryPrice = parseFloat(data.outFactoryPrice || "0")
+
+        return ({
+            price: (outFactoryPrice + logisticsPrice).toFixed(2),
+            offerDiff: (price - applyPrice).toFixed(2)
+        })
+    }
+
+    const outFactoryTableChange = (fields: any, allFields: any) => {
+        if (fields.submit.length - 1 >= 0) {
+            // const currentRowData = fields.submit[fields.submit.length - 1]
+            const newFields = allFields.submit.map((item: any, index: number) => index === fields.submit.length - 1 ? ({
+                ...item,
+                ...calculate(item)
+            }) : item)
+            outFactoryTableForm.setFieldsValue({ submit: newFields })
+        }
+    }
+
+    const revokeOutFactory = () => {
+        Modal.confirm({
+            title: "撤销申请",
+            content: "确定要撤销此申请吗?",
+            onOk: () => {
+                message.success("撤销成功。。（假的哦，服务端还没接口...）")
+            }
+        })
     }
 
     return <>
@@ -404,7 +449,7 @@ export default function Information(): React.ReactNode {
             <DetailTitle title="基本信息" />
             <BaseInfo form={outFactoryForm} onChange={handleOutFactoryChange} columns={outFactoryHead} dataSource={{}} edit col={3} />
             <DetailTitle title="申请明细" />
-            <EditTable form={outFactoryTableForm} columns={addanewone} dataSource={[]} />
+            <EditTable form={outFactoryTableForm} onChange={outFactoryTableChange} columns={addanewone} dataSource={[]} />
         </Modal>
         <SelectAuditType visible={visible} title="新建审批" okText="创建" onOk={handleOk} onCancel={() => setVisible(false)} />
         <ApprovalTypesView
@@ -412,6 +457,7 @@ export default function Information(): React.ReactNode {
             visible={viewVisible}
             onCancel={() => setViewVisible(false)}
             footer={[
+                currentView === "out_factory" && <Button key="cancel" type="primary" onClick={revokeOutFactory}>撤销申请</Button>,
                 <Button key="ok" type="primary" onClick={() => setViewVisible(false)}>
                     确认
                 </Button>

@@ -726,8 +726,8 @@
     ],
     "applicationdetails": [
         {
-            "title": "货物名称",
-            "dataIndex": ""
+            "title": "产品类型",
+            "dataIndex": "productType"
         },
         {
             "title": "包号",
@@ -739,7 +739,8 @@
         },
         {
             "title": "重量(吨)",
-            "dataIndex": "weight"
+            "dataIndex": "weight",
+            "type": "number"
         },
         {
             "title": "基数",
@@ -752,8 +753,8 @@
         },
         {
             "title": "单价",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "outFactoryPrice",
+            "type": "number"
         },
         {
             "title": "运费",
@@ -778,7 +779,7 @@
         {
             "title": "交货日期",
             "dataIndex": "deliveryTime",
-            "type": "string"
+            "type": "date"
         },
         {
             "title": "备注",
@@ -789,7 +790,13 @@
     "addanewone": [
         {
             "title": "产品类型",
-            "dataIndex": "productType"
+            "dataIndex": "productType",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入产品类型..."
+                }
+            ]
         },
         {
             "title": "包号",
@@ -801,7 +808,13 @@
         },
         {
             "title": "重量(吨)",
-            "dataIndex": "weight"
+            "dataIndex": "weight",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入重量..."
+                }
+            ]
         },
         {
             "title": "基数",
@@ -812,27 +825,53 @@
             "dataIndex": "cargoAddress"
         },
         {
-            "title": "单价",
-            "dataIndex": "outFactoryPrice"
+            "title": "出厂单价",
+            "dataIndex": "outFactoryPrice",
+            "disabled": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入出厂单价..."
+                }
+            ]
         },
         {
-            "title": "运费",
+            "title": "物流费用",
             "dataIndex": "logisticsPrice",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入物流费用..."
+                }
+            ]
         },
         {
-            "title": "价格",
+            "title": "核算价格",
             "dataIndex": "price",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入核算价格..."
+                }
+            ]
         },
         {
             "title": "申请价格",
             "dataIndex": "applyPrice",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入申请价格..."
+                }
+            ]
         },
         {
             "title": "报价差值",
             "dataIndex": "offerDiff",
+            "disabled": true,
             "type": "number"
         },
         {

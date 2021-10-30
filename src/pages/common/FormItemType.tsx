@@ -83,7 +83,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: 
     const paginationChange = (page: number, pageSize: number) => setPagenation({ ...pagenation, current: page, pageSize })
 
     return <>
-        <Form form={form} onFinish={async () => {
+        {searchs.length > 0 && <Form form={form} onFinish={async () => {
             setPagenation({ ...pagenation, current: 1, pageSize: 10 })
             await run()
         }}>
@@ -101,7 +101,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: 
                     <Button type="default" size="small" onClick={() => form.resetFields()} style={{ marginLeft: 12 }}>重置</Button>
                 </Form.Item>
             </Row>
-        </Form>
+        </Form>}
         <CommonTable
             columns={data.columns}
             rowSelection={{
@@ -112,7 +112,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: 
             rowKey={(record: any) => record.id}
             size="small"
             loading={loading}
-            dataSource={popTableData?.records}
+            dataSource={popTableData?.records || popTableData || []}
             pagination={{
                 size: "small",
                 pageSize: pagenation.pageSize,

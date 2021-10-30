@@ -105,7 +105,7 @@ class ManagementContractSummary extends ContractSummary {
           },
           {
             label: "结算单位",
-            value: baseInfo?.payCompanyName, 
+            value: baseInfo?.payCompanyName,
           },
         ],
         [
@@ -131,7 +131,7 @@ class ManagementContractSummary extends ContractSummary {
         [
           {
             label: "所属区域",
-            value: this.state.region?.find((reItem: any) => reItem.code === baseInfo?.region)?.name,
+            value: this.state.region?.find((reItem: any) => reItem.code === baseInfo?.region)?.name || baseInfo?.region,
           },
           {
             label: "销售员",
@@ -189,14 +189,16 @@ class ManagementContractSummary extends ContractSummary {
         dataIndex: "orderProjectName",
       },
       {
+        key: "productType",
         title: "产品类型",
-        dataIndex: "productName",
-        render: (text: any) => <>{text}</>
+        dataIndex: "productType",
+        render: (text: any) => <>{productTypeOptions?.find((item: any) => text === item.id)?.name}</>
       },
       {
+        key: "voltageGrade",
         title: "电压等级",
         dataIndex: "voltageGrade",
-        render: (text: any) => <>{text}</>
+        render: (text: any) => <>{voltageGradeOptions?.find((item: any) => text === item.id)?.name}</>
       },
       {
         title: "含税金额(元)",

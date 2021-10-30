@@ -230,22 +230,26 @@
         {
             "title": "合同号",
             "dataIndex": "contractNumber",
-            "disabled": true
+            "disabled": true,
+            "width": 200
         },
         {
             "title": "合同/工程名称",
             "dataIndex": "contractName",
-            "disabled": true
+            "disabled": true,
+            "width": 200
         },
         {
             "title": "回款金额",
             "dataIndex": "refundAmount",
-            "type": "number"
+            "type": "number",
+            "width": 200
         },
         {
             "title": "业务经理",
             "dataIndex": "salesman",
-            "disabled": true
+            "disabled": true,
+            "width": 200
         },
         {
             "title": "回款计划名称",
@@ -259,8 +263,7 @@
             "columns": [
                 {
                     "title": "期次",
-                    "dataIndex": "contractNumber",
-                    "search": true
+                    "dataIndex": "period"
                 },
                 {
                     "title": "回款计划名称",
@@ -268,16 +271,15 @@
                 },
                 {
                     "title": "计划回款日期",
-                    "dataIndex": "saleType"
+                    "dataIndex": "returnedTime"
                 },
                 {
                     "title": "计划回款占比(%)",
-                    "dataIndex": "customerCompany",
-                    "search": true
+                    "dataIndex": "returnedRate"
                 },
                 {
                     "title": "计划回款金额",
-                    "dataIndex": "paymentReceived"
+                    "dataIndex": "returnedAmount"
                 }
             ],
             "rules": [
@@ -289,18 +291,21 @@
         },
         {
             "title": "计划回款金额",
-            "dataIndex": "",
-            "disabled": true
+            "dataIndex": "returnedAmount",
+            "disabled": true,
+            "width": 200
         },
         {
             "title": "已回款金额",
-            "dataIndex": "",
-            "disabled": true
+            "dataIndex": "paymentReceived",
+            "disabled": true,
+            "width": 200
         },
         {
             "title": "未回款金额",
-            "dataIndex": "",
-            "disabled": true
+            "dataIndex": "noPaymentReceived",
+            "disabled": true,
+            "width": 200
         }
     ]
 }
