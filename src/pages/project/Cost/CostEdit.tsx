@@ -112,7 +112,8 @@ export default function CostEdit() {
             const askInfo: any = await RequestUtil.get(`/tower-market/askInfo?projectId=${params.projectId}`)
             setAskProductDtos(askInfo.productArr.map((item: any, index: number) => ({
                 ...item,
-                data: [({ ...item.data, id: index })]
+                id: index,
+                data: [({ ...item.data })]
             })))
             baseInfo.setFieldsValue(askInfo.askInfoVo)
             resole(askInfo)
@@ -128,9 +129,9 @@ export default function CostEdit() {
             result.head.forEach((item: any) => item.type !== "select" && (initValues[item.dataIndex] = (result.data[item.dataIndex] && result.data[item.dataIndex] !== -1) ? result.data[item.dataIndex] : 0))
             setAskProductDtos([...askProductDtos, {
                 ...result,
+                id: askProductDtos.length,
                 data: [{
                     ...initValues,
-                    id: result.length,
                     voltage,
                     productName
                 }]
@@ -187,10 +188,11 @@ export default function CostEdit() {
     }
 
     const deleteProduct = (item: any) => {
+        console.log(item, askProductDtos)
         Modal.confirm({
             title: "删除",
             content: "是否确认删除该产品？",
-            onOk: () => setAskProductDtos(askProductDtos.filter((askItem: any) => !(askItem.productName === item.productName && askItem.voltage === item.voltage)))
+            onOk: () => setAskProductDtos(askProductDtos.filter((askItem: any) => !(askItem.productName === item.productName && askItem.voltage === item.voltage && askItem.id === item.id)))
         })
     }
 

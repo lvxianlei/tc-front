@@ -837,11 +837,14 @@
         },
         {
             "title": "交货日期",
-            "dataIndex": "deliveryTime"
+            "dataIndex": "deliveryTime",
+            "type": "date"
         },
         {
             "title": "备注",
-            "dataIndex": "remark"
+            "dataIndex": "remark",
+            "rows": 1,
+            "type": "textarea"
         }
     ],
     "enclosure": [

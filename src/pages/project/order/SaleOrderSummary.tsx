@@ -6,7 +6,7 @@ import {
   ISaleOrderBaseInfo,
   SaleOrderSummary,
 } from "../../prom/order/SaleOrderSummary";
-
+import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
 interface ManagementSaleOrderBaseInfo extends ISaleOrderBaseInfo {
   createUser?: number;
   createTime?: string;
@@ -116,11 +116,11 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
         [
           {
             label: "产品类型",
-            value: baseInfo?.productType,
+            value: productTypeOptions?.find((item: any) => baseInfo?.productType === item.id)?.name,
           },
           {
             label: "电压等级",
-            value: baseInfo?.voltageGrade,
+            value: voltageGradeOptions?.find((item: any) => baseInfo?.voltageGrade === item.id)?.name,
           },
         ],
         [

@@ -1,7 +1,7 @@
 import React, { useState } from "react"
-import { Button, Spin, Form, Modal } from 'antd'
+import { Button, Spin, Form, Modal, message } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, EditTable, PopTableContent } from '../common'
+import { DetailContent, DetailTitle, BaseInfo, EditTable, PopTableContent, formatData } from '../common'
 import { promotionalTourism, contractInformation } from "./CollectionData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
@@ -57,7 +57,7 @@ const contract = {
 export default function Edit() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
-    const [returnType, setReturnType] = useState<ReturnType>(-1)
+    const [returnType, setReturnType] = useState<ReturnType>(0)
     const [popContent, setPopContent] = useState<{ id: string, value: string, records: any }>({ value: "", id: "", records: {} })
     const [visible, setVisible] = useState<boolean>(false)
     const [baseForm] = Form.useForm()
@@ -65,9 +65,9 @@ export default function Edit() {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/backMoney/${params.id}`)
-            baseForm.setFieldsValue(result)
+            baseForm.setFieldsValue(formatData(promotionalTourism, result))
             contractInfosForm.setFieldsValue(result.backMoneyVOList)
-            setReturnType(result.returnType)
+            setReturnType(result.returnType === -1 ? 0 : result.returnType)
             resole(result)
         } catch (error) {
             reject(error)
@@ -85,7 +85,15 @@ export default function Edit() {
     const handleSubmit = async () => {
         const baseInfo = await baseForm.validateFields()
         const confirmBackMoneyInfoDTOList = await contractInfosForm.validateFields()
-        await saveRun({ ...baseInfo, confirmBackMoneyInfoDTOList: confirmBackMoneyInfoDTOList.submit })
+        const result = await saveRun({
+            ...baseInfo,
+            payNum: baseInfo.payNum.records?.[0].payNumber || data?.payNum || "",
+            confirmBackMoneyInfoDTOList: confirmBackMoneyInfoDTOList.submit
+        })
+        if (result) {
+            message.success("保存成功")
+            history.go(-1)
+        }
     }
 
     const handleBaseInfoChange = (fields: any) => {
@@ -112,12 +120,20 @@ export default function Edit() {
             <BaseInfo
                 onChange={handleBaseInfoChange}
                 form={baseForm}
-                columns={promotionalTourism.filter((item: any) => returnType === 0 ? true : item.dataIndex !== "payNum")} dataSource={data || {}}
+                columns={promotionalTourism.filter((item: any) => returnType === 0 ? true : item.dataIndex !== "payNum")}
+                dataSource={data || {}}
                 edit
             />
             {returnType === 1 && <>
-                <DetailTitle title="合同信息" operation={[<Button type="primary" ghost onClick={() => setVisible(true)}>选择合同</Button>]} />
-                <EditTable form={contractInfosForm} haveNewButton={false} columns={contractInformation} dataSource={[]} />
+                <DetailTitle title="合同信息" operation={[<Button key="choose" type="primary" ghost onClick={() => setVisible(true)}>选择合同</Button>]} />
+                <EditTable
+                    form={contractInfosForm}
+                    haveNewButton={false}
+                    columns={contractInformation.map((item: any) => item.dataIndex === "paymentPlanId" ? ({
+                        ...item,
+                        path: item.path + popContent.id
+                    }) : item)}
+                    dataSource={[]} />
             </>}
         </Spin>
     </DetailContent>

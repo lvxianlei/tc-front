@@ -296,7 +296,7 @@
       "path": "/sys/materialType",
       "module": "./pages/system-mngt/material/MaterialTypeMngt",
       "exact": true,
-      "authority": "material_management"
+      "authority": "material_category_management"
     },
     { // 原材料管理
       "name": "原材料管理",
@@ -788,7 +788,7 @@
       "path": "/confirmTask/ConfirmTaskMngt",
       "module": "./pages/confirmTask/ConfirmTaskMngt",
       "exact": true,
-      "authority": "rd_draw_page"
+      "authority": "rd_draw"
     },
     { // 确认任务详情
       "name": "确认任务详情",
@@ -809,7 +809,7 @@
       "path": "/workMngt/confirmList",
       "module": "./pages/workMngt/confirmList/ConfirmList",
       "exact": true,
-      "authority": "rd_draw_product_detail_page"
+      "authority": "rd_draw_product_detail"
     },
     { // 工作管理-确认列表-确认信息
       "name": "确认信息",
@@ -1201,7 +1201,7 @@
       "path": "/setOutTower/setOutTowerMngt",
       "module": "./pages/setOutTower/SetOutTowerMngt",
       "exact": true,
-      "authority": "rd_product_category_lofting_page "
+      "authority": "rd_product_category"
     },
     { // 放样塔型-塔型详情
       "name": "塔型详情",

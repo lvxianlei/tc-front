@@ -6,6 +6,7 @@ import ConfirmableButton from '../../../components/ConfirmableButton';
 import { Page } from '../../common';
 import { IClient } from '../../IClient';
 import RequestUtil from '../../../utils/RequestUtil';
+import ApplicationContext from "../../../configuration/ApplicationContext"
 import '../StockPublicStyle.less';
 import './modal.less';
 const { RangePicker } = DatePicker;
@@ -27,9 +28,16 @@ export default function RawMaterialStock(): React.ReactNode {
     const [isEnterLibraryModal, setIsEnterLibraryModal] = useState<boolean>(false);//入库弹框显示
     const [warehouseId, setWarehouseId] = useState('');//入库弹框选择仓库
     const [locatorId, setLocatorId] = useState('');//入库弹框选择库位
-    const [reservoirId, setReservoirId] = useState('');//入库弹框选择库位
-    const [collect, setCollect] = useState('');//入库弹框输入炉批号
+    const [reservoirId, setReservoirId] = useState('');//入库弹框选择库区
+    const [collect, setCollect] = useState('');//入库弹框输入实收余料
+    const [ListFurnaceBatchNo, setListFurnaceBatchNo] = useState('');//入库弹框展示炉批号
+    const [ListProductionBatchNumber, setListProductionBatchNumber] = useState('');//入库弹框展示收货批次
+    const [ListReceivableSurplus, setListReceivableSurplus] = useState('');//入库弹框展示应收余料
+    const [ListID, setListID] = useState('');//入库弹框展shiyongid
     const [isDetailModal, setIsDetailModal] = useState<boolean>(false);//详情弹框显示
+    const [Warehouse, setWarehouse] = useState<any[]>([]);//入库仓库数据
+    const [ReservoirArea, setReservoirArea] = useState<any[]>([]);//入库库区数据
+    const [Location, setLocation] = useState<any[]>([]);//入库库位数据
     const columns = [
         {
             title: '序号',
@@ -57,7 +65,7 @@ export default function RawMaterialStock(): React.ReactNode {
             }
         }, {
             title: '最新状态变更时间',
-            dataIndex: 'key',
+            dataIndex: 'updateTime',
             width: 130,
         }, {
             title: '材质',
@@ -82,12 +90,12 @@ export default function RawMaterialStock(): React.ReactNode {
         },
         {
             title: '操作',
-            width: 120,
+            width: 110,
             fixed: 'right' as FixedType,
-            render: (_: undefined, record: object): React.ReactNode => (
+            render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type='link' onClick={() => { setIsEnterLibraryModal(true) }}>入库</Button>
-                    <Button type='link' onClick={() => { setIsDetailModal(true) }}>详情</Button>
+                    {record.receiveStatus == 0 ? <Button type='link' onClick={() => { ReceivingBtn(record) }}>入库</Button> : null}
+                    <Button type='link' onClick={() => { getDetail(record.id) }}>详情</Button>
                 </Space>
             )
         }
@@ -95,90 +103,80 @@ export default function RawMaterialStock(): React.ReactNode {
     const supplierColumns = [
         {
             title: '收货单号',
-            dataIndex: 'id',
+            dataIndex: 'receiveNumber',
             width: 50,
-            render: (text: any, item: any, index: any) => {
-                console.log(item, 'item')
-                return <span>{index + 1}</span>
-            }
         },
         {
             title: '供应商',
-            dataIndex: 'productName',
+            dataIndex: 'supplierName',
             width: 120,
-            render: (text: any) => <a>{text}</a>,
         }, {
             title: '联系人',
-            dataIndex: 'outStockItemStatus',
+            dataIndex: 'contactsUser',
             width: 120,
         }, {
             title: '联系电话',
-            dataIndex: 'createTime',
+            dataIndex: 'contactsPhone',
             width: 160,
         }, {
             title: '合同编号',
-            dataIndex: 'spec',
+            dataIndex: 'contractNumber',
             width: 120,
         }
     ];//详情-供应商列表表头
     const WarehousingColumns = [
         {
             title: '材质名称',
-            dataIndex: 'id',
+            dataIndex: 'materialTexture',
             width: 100,
-            render: (text: any, item: any, index: any) => {
-                console.log(item, 'item')
-                return <span>{index + 1}</span>
-            }
         },
         {
             title: '标准',
-            dataIndex: 'productName',
-            width: 120,
-            render: (text: any) => <a>{text}</a>,
-        }, {
-            title: '规格',
-            dataIndex: 'outStockItemStatus',
-            width: 120,
-        }, {
-            title: '材质',
-            dataIndex: 'createTime',
-            width: 160,
-        }, {
-            title: '长度',
-            dataIndex: 'spec',
-            width: 120,
-        }, {
-            title: '宽度',
             dataIndex: 'standard',
             width: 120,
         }, {
-            title: '入库人',
-            dataIndex: 'materialTexture',
+            title: '规格',
+            dataIndex: 'spec',
             width: 120,
         }, {
-            title: '入库时间',
+            title: '材质',
+            dataIndex: 'materialTexture',
+            width: 160,
+        }, {
+            title: '长度',
             dataIndex: 'length',
             width: 120,
         }, {
-            title: '炉批号',
+            title: '宽度',
             dataIndex: 'width',
             width: 120,
         }, {
+            title: '入库人',
+            dataIndex: 'stockUserName',
+            width: 120,
+        }, {
+            title: '入库时间',
+            dataIndex: 'updateTime',
+            width: 120,
+        }, {
+            title: '炉批号',
+            dataIndex: 'furnaceBatchNumber',
+            width: 120,
+        }, {
             title: '仓库',
-            dataIndex: 'weight',
+            dataIndex: 'warehouseName',
             width: 120,
         }, {
             title: '库位',
-            dataIndex: 'furnaceBatch',
+            dataIndex: 'locatorName',
             width: 120,
         }, {
             title: '库区',
-            dataIndex: 'contractNumber',
+            dataIndex: 'reservoirName',
             width: 120,
         }, {
             title: '备注',
-            dataIndex: 'productCategoryId',
+            dataIndex: 'remark',
             width: 120,
         }
     ];//详情-入库表头
@@ -188,11 +186,79 @@ export default function RawMaterialStock(): React.ReactNode {
         const data: any = await RequestUtil.get(`/tower-storage/receiveStock/excess`, {
             current,
             pageSize,
-            keyword,
-            dateString
+            selectName: keyword,
+            updateTimeStart: dateString[0] ? dateString[0] + ' 00:00:00' : '',
+            updateTimeEnd: dateString[1] ? dateString[1] + ' 23:59:59' : '',
+            departmentId: departmentId,
+            stockUser: personnelId,
+            receiveStatus: status
         });
         setListdata(data.records);
         setTotal(data.total);
+    }
+    // 获取详情数据
+    const getDetail = async (id: any) => {
+        const data: any = await RequestUtil.get(`/tower-storage/receiveStock/excess/${id}`);
+        setSupplierListdata([data]);
+        setWarehousingListdata([data]);
+        setIsDetailModal(true)
+    }
+    // 入库按钮
+    const ReceivingBtn = async (record: any) => {
+        await getWarehousing('', 0)
+        setListFurnaceBatchNo(record.furnaceBatchNo)
+        setListProductionBatchNumber(record.receiveBatchNumber)
+        setListReceivableSurplus(record.length)
+        setListID(record.id)
+        setIsEnterLibraryModal(true)
+    }
+    // 收货
+    const Receiving = async () => {
+        if (!warehouseId) {
+            message.error('请选择仓库')
+            return
+        }
+        if (!reservoirId) {
+            message.error('请选择库区')
+            return
+        }
+        if (!locatorId) {
+            message.error('请选择库位')
+            return
+        }
+        if (!collect) {
+            message.error('请输入实收余料')
+            return
+        }
+        const data: any = await RequestUtil.put(`/tower-storage/receiveStock/excess`, {
+            id: ListID,
+            length: collect,
+            locatorId: locatorId
+        });
+        if (data) {
+            onReceivingCancel()
+            loadData()
+        }
+    }
+    // 获取仓库/库区/库位
+    const getWarehousing = async (id?: any, type?: any) => {
+        const data: any = await RequestUtil.get(`/tower-storage/warehouse/tree`, {
+            id,
+            type,
+        });
+        switch (type) {
+            case 0:
+                setWarehouse(data)
+                break;
+            case 1:
+                setReservoirArea(data)
+                break;
+            case 2:
+                setLocation(data)
+                break;
+            default:
+                break;
+        }
     }
     // 重置
     const reset = () => {
@@ -208,6 +274,13 @@ export default function RawMaterialStock(): React.ReactNode {
     // 收货弹框取消
     const onReceivingCancel = () => {
         setIsEnterLibraryModal(false);
+        setCollect('')
+        setLocatorId('')
+        setLocatorId('')
+        setReservoirId('')
+        setWarehouse([])
+        setReservoirArea([])
+        setLocation([])
     }
     // 详情弹框取消
     const onDetailCancel = () => {
@@ -216,7 +289,7 @@ export default function RawMaterialStock(): React.ReactNode {
     //进入页面刷新
     useEffect(() => {
         loadData()
-    }, [current, pageSize])
+    }, [current, pageSize, dateString, personnelId, status])
     return (
         <div id="RawMaterialStock">
             <div className="Search_public_Stock">
@@ -243,19 +316,14 @@ export default function RawMaterialStock(): React.ReactNode {
                             onChange={(val) => { setStatus(val) }}
                         >
                             <Select.Option
+                                value="0"
+                            >
+                                待完成
+                            </Select.Option>
+                            <Select.Option
                                 value="1"
                             >
-                                状态1
-                            </Select.Option>
-                            <Select.Option
-                                value="2"
-                            >
-                                状态2
-                            </Select.Option>
-                            <Select.Option
-                                value="3"
-                            >
-                                状态3
+                                已完成
                             </Select.Option>
                         </Select>
                     </div>
@@ -269,7 +337,17 @@ export default function RawMaterialStock(): React.ReactNode {
                             value={departmentId ? departmentId : '请选择'}
                             onChange={(val) => { setDepartmentId(val) }}
                         >
-                            <Select.Option
+                            {
+                                (ApplicationContext.get().dictionaryOption as any)["105"].map((item: { id: string, name: string }) => ({
+                                    value: item.id,
+                                    label: item.name
+                                })).map((item: any) => {
+                                    return (
+                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                    )
+                                })
+                            }
+                            {/* <Select.Option
                                 value="1"
                             >
                                 部门1
@@ -283,7 +361,7 @@ export default function RawMaterialStock(): React.ReactNode {
                                 value="3"
                             >
                                 部门3
-                            </Select.Option>
+                            </Select.Option> */}
                         </Select>-
                         <Select
                             className="select"
@@ -291,7 +369,17 @@ export default function RawMaterialStock(): React.ReactNode {
                             value={personnelId ? personnelId : '请选择'}
                             onChange={(val) => { setPersonnelId(val) }}
                         >
-                            <Select.Option
+                            {
+                                (ApplicationContext.get().dictionaryOption as any)["105"].map((item: { id: string, name: string }) => ({
+                                    value: item.id,
+                                    label: item.name
+                                })).map((item: any) => {
+                                    return (
+                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                    )
+                                })
+                            }
+                            {/* <Select.Option
                                 value="1"
                             >
                                 人员1
@@ -305,7 +393,7 @@ export default function RawMaterialStock(): React.ReactNode {
                                 value="3"
                             >
                                 人员3
-                            </Select.Option>
+                            </Select.Option> */}
                         </Select>
                     </div>
                 </div>
@@ -317,6 +405,9 @@ export default function RawMaterialStock(): React.ReactNode {
                             value={keyword}
                             onChange={(e) => {
                                 setKeyword(e.target.value)
+                            }}
+                            onPressEnter={() => {
+                                loadData()
                             }}
                         >
                         </Input>
@@ -384,7 +475,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 footer={
                     <>
                         <Button onClick={onReceivingCancel}>关闭</Button>
-                        <Button type='primary' onClick={() => { }}>保存并提交</Button>
+                        <Button type='primary' onClick={() => { Receiving() }}>保存并提交</Button>
                     </>
                 }
             >
@@ -393,7 +484,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         <div className="item">
                             <div className='tip'>收货批次</div>
                             <div className='info'>
-                                1255666
+                                {ListProductionBatchNumber}
                             </div>
                         </div>
                         <div className="item">
@@ -403,23 +494,19 @@ export default function RawMaterialStock(): React.ReactNode {
                                     className="select"
                                     style={{ width: "100%" }}
                                     value={warehouseId ? warehouseId : '请选择'}
-                                    onChange={(val) => { setWarehouseId(val) }}
+                                    onChange={(val) => { setWarehouseId(val); getWarehousing(val, 1) }}
                                 >
-                                    <Select.Option
-                                        value="1"
-                                    >
-                                        仓库1
-                                    </Select.Option>
-                                    <Select.Option
-                                        value="2"
-                                    >
-                                        仓库12
-                                    </Select.Option>
-                                    <Select.Option
-                                        value="3"
-                                    >
-                                        仓库13
-                                    </Select.Option>
+                                    {
+                                        Warehouse.map((item, index) => {
+                                            return (
+                                                <Select.Option
+                                                    value={item.id}
+                                                >
+                                                    {item.name}
+                                                </Select.Option>
+                                            )
+                                        })
+                                    }
                                 </Select>
                             </div>
                         </div>
@@ -432,28 +519,24 @@ export default function RawMaterialStock(): React.ReactNode {
                                     value={locatorId ? locatorId : '请选择'}
                                     onChange={(val) => { setLocatorId(val) }}
                                 >
-                                    <Select.Option
-                                        value="1"
-                                    >
-                                        库位1
-                                    </Select.Option>
-                                    <Select.Option
-                                        value="2"
-                                    >
-                                        库位2
-                                    </Select.Option>
-                                    <Select.Option
-                                        value="3"
-                                    >
-                                        库位3
-                                    </Select.Option>
+                                    {
+                                        Location.map((item, index) => {
+                                            return (
+                                                <Select.Option
+                                                    value={item.id}
+                                                >
+                                                    {item.name}
+                                                </Select.Option>
+                                            )
+                                        })
+                                    }
                                 </Select>
                             </div>
                         </div>
                         <div className="item">
                             <div className='tip'>应收余料</div>
                             <div className='info'>
-                                自动获取
+                                {ListReceivableSurplus}
                             </div>
                         </div>
                     </div>
@@ -469,30 +552,26 @@ export default function RawMaterialStock(): React.ReactNode {
                                     className="select"
                                     style={{ width: "100%" }}
                                     value={reservoirId ? reservoirId : '请选择'}
-                                    onChange={(val) => { setReservoirId(val) }}
+                                    onChange={(val) => { setReservoirId(val); getWarehousing(val, 2) }}
                                 >
-                                    <Select.Option
-                                        value="1"
-                                    >
-                                        库区1
-                                    </Select.Option>
-                                    <Select.Option
-                                        value="2"
-                                    >
-                                        库区12
-                                    </Select.Option>
-                                    <Select.Option
-                                        value="3"
-                                    >
-                                        库区13
-                                    </Select.Option>
+                                    {
+                                        ReservoirArea.map((item, index) => {
+                                            return (
+                                                <Select.Option
+                                                    value={item.id}
+                                                >
+                                                    {item.name}
+                                                </Select.Option>
+                                            )
+                                        })
+                                    }
                                 </Select>
                             </div>
                         </div>
                         <div className="item">
                             <div className='tip'>炉批号<span>*</span></div>
                             <div className='info'>
-                                自动获取
+                                {ListFurnaceBatchNo}
                             </div>
                         </div>
                         <div className="item">
@@ -502,7 +581,7 @@ export default function RawMaterialStock(): React.ReactNode {
                                     placeholder='请输入'
                                     value={collect}
                                     onChange={(e) => {
-                                        setCollect(e.target.value)
+                                        setCollect(e.target.value.replace(/[^0-9]/g, ''))
                                     }}
                                 ></Input>
                             </div>

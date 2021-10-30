@@ -184,7 +184,7 @@ export default function RawMaterialStock(): React.ReactNode {
                                     label: item.name
                                 })).map((item: any) => {
                                     return (
-                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                        <Select.Option value={item.value} key={item.value}>{item.label}</Select.Option>
                                     )
                                 })
                             }
