@@ -50,7 +50,6 @@ export default function PackingListNew(): React.ReactNode {
     const [ packagingData, setPackagingData ] = useState<IBundle[]>([]);
     const [ stayDistrict, setStayDistrict ] = useState<IBundle[]>([]);
     const [ balesCode, setBalesCode ] = useState<string>();
-    const [ description, setDescription ] = useState("");
     const location = useLocation<{productCategoryName: string, productNumber: string}>()
 
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
@@ -68,6 +67,7 @@ export default function PackingListNew(): React.ReactNode {
     const { loading, data } = useRequest<IPackingList>(() => getTableDataSource({}));
 
     const detailData: IPackingList = data || {};
+    const [ description, setDescription ] = useState(detailData?.description || '');
 
     const chooseColumns = [
         {
@@ -79,10 +79,10 @@ export default function PackingListNew(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
         },
         {
-            key: 'partName',
+            key: 'segmentName',
             title: '段名',
             width: 150,
-            dataIndex: 'partName'
+            dataIndex: 'segmentName'
         },
         {
             key: 'code',
@@ -316,24 +316,29 @@ export default function PackingListNew(): React.ReactNode {
     } 
 
     const numChange = (e: number, allNum: number, index: number) => {
-        if(e < allNum) {
-            stayDistrict.forEach((item: IBundle, ind: number) => {
-                if(item.id === packagingData[index].id) {
-                    stayDistrict[ind] = {
-                        ...item,
-                        basicsPartNum: (packagingData[index]?.allNum || 0) - (e || 0)
-                    }  
-                    setStayDistrict([...stayDistrict])
-                } else {
-                    setStayDistrict([...stayDistrict, { ...packagingData[index], basicsPartNum: (packagingData[index]?.allNum || 0) - (e || 0) }])
-                }
-            })
-        } else {
-            const data = stayDistrict.filter((item: IBundle) => {
-                return item.id !== packagingData[index].id;
-            })
-            setStayDistrict([ ...data ])
+        packagingData[index] = {
+            ...packagingData[index],
+            num: e
         }
+        setPackagingData([ ...packagingData ])
+        // if(e < allNum) {
+        //     stayDistrict.forEach((item: IBundle, ind: number) => {
+        //         if(item.id === packagingData[index].id) {
+        //             stayDistrict[ind] = {
+        //                 ...item,
+        //                 basicsPartNum: (packagingData[index]?.allNum || 0) - (e || 0)
+        //             }  
+        //             setStayDistrict([...stayDistrict])
+        //         } else {
+        //             setStayDistrict([...stayDistrict, { ...packagingData[index], basicsPartNum: (packagingData[index]?.allNum || 0) - (e || 0) }])
+        //         }
+        //     })
+        // } else {
+        //     const data = stayDistrict.filter((item: IBundle) => {
+        //         return item.id !== packagingData[index].id;
+        //     })
+        //     setStayDistrict([ ...data ])
+        // }
     }
 
     if (loading) {

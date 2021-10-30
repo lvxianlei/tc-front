@@ -15,7 +15,7 @@ import { specialColums, productColumns } from './SetOutInformation.json';
 
 interface ISetOut {
     readonly attachVos?: IAttachVos[];
-    readonly taskDataVOList?: ITaskDataVOList[];
+    readonly stateRecordVOS?: ITaskDataVOList[];
 }
 
 interface IAttachVos {
@@ -136,6 +136,6 @@ export default function SetOutInformation(): React.ReactNode {
             pagination={ false }
         />
         <DetailTitle title="操作信息"/>
-        <CommonTable columns={ tableColumns } dataSource={ detailData.taskDataVOList } pagination={ false }/>
+        <CommonTable columns={ tableColumns } dataSource={ detailData.stateRecordVOS } pagination={ false }/>
     </DetailContent>
 }
