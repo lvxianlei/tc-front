@@ -25,7 +25,7 @@ interface IBundle {
     readonly length?: string;
     readonly description?: string;
     readonly structureNum?: number;
-    readonly allNum?: number;
+    readonly structureCount?: number;
     readonly materialSpec?: string;
 }
 
@@ -47,15 +47,18 @@ export default function PackingListNew(): React.ReactNode {
     const [ form ] = Form.useForm();
     const [ selectedRows, setSelectedRows ] = useState([]);
     const [ selectedRowKeys, setSelectedRowKeys ] = useState([]);
-    const [ packagingData, setPackagingData ] = useState<IBundle[]>([]);
+    let [ packagingData, setPackagingData ] = useState<IBundle[]>([]);
     const [ stayDistrict, setStayDistrict ] = useState<IBundle[]>([]);
+    const location = useLocation<{productCategoryName: string, productNumber: string}>();
     const [ balesCode, setBalesCode ] = useState<string>();
-    const location = useLocation<{productCategoryName: string, productNumber: string}>()
+    const [ description, setDescription ] = useState('');
 
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
         if(!location.state) {
             const data = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${ params.packId }`);
             setPackagingData(data?.packageRecordVOList || []);
+            setBalesCode(data?.balesCode || '');
+            setDescription(data?.description || '')
             resole(data);
         } else {
             resole({ productCategoryName: location.state.productCategoryName, productNumber:location.state.productNumber });
@@ -67,7 +70,6 @@ export default function PackingListNew(): React.ReactNode {
     const { loading, data } = useRequest<IPackingList>(() => getTableDataSource({}));
 
     const detailData: IPackingList = data || {};
-    const [ description, setDescription ] = useState(detailData?.description || '');
 
     const chooseColumns = [
         {
@@ -208,8 +210,8 @@ export default function PackingListNew(): React.ReactNode {
                     bordered={false} 
                     defaultValue={ record.num } 
                     min={ 1 }
-                    max={ record.allNum }
-                    onChange={ (e) => numChange(e, record.allNum, index) }
+                    max={ record.structureCount }
+                    onChange={ (e) => numChange(e, record.structureCount, index) }
                 />
             )
         },
@@ -240,17 +242,21 @@ export default function PackingListNew(): React.ReactNode {
 
     const remove = async (value: Record<string, any>) => {
         // if(stayDistrict.length > 0) {
-            const newValue = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/delRecord?packageRecordId=${ value.id }`);
             const newPackagingData = packagingData.filter((item: IBundle) => {
                 return item.id !== value.id;
             })
             setPackagingData(newPackagingData); 
-            setStayDistrict([ ...stayDistrict, newValue ]);
+            if(!value.topId) {
+                const newValue = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/delRecord?packageRecordId=${ value.id }`);
+                setStayDistrict([ ...stayDistrict, newValue ]);
+            } else {
+                setStayDistrict([ ...stayDistrict, value ]);
+            }
             // stayDistrict.forEach((item: IBundle, ind: number) => {
             //     if(item.id === value.id) {
             //         stayDistrict[ind] = {
             //             ...item,
-            //             structureNum: value.allNum
+            //             structureNum: value.structureCount
             //         }  
             //         setStayDistrict([...stayDistrict])
             //     } else {
@@ -264,11 +270,11 @@ export default function PackingListNew(): React.ReactNode {
     
     const packaging = () => {
         const data: IBundle[] = selectedRows.map((item: IBundle) => {
+            console.log(balesCode)
             return {
                 ...item,
                 balesCode: balesCode,
-                description: description,
-                id: item.id,
+                description: item.description,
                 length: item.length,
                 pieceCode: item.code,
                 num: item.structureNum,
@@ -276,7 +282,8 @@ export default function PackingListNew(): React.ReactNode {
                 productCategoryId: detailData.productCategoryId,
                 productId: detailData.productId,
                 structureId: item.id,
-                allNum: item.structureNum
+                structureCount: item.structureNum,
+                topId: item.id
             }
         })
         setPackagingData([ ...data, ...packagingData ]);
@@ -317,22 +324,22 @@ export default function PackingListNew(): React.ReactNode {
         setPackagingData([...data]);
     } 
 
-    const numChange = (e: number, allNum: number, index: number) => {
+    const numChange = (e: number, structureCount: number, index: number) => {
         packagingData[index] = {
             ...packagingData[index],
             num: e
         }
         setPackagingData([ ...packagingData ])
-        // if(e < allNum) {
+        // if(e < structureCount) {
         //     stayDistrict.forEach((item: IBundle, ind: number) => {
         //         if(item.id === packagingData[index].id) {
         //             stayDistrict[ind] = {
         //                 ...item,
-        //                 structureNum: (packagingData[index]?.allNum || 0) - (e || 0)
+        //                 structureNum: (packagingData[index]?.structureCount || 0) - (e || 0)
         //             }  
         //             setStayDistrict([...stayDistrict])
         //         } else {
-        //             setStayDistrict([...stayDistrict, { ...packagingData[index], structureNum: (packagingData[index]?.allNum || 0) - (e || 0) }])
+        //             setStayDistrict([...stayDistrict, { ...packagingData[index], structureNum: (packagingData[index]?.structureCount || 0) - (e || 0) }])
         //         }
         //     })
         // } else {
@@ -353,20 +360,32 @@ export default function PackingListNew(): React.ReactNode {
         <DetailContent operation={ [
             <Space direction="horizontal" size="small" >
                 <Button type="primary" onClick={ () => {
-                    const value = {
-                        balesCode: balesCode,
-                        id: params.packId,
-                        productCategoryId: params.id,
-                        productCategoryName: detailData.productCategoryName,
-                        productId: params.productId,
-                        productNumber: detailData.productNumber,
-                        packageRecordSaveDTOList: packagingData,
-                        description: description
-                    };
-                    RequestUtil.post(`/tower-science/packageStructure/save`, value).then(res => {
-                        message.success('包装清单保存成功');
-                        history.goBack();
-                    })
+                    if(!location.state) {
+                        packagingData = packagingData.map((res: IBundle) => {
+                            return {
+                                ...res,
+                                id: ''
+                            }
+                        })
+                    }    
+                    if(balesCode) {
+                        const value = {
+                            balesCode: balesCode,
+                            id: params.packId,
+                            productCategoryId: params.id,
+                            productCategoryName: detailData.productCategoryName,
+                            productId: params.productId,
+                            productNumber: detailData.productNumber,
+                            packageRecordSaveDTOList: packagingData,
+                            description: description
+                        };
+                        RequestUtil.post(`/tower-science/packageStructure/save`, value).then(res => {
+                            message.success('包装清单保存成功');
+                            history.goBack();
+                        })
+                    } else {
+                        message.warning('请输入捆号');
+                    }   
                 } }>保存</Button>
                 <Button type="ghost" onClick={ () => history.goBack() }>关闭</Button>
             </Space>

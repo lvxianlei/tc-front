@@ -149,8 +149,7 @@ export default function SampleDraw(): React.ReactNode {
                     <Space>
                     {/* <Button type="primary">导出</Button> */}
                     <Upload
-                        key="sub"
-                        name="file"
+                        accept="image/png,image/jpeg"
                         multiple={true}
                         action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
                         headers={{
