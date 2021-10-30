@@ -24,7 +24,7 @@ interface IBundle {
     readonly structureSpec?: string;
     readonly length?: string;
     readonly description?: string;
-    readonly basicsPartNum?: number;
+    readonly structureNum?: number;
     readonly allNum?: number;
     readonly materialSpec?: string;
 }
@@ -60,7 +60,7 @@ export default function PackingListNew(): React.ReactNode {
         } else {
             resole({ productCategoryName: location.state.productCategoryName, productNumber:location.state.productNumber });
         }
-        const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...filterValues })
+        const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...filterValues, packageStructureId: params.packId })
         setStayDistrict(list);
     });
 
@@ -109,10 +109,10 @@ export default function PackingListNew(): React.ReactNode {
             dataIndex: 'structureSpec'
         },
         {
-            key: 'basicsPartNum',
+            key: 'structureNum',
             title: '单段件数',
             width: 150,
-            dataIndex: 'basicsPartNum'
+            dataIndex: 'structureNum'
         },
         {
             key: 'length',
@@ -186,10 +186,10 @@ export default function PackingListNew(): React.ReactNode {
             dataIndex: 'pieceCode'
         },
         {
-            key: 'structureSpec',
+            key: 'materialSpec',
             title: '规格',
             width: 150,
-            dataIndex: 'structureSpec'
+            dataIndex: 'materialSpec'
         },
         {
             key: 'length',
@@ -238,26 +238,28 @@ export default function PackingListNew(): React.ReactNode {
         }
     ]
 
-    const remove = (value: Record<string, any>) => {
-        const newPackagingData = packagingData.filter((item: IBundle) => {
-            return item.id !== value.id;
-        })
-        setPackagingData(newPackagingData);
-        if(stayDistrict.length > 0) {
-            stayDistrict.forEach((item: IBundle, ind: number) => {
-                if(item.id === value.id) {
-                    stayDistrict[ind] = {
-                        ...item,
-                        basicsPartNum: value.allNum
-                    }  
-                    setStayDistrict([...stayDistrict])
-                } else {
-                    setStayDistrict([ ...stayDistrict, value ]);
-                }
+    const remove = async (value: Record<string, any>) => {
+        // if(stayDistrict.length > 0) {
+            const newValue = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/delRecord?packageRecordId=${ value.id }`);
+            const newPackagingData = packagingData.filter((item: IBundle) => {
+                return item.id !== value.id;
             })
-        } else {
-            setStayDistrict([ ...stayDistrict, value ]);
-        }
+            setPackagingData(newPackagingData); 
+            setStayDistrict([ ...stayDistrict, newValue ]);
+            // stayDistrict.forEach((item: IBundle, ind: number) => {
+            //     if(item.id === value.id) {
+            //         stayDistrict[ind] = {
+            //             ...item,
+            //             structureNum: value.allNum
+            //         }  
+            //         setStayDistrict([...stayDistrict])
+            //     } else {
+            //         setStayDistrict([ ...stayDistrict, value ]);
+            //     }
+            // })
+        // } else {
+        //     setStayDistrict([ ...stayDistrict, value ]);
+        // }
     }
     
     const packaging = () => {
@@ -265,16 +267,16 @@ export default function PackingListNew(): React.ReactNode {
             return {
                 ...item,
                 balesCode: balesCode,
-                description: item.description,
+                description: description,
                 id: item.id,
                 length: item.length,
                 pieceCode: item.code,
-                num: item.basicsPartNum,
+                num: item.structureNum,
                 materialSpec: item.structureSpec,
                 productCategoryId: detailData.productCategoryId,
                 productId: detailData.productId,
                 structureId: item.id,
-                allNum: item.basicsPartNum
+                allNum: item.structureNum
             }
         })
         setPackagingData([ ...data, ...packagingData ]);
@@ -326,11 +328,11 @@ export default function PackingListNew(): React.ReactNode {
         //         if(item.id === packagingData[index].id) {
         //             stayDistrict[ind] = {
         //                 ...item,
-        //                 basicsPartNum: (packagingData[index]?.allNum || 0) - (e || 0)
+        //                 structureNum: (packagingData[index]?.allNum || 0) - (e || 0)
         //             }  
         //             setStayDistrict([...stayDistrict])
         //         } else {
-        //             setStayDistrict([...stayDistrict, { ...packagingData[index], basicsPartNum: (packagingData[index]?.allNum || 0) - (e || 0) }])
+        //             setStayDistrict([...stayDistrict, { ...packagingData[index], structureNum: (packagingData[index]?.allNum || 0) - (e || 0) }])
         //         }
         //     })
         // } else {

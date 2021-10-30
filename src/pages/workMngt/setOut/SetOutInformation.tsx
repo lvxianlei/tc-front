@@ -45,14 +45,14 @@ const tableColumns = [
         width: 100, 
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
     {
-        key: 'createDepartment',
+        key: 'createDeptName',
         title: '操作部门',
-        dataIndex: 'createDepartment', 
+        dataIndex: 'createDeptName', 
     },
     {  
-        key: 'createUser', 
+        key: 'createUserName', 
         title: '操作人', 
-        dataIndex: 'createUser' 
+        dataIndex: 'createUserName' 
     },
     { 
         key: 'createTime', 
@@ -60,11 +60,11 @@ const tableColumns = [
         dataIndex: 'createTime' 
     },
     {
-        key: 'status', 
+        key: 'currentStatus', 
         title: '任务状态', 
-        dataIndex: 'status',
-        render: (pattern: number): React.ReactNode => {
-            switch (pattern) {
+        dataIndex: 'currentStatus',
+        render: (currentStatus: number): React.ReactNode => {
+            switch (currentStatus) {
                 case 1:
                     return '待指派';
                 case 2:
