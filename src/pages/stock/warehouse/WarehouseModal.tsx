@@ -35,12 +35,13 @@ const WarehouseModal = (props: Props) => {
         },
         {
             key: 'reservoirName',
-            title: '库区',
+            title: '库区*',
             dataIndex: 'reservoirName',
             render: (text, item: any, index) => {
                 return (
                     <Input
                         value={item.reservoirName}
+                        maxLength={50}
                         onChange={(ev) => {
                             changeInputList(ev, item, 'reservoirName', index)
                         }}
@@ -50,12 +51,13 @@ const WarehouseModal = (props: Props) => {
         },
         {
             key: 'locatorName',
-            title: '库位',
+            title: '库位*',
             dataIndex: 'locatorName',
             render: (text, item: any, index) => {
                 return (
                     <Input
                         value={item.locatorName}
+                        maxLength={50}
                         onChange={(ev) => {
                             changeInputList(ev, item, 'locatorName', index)
                         }}
@@ -204,7 +206,7 @@ const WarehouseModal = (props: Props) => {
             return;
         }
         if (columnsData.some(item => !item.reservoirName || !item.locatorName)) {
-            message.error('请完善保管员信息')
+            message.error('请完善库区库位信息')
             return;
         }
         if (props.id) {
@@ -254,11 +256,12 @@ const WarehouseModal = (props: Props) => {
                             md={8}
                             className='search_item'
                         >
-                            <span className='tip'>*仓库编号：</span>
+                            <span className='tip'>仓库编号*：</span>
                             <Input
                                 className='input'
                                 placeholder='请输入'
                                 value={baseInfo.warehouseNumber}
+                                maxLength={50}
                                 onChange={(ev) => {
                                     baseInfoChange(ev, 'input', 'warehouseNumber')
                                 }}
@@ -268,11 +271,12 @@ const WarehouseModal = (props: Props) => {
                             md={8}
                             className='search_item'
                         >
-                            <span className='tip'>*仓库名称：</span>
+                            <span className='tip'>仓库名称*：</span>
                             <Input
                                 className='input'
                                 placeholder='请输入'
                                 value={baseInfo.name}
+                                maxLength={50}
                                 onChange={(ev) => {
                                     baseInfoChange(ev, 'input', 'name')
                                 }}
@@ -282,7 +286,7 @@ const WarehouseModal = (props: Props) => {
                             md={8}
                             className='search_item'
                         >
-                            <span className='tip'>*分类：</span>
+                            <span className='tip'>分类*：</span>
                             <Select
                                 className='input'
                                 value={baseInfo.warehouseCategoryId ? baseInfo.warehouseCategoryId : '请选择'}
@@ -306,7 +310,7 @@ const WarehouseModal = (props: Props) => {
                             md={8}
                             className='search_item'
                         >
-                            <span className='tip'>*车间：</span>
+                            <span className='tip'>车间*：</span>
                             <Select
                                 className='input'
                                 value={baseInfo.shopId ? baseInfo.shopId : '请选择'}
@@ -336,6 +340,7 @@ const WarehouseModal = (props: Props) => {
                                 style={{ width: 120 }}
                                 onChange={(value) => {
                                     setDepartmentId(value)
+                                    setUserId(null)
                                     getUserList(value)
                                 }}
                             >
@@ -372,13 +377,14 @@ const WarehouseModal = (props: Props) => {
                         staffs.map((item, index) => {
                             return (
                                 <div className='keeper_item' key={Math.random()}>
-                                    <span className='tip'>保管员</span>
+                                    <span className='tip'>保管员*</span>
                                     <Select
                                         className='input'
                                         value={item.departmentName ? item.departmentName : item.departmentId ? item.departmentId : '请选择'}
                                         style={{ width: 120 }}
                                         onChange={(value) => {
                                             staffs[index].departmentId = value;
+                                            staffs[index].userId = '';
                                             staffs = [...staffs]
                                             setStaffs(staffs)
                                             getUserList(value, index)
@@ -411,7 +417,7 @@ const WarehouseModal = (props: Props) => {
                                         }
                                     </Select>
                                     {
-                                        staffs.length - 1 === index && staffs.length <= 10 ?
+                                        staffs.length - 1 === index && staffs.length < 10 ?
                                             <Button
                                                 className='button'
                                                 onClick={() => {
