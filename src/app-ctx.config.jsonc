@@ -48,16 +48,6 @@
                                 "label": "成本评估配置",
                                 "path": "/sys/costconfig",
                                 "authority": "dxnry"
-                            },
-                            {
-                                "label": "原材料类型管理",
-                                "path": "/sys/materialType",
-                                "authority": "material_category_management"
-                            },
-                            {
-                                "label": "原材料管理",
-                                "path": "/sys/material",
-                                "authority": "material_management"
                             }
                         ]
                     },
@@ -473,6 +463,16 @@
                                 "label": "角钢配料策略",
                                 "path": "/stock/angleSteel",
                                 "authority": "approvalm"
+                            },
+                            {
+                                "label": "原材料类型管理",
+                                "path": "/sys/materialType",
+                                "authority": "material_category_management"
+                            },
+                            {
+                                "label": "原材料管理",
+                                "path": "/sys/material",
+                                "authority": "material_management"
                             }
                         ]
                     },
