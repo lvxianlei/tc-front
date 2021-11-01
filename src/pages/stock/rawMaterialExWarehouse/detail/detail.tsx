@@ -6,7 +6,8 @@ import ConfirmableButton from '../../../../components/ConfirmableButton';
 import { Page } from '../../../common';
 import { IClient } from '../../../IClient';
 import RequestUtil from '../../../../utils/RequestUtil';
-import ApplicationContext from "../../../../configuration/ApplicationContext"
+import ApplicationContext from "../../../../configuration/ApplicationContext";
+import AuthUtil from '../../../../utils/AuthUtil';
 import '../../StockPublicStyle.less';
 import './detail.less';
 
@@ -37,6 +38,8 @@ export default function RawMaterialStock(): React.ReactNode {
     const [requirement, setRequirement] = useState<number | string>('');//出库-弹框需求量
     const [OutboundId, setOutboundId] = useState<number | string>('');//出库-弹框-需要的列表id
     const [tempApplyData, setTempApplyData] = useState<number | string>('');//出库-弹框-缺料申请需要的列表数据
+    const [departmentList, setDepartmentList] = useState<any[]>([]);//部门数据
+    const [userList, setuserList] = useState<any[]>([]);//申请人数据数据
     const columns = [
         {
             title: '序号',
@@ -494,7 +497,7 @@ export default function RawMaterialStock(): React.ReactNode {
     }
     // 点击出库-缺料申请-按钮
     const MaterialShortageApplication = async () => {
-        console.log(ApplyListdata,'ApplyListdata')
+        console.log(ApplyListdata, 'ApplyListdata')
         if (OutLibraryListdata.length != 0) {
             message.error('库存未用完')
             return
@@ -518,6 +521,8 @@ export default function RawMaterialStock(): React.ReactNode {
         setDateValue([]);
         setDateString([]);
         setKeyword('')
+        setPersonnelId('')
+        setDepartmentId('')
     }
     // 详情弹框取消
     const onDetailCancel = () => {
@@ -536,10 +541,28 @@ export default function RawMaterialStock(): React.ReactNode {
         await setStatus(val);
         getLoadData()
     }
+    //获取部门数据
+    const getDepartment = async () => {
+        const data: any = await RequestUtil.get(`/sinzetech-user/department`, {
+            tenantId: AuthUtil.getTenantId(),
+        });
+        setDepartmentList(data)
+    }
+    //获取部门部门中的人
+    const getUser = async (department: any) => {
+        const data: any = await RequestUtil.get(`/sinzetech-user/user`, {
+            departmentId: department,
+        });
+        setuserList(data.records)
+    }
+    //进入页面刷新
+    useEffect(() => {
+        getDepartment()
+    }, [])
     //进入页面刷新
     useEffect(() => {
         getLoadData()
-    }, [current, pageSize, status, dateString])
+    }, [current, pageSize, status, dateString, outStockStaffId])
     return (
         <div id="RawMaterialStock">
             <div className="Search_public_Stock">
@@ -595,33 +618,15 @@ export default function RawMaterialStock(): React.ReactNode {
                             className="select"
                             style={{ width: "100px" }}
                             value={departmentId ? departmentId : '请选择'}
-                            onChange={(val) => { setDepartmentId(val) }}
+                            onChange={(val) => { setDepartmentId(val); getUser(departmentId) }}
                         >
                             {
-                                (ApplicationContext.get().dictionaryOption as any)["105"].map((item: { id: string, name: string }) => ({
-                                    value: item.id,
-                                    label: item.name
-                                })).map((item: any) => {
+                                departmentList.map((item, index) => {
                                     return (
-                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                        <Select.Option key={index} value={item.id}>{item.name}</Select.Option>
                                     )
                                 })
                             }
-                            {/* <Select.Option
-                                value="1"
-                            >
-                                部门1
-                            </Select.Option>
-                            <Select.Option
-                                value="2"
-                            >
-                                部门2
-                            </Select.Option>
-                            <Select.Option
-                                value="3"
-                            >
-                                部门3
-                            </Select.Option> */}
                         </Select>-
                         <Select
                             className="select"
@@ -630,30 +635,12 @@ export default function RawMaterialStock(): React.ReactNode {
                             onChange={(val) => { setPersonnelId(val) }}
                         >
                             {
-                                (ApplicationContext.get().dictionaryOption as any)["105"].map((item: { id: string, name: string }) => ({
-                                    value: item.id,
-                                    label: item.name
-                                })).map((item: any) => {
+                                userList.map((item, index) => {
                                     return (
-                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                        <Select.Option value={item.id} key={index}>{item.name}</Select.Option>
                                     )
                                 })
                             }
-                            {/* <Select.Option
-                                value="1"
-                            >
-                                人员1
-                            </Select.Option>
-                            <Select.Option
-                                value="2"
-                            >
-                                人员2
-                            </Select.Option>
-                            <Select.Option
-                                value="3"
-                            >
-                                人员3
-                            </Select.Option> */}
                         </Select>
                     </div>
                 </div>

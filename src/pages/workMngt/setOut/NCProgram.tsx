@@ -4,8 +4,7 @@
  * @description 工作管理-放样列表-塔型信息-NC程序
 */
 
-
-import React, { useState } from 'react';
+import React from 'react';
 import { Space, Input, DatePicker, Button, Popconfirm, Upload, message, Spin } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -153,6 +152,7 @@ export default function NCProgram(): React.ReactNode {
                             }],
                             productCategoryId: params.id
                         })
+                        message.success('上传成功');
                         history.go(0);
                     }
                 } }

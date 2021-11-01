@@ -27,10 +27,10 @@ const columns = [
         dataIndex: 'segmentName'
     },
     {
-        key: 'projectName',
+        key: 'repeatNum',
         title: '段重复数',
         width: 150,
-        dataIndex: 'projectName'
+        dataIndex: 'repeatNum'
     },
     {
         key: 'code',

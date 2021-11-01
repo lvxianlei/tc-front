@@ -694,28 +694,28 @@
       "exact": true,
       "authority": "approvalm"
     },
-    {//供应商管理
+    { //供应商管理
       "name": "供应商管理",
       "path": "/supplier-mngt/index",
       "module": "./pages/supplier-mngt/index",
       "exact": true,
       "authority": "approvalm"
     },
-    {//供应商管理-创建
+    { //供应商管理-创建
       "name": "供应商管理创建",
       "path": "/supplier-mngt/supplierAdd",
       "module": "./pages/supplier-mngt/supplierAdd",
       "exact": true,
       "authority": "approvalm"
     },
-    {//供应商管理-编辑
+    { //供应商管理-编辑
       "name": "供应商管理编辑",
       "path": "/supplier-mngt/supplierEdit",
       "module": "./pages/supplier-mngt/supplierEdit",
       "exact": true,
       "authority": "approvalm"
     },
-    {//供应商管理-详情
+    { //供应商管理-详情
       "name": "供应商管理详情",
       "path": "/supplier-mngt/supplierDetail",
       "module": "./pages/supplier-mngt/supplierDetail",
@@ -957,6 +957,48 @@
       "module": "./pages/workMngt/evaluation/EvaluationList",
       "exact": true,
       // "authority": "assess_list_management"
+      "authority": "approvalm"
+    },
+    { // 工作管理-采购列表
+      "name": "采购列表",
+      "path": "/workMngt/purchaseList",
+      "module": "./pages/workMngt/purchaseList/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-计划列表
+      "name": "计划列表",
+      "path": "/workMngt/planList",
+      "module": "./pages/workMngt/planList/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-生产配料
+      "name": "生产配料",
+      "path": "/workMngt/production",
+      "module": "./pages/workMngt/production/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-收获列表
+      "name": "收获列表",
+      "path": "/workMngt/receivingList",
+      "module": "./pages/workMngt/receivingList/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-差异列表
+      "name": "差异列表",
+      "path": "/workMngt/differentList",
+      "module": "./pages/workMngt/differentList/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-缺料列表
+      "name": "缺料列表",
+      "path": "/workMngt/shortageList",
+      "module": "./pages/workMngt/shortageList/index",
+      "exact": true,
       "authority": "approvalm"
     },
     { // 放样任务

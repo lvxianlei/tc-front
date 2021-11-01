@@ -77,11 +77,15 @@ const columns = [
         dataIndex: 'materialStatus',
         render: (status: number): React.ReactNode => {
             switch (status) {
+                case 0:
+                    return '已拒绝';
                 case 1:
-                    return '配段中';
+                    return '待开始';
                 case 2:
-                    return '已完成';
+                    return '提料中';
                 case 3:
+                    return '已完成';
+                case 4:
                     return '已提交';
                 default:
                     return '-';

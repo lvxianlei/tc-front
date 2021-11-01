@@ -2,8 +2,6 @@ import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import * as echarts from 'echarts';
-import styles from './WorkBench.module.less';
-import { DetailTitle } from '../common';
 
 export interface LineProps {}
 export interface ILineRouteProps extends RouteComponentProps<LineProps>, WithTranslation {
