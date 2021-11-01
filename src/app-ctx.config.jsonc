@@ -397,6 +397,11 @@
                                 "label": "采购配料",
                                 "path": "/workMngt/buyBurdening",
                                 "authority": "approvalm"
+                            },
+                            {
+                                "label": "缺料列表",
+                                "path": "/workMngt/shortageList",
+                                "authority": "approvalm"
                             }
                         ]
                     },
