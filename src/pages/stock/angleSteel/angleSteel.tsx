@@ -1,76 +1,83 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react'
-import { Button, Col, Pagination, Row, Select, TableColumnProps, Table, } from 'antd'
-import { CommonTable } from '../../common'
-// import { Page } from '../../common'
+import React, { useEffect, useRef, useState } from 'react'
+import { Button, Col, Pagination, Row, Select, TableColumnProps, Table, Modal, message, } from 'antd'
+import { CommonTable, DetailContent, DetailTitle } from '../../common'
 import { baseInfo, material } from './configurationData.json'
 import RequestUtil from "../../../utils/RequestUtil"
+import Edit from "./Edit"
 import { RouteProps } from '../public'
-const { Option } = Select;
+type typeProps = "new" | "edit"
 const AngleSteel = (props: RouteProps) => {
     // const history = useHistory()
+    const editRef = useRef<{ onSubmit: () => Promise<boolean> }>()
+    const [visible, setVisible] = useState<boolean>(false);
+    const [type, setType] = useState<typeProps>("new");
     const [columnsData, setColumnsData] = useState([]);
-    const [total, setTotal] = useState(0);
-    const [size, setSize] = useState(10);
-    const [current, setCurrent] = useState(1);
-    const [isModal, setIsModal] = useState(false);
-    const [id, setId] = useState<string | null>(null);
     const columns: TableColumnProps<object>[] = [
-        ...baseInfo
-    ]
-    useEffect(() => {
-        getColumnsData()
-    }, [current, size]);
-    const getColumnsData = async () => {
-        const data: any = await RequestUtil.get('/tower-supply/angleConfigStrategy', {
-            current,
-            size,
-        })
-        setTotal(data.data)
-        setColumnsData(data.records)
-    }
-    const cancelModal = () => {
-        setIsModal(false)
-        setId(null)
-    }
-    return (
-        <div className='public_page'>
-            <div className='public_content'>
-            <div className='func'>
-                      <span>配料基础配置</span>  
-                    </div>
-                <CommonTable
-                    columns={columns}
-                    dataSource={columnsData}
-                />
-                <div className='page_content'>
-                    <Pagination
-                        className='page'
-                        showSizeChanger
-                        showQuickJumper
-                        total={total}
-                        pageSize={size}
-                        current={current}
-                        onChange={(page: number, size: any) => {
-                            setCurrent(page)
-                            setSize(size)
-                        }}
-                    />
-                </div>
-              
-            </div>
-            {/* <Page
-                path="/"
-                columns={
-                    [
-                       ...material
-                    ]
-                }
-                searchFormItems={[]}
-            /> */}
-        </div>
-        
-    )
+        {
+            key: 'index',
+            title: '序号',
+            dataIndex: 'index',
+            width: 50,
+            render: (text, item, index) => {
+                return <span>{index + 1}</span>
+            }
+        },
+        {
+            key: 'policy',
+            title: '策略项',
+            dataIndex: 'policy',
+        },
+        {
+            key: 'configData',
+            title: '配置数据',
+            dataIndex: 'configData',
+        },
+        {
+            key: 'description',
+            title: '说明',
+            dataIndex: 'description'
+        },
+        {
+            key: 'operation',
+            title: '操作',
+            dataIndex: 'operation',
+            align: 'center',
+        }]
+
+    const handleModalOk = () => new Promise(async (resove, reject) => {
+        const isClose = await editRef.current?.onSubmit()
+        if (isClose) {
+            message.success("票据创建成功...")
+            setVisible(false)
+            resove(true)
+        }
+    })
+    return <>
+        <Modal visible={visible} width={1011} title="创建" onOk={handleModalOk} onCancel={() => setVisible(false)}>
+            <Edit type={type} ref={editRef} />
+        </Modal>
+        <DetailContent>
+            <DetailTitle title="配置基础配置" />
+            <CommonTable
+                columns={columns}
+                dataSource={columnsData}
+            />
+            <DetailTitle title="材质配料设定" operation={[
+                <Button key="add" type="primary" ghost style={{ marginRight: 16 }} onClick={() => {
+                    setVisible(true)
+                    setType("new")
+                }}>添加</Button>,
+                <Button key="goback" type="primary" ghost>返回上一级</Button>
+            ]} />
+            <CommonTable
+                columns={columns}
+                dataSource={columnsData}
+            />
+        </DetailContent>
+    </>
+
+
 
 
 

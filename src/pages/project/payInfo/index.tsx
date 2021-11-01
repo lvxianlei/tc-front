@@ -18,7 +18,7 @@ export default function PayInfo() {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
     const [payType, setPayType] = useState<PayTypes>(2)
-    const [payInfoId, setPayInfoId] = useState<number>()
+    const [payInfoData, setPayInfoData] = useState<any>()
     const params = useParams<{ id: string, tab?: TabTypes }>()
     // const [visible, setVisible] = useState<boolean>(false)
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -48,17 +48,17 @@ export default function PayInfo() {
                     </Button>
                 ]}
             >
-                <Overview payType={payType} payInfoId={payInfoId} />
+                <Overview data={payInfoData} />
             </Modal>
             <CommonTable columns={[
                 ...payInfoListHead,
                 {
                     title: "操作",
                     dataIndex: "opration",
-                    render: (text: number, records: any) => [2, 3].includes(text) ? <a onClick={() => {
+                    render: (_: any, records: any) => [2, 3].includes(records.costType) ? <a onClick={() => {
                         setVisible(true)
-                        setPayType(text as PayTypes)
-                        setPayInfoId(records.id)
+                        setPayType(records.costType)
+                        setPayInfoData(records)
                     }} >详情</a> : <>-</>
                 }
             ]} dataSource={(data as any) || []} />

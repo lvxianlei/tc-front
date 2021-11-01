@@ -1,0 +1,192 @@
+{
+    "baseInfo": [
+        {
+            "title": "序号",
+            "dataIndex": ""
+        },
+        {
+            "title": "原材料任务编号",
+            "dataIndex": "materialCategoryId",
+            "type": "integer"
+        },
+        {
+            "title": "采购计划编号",
+            "dataIndex": "purchaseTaskId",
+            "type": "integer"
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "type": "string"
+        },
+        {
+            "title": "杆塔（基）",
+            "dataIndex": "productId",
+            "type": "integer"
+        },
+        {
+            "title": "圆钢总重（吨）",
+            "dataIndex": "roundSteelTotal",
+            "type": "number"
+        },
+        {
+            "title": "角钢总重（吨）",
+            "dataIndex": "angleSteelTotal",
+            "type": "number"
+        },
+        {
+            "title": "钢板总重（吨）",
+            "dataIndex": "steelPlateTotal",
+            "type": "number"
+        },
+        {
+            "title": "采购负责人",
+            "dataIndex": "purchaser",
+            "type": "string"
+        },
+        {
+            "title": "塔型采购状态",
+            "dataIndex": "purchaseStatusUpdateTime",
+            "type": "string"
+        }
+    ],
+    "GeneratePurchasePlan": [
+        {
+            "ListIngredients": [
+                {
+                    "title": "序号",
+                    "dataIndex": ""
+                },
+                {
+                    "title": "材质",
+                    "dataIndex": "structureTexture",
+                    "type": "string"
+                },
+                {
+                    "title": "标准",
+                    "dataIndex": "materialStandardName",
+                    "type": "string"
+                },
+                {
+                    "title": "规格",
+                    "dataIndex": "structureSpec",
+                    "type": "string"
+                },
+                {
+                    "title": "配料品名",
+                    "dataIndex": "doseName",
+                    "type": "string"
+                },
+                {
+                    "title": "搭配长度",
+                    "dataIndex": "collocationLength",
+                    "type": "number"
+                },
+                {
+                    "title": "搭配数量",
+                    "dataIndex": "",
+                    "type": ""
+                },
+                {
+                    "title": "重量（吨）",
+                    "dataIndex": "weight",
+                    "type": "number"
+                },
+                {
+                    "title": "备注",
+                    "dataIndex": "",
+                    "type": ""
+                }
+            ],
+            "PlanList": [
+                {
+                    "title": "生产未领料（支）",
+                    "dataIndex": "",
+                    "type": ""
+                },
+                {
+                    "title": "仓库库存（支）",
+                    "dataIndex": "",
+                    "type": ""
+                },
+                {
+                    "title": "在途库存（支）",
+                    "dataIndex": "",
+                    "type": ""
+                },
+                {
+                    "title": "计划采购（本次）",
+                    "dataIndex": "purchasePlanNumber",
+                    "type": "string"
+                }
+            ]
+        }
+    ],
+    "BatchingScheme":[
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string"
+        },
+        {
+            "title": "原材料长度(mm)",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "零件1",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type":"number"
+        },
+        {
+            "title": "零件2",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type":"number"
+        },
+        {
+            "title": "零件3",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type":"number"
+        },
+        {
+            "title": "零件4",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type":"number"
+        },
+        {
+            "title": "余料长度",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "利用率",
+            "dataIndex": "",
+            "type":""
+        }
+    ]
+}

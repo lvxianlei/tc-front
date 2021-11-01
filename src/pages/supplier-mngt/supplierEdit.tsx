@@ -5,7 +5,7 @@ import { Page } from '../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
 
-//put请求
+//post请求创建
 
 export default function SupplierAdd(): React.ReactNode {
     return (

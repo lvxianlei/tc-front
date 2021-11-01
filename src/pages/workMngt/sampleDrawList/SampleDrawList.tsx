@@ -183,7 +183,7 @@ export default function SampleDrawList(): React.ReactNode {
             filterValue={filterValue}
             refresh={refresh}
             requestData={ { smallSampleStatus: location.state } }
-            extraOperation={<Button type="primary">导出</Button>}
+            // extraOperation={<Button type="primary">导出</Button>}
             searchFormItems={[
                 {
                     name: 'statusUpdateTime',

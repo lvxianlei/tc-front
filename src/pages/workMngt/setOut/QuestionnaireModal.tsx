@@ -65,9 +65,9 @@ const tableColumns = [
                     return '待修改';
                 case 2:
                     return '已修改';
-                case 3:
+                case 0:
                     return '已拒绝';
-                case 4:
+                case 3:
                     return '已删除';
             }
         } 

@@ -17,10 +17,6 @@
             "dataIndex": "supplierName"
         },
         {
-            "title": "添加时间",
-            "dataIndex": "addTime"
-        },
-        {
             "title": "联系人",
             "dataIndex": "contactMan"
         },
@@ -48,19 +44,19 @@
         },
         {
             "title": "操作部门",
-            "dataIndex": "createDeptName"
+            "dataIndex": "index"
         },
         {
             "title": "操作人",
-            "dataIndex": "createUserName"
+            "dataIndex": "index"
         },
         {
             "title": "操作时间",
-            "dataIndex": "createTime"
+            "dataIndex": "index"
         },
         {
             "title": "操作",
-            "dataIndex": "operation"
+            "dataIndex": "index"
         }
     ]
 }

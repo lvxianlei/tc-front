@@ -26,6 +26,7 @@ interface IBundle {
     readonly description?: string;
     readonly basicsPartNum?: number;
     readonly allNum?: number;
+    readonly materialSpec?: string;
 }
 
 interface IPackingList {
@@ -34,14 +35,15 @@ interface IPackingList {
     readonly productCategoryName?: string;
     readonly productId?: string;
     readonly productNumber?: string;
-    readonly packageStructureVOList?: IBundle[];
+    readonly packageRecordVOList?: IBundle[];
     readonly toChooseList?: IBundle[];
     readonly id?: string;
+    readonly description?: string;
 }
 
 export default function PackingListNew(): React.ReactNode {
     const history = useHistory();
-    const params = useParams<{ id: string, productId: string }>();
+    const params = useParams<{ id: string, productId: string, packId: string }>();
     const [ form ] = Form.useForm();
     const [ selectedRows, setSelectedRows ] = useState([]);
     const [ selectedRowKeys, setSelectedRowKeys ] = useState([]);
@@ -53,13 +55,14 @@ export default function PackingListNew(): React.ReactNode {
 
     const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
         if(!location.state) {
-            const data = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${ params.productId }`);
-            setPackagingData(data?.packageStructureVOList || []);
+            const data = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${ params.packId }`);
+            setPackagingData(data?.packageRecordVOList || []);
             resole(data);
+        } else {
+            resole({ productCategoryName: location.state.productCategoryName, productNumber:location.state.productNumber });
         }
         const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...filterValues })
         setStayDistrict(list);
-        resole({ productCategoryName: location.state.productCategoryName, productNumber:location.state.productNumber });
     });
 
     const { loading, data } = useRequest<IPackingList>(() => getTableDataSource({}));
@@ -177,10 +180,10 @@ export default function PackingListNew(): React.ReactNode {
             dataIndex: 'balesCode'
         },
         {
-            key: 'code',
+            key: 'pieceCode',
             title: '构件编号',
             width: 150,
-            dataIndex: 'code'
+            dataIndex: 'pieceCode'
         },
         {
             key: 'structureSpec',
@@ -240,33 +243,38 @@ export default function PackingListNew(): React.ReactNode {
             return item.id !== value.id;
         })
         setPackagingData(newPackagingData);
-        stayDistrict.forEach((item: IBundle, ind: number) => {
-            if(item.id === value.id) {
-                stayDistrict[ind] = {
-                    ...item,
-                    basicsPartNum: value.allNum
-                }  
-                setStayDistrict([...stayDistrict])
-            } else {
-                setStayDistrict([ ...stayDistrict, value ]);
-            }
-        })
+        if(stayDistrict.length > 0) {
+            stayDistrict.forEach((item: IBundle, ind: number) => {
+                if(item.id === value.id) {
+                    stayDistrict[ind] = {
+                        ...item,
+                        basicsPartNum: value.allNum
+                    }  
+                    setStayDistrict([...stayDistrict])
+                } else {
+                    setStayDistrict([ ...stayDistrict, value ]);
+                }
+            })
+        } else {
+            setStayDistrict([ ...stayDistrict, value ]);
+        }
+        
     }
     
     const packaging = () => {
         const data: IBundle[] = selectedRows.map((item: IBundle) => {
             return {
                 ...item,
-                code: item.code,
-                structureSpec: item.structureSpec,
+                balesCode: balesCode,
+                description: item.description,
                 id: item.id,
                 length: item.length,
+                pieceCode: item.code,
                 num: item.basicsPartNum,
-                balesCode: balesCode,
+                materialSpec: item.structureSpec,
                 productCategoryId: detailData.productCategoryId,
                 productId: detailData.productId,
                 structureId: item.id,
-                description: item.description,
                 allNum: item.basicsPartNum
             }
         })
@@ -341,7 +349,7 @@ export default function PackingListNew(): React.ReactNode {
                 <Button type="primary" onClick={ () => {
                     const value = {
                         balesCode: balesCode,
-                        id: detailData.id,
+                        id: params.packId,
                         productCategoryId: params.id,
                         productCategoryName: detailData.productCategoryName,
                         productId: params.productId,
@@ -360,16 +368,16 @@ export default function PackingListNew(): React.ReactNode {
             <DetailTitle title="包装信息" />
             <Descriptions title="" bordered size="small" column={ 4 }>
                 <Descriptions.Item label="塔型">
-                    { detailData.productCategoryName }
+                    { detailData?.productCategoryName }
                 </Descriptions.Item>
                 <Descriptions.Item label="杆塔号">
-                    { detailData.productNumber }
+                    { detailData?.productNumber }
                 </Descriptions.Item>
                 <Descriptions.Item label="捆号">
-                    <Input placeholder="请输入捆号" bordered={ false } onChange={ (e) => balesCodeChange(e) } />   
+                    <Input placeholder="请输入捆号" defaultValue={ detailData?.balesCode } bordered={ false } onChange={ (e) => balesCodeChange(e) } />   
                 </Descriptions.Item>
                 <Descriptions.Item label="备注">
-                    <Input placeholder="请输入备注" bordered={ false } onChange={ (e) => setDescription(e.target.value) } />   
+                    <Input placeholder="请输入备注" defaultValue={ detailData?.description } bordered={ false } onChange={ (e) => setDescription(e.target.value) } />   
                 </Descriptions.Item>
             </Descriptions>                
             <Form form={ form } className={ styles.topPadding } onFinish={ (value: Record<string, any>) => onFinish(value) }>

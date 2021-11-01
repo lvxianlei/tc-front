@@ -1,13 +1,21 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import { Button, DatePicker, Select, Modal, message } from 'antd'
-import { Link, useHistory } from 'react-router-dom'
-import { Page, DetailContent, BaseInfo, DetailTitle, CommonTable } from '../../common'
-import { baseinfo, bilinformation, operation } from "../financialData.json"
+import { useHistory } from 'react-router-dom'
+import { Page } from '../../common'
+import Edit from "./Edit"
+import Overview from "./Overview"
+import { baseinfo } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+interface EditRefProps {
+    onSubmit: () => void
+}
 export default function Invoice() {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
+    const [detailVisible, setDetailVisible] = useState<boolean>(false)
+    const [type, setType] = useState<"new" | "edit">("new")
+    const editRef = useRef<EditRefProps>()
     const { loading, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/invoice?id=${id}`)
@@ -42,16 +50,26 @@ export default function Invoice() {
         })
     }
 
+    const handleModalOk = () => new Promise(async (resove, reject) => {
+        const isClose = await editRef.current?.onSubmit()
+        if (isClose) {
+            message.success("票据创建成功...")
+            setVisible(false)
+            resove(true)
+        }
+    })
+
     return <>
-        <Modal visible={visible} width={1011} title="创建" onCancel={() => setVisible(false)}>
-            <DetailContent>
-                <DetailTitle title="票据信息" />
-                <BaseInfo columns={bilinformation} dataSource={{}} edit />
-                <DetailTitle title="相关附件" />
-                <CommonTable columns={[]} dataSource={[]} />
-                <DetailTitle title="操作信息" />
-                <CommonTable columns={operation} dataSource={[]} />
-            </DetailContent>
+        <Modal style={{ padding: 0 }} visible={visible} width={1011} title="创建" onOk={handleModalOk} onCancel={() => setVisible(false)}>
+            <Edit type={type} ref={editRef} />
+        </Modal>
+        <Modal
+            style={{ padding: 0 }}
+            visible={detailVisible} width={1011}
+            footer={<Button type="primary" onClick={() => setDetailVisible(false)}>确认</Button>}
+            title="详情"
+            onCancel={() => setVisible(false)}>
+            <Overview />
         </Modal>
         <Page
             path="/tower-supply/invoice"
@@ -64,7 +82,7 @@ export default function Invoice() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link" onClick={() => setVisible(true)}>查看</Button>
+                            <Button type="link" onClick={() => setDetailVisible(true)}>查看</Button>
                             <Button type="link" onClick={() => setVisible(true)}>编辑</Button>
                             <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>
                         </>
@@ -72,7 +90,11 @@ export default function Invoice() {
                 }]}
             extraOperation={<>
                 <Button type="primary">导出</Button>
-                <Button type="primary" onClick={() => setVisible(true)}>创建</Button>
+                <Button type="primary"
+                    onClick={() => {
+                        setVisible(true)
+                        setType("new")
+                    }}>创建</Button>
             </>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[

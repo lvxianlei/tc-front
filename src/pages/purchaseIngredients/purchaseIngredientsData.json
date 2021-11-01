@@ -1,0 +1,280 @@
+{
+    "baseInfo": [
+        {
+            "title": "序号",
+            "dataIndex": ""
+        },
+        {
+            "title": "原材料任务编号",
+            "dataIndex": "materialCategoryId",
+            "type": "integer"
+        },
+        {
+            "title": "内部合同编号",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "塔型（个）",
+            "dataIndex": "productCategoryName",
+            "type": "string"
+        },
+        {
+            "title": "杆塔（基）",
+            "dataIndex": "productId",
+            "type": "integer"
+        },
+        {
+            "title": "配料负责人",
+            "dataIndex": "batcher",
+            "type": "string"
+        },
+        {
+            "title": "配料状态",
+            "dataIndex": "batcheTaskStatus",
+            "type": "integer"
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "purchaseStatusUpdateTime",
+            "type": "string"
+        }
+    ],
+    "SeeList": [
+        {
+            "title": "序号",
+            "dataIndex": ""
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "type": "string"
+        },
+        {
+            "title": "杆塔（基）",
+            "dataIndex": "productId",
+            "type": "integer"
+        },
+        {
+            "title": "提料重量（吨）",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "配料人",
+            "dataIndex": "batcher",
+            "type": "string"
+        },
+        {
+            "title": "塔型配料状态",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "purchaseStatusUpdateTime",
+            "type": "string"
+        },
+        {
+            "title": "方案编号",
+            "dataIndex": "schemeNumber",
+            "type": "string"
+        }
+    ],
+    "ComponentDetails": [
+        {
+            "title": "序号",
+            "dataIndex": ""
+        },
+        {
+            "title": "件号",
+            "dataIndex": "num",
+            "type": "integer"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string"
+        },
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "已配/全部",
+            "dataIndex": "",
+            "type": ""
+        }
+    ],
+    "mixedIngredients": [
+        {
+            "detailClassification": [
+                {
+                    "title": "件号",
+                    "dataIndex": "num",
+                    "type": "integer"
+                },
+                {
+                    "title": "材质",
+                    "dataIndex": "structureTexture",
+                    "type": "string"
+                },
+                {
+                    "title": "规格",
+                    "dataIndex": "structureSpec",
+                    "type": "string"
+                },
+                {
+                    "title": "长度(mm)",
+                    "dataIndex": "length",
+                    "type": "number"
+                },
+                {
+                    "title": "已配/全部",
+                    "dataIndex": "",
+                    "type": ""
+                }
+            ],
+            "Batchingschemed": [
+                {
+                    "title": "材质",
+                    "dataIndex": "structureTexture",
+                    "type": "string"
+                },
+                {
+                    "title": "规格",
+                    "dataIndex": "structureSpec",
+                    "type": "string"
+                },
+                {
+                    "title": "原材料长度(mm)",
+                    "dataIndex": "length",
+                    "type": "number"
+                },
+                {
+                    "title": "零件1",
+                    "dataIndex": "",
+                    "type": ""
+                },
+                {
+                    "title": "长度",
+                    "dataIndex": "length",
+                    "type": "number"
+                },
+                {
+                    "title": "零件2",
+                    "dataIndex": "",
+                    "type": ""
+                },
+                {
+                    "title": "长度",
+                    "dataIndex": "length",
+                    "type": "number"
+                },
+                {
+                    "title": "零件3",
+                    "dataIndex": "",
+                    "type": ""
+                },
+                {
+                    "title": "长度",
+                    "dataIndex": "length",
+                    "type": "number"
+                },
+                {
+                    "title": "零件4",
+                    "dataIndex": "",
+                    "type": ""
+                },
+                {
+                    "title": "长度",
+                    "dataIndex": "length",
+                    "type": "number"
+                },
+                {
+                    "title": "余料长度",
+                    "dataIndex": "",
+                    "type": ""
+                },
+                {
+                    "title": "利用率",
+                    "dataIndex": "",
+                    "type": ""
+                }
+            ],
+            "BatchingSchemes": [
+                {
+                    "title": "材质",
+                    "dataIndex": "structureTexture",
+                    "type": "string"
+                },
+                {
+                    "title": "规格",
+                    "dataIndex": "structureSpec",
+                    "type": "string"
+                },
+                {
+                    "title": "原材料长度(mm)",
+                    "dataIndex": "length",
+                    "type": "number"
+                },
+                {
+                    "title": "零件1",
+                    "dataIndex": "",
+                    "type": ""
+                },
+                {
+                    "title": "长度(mm)",
+                    "dataIndex": "length",
+                    "type": "number"
+                },
+                {
+                    "title": "零件2",
+                    "dataIndex": "",
+                    "type": ""
+                },
+                {
+                    "title": "长度(mm)",
+                    "dataIndex": "length",
+                    "type": "number"
+                },
+                {
+                    "title": "零件3",
+                    "dataIndex": "",
+                    "type": ""
+                },
+                {
+                    "title": "长度(mm)",
+                    "dataIndex": "length",
+                    "type": "number"
+                },
+                {
+                    "title": "零件4",
+                    "dataIndex": "",
+                    "type": ""
+                },
+                {
+                    "title": "长度(mm)",
+                    "dataIndex": "length",
+                    "type": "number"
+                },
+                {
+                    "title": "余料长度",
+                    "dataIndex": "",
+                    "type": ""
+                },
+                {
+                    "title": "利用率",
+                    "dataIndex": "",
+                    "type": ""
+                }
+            ]
+        }
+    ]
+}
