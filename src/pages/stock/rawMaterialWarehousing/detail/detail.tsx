@@ -34,10 +34,10 @@ export default function RawMaterialStock(): React.ReactNode {
     const [Location, setLocation] = useState<any[]>([]);//入库库位数据
     const [receiveBatchNumber, setReceiveBatchNumber] = useState<any>('');//收货批次
     const [ListID, setListID] = useState('');//入库弹框展试 使用id
-    const [receiveWeight, setReceiveWeight] = useState('');//合计重量
-    const [receivePrice, setReceivePrice] = useState('');//收货合计价格
-    const [waitWeight, setWaitWeight] = useState('');//展示条 未收货重量
-    const [waitPrice, setwaitPrice] = useState('');//展示条 等价格
+    const [receiveWeight, setReceiveWeight] = useState('');//展示条 已收货合计重量
+    const [receivePrice, setReceivePrice] = useState('');//展示条 已收货合计价格
+    const [waitWeight, setWaitWeight] = useState('');//展示条 待收货：重量
+    const [waitPrice, setwaitPrice] = useState('');//展示条 待收货：价格
     const columns = [
         {
             title: '序号',
@@ -108,8 +108,12 @@ export default function RawMaterialStock(): React.ReactNode {
             receiveStockId: params.id,
             receiveStatus: status,
         });
-        setListdata(data.records)
-        // setTotal()
+        setListdata(data.ReceiveStockDetailPage.records)
+        setReceiveWeight(data.receiveStockMessage.receiveWeight)
+        setReceivePrice(data.receiveStockMessage.receivePrice)
+        setWaitWeight(data.receiveStockMessage.waitWeight)
+        setwaitPrice(data.receiveStockMessage.waitPrice)
+        setTotal(data.ReceiveStockDetailPage.total)
     }
     // 重置
     const reset = () => {
@@ -307,7 +311,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 >返回上一级</Button>
             </div>
             <div className="tip_public_Stock">
-                <div>已收货：重量(支)合计：2209.90 ,    价税合计(元)合计：51425.00 ,  待收货：重量(支)合计：2209.90</div>
+                <div>已收货：重量(支)合计：{receiveWeight}, 已收货：价税合计(元)合计：{receivePrice} ,  待收货：重量(支)合计：{waitWeight}待收货：价税合计(元)合计：{waitPrice}</div>
             </div>
             <div className="page_public_Stock">
                 <Table
