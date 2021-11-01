@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useRef } from 'react'
-import { Button, TableColumnProps, Modal, message } from 'antd'
+import React, { useEffect, useRef, useState } from 'react'
+import { Button, Col, Pagination, Row, Select, TableColumnProps, Table, Modal, message, } from 'antd'
 import { CommonTable, DetailContent, DetailTitle } from '../../common'
+import { baseInfo, material } from './configurationData.json'
 import RequestUtil from "../../../utils/RequestUtil"
 import Edit from "./Edit"
 import { RouteProps } from '../public'
@@ -44,15 +45,6 @@ const AngleSteel = (props: RouteProps) => {
             align: 'center',
         }]
 
-
-    // const getColumnsData = async () => {
-    //     const data: any = await RequestUtil.get('/tower-supply/angleConfigStrategy', {
-    //         current,
-    //         size,
-    //     })
-    //     setTotal(data.data)
-    //     setColumnsData(data.records)
-    // }
     const handleModalOk = () => new Promise(async (resove, reject) => {
         const isClose = await editRef.current?.onSubmit()
         if (isClose) {
@@ -84,6 +76,7 @@ const AngleSteel = (props: RouteProps) => {
             />
         </DetailContent>
     </>
+
 
 
 

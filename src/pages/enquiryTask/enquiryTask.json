@@ -33,10 +33,6 @@
             "dataIndex": "biddingEndTime"
         },
         {
-            "title": "业务经理",
-            "dataIndex": "businessserviceManager"
-        },
-        {
             "title": "询价人",
             "dataIndex": "inquirer"
         }

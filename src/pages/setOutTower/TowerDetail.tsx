@@ -9,7 +9,7 @@ import Modal from 'antd/lib/modal/Modal';
 
 const componentColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '段号', dataIndex: 'partName', key: 'partName', },
+    { title: '段号', dataIndex: 'segmentName', key: 'segmentName', },
     { title: '构件编号', dataIndex: 'code', key: 'code' },
     { title: '材料', dataIndex: 'materialName', key: 'materialName' },
     { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture' },

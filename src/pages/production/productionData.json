@@ -1,0 +1,259 @@
+{
+    "baseInfo": [
+        {
+            "title": "序号",
+            "dataIndex": ""
+        },
+        {
+            "title": "原材料任务编号",
+            "dataIndex": "materialTaskCode",
+            "type":"string"
+        },
+        {
+            "title": "生产批次",
+            "dataIndex": "productionBatch",
+            "type":"string"
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategory",
+            "type":"string"
+        },
+        {
+            "title": "杆塔（基）",
+            "dataIndex": "productNum",
+            "type":"integer"
+        },
+        {
+            "title": "放样总重（吨）",
+            "dataIndex": "loftingWeightTotal",
+            "type":"number"
+        },     
+        {
+            "title": "计划交付时间",
+            "dataIndex": "deliverTime",
+            "type":"string"
+        },     
+        {
+            "title": "配料负责人",
+            "dataIndex": "batcherId",
+            "type":"integer"
+        } ,   
+        {
+            "title": "搭配数量",
+            "dataIndex": "quantity",
+            "type":"integer"
+        } ,    
+        {
+            "title": "配料状态",
+            "dataIndex": "loftingState",
+            "type":"integer"
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "updateTime",
+            "type":"string"
+        },
+        {
+            "title": "方案编号",
+            "dataIndex": "programmeCode",
+            "type":"string"
+        }                     
+    ],
+    "ConstructionDetails":[
+        {
+            "title": "序号",
+            "dataIndex": ""
+        },
+        {
+            "title": "件号",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture",
+            "type":"string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec",
+            "type":"string"
+        },     
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "已配/未配",
+            "dataIndex": "",
+            "type":""
+        }
+    ],
+    "ProductionIngredients":[
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture",
+            "type":"string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec",
+            "type":"string"
+        },     
+        {
+            "title": "原材料长度",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "零件1",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "零件2",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "零件3",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "零件4",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "余料入库长度",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "状态",
+            "dataIndex": "status",
+            "type":"integer"
+        }
+        
+    ],
+    "mixedIngredients":[{
+        "ComponentDetail":[
+            {
+                "title": "件号",
+                "dataIndex": "",
+                "type":""
+            },
+            {
+                "title": "材质",
+                "dataIndex": "materialTexture",
+                "type":"string"
+            },
+            {
+                "title": "规格",
+                "dataIndex": "spec",
+                "type":"string"
+            },     
+            {
+                "title": "长度",
+                "dataIndex": "length",
+                "type": "number"
+            },
+            {
+                "title": "已配/未配",
+                "dataIndex": "",
+                "type":""
+            }
+        ],
+        "BatchingScheme":[
+            {
+                "title": "材质",
+                "dataIndex": "materialTexture",
+                "type":"string"
+            },
+            {
+                "title": "规格",
+                "dataIndex": "spec",
+                "type":"string"
+            },     
+            {
+                "title": "原材料长度",
+                "dataIndex": "",
+                "type":""
+            },
+            {
+                "title": "零件1",
+                "dataIndex": "",
+                "type":""
+            },
+            {
+                "title": "长度",
+                "dataIndex": "length",
+                "type":"number"
+            },
+            {
+                "title": "零件2",
+                "dataIndex": "",
+                "type":""
+            },
+            {
+                "title": "长度",
+                "dataIndex": "length",
+                "type":"number"
+            },
+            {
+                "title": "零件3",
+                "dataIndex": "",
+                "type":""
+            },
+            {
+                "title": "长度",
+                "dataIndex": "length",
+                "type":"number"
+            },
+            {
+                "title": "零件4",
+                "dataIndex": "",
+                "type":""
+            },
+            {
+                "title": "长度",
+                "dataIndex": "length",
+                "type":"number"
+            },
+            {
+                "title": "余料入库长度",
+                "dataIndex": "",
+                "type":""
+            },
+            {
+                "title": "利用率",
+                "dataIndex": "",
+                "type":""
+            }
+        ]
+    }]
+    
+}

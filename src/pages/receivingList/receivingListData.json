@@ -1,0 +1,303 @@
+{
+    "baseInfo": [
+        {
+            "title": "序号",
+            "dataIndex": ""
+        },
+        {
+            "title": "收货单号",
+            "dataIndex": "receiveNumber",
+            "type": "string"
+        },
+        {
+            "title": "收货单状态",
+            "dataIndex": "receiveStatus",
+            "type": "integer"
+        },
+        {
+            "title": "供应商",
+            "dataIndex": "supplierId",
+            "type": "string"
+        },
+        {
+            "title": "联系人",
+            "dataIndex": "contactsUser",
+            "type": "string"
+        },
+        {
+            "title": "联系电话",
+            "dataIndex": "contactsPhone",
+            "type": "string"
+        },
+        {
+            "title": "合同编号",
+            "dataIndex": "contractNumber",
+            "type": "string"
+        },
+        {
+            "title": "约定到货时间",
+            "dataIndex": "startReceiveTime",
+            "type": "string"
+        },
+        {
+            "title": "完成时间",
+            "dataIndex": "startCompleteTime",
+            "type": ""
+        },
+        {
+            "title": "创建人",
+            "dataIndex": "createUser",
+            "type": "integer"
+        }
+    ],
+    "BasicInformation": [
+        {
+            "title": "收货单号",
+            "dataIndex": "receiveNumber",
+            "type": "string"
+        },
+        {
+            "title": "供应商",
+            "dataIndex": "supplierId",
+            "type": "string"
+        },
+        {
+            "title": "联系人",
+            "dataIndex": "contactsUser",
+            "type": "string"
+        },
+        {
+            "title": "联系电话",
+            "dataIndex": "contactsPhone",
+            "type": "string"
+        },
+        {
+            "title": "合同编号",
+            "dataIndex": "contractNumber",
+            "type": "string"
+        },
+        {
+            "title": "约定到货时间",
+            "dataIndex": "startReceiveTime",
+            "type": "string"
+        },
+        {
+            "title": "数量合计",
+            "dataIndex": "quantity",
+            "type": "integer"
+        },
+        {
+            "title": "重量（kg）合计",
+            "dataIndex": "weight",
+            "type": "number"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark",
+            "type": "string"
+        },
+        {
+            "title": "价税合计（元）",
+            "dataIndex": "price",
+            "type": "number"
+        }
+    ],
+    "CargoDetails": [
+        {
+            "title": "序号",
+            "dataIndex": ""
+        },
+        {
+            "title": "品名",
+            "dataIndex": "productName",
+            "type": "integer"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "standard",
+            "type": "integer"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture",
+            "type": "integer"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec",
+            "type": "integer"
+        },
+        {
+            "title": "长度（mm）",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "quantity",
+            "type": "integer"
+        },
+        {
+            "title": "合同单价（元/吨）",
+            "dataIndex": "contractUnitPrice",
+            "type": "number"
+        },
+        {
+            "title": "价税合计（元）",
+            "dataIndex": "price",
+            "type": "number"
+        },
+        {
+            "title": "重量（kg）",
+            "dataIndex": "weight",
+            "type": "number"
+        }
+    ],
+    "AddList": [
+        {
+            "SelectedArea": [
+                {
+                    "title": "序号",
+                    "dataIndex": ""
+                },
+                {
+                    "title": "材质",
+                    "dataIndex": "materialTexture",
+                    "type": "integer"
+                },
+                {
+                    "title": "标准",
+                    "dataIndex": "standard",
+                    "type": "integer"
+                },
+                {
+                    "title": "规格",
+                    "dataIndex": "spec",
+                    "type": "integer"
+                },
+                {
+                    "title": "配料品名",
+                    "dataIndex": "doseName",
+                    "type": "string"
+                },
+                {
+                    "title": "长度",
+                    "dataIndex": "length",
+                    "type": "number"
+                },
+                {
+                    "title": "宽度",
+                    "dataIndex": "width",
+                    "type": "number"
+                },
+                {
+                    "title": " 单个重量 （吨）",
+                    "dataIndex": "weight",
+                    "type": "number"
+                },
+                {
+                    "title": "已选数量",
+                    "dataIndex": "",
+                    "type": ""
+                }
+            ],
+            "WaitingArea": [
+                {
+                    "title": "序号",
+                    "dataIndex": ""
+                },
+                {
+                    "title": "材质",
+                    "dataIndex": "materialTexture",
+                    "type": "integer"
+                },
+                {
+                    "title": "标准",
+                    "dataIndex": "standard",
+                    "type": "integer"
+                },
+                {
+                    "title": "规格",
+                    "dataIndex": "spec",
+                    "type": "integer"
+                },
+                {
+                    "title": "配料品名",
+                    "dataIndex": "doseName",
+                    "type": "string"
+                },
+                {
+                    "title": "长度",
+                    "dataIndex": "length",
+                    "type": "number"
+                },
+                {
+                    "title": "宽度",
+                    "dataIndex": "width",
+                    "type": "number"
+                },
+                {
+                    "title": " 单个重量 （吨）",
+                    "dataIndex": "weight",
+                    "type": "number"
+                },
+                {
+                    "title": "已选数量",
+                    "dataIndex": "",
+                    "type": ""
+                }
+            ]
+        }
+    ],
+    "DetailPage":[
+        {
+            "title": "序号",
+            "dataIndex": ""
+        },
+        {
+            "title": "品名",
+            "dataIndex": "productName",
+            "type": "integer"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "standard",
+            "type": "integer"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec",
+            "type": "integer"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture",
+            "type": "integer"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "宽度",
+            "dataIndex": "width",
+            "type": "number"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "quantity",
+            "type": "integer"
+        },
+        {
+            "title": "合同单价（元/吨）",
+            "dataIndex": "contractUnitPrice",
+            "type": "number"
+        },
+        {
+            "title": "价税合计（元）",
+            "dataIndex": "price",
+            "type": "number"
+        }
+    ]
+}
