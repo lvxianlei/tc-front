@@ -78,9 +78,10 @@ export default function PackingList(): React.ReactNode {
     }
     
     return <>
-        <Space direction="horizontal" size="small" className={ styles.padding16 }>
+        <Space direction="horizontal" size="small" className={ styles.topcontent }><span>塔型：{ detailData.productCategoryName }</span> <span>杆号：{ detailData.productNumber }</span><span>
+            捆数: { detailData.packageStructureCount }</span></Space>
+        <Space direction="horizontal" size="small" className={ `${ styles.padding16 } ${ styles.btnRight }` }>
             {/* <Button type="primary" ghost>导出</Button> */}
-            <span>塔型：{ detailData.productCategoryName }  杆号：{ detailData.productNumber }  捆数: { detailData.packageStructureCount }</span>
             <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ params.productId }/packingListNew`, state: { productCategoryName: detailData.productCategoryName, productNumber: detailData.productNumber } }}><Button type="primary" ghost>添加</Button></Link>
             <Popconfirm
                 title="确认完成?"

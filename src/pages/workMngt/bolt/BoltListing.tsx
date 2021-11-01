@@ -315,7 +315,7 @@ export default function BoltList(): React.ReactNode {
                 >
                     <Button type="primary" disabled={ editorLock === '锁定' }>完成螺栓清单</Button>
                 </Popconfirm>
-                <Button type="primary" ghost onClick={ () => { 
+                <Button type="primary" disabled={ !(detailData.length > 0) } ghost onClick={ () => { 
                     if(editorLock === '编辑') {
                         setColumns(columns);
                         setEditorLock('锁定'); 
@@ -371,10 +371,11 @@ export default function BoltList(): React.ReactNode {
                             getDataSource(activeKey);
                         }
                     } }
+                    disabled={ !(detailData.length > 0) }
                 >
-                    <Button type="primary" ghost>导入</Button>
+                    <Button type="primary" disabled={ !(detailData.length > 0) } ghost>导入</Button>
                 </Upload>
-                { editorLock === '锁定' ? <Button type="primary" disabled ghost>添加</Button> : <BoltNewModal id={ params.id } basicHeightId={ activeKey } updataList={ () => getDataSource(activeKey) }/>}
+                { editorLock === '锁定' || !(detailData.length > 0) ? <Button type="primary" disabled ghost>添加</Button> : <BoltNewModal id={ params.id } basicHeightId={ activeKey } updataList={ () => getDataSource(activeKey) }/>}
                 <Button type="primary" onClick={ () => setVisible(true) } disabled={ editorLock === '锁定' } ghost>添加呼高</Button>
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
             </Space>
@@ -390,7 +391,7 @@ export default function BoltList(): React.ReactNode {
                         })
                     }
                 </Tabs>
-                :  <div>暂无呼高，请添加</div>
+                :  <div>暂无呼高，请先添加呼高</div>
             } 
         </DetailContent>
         <Modal

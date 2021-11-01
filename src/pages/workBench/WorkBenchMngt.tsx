@@ -279,74 +279,48 @@ export default function WorkBenchMngt(): React.ReactNode {
 		resole(data)
 	}), {})
 	const detailData: any = data;
-	const history = useHistory()
+	const history = useHistory();
 	if (loading) {
 		return <Spin spinning={loading}>
 			<div style={{ width: '100%', height: '300px' }}></div>
 		</Spin>
 	}
 
+	const getChildContent = (res: IList, ind: number, data: Record<string, any>) => {
+		return <div key={ind} className={res.col !== 2 ? styles.border : styles.border2}>
+			<DetailTitle title={res.title}></DetailTitle>
+			<div>{
+				res?.child && res?.child.map((item: IList, index: number) => {
+					const dataIndex: string | undefined = item.dataIndex;
+					return <div className={res.col !== 2 ? styles.content : styles.content2} key={ind + '_' + index}>
+						<p onClick={() => { if (item.path) history.push({ pathname: item.path, state: item.state }) }}><CheckCircleOutlined />{item.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
+						<p className={styles.total}>{data && data[dataIndex || ''] === -1 ? 0 : data && data[dataIndex || ''] || 0}</p>
+						<div className={styles.draw}><Line keyIndex={dataIndex + '_' + index} valueList={[Math.ceil(Math.random() * 80), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 150), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 90), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100)]} /></div>
+					</div>
+				})
+			}</div>
+		</div>
+	}
+
 	return <div className={styles.all}>
 		<div className={styles.left}>
 			{
 				Object.keys(detailData.director).length > 0 ? directorList.map((res: IList, ind: number) => {
-					return <div key={ind} className={res.col !== 2 ? styles.border : styles.border2}>
-						<DetailTitle title={res.title}></DetailTitle>
-						<div>
-							{
-								res?.child && res?.child.map((item: IList, index: number) => {
-									const dataIndex: string | undefined = item.dataIndex;
-									return <div className={res.col !== 2 ? styles.content : styles.content2} key={ind + '_' + index}>
-										<p onClick={() => { if (item.path) history.push({ pathname: item.path, state: item.state }) }}><CheckCircleOutlined />{item.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
-										<p className={styles.total}>{detailData.director && detailData.director[dataIndex || ''] === -1 ? 0 : detailData.director && detailData.director[dataIndex || ''] || 0}</p>
-										<div className={styles.draw}><Line keyIndex={dataIndex + '_' + index} valueList={[Math.ceil(Math.random() * 80), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 150), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 90), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100)]} /></div>
-									</div>
-								})
-							}
-						</div>
-					</div>
+					return <>{getChildContent(res, ind, detailData.director)}</>
 				})
-					: null
+				: null
 			}
 			{
 				Object.keys(detailData.leaderToDoVO).length > 0 ? groupLeaderList.map((res: IList, ind: number) => {
-					return <div key={ind} className={res.col !== 2 ? styles.border : styles.border2}>
-						<DetailTitle title={res.title}></DetailTitle>
-						<div>
-							{
-								res?.child && res?.child.map((item: IList, index: number) => {
-									const dataIndex: string | undefined = item.dataIndex;
-									return <div className={res.col !== 2 ? styles.content : styles.content2} key={dataIndex + '_' + index}>
-										<p onClick={() => { if (item.path) history.push({ pathname: item.path, state: item.state }) }}><CheckCircleOutlined />{item.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
-										<p className={styles.total}>{detailData.leaderToDoVO && detailData.leaderToDoVO[dataIndex || ''] === -1 ? 0 : detailData.leaderToDoVO && detailData.leaderToDoVO[dataIndex || ''] || 0}</p>
-										<div className={styles.draw}><Line keyIndex={dataIndex + '_' + index} valueList={[Math.ceil(Math.random() * 80), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 150), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 90), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100)]} /></div>
-									</div>
-								})
-							}
-						</div>
-					</div>
+					return <>{getChildContent(res, ind, detailData.leaderToDoVO)}</>
 				})
-					: null
+				: null
 			}
 			{
 				Object.keys(detailData.staffToDoVO).length > 0 ? workmanList.map((res: IList, ind: number) => {
-					return <div key={ind} className={res.col !== 2 ? styles.border : styles.border2}>
-						<DetailTitle title={res.title}></DetailTitle>
-						<div>
-							{
-								res?.child && res?.child.map((item: IList, index: number) => {
-									const dataIndex: string | undefined = item.dataIndex;
-									return <div className={res.col !== 2 ? styles.content : styles.content2} key={dataIndex + '_' + index}>
-										<p onClick={() => { if (item.path) history.push({ pathname: item.path, state: item.state }) }}><CheckCircleOutlined />{item.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
-										<p className={styles.total}>{detailData.staffToDoVO && detailData.staffToDoVO[dataIndex || ''] === -1 ? 0 : detailData.staffToDoVO && detailData.staffToDoVO[dataIndex || ''] || 0}</p>
-										<div className={styles.draw}><Line keyIndex={ind + '_' + index} valueList={[Math.ceil(Math.random() * 80), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 150), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 90), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100)]} /></div>
-									</div>
-								})
-							}
-						</div>
-					</div>
+					return <>{getChildContent(res, ind, detailData.staffToDoVO)}</>
 				})
-					: null
+				: null
 			}
 		</div>
 		<div className={styles.right}>
