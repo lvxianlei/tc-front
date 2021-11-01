@@ -19,12 +19,35 @@ export default function Edit() {
             reject(error)
         }
     }))
+    const { loading: approvalLoading, run } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/invoicing/approval`, { ...data, id: params.id })
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const handleApproval = async () => {
+        try {
+            const result = await run({
+                approver: data?.approver,
+                batchResult: data?.batchResult,
+                batchTime: data?.batchTime,
+                department: data?.department,
+                invoicingId: data?.invoicingInfoVo.id,
+                opinion: data?.opinion,
+                position: data?.position
+            })
+            message.success("已成功发起审批")
+        } catch (err0r) {
+            message.error("发起审批失败...")
+        }
+    }
 
     return <DetailContent title={[
-        <Button type="primary" key="ab">发起审批</Button>
-    ]} operation={[
-        <Button key="cancel" onClick={() => history.go(-1)}>返回</Button>
-    ]}>
+        <Button type="primary" key="ab" onClick={handleApproval} loading={approvalLoading}>发起审批</Button>
+    ]} operation={[<Button key="cancel" onClick={() => history.go(-1)}>返回</Button>]}>
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
             <BaseInfo columns={baseInfoHead} dataSource={data || {}} />
