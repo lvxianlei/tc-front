@@ -32,16 +32,6 @@ export default function SupplierMngt(): React.ReactNode {
         setFilterValue(value)
         return value
     }
-<<<<<<< HEAD
-    const add=()=>{
-        history.push(`/supplier-mngt/supplierAdd`);
-    }
-    const edit=()=>{
-        history.push(`/supplier-mngt/supplierEdit`);
-    }
-    const detail=()=>{
-        history.push(`/supplier-mngt/supplierDetail`);
-=======
     const add = () => {
         setIsModalVisible1(true)
     }
@@ -54,7 +44,6 @@ export default function SupplierMngt(): React.ReactNode {
     }
     const edit = () => {
         setIsModalVisible(true)
->>>>>>> f6e67334bc67f136e1815a950785e30a5bc7a317
     }
     const handleCancel = () => {
         setIsModalVisible(false);

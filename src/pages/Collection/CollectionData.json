@@ -157,7 +157,7 @@
             "title": "付款单号",
             "dataIndex": "payNum",
             "type": "popTable",
-            "path": "/tower-market/payApply",
+            "path": "/tower-market/payApply?payStatus=1",
             "readOnly": false,
             "width": 1011,
             "value": "payNumber",
@@ -170,7 +170,33 @@
                 },
                 {
                     "title": "付款类型",
-                    "dataIndex": "payType"
+                    "dataIndex": "payType",
+                    "type": "select",
+                    "enum": [
+                        {
+                            "label": "请款",
+                            "value": 0
+                        },
+                        {
+                            "label": "报销",
+                            "value": 1
+                        }
+                    ]
+                },
+                {
+                    "title": "付款状态",
+                    "dataIndex": "payStatus",
+                    "type": "select",
+                    "enum": [
+                        {
+                            "label": "待付款",
+                            "value": 0
+                        },
+                        {
+                            "label": "已付款",
+                            "value": 1
+                        }
+                    ]
                 },
                 {
                     "title": "项目名称",
