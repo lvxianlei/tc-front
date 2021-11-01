@@ -149,9 +149,15 @@ export default function Information(): React.ReactNode {
     }
     const outFactoryOk = async () => {
         const postData = await outFactoryForm.validateFields()
-        postData.projectName = postData.projectName?.value || ""
         const auditOutInfoDTOList = await outFactoryTableForm.validateFields()
-        const result = await run({ path: "/tower-market/OutFactory/submitAudit", data: { ...postData, auditOutInfoDTOList: auditOutInfoDTOList.submit } })
+        const result = await run({
+            path: "/tower-market/OutFactory/submitAudit", data: {
+                ...postData,
+                projectName: postData.projectName?.value || "",
+                projectId: postData.projectName?.id || "",
+                auditOutInfoDTOList: auditOutInfoDTOList.submit
+            }
+        })
         if (result) {
             message.success("成功创建申请...")
             setBidingVisible(false)

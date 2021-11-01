@@ -161,7 +161,7 @@
         },
         {
             "title": "申请时间",
-            "dataIndex": "createTime"
+            "dataIndex": "launchTime"
         },
         {
             "title": "制单人",
