@@ -1,10 +1,6 @@
 {
     "baseInfo": [
         {
-            "title": "序号",
-            "dataIndex": ""
-        },
-        {
             "title": "生产批次",
             "dataIndex": "productionBatchNumber",
             "type":"string"
@@ -61,10 +57,6 @@
         }                     
     ],
     "operationInformation":[
-        {
-            "title": "序号",
-            "dataIndex": ""
-        },
         {
             "title": "操作部门",
             "dataIndex": "departmentId",

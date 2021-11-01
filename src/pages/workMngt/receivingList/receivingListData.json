@@ -1,10 +1,6 @@
 {
     "baseInfo": [
         {
-            "title": "序号",
-            "dataIndex": ""
-        },
-        {
             "title": "收货单号",
             "dataIndex": "receiveNumber",
             "type": "string"
@@ -104,10 +100,6 @@
     ],
     "CargoDetails": [
         {
-            "title": "序号",
-            "dataIndex": ""
-        },
-        {
             "title": "品名",
             "dataIndex": "productName",
             "type": "integer"
@@ -157,10 +149,6 @@
         {
             "SelectedArea": [
                 {
-                    "title": "序号",
-                    "dataIndex": ""
-                },
-                {
                     "title": "材质",
                     "dataIndex": "materialTexture",
                     "type": "integer"
@@ -202,10 +190,6 @@
                 }
             ],
             "WaitingArea": [
-                {
-                    "title": "序号",
-                    "dataIndex": ""
-                },
                 {
                     "title": "材质",
                     "dataIndex": "materialTexture",
@@ -250,10 +234,6 @@
         }
     ],
     "DetailPage":[
-        {
-            "title": "序号",
-            "dataIndex": ""
-        },
         {
             "title": "品名",
             "dataIndex": "productName",

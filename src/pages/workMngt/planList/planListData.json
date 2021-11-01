@@ -1,10 +1,6 @@
 {
     "baseInfoList": [
         {
-            "title": "序号",
-            "dataIndex": ""
-        },
-        {
             "title": "采购计划编号",
             "dataIndex": "purchasePlanCode",
             "type": "string"
@@ -46,10 +42,6 @@
         }
     ],
     "AssociatedTowerType": [
-        {
-            "title": "序号",
-            "dataIndex": ""
-        },
         {
             "title": "塔型",
             "dataIndex": "productCategory",
@@ -98,10 +90,6 @@
     ],
     "PurchaseList": [
         {
-            "title": "序号",
-            "dataIndex": ""
-        },
-        {
             "title": "材质",
             "dataIndex": "materialTexture",
             "type": "string"
@@ -148,10 +136,6 @@
         }
     ],
     "PurchaseTypeStatistics": [
-        {
-            "title": "序号",
-            "dataIndex": ""
-        },
         {
             "title": "类型",
             "dataIndex": "purchaseType",

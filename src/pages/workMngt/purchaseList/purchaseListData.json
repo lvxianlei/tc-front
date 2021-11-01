@@ -1,10 +1,6 @@
 {
     "baseInfo": [
         {
-            "title": "序号",
-            "dataIndex": ""
-        },
-        {
             "title": "原材料任务编号",
             "dataIndex": "materialCategoryId",
             "type": "integer"
@@ -53,10 +49,6 @@
     "GeneratePurchasePlan": [
         {
             "ListIngredients": [
-                {
-                    "title": "序号",
-                    "dataIndex": ""
-                },
                 {
                     "title": "材质",
                     "dataIndex": "structureTexture",
@@ -122,7 +114,7 @@
             ]
         }
     ],
-    "BatchingScheme":[
+    "BatchingScheme": [
         {
             "title": "材质",
             "dataIndex": "structureTexture",
@@ -141,52 +133,52 @@
         {
             "title": "零件1",
             "dataIndex": "",
-            "type":""
+            "type": ""
         },
         {
             "title": "长度",
             "dataIndex": "length",
-            "type":"number"
+            "type": "number"
         },
         {
             "title": "零件2",
             "dataIndex": "",
-            "type":""
+            "type": ""
         },
         {
             "title": "长度",
             "dataIndex": "length",
-            "type":"number"
+            "type": "number"
         },
         {
             "title": "零件3",
             "dataIndex": "",
-            "type":""
+            "type": ""
         },
         {
             "title": "长度",
             "dataIndex": "length",
-            "type":"number"
+            "type": "number"
         },
         {
             "title": "零件4",
             "dataIndex": "",
-            "type":""
+            "type": ""
         },
         {
             "title": "长度",
             "dataIndex": "length",
-            "type":"number"
+            "type": "number"
         },
         {
             "title": "余料长度",
             "dataIndex": "",
-            "type":""
+            "type": ""
         },
         {
             "title": "利用率",
             "dataIndex": "",
-            "type":""
+            "type": ""
         }
     ]
 }
