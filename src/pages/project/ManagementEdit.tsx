@@ -8,7 +8,6 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
 import AuthUtil from "../../utils/AuthUtil"
 import { downLoadFile } from "../../utils"
-let projectLeaderId: string = ""
 export default function BaseInfoEdit(): JSX.Element {
   const history = useHistory()
   const [attachVosData, setAttachVosData] = useState<any[]>([])
@@ -28,7 +27,7 @@ export default function BaseInfoEdit(): JSX.Element {
 
   const { loading: saveStatus, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
     try {
-      const result: { [key: string]: any } = await RequestUtil.put(`/tower-market/projectInfo`, postData)
+      const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/projectInfo`, postData)
       resole(result)
     } catch (error) {
       reject(error)
