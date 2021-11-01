@@ -95,13 +95,16 @@ export default function RawMaterialStock(): React.ReactNode {
     //获取列表数据
     const loadData = async () => {
         console.log('请求数据')
-        const data: any[] = await RequestUtil.get(`/tower-storage/receiveStock/${params.id}`, {
-            current,
-            pageSize,
-            keyword,
-            dateString
+        const data: any = await RequestUtil.get(`/tower-storage/receiveStock/detail`, {
+            current: current,
+            size: pageSize,
+            fuzzyQuery: keyword,
+            startStatusUpdateTime: dateString[0],
+            endStatusUpdateTime: dateString[1],
+            receiveStockId: params.id,
+            receiveStatus: status,
         });
-        setListdata(data)
+        setListdata(data.records)
         // setTotal()
     }
     // 重置
@@ -207,7 +210,7 @@ export default function RawMaterialStock(): React.ReactNode {
     //进入页面刷新
     useEffect(() => {
         loadData()
-    }, [current, pageSize])
+    }, [current, pageSize, status, dateString])
     return (
         <div id="RawMaterialStock">
             <div className="Search_public_Stock">
@@ -236,17 +239,17 @@ export default function RawMaterialStock(): React.ReactNode {
                             <Select.Option
                                 value="1"
                             >
-                                状态1
+                                待收货
                             </Select.Option>
                             <Select.Option
                                 value="2"
                             >
-                                状态2
+                                已收货
                             </Select.Option>
                             <Select.Option
                                 value="3"
                             >
-                                状态3
+                                已拒绝
                             </Select.Option>
                         </Select>
                     </div>
