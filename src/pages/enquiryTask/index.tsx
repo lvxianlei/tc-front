@@ -5,7 +5,6 @@ import { enquiryTaskList, enquiryTaskAction, CurrentPriceInformation } from "./e
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import { DetailContent, Page } from '../common';
-import { values } from '_@antv_util@2.0.17@@antv/util'
 
 export default function EnquiryTask(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
@@ -27,16 +26,6 @@ export default function EnquiryTask(): React.ReactNode {
     moment().format();
     const [form] = Form.useForm();
     const history = useHistory();
-
-    // const { loading, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
-    //     try {
-    //         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryTask/initTask`)
-    //         console.log(result);
-    //         resole(result)
-    //     } catch (error) {
-    //         reject(error)
-    //     }
-    // }), { manual: true })
 
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {

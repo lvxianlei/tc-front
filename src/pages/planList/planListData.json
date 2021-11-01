@@ -154,8 +154,38 @@
         },
         {
             "title": "类型",
-            "dataIndex": "type",
+            "dataIndex": "purchaseType",
+            "type": "integer"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "doseName",
             "type": "string"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "standard",
+            "type": "integer"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture",
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec",
+            "type": "string"
+        },
+        {
+            "title": "已采购总量",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "计划采购总量（吨）",
+            "dataIndex": "",
+            "type": ""
         }
     ]
 }
