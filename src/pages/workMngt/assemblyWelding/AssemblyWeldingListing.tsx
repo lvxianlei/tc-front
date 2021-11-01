@@ -165,7 +165,6 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                     columns={ towerColumns }
                     onRow={ (record: Record<string, any>, index: number) => ({
                         onClick: async () => { 
-                            console.log(record);
                             const resData: [] = await RequestUtil.get(`/tower-science/welding/getStructureById`, { segmentId: record.id });
                             setParagraphData([...resData]);
                         },
