@@ -168,9 +168,9 @@ export default function RawMaterialStock(): React.ReactNode {
                                 warehouseList.map((item: { id: string, name: string }) => ({
                                     value: item.id,
                                     label: item.name
-                                })).map((item: any) => {
+                                })).map((item: any, index: number) => {
                                     return (
-                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                        <Select.Option value={item.value} key={index}>{item.label}</Select.Option>
                                     )
                                 })
                             }
@@ -190,9 +190,9 @@ export default function RawMaterialStock(): React.ReactNode {
                                 (ApplicationContext.get().dictionaryOption as any)["139"].map((item: { id: string, name: string }) => ({
                                     value: item.id,
                                     label: item.name
-                                })).map((item: any) => {
+                                })).map((item: any, index: number) => {
                                     return (
-                                        <Select.Option value={item.label}>{item.label}</Select.Option>
+                                        <Select.Option key={index} value={item.label}>{item.label}</Select.Option>
                                     )
                                 })
                             }
@@ -212,9 +212,9 @@ export default function RawMaterialStock(): React.ReactNode {
                                 (ApplicationContext.get().dictionaryOption as any)["140"].map((item: { id: string, name: string }) => ({
                                     value: item.id,
                                     label: item.name
-                                })).map((item: any) => {
+                                })).map((item: any, index: number) => {
                                     return (
-                                        <Select.Option value={item.label}>{item.label}</Select.Option>
+                                        <Select.Option key={index} value={item.label}>{item.label}</Select.Option>
                                     )
                                 })
                             }
@@ -234,9 +234,9 @@ export default function RawMaterialStock(): React.ReactNode {
                                 (ApplicationContext.get().dictionaryOption as any)["138"].map((item: { id: string, name: string }) => ({
                                     value: item.id,
                                     label: item.name
-                                })).map((item: any) => {
+                                })).map((item: any, index: number) => {
                                     return (
-                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                        <Select.Option key={index} value={item.value}>{item.label}</Select.Option>
                                     )
                                 })
                             }
@@ -256,9 +256,9 @@ export default function RawMaterialStock(): React.ReactNode {
                                 (ApplicationContext.get().dictionaryOption as any)["141"].map((item: { id: string, name: string }) => ({
                                     value: item.id,
                                     label: item.name
-                                })).map((item: any) => {
+                                })).map((item: any, index: number) => {
                                     return (
-                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                        <Select.Option key={index} value={item.value}>{item.label}</Select.Option>
                                     )
                                 })
                             }
@@ -278,9 +278,9 @@ export default function RawMaterialStock(): React.ReactNode {
                                 (ApplicationContext.get().dictionaryOption as any)["142"].map((item: { id: string, name: string }) => ({
                                     value: item.id,
                                     label: item.name
-                                })).map((item: any) => {
+                                })).map((item: any, index: number) => {
                                     return (
-                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                        <Select.Option key={index} value={item.value}>{item.label}</Select.Option>
                                     )
                                 })
                             }
@@ -295,9 +295,9 @@ export default function RawMaterialStock(): React.ReactNode {
                                 (ApplicationContext.get().dictionaryOption as any)["142"].map((item: { id: string, name: string }) => ({
                                     value: item.id,
                                     label: item.name
-                                })).map((item: any) => {
+                                })).map((item: any, index: number) => {
                                     return (
-                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                        <Select.Option key={index} value={item.value}>{item.label}</Select.Option>
                                     )
                                 })
                             }
@@ -317,9 +317,9 @@ export default function RawMaterialStock(): React.ReactNode {
                                 (ApplicationContext.get().dictionaryOption as any)["143"].map((item: { id: string, name: string }) => ({
                                     value: item.id,
                                     label: item.name
-                                })).map((item: any) => {
+                                })).map((item: any, index: number) => {
                                     return (
-                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                        <Select.Option key={index} value={item.value}>{item.label}</Select.Option>
                                     )
                                 })
                             }
@@ -355,6 +355,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     dataSource={Listdata}
                     size='small'
                     className="table_antd_wrap"
+                    rowKey="id"
                     rowClassName={(item, index) => {
                         return index % 2 ? 'aaa' : ''
                     }}
