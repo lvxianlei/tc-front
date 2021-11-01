@@ -76,7 +76,7 @@ export default function EnquiryTask(): React.ReactNode {
         console.log(inquiryId);
         // const abc:any = new FormData()
         // abc.append("inquiryId",122)
-        const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/inquiryTask/finish`, {},{ "Content-Type": "application/x-www-form-urlencoded" })
+        const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/inquiryTask/finish`, {}, { "Content-Type": "application/x-www-form-urlencoded" })
         console.log(result);
     }
 
@@ -267,12 +267,8 @@ export default function EnquiryTask(): React.ReactNode {
             <Descriptions title="操作信息">
             </Descriptions>
             <Page
-<<<<<<< HEAD
-                path="/tower-supply/inquiryTask/{inquiryId}"
-=======
                 // path={`/tower-supply/inquiryTask/${inquiryId}`}
                 path="/tower-supply/inquiryTask"
->>>>>>> f6e67334bc67f136e1815a950785e30a5bc7a317
                 columns={[
                     ...enquiryTaskAction,
                 ]}
@@ -283,11 +279,7 @@ export default function EnquiryTask(): React.ReactNode {
             <Descriptions title="当前价格信息">
             </Descriptions>
             <Page
-<<<<<<< HEAD
-                path="/tower-supply/inquiryTask/taskResult/{inquiryId}"
-=======
                 path={`/tower-supply/inquiryTask/taskResult/${inquiryId}`}
->>>>>>> f6e67334bc67f136e1815a950785e30a5bc7a317
                 columns={[
                     ...CurrentPriceInformation
                 ]}
