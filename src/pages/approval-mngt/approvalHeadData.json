@@ -145,16 +145,24 @@
             "type": "select",
             "enum": [
                 {
-                    "value": 0,
-                    "label": "待审批"
+                    "label": "审批中",
+                    "value": 1
                 },
                 {
-                    "value": 1,
-                    "label": "通过"
+                    "label": "已通过",
+                    "value": 2
                 },
                 {
-                    "value": 2,
-                    "label": "驳回"
+                    "label": "已驳回",
+                    "value": 3
+                },
+                {
+                    "label": "已撤销",
+                    "value": 4
+                },
+                {
+                    "label": "通过后撤销",
+                    "value": 6
                 }
             ]
         },
@@ -726,8 +734,8 @@
     ],
     "applicationdetails": [
         {
-            "title": "货物名称",
-            "dataIndex": ""
+            "title": "产品类型",
+            "dataIndex": "productType"
         },
         {
             "title": "包号",
@@ -739,7 +747,8 @@
         },
         {
             "title": "重量(吨)",
-            "dataIndex": "weight"
+            "dataIndex": "weight",
+            "type": "number"
         },
         {
             "title": "基数",
@@ -752,8 +761,8 @@
         },
         {
             "title": "单价",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "outFactoryPrice",
+            "type": "number"
         },
         {
             "title": "运费",
@@ -761,8 +770,8 @@
             "type": "number"
         },
         {
-            "title": "价格",
-            "dataIndex": "price",
+            "title": "核算价格",
+            "dataIndex": "accountingPrice",
             "type": "number"
         },
         {
@@ -778,7 +787,8 @@
         {
             "title": "交货日期",
             "dataIndex": "deliveryTime",
-            "type": "string"
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "备注",
@@ -789,7 +799,13 @@
     "addanewone": [
         {
             "title": "产品类型",
-            "dataIndex": "productType"
+            "dataIndex": "productType",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入产品类型..."
+                }
+            ]
         },
         {
             "title": "包号",
@@ -801,7 +817,13 @@
         },
         {
             "title": "重量(吨)",
-            "dataIndex": "weight"
+            "dataIndex": "weight",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入重量..."
+                }
+            ]
         },
         {
             "title": "基数",
@@ -812,36 +834,64 @@
             "dataIndex": "cargoAddress"
         },
         {
-            "title": "单价",
-            "dataIndex": "outFactoryPrice"
+            "title": "出厂单价",
+            "dataIndex": "outFactoryPrice",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入出厂单价..."
+                }
+            ]
         },
         {
-            "title": "运费",
+            "title": "物流费用",
             "dataIndex": "logisticsPrice",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入物流费用..."
+                }
+            ]
         },
         {
-            "title": "价格",
-            "dataIndex": "price",
-            "type": "number"
+            "title": "核算价格",
+            "dataIndex": "accountingPrice",
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入核算价格..."
+                }
+            ]
         },
         {
             "title": "申请价格",
             "dataIndex": "applyPrice",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入申请价格..."
+                }
+            ]
         },
         {
             "title": "报价差值",
             "dataIndex": "offerDiff",
+            "disabled": true,
             "type": "number"
         },
         {
             "title": "交货日期",
-            "dataIndex": "deliveryTime"
+            "dataIndex": "deliveryTime",
+            "type": "date"
         },
         {
             "title": "备注",
-            "dataIndex": "remark"
+            "dataIndex": "remark",
+            "rows": 1,
+            "type": "textarea"
         }
     ],
     "enclosure": [

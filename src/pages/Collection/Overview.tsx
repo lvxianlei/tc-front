@@ -1,8 +1,8 @@
 import React from "react"
 import { Button, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo } from '../common'
-import { promotionalTourism } from "./CollectionData.json"
+import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../common'
+import { promotionalTourism, contractInformation } from "./CollectionData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 export default function Overview() {
@@ -22,6 +22,10 @@ export default function Overview() {
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
             <BaseInfo columns={promotionalTourism} dataSource={data || {}} />
+            {data?.returnType === 1 && <>
+                <DetailTitle title="合同信息" />
+                <CommonTable columns={contractInformation} dataSource={data?.backMoneyVOList || []} />
+            </>}
         </Spin>
     </DetailContent>
 }

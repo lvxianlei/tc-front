@@ -17,6 +17,7 @@ import layoutStyles from "../../../layout/Layout.module.less";
 import { ProjectContractInfo } from "../../prom/contract/AbstractContractSetting";
 
 class ManagementContractSetting extends ContractSetting {
+
   public getFormItemGroups(): IFormItemGroup[][] {
     const contract = this.state.contract as ProjectContractInfo | undefined;
     return [
@@ -28,13 +29,33 @@ class ManagementContractSetting extends ContractSetting {
           },
           itemProps: [
             {
+              label: "采购订单编号",
+              name: "purchaseOrderNumber",
+              initialValue: contract?.purchaseOrderNumber,
+              rules: [
+                {
+                  required: true,
+                  message: "请输入合同编号"
+                },
+              ],
+              children: (
+                <Input value={contract?.contractNumber} maxLength={50} />
+              ),
+            },
+            {
+              label: "ECP合同编号",
+              name: "ecpContractNumber",
+              initialValue: contract?.ecpContractNumber,
+              children: <Input placeholder="内部合同编号自动生成" disabled />,
+            },
+            {
               label: "合同编号",
               name: "contractNumber",
               initialValue: contract?.contractNumber,
               rules: [
                 {
                   required: true,
-                  message:"请输入合同编号"
+                  message: "请输入合同编号"
                 },
               ],
               children: (
@@ -74,6 +95,7 @@ class ManagementContractSetting extends ContractSetting {
                   min="0"
                   stringMode={false}
                   className={layoutStyles.width100}
+                  onChange={() => this.onContractTotalWeightChange()}
                 />
               ),
             },
@@ -90,6 +112,7 @@ class ManagementContractSetting extends ContractSetting {
               children: (
                 <InputNumber
                   min="0.01"
+                  disabled
                   max="10000000000.00"
                   step="0.01"
                   stringMode={false}
@@ -232,6 +255,48 @@ class ManagementContractSetting extends ContractSetting {
               ),
             },
             {
+              label: "付款方式",
+              name: "payType",
+              initialValue: contract?.payType,
+              children: (
+                <>
+                  <Select
+                    value={contract?.payType}
+                  >
+                    <Select.Option value="1">转账</Select.Option>
+                    <Select.Option value="2">现金</Select.Option>
+                    <Select.Option value="3">支票</Select.Option>
+                    <Select.Option value="4">电汇</Select.Option>
+                    <Select.Option value="5">承兑</Select.Option>
+                  </Select>
+                </>
+              ),
+            },
+            {
+              label: "结算单位",
+              name: "payCompanyName",
+              initialValue: contract?.payCompanyName,
+              rules: [
+                {
+                  required: true,
+                  message: "请选择结算单位",
+                },
+              ],
+              children: (
+                <>
+                  <Input
+                    value={contract?.payCompanyName}
+                    suffix={
+                      <ClientSelectionComponent
+                        onSelect={this.onPayCompanyNameSelect}
+                        selectKey={[contract?.signCustomerId]}
+                      />
+                    }
+                  />
+                </>
+              ),
+            },
+            {
               label: "合同签订日期",
               name: "signContractTime",
               initialValue: contract?.signContractTime
@@ -339,6 +404,7 @@ class ManagementContractSetting extends ContractSetting {
                       </Select.Option>
                     );
                   })}
+                  <Select.Option value="其他-国外">其他-国外</Select.Option>
                 </Select>
 
                 // <Cascader

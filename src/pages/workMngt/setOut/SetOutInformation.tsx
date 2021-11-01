@@ -15,7 +15,7 @@ import { specialColums, productColumns } from './SetOutInformation.json';
 
 interface ISetOut {
     readonly attachVos?: IAttachVos[];
-    readonly taskDataVOList?: ITaskDataVOList[];
+    readonly stateRecordVOS?: ITaskDataVOList[];
 }
 
 interface IAttachVos {
@@ -45,14 +45,14 @@ const tableColumns = [
         width: 100, 
         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
     {
-        key: 'createDepartment',
+        key: 'createDeptName',
         title: '操作部门',
-        dataIndex: 'createDepartment', 
+        dataIndex: 'createDeptName', 
     },
     {  
-        key: 'createUser', 
+        key: 'createUserName', 
         title: '操作人', 
-        dataIndex: 'createUser' 
+        dataIndex: 'createUserName' 
     },
     { 
         key: 'createTime', 
@@ -60,11 +60,11 @@ const tableColumns = [
         dataIndex: 'createTime' 
     },
     {
-        key: 'status', 
+        key: 'currentStatus', 
         title: '任务状态', 
-        dataIndex: 'status',
-        render: (pattern: number): React.ReactNode => {
-            switch (pattern) {
+        dataIndex: 'currentStatus',
+        render: (currentStatus: number): React.ReactNode => {
+            switch (currentStatus) {
                 case 1:
                     return '待指派';
                 case 2:
@@ -91,7 +91,7 @@ export default function SetOutInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const { loading, data }: Record<string, any> = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-science/loftingList/detail?id=${ params.id }`);
+        const data = await RequestUtil.get(`/tower-science/loftingList/detail?productCategoryId=${ params.id }`);
         resole(data)
     }), {})
     const detailData: ISetOut = data;
@@ -136,6 +136,6 @@ export default function SetOutInformation(): React.ReactNode {
             pagination={ false }
         />
         <DetailTitle title="操作信息"/>
-        <CommonTable columns={ tableColumns } dataSource={ detailData.taskDataVOList } pagination={ false }/>
+        <CommonTable columns={ tableColumns } dataSource={ detailData.stateRecordVOS } pagination={ false }/>
     </DetailContent>
 }

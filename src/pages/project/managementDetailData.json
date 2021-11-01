@@ -37,7 +37,7 @@
             "rules": [
                 {
                     "required": true,
-                    "message": "请选择项目类型"
+                    "message": "请选择项目类型..."
                 }
             ]
         },
@@ -55,7 +55,13 @@
         },
         {
             "title": "地区",
-            "dataIndex": "address"
+            "dataIndex": "address",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择地区..."
+                }
+            ]
         },
         {
             "title": "国家",
@@ -595,7 +601,7 @@
             "dataIndex": "ownerCompany",
             "type": "popTable",
             "path": "/tower-customer/customer",
-            "readOnly": false,
+            "readOnly": true,
             "value": "name",
             "dependencies": true,
             "columns": [
@@ -633,7 +639,7 @@
             "dataIndex": "signCompany",
             "type": "popTable",
             "path": "/tower-customer/customer",
-            "readOnly": false,
+            "readOnly": true,
             "value": "name",
             "dependencies": true,
             "columns": [

@@ -64,6 +64,8 @@ export interface ManagementSaleOrder extends ISaleOrder {
     orderProjectName?: string;
     saleType?: string;
     salesman?: string;
+    productType?: string;
+    voltageGrade?: string;
 }
 
 export interface IProductVo extends IProduct {
@@ -393,7 +395,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                         {
                             label: "产品类型",
                             name: "productType",
-                            initialValue: saleOrder?.contractInfoDto?.productType,
+                            initialValue: saleOrder?.productType,
                             children: <Select>
                                 {productTypeOptions &&
                                     productTypeOptions.map(({ id, name }, index) => {
@@ -414,7 +416,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                         {
                             label: "电压等级",
                             name: "voltageGrade",
-                            initialValue: saleOrder?.contractInfoDto?.voltageGrade,
+                            initialValue: saleOrder?.voltageGrade,
                             children: <Select>
                                 {voltageGradeOptions &&
                                     voltageGradeOptions.map(({ id, name }, index) => {
@@ -619,7 +621,12 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                     ? undefined
                                     : saleOrder?.guaranteeType,
                             children: (
-                                <Input maxLength={50} className={layoutStyles.width100} />
+                                <Select maxLength={50} className={layoutStyles.width100}>
+                                    <Select.Option value="1">履约保函</Select.Option>
+                                    <Select.Option value="2">预付款保函</Select.Option>
+                                    <Select.Option value="3">质保保函以及履约保函</Select.Option>
+                                    <Select.Option value="4">预付款保函和质保保函</Select.Option>
+                                </Select>
                             ),
                         },
                         {

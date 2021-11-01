@@ -22,7 +22,8 @@ export default function FrameAgreementEdit(): JSX.Element {
                 ...result,
                 bidType: result.bidType === -1 ? null : result.bidType,
                 saleType: result.saleType === -1 ? null : result.saleType,
-                isIta: result.isIta === -1 ? null : result.isIta
+                isIta: result.isIta === -1 ? null : result.isIta,
+                isReceivedContract: result.isReceivedContract === -1 ? null : result.isReceivedContract,
             })
             cargoDtoForm.setFieldsValue({ submit: result.contractCargoVos })
             resole(result)

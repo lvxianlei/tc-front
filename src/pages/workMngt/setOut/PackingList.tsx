@@ -52,7 +52,7 @@ export default function PackingList(): React.ReactNode {
                     <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ params.productId }/packingListSetting/${ record.id }` }><Button type="link">编辑</Button></Link>
                     <Popconfirm
                         title="确认删除?"
-                        onConfirm={ () => { RequestUtil.delete(`/tower-science/packageRecord`, { id: record.id }).then(res => history.go(0)) } }
+                        onConfirm={ () => { RequestUtil.delete(`/tower-science/packageStructure?id=${ record.id }`).then(res => history.go(0)) } }
                         okText="确认"
                         cancelText="取消"
                     >

@@ -317,7 +317,7 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
     const columnsSetting = columns.map(col => {
         return {
             ...col,
-            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+            render:  col.render?col.render:(_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 col.dataIndex === 'index' ? index + 1 
                 : col.dataIndex === 'boltDeliverRealTime'&& moment(record.boltDeliverTime)<moment(record.boltDeliverRealTime?record.boltDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
                 : col.dataIndex === 'smallSampleDeliverRealTime'&& moment(record.smallSampleDeliverTime)<moment(record.smallSampleDeliverRealTime?record.smallSampleDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>

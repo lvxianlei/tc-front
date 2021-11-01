@@ -14,7 +14,7 @@ import styles from './ContractRefundRecord.module.less';
 import ClientSelectionComponent from '../../../components/ClientSelectionModal';
 import { currencyTypeOptions, refundModeOptions } from '../../../configuration/DictionaryOptions';
 import layoutStyles from '../../../layout/Layout.module.less';
-
+import { currency } from "../../../utils"
 export interface IContractRefundRecord {
     readonly paymentPlanVos: IPaymentPlanVo[];
 }
@@ -46,6 +46,7 @@ interface IPaymentPlanVo {
     readonly paymentPlanId?: string;
     readonly uncollectedPayment?: number;
     readonly paymentReceived?: number;
+    readonly name?: string;
 }
 
 interface IPaymentRecordVo {
@@ -606,22 +607,21 @@ export default class ContractRefundRecord extends React.Component<IContractRefun
         return paymentPlanVos.map<IRenderdSummariableItem>((item: IPaymentPlanVo, index: number): IRenderdSummariableItem => {
             return {
                 fieldItems: [{
-                    label: `第${item.period}期计划 `,
+                    label: `第${item.period}期${item.name}计划`,
                     value: item.returnedTime
                 }, {
                     label: '计划回款占比',
-                    value: item.returnedRate
+                    value: `${item.returnedRate}%`
                 }, {
                     label: '计划回款金额',
-                    value: item.returnedAmount
+                    value: currency(item.returnedAmount)
                 }, {
                     label: '已回款金额',
-                    value: item.paymentReceived
+                    value: currency(item.paymentReceived)
                 }, {
                     label: '未回款金额',
-                    value: item.uncollectedPayment
+                    value: currency(item.uncollectedPayment)
                 }],
-                // renderExtraInBar: (): React.ReactNode => this.renderExtraInBar(index),
                 render: (): React.ReactNode => (
                     <Form ref={this.form} key={Math.random()} onFinish={this.save} onValuesChange={(changedValues, allValues) => {
                         this.getForm()?.setFieldsValue({ ...allValues })

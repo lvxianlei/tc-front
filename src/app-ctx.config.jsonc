@@ -66,7 +66,7 @@
                             {
                                 "label": "原材料类型管理",
                                 "path": "/sys/materialType",
-                                "authority": "material_management"
+                                "authority": "material_category_management"
                             },
                             {
                                 "label": "原材料管理",
@@ -201,12 +201,12 @@
                             {
                                 "label": "计划跟踪",
                                 "path": "/cockpit/planTrack",
-                                "authority": "rd_plan_track_management"
+                                "authority": "approvalm"
                             },
                             {
                                 "label": "放样计划",
                                 "path": "/cockpit/planSetOut",
-                                "authority": "rd_plan_lofting_management"
+                                "authority": "approvalm"
                             },
                             {
                                 "label": "库存看板",
@@ -366,7 +366,7 @@
                             {
                                 "label": "提料列表",
                                 "path": "/workMngt/pickList",
-                                "authority": "product_material_list"
+                                "authority": "approvalm"
                             },
                             {
                                 "label": "放样列表",
@@ -376,12 +376,12 @@
                             {
                                 "label": "螺栓列表",
                                 "path": "/workMngt/boltList",
-                                "authority": "rd_bolt_management"
+                                "authority": "approvalm"
                             },
                             {
                                 "label": "小样图列表",
                                 "path": "/workMngt/sampleDrawList",
-                                "authority": "rd_small_sample_management"
+                                "authority": "approvalm"
                             },
                             {
                                 "label": "组焊列表",
@@ -404,12 +404,12 @@
                         "label": "图纸塔型",
                         "icon": "technology",
                         "path": "/drawTower",
-                        "authority": "rd_draw_product_category_management",
+                        "authority": "approvalm",
                         "items": [
                             {
                                 "label": "图纸塔型",
                                 "path": "/drawTower/drawTowerMngt",
-                                "authority": "rd_draw_product_category_management"
+                                "authority": "approvalm"
                             }
                         ]
                     },

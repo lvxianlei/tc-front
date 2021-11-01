@@ -1,10 +1,6 @@
 {
     "materialPrice": [
         {
-            "title": "序号",
-            "dataIndex": "index"
-        },
-        {
             "title": "原材料名称",
             "dataIndex": "materialName"
         },
@@ -35,10 +31,6 @@
         {
             "title": "价格",
             "dataIndex": "price"
-        },
-        {
-            "title": "操作",
-            "dataIndex": "operation"
         }
     ],
     "dataSource":[
@@ -76,10 +68,6 @@
         }
     ],
     "priceMaintain":[
-        {
-            "title": "序号",
-            "dataIndex": "index"
-        },
         {
             "title": "原材料名称",
             "dataIndex": "materialName"

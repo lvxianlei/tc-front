@@ -1,9 +1,8 @@
 import React, { useState } from "react"
-import { Modal, Spin, Upload, Button, Radio } from "antd"
+import { Modal, Spin, Radio } from "antd"
 import { CommonTable, BaseInfo, DetailContent, DetailTitle } from "../common"
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import AuthUtil from "../../utils/AuthUtil"
 import {
     bondBaseInfo, enclosure, drawH, drawingCofirm,
     baseInfo, auditIdRecord, outFactoryHead, applicationdetails
