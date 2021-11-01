@@ -265,9 +265,9 @@ const ViewPanel = (): React.ReactNode => {
                         }}
                     >
                         <Option value={''}>全部</Option>
-                        <Option value={'0'}>正常</Option>
-                        <Option value={'1'}>提醒</Option>
-                        <Option value={'2'}>告警</Option>
+                        <Option value={'0'}>正常库存</Option>
+                        <Option value={'1'}>可用库存</Option>
+                        <Option value={'2'}>告警库存</Option>
                     </Select>
                 </Col>
                 <Col
