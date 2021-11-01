@@ -13,7 +13,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import { useState } from 'react';
 import styles from './AssemblyWelding.module.less';
 import { downloadTemplate } from '../setOut/downloadTemplate';
-import AssemblyWeldingNew, { IBaseData, IComponentList } from './AssemblyWeldingNew';
+import AssemblyWeldingNew, { IBaseData } from './AssemblyWeldingNew';
 
 interface IResponseData {
     readonly id: number;
@@ -145,7 +145,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
         setDetailData(data);
         resole(data);
     });
-    const { loading, data } = useRequest<IResponseData>(() => getTableDataSource(page), {});
+    const { loading } = useRequest<IResponseData>(() => getTableDataSource(page), {});
 
     return <>
         <Spin spinning={ loading }>

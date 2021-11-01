@@ -203,7 +203,7 @@ export default function TowerInformation(): React.ReactNode {
             >
                 <Button type="primary" ghost>提交</Button>
             </Popconfirm>
-            <TowerLoftingAssign id={ params.id } update={ () => setRefresh(true) } />
+            <TowerLoftingAssign id={ params.id } update={ () => history.go(0) } />
             <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
         </Space> }
         searchFormItems={ [
