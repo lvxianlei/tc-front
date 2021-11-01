@@ -14,7 +14,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 
 enum PriorityType {
     HIGH = 1,              
-    MIDDLE =2,         
+    MIDDLE = 2,         
     LOW = 3,                       
 }
 

@@ -153,6 +153,7 @@ export default function NCProgram(): React.ReactNode {
                             }],
                             productCategoryId: params.id
                         })
+                        message.success('上传成功');
                         history.go(0);
                     }
                 } }
