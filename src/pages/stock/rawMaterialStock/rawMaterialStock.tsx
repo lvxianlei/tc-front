@@ -23,6 +23,7 @@ export default function RawMaterialStock(): React.ReactNode {
         [lengthMax, setLengthMax] = useState(''),//长度2
         [spec, setSpec] = useState(''),//规格
         [Listdata, setListdata] = useState<any[]>([]),//列表数据
+        [warehouseList, setWarehouseList] = useState<any>([]),//筛选仓库数据
         [weight, setWeight] = useState<number | string>(0),//合计重量
         [quantity, setQuantity] = useState<number | string>(0);//合计数量
     // console.log((ApplicationContext.get().dictionaryOption as any)["111"],'ssss')
@@ -122,6 +123,15 @@ export default function RawMaterialStock(): React.ReactNode {
         setQuantity(data.quantity);
         setTotal(data.total);
     }
+    // 获取仓库/库区/库位
+    const getWarehousing = async (id?: any, type?: any) => {
+        const data: any = await RequestUtil.get(`/tower-storage/warehouse/tree`, {
+            type: 0,
+        });
+        if (data) {
+            setWarehouseList(data)
+        }
+    }
     // 重置
     const reset = () => {
         setCurrent(1);
@@ -135,10 +145,13 @@ export default function RawMaterialStock(): React.ReactNode {
         setLengthMax('');
         setSpec('');
     }
+    useEffect(() => {
+        getWarehousing()
+    }, [])
     //进入页面刷新
     useEffect(() => {
         loadData()
-    }, [current, pageSize,spec,warehouseId,materialTexture,productName,standard,classify,lengthMax])
+    }, [current, pageSize, spec, warehouseId, materialTexture, productName, standard, classify, lengthMax])
     return (
         <div id="RawMaterialStock">
             <div className="Search_public_Stock">
@@ -152,30 +165,15 @@ export default function RawMaterialStock(): React.ReactNode {
                             onChange={(val) => { setWarehouseId(val) }}
                         >
                             {
-                                (ApplicationContext.get().dictionaryOption as any)["105"].map((item: { id: string, name: string }) => ({
+                                warehouseList.map((item: { id: string, name: string }) => ({
                                     value: item.id,
                                     label: item.name
-                                })).map((item: any) => {
+                                })).map((item: any, index: number) => {
                                     return (
-                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                        <Select.Option value={item.value} key={index}>{item.label}</Select.Option>
                                     )
                                 })
                             }
-                            {/* <Select.Option
-                                value="1"
-                            >
-                                仓库1
-                            </Select.Option>
-                            <Select.Option
-                                value="2"
-                            >
-                                仓库2
-                            </Select.Option>
-                            <Select.Option
-                                value="3"
-                            >
-                                仓库3
-                            </Select.Option> */}
                         </Select>
                     </div>
                 </div>
@@ -189,30 +187,15 @@ export default function RawMaterialStock(): React.ReactNode {
                             onChange={(val) => { setMaterialTexture(val) }}
                         >
                             {
-                                (ApplicationContext.get().dictionaryOption as any)["105"].map((item: { id: string, name: string }) => ({
+                                (ApplicationContext.get().dictionaryOption as any)["139"].map((item: { id: string, name: string }) => ({
                                     value: item.id,
                                     label: item.name
-                                })).map((item: any) => {
+                                })).map((item: any, index: number) => {
                                     return (
-                                        <Select.Option value={item.label}>{item.label}</Select.Option>
+                                        <Select.Option key={index} value={item.label}>{item.label}</Select.Option>
                                     )
                                 })
                             }
-                            {/* <Select.Option
-                                value="1"
-                            >
-                                材质1
-                            </Select.Option>
-                            <Select.Option
-                                value="2"
-                            >
-                                材质2
-                            </Select.Option>
-                            <Select.Option
-                                value="3"
-                            >
-                                材质3
-                            </Select.Option> */}
                         </Select>
                     </div>
                 </div>
@@ -226,30 +209,15 @@ export default function RawMaterialStock(): React.ReactNode {
                             onChange={(val) => { setProductName(val) }}
                         >
                             {
-                                (ApplicationContext.get().dictionaryOption as any)["105"].map((item: { id: string, name: string }) => ({
+                                (ApplicationContext.get().dictionaryOption as any)["140"].map((item: { id: string, name: string }) => ({
                                     value: item.id,
                                     label: item.name
-                                })).map((item: any) => {
+                                })).map((item: any, index: number) => {
                                     return (
-                                        <Select.Option value={item.label}>{item.label}</Select.Option>
+                                        <Select.Option key={index} value={item.label}>{item.label}</Select.Option>
                                     )
                                 })
                             }
-                            {/* <Select.Option
-                                value="1"
-                            >
-                                品名1
-                            </Select.Option>
-                            <Select.Option
-                                value="2"
-                            >
-                                品名2
-                            </Select.Option>
-                            <Select.Option
-                                value="3"
-                            >
-                                品名3
-                            </Select.Option> */}
                         </Select>
                     </div>
                 </div>
@@ -263,30 +231,15 @@ export default function RawMaterialStock(): React.ReactNode {
                             onChange={(val) => { setStandard(val) }}
                         >
                             {
-                                (ApplicationContext.get().dictionaryOption as any)["105"].map((item: { id: string, name: string }) => ({
+                                (ApplicationContext.get().dictionaryOption as any)["138"].map((item: { id: string, name: string }) => ({
                                     value: item.id,
                                     label: item.name
-                                })).map((item: any) => {
+                                })).map((item: any, index: number) => {
                                     return (
-                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                        <Select.Option key={index} value={item.value}>{item.label}</Select.Option>
                                     )
                                 })
                             }
-                            {/* <Select.Option
-                                value="1"
-                            >
-                                标准1
-                            </Select.Option>
-                            <Select.Option
-                                value="2"
-                            >
-                                标准2
-                            </Select.Option>
-                            <Select.Option
-                                value="3"
-                            >
-                                标准3
-                            </Select.Option> */}
                         </Select>
                     </div>
                 </div>
@@ -300,30 +253,15 @@ export default function RawMaterialStock(): React.ReactNode {
                             onChange={(val) => { setClassify(val) }}
                         >
                             {
-                                (ApplicationContext.get().dictionaryOption as any)["105"].map((item: { id: string, name: string }) => ({
+                                (ApplicationContext.get().dictionaryOption as any)["141"].map((item: { id: string, name: string }) => ({
                                     value: item.id,
                                     label: item.name
-                                })).map((item: any) => {
+                                })).map((item: any, index: number) => {
                                     return (
-                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                        <Select.Option key={index} value={item.value}>{item.label}</Select.Option>
                                     )
                                 })
                             }
-                            {/* <Select.Option
-                                value="1"
-                            >
-                                分类1
-                            </Select.Option>
-                            <Select.Option
-                                value="2"
-                            >
-                                分类2
-                            </Select.Option>
-                            <Select.Option
-                                value="3"
-                            >
-                                分类3
-                            </Select.Option> */}
                         </Select>
                     </div>
                 </div>
@@ -337,30 +275,15 @@ export default function RawMaterialStock(): React.ReactNode {
                             onChange={(val) => { setLengthMin(val) }}
                         >
                             {
-                                (ApplicationContext.get().dictionaryOption as any)["105"].map((item: { id: string, name: string }) => ({
+                                (ApplicationContext.get().dictionaryOption as any)["142"].map((item: { id: string, name: string }) => ({
                                     value: item.id,
                                     label: item.name
-                                })).map((item: any) => {
+                                })).map((item: any, index: number) => {
                                     return (
-                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                        <Select.Option key={index} value={item.value}>{item.label}</Select.Option>
                                     )
                                 })
                             }
-                            {/* <Select.Option
-                                value="1"
-                            >
-                                长度1
-                            </Select.Option>
-                            <Select.Option
-                                value="2"
-                            >
-                                长度2
-                            </Select.Option>
-                            <Select.Option
-                                value="3"
-                            >
-                                长度3
-                            </Select.Option> */}
                         </Select>-
                         <Select
                             className="select"
@@ -369,30 +292,15 @@ export default function RawMaterialStock(): React.ReactNode {
                             onChange={(val) => { setLengthMax(val) }}
                         >
                             {
-                                (ApplicationContext.get().dictionaryOption as any)["105"].map((item: { id: string, name: string }) => ({
+                                (ApplicationContext.get().dictionaryOption as any)["142"].map((item: { id: string, name: string }) => ({
                                     value: item.id,
                                     label: item.name
-                                })).map((item: any) => {
+                                })).map((item: any, index: number) => {
                                     return (
-                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                        <Select.Option key={index} value={item.value}>{item.label}</Select.Option>
                                     )
                                 })
                             }
-                            {/* <Select.Option
-                                value="1"
-                            >
-                                长度1-1
-                            </Select.Option>
-                            <Select.Option
-                                value="2"
-                            >
-                                长度1-2
-                            </Select.Option>
-                            <Select.Option
-                                value="3"
-                            >
-                                长度1-3
-                            </Select.Option> */}
                         </Select>
                     </div>
                 </div>
@@ -406,30 +314,15 @@ export default function RawMaterialStock(): React.ReactNode {
                             onChange={(val) => { setSpec(val) }}
                         >
                             {
-                                (ApplicationContext.get().dictionaryOption as any)["105"].map((item: { id: string, name: string }) => ({
+                                (ApplicationContext.get().dictionaryOption as any)["143"].map((item: { id: string, name: string }) => ({
                                     value: item.id,
                                     label: item.name
-                                })).map((item: any) => {
+                                })).map((item: any, index: number) => {
                                     return (
-                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                        <Select.Option key={index} value={item.value}>{item.label}</Select.Option>
                                     )
                                 })
                             }
-                            {/* <Select.Option
-                                value="1"
-                            >
-                                规格1
-                            </Select.Option>
-                            <Select.Option
-                                value="2"
-                            >
-                                规格2
-                            </Select.Option>
-                            <Select.Option
-                                value="3"
-                            >
-                                规格3
-                            </Select.Option> */}
                         </Select>
                     </div>
                 </div>
@@ -462,6 +355,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     dataSource={Listdata}
                     size='small'
                     className="table_antd_wrap"
+                    rowKey="id"
                     rowClassName={(item, index) => {
                         return index % 2 ? 'aaa' : ''
                     }}
