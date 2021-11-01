@@ -33,7 +33,11 @@ export default function RawMaterialStock(): React.ReactNode {
     const [ReservoirArea, setReservoirArea] = useState<any[]>([]);//入库库区数据
     const [Location, setLocation] = useState<any[]>([]);//入库库位数据
     const [receiveBatchNumber, setReceiveBatchNumber] = useState<any>('');//收货批次
-    const [ListID, setListID] = useState('');//入库弹框展shiyongid
+    const [ListID, setListID] = useState('');//入库弹框展试 使用id
+    const [receiveWeight, setReceiveWeight] = useState('');//合计重量
+    const [receivePrice, setReceivePrice] = useState('');//收货合计价格
+    const [waitWeight, setWaitWeight] = useState('');//展示条 未收货重量
+    const [waitPrice, setwaitPrice] = useState('');//展示条 等价格
     const columns = [
         {
             title: '序号',
@@ -303,7 +307,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 >返回上一级</Button>
             </div>
             <div className="tip_public_Stock">
-                <div>已收货：重量(支)合计：2209.90     价税合计(元)合计：51425.00   待收货：重量(支)合计：2209.90     价税合计(元)合计：51425.00</div>
+                <div>已收货：重量(支)合计：2209.90 ,    价税合计(元)合计：51425.00 ,  待收货：重量(支)合计：2209.90</div>
             </div>
             <div className="page_public_Stock">
                 <Table
