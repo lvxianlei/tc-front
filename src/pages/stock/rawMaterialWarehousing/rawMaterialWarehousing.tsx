@@ -38,7 +38,7 @@ export default function RawMaterialStock(): React.ReactNode {
             dataIndex: 'receivingBatch',
             width: 120,
             render: (text: any, item: any, index: any) => {
-                return text == 0 ? '待完成' : '已完成'
+                return item.receiveStatus == 0 ? '待完成' : '已完成'
             }
         }, {
             title: '最新状态变更时间',

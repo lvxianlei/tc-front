@@ -90,8 +90,8 @@ export default function RawMaterialStock(): React.ReactNode {
                 <Space direction="horizontal" size="small">
                     <span>质检单</span>
                     <span>质保单</span>
-                    <Button type='link' onClick={() => { ReceivingBtn(record) }}>收货</Button>
-                    <Button type='link' onClick={() => { OutReceivingBtn(record) }}>拒收</Button>
+                    {record.receiveStatus == 0 ? <Button type='link' onClick={() => { ReceivingBtn(record) }}>收货</Button> : null}
+                    {record.receiveStatus == 0 ? <Button type='link' onClick={() => { OutReceivingBtn(record) }}>拒收</Button> : null}
                 </Space>
             )
         }
@@ -103,8 +103,8 @@ export default function RawMaterialStock(): React.ReactNode {
             current: current,
             size: pageSize,
             fuzzyQuery: keyword,
-            startStatusUpdateTime: dateString[0],
-            endStatusUpdateTime: dateString[1],
+            startStatusUpdateTime: dateString[0] ? dateString[0] + " 00:00:00" : '',
+            endStatusUpdateTime: dateString[1] ? dateString[1] + " 23:59:59" : '',
             receiveStockId: params.id,
             receiveStatus: status,
         });
@@ -245,17 +245,22 @@ export default function RawMaterialStock(): React.ReactNode {
                             onChange={(val) => { setStatus(val) }}
                         >
                             <Select.Option
-                                value="1"
+                                value=""
+                            >
+                                全部
+                            </Select.Option>
+                            <Select.Option
+                                value="0"
                             >
                                 待收货
                             </Select.Option>
                             <Select.Option
-                                value="2"
+                                value="1"
                             >
                                 已收货
                             </Select.Option>
                             <Select.Option
-                                value="3"
+                                value="2"
                             >
                                 已拒绝
                             </Select.Option>

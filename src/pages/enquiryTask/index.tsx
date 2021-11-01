@@ -65,7 +65,7 @@ export default function EnquiryTask(): React.ReactNode {
         console.log(inquiryId);
         // const abc:any = new FormData()
         // abc.append("inquiryId",122)
-        const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/inquiryTask/finish`, {},{ "Content-Type": "application/x-www-form-urlencoded" })
+        const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/inquiryTask/finish`, {}, { "Content-Type": "application/x-www-form-urlencoded" })
         console.log(result);
     }
 
