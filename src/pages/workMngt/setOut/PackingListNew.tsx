@@ -27,6 +27,7 @@ interface IBundle {
     readonly structureNum?: number;
     readonly structureCount?: number;
     readonly materialSpec?: string;
+    readonly structureId?: string;
 }
 
 interface IPackingList {
@@ -243,7 +244,7 @@ export default function PackingListNew(): React.ReactNode {
     const remove = async (value: Record<string, any>) => {
         // if(stayDistrict.length > 0) {
             const newPackagingData = packagingData.filter((item: IBundle) => {
-                return item.id !== value.id;
+                return item.structureId !== value.structureId;
             })
             setPackagingData(newPackagingData); 
             if(!value.topId) {
@@ -270,7 +271,6 @@ export default function PackingListNew(): React.ReactNode {
     
     const packaging = () => {
         const data: IBundle[] = selectedRows.map((item: IBundle) => {
-            console.log(balesCode)
             return {
                 ...item,
                 balesCode: balesCode,
@@ -283,7 +283,8 @@ export default function PackingListNew(): React.ReactNode {
                 productId: detailData.productId,
                 structureId: item.id,
                 structureCount: item.structureNum,
-                topId: item.id
+                topId: item.id,
+                id: ''
             }
         })
         setPackagingData([ ...data, ...packagingData ]);
@@ -360,14 +361,6 @@ export default function PackingListNew(): React.ReactNode {
         <DetailContent operation={ [
             <Space direction="horizontal" size="small" >
                 <Button type="primary" onClick={ () => {
-                    if(!location.state) {
-                        packagingData = packagingData.map((res: IBundle) => {
-                            return {
-                                ...res,
-                                id: ''
-                            }
-                        })
-                    }    
                     if(balesCode) {
                         const value = {
                             balesCode: balesCode,
