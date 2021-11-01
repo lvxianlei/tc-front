@@ -114,7 +114,7 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                 weldingDetailedStructureList.forEach((items: IComponentList, index: number) => {
                     newData = newData.map((item: IComponentList) => {
                         if(item.id === items.structureId) {
-                            const num = this.state.settingData && this.state.settingData[index]?.singleNum || 0;
+                            const num = (this.state.settingData && this.state.settingData[index]?.singleNum) || 0;
                             return {
                                 ...item,
                                 basicsPartNumNow: items.id ? Number(item.basicsPartNumNow || 0) - Number(items.singleNum || 0) + num : Number(item.basicsPartNumNow || 0) - Number(items.singleNum || 0),
@@ -299,7 +299,7 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                         console.log(record.basicsPartNumNow)
                     } } 
                     bordered={false} 
-                    max={ record.basicsPartNumNow ? Number(record.basicsPartNumNow || 0) : Number(record.surplusNum || 0) + Number(this.state.settingData && this.state.settingData[index]?.singleNum || 0) }
+                    max={ record.basicsPartNumNow ? Number(record.basicsPartNumNow || 0) : Number(record.surplusNum || 0) + Number((this.state.settingData && this.state.settingData[index]?.singleNum) || 0) }
                     min={ 1 }
                 />
             )  

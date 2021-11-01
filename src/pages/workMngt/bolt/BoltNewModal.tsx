@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Modal, Input, FormProps, Select } from 'antd';
 import RequestUtil from '../../../utils/RequestUtil';
-import styles from './AssessmentTask.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGroup } from '../../../components/AbstractFillableComponent';
@@ -18,9 +17,6 @@ export interface BoltNewModalState extends IAbstractFillableComponentState {
     readonly visible: boolean;
 }
 class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, BoltNewModalState> {
-    constructor(props: IBoltNewModalRouteProps) {
-        super(props)
-    }
 
     public state: BoltNewModalState = {
         visible: false

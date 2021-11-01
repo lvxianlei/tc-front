@@ -425,12 +425,12 @@ export default function PackingListNew(): React.ReactNode {
                     </Col>
                     <Col offset={ 1 } span={ 3 }>
                         <Form.Item name="minLength" label="长度范围" className={ styles.rightPadding5 }>
-                           <Input placeholder="请输入" />
+                           <Input type="number" placeholder="请输入" />
                         </Form.Item>
                     </Col>
                     <Col span={ 2 }>
                         <Form.Item name="maxLength">
-                           <Input placeholder="请输入" />
+                           <Input type="number" placeholder="请输入" />
                         </Form.Item>
                     </Col>
                     <Col offset={ 1 } span={ 5 }>
