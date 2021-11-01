@@ -153,7 +153,7 @@ export default function SetOutList(): React.ReactNode {
                                         }],
                                         productCategoryId: record.id
                                     }).then(res => {
-                                        message.success('上传成功')
+                                        message.success('上传成功');
                                         setRefresh(!refresh);
                                     })
                                 }
