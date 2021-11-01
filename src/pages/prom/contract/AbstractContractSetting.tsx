@@ -59,6 +59,10 @@ export interface ProjectContractInfo extends IContractInfo {
     readonly contractTotalWeight: number;
     readonly contractPrice: number;
     readonly isIta: 0 | 1 | 2;
+    readonly purchaseOrderNumber: string;
+    readonly ecpContractNumber: string;
+    readonly payCompanyName: string;
+    readonly payType: string;
 }
 
 export interface ICustomerInfoDto {
@@ -206,6 +210,20 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         }
     }
 
+    public onPayCompanyNameSelect = (selectedRows: DataType[]): void => {
+        const contract: IContractInfo | undefined = this.state.contract;
+        if (selectedRows && selectedRows.length > 0) {
+            this.setState(({
+                contract: {
+                    ...(contract || {}),
+                    payCompanyName: selectedRows[0].name,
+                    payCompanyId: selectedRows[0].id
+                }
+            }) as any)
+            this.getForm()?.setFieldsValue({ payCompanyName: selectedRows[0].name });
+        }
+    }
+
     public onCustomerCompanySelect = (selectedRows: DataType[]): void => {
         const contract: IContractInfo | undefined = this.state.contract;
         if (selectedRows && selectedRows.length > 0) {
@@ -343,6 +361,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     public contractAmountBlur(): void {
         let planValue: IPaymentPlanDto[] = this.getForm()?.getFieldsValue(true).paymentPlanDtos;
         const contractAmount: number = this.getForm()?.getFieldValue("contractAmount");
+        const contractTotalWeight: number = this.getForm()?.getFieldValue("contractTotalWeight");
         planValue.map<void>((item: IPaymentPlanDto, index: number): void => {
             if (this.getForm()?.getFieldValue("contractAmount") && planValue[index] && planValue[index].returnedRate !== undefined) {
                 planValue[index] = {
@@ -378,7 +397,17 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
 
         })
         this.getForm()?.setFieldsValue({
-            planValue: planValue
+            planValue: planValue,
+            contractPrice: parseFloat((contractAmount / contractTotalWeight).toFixed(2))
+        })
+    }
+
+    public onContractTotalWeightChange() {
+        const contractAmount: number = this.getForm()?.getFieldValue("contractAmount");
+        const contractTotalWeight: number = this.getForm()?.getFieldValue("contractTotalWeight");
+
+        this.getForm()?.setFieldsValue({
+            contractPrice: parseFloat((contractAmount / contractTotalWeight).toFixed(2))
         })
     }
 

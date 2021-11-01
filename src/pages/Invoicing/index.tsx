@@ -8,7 +8,7 @@ import RequestUtil from '../../utils/RequestUtil'
 export default function Invoicing() {
     const history = useHistory()
 
-    const { loading, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/invoicing?id=${id}`)
             resole(result)
@@ -54,8 +54,8 @@ export default function Invoicing() {
                 render: (_: any, record: any) => {
                     return <>
                         <Button type="link" onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</Button>
-                        <Button type="link" onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>
-                        <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>
+                        {[0, 3].includes(record.state) && <Button type="link" onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>}
+                        {[0].includes(record.state) && <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>}
                     </>
                 }
             }]}
@@ -70,7 +70,6 @@ export default function Invoicing() {
                 name: 'isOpen',
                 label: '是否已全开',
                 children: <Select style={{ width: 200 }}>
-                    <Select.Option value="1">预开</Select.Option>
                     <Select.Option value="2">发票已开全</Select.Option>
                     <Select.Option value="3">发票未开全</Select.Option>
                 </Select>

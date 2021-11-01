@@ -38,4 +38,5 @@ export interface IContract {
     readonly productTypeName?: string;
     readonly voltageGradeName?: string;
     readonly isRelateOrder?: number;
+    readonly payCompanyName?: string;
 }

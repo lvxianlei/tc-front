@@ -3,6 +3,7 @@ import { Button, Modal } from 'antd';
 import { DetailContent, CommonTable } from '../common';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
+import { downloadTemplate } from '../workMngt/setOut/downloadTemplate';
 
 export interface DeliverablesListingProps {}
 export interface IDeliverablesListingRouteProps extends RouteComponentProps<DeliverablesListingProps>, WithTranslation {
@@ -13,34 +14,6 @@ export interface DeliverablesListingState {
     readonly visible: boolean;
     readonly description?: string;
 }
-
-const tableColumns = [
-    { 
-        key: 'index', 
-        title: '序号', 
-        dataIndex: 'index', 
-        width: 50, 
-        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
-    {
-        key: 'name',
-        title: '交付物名称',
-        dataIndex: 'name', 
-    },
-    {  
-        key: 'use', 
-        title: '用途', 
-        dataIndex: 'use' 
-    }, 
-    {
-        key: 'operation',
-        title: '操作',
-        dataIndex: 'operation',
-        width: 120,
-        render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-            <Button type="link">下载</Button>
-        )
-    }
-]
 
 class DeliverablesListing extends React.Component<IDeliverablesListingRouteProps, DeliverablesListingState> {
     
@@ -65,13 +38,51 @@ class DeliverablesListing extends React.Component<IDeliverablesListingRouteProps
      * @returns render 
      */
     public render(): React.ReactNode {
+        const tableColumns = [
+            { 
+                key: 'index', 
+                title: '序号', 
+                dataIndex: 'index', 
+                width: 50, 
+                render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
+            {
+                key: 'name',
+                title: '交付物名称',
+                dataIndex: 'name', 
+            },
+            {  
+                key: 'use', 
+                title: '用途', 
+                dataIndex: 'use' 
+            }, 
+            {
+                key: 'operation',
+                title: '操作',
+                dataIndex: 'operation',
+                width: 120,
+                render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                    <Button type="link" onClick={ () => { 
+                        if(record.requestType === 'zip') {
+                            downloadTemplate(record.path + this.props.id , record.use, {}, true)
+                        } else {
+                            downloadTemplate(record.path + this.props.id , record.use)
+                        } 
+                    } }>下载</Button>
+                )
+            }
+        ]
+
         const data = [{
-            name: '提料塔型构件明细汇总.zip',
-            use: '提料塔型构件明细汇总'
+            name: '提料塔型构件明细汇总.xls',
+            use: '提料塔型构件明细汇总',
+            path: '/tower-science/productCategory/material/productCategoryStructure/download/excel?productCategoryId='
         }, {
             name: '塔型图纸汇总.zip',
-            use: '塔型图纸汇总'
+            use: '塔型图纸汇总',
+            requestType: 'zip',
+            path: '/tower-science/productCategory/lofting/draw/summary?productCategoryId=',
         }]
+
         return <>
             <Button type="link" onClick={ () => this.modalShow() }>附件</Button>
             <Modal

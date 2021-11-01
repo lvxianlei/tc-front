@@ -3,7 +3,7 @@ import { Table } from "antd";
 import { withRouter } from "react-router-dom";
 import { ContractSummary } from "../../prom/contract/ContractSummary";
 import RequestUtil from "../../../utils/RequestUtil";
-
+import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions'
 const isIta: any = {
   0: "无",
   1: "原件",
@@ -131,7 +131,7 @@ class ManagementContractSummary extends ContractSummary {
         [
           {
             label: "所属区域",
-            value: this.state.region?.find((reItem: any) => reItem.code === baseInfo?.region)?.name,
+            value: this.state.region?.find((reItem: any) => reItem.code === baseInfo?.region)?.name || baseInfo?.region,
           },
           {
             label: "销售员",
@@ -187,6 +187,18 @@ class ManagementContractSummary extends ContractSummary {
       {
         title: "订单工程名称",
         dataIndex: "orderProjectName",
+      },
+      {
+        key: "productType",
+        title: "产品类型",
+        dataIndex: "productType",
+        render: (text: any) => <>{productTypeOptions?.find((item: any) => text === item.id)?.name}</>
+      },
+      {
+        key: "voltageGrade",
+        title: "电压等级",
+        dataIndex: "voltageGrade",
+        render: (text: any) => <>{voltageGradeOptions?.find((item: any) => text === item.id)?.name}</>
       },
       {
         title: "含税金额(元)",

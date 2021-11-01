@@ -1,11 +1,11 @@
 import React, { useState } from "react"
-import { Button, Spin, Form, Modal } from 'antd'
+import { Button, Spin, Form, Modal, message } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, EditTable, PopTableContent } from '../common'
+import { DetailContent, DetailTitle, BaseInfo, EditTable, PopTableContent, formatData } from '../common'
 import { promotionalTourism, contractInformation } from "./CollectionData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
-type ReturnType = 0 | 1 | -1 | undefined
+type ReturnType = 0 | 1 | -1 | "-1" | undefined
 const contract = {
     "title": "相关合同",
     "dataIndex": "contractId",
@@ -57,7 +57,7 @@ const contract = {
 export default function Edit() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
-    const [returnType, setReturnType] = useState<ReturnType>(-1)
+    const [returnType, setReturnType] = useState<ReturnType | string>(-1)
     const [popContent, setPopContent] = useState<{ id: string, value: string, records: any }>({ value: "", id: "", records: {} })
     const [visible, setVisible] = useState<boolean>(false)
     const [baseForm] = Form.useForm()
@@ -65,7 +65,7 @@ export default function Edit() {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/backMoney/${params.id}`)
-            baseForm.setFieldsValue(result)
+            baseForm.setFieldsValue(formatData(promotionalTourism, result))
             contractInfosForm.setFieldsValue(result.backMoneyVOList)
             setReturnType(result.returnType)
             resole(result)
@@ -85,7 +85,18 @@ export default function Edit() {
     const handleSubmit = async () => {
         const baseInfo = await baseForm.validateFields()
         const confirmBackMoneyInfoDTOList = await contractInfosForm.validateFields()
-        await saveRun({ ...baseInfo, confirmBackMoneyInfoDTOList: confirmBackMoneyInfoDTOList.submit })
+        const result = await saveRun({
+            ...baseInfo,
+            payNum: returnType === 0 ? baseInfo.payNum.records?.[0].payNumber || data?.payNum || "" : "",
+            confirmBackMoneyInfoDTOList: confirmBackMoneyInfoDTOList.submit.map((item: any) => ({
+                ...item,
+                paymentPlanId: item.paymentPlanId.id || item.paymentPlanId || ""
+            }))
+        })
+        if (result) {
+            message.success("保存成功")
+            history.go(-1)
+        }
     }
 
     const handleBaseInfoChange = (fields: any) => {
@@ -100,8 +111,23 @@ export default function Edit() {
     }
     const handleCancel = () => setVisible(false)
     const handleChange = (event: any) => setPopContent({ id: event[0].id, value: event[0][contract.value || "name" || "id"], records: event[0] })
+
+    const handleContractInfosChange = (fields: any, allFields: any) => {
+        if (fields.submit.length - 1 >= 0) {
+            const currentRowData = fields.submit[fields.submit.length - 1]
+            if (currentRowData.paymentPlanId) {
+                const newFields = allFields.submit.map((item: any, index: number) => index === fields.submit.length - 1 ? ({
+                    ...item,
+                    returnedAmount: item.paymentPlanId.records[0].returnedAmount || "0",
+                    paymentReceived: item.paymentPlanId.records[0].paymentReceived || "0",
+                    noPaymentReceived: parseFloat(item.paymentPlanId.records[0].returnedAmount || "0") - parseFloat(item.paymentPlanId.records[0].paymentReceived || "0")
+                }) : item)
+                contractInfosForm.setFieldsValue({ submit: newFields })
+            }
+        }
+    }
     return <DetailContent operation={[
-        <Button key="save" type="primary" style={{ marginRight: 16 }} onClick={handleSubmit}>确认回款信息</Button>,
+        <Button key="save" type="primary" loading={saveLoading} style={{ marginRight: 16 }} onClick={handleSubmit}>确认回款信息</Button>,
         <Button key="cancel" onClick={() => history.go(-1)}>返回</Button>
     ]}>
         <Modal width={1011} title="选择合同" destroyOnClose visible={visible} onOk={handleOk} onCancel={handleCancel}>
@@ -112,12 +138,21 @@ export default function Edit() {
             <BaseInfo
                 onChange={handleBaseInfoChange}
                 form={baseForm}
-                columns={promotionalTourism.filter((item: any) => returnType === 0 ? true : item.dataIndex !== "payNum")} dataSource={data || {}}
+                columns={promotionalTourism.filter((item: any) => returnType === 0 ? true : item.dataIndex !== "payNum")}
+                dataSource={data || {}}
                 edit
             />
             {returnType === 1 && <>
-                <DetailTitle title="合同信息" operation={[<Button type="primary" ghost onClick={() => setVisible(true)}>选择合同</Button>]} />
-                <EditTable form={contractInfosForm} haveNewButton={false} columns={contractInformation} dataSource={[]} />
+                <DetailTitle title="合同信息" operation={[<Button key="choose" type="primary" ghost onClick={() => setVisible(true)}>选择合同</Button>]} />
+                <EditTable
+                    form={contractInfosForm}
+                    haveNewButton={false}
+                    onChange={handleContractInfosChange}
+                    columns={contractInformation.map((item: any) => item.dataIndex === "paymentPlanId" ? ({
+                        ...item,
+                        path: item.path + popContent.id
+                    }) : item)}
+                    dataSource={[]} />
             </>}
         </Spin>
     </DetailContent>

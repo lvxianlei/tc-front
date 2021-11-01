@@ -8,7 +8,7 @@ import { ITabItem } from "../../../components/ITabableComponent";
 import RequestUtil from "../../../utils/RequestUtil";
 import { IResponseData } from "../../common/Page";
 import { SaleOrder, ITableDataItem } from "../../prom/order/SaleOrder";
-
+import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
 /**
  * 项目管理-订单管理
  */
@@ -88,6 +88,18 @@ class ManagementOrder extends SaleOrder {
         key: "signCustomerName",
         title: "合同签订单位",
         dataIndex: "signCustomerName",
+      },
+      {
+        key: "productType",
+        title: "产品类型",
+        dataIndex: "productType",
+        render: (text: any) => <>{productTypeOptions?.find((item: any) => text === item.id)?.name}</>
+      },
+      {
+        key: "voltageGrade",
+        title: "电压等级",
+        dataIndex: "voltageGrade",
+        render: (text: any) => <>{voltageGradeOptions?.find((item: any) => text === item.id)?.name}</>
       },
       {
         key: "taxAmount",

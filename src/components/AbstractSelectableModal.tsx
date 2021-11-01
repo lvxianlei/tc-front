@@ -41,6 +41,7 @@ export interface DataType {
     readonly returnedTime?: string;
     readonly period?: number;
     readonly description?: string;
+    readonly payCompanyName?: string;
 }
 
 export interface IResponseData {

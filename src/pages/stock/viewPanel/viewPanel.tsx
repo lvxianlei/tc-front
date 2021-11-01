@@ -1,34 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState,  } from 'react'
+import React, { useEffect, useState, } from 'react'
 import { Button, Table, Pagination, TableColumnProps, Row, Col, Select, } from 'antd';
 import RequestUtil from '../../../utils/RequestUtil';
 import ApplicationContext from "../../../configuration/ApplicationContext"
+import { Key } from 'rc-select/lib/interface/generator';
+import { useHistory } from 'react-router';
 const { Option } = Select;
-// interface SelectInfo {
-//     condition: string,
-//     materialTexture: string,
-//     productName: string,
-//     spec: string,
-//     standard: string,
-// }
 const ViewPanel = (): React.ReactNode => {
-    // const history = useHistory()
-    let [columnsData, setColumnsData] = useState<any[]>([]);
-    // let [total, setTotal] = useState(0);
-    let [size, setSize] = useState(10);
-    let [current, setCurrent] = useState(1);
-    let [condition, setCondition] = useState('');
-    let [materialTexture, setMaterialTexture] = useState('');
-    let [productName, setProductName] = useState('');
-    let [spec, setSpec] = useState('');
-    let [standard, setStandard] = useState('');
-    // let [selectInfo, setSelectInfo] = useState<any>({
-    //     condition: '',
-    //     materialTexture: '',
-    //     productName: '',
-    //     spec: '',
-    //     standard: '',
-    // });
+    const history = useHistory()
     const columns: TableColumnProps<object>[] = [
         {
             key: 'index',
@@ -85,33 +64,49 @@ const ViewPanel = (): React.ReactNode => {
             dataIndex: 'safeWeight'
         },
         {
-            key: 'typeName',
+            key: 'alarmWeight',
             title: '告警库存（吨）',
-            dataIndex: 'typeName'
+            dataIndex: 'alarmWeight'
         },
         {
-            key: 'currentProjectStage',
+            key: 'typeName',
             title: '库存状态',
-            dataIndex: 'currentProjectStage',
+            dataIndex: 'typeName',
             render: (text, item: any, index) => {
                 return (
                     <div>
                         {
                             item.type === 0 ?
-                                <span style={{ padding: '5px 8px', backgroundColor: 'yello', color: '#fff' }}>告警库存</span> :
+                                <span style={{ padding: '5px 8px', backgroundColor: 'yellow' , color: '#000' }}>告警库存</span> :
                                 item.type === 1 ?
                                     <span style={{ padding: '5px 8px', backgroundColor: 'red', color: '#fff' }}>可用库存</span> :
-                                    <span></span>
+                                    <span style={{ padding: '5px 8px', backgroundColor: '#ccc', color: '#FF8C00' }}>安全库存</span>
                         }
                     </div>
                 )
             }
         },
     ]
+    let [columnsData, setColumnsData] = useState<any[]>([]);
+    let [selects, setSelects] = useState<any>({
+        materialNames: [],
+        materialTextures: [],
+        specs: [],
+    });
+    // let [total, setTotal] = useState(0);
+    let [size, setSize] = useState(10);
+    let [current, setCurrent] = useState(1);
+    let [condition, setCondition] = useState('');
+    let [materialTexture, setMaterialTexture] = useState('');
+    let [productName, setProductName] = useState('');
+    let [spec, setSpec] = useState('');
+    let [standard, setStandard] = useState('');
     useEffect(() => {
-        console.log('11111')
         getColumnsData()
     }, [condition, materialTexture, productName, spec, standard, current, size,]);
+    useEffect(() => {
+        getSelectDetail()
+    }, []);
     const getColumnsData = async () => {
         const data: any = await RequestUtil.get('/tower-storage/safetyStock/board', {
             current,
@@ -125,13 +120,20 @@ const ViewPanel = (): React.ReactNode => {
         // setTotal(data.data)
         setColumnsData(data)
     }
-    // 筛选条件变化
-    // const changeSelectInfo = (value: string, key: string) => {
-    //     selectInfo[key] = value;
-    //     selectInfo = {...selectInfo}
-    //     setSelectInfo(selectInfo)
-    //     console.log(selectInfo)
-    // }
+    // 获取选择框信息
+    const getSelectDetail = async () => {
+        const data: any = await RequestUtil.get('/tower-system/material/selectDetail')
+        setSelects(data)
+    }
+    // 重置
+    const resetting = () => {
+        setCurrent(1)
+        setCondition('')
+        setMaterialTexture('')
+        setProductName('')
+        setSpec('')
+        setStandard('')
+    }
     return (
         <div className='public_page'>
             <Row className='search_content'>
@@ -150,13 +152,11 @@ const ViewPanel = (): React.ReactNode => {
                             setMaterialTexture(value)
                         }}
                     >
+                        <Option value={''}>全部</Option>
                         {
-                            (ApplicationContext.get().dictionaryOption as any)["111"].map((item: { id: string, name: string }) => ({
-                                value: item.id,
-                                label: item.name
-                            })).map(() => {
+                            selects.materialNames.map((item: string) => {
                                 return (
-                                    <Option value={''}>全部</Option>
+                                    <Option value={item} key={item}>{item}</Option>
                                 )
                             })
                         }
@@ -178,8 +178,16 @@ const ViewPanel = (): React.ReactNode => {
                         }}
                     >
                         <Option value={''}>全部</Option>
-                        <Option value={0}>未生成</Option>
-                        <Option value={1}>已生成</Option>
+                        {
+                            (ApplicationContext.get().dictionaryOption as any)["138"].map((item: { id: string, name: string }) => ({
+                                value: item.id,
+                                label: item.name
+                            })).map((t: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }, i: any) => {
+                                return (
+                                    <Option value={t.value}>{t.label}</Option>
+                                )
+                            })
+                        }
                     </Select>
                 </Col>
                 <Col
@@ -198,8 +206,13 @@ const ViewPanel = (): React.ReactNode => {
                         }}
                     >
                         <Option value={''}>全部</Option>
-                        <Option value={0}>未生成</Option>
-                        <Option value={1}>已生成</Option>
+                        {
+                            selects.materialTextures.map((item: string) => {
+                                return (
+                                    <Option value={item} key={item}>{item}</Option>
+                                )
+                            })
+                        }
                     </Select>
                 </Col>
                 <Col
@@ -218,8 +231,13 @@ const ViewPanel = (): React.ReactNode => {
                         }}
                     >
                         <Option value={''}>全部</Option>
-                        <Option value={0}>未生成</Option>
-                        <Option value={1}>已生成</Option>
+                        {
+                            selects.specs.map((item: string) => {
+                                return (
+                                    <Option value={item} key={item}>{item}</Option>
+                                )
+                            })
+                        }
                     </Select>
                 </Col>
                 <Col
@@ -248,6 +266,9 @@ const ViewPanel = (): React.ReactNode => {
                 >
                     <Button
                         className='btn_item'
+                        onClick={() => {
+                            resetting()
+                        }}
                     >重置</Button>
                 </Col>
             </Row>
@@ -262,6 +283,9 @@ const ViewPanel = (): React.ReactNode => {
                     <div className='func_right'>
                         <Button
                             className='func_right_item'
+                            onClick={() => {
+                                history.go(-1)
+                            }}
                         >返回上一级</Button>
                     </div>
                 </div>

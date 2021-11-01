@@ -49,7 +49,7 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
         try {
             const productType: any = await RequestUtil.get(`/tower-market/askInfo/getAskProductByProId?projectId=${id}`)
             askForm.setFieldsValue({ submit: productType.map((item: any) => ({ productType: `${item.voltage}${item.productName}` })) })
-            baseForm.setFieldsValue({ productType: askData?.map((ask: any) => `${ask.voltage}${ask.productName}`).join(",") })
+            baseForm.setFieldsValue({ productType: productType?.map((ask: any) => `${ask.voltage}${ask.productName}`).join(",") })
             resole(productType)
         } catch (error) {
             reject(error)

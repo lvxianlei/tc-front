@@ -54,14 +54,13 @@ const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref
         const lsdj: number = parseFloat(allfields.lsdj || 0)
         const logistics_price: number = parseFloat(allfields.logistics_price || 0)
         const yc: number = ycl.reduce((result: number, item: any) => {
-            const aa: string = (parseFloat(allValue[item.dj]) * parseFloat(allValue[item.bl])).toFixed(2)
+            const aa: string = (parseFloat(allValue[item.dj]) * parseFloat(allValue[item.bl]) * 0.01).toFixed(2)
             return result + parseFloat(aa)
         }, 0)
         const flsh: number = parseFloat((gcxh * (yc - fljj)).toFixed(2))
         const bhls: number = parseFloat((yc + flsh + dxcb + jgf + gsfs).toFixed(2))
         const lscb: number = parseFloat((parseFloat((lsdj - bhls).toFixed(2)) * lszb).toFixed(2))
         const cc: number = parseFloat((yc + logistics_price).toFixed(2))
-        console.log(cc, yc, flsh, bhls, lscb)
         formRef.setFieldsValue({ submit: [{ ...allValue, cc, yc, flsh, bhls, lscb }] })
     }
     return <EditTable
@@ -112,7 +111,8 @@ export default function CostEdit() {
             const askInfo: any = await RequestUtil.get(`/tower-market/askInfo?projectId=${params.projectId}`)
             setAskProductDtos(askInfo.productArr.map((item: any, index: number) => ({
                 ...item,
-                data: [({ ...item.data, id: index })]
+                id: index,
+                data: [({ ...item.data })]
             })))
             baseInfo.setFieldsValue(askInfo.askInfoVo)
             resole(askInfo)
@@ -128,9 +128,9 @@ export default function CostEdit() {
             result.head.forEach((item: any) => item.type !== "select" && (initValues[item.dataIndex] = (result.data[item.dataIndex] && result.data[item.dataIndex] !== -1) ? result.data[item.dataIndex] : 0))
             setAskProductDtos([...askProductDtos, {
                 ...result,
+                id: askProductDtos.length,
                 data: [{
                     ...initValues,
-                    id: result.length,
                     voltage,
                     productName
                 }]
@@ -190,7 +190,7 @@ export default function CostEdit() {
         Modal.confirm({
             title: "删除",
             content: "是否确认删除该产品？",
-            onOk: () => setAskProductDtos(askProductDtos.filter((askItem: any) => !(askItem.productName === item.productName && askItem.voltage === item.voltage)))
+            onOk: () => setAskProductDtos(askProductDtos.filter((askItem: any) => !(askItem.productName === item.productName && askItem.voltage === item.voltage && askItem.id === item.id)))
         })
     }
 

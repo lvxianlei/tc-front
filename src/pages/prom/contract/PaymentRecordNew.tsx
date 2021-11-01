@@ -47,7 +47,8 @@ export class PaymentRecordNew extends AbstractPaymentRecordSetting<IPaymentRecor
         })
     }
     protected getReturnPath(): string {
-        return `/project/management/contract/${(this.props.match.params as any).projectId}`;
+        this.props.history.goBack()
+        return "";
     }
     /**
      * @implements

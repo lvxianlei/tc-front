@@ -140,7 +140,7 @@ export default function Edit() {
         if (fields.backProportion) {
             const ticketMoney = baseInfo.getFieldValue("ticketMoney")
             baseInfo.setFieldsValue({
-                backMoney: (parseFloat(fields.backProportion) * parseFloat(ticketMoney || 0)).toFixed(2)
+                backMoney: (parseFloat(fields.backProportion) * parseFloat(ticketMoney || "0") * 0.01).toFixed(2)
             })
         }
     }
@@ -148,21 +148,22 @@ export default function Edit() {
     const handleEditTableChange = (fields: any, allFields: any) => {
         if (fields.submit.length - 1 >= 0) {
             const currentRowData = fields.submit[fields.submit.length - 1]
-            const backMoney = baseInfo.getFieldValue("backMoney") || 0
+            const ticketMoney = baseInfo.getFieldValue("ticketMoney") || "0"
+            const backProportion = baseInfo.getFieldValue("backProportion") || "0"
             if (currentRowData.weight || currentRowData.moneyCount) {
                 const { weight, moneyCount } = allFields.submit.reduce((result: { weight: string, moneyCount: string }, item: any) => ({
-                    weight: parseFloat(result.weight || "0") + parseFloat(item.weight || 0),
-                    moneyCount: parseFloat(result.moneyCount || "0") + parseFloat(item.moneyCount || 0)
-                }), { weight: 0, moneyCount: 0 })
+                    weight: parseFloat(result.weight || "0") + parseFloat(item.weight || "0"),
+                    moneyCount: parseFloat(result.moneyCount || "0") + parseFloat(item.moneyCount || "0")
+                }), { weight: "0", moneyCount: "0" })
                 const newFields = allFields.submit.map((item: any, index: number) => index === fields.submit.length - 1 ? ({
                     ...item,
-                    money: (item.moneyCount / item.weight).toFixed(2)
+                    money: ["0", 0].includes(item.weight) || !item.weight ? "0" : (item.moneyCount / item.weight).toFixed(2)
                 }) : item)
                 billingForm.setFieldsValue({ submit: newFields })
                 baseInfo.setFieldsValue({
                     ticketWeight: weight,
                     ticketMoney: moneyCount,
-                    backMoney: (parseFloat(backMoney === -1 ? 0 : backMoney) * parseFloat(moneyCount || 0)).toFixed(2)
+                    backMoney: (parseFloat(backProportion) * parseFloat(ticketMoney || "0") * 0.01).toFixed(2)
                 })
             }
         } else {

@@ -128,21 +128,6 @@ export default function Management(): React.ReactNode {
             )
         }]
 
-    const handleConfirmDelete = () => {
-        Modal.confirm({
-            title: '确认提示',
-            content: '确定删除对应项目信息？',
-            okText: '确定',
-            cancelText: '取消',
-            onOk: () => {
-
-            },
-            onCancel: () => {
-
-            }
-        })
-    }
-
     const onFilterSubmit = (value: any) => {
         if (value.startBidBuyEndTime) {
             const formatDate = value.startBidBuyEndTime.map((item: any) => item.format("YYYY-MM-DD"))
