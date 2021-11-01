@@ -145,6 +145,7 @@ class UploadModal extends React.Component<IUploadModalRouteProps, UploadModalSta
                                             }],
                                             ...this.props.requestData
                                         }).then(res => {
+                                            message.success('上传成功');
                                             this.getDetail();
                                         })
                                     }
