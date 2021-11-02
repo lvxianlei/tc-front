@@ -152,7 +152,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
             <DetailContent>
                 <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
                     {/* <Button type="primary" ghost>导出</Button> */}
-                    <Button type="primary" onClick={ () => downloadTemplate('/tower-science/welding/exportTemplate', '模板') } ghost>模板下载</Button>
+                    {/* <Button type="primary" onClick={ () => downloadTemplate('/tower-science/welding/exportTemplate', '模板') } ghost>模板下载</Button> */}
                     <Button type="primary"  onClick={ () => RequestUtil.post<IResponseData>(`/tower-science/welding/submitForVerification`, { weldingId: params.id }).then(res => {
                         history.goBack();
                     }) } >完成组焊清单</Button>
