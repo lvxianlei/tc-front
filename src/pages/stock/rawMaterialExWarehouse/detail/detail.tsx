@@ -60,7 +60,7 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 120,
             render: (text: any) => text == 0 ? '待出库' : text == 1 ? '已出库' : '缺料中'
         }, {
-            title: '最新状态变更',
+            title: '最新状态变更时间',
             dataIndex: 'updateTime',
             width: 160,
         }, {
@@ -106,6 +106,26 @@ export default function RawMaterialStock(): React.ReactNode {
         }, {
             title: '出库人',
             dataIndex: 'outStockUserName',
+            width: 120,
+        }, {
+            title: '出库时间',
+            dataIndex: 'updatetime',
+            width: 140,
+        }, {
+            title: '仓库',
+            dataIndex: 'warehouseName',
+            width: 120,
+        }, {
+            title: '库区',
+            dataIndex: 'reservoirName',
+            width: 120,
+        }, {
+            title: '库位',
+            dataIndex: 'locatorName',
+            width: 120,
+        }, {
+            title: '备注',
+            dataIndex: 'remark',
             width: 120,
         },
         {
@@ -523,6 +543,7 @@ export default function RawMaterialStock(): React.ReactNode {
         setKeyword('')
         setPersonnelId('')
         setDepartmentId('')
+        setuserList([]);
     }
     // 详情弹框取消
     const onDetailCancel = () => {
@@ -585,7 +606,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={status ? status : '请选择'}
+                            value={status ? status : ''}
                             onChange={(val) => { setStatus(val) }}
                         >
                             <Select.Option
@@ -618,7 +639,7 @@ export default function RawMaterialStock(): React.ReactNode {
                             className="select"
                             style={{ width: "100px" }}
                             value={departmentId ? departmentId : '请选择'}
-                            onChange={(val) => { setDepartmentId(val); getUser(departmentId) }}
+                            onChange={(val) => { setDepartmentId(val); setPersonnelId(''); setuserList([]); getUser(departmentId) }}
                         >
                             {
                                 departmentList.map((item, index) => {

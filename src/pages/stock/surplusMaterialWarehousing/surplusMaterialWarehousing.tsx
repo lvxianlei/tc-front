@@ -64,7 +64,7 @@ export default function RawMaterialStock(): React.ReactNode {
             dataIndex: 'receiveStatus',
             width: 120,
             render: (text: any, item: any, index: any) => {
-                return <span>{text == 0 ? '待完成' : '已完成'}</span>
+                return <span>{item.receiveStatus == 0 ? '待完成' : '已完成'}</span>
             }
         }, {
             title: '最新状态变更时间',
@@ -80,7 +80,7 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 120,
         }, {
             title: '应收余料长度',
-            dataIndex: 'excessStockNumber',
+            dataIndex: 'length',
             width: 120,
         }, {
             title: '实收余料长度',
@@ -98,7 +98,7 @@ export default function RawMaterialStock(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     {record.receiveStatus == 0 ? <Button type='link' onClick={() => { ReceivingBtn(record) }}>入库</Button> : null}
-                    <Button type='link' onClick={() => { getDetail(record.id) }}>详情</Button>
+                    {record.receiveStatus == 0 ? <Button type='link' onClick={() => { getDetail(record.id) }}>详情</Button> : null}
                 </Space>
             )
         }
