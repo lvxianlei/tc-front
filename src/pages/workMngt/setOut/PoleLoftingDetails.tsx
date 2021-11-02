@@ -227,6 +227,9 @@ export default function PoleLoftingDetails(): React.ReactNode {
             {/* <Button type="primary" ghost>导出</Button> */}
             <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
         </Space>}
+        tableProps={{
+            pagination: false
+        }}
         searchFormItems={ [] }
     />
 }
