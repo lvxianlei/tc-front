@@ -367,7 +367,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                                 </Select>
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="校对人"  span={ 3 }>
+                                        <Descriptions.Item label="校核人"  span={ 3 }>
                                             <Form.Item name={["appointedList", index, "materialCheckLeaderDepartment"]}
                                                 rules={[{
                                                     required: true,

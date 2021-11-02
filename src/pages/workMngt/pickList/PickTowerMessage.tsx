@@ -81,7 +81,7 @@ export default function PickTowerMessage(): React.ReactNode {
         },
         {
             key: 'materialCheckLeaderName',
-            title: '校对人',
+            title: '校核人',
             width: 100,
             dataIndex: 'materialCheckLeaderName'
         },
