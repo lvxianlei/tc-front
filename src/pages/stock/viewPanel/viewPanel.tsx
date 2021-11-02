@@ -75,10 +75,10 @@ const ViewPanel = (): React.ReactNode => {
                     <div>
                         {
                             item.type === 0 ?
-                                <span style={{ padding: '5px 8px', backgroundColor: 'red', color: '#000' }}>正常</span> :
+                                <span style={{ padding: '5px 8px', color: '#000' }}>正常</span> :
                                 item.type === 1 ?
-                                    <span style={{ padding: '5px 8px', backgroundColor: '#ccc', color: '#fff' }}>提醒</span> :
-                                    <span style={{ padding: '5px 8px', backgroundColor: 'yellow', color: '#FF8C00' }}>告警</span>
+                                    <span style={{ padding: '5px 8px', backgroundColor: 'yellow', color: '#fff' }}>提醒</span> :
+                                    <span style={{ padding: '5px 8px', backgroundColor: 'red', color: '#FF8C00' }}>告警</span>
                         }
                     </div>
                 )
