@@ -388,7 +388,7 @@
                                 "authority": "approvalm"
                             },
                             {
-                                "label": "收获列表",
+                                "label": "收货列表",
                                 "path": "/workMngt/receivingList",
                                 "authority": "approvalm"
                             },

@@ -43,7 +43,7 @@ export default function Invoicing() {
     }
 
     return <Page
-        path="/tower-market/invoicing"
+        path="/tower-supply/componentDiff"
         columns={[
             ...baseInfoList,
             {

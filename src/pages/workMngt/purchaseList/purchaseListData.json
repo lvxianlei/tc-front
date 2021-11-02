@@ -42,76 +42,91 @@
         },
         {
             "title": "塔型采购状态",
+            "dataIndex": "purchaseTaskStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "lable": "待完成",
+                    "value": 1
+                },
+                {
+                    "lable": "待接收",
+                    "value": 2
+                },
+                {
+                    "lable": "已完成",
+                    "value": 3
+                }
+            ]
+        },
+        {
+            "title": "最新状态变更时间",
             "dataIndex": "purchaseStatusUpdateTime",
             "type": "string"
         }
     ],
-    "GeneratePurchasePlan": [
+    "ListIngredients": [
         {
-            "ListIngredients": [
-                {
-                    "title": "材质",
-                    "dataIndex": "structureTexture",
-                    "type": "string"
-                },
-                {
-                    "title": "标准",
-                    "dataIndex": "materialStandardName",
-                    "type": "string"
-                },
-                {
-                    "title": "规格",
-                    "dataIndex": "structureSpec",
-                    "type": "string"
-                },
-                {
-                    "title": "配料品名",
-                    "dataIndex": "doseName",
-                    "type": "string"
-                },
-                {
-                    "title": "搭配长度",
-                    "dataIndex": "collocationLength",
-                    "type": "number"
-                },
-                {
-                    "title": "搭配数量",
-                    "dataIndex": "",
-                    "type": ""
-                },
-                {
-                    "title": "重量（吨）",
-                    "dataIndex": "weight",
-                    "type": "number"
-                },
-                {
-                    "title": "备注",
-                    "dataIndex": "",
-                    "type": ""
-                }
-            ],
-            "PlanList": [
-                {
-                    "title": "生产未领料（支）",
-                    "dataIndex": "",
-                    "type": ""
-                },
-                {
-                    "title": "仓库库存（支）",
-                    "dataIndex": "",
-                    "type": ""
-                },
-                {
-                    "title": "在途库存（支）",
-                    "dataIndex": "",
-                    "type": ""
-                },
-                {
-                    "title": "计划采购（本次）",
-                    "dataIndex": "purchasePlanNumber",
-                    "type": "string"
-                }
-            ]
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "string"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandardName",
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string"
+        },
+        {
+            "title": "配料品名",
+            "dataIndex": "doseName",
+            "type": "string"
+        },
+        {
+            "title": "搭配长度",
+            "dataIndex": "collocationLength",
+            "type": "number"
+        },
+        {
+            "title": "搭配数量",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "重量（吨）",
+            "dataIndex": "weight",
+            "type": "number"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "",
+            "type": ""
+        }
+    ],
+    "PlanList": [
+        {
+            "title": "生产未领料（支）",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "仓库库存（支）",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "在途库存（支）",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "计划采购（本次）",
+            "dataIndex": "purchasePlanNumber",
+            "type": "string"
         }
     ],
     "BatchingScheme": [
@@ -131,54 +146,14 @@
             "type": "number"
         },
         {
-            "title": "零件1",
-            "dataIndex": "",
-            "type": ""
-        },
-        {
-            "title": "长度",
-            "dataIndex": "length",
-            "type": "number"
-        },
-        {
-            "title": "零件2",
-            "dataIndex": "",
-            "type": ""
-        },
-        {
-            "title": "长度",
-            "dataIndex": "length",
-            "type": "number"
-        },
-        {
-            "title": "零件3",
-            "dataIndex": "",
-            "type": ""
-        },
-        {
-            "title": "长度",
-            "dataIndex": "length",
-            "type": "number"
-        },
-        {
-            "title": "零件4",
-            "dataIndex": "",
-            "type": ""
-        },
-        {
-            "title": "长度",
-            "dataIndex": "length",
-            "type": "number"
-        },
-        {
             "title": "余料长度",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "plannedSurplusLength",
+            "type": "number"
         },
         {
             "title": "利用率",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "utilizationRate",
+            "type": "string"
         }
     ]
 }

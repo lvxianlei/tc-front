@@ -29,7 +29,7 @@ export default function Invoicing() {
     const handleDelete = (id: string) => {
         Modal.confirm({
             title: "删除",
-            content: "确定删除此开票申请吗？",
+            content: "确定删除此计划吗？",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
                     resove(await deleteRun(id))
@@ -43,7 +43,7 @@ export default function Invoicing() {
     }
 
     return <Page
-        path="/tower-market/invoicing"
+        path="/tower-supply/materialPurchasePlan"
         columns={[
             ...baseInfoList,
             {
@@ -53,42 +53,44 @@ export default function Invoicing() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <Button type="link" onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</Button>
-                        {[0, 3].includes(record.state) && <Button type="link" onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>}
-                        {[0].includes(record.state) && <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>}
+                        <Link to="">关联塔形</Link>
+                        <Button type="link">采购清单</Button>
+                        <Button type="link" onClick={() => handleDelete(record.id)}>取消计划</Button>
                     </>
                 }
             }]}
-        extraOperation={<Button type="primary">导出</Button>}
+        extraOperation={<>
+            <Button type="primary" ghost>导出</Button>
+            <Button type="primary" ghost>创建采购计划</Button>
+        </>}
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {
-                name: 'fuzzyQuery',
-                children: <Input placeholder="编号/内部合同编号/工程名称/票面单位/业务经理" style={{ width: 300 }} />
+                name: 'startPurchaseStatusUpdateTime',
+                label: '最新状态变更时间',
+                children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+            },
+            {
+                name: 'purchaseTaskStatus',
+                label: '计划状态',
+                children: <Select style={{ width: 200 }}>
+                    <Select.Option value="1">待完成</Select.Option>、
+                    <Select.Option value="2">已完成</Select.Option>
+                </Select>
             },
             {
                 name: 'isOpen',
-                label: '是否已全开',
+                label: '采购类型',
                 children: <Select style={{ width: 200 }}>
-                    <Select.Option value="2">发票已开全</Select.Option>
-                    <Select.Option value="3">发票未开全</Select.Option>
+                    <Select.Option value="1">外部</Select.Option>
+                    <Select.Option value="2">内部</Select.Option>
+                    <Select.Option value="3">缺料</Select.Option>
                 </Select>
             },
             {
                 name: 'contractType',
-                label: '开票时合同状态',
-                children: <Select style={{ width: 200 }}>
-                    <Select.Option value="1">不下计划</Select.Option>
-                    <Select.Option value="2">未下计划</Select.Option>
-                    <Select.Option value="3">未下完计划</Select.Option>
-                    <Select.Option value="4">未发完货</Select.Option>
-                    <Select.Option value="5">已发完货</Select.Option>
-                </Select>
-            },
-            {
-                name: 'startLaunchTime',
-                label: '申请日期',
-                children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                label: '采购计划编号',
+                children: <Input />
             }
         ]}
     />

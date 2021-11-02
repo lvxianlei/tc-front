@@ -1,97 +1,82 @@
-import React from "react"
-import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
+import React, { useState } from "react"
+import { Button, Input, DatePicker, Select, Modal } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { Page } from '../../common'
 import { baseInfo } from "./purchaseListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import Overview from "./Overview"
+import PurchasePlan from "./PurchasePlan"
 export default function Invoicing() {
     const history = useHistory()
-
-    const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/invoicing?id=${id}`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
-
+    const [visible, setVisible] = useState<boolean>(false)
+    const [generateVisible, setGenerateVisible] = useState<boolean>(false)
+    const [generateIds, setGenerateIds] = useState<string[]>([])
+    const [chooseId, setChooseId] = useState<string>("")
     const onFilterSubmit = (value: any) => {
-        if (value.startLaunchTime) {
-            const formatDate = value.startLaunchTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startLaunchTime = formatDate[0]
-            value.endLaunchTime = formatDate[1]
+        if (value.startPurchaseStatusUpdateTime) {
+            const formatDate = value.startPurchaseStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startPurchaseStatusUpdateTime = formatDate[0]
+            value.endPurchaseStatusUpdateTime = formatDate[1]
         }
         return value
     }
 
-    const handleDelete = (id: string) => {
-        Modal.confirm({
-            title: "删除",
-            content: "确定删除此开票申请吗？",
-            onOk: () => new Promise(async (resove, reject) => {
-                try {
-                    resove(await deleteRun(id))
-                    message.success("删除成功...")
-                    history.go(0)
-                } catch (error) {
-                    reject(error)
+    return <>
+        <Modal title="配料" visible={visible} width={1011} onCancel={() => setVisible(false)}>
+            <Overview id={chooseId} />
+        </Modal>
+        <Modal title="生成采购计划" visible={generateVisible} width={1011} onCancel={() => setGenerateVisible(false)}>
+            <PurchasePlan ids={generateIds} />
+        </Modal>
+        <Page
+            path="/tower-supply/purchaseTaskTower/purchaser"
+            columns={[
+                ...baseInfo,
+                {
+                    title: "操作",
+                    dataIndex: "opration",
+                    fixed: "right",
+                    width: 100,
+                    render: (_: any, record: any) => <Button type="link" onClick={() => {
+                        setVisible(true)
+                        setChooseId(record.id)
+                    }}>配料方案</Button>
+                }]}
+            extraOperation={<>
+                <Button type="primary" ghost>导出</Button>
+                <Button type="primary" ghost onClick={() => setGenerateVisible(true)}>生成采购计划</Button>
+            </>}
+            onFilterSubmit={onFilterSubmit}
+            searchFormItems={[
+                {
+                    name: 'fuzzyQuery',
+                    children: <Input placeholder="编号/内部合同编号/工程名称/票面单位/业务经理" style={{ width: 300 }} />
+                },
+                {
+                    name: 'startPurchaseStatusUpdateTime',
+                    label: '最新状态变更时间',
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                },
+                {
+                    name: 'purchaseTaskStatus',
+                    label: '塔型采购状态',
+                    children: <Select style={{ width: 200 }}>
+                        <Select.Option value="1">待完成</Select.Option>
+                        <Select.Option value="2">待接收</Select.Option>
+                        <Select.Option value="3">已完成</Select.Option>
+                    </Select>
                 }
-            })
-        })
-    }
-
-    return <Page
-        path="/purchaseTaskTower/purchaser"
-        columns={[
-            ...baseInfo,
-            {
-                title: "操作",
-                dataIndex: "opration",
-                fixed: "right",
-                width: 100,
-                render: (_: any, record: any) => <Button type="link" onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>配料方案</Button>
-            }]}
-        extraOperation={<>
-            <Button type="primary">导出</Button>
-            <Button type="primary">生成采购列表</Button>
-        </>}
-        onFilterSubmit={onFilterSubmit}
-        searchFormItems={[
-            {
-                name: 'fuzzyQuery',
-                children: <Input placeholder="编号/内部合同编号/工程名称/票面单位/业务经理" style={{ width: 300 }} />
-            },
-            {
-                name: 'isOpen',
-                label: '是否已全开',
-                children: <Select style={{ width: 200 }}>
-                    <Select.Option value="2">发票已开全</Select.Option>
-                    <Select.Option value="3">发票未开全</Select.Option>
-                </Select>
-            },
-            {
-                name: 'contractType',
-                label: '开票时合同状态',
-                children: <Select style={{ width: 200 }}>
-                    <Select.Option value="1">不下计划</Select.Option>
-                    <Select.Option value="2">未下计划</Select.Option>
-                    <Select.Option value="3">未下完计划</Select.Option>
-                    <Select.Option value="4">未发完货</Select.Option>
-                    <Select.Option value="5">已发完货</Select.Option>
-                </Select>
-            },
-            {
-                name: 'startLaunchTime',
-                label: '申请日期',
-                children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-            }
-        ]}
-        tableProps={{
-            rowSelection: {
-                type: "checkbox"
-            }
-        }}
-    />
+            ]}
+            tableProps={{
+                rowSelection: {
+                    type: "checkbox",
+                    selectedRowKeys: generateIds,
+                    onChange: (selectedRowKeys: any[]) => {
+                        setGenerateIds(selectedRowKeys)
+                    }
+                }
+            }}
+        />
+    </>
 }
