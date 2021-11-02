@@ -53,8 +53,8 @@ export default function Invoicing() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <Link to="">关联塔形</Link>
-                        <Button type="link">采购清单</Button>
+                        <Link to="/workMngt/planList/relationTower">关联塔形</Link>
+                        <Link to={`/workMngt/planList/purchaseList/${record.id}`}><Button type="link">采购清单</Button></Link>
                         <Button type="link" onClick={() => handleDelete(record.id)}>取消计划</Button>
                     </>
                 }

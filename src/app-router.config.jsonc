@@ -982,14 +982,14 @@
     },
     { // 工作管理-计划列表-采购清单
       "name": "采购清单",
-      "path": "/workMngt/planList/purchaseList",
+      "path": "/workMngt/planList/purchaseList/:id",
       "module": "./pages/workMngt/planList/Overview",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-计划列表-关联塔型
       "name": "关联塔型",
-      "path": "/workMngt/planList/relationTower",
+      "path": "/workMngt/planList/relationTower/:id",
       "module": "./pages/workMngt/planList/RelationList",
       "exact": true,
       "authority": "approvalm"
@@ -1003,7 +1003,7 @@
     },
     { // 工作管理-生产配料-构件明细
       "name": "构件明细",
-      "path": "/workMngt/production/detailed",
+      "path": "/workMngt/production/detailed/:id",
       "module": "./pages/workMngt/production/Overview",
       "exact": true,
       "authority": "approvalm"

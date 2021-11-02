@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Button, Input, DatePicker, Select, Modal } from 'antd'
+import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { Page } from '../../common'
 import { baseInfo } from "./purchaseListData.json"
@@ -45,7 +45,14 @@ export default function Invoicing() {
                 }]}
             extraOperation={<>
                 <Button type="primary" ghost>导出</Button>
-                <Button type="primary" ghost onClick={() => setGenerateVisible(true)}>生成采购计划</Button>
+                <Button type="primary" ghost onClick={() => {
+                    if (!generateIds || generateIds.length <= 0) {
+                        message.warning("必须选择任务才能生成采购计划...")
+                        return
+                    } else {
+                        setGenerateVisible(true)
+                    }
+                }}>生成采购计划</Button>
             </>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[

@@ -43,7 +43,7 @@ export default function Invoicing() {
     }
 
     return <Page
-        path="/tower-market/invoicing"
+        path="/tower-supply/materialShortage"
         columns={[
             ...baseInfo,
             {
@@ -72,28 +72,19 @@ export default function Invoicing() {
                 children: <Input placeholder="编号/内部合同编号/工程名称/票面单位/业务经理" style={{ width: 300 }} />
             },
             {
-                name: 'isOpen',
-                label: '是否已全开',
-                children: <Select style={{ width: 200 }}>
-                    <Select.Option value="2">发票已开全</Select.Option>
-                    <Select.Option value="3">发票未开全</Select.Option>
-                </Select>
-            },
-            {
-                name: 'contractType',
-                label: '开票时合同状态',
-                children: <Select style={{ width: 200 }}>
-                    <Select.Option value="1">不下计划</Select.Option>
-                    <Select.Option value="2">未下计划</Select.Option>
-                    <Select.Option value="3">未下完计划</Select.Option>
-                    <Select.Option value="4">未发完货</Select.Option>
-                    <Select.Option value="5">已发完货</Select.Option>
-                </Select>
-            },
-            {
-                name: 'startLaunchTime',
-                label: '申请日期',
+                name: 'startPurchaseStatusUpdateTime',
+                label: '最新状态变更时间',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+            },
+            {
+                name: 'isOpen',
+                label: '状态',
+                children: <Select style={{ width: 200 }}>
+                    <Select.Option value="1">待审批</Select.Option>
+                    <Select.Option value="2">已拒绝</Select.Option>
+                    <Select.Option value="3">已撤回</Select.Option>
+                    <Select.Option value="4">已通过</Select.Option>
+                </Select>
             }
         ]}
     />
