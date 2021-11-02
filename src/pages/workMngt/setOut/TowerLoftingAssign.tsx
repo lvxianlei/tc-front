@@ -368,7 +368,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                                 </Select>
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="校对人">
+                                        <Descriptions.Item label="校核人">
                                             <Form.Item name={["appointedList", index, "checkUserDepartment"]}
                                                 rules={[{
                                                     required: true,

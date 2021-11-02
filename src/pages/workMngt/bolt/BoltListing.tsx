@@ -17,7 +17,6 @@ import BoltNewModal from './BoltNewModal';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import AuthUtil from '../../../utils/AuthUtil';
 import { boltTypeOptions } from '../../../configuration/DictionaryOptions';
-import Item from 'antd/lib/list/Item';
 
 interface ITab {
     readonly basicHeight?: string;
@@ -41,6 +40,8 @@ export default function BoltList(): React.ReactNode {
     const [ rowChangeList, setRowChangeList ] = useState<number[]>([]);
     const [ activeKey, setActiveKey ] = useState<string>('');
     const [ visible, setVisible ] = useState<boolean>(false);
+    const [ urlVisible, setUrlVisible ] = useState<boolean>(false);
+    const [ url, setUrl ] = useState<string>('');
     const [ basicHeight, setBasicHeight ] = useState<string>('');
     const [ form ] = Form.useForm();
 
@@ -383,7 +384,13 @@ export default function BoltList(): React.ReactNode {
                             message.warning(info.file.response?.msg)
                         } 
                         if(info.file.response && info.file.response?.success){
-                            getDataSource(activeKey);
+                            if(info.file.response?.data){
+                                setUrl(info.file.response?.data);
+                                setUrlVisible(true);
+                            }else{
+                                message.success('导入成功！');
+                                getDataSource(activeKey);
+                            }
                         }
                     } }
                     disabled={ !(detailData.length > 0) }
@@ -418,6 +425,18 @@ export default function BoltList(): React.ReactNode {
             okText="确定"
             cancelText="关闭">
             <Row className={ styles.content }><Col offset={ 2 } span={ 4 }>呼高 <span style={{ color: 'red' }}>*</span></Col><Col span={ 16 }><Input type="number" min={ 0 } value={ basicHeight } onChange={ (e) => setBasicHeight(e.target.value) } placeholder="请输入"/></Col></Row>
+        </Modal>
+        <Modal 
+            visible={urlVisible} 
+            onOk={()=>{
+                window.open(url);
+                setUrlVisible(false);
+            }} 
+            onCancel={()=>{setUrlVisible(false);setUrl('')}} 
+            title='提示' 
+            okText='下载'
+        >
+            当前存在错误数据，请重新下载上传！
         </Modal>
     </>
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, Select, Button, Popconfirm, Input, Form, FormInstance, message, InputNumber, Upload } from 'antd';
+import { Space, Select, Button, Popconfirm, Input, Form, FormInstance, message, InputNumber, Upload, Modal } from 'antd';
 import { Page } from '../../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
 import styles from './Pick.module.less';
@@ -17,6 +17,8 @@ export default function Lofting(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string, productSegmentId: string, status: string}>();
     const [ refresh, setRefresh ] = useState<boolean>(false);
+    const [ visible, setVisible ] = useState<boolean>(false);
+    const [ url, setUrl ] = useState<string>('');
     const [ filterValue, setFilterValue ] = useState({});
     const [ editorLock, setEditorLock ] = useState('编辑');
     const formRef: React.RefObject<FormInstance> = React.createRef<FormInstance>();
@@ -232,6 +234,17 @@ export default function Lofting(): React.ReactNode {
     }
     const [ rowChangeList, setRowChangeList ] = useState<number[]>([]);
     return <Form ref={ formRef } className={ styles.descripForm }>
+        <Modal 
+            visible={visible} 
+            onOk={()=>{
+                window.open(url)
+            }} 
+            onCancel={()=>{setVisible(false);setUrl('')}} 
+            title='提示' 
+            okText='下载'
+        >
+            当前存在错误数据，请重新下载上传！
+        </Modal>
         <Page
             path="/tower-science/drawProductStructure"
             columns={ [...tableColumns,{
@@ -286,8 +299,14 @@ export default function Lofting(): React.ReactNode {
                             if(info.file.response && !info.file.response?.success) {
                                 message.warning(info.file.response?.msg)
                             }else if(info.file.response && info.file.response?.success){
-                                message.success('导入成功！');
-                                setRefresh(!refresh);
+                                if(info.file.response?.data){
+                                    setUrl(info.file.response?.data);
+                                    setVisible(true);
+                                }else{
+                                    message.success('导入成功！');
+                                    setRefresh(!refresh);
+                                }
+                                
                             }
                             
                         } }
