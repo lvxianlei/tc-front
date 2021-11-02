@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useRef, useState } from 'react'
 import { useHistory } from "react-router-dom"
-import { Button, Modal, message, } from 'antd'
-import { CommonTable, DetailContent, DetailTitle } from '../../common'
+import { Button, Modal, message, Form } from 'antd'
+import { BaseInfo, CommonTable, DetailContent, DetailTitle } from '../../common'
 import { baseInfo, material } from './angleSteel.json'
 import RequestUtil from "../../../utils/RequestUtil"
 import Edit from "./Edit"
@@ -12,9 +12,12 @@ type typeProps = "new" | "edit"
 const AngleSteel = () => {
     const history = useHistory()
     const editRef = useRef<{ onSubmit: () => Promise<boolean>, loading: boolean }>()
-    const [visible, setVisible] = useState<boolean>(false);
-    const [type, setType] = useState<typeProps>("new");
-    const [materialData, setMaterialData] = useState<{ [key: string]: any }>({});
+    const [visible, setVisible] = useState<boolean>(false)
+    const [ingredientsConfigVisible, setIngredientsConfigVisible] = useState<boolean>(false)
+    const [type, setType] = useState<typeProps>("new")
+    const [materialData, setMaterialData] = useState<{ [key: string]: any }>({})
+    const [materialId, setMaterialId] = useState<string>()
+    const [baseInfoForm] = Form.useForm()
     const materialTextureEnum = (ApplicationContext.get().dictionaryOption as any)["139"].map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
@@ -37,10 +40,19 @@ const AngleSteel = () => {
         }
     }), { manual: true })
 
+    const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/angleConfigStrategy/updateIngredientsConfig`, { ...data, id: materialId })
+            resole(result)
+        } catch (error) {
+            reject(false)
+        }
+    }), { manual: true })
+
     const handleModalOk = () => new Promise(async (resove, reject) => {
         const isClose = await editRef.current?.onSubmit()
         if (isClose) {
-            message.success("成功...")
+            message.success("材质配料设定成功...")
             setVisible(false)
             resove(true)
             history.go(0)
@@ -61,7 +73,14 @@ const AngleSteel = () => {
         })
 
     }
-
+    const handleIngredientsConfig = async () => {
+        const baseInfoData = await baseInfoForm.validateFields()
+        const result = await saveRun({ ...baseInfoData })
+        if (result) {
+            message.success("配置基础配置成功...")
+            history.go(0)
+        }
+    }
     return <>
         <Modal visible={visible} width={1011} title="创建" onOk={handleModalOk} onCancel={() => {
             setVisible(false)
@@ -69,6 +88,13 @@ const AngleSteel = () => {
         }}>
             <Edit type={type} ref={editRef} data={materialData} />
         </Modal>
+
+        <Modal visible={ingredientsConfigVisible} width={1011} title="基础配置" onOk={handleIngredientsConfig} onCancel={() => {
+            setIngredientsConfigVisible(false)
+        }}>
+            <BaseInfo form={baseInfoForm} columns={baseInfo} dataSource={{}} edit />
+        </Modal>
+
         <DetailContent>
             <DetailTitle title="配置基础配置" />
             <CommonTable
@@ -88,9 +114,9 @@ const AngleSteel = () => {
                         title: "操作",
                         dataIndex: "opration",
                         render: (_: any, records: any) => <Button type="link" onClick={() => {
-                            setVisible(true)
-                            setType("edit")
-                            setMaterialData(records)
+                            setIngredientsConfigVisible(true)
+                            setMaterialId(records.id)
+                            baseInfoForm.setFieldsValue(records)
                         }}>编辑</Button>
                     }
                 ]}
@@ -133,4 +159,4 @@ const AngleSteel = () => {
     </>
 }
 
-export default AngleSteel;
+export default AngleSteel
