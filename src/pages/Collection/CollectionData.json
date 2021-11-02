@@ -49,7 +49,8 @@
         },
         {
             "title": "确认人",
-            "dataIndex": "updateUser"
+            "dataIndex": "updateUserName",
+            "type": "string"
         },
         {
             "title": "确认时间",
@@ -221,7 +222,7 @@
         },
         {
             "title": "确认人",
-            "dataIndex": "updateUser",
+            "dataIndex": "updateUserName",
             "disabled": true
         },
         {
@@ -269,7 +270,13 @@
             "title": "回款金额",
             "dataIndex": "refundAmount",
             "type": "number",
-            "width": 200
+            "width": 200,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入回款金额..."
+                }
+            ]
         },
         {
             "title": "业务经理",
@@ -351,7 +358,13 @@
             "title": "回款金额",
             "dataIndex": "refundAmount",
             "type": "number",
-            "width": 200
+            "width": 200,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入回款金额..."
+                }
+            ]
         },
         {
             "title": "业务经理",
@@ -393,7 +406,7 @@
             "rules": [
                 {
                     "required": true,
-                    "message": "请选择相关合同..."
+                    "message": "请选择回款计划..."
                 }
             ]
         },

@@ -14,6 +14,7 @@ const AngleSteel = () => {
     const editRef = useRef<{ onSubmit: () => Promise<boolean>, loading: boolean }>()
     const [visible, setVisible] = useState<boolean>(false);
     const [type, setType] = useState<typeProps>("new");
+    const [materialData, setMaterialData] = useState<{ [key: string]: any }>({});
     const materialTextureEnum = (ApplicationContext.get().dictionaryOption as any)["139"].map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
@@ -27,17 +28,46 @@ const AngleSteel = () => {
         }
     }))
 
+    const { loading: deleteLoading, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/angleConfigStrategy/deleteIngredientsMaterialConfig?id=${id}`)
+            resole(result)
+        } catch (error) {
+            reject(false)
+        }
+    }), { manual: true })
+
     const handleModalOk = () => new Promise(async (resove, reject) => {
         const isClose = await editRef.current?.onSubmit()
         if (isClose) {
             message.success("成功...")
             setVisible(false)
             resove(true)
+            history.go(0)
         }
     })
+
+    const deleteItem = (id: string) => {
+        Modal.confirm({
+            title: "删除",
+            content: "确定删除此配料设定吗？",
+            onOk: async () => {
+                const result = await deleteRun(id)
+                if (result) {
+                    message.success("删除成功")
+                    history.go(0)
+                }
+            }
+        })
+
+    }
+
     return <>
-        <Modal visible={visible} width={1011} title="创建" onOk={handleModalOk} onCancel={() => setVisible(false)}>
-            <Edit type={type} ref={editRef} />
+        <Modal visible={visible} width={1011} title="创建" onOk={handleModalOk} onCancel={() => {
+            setVisible(false)
+            setMaterialData({})
+        }}>
+            <Edit type={type} ref={editRef} data={materialData} />
         </Modal>
         <DetailContent>
             <DetailTitle title="配置基础配置" />
@@ -52,26 +82,53 @@ const AngleSteel = () => {
                         render: (_, _b, index) => {
                             return <span>{index + 1}</span>
                         }
-                    }, ...baseInfo]}
+                    },
+                    ...baseInfo,
+                    {
+                        title: "操作",
+                        dataIndex: "opration",
+                        render: (_: any, records: any) => <Button type="link" onClick={() => {
+                            setVisible(true)
+                            setType("edit")
+                            setMaterialData(records)
+                        }}>编辑</Button>
+                    }
+                ]}
                 dataSource={data?.ingredientsConfigVos || []}
             />
             <DetailTitle title="材质配料设定" operation={[
                 <Button key="add" type="primary" ghost style={{ marginRight: 16 }} onClick={() => {
                     setVisible(true)
                     setType("new")
+                    setMaterialData({})
                 }}>添加</Button>,
                 <Button key="goback" type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
             ]} />
-            <CommonTable columns={material.map((item: any) => {
-                if (item.dataIndex === "material") {
-                    return ({
-                        ...item,
-                        type: "select",
-                        enum: materialTextureEnum
-                    })
-                }
-                return item
-            })} dataSource={data?.ingredientsMaterialConfigVos || []} />
+            <CommonTable
+                loading={loading}
+                columns={[...material.map((item: any) => {
+                    if (item.dataIndex === "materialTexture") {
+                        return ({
+                            ...item,
+                            type: "select",
+                            enum: materialTextureEnum
+                        })
+                    }
+                    return item
+                }),
+                {
+                    title: "操作",
+                    dataIndex: "opration",
+                    render: (_: any, records: any) => <>
+                        <Button type="link" onClick={() => {
+                            setVisible(true)
+                            setType("edit")
+                            setMaterialData(records)
+                        }}>编辑</Button>
+                        <Button type="link" loading={deleteLoading} onClick={() => deleteItem(records.id)}>删除</Button>
+                    </>
+                }]}
+                dataSource={data?.ingredientsMaterialConfigVos || []} />
         </DetailContent>
     </>
 }
