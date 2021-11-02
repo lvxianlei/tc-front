@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Space, Modal, Input, Descriptions, Form, FormInstance, DatePicker, InputNumber, TreeSelect, Select } from 'antd';
+import { Button, Space, Modal, Input, Descriptions, Form, FormInstance, DatePicker, InputNumber, TreeSelect, Select, message } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './TowerLoftingAssign.module.less';
@@ -103,30 +103,37 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
         if (this.getForm()) {
             this.getForm()?.validateFields().then(() => {
                 let values = this.getForm()?.getFieldsValue().appointedList;
-                values = values.map((item: Record<string, any>) => {
-                    return {
-                        ...item,
-                        plannedDeliveryTime: item?.plannedDeliveryTime && item?.plannedDeliveryTime.format('YYYY-MM-DD') + ' 00:00:00',
-                        productCategoryId: this.state.appointed?.productCategoryId,
-                        productCategoryName: this.state.appointed?.productCategoryName,
-                        pattern: this.state.appointed?.pattern,
-                        loftingUser: item.loftingUser.split('-')[0],
-                        loftingUserName: item.loftingUser.split('-')[1],
-                        checkUser: item.checkUser.split('-')[0],
-                        checkUserName: item.checkUser.split('-')[1],
-                    }
-                })
-                RequestUtil.post(`/tower-science/productSegment/submit`, [ ...values ])
-                this.getForm()?.resetFields();
-                this.getForm()?.setFieldsValue({
-                    appointedList: []
-                });
-                this.setState({  
-                    appointedList: [],
-                    visible: false
-                })
-                this.props.update()
-                return Promise.resolve()
+                if(values){
+                    values = values.map((item: Record<string, any>) => {
+                        return {
+                            ...item,
+                            plannedDeliveryTime: item?.plannedDeliveryTime && item?.plannedDeliveryTime.format('YYYY-MM-DD') + ' 00:00:00',
+                            productCategoryId: this.state.appointed?.productCategoryId,
+                            productCategoryName: this.state.appointed?.productCategoryName,
+                            pattern: this.state.appointed?.pattern,
+                            loftingUser: item.loftingUser.split('-')[0],
+                            loftingUserName: item.loftingUser.split('-')[1],
+                            checkUser: item.checkUser.split('-')[0],
+                            checkUserName: item.checkUser.split('-')[1],
+                        }
+                    })
+                    RequestUtil.post(`/tower-science/productSegment/submit`, [ ...values ]).then(() => {
+                        message.success('指派成功');
+                    }).then(() => {
+                        this.getForm()?.resetFields();
+                        this.getForm()?.setFieldsValue({
+                            appointedList: []
+                        });
+                        this.setState({  
+                            appointedList: [],
+                            visible: false
+                        })
+                        this.props.update();
+                    });
+                } else {
+                    message.error('当前暂无指派数据，不可提交！')
+                }
+                return Promise.resolve();
             })
         }
     };

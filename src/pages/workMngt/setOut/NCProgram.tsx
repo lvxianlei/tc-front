@@ -4,7 +4,7 @@
  * @description 工作管理-放样列表-塔型信息-NC程序
 */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Space, Input, DatePicker, Button, Popconfirm, Upload, message, Spin } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -100,6 +100,7 @@ export default function NCProgram(): React.ReactNode {
     ]
     const history = useHistory();
     const params = useParams<{ id: string, productSegmentId: string }>();
+    const [ refresh, setRefresh ] = useState(false);
     const { loading, data }: Record<string, any> = useRequest(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get(`/tower-science/productNc/count?productCategoryId=${ params.id }`);
         resole(data)
@@ -116,6 +117,7 @@ export default function NCProgram(): React.ReactNode {
         requestData={{ productCategoryId: params.id }}
         columns={ columns }
         headTabs={ [] }
+        refresh={ refresh }
         extraOperation={ <Space direction="horizontal" size="small">
             <Button type="primary" ghost onClick={ () => downloadTemplate(`/tower-science/productNc/downloadSummary?productCategoryId=${ params.id }`, "NC文件汇总" , {}, true ) }>下载</Button>
             <p>NC程序数 { data.ncCount }/{ data.structureCount }</p>
@@ -153,7 +155,7 @@ export default function NCProgram(): React.ReactNode {
                             productCategoryId: params.id
                         })
                         message.success('上传成功');
-                        history.go(0);
+                        setRefresh(!refresh);
                     }
                 } }
             >
