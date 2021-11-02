@@ -3,27 +3,57 @@
         {
             "title": "材质",
             "dataIndex": "materialTexture",
-            "type": "string"
+            "type": "string",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择材质..."
+                }
+            ]
         },
         {
             "title": "厚度",
             "dataIndex": "thickness",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入厚度..."
+                }
+            ]
         },
         {
             "title": "宽度",
             "dataIndex": "width",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入宽度..."
+                }
+            ]
         },
         {
             "title": "夹钳总损耗",
             "dataIndex": "clampLoss",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入夹钳总损耗..."
+                }
+            ]
         },
         {
             "title": "每刀口耗损",
             "dataIndex": "edgeLoss",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入每刀口耗损..."
+                }
+            ]
         },
         {
             "title": "备注",
