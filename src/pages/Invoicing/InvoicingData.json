@@ -21,8 +21,8 @@
             "dataIndex": "ticketCompany"
         },
         {
-            "title": "工程名称",
-            "dataIndex": ""
+            "title": "合同/工程名称",
+            "dataIndex": "contractName"
         },
         {
             "title": "合计金额(元)",
@@ -49,13 +49,15 @@
                 },
                 {
                     "value": 2,
-                    "label": "增值税专项发票完"
+                    "label": "增值税专项发票"
                 }
             ]
         },
         {
             "title": "开票日期",
-            "dataIndex": "ticketTime"
+            "dataIndex": "ticketTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "是否已全开",
@@ -129,7 +131,9 @@
         },
         {
             "title": "合同签订日期",
-            "dataIndex": ""
+            "dataIndex": "contractSignTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "开票方式",
@@ -147,12 +151,33 @@
             ]
         },
         {
-            "title": "开票依据",
-            "dataIndex": "ticketBasis"
+            "title": "开票金额依据",
+            "dataIndex": "ticketBasis",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "理重"
+                },
+                {
+                    "value": 2,
+                    "label": "过磅重量"
+                },
+                {
+                    "value": 3,
+                    "label": "合同约定"
+                },
+                {
+                    "value": 4,
+                    "label": "海关出口报关单"
+                }
+            ]
         },
         {
             "title": "最后发货日期",
-            "dataIndex": "contractLastTime"
+            "dataIndex": "contractLastTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "开票次数",
@@ -161,7 +186,9 @@
         },
         {
             "title": "申请时间",
-            "dataIndex": "launchTime"
+            "dataIndex": "launchTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "制单人",
@@ -169,7 +196,9 @@
         },
         {
             "title": "制单时间",
-            "dataIndex": "createTime"
+            "dataIndex": "createTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "状态",
@@ -207,7 +236,7 @@
             "type": "popTable",
             "path": "/tower-market/contract",
             "width": 1011,
-            "value": "contractName",
+            "value": "contractNumber",
             "dependencies": true,
             "readOnly": true,
             "columns": [
@@ -221,10 +250,6 @@
                     "dataIndex": "contractName"
                 },
                 {
-                    "title": "销售类型",
-                    "dataIndex": "saleType"
-                },
-                {
                     "title": "业主单位",
                     "dataIndex": "customerCompany",
                     "search": true
@@ -235,11 +260,15 @@
                 },
                 {
                     "title": "合同签订日期",
-                    "dataIndex": "signContractTime"
+                    "dataIndex": "signContractTime",
+                    "type": "date",
+                    "format": "YYYY-MM-DD"
                 },
                 {
                     "title": "要求交货日期",
-                    "dataIndex": "deliveryTime"
+                    "dataIndex": "deliveryTime",
+                    "type": "date",
+                    "format": "YYYY-MM-DD"
                 }
             ],
             "rules": [
@@ -276,12 +305,12 @@
             ]
         },
         {
-            "title": "合同/项目名称",
+            "title": "合同/工程名称",
             "dataIndex": "contractCompany",
             "rules": [
                 {
                     "required": true,
-                    "message": "请输入合同/项目名称..."
+                    "message": "请输入合同/工程名称..."
                 }
             ]
         },
@@ -346,7 +375,8 @@
         },
         {
             "title": "开票次数",
-            "dataIndex": "ticketCount"
+            "dataIndex": "ticketCount",
+            "type": "number"
         },
         {
             "title": "合同最后发货日期",
@@ -386,7 +416,7 @@
                 },
                 {
                     "value": 2,
-                    "label": "增值税专项发票完"
+                    "label": "增值税专项发票"
                 }
             ],
             "rules": [

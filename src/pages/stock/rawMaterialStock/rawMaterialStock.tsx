@@ -78,12 +78,20 @@ export default function RawMaterialStock(): React.ReactNode {
             dataIndex: 'spec',
             width: 120,
         }, {
-            title: '长度',
+            title: '长度(mm)',
             dataIndex: 'length',
             width: 120,
         }, {
-            title: '宽度',
+            title: '宽度(mm)',
             dataIndex: 'width',
+            width: 120,
+        },{
+            title: '数量',
+            dataIndex: 'quantity',
+            width: 120,
+        },{
+            title: '重量',
+            dataIndex: 'weight',
             width: 120,
         },
         {

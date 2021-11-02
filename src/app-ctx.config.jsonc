@@ -48,16 +48,6 @@
                                 "label": "成本评估配置",
                                 "path": "/sys/costconfig",
                                 "authority": "dxnry"
-                            },
-                            {
-                                "label": "原材料类型管理",
-                                "path": "/sys/materialType",
-                                "authority": "material_category_management"
-                            },
-                            {
-                                "label": "原材料管理",
-                                "path": "/sys/material",
-                                "authority": "material_management"
                             }
                         ]
                     },
@@ -456,22 +446,12 @@
                     {
                         "label": "配置管理",
                         "icon": "technology",
-                        "path": "/configure",
+                        "path": "/config",
                         "authority": "approvalm",
                         "items": [
                             {
-                                "label": "仓库管理",
-                                "path": "/stock/warehouse",
-                                "authority": "approvalm"
-                            },
-                            {
-                                "label": "安全库存配置",
-                                "path": "/stock/securitySetting",
-                                "authority": "approvalm"
-                            },
-                            {
-                                "label": "角钢配料策略",
-                                "path": "/stock/angleSteel",
+                                "label": "配置管理列表",
+                                "path": "/config",
                                 "authority": "approvalm"
                             }
                         ]

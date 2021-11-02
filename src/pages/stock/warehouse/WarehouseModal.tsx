@@ -35,7 +35,11 @@ const WarehouseModal = (props: Props) => {
         },
         {
             key: 'reservoirName',
-            title: '库区*',
+            title: () => {
+                return (
+                    <div>库区<span style={{ color: 'red' }}>*</span></div>
+                )
+            },
             dataIndex: 'reservoirName',
             render: (text, item: any, index) => {
                 return (
@@ -51,7 +55,11 @@ const WarehouseModal = (props: Props) => {
         },
         {
             key: 'locatorName',
-            title: '库位*',
+            title: () => {
+                return (
+                    <div>库位<span style={{ color: 'red' }}>*</span></div>
+                )
+            },
             dataIndex: 'locatorName',
             render: (text, item: any, index) => {
                 return (
@@ -256,7 +264,7 @@ const WarehouseModal = (props: Props) => {
                             md={8}
                             className='search_item'
                         >
-                            <span className='tip'>仓库编号*：</span>
+                            <span className='tip'>仓库编号<span style={{ color: 'red' }}>*</span>：</span>
                             <Input
                                 className='input'
                                 placeholder='请输入'
@@ -271,7 +279,7 @@ const WarehouseModal = (props: Props) => {
                             md={8}
                             className='search_item'
                         >
-                            <span className='tip'>仓库名称*：</span>
+                            <span className='tip'>仓库名称<span style={{ color: 'red' }}>*</span>：</span>
                             <Input
                                 className='input'
                                 placeholder='请输入'
@@ -286,7 +294,7 @@ const WarehouseModal = (props: Props) => {
                             md={8}
                             className='search_item'
                         >
-                            <span className='tip'>分类*：</span>
+                            <span className='tip'>分类<span style={{ color: 'red' }}>*</span>：</span>
                             <Select
                                 className='input'
                                 value={baseInfo.warehouseCategoryId ? baseInfo.warehouseCategoryId : '请选择'}
@@ -310,7 +318,7 @@ const WarehouseModal = (props: Props) => {
                             md={8}
                             className='search_item'
                         >
-                            <span className='tip'>车间*：</span>
+                            <span className='tip'>车间<span style={{ color: 'red' }}>*</span>：</span>
                             <Select
                                 className='input'
                                 value={baseInfo.shopId ? baseInfo.shopId : '请选择'}
@@ -333,7 +341,7 @@ const WarehouseModal = (props: Props) => {
                             className='search_item'
                             style={{ marginTop: 0 }}
                         >
-                            <span className='tip'>负责人*：</span>
+                            <span className='tip'>负责人<span style={{ color: 'red' }}>*</span>：</span>
                             <Select
                                 className='input'
                                 value={departmentId ? departmentId : '请选择'}
@@ -377,7 +385,7 @@ const WarehouseModal = (props: Props) => {
                         staffs.map((item, index) => {
                             return (
                                 <div className='keeper_item' key={Math.random()}>
-                                    <span className='tip'>保管员*</span>
+                                    <span className='tip'>保管员<span style={{ color: 'red' }}>*</span></span>
                                     <Select
                                         className='input'
                                         value={item.departmentName ? item.departmentName : item.departmentId ? item.departmentId : '请选择'}
@@ -400,7 +408,7 @@ const WarehouseModal = (props: Props) => {
                                     </Select>
                                     <Select
                                         className='input'
-                                        value={item.userName ? item.userName : item.userId? item.userId : '请选择'}
+                                        value={item.userName ? item.userName : item.userId ? item.userId : '请选择'}
                                         style={{ width: 120 }}
                                         onChange={(value) => {
                                             staffs[index].userId = value;

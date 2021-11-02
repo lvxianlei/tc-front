@@ -80,6 +80,46 @@ export default function RawMaterialStock(): React.ReactNode {
             title: '价税合计(元)',
             dataIndex: 'price',
             width: 120,
+        },{
+            title: '重量(kg)',
+            dataIndex: 'weight',
+            width: 120,
+        },{
+            title: '采购状态',
+            dataIndex: 'receiveStatus',
+            width: 120,
+        },{
+            title: '最新状态变更时间',
+            dataIndex: 'updateTime',
+            width: 120,
+        },{
+            title: '操作人',
+            dataIndex: 'operatorMan',
+            width: 120,
+        },{
+            title: '炉批号',
+            dataIndex: 'furnaceBatchNo',
+            width: 120,
+        },{
+            title: '仓库',
+            dataIndex: 'warehouse',
+            width: 120,
+        },{
+            title: '库区',
+            dataIndex: 'reservoirArea',
+            width: 120,
+        },{
+            title: '库位',
+            dataIndex: 'location',
+            width: 120,
+        },{
+            title: '收货批次',
+            dataIndex: 'receiveBatchNumber',
+            width: 120,
+        },{
+            title: '备注',
+            dataIndex: 'remark',
+            width: 120,
         },
         {
             title: '操作',

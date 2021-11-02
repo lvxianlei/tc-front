@@ -68,13 +68,13 @@ class ManagementContractNew extends ContractNew {
               children: <Input placeholder="内部合同编号自动生成" disabled />,
             },
             {
-              label: "合同名称",
+              label: "合同/工程名称",
               name: "contractName",
               initialValue: contract?.contractName,
               rules: [
                 {
                   required: true,
-                  message: "请输入合同名称",
+                  message: "请输入合同/工程名称",
                 },
               ],
               children: <Input maxLength={100} />,
@@ -408,57 +408,34 @@ class ManagementContractNew extends ContractNew {
               ),
             },
             {
-              label: "销售员",
-              name: "salesman",
-              initialValue: contract?.salesman,
-              rules: [
-                {
-                  required: true,
-                  message: "请输入销售员",
-                },
-              ],
-              children: <Input maxLength={20} />,
+              label: "合同接管人",
+              name: "takeOverUser",
+              initialValue: contract?.takeOverUser,
+              children: (<Input value={contract?.takeOverUser} />),
             },
             {
-              label: "备注",
-              name: "description",
-              initialValue: contract?.description,
+              label: "合同接管日期",
+              name: "takeOverTime",
+              initialValue: contract?.takeOverTime,
               children: (
-                <Input.TextArea
-                  rows={1}
-                  showCount={true}
-                  maxLength={300}
-                  autoSize={false}
-                  placeholder="请输入备注信息"
+                <DatePicker
+                  format="YYYY-MM-DD"
                   className={layoutStyles.width100}
                 />
               ),
             },
             {
-              label: "币种",
-              name: "currencyType",
-              initialValue: contract?.currencyType,
-              rules: [
-                {
-                  required: true,
-                  message: "请选择币种",
-                },
-              ],
+              label: "是否收到合同原件",
+              name: "isReceivedContract",
+              initialValue: contract?.isReceivedContract || 0,
               children: (
-                <Select
-                  getPopupContainer={(triggerNode) => triggerNode.parentNode}
+                <Select value={contract?.isReceivedContract}
                 >
-                  {currencyTypeOptions &&
-                    currencyTypeOptions.map(({ id, name }, index) => {
-                      return (
-                        <Select.Option key={index} value={id}>
-                          {name}
-                        </Select.Option>
-                      );
-                    })}
+                  <Select.Option value={0}>是</Select.Option>
+                  <Select.Option value={1}>否</Select.Option>
                 </Select>
               ),
-            },
+            }
           ],
         },
       ],
