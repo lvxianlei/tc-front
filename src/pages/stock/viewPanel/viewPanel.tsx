@@ -75,10 +75,10 @@ const ViewPanel = (): React.ReactNode => {
                     <div>
                         {
                             item.type === 0 ?
-                                <span style={{ padding: '5px 8px', backgroundColor: 'yellow', color: '#000' }}>告警库存</span> :
+                                <span style={{ padding: '5px 8px', backgroundColor: 'red', color: '#000' }}>正常</span> :
                                 item.type === 1 ?
-                                    <span style={{ padding: '5px 8px', backgroundColor: 'red', color: '#fff' }}>可用库存</span> :
-                                    <span style={{ padding: '5px 8px', backgroundColor: '#ccc', color: '#FF8C00' }}>安全库存</span>
+                                    <span style={{ padding: '5px 8px', backgroundColor: '#ccc', color: '#fff' }}>提醒</span> :
+                                    <span style={{ padding: '5px 8px', backgroundColor: 'yellow', color: '#FF8C00' }}>告警</span>
                         }
                     </div>
                 )
@@ -265,9 +265,9 @@ const ViewPanel = (): React.ReactNode => {
                         }}
                     >
                         <Option value={''}>全部</Option>
-                        <Option value={'0'}>正常库存</Option>
-                        <Option value={'1'}>可用库存</Option>
-                        <Option value={'2'}>告警库存</Option>
+                        <Option value={'0'}>正常</Option>
+                        <Option value={'1'}>提醒</Option>
+                        <Option value={'2'}>告警</Option>
                     </Select>
                 </Col>
                 <Col
