@@ -1,46 +1,32 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef, useState } from 'react'
-import { Button, Col, Pagination, Row, Select, TableColumnProps, Table, Modal, message, } from 'antd'
+import React, { useRef, useState } from 'react'
+import { useHistory } from "react-router-dom"
+import { Button, Modal, message, } from 'antd'
 import { CommonTable, DetailContent, DetailTitle } from '../../common'
 import { baseInfo, material } from './angleSteel.json'
 import RequestUtil from "../../../utils/RequestUtil"
 import Edit from "./Edit"
-import { RouteProps } from '../public'
+import useRequest from '_@ahooksjs_use-request@2.8.13@@ahooksjs/use-request'
 type typeProps = "new" | "edit"
-const AngleSteel = (props: RouteProps) => {
-    // const history = useHistory()
-    const editRef = useRef<{ onSubmit: () => Promise<boolean> }>()
+const AngleSteel = () => {
+    const history = useHistory()
+    const editRef = useRef<{ onSubmit: () => Promise<boolean>, loading: boolean }>()
     const [visible, setVisible] = useState<boolean>(false);
     const [type, setType] = useState<typeProps>("new");
-    const [columnsData, setColumnsData] = useState([]);
-    const columns: TableColumnProps<object>[] = [
 
-        {
-            key: 'policy',
-            title: '策略项',
-            dataIndex: 'policy',
-        },
-        {
-            key: 'configData',
-            title: '配置数据',
-            dataIndex: 'configData',
-        },
-        {
-            key: 'description',
-            title: '说明',
-            dataIndex: 'description'
-        },
-        {
-            key: 'operation',
-            title: '操作',
-            dataIndex: 'operation',
-            align: 'center',
-        }]
+    const { loading, data } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get("/tower-supply/angleConfigStrategy")
+            resole(result)
+        } catch (error) {
+            reject(false)
+        }
+    }))
 
     const handleModalOk = () => new Promise(async (resove, reject) => {
         const isClose = await editRef.current?.onSubmit()
         if (isClose) {
-            message.success("票据创建成功...")
+            message.success("成功...")
             setVisible(false)
             resove(true)
         }
@@ -52,6 +38,7 @@ const AngleSteel = (props: RouteProps) => {
         <DetailContent>
             <DetailTitle title="配置基础配置" />
             <CommonTable
+                loading={loading}
                 columns={[
                     {
                         key: 'index',
@@ -62,26 +49,18 @@ const AngleSteel = (props: RouteProps) => {
                             return <span>{index + 1}</span>
                         }
                     }, ...baseInfo]}
-                dataSource={columnsData}
+                dataSource={data?.ingredientsConfigVos || []}
             />
             <DetailTitle title="材质配料设定" operation={[
                 <Button key="add" type="primary" ghost style={{ marginRight: 16 }} onClick={() => {
                     setVisible(true)
                     setType("new")
                 }}>添加</Button>,
-                <Button key="goback" type="primary" ghost>返回上一级</Button>
+                <Button key="goback" type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
             ]} />
-            <CommonTable
-                columns={columns}
-                dataSource={columnsData}
-            />
+            <CommonTable columns={material} dataSource={data?.ingredientsMaterialConfigVos || []} />
         </DetailContent>
     </>
-
-
-
-
-
 }
 
 export default AngleSteel;

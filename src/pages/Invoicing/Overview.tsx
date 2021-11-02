@@ -21,7 +21,7 @@ export default function Edit() {
     }))
     const { loading: approvalLoading, run } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/invoicing/approval`, { ...data, id: params.id })
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/invoicing/approval`, { ...data, invoicingId: params.id })
             resole(result)
         } catch (error) {
             reject(error)
@@ -35,7 +35,6 @@ export default function Edit() {
                 batchResult: data?.batchResult,
                 batchTime: data?.batchTime,
                 department: data?.department,
-                invoicingId: data?.invoicingInfoVo.id,
                 opinion: data?.opinion,
                 position: data?.position
             })

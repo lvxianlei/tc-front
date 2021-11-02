@@ -43,7 +43,7 @@ export default function Invoicing() {
     }
 
     return <Page
-        path="/tower-market/invoicing"
+        path="/purchaseTaskTower/purchaser"
         columns={[
             ...baseInfo,
             {
@@ -51,16 +51,12 @@ export default function Invoicing() {
                 dataIndex: "opration",
                 fixed: "right",
                 width: 100,
-                render: (_: any, record: any) => {
-                    return <>
-                        <Button type="link" onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</Button>
-                        {[0, 3].includes(record.state) && <Button type="link" onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>}
-                        {[0].includes(record.state) && <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>}
-                    </>
-                }
+                render: (_: any, record: any) => <Button type="link" onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>配料方案</Button>
             }]}
-
-        extraOperation={<Button type="primary">导出</Button>}
+        extraOperation={<>
+            <Button type="primary">导出</Button>
+            <Button type="primary">生成采购列表</Button>
+        </>}
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {

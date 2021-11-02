@@ -722,6 +722,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    {
+      "name": "配置管理",
+      "path": "/config",
+      "module": "./pages/config/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 库存管理-原材料库存
       "name": "原材料库存",
       "path": "/stock/rawMaterialStock",

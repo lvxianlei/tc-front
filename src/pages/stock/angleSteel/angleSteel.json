@@ -2,27 +2,33 @@
     "angleConfigStrategy": [
         {
             "title": "材质",
-            "dataIndex": ""
+            "dataIndex": "materialTexture",
+            "type": "string"
         },
         {
             "title": "厚度",
-            "dataIndex": ""
+            "dataIndex": "thickness",
+            "type": "number"
         },
         {
             "title": "宽度",
-            "dataIndex": ""
+            "dataIndex": "width",
+            "type": "number"
         },
         {
             "title": "夹钳总损耗",
-            "dataIndex": ""
+            "dataIndex": "clampLoss",
+            "type": "number"
         },
         {
             "title": "每刀口耗损",
-            "dataIndex": ""
+            "dataIndex": "edgeLoss",
+            "type": "number"
         },
         {
             "title": "备注",
-            "dataIndex": ""
+            "dataIndex": "description",
+            "type": "textarea"
         }
     ],
     "baseInfo": [
