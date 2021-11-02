@@ -333,5 +333,75 @@
             "disabled": true,
             "width": 200
         }
+    ],
+    "contractInformationDetail": [
+        {
+            "title": "合同号",
+            "dataIndex": "contractNumber",
+            "disabled": true,
+            "width": 200
+        },
+        {
+            "title": "合同/工程名称",
+            "dataIndex": "contractName",
+            "disabled": true,
+            "width": 200
+        },
+        {
+            "title": "回款金额",
+            "dataIndex": "refundAmount",
+            "type": "number",
+            "width": 200
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": "salesman",
+            "disabled": true,
+            "width": 200
+        },
+        {
+            "title": "回款计划名称",
+            "dataIndex": "paymentPlanId",
+            "type": "popTable",
+            "path": "/tower-market/contract/getPaymentPlansByContractId?contractId=",
+            "width": 1011,
+            "value": "name",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "期次",
+                    "dataIndex": "period"
+                },
+                {
+                    "title": "回款计划名称",
+                    "dataIndex": "name"
+                },
+                {
+                    "title": "计划回款日期",
+                    "dataIndex": "returnedTime"
+                },
+                {
+                    "title": "计划回款占比(%)",
+                    "dataIndex": "returnedRate"
+                },
+                {
+                    "title": "计划回款金额",
+                    "dataIndex": "returnedAmount"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择相关合同..."
+                }
+            ]
+        },
+        {
+            "title": "计划回款金额",
+            "dataIndex": "returnedAmount",
+            "disabled": true,
+            "width": 200
+        }
     ]
 }

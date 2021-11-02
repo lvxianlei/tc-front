@@ -68,7 +68,7 @@ class ManagementContract extends PromContract {
       },
       {
         key: "contractName",
-        title: "合同名称",
+        title: "合同/工程名称",
         dataIndex: "contractName",
       },
       {

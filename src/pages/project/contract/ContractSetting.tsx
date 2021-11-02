@@ -69,13 +69,13 @@ class ManagementContractSetting extends ContractSetting {
               children: <Input placeholder="内部合同编号自动生成" disabled />,
             },
             {
-              label: "合同名称",
+              label: "合同/工程名称",
               name: "contractName",
               initialValue: contract?.contractName,
               rules: [
                 {
                   required: true,
-                  message: "请输入合同名称",
+                  message: "请输入合同/工程名称",
                 },
               ],
               children: <Input maxLength={100} />,
@@ -257,17 +257,17 @@ class ManagementContractSetting extends ContractSetting {
             {
               label: "付款方式",
               name: "payType",
-              initialValue: contract?.payType,
+              initialValue: (contract?.payType && (contract?.payType !== -1)) ? contract?.payType : undefined,
               children: (
                 <>
                   <Select
-                    value={contract?.payType}
+                    value={(contract?.payType && (contract?.payType !== -1)) ? contract?.payType : undefined}
                   >
-                    <Select.Option value="1">转账</Select.Option>
-                    <Select.Option value="2">现金</Select.Option>
-                    <Select.Option value="3">支票</Select.Option>
-                    <Select.Option value="4">电汇</Select.Option>
-                    <Select.Option value="5">承兑</Select.Option>
+                    <Select.Option value={1}>转账</Select.Option>
+                    <Select.Option value={2}>现金</Select.Option>
+                    <Select.Option value={3}>支票</Select.Option>
+                    <Select.Option value={4}>电汇</Select.Option>
+                    <Select.Option value={5}>承兑</Select.Option>
                   </Select>
                 </>
               ),
@@ -406,70 +406,37 @@ class ManagementContractSetting extends ContractSetting {
                   })}
                   <Select.Option value="其他-国外">其他-国外</Select.Option>
                 </Select>
-
-                // <Cascader
-                //   fieldNames={{ label: "name", value: "code" }}
-                //   options={this.state.regionInfoData?.map(item=>item.children = [])}
-                //   onChange={this.onRegionInfoChange}
-                //   changeOnSelect
-                //   disabled={
-                //     this.getForm()?.getFieldValue("countryCode") === 1 ||
-                //     contract?.countryCode === 1
-                //   }
-                // />
               ),
             },
             {
-              label: "销售员",
-              name: "salesman",
-              initialValue: contract?.salesman,
-              rules: [
-                {
-                  required: false,
-                  message: "请输入销售员",
-                },
-              ],
-              children: <Input maxLength={20} />,
+              label: "合同接管人",
+              name: "takeOverUser",
+              initialValue: contract?.takeOverUser,
+              children: (<Input value={contract?.takeOverUser} />),
             },
             {
-              label: "备注",
-              name: "description",
-              initialValue: contract?.description,
+              label: "合同接管日期",
+              name: "takeOverTime",
+              initialValue: contract?.takeOverTime,
               children: (
-                <Input.TextArea
-                  rows={5}
-                  showCount={true}
-                  maxLength={300}
-                  placeholder="请输入备注信息"
+                <DatePicker
+                  format="YYYY-MM-DD"
                   className={layoutStyles.width100}
                 />
               ),
             },
             {
-              label: "币种",
-              name: "currencyType",
-              initialValue: contract?.currencyType,
-              rules: [
-                {
-                  required: true,
-                  message: "请选择币种",
-                },
-              ],
+              label: "是否收到合同原件",
+              name: "isReceivedContract",
+              initialValue: contract?.isReceivedContract || 0,
               children: (
-                <Select
-                  getPopupContainer={(triggerNode) => triggerNode.parentNode}
+                <Select value={contract?.isReceivedContract}
                 >
-                  {currencyTypeOptions &&
-                    currencyTypeOptions.map(({ id, name }, index) => {
-                      return (
-                        <Select.Option key={index} value={id}>
-                          {name}
-                        </Select.Option>
-                      );
-                    })}
+                  <Select.Option value={0}>是</Select.Option>
+                  <Select.Option value={1}>否</Select.Option>
                 </Select>
               ),
-            },
+            }
           ],
         },
       ],

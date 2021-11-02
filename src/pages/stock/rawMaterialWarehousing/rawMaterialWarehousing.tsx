@@ -65,7 +65,7 @@ export default function RawMaterialStock(): React.ReactNode {
             dataIndex: 'receiveTime',
             width: 120,
         }, {
-            title: '重量(度)',
+            title: '重量(吨)',
             dataIndex: 'weight',
             width: 120,
         },
@@ -130,7 +130,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={status ? status : '请选择'}
+                            value={status ? status : ''}
                             onChange={(val) => { setStatus(val) }}
                         >
                             <Select.Option

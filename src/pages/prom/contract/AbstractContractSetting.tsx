@@ -62,7 +62,10 @@ export interface ProjectContractInfo extends IContractInfo {
     readonly purchaseOrderNumber: string;
     readonly ecpContractNumber: string;
     readonly payCompanyName: string;
-    readonly payType: string;
+    readonly payType: number;
+    readonly takeOverUser: string;
+    readonly takeOverTime: string;
+    readonly isReceivedContract: number;
 }
 
 export interface ICustomerInfoDto {

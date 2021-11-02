@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Button, Col, Pagination, Row, Select, TableColumnProps, Table, Modal, message, } from 'antd'
 import { CommonTable, DetailContent, DetailTitle } from '../../common'
-import { baseInfo, material } from './configurationData.json'
+import { baseInfo, material } from './angleSteel.json'
 import RequestUtil from "../../../utils/RequestUtil"
 import Edit from "./Edit"
 import { RouteProps } from '../public'
@@ -14,15 +14,7 @@ const AngleSteel = (props: RouteProps) => {
     const [type, setType] = useState<typeProps>("new");
     const [columnsData, setColumnsData] = useState([]);
     const columns: TableColumnProps<object>[] = [
-        {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            width: 50,
-            render: (text, item, index) => {
-                return <span>{index + 1}</span>
-            }
-        },
+
         {
             key: 'policy',
             title: '策略项',
@@ -60,7 +52,16 @@ const AngleSteel = (props: RouteProps) => {
         <DetailContent>
             <DetailTitle title="配置基础配置" />
             <CommonTable
-                columns={columns}
+                columns={[
+                    {
+                        key: 'index',
+                        title: '序号',
+                        dataIndex: 'index',
+                        width: 50,
+                        render: (_, _b, index) => {
+                            return <span>{index + 1}</span>
+                        }
+                    }, ...baseInfo]}
                 dataSource={columnsData}
             />
             <DetailTitle title="材质配料设定" operation={[

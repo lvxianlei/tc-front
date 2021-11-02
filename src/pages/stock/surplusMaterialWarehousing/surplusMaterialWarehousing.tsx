@@ -52,7 +52,7 @@ export default function RawMaterialStock(): React.ReactNode {
             }
         },
         {
-            title: '余料出库编号',
+            title: '余料入库编号',
             dataIndex: 'excessStockNumber',
             width: 120,
         }, {

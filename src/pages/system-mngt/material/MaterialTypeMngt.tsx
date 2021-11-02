@@ -12,8 +12,8 @@ import { ITabItem } from '../../../components/ITabableComponent';
 import RequestUtil from '../../../utils/RequestUtil';
 import { IMaterialType } from './IMaterial';
 
-interface IMaterialTypeTypeMngtProps {}
-interface IMaterialTypeTypeMngtWithRouteProps extends RouteComponentProps<IMaterialTypeTypeMngtProps>, WithTranslation {}
+interface IMaterialTypeTypeMngtProps { }
+interface IMaterialTypeTypeMngtWithRouteProps extends RouteComponentProps<IMaterialTypeTypeMngtProps>, WithTranslation { }
 interface IMaterialTypeTypeMngtState extends IAbstractMngtComponentState, IFIlterValue {
     readonly material: IMaterialType[];
     readonly visible: boolean;
@@ -35,21 +35,21 @@ interface IFIlterValue {
  */
 class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRouteProps, IMaterialTypeTypeMngtState> {
 
-    constructor(props: IMaterialTypeTypeMngtWithRouteProps){
+    constructor(props: IMaterialTypeTypeMngtWithRouteProps) {
         super(props)
         this.showModal = this.showModal.bind(this)
         this.closeModal = this.closeModal.bind(this)
     }
 
     //modal-show
-    public showModal(record: Record<string,any> ,res:any, edit: number): void {
+    public showModal(record: Record<string, any>, res: any, edit: number): void {
         this.setState({
             visible: true,
             defaultName: edit === 1 ? '' : record.name,
             defaultCode: edit === 1 ? '' : record.code,
             editValue: edit === 1 ? false : true,
             type: edit,
-            selectedValue:  record,
+            selectedValue: record,
         })
     }
     //modal-close
@@ -66,7 +66,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
      * @param item 
      * @returns table props 
      */
-     protected getTableProps(item: ITabItem): TableProps<object> {
+    protected getTableProps(item: ITabItem): TableProps<object> {
         return {
             rowKey: this.getTableRowKey(),
             bordered: true,
@@ -77,22 +77,22 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
         };
     }
     //modal-value
-    public onFinish = async ( values: any ) =>{
+    public onFinish = async (values: any) => {
         let dataSource: IMaterialType = {};
-        const { selectedValue, type } = this.state; 
-        if(selectedValue.id && type === 1){
-        dataSource.level =  selectedValue?.level && selectedValue.level+1;
-        dataSource.parentId =  selectedValue?.id && selectedValue.id;
-        }else if(type === 2){
-        dataSource.id =  selectedValue?.id && selectedValue.id;
+        const { selectedValue, type } = this.state;
+        if (selectedValue.id && type === 1) {
+            dataSource.level = selectedValue?.level && selectedValue.level + 1;
+            dataSource.parentId = selectedValue?.id && selectedValue.id;
+        } else if (type === 2) {
+            dataSource.id = selectedValue?.id && selectedValue.id;
         }
         dataSource.name = values.name;
         dataSource.code = values.code;
-        
+
         this.setState({
             visible: false,
         })
-        selectedValue.id && type===2?await RequestUtil.put('/tower-system/materialCategory', dataSource):await RequestUtil.post('/tower-system/materialCategory', dataSource);
+        selectedValue.id && type === 2 ? await RequestUtil.put('/tower-system/materialCategory', dataSource) : await RequestUtil.post('/tower-system/materialCategory', dataSource);
         this.fetchMaterialType();
     }
 
@@ -102,14 +102,14 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
             title: '编号',
             dataIndex: 'code',
             align: "center",
-            width:500,
-        },  {
+            width: 500,
+        }, {
             key: 'name',
             title: '名称',
             dataIndex: 'name',
             align: "center",
-            width:500,
-        },  {
+            width: 500,
+        }, {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
@@ -119,15 +119,15 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                     <Button type="link" onClick={() => this.showModal(record, item, 1)}>
                         新增
                     </Button>
-                    <Button type="link"  onClick={() => this.showModal(record, item, 2)}>
+                    <Button type="link" onClick={() => this.showModal(record, item, 2)}>
                         编辑
                     </Button>
-                    <ConfirmableButton confirmTitle="要删除该数据吗？" type="link" placement="topRight" onConfirm={() => {this.handleDelete(record)}} >
+                    <ConfirmableButton confirmTitle="要删除该数据吗？" type="link" placement="topRight" onConfirm={() => { this.handleDelete(record) }} >
                         <Button type="link">
                             删除
                         </Button>
                     </ConfirmableButton>
-                    
+
                 </Space>
             )
         }];
@@ -156,7 +156,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
         const resData: IMaterialType[] = await RequestUtil.get<IMaterialType[]>('/tower-system/materialCategory', {
             ...filterValues,
             current: pagination.current || this.state.tablePagination?.current,
-            size: pagination.pageSize ||this.state.tablePagination?.pageSize,
+            size: pagination.pageSize || this.state.tablePagination?.pageSize,
         });
         this.setState({
             ...filterValues,
@@ -177,7 +177,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
 
 
     //delete-row
-    public handleDelete = async(record: Record<string,any>) => {
+    public handleDelete = async (record: Record<string, any>) => {
         //接口
         await RequestUtil.delete(`/tower-system/materialCategory/${record.id}`)
         this.fetchMaterialType()
@@ -195,14 +195,14 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
             key: 0
         }];
     }
-    
+
     /**
      * @implements
      * @description Determines whether tab change on
      * @param activeKey 
      */
-    public onTabChange(activeKey: string): void {}
-    
+    public onTabChange(activeKey: string): void { }
+
     /**
      * @implements
      * @description Gets filter form item props
@@ -236,7 +236,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
     public onFilterSubmit(values: Record<string, any>): void {
         this.fetchMaterialType(values);
     }
-    
+
     /**
      * @implements
      * @description Determines whether table change on
@@ -248,7 +248,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
             name: this.state.name
         }, pagination);
     }
-    
+
 
 
     /**
@@ -263,7 +263,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
 
 
 
-    
+
 
 
 
@@ -281,51 +281,51 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
         const { editValue, visible, defaultName, defaultCode } = this.state;
         return (
             <>
-            { super.render() }
-            {visible && <Modal 
-                title={ editValue? '修改' : '新增' } 
-                visible={ visible } 
-                footer={ null } 
-                onCancel={ this.closeModal }
-            >
-                <Form onFinish={ this.onFinish }>
-                    <Form.Item
-                        name="code"
-                        label="编号"
-                        rules={[{ 
-                            required: true, 
-                            message: '请填写编号！' 
-                        },
-                        {
-                            pattern: /^[^(\s)|(\u4e00-\u9fa5)]*$/,
-                            message: '禁止输入中文或空格',
-                        }]} 
-                        initialValue={ defaultCode }
-                    >
-                        <Input placeholder="请填写编号" style={{ width:"100%" }} maxLength={ 20 }/>
-                    </Form.Item>
-                    <Form.Item
-                        name="name"
-                        label="名称"
-                        rules={[{ 
-                            required: true, 
-                            message: '请填写名称！' 
-                        },
-                        {
-                            pattern: /^[^\s]*$/,
-                            message: '禁止输入空格',
-                        }]} 
-                        initialValue={ defaultName }
-                    >
-                        <Input placeholder="请填写名称" maxLength={ 20 }/>
-                    </Form.Item>
-                    <Button type="primary" htmlType="submit">保存</Button>
-                    <Button onClick={this.closeModal}>取消</Button>
-                </Form>
-            </Modal>}
+                {super.render()}
+                {visible && <Modal
+                    title={editValue ? '修改' : '新增'}
+                    visible={visible}
+                    footer={null}
+                    onCancel={this.closeModal}
+                >
+                    <Form onFinish={this.onFinish}>
+                        <Form.Item
+                            name="code"
+                            label="编号"
+                            rules={[{
+                                required: true,
+                                message: '请填写编号！'
+                            },
+                            {
+                                pattern: /^[^(\s)|(\u4e00-\u9fa5)]*$/,
+                                message: '禁止输入中文或空格',
+                            }]}
+                            initialValue={defaultCode}
+                        >
+                            <Input placeholder="请填写编号" style={{ width: "100%" }} maxLength={20} />
+                        </Form.Item>
+                        <Form.Item
+                            name="name"
+                            label="名称"
+                            rules={[{
+                                required: true,
+                                message: '请填写名称！'
+                            },
+                            {
+                                pattern: /^[^\s]*$/,
+                                message: '禁止输入空格',
+                            }]}
+                            initialValue={defaultName}
+                        >
+                            <Input placeholder="请填写名称" maxLength={20} />
+                        </Form.Item>
+                        <Button type="primary" htmlType="submit">保存</Button>
+                        <Button onClick={this.closeModal}>取消</Button>
+                    </Form>
+                </Modal>}
             </>
         );
-    
+
     }
 }
 
