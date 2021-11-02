@@ -2,6 +2,7 @@ import React from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { Page } from '../../common'
+import { baseInfoList } from './differentListData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 export default function Invoicing() {
@@ -44,6 +45,7 @@ export default function Invoicing() {
     return <Page
         path="/tower-market/invoicing"
         columns={[
+            ...baseInfoList,
             {
                 title: "操作",
                 dataIndex: "opration",
@@ -57,7 +59,7 @@ export default function Invoicing() {
                     </>
                 }
             }]}
-        extraOperation={<Link to="/project/invoicing/edit/new"><Button type="primary">新增开票申请</Button></Link>}
+        extraOperation={<Link to="/project/invoicing/edit/new"><Button type="primary">导出</Button></Link>}
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {

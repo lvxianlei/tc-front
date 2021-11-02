@@ -6,48 +6,48 @@
         },
         {
             "title": "差异编号",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "diffNumber",
+            "type": "string"
         },
         {
             "title": "内部合同号",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "internalNumber",
+            "type": "string"
         },
         {
             "title": "生产批次",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "productionBatch",
+            "type": "string"
         },
         {
             "title": "原材料任务编号",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "purchaseNumber",
+            "type": "string"
         },
         {
             "title": "塔型",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "productCategoryName",
+            "type": "string"
         },
         {
             "title": "差异数",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "diffCount",
+            "type": "integer"
         },
         {
             "title": "状态",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "diffStatus",
+            "type": "integer"
         },
         {
             "title": "处理人",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "handlerName",
+            "type": "string"
         },
         {
             "title": "最新状态变更时间",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "statusUpdateTime",
+            "type": "string"
         }
     ],
     "SeeList": [
@@ -57,8 +57,8 @@
         },
         {
             "title": "构件号",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "code",
+            "type": "string"
         },
         {
             "title": "更改前材质",
@@ -67,8 +67,8 @@
         },
         {
             "title": "更改后材质",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "changeStructureTexture",
+            "type": "string"
         },
         {
             "title": "更改前规格",
@@ -77,8 +77,8 @@
         },
         {
             "title": "更改后规格",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "changeStructureSpec",
+            "type": "string"
         },
         {
             "title": "更改前长度（mm）",
@@ -87,8 +87,8 @@
         },
         {
             "title": "更改后长度（mm）",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "changeLength",
+            "type": "number"
         },
         {
             "title": "单数量",
@@ -97,18 +97,18 @@
         },
         {
             "title": "基数",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "count",
+            "type": "integer"
         },
         {
             "title": "修改总数量",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "totalNum",
+            "type": "integer"
         },
         {
             "title": "提料人",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "materialLeaderName",
+            "type": "string"
         },
         {
             "title": "状态",
@@ -119,12 +119,12 @@
     "MaterialShortage": [
         {
             "title": "材质",
-            "dataIndex": "materialTexture",
+            "dataIndex": "structureTexture",
             "type":"string"
         },
         {
             "title": "规格",
-            "dataIndex": "spec",
+            "dataIndex": "structureSpec",
             "type":"string"
         },     
         {
