@@ -373,8 +373,6 @@
                                 "authority": "approvalm"
                             },
                             {
-<<<<<<< HEAD
-=======
                                 "label": "采购列表",
                                 "path": "/workMngt/purchaseList",
                                 "authority": "approvalm"
@@ -400,7 +398,6 @@
                                 "authority": "approvalm"
                             },
                             {
->>>>>>> 4bef0e1e6e0e5859405f0b5fbc981a0f17832c8a
                                 "label": "缺料列表",
                                 "path": "/workMngt/shortageList",
                                 "authority": "approvalm"
