@@ -7,13 +7,17 @@ import { baseInfo, material } from './angleSteel.json'
 import RequestUtil from "../../../utils/RequestUtil"
 import Edit from "./Edit"
 import useRequest from '@ahooksjs/use-request'
+import ApplicationContext from "../../../configuration/ApplicationContext"
 type typeProps = "new" | "edit"
 const AngleSteel = () => {
     const history = useHistory()
     const editRef = useRef<{ onSubmit: () => Promise<boolean>, loading: boolean }>()
     const [visible, setVisible] = useState<boolean>(false);
     const [type, setType] = useState<typeProps>("new");
-
+    const materialTextureEnum = (ApplicationContext.get().dictionaryOption as any)["139"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
     const { loading, data } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get("/tower-supply/angleConfigStrategy")
@@ -58,7 +62,16 @@ const AngleSteel = () => {
                 }}>添加</Button>,
                 <Button key="goback" type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
             ]} />
-            <CommonTable columns={material} dataSource={data?.ingredientsMaterialConfigVos || []} />
+            <CommonTable columns={material.map((item: any) => {
+                if (item.dataIndex === "material") {
+                    return ({
+                        ...item,
+                        type: "select",
+                        enum: materialTextureEnum
+                    })
+                }
+                return item
+            })} dataSource={data?.ingredientsMaterialConfigVos || []} />
         </DetailContent>
     </>
 }
