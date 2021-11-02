@@ -191,9 +191,9 @@ const ViewPanel = (): React.ReactNode => {
                             (ApplicationContext.get().dictionaryOption as any)["138"].map((item: { id: string, name: string }) => ({
                                 value: item.id,
                                 label: item.name
-                            })).map((t: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }, i: any) => {
+                            })).map((t: any, i: any) => {
                                 return (
-                                    <Option value={t.value}>{t.label}</Option>
+                                    <Option value={t.label}>{t.label}</Option>
                                 )
                             })
                         }
