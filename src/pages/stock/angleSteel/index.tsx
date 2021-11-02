@@ -6,7 +6,8 @@ import { CommonTable, DetailContent, DetailTitle } from '../../common'
 import { baseInfo, material } from './angleSteel.json'
 import RequestUtil from "../../../utils/RequestUtil"
 import Edit from "./Edit"
-import useRequest from '_@ahooksjs_use-request@2.8.13@@ahooksjs/use-request'
+// import useRequest from '_@ahooksjs_use-request@2.8.13@@ahooksjs/use-request'
+import useRequest from "@ahooksjs/use-request"
 type typeProps = "new" | "edit"
 const AngleSteel = () => {
     const history = useHistory()
