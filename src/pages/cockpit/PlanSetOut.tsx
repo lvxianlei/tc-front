@@ -358,7 +358,7 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
                             </Select>
             },
             {
-                name: '3fuzzyMsg',
+                name: 'fuzzyMsg',
                 label: '模糊查询项',
                 children: <Input placeholder="请输入放样任务编号/任务单号/订单编号/内部合同编号进行查询" maxLength={200} />
             },
