@@ -90,7 +90,7 @@ export default function SampleDrawCheck(): React.ReactNode {
         },
         {
             key: 'code',
-            title: '构建编号',
+            title: '构件编号',
             width: 200,
             dataIndex: 'code'
         },
