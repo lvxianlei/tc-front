@@ -119,7 +119,10 @@ export default function SetOutList(): React.ReactNode {
                     {
                         record.status === 4 ? <Link to={ `/workMngt/setOutList/poleInformation/${ record.id }` }>杆塔配段</Link> : <Button type="link" disabled>杆塔配段</Button>
                     }
-                    <Deliverables id={ record.id } name={ record.name }/>
+                    {
+                        record.status === 6 ? <Deliverables id={ record.id } name={ record.name }/> : <Button type="link" disabled>交付物</Button>
+                    }
+                    
                     {
                         record.status === 2 || record.status === 3 || record.status === 4 ?
                         <Upload 

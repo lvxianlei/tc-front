@@ -125,13 +125,13 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             )
             
         },{
-            key: 'productName',
+            key: 'materialName',
             title: '* 品名',
-            dataIndex: 'productName',
+            dataIndex: 'materialName',
             align: "center",
             width: 200,
             render: (text: string, record: IMaterial, index: number): React.ReactNode => (
-                <Form.Item name={['materialData', index,'productName']} rules= {[{
+                <Form.Item name={['materialData', index,'materialName']} rules= {[{
                     required: true,
                     message: '请输入品名'
                 }, ({ getFieldValue }) => ({
@@ -205,7 +205,7 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
                     message: '请输入规格'
                 },({ getFieldValue }) => ({
                     validator(_, value) {
-                      if (!value || getFieldValue(['materialData', index,'productName']) === value) {
+                      if (!value || getFieldValue(['materialData', index,'materialName']) === value) {
                         return Promise.reject(new Error('不可与品名相同!'));
                       }
                       return Promise.resolve();
@@ -435,7 +435,7 @@ export interface IAbstractMaterialSettingState extends IAbstractFillableComponen
             description: "",
             materialCode: "",
             materialTexture: "",
-            productName: "",
+            materialName: "",
             proportion: undefined,
             rowMaterial: "",
             shortcutCode: "",
