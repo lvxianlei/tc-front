@@ -1,0 +1,92 @@
+{
+    "buyingTask":[
+        {
+            "title": "原材料采购任务编号",
+            "dataIndex": "rawMaterialProcurementTaskNumber"
+        },
+        {
+            "title": "任务状态",
+            "dataIndex": "description"
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "batcheStatusUpdateTime"
+        },
+        {
+            "title": "已完成（吨）/需求（吨）",
+            "dataIndex": "completed (tons)/required (tons)"
+        },
+        {
+            "title": "任务单编号",
+            "dataIndex": "taskNoticeNumber"
+        },
+        {
+            "title": "订单编号",
+            "dataIndex": "saleOrderNumber"
+        },
+        {
+            "title": "内部合同编号",
+            "dataIndex": "internalNumber"
+        },
+        {
+            "title": "配料人",
+            "dataIndex": "batcher"
+        },
+        {
+            "title": "采购人",
+            "dataIndex": "purchaserId"
+        }
+    ],
+    "operatingInformation":[
+        {
+            "title": "操作部门",
+            "dataIndex": "deptName"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "optUserName"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "optTime"
+        },
+        {
+            "title": "任务状态",
+            "dataIndex": "taskStatus"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        }
+    ],
+    "materialList1":[
+        {
+            "title": "生产批次",
+            "dataIndex": "productionBatch"
+        },
+        {
+            "title": "出库时间",
+            "dataIndex": "updateTime"
+        },
+        {
+            "title": "出库人",
+            "dataIndex": "outStockUserName"
+        },
+        {
+            "title": "领料人",
+            "dataIndex": "pickingPerson"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture"
+        },
+        {
+            "title": "原材料长度",
+            "dataIndex": "length"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "number"
+        }
+    ]
+}

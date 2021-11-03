@@ -1,0 +1,172 @@
+{
+    "viewReceivingNote": [
+        {
+            "title": "供应商",
+            "dataIndex": "supplierName"
+        },
+        {
+            "title": "收货单编号",
+            "dataIndex": "receiptNumber"
+        },
+        {
+            "title": "收货完成时间",
+            "dataIndex": "receivingTime"
+        },
+        {
+            "title": "重量合集(吨)",
+            "dataIndex": "weight"
+        },
+        {
+            "title": "价税合计(元)",
+            "dataIndex": "price"
+        },
+        {
+            "title": "运费(元)",
+            "dataIndex": "freight"
+        },
+        {
+            "title": "贷款运费合计(元)",
+            "dataIndex": "loansFreight"
+        },
+        {
+            "title": "关联请款编号",
+            "dataIndex": "associatedPaymentRequestNumber"
+        },
+        {
+            "title": "关联票据编号",
+            "dataIndex": "associatedBillNumber"
+        },
+        {
+            "title": "付款状态",
+            "dataIndex": "payStatus"
+        }
+    ],
+    "viewReceivingNoteDetail": [
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandard"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length"
+        },
+        {
+            "title": "宽度",
+            "dataIndex": "width"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "number"
+        },
+        {
+            "title": "合同单价（元/吨）",
+            "dataIndex": "contractPrice"
+        },
+        {
+            "title": "价税合计（元）",
+            "dataIndex": "price"
+        },
+        {
+            "title": "重量（吨）",
+            "dataIndex": "weight"
+        },
+        {
+            "title": "采购状态",
+            "dataIndex": "purchaseStatus"
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "batcheStatusUpdateTime"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "optUserName"
+        }
+    ],
+    "ApprovalInformation": [
+        {
+            "title": "操作部门",
+            "dataIndex": "deptName"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "optUserName"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "optTime"
+        },
+        {
+            "title": "状态",
+            "dataIndex": "status"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "taskDescription"
+        }
+    ],
+    "operatingInformation": [
+        {
+            "title": "操作部门",
+            "dataIndex": "deptName"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "optUserName"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "optTime"
+        },
+        {
+            "title": "状态",
+            "dataIndex": "status"
+        },
+        {
+            "title": "付款日",
+            "dataIndex": "payDay"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "taskDescription"
+        }
+    ],
+    "operatingInformation1":[
+        {
+            "title": "操作部门",
+            "dataIndex": "deptName"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "optUserName"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "optTime"
+        },
+        {
+            "title": "操作",
+            "dataIndex": "operation"
+        }
+    ]
+}

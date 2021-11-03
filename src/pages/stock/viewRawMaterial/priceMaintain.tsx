@@ -90,9 +90,9 @@ export default function PriceMaintain(): React.ReactNode {
     const handleCancel = () => {
         setIsModalVisible(false);
     };
-    const del = async (materialPriceId: string) => {
+    const del = async (materialPriceId: number) => {
         ///tower-supply/materialPrice
-        const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/materialPrice?materialPriceId=${materialPriceId}`)
+        const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/materialPrice/${materialPriceId}`,{});
         console.log(result);
     }
     const handleCancel1 = () => {

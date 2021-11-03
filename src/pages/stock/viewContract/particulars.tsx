@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, TableColumnProps, Select, DatePicker, Input } from 'antd'
 import { Link, useHistory, } from 'react-router-dom'
 import { Page } from '../../common'
-import { viewContract } from "./viewContract.json"
+import { particulars } from "./viewContract.json"
 //状态
 const projectType = [
     {
@@ -23,7 +23,7 @@ const projectType = [
     }
 ]
 
-export default function ViewContract(): React.ReactNode {
+export default function Particulars(): React.ReactNode {
     const history = useHistory()
     const [filterValue, setFilterValue] = useState({});
     const { RangePicker } = DatePicker;
@@ -46,47 +46,32 @@ export default function ViewContract(): React.ReactNode {
     return (
         <div>
             <Page
-                path="/tower-supply/materialContract/getMaterialContractBoardPage"
+                path="/tower-market/contract"//no
                 columns={[
                     {
                         key: 'index',
                         title: '序号',
                         dataIndex: 'index',
+                        fixed:"left",
                         width: 50,
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
-                    ...viewContract
+                    ...particulars
                     ,
                     {
                         key: 'operation',
                         title: '操作',
                         dataIndex: 'operation',
+                        fixed:"right",
                         render: (_: any, records: any) => <>
-                            <Button type="link" onClick={() => { history.push(`/stock/viewContract/particulars`) }}>明细</Button>
+                            <Button type="link" onClick={() => { }}>质保单</Button>
+                            <Button type="link" onClick={() => { }}>质检单</Button>
                         </>
                     },]}
                 filterValue={filterValue}
-                extraOperation={<Link to="/project/management/new"><Button type="primary">导出</Button></Link>}
+                extraOperation={<div><Link to="/project/management/new"><Button type="primary">导出</Button></Link><span style={{fontSize:"20px",color:"#F59A23"}}>已收货：重量(支)合计：2209.900     价税合计(元)合计：51425.00</span><Button onClick={()=>history.goBack()}>返回上一级</Button></div>}
                 onFilterSubmit={onFilterSubmit}
-                searchFormItems={[
-                    {
-                        name: 'updateTime',
-                        label: '最新状态变更时间',
-                        children: <RangePicker />
-                    },
-                    {
-                        name: 'rawMaterialType',
-                        label: '状态',
-                        children: <Select style={{ width: "150px" }}>
-                            {projectType.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
-                        </Select>
-                    },
-                    {
-                        name: 'inquire',
-                        label: '查询',
-                        children: <Input style={{ width: "113px" }} placeholder="供应商/收货单编号/关联申请编号/关联票据编号" />
-                    },
-                ]}
+                searchFormItems={[]}
             />
         </div>
     )

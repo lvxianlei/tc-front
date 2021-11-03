@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Select, Button, Modal, Form, Popconfirm, Row, Col, TreeSelect, message, Descriptions } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { Page } from '../common';
+import { CommonTable, DetailContent, DetailTitle, Page } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import moment from 'moment';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
@@ -19,6 +19,7 @@ export default function SupplierMngt(): React.ReactNode {
     const [isModalVisible2, setIsModalVisible2] = useState(false);
     const [materialCategoryId, setMaterialCategoryId] = useState("");
     const [supplierId, setSupplierId] = useState("");
+    const [columnsData, setColumnsData] = useState([]);
     const [form] = Form.useForm();
     const history = useHistory();
 
@@ -91,9 +92,10 @@ export default function SupplierMngt(): React.ReactNode {
         </div>
     ]
     //调接口删除
-    const handleDelete = async (id: string) => {
+    const handleDelete = async (id: number) => {
         ///tower-supply/supplier
-        const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/supplier`, { id })
+        console.log(id);        
+        const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/supplier?id=${id}`,{});
         console.log(result);
     }
     return <>
@@ -208,15 +210,15 @@ export default function SupplierMngt(): React.ReactNode {
                 <Descriptions.Item label="开户银行 *"><input style={{ border: "none", outline: "none" }} /></Descriptions.Item>
                 <Descriptions.Item label="银行账号 *"><input style={{ border: "none", outline: "none" }} /></Descriptions.Item>
             </Descriptions>
-            <Page
-                path="/tower-supply/supplier"
-                columns={
-                    [
+            <DetailContent>
+                <DetailTitle title="操作信息" />
+                <CommonTable
+                    columns={[
                         ...AddEditDetail
-                    ]
-                }
-                searchFormItems={[]}
-            />
+                    ]}
+                    dataSource={columnsData}
+                />
+            </DetailContent>
         </Modal>
         <Modal width="700px" title="详情" visible={isModalVisible2} footer={buttons2} onCancel={handleCancel2}>
             <Descriptions title="供应商基础信息" bordered column={2} labelStyle={{ textAlign: 'center' }}>
