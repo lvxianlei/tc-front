@@ -43,7 +43,7 @@ const towerColumns = [
     { title: '材料名称', dataIndex: 'materialName', key: 'materialName' },
     { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture' },
     { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec' },
-    { title: '单基件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum' },
+    { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum' },
     { title: '长度', dataIndex: 'length', key: 'length' },
     { title: '宽度', dataIndex: 'width', key: 'width' },
     { title: '理算重量（kg）', dataIndex: 'basicsTheoryWeight', key: 'basicsTheoryWeight' ,render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>)  },
