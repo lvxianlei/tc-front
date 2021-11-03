@@ -40,7 +40,6 @@ export default function RawMaterialStock(): React.ReactNode {
             title: '所在仓库',
             dataIndex: 'warehouseName',
             width: 120,
-            render: (text: any) => <a>{text}</a>,
         }, {
             title: '收货批次',
             dataIndex: 'receiveBatchNumber',
