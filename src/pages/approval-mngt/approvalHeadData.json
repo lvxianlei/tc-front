@@ -356,11 +356,19 @@
             "enum": [
                 {
                     "value": 1,
-                    "label": "通过"
+                    "label": "审批中"
                 },
                 {
                     "value": 2,
-                    "label": "驳回"
+                    "label": "已同意"
+                },
+                {
+                    "value": 3,
+                    "label": "已驳回"
+                },
+                {
+                    "value": 4,
+                    "label": "已转审"
                 }
             ]
         },

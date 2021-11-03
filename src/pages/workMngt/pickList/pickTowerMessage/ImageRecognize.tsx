@@ -14,7 +14,7 @@ export default function PickTowerDetail(): React.ReactNode {
     const params = useParams<{ id: string, productSegmentId: string, status: string }>()
     const [ url, setUrl ] = useState<string>('')
     const [ urlBase, setUrlBase ] = useState<undefined|any>('')
-    const [ tableDataSource, setTableDataSource ] = useState<undefined|any[]>([])
+    const [ tableDataSource, setTableDataSource ] = useState<any[]>([])
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         // const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
         resole(data)
@@ -36,7 +36,8 @@ export default function PickTowerDetail(): React.ReactNode {
         { title: '备注', dataIndex: 'description', key: 'description' },
         { title: '操作', key:'operation', render:(_a: any, _b: any, index: number): React.ReactNode =>(
             <Button type='link' onClick={()=>{
-                tableDataSource&&setTableDataSource(tableDataSource.splice(index,1))
+                tableDataSource&&tableDataSource.splice(index,1);
+                tableDataSource&&setTableDataSource([...tableDataSource])
             }}>删除</Button>
         )}
     ]
@@ -104,12 +105,12 @@ export default function PickTowerDetail(): React.ReactNode {
                         <Button type="primary">选择图片</Button>
                     </Upload>
                     <Button type='primary' onClick={async ()=>{
-                        const tableDataSource: any[]|undefined  = await RequestUtil.post(`/tower-science/drawProductStructure/ocr`,{base64File: urlBase, productSegmentId: params.productSegmentId});
+                        const tableDataSource: any[]  = await RequestUtil.post(`/tower-science/drawProductStructure/ocr`,{base64File: urlBase, productSegmentId: params.productSegmentId});
                         setTableDataSource(tableDataSource);
                     }} disabled={!urlBase}>识别文字</Button>
                 </Space>
                 <div style={{ display: 'flex' }}>
-                    <CommonTable dataSource={tableDataSource} columns={towerColumns} pagination={false}/>
+                    <CommonTable dataSource={[...tableDataSource]} columns={towerColumns} pagination={false} rowKey='index'/>
                     <div style={{ boxShadow:'0px 0px 5px 5px #ccc', width:'100%', marginLeft:'10px', textAlign:'center'}}>
                         {url?<Image src={url} />:<span style={{lineHeight:"200px"}}>当前暂无图片</span>}
                     </div>

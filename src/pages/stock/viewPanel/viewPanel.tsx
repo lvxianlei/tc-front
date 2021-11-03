@@ -4,10 +4,8 @@ import { Button, Table, Pagination, TableColumnProps, Row, Col, Select, } from '
 import RequestUtil from '../../../utils/RequestUtil';
 import ApplicationContext from "../../../configuration/ApplicationContext"
 import { Key } from 'rc-select/lib/interface/generator';
-import { useHistory } from 'react-router';
 const { Option } = Select;
 const ViewPanel = (): React.ReactNode => {
-    const history = useHistory()
     const columns: TableColumnProps<object>[] = [
         {
             key: 'index',
@@ -77,10 +75,10 @@ const ViewPanel = (): React.ReactNode => {
                     <div>
                         {
                             item.type === 0 ?
-                                <span style={{ padding: '5px 8px', backgroundColor: 'yellow' , color: '#000' }}>告警库存</span> :
+                                <span style={{ padding: '5px 8px', color: '#000' }}>正常</span> :
                                 item.type === 1 ?
-                                    <span style={{ padding: '5px 8px', backgroundColor: 'red', color: '#fff' }}>可用库存</span> :
-                                    <span style={{ padding: '5px 8px', backgroundColor: '#ccc', color: '#FF8C00' }}>安全库存</span>
+                                    <span style={{ padding: '5px 8px', backgroundColor: 'yellow', color: '#fff' }}>提醒</span> :
+                                    <span style={{ padding: '5px 8px', backgroundColor: 'red', color: '#FF8C00' }}>告警</span>
                         }
                     </div>
                 )
@@ -101,9 +99,16 @@ const ViewPanel = (): React.ReactNode => {
     let [productName, setProductName] = useState('');
     let [spec, setSpec] = useState('');
     let [standard, setStandard] = useState('');
+    let [searchInfo, setSearchInfo] = useState({
+        condition: '',
+        materialTexture: '',
+        productName: '',
+        spec: '',
+        standard: '',
+    })
     useEffect(() => {
         getColumnsData()
-    }, [condition, materialTexture, productName, spec, standard, current, size,]);
+    }, [current, size,]);
     useEffect(() => {
         getSelectDetail()
     }, []);
@@ -111,11 +116,12 @@ const ViewPanel = (): React.ReactNode => {
         const data: any = await RequestUtil.get('/tower-storage/safetyStock/board', {
             current,
             size,
-            condition,
-            materialTexture,
-            productName,
-            spec,
-            standard,
+            ...searchInfo,
+            // condition,
+            // materialTexture,
+            // productName,
+            // spec,
+            // standard,
         })
         // setTotal(data.data)
         setColumnsData(data)
@@ -127,12 +133,15 @@ const ViewPanel = (): React.ReactNode => {
     }
     // 重置
     const resetting = () => {
-        setCurrent(1)
         setCondition('')
         setMaterialTexture('')
         setProductName('')
         setSpec('')
         setStandard('')
+        setCurrent(1)
+        if (current === 1) {
+            getColumnsData()
+        }
     }
     return (
         <div className='public_page'>
@@ -182,9 +191,9 @@ const ViewPanel = (): React.ReactNode => {
                             (ApplicationContext.get().dictionaryOption as any)["138"].map((item: { id: string, name: string }) => ({
                                 value: item.id,
                                 label: item.name
-                            })).map((t: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }, i: any) => {
+                            })).map((t: any, i: any) => {
                                 return (
-                                    <Option value={t.value}>{t.label}</Option>
+                                    <Option value={t.label}>{t.label}</Option>
                                 )
                             })
                         }
@@ -246,7 +255,7 @@ const ViewPanel = (): React.ReactNode => {
                     md={12}
                     className='search_item'
                 >
-                    <span className='tip'>库存情况：</span>
+                    <span className='tip'>库存状态：</span>
                     <Select
                         className='input'
                         value={condition}
@@ -267,6 +276,18 @@ const ViewPanel = (): React.ReactNode => {
                     <Button
                         className='btn_item'
                         onClick={() => {
+                            searchInfo.condition = condition;
+                            searchInfo.materialTexture = materialTexture;
+                            searchInfo.productName = productName;
+                            searchInfo.spec = spec;
+                            searchInfo.standard = standard;
+                            setSearchInfo(searchInfo)
+                            getColumnsData()
+                        }}
+                    >查询</Button>
+                    <Button
+                        className='btn_item'
+                        onClick={() => {
                             resetting()
                         }}
                     >重置</Button>
@@ -279,14 +300,6 @@ const ViewPanel = (): React.ReactNode => {
                             className='func_item'
                             type='primary'
                         >导出</Button>
-                    </div>
-                    <div className='func_right'>
-                        <Button
-                            className='func_right_item'
-                            onClick={() => {
-                                history.go(-1)
-                            }}
-                        >返回上一级</Button>
                     </div>
                 </div>
                 <Table

@@ -2,8 +2,9 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Pagination, TableColumnProps, Table, Modal, Input, message } from 'antd'
 import RequestUtil from '../../../utils/RequestUtil';
+import { useHistory } from 'react-router-dom';
 const SecuritySetting = (): React.ReactNode => {
-    // const history = useHistory()
+    const history = useHistory()
     const columns: TableColumnProps<object>[] = [
         {
             key: 'index',
@@ -102,11 +103,17 @@ const SecuritySetting = (): React.ReactNode => {
     return (
         <div className='public_page'>
             <div className='public_content'>
-                <div className='func'>
-                    <Button
-                        className='func_item'
-                        type='primary'
-                    >导出</Button>
+                <div className='func_box'>
+                    <div className='func'>
+                    </div>
+                    <div className='func_right' style={{ marginBottom: 20 }}>
+                        <Button
+                            className='func_right_item'
+                            onClick={() => {
+                                history.go(-1)
+                            }}
+                        >返回上一级</Button>
+                    </div>
                 </div>
                 <Table
                     className='public_table'

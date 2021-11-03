@@ -140,7 +140,7 @@ export default function SetOutList(): React.ReactNode {
                                     message.warning(info.file.response?.msg)
                                 } 
                                 if(info.file.response && info.file.response?.success) {
-                                    const dataInfo = info.file.response.data
+                                    const dataInfo = info.file.response.data;
                                     const fileInfo = dataInfo.name.split(".")
                                     RequestUtil.post(`/tower-science/productCategory/lofting/draw/upload`, {
                                         attachInfoDTOList: [{
@@ -153,7 +153,8 @@ export default function SetOutList(): React.ReactNode {
                                         }],
                                         productCategoryId: record.id
                                     }).then(res => {
-                                        setRefresh(true);
+                                        message.success('上传成功');
+                                        setRefresh(!refresh);
                                     })
                                 }
                             }}> <Button type='link'>图纸上传</Button>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, Select, Button, Popconfirm, Input, Form, FormInstance, message, InputNumber, Upload } from 'antd';
+import { Space, Select, Button, Popconfirm, Input, Form, FormInstance, message, InputNumber, Upload, Modal } from 'antd';
 import { Page } from '../../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
 import styles from './Pick.module.less';
@@ -17,6 +17,8 @@ export default function Lofting(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string, productSegmentId: string, status: string}>();
     const [ refresh, setRefresh ] = useState<boolean>(false);
+    const [ visible, setVisible ] = useState<boolean>(false);
+    const [ url, setUrl ] = useState<string>('');
     const [ filterValue, setFilterValue ] = useState({});
     const [ editorLock, setEditorLock ] = useState('编辑');
     const formRef: React.RefObject<FormInstance> = React.createRef<FormInstance>();
@@ -177,18 +179,8 @@ export default function Lofting(): React.ReactNode {
                     <TextArea size="small" rows={1} showCount maxLength={300} onChange={ () => rowChange(index) }/>
                 </Form.Item>
             ) 
-        },
-        {
-            key: 'operation',
-            title: '操作',
-            dataIndex: 'operation',
-            fixed: 'right' as FixedType,
-            width: 100,
-            editable: true,
-            render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                <Button type="link" disabled>删除</Button>
-            )
         }
+        
     ]
 
     const columnsSetting: Column[] = columns.map((col: Column) => {
@@ -199,22 +191,22 @@ export default function Lofting(): React.ReactNode {
         if(col.dataIndex === 'operation') {
             return {
                 ...col,
-                render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                    <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                        <Popconfirm
-                            title="确认删除?"
-                            onConfirm={ async () => await RequestUtil.delete(`/tower-science/drawProductStructure/${record.id}`).then(()=>{
-                                message.success('删除成功！')
-                            }).then(()=>{
-                                setRefresh(!refresh)
-                            }) }
-                            okText="提交"
-                            cancelText="取消"
-                        >
-                            <Button type="link">删除</Button>
-                        </Popconfirm>
-                    </Space>
-                )
+                // render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                //     <Space direction="horizontal" size="small" className={ styles.operationBtn }>
+                //         <Popconfirm
+                //             title="确认删除?"
+                //             onConfirm={ async () => await RequestUtil.delete(`/tower-science/drawProductStructure/${record.id}`).then(()=>{
+                //                 message.success('删除成功！');
+                //                 setColumns(columnsSetting);
+                //                 setRefresh(!refresh);
+                //             })}
+                //             okText="提交"
+                //             cancelText="取消"
+                //         >
+                //             <Button type="link">删除</Button>
+                //         </Popconfirm>
+                //     </Space>
+                // )
             }
         } else {
             if(['basicsPartNum','length','width','basicsTheoryWeight','basicsWeight','totalWeight'].includes(col.dataIndex as string)){
@@ -242,9 +234,42 @@ export default function Lofting(): React.ReactNode {
     }
     const [ rowChangeList, setRowChangeList ] = useState<number[]>([]);
     return <Form ref={ formRef } className={ styles.descripForm }>
+        <Modal 
+            visible={visible} 
+            onOk={()=>{
+                window.open(url)
+            }} 
+            onCancel={()=>{setVisible(false);setUrl('')}} 
+            title='提示' 
+            okText='下载'
+        >
+            当前存在错误数据，请重新下载上传！
+        </Modal>
         <Page
             path="/tower-science/drawProductStructure"
-            columns={ tableColumns }
+            columns={ [...tableColumns,{
+                key: 'operation',
+                title: '操作',
+                dataIndex: 'operation',
+                fixed: 'right' as FixedType,
+                width: 100,
+                render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                    <Space direction="horizontal" size="small" className={ styles.operationBtn }>
+                        <Popconfirm
+                            title="确认删除?"
+                            onConfirm={ async () => await RequestUtil.delete(`/tower-science/drawProductStructure/${record.id}`).then(()=>{
+                                message.success('删除成功！');
+                                setRefresh(!refresh);
+                            })}
+                            okText="提交"
+                            cancelText="取消"
+                            disabled={editorLock==='锁定'}
+                        >
+                            <Button type="link" disabled={editorLock==='锁定'}>删除</Button>
+                        </Popconfirm>
+                    </Space>
+                )
+            }] }
             requestData={{productSegmentId:params.productSegmentId}}
             headTabs={ [] }
             onFilterSubmit={onFilterSubmit}
@@ -274,8 +299,14 @@ export default function Lofting(): React.ReactNode {
                             if(info.file.response && !info.file.response?.success) {
                                 message.warning(info.file.response?.msg)
                             }else if(info.file.response && info.file.response?.success){
-                                message.success('导入成功！');
-                                setRefresh(!refresh);
+                                if(info.file.response?.data){
+                                    setUrl(info.file.response?.data);
+                                    setVisible(true);
+                                }else{
+                                    message.success('导入成功！');
+                                    setRefresh(!refresh);
+                                }
+                                
                             }
                             
                         } }

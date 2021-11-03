@@ -38,7 +38,7 @@ export default function RawMaterialStock(): React.ReactNode {
             dataIndex: 'receivingBatch',
             width: 120,
             render: (text: any, item: any, index: any) => {
-                return text == 0 ? '待完成' : '已完成'
+                return item.receiveStatus == 0 ? '待完成' : '已完成'
             }
         }, {
             title: '最新状态变更时间',
@@ -65,11 +65,18 @@ export default function RawMaterialStock(): React.ReactNode {
             dataIndex: 'receiveTime',
             width: 120,
         }, {
-            title: '重量(度)',
+            title: '重量(吨)',
             dataIndex: 'weight',
             width: 120,
-        },
-        {
+        }, {
+            title: '税价合计(元)',
+            dataIndex: 'price',
+            width: 120,
+        }, {
+            title: '备注',
+            dataIndex: 'remark',
+            width: 120,
+        }, {
             title: '操作',
             dataIndex: 'key',
             width: 40,
@@ -130,7 +137,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={status ? status : '请选择'}
+                            value={status ? status : ''}
                             onChange={(val) => { setStatus(val) }}
                         >
                             <Select.Option
@@ -155,8 +162,9 @@ export default function RawMaterialStock(): React.ReactNode {
                     <span className="tip">关键字：</span>
                     <div className='selectOrInput'>
                         <Input
-                            placeholder="收货单号/供应商/合同编号"
+                            placeholder="收货单号/供应商/合同编号/联系人/联系电话"
                             value={keyword}
+                            style={{width:260}}
                             onChange={(e) => {
                                 setKeyword(e.target.value)
                             }}

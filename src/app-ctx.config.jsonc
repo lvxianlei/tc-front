@@ -28,19 +28,6 @@
                             }
                         ]
                     },
-                    // {
-                    //     "label": "审批",
-                    //     "icon": "examine",
-                    //     "path": "/approval",
-                    //     "authority": "approval_section",
-                    //     "items": [
-                    //         {
-                    //             "label": "审批中心",
-                    //             "path": "/approval/task",
-                    //             "authority":"approval_task"
-                    //         }
-                    //     ]
-                    // },
                     {
                         "label": "系统管理",
                         "icon": "system",
@@ -61,17 +48,6 @@
                                 "label": "成本评估配置",
                                 "path": "/sys/costconfig",
                                 "authority": "dxnry"
-                            }
-                            ,
-                            {
-                                "label": "原材料类型管理",
-                                "path": "/sys/materialType",
-                                "authority": "material_category_management"
-                            },
-                            {
-                                "label": "原材料管理",
-                                "path": "/sys/material",
-                                "authority": "material_management"
                             }
                         ]
                     },
@@ -133,7 +109,7 @@
                             {
                                 "label": "招标信息",
                                 "path": "/bidding/information",
-                                "authority":"bidding"
+                                "authority": "bidding"
                             }
                         ]
                     },
@@ -153,7 +129,6 @@
                                 "path": "/project/invoicing",
                                 "authority": "project"
                             },
-                            
                             {
                                 "label": "付款申请",
                                 "path": "/project/payment",
@@ -320,7 +295,6 @@
                             }
                         ]
                     },
-
                     {
                         "label": "评估任务",
                         "icon": "technology",
@@ -428,6 +402,36 @@
                                 "label": "采购配料",
                                 "path": "/workMngt/buyBurdening",
                                 "authority": "approvalm"
+                            },
+                            {
+                                "label": "采购列表",
+                                "path": "/workMngt/purchaseList",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "计划列表",
+                                "path": "/workMngt/planList",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "生产配料",
+                                "path": "/workMngt/production",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "收货列表",
+                                "path": "/workMngt/receivingList",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "差异列表",
+                                "path": "/workMngt/differentList",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "缺料列表",
+                                "path": "/workMngt/shortageList",
+                                "authority": "approvalm"
                             }
                         ]
                     },
@@ -473,22 +477,12 @@
                     {
                         "label": "配置管理",
                         "icon": "technology",
-                        "path": "/configure",
+                        "path": "/config",
                         "authority": "approvalm",
                         "items": [
                             {
-                                "label": "仓库管理",
-                                "path": "/stock/warehouse",
-                                "authority": "approvalm"
-                            },
-                            {
-                                "label": "安全库存配置",
-                                "path": "/stock/securitySetting",
-                                "authority": "approvalm"
-                            },
-                            {
-                                "label": "角钢配料策略",
-                                "path": "/stock/angleSteel",
+                                "label": "配置管理列表",
+                                "path": "/config",
                                 "authority": "approvalm"
                             }
                         ]

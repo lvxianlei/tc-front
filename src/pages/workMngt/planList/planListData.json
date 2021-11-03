@@ -1,0 +1,189 @@
+{
+    "baseInfoList": [
+        {
+            "title": "采购计划编号",
+            "dataIndex": "purchasePlanCode",
+            "type": "string"
+        },
+        {
+            "title": "采购类型",
+            "dataIndex": "purchaseType",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "外部",
+                    "value": 1
+                },
+                {
+                    "label": "内部",
+                    "value": 2
+                },
+                {
+                    "label": "缺料",
+                    "value": 3
+                }
+            ]
+        },
+        {
+            "title": "塔型（个）",
+            "dataIndex": "productCategory",
+            "type": "string"
+        },
+        {
+            "title": "杆塔（基）",
+            "dataIndex": "productNum",
+            "type": "integer"
+        },
+        {
+            "title": "圆钢收货量（吨）/总重（吨）",
+            "dataIndex": "roundSteelTotal",
+            "type": "number"
+        },
+        {
+            "title": "角钢收货量（吨）/总重（吨）",
+            "dataIndex": "angleSteelTotal",
+            "type": "number"
+        },
+        {
+            "title": "钢板收货量（吨）/总重（吨）",
+            "dataIndex": "steelPlateTotal",
+            "type": "number"
+        },
+        {
+            "title": "采购人",
+            "dataIndex": "purchaserId",
+            "type": "string"
+        }
+    ],
+    "AssociatedTowerType": [
+        {
+            "title": "塔型",
+            "dataIndex": "productCategory",
+            "type": "string"
+        },
+        {
+            "title": "杆塔数",
+            "dataIndex": "productNum",
+            "type": "integer"
+        },
+        {
+            "title": "原材料任务编号",
+            "dataIndex": "materialCategoryId",
+            "type": "integer"
+        },
+        {
+            "title": "圆钢总重（吨）",
+            "dataIndex": "roundSteelTotal",
+            "type": "number"
+        },
+        {
+            "title": "角钢总重（吨）",
+            "dataIndex": "angleSteelTotal",
+            "type": "number"
+        },
+        {
+            "title": "钢板总重（吨）",
+            "dataIndex": "steelPlateTotal",
+            "type": "number"
+        },
+        {
+            "title": "采购负责人",
+            "dataIndex": "purchaserId",
+            "type": "integer"
+        },
+        {
+            "title": "塔型采购状态",
+            "dataIndex": "purchaseType",
+            "type": "integer"
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "purchaseStatusUpdateTime",
+            "type": "string"
+        }
+    ],
+    "PurchaseList": [
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture",
+            "type": "string"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "standard",
+            "type": "integer"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec",
+            "type": "string"
+        },
+        {
+            "title": "配料品名",
+            "dataIndex": "doseName",
+            "type": "string"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "宽度",
+            "dataIndex": "width",
+            "type": "number"
+        },
+        {
+            "title": "单个重量 kg",
+            "dataIndex": "weight",
+            "type": "number"
+        },
+        {
+            "title": "已采购量",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "计划采购量",
+            "dataIndex": "",
+            "type": ""
+        }
+    ],
+    "PurchaseTypeStatistics": [
+        {
+            "title": "类型",
+            "dataIndex": "purchaseType",
+            "type": "integer"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "doseName",
+            "type": "string"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "standard",
+            "type": "integer"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture",
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec",
+            "type": "string"
+        },
+        {
+            "title": "已采购总量",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "计划采购总量（吨）",
+            "dataIndex": "",
+            "type": ""
+        }
+    ]
+}

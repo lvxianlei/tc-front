@@ -27,10 +27,10 @@ const columns = [
         dataIndex: 'segmentName'
     },
     {
-        key: 'projectName',
+        key: 'repeatNum',
         title: '段重复数',
         width: 150,
-        dataIndex: 'projectName'
+        dataIndex: 'repeatNum'
     },
     {
         key: 'code',
@@ -174,19 +174,28 @@ const columns = [
         key: 'sides',
         title: '边数',
         width: 200,
-        dataIndex: 'sides'
+        dataIndex: 'sides',
+        render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+            <span>{ _ === -1  ? undefined : _ }</span>
+        )
     },
     {
         key: 'perimeter',
         title: '周长',
         width: 200,
-        dataIndex: 'perimeter'
+        dataIndex: 'perimeter',
+        render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+            <span>{ _ === -1  ? undefined : _ }</span>
+        )
     },
     {
         key: 'surfaceArea',
         title: '表面积',
         width: 200,
-        dataIndex: 'surfaceArea'
+        dataIndex: 'surfaceArea',
+        render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+            <span>{ _ === -1  ? undefined : _ }</span>
+        )
     },
     {
         key: 'apertureNumber',
@@ -198,7 +207,10 @@ const columns = [
         key: 'weldingEdge',
         title: '焊接边（mm）',
         width: 200,
-        dataIndex: 'weldingEdge'
+        dataIndex: 'weldingEdge',
+        render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+            <span>{ _ === -1  ? undefined : _ }</span>
+        )
     }
 ]
 
@@ -215,6 +227,9 @@ export default function PoleLoftingDetails(): React.ReactNode {
             {/* <Button type="primary" ghost>导出</Button> */}
             <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
         </Space>}
+        tableProps={{
+            pagination: false
+        }}
         searchFormItems={ [] }
     />
 }

@@ -112,7 +112,7 @@ class UploadModal extends React.Component<IUploadModalRouteProps, UploadModalSta
                 onCancel={ () => this.modalCancel() }
             >
                 <DetailContent>
-                    <p className={ styles.topPadding }>相关附件
+                    <div className={ styles.topPadding }>相关附件
                         <span style={ { position: 'absolute', right: '1%' } }>
                             <Upload 
                                 action={ () => {
@@ -145,13 +145,14 @@ class UploadModal extends React.Component<IUploadModalRouteProps, UploadModalSta
                                             }],
                                             ...this.props.requestData
                                         }).then(res => {
+                                            message.success('上传成功');
                                             this.getDetail();
                                         })
                                     }
                                 }}> <Button type='primary' ghost>添加</Button>
                             </Upload>
                         </span>
-                    </p>
+                    </div>
                     <CommonTable columns={[
                         { 
                             key: 'name', 

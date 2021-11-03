@@ -103,12 +103,9 @@ const Warehouse = () => {
             <div className='public_content'>
                 <div className='func_box'>
                     <div className='func'>
-                        <Button
-                            className='func_item'
-                            type='primary'
-                        >导出</Button>
+                        
                     </div>
-                    <div className='func_right'>
+                    <div className='func_right' style={{ marginBottom: 20 }}>
                         <Button
                             className='func_right_item'
                             onClick={() => {

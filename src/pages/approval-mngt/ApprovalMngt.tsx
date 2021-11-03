@@ -463,7 +463,6 @@ export default function Information(): React.ReactNode {
             visible={viewVisible}
             onCancel={() => setViewVisible(false)}
             footer={[
-                currentView === "out_factory" && <Button key="cancel" type="primary" onClick={revokeOutFactory}>撤销申请</Button>,
                 <Button key="ok" type="primary" onClick={() => setViewVisible(false)}>
                     确认
                 </Button>

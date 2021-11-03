@@ -36,7 +36,7 @@ export default function PickTowerDetail(): React.ReactNode {
         showSizeChanger: false
     });
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/check`,{productSegmentId:params.productSegmentId,...tablePagination})
+        const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/check`,{productSegmentId:params.productSegmentId,...tablePagination, size:tablePagination.pageSize})
         setTableDataSource(data.records);
         setTablePagination({
             ...tablePagination,
@@ -48,8 +48,7 @@ export default function PickTowerDetail(): React.ReactNode {
     }), {});
     
     const onTableChange=async (pagination: TablePaginationConfig)=> {
-        console.log(pagination)
-        const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/check`,{productSegmentId:params.productSegmentId,...pagination})
+        const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/check`,{productSegmentId:params.productSegmentId,...pagination, size:pagination.pageSize})
         setTableDataSource(data.records);
         setTablePagination({
             ...tablePagination,

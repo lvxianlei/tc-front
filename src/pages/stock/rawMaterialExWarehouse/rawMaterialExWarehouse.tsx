@@ -2,11 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message, Table } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import ConfirmableButton from '../../../components/ConfirmableButton';
-import { Page } from '../../common';
-import { IClient } from '../../IClient';
 import RequestUtil from '../../../utils/RequestUtil';
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import AuthUtil from '../../../utils/AuthUtil';
 import '../StockPublicStyle.less';
 const { RangePicker } = DatePicker;
 
@@ -22,6 +19,8 @@ export default function RawMaterialStock(): React.ReactNode {
     const [departmentId, setDepartmentId] = useState('');//部门
     const [applyStaffId, setPersonnelId] = useState('');//人员
     const [Listdata, setListdata] = useState<any[]>([]);//列表数据
+    const [departmentList, setDepartmentList] = useState<any[]>([]);//部门数据
+    const [userList, setuserList] = useState<any[]>([]);//申请人数据数据
     const columns = [
         {
             title: '序号',
@@ -84,6 +83,20 @@ export default function RawMaterialStock(): React.ReactNode {
         setListdata(data.records);
         setTotal(data.total);
     }
+    //获取部门数据
+    const getDepartment = async () => {
+        const data: any = await RequestUtil.get(`/sinzetech-user/department`, {
+            tenantId: AuthUtil.getTenantId(),
+        });
+        setDepartmentList(data)
+    }
+    //获取部门部门中的人
+    const getUser = async (department: any) => {
+        const data: any = await RequestUtil.get(`/sinzetech-user/user`, {
+            departmentId: department,
+        });
+        setuserList(data.records)
+    }
     // 重置
     const reset = () => {
         setCurrent(1);
@@ -94,7 +107,11 @@ export default function RawMaterialStock(): React.ReactNode {
         setKeyword('');
         setDepartmentId('');
         setPersonnelId('');
+        setuserList([]);
     }
+    useEffect(() => {
+        getDepartment()
+    }, [])
     //进入页面刷新
     useEffect(() => {
         loadData()
@@ -144,33 +161,15 @@ export default function RawMaterialStock(): React.ReactNode {
                             className="select"
                             style={{ width: "100px" }}
                             value={departmentId ? departmentId : '请选择'}
-                            onChange={(val) => { setDepartmentId(val) }}
+                            onChange={(val) => { setDepartmentId(val); setPersonnelId(''); setuserList([]); getUser(departmentId) }}
                         >
                             {
-                                (ApplicationContext.get().dictionaryOption as any)["105"].map((item: { id: string, name: string }) => ({
-                                    value: item.id,
-                                    label: item.name
-                                })).map((item: any) => {
+                                departmentList.map((item, index) => {
                                     return (
-                                        <Select.Option value={item.value}>{item.label}</Select.Option>
+                                        <Select.Option key={index} value={item.id}>{item.name}</Select.Option>
                                     )
                                 })
                             }
-                            {/* <Select.Option
-                                value="1"
-                            >
-                                部门1
-                            </Select.Option>
-                            <Select.Option
-                                value="2"
-                            >
-                                部门2
-                            </Select.Option>
-                            <Select.Option
-                                value="3"
-                            >
-                                部门3
-                            </Select.Option> */}
                         </Select>-
                         <Select
                             className="select"
@@ -179,30 +178,12 @@ export default function RawMaterialStock(): React.ReactNode {
                             onChange={(val) => { setPersonnelId(val) }}
                         >
                             {
-                                (ApplicationContext.get().dictionaryOption as any)["105"].map((item: { id: string, name: string }) => ({
-                                    value: item.id,
-                                    label: item.name
-                                })).map((item: any) => {
+                                userList.map((item, index) => {
                                     return (
-                                        <Select.Option value={item.value} key={item.value}>{item.label}</Select.Option>
+                                        <Select.Option value={item.id} key={index}>{item.name}</Select.Option>
                                     )
                                 })
                             }
-                            {/* <Select.Option
-                                value="1"
-                            >
-                                人员1
-                            </Select.Option>
-                            <Select.Option
-                                value="2"
-                            >
-                                人员2
-                            </Select.Option>
-                            <Select.Option
-                                value="3"
-                            >
-                                人员3
-                            </Select.Option> */}
                         </Select>
                     </div>
                 </div>
@@ -210,7 +191,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     <span className="tip">关键字：</span>
                     <div className='selectOrInput'>
                         <Input
-                            placeholder="任务编号/项目名称"
+                            placeholder="领料编号/生产批次"
                             value={keyword}
                             onChange={(e) => {
                                 setKeyword(e.target.value)

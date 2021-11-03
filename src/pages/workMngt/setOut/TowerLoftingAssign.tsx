@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Space, Modal, Input, Descriptions, Form, FormInstance, DatePicker, InputNumber, TreeSelect, Select } from 'antd';
+import { Button, Space, Modal, Input, Descriptions, Form, FormInstance, DatePicker, InputNumber, TreeSelect, Select, message } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './TowerLoftingAssign.module.less';
@@ -103,30 +103,37 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
         if (this.getForm()) {
             this.getForm()?.validateFields().then(() => {
                 let values = this.getForm()?.getFieldsValue().appointedList;
-                values = values.map((item: Record<string, any>) => {
-                    return {
-                        ...item,
-                        plannedDeliveryTime: item?.plannedDeliveryTime && item?.plannedDeliveryTime.format('YYYY-MM-DD') + ' 00:00:00',
-                        productCategoryId: this.state.appointed?.productCategoryId,
-                        productCategoryName: this.state.appointed?.productCategoryName,
-                        pattern: this.state.appointed?.pattern,
-                        loftingUser: item.loftingUser.split('-')[0],
-                        loftingUserName: item.loftingUser.split('-')[1],
-                        checkUser: item.checkUser.split('-')[0],
-                        checkUserName: item.checkUser.split('-')[1],
-                    }
-                })
-                RequestUtil.post(`/tower-science/productSegment/submit`, [ ...values ])
-                this.getForm()?.resetFields();
-                this.getForm()?.setFieldsValue({
-                    appointedList: []
-                });
-                this.setState({  
-                    appointedList: [],
-                    visible: false
-                })
-                this.props.update()
-                return Promise.resolve()
+                if(values){
+                    values = values.map((item: Record<string, any>) => {
+                        return {
+                            ...item,
+                            plannedDeliveryTime: item?.plannedDeliveryTime && item?.plannedDeliveryTime.format('YYYY-MM-DD') + ' 00:00:00',
+                            productCategoryId: this.state.appointed?.productCategoryId,
+                            productCategoryName: this.state.appointed?.productCategoryName,
+                            pattern: this.state.appointed?.pattern,
+                            loftingUser: item.loftingUser.split('-')[0],
+                            loftingUserName: item.loftingUser.split('-')[1],
+                            checkUser: item.checkUser.split('-')[0],
+                            checkUserName: item.checkUser.split('-')[1],
+                        }
+                    })
+                    RequestUtil.post(`/tower-science/productSegment/submit`, [ ...values ]).then(() => {
+                        message.success('指派成功');
+                    }).then(() => {
+                        this.getForm()?.resetFields();
+                        this.getForm()?.setFieldsValue({
+                            appointedList: []
+                        });
+                        this.setState({  
+                            appointedList: [],
+                            visible: false
+                        })
+                        this.props.update();
+                    });
+                } else {
+                    message.error('当前暂无指派数据，不可提交！')
+                }
+                return Promise.resolve();
             })
         }
     };
@@ -298,7 +305,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
             <Button type="primary" onClick={ () => this.modalShow() } ghost>塔型放样指派</Button>
             <Modal
                 visible={ this.state.visible } 
-                width="80%" 
+                width="90%" 
                 title="塔型放样指派" 
                 footer={ 
                     <Space direction="horizontal" className={ styles.bottomBtn }>
@@ -311,22 +318,22 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                 <DetailContent className={ styles.modalHeight }>
                     <p>指派信息</p>
                     <Form ref={ this.form } className={ styles.descripForm }>
-                        <Descriptions title="" bordered size="small" colon={ false } column={ 9 }>
-                            <Descriptions.Item label="塔型" span={ 1 }>
+                        <Descriptions title="" bordered size="small" colon={ false } column={ 5 }>
+                            <Descriptions.Item label="塔型">
                                 { this.state.appointed?.productCategoryName }
                             </Descriptions.Item>
-                            <Descriptions.Item label="模式" span={ 3 }>
+                            <Descriptions.Item label="模式">
                                 { this.state.appointed?.pattern === 1 ? '新放' :  this.state.appointed?.pattern === 2 ? '重新出卡' : '套用' }
                             </Descriptions.Item>
-                            <Descriptions.Item label="段数" span={ 3 }>
+                            <Descriptions.Item label="段数">
                                 { this.state.appointed?.sectionNum || 0 }
                             </Descriptions.Item>
-                            <Descriptions.Item children span={ 1 }></Descriptions.Item>
-                            <Descriptions.Item span={ 1 }><Button type="primary" ghost size="small" onClick={ () => this.addRow() }>添加</Button></Descriptions.Item>
+                            <Descriptions.Item children></Descriptions.Item>
+                            <Descriptions.Item><Button type="primary" ghost size="small" onClick={ () => this.addRow() }>添加</Button></Descriptions.Item>
                             {
                                 this.state.appointedList?.map((item: IAppointedList, index: number) => {
                                     return  <>  
-                                        <Descriptions.Item label="段名" span={ 1 }>
+                                        <Descriptions.Item label="段名">
                                             <Form.Item name={["appointedList", index, "name"]}
                                                 rules={[{
                                                     required: true,
@@ -339,13 +346,13 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                                 <Input />
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="放样人"  span={ 3 }>
+                                        <Descriptions.Item label="放样人">
                                             <Form.Item name={["appointedList", index, "loftingUserDepartment"]}
                                                 rules={[{
                                                     required: true,
                                                     message: '请选择部门'
                                                 }]} style={ { width: '50%', display: 'inline-block' } }>
-                                                <TreeSelect placeholder="请选择" style={{width:'100px'}} onChange={ (value: any) => { this.onDepartmentChange(value,index,'放样') } } className={ styles.width200 }>
+                                                <TreeSelect placeholder="请选择" style={{width:'120px'}} onChange={ (value: any) => { this.onDepartmentChange(value,index,'放样') } } className={ styles.width200 }>
                                                     { this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
                                                 </TreeSelect>
                                             </Form.Item>
@@ -354,20 +361,20 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                                     required: true,
                                                     message: '请选择人员'
                                                 }]} style={ { width: '50%', display: 'inline-block' } } key={ index }>
-                                                <Select placeholder="请选择" style={{width:'100px'}} key={ index }>
+                                                <Select placeholder="请选择" style={{width:'120px'}} key={ index }>
                                                     { this.state?.user && this.state.user[index] && this.state.user[index].map((item: any) => {
                                                         return <Select.Option key={ item.id } value={ item.id + '-' + item.name }>{ item.name }</Select.Option>
                                                     }) }
                                                 </Select>
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="校对人"  span={ 3 }>
+                                        <Descriptions.Item label="校核人">
                                             <Form.Item name={["appointedList", index, "checkUserDepartment"]}
                                                 rules={[{
                                                     required: true,
                                                     message: '请选择部门'
                                                 }]} style={ { width: '50%', display: 'inline-block' } }>
-                                                <TreeSelect placeholder="请选择" style={{width:'100px'}} onChange={ (value: any) => { this.onDepartmentChange(value,index,'校对') } } className={ styles.width200 }>
+                                                <TreeSelect placeholder="请选择" style={{width:'120px'}} onChange={ (value: any) => { this.onDepartmentChange(value,index,'校对') } } className={ styles.width200 }>
                                                     { this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
                                                 </TreeSelect>
                                             </Form.Item>
@@ -376,7 +383,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                                     required: true,
                                                     message: '请选择人员'
                                                 }]} style={ { width: '50%', display: 'inline-block' } }>
-                                                <Select placeholder="请选择" style={{width:'100px'}} key={ index }>
+                                                <Select placeholder="请选择" style={{width:'120px'}} key={ index }>
                                                     { this.state?.checkUser && this.state.checkUser[index] && this.state.checkUser[index].map((item: any) => {
                                                         return <Select.Option key={ item.id } value={ item.id + '-' + item.name }>{ item.name }</Select.Option>
                                                     }) }
@@ -392,7 +399,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                                 <DatePicker />
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item >
+                                        <Descriptions.Item>
                                             <Space direction="horizontal">
                                                 <Button type="primary" ghost size="small" onClick={ () => this.setState({ repeatModal: true, selectKey: index }) }>重复添加</Button>
                                                 <Button type="ghost" size="small" onClick={ () => this.deleteRow(index) }>删除</Button>

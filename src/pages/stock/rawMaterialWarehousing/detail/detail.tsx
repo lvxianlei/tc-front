@@ -18,7 +18,7 @@ export default function RawMaterialStock(): React.ReactNode {
         [total, setTotal] = useState(100),
         [pageSize, setPageSize] = useState<number>(10),
         [isRejectionModal, setRejectionModal] = useState<boolean>(false),//拒收弹框
-        [isReceivingModal, setisReceivingModal] = useState<boolean>(false),//拒收弹框
+        [isReceivingModal, setisReceivingModal] = useState<boolean>(false),//收货弹框
         [status, setStatus] = useState(''),//采购状态
         [dateValue, setDateValue] = useState<any>([]),//时间
         [dateString, setDateString] = useState<any>([]),//时间字符串格式
@@ -43,6 +43,10 @@ export default function RawMaterialStock(): React.ReactNode {
             title: '序号',
             dataIndex: 'key',
             width: 50,
+            render: (text: any, item: any, index: any) => {
+                console.log(item, 'item')
+                return <span>{index + 1}</span>
+            }
         },
         {
             title: '材质名称',
@@ -80,6 +84,50 @@ export default function RawMaterialStock(): React.ReactNode {
             title: '价税合计(元)',
             dataIndex: 'price',
             width: 120,
+        }, {
+            title: '重量(吨)',
+            dataIndex: 'weight',
+            width: 120,
+        }, {
+            title: '采购状态',
+            dataIndex: 'receiveStatus',
+            width: 120,
+            render: (text: any, item: any, index: any) => {
+                // 0待收货1 已收货2已拒绝
+                return <span>{item.receiveStatus == 0 ? '待收货' : item.receiveStatus == 1 ? '已收货' : '已拒绝'}</span>
+            },
+        }, {
+            title: '最新状态变更时间',
+            dataIndex: 'updateTime',
+            width: 120,
+        }, {
+            title: '操作人',
+            dataIndex: 'operatorMan',
+            width: 120,
+        }, {
+            title: '炉批号',
+            dataIndex: 'furnaceBatchNo',
+            width: 120,
+        }, {
+            title: '仓库',
+            dataIndex: 'warehouse',
+            width: 120,
+        }, {
+            title: '库区',
+            dataIndex: 'reservoirArea',
+            width: 120,
+        }, {
+            title: '库位',
+            dataIndex: 'location',
+            width: 120,
+        }, {
+            title: '收货批次',
+            dataIndex: 'receiveBatchNumber',
+            width: 120,
+        }, {
+            title: '备注',
+            dataIndex: 'remark',
+            width: 120,
         },
         {
             title: '操作',
@@ -90,8 +138,8 @@ export default function RawMaterialStock(): React.ReactNode {
                 <Space direction="horizontal" size="small">
                     <span>质检单</span>
                     <span>质保单</span>
-                    <Button type='link' onClick={() => { ReceivingBtn(record) }}>收货</Button>
-                    <Button type='link' onClick={() => { OutReceivingBtn(record) }}>拒收</Button>
+                    {record.receiveStatus == 0 ? <Button type='link' onClick={() => { ReceivingBtn(record) }}>收货</Button> : null}
+                    {record.receiveStatus == 0 ? <Button type='link' onClick={() => { OutReceivingBtn(record) }}>拒收</Button> : null}
                 </Space>
             )
         }
@@ -103,8 +151,8 @@ export default function RawMaterialStock(): React.ReactNode {
             current: current,
             size: pageSize,
             fuzzyQuery: keyword,
-            startStatusUpdateTime: dateString[0],
-            endStatusUpdateTime: dateString[1],
+            startStatusUpdateTime: dateString[0] ? dateString[0] + " 00:00:00" : '',
+            endStatusUpdateTime: dateString[1] ? dateString[1] + " 23:59:59" : '',
             receiveStockId: params.id,
             receiveStatus: status,
         });
@@ -126,6 +174,10 @@ export default function RawMaterialStock(): React.ReactNode {
     }
     // submit拒收弹框提交
     const rejectionSubmit = async () => {
+        if (!rejectionText) {
+            message.error('请填写拒收原因！')
+            return
+        }
         // 拒收
         const data: any = await RequestUtil.post(`/tower-storage/receiveStock`, {
             id: ListID,
@@ -241,21 +293,26 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={status ? status : '请选择'}
+                            value={status ? status : ''}
                             onChange={(val) => { setStatus(val) }}
                         >
                             <Select.Option
-                                value="1"
+                                value=""
+                            >
+                                全部
+                            </Select.Option>
+                            <Select.Option
+                                value="0"
                             >
                                 待收货
                             </Select.Option>
                             <Select.Option
-                                value="2"
+                                value="1"
                             >
                                 已收货
                             </Select.Option>
                             <Select.Option
-                                value="3"
+                                value="2"
                             >
                                 已拒绝
                             </Select.Option>
@@ -311,7 +368,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 >返回上一级</Button>
             </div>
             <div className="tip_public_Stock">
-                <div>已收货：重量(支)合计：{receiveWeight}, 已收货：价税合计(元)合计：{receivePrice} ,  待收货：重量(支)合计：{waitWeight}待收货：价税合计(元)合计：{waitPrice}</div>
+                <div>已收货：重量(吨)合计：{receiveWeight}, 已收货：价税合计(元)合计：{receivePrice} ,  待收货：重量(吨)合计：{waitWeight}待收货：价税合计(元)合计：{waitPrice}</div>
             </div>
             <div className="page_public_Stock">
                 <Table
@@ -346,7 +403,13 @@ export default function RawMaterialStock(): React.ReactNode {
             {/* 拒收弹框 */}
             <Modal
                 visible={isRejectionModal}
-                title="拒收原因*"
+                // title="拒收原因*"
+                title={
+                    <>
+                        <span>拒收原因</span>
+                        <span style={{ color: 'red' }}>*</span>
+                    </>
+                }
                 onCancel={onRejectionCancel}
                 maskClosable={false}
                 footer={
@@ -376,6 +439,7 @@ export default function RawMaterialStock(): React.ReactNode {
             <Modal
                 className="receiving_modal"
                 visible={isReceivingModal}
+                // visible={true}
                 title="收货"
                 maskClosable={false}
                 onCancel={onReceivingCancel}
@@ -401,7 +465,7 @@ export default function RawMaterialStock(): React.ReactNode {
                                     className="select"
                                     style={{ width: "100%" }}
                                     value={warehouseId ? warehouseId : '请选择'}
-                                    onChange={(val) => { setWarehouseId(val); getWarehousing(val, 1) }}
+                                    onChange={(val) => { setWarehouseId(val); setReservoirId(''); setReservoirArea([]); setLocatorId(''); setLocation([]); getWarehousing(val, 1) }}
                                 >
                                     {
                                         Warehouse.map((item, index) => {
@@ -424,7 +488,7 @@ export default function RawMaterialStock(): React.ReactNode {
                                     className="select"
                                     style={{ width: "100%" }}
                                     value={locatorId ? locatorId : '请选择'}
-                                    onChange={(val) => { setLocatorId(val) }}
+                                    onChange={(val) => { setLocatorId(val); }}
                                 >
                                     {
                                         Location.map((item, index) => {
@@ -453,7 +517,7 @@ export default function RawMaterialStock(): React.ReactNode {
                                     className="select"
                                     style={{ width: "100%" }}
                                     value={reservoirId ? reservoirId : '请选择'}
-                                    onChange={(val) => { setReservoirId(val); getWarehousing(val, 2) }}
+                                    onChange={(val) => { setReservoirId(val); getWarehousing(val, 2); setLocatorId(''); setLocation([]); }}
                                 >
                                     {
                                         ReservoirArea.map((item, index) => {
@@ -475,9 +539,9 @@ export default function RawMaterialStock(): React.ReactNode {
                                 <Input
                                     placeholder='请输入'
                                     value={furnaceBatchNo}
-                                    maxLength={200}
+                                    maxLength={30}
                                     onChange={(e) => {
-                                        setFurnaceBatchNo(e.target.value)
+                                        setFurnaceBatchNo(e.target.value.replace(/[\u4E00-\u9FA5]/g, ''))
                                     }}
                                 ></Input>
                             </div>

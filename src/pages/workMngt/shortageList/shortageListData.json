@@ -1,0 +1,91 @@
+{
+    "baseInfo": [
+        {
+            "title": "生产批次",
+            "dataIndex": "productionBatchNumber",
+            "type":"string"
+        },
+        {
+            "title": "采购员",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "采购计划编号",
+            "dataIndex": "taskNumber",
+            "type":"string"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture",
+            "type":"string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec",
+            "type":"string"
+        },     
+        {
+            "title": "品名",
+            "dataIndex": "productName",
+            "type":"string"
+        },     
+        {
+            "title": "搭配长度（mm）",
+            "dataIndex": "",
+            "type":""
+        } ,   
+        {
+            "title": "搭配数量",
+            "dataIndex": "quantity",
+            "type":"integer"
+        } ,    
+        {
+            "title": "重量（吨）",
+            "dataIndex": "weight",
+            "type":"number"
+        },
+        {
+            "title": "重量（吨）",
+            "dataIndex": "weight",
+            "type":"number"
+        },
+        {
+            "title": "状态",
+            "dataIndex": "",
+            "type":""
+        }                     
+    ],
+    "operationInformation":[
+        {
+            "title": "操作部门",
+            "dataIndex": "departmentId",
+            "type":"integer"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "departmentName",
+            "type":"string"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "updateTime",
+            "type":"string"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "updateTime",
+            "type":"string"
+        },
+        {
+            "title": "操作",
+            "dataIndex": "",
+            "type":""
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark",
+            "type":"string"
+        }
+    ]
+}

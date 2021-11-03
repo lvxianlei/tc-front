@@ -105,32 +105,36 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
     protected onSubmit(): void {
         if (this.getForm()) {
             this.getForm()?.validateFields().then(() => {
-                let values = {
-                    drawProductSegmentList:this.getForm()?.getFieldsValue().appointedList.map((item: Record<string, any>) => {
-                        return {
-                            ...item,
-                            plannedDeliveryTime: item?.plannedDeliveryTime && item?.plannedDeliveryTime.format('YYYY-MM-DD')+ ' 00:00:00',
-                            // productCategory: this.state.appointed?.productCategory,
-                            // productCategoryName: this.state.appointed?.productCategoryName,
-                            // pattern: this.state.appointed?.pattern
-                        }
-                    }),
-                    productCategoryId: this.props.id
+                if(this.getForm()?.getFieldsValue().appointedList){
+                    let values = {
+                        drawProductSegmentList:this.getForm()?.getFieldsValue().appointedList.map((item: Record<string, any>) => {
+                            return {
+                                ...item,
+                                plannedDeliveryTime: item?.plannedDeliveryTime && item?.plannedDeliveryTime.format('YYYY-MM-DD')+ ' 00:00:00',
+                                // productCategory: this.state.appointed?.productCategory,
+                                // productCategoryName: this.state.appointed?.productCategoryName,
+                                // pattern: this.state.appointed?.pattern
+                            }
+                        }),
+                        productCategoryId: this.props.id
+                    }
+                    RequestUtil.post(`/tower-science/drawProductSegment/assign`, { ...values }).then(()=>{
+                        message.success('提交成功！')
+                    }).then(()=>{
+                        this.getForm()?.resetFields();
+                        this.getForm()?.setFieldsValue({
+                            appointedList: []
+                        });
+                        this.setState({  
+                            appointedList: [],
+                            visible:false 
+                        });
+                        this.props.onRefresh()
+                    })
+                    
+                }else{
+                    message.error('当前暂无指派数据，不可提交！')
                 }
-                RequestUtil.post(`/tower-science/drawProductSegment/assign`, { ...values }).then(()=>{
-                    message.success('提交成功！')
-                }).then(()=>{
-                    this.getForm()?.resetFields();
-                    this.getForm()?.setFieldsValue({
-                        appointedList: []
-                    });
-                    this.setState({  
-                        appointedList: [],
-                        visible:false 
-                    });
-                    this.props.onRefresh()
-                })
-                
                 return Promise.resolve()
             })
         }
@@ -363,7 +367,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                                 </Select>
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="校对人"  span={ 3 }>
+                                        <Descriptions.Item label="校核人"  span={ 3 }>
                                             <Form.Item name={["appointedList", index, "materialCheckLeaderDepartment"]}
                                                 rules={[{
                                                     required: true,

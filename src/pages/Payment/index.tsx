@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { Page } from '../common'
 import { PaymentListHead } from "./PaymentData.json"
 import useRequest from '@ahooksjs/use-request'
@@ -10,7 +10,7 @@ export default function Payment() {
     const [filterValue, setFilterValue] = useState({})
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/payapply?id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/payApply?id=${id}`)
             resole(result)
         } catch (error) {
             reject(error)

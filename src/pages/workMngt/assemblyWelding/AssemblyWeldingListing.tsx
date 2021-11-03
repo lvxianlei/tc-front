@@ -13,7 +13,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import { useState } from 'react';
 import styles from './AssemblyWelding.module.less';
 import { downloadTemplate } from '../setOut/downloadTemplate';
-import AssemblyWeldingNew, { IBaseData, IComponentList } from './AssemblyWeldingNew';
+import AssemblyWeldingNew, { IBaseData } from './AssemblyWeldingNew';
 
 interface IResponseData {
     readonly id: number;
@@ -145,14 +145,14 @@ export default function AssemblyWeldingListing(): React.ReactNode {
         setDetailData(data);
         resole(data);
     });
-    const { loading, data } = useRequest<IResponseData>(() => getTableDataSource(page), {});
+    const { loading } = useRequest<IResponseData>(() => getTableDataSource(page), {});
 
     return <>
         <Spin spinning={ loading }>
             <DetailContent>
                 <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
                     {/* <Button type="primary" ghost>导出</Button> */}
-                    <Button type="primary" onClick={ () => downloadTemplate('/tower-science/welding/exportTemplate', '模板') } ghost>模板下载</Button>
+                    {/* <Button type="primary" onClick={ () => downloadTemplate('/tower-science/welding/exportTemplate', '模板') } ghost>模板下载</Button> */}
                     <Button type="primary"  onClick={ () => RequestUtil.post<IResponseData>(`/tower-science/welding/submitForVerification`, { weldingId: params.id }).then(res => {
                         history.goBack();
                     }) } >完成组焊清单</Button>
@@ -165,7 +165,6 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                     columns={ towerColumns }
                     onRow={ (record: Record<string, any>, index: number) => ({
                         onClick: async () => { 
-                            console.log(record);
                             const resData: [] = await RequestUtil.get(`/tower-science/welding/getStructureById`, { segmentId: record.id });
                             setParagraphData([...resData]);
                         },
