@@ -112,7 +112,7 @@ export default function BaseInfoEdit(): JSX.Element {
     ]}>
       <Spin spinning={loading}>
         <DetailTitle title="基本信息" />
-        <BaseInfo
+        <BaseInfo 
           onChange={handleBaseInfoChange}
           form={baseInfoForm}
           columns={

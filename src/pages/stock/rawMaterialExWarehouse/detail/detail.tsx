@@ -413,8 +413,8 @@ export default function RawMaterialStock(): React.ReactNode {
             updateTimeEnd: dateString[1] ? dateString[1] + ' 23:59:59' : '',
         })
         setListdata(data.outStockDetailPage.records);
-        setTotalWeight(data.width)
-        setMaterialShortageTotalWeight(data.excessWidth)
+        setTotalWeight(data.weight)
+        setMaterialShortageTotalWeight(data.excessWeight)
         setTotal(data.total);
     }
     //获取列表详情数据数据
@@ -465,15 +465,13 @@ export default function RawMaterialStock(): React.ReactNode {
         setApplyListdata([record]);
         console.log(record)
         const data: any = await RequestUtil.get(`/tower-storage/materialStock`, {
-            params: {
-                warehouseId: record.id,//仓库id
-                materialTexture: record.materialTexture,//材质
-                productName: record.productName,//品名
-                standard: record.standard,//标准
-                lengthMin: record.length,//长度最小值
-                lengthMax: record.length,//长度最大值
-                spec: record.spec,//规格
-            }
+            warehouseId: record.id,//仓库id
+            materialTexture: record.materialTexture,//材质
+            productName: record.productName,//品名
+            standard: record.standard,//标准
+            lengthMin: record.length,//长度最小值
+            lengthMax: record.length,//长度最大值
+            spec: record.spec,//规格
         });
         setOutLibraryListdata(data.materialStockPage.records);
         setIsOutLibraryModal(true)

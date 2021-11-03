@@ -69,7 +69,7 @@ export default function RawMaterialStock(): React.ReactNode {
             dataIndex: 'weight',
             width: 120,
         }, {
-            title: '税价合计(元)',
+            title: '价税合计(元)',
             dataIndex: 'price',
             width: 120,
         }, {
