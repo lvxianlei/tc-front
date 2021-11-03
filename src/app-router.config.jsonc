@@ -1350,7 +1350,14 @@
     { // 工作管理-采购配料
       "name": "采购配料",
       "path": "/workMngt/buyBurdening",
-      "module": "./pages/workMngt/buyBurdening/BuyBurdening",
+      "module": "./pages/workMngt/buyBurdening/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-采购配料
+      "name": "采购配料详情",
+      "path": "/workMngt/buyBurdening/detail/:id",
+      "module": "./pages/workMngt/buyBurdening/Overview",
       "exact": true,
       "authority": "approvalm"
     },
