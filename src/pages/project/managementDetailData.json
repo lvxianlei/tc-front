@@ -258,6 +258,10 @@
             ]
         },
         {
+            "title": "电压等级",
+            "dataIndex": "voltagelevel"
+        },
+        {
             "title": "包号",
             "dataIndex": "packageCode"
         },
@@ -282,6 +286,10 @@
                     "message": "请输入投标人名称..."
                 }
             ]
+        },
+        {
+            "title": "单价（元）",
+            "dataIndex": "price"
         },
         {
             "title": "总价（万元）",
