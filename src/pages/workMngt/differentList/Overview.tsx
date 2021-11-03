@@ -1,30 +1,88 @@
-import React from "react"
-import { Button, message, Spin } from 'antd'
+import React, { useState } from "react"
+import { Button, Input, Select, DatePicker, Modal, message } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../../common'
+import { Page } from '../../common'
+import { SeeList } from "./differentListData.json"
+import Edit from "./Edit"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import { downLoadFile } from "../../../utils"
-export default function Edit() {
+export default function Overview() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
+    const [filterValue, setFilterValue] = useState({ diffId: params.id })
+    const [visible, setVisible] = useState<boolean>(false)
 
-    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { run: submitRun } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/componentDiff/${params.id}`)
-            resole(result)
+            await RequestUtil.put(`/tower-supply/componentDiff?diffId=${params.id}`)
+            message.success("提交完成...")
+            resole(true)
         } catch (error) {
-            reject(error)
+            reject(false)
         }
-    }))
+    }), { manual: true })
 
-    return <DetailContent title={[
-        <Button type="primary" key="ab">发起审批</Button>
-    ]} operation={[
-        <Button key="cancel" onClick={() => history.go(-1)}>返回</Button>
-    ]}>
-        <Spin spinning={loading}>
 
-        </Spin>
-    </DetailContent>
+    const onFilterSubmit = (value: any) => {
+        if (value.startLaunchTime) {
+            const formatDate = value.startLaunchTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startLaunchTime = formatDate[0]
+            value.endLaunchTime = formatDate[1]
+        }
+        setFilterValue({ ...filterValue, ...value })
+        return value
+    }
+
+    const handleComponentDiff = () => {
+        Modal.confirm({
+            title: "提交/完成",
+            content: "确认提交/完成？",
+            okText: "提交/完成",
+            onOk: () => submitRun()
+        })
+    }
+
+    return <>
+        <Modal title="缺料申请" visible={visible} width={1011} onCancel={() => setVisible(false)}>
+            <Edit />
+        </Modal>
+        <Page
+            path={`/tower-supply/componentDiff/diffDetail`}
+            columns={SeeList}
+            extraOperation={<>
+                <Button type="primary" ghost>导出</Button>
+                <Button type="primary" ghost onClick={handleComponentDiff}>处理完成</Button>
+                <Button type="primary" ghost onClick={() => setVisible(true)}>缺料申请</Button>
+                <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
+            </>}
+            filterValue={{ ...filterValue, diffId: params.id }}
+            onFilterSubmit={onFilterSubmit}
+            tableProps={{
+                rowSelection: {
+                    type: "checkbox"
+                }
+            }}
+            searchFormItems={[
+                {
+                    name: 'fuzzyQuery',
+                    children: <Input placeholder="编号/内部合同编号/工程名称/票面单位/业务经理" style={{ width: 300 }} />
+                },
+                {
+                    name: 'startPurchaseStatusUpdateTime',
+                    label: '最新状态变更时间',
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                },
+                {
+                    name: 'isOpen',
+                    label: '状态',
+                    children: <Select style={{ width: 200 }}>
+                        <Select.Option value="1">待审批</Select.Option>
+                        <Select.Option value="2">已拒绝</Select.Option>
+                        <Select.Option value="3">已撤回</Select.Option>
+                        <Select.Option value="4">已通过</Select.Option>
+                    </Select>
+                }
+            ]}
+        />
+    </>
 }

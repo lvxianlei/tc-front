@@ -59,12 +59,12 @@
     "ConstructionDetails": [
         {
             "title": "件号",
-            "dataIndex": "num",
-            "type": "integer"
+            "dataIndex": "code",
+            "type": "string"
         },
         {
             "title": "材质",
-            "dataIndex": "materialTexture",
+            "dataIndex": "structureTexture",
             "type": "string"
         },
         {
@@ -79,7 +79,8 @@
         },
         {
             "title": "已配/未配",
-            "dataIndex": "equipped/notequipped"
+            "dataIndex": "alreadyIngredients",
+            "type": "string"
         }
     ],
     "ProductionIngredients": [

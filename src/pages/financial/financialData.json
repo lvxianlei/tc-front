@@ -117,7 +117,7 @@
             "type": "popTable",
             "path": "/tower-storage/receiveStock",
             "width": 1011,
-            "value": "contractName",
+            "value": "id",
             "selectType": "checkbox",
             "dependencies": true,
             "readOnly": true,

@@ -3,12 +3,14 @@
         {
             "title": "采购计划编号",
             "dataIndex": "purchasePlanCode",
+            "width": 200,
             "type": "string"
         },
         {
             "title": "采购类型",
             "dataIndex": "purchaseType",
             "type": "select",
+            "width": 100,
             "enum": [
                 {
                     "label": "外部",
@@ -27,26 +29,31 @@
         {
             "title": "塔型（个）",
             "dataIndex": "productCategory",
+            "width": 100,
             "type": "string"
         },
         {
             "title": "杆塔（基）",
             "dataIndex": "productNum",
+            "width": 100,
             "type": "integer"
         },
         {
             "title": "圆钢收货量（吨）/总重（吨）",
             "dataIndex": "roundSteelTotal",
+            "width": 100,
             "type": "number"
         },
         {
             "title": "角钢收货量（吨）/总重（吨）",
             "dataIndex": "angleSteelTotal",
+            "width": 100,
             "type": "number"
         },
         {
             "title": "钢板收货量（吨）/总重（吨）",
             "dataIndex": "steelPlateTotal",
+            "width": 100,
             "type": "number"
         },
         {

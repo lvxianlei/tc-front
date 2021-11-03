@@ -50,7 +50,7 @@ export default function SampleDraw(): React.ReactNode {
         },
         {
             key: 'code',
-            title: '构建编号',
+            title: '构件编号',
             width: 100,
             dataIndex: 'code'
         },

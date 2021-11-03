@@ -102,22 +102,22 @@
         {
             "title": "品名",
             "dataIndex": "productName",
-            "type": "integer"
+            "type": "string"
         },
         {
             "title": "标准",
             "dataIndex": "standard",
-            "type": "integer"
+            "type": "string"
         },
         {
             "title": "材质",
             "dataIndex": "materialTexture",
-            "type": "integer"
+            "type": "string"
         },
         {
             "title": "规格",
             "dataIndex": "spec",
-            "type": "integer"
+            "type": "string"
         },
         {
             "title": "长度（mm）",
@@ -233,7 +233,7 @@
             ]
         }
     ],
-    "DetailPage":[
+    "DetailPage": [
         {
             "title": "品名",
             "dataIndex": "productName",

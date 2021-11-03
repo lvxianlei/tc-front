@@ -125,7 +125,7 @@ export default function PickTower(): React.ReactNode {
         },
         {
             key: 'materialStatus',
-            title: '杆塔提料状态',
+            title: '杆塔配段状态',
             width: 100,
             dataIndex: 'materialStatus',
             render: (value: number, record: object): React.ReactNode => {
@@ -319,7 +319,7 @@ export default function PickTower(): React.ReactNode {
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                     {
-                        name: 'status',
+                        name: 'materialStatus',
                         label: '杆塔配段状态',
                         children: <Select style={{width:'100px'}}>
                             <Select.Option value={''} key ={''}>全部</Select.Option>

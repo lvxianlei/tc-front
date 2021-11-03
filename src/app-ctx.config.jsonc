@@ -420,7 +420,7 @@
                             },
                             {
                                 "label": "收货列表",
-                                "path": "/workMngt/receivingList",
+                                "path": "/workMngt/receiving",
                                 "authority": "approvalm"
                             },
                             {

@@ -52,14 +52,11 @@ export default function Invoicing() {
                 fixed: "right",
                 width: 100,
                 render: (_: any, record: any) => {
-                    return <>
-                        <Button type="link" onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</Button>
-                        {[0, 3].includes(record.state) && <Button type="link" onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>}
-                        {[0].includes(record.state) && <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>}
-                    </>
+                    return <Link to={`/workMngt/differentList/detail/${record.id}`}>查看</Link>
+
                 }
             }]}
-        extraOperation={<Link to="/project/invoicing/edit/new"><Button type="primary">导出</Button></Link>}
+        extraOperation={<Button type="primary" ghost>导出</Button>}
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {

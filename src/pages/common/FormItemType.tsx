@@ -128,7 +128,11 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
     const [popContent, setPopContent] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: {} })
     const [value, setValue] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: {} })
 
-    const handleChange = (event: any) => setPopContent({ id: event[0].id, value: event[0][data.value || "name" || "id"], records: event })
+    const handleChange = (event: any) => {
+        const newPopContent = { id: event[0].id, value: event[0][data.value || "name" || "id"], records: event }
+        const checkboxContent = { id: event[0].id, value: event.map((item: any) => item[data.value || "name" || "id"]).join(","), records: event }
+        setPopContent(data.selectType === "checkbox" ? checkboxContent : newPopContent)
+    }
 
     const handleOk = () => {
         const depFalseValue = popContent.id || popContent.value
@@ -150,6 +154,15 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
         setVisible(false)
     }
 
+    const formatValue = () => {
+        let initValue = typeof props.value === "string" ? props.value : value.value
+        if (data.selectType === "checkbox") {
+            console.log(value.value, "----------")
+            // initValue = (value.value as any).join(",")
+        }
+        return initValue
+    }
+
     return <>
         <Modal width={data.width || 520} title={`选择${data.title}`} destroyOnClose visible={visible} onOk={handleOk} onCancel={handleCancel}>
             <PopTableContent data={data} onChange={handleChange} />
@@ -160,7 +173,7 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
             style={{ width: "100%", height: "100%", ...props.style }}
             onChange={inputChange}
             readOnly={data.readOnly === undefined ? true : data.readOnly}
-            value={typeof props.value === "string" ? props.value : value.value}
+            value={formatValue()}
             addonAfter={<PlusOutlined onClick={() => !data.disabled && setVisible(true)} />} />
     </>
 }

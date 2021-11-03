@@ -118,16 +118,22 @@ export default function PackingListNew(): React.ReactNode {
             dataIndex: 'structureNum'
         },
         {
-            key: 'length',
-            title: '长度',
-            width: 150,
-            dataIndex: 'length'
-        },
-        {
             key: 'width',
             title: '宽度',
             width: 150,
             dataIndex: 'width'
+        },
+        {
+            key: 'thickness',
+            title: '厚度',
+            width: 150,
+            dataIndex: 'thickness'
+        },
+        {
+            key: 'length',
+            title: '长度',
+            width: 150,
+            dataIndex: 'length'
         },
         {
             key: 'basicsWeight',
