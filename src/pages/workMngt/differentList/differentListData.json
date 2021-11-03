@@ -2,7 +2,7 @@
     "baseInfoList": [
         {
             "title": "序号",
-            "dataIndex": ""
+            "dataIndex": "index"
         },
         {
             "title": "差异编号",
@@ -53,7 +53,7 @@
     "SeeList": [
         {
             "title": "序号",
-            "dataIndex": ""
+            "dataIndex": "index"
         },
         {
             "title": "构件号",
@@ -62,8 +62,8 @@
         },
         {
             "title": "更改前材质",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "beforechangematerial",
+            "type": "string"
         },
         {
             "title": "更改后材质",
@@ -72,8 +72,8 @@
         },
         {
             "title": "更改前规格",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "beforechangeSpec",
+            "type": "string"
         },
         {
             "title": "更改后规格",
@@ -82,8 +82,8 @@
         },
         {
             "title": "更改前长度（mm）",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "beforechangeLength",
+            "type": "string"
         },
         {
             "title": "更改后长度（mm）",
@@ -92,8 +92,7 @@
         },
         {
             "title": "单数量",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "singlequantity"
         },
         {
             "title": "基数",
@@ -112,8 +111,7 @@
         },
         {
             "title": "状态",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "confirmStatus"
         }
     ],
     "MaterialShortage": [
@@ -129,12 +127,12 @@
         },     
         {
             "title": "原材料长度",
-            "dataIndex": "",
-            "type":""
+            "dataIndex": "length",
+            "type":"number"
         },
         {
             "title": "零件1",
-            "dataIndex": "",
+            "dataIndex": "part1",
             "type":""
         },
         {
@@ -144,7 +142,7 @@
         },
         {
             "title": "零件2",
-            "dataIndex": "",
+            "dataIndex": "part2",
             "type":""
         },
         {
@@ -154,7 +152,7 @@
         },
         {
             "title": "零件3",
-            "dataIndex": "",
+            "dataIndex": "part3",
             "type":""
         },
         {
@@ -164,7 +162,7 @@
         },
         {
             "title": "零件4",
-            "dataIndex": "",
+            "dataIndex": "part4",
             "type":""
         },
         {
@@ -174,13 +172,11 @@
         },
         {
             "title": "余料长度",
-            "dataIndex": "",
-            "type":""
+            "dataIndex": "surpluslength"
         },
         {
             "title": "利用率",
-            "dataIndex": "",
-            "type":""
+            "dataIndex": "utilizationrate"
         }
         
     ]

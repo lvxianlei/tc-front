@@ -126,13 +126,13 @@
         },
         {
             "title": "已采购量",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "purchasedquantity",
+            "type": "string"
         },
         {
             "title": "计划采购量",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "plannedpurchasequantity",
+            "type": "string"
         }
     ],
     "PurchaseTypeStatistics": [
@@ -163,13 +163,13 @@
         },
         {
             "title": "已采购总量",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "totalpurchased",
+            "type": "string"
         },
         {
             "title": "计划采购总量（吨）",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "totalplannedpurchases",
+            "type": "string"
         }
     ]
 }

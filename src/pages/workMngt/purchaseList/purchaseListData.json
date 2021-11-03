@@ -76,8 +76,8 @@
                 },
                 {
                     "title": "搭配数量",
-                    "dataIndex": "",
-                    "type": ""
+                    "dataIndex": "matchingquantity",
+                    "type": "number"
                 },
                 {
                     "title": "重量（吨）",
@@ -86,25 +86,25 @@
                 },
                 {
                     "title": "备注",
-                    "dataIndex": "",
-                    "type": ""
+                    "dataIndex": "description",
+                    "type": "string"
                 }
             ],
             "PlanList": [
                 {
                     "title": "生产未领料（支）",
-                    "dataIndex": "",
+                    "dataIndex": "productionuncollected",
                     "type": ""
                 },
                 {
                     "title": "仓库库存（支）",
-                    "dataIndex": "",
-                    "type": ""
+                    "dataIndex": "warehouseinventory",
+                    "type": "string"
                 },
                 {
                     "title": "在途库存（支）",
-                    "dataIndex": "",
-                    "type": ""
+                    "dataIndex": "transportationinventory",
+                    "type": "string"
                 },
                 {
                     "title": "计划采购（本次）",
@@ -132,8 +132,8 @@
         },
         {
             "title": "零件1",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "part1",
+            "type": "string"
         },
         {
             "title": "长度",
@@ -142,8 +142,8 @@
         },
         {
             "title": "零件2",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "part2",
+            "type": "string"
         },
         {
             "title": "长度",
@@ -152,8 +152,8 @@
         },
         {
             "title": "零件3",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "part3",
+            "type": "string"
         },
         {
             "title": "长度",
@@ -162,8 +162,8 @@
         },
         {
             "title": "零件4",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "part4",
+            "type": "string"
         },
         {
             "title": "长度",
@@ -172,13 +172,11 @@
         },
         {
             "title": "余料长度",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "surpluslength"
         },
         {
             "title": "利用率",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "utilizationrate"
         }
     ]
 }
