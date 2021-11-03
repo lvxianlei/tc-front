@@ -680,10 +680,24 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 驾驶舱-收货单看板-详情
+      "name": "收货单看板详情",
+      "path": "/stock/viewReceivingNote/viewReceivingNoteDetail",
+      "module": "./pages/stock/viewReceivingNote/viewReceivingNoteDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 驾驶舱-合同看板
       "name": "合同看板",
       "path": "/stock/viewContract",
       "module": "./pages/stock/viewContract/viewContract",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 驾驶舱-合同看板-明细
+      "name": "明细",
+      "path": "/stock/viewContract/particulars",
+      "module": "./pages/stock/viewContract/particulars",
       "exact": true,
       "authority": "approvalm"
     },
@@ -722,10 +736,17 @@
       "exact": true,
       "authority": "approvalm"
     },
-    {
-      "name": "配置管理",
-      "path": "/config",
-      "module": "./pages/config/index",
+    {//合同管理-原材料合同管理
+      "name": "原材料合同管理",
+      "path": "/contract-mngt/index",
+      "module": "./pages/contract-mngt/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    {//合同管理-询价比
+      "name": "询价比",
+      "path": "/contract-mngt/enquiryCompare",
+      "module": "./pages/contract-mngt/enquiryCompare",
       "exact": true,
       "authority": "approvalm"
     },
@@ -980,6 +1001,20 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 工作管理-计划列表-采购清单
+      "name": "采购清单",
+      "path": "/workMngt/planList/purchaseList/:id",
+      "module": "./pages/workMngt/planList/Overview",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-计划列表-关联塔型
+      "name": "关联塔型",
+      "path": "/workMngt/planList/relationTower/:id",
+      "module": "./pages/workMngt/planList/RelationList",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 工作管理-生产配料
       "name": "生产配料",
       "path": "/workMngt/production",
@@ -987,8 +1022,15 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 工作管理-生产配料-构件明细
+      "name": "构件明细",
+      "path": "/workMngt/production/detailed/:id",
+      "module": "./pages/workMngt/production/Overview",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 工作管理-收获列表
-      "name": "收获列表",
+      "name": "收货列表",
       "path": "/workMngt/receivingList",
       "module": "./pages/workMngt/receivingList/index",
       "exact": true,
@@ -1039,6 +1081,20 @@
       "exact": true,
       // "authority": "rd_product_page"
       "authority": "approvalm"
+    },
+    {//采购任务-原材料
+      "name": "采购任务",
+      "path": "/buyingTask/index",
+      "module": "./pages/buyingTask/index",
+      "exact": true,
+      "authority": "auth_section"
+    },
+    {//采购任务-原材料-用料清单
+      "name": "用料清单",
+      "path": "/buyingTask/materialList",
+      "module": "./pages/buyingTask/materialList",
+      "exact": true,
+      "authority": "auth_section"
     },
     { // 工作管理-放样列表
       "name": "放样列表",

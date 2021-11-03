@@ -153,8 +153,11 @@ export default function NCProgram(): React.ReactNode {
                                 fileSuffix: fileInfo[fileInfo.length - 1]
                             }],
                             productCategoryId: params.id
+                        }).then(res => {
+                            if(res) {
+                                message.success('上传成功');
+                            }
                         })
-                        message.success('上传成功');
                         setRefresh(!refresh);
                     }
                 } }

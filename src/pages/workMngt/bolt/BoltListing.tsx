@@ -16,11 +16,16 @@ import { ColumnType } from 'antd/lib/table';
 import BoltNewModal from './BoltNewModal';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import AuthUtil from '../../../utils/AuthUtil';
+import { boltTypeOptions } from '../../../configuration/DictionaryOptions';
 
 interface ITab {
     readonly basicHeight?: string;
     readonly id?: string;
     readonly productCategoryId?: string;
+}
+
+interface IData {
+    readonly unbuckleLength?: number
 }
 
 interface Column extends ColumnType<object> {
@@ -35,6 +40,8 @@ export default function BoltList(): React.ReactNode {
     const [ rowChangeList, setRowChangeList ] = useState<number[]>([]);
     const [ activeKey, setActiveKey ] = useState<string>('');
     const [ visible, setVisible ] = useState<boolean>(false);
+    const [ urlVisible, setUrlVisible ] = useState<boolean>(false);
+    const [ url, setUrl ] = useState<string>('');
     const [ basicHeight, setBasicHeight ] = useState<string>('');
     const [ form ] = Form.useForm();
 
@@ -59,9 +66,12 @@ export default function BoltList(): React.ReactNode {
                     required: true,
                     message: '请选择类型'
                 }]}>
-                    <Select style={{ width: '100%' }} placeholder="请选择" onChange={ () => rowChange(index) }>
-                        <Select.Option value={ 1 } key="1">普通</Select.Option>
-                        <Select.Option value={ 2 } key="2">防盗</Select.Option>
+                    <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                        { boltTypeOptions && boltTypeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={index} value={id}>
+                                {name}
+                            </Select.Option>
+                        }) }
                     </Select>
                 </Form.Item>
             )
@@ -118,7 +128,7 @@ export default function BoltList(): React.ReactNode {
             width: 120,
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "unbuckleLength"]} initialValue={ _ === -1 ? "" :  _ }>
+                <Form.Item name={['data',index, "unbuckleLength"]} initialValue={ _ }>
                     <Input size="small" onChange={ () => rowChange(index) }/>
                 </Form.Item>
             )
@@ -258,7 +268,7 @@ export default function BoltList(): React.ReactNode {
     const [ tableColumns, setColumns ] = useState(columnsSetting);
 
     const getDataSource = async (basicHeightId?: string) => {
-        const data: [] = await RequestUtil.get(`/tower-science/boltRecord/boltList`, {
+        let data: [] = await RequestUtil.get(`/tower-science/boltRecord/boltList`, {
             basicHeightId: basicHeightId,
             productCategoryId: params.id
         })
@@ -319,7 +329,13 @@ export default function BoltList(): React.ReactNode {
                     if(editorLock === '编辑') {
                         setColumns(columns);
                         setEditorLock('锁定'); 
-                        form.setFieldsValue({ data: [...dataSource] })  
+                        const newData = dataSource.map((res: IData)=>{
+                            return {
+                                ...res,
+                                unbuckleLength: res.unbuckleLength === -1 ? 0 : res.unbuckleLength
+                            }
+                        })
+                        form.setFieldsValue({ data: [...newData] })  
                     } else {
                         const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
                         let values = form.getFieldsValue(true).data;
@@ -368,7 +384,13 @@ export default function BoltList(): React.ReactNode {
                             message.warning(info.file.response?.msg)
                         } 
                         if(info.file.response && info.file.response?.success){
-                            getDataSource(activeKey);
+                            if(Object.keys(info.file.response?.data).length > 0){
+                                setUrl(info.file.response?.data);
+                                setUrlVisible(true);
+                            }else{
+                                message.success('导入成功！');
+                                getDataSource(activeKey);
+                            }
                         }
                     } }
                     disabled={ !(detailData.length > 0) }
@@ -385,7 +407,7 @@ export default function BoltList(): React.ReactNode {
                         detailData.map((item: ITab) => {
                             return <Tabs.TabPane tab={ item.basicHeight + 'm呼高' } key={ item.id } disabled={ editorLock === '锁定' }>
                                 <Form form={ form } className={ styles.descripForm } key={ item.id }>
-                                    <CommonTable columns={ tableColumns } dataSource={ dataSource } pagination={ false } />
+                                    <CommonTable columns={ tableColumns } key={ item.basicHeight } dataSource={ dataSource } pagination={ false } />
                                 </Form>
                             </Tabs.TabPane>
                         })
@@ -403,6 +425,18 @@ export default function BoltList(): React.ReactNode {
             okText="确定"
             cancelText="关闭">
             <Row className={ styles.content }><Col offset={ 2 } span={ 4 }>呼高 <span style={{ color: 'red' }}>*</span></Col><Col span={ 16 }><Input type="number" min={ 0 } value={ basicHeight } onChange={ (e) => setBasicHeight(e.target.value) } placeholder="请输入"/></Col></Row>
+        </Modal>
+        <Modal 
+            visible={urlVisible} 
+            onOk={()=>{
+                window.open(url);
+                setUrlVisible(false);
+            }} 
+            onCancel={()=>{setUrlVisible(false);setUrl('')}} 
+            title='提示' 
+            okText='下载'
+        >
+            当前存在错误数据，请重新下载上传！
         </Modal>
     </>
 }

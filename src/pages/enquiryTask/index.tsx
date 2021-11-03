@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { enquiryTaskList, enquiryTaskAction, CurrentPriceInformation } from "./enquiryTask.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
-import { DetailContent, Page } from '../common';
+import { CommonTable, DetailContent, DetailTitle, Page } from '../common';
 
 export default function EnquiryTask(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
@@ -22,10 +22,24 @@ export default function EnquiryTask(): React.ReactNode {
     const [inquirerId, setInquirerId] = useState("");
     const [plannedDeliveryTime, setPlannedDeliveryTime] = useState("");
     const [val, setVal] = useState("");
+    const [columnsData, setColumnsData] = useState([]);
     var moment = require('moment');
     moment().format();
     const [form] = Form.useForm();
     const history = useHistory();
+
+    // const { loading, run: deleteRun } = useRequest<{ [key: string]: any }>((inquiryId: number) => new Promise(async (resole, reject) => {
+    //     try {
+    //         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryTask/${inquiryId}`)
+    //         console.log(result);
+    //         resole(result)
+    //     } catch (error) {
+    //         reject(error)
+    //     }
+    // }), { manual: true })
+
+    // const result: { [key: string]: any } = RequestUtil.get(`/tower-supply/inquiryTask/${inquiryId}`)
+    // console.log(result);
 
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
@@ -44,6 +58,7 @@ export default function EnquiryTask(): React.ReactNode {
         setInquiryId(inquiryId);
         const result: { [key: string]: any } = RequestUtil.get(`/tower-supply/inquiryTask/${inquiryId}`)
         console.log(result);
+        // setColumnsData(result)
         setObj(result);
         console.log(obj, "-------");
 
@@ -55,17 +70,17 @@ export default function EnquiryTask(): React.ReactNode {
     }
     // console.log(obj);
 
-    const inquiryResults = async (inquiryId: string) => {
+    const inquiryResults = async (inquiryId: number) => {
         setIsModalVisible1(true);
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryTask/taskResult/${inquiryId}`)
         console.log(result);
     }
 
     const submitTask = async (inquiryId: number) => {
-        console.log(inquiryId);
+        // console.log(inquiryId);
         // const abc:any = new FormData()
         // abc.append("inquiryId",122)
-        const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/inquiryTask/finish`, {}, { "Content-Type": "application/x-www-form-urlencoded" })
+        const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/inquiryTask/finish/${inquiryId}`, {}, { "Content-Type": "application/json" })
         console.log(result);
     }
 
@@ -78,7 +93,7 @@ export default function EnquiryTask(): React.ReactNode {
         console.log(id);
         console.log(inquiryId);
         setInquiryId(id);
-        const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/inquiryTask/taskReceive`, { inquiryId }, { "Content-Type": "application/json" })
+        const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/inquiryTask/taskReceive/${inquiryId}`, {}, { "Content-Type": "application/json" })
         console.log(result);
     }
 
@@ -253,27 +268,26 @@ export default function EnquiryTask(): React.ReactNode {
                     <span style={{ color: "#FF8C00" }}>下载</span>
                 </Descriptions.Item>
             </Descriptions>
-            <Descriptions title="操作信息">
-            </Descriptions>
-            <Page
-                // path={`/tower-supply/inquiryTask/${inquiryId}`}
-                path="/tower-supply/inquiryTask"
-                columns={[
-                    ...enquiryTaskAction,
-                ]}
-                searchFormItems={[]}
-            />
+            <DetailContent>
+                <DetailTitle title="操作信息" />
+                <CommonTable
+                    columns={[
+                        ...enquiryTaskAction,
+                    ]}
+                    dataSource={columnsData}
+                />
+            </DetailContent>
         </Modal>
         <Modal width="700px" title="询价结果" visible={isModalVisible1} footer={buttons1} onCancel={handleCancel1}>
-            <Descriptions title="当前价格信息">
-            </Descriptions>
-            <Page
-                path={`/tower-supply/inquiryTask/taskResult/${inquiryId}`}
-                columns={[
-                    ...CurrentPriceInformation
-                ]}
-                searchFormItems={[]}
-            />
+            <DetailContent>
+                <DetailTitle title="当前价格信息" />
+                <CommonTable
+                    columns={[
+                        ...CurrentPriceInformation,
+                    ]}
+                    dataSource={columnsData}
+                />
+            </DetailContent>
             <div style={{ width: "500px", height: "100px", background: "# inquiry results", textAlign: "center", lineHeight: "100px", borderRadius: "5px" }}>
                 补充信息补充信息补充信息补充信息补充信息补充信息补充信息
             </div>

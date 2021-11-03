@@ -49,7 +49,8 @@
         },
         {
             "title": "确认人",
-            "dataIndex": "updateUser"
+            "dataIndex": "updateUserName",
+            "type": "string"
         },
         {
             "title": "确认时间",
@@ -221,7 +222,7 @@
         },
         {
             "title": "确认人",
-            "dataIndex": "updateUser",
+            "dataIndex": "updateUserName",
             "disabled": true
         },
         {
@@ -269,7 +270,13 @@
             "title": "回款金额",
             "dataIndex": "refundAmount",
             "type": "number",
-            "width": 200
+            "width": 200,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入回款金额..."
+                }
+            ]
         },
         {
             "title": "业务经理",
@@ -351,7 +358,13 @@
             "title": "回款金额",
             "dataIndex": "refundAmount",
             "type": "number",
-            "width": 200
+            "width": 200,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入回款金额..."
+                }
+            ]
         },
         {
             "title": "业务经理",
@@ -361,45 +374,17 @@
         },
         {
             "title": "回款计划名称",
-            "dataIndex": "paymentPlanId",
-            "type": "popTable",
-            "path": "/tower-market/contract/getPaymentPlansByContractId?contractId=",
-            "width": 1011,
-            "value": "name",
-            "dependencies": true,
-            "readOnly": true,
-            "columns": [
-                {
-                    "title": "期次",
-                    "dataIndex": "period"
-                },
-                {
-                    "title": "回款计划名称",
-                    "dataIndex": "name"
-                },
-                {
-                    "title": "计划回款日期",
-                    "dataIndex": "returnedTime"
-                },
-                {
-                    "title": "计划回款占比(%)",
-                    "dataIndex": "returnedRate"
-                },
-                {
-                    "title": "计划回款金额",
-                    "dataIndex": "returnedAmount"
-                }
-            ],
+            "dataIndex": "paymentPlanName",
             "rules": [
                 {
                     "required": true,
-                    "message": "请选择相关合同..."
+                    "message": "请选择回款计划..."
                 }
             ]
         },
         {
             "title": "计划回款金额",
-            "dataIndex": "returnedAmount",
+            "dataIndex": "paymentPlanMoney",
             "disabled": true,
             "width": 200
         }

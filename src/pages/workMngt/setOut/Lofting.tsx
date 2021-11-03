@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Space, Button, Popconfirm, Input, Form, Upload, message } from 'antd';
+import { Space, Button, Popconfirm, Input, Form, Upload, message, Modal } from 'antd';
 import { Page } from '../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
 import styles from './TowerLoftingAssign.module.less';
@@ -438,97 +438,119 @@ export default function Lofting(): React.ReactNode {
     const [ tableColumns, setColumns ] = useState(columnsSetting);
     const [ form ] = Form.useForm();
     const [ refresh, setRefresh ] = useState(false);
+    const [ urlVisible, setUrlVisible ] = useState<boolean>(false);
+    const [ url, setUrl ] = useState<string>('');
 
-    return <Form form={ form } className={ styles.descripForm }>  
-        <Page
-            path="/tower-science/productStructure/list"
-            columns={ tableColumns }
-            headTabs={ [] }
-            tableProps={{ pagination: false }}
-            refresh={ refresh }
-            requestData={{ productSegmentId: params.productSegmentId }}
-            extraOperation={ <Space direction="horizontal" size="small">
-                {/* <Button type="primary" ghost>导出</Button> */}
-                <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productStructure/exportTemplate', '模板') } ghost>模板下载</Button>
-                <Popconfirm
-                    title="确认完成放样?"
-                    onConfirm={ () => RequestUtil.post(`/tower-science/productSegment/complete?productSegmentId=${ params.productSegmentId }`).then(res => {
-                        history.goBack();
-                    }) }
-                    okText="确认"
-                    cancelText="取消"
-                >
-                    <Button type="primary" ghost>完成放样</Button>
-                </Popconfirm>
-                <Upload 
-                    action={ () => {
-                        const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                        return baseUrl+'/tower-science/productStructure/import'
-                    } } 
-                    headers={
-                        {
-                            'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
-                            'Tenant-Id': AuthUtil.getTenantId(),
-                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+    return <>
+        <Form form={ form } className={ styles.descripForm }>  
+            <Page
+                path="/tower-science/productStructure/list"
+                columns={ tableColumns }
+                headTabs={ [] }
+                tableProps={{ pagination: false }}
+                refresh={ refresh }
+                requestData={{ productSegmentId: params.productSegmentId }}
+                extraOperation={ <Space direction="horizontal" size="small">
+                    {/* <Button type="primary" ghost>导出</Button> */}
+                    <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productStructure/exportTemplate', '模板') } ghost>模板下载</Button>
+                    <Popconfirm
+                        title="确认完成放样?"
+                        onConfirm={ () => RequestUtil.post(`/tower-science/productSegment/complete?productSegmentId=${ params.productSegmentId }`).then(res => {
+                            history.goBack();
+                        }) }
+                        okText="确认"
+                        cancelText="取消"
+                    >
+                        <Button type="primary" ghost>完成放样</Button>
+                    </Popconfirm>
+                    <Upload 
+                        action={ () => {
+                            const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                            return baseUrl+'/tower-science/productStructure/import'
+                        } } 
+                        headers={
+                            {
+                                'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                                'Tenant-Id': AuthUtil.getTenantId(),
+                                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                            }
                         }
-                    }
-                    data={ { productSegmentId: params.productSegmentId } }
-                    showUploadList={ false }
-                    onChange={ (info) => {
-                        if(info.file.response && !info.file.response?.success) {
-                            message.warning(info.file.response?.msg)
-                        } 
-                        if(info.file.response && info.file.response?.success){
-                            setRefresh(!refresh);
-                        }
-                    } }
-                >
-                    <Button type="primary" ghost>导入</Button>
-                </Upload>
-                <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/lofting/${ params.productSegmentId }/loftingTowerApplication` }><Button type="primary" ghost>放样塔型套用</Button></Link>
-                <Button type="primary" ghost onClick={ () => { 
-                    if(editorLock === '编辑') {
-                        setColumns(columns);
-                        setEditorLock('锁定');   
-                    } else {
-                        const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
-                        let values = form.getFieldsValue(true).data;
-                        if(values) {
-                            let changeValues = values.filter((item: any, index: number) => {
-                                return newRowChangeList.indexOf(index) !== -1;
-                            })
-                            RequestUtil.post(`/tower-science/productStructure/save`, [ ...changeValues ]).then(res => {
+                        data={ { productSegmentId: params.productSegmentId } }
+                        showUploadList={ false }
+                        onChange={ (info) => {
+                            if(info.file.response && !info.file.response?.success) {
+                                message.warning(info.file.response?.msg)
+                            }
+                            if(info.file.response && info.file.response?.success){
+                                if(Object.keys(info.file.response?.data).length > 0){
+                                    setUrl(info.file.response?.data);
+                                    setUrlVisible(true);
+                                }else{
+                                    message.success('导入成功！');
+                                    setRefresh(!refresh);
+                                }
+                            } 
+                        } }
+                    >
+                        <Button type="primary" ghost>导入</Button>
+                    </Upload>
+                    <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/lofting/${ params.productSegmentId }/loftingTowerApplication` }><Button type="primary" ghost>放样塔型套用</Button></Link>
+                    <Button type="primary" ghost onClick={ () => { 
+                        if(editorLock === '编辑') {
+                            setColumns(columns);
+                            setEditorLock('锁定');   
+                        } else {
+                            const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
+                            let values = form.getFieldsValue(true).data;
+                            if(values) {
+                                let changeValues = values.filter((item: any, index: number) => {
+                                    return newRowChangeList.indexOf(index) !== -1;
+                                })
+                                RequestUtil.post(`/tower-science/productStructure/save`, [ ...changeValues ]).then(res => {
+                                    setColumns(columnsSetting);
+                                    setEditorLock('编辑');
+                                    setRowChangeList([]);    
+                                    form.resetFields();
+                                    setRefresh(!refresh);
+                                });
+                            } else {
                                 setColumns(columnsSetting);
                                 setEditorLock('编辑');
                                 setRowChangeList([]);    
                                 form.resetFields();
-                                setRefresh(!refresh);
-                            });
-                        } else {
-                            setColumns(columnsSetting);
-                            setEditorLock('编辑');
-                            setRowChangeList([]);    
-                            form.resetFields();
+                            }
                         }
+                    } }>{ editorLock }</Button>
+                    <UploadModal id={ params.productSegmentId } path={ `/tower-science/productSegment/segmentModelDetail?productSegmentId=${ params.productSegmentId }` } requestData={ { productSegmentId: params.productSegmentId } } uploadUrl="/tower-science/productSegment/segmentModelUpload" btnName="模型上传" delPath="/tower-science/productSegment/segmentModelDelete" />
+                    <UploadModal id={ params.productSegmentId } path={ `/tower-science/productSegment/segmentDrawDetail?productSegmentId=${ params.productSegmentId }` } requestData={ { productSegmentId: params.productSegmentId } } uploadUrl="/tower-science/productSegment/segmentDrawUpload" btnName="样图上传"  delPath="/tower-science/productSegment/segmentDrawDelete"/>
+                    <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
+                </Space> }
+                searchFormItems={ [
+                    {
+                        name: 'materialName',
+                        label: '材料名称',
+                        children: <Input placeholder="请输入"/>
+                    },
+                    {
+                        name: 'structureTexture',
+                        label: '材质',
+                        children: <Input placeholder="请输入"/>
                     }
-                } }>{ editorLock }</Button>
-                <UploadModal id={ params.productSegmentId } path={ `/tower-science/productSegment/segmentModelDetail?productSegmentId=${ params.productSegmentId }` } requestData={ { productSegmentId: params.productSegmentId } } uploadUrl="/tower-science/productSegment/segmentModelUpload" btnName="模型上传" delPath="/tower-science/productSegment/segmentModelDelete" />
-                <UploadModal id={ params.productSegmentId } path={ `/tower-science/productSegment/segmentDrawDetail?productSegmentId=${ params.productSegmentId }` } requestData={ { productSegmentId: params.productSegmentId } } uploadUrl="/tower-science/productSegment/segmentDrawUpload" btnName="样图上传"  delPath="/tower-science/productSegment/segmentDrawDelete"/>
-                <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
-            </Space> }
-            searchFormItems={ [
-                {
-                    name: 'materialName',
-                    label: '材料名称',
-                    children: <Input placeholder="请输入"/>
-                },
-                {
-                    name: 'structureTexture',
-                    label: '材质',
-                    children: <Input placeholder="请输入"/>
-                }
-            ] }
-            onFilterSubmit = { (values: Record<string, any>) => { return values; } }
-        />
-    </Form>
+                ] }
+                onFilterSubmit = { (values: Record<string, any>) => { return values; } }
+            />
+        </Form>
+        <Modal 
+            visible={urlVisible} 
+            onOk={()=>{
+                window.open(url);
+                setUrlVisible(false);
+            }} 
+            onCancel={()=>{setUrlVisible(false);setUrl('')}} 
+            title='提示' 
+            okText='下载'
+        >
+            当前存在错误数据，请重新下载上传！
+        </Modal>
+    </>
 }

@@ -80,9 +80,8 @@
                     "type": "number"
                 },
                 {
-                    "title": "重量（吨）",
-                    "dataIndex": "weight",
-                    "type": "number"
+                    "lable": "待完成",
+                    "value": 1
                 },
                 {
                     "title": "备注",
@@ -112,6 +111,68 @@
                     "type": "string"
                 }
             ]
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "purchaseStatusUpdateTime",
+            "type": "string"
+        }
+    ],
+    "ListIngredients": [
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "string"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandardName",
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string"
+        },
+        {
+            "title": "配料品名",
+            "dataIndex": "doseName",
+            "type": "string"
+        },
+        {
+            "title": "搭配长度",
+            "dataIndex": "collocationLength",
+            "type": "number"
+        },
+        {
+            "title": "零件1",
+            "dataIndex": "part1",
+            "type": "string"
+        },
+        {
+            "title": "重量（吨）",
+            "dataIndex": "weight",
+            "type": "number"
+        },
+        {
+            "title": "零件2",
+            "dataIndex": "part2",
+            "type": "string"
+        },
+        {
+            "title": "仓库库存（支）",
+            "dataIndex": "",
+            "type": ""
+        },
+        {
+            "title": "零件3",
+            "dataIndex": "part3",
+            "type": "string"
+        },
+        {
+            "title": "计划采购（本次）",
+            "dataIndex": "purchasePlanNumber",
+            "type": "string"
         }
     ],
     "BatchingScheme": [
@@ -121,52 +182,12 @@
             "type": "string"
         },
         {
-            "title": "规格",
-            "dataIndex": "structureSpec",
-            "type": "string"
-        },
-        {
-            "title": "原材料长度(mm)",
-            "dataIndex": "length",
-            "type": "number"
-        },
-        {
-            "title": "零件1",
-            "dataIndex": "part1",
-            "type": "string"
-        },
-        {
-            "title": "长度",
-            "dataIndex": "length",
-            "type": "number"
-        },
-        {
-            "title": "零件2",
-            "dataIndex": "part2",
-            "type": "string"
-        },
-        {
-            "title": "长度",
-            "dataIndex": "length",
-            "type": "number"
-        },
-        {
-            "title": "零件3",
-            "dataIndex": "part3",
-            "type": "string"
-        },
-        {
-            "title": "长度",
-            "dataIndex": "length",
-            "type": "number"
-        },
-        {
             "title": "零件4",
             "dataIndex": "part4",
             "type": "string"
         },
         {
-            "title": "长度",
+            "title": "原材料长度(mm)",
             "dataIndex": "length",
             "type": "number"
         },

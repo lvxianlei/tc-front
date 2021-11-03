@@ -26,10 +26,6 @@ const contract = {
             "dataIndex": "contractName"
         },
         {
-            "title": "销售类型",
-            "dataIndex": "saleType"
-        },
-        {
             "title": "业主单位",
             "dataIndex": "customerCompany",
             "search": true
@@ -85,17 +81,23 @@ export default function Edit() {
     const handleSubmit = async () => {
         const baseInfo = await baseForm.validateFields()
         const confirmBackMoneyInfoDTOList = await contractInfosForm.validateFields()
-        const result = await saveRun({
-            ...baseInfo,
-            payNum: returnType === 0 ? baseInfo.payNum.records?.[0].payNumber || data?.payNum || "" : "",
-            confirmBackMoneyInfoDTOList: confirmBackMoneyInfoDTOList.submit.map((item: any) => ({
-                ...item,
-                paymentPlanId: item.paymentPlanId.id || item.paymentPlanId || ""
-            }))
-        })
-        if (result) {
-            message.success("保存成功")
-            history.go(-1)
+        if (returnType === 1 && confirmBackMoneyInfoDTOList?.submit?.length <= 0) {
+            message.warning("回款类型为合同应收款时，必须选择合同和回款计划")
+            return
+        } else {
+            const result = await saveRun({
+                ...baseInfo,
+                payNum: returnType === 0 ? baseInfo.payNum.records?.[0].payNumber || data?.payNum || "" : "",
+                confirmBackMoneyInfoDTOList: confirmBackMoneyInfoDTOList?.submit?.map((item: any) => ({
+                    ...item,
+                    contractId: item.id,
+                    paymentPlanId: item.paymentPlanId.id || item.paymentPlanId || ""
+                }))
+            })
+            if (result) {
+                message.success("保存成功")
+                history.go(-1)
+            }
         }
     }
 

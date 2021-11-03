@@ -8,7 +8,21 @@
         {
             "title": "采购类型",
             "dataIndex": "purchaseType",
-            "type": "integer"
+            "type": "select",
+            "enum": [
+                {
+                    "label": "外部",
+                    "value": 1
+                },
+                {
+                    "label": "内部",
+                    "value": 2
+                },
+                {
+                    "label": "缺料",
+                    "value": 3
+                }
+            ]
         },
         {
             "title": "塔型（个）",
@@ -38,7 +52,7 @@
         {
             "title": "采购人",
             "dataIndex": "purchaserId",
-            "type": "integer"
+            "type": "string"
         }
     ],
     "AssociatedTowerType": [

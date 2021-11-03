@@ -1,13 +1,16 @@
-import React from "react"
+import React, { useState, useRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { Page } from '../../common'
 import { baseInfo } from "./receivingListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import Edit from "./Edit"
 export default function Invoicing() {
     const history = useHistory()
-
+    const [visible, setVisible] = useState<boolean>(false)
+    const editRef = useRef<{ onSubmit: () => Promise<boolean>, loading: boolean }>()
+    const [materialData, setMaterialData] = useState<{ [key: string]: any }>({});
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/invoicing?id=${id}`)
@@ -25,7 +28,15 @@ export default function Invoicing() {
         }
         return value
     }
-
+    const handleModalOk = () => new Promise(async (resove, reject) => {
+        const isClose = await editRef.current?.onSubmit()
+        if (isClose) {
+            message.success("材质配料设定成功...")
+            setVisible(false)
+            resove(true)
+            history.go(0)
+        }
+    })
     const handleDelete = (id: string) => {
         Modal.confirm({
             title: "删除",
@@ -42,54 +53,55 @@ export default function Invoicing() {
         })
     }
 
-    return <Page
-        path="/tower-market/invoicing"
-        columns={[
-            ...baseInfo,
-            {
-                title: "操作",
-                dataIndex: "opration",
-                fixed: "right",
-                width: 100,
-                render: (_: any, record: any) => {
-                    return <>
-                        <Button type="link" onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</Button>
-                        {[0, 3].includes(record.state) && <Button type="link" onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>}
-                        {[0].includes(record.state) && <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>}
-                    </>
+    return <>
+        <Modal visible={visible} width={1011} title="创建" onOk={handleModalOk} onCancel={() => {
+            setVisible(false)
+            setMaterialData({})
+        }}>
+            <Edit />
+        </Modal>
+        <Page
+            path="/tower-storage/receiveStock"
+            columns={[
+                ...baseInfo,
+                {
+                    title: "操作",
+                    dataIndex: "opration",
+                    fixed: "right",
+                    width: 100,
+                    render: (_: any, record: any) => {
+                        return <>
+                            <Button type="link">详情</Button>
+                            <Button type="link">编辑</Button>
+                            <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>
+                        </>
+                    }
+                }]}
+            extraOperation={<>
+                <Button type="primary" ghost>导出</Button>
+                <Button type="primary" ghost>创建</Button>
+            </>}
+            onFilterSubmit={onFilterSubmit}
+            searchFormItems={[
+                {
+                    name: 'fuzzyQuery',
+                    children: <Input placeholder="编号/内部合同编号/工程名称/票面单位/业务经理" style={{ width: 300 }} />
+                },
+                {
+                    name: 'startPurchaseStatusUpdateTime',
+                    label: '最新状态变更时间',
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                },
+                {
+                    name: 'purchaseTaskStatus',
+                    label: '收货单状态',
+                    children: <Select style={{ width: 200 }}>
+                        <Select.Option value="1">待完成</Select.Option>
+                        <Select.Option value="2">待接收</Select.Option>
+                        <Select.Option value="3">已完成</Select.Option>
+                    </Select>
                 }
-            }]}
-        extraOperation={<Button type="primary">导出</Button>}
-        onFilterSubmit={onFilterSubmit}
-        searchFormItems={[
-            {
-                name: 'fuzzyQuery',
-                children: <Input placeholder="编号/内部合同编号/工程名称/票面单位/业务经理" style={{ width: 300 }} />
-            },
-            {
-                name: 'isOpen',
-                label: '是否已全开',
-                children: <Select style={{ width: 200 }}>
-                    <Select.Option value="2">发票已开全</Select.Option>
-                    <Select.Option value="3">发票未开全</Select.Option>
-                </Select>
-            },
-            {
-                name: 'contractType',
-                label: '开票时合同状态',
-                children: <Select style={{ width: 200 }}>
-                    <Select.Option value="1">不下计划</Select.Option>
-                    <Select.Option value="2">未下计划</Select.Option>
-                    <Select.Option value="3">未下完计划</Select.Option>
-                    <Select.Option value="4">未发完货</Select.Option>
-                    <Select.Option value="5">已发完货</Select.Option>
-                </Select>
-            },
-            {
-                name: 'startLaunchTime',
-                label: '申请日期',
-                children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-            }
-        ]}
-    />
+            ]}
+        />
+    </>
 }

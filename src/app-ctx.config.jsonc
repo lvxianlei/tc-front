@@ -232,6 +232,24 @@
                         ]
                     },
                     {
+                        "label": "合同管理",
+                        "icon": "technology",
+                        "path": "/contract-mngt",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "原材料合同管理",
+                                "path": "/contract-mngt/index",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "询价比",
+                                "path": "/contract-mngt/enquiryCompare",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
                         "label": "库存管理",
                         "icon": "technology",
                         "path": "/stock",
@@ -317,6 +335,19 @@
                         ]
                     },
                     {
+                        "label": "采购任务",
+                        "icon": "technology",
+                        "path": "/buyingTask",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "原材料",
+                                "path": "/buyingTask/index",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
                         "label": "工作管理",
                         "icon": "technology",
                         "path": "/workMngt",
@@ -388,7 +419,7 @@
                                 "authority": "approvalm"
                             },
                             {
-                                "label": "收获列表",
+                                "label": "收货列表",
                                 "path": "/workMngt/receivingList",
                                 "authority": "approvalm"
                             },

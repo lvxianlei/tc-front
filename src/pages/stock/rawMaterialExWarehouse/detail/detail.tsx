@@ -60,7 +60,7 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 120,
             render: (text: any) => text == 0 ? '待出库' : text == 1 ? '已出库' : '缺料中'
         }, {
-            title: '最新状态变更',
+            title: '最新状态变更时间',
             dataIndex: 'updateTime',
             width: 160,
         }, {
@@ -106,6 +106,26 @@ export default function RawMaterialStock(): React.ReactNode {
         }, {
             title: '出库人',
             dataIndex: 'outStockUserName',
+            width: 120,
+        }, {
+            title: '出库时间',
+            dataIndex: 'updatetime',
+            width: 140,
+        }, {
+            title: '仓库',
+            dataIndex: 'warehouseName',
+            width: 120,
+        }, {
+            title: '库区',
+            dataIndex: 'reservoirName',
+            width: 120,
+        }, {
+            title: '库位',
+            dataIndex: 'locatorName',
+            width: 120,
+        }, {
+            title: '备注',
+            dataIndex: 'remark',
             width: 120,
         },
         {
@@ -393,8 +413,8 @@ export default function RawMaterialStock(): React.ReactNode {
             updateTimeEnd: dateString[1] ? dateString[1] + ' 23:59:59' : '',
         })
         setListdata(data.outStockDetailPage.records);
-        setTotalWeight(data.width)
-        setMaterialShortageTotalWeight(data.excessWidth)
+        setTotalWeight(data.weight)
+        setMaterialShortageTotalWeight(data.excessWeight)
         setTotal(data.total);
     }
     //获取列表详情数据数据
@@ -445,15 +465,13 @@ export default function RawMaterialStock(): React.ReactNode {
         setApplyListdata([record]);
         console.log(record)
         const data: any = await RequestUtil.get(`/tower-storage/materialStock`, {
-            params: {
-                warehouseId: record.id,//仓库id
-                materialTexture: record.materialTexture,//材质
-                productName: record.productName,//品名
-                standard: record.standard,//标准
-                lengthMin: record.length,//长度最小值
-                lengthMax: record.length,//长度最大值
-                spec: record.spec,//规格
-            }
+            warehouseId: record.id,//仓库id
+            materialTexture: record.materialTexture,//材质
+            productName: record.productName,//品名
+            standard: record.standard,//标准
+            lengthMin: record.length,//长度最小值
+            lengthMax: record.length,//长度最大值
+            spec: record.spec,//规格
         });
         setOutLibraryListdata(data.materialStockPage.records);
         setIsOutLibraryModal(true)
@@ -523,6 +541,7 @@ export default function RawMaterialStock(): React.ReactNode {
         setKeyword('')
         setPersonnelId('')
         setDepartmentId('')
+        setuserList([]);
     }
     // 详情弹框取消
     const onDetailCancel = () => {
@@ -585,7 +604,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={status ? status : '请选择'}
+                            value={status ? status : ''}
                             onChange={(val) => { setStatus(val) }}
                         >
                             <Select.Option
@@ -618,7 +637,7 @@ export default function RawMaterialStock(): React.ReactNode {
                             className="select"
                             style={{ width: "100px" }}
                             value={departmentId ? departmentId : '请选择'}
-                            onChange={(val) => { setDepartmentId(val); getUser(departmentId) }}
+                            onChange={(val) => { setDepartmentId(val); setPersonnelId(''); setuserList([]); getUser(departmentId) }}
                         >
                             {
                                 departmentList.map((item, index) => {

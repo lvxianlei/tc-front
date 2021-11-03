@@ -16,11 +16,15 @@ export default function SampleDraw(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [url, setUrl] = useState<string>('');
     const [form] = Form.useForm();
+    const [headerName, setHeaderName] = useState({
+        uploadSmallSampleCount: 0,
+        noSmallSampleCount: 0
+    });
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/smallSample/sampleStat/${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-science/smallSample/sampleStat/${params.id}`);
+        setHeaderName(data);
         resole(data)
     }), {})
-    const headerName:any = data;
     const handleModalOk = async () => {
         try {
             const submitData = await form.validateFields()
@@ -112,23 +116,26 @@ export default function SampleDraw(): React.ReactNode {
         return value
     }
     const uploadChange = async (event: any) => {
-      if (event.file.status === "done") {
-          if (event.file.response.code === 200) {
-              const dataInfo = event.file.response.data
-              const fileInfo = dataInfo.name.split(".");
-              const value=[{
-                  name: dataInfo.originalName.split('.')[0],
-                  fileSuffix:fileInfo[fileInfo.length - 1],
-                  filePath: dataInfo.name,
-                  userName:dataInfo.userName
-              }]
-              await RequestUtil.post(`/tower-science/smallSample/sampleUpload/${params.id}`,value).then(()=>{
-                  message.success('导入成功！')
-              }).then(()=>{
-                  setRefresh(!refresh)
-              })
-          }
-      }
+        if (event.file.status === "done") {
+            if (event.file.response.code === 200) {
+                const dataInfo = event.file.response.data
+                const fileInfo = dataInfo.name.split(".");
+                const value=[{
+                    name: dataInfo.originalName.split('.')[0],
+                    fileSuffix:fileInfo[fileInfo.length - 1],
+                    filePath: dataInfo.name,
+                    userName:dataInfo.userName
+                }]
+                await RequestUtil.post(`/tower-science/smallSample/sampleUpload/${params.id}`,value).then(()=>{
+                    message.success('导入成功！')
+                }).then(async ()=>{
+                    const data: any = await RequestUtil.get(`/tower-science/smallSample/sampleStat/${params.id}`)
+                    setHeaderName(data);
+                }).then(()=>{
+                    setRefresh(!refresh);
+                })
+            }
+        }
     }
     return (
         <>

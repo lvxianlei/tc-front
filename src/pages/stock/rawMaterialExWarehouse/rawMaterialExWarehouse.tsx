@@ -2,12 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message, Table } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import ConfirmableButton from '../../../components/ConfirmableButton';
-import { Page } from '../../common';
-import { IClient } from '../../IClient';
 import RequestUtil from '../../../utils/RequestUtil';
-import ApplicationContext from "../../../configuration/ApplicationContext";
 import AuthUtil from '../../../utils/AuthUtil';
+import '../StockPublicStyle.less';
 const { RangePicker } = DatePicker;
 
 export default function RawMaterialStock(): React.ReactNode {
@@ -110,6 +107,7 @@ export default function RawMaterialStock(): React.ReactNode {
         setKeyword('');
         setDepartmentId('');
         setPersonnelId('');
+        setuserList([]);
     }
     useEffect(() => {
         getDepartment()
@@ -163,7 +161,7 @@ export default function RawMaterialStock(): React.ReactNode {
                             className="select"
                             style={{ width: "100px" }}
                             value={departmentId ? departmentId : '请选择'}
-                            onChange={(val) => { setDepartmentId(val); getUser(departmentId) }}
+                            onChange={(val) => { setDepartmentId(val); setPersonnelId(''); setuserList([]); getUser(departmentId) }}
                         >
                             {
                                 departmentList.map((item, index) => {
@@ -193,7 +191,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     <span className="tip">关键字：</span>
                     <div className='selectOrInput'>
                         <Input
-                            placeholder="任务编号/项目名称"
+                            placeholder="领料编号/生产批次"
                             value={keyword}
                             onChange={(e) => {
                                 setKeyword(e.target.value)
