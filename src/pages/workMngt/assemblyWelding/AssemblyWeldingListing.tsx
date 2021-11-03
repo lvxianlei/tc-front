@@ -111,14 +111,19 @@ export default function AssemblyWeldingListing(): React.ReactNode {
             key: 'structureSpec' 
         },
         { 
-            title: '长', 
-            dataIndex: 'length', 
-            key: 'length' 
-        },
-        { 
-            title: '宽', 
+            title: '宽度（mm）', 
             dataIndex: 'width', 
             key: 'width' 
+        },
+        { 
+            title: '厚度（mm）', 
+            dataIndex: 'thickness', 
+            key: 'thickness' 
+        },
+        { 
+            title: '长度（mm）', 
+            dataIndex: 'length', 
+            key: 'length' 
         },
         { 
             title: '单组件数', 
@@ -129,6 +134,11 @@ export default function AssemblyWeldingListing(): React.ReactNode {
             title: '电焊长度（mm）',
             dataIndex: 'weldingLength', 
             key: 'weldingLength' 
+        }, 
+        {
+            title: '备注',
+            dataIndex: 'description', 
+            key: 'description' 
         }
     ]
 
