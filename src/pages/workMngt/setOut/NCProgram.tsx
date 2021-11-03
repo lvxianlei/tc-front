@@ -156,9 +156,9 @@ export default function NCProgram(): React.ReactNode {
                         }).then(res => {
                             if(res) {
                                 message.success('上传成功');
+                                setRefresh(!refresh);
                             }
                         })
-                        setRefresh(!refresh);
                     }
                 } }
             >
