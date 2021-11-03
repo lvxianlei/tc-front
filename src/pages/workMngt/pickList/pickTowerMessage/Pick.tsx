@@ -237,7 +237,8 @@ export default function Lofting(): React.ReactNode {
         <Modal 
             visible={visible} 
             onOk={()=>{
-                window.open(url)
+                window.open(url);
+                setVisible(false);
             }} 
             onCancel={()=>{setVisible(false);setUrl('')}} 
             title='提示' 
@@ -299,7 +300,7 @@ export default function Lofting(): React.ReactNode {
                             if(info.file.response && !info.file.response?.success) {
                                 message.warning(info.file.response?.msg)
                             }else if(info.file.response && info.file.response?.success){
-                                if(info.file.response?.data){
+                                if(Object.keys(info.file.response?.data).length > 0){
                                     setUrl(info.file.response?.data);
                                     setVisible(true);
                                 }else{
