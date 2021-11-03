@@ -128,7 +128,8 @@ export default function RawMaterialStock(): React.ReactNode {
         setListdata(data.materialStockPage.records);
         setWeight(data.weight)
         setQuantity(data.quantity);
-        setTotal(data.total);
+        console.log(data.total)
+        setTotal(data.materialStockPage.total);
     }
     // 获取仓库/库区/库位
     const getWarehousing = async (id?: any, type?: any) => {
