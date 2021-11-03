@@ -914,15 +914,15 @@
       // "authority": "product_material_list"
       "authority": "approvalm"
     },
-    { // 工作管理-提料-杆塔信息
-      "name": "杆塔信息",
+    { // 工作管理-提料-塔型信息
+      "name": "塔型信息",
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status",
       "module": "./pages/workMngt/pickList/PickTowerMessage",
       "exact": true,
       // "authority": "product_material_list"
       "authority": "approvalm"
     },
-    { // 工作管理-提料-杆塔信息-提料
+    { // 工作管理-提料-塔型信息-提料
       "name": "提料",
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Pick",
@@ -930,7 +930,7 @@
       // "authority": "product_material_list"
       "authority": "approvalm"
     },
-    { // 工作管理-提料-杆塔信息-提料-放样塔型套用
+    { // 工作管理-提料-塔型信息-提料-放样塔型套用
       "name": "放样塔型套用",
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId/setOutApply",
       "module": "./pages/workMngt/pickList/pickTowerMessage/SetOutApply",
@@ -938,7 +938,7 @@
       // "authority": "product_material_list"
       "authority": "approvalm"
     },
-    { // 工作管理-提料-杆塔信息-提料-图形塔型套用
+    { // 工作管理-提料-塔型信息-提料-图形塔型套用
       "name": "图形塔型套用",
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId/drawApply",
       "module": "./pages/workMngt/pickList/pickTowerMessage/DrawApply",
@@ -946,7 +946,7 @@
       // "authority": "product_material_list"
       "authority": "approvalm"
     },
-    { // 工作管理-提料-杆塔信息-提料-识别
+    { // 工作管理-提料-塔型信息-提料-识别
       "name": "识别",
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId/recognize",
       "module": "./pages/workMngt/pickList/pickTowerMessage/ImageRecognize",
@@ -954,7 +954,7 @@
       // "authority": "product_material_list"
       "authority": "approvalm"
     },
-    { // 工作管理-提料-杆塔信息-校核
+    { // 工作管理-提料-塔型信息-校核
       "name": "校核",
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/check/:productSegmentId/:materialLeaderId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Check",
@@ -962,7 +962,7 @@
       // "authority": "product_material_list"
       "authority": "approvalm"
     },
-    { // 工作管理-提料-杆塔信息-明细
+    { // 工作管理-提料-塔型信息-明细
       "name": "明细",
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/detail/:productSegmentId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Detail",
