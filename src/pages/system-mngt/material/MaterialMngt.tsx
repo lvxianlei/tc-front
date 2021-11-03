@@ -55,9 +55,9 @@ import { DataNode } from 'antd/lib/tree';
             align: "center",
             width: 400,
         },{
-            key: 'productName',
+            key: 'materialName',
             title: '品名',
-            dataIndex: 'productName',
+            dataIndex: 'materialName',
             align: "center",
             width: 200,
         },{
@@ -294,7 +294,7 @@ import { DataNode } from 'antd/lib/tree';
             name: 'materialCode',
             children: <Input placeholder="物料编号关键字" maxLength={ 200 }/>
         },{
-            name: 'productName',
+            name: 'materialName',
             children: <Input placeholder="品名关键字" maxLength={ 200 }/>
         },{
             name: 'shortcutCode',
