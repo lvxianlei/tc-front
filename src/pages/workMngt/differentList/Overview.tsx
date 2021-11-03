@@ -11,7 +11,7 @@ export default function Edit() {
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/invoicing/getInvoicingInfo/${params.id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/componentDiff/${params.id}`)
             resole(result)
         } catch (error) {
             reject(error)

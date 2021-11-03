@@ -185,8 +185,8 @@
                 },
                 {
                     "title": "已选数量",
-                    "dataIndex": "",
-                    "type": ""
+                    "dataIndex": "selectedquantity",
+                    "type": "integer"
                 }
             ],
             "WaitingArea": [
@@ -227,8 +227,8 @@
                 },
                 {
                     "title": "已选数量",
-                    "dataIndex": "",
-                    "type": ""
+                    "dataIndex": "selectedquantity",
+                    "type": "integer"
                 }
             ]
         }

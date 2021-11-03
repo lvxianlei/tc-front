@@ -71,9 +71,9 @@ export default function Invoicing() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link">详情</Button>
-                            <Button type="link">编辑</Button>
-                            <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>
+                            <Link to={`/workMngt/receive/detail/${record.id}`}>详情</Link>
+                            <Button type="link" onClick={()=>history.push(`/workMngt/receive/edit/${record.id}`)}>编辑</Button>
+                            <a onClick={() => handleDelete(record.id)}>删除</a>
                         </>
                     }
                 }]}

@@ -53,7 +53,7 @@ export default function Invoicing() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <Link to={`/workMngt/production/detailed/${record.id}`}>明细</Link>
+                        <Link to={`/workMngt/production/detailed/${record.productionBatch}`}>明细</Link>
                         <Button type="link">配料单</Button>
                     </>
                 }

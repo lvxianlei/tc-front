@@ -13,7 +13,7 @@
     readonly rowMaterial?: string;
     readonly id?: string;
     readonly proportion?: number;
-    readonly productName?: string;
+    readonly materialName?: string;
     readonly middleCategory?: string;
     readonly materialTexture?: string;
     readonly materialCode?: string;
