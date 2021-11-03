@@ -46,75 +46,66 @@
             "type": "string"
         }
     ],
-    "GeneratePurchasePlan": [
+    "ListIngredient": [
         {
-            "ListIngredients": [
-                {
-                    "title": "材质",
-                    "dataIndex": "structureTexture",
-                    "type": "string"
-                },
-                {
-                    "title": "标准",
-                    "dataIndex": "materialStandardName",
-                    "type": "string"
-                },
-                {
-                    "title": "规格",
-                    "dataIndex": "structureSpec",
-                    "type": "string"
-                },
-                {
-                    "title": "配料品名",
-                    "dataIndex": "doseName",
-                    "type": "string"
-                },
-                {
-                    "title": "搭配长度",
-                    "dataIndex": "collocationLength",
-                    "type": "number"
-                },
-                {
-                    "title": "搭配数量",
-                    "dataIndex": "matchingquantity",
-                    "type": "number"
-                },
-                {
-                    "lable": "待完成",
-                    "value": 1
-                },
-                {
-                    "title": "备注",
-                    "dataIndex": "description",
-                    "type": "string"
-                }
-            ],
-            "PlanList": [
-                {
-                    "title": "生产未领料（支）",
-                    "dataIndex": "productionuncollected",
-                    "type": ""
-                },
-                {
-                    "title": "仓库库存（支）",
-                    "dataIndex": "warehouseinventory",
-                    "type": "string"
-                },
-                {
-                    "title": "在途库存（支）",
-                    "dataIndex": "transportationinventory",
-                    "type": "string"
-                },
-                {
-                    "title": "计划采购（本次）",
-                    "dataIndex": "purchasePlanNumber",
-                    "type": "string"
-                }
-            ]
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "string"
         },
         {
-            "title": "最新状态变更时间",
-            "dataIndex": "purchaseStatusUpdateTime",
+            "title": "标准",
+            "dataIndex": "materialStandardName",
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string"
+        },
+        {
+            "title": "配料品名",
+            "dataIndex": "doseName",
+            "type": "string"
+        },
+        {
+            "title": "搭配长度",
+            "dataIndex": "collocationLength",
+            "type": "number"
+        },
+        {
+            "title": "搭配数量",
+            "dataIndex": "matchingquantity",
+            "type": "number"
+        },
+        {
+            "lable": "待完成",
+            "value": 1
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "string"
+        }
+    ],
+    "PlanList": [
+        {
+            "title": "生产未领料（支）",
+            "dataIndex": "productionuncollected",
+            "type": ""
+        },
+        {
+            "title": "仓库库存（支）",
+            "dataIndex": "warehouseinventory",
+            "type": "string"
+        },
+        {
+            "title": "在途库存（支）",
+            "dataIndex": "transportationinventory",
+            "type": "string"
+        },
+        {
+            "title": "计划采购（本次）",
+            "dataIndex": "purchasePlanNumber",
             "type": "string"
         }
     ],
