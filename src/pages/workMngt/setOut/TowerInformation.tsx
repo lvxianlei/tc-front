@@ -214,7 +214,7 @@ export default function TowerInformation(): React.ReactNode {
             {
                 name: 'updateStatusTime',
                 label: '最新状态变更时间',
-                children: <DatePicker />
+                children: <DatePicker.RangePicker />
             },
             {
                 name: 'status',
@@ -275,8 +275,8 @@ export default function TowerInformation(): React.ReactNode {
         onFilterSubmit = { (values: Record<string, any>) => {
             if(values.updateStatusTime) {
                 const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
-                values.updateStatusTimeStart = formatDate[0];
-                values.updateStatusTimeEnd = formatDate[1];
+                values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
+                values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             }
             return values;
         } }
