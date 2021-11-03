@@ -99,7 +99,7 @@ export default function Lofting(): React.ReactNode {
             ) 
         },
         { 
-            title: '单基件数', 
+            title: '单段件数', 
             dataIndex: 'basicsPartNum',
              key: 'basicsPartNum',
              width: 120,
