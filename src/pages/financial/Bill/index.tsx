@@ -89,12 +89,11 @@ export default function Invoice() {
                     }
                 }]}
             extraOperation={<>
-                <Button type="primary">导出</Button>
-                <Button type="primary"
-                    onClick={() => {
-                        setVisible(true)
-                        setType("new")
-                    }}>创建</Button>
+                <Button type="primary" ghost>导出</Button>
+                <Button type="primary" ghost onClick={() => {
+                    setVisible(true)
+                    setType("new")
+                }}>创建</Button>
             </>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[

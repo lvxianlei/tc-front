@@ -80,15 +80,21 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 120,
         }, {
             title: '应收余料长度',
-            dataIndex: 'length',
-            width: 120,
-        }, {
-            title: '实收余料长度',
             dataIndex: 'excessLength',
             width: 120,
+            render: (text: any, item: any, index: any) => {
+                return <span>{item.excessLength == -1 ? '' : item.excessLength}</span>
+            }
+        }, {
+            title: '实收余料长度',
+            dataIndex: 'length',
+            width: 120,
+            render: (text: any, item: any, index: any) => {
+                return <span>{item.length == -1 ? '' : item.length}</span>
+            }
         }, {
             title: '入库人',
-            dataIndex: 'stockUser',
+            dataIndex: 'stockUserName',
             width: 120,
         },
         {
@@ -97,8 +103,11 @@ export default function RawMaterialStock(): React.ReactNode {
             fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    {record.receiveStatus == 0 ? <Button type='link' onClick={() => { ReceivingBtn(record) }}>入库</Button> : null}
-                    {record.receiveStatus == 0 ? <Button type='link' onClick={() => { getDetail(record.id) }}>详情</Button> : null}
+                    {
+                        record.receiveStatus == 0 ?
+                            <Button type='link' onClick={() => { ReceivingBtn(record) }}>入库</Button> :
+                            <Button type='link' onClick={() => { getDetail(record.id) }}>详情</Button>
+                    }
                 </Space>
             )
         }
@@ -211,7 +220,7 @@ export default function RawMaterialStock(): React.ReactNode {
         await getWarehousing('', 0)
         setListFurnaceBatchNo(record.furnaceBatchNo)
         setListProductionBatchNumber(record.receiveBatchNumber)
-        setListReceivableSurplus(record.length)
+        setListReceivableSurplus(record.excessLength)
         setListID(record.id)
         setIsEnterLibraryModal(true)
     }
@@ -303,6 +312,17 @@ export default function RawMaterialStock(): React.ReactNode {
         });
         setuserList(data.records)
     }
+    // 入库部门选择
+    const departmentChange = async (val: any) => {
+        console.log(val, 'valvalvalvalval')
+        await setDepartmentId(val);
+        await setPersonnelId('');
+        await setuserList([]);
+        if (val) {
+            await getUser(val);
+        }
+    }
+
     //进入页面刷新
     useEffect(() => {
         getDepartment()
@@ -310,7 +330,7 @@ export default function RawMaterialStock(): React.ReactNode {
     //进入页面刷新
     useEffect(() => {
         loadData()
-    }, [current, pageSize, dateString, personnelId, status])
+    }, [current, pageSize, dateString, departmentId, personnelId, status])
     return (
         <div id="RawMaterialStock">
             <div className="Search_public_Stock">
@@ -333,9 +353,10 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={status ? status : '请选择'}
+                            value={status ? status : ''}
                             onChange={(val) => { setStatus(val) }}
                         >
+                            <Select.Option key={'dd'} value=''>全部</Select.Option>
                             <Select.Option
                                 value="0"
                             >
@@ -355,9 +376,10 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={departmentId ? departmentId : '请选择'}
-                            onChange={(val) => { setDepartmentId(val); getUser(departmentId) }}
+                            value={departmentId ? departmentId : ''}
+                            onChange={(val) => { departmentChange(val) }}
                         >
+                            <Select.Option key={'dd'} value=''>全部</Select.Option>
                             {
                                 departmentList.map((item, index) => {
                                     return (
@@ -369,9 +391,10 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Select
                             className="select"
                             style={{ width: "100px" }}
-                            value={personnelId ? personnelId : '请选择'}
+                            value={personnelId ? personnelId : ''}
                             onChange={(val) => { setPersonnelId(val) }}
                         >
+                            <Select.Option key={'ds'} value=''>全部</Select.Option>
                             {
                                 userList.map((item, index) => {
                                     return (

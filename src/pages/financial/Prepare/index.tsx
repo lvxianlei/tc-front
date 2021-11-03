@@ -87,8 +87,8 @@ export default function ApplyPayment() {
                     }
                 }]}
             extraOperation={<>
-                <Button type="primary">导出</Button>
-                <Button type="primary" onClick={() => setVisible(true)}>申请</Button>
+                <Button type="primary" ghost>导出</Button>
+                <Button type="primary" ghost onClick={() => setVisible(true)}>申请</Button>
             </>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[

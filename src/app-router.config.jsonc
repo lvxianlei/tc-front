@@ -1036,9 +1036,9 @@
       "exact": true,
       "authority": "approvalm"
     },
-    { // 工作管理-收获列表
+    { // 工作管理-收货列表
       "name": "收货列表",
-      "path": "/workMngt/receivingList",
+      "path": "/workMngt/receiving",
       "module": "./pages/workMngt/receivingList/index",
       "exact": true,
       "authority": "approvalm"
@@ -1046,14 +1046,14 @@
     { // 工作管理-收获列表-详情
       "name": "收货列表详情",
       "path": "/workMngt/receiving/detail/:id",
-      "module": "./pages/workMngt/receivingList/index",
+      "module": "./pages/workMngt/receivingList/Overview",
       "exact": true,
       "authority": "approvalm"
     },
     { // 工作管理-收获列表-编辑
       "name": "收货列表编辑",
       "path": "/workMngt/receiving/edit/:id",
-      "module": "./pages/workMngt/receivingList/index",
+      "module": "./pages/workMngt/receivingList/Edit",
       "exact": true,
       "authority": "approvalm"
     },
@@ -1061,6 +1061,13 @@
       "name": "差异列表",
       "path": "/workMngt/differentList",
       "module": "./pages/workMngt/differentList/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-差异列表
+      "name": "差异列表",
+      "path": "/workMngt/differentList/detail/:id",
+      "module": "./pages/workMngt/differentList/Overview",
       "exact": true,
       "authority": "approvalm"
     },
@@ -1343,7 +1350,14 @@
     { // 工作管理-采购配料
       "name": "采购配料",
       "path": "/workMngt/buyBurdening",
-      "module": "./pages/workMngt/buyBurdening/BuyBurdening",
+      "module": "./pages/workMngt/buyBurdening/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-采购配料
+      "name": "采购配料详情",
+      "path": "/workMngt/buyBurdening/detail/:id",
+      "module": "./pages/workMngt/buyBurdening/Overview",
       "exact": true,
       "authority": "approvalm"
     },

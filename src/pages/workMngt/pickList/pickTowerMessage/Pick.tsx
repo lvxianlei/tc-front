@@ -99,7 +99,7 @@ export default function Lofting(): React.ReactNode {
             ) 
         },
         { 
-            title: '单基件数', 
+            title: '单段件数', 
             dataIndex: 'basicsPartNum',
              key: 'basicsPartNum',
              width: 120,
@@ -133,6 +133,18 @@ export default function Lofting(): React.ReactNode {
                     <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
                 </Form.Item>
             )
+        },
+        { 
+            title: '厚度（mm）', 
+            dataIndex: 'thickness', 
+            key: 'thickness', 
+            editable: true,
+            width: 120,
+            render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data',index, "thickness"]} initialValue={ _===-1?0:_}>
+                    <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
+                </Form.Item>
+            ) 
         },
         { 
             title: '理算重量（kg）', 

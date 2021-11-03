@@ -1,10 +1,6 @@
 {
     "baseInfoList": [
         {
-            "title": "序号",
-            "dataIndex": "index"
-        },
-        {
             "title": "差异编号",
             "dataIndex": "diffNumber",
             "type": "string"
@@ -51,10 +47,6 @@
         }
     ],
     "SeeList": [
-        {
-            "title": "序号",
-            "dataIndex": "index"
-        },
         {
             "title": "构件号",
             "dataIndex": "code",
@@ -118,22 +110,22 @@
         {
             "title": "材质",
             "dataIndex": "structureTexture",
-            "type":"string"
+            "type": "string"
         },
         {
             "title": "规格",
             "dataIndex": "structureSpec",
-            "type":"string"
-        },     
+            "type": "string"
+        },
         {
             "title": "原材料长度",
             "dataIndex": "length",
-            "type":"number"
+            "type": "number"
         },
         {
             "title": "零件1",
             "dataIndex": "part1",
-            "type":""
+            "type": ""
         },
         {
             "title": "长度",
@@ -143,7 +135,7 @@
         {
             "title": "零件2",
             "dataIndex": "part2",
-            "type":""
+            "type": ""
         },
         {
             "title": "长度",
@@ -153,7 +145,7 @@
         {
             "title": "零件3",
             "dataIndex": "part3",
-            "type":""
+            "type": ""
         },
         {
             "title": "长度",
@@ -163,7 +155,7 @@
         {
             "title": "零件4",
             "dataIndex": "part4",
-            "type":""
+            "type": ""
         },
         {
             "title": "长度",
@@ -178,6 +170,5 @@
             "title": "利用率",
             "dataIndex": "utilizationrate"
         }
-        
     ]
 }

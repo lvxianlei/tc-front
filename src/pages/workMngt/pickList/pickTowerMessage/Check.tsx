@@ -29,7 +29,7 @@ export default function PickCheckList(): React.ReactNode {
         { title: '宽度（mm）', dataIndex: 'width', key: 'width', editable: true },
         { title: '厚度（mm）', dataIndex: 'thickness', key: 'thickness', editable: true },
         { title: '长度（mm）', dataIndex: 'length', key: 'length', editable: true },
-        { title: '单基件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum', editable: true },
+        { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum', editable: true },
         { title: '理算重量（kg）', dataIndex: 'basicsTheoryWeight', key: 'basicsTheoryWeight', editable: true },
         { title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight', editable: true },
         { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight', editable: true },
