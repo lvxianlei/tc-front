@@ -62,7 +62,7 @@ export default forwardRef(function Edit({ type }: EditProps, ref) {
         setAttachs(attchs.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
     }
     return <DetailContent>
-        <DetailTitle title="票据信息" />
+        <DetailTitle title="申请信息" />
         <BaseInfo form={baseForm} columns={bilinformation} col={3} dataSource={{}} edit />
         <DetailTitle title="相关附件" operation={[<Upload
             key="sub"

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { Page } from '../../common'
@@ -9,6 +9,7 @@ import Overview from "./Overview"
 import PurchasePlan from "./PurchasePlan"
 export default function Invoicing() {
     const history = useHistory()
+    const purChasePlanRef = useRef<{ onSubmit: () => void }>({ onSubmit: () => { } })
     const [visible, setVisible] = useState<boolean>(false)
     const [generateVisible, setGenerateVisible] = useState<boolean>(false)
     const [generateIds, setGenerateIds] = useState<string[]>([])
@@ -21,13 +22,17 @@ export default function Invoicing() {
         }
         return value
     }
+    
+    const handlePurChasePlan = () => {
+        purChasePlanRef.current?.onSubmit()
+    }
 
     return <>
         <Modal title="配料" visible={visible} width={1011} onCancel={() => setVisible(false)}>
             <Overview id={chooseId} />
         </Modal>
-        <Modal title="生成采购计划" visible={generateVisible} width={1011} onCancel={() => setGenerateVisible(false)}>
-            <PurchasePlan ids={generateIds} />
+        <Modal title="生成采购计划" visible={generateVisible} width={1011} onOk={handlePurChasePlan} onCancel={() => setGenerateVisible(false)}>
+            <PurchasePlan ids={generateIds} ref={purChasePlanRef} />
         </Modal>
         <Page
             path="/tower-supply/purchaseTaskTower/purchaser"

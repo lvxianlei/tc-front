@@ -80,9 +80,12 @@ export default function ApplyPayment() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link" onClick={() => history.push(`/project/applyPayment/detail/${record.id}`)}>查看</Button>
-                            <Button type="link" onClick={() => history.push(`/project/applyPayment/edit/${record.id}`)}>编辑</Button>
-                            <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>
+                            <a>详情</a>
+                            <Button type="link">编辑</Button>
+                            <a>发起</a>
+                            <Button type="link">撤回</Button>
+                            <a>删除</a>
+                            <Button type="link">完成</Button>
                         </>
                     }
                 }]}
