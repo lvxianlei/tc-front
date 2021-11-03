@@ -20,7 +20,11 @@ interface IResponseData {
     readonly size: number;
     readonly current: number;
     readonly total: number;
-    readonly records: [];
+    readonly records: IData[];
+}
+
+interface IData {
+    readonly id?: string;
 }
 
 export default function AssemblyWeldingListing(): React.ReactNode {
@@ -143,8 +147,16 @@ export default function AssemblyWeldingListing(): React.ReactNode {
     const getTableDataSource = (pagination: TablePaginationConfig) => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<IResponseData>(`/tower-science/welding/getDetailedById`, { weldingId: params.id, ...pagination });
         setDetailData(data);
+        if(data?.records && data?.records[0]) {
+            getParagraphData(data?.records && data?.records[0].id || '')
+        }
         resole(data);
     });
+    const getParagraphData = async (id: string) => {
+        const resData: [] = await RequestUtil.get(`/tower-science/welding/getStructureById`, { segmentId: id });
+        setParagraphData([...resData]);
+    }
+
     const { loading } = useRequest<IResponseData>(() => getTableDataSource(page), {});
 
     return <>
@@ -164,10 +176,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                     dataSource={ detailData?.records } 
                     columns={ towerColumns }
                     onRow={ (record: Record<string, any>, index: number) => ({
-                        onClick: async () => { 
-                            const resData: [] = await RequestUtil.get(`/tower-science/welding/getStructureById`, { segmentId: record.id });
-                            setParagraphData([...resData]);
-                        },
+                        onClick: () => { getParagraphData(record.id) },
                         className: styles.tableRow
                     })
                 }
