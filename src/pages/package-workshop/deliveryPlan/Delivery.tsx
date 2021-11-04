@@ -1,29 +1,23 @@
 import React, { useState } from 'react'
-import { Button, Spin, Space, Modal, Form, message, Image } from 'antd';
+import { Button, Spin} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
-import { baseInfoData } from './warehousingTaskData.json';
+import { baseInfoData } from './deliveryTaskData.json';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
-import TextArea from 'antd/lib/input/TextArea';
 
 const tableColumns = [
-    { title: '塔型', dataIndex: 'ptcreateDeName', key: 'createDeptName', },
-    { title: '杆塔号', dataIndex: 'createUserName', key: 'createUserName' },
-    { title: '呼高', dataIndex: 'createTime', key: 'createTime' },
-    { title: '入库重量', dataIndex: 'currentStatus', key: 'currentStatus'},
-    { title: '总基数', dataIndex: 'currentStatus', key: 'currentStatus'},
-    { title: '入库基数', dataIndex: 'currentStatus', key: 'currentStatus'},
-    { title: '备注', dataIndex: 'description', key: 'description' }
+    { title: '出库状态', dataIndex: 'ptcreateDeName', key: 'createDeptName', },
+    { title: '产品名称', dataIndex: 'createUserName', key: 'createUserName' },
+    { title: '包名称', dataIndex: 'createTime', key: 'createTime' },
+    { title: '塔型', dataIndex: 'currentStatus', key: 'currentStatus'},
+    { title: '塔位号', dataIndex: 'currentStatus', key: 'currentStatus'},
+    { title: '呼高', dataIndex: 'currentStatus', key: 'currentStatus'},
+    { title: '基数', dataIndex: 'description', key: 'description' },
+    { title: '班组', dataIndex: 'description', key: 'description' },
+    { title: '发包人员', dataIndex: 'description', key: 'description' }
 ]
 
-const packageColumns = [
-    { title: '捆号/包号', dataIndex: 'ptcreateDeName', key: 'createDeptName', },
-    { title: '包类型', dataIndex: 'createUserName', key: 'createUserName' },
-    { title: '重量', dataIndex: 'createTime', key: 'createTime' },
-    { title: '入库数', dataIndex: 'currentStatus', key: 'currentStatus'},
-    { title: '库位', dataIndex: 'description', key: 'description' }
-]
 
 export default function ConfirmTaskDetail(): React.ReactNode {
     const history = useHistory();
@@ -42,8 +36,6 @@ export default function ConfirmTaskDetail(): React.ReactNode {
                 <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
                 <DetailTitle title="杆塔信息"/>
                 <CommonTable columns={tableColumns} dataSource={detailData?.statusRecordList} pagination={ false } />
-                <DetailTitle title="包信息"/>
-                <CommonTable columns={packageColumns} dataSource={detailData?.statusRecordList} pagination={ false } />
             </DetailContent>
         </Spin>
     </>
