@@ -45,9 +45,7 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             dataIndex: 'segmentName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "segmentName"]} initialValue={ _ }>
-                    <Input size="small" onChange={ () => rowChange(index) }/>
-                </Form.Item>
+                <span>{record.segmentName}</span>
             )
         },
         {
@@ -153,9 +151,7 @@ export default function Lofting(): React.ReactNode {
             width: 120,
             editable: true,
             render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "basicsTheoryWeight"]} initialValue={_===-1?0:_}>
-                    <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
-                </Form.Item>
+                <span>锁定后，系统自动计算</span>
             ) 
         },
         { 
