@@ -106,15 +106,15 @@ export default function DrawTowerMngt(): React.ReactNode {
             width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type='primary' ghost onClick={()=>{ history.push(`/drawTower/drawTowerMngt/towerInformation/${ record.id }` )}}>查看</Button>
-                    <Button type='primary' ghost onClick={()=>{ history.push(`/drawTower/drawTowerMngt/towerInformation/${ record.id }` )}}>成品出库</Button>
+                    <Button type='link' onClick={()=>{ history.push(`/packagingWorkshop/deliveryPlan/detail/${ record.id }` )}}>查看</Button>
+                    <Button type='link' onClick={()=>{ history.push(`/packagingWorkshop/deliveryPlan/delivery/${ record.id }` )}}>成品出库</Button>
                 </Space>
             )
         }
     ]
 
     return <Page
-        path="/tower-science/productCategory/draw/page"
+        path="/tower-science/materialTask"
         columns={ columns }
         headTabs={ [] }
         // extraOperation={ <Button type="primary" ghost>导出</Button> }

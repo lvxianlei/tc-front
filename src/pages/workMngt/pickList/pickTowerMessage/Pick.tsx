@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, Select, Button, Popconfirm, Input, Form, FormInstance, message, InputNumber, Upload, Modal } from 'antd';
+import { Space, Select, Button, Popconfirm, Input, Form, FormInstance, message, InputNumber, Upload, Modal, TablePaginationConfig } from 'antd';
 import { Page } from '../../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
 import styles from './Pick.module.less';
@@ -233,158 +233,176 @@ export default function Lofting(): React.ReactNode {
     })
     const [ tableColumns, setColumns ] = useState(columnsSetting);
     const onFilterSubmit = (value: any) => {
+        console.log(value)
         setFilterValue(value)
-        return value
+        // return value
+        setRefresh(!refresh);
     }
     const rowChange = (index: number) => {
         rowChangeList.push(index);
         setRowChangeList([...rowChangeList]);    
     }
     const [ rowChangeList, setRowChangeList ] = useState<number[]>([]);
-    return <Form ref={ formRef } className={ styles.descripForm }>
-        <Modal 
-            visible={visible} 
-            onOk={()=>{
-                window.open(url);
-                setVisible(false);
-            }} 
-            onCancel={()=>{setVisible(false);setUrl('')}} 
-            title='提示' 
-            okText='下载'
-        >
-            当前存在错误数据，请重新下载上传！
-        </Modal>
-        <Page
-            path="/tower-science/drawProductStructure"
-            columns={ [...tableColumns,{
-                key: 'operation',
-                title: '操作',
-                dataIndex: 'operation',
-                fixed: 'right' as FixedType,
-                width: 100,
-                render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                    <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                        <Popconfirm
-                            title="确认删除?"
-                            onConfirm={ async () => await RequestUtil.delete(`/tower-science/drawProductStructure/${record.id}`).then(()=>{
-                                message.success('删除成功！');
-                                setRefresh(!refresh);
-                            })}
-                            okText="提交"
-                            cancelText="取消"
-                            disabled={editorLock==='锁定'}
-                        >
-                            <Button type="link" disabled={editorLock==='锁定'}>删除</Button>
-                        </Popconfirm>
-                    </Space>
-                )
-            }] }
-            requestData={{productSegmentId:params.productSegmentId}}
-            headTabs={ [] }
-            onFilterSubmit={onFilterSubmit}
-            filterValue={ filterValue }
-            refresh={ refresh }
-            tableProps={{ pagination: false }}
-            extraOperation={ 
-                <Space direction="horizontal" size="small">
-                    {/* <Button type="primary" ghost>导出</Button> */}
-                    <Button type="primary" ghost onClick={ () => downloadTemplate('/tower-science/drawProductStructure/exportTemplate', '构建明细') }>模板下载</Button>
-                    <Upload 
-                        accept=".xls,.xlsx"
-                        action={ () => {
-                            const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                            return baseUrl+'/tower-science/drawProductStructure/import'
-                        } } 
-                        headers={
-                            {
-                                'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
-                                'Tenant-Id': AuthUtil.getTenantId(),
-                                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                            }
-                        }
-                        data={ { productSegmentId: params.productSegmentId } }
-                        showUploadList={ false }
-                        onChange={ (info) => {
-                            if(info.file.response && !info.file.response?.success) {
-                                message.warning(info.file.response?.msg)
-                            }else if(info.file.response && info.file.response?.success){
-                                if(Object.keys(info.file.response?.data).length > 0){
-                                    setUrl(info.file.response?.data);
-                                    setVisible(true);
-                                }else{
-                                    message.success('导入成功！');
+    return <>
+        <Form layout="inline" style={{margin:'20px'}} onFinish={onFilterSubmit}>
+            <Form.Item label='材料名称' name='materialName'>
+                <Input/>
+            </Form.Item>
+            <Form.Item label='材质' name='structureTexture'>
+                <Input/>
+            </Form.Item>
+            <Form.Item>
+                <Button type="primary" htmlType="submit">查询</Button>
+            </Form.Item>
+            <Form.Item>
+                <Button htmlType="reset">重置</Button>
+            </Form.Item>
+        </Form>
+        <Form ref={ formRef } className={ styles.descripForm }>
+            <Modal 
+                visible={visible} 
+                onOk={()=>{
+                    window.open(url);
+                    setVisible(false);
+                }} 
+                onCancel={()=>{setVisible(false);setUrl('')}} 
+                title='提示' 
+                okText='下载'
+            >
+                当前存在错误数据，请重新下载上传！
+            </Modal>
+        
+            <Page
+                path="/tower-science/drawProductStructure"
+                columns={ [...tableColumns,{
+                    key: 'operation',
+                    title: '操作',
+                    dataIndex: 'operation',
+                    fixed: 'right' as FixedType,
+                    width: 100,
+                    render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                        <Space direction="horizontal" size="small" className={ styles.operationBtn }>
+                            <Popconfirm
+                                title="确认删除?"
+                                onConfirm={ async () => await RequestUtil.delete(`/tower-science/drawProductStructure/${record.id}`).then(()=>{
+                                    message.success('删除成功！');
                                     setRefresh(!refresh);
+                                })}
+                                okText="提交"
+                                cancelText="取消"
+                                disabled={editorLock==='锁定'}
+                            >
+                                <Button type="link" disabled={editorLock==='锁定'}>删除</Button>
+                            </Popconfirm>
+                        </Space>
+                    )
+                }] }
+                requestData={{productSegmentId:params.productSegmentId,...filterValue}}
+                headTabs={ [] }
+                // onFilterSubmit={onFilterSubmit}
+                filterValue={ filterValue }
+                refresh={ refresh }
+                tableProps={{ pagination: false }}
+                extraOperation={ 
+                    <Space direction="horizontal" size="small">
+                        {/* <Button type="primary" ghost>导出</Button> */}
+                        <Button type="primary" ghost onClick={ () => downloadTemplate('/tower-science/drawProductStructure/exportTemplate', '构建明细') }>模板下载</Button>
+                        <Upload 
+                            accept=".xls,.xlsx"
+                            action={ () => {
+                                const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                                return baseUrl+'/tower-science/drawProductStructure/import'
+                            } } 
+                            headers={
+                                {
+                                    'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                                    'Tenant-Id': AuthUtil.getTenantId(),
+                                    'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                                }
+                            }
+                            data={ { productSegmentId: params.productSegmentId } }
+                            showUploadList={ false }
+                            onChange={ (info) => {
+                                if(info.file.response && !info.file.response?.success) {
+                                    message.warning(info.file.response?.msg)
+                                }else if(info.file.response && info.file.response?.success){
+                                    if(Object.keys(info.file.response?.data).length > 0){
+                                        setUrl(info.file.response?.data);
+                                        setVisible(true);
+                                    }else{
+                                        message.success('导入成功！');
+                                        setRefresh(!refresh);
+                                    }
+                                    
+                                }
+                                
+                            } }
+                        >
+                            <Button type="primary" ghost>导入</Button>
+                        </Upload>
+                        <Button type="primary" ghost  onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}/drawApply`)}}>图纸塔型套用</Button>
+                        <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}/setOutApply`)}}>放样塔型套用</Button>
+                        <Popconfirm
+                            title="确认完成提料?"
+                            onConfirm={ async () => {
+                                await RequestUtil.post(`/tower-science/drawProductSegment/completedLofting?productSegmentId=${params.productSegmentId}`).then(()=>{
+                                    message.success('提料成功！')
+                                }).then(()=>{
+                                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}`)
+                                })
+                            } }
+                            okText="确认"
+                            cancelText="取消"
+                        >
+                            <Button type="primary" ghost>完成提料</Button>
+                        </Popconfirm>
+                        <Button type="primary" ghost onClick={ () => { 
+                            if(editorLock === '编辑') {
+                                setColumns(columns);
+                                setEditorLock('锁定');
+                            } else {
+                                const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
+                                console.log(rowChangeList)
+                                console.log(newRowChangeList)
+                                let values = getForm()?.getFieldsValue(true).data;
+                                if(values) {
+                                    let changeValues = values.filter((item: any, index: number) => {
+                                        return newRowChangeList.indexOf(index) !== -1;
+                                    })
+                                    RequestUtil.post(`/tower-science/drawProductStructure/submit?productCategoryId=${params.id}`, [ ...changeValues ]).then(res => {
+                                        setColumns(columnsSetting);
+                                        setEditorLock('编辑');
+                                        setRowChangeList([]);
+                                        setRefresh(!refresh);    
+                                    });
                                 }
                                 
                             }
-                            
-                        } }
-                    >
-                        <Button type="primary" ghost>导入</Button>
-                    </Upload>
-                    <Button type="primary" ghost  onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}/drawApply`)}}>图纸塔型套用</Button>
-                    <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}/setOutApply`)}}>放样塔型套用</Button>
-                    <Popconfirm
-                        title="确认完成提料?"
-                        onConfirm={ async () => {
-                            await RequestUtil.post(`/tower-science/drawProductSegment/completedLofting?productSegmentId=${params.productSegmentId}`).then(()=>{
-                                message.success('提料成功！')
-                            }).then(()=>{
-                                history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}`)
-                            })
-                        } }
-                        okText="确认"
-                        cancelText="取消"
-                    >
-                        <Button type="primary" ghost>完成提料</Button>
-                    </Popconfirm>
-                    <Button type="primary" ghost onClick={ () => { 
-                        if(editorLock === '编辑') {
-                            setColumns(columns);
-                            setEditorLock('锁定');
-                        } else {
-                            const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
-                            console.log(rowChangeList)
-                            console.log(newRowChangeList)
-                            let values = getForm()?.getFieldsValue(true).data;
-                            if(values) {
-                                let changeValues = values.filter((item: any, index: number) => {
-                                    return newRowChangeList.indexOf(index) !== -1;
-                                })
-                                RequestUtil.post(`/tower-science/drawProductStructure/submit?productCategoryId=${params.id}`, [ ...changeValues ]).then(res => {
-                                    setColumns(columnsSetting);
-                                    setEditorLock('编辑');
-                                    setRowChangeList([]);
-                                    setRefresh(!refresh);    
-                                });
-                            }
-                            
-                        }
-                        console.log(getForm()?.getFieldsValue(true)) 
-                    } }>{ editorLock }</Button>
-                    <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}/recognize`)}}>识别</Button>
-                    <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}`)}}>返回上一级</Button>
-                </Space>
-            }
-            searchFormItems={[
-                {
-                    name: 'materialName',
-                    label: '材料名称',
-                    children: <Input />
-                    // <Select>
-                    //                 { materialStandardOptions && materialStandardOptions.map(({ id, name }, index) => {
-                    //                     return <Select.Option key={ index } value={ id }>
-                    //                         { name }
-                    //                     </Select.Option>
-                    //                 }) }
-                    //             </Select>
-                },
-                {
-                    name: 'structureTexture',
-                    label: '材质',
-                    children: <Input />
+                            console.log(getForm()?.getFieldsValue(true)) 
+                        } }>{ editorLock }</Button>
+                        <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}/recognize`)}}>识别</Button>
+                        <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}`)}}>返回上一级</Button>
+                    </Space>
                 }
-            ]}
-        />
-    </Form>
+                searchFormItems={[
+                    // {
+                    //     name: 'materialName',
+                    //     label: '材料名称',
+                    //     children: <Input />
+                    //     // <Select>
+                    //     //                 { materialStandardOptions && materialStandardOptions.map(({ id, name }, index) => {
+                    //     //                     return <Select.Option key={ index } value={ id }>
+                    //     //                         { name }
+                    //     //                     </Select.Option>
+                    //     //                 }) }
+                    //     //             </Select>
+                    // },
+                    // {
+                    //     name: 'structureTexture',
+                    //     label: '材质',
+                    //     children: <Input />
+                    // }
+                ]}
+            />
+    </Form></>
 }

@@ -440,8 +440,26 @@ export default function Lofting(): React.ReactNode {
     const [ refresh, setRefresh ] = useState(false);
     const [ urlVisible, setUrlVisible ] = useState<boolean>(false);
     const [ url, setUrl ] = useState<string>('');
+    const [ filterValue, setFilterValue ] = useState({});
 
     return <>
+        <Form layout="inline" style={{margin:'20px'}} onFinish={(value: Record<string, any>) => {
+            setFilterValue(value)
+            setRefresh(!refresh);
+        }}>
+            <Form.Item label='材料名称' name='materialName'>
+                <Input/>
+            </Form.Item>
+            <Form.Item label='材质' name='structureTexture'>
+                <Input/>
+            </Form.Item>
+            <Form.Item>
+                <Button type="primary" htmlType="submit">查询</Button>
+            </Form.Item>
+            <Form.Item>
+                <Button htmlType="reset">重置</Button>
+            </Form.Item>
+        </Form>
         <Form form={ form } className={ styles.descripForm }>  
             <Page
                 path="/tower-science/productStructure/list"
@@ -449,7 +467,7 @@ export default function Lofting(): React.ReactNode {
                 headTabs={ [] }
                 tableProps={{ pagination: false }}
                 refresh={ refresh }
-                requestData={{ productSegmentId: params.productSegmentId }}
+                requestData={{ productSegmentId: params.productSegmentId, ...filterValue }}
                 extraOperation={ <Space direction="horizontal" size="small">
                     {/* <Button type="primary" ghost>导出</Button> */}
                     <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productStructure/exportTemplate', '模板') } ghost>模板下载</Button>
@@ -525,19 +543,7 @@ export default function Lofting(): React.ReactNode {
                     <UploadModal id={ params.productSegmentId } path={ `/tower-science/productSegment/segmentDrawDetail?productSegmentId=${ params.productSegmentId }` } requestData={ { productSegmentId: params.productSegmentId } } uploadUrl="/tower-science/productSegment/segmentDrawUpload" btnName="样图上传"  delPath="/tower-science/productSegment/segmentDrawDelete"/>
                     <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
                 </Space> }
-                searchFormItems={ [
-                    {
-                        name: 'materialName',
-                        label: '材料名称',
-                        children: <Input placeholder="请输入"/>
-                    },
-                    {
-                        name: 'structureTexture',
-                        label: '材质',
-                        children: <Input placeholder="请输入"/>
-                    }
-                ] }
-                onFilterSubmit = { (values: Record<string, any>) => { return values; } }
+                searchFormItems={[]}
             />
         </Form>
         <Modal 

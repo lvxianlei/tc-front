@@ -84,14 +84,14 @@ export default function DrawTowerMngt(): React.ReactNode {
             width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type='primary' ghost onClick={()=>{ history.push(`/packagingWorkshop/warehousing/detail/${ record.id }` )}}>查看</Button>
+                    <Button type='link' onClick={()=>{ history.push(`/packagingWorkshop/warehousing/detail/${ record.id }` )}}>查看</Button>
                 </Space>
             )
         }
     ]
 
     return <Page
-        path="/tower-science/productCategory/draw/page"
+        path="/tower-science/materialTask"
         columns={ columns }
         headTabs={ [] }
         // extraOperation={ <Button type="primary" ghost>导出</Button> }
@@ -99,23 +99,23 @@ export default function DrawTowerMngt(): React.ReactNode {
         searchFormItems={ [
             {
                 name: 'pattern',
-                label: '出库状态',
+                label: '产品类型',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
                     <Select.Option value={ "" } key="">全部</Select.Option>
-                    <Select.Option value={ 1 } key="1">已出库</Select.Option>
-                    <Select.Option value={ 2 } key="2">部分出库</Select.Option>
-                    <Select.Option value={ 3 } key="3">未出库</Select.Option>
+                    <Select.Option value={ 1 } key="1">角钢塔</Select.Option>
+                    <Select.Option value={ 2 } key="2">钢结构</Select.Option>
+                    <Select.Option value={ 3 } key="3">钢管杆</Select.Option>
                 </Select>
             },
             {
                 name: 'time',
-                label: '发运日期',
+                label: '入库日期',
                 children: <DatePicker.RangePicker />
             },
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="请输入发货通知单编号/工程名称/计划号进行查询"/>
+                children: <Input placeholder="请输入内部合同编号/工程名称/计划号/订单号进行查询"/>
             }
         ] }
         filterValue={ filterValue }
