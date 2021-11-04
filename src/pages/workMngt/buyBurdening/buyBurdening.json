@@ -2,7 +2,7 @@
     "baseInfo": [
         {
             "title": "原材料任务编号",
-            "dataIndex": "materialCategoryId",
+            "dataIndex": "purchaseNumber",
             "type": "integer"
         },
         {
@@ -13,12 +13,12 @@
         {
             "title": "塔型（个）",
             "dataIndex": "productCategoryNum",
-            "type": "string"
+            "type": "number"
         },
         {
             "title": "杆塔（基）",
-            "dataIndex": "productId",
-            "type": "integer"
+            "dataIndex": "productNum",
+            "type": "number"
         },
         {
             "title": "配料负责人",
@@ -28,12 +28,27 @@
         {
             "title": "配料状态",
             "dataIndex": "batcheTaskStatus",
-            "type": "integer"
+            "type": "select",
+            "enum": [
+                {
+                    "label": "待完成",
+                    "value": 1
+                },
+                {
+                    "label": "待接收",
+                    "value": 2
+                },
+                {
+                    "label": "已完成",
+                    "value": 3
+                }
+            ]
         },
         {
             "title": "最新状态变更时间",
-            "dataIndex": "purchaseStatusUpdateTime",
-            "type": "string"
+            "dataIndex": "batcheStatusUpdateTime",
+            "type": "date",
+            "format": "YYYY-MM-DD HH:mm"
         }
     ],
     "SeeList": [
@@ -44,12 +59,12 @@
         },
         {
             "title": "杆塔（基）",
-            "dataIndex": "productId",
+            "dataIndex": "productNum",
             "type": "integer"
         },
         {
             "title": "提料重量（吨）",
-            "dataIndex": "liftingweight",
+            "dataIndex": "totalWeight",
             "type": "number"
         },
         {
@@ -59,13 +74,28 @@
         },
         {
             "title": "塔型配料状态",
-            "dataIndex": "Towerbatchingstate",
-            "type": "string"
+            "dataIndex": "batcheTaskStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "待完成",
+                    "value": 1
+                },
+                {
+                    "label": "待接收",
+                    "value": 2
+                },
+                {
+                    "label": "已完成",
+                    "value": 3
+                }
+            ]
         },
         {
             "title": "最新状态变更时间",
-            "dataIndex": "purchaseStatusUpdateTime",
-            "type": "string"
+            "dataIndex": "batcheStatusUpdateTime",
+            "type": "date",
+            "format": "YYYY-MM-DD HH:mm"
         },
         {
             "title": "方案编号",
@@ -96,7 +126,7 @@
         },
         {
             "title": "已配/未配",
-            "dataIndex": "equipped/notequipped"
+            "dataIndex": "equipped"
         }
     ],
     "detailClassification": [

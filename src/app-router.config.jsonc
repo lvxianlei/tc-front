@@ -1361,6 +1361,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 工作管理-采购配料
+      "name": "配料明细",
+      "path": "/workMngt/buyBurdening/component/:id",
+      "module": "./pages/workMngt/buyBurdening/Detail",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 问题单
       "name": "问题单列表",
       "path": "/question/questionMngt",

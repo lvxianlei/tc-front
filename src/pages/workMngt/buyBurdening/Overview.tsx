@@ -4,8 +4,6 @@ import { useHistory, Link, useParams } from 'react-router-dom'
 import { Page } from '../../common';
 import { SeeList } from "./buyBurdening.json"
 export default function Overview(): React.ReactNode {
-    const [refresh, setRefresh] = useState<boolean>(false);
-    const [confirmLeader, setConfirmLeader] = useState<any | undefined>([]);
     const params = useParams<{ id: string }>()
     const [filterValue, setFilterValue] = useState({ purchaseTaskId: params.id });
 
@@ -30,13 +28,12 @@ export default function Overview(): React.ReactNode {
                     width: 100,
                     dataIndex: 'operation',
                     render: (_: any, records: any) => (<>
-                        <Link to={`/workMngt/buyBurdening/detail/${records.id}`}>明细</Link>
+                        <Link to={`/workMngt/buyBurdening/component/${records.id}`}>明细</Link>
                         <Button type="link" >配料方案</Button>
                     </>)
                 }
             ]}
-            refresh={refresh}
-            extraOperation={<Button type="primary">导出</Button>}
+            extraOperation={<Button type="primary" ghost>导出</Button>}
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
@@ -58,7 +55,7 @@ export default function Overview(): React.ReactNode {
                     name: 'confirmId',
                     label: '配料人',
                     children: <div>
-                        <Select style={{ width: '100px' }} defaultValue="部门">
+                        {/* <Select style={{ width: '100px' }} defaultValue="部门">
                             {confirmLeader && confirmLeader.map((item: any) => {
                                 return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
                             })}
@@ -67,7 +64,7 @@ export default function Overview(): React.ReactNode {
                             {confirmLeader && confirmLeader.map((item: any) => {
                                 return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
                             })}
-                        </Select>
+                        </Select> */}
                     </div>
                 },
                 {
