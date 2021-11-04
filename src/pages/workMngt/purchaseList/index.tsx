@@ -28,7 +28,7 @@ export default function Invoicing() {
     }
 
     return <>
-        <Modal title="配料" visible={visible} width={1011} onCancel={() => setVisible(false)}>
+        <Modal title="配料方案" visible={visible} width={1011} onCancel={() => setVisible(false)}>
             <Overview id={chooseId} />
         </Modal>
         <Modal title="生成采购计划" visible={generateVisible} width={1011} onOk={handlePurChasePlan} onCancel={() => setGenerateVisible(false)}>

@@ -1,70 +1,11 @@
 import React, { useState } from 'react'
 import { Input, DatePicker, Select, Button, Form } from 'antd'
 import { useHistory, Link } from 'react-router-dom'
+import { baseInfo } from "./buyBurdening.json"
 import { Page } from '../../common';
 
 export default function EnquiryList(): React.ReactNode {
-    const [refresh, setRefresh] = useState<boolean>(false);
-    const [confirmLeader, setConfirmLeader] = useState<any | undefined>([]);
     const [filterValue, setFilterValue] = useState({});
-    const columns = [
-        {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            width: 50,
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-        },
-        {
-            key: 'rawMaterialTaskNum',
-            title: '原材料任务编号',
-            width: 100,
-            dataIndex: 'rawMaterialTaskNum'
-        },
-        {
-            key: 'insideContractNum',
-            title: '内部合同编号',
-            width: 100,
-            dataIndex: 'insideContractNum',
-        },
-        {
-            key: 'towerModel',
-            title: '塔型(个)',
-            width: 200,
-            dataIndex: 'towerModel'
-        },
-        {
-            key: 'poleTower',
-            title: '杆塔(基)',
-            width: 200,
-            dataIndex: 'poleTower'
-        },
-        {
-            key: 'burdeningLeader',
-            title: '配料负责人',
-            width: 100,
-            dataIndex: 'burdeningLeader'
-        },
-        {
-            key: 'burdeningState',
-            title: '配料状态',
-            width: 100,
-            dataIndex: 'burdeningState'
-        },
-        {
-            key: 'updateStatusTime',
-            title: '最新状态变更时间',
-            width: 100,
-            dataIndex: 'updateStatusTime'
-        },
-        {
-            key: 'operation',
-            title: '操作',
-            width: 100,
-            dataIndex: 'operation',
-            render: (_: any, records: any) => <Link type="link" to={`/workMngt/buyBurdening/detail/${records.id}`}>查看</Link>
-        }
-    ]
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -79,8 +20,15 @@ export default function EnquiryList(): React.ReactNode {
     return <>
         <Page
             path="/tower-supply/materialPurchaseTask/inquirer"
-            columns={columns}
-            refresh={refresh}
+            columns={[
+                ...baseInfo,
+                {
+                    title: '操作',
+                    width: 100,
+                    dataIndex: 'operation',
+                    render: (_: any, records: any) => <Link to={`/workMngt/buyBurdening/detail/${records.id}`}>查看</Link>
+                }
+            ]}
             extraOperation={<Button type="primary">导出</Button>}
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
@@ -103,7 +51,7 @@ export default function EnquiryList(): React.ReactNode {
                     name: 'confirmId',
                     label: '配料人',
                     children: <div>
-                        <Select style={{ width: '100px' }} defaultValue="部门">
+                        {/* <Select style={{ width: '100px' }} defaultValue="部门">
                             {confirmLeader && confirmLeader.map((item: any) => {
                                 return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
                             })}
@@ -112,7 +60,7 @@ export default function EnquiryList(): React.ReactNode {
                             {confirmLeader && confirmLeader.map((item: any) => {
                                 return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
                             })}
-                        </Select>
+                        </Select> */}
                     </div>
                 },
                 {

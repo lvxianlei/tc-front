@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
+import { Button, Input, DatePicker, Select, Modal, message, Form } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { Page } from '../../common'
 import { baseInfo } from "./shortageListData.json"
@@ -9,9 +9,12 @@ import Overview from "./Overview"
 export default function Invoicing() {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
-    const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    const [cancelVisible, setCancelVisible] = useState<boolean>(false)
+    const [cancelId, setCancelId] = useState<string>()
+    const [form] = Form.useForm()
+    const { run: cancelRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/invoicing?id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialShortage`, { ...data })
             resole(result)
         } catch (error) {
             reject(error)
@@ -27,25 +30,27 @@ export default function Invoicing() {
         return value
     }
 
-    const handleDelete = (id: string) => {
-        Modal.confirm({
-            title: "取消",
-            content: "确定取消此缺料列表吗？",
-            onOk: () => new Promise(async (resove, reject) => {
-                try {
-                    resove(await deleteRun(id))
-                    message.success("删除成功...")
-                    history.go(0)
-                } catch (error) {
-                    reject(error)
-                }
-            })
-        })
-    }
+    const handleCancel = () => new Promise(async (resove, reject) => {
+        try {
+            const formData = await form.validateFields()
+            await cancelRun({ id: cancelId, reason: formData.reason })
+            resove(true)
+        } catch (error) {
+            reject(false)
+        }
+    })
 
     return <>
         <Modal title="操作信息" visible={visible} width={1011} onCancel={() => setVisible(false)}>
             <Overview />
+        </Modal>
+        <Modal title="取消" visible={cancelVisible} onOk={handleCancel} onCancel={() => {
+            setCancelVisible(false)
+            form.resetFields()
+        }}>
+            <Form form={form}>
+                <Form.Item rules={[{ required: true, message: "请填写取消原因..." }]} label="取消原因" name="reason"><Input.TextArea /></Form.Item>
+            </Form>
         </Modal>
         <Page
             path="/tower-supply/materialShortage"
@@ -59,7 +64,11 @@ export default function Invoicing() {
                     render: (_: any, record: any) => {
                         return <>
                             <a onClick={() => setVisible(true)}>查看</a>
-                            <Button type="link" onClick={() => handleDelete(record.id)}>取消</Button>
+                            <Button type="link" onClick={() => {
+                                setCancelId(record.id)
+                                setCancelVisible(true)
+                            }
+                            }>取消</Button>
                         </>
                     }
                 }]}
