@@ -477,7 +477,7 @@
                     {
                         "label": "车间工作管理",
                         "icon": "technology",
-                        "path": "/packagingWorkshop",
+                        "path": "/workshopManagement",
                         "authority": "approvalm",
                         "items": [
                             {
@@ -500,7 +500,7 @@
                     {
                         "label": "镀锌车间",
                         "icon": "technology",
-                        "path": "/packagingWorkshop",
+                        "path": "/galvanizingWorkshop",
                         "authority": "approvalm",
                         "items": [
                             {
@@ -546,7 +546,7 @@
                     {
                         "label": "车辆转运",
                         "icon": "technology",
-                        "path": "/config",
+                        "path": "/vehicleTransfer",
                         "authority": "approvalm",
                         "items": [
                             {
