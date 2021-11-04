@@ -1539,6 +1539,41 @@
       "module": "./pages/package-workshop/stock/StockList",
       "exact": true,
       "authority": "approvalm"
+    },
+    { // 车辆转运-运输任务面板
+      "name": "运输任务面板",
+      "path": "/vehicleTransport/transportTask",
+      "module": "./pages/VehicleTransport/TransportTask",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 基础配置-产线管理
+      "name": "产线管理",
+      "path": "/baseSetting/productionLineMngt",
+      "module": "./pages/baseSetting/ProductionLineMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 基础配置-工序管理
+      "name": "工序管理",
+      "path": "/baseSetting/processMngt",
+      "module": "./pages/baseSetting/ProcessMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 基础配置-车间派工设备管理
+      "name": "车间派工设备管理",
+      "path": "/baseSetting/workshopDispatchEquipmentMngt",
+      "module": "./pages/baseSetting/WorkshopDispatchEquipmentMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 基础配置-车间班组管理
+      "name": "车间班组管理",
+      "path": "/baseSetting/workshopTeamMngt",
+      "module": "./pages/baseSetting/WorkshopTeamMngt",
+      "exact": true,
+      "authority": "approvalm"
     }
   ]
 }

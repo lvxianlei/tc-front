@@ -546,12 +546,12 @@
                     {
                         "label": "车辆转运",
                         "icon": "technology",
-                        "path": "/vehicleTransfer",
+                        "path": "/vehicleTransport",
                         "authority": "approvalm",
                         "items": [
                             {
                                 "label": "运输任务面板",
-                                "path": "/config",
+                                "path": "/vehicleTransport/transportTask",
                                 "authority": "approvalm"
                             }
                         ]
@@ -582,22 +582,22 @@
                             },
                             {
                                 "label": "产线管理",
-                                "path": "/baseSetting/baseSettingMngt",
+                                "path": "/baseSetting/productionLineMngt",
                                 "authority": "approvalm"
                             },
                             {
                                 "label": "工序管理",
-                                "path": "/baseSetting/baseSettingMngt",
+                                "path": "/baseSetting/processMngt",
                                 "authority": "approvalm"
                             },
                             {
                                 "label": "车间派工设备管理",
-                                "path": "/baseSetting/baseSettingMngt",
+                                "path": "/baseSetting/workshopDispatchEquipmentMngt",
                                 "authority": "approvalm"
                             },
                             {
                                 "label": "车间班组管理",
-                                "path": "/baseSetting/baseSettingMngt",
+                                "path": "/baseSetting/workshopTeamMngt",
                                 "authority": "approvalm"
                             }
                         ]
