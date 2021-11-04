@@ -21,9 +21,9 @@ const SecuritySetting = (): React.ReactNode => {
             dataIndex: 'productName',
         },
         {
-            key: 'projectNumber',
+            key: 'standard',
             title: '标准',
-            dataIndex: 'projectNumber'
+            dataIndex: 'standard'
         },
         {
             key: 'spec',
@@ -31,9 +31,9 @@ const SecuritySetting = (): React.ReactNode => {
             dataIndex: 'spec',
         },
         {
-            key: 'material_texture',
+            key: 'materialTexture',
             title: '材质',
-            dataIndex: 'material_texture'
+            dataIndex: 'materialTexture'
         },
         {
             key: 'safetyStock',
