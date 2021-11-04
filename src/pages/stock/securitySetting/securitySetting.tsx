@@ -21,9 +21,9 @@ const SecuritySetting = (): React.ReactNode => {
             dataIndex: 'productName',
         },
         {
-            key: 'standard',
+            key: 'projectNumber',
             title: '标准',
-            dataIndex: 'standard'
+            dataIndex: 'projectNumber'
         },
         {
             key: 'spec',
@@ -31,9 +31,9 @@ const SecuritySetting = (): React.ReactNode => {
             dataIndex: 'spec',
         },
         {
-            key: 'materialTexture',
+            key: 'material_texture',
             title: '材质',
-            dataIndex: 'materialTexture'
+            dataIndex: 'material_texture'
         },
         {
             key: 'safetyStock',
@@ -86,7 +86,7 @@ const SecuritySetting = (): React.ReactNode => {
     }
     // 编辑
     const submit = async () => {
-        await RequestUtil.put(`/tower-storage/safetyStock/${id}?safetyStock=${safetyStock}&alarmStock=${alarmStock}`, {
+        await RequestUtil.put(`/tower-storage/safetyStock/${id}`, {
             safetyStock,
             alarmStock,
         })

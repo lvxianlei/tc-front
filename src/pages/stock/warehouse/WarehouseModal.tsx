@@ -426,30 +426,18 @@ const WarehouseModal = (props: Props) => {
                                     </Select>
                                     {
                                         staffs.length - 1 === index && staffs.length < 10 ?
-                                            (
-                                                <div>
-                                                    <Button
-                                                        className='button'
-                                                        onClick={() => {
-                                                            staffs.splice(index, 1)
-                                                            staffs = [...staffs]
-                                                            setStaffs(staffs)
-                                                        }}
-                                                    >删除</Button>
-                                                    <Button
-                                                        className='button'
-                                                        onClick={() => {
-                                                            staffs = [...staffs, {
-                                                                departmentId: '',//部门
-                                                                userId: '',//人员
-                                                                id: null,
-                                                                userList: [],
-                                                            }]
-                                                            setStaffs(staffs)
-                                                        }}
-                                                    >新增</Button>
-                                                </div>
-                                            ) :
+                                            <Button
+                                                className='button'
+                                                onClick={() => {
+                                                    staffs = [...staffs, {
+                                                        departmentId: '',//部门
+                                                        userId: '',//人员
+                                                        id: null,
+                                                        userList: [],
+                                                    }]
+                                                    setStaffs(staffs)
+                                                }}
+                                            >新增</Button> :
                                             <Button
                                                 className='button'
                                                 onClick={() => {
