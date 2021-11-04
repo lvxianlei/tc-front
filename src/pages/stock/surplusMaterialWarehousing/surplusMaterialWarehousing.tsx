@@ -242,6 +242,10 @@ export default function RawMaterialStock(): React.ReactNode {
             message.error('请输入实收余料')
             return
         }
+        if (Number(collect) > Number(ListReceivableSurplus)) {
+            message.error('实收余料不得大于应收余料')
+            return
+        }
         const data: any = await RequestUtil.put(`/tower-storage/receiveStock/excess`, {
             id: ListID,
             length: collect,
