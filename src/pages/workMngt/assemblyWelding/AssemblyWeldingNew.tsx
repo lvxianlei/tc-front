@@ -6,6 +6,7 @@ import styles from './AssemblyWelding.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { FixedType } from 'rc-table/lib/interface';
+import Item from 'antd/lib/list/Item';
 
 export interface AssemblyWeldingNewProps {}
 export interface IAssemblyWeldingNewRouteProps extends RouteComponentProps<AssemblyWeldingNewProps>, WithTranslation {
@@ -39,6 +40,7 @@ export interface IComponentList {
     readonly singleNum?: number;
     readonly isMainPart?: number;
     readonly structureId?: string;
+    readonly surplusNum?: number;
 }
 
 export interface IBaseData {
@@ -97,11 +99,30 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
     protected getComponentList = () => {
         if(this.getForm()) {
             this.getForm()?.validateFields(['segmentName']).then(async res => {
-                const data: IComponentList[] = await RequestUtil.get(`/tower-science/welding/getStructure`, {
+                const weldingDetailedStructureList = this.state.weldingDetailedStructureList || [];
+                const settingData = this.state.settingData || [];
+                let data: IComponentList[] = await RequestUtil.get(`/tower-science/welding/getStructure`, {
                     segmentName: this.getForm()?.getFieldsValue(true).segmentName,
                     productCategoryId: this.props.productCategoryId
                 });
-                const weldingDetailedStructureList = this.state.weldingDetailedStructureList || [];
+                if(this.props.name === '编辑') {
+                    settingData.forEach((items: IComponentList) => {    
+                        data = data.map((item: IComponentList) => {
+                            if(items.structureId === item.id) {
+                                console.log(Number(item.basicsPartNumNow || 0) + Number(items.singleNum || 0))
+                                return {
+                                    ...item,
+                                    basicsPartNumNow: Number(item.basicsPartNumNow || 0) + Number(items.singleNum || 0)
+                                }
+                            } else {
+                                return {
+                                    ...item,
+                                    basicsPartNumNow: Number(item.basicsPartNumNow || 0)
+                                }
+                            }
+                        })
+                    })
+                }
                 let newData: IComponentList[] = data?.filter((item: IComponentList) => {
                     return weldingDetailedStructureList.every((items: IComponentList) => {
                         if(items.singleNum === item.basicsPartNumNow) { 
@@ -117,7 +138,7 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                             const num = (this.state.settingData && this.state.settingData[index]?.singleNum) || 0;
                             return {
                                 ...item,
-                                basicsPartNumNow: items.id ? Number(item.basicsPartNumNow || 0) - Number(items.singleNum || 0) + num : Number(item.basicsPartNumNow || 0) - Number(items.singleNum || 0),
+                                basicsPartNumNow: !!(items.id && items.id?.length > 0) ? Number(item.basicsPartNumNow || 0) - Number(items.singleNum || 0) + num : Number(item.basicsPartNumNow || 0) - Number(items.singleNum || 0),
                                 totalWeight: Number(item.basicsPartNumNow || 0) *  Number(item.basicsWeight || 0) 
                             };
                         } else {
@@ -171,12 +192,12 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                     return {
                         ...item,
                         singleNum: Number(item.singleNum) + 1,
-                        basicsPartNumNow: Number(items.basicsPartNumNow || 0) + Number(item.singleNum || 0)
+                        basicsPartNumNow: Number(items.basicsPartNumNow || 0)
                     }
                 } else {
                     return {
                         ...item,
-                        basicsPartNumNow: Number(items.basicsPartNumNow || 0) + Number(item.singleNum || 0)
+                        basicsPartNumNow: Number(items.basicsPartNumNow || 0)
                     }
                 }
             })
@@ -282,7 +303,7 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
             key: 'singleNum',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <InputNumber
-                    key={ record.structureId + record.basicsPartNumNow } 
+                    key={ record.structureId + record.singleNum } 
                     defaultValue={ record.singleNum } 
                     onChange={ (e) => {
                         const weldingDetailedStructureList: IComponentList[] = this.state.weldingDetailedStructureList || [];
@@ -296,10 +317,9 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                             weldingDetailedStructureList: [ ...weldingDetailedStructureList ]
                         })
                         this.getForm()?.setFieldsValue({ 'singleGroupWeight': Number(singleGroupWeight) - Number(record.singleNum) * Number(record.basicsWeight) + Number(e) * Number(record.basicsWeight), 'electricWeldingMeters': Number(electricWeldingMeters) - Number(record.weldingLength) * Number(record.singleNum) + Number(record.weldingLength) * Number(e) });
-                        console.log(record.basicsPartNumNow)
                     } } 
                     bordered={false} 
-                    max={ record.basicsPartNumNow ? Number(record.basicsPartNumNow || 0) : Number(record.surplusNum || 0) + Number((this.state.settingData && this.state.settingData[index]?.singleNum) || 0) }
+                    max={ record.id ? Number(record.surplusNum || 0) + Number((this.state.settingData && this.state.settingData[index]?.singleNum) || 0) : Number(record.basicsPartNumNow || 0) }
                     min={ 1 }
                 />
             )  

@@ -1,0 +1,28 @@
+{
+    "baseInfoData": [
+        {
+            "dataIndex": "contractName",
+            "title": "合同名称"
+        },
+        {
+            "dataIndex": "customerName",
+            "title": "客户名称"
+        },
+        {
+            "dataIndex": "aeName",
+            "title": "业务经理"
+        },
+        {
+            "dataIndex": "aePhone",
+            "title": "业务经理电话"
+        },
+        {
+            "dataIndex": "designContactsName",
+            "title": "设计院联系人"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "设计院联系电话"
+        }
+    ]
+}
