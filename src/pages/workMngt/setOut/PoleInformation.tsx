@@ -163,7 +163,7 @@ export default function PoleInformation(): React.ReactNode {
                 children: <DatePicker.RangePicker />
             },
             {
-                name: 'materialStatus',
+                name: 'loftingStatus',
                 label: '杆塔放样状态',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
                     <Select.Option value={ "" } key="5">全部</Select.Option>
