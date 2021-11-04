@@ -293,6 +293,7 @@ export default function RawMaterialStock(): React.ReactNode {
         setWarehouse([])
         setReservoirArea([])
         setLocation([])
+        setWarehouseId('')
     }
     // 详情弹框取消
     const onDetailCancel = () => {
