@@ -10,7 +10,7 @@ export default function Invoicing() {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
     const [cancelVisible, setCancelVisible] = useState<boolean>(false)
-    const [cancelId, setCancelId] = useState<string>()
+    const [cancelId, setCancelId] = useState<string>("")
     const [form] = Form.useForm()
     const { run: cancelRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
@@ -34,7 +34,9 @@ export default function Invoicing() {
         try {
             const formData = await form.validateFields()
             await cancelRun({ id: cancelId, reason: formData.reason })
+            message.success("取消成功...")
             resove(true)
+            history.go(0)
         } catch (error) {
             reject(false)
         }
@@ -42,7 +44,7 @@ export default function Invoicing() {
 
     return <>
         <Modal title="操作信息" visible={visible} width={1011} onCancel={() => setVisible(false)}>
-            <Overview />
+            <Overview id={cancelId} />
         </Modal>
         <Modal title="取消" visible={cancelVisible} onOk={handleCancel} onCancel={() => {
             setCancelVisible(false)
@@ -63,12 +65,19 @@ export default function Invoicing() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <a onClick={() => setVisible(true)}>查看</a>
-                            <Button type="link" onClick={() => {
+                            <a onClick={() => {
                                 setCancelId(record.id)
-                                setCancelVisible(true)
-                            }
-                            }>取消</Button>
+                                setVisible(true)
+                            }}>查看</a>
+                            <Button
+                                type="link"
+                                disabled={![1].includes(record.shortageStatus)}
+                                onClick={() => {
+                                    setCancelId(record.id)
+                                    setCancelVisible(true)
+                                }
+                                }
+                            >取消</Button>
                         </>
                     }
                 }]}
