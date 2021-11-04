@@ -480,21 +480,21 @@
                         "path": "/workshopManagement",
                         "authority": "approvalm",
                         "items": [
-                            {
-                                "label": "加工任务面板",
-                                "path": "/packagingWorkshop/processingTask",
-                                "authority": "approvalm"
-                            },
-                            {
-                                "label": "试装计划任务列表",
-                                "path": "/packagingWorkshop/processingTask",
-                                "authority": "approvalm"
-                            },
-                            {
-                                "label": "车间转运接收列表",
-                                "path": "/packagingWorkshop/processingTask",
-                                "authority": "approvalm"
-                            }
+                            // {
+                            //     "label": "加工任务面板",
+                            //     "path": "/packagingWorkshop/processingTask",
+                            //     "authority": "approvalm"
+                            // },
+                            // {
+                            //     "label": "试装计划任务列表",
+                            //     "path": "/packagingWorkshop/processingTask",
+                            //     "authority": "approvalm"
+                            // },
+                            // {
+                            //     "label": "车间转运接收列表",
+                            //     "path": "/packagingWorkshop/processingTask",
+                            //     "authority": "approvalm"
+                            // }
                         ]
                     },
                     {
@@ -521,11 +521,11 @@
                         "path": "/packagingWorkshop",
                         "authority": "approvalm",
                         "items": [
-                            {
-                                "label": "加工任务面板",
-                                "path": "/packagingWorkshop/processingTask",
-                                "authority": "approvalm"
-                            },
+                            // {
+                            //     "label": "加工任务面板",
+                            //     "path": "/packagingWorkshop/processingTask",
+                            //     "authority": "approvalm"
+                            // },
                             {
                                 "label": "成品入库列表",
                                 "path": "/packagingWorkshop/warehousing",
