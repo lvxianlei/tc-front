@@ -2,51 +2,39 @@
     "baseInfoData": [
         {
             "dataIndex": "contractName",
-            "title": "入库单编号"
+            "title": "出库计划号"
         },
         {
             "dataIndex": "customerName",
-            "title": "内部合同编号"
+            "title": "发货通知单编号"
         },
         {
             "dataIndex": "aeName",
-            "title": "订单编号"
+            "title": "项目名称"
         },
         {
             "dataIndex": "aePhone",
-            "title": "工程名称"
+            "title": "出库日期"
         },
         {
             "dataIndex": "designContactsName",
-            "title": "产品类别"
-        },
-        {
-            "dataIndex": "designPhone",
             "title": "计划号"
         },
         {
             "dataIndex": "designPhone",
-            "title": "包装时间"
+            "title": "司机"
         },
         {
             "dataIndex": "designPhone",
-            "title": "车间"
+            "title": "车牌号"
         },
         {
             "dataIndex": "designPhone",
-            "title": "仓库"
+            "title": "出库状态"
         },
         {
             "dataIndex": "designPhone",
-            "title": "库位"
-        },
-        {
-            "dataIndex": "designPhone",
-            "title": "班组"
-        },
-        {
-            "dataIndex": "designPhone",
-            "title": "打包人员"
+            "title": "备注"
         }
     ]
 }
