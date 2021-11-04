@@ -415,7 +415,7 @@ export default function RawMaterialStock(): React.ReactNode {
         setListdata(data.outStockDetailPage.records);
         setTotalWeight(data.weight)
         setMaterialShortageTotalWeight(data.excessWeight)
-        setTotal(data.total);
+        setTotal(data.outStockDetailPage.total);
     }
     //获取列表详情数据数据
     const getDetailData = async (id: any) => {
@@ -465,7 +465,6 @@ export default function RawMaterialStock(): React.ReactNode {
         setApplyListdata([record]);
         console.log(record)
         const data: any = await RequestUtil.get(`/tower-storage/materialStock`, {
-            warehouseId: record.id,//仓库id
             materialTexture: record.materialTexture,//材质
             productName: record.productName,//品名
             standard: record.standard,//标准
