@@ -1490,6 +1490,41 @@
       "module": "./pages/financial/Prepare/index",
       "exact": true,
       "authority": "approvalm"
+    },
+    { // 包装车间-加工任务面板
+      "name": "加工任务面板",
+      "path": "/packagingWorkshop/processingTask",
+      "module": "./pages/package-workshop/processingTask/processingTaskList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装车间-成品入库列表
+      "name": "成品入库列表",
+      "path": "/packagingWorkshop/warehousing",
+      "module": "./pages/package-workshop/warehousing/warehousingList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装车间-成品入库列表-查看
+      "name": "明细查看",
+      "path": "/packagingWorkshop/warehousing/detail/:id",
+      "module": "./pages/package-workshop/warehousing/warehousingView",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装车间-成品出库计划
+      "name": "成品出库计划",
+      "path": "/packagingWorkshop/deliveryPlan",
+      "module": "./pages/package-workshop/deliveryPlan/deliveryPlanList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装车间-成品库存
+      "name": "成品库存",
+      "path": "/packagingWorkshop/stock",
+      "module": "./pages/package-workshop/stock/stockList",
+      "exact": true,
+      "authority": "approvalm"
     }
   ]
 }
