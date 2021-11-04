@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { Page } from '../../common'
 import Edit from "./Edit"
 import Overview from "./Overview"
+import AttachFile from "./AttachFile"
 import { ApplicationForPayment } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -13,9 +14,11 @@ interface EditRefProps {
 export default function ApplyPayment() {
     const history = useHistory()
     const editRef = useRef<EditRefProps>()
+    const fileRef = useRef<EditRefProps>()
     const [visible, setVisible] = useState<boolean>(false)
     const [type, setType] = useState<"new" | "edit">("new")
     const [detailVisible, setDetailVisible] = useState<boolean>(false)
+    const [successVisible, setSuccessVisible] = useState<boolean>(false)
     const [detailId, setDetailId] = useState<string>("")
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
@@ -36,6 +39,14 @@ export default function ApplyPayment() {
     }), { manual: true })
 
     const { run: approvalRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/applyPayment/initiateApproval?id=${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+    const { run: successRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/applyPayment/initiateApproval?id=${id}`)
             resole(result)
@@ -110,17 +121,33 @@ export default function ApplyPayment() {
         })
     }
 
+    const handleSuccessRun = async () => {
+        const result = await fileRef.current?.onSubmit()
+        message.success("成功完成...")
+        setSuccessVisible(false)
+        history.go(0)
+    }
+
     return <>
         <Modal style={{ padding: 0 }} visible={visible} width={1011} title={type === "new" ? "创建" : "编辑"} onOk={handleModalOk} onCancel={() => setVisible(false)}>
             <Edit type={type} ref={editRef} id={detailId} />
         </Modal>
         <Modal
-            style={{ padding: 0 }}
             visible={detailVisible} width={1011}
             footer={<Button type="primary" onClick={() => setDetailVisible(false)}>确认</Button>}
             title="详情"
             onCancel={() => setDetailVisible(false)}>
             <Overview id={detailId} />
+        </Modal>
+        <Modal visible={successVisible} width={1011}
+            title="附件上传"
+            onCancel={() => {
+                setSuccessVisible(false)
+                history.go(0)
+            }}
+            onOk={() => handleSuccessRun()}
+        >
+            <AttachFile id={detailId} ref={fileRef} />
         </Modal>
         <Page
             path="/tower-supply/applyPayment"
@@ -137,15 +164,21 @@ export default function ApplyPayment() {
                                 setDetailId(record.id)
                                 setDetailVisible(true)
                             }}>详情</a>
+                            <Button
+                                type="link"
+                                disabled={![0, 3].includes(record.applyStatus)}
+                                onClick={() => {
+                                    setType("edit")
+                                    setDetailId(record.id)
+                                    setVisible(true)
+                                }} >编辑</Button>
+                            {[0].includes(record.applyStatus) && <a onClick={() => handleApprovalRun(record.id)}>发起</a>}
+                            <Button type="link" disabled={![1].includes(record.applyStatus)} onClick={() => handleCancel(record.id)}>撤回</Button>
+                            {[0, 3].includes(record.applyStatus) && <a onClick={() => handleDelete(record.id)}>删除</a>}
                             <Button type="link" onClick={() => {
-                                setType("edit")
                                 setDetailId(record.id)
-                                setVisible(true)
-                            }} >编辑</Button>
-                            <a onClick={() => handleApprovalRun(record.id)}>发起</a>
-                            <Button type="link" onClick={() => handleCancel(record.id)}>撤回</Button>
-                            <a onClick={() => handleDelete(record.id)}>删除</a>
-                            <Button type="link" onClick={() => { message.warning("开发中....") }}>完成</Button>
+                                setSuccessVisible(true)
+                            }}>完成</Button>
                         </>
                     }
                 }]}

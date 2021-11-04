@@ -29,7 +29,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
     }), { manual: true })
 
     const handleInputChange = (event: any, index: number) => {
-        setDataSource(dataSource.map((item: any, dataIndex: number) => dataIndex === index ? ({ ...item, purchasePlanNumber: event }) : item))
+        setDataSource(dataSource.map((item: any, dataIndex: number) => dataIndex === index ? ({ ...item, planPurchaseNum: event }) : item))
     }
     const handleSubmit = () => new Promise(async (resole, reject) => {
         try {
@@ -43,6 +43,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
             reject(false)
         }
     })
+
     useImperativeHandle(ref, () => ({ onSubmit: handleSubmit }))
 
     return <Spin spinning={loading}>

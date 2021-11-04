@@ -23,12 +23,18 @@ export default function Invoicing() {
         return value
     }
 
-    const handlePurChasePlan = () => {
-        return purChasePlanRef.current?.onSubmit()
-    }
-
+    const handlePurChasePlan = () => new Promise(async (resove, reject) => {
+        try {
+            const result = await purChasePlanRef.current?.onSubmit()
+            resove(true)
+            history.go(0)
+        } catch (error) {
+            reject(false)
+        }
+    })
     return <>
-        <Modal title="配料方案" visible={visible} width={1011} onCancel={() => setVisible(false)}>
+        <Modal title="配料方案" visible={visible} width={1011}
+            footer={<Button type="primary" onClick={() => setVisible(false)}>确认</Button>} onCancel={() => setVisible(false)}>
             <Overview id={chooseId} />
         </Modal>
         <Modal title="生成采购计划" visible={generateVisible} width={1011} onOk={handlePurChasePlan} onCancel={() => setGenerateVisible(false)}>
