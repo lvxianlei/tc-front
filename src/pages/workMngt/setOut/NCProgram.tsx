@@ -114,6 +114,7 @@ export default function NCProgram(): React.ReactNode {
     }
     const { loading }: Record<string, any> = useRequest(() => new Promise(async (resole, reject) => {
         getData();
+        resole(true);
     }), {})
 
     if (loading) {
