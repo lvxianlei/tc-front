@@ -1547,6 +1547,20 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 镀锌车间-日计划列表
+      "name": "日计划列表",
+      "path": "/galvanizingWorkshop/dailySchedule",
+      "module": "./pages/GalvanizingWorkshop/DailySchedule",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 镀锌车间-过磅单列表
+      "name": "过磅单列表",
+      "path": "/galvanizingWorkshop/weighingList",
+      "module": "./pages/GalvanizingWorkshop/WeighingList",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 基础配置-产线管理
       "name": "产线管理",
       "path": "/baseSetting/productionLineMngt",
@@ -1572,6 +1586,13 @@
       "name": "车间班组管理",
       "path": "/baseSetting/workshopTeamMngt",
       "module": "./pages/baseSetting/WorkshopTeamMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 基础配置-成品库配置
+      "name": "成品库配置",
+      "path": "/baseSetting/shippingDepartmentConfig",
+      "module": "./pages/baseSetting/ShippingDepartmentConfig",
       "exact": true,
       "authority": "approvalm"
     }

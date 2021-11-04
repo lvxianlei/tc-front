@@ -505,12 +505,12 @@
                         "items": [
                             {
                                 "label": "日计划列表",
-                                "path": "/packagingWorkshop/processingTask",
+                                "path": "/galvanizingWorkshop/dailySchedule",
                                 "authority": "approvalm"
                             },
                             {
                                 "label": "过磅单列表",
-                                "path": "/packagingWorkshop/processingTask",
+                                "path": "/galvanizingWorkshop/weighingList",
                                 "authority": "approvalm"
                             }
                         ]
@@ -598,6 +598,11 @@
                             {
                                 "label": "车间班组管理",
                                 "path": "/baseSetting/workshopTeamMngt",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "成品库配置",
+                                "path": "/baseSetting/shippingDepartmentConfig",
                                 "authority": "approvalm"
                             }
                         ]
