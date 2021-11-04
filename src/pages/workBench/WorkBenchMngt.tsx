@@ -93,7 +93,8 @@ const directorList = [
 			{
 				title: '',
 				dataIndex: 'questionnaire',
-				path: '/question/questionMngt'
+				path: '/question/questionMngt',
+				state: 1
 			}
 		]
 	}, {

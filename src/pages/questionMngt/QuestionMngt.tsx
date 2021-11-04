@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker,  Button, Select } from 'antd'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 
 export default function QuestionMngt(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
+    const location = useLocation<{ state: number }>();
     const columns = [
         {
             key: 'index',
@@ -136,6 +137,7 @@ export default function QuestionMngt(): React.ReactNode {
             // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
+            requestData={ { status: location.state } }
             searchFormItems={[
                 {
                     name: 'updateTime',
