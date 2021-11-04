@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Button, Form, Modal, Row, Col, Popconfirm, Select, message } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
-import { Link, useHistory, useParams } from 'react-router-dom'
+import { Link, useHistory, useLocation, useParams } from 'react-router-dom'
 import { Page } from '../../common'
 import TowerPickAssign from './TowerPickAssign';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -19,6 +19,7 @@ export default function PickTowerMessage(): React.ReactNode {
     const [pickLeader, setPickLeader] = useState<any|undefined>([]);
     const [checkLeader, setCheckLeader] = useState<any|undefined>([]);
     const [department, setDepartment] = useState<any|undefined>([]);
+    const location = useLocation<{ state: {} }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
         setDepartment(departmentData);
@@ -194,7 +195,7 @@ export default function PickTowerMessage(): React.ReactNode {
             extraOperation={
                 <Space>
                 {/* <Button type="primary" ghost>导出</Button> */}
-                <Popconfirm
+                { location.state===AuthUtil.getUserId()?<Popconfirm
                     title="确认提交?"
                     onConfirm={ async () => {
                         await RequestUtil.post(`/tower-science/drawProductSegment/${params.id}/submit`).then(()=>{
@@ -207,8 +208,8 @@ export default function PickTowerMessage(): React.ReactNode {
                     cancelText="取消"
                 >   
                     <Button type="primary" ghost>提交</Button>
-                </Popconfirm>
-                { params.status==='1' ? <TowerPickAssign id={ params.id } onRefresh={onRefresh}/> : null }
+                </Popconfirm>:null}
+                { params.status==='1'&& location.state===AuthUtil.getUserId() ? <TowerPickAssign id={ params.id } onRefresh={onRefresh}/> : null }
                 <Button type="primary" onClick={()=>history.push('/workMngt/pickList')} ghost>返回上一级</Button>
                 </Space>
             }
