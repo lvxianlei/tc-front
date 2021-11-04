@@ -219,11 +219,6 @@
     ],
     "associatedreceipt": [
         {
-            "title": "序号",
-            "dataIndex": "",
-            "type": ""
-        },
-        {
             "title": "收货单号",
             "dataIndex": "receiptNumber",
             "type": "string"
@@ -307,6 +302,286 @@
             "title": "收票日",
             "dataIndex": "collectInvoiceDate",
             "type": "string"
+        }
+    ],
+    "ApplicationForPayment": [
+        {
+            "title": "付款编号",
+            "dataIndex": "projectCode"
+        },
+        {
+            "title": "关联到货单",
+            "dataIndex": "associatedarrivaldoc"
+        },
+        {
+            "title": "关联票据",
+            "dataIndex": "relatednotes"
+        },
+        {
+            "title": "请款金额",
+            "dataIndex": "pleasePayAmount",
+            "type": "number"
+        },
+        {
+            "title": "付款状态",
+            "dataIndex": "applyStatus"
+        },
+        {
+            "title": "审批状态",
+            "dataIndex": "applyStatus",
+            "type": "integer"
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "updateStatusTim"
+        },
+        {
+            "title": "所属供应商",
+            "dataIndex": "description"
+        },
+        {
+            "title": "请款机构",
+            "dataIndex": "pleasePayOrganization",
+            "type": "string"
+        },
+        {
+            "title": "请款类别",
+            "dataIndex": "pleasePayType",
+            "type": "integer"
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "paymentMethod",
+            "type": "string"
+        }
+    ],
+    "ApplicationList": [
+        {
+            "title": "所属供应商",
+            "dataIndex": "description",
+            "disabled": true
+        },
+        {
+            "title": "关联票据",
+            "dataIndex": "relatednotes"
+        },
+        {
+            "title": "请款金额",
+            "dataIndex": "pleasePayAmount",
+            "type": "number"
+        },
+        {
+            "title": "关联收货单",
+            "dataIndex": "associatedreceipt"
+        },
+        {
+            "title": "开户银行",
+            "dataIndex": "openBank"
+        },
+        {
+            "title": "银行账号",
+            "dataIndex": "openBankNumber",
+            "type": "string"
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "paymentMethod",
+            "type": "string"
+        },
+        {
+            "title": "请款类别",
+            "dataIndex": "pleasePayType",
+            "type": "integer"
+        },
+        {
+            "title": "请款机构",
+            "dataIndex": "pleasePayOrganization",
+            "type": "string"
+        }
+    ],
+    "ApprovalInformation": [
+        {
+            "title": "操作部门",
+            "dataIndex": "deptName"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "optUserName"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "optTime"
+        },
+        {
+            "title": "状态",
+            "dataIndex": "status"
+        }
+    ],
+    "OperationInformation": [
+        {
+            "title": "操作部门",
+            "dataIndex": "deptName"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "optUserName"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "optTime"
+        },
+        {
+            "title": "状态",
+            "dataIndex": "status"
+        },
+        {
+            "title": "付款日",
+            "dataIndex": "payDay"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        }
+    ],
+    "ApplicationInformation": [
+        {
+            "title": "所属供应商",
+            "dataIndex": "description",
+            "disabled": true
+        },
+        {
+            "title": "关联票据",
+            "dataIndex": "relatednotes"
+        },
+        {
+            "title": "请款金额",
+            "dataIndex": "pleasePayAmount",
+            "type": "number"
+        },
+        {
+            "title": "关联收货单",
+            "dataIndex": "associatedreceipt"
+        },
+        {
+            "title": "开户银行",
+            "dataIndex": "openBank"
+        },
+        {
+            "title": "银行账号",
+            "dataIndex": "openBankNumber",
+            "type": "string"
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "paymentMethod",
+            "type": "string"
+        },
+        {
+            "title": "请款类别",
+            "dataIndex": "pleasePayType",
+            "type": "integer"
+        },
+        {
+            "title": "请款机构",
+            "dataIndex": "pleasePayOrganization",
+            "type": "string"
+        }
+    ],
+    "operationInfo": [
+        {
+            "title": "操作部门",
+            "dataIndex": "deptName"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "optUserName"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "optTime"
+        }
+    ],
+    "AssociatedInvoice": [
+        {
+            "title": "票据编号",
+            "dataIndex": "billNumber",
+            "type": "string"
+        },
+        {
+            "title": "发票号",
+            "dataIndex": "invoiceNumber"
+        },
+        {
+            "title": "票据金额",
+            "dataIndex": "invoiceAmount"
+        },
+        {
+            "title": "收票日",
+            "dataIndex": "collectInvoiceDate",
+            "type": "string"
+        },
+        {
+            "title": "发票类型",
+            "dataIndex": "invoiceType",
+            "type": "string"
+        }
+    ],
+    "EditList": [
+        {
+            "title": "所属供应商",
+            "dataIndex": "description",
+            "disabled": true
+        },
+        {
+            "title": "关联票据",
+            "dataIndex": "relatednotes"
+        },
+        {
+            "title": "请款金额",
+            "dataIndex": "pleasePayAmount",
+            "type": "number"
+        },
+        {
+            "title": "关联收货单",
+            "dataIndex": "associatedreceipt"
+        },
+        {
+            "title": "开户银行",
+            "dataIndex": "openBank"
+        },
+        {
+            "title": "银行账号",
+            "dataIndex": "openBankNumber",
+            "type": "string"
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "paymentMethod",
+            "type": "string"
+        },
+        {
+            "title": "请款类别",
+            "dataIndex": "pleasePayType",
+            "type": "integer"
+        },
+        {
+            "title": "请款机构",
+            "dataIndex": "pleasePayOrganization",
+            "type": "string"
+        }
+    ],
+    "operationList": [
+        {
+            "title": "操作部门",
+            "dataIndex": "deptName"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "optUserName"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "optTime"
         }
     ]
 }

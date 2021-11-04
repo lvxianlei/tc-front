@@ -22,9 +22,9 @@ export default function Invoicing() {
         }
         return value
     }
-    
+
     const handlePurChasePlan = () => {
-        purChasePlanRef.current?.onSubmit()
+        return purChasePlanRef.current?.onSubmit()
     }
 
     return <>

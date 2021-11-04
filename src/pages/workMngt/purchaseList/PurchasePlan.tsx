@@ -19,10 +19,9 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
         }
     }), { refreshDeps: [JSON.stringify(ids)] })
 
-    const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
+    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/purchaseBatchingScheme`, { ...data })
-            setDataSource(result?.list || [])
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPurchasePlan`, { ...data })
             resole(result)
         } catch (error) {
             reject(error)
@@ -32,9 +31,18 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
     const handleInputChange = (event: any, index: number) => {
         setDataSource(dataSource.map((item: any, dataIndex: number) => dataIndex === index ? ({ ...item, purchasePlanNumber: event }) : item))
     }
-    const handleSubmit = () => {
-        console.log("save", dataSource)
-    }
+    const handleSubmit = () => new Promise(async (resole, reject) => {
+        try {
+            await saveRun({
+                purchaseType: 1,
+                purchaserTaskTowerIds: ids.join(","),
+                lists: dataSource
+            })
+            resole(true)
+        } catch (error) {
+            reject(false)
+        }
+    })
     useImperativeHandle(ref, () => ({ onSubmit: handleSubmit }))
 
     return <Spin spinning={loading}>
