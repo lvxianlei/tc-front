@@ -6,12 +6,17 @@ import RequestUtil from '../../../utils/RequestUtil'
 import AuthUtil from "../../../utils/AuthUtil"
 import { downLoadFile } from "../../../utils"
 import useRequest from '@ahooksjs/use-request'
+import ApplicationContext from "../../../configuration/ApplicationContext"
 interface EditProps {
     type: "new" | "edit",
     ref?: React.RefObject<{ onSubmit: () => Promise<any> }>
 }
 
 export default forwardRef(function Edit({ type }: EditProps, ref) {
+    const invoiceTypeEnum = (ApplicationContext.get().dictionaryOption as any)["1210"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
     const [baseForm] = Form.useForm()
     const [attchs, setAttachs] = useState<any[]>([])
     const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
@@ -27,7 +32,10 @@ export default forwardRef(function Edit({ type }: EditProps, ref) {
         try {
             const baseData = await baseForm.validateFields()
             await saveRun({
-                ...baseData
+                ...baseData,
+                supplierName: baseData.supplierName.value,
+                supplierId: baseData.supplierName.id,
+                receiptDtos: baseData.receiptVos.records?.map((item: any) => ({ receiptId: item.id, receiptNumber: item.receiveNumber }))
             })
             resolve(true)
         } catch (error) {
@@ -63,7 +71,12 @@ export default forwardRef(function Edit({ type }: EditProps, ref) {
     }
     return <DetailContent>
         <DetailTitle title="票据信息" />
-        <BaseInfo form={baseForm} columns={bilinformation} col={3} dataSource={{}} edit />
+        <BaseInfo form={baseForm} columns={bilinformation.map((item: any) => {
+            if (item.dataIndex === "invoiceType") {
+                return ({ ...item, type: "select", enum: invoiceTypeEnum })
+            }
+            return item
+        })} col={3} dataSource={{}} edit />
         <DetailTitle title="相关附件" operation={[<Upload
             key="sub"
             name="file"

@@ -58,7 +58,7 @@ export default function RawMaterialStock(): React.ReactNode {
             title: '状态',
             dataIndex: 'outStockItemStatus',
             width: 120,
-            render: (text: any) => text == 0 ? '待出库' : text == 1 ? '已出库' : '缺料中'
+            render: (text: any) => text == 0 ? '待出库' : text == 1 ? '缺料中' : '已出库'
         }, {
             title: '最新状态变更时间',
             dataIndex: 'updateTime',
@@ -133,10 +133,10 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 80,
             fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
-                // 0待出库 1 已出库 2 缺料中
+                // 0待出库 2 已出库  1缺料中
                 <Space direction="horizontal" size="small">
                     {record.outStockItemStatus == 0 ? <Button type='link' onClick={() => { IssueOperation(record) }}>出库</Button> : null}
-                    {record.outStockItemStatus == 1 ? <Button type='link' onClick={() => { getDetailData(record.id) }}>详情</Button> : null}
+                    {record.outStockItemStatus == 2 ? <Button type='link' onClick={() => { getDetailData(record.id) }}>详情</Button> : null}
                 </Space>
             )
         }
@@ -620,12 +620,12 @@ export default function RawMaterialStock(): React.ReactNode {
                             <Select.Option
                                 value="1"
                             >
-                                已出库
+                                缺料中
                             </Select.Option>
                             <Select.Option
                                 value="2"
                             >
-                                缺料中
+                                已出库
                             </Select.Option>
                         </Select>
                     </div>
