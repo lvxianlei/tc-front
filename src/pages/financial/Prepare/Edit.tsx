@@ -10,16 +10,31 @@ import ApplicationContext from "../../../configuration/ApplicationContext"
 interface EditProps {
     type: "new" | "edit",
     ref?: React.RefObject<{ onSubmit: () => Promise<any> }>
+    id: string
 }
 
-export default forwardRef(function Edit({ type }: EditProps, ref) {
+export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const invoiceTypeEnum = (ApplicationContext.get().dictionaryOption as any)["1210"].map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
     const [baseForm] = Form.useForm()
     const [attchs, setAttachs] = useState<any[]>([])
-    const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
+
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/applyPayment/${id}`)
+            baseForm.setFieldsValue({
+                ...result,
+                relatednotes: result.applyPaymentInvoiceVos?.map((item: any) => item.billNumber).join(",")
+            })
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: type === "new" })
+
+    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/applyPayment`, data)
             resole(result)
@@ -35,7 +50,7 @@ export default forwardRef(function Edit({ type }: EditProps, ref) {
                 ...baseData,
                 supplierId: baseData.supplierName.id,
                 supplierName: baseData.supplierName.value,
-                billIds: baseData.relatednotes.records.map((item: any) => item.id)
+                applyPaymentInvoiceDtos: baseData.relatednotes.records.map((item: any) => ({ invoiceId: item.id, billNumber: item.billNumber }))
             })
             resolve(true)
         } catch (error) {
@@ -65,14 +80,18 @@ export default forwardRef(function Edit({ type }: EditProps, ref) {
             }
         }
     }
-
+    const handleBaseInfoChange = (fields: any) => {
+        if (fields.relatednotes) {
+            console.log(fields.records)
+        }
+    }
     const deleteAttachData = (id: number) => {
         setAttachs(attchs.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
     }
 
     return <DetailContent>
         <DetailTitle title="申请信息" />
-        <BaseInfo form={baseForm} columns={ApplicationList.map((item: any) => {
+        <BaseInfo form={baseForm} onChange={handleBaseInfoChange} columns={ApplicationList.map((item: any) => {
             if (item.dataIndex === "relatednotes") {
                 return ({
                     ...item,

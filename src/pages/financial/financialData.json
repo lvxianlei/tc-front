@@ -315,7 +315,7 @@
     "ApplicationForPayment": [
         {
             "title": "付款编号",
-            "dataIndex": "projectCode"
+            "dataIndex": "pleasePayNumber"
         },
         {
             "title": "关联到货单",
@@ -406,7 +406,7 @@
             "title": "关联票据",
             "dataIndex": "relatednotes",
             "type": "popTable",
-            "path": "/tower-supply/invoice",
+            "path": "/tower-supply/invoice?invoiceStatus=1",
             "width": 1011,
             "value": "supplierName",
             "dependencies": true,
