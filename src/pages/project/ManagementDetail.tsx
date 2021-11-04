@@ -282,7 +282,7 @@ export default function ManagementDetail(): React.ReactNode {
                     dataIndex: "bidWeight"
                 },
                 {
-                    title: '备注',
+                    title: '说明',
                     dataIndex: 'description'
                 }
             ]} dataSource={data || {}} col={2} />

@@ -55,7 +55,7 @@ export default function Invoicing() {
                     return <>
                         <Link to={`/workMngt/planList/relationTower/${record.id}`}>关联塔形</Link>
                         <Link to={`/workMngt/planList/purchaseList/${record.id}`}><Button type="link">采购清单</Button></Link>
-                        <Button type="link" onClick={() => handleDelete(record.id)}>取消计划</Button>
+                        <a onClick={() => handleDelete(record.id)}>取消计划</a>
                     </>
                 }
             }]}

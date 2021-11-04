@@ -14,6 +14,7 @@ export default function Invoice() {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
     const [detailVisible, setDetailVisible] = useState<boolean>(false)
+    const [detailedId, setDetailedId] = useState<string>("")
     const [type, setType] = useState<"new" | "edit">("new")
     const editRef = useRef<EditRefProps>()
     const { loading, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
@@ -69,7 +70,7 @@ export default function Invoice() {
             footer={<Button type="primary" onClick={() => setDetailVisible(false)}>确认</Button>}
             title="详情"
             onCancel={() => setVisible(false)}>
-            <Overview />
+            <Overview id={detailedId} />
         </Modal>
         <Page
             path="/tower-supply/invoice"
@@ -82,7 +83,10 @@ export default function Invoice() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link" onClick={() => setDetailVisible(true)}>查看</Button>
+                            <Button type="link" onClick={() => {
+                                setDetailVisible(true)
+                                setDetailedId(record.id)
+                            }}>查看</Button>
                             <Button type="link" onClick={() => setVisible(true)}>编辑</Button>
                             <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>
                         </>

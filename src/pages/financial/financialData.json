@@ -60,11 +60,32 @@
         {
             "title": "所属供应商 ",
             "dataIndex": "supplierName",
-            "type": "string",
-            "rules": [
+            "type": "popTable",
+            "path": "/tower-supply/supplier",
+            "width": 1011,
+            "value": "supplierName",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
                 {
-                    "required": true,
-                    "message": "请输入所属供应商..."
+                    "title": "供应商编号",
+                    "dataIndex": "supplierCode"
+                },
+                {
+                    "title": "供应商名称",
+                    "dataIndex": "supplierName"
+                },
+                {
+                    "title": "联系人",
+                    "dataIndex": "contactMan"
+                },
+                {
+                    "title": "联系电话",
+                    "dataIndex": "contactNumber"
+                },
+                {
+                    "title": "供货产品",
+                    "dataIndex": "supplyProducts"
                 }
             ]
         },
@@ -117,7 +138,7 @@
             "type": "popTable",
             "path": "/tower-storage/receiveStock",
             "width": 1011,
-            "value": "id",
+            "value": "receiveNumber",
             "selectType": "checkbox",
             "dependencies": true,
             "readOnly": true,

@@ -327,6 +327,9 @@ export default function TowerCheck(): React.ReactNode {
                     children: <Input placeholder="请输入"/>
                 }
             ] }
+            onFilterSubmit = { (values: Record<string, any>) => {
+                return values;
+            } }
         />
         <QuestionnaireModal visible={ visible } record={ record } title={ title } modalCancel={ () => { setVisible(false); setRefresh(!refresh); } } update={ () => setRefresh(!refresh) }/>
     </>

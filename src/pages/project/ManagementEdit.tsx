@@ -112,7 +112,8 @@ export default function BaseInfoEdit(): JSX.Element {
     ]}>
       <Spin spinning={loading}>
         <DetailTitle title="基本信息" />
-        <BaseInfo 
+       <div style={{textAlign:"center"}}>
+       <BaseInfo 
           onChange={handleBaseInfoChange}
           form={baseInfoForm}
           columns={
@@ -120,6 +121,7 @@ export default function BaseInfoEdit(): JSX.Element {
               baseInfoData.map((item: any) => item.dataIndex === "address" ? ({ ...item, type: "select", enum: data?.addressList }) : item) :
               baseInfoData.map((item: any) => item.dataIndex === "address" ? ({ ...item, type: "select", enum: data?.addressList }) : item).filter((item: any) => item.dataIndex !== "country")
           } dataSource={data || {}} edit />
+       </div>
         <DetailTitle title="物资清单" />
         <EditTable form={cargoVOListForm} columns={cargoVOListColumns} dataSource={data?.cargoVOList} />
         <DetailTitle title="附件信息" operation={[<Upload

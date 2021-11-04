@@ -111,164 +111,160 @@
             "dataIndex": "equipped/notequipped"
         }
     ],
-    "mixedIngredients": [
+    "detailClassification": [
         {
-            "detailClassification": [
-                {
-                    "title": "件号",
-                    "dataIndex": "num",
-                    "type": "integer"
-                },
-                {
-                    "title": "材质",
-                    "dataIndex": "structureTexture",
-                    "type": "string"
-                },
-                {
-                    "title": "规格",
-                    "dataIndex": "structureSpec",
-                    "type": "string"
-                },
-                {
-                    "title": "长度(mm)",
-                    "dataIndex": "length",
-                    "type": "number"
-                },
-                {
-                    "title": "已配/未配",
-                    "dataIndex": "equipped/notequipped"
-                }
-            ],
-            "Batchingschemed": [
-                {
-                    "title": "材质",
-                    "dataIndex": "structureTexture",
-                    "type": "string"
-                },
-                {
-                    "title": "规格",
-                    "dataIndex": "structureSpec",
-                    "type": "string"
-                },
-                {
-                    "title": "原材料长度(mm)",
-                    "dataIndex": "length",
-                    "type": "number"
-                },
-                {
-                    "title": "零件1",
-                    "dataIndex": "part1",
-                    "type": "string"
-                },
-                {
-                    "title": "长度",
-                    "dataIndex": "length",
-                    "type": "number"
-                },
-                {
-                    "title": "零件2",
-                    "dataIndex": "part2",
-                    "type": "string"
-                },
-                {
-                    "title": "长度",
-                    "dataIndex": "length",
-                    "type": "number"
-                },
-                {
-                    "title": "零件3",
-                    "dataIndex": "part3",
-                    "type": "string"
-                },
-                {
-                    "title": "长度",
-                    "dataIndex": "length",
-                    "type": "number"
-                },
-                {
-                    "title": "零件4",
-                    "dataIndex": "part4",
-                    "type": "string"
-                },
-                {
-                    "title": "长度",
-                    "dataIndex": "length",
-                    "type": "number"
-                },
-                {
-                    "title": "余料长度",
-                    "dataIndex": "surpluslength"
-                },
-                {
-                    "title": "利用率",
-                    "dataIndex": "utilizationrate"
-                }
-            ],
-            "BatchingSchemes": [
-                {
-                    "title": "材质",
-                    "dataIndex": "structureTexture",
-                    "type": "string"
-                },
-                {
-                    "title": "规格",
-                    "dataIndex": "structureSpec",
-                    "type": "string"
-                },
-                {
-                    "title": "原材料长度(mm)",
-                    "dataIndex": "length",
-                    "type": "number"
-                },
-                {
-                    "title": "零件1",
-                    "dataIndex": "part1",
-                    "type": "string"
-                },
-                {
-                    "title": "长度(mm)",
-                    "dataIndex": "length",
-                    "type": "number"
-                },
-                {
-                    "title": "零件2",
-                    "dataIndex": "part2",
-                    "type": "string"
-                },
-                {
-                    "title": "长度(mm)",
-                    "dataIndex": "length",
-                    "type": "number"
-                },
-                {
-                    "title": "零件3",
-                    "dataIndex": "part3",
-                    "type": "string"
-                },
-                {
-                    "title": "长度(mm)",
-                    "dataIndex": "length",
-                    "type": "number"
-                },
-                {
-                    "title": "零件4",
-                    "dataIndex": "part4",
-                    "type": "string"
-                },
-                {
-                    "title": "长度(mm)",
-                    "dataIndex": "length",
-                    "type": "number"
-                },
-                {
-                    "title": "余料长度",
-                    "dataIndex": "surpluslength"
-                },
-                {
-                    "title": "利用率",
-                    "dataIndex": "utilizationrate"
-                }
-            ]
+            "title": "件号",
+            "dataIndex": "num",
+            "type": "integer"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string"
+        },
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "已配/未配",
+            "dataIndex": "equipped/notequipped"
+        }
+    ],
+    "Batchingschemed": [
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string"
+        },
+        {
+            "title": "原材料长度(mm)",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "零件1",
+            "dataIndex": "part1",
+            "type": "string"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "零件2",
+            "dataIndex": "part2",
+            "type": "string"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "零件3",
+            "dataIndex": "part3",
+            "type": "string"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "零件4",
+            "dataIndex": "part4",
+            "type": "string"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "余料长度",
+            "dataIndex": "surpluslength"
+        },
+        {
+            "title": "利用率",
+            "dataIndex": "utilizationrate"
+        }
+    ],
+    "BatchingSchemes": [
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string"
+        },
+        {
+            "title": "原材料长度(mm)",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "零件1",
+            "dataIndex": "part1",
+            "type": "string"
+        },
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "零件2",
+            "dataIndex": "part2",
+            "type": "string"
+        },
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "零件3",
+            "dataIndex": "part3",
+            "type": "string"
+        },
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "零件4",
+            "dataIndex": "part4",
+            "type": "string"
+        },
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "余料长度",
+            "dataIndex": "surpluslength"
+        },
+        {
+            "title": "利用率",
+            "dataIndex": "utilizationrate"
         }
     ]
 }

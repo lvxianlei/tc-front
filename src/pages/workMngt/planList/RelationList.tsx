@@ -3,10 +3,8 @@ import { Button, Input, DatePicker, Select, Modal } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { Page } from '../../common'
 import { baseInfo } from "../purchaseList/purchaseListData.json"
-export default function Invoicing() {
+export default function RelationList() {
     const history = useHistory()
-    const [generateIds, setGenerateIds] = useState<string[]>([])
-    const [chooseId, setChooseId] = useState<string>("")
     const onFilterSubmit = (value: any) => {
         if (value.startPurchaseStatusUpdateTime) {
             const formatDate = value.startPurchaseStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -40,14 +38,5 @@ export default function Invoicing() {
                 </Select>
             }
         ]}
-        tableProps={{
-            rowSelection: {
-                type: "checkbox",
-                selectedRowKeys: generateIds,
-                onChange: (selectedRowKeys: any[]) => {
-                    setGenerateIds(selectedRowKeys)
-                }
-            }
-        }}
     />
 }

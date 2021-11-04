@@ -176,7 +176,11 @@ export default function TowerInformation(): React.ReactNode {
                         record.status === 2 ? 
                         <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerCheck/${ record.id }` }>校核</Link> : <Button type="link" disabled>校核</Button>
                     }
-                    <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerLoftingDetails/${ record.id }` }>塔型放样明细</Link>
+                    {
+                        record.status === 1 ? 
+                        <Button type="link" disabled>塔型放样明细</Button> : <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerLoftingDetails/${ record.id }` }>塔型放样明细</Link>
+                    }
+                    
                 </Space>
             )
         }
