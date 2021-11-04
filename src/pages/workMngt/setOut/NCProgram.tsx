@@ -109,7 +109,7 @@ export default function NCProgram(): React.ReactNode {
     const [ data, setData ] = useState<IData>();
 
     const getData = async () => {
-        const data = await RequestUtil.get<IData>(`/tower-science/productNc/count?productCategoryId=${ params.id }`);
+        const data = await RequestUtil.get<IData>(`/tower-science/productNc/count?productSegmentId=${ params.productSegmentId }`);
         setData(data)
     }
     const { loading }: Record<string, any> = useRequest(() => new Promise(async (resole, reject) => {
@@ -125,7 +125,7 @@ export default function NCProgram(): React.ReactNode {
     
     return <Page
         path="/tower-science/productNc"
-        requestData={{ productCategoryId: params.id }}
+        requestData={{ id: params.productSegmentId }}
         columns={ columns }
         headTabs={ [] }
         refresh={ refresh }
