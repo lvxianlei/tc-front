@@ -50,9 +50,9 @@ export default function ConfirmTaskDetail(): React.ReactNode {
         if(selectedRows && selectedRows.length > 0 ) {
             const task:any[] = tableUserDataSource || [];
             task.push(selectedRows[0])
-            this.setState({
-                tableUserDataSource:[...task]
-            })
+            // this.setState({
+            //     tableUserDataSource:[...task]
+            // })
         }
     }
     return <>
@@ -85,8 +85,8 @@ export default function ConfirmTaskDetail(): React.ReactNode {
                             rowSelection={{
                                 type:'checkbox',
                                 onChange:( selectedKeys: React.Key[], selectedRows:any )=>{
-                                    setSelectKeys(selectedKeys);
-                                    setSelectRows(selectedRows);
+                                    // setSelectKeys(selectedKeys);
+                                    // setSelectRows(selectedRows);
                                 }
                             }}
                         />

@@ -86,7 +86,7 @@ const SecuritySetting = (): React.ReactNode => {
     }
     // 编辑
     const submit = async () => {
-        await RequestUtil.put(`/tower-storage/safetyStock/${id}`, {
+        await RequestUtil.put(`/tower-storage/safetyStock/${id}?safetyStock=${safetyStock}&alarmStock=${alarmStock}`, {
             safetyStock,
             alarmStock,
         })
