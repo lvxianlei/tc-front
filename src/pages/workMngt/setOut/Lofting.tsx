@@ -135,8 +135,16 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'basicsPartNum',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "basicsPartNum"]} initialValue={ _ }>
-                    <Input size="small" onChange={ () => rowChange(index) }/>
+                <Form.Item name={['data', index, "basicsPartNum"]} initialValue={ _ }>
+                    <Input type="number" min={ 0 } size="small" onChange={ (e) => { 
+                        const data = form.getFieldsValue(true).data;
+                        data[index] = {
+                            ...data[index],
+                            totalWeight: Number(e.target.value) * Number(data[index].basicsWeight)
+                        }
+                        form.setFieldsValue({ data: [ ...data ] })
+                        rowChange(index);
+                    } }/>
                 </Form.Item>
             )
         },
@@ -148,7 +156,15 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data',index, "basicsWeight"]} initialValue={ _ }>
-                    <Input size="small" onChange={ () => rowChange(index) }/>
+                    <Input type="number" min={ 0 } size="small" onChange={ (e) => {
+                        const data = form.getFieldsValue(true).data;
+                        data[index] = {
+                            ...data[index],
+                            totalWeight: Number(e.target.value) * Number(data[index].basicsPartNum)
+                        }
+                        form.setFieldsValue({ data: [ ...data ] })
+                        rowChange(index);
+                    } }/>
                 </Form.Item>
             )
         },
@@ -160,7 +176,7 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data',index, "totalWeight"]} initialValue={ _ }>
-                    <Input size="small" onChange={ () => rowChange(index) }/>
+                    <Input size="small" disabled/>
                 </Form.Item>
             )
         },
