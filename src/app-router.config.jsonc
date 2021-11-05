@@ -1513,7 +1513,7 @@
       "authority": "approvalm"
     },
     { // 车间工作管理-试装计划任务列表-构件明细
-      "name": "试装计划任务列表",
+      "name": "构件明细",
       "path": "/workshopManagement/trialAssemblyTask/componentDetail/:id",
       "module": "./pages/mngt-workshop/ComponentDetails",
       "exact": true,
@@ -1527,7 +1527,7 @@
       "authority": "approvalm"
     },
     { // 车间工作管理-车间转运接收列表-构件明细
-      "name": "车间转运接收列表",
+      "name": "构件明细",
       "path": "/workshopManagement/workshopTransfer/componentDetail/:id",
       "module": "./pages/mngt-workshop/ComponentDetails",
       "exact": true,
