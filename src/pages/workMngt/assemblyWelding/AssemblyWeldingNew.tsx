@@ -209,7 +209,8 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
         this.setState({
             selectVisible: false,
             weldingDetailedStructureList: [ ...weldingDetailedStructureList, ...newComponentList],
-            selectedRowKeys: []
+            selectedRowKeys: [],
+            selectedRows: []
         })
     }
     
