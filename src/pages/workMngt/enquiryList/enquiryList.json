@@ -75,10 +75,6 @@
     ],
     "CurrentPriceInformation": [
         {
-            "title": "序号",
-            "dataIndex": "index"
-        },
-        {
             "title": "原材料名称",
             "dataIndex": "materialName"
         },

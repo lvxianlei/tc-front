@@ -1349,8 +1349,8 @@
     },
     { // 工作管理-询价列表
       "name": "询价列表",
-      "path": "/workMngt/enquiryList",
-      "module": "./pages/workMngt/enquiryList/EnquiryList",
+      "path": "/workMngt/enquiry",
+      "module": "./pages/workMngt/enquiryList/index",
       "exact": true,
       "authority": "approvalm"
     },

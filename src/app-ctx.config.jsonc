@@ -395,7 +395,7 @@
                             },
                             {
                                 "label": "询价列表",
-                                "path": "/workMngt/enquiryList",
+                                "path": "/workMngt/enquiry",
                                 "authority": "approvalm"
                             },
                             {
