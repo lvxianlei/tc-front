@@ -7,17 +7,22 @@ import Overview from "./Overview"
 import { baseinfo } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import ApplicationContext from "../../../configuration/ApplicationContext"
 interface EditRefProps {
     onSubmit: () => void
 }
 export default function Invoice() {
     const history = useHistory()
+    const invoiceTypeEnum = (ApplicationContext.get().dictionaryOption as any)["1210"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
     const [visible, setVisible] = useState<boolean>(false)
     const [detailVisible, setDetailVisible] = useState<boolean>(false)
     const [detailedId, setDetailedId] = useState<string>("")
     const [type, setType] = useState<"new" | "edit">("new")
     const editRef = useRef<EditRefProps>()
-    const { loading, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/invoice?id=${id}`)
             resole(result)
@@ -27,10 +32,10 @@ export default function Invoice() {
     }), { manual: true })
 
     const onFilterSubmit = (value: any) => {
-        if (value.startLaunchTime) {
-            const formatDate = value.startLaunchTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startLaunchTime = formatDate[0]
-            value.endLaunchTime = formatDate[1]
+        if (value.updateEndTime) {
+            const formatDate = value.updateEndTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.updateStartTime = formatDate[0]
+            value.updateEndTime = formatDate[1]
         }
         return value
     }
@@ -112,34 +117,25 @@ export default function Invoice() {
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
-                    name: 'startLaunchTime',
+                    name: 'updateEndTime',
                     label: '最近状态变更时间',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'contractType',
+                    name: 'invoiceStatus',
                     label: '状态',
                     children: <Select style={{ width: 200 }}>
-                        <Select.Option value="1">不下计划</Select.Option>
-                        <Select.Option value="2">未下计划</Select.Option>
+                        <Select.Option value="1">已收票</Select.Option>
+                        <Select.Option value="2">待付款</Select.Option>
+                        <Select.Option value="3">已付款</Select.Option>
+                        <Select.Option value="4">已作废</Select.Option>
                     </Select>
                 },
                 {
-                    name: 'isOpen',
+                    name: 'invoiceType',
                     label: '发票类型',
                     children: <Select style={{ width: 200 }}>
-                        <Select.Option value="1">预开</Select.Option>
-                        <Select.Option value="2">发票已开全</Select.Option>
-                        <Select.Option value="3">发票未开全</Select.Option>
-                    </Select>
-                },
-                {
-                    name: 'b',
-                    label: '供应商',
-                    children: <Select style={{ width: 200 }}>
-                        <Select.Option value="1">预开</Select.Option>
-                        <Select.Option value="2">发票已开全</Select.Option>
-                        <Select.Option value="3">发票未开全</Select.Option>
+                        {invoiceTypeEnum.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
                     </Select>
                 }
             ]}

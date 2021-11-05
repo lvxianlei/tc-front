@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Input, DatePicker, Select, Button, Form } from 'antd'
-import { useHistory, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { baseInfo } from "./buyBurdening.json"
 import { Page } from '../../common';
 

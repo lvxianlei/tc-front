@@ -167,7 +167,6 @@ export default function EnquiryTask(): React.ReactNode {
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryTask/initTask`)
         console.log(result);
     }
-    console.log(inquiryId);
 
     return <>
         <Page
@@ -298,7 +297,7 @@ export default function EnquiryTask(): React.ReactNode {
                 <Select.Option value="2">Lucy</Select.Option>
                 <Select.Option value="3">yiminghe</Select.Option>
             </Select>
-            人员 *<Button onClick={()=>{handleChange1(id)}}>aaa</Button>
+            人员 *<Button onClick={() => { handleChange1(id) }}>aaa</Button>
             <div>
                 计划交付时间 *<DatePicker onChange={onChange} />
             </div>
