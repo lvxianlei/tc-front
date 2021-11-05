@@ -1,0 +1,280 @@
+{
+    "contract": [
+        {
+            "title": "合同编号",
+            "dataIndex": "contractNumber"
+        },
+        {
+            "title": "关联采购计划",
+            "dataIndex": "purchasePlanNumber"
+        },
+        {
+            "title": "合同状态",
+            "dataIndex": "contractStatus"
+        },
+        {
+            "title": "供应商",
+            "dataIndex": "supplierName"
+        },
+        {
+            "title": "签订时间",
+            "dataIndex": "signingTime"
+        },
+        {
+            "title": "经办人",
+            "dataIndex": "operator"
+        },
+        {
+            "title": "总重量",
+            "dataIndex": "totalWeight"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandard"
+        },
+        {
+            "title": "含税金额（元）合计",
+            "dataIndex": "taxTotalAmount"
+        },
+        {
+            "title": "不含税单价（元）合计",
+            "dataIndex": "totalAmount"
+        },
+        {
+            "title": "交（提）货方式",
+            "dataIndex": "deliveryMethod"
+        },
+        {
+            "title": "运输方式",
+            "dataIndex": "transportMethod"
+        },
+        {
+            "title": "运输承担",
+            "dataIndex": "transportBear"
+        },
+        {
+            "title": "卸车承担",
+            "dataIndex": "unloadBear"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        }
+    ],
+    "contract1": [
+        {
+            "title": "材料名称",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec"
+        },
+        {
+            "title": "宽度（mm）",
+            "dataIndex": "width"
+        },
+        {
+            "title": "长度（mm）",
+            "dataIndex": "length"
+        },
+        {
+            "title": "重量（吨）",
+            "dataIndex": "weight"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "number"
+        },
+        {
+            "title": "含税单价",
+            "dataIndex": "taxPrice"
+        },
+        {
+            "title": "含税金额（元）合计",
+            "dataIndex": "taxTotalAmount"
+        },
+        {
+            "title": "不含税单价",
+            "dataIndex": "price"
+        },
+        {
+            "title": "不含税单价（元）合计",
+            "dataIndex": "totalAmount"
+        },
+        {
+            "title": "操作",
+            "dataIndex": "operation"
+        }
+    ],
+    "contract2": [
+        {
+            "title": "物料编号",
+            "dataIndex": "materialCode"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "standard"
+        },
+        {
+            "title": "材料",
+            "dataIndex": "rowMaterial"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec"
+        }
+    ],
+    "contract3": [
+        {
+            "title": "询比价编号",
+            "dataIndex": "componentNumber"
+        },
+        {
+            "title": "用途",
+            "dataIndex": "purpose"
+        },
+        {
+            "title": "询比价类型",
+            "dataIndex": "batcheStatusUpdateTime"
+        },
+        {
+            "title": "询比价状态",
+            "dataIndex": "componentStatus"
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "batcheStatusUpdateTime"
+        },
+        {
+            "title": "询价人",
+            "dataIndex": "componentPersonId"
+        }
+    ],
+    "contract4": [
+        {
+            "title": "物料编码",
+            "dataIndex": "materialCode"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandard"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec"
+        },
+        {
+            "title": "宽度（mm）",
+            "dataIndex": "width"
+        },
+        {
+            "title": "厚度（mm）",
+            "dataIndex": "thickness"
+        },
+        {
+            "title": "长度（mm）",
+            "dataIndex": "length"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "number"
+        },
+        {
+            "title": "单重（吨）",
+            "dataIndex": "singleWeight"
+        },
+        {
+            "title": "总重（吨）",
+            "dataIndex": "totalWeight"
+        },
+        {
+            "title": "操作",
+            "dataIndex": "operation"
+        }
+    ],
+    "contract5": [
+        {
+            "title": "采购计划编号",
+            "dataIndex": "purchasePlanNumber"
+        },
+        {
+            "title": "采购类型",
+            "dataIndex": "purchaseType"
+        },
+        {
+            "title": "塔型（个）",
+            "dataIndex": "productCategory"
+        },
+        {
+            "title": "杆塔（基）",
+            "dataIndex": "productNum"
+        },
+        {
+            "title": "圆钢收货量（吨）/总重（吨）",
+            "dataIndex": "roundSteelArrival/roundSteelTotal"
+        },
+        {
+            "title": "角钢收货量（吨）/总重（吨）",
+            "dataIndex": "angleSteelArrival/angleSteelTotal"
+        },
+        {
+            "title": "钢板收货量（吨）/总重（吨）",
+            "dataIndex": "steelPlateArrival/steelPlateTotal"
+        },
+        {
+            "title": "采购人",
+            "dataIndex": "purchaserId"
+        },
+        {
+            "title": "计划状态",
+            "dataIndex": "purchaseTaskStatus"
+        }
+    ],
+    "contract6": [
+        {
+            "title": "序号",
+            "dataIndex": "index"
+        },
+        {
+            "title": "操作部门",
+            "dataIndex": "deptName"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "optUserName"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "optTime"
+        },
+        {
+            "title": "操作",
+            "dataIndex": "operation"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        }
+    ]
+}

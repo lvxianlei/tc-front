@@ -2,19 +2,19 @@
     "buyingTask":[
         {
             "title": "原材料采购任务编号",
-            "dataIndex": "rawMaterialProcurementTaskNumber"
+            "dataIndex": "purchaseNumber"
         },
         {
             "title": "任务状态",
-            "dataIndex": "description"
+            "dataIndex": "taskStatus"
         },
         {
             "title": "最新状态变更时间",
-            "dataIndex": "batcheStatusUpdateTime"
+            "dataIndex": "statusUpdateTime"
         },
         {
             "title": "已完成（吨）/需求（吨）",
-            "dataIndex": "completed (tons)/required (tons)"
+            "dataIndex": "completionProgresdemand"
         },
         {
             "title": "任务单编号",
@@ -34,7 +34,7 @@
         },
         {
             "title": "采购人",
-            "dataIndex": "purchaserId"
+            "dataIndex": "purchaser"
         }
     ],
     "operatingInformation":[

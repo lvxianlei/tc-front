@@ -696,7 +696,7 @@
     },
     { // 驾驶舱-合同看板-明细
       "name": "明细",
-      "path": "/stock/viewContract/particulars",
+      "path": "/stock/viewContract/particulars/:contractId",
       "module": "./pages/stock/viewContract/particulars",
       "exact": true,
       "authority": "approvalm"
@@ -743,10 +743,17 @@
       "exact": true,
       "authority": "approvalm"
     },
-    {//合同管理-询价比
-      "name": "询价比",
+    {//合同管理-询比价
+      "name": "询比价",
       "path": "/contract-mngt/enquiryCompare",
       "module": "./pages/contract-mngt/enquiryCompare",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    {//合同管理-询比价-询价信息
+      "name": "询价信息",
+      "path": "/contract-mngt/enquiryCompare/enquiryInformation",
+      "module": "./pages/contract-mngt/enquiryInformation",
       "exact": true,
       "authority": "approvalm"
     },
