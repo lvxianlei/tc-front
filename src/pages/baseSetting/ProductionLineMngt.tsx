@@ -8,7 +8,6 @@ import React, { useState } from 'react';
 import { Space, Input, Button, Modal, Select, Form, Table, Popconfirm, message } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
-import { Link, useLocation } from 'react-router-dom';
 import RequestUtil from '../../utils/RequestUtil';
 import { useForm } from 'antd/es/form/Form';
 import styles from './ProductionLineMngt.module.less';
@@ -20,16 +19,40 @@ interface IProcessList {
 export default function ProductionLineMngt(): React.ReactNode {
     const columns = [
         {
+            key: 'index',
+            title: '序号',
+            dataIndex: 'index',
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+        },
+        {
             key: 'taskNum',
-            title: '所属部门',
+            title: '产线名称',
             width: 150,
             dataIndex: 'taskNum'
         },
         {
             key: 'internalNumber',
-            title: '制单人',
+            title: '所属车间',
             dataIndex: 'internalNumber',
             width: 120
+        },
+        {
+            key: 'name',
+            title: '所属工序',
+            width: 200,
+            dataIndex: 'name'
+        },
+        {
+            key: 'name',
+            title: '备注',
+            width: 200,
+            dataIndex: 'name'
+        },
+        {
+            key: 'name',
+            title: '制单人',
+            width: 200,
+            dataIndex: 'name'
         },
         {
             key: 'name',
@@ -152,6 +175,7 @@ export default function ProductionLineMngt(): React.ReactNode {
 
     const [ refresh, setRefresh ] = useState(false);
     const [ visible, setVisible ] = useState(false);
+    const [ title, setTitle ] = useState('新增');
     const [ form ] = useForm();
     const [ processList, setProcessList ] = useState<IProcessList[]>([]);
     return (
@@ -160,20 +184,20 @@ export default function ProductionLineMngt(): React.ReactNode {
                 path="/tower-science/loftingList/loftingPage"
                 columns={ columns }
                 headTabs={ [] }
-                extraOperation={ <Button type="primary" onClick={ () => setVisible(true) } ghost>新增</Button> }
+                extraOperation={ <Button type="primary" onClick={ () => setVisible(true) } ghost>新增产线</Button> }
                 refresh={ refresh }
                 searchFormItems={ [
                     {
                         name: 'fuzzyMsg',
                         label: '',
-                        children: <Input placeholder="请输入部门名称进行查询"/>
+                        children: <Input placeholder="请输入产线名称进行查询"/>
                     }
                 ] }
                 onFilterSubmit = { (values: Record<string, any>) => {
                     return values;
                 } }
             />
-            <Modal visible={ visible } width="40%" title="按车间设置工序顺序" okText="保存" cancelText="取消" onOk={ save } onCancel={ cancel }>
+            <Modal visible={ visible } width="40%" title={title + "产线"} okText="保存" cancelText="取消" onOk={ save } onCancel={ cancel }>
                 <Form form={ form }>
                    <Form.Item name="dept" label="所属车间" rules={[{
                         "required": true,
