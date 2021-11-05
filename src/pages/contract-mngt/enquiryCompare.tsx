@@ -173,10 +173,10 @@ export default function ContractMngt() {
             </Modal>
             <Modal title="添加原材料" width="1200px" footer={buttons1} visible={isModalVisible1} onCancel={handleCancel1}>
                 <Page
-                    path="/tower-system/material"
+                    // path="/tower-system/material"
+                    path=""
                     //表格
                     columns={[
-
                         ...contract2
                     ]}
                     //头部时间
@@ -191,7 +191,6 @@ export default function ContractMngt() {
                                 <Option value="缺料">缺料</Option>
                             </Select>
                         },
-
                         // 材质 
                         {
                             name: 'pickingPerson',

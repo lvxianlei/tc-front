@@ -1,9 +1,9 @@
 // 合同管理-原材料合同管理
 import React, { useState } from 'react'
 //page 组件
-import { Page } from "../common"
+import { CommonTable, DetailContent, DetailTitle, Page } from "../common"
 // 表格数据
-import { contract, contract1, contract2 } from "./contract.json"
+import { contract, contract1, contract2, contract7 } from "./contract.json"
 //路由
 import { Link, } from 'react-router-dom'
 // antd
@@ -18,6 +18,7 @@ export default function ContractMngt() {
     const [isModalVisible1, setIsModalVisible1] = useState(false);
     const [isModalVisible2, setIsModalVisible2] = useState(false);
     const [isModalVisible3, setIsModalVisible3] = useState(false);
+    const [isModalVisible4, setIsModalVisible4] = useState(false);
     const [contractId, setContractId] = useState(0);
     const [obj, setObj] = useState<any>({})
     const [contractNumber, setContractNumber] = useState("");//合同编号
@@ -35,6 +36,7 @@ export default function ContractMngt() {
     const [transportMethod, setTransportMethod] = useState(0);//运输方式
     const [unloadBear, setUnloadBear] = useState("");//卸车承担
     const [id, setId] = useState(0);
+    const [columnsData, setColumnsData] = useState([]);
     // 选择器
     const { Option } = Select;
     var moment = require('moment');
@@ -50,13 +52,16 @@ export default function ContractMngt() {
         setIsModalVisible(false);
     };
     const handleCancel1 = () => {
-        setIsModalVisible(false);
+        setIsModalVisible1(false);
     };
     const handleCancel2 = () => {
         setIsModalVisible2(false);
     };
     const handleCancel3 = () => {
         setIsModalVisible3(false);
+    };
+    const handleCancel4 = () => {
+        setIsModalVisible4(false);
     };
     const handleChange = (value: any) => {
         console.log(`selected ${value}`);
@@ -135,7 +140,7 @@ export default function ContractMngt() {
     // /弹窗里面的添加按钮
     const buttons1: {} | null | undefined = [
         <div>
-            <Button >关闭</Button>
+            <Button onClick={() => setIsModalVisible1(false)} >关闭</Button>
             <Button >保存</Button>
         </div>
     ]
@@ -148,6 +153,12 @@ export default function ContractMngt() {
         <div>
             <Button onClick={() => setIsModalVisible3(false)}>关闭</Button>
             <Button onClick={() => { save1(id, deliveryMethod, materialStandard, operatorDeptId, operatorId, purchasePlanId, purchasePlanNumber, signingTime, supplierId, supplierName, transportBear, transportMethod, unloadBear) }}>保存</Button>
+        </div>
+    ]
+    const buttons4: {} | null | undefined = [
+        <div>
+            <Button onClick={() => setIsModalVisible4(false)}>关闭</Button>
+            <Button>保存</Button>
         </div>
     ]
     //弹窗里面的添加
@@ -276,14 +287,14 @@ export default function ContractMngt() {
                     </Descriptions.Item>
                 </Descriptions>
                 {/* 询比价信息 */}
-                <Descriptions title="询比价信息" column={2} bordered>
-                    <Descriptions.Item label="询比价名称">  <Select placeholder="请选择 " bordered={false}></Select></Descriptions.Item>
+                <Descriptions title="询比价信息" column={1} bordered>
+                    <Descriptions.Item label="询比价名称"><div onClick={() => { setIsModalVisible4(true) }}>请选择</div></Descriptions.Item>
                 </Descriptions>
                 {/* 上传附件 */}
                 <Descriptions title="上传附件" column={2} bordered>
                     <Descriptions.Item label="附件名称附件名称附件名称附件名称附件名称">预览 下载 删除</Descriptions.Item>
                 </Descriptions>
-                {/* <Page
+                <Page
                     path=""
                     //表格
                     columns={[
@@ -306,7 +317,7 @@ export default function ContractMngt() {
                     extraOperation={<div><div>原材料信息</div><b style={{ color: "#F59A23" }}>重量合计（吨）：62.00  含税金额合计（元）：371010    不含税金额合计（元）322778.7</b> <Link to="/contract-mngt/index"><Button onClick={showModal1} style={{ marginLeft: "50px" }} >添加</Button></Link></div>}
                     //头部时间
                     searchFormItems={[]}
-                /> */}
+                />
             </Modal>
             <Modal title="添加原材料" width="1200px" footer={buttons1} visible={isModalVisible1} onCancel={handleCancel1}>
                 <Page
@@ -516,6 +527,22 @@ export default function ContractMngt() {
                     //头部时间
                     searchFormItems={[]}
                 /> */}
+            </Modal>
+            <Modal title="编辑" width="900px" footer={buttons4} visible={isModalVisible4} onCancel={handleCancel4}>
+                <DetailContent>
+                    <DetailTitle title="操作信息" />
+                    <CommonTable
+                        columns={[
+                            {
+                                title: "序号",
+                                dataIndex: "index",
+                                render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                            },
+                            ...contract7,
+                        ]}
+                        dataSource={columnsData}
+                    />
+                </DetailContent>
             </Modal>
         </div>
     )

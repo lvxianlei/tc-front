@@ -16,6 +16,7 @@ export default function EnquiryTask(): React.ReactNode {
     const [isModalVisible2, setIsModalVisible2] = useState(false);
     const [isModalVisible3, setIsModalVisible3] = useState(false);
     const [obj, setObj] = useState<any>({});
+    const [arr, setArr] = useState<any>([])
     const [id, setId] = useState(0);
     // console.log(id,"--------");
     const [inquiryId, setInquiryId] = useState(0);
@@ -98,10 +99,12 @@ export default function EnquiryTask(): React.ReactNode {
 
     const handleChange = async (value: any) => {
         console.log(`selected ${value}`);
-        // setDeptId(value);
+        setDeptId(value);
         // sinzetech-user/department/tree
         const result: { [key: string]: any } = await RequestUtil.get(`/sinzetech-user/department/tree`);
         console.log(result);
+        setArr(result);
+        setId(result[0].id);
     }
 
     const handleChange1 = async (departmentId: any) => {
@@ -293,12 +296,22 @@ export default function EnquiryTask(): React.ReactNode {
             </Descriptions>
         </Modal>
         <Modal width="700px" title="指派" visible={isModalVisible2} footer={buttons2} onCancel={handleCancel2}>
-            部门 *<Select defaultValue="lucy" style={{ width: 120 }} onChange={handleChange}>
-                <Select.Option value="1">Jack</Select.Option>
-                <Select.Option value="2">Lucy</Select.Option>
-                <Select.Option value="3">yiminghe</Select.Option>
+            部门 *<Select defaultValue="测试" style={{ width: 120 }} onChange={handleChange}>
+                {
+                    arr.map((item: any, index: any) => {
+                        return <Select.Option value={index}>{item.title}</Select.Option>
+                    })
+                }
+                <Select.Option value="1">测试</Select.Option>
             </Select>
-            人员 *<Button onClick={()=>{handleChange1(id)}}>aaa</Button>
+            人员 *<Select defaultValue="lucy" style={{ width: 120 }} onChange={handleChange1}>
+                {
+                    arr.map((item: any, index: any) => {
+                        return <Select.Option value={index}>{item.title}</Select.Option>
+                    })
+                }
+                <Select.Option value="1">测试</Select.Option>
+            </Select>
             <div>
                 计划交付时间 *<DatePicker onChange={onChange} />
             </div>

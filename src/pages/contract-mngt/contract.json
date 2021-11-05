@@ -276,5 +276,27 @@
             "title": "备注",
             "dataIndex": "description"
         }
+    ],
+    "contract7":[
+        {
+            "title": "询比价编号",
+            "dataIndex": "componentNumber"
+        },
+        {
+            "title": "用途",
+            "dataIndex": "purpose"
+        },
+        {
+            "title": "询比价状态",
+            "dataIndex": "componentStatus"
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "batcheStatusUpdateTime"
+        },
+        {
+            "title": "询价人",
+            "dataIndex": "componentPersonId"
+        }
     ]
 }

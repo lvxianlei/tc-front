@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Select, Button, Modal, Form, Popconfirm, Row, Col, TreeSelect, message, Descriptions } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { CommonTable, DetailContent, DetailTitle, Page } from '../common';
+import { CommonTable, DetailContent, DetailTitle, Page, BaseInfo } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import moment from 'moment';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { TreeNode } from 'antd/lib/tree-select';
 import useRequest from '@ahooksjs/use-request';
-import { supplierMngt, AddEditDetail } from "./supplier-mngt.json"
+import { supplierMngt, supplierMngt1, AddEditDetail } from "./supplier-mngt.json"
 // import styles from './confirm.module.less';
 
 export default function SupplierMngt(): React.ReactNode {
@@ -213,7 +213,7 @@ export default function SupplierMngt(): React.ReactNode {
             </DetailContent>
         </Modal>
         <Modal width="800px" title="创建" visible={isModalVisible1} footer={buttons1} onCancel={handleCancel1}>
-            <Descriptions title="供应商基础信息" bordered column={2} labelStyle={{ textAlign: 'center' }}>
+            {/* <Descriptions title="供应商基础信息" bordered column={2} labelStyle={{ textAlign: 'center' }}>
                 <Descriptions.Item label="供应商编号"><input style={{ border: "none", outline: "none" }} value={supplierCode} onChange={(e) => { setSupplierCode(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="供应商名称 *"><input placeholder='请输入' style={{ border: "none", outline: "none" }} value={supplierName} onChange={(e) => { setSupplierName(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="供应商类型 *">
@@ -239,7 +239,16 @@ export default function SupplierMngt(): React.ReactNode {
                         <Select.Option value="3">yiminghe</Select.Option>
                     </Select></Descriptions.Item>
                 <Descriptions.Item label="备注"><input style={{ border: "none", outline: "none" }} value={description} onChange={(e) => { setDescription(e.target.value) }} /></Descriptions.Item>
-            </Descriptions>
+            </Descriptions> */}
+            <BaseInfo
+                columns={[
+                    ...supplierMngt1
+                ]}
+                form={form}
+                dataSource={{}}
+                edit
+                col={2}
+            />
             <Descriptions title="供应商账户信息" bordered column={2} labelStyle={{ textAlign: 'center' }}>
                 <Descriptions.Item label="开户银行 *"><input style={{ border: "none", outline: "none" }} value={bankDeposit} onChange={(e) => { setBankDeposit(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="银行账号 *"><input style={{ border: "none", outline: "none" }} value={bankAccount} onChange={(e) => { setBankAccount(e.target.value) }} /></Descriptions.Item>
