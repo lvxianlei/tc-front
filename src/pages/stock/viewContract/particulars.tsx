@@ -4,7 +4,7 @@ import { Button, TableColumnProps, Select, DatePicker, Input } from 'antd'
 import { Link, useHistory, useLocation, } from 'react-router-dom'
 import { CommonTable, DetailContent, DetailTitle, Page } from '../../common'
 import { particulars } from "./viewContract.json"
-import useRequest from '_@ahooksjs_use-request@2.8.13@@ahooksjs/use-request'
+import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 
 export default function Particulars(): React.ReactNode {
