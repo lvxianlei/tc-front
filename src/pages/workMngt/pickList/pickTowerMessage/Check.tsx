@@ -32,7 +32,9 @@ export default function PickCheckList(): React.ReactNode {
         { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum', editable: true },
         { title: '理算重量（kg）', dataIndex: 'basicsTheoryWeight', key: 'basicsTheoryWeight', editable: false },
         { title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight', editable: true },
-        { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight', editable: false },
+        { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight', editable: false,  render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+            <span>{(record.basicsWeight&&record.basicsWeight!==-1?record.basicsWeight:0)*(record.basicsPartNum&&record.basicsPartNum!==-1?record.basicsPartNum:0)}</span>
+        )},
         { title: '备注', dataIndex: 'description', key: 'description', editable: true }
     ];
     const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {
@@ -71,7 +73,7 @@ export default function PickCheckList(): React.ReactNode {
     const columnsSetting = columns.map(col => {
         return {
             ...col,
-            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+            render: col.dataIndex==='totalWeight'? col.render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 col.dataIndex === 'index' ? index + 1 
                 : !col.editable ? _ 
                 : <p onDoubleClick={ (e) => { questionnaire( _, record, col, checkColor(record, col.dataIndex)) }} className={ checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow : '' }>{ _ }</p>
