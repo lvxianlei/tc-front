@@ -16,7 +16,7 @@
         },
         {
             "title": "关联收货单",
-            "dataIndex": ""
+            "dataIndex": "receipt"
         },
         {
             "title": "票据金额",
@@ -30,7 +30,8 @@
         {
             "title": "收票日",
             "dataIndex": "collectInvoiceDate",
-            "type": "string"
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "所属供应商",

@@ -12,7 +12,7 @@
         },
         {
             "title": "供应商",
-            "dataIndex": "supplierId",
+            "dataIndex": "supplierName",
             "type": "string"
         },
         {

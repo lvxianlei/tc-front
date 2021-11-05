@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Button, message, Spin, Modal, Row, Col } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, CommonTable } from '../../common'
-import { ConstructionDetails, ProductionIngredients } from "./productionData.json"
+import { ConstructionDetails, ProductionIngredients, ComponentDetail } from "./productionData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 export default function Overview() {
@@ -50,20 +50,20 @@ export default function Overview() {
             </Row>
             <Row gutter={10}>
                 <Col span={12}>
-                    <CommonTable columns={ConstructionDetails} dataSource={[]} />
+                    <CommonTable columns={ConstructionDetails} dataSource={data?.detail || []} pagination={false} />
                 </Col>
                 <Col span={12}>
-                    <CommonTable columns={ConstructionDetails} dataSource={[]} />
+                    <CommonTable columns={ComponentDetail} dataSource={data?.detail || []} pagination={false} />
                 </Col>
             </Row>
             <DetailTitle title="生产配料方案" />
-            <CommonTable columns={ConstructionDetails} dataSource={[]} />
+            <CommonTable columns={ProductionIngredients} dataSource={[]} />
         </Modal>
         <DetailContent title={[
             <Button key="export" type="primary" style={{ marginRight: 16 }}>导出</Button>,
             <Button key="peiliao" type="primary" ghost onClick={() => setVisible(true)}>配料</Button>
         ]} operation={[
-            <Button type="primary" ghost key="cancel" onClick={() => history.go(-1)}>完成</Button>
+            <Button type="primary" ghost key="cancel" onClick={() => history.go(-1)}>返回</Button>
         ]}>
             <Spin spinning={loading}>
                 <CommonTable columns={ConstructionDetails.map((item: any) => {

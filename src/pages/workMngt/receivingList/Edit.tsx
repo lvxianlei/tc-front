@@ -14,9 +14,10 @@ const ChooseModal = forwardRef(({ id }: ChooseModalProps, ref) => {
     const [currentId, setCurrentId] = useState<string>("")
     const [oprationType, setOprationType] = useState<"select" | "remove">("select")
     const [form] = Form.useForm()
-    useImperativeHandle(ref, () => ({ dataSource: chooseList }), [ref, JSON.stringify(chooseList)])
 
-    const { loading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    useImperativeHandle(ref, () => ({ dataSource: chooseList, resetFields }), [ref, JSON.stringify(chooseList)])
+
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/${id}`)
             setSelectList(result?.materialContractDetailVos)
@@ -26,44 +27,62 @@ const ChooseModal = forwardRef(({ id }: ChooseModalProps, ref) => {
         }
     }), { refreshDeps: [id] })
 
+    const resetFields = () => {
+        setCurrentId("")
+        setChooseList([])
+        setSelectList(data?.materialContractDetailVos || [])
+    }
+
     const handleRemove = async (id: string) => {
         const formData = await form.validateFields()
         const currentData = chooseList.find((item: any) => item.id === id)
         const currentSelectData = chooseList.find((item: any) => item.id === id)
-        if ((currentData.num - formData.num) <= 0) {
+        if ((currentData.num - formData.num) === 0) {
             setChooseList(chooseList.filter((item: any) => item.id !== id))
             if (currentSelectData) {
                 setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
             } else {
                 setSelectList([...selectList, { ...currentData, num: formData.num }])
             }
+        } else if ((currentData.num - formData.num) < 0) {
+            message.error("移除数量不能大于已选数量...")
+            return
         } else {
             setChooseList(selectList.map((item: any) => item.id === id ? ({ ...item, num: item.num - formData.num }) : item))
+            if (currentSelectData) {
+                setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
+            } else {
+                setSelectList([...selectList, { ...currentData, num: formData.num }])
+            }
         }
+        setVisible(false)
+        form.resetFields()
     }
 
     const handleSelect = async (id: string) => {
         const formData = await form.validateFields()
         const currentData = selectList.find((item: any) => item.id === id)
         const currentChooseData = chooseList.find((item: any) => item.id === id)
-        if ((currentData.num - formData.num) <= 0) {
-            console.log("<=0")
+        if ((currentData.num - formData.num) === 0) {
             setSelectList(selectList.filter((item: any) => item.id !== id))
             if (currentChooseData) {
                 setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
             } else {
                 setChooseList([...chooseList, { ...currentData, num: formData.num }])
             }
+        } else if ((currentData.num - formData.num) < 0) {
+            message.error("选择数量不能大于可选数量...")
+            return
         } else {
             setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, num: item.num - formData.num }) : item))
-            if (currentData) {
-                console.log("currentData")
+            if (currentChooseData) {
                 setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
             } else {
-                console.log("else currentData")
                 setChooseList([...chooseList, { ...currentData, num: formData.num }])
             }
         }
+        setVisible(false)
+        form.resetFields()
     }
 
     const handleModalOk = () => oprationType === "select" ? handleSelect(currentId) : handleRemove(currentId)
@@ -87,7 +106,7 @@ const ChooseModal = forwardRef(({ id }: ChooseModalProps, ref) => {
                         ]}
                         style={{ width: "100%" }}
                         name="num"
-                        label="输入数量"><InputNumber /></Form.Item></Col>
+                        label="输入数量"><InputNumber min={1} step={1} /></Form.Item></Col>
                 </Row>
             </Form>
         </Modal>
@@ -133,11 +152,33 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const handleModalOk = () => {
         const dataSource: any[] = modalRef.current?.dataSource
         setCargoData(dataSource)
+        setVisible(false)
     }
 
-    const onSubmit = () => {
+    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/receiveStock/receiveStock`, { ...data })
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
 
-    }
+    const onSubmit = () => new Promise(async (resole, reject) => {
+        try {
+            const baseFormData = await form.validateFields()
+            await saveRun({
+                ...baseFormData,
+                supplierId: baseFormData.supplierName.id,
+                supplierName: baseFormData.supplierName.value,
+                contractNumber: baseFormData.contractNumber.id,
+                lists: cargoData
+            })
+            resole(true)
+        } catch (error) {
+            reject(false)
+        }
+    })
 
     const resetFields = () => {
         form.resetFields()
