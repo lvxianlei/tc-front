@@ -61,7 +61,7 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
                 total: 0,
                 showSizeChanger: false
             },
-            confirmTitle: "选择明细"
+            confirmTitle: "选择人员"
         };
     }
 

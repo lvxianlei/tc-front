@@ -1498,6 +1498,41 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 车间工作管理-加工任务面板
+      "name": "加工任务面板",
+      "path": "/workshopManagement/processingTask",
+      "module": "./pages/mngt-workshop/processingTask/ProcessingTaskList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 车间工作管理-试装计划任务列表
+      "name": "试装计划任务列表",
+      "path": "/workshopManagement/trialAssemblyTask",
+      "module": "./pages/mngt-workshop/trialAssemblyTask/TrialAssemblyTaskList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 车间工作管理-试装计划任务列表-构件明细
+      "name": "构件明细",
+      "path": "/workshopManagement/trialAssemblyTask/componentDetail/:id",
+      "module": "./pages/mngt-workshop/ComponentDetails",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 车间工作管理-车间转运接收列表
+      "name": "车间转运接收列表",
+      "path": "/workshopManagement/workshopTransfer",
+      "module": "./pages/mngt-workshop/workshopTransfer/WorkshopTransferList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 车间工作管理-车间转运接收列表-构件明细
+      "name": "构件明细",
+      "path": "/workshopManagement/workshopTransfer/componentDetail/:id",
+      "module": "./pages/mngt-workshop/ComponentDetails",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 包装车间-加工任务面板
       "name": "加工任务面板",
       "path": "/packagingWorkshop/processingTask",
