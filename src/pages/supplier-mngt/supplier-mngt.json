@@ -1,10 +1,6 @@
 {
     "supplierMngt": [
         {
-            "title": "序号",
-            "dataIndex": "index"
-        },
-        {
             "title": "供应商编号",
             "dataIndex": "supplierCode"
         },
@@ -22,7 +18,7 @@
         },
         {
             "title": "联系电话",
-            "dataIndex": "contactNumber"
+            "dataIndex": "contactManTel"
         },
         {
             "title": "质量保证体系",
@@ -34,7 +30,7 @@
         },
         {
             "title": "开户银行",
-            "dataIndex": "depositBank"
+            "dataIndex": "bankDeposit"
         }
     ],
     "AddEditDetail":[

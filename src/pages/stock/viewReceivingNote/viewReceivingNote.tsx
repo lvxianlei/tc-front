@@ -3,6 +3,7 @@ import { Button, TableColumnProps, Select, DatePicker, Input, Descriptions, Moda
 import { Link, useHistory, } from 'react-router-dom'
 import { CommonTable, DetailContent, DetailTitle, Page } from '../../common'
 import { viewReceivingNote, operatingInformation, ApprovalInformation, operatingInformation1 } from "./viewReceivingNote.json"
+import RequestUtil from '../../../utils/RequestUtil'
 //状态
 const projectType = [
     {
@@ -28,8 +29,13 @@ export default function ViewReceivingNote(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
     const { RangePicker } = DatePicker;
     const [columnsData, setColumnsData] = useState([]);
+    const [columnsData1, setColumnsData1] = useState([]);
+    const [columnsData2, setColumnsData2] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisible1, setIsModalVisible1] = useState(false);
+    const [obj, setObj] = useState<any>({})
+    const [obj1, setObj1] = useState<any>({});
+    const [receiptVos, setReceiptVos] = useState<any>([]);
 
     const history = useHistory();
 
@@ -54,6 +60,20 @@ export default function ViewReceivingNote(): React.ReactNode {
     const handleCancel1 = () => {
         setIsModalVisible1(false);
     };
+    const billNumber = async (invoiceId: number) => {
+        setIsModalVisible1(true)
+        const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/invoice/${invoiceId}`);
+        setObj(result);
+        setColumnsData(obj.operationRecordInfoVos);
+        setReceiptVos(obj.receiptVos);
+    }
+    const pleasePayNumber = async (applyPaymentId: number) => {
+        setIsModalVisible(true)
+        const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/applyPayment/${applyPaymentId}`)
+        console.log(result);
+        setObj1(result);
+        setColumnsData1(result.operationRecordInfoVos)
+    }
 
     const buttons: {} | null | undefined = [
         <div>
@@ -69,8 +89,7 @@ export default function ViewReceivingNote(): React.ReactNode {
     return (
         <div>
             <Page
-                // path="/tower-market/projectInfo"
-                path=""
+                path="/tower-storage/receiveStock/list"
                 columns={[
                     {
                         key: 'index',
@@ -79,15 +98,63 @@ export default function ViewReceivingNote(): React.ReactNode {
                         width: 50,
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
-                    ...viewReceivingNote,
                     {
-                        title: "操作",
-                        dataIndex: "opration",
-                        render: (_: any, records: any) => <>
-                            <Button onClick={() => history.push(`/stock/viewReceivingNote/viewReceivingNoteDetail`)}>HT202101-010</Button>
-                            <Button onClick={() => { }}>QK-20210924-001</Button>
-                            <Button>PJ-20210924-001</Button>
-                        </>
+                        title: "供应商",
+                        dataIndex: "supplierName"
+                    },
+                    {
+                        title: "收货单编号",
+                        dataIndex: "receiveNumber",
+                        render: (text, record: any) => {
+                            // console.log(record);
+                            return <div>
+                                <Button type="link" onClick={() => history.push(`/stock/rawMaterialWarehousing/detail/${record.id}`)}>{record.receiveNumber}</Button>
+                            </div>
+                        }
+                    },
+                    {
+                        title: "收货完成时间",
+                        dataIndex: "receivingTime"
+                    },
+                    {
+                        title: "重量合集(吨)",
+                        dataIndex: "weight"
+                    },
+                    {
+                        title: "价税合计(元)",
+                        dataIndex: "price"
+                    },
+                    {
+                        title: "运费(元)",
+                        dataIndex: "freight"
+                    },
+                    {
+                        title: "贷款运费合计(元)",
+                        dataIndex: "price"
+                    },
+                    {
+                        title: "关联请款编号",
+                        dataIndex: "pleasePayNumber",
+                        render: (text, record: any) => {
+                            return <div>
+                                {/* pleasePayId */}
+                                {/*  */}
+                                <Button type="link" onClick={() => { pleasePayNumber(record.pleasePayId) }}>{record.pleasePayNumber}</Button>
+                            </div>
+                        }
+                    },
+                    {
+                        title: "关联票据编号",
+                        dataIndex: "billNumber",
+                        render: (text, record: any) => {
+                            return <div>
+                                <Button type="link" onClick={() => { billNumber(record.invoiceId) }}>{record.billNumber}</Button>
+                            </div>
+                        }
+                    },
+                    {
+                        title: "付款状态",
+                        dataIndex: "invoiceStatus"
                     }
                 ]}
                 filterValue={filterValue}
@@ -115,14 +182,14 @@ export default function ViewReceivingNote(): React.ReactNode {
             />
             <Modal width="700px" title="详情" visible={isModalVisible} footer={buttons} onCancel={handleCancel} >
                 <Descriptions title="申请信息" bordered column={2} labelStyle={{ textAlign: 'center' }}>
-                    <Descriptions.Item label="所属供应商">1</Descriptions.Item>
-                    <Descriptions.Item label="请款金额">2</Descriptions.Item>
-                    <Descriptions.Item label="关联票据">3</Descriptions.Item>
-                    <Descriptions.Item label="关联收货单">4</Descriptions.Item>
-                    <Descriptions.Item label="开户银行">5</Descriptions.Item>
-                    <Descriptions.Item label="银行账号">6</Descriptions.Item>
-                    <Descriptions.Item label="付款方式">7</Descriptions.Item>
-                    <Descriptions.Item label="请款类别">8</Descriptions.Item>
+                    <Descriptions.Item label="所属供应商">{obj1.supplierName}</Descriptions.Item>
+                    <Descriptions.Item label="请款金额">{obj1.pleasePayAmount}</Descriptions.Item>
+                    <Descriptions.Item label="关联票据">{obj1.billNumbers}</Descriptions.Item>
+                    <Descriptions.Item label="关联收货单">{obj1.receiptNumbers}</Descriptions.Item>
+                    <Descriptions.Item label="开户银行">{obj1.openBank}</Descriptions.Item>
+                    <Descriptions.Item label="银行账号">{obj1.openBankNumber}</Descriptions.Item>
+                    <Descriptions.Item label="付款方式">{obj1.paymentMethod}</Descriptions.Item>
+                    <Descriptions.Item label="请款类别">{obj1.pleasePayType}</Descriptions.Item>
                 </Descriptions>
                 <DetailContent>
                     <DetailTitle title="审批信息" />
@@ -137,7 +204,7 @@ export default function ViewReceivingNote(): React.ReactNode {
                             },
                             ...ApprovalInformation,
                         ]}
-                        dataSource={columnsData}
+                        dataSource={columnsData2}
                     />
                 </DetailContent>
                 <DetailContent>
@@ -153,20 +220,20 @@ export default function ViewReceivingNote(): React.ReactNode {
                             },
                             ...operatingInformation,
                         ]}
-                        dataSource={columnsData}
+                        dataSource={columnsData1}
                     />
                 </DetailContent>
             </Modal>
-            <Modal width="700px" title="创建" visible={isModalVisible1} footer={buttons1} onCancel={handleCancel1} >
+            <Modal width="700px" title="详情" visible={isModalVisible1} footer={buttons1} onCancel={handleCancel1} >
                 <Descriptions title="票据信息" bordered column={2} labelStyle={{ textAlign: 'right' }}>
-                    <Descriptions.Item label="票据编号">1</Descriptions.Item>
-                    <Descriptions.Item label="所属供应商">2</Descriptions.Item>
-                    <Descriptions.Item label="开票单位">3</Descriptions.Item>
-                    <Descriptions.Item label="发票号">4</Descriptions.Item>
-                    <Descriptions.Item label="发票类型">5</Descriptions.Item>
-                    <Descriptions.Item label="发票金额">6</Descriptions.Item>
-                    <Descriptions.Item label="收货单">7</Descriptions.Item>
-                    <Descriptions.Item label="收票日">8</Descriptions.Item>
+                    <Descriptions.Item label="票据编号">{obj.billNumber}</Descriptions.Item>
+                    <Descriptions.Item label="所属供应商">{obj.supplierName}</Descriptions.Item>
+                    <Descriptions.Item label="开票单位">{obj.invoiceUnit}</Descriptions.Item>
+                    <Descriptions.Item label="发票号">{obj.invoiceNumber}</Descriptions.Item>
+                    <Descriptions.Item label="发票类型">{obj.invoiceType}</Descriptions.Item>
+                    <Descriptions.Item label="发票金额">{obj.invoiceAmount}</Descriptions.Item>
+                    <Descriptions.Item label="收货单">{ }</Descriptions.Item>
+                    <Descriptions.Item label="收票日">{obj.collectInvoiceDate}</Descriptions.Item>
                 </Descriptions>
                 <Descriptions title="相关附件" bordered column={1} labelStyle={{ textAlign: 'center' }}>
                     <Descriptions.Item label="附件名称附件名称附件名称附件名称附件名称">
@@ -193,9 +260,6 @@ export default function ViewReceivingNote(): React.ReactNode {
                     />
                 </DetailContent>
             </Modal>
-            <Button onClick={() => history.push(`/stock/viewReceivingNote/viewReceivingNoteDetail`)}>HT202101-010</Button>
-            <Button onClick={() => { setIsModalVisible(true) }}>QK-20210924-001</Button>
-            <Button onClick={() => { setIsModalVisible1(true) }}>PJ-20210924-001</Button>
         </div>
     )
 }

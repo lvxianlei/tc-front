@@ -56,6 +56,8 @@ const SecuritySetting = (): React.ReactNode => {
                             className='yello'
                             onClick={() => {
                                 setIsModal(true)
+                                setSafetyStock('')
+                                setAlarmStock('')
                                 setId(item.id)
                             }}
                         >编辑</span>
@@ -91,6 +93,7 @@ const SecuritySetting = (): React.ReactNode => {
             alarmStock,
         })
         message.success('操作成功')
+        getColumnsData()
         closeModal()
     }
     // 关闭弹窗

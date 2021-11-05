@@ -97,7 +97,7 @@
         },
         {
             "title": "原材料名称",
-            "dataIndex": "projectName"
+            "dataIndex": "materialName"
         },
         {
             "title": "规格",

@@ -14,7 +14,8 @@ export default function MaterialList() {
     return (
         <div>
             <Page
-                path="/tower-supply/materialPurchaseTask/inquirer"
+                // path="/tower-supply/materialPurchaseTask/inquirer"
+                path=""
                 //表格
                 columns={[
                     {
