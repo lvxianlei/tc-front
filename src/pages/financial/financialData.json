@@ -1,11 +1,6 @@
 {
     "baseinfo": [
         {
-            "title": "序号",
-            "dataIndex": "index",
-            "type": "string"
-        },
-        {
             "title": "票据编号",
             "dataIndex": "billNumber",
             "type": "string"
@@ -21,7 +16,7 @@
         },
         {
             "title": "关联收货单",
-            "dataIndex": ""
+            "dataIndex": "receipt"
         },
         {
             "title": "票据金额",
@@ -35,11 +30,12 @@
         {
             "title": "收票日",
             "dataIndex": "collectInvoiceDate",
-            "type": "string"
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "所属供应商",
-            "dataIndex": "description"
+            "dataIndex": "supplierName"
         },
         {
             "title": "发票类型",
@@ -48,7 +44,26 @@
         },
         {
             "title": "状态",
-            "dataIndex": "status"
+            "dataIndex": "status",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "已收票",
+                    "value": 1
+                },
+                {
+                    "label": "待付款",
+                    "value": 2
+                },
+                {
+                    "label": "已付款",
+                    "value": 3
+                },
+                {
+                    "label": "已作废",
+                    "value": 4
+                }
+            ]
         },
         {
             "title": "最新状态变更时间",

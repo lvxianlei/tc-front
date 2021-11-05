@@ -1,12 +1,36 @@
-import React, { useState } from 'react'
-import { Input, DatePicker, Select, Button, Form } from 'antd'
-import { useParams } from 'react-router-dom'
-import { ComponentDetails } from "./buyBurdening.json"
-import { Page } from '../../common';
-
+import React, { useState, useRef } from 'react'
+import { Input, DatePicker, Select, Button, Form, Modal, Row, Col, message } from 'antd'
+import { useParams, useHistory } from 'react-router-dom'
+import { ComponentDetails, Batchingschemed } from "./buyBurdening.json"
+import { CommonTable, Page } from '../../common'
+import Batcher from "./Batcher"
+import useRequest from '@ahooksjs/use-request'
+import RequestUtil from '../../../utils/RequestUtil'
 export default function EnquiryList(): React.ReactNode {
+    const history = useHistory()
     const params = useParams<{ id: string }>()
-    const [filterValue, setFilterValue] = useState({ purchaseTaskTowerId: params.id });
+    const [visible, setVisible] = useState<boolean>(false)
+    const ref = useRef<{ data: any }>()
+    const [filterValue, setFilterValue] = useState({ purchaseTaskTowerId: params.id })
+
+    const { run } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            const detail: any = await RequestUtil.put(`/tower-supply/purchaseTaskTower/finish/${params.id}`)
+            resole(detail)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const { run: saveRun } = useRequest<any>((data: any) => new Promise(async (resole, reject) => {
+        try {
+            const detail: any = await RequestUtil.post(`/tower-supply/purchaseBatchingScheme`, { ...data, id: params.id })
+            resole(detail)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -18,7 +42,39 @@ export default function EnquiryList(): React.ReactNode {
         return value
     }
 
+    const handleSuccess = () => {
+        Modal.confirm({
+            title: "提交/完成",
+            content: "确认提交/完成？",
+            okText: "提交/完成",
+            onOk() {
+                return new Promise(async (resove, reject) => {
+                    try {
+                        const result = await run()
+                        resove(result)
+                    } catch (error) {
+                        reject(false)
+                    }
+                })
+            }
+        })
+    }
+
+    const handleModalOk = () => new Promise(async (resove, rejects) => {
+        try {
+            const result = await saveRun({ ...ref.current?.data })
+            resove(true)
+            message.success("保存成功...")
+            setVisible(false)
+        } catch (error) {
+            rejects(false)
+        }
+    })
+
     return <>
+        <Modal title="配料" width={1011} visible={visible} okText="保存并提交" onOk={handleModalOk} onCancel={() => setVisible(false)}>
+            <Batcher id={params.id} ref={ref} />
+        </Modal>
         <Page
             path="/tower-supply/purchaseTaskTower/component"
             columns={ComponentDetails.map((item: any) => {
@@ -29,9 +85,9 @@ export default function EnquiryList(): React.ReactNode {
             })}
             extraOperation={<>
                 <Button type="primary" ghost>导出</Button>
-                <Button type="primary" ghost>完成</Button>
-                <Button type="primary" ghost>配料</Button>
-                <Button type="primary" ghost>返回上一级</Button>
+                <Button type="primary" ghost onClick={handleSuccess}>完成</Button>
+                <Button type="primary" ghost onClick={() => setVisible(true)}>配料</Button>
+                <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
             </>}
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}

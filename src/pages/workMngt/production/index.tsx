@@ -18,7 +18,7 @@ export default function Invoicing() {
     }
 
     return <>
-        <Modal title="配料方案" visible={visible} width={1011} onCancel={() => setVisible(false)}>
+        <Modal title="配料方案" visible={visible} width={1011} onOk={() => setVisible(false)} onCancel={() => setVisible(false)}>
             <Overview id={detailId} />
         </Modal>
         <Page

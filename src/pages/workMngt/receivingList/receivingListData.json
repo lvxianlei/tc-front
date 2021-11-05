@@ -12,7 +12,7 @@
         },
         {
             "title": "供应商",
-            "dataIndex": "supplierId",
+            "dataIndex": "supplierName",
             "type": "string"
         },
         {
@@ -54,8 +54,41 @@
         },
         {
             "title": "供应商",
-            "dataIndex": "supplierId",
-            "type": "string"
+            "dataIndex": "supplierName",
+            "type": "popTable",
+            "path": "/tower-supply/supplier",
+            "width": 1011,
+            "value": "supplierName",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "供应商编号",
+                    "dataIndex": "supplierCode"
+                },
+                {
+                    "title": "供应商名称",
+                    "dataIndex": "supplierName"
+                },
+                {
+                    "title": "联系人",
+                    "dataIndex": "contactMan"
+                },
+                {
+                    "title": "联系电话",
+                    "dataIndex": "contactNumber"
+                },
+                {
+                    "title": "供货产品",
+                    "dataIndex": "supplyProducts"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择供应商..."
+                }
+            ]
         },
         {
             "title": "联系人",
@@ -70,12 +103,61 @@
         {
             "title": "合同编号",
             "dataIndex": "contractNumber",
-            "type": "string"
+            "type": "popTable",
+            "path": "/tower-supply/materialContract",
+            "width": 1011,
+            "value": "contractNumber",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "合同编号",
+                    "dataIndex": "contractNumber",
+                    "search": true
+                },
+                {
+                    "title": "合同名称",
+                    "dataIndex": "contractName"
+                },
+                {
+                    "title": "业主单位",
+                    "dataIndex": "customerCompany",
+                    "search": true
+                },
+                {
+                    "title": "合同签订单位",
+                    "dataIndex": "signCustomerName"
+                },
+                {
+                    "title": "合同签订日期",
+                    "dataIndex": "signContractTime",
+                    "type": "date",
+                    "format": "YYYY-MM-DD"
+                },
+                {
+                    "title": "要求交货日期",
+                    "dataIndex": "deliveryTime",
+                    "type": "date",
+                    "format": "YYYY-MM-DD"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择合同编号"
+                }
+            ]
         },
         {
             "title": "约定到货时间",
             "dataIndex": "startReceiveTime",
-            "type": "string"
+            "type": "date",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择到货时间"
+                }
+            ]
         },
         {
             "title": "数量合计",
@@ -145,92 +227,88 @@
             "type": "number"
         }
     ],
-    "AddList": [
+    "SelectedArea": [
         {
-            "SelectedArea": [
-                {
-                    "title": "材质",
-                    "dataIndex": "materialTexture",
-                    "type": "integer"
-                },
-                {
-                    "title": "标准",
-                    "dataIndex": "standard",
-                    "type": "integer"
-                },
-                {
-                    "title": "规格",
-                    "dataIndex": "spec",
-                    "type": "integer"
-                },
-                {
-                    "title": "配料品名",
-                    "dataIndex": "doseName",
-                    "type": "string"
-                },
-                {
-                    "title": "长度",
-                    "dataIndex": "length",
-                    "type": "number"
-                },
-                {
-                    "title": "宽度",
-                    "dataIndex": "width",
-                    "type": "number"
-                },
-                {
-                    "title": " 单个重量 （吨）",
-                    "dataIndex": "weight",
-                    "type": "number"
-                },
-                {
-                    "title": "已选数量",
-                    "dataIndex": "selectedquantity",
-                    "type": "integer"
-                }
-            ],
-            "WaitingArea": [
-                {
-                    "title": "材质",
-                    "dataIndex": "materialTexture",
-                    "type": "integer"
-                },
-                {
-                    "title": "标准",
-                    "dataIndex": "standard",
-                    "type": "integer"
-                },
-                {
-                    "title": "规格",
-                    "dataIndex": "spec",
-                    "type": "integer"
-                },
-                {
-                    "title": "配料品名",
-                    "dataIndex": "doseName",
-                    "type": "string"
-                },
-                {
-                    "title": "长度",
-                    "dataIndex": "length",
-                    "type": "number"
-                },
-                {
-                    "title": "宽度",
-                    "dataIndex": "width",
-                    "type": "number"
-                },
-                {
-                    "title": " 单个重量 （吨）",
-                    "dataIndex": "weight",
-                    "type": "number"
-                },
-                {
-                    "title": "已选数量",
-                    "dataIndex": "selectedquantity",
-                    "type": "integer"
-                }
-            ]
+            "title": "材质",
+            "dataIndex": "materialTexture",
+            "type": "integer"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandard",
+            "type": "integer"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec",
+            "type": "integer"
+        },
+        {
+            "title": "配料品名",
+            "dataIndex": "materialName",
+            "type": "string"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "宽度",
+            "dataIndex": "width",
+            "type": "number"
+        },
+        {
+            "title": " 单个重量 （吨）",
+            "dataIndex": "weight",
+            "type": "number"
+        },
+        {
+            "title": "已选数量",
+            "dataIndex": "num",
+            "type": "number"
+        }
+    ],
+    "Selected": [
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture",
+            "type": "integer"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandard",
+            "type": "integer"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec",
+            "type": "integer"
+        },
+        {
+            "title": "配料品名",
+            "dataIndex": "materialName",
+            "type": "string"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "宽度",
+            "dataIndex": "width",
+            "type": "number"
+        },
+        {
+            "title": " 单个重量 （吨）",
+            "dataIndex": "weight",
+            "type": "number"
+        },
+        {
+            "title": "可选数量",
+            "dataIndex": "num",
+            "type": "number"
         }
     ],
     "DetailPage": [
