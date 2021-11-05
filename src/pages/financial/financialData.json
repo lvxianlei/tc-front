@@ -1,6 +1,11 @@
 {
     "baseinfo": [
         {
+            "title": "序号",
+            "dataIndex": "index",
+            "type": "string"
+        },
+        {
             "title": "票据编号",
             "dataIndex": "billNumber",
             "type": "string"
@@ -133,7 +138,7 @@
             ]
         },
         {
-            "title": "关联收货单",
+            "title": "收货单",
             "dataIndex": "receiptVos",
             "type": "popTable",
             "path": "/tower-storage/receiveStock",

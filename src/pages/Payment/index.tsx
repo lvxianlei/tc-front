@@ -30,7 +30,7 @@ export default function Payment() {
     const handleDelete = (id: string) => {
         Modal.confirm({
             title: "删除",
-            content: "确定删除此开票申请吗？",
+            content: "确定删除此付款申请吗？",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
                     resove(await deleteRun(id))

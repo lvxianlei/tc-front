@@ -213,8 +213,7 @@ export default function Edit() {
                 dataSource={generateInitValues(baseInfoHead)} edit />
 
             <DetailTitle title="发票信息" />
-            <BaseInfo form={invoicForm} columns={invoiceHead} dataSource={data?.invoicingInfoVo || {}} edit />
-
+            <BaseInfo form={invoicForm} columns={invoiceHead} dataSource={data?.invoicingInfoVo || {}} edit/>
             <DetailTitle title="开票明细" operation={[]} />
 
             <EditTable onChange={handleEditTableChange} form={billingForm} columns={billingHead} dataSource={data?.invoicingDetailDtos || []} />
