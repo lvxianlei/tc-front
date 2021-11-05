@@ -2,22 +2,23 @@
 /**
  * @author zyc
  * @copyright © 2021 
- * @description 车间派工设备管理
+ * @description 车间班组管理
  */
 
 import React, { useState } from 'react';
 import { Space, Input, Button, Modal, Select, Form, Table, Popconfirm, message, Row, Col } from 'antd';
-import { Page } from '../common';
+import { CommonTable, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
 import { useForm } from 'antd/es/form/Form';
-import styles from './WorkshopEquipmentMngt.module.less';
+ import styles from './WorkshopEquipmentMngt.module.less';
+import WorkshopUserSelectionComponent from '../../components/WorkshopUserModal';
 
 interface IProcessList {
     readonly time?: string;
     readonly atime?: string;
 }
-export default function WorkshopEquipmentMngt(): React.ReactNode {
+export default function WorkshopTeamMngt(): React.ReactNode {
     const columns = [
         {
             key: 'index',
@@ -33,12 +34,6 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
             dataIndex: 'taskNum'
         },
         {
-            key: 'internalNumber',
-            title: '派工设备名称',
-            dataIndex: 'internalNumber',
-            width: 120
-        },
-        {
             key: 'name',
             title: '工序',
             width: 200,
@@ -46,13 +41,13 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
         },
         {
             key: 'name',
-            title: '设备所属产线',
+            title: '班组名称',
             width: 200,
             dataIndex: 'name'
         },
         {
             key: 'name',
-            title: '设备状态',
+            title: '所属产线',
             width: 200,
             dataIndex: 'name'
         },
@@ -79,6 +74,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                     <Button type="link" onClick={ () => {
                         getList();
                         setVisible(true);
+                        setTitle('编辑');
                     } }>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
@@ -98,15 +94,54 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
         }
     ]
 
+    const tableColumns = [
+        {
+            key: 'time',
+            title: '姓名',
+            dataIndex: 'time'
+        },
+        {
+            key: 'time',
+            title: '职位',
+            dataIndex: 'time'
+        },
+        {
+            key: 'operation',
+            title: '操作',
+            dataIndex: 'operation',
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Space direction="horizontal" size="small">
+                    <Popconfirm
+                        title="确认删除?"
+                        onConfirm={ () => delRow(index) }
+                        okText="确认"
+                        cancelText="取消"
+                    >
+                        <Button type="link">删除</Button>
+                    </Popconfirm>
+                </Space>
+            )
+        }
+    ]
+
     const save = () => {
         form.validateFields().then(res => {
             console.log(form.getFieldsValue(true));
+            console.log(userList);
         })
     }
 
     const cancel = () => {
         setVisible(false);
         form.resetFields();
+        setUserList([]);
+        setDisabled(false);
+        setDisabled2(false);
+    }
+
+    const delRow = (index: number) => {
+        userList.splice(index, 1);
+        setUserList([...userList]);
     }
 
     const getList = async () => {
@@ -121,6 +156,8 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
     const [ filterValue, setFilterValue ] = useState({});
     const [ disabled, setDisabled] = useState(false);
     const [ disabled2, setDisabled2 ] = useState(false);
+    const [ userList, setUserList ] = useState([]);
+    const [ title, setTitle ] = useState('新增');
     return (
         <>
             <Form form={searchForm} layout="inline" style={{margin:'20px'}} onFinish={(value: Record<string, any>) => {
@@ -128,7 +165,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                 setRefresh(!refresh);
             }}>
                 <Form.Item label='' name='materialName'>
-                    <Input placeholder="请输入派工设备进行查询"/>
+                    <Input placeholder="请输入派工设备/班组名称进行查询"/>
                 </Form.Item>
                 <Form.Item label='选择车间' name='a'>
                     <Select placeholder="请选择" className={ styles.width150 } onChange={ (e) => {
@@ -143,12 +180,6 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                     <Select placeholder="请选择" className={ styles.width150 } onChange={ (e) => {
                         console.log(e)
                     } }>
-                        <Select.Option value={ 1 } key="4">全部</Select.Option>
-                        <Select.Option value={ 2 } key="">全部222</Select.Option>
-                    </Select>
-                </Form.Item>
-                <Form.Item label='状态' name='b'>
-                    <Select placeholder="请选择" className={ styles.width150 }>
                         <Select.Option value={ 1 } key="4">全部</Select.Option>
                         <Select.Option value={ 2 } key="">全部222</Select.Option>
                     </Select>
@@ -169,10 +200,10 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                 searchFormItems={ [] }
                 requestData={{ ...filterValue }}
             />
-            <Modal visible={ visible } width="60%" title="按车间设置工序顺序" okText="保存" cancelText="取消" onOk={ save } onCancel={ cancel }>
-                <Form form={ form } labelCol={{ span: 8 }}>
+            <Modal visible={ visible } width="40%" title={ title + "班组" } okText="保存" cancelText="取消" onOk={ save } onCancel={ cancel }>
+                <Form form={ form } labelCol={{ span: 6 }}>
                     <Row>
-                        <Col span={ 8 }>
+                        <Col span={ 12 }>
                             <Form.Item name="dept" label="所属车间" rules={[{
                                     "required": true,
                                     "message": "请选择所属车间"
@@ -186,7 +217,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                                 </Select>
                             </Form.Item>
                         </Col>
-                        <Col span={ 8 }>
+                        <Col span={ 12 }>
                             <Form.Item name="dept" label="工序" rules={[{
                                     "required": true,
                                     "message": "请选择工序"
@@ -200,17 +231,17 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                                 </Select>
                             </Form.Item>
                         </Col>
-                        <Col span={ 8 }>
-                            <Form.Item name="dept" label="派工设备名称" rules={[{
+                    </Row>
+                    <Row>
+                        <Col span={ 12 }>
+                            <Form.Item name="dept" label="班组名称" rules={[{
                                     "required": true,
-                                    "message": "请输入派工设备名称"
+                                    "message": "请输入班组名称"
                                 }]}>
                                 <Input maxLength={ 50 }/>
                             </Form.Item>
                         </Col>
-                    </Row>
-                    <Row>
-                        <Col span={ 8 }>
+                        <Col span={ 12 }>
                             <Form.Item name="dept" label="所属产线" rules={[{
                                     "required": true,
                                     "message": "请选择所属产线"
@@ -221,22 +252,14 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                                 </Select>
                             </Form.Item>
                         </Col>
-                        <Col span={ 8 }>
-                            <Form.Item name="dept" label="台账设备关联">
-                                <Button>+关联设备</Button>
-                            </Form.Item>
-                        </Col>
-                        <Col span={ 8 }>
-                            <Form.Item name="dept" label="状态">
-                                <Select placeholder="请选择">
-                                    <Select.Option value={ 1 } key="1">正常</Select.Option>
-                                    <Select.Option value={ 2 } key="2">停用</Select.Option>
-                                    <Select.Option value={ 3 } key="3">维修</Select.Option>
-                                </Select>
-                            </Form.Item>
-                        </Col>
                     </Row>
                 </Form>
+                <p>班组成员</p>
+                <WorkshopUserSelectionComponent onSelect={ (selectedRows: object[] | any) => {
+                    console.log(selectedRows)
+                    setUserList(selectedRows);
+                } }/>
+                <CommonTable columns={ tableColumns } dataSource={ userList } pagination={ false } />
             </Modal>
         </>
     )

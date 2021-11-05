@@ -114,7 +114,7 @@ export default function ProcessMngt(): React.ReactNode {
                     </Popconfirm>
                 </Space>
             )
-        },
+        }
     ]
 
     const save = () => {
