@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { Input, DatePicker, Select, Button, Form } from 'antd'
+import { Input, DatePicker, Select, Button, Form, Modal } from 'antd'
 import { useParams } from 'react-router-dom'
 import { ComponentDetails } from "./buyBurdening.json"
-import { Page } from '../../common';
+import { Page } from '../../common'
 
 export default function EnquiryList(): React.ReactNode {
     const params = useParams<{ id: string }>()
@@ -18,6 +18,18 @@ export default function EnquiryList(): React.ReactNode {
         return value
     }
 
+    const handleSuccess = () => {
+        Modal.confirm({
+            title: "提交/完成",
+            content: "确认提交/完成？",
+            onOk() {
+                return new Promise(async () => {
+                    
+                })
+            }
+        })
+    }
+
     return <>
         <Page
             path="/tower-supply/purchaseTaskTower/component"
@@ -29,7 +41,7 @@ export default function EnquiryList(): React.ReactNode {
             })}
             extraOperation={<>
                 <Button type="primary" ghost>导出</Button>
-                <Button type="primary" ghost>完成</Button>
+                <Button type="primary" ghost onClick={handleSuccess}>完成</Button>
                 <Button type="primary" ghost>配料</Button>
                 <Button type="primary" ghost>返回上一级</Button>
             </>}
