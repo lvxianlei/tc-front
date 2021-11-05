@@ -1,25 +1,26 @@
-import React, { useState } from "react"
-import { Button, Input, DatePicker, Select, Modal, message, Form } from 'antd'
-import { Link, useHistory } from 'react-router-dom'
-import { Page } from '../../common'
-import { baseInfo } from "./shortageListData.json"
+import React, {useState} from "react"
+import {Button, Input, DatePicker, Select, Modal, message, Form} from 'antd'
+import {Link, useHistory} from 'react-router-dom'
+import {Page} from '../../common'
+import {baseInfo} from "./shortageListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import Overview from "./Overview"
+
 export default function Invoicing() {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
     const [cancelVisible, setCancelVisible] = useState<boolean>(false)
     const [cancelId, setCancelId] = useState<string>("")
     const [form] = Form.useForm()
-    const { run: cancelRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
+    const {run: cancelRun} = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialShortage`, { ...data })
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialShortage`, {...data})
             resole(result)
         } catch (error) {
             reject(error)
         }
-    }), { manual: true })
+    }), {manual: true})
 
     const onFilterSubmit = (value: any) => {
         if (value.startLaunchTime) {
@@ -33,7 +34,7 @@ export default function Invoicing() {
     const handleCancel = () => new Promise(async (resove, reject) => {
         try {
             const formData = await form.validateFields()
-            await cancelRun({ id: cancelId, reason: formData.reason })
+            await cancelRun({id: cancelId, reason: formData.reason})
             message.success("取消成功...")
             resove(true)
             history.go(0)
@@ -44,14 +45,15 @@ export default function Invoicing() {
 
     return <>
         <Modal title="操作信息" visible={visible} width={1011} onCancel={() => setVisible(false)}>
-            <Overview id={cancelId} />
+            <Overview id={cancelId}/>
         </Modal>
         <Modal title="取消" visible={cancelVisible} onOk={handleCancel} onCancel={() => {
             setCancelVisible(false)
             form.resetFields()
         }}>
             <Form form={form}>
-                <Form.Item rules={[{ required: true, message: "请填写取消原因..." }]} label="取消原因" name="reason"><Input.TextArea /></Form.Item>
+                <Form.Item rules={[{required: true, message: "请填写取消原因..."}]} label="取消原因"
+                           name="reason"><Input.TextArea/></Form.Item>
             </Form>
         </Modal>
         <Page
@@ -90,23 +92,28 @@ export default function Invoicing() {
             }}
             searchFormItems={[
                 {
-                    name: 'fuzzyQuery',
-                    children: <Input placeholder="编号/内部合同编号/工程名称/票面单位/业务经理" style={{ width: 300 }} />
-                },
-                {
-                    name: 'startPurchaseStatusUpdateTime',
+                    name: 'updateStartTime',
                     label: '最新状态变更时间',
-                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD"/>
                 },
                 {
-                    name: 'isOpen',
+                    name: 'shortageStatus',
                     label: '状态',
-                    children: <Select style={{ width: 200 }}>
-                        <Select.Option value="1">待审批</Select.Option>
-                        <Select.Option value="2">已拒绝</Select.Option>
-                        <Select.Option value="3">已撤回</Select.Option>
-                        <Select.Option value="4">已通过</Select.Option>
+                    children: <Select style={{width: 200}}>
+                        <Select.Option value="1">待处理</Select.Option>
+                        <Select.Option value="2">已处理</Select.Option>
+                        <Select.Option value="3">已完成</Select.Option>
+                        <Select.Option value="4">已取消</Select.Option>
                     </Select>
+                },
+                {
+                    name: 'handlerId',
+                    label: '处理人'
+                },
+                {
+                    name: 'fuzzyQuery',
+                    label: '查询',
+                    children: <Input placeholder="生产批次/采购计划编号/材质/规格" style={{width: 300}}/>
                 }
             ]}
         />
