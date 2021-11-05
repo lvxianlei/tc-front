@@ -1626,8 +1626,8 @@
     },
     { // 基础配置-车间派工设备管理
       "name": "车间派工设备管理",
-      "path": "/baseSetting/workshopDispatchEquipmentMngt",
-      "module": "./pages/baseSetting/WorkshopDispatchEquipmentMngt",
+      "path": "/baseSetting/workshopEquipmentMngt",
+      "module": "./pages/baseSetting/WorkshopEquipmentMngt",
       "exact": true,
       "authority": "approvalm"
     },
