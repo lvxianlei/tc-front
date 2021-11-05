@@ -8,6 +8,7 @@ import AttachFile from "./AttachFile"
 import {ApplicationForPayment} from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import ApplicationContext from "../../../configuration/ApplicationContext"
 
 interface EditRefProps {
     onSubmit: () => void
@@ -15,6 +16,14 @@ interface EditRefProps {
 
 export default function ApplyPayment() {
     const history = useHistory()
+    const pleasePayTypeEnum = (ApplicationContext.get().dictionaryOption as any)["1212"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
+    const paymentMethodEnum = (ApplicationContext.get().dictionaryOption as any)["1211"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
     const editRef = useRef<EditRefProps>()
     const fileRef = useRef<EditRefProps>()
     const [visible, setVisible] = useState<boolean>(false)
@@ -155,7 +164,15 @@ export default function ApplyPayment() {
         <Page
             path="/tower-supply/applyPayment"
             columns={[
-                ...ApplicationForPayment,
+                ...ApplicationForPayment.map((item: any) => {
+                    if(item.dataIndex==="pleasePayType"){
+                        return ({...item,type:"select",enum:pleasePayTypeEnum});
+                    }
+                    if(item.dataIndex==="paymentMethod"){
+                        return ({...item,type:"select",enum:paymentMethodEnum});
+                    }
+                    return item;
+                }),
                 {
                     title: "操作",
                     dataIndex: "opration",
@@ -221,14 +238,10 @@ export default function ApplyPayment() {
                     </Select>
                 },
                 {
-                    name: 'contractType',
+                    name: 'pleasePayType',
                     label: '请款类别',
-                    children: <Select style={{width: 200}}>
-                        <Select.Option value="1">不下计划</Select.Option>
-                        <Select.Option value="2">未下计划</Select.Option>
-                        <Select.Option value="3">未下完计划</Select.Option>
-                        <Select.Option value="4">未发完货</Select.Option>
-                        <Select.Option value="5">已发完货</Select.Option>
+                    children: <Select style={{ width: 200 }}>
+                        {pleasePayTypeEnum.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
                     </Select>
                 },
                 {
