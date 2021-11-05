@@ -165,6 +165,18 @@ export default function Lofting(): React.ReactNode {
             )
         },
         {
+            key: 'holesNum',
+            title: '单件孔数',
+            width: 200,
+            dataIndex: 'holesNum',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data',index, "holesNum"]} initialValue={ _ }>
+                    <Input size="small" onChange={ () => rowChange(index) }/>
+                </Form.Item>
+            )
+        },
+        {
             key: 'ncName',
             title: 'NC程序名称',
             width: 200,

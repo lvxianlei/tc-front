@@ -1602,6 +1602,13 @@
       "module": "./pages/baseSetting/ShippingDepartmentConfig",
       "exact": true,
       "authority": "approvalm"
+    },
+    { // 基础配置-车辆管理
+      "name": "车辆管理",
+      "path": "/baseSetting/vehicleMngt",
+      "module": "./pages/baseSetting/VehicleMngt",
+      "exact": true,
+      "authority": "approvalm"
     }
   ]
 }
