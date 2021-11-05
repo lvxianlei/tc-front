@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Form, Input, Space, Spin, Table, Tabs } from 'antd';
+import { Button, Form, Input, message, Space, Spin, Table, Tabs } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
 import { baseInfoData } from './deliveryTaskData.json';
@@ -55,7 +55,23 @@ export default function ConfirmTaskDetail(): React.ReactNode {
         <Spin spinning={false}>
             <DetailContent operation={[
                 <Space>
-                    <Button type='primary' onClick={() => history.goBack()}>确认出库</Button>
+                    <Button type='primary' onClick={() => {
+                        if(selectedRows.length>0){
+                            console.log(selectedRows)
+                            if(tableUserDataSource.length>0){
+                                console.log(tableUserDataSource)
+                                RequestUtil.post(``,{}).then(()=>{
+                                    message.success('出库成功！')
+                                }).then(()=>{
+                                    history.push(`/packagingWorkshop/deliveryPlan`);
+                                })
+                            }else{
+                                message.error('未选择发包人员，不可出库！')
+                            }
+                        }else{
+                            message.error('未选择杆塔信息，不可出库！')
+                        }
+                    }}>确认出库</Button>
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
                 </Space>
             ]}>
