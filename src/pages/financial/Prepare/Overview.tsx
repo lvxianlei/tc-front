@@ -1,5 +1,5 @@
 import React from "react"
-import {Spin } from 'antd'
+import { Spin } from 'antd'
 import { DetailTitle, BaseInfo, CommonTable } from '../../common'
 import { ApplicationList, operationInfo } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
@@ -9,15 +9,6 @@ interface OverviewProps {
     id: string
 }
 export default function Overview({ id }: OverviewProps): JSX.Element {
-    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/applyPayment/${id}`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }))
-
     const pleasePayTypeEnum = (ApplicationContext.get().dictionaryOption as any)["1212"].map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
@@ -26,15 +17,23 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
         value: item.id,
         label: item.name
     }))
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/applyPayment/${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { refreshDeps: [id] })
 
     return <Spin spinning={loading}>
         <DetailTitle title="申请信息" />
-        <BaseInfo columns={ApplicationList.map((item:any)=>{
-            if(item.dataIndex==="pleasePayType"){
-                return ({...item,type:"select",enum:pleasePayTypeEnum});
+        <BaseInfo columns={ApplicationList.map((item: any) => {
+            if (item.dataIndex === "pleasePayType") {
+                return ({ ...item, type: "select", enum: pleasePayTypeEnum });
             }
-            if(item.dataIndex==="paymentMethod"){
-                return ({...item,type:"select",enum:paymentMethodEnum});
+            if (item.dataIndex === "paymentMethod") {
+                return ({ ...item, type: "select", enum: paymentMethodEnum });
             }
             return item;
         })} dataSource={data || {}} />
