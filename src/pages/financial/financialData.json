@@ -339,11 +339,11 @@
         },
         {
             "title": "关联到货单",
-            "dataIndex": "associatedarrivaldoc"
+            "dataIndex": "receiptNumbers"
         },
         {
             "title": "关联票据",
-            "dataIndex": "relatednotes"
+            "dataIndex": "billNumbers"
         },
         {
             "title": "请款金额",
@@ -352,20 +352,57 @@
         },
         {
             "title": "付款状态",
-            "dataIndex": "applyStatus"
+            "dataIndex": "pleasePayStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "已创建",
+                    "value": 1
+                },
+                {
+                    "label": "待付款",
+                    "value": 2
+                },
+                {
+                    "label": "已付款",
+                    "value": 3
+                }
+            ]
         },
         {
             "title": "审批状态",
             "dataIndex": "applyStatus",
-            "type": "integer"
+            "type": "select",
+            "enum": [
+                {
+                    "label": "未发起",
+                    "value": 0
+                },
+                {
+                    "label": "待审批",
+                    "value": 1
+                },
+                {
+                    "label": "已拒绝",
+                    "value": 2
+                },
+                {
+                    "label": "已撤回",
+                    "value": 3
+                },
+                {
+                    "label": "已通过",
+                    "value": 4
+                }
+            ]
         },
         {
             "title": "最新状态变更时间",
-            "dataIndex": "updateStatusTim"
+            "dataIndex": "updateTime"
         },
         {
             "title": "所属供应商",
-            "dataIndex": "description"
+            "dataIndex": "supplierName"
         },
         {
             "title": "请款机构",
@@ -375,7 +412,7 @@
         {
             "title": "请款类别",
             "dataIndex": "pleasePayType",
-            "type": "integer"
+            "type": "select"
         },
         {
             "title": "付款方式",
