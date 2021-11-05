@@ -77,7 +77,7 @@ const SecuritySetting = (): React.ReactNode => {
     }, [current, size]);
     // 获取列表
     const getColumnsData = async () => {
-        const data: any = await RequestUtil.get(`/tower-storage/safetyStock?safetyStock=${safetyStock}&alarmStock=${alarmStock}`, {
+        const data: any = await RequestUtil.get(`/tower-storage/safetyStock`, {
             current,
             size,
         })
@@ -86,7 +86,7 @@ const SecuritySetting = (): React.ReactNode => {
     }
     // 编辑
     const submit = async () => {
-        await RequestUtil.put(`/tower-storage/safetyStock/${id}`, {
+        await RequestUtil.put(`/tower-storage/safetyStock/${id}?safetyStock=${safetyStock}&alarmStock=${alarmStock}`, {
             safetyStock,
             alarmStock,
         })
