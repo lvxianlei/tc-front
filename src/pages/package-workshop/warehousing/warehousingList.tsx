@@ -47,6 +47,12 @@ export default function DrawTowerMngt(): React.ReactNode {
             dataIndex: 'internalNumber'
         },
         {
+            key: 'internalNumber',
+            title: '产品类型',
+            width: 200,
+            dataIndex: 'internalNumber'
+        },
+        {
             key: 'structureCount',
             title: '仓库',
             width: 200,
