@@ -395,7 +395,7 @@
                             },
                             {
                                 "label": "询价列表",
-                                "path": "/workMngt/enquiryList",
+                                "path": "/workMngt/enquiry",
                                 "authority": "approvalm"
                             },
                             {
@@ -592,7 +592,7 @@
                             },
                             {
                                 "label": "车间派工设备管理",
-                                "path": "/baseSetting/workshopDispatchEquipmentMngt",
+                                "path": "/baseSetting/workshopEquipmentMngt",
                                 "authority": "approvalm"
                             },
                             {

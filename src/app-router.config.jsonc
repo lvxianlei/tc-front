@@ -1349,8 +1349,8 @@
     },
     { // 工作管理-询价列表
       "name": "询价列表",
-      "path": "/workMngt/enquiryList",
-      "module": "./pages/workMngt/enquiryList/EnquiryList",
+      "path": "/workMngt/enquiry",
+      "module": "./pages/workMngt/enquiryList/index",
       "exact": true,
       "authority": "approvalm"
     },
@@ -1492,14 +1492,14 @@
     },
     //财务管理
     { // 票据管理
-      "name": "工作台",
+      "name": "票据管理",
       "path": "/financial/bill",
       "module": "./pages/financial/Bill/index",
       "exact": true,
       "authority": "approvalm"
     },
     { // 请款申请
-      "name": "工作台",
+      "name": "请款申请",
       "path": "/financial/prepare",
       "module": "./pages/financial/Prepare/index",
       "exact": true,
@@ -1626,8 +1626,8 @@
     },
     { // 基础配置-车间派工设备管理
       "name": "车间派工设备管理",
-      "path": "/baseSetting/workshopDispatchEquipmentMngt",
-      "module": "./pages/baseSetting/WorkshopDispatchEquipmentMngt",
+      "path": "/baseSetting/workshopEquipmentMngt",
+      "module": "./pages/baseSetting/WorkshopEquipmentMngt",
       "exact": true,
       "authority": "approvalm"
     },

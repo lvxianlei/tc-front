@@ -9,7 +9,9 @@ import Edit from "./Edit"
 export default function Invoicing() {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
-    const editRef = useRef<{ onSubmit: () => Promise<boolean>, loading: boolean }>()
+    const [type, setType] = useState<"new" | "edit">("new")
+    const [detailId, setDetailId] = useState<string>("")
+    const editRef = useRef<{ onSubmit: () => Promise<boolean>, resetFields: () => void }>()
     const [materialData, setMaterialData] = useState<{ [key: string]: any }>({});
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
@@ -56,9 +58,10 @@ export default function Invoicing() {
     return <>
         <Modal visible={visible} width={1011} title="创建" onOk={handleModalOk} onCancel={() => {
             setVisible(false)
+            editRef.current?.resetFields()
             setMaterialData({})
         }}>
-            <Edit />
+            <Edit ref={editRef} id={detailId} type={type} />
         </Modal>
         <Page
             path="/tower-storage/receiveStock"
@@ -72,7 +75,11 @@ export default function Invoicing() {
                     render: (_: any, record: any) => {
                         return <>
                             <Link to={`/workMngt/receiving/detail/${record.id}`}>详情</Link>
-                            <Button type="link" onClick={() => history.push(`/workMngt/receiving/edit/${record.id}`)}>编辑</Button>
+                            <Button type="link" onClick={() => {
+                                setDetailId(record.id)
+                                setType("edit")
+                                setVisible(true)
+                            }}>编辑</Button>
                             <a onClick={() => handleDelete(record.id)}>删除</a>
                         </>
                     }
@@ -80,6 +87,7 @@ export default function Invoicing() {
             extraOperation={<>
                 <Button type="primary" ghost>导出</Button>
                 <Button type="primary" ghost onClick={() => {
+                    setType("new")
                     setVisible(true)
                 }}>创建</Button>
             </>}

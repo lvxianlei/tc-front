@@ -2,42 +2,42 @@
     "baseInfo": [
         {
             "title": "生产批次",
-            "dataIndex": "productionBatchNumber",
+            "dataIndex": "productionBatch",
             "type":"string"
         },
         {
             "title": "采购员",
-            "dataIndex": "",
-            "type":""
+            "dataIndex": "purchaseId",
+            "type":"string"
         },
         {
             "title": "采购计划编号",
-            "dataIndex": "taskNumber",
+            "dataIndex": "purchasePlanNumber",
             "type":"string"
         },
         {
             "title": "材质",
-            "dataIndex": "materialTexture",
+            "dataIndex": "structureTexture",
             "type":"string"
         },
         {
             "title": "规格",
-            "dataIndex": "spec",
+            "dataIndex": "structureSpec",
             "type":"string"
         },     
         {
             "title": "品名",
-            "dataIndex": "productName",
+            "dataIndex": "materialName",
             "type":"string"
         },     
         {
             "title": "搭配长度（mm）",
-            "dataIndex": "",
-            "type":""
+            "dataIndex": "length",
+            "type":"number"
         } ,   
         {
             "title": "搭配数量",
-            "dataIndex": "quantity",
+            "dataIndex": "amount",
             "type":"integer"
         } ,    
         {
@@ -46,14 +46,9 @@
             "type":"number"
         },
         {
-            "title": "重量（吨）",
-            "dataIndex": "weight",
-            "type":"number"
-        },
-        {
             "title": "状态",
-            "dataIndex": "",
-            "type":""
+            "dataIndex": "shortageStatus",
+            "type":"integer"
         }                     
     ],
     "operationInformation":[

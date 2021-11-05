@@ -18,6 +18,14 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         value: item.id,
         label: item.name
     }))
+    const pleasePayTypeEnum = (ApplicationContext.get().dictionaryOption as any)["1212"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
+    const paymentMethodEnum = (ApplicationContext.get().dictionaryOption as any)["1211"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
     const [baseForm] = Form.useForm()
     const [attchs, setAttachs] = useState<any[]>([])
 
@@ -98,7 +106,14 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     columns: item.columns.map((item: any) => item.dataIndex === "invoiceType" ? ({ ...item, enum: invoiceTypeEnum }) : item)
                 })
             }
-            return item
+
+            if(item.dataIndex==="pleasePayType"){
+                return ({...item,type:"select",enum:pleasePayTypeEnum});
+            }
+            if(item.dataIndex==="paymentMethod"){
+                return ({...item,type:"select",enum:paymentMethodEnum});
+            }
+            return item;
         })} col={3} dataSource={{}} edit />
         <DetailTitle title="相关附件" operation={[<Upload
             key="sub"

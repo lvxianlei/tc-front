@@ -170,7 +170,6 @@ export default function EnquiryTask(): React.ReactNode {
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryTask/initTask`)
         console.log(result);
     }
-    console.log(inquiryId);
 
     return <>
         <Page

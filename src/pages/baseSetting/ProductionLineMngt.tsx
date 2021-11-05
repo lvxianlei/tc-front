@@ -5,15 +5,15 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, Button, Modal, Select, Form, Table, Popconfirm, message } from 'antd';
+import { Space, Input, Button, Modal, Select, Form, Popconfirm, message } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
 import { useForm } from 'antd/es/form/Form';
-import styles from './ProductionLineMngt.module.less';
 
-interface IProcessList {
+interface IDetailData {
     readonly time?: string;
+    readonly name?: string;
     readonly atime?: string;
 }
 export default function ProductionLineMngt(): React.ReactNode {
@@ -22,6 +22,7 @@ export default function ProductionLineMngt(): React.ReactNode {
             key: 'index',
             title: '序号',
             dataIndex: 'index',
+            width: 100,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
         },
         {
@@ -69,8 +70,9 @@ export default function ProductionLineMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type="link" onClick={ () => {
-                        getList();
                         setVisible(true);
+                        setTitle("编辑");
+                        setDetailData({name: 'aaaa'});
                     } }>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
@@ -90,56 +92,6 @@ export default function ProductionLineMngt(): React.ReactNode {
         }
     ]
 
-    const tableColumns = [
-        {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
-        },
-        {
-            key: 'time',
-            title: '工序',
-            dataIndex: 'time',
-            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={ ["data", index, "time"] } initialValue={ _ } rules={[{ 
-                    "required": true,
-                    "message": "请输入工序" }]}>
-                    <Input maxLength={ 50 } key={ index } bordered={false} />
-                </Form.Item>
-            )  
-        },
-        {
-            key: 'time',
-            title: '顺序',
-            dataIndex: 'time',
-            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={ ["data", index, "time"] } initialValue={ _ } rules={[{ 
-                    "required": true,
-                    "message": "请输入顺序" }]}>
-                    <Input type="number" min={ 1 } key={ index } bordered={false} />
-                </Form.Item>
-            )  
-        },
-        {
-            key: 'operation',
-            title: '操作',
-            dataIndex: 'operation',
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Space direction="horizontal" size="small">
-                    <Popconfirm
-                        title="确认删除?"
-                        onConfirm={ () => delRow(index) }
-                        okText="确认"
-                        cancelText="取消"
-                    >
-                        <Button type="link">删除</Button>
-                    </Popconfirm>
-                </Space>
-            )
-        },
-    ]
-
     const save = () => {
         form.validateFields().then(res => {
             console.log(form.getFieldsValue(true));
@@ -151,40 +103,23 @@ export default function ProductionLineMngt(): React.ReactNode {
         form.resetFields();
     }
 
-    const addRow = () => {
-        let processListValues = form.getFieldsValue(true).data || [];
-        let newData = {
-            time: '',
-            atime: ''
-        }
-        setProcessList([...processListValues, newData]);
-        form.setFieldsValue({ data: [...processListValues, newData] })
-    }
-
-    const delRow = (index: number) => {
-        let processListValues = form.getFieldsValue(true).data || []; 
-        processListValues.splice(index, 1);
-        setProcessList([...processListValues]);
-        form.setFieldsValue({ data: [...processListValues] })
-    }
-
     const getList = async () => {
-        const data = await RequestUtil.post<IProcessList[]>(``);
-        setProcessList(data);
+        const data = await RequestUtil.post<IDetailData[]>(``);
     }
 
     const [ refresh, setRefresh ] = useState(false);
     const [ visible, setVisible ] = useState(false);
     const [ title, setTitle ] = useState('新增');
     const [ form ] = useForm();
-    const [ processList, setProcessList ] = useState<IProcessList[]>([]);
+    const [ processDisabled, setProcessDisabled ] = useState(true);
+    const [ detailData, setDetailData ] = useState<IDetailData>({});
     return (
         <>
             <Page
                 path="/tower-science/loftingList/loftingPage"
                 columns={ columns }
                 headTabs={ [] }
-                extraOperation={ <Button type="primary" onClick={ () => setVisible(true) } ghost>新增产线</Button> }
+                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle("新增");} } ghost>新增产线</Button> }
                 refresh={ refresh }
                 searchFormItems={ [
                     {
@@ -197,21 +132,37 @@ export default function ProductionLineMngt(): React.ReactNode {
                     return values;
                 } }
             />
-            <Modal visible={ visible } width="40%" title={title + "产线"} okText="保存" cancelText="取消" onOk={ save } onCancel={ cancel }>
-                <Form form={ form }>
-                   <Form.Item name="dept" label="所属车间" rules={[{
-                        "required": true,
-                        "message": "请选择所属车间"
-                    }]}>
+            <Modal visible={ visible } width="40%" title={ title + "产线" } okText="保存" cancelText="取消" onOk={ save } onCancel={ cancel }>
+                <Form form={ form } labelCol={{ span: 4 }}>
+                    <Form.Item name="name" label="产线名称" initialValue={ detailData?.name } rules={[{
+                            "required": true,
+                            "message": "请输入产线名称"
+                        }]}>
+                        <Input placeholder="请输入" maxLength={ 50 } />
+                    </Form.Item>
+                    <Form.Item name="dept" label="所属车间" rules={[{
+                            "required": true,
+                            "message": "请选择所属车间"
+                        }]}>
                         <Select placeholder="请选择" onChange={ (e) => {
-                            console.log(e)
+                            setProcessDisabled(false);
                         } }>
                             <Select.Option value={ 1 } key="4">全部</Select.Option>
                             <Select.Option value={ 2 } key="">全部222</Select.Option>
                         </Select>
-                   </Form.Item>
-                   <Button type="primary" onClick={ addRow }>新增一行</Button>
-                   <Table rowKey="index" dataSource={[...processList]} pagination={false} columns={tableColumns} className={styles.addModal}/>
+                    </Form.Item>
+                    <Form.Item name="a" label="所属工序" rules={[{
+                            "required": true,
+                            "message": "请选择所属工序"
+                        }]}>
+                        <Select placeholder="请选择" disabled={ processDisabled }>
+                            <Select.Option value={ 1 } key="4">全部</Select.Option>
+                            <Select.Option value={ 2 } key="">全部222</Select.Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item name="description" label="备注">
+                        <Input placeholder="请输入" maxLength={ 300 } />
+                    </Form.Item>
                 </Form>
             </Modal>
         </>

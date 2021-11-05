@@ -143,19 +143,9 @@
             "title": "余料入库长度",
             "dataIndex": "surpluslength",
             "type": "string"
-        },
-        {
-            "title": "状态",
-            "dataIndex": "status",
-            "type": "integer"
         }
     ],
     "ComponentDetail": [
-        {
-            "title": "件号",
-            "dataIndex": "num",
-            "type": "integer"
-        },
         {
             "title": "材质",
             "dataIndex": "materialTexture",
@@ -167,13 +157,13 @@
             "type": "string"
         },
         {
-            "title": "长度",
+            "title": "原材料长度",
             "dataIndex": "length",
             "type": "number"
         },
         {
-            "title": "已配/未配",
-            "dataIndex": "equipped/notequipped"
+            "title": "类型",
+            "dataIndex": ""
         }
     ],
     "BatchingScheme": [

@@ -218,11 +218,20 @@ export default function Lofting(): React.ReactNode {
             }
         } else {
             if(['basicsPartNum','length','width','basicsTheoryWeight','basicsWeight','totalWeight'].includes(col.dataIndex as string)){
-                return {
-                    ...col,
-                    render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                        <span>{_===-1?0:_}</span>
-                    )
+                if(col.dataIndex==='totalWeight'){
+                    return {
+                        ...col,
+                        render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                            <span>{(record.basicsWeight&&record.basicsWeight!==-1?record.basicsWeight:0)*(record.basicsPartNum&&record.basicsPartNum!==-1?record.basicsPartNum:0)}</span>
+                        )
+                    }
+                }else{
+                    return {
+                        ...col,
+                        render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                            <span>{_===-1?0:_}</span>
+                        )
+                    }
                 }
             }
             else return {
