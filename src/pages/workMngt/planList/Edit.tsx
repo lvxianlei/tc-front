@@ -1,13 +1,7 @@
-import React, { useState } from "react"
-import { Button, Upload, Form, message, Spin } from 'antd'
-import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable, EditTable, formatData } from '../../common'
-import { enclosure } from '../../project/managementDetailData.json'
-import RequestUtil from '../../../utils/RequestUtil'
-import useRequest from '@ahooksjs/use-request'
-import AuthUtil from "../../../utils/AuthUtil"
-import { downLoadFile } from "../../../utils"
-import ApplicationContext from "../../../configuration/ApplicationContext"
+import React from "react"
+import { Button } from 'antd'
+import { useHistory } from 'react-router-dom'
+import { DetailContent } from '../../common'
 export default function Edit() {
     const history = useHistory()
     return <DetailContent operation={[

@@ -1,7 +1,7 @@
 import React from "react"
-import { Button, message, Spin, Row } from 'antd'
+import { Button, Row } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../../common'
+import { DetailContent, CommonTable } from '../../common'
 import { PurchaseList, PurchaseTypeStatistics } from "./planListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { Page } from '../../common'
@@ -7,7 +7,7 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 export default function Invoicing() {
     const history = useHistory()
-
+    const [filterValue, setFilterValue] = useState<any>({})
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/invoicing?id=${id}`)
@@ -23,6 +23,7 @@ export default function Invoicing() {
             value.startLaunchTime = formatDate[0]
             value.endLaunchTime = formatDate[1]
         }
+        setFilterValue({ ...filterValue, ...value })
         return value
     }
 
@@ -56,6 +57,7 @@ export default function Invoicing() {
 
                 }
             }]}
+        filterValue={filterValue}
         extraOperation={<Button type="primary" ghost>导出</Button>}
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[

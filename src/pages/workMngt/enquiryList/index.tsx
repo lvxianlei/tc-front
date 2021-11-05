@@ -27,7 +27,7 @@ export default function EnquiryList(): React.ReactNode {
             value.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             delete value.statusUpdateTime
         }
-        setFilterValue(value)
+        setFilterValue({ ...filterValue, ...value })
         return value
     }
 

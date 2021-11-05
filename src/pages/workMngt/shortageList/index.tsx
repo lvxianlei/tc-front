@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Button, Input, DatePicker, Select, Modal, message, Form } from 'antd'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { Page } from '../../common'
 import { baseInfo } from "./shortageListData.json"
 import useRequest from '@ahooksjs/use-request'
@@ -8,6 +8,7 @@ import RequestUtil from '../../../utils/RequestUtil'
 import Overview from "./Overview"
 export default function Invoicing() {
     const history = useHistory()
+    const [filterValue, setFilterValue] = useState<any>({})
     const [visible, setVisible] = useState<boolean>(false)
     const [cancelVisible, setCancelVisible] = useState<boolean>(false)
     const [cancelId, setCancelId] = useState<string>("")
@@ -22,11 +23,12 @@ export default function Invoicing() {
     }), { manual: true })
 
     const onFilterSubmit = (value: any) => {
-        if (value.startLaunchTime) {
-            const formatDate = value.startLaunchTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startLaunchTime = formatDate[0]
-            value.endLaunchTime = formatDate[1]
+        if (value.updateStartTime) {
+            const formatDate = value.updateStartTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.updateStartTime = formatDate[0]
+            value.updateEndTime = formatDate[1]
         }
+        setFilterValue({ ...filterValue, ...value })
         return value
     }
 
@@ -56,6 +58,7 @@ export default function Invoicing() {
         </Modal>
         <Page
             path="/tower-supply/materialShortage"
+            filterValue={filterValue}
             columns={[
                 ...baseInfo,
                 {
@@ -94,13 +97,13 @@ export default function Invoicing() {
                     children: <Input placeholder="编号/内部合同编号/工程名称/票面单位/业务经理" style={{ width: 300 }} />
                 },
                 {
-                    name: 'startPurchaseStatusUpdateTime',
+                    name: 'updateStartTime',
                     label: '最新状态变更时间',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'isOpen',
-                    label: '状态',
+                    name: 'shortageStatus',
+                    label: '审批状态',
                     children: <Select style={{ width: 200 }}>
                         <Select.Option value="1">待审批</Select.Option>
                         <Select.Option value="2">已拒绝</Select.Option>
