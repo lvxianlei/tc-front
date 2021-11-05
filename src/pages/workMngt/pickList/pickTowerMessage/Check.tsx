@@ -21,7 +21,7 @@ export default function PickCheckList(): React.ReactNode {
    
     const columns = [
         { title: '序号', dataIndex: 'index', key: 'index', editable: true, render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-        { title: '段名', dataIndex: 'segmentName', key: 'segmentName', editable: true},
+        { title: '段名', dataIndex: 'segmentName', key: 'segmentName', editable: false},
         { title: '构件编号', dataIndex: 'code', key: 'code',editable: true },
         { title: '材料名称', dataIndex: 'materialName', key: 'materialName', editable: true },
         { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture', editable: true },
@@ -30,9 +30,9 @@ export default function PickCheckList(): React.ReactNode {
         { title: '厚度（mm）', dataIndex: 'thickness', key: 'thickness', editable: true },
         { title: '长度（mm）', dataIndex: 'length', key: 'length', editable: true },
         { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum', editable: true },
-        { title: '理算重量（kg）', dataIndex: 'basicsTheoryWeight', key: 'basicsTheoryWeight', editable: true },
+        { title: '理算重量（kg）', dataIndex: 'basicsTheoryWeight', key: 'basicsTheoryWeight', editable: false },
         { title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight', editable: true },
-        { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight', editable: true },
+        { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight', editable: false },
         { title: '备注', dataIndex: 'description', key: 'description', editable: true }
     ];
     const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {
