@@ -1,0 +1,110 @@
+{
+    "baseInfo": [
+        {
+            "title": "询价任务编号",
+            "width": 100,
+            "dataIndex": "inquiryNumber"
+        },
+        {
+            "title": "项目名称",
+            "width": 100,
+            "dataIndex": "projectName"
+        },
+        {
+            "title": "客户名称",
+            "width": 200,
+            "dataIndex": "biddingPerson"
+        },
+        {
+            "title": "项目负责人",
+            "width": 200,
+            "dataIndex": "projectLeader"
+        },
+        {
+            "title": "投标截止时间",
+            "width": 100,
+            "dataIndex": "biddingEndTime"
+        },
+        {
+            "title": "计划交付时间",
+            "width": 100,
+            "dataIndex": "plannedDeliveryTime"
+        },
+        {
+            "title": "任务状态",
+            "width": 250,
+            "dataIndex": "inquiryStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "待确认",
+                    "value": 1
+                },
+                {
+                    "label": "已完成",
+                    "value": 2
+                },
+                {
+                    "label": "待指派",
+                    "value": 3
+                },
+                {
+                    "label": "待完成",
+                    "value": 4
+                },
+                {
+                    "label": "已提交",
+                    "value": 5
+                },
+                {
+                    "label": "已拒绝",
+                    "value": 6
+                }
+            ]
+        },
+        {
+            "title": "最新状态变更时间",
+            "width": 100,
+            "dataIndex": "statusUpdateTime"
+        },
+        {
+            "title": "询价人",
+            "width": 100,
+            "dataIndex": "inquirer"
+        }
+    ],
+    "CurrentPriceInformation": [
+        {
+            "title": "序号",
+            "dataIndex": "index"
+        },
+        {
+            "title": "原材料名称",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec"
+        },
+        {
+            "title": "原材料类型",
+            "dataIndex": "rawMaterialType"
+        },
+        {
+            "title": "原材料标准",
+            "dataIndex": "materialStandardName"
+        },
+        {
+            "title": "更新时间",
+            "dataIndex": "updateTime"
+        },
+        {
+            "title": "价格来源",
+            "dataIndex": "priceSource"
+        },
+        {
+            "title": "价格",
+            "dataIndex": "price"
+        }
+    ]
+}

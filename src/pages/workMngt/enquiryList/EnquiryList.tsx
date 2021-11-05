@@ -1,88 +1,13 @@
-import React, { useState } from 'react'
-import { Space, Input, DatePicker, Select, Button, Modal, Form, Popconfirm, Row, Col, TreeSelect, message } from 'antd'
-import { useHistory } from 'react-router-dom'
+import React, { useState, useRef } from 'react'
+import { Input, DatePicker, Select, Button, Modal, message } from 'antd'
 import { Page } from '../../common';
-
+import { baseInfo } from "./enquiryList.json"
+import Edit from "./Edit"
 export default function EnquiryList(): React.ReactNode {
-    const [user, setUser] = useState<any[] | undefined>([]);
-    const [refresh, setRefresh] = useState<boolean>(false);
-    const [confirmLeader, setConfirmLeader] = useState<any | undefined>([]);
-    const [department, setDepartment] = useState<any | undefined>([]);
-    const [assignVisible, setVisible] = useState<boolean>(false);
-    const [filterValue, setFilterValue] = useState({});
-    const [drawTaskId, setDrawTaskId] = useState<string>('');
-    const [form] = Form.useForm();
-    const history = useHistory();
-    const columns = [
-        {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            width: 50,
-            // render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-        },
-        {
-            key: 'enquiryTaskNum',
-            title: '询价任务编号',
-            width: 100,
-            dataIndex: 'enquiryTaskNum'
-        },
-        {
-            key: 'projectName',
-            title: '项目名称',
-            width: 100,
-            dataIndex: 'projectName',
-        },
-        {
-            key: 'customerName',
-            title: '客户名称',
-            width: 200,
-            dataIndex: 'customerName'
-        },
-        {
-            key: 'projectLeader',
-            title: '项目负责人',
-            width: 200,
-            dataIndex: 'projectLeader'
-        },
-        {
-            key: 'bidCutTime',
-            title: '投标截止时间',
-            width: 100,
-            dataIndex: 'bidCutTime'
-        },
-        {
-            key: 'PlannedDeliveryTime',
-            title: '计划交付时间',
-            width: 100,
-            dataIndex: 'PlannedDeliveryTime'
-        },
-        {
-            key: 'taskState',
-            title: '任务状态',
-            // fixed: 'right' as FixedType,
-            width: 250,
-            dataIndex: 'taskState',
-        },
-        {
-            key: 'updateStatusTime',
-            title: '最新状态变更时间',
-            width: 100,
-            dataIndex: 'updateStatusTime'
-        },
-        {
-            key: 'inquirer',
-            title: '询价人',
-            width: 100,
-            dataIndex: 'inquirer'
-        },
-        {
-            key: 'operation',
-            title: '操作',
-            width: 100,
-            dataIndex: 'operation'
-        }
-    ]
+    const [visible, setVisible] = useState<boolean>(false)
+    const [filterValue, setFilterValue] = useState({})
+    const [detailId, setDetailId] = useState<string>("")
+    const editRef = useRef<{ onSubmit: () => void }>({ onSubmit: () => { } })
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -94,15 +19,43 @@ export default function EnquiryList(): React.ReactNode {
         return value
     }
 
+    const handleModal = () => new Promise(async (resove, reject) => {
+        try {
+            const result = await editRef.current?.onSubmit()
+            message.success("保存成功...")
+            setVisible(false)
+        } catch (error) {
+            reject(false)
+        }
+    })
+
     return <>
+        <Modal width={1011} visible={visible} onOk={handleModal} onCancel={() => setVisible(false)} >
+            <Edit detailId={detailId} ref={editRef} />
+        </Modal>
         <Page
-            path="/tower-science/drawTask"
-            columns={columns}
-            refresh={refresh}
+            path="/tower-supply/inquiryTask"
+            columns={[
+                ...baseInfo,
+                {
+                    key: "operation",
+                    title: "操作",
+                    width: 100,
+                    dataIndex: "operation",
+                    render: (_: any, records: any) => <Button type="link" onClick={() => {
+                        setDetailId(records.id)
+                        setVisible(true)
+                    }}>询价信息</Button>
+                }]}
             extraOperation={<Button type="primary">导出</Button>}
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
+                {
+                    name: 'fuzzyMsg',
+                    label: '查询',
+                    children: <Input placeholder="任务编号/项目名称/项目负责人/客户名称" maxLength={200} />
+                },
                 {
                     name: 'statusUpdateTime',
                     label: '最新状态变更时间',
@@ -130,23 +83,9 @@ export default function EnquiryList(): React.ReactNode {
                     name: 'confirmId',
                     label: '询价人',
                     children: <div>
-                        <Select style={{ width: '100px' }} defaultValue="部门">
-                            {confirmLeader && confirmLeader.map((item: any) => {
-                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                            })}
-                        </Select>
-                        <Select style={{ width: '100px' }} defaultValue="人员">
-                            {confirmLeader && confirmLeader.map((item: any) => {
-                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                            })}
-                        </Select>
+
                     </div>
-                },
-                {
-                    name: 'fuzzyMsg',
-                    label: '查询',
-                    children: <Input placeholder="任务编号/项目名称/项目负责人/客户名称" maxLength={200} />
-                },
+                }
             ]}
         />
     </>
