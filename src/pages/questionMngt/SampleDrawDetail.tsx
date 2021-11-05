@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { Button, Spin, Image, Descriptions, Form, message, Modal } from 'antd';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle } from '../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
+import AuthUtil from '../../utils/AuthUtil';
 
 const tableColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
@@ -39,6 +40,7 @@ export default function SampleDrawDetail(): React.ReactNode {
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
+    const location = useLocation<{ state: {} }>();
     const params = useParams<{ id: string,status: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/issue/smallSample?id=${params.id}`)
@@ -83,7 +85,7 @@ export default function SampleDrawDetail(): React.ReactNode {
                     </Form.Item>
                 </Form>
             </Modal>
-            <DetailContent operation={params.status==='1'?[
+            <DetailContent operation={params.status==='1'&&AuthUtil.getUserId()===location.state?[
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
                     await RequestUtil.post(`/tower-science/issue/verify`,{id:params.id}).then(()=>{
                         message.success('修改成功！')

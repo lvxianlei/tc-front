@@ -1,10 +1,6 @@
 {
     "baseInfoList": [
         {
-            "title": "序号",
-            "dataIndex": ""
-        },
-        {
             "title": "差异编号",
             "dataIndex": "diffNumber",
             "type": "string"
@@ -52,18 +48,14 @@
     ],
     "SeeList": [
         {
-            "title": "序号",
-            "dataIndex": ""
-        },
-        {
             "title": "构件号",
             "dataIndex": "code",
             "type": "string"
         },
         {
             "title": "更改前材质",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "beforechangematerial",
+            "type": "string"
         },
         {
             "title": "更改后材质",
@@ -72,8 +64,8 @@
         },
         {
             "title": "更改前规格",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "beforechangeSpec",
+            "type": "string"
         },
         {
             "title": "更改后规格",
@@ -82,8 +74,8 @@
         },
         {
             "title": "更改前长度（mm）",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "beforechangeLength",
+            "type": "string"
         },
         {
             "title": "更改后长度（mm）",
@@ -92,8 +84,7 @@
         },
         {
             "title": "单数量",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "singlequantity"
         },
         {
             "title": "基数",
@@ -112,30 +103,29 @@
         },
         {
             "title": "状态",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "confirmStatus"
         }
     ],
     "MaterialShortage": [
         {
             "title": "材质",
             "dataIndex": "structureTexture",
-            "type":"string"
+            "type": "string"
         },
         {
             "title": "规格",
             "dataIndex": "structureSpec",
-            "type":"string"
-        },     
+            "type": "string"
+        },
         {
             "title": "原材料长度",
-            "dataIndex": "",
-            "type":""
+            "dataIndex": "length",
+            "type": "number"
         },
         {
             "title": "零件1",
-            "dataIndex": "",
-            "type":""
+            "dataIndex": "part1",
+            "type": ""
         },
         {
             "title": "长度",
@@ -144,8 +134,8 @@
         },
         {
             "title": "零件2",
-            "dataIndex": "",
-            "type":""
+            "dataIndex": "part2",
+            "type": ""
         },
         {
             "title": "长度",
@@ -154,8 +144,8 @@
         },
         {
             "title": "零件3",
-            "dataIndex": "",
-            "type":""
+            "dataIndex": "part3",
+            "type": ""
         },
         {
             "title": "长度",
@@ -164,8 +154,8 @@
         },
         {
             "title": "零件4",
-            "dataIndex": "",
-            "type":""
+            "dataIndex": "part4",
+            "type": ""
         },
         {
             "title": "长度",
@@ -174,14 +164,11 @@
         },
         {
             "title": "余料长度",
-            "dataIndex": "",
-            "type":""
+            "dataIndex": "surpluslength"
         },
         {
             "title": "利用率",
-            "dataIndex": "",
-            "type":""
+            "dataIndex": "utilizationrate"
         }
-        
     ]
 }

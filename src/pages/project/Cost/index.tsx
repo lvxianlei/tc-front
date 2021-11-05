@@ -108,7 +108,7 @@ export default function CostDetail() {
                             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                         },
                         ...item.head
-                    ]} dataSource={[item.data]} />
+                    ]} dataSource={[item.data]} pagination={false} />
                 </div>)}
                 <DetailTitle title="咨询记录" />
                 <CommonTable columns={[

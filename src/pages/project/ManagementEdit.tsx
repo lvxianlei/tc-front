@@ -62,6 +62,7 @@ export default function BaseInfoEdit(): JSX.Element {
     if (event.file.status === "done") {
       if (event.file.response.code === 200) {
         const dataInfo = event.file.response.data
+        
         const fileInfo = dataInfo.name.split(".")
         setAttachVosData([...attachVosData, {
           id: "",
@@ -112,7 +113,7 @@ export default function BaseInfoEdit(): JSX.Element {
     ]}>
       <Spin spinning={loading}>
         <DetailTitle title="基本信息" />
-        <BaseInfo
+        <BaseInfo 
           onChange={handleBaseInfoChange}
           form={baseInfoForm}
           columns={

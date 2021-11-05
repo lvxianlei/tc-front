@@ -10,7 +10,7 @@ export default function Invoicing() {
 
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/invoicing?id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPurchasePlan/${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -28,13 +28,13 @@ export default function Invoicing() {
 
     const handleDelete = (id: string) => {
         Modal.confirm({
-            title: "删除",
-            content: "确定删除此计划吗？",
+            title: "取消计划",
+            content: "确定取消此计划吗？",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
                     resove(await deleteRun(id))
-                    message.success("删除成功...")
-                    history.go(0)
+                    message.success("计划已取消...")
+                    // history.go(0)
                 } catch (error) {
                     reject(error)
                 }
@@ -53,15 +53,15 @@ export default function Invoicing() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <Link to="/workMngt/planList/relationTower">关联塔形</Link>
+                        <Link to={`/workMngt/planList/relationTower/${record.id}`}>关联塔形</Link>
                         <Link to={`/workMngt/planList/purchaseList/${record.id}`}><Button type="link">采购清单</Button></Link>
-                        <Button type="link" onClick={() => handleDelete(record.id)}>取消计划</Button>
+                        <a onClick={() => handleDelete(record.id)}>取消计划</a>
                     </>
                 }
             }]}
         extraOperation={<>
             <Button type="primary" ghost>导出</Button>
-            <Button type="primary" ghost>创建采购计划</Button>
+            <Button type="primary" ghost onClick={() => message.warning("预留按钮,暂无功能...")}>创建采购计划</Button>
         </>}
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[

@@ -71,7 +71,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
             initialValues={formatData(columns, dataSource)}
             labelAlign="right"
             layout="inline"
-            labelCol={{ style: { width: '80px', whiteSpace: "break-spaces" } }}
+            labelCol={{ style: { width: '100px', whiteSpace: "break-spaces" } }}
         >
             <Row>
                 {columns.map((item: any, index: number) => <Col key={`form_item_${index}`} span={item.type === "textarea" ? 24 : (24 / col)}>

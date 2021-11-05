@@ -420,7 +420,7 @@
                             },
                             {
                                 "label": "收货列表",
-                                "path": "/workMngt/receivingList",
+                                "path": "/workMngt/receiving",
                                 "authority": "approvalm"
                             },
                             {
@@ -475,6 +475,88 @@
                         ]
                     },
                     {
+                        "label": "车间工作管理",
+                        "icon": "technology",
+                        "path": "/workshopManagement",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "加工任务面板",
+                                "path": "/workshopManagement/processingTask",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "试装计划任务列表",
+                                "path": "/workshopManagement/trialAssemblyTask",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "车间转运接收列表",
+                                "path": "/workshopManagement/workshopTransfer",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "镀锌车间",
+                        "icon": "technology",
+                        "path": "/galvanizingWorkshop",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "日计划列表",
+                                "path": "/galvanizingWorkshop/dailySchedule",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "过磅单列表",
+                                "path": "/galvanizingWorkshop/weighingList",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "包装车间",
+                        "icon": "technology",
+                        "path": "/packagingWorkshop",
+                        "authority": "approvalm",
+                        "items": [
+                            // {
+                            //     "label": "加工任务面板",
+                            //     "path": "/packagingWorkshop/processingTask",
+                            //     "authority": "approvalm"
+                            // },
+                            {
+                                "label": "成品入库列表",
+                                "path": "/packagingWorkshop/warehousing",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "成品出库计划",
+                                "path": "/packagingWorkshop/deliveryPlan",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "成品库存",
+                                "path": "/packagingWorkshop/stock",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "车辆转运",
+                        "icon": "technology",
+                        "path": "/vehicleTransport",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "运输任务面板",
+                                "path": "/vehicleTransport/transportTask",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
                         "label": "配置管理",
                         "icon": "technology",
                         "path": "/config",
@@ -496,6 +578,36 @@
                             {
                                 "label": "基础设置",
                                 "path": "/baseSetting/baseSettingMngt",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "产线管理",
+                                "path": "/baseSetting/productionLineMngt",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "工序管理",
+                                "path": "/baseSetting/processMngt",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "车间派工设备管理",
+                                "path": "/baseSetting/workshopDispatchEquipmentMngt",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "车间班组管理",
+                                "path": "/baseSetting/workshopTeamMngt",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "成品库配置",
+                                "path": "/baseSetting/shippingDepartmentConfig",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "车辆管理",
+                                "path": "/baseSetting/vehicleMngt",
                                 "authority": "approvalm"
                             }
                         ]

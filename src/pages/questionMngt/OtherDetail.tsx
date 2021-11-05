@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { Button, Form, message, Modal, Spin } from 'antd';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common';
 import { baseInfoData } from './question.json';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
+import AuthUtil from '../../utils/AuthUtil';
 
 const tableColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
@@ -43,7 +44,7 @@ const towerColumns = [
     { title: '材料名称', dataIndex: 'materialName', key: 'materialName' },
     { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture' },
     { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec' },
-    { title: '单基件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum' },
+    { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum' },
     { title: '长度', dataIndex: 'length', key: 'length' },
     { title: '宽度', dataIndex: 'width', key: 'width' },
     { title: '理算重量（kg）', dataIndex: 'basicsTheoryWeight', key: 'basicsTheoryWeight' ,render: (_: number, _b: any, index: number): React.ReactNode => (<span>{_===-1?0:_}</span>)  },
@@ -101,6 +102,7 @@ const boltColumns = [
 
 export default function OtherDetail(): React.ReactNode {
     const history = useHistory();
+    const location = useLocation<{ state: {} }>();
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
     const params = useParams<{ id: string, type: string, status: string }>()
@@ -118,6 +120,8 @@ export default function OtherDetail(): React.ReactNode {
         resole(data)
     }), {})
     const detailData: any = data;
+    console.log(location.state)
+    console.log(AuthUtil.getUserId())
     const handleModalOk = async () => {
         try {
             const refuseData = await form.validateFields();
@@ -156,7 +160,7 @@ export default function OtherDetail(): React.ReactNode {
                     </Form.Item>
                 </Form>
             </Modal>
-            <DetailContent operation={params.status==='1'?[
+            <DetailContent operation={params.status==='1'&&AuthUtil.getUserId()===location.state?[
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
                     await RequestUtil.post(`/tower-science/issue/verify`,{id:params.id}).then(()=>{
                         message.success('修改成功！')

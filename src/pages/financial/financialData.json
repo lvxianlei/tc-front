@@ -1,6 +1,11 @@
 {
     "baseinfo": [
         {
+            "title": "序号",
+            "dataIndex": "index",
+            "type": "string"
+        },
+        {
             "title": "票据编号",
             "dataIndex": "billNumber",
             "type": "string"
@@ -60,11 +65,38 @@
         {
             "title": "所属供应商 ",
             "dataIndex": "supplierName",
-            "type": "string",
+            "type": "popTable",
+            "path": "/tower-supply/supplier",
+            "width": 1011,
+            "value": "supplierName",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "供应商编号",
+                    "dataIndex": "supplierCode"
+                },
+                {
+                    "title": "供应商名称",
+                    "dataIndex": "supplierName"
+                },
+                {
+                    "title": "联系人",
+                    "dataIndex": "contactMan"
+                },
+                {
+                    "title": "联系电话",
+                    "dataIndex": "contactNumber"
+                },
+                {
+                    "title": "供货产品",
+                    "dataIndex": "supplyProducts"
+                }
+            ],
             "rules": [
                 {
                     "required": true,
-                    "message": "请输入所属供应商..."
+                    "message": "请选择供应商..."
                 }
             ]
         },
@@ -112,12 +144,12 @@
             ]
         },
         {
-            "title": "关联收货单",
+            "title": "收货单",
             "dataIndex": "receiptVos",
             "type": "popTable",
             "path": "/tower-storage/receiveStock",
             "width": 1011,
-            "value": "contractName",
+            "value": "receiveNumber",
             "selectType": "checkbox",
             "dependencies": true,
             "readOnly": true,
@@ -182,26 +214,23 @@
     "operation": [
         {
             "title": "操作部门",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "deptName"
         },
         {
             "title": "操作人",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "optUserName"
         },
         {
             "title": "操作时间",
-            "dataIndex": "",
-            "type": ""
+            "dataIndex": "optTime",
+            "type": "date"
+        },
+        {
+            "title": "操作类型",
+            "dataIndex": "optName"
         }
     ],
     "associatedreceipt": [
-        {
-            "title": "序号",
-            "dataIndex": "",
-            "type": ""
-        },
         {
             "title": "收货单号",
             "dataIndex": "receiptNumber",
@@ -286,6 +315,348 @@
             "title": "收票日",
             "dataIndex": "collectInvoiceDate",
             "type": "string"
+        }
+    ],
+    "ApplicationForPayment": [
+        {
+            "title": "付款编号",
+            "dataIndex": "pleasePayNumber"
+        },
+        {
+            "title": "关联到货单",
+            "dataIndex": "associatedarrivaldoc"
+        },
+        {
+            "title": "关联票据",
+            "dataIndex": "relatednotes"
+        },
+        {
+            "title": "请款金额",
+            "dataIndex": "pleasePayAmount",
+            "type": "number"
+        },
+        {
+            "title": "付款状态",
+            "dataIndex": "applyStatus"
+        },
+        {
+            "title": "审批状态",
+            "dataIndex": "applyStatus",
+            "type": "integer"
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "updateStatusTim"
+        },
+        {
+            "title": "所属供应商",
+            "dataIndex": "description"
+        },
+        {
+            "title": "请款机构",
+            "dataIndex": "pleasePayOrganization",
+            "type": "string"
+        },
+        {
+            "title": "请款类别",
+            "dataIndex": "pleasePayType",
+            "type": "integer"
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "paymentMethod",
+            "type": "string"
+        }
+    ],
+    "ApplicationList": [
+        {
+            "title": "所属供应商 ",
+            "dataIndex": "supplierName",
+            "type": "popTable",
+            "path": "/tower-supply/supplier",
+            "width": 1011,
+            "value": "supplierName",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "供应商编号",
+                    "dataIndex": "supplierCode"
+                },
+                {
+                    "title": "供应商名称",
+                    "dataIndex": "supplierName"
+                },
+                {
+                    "title": "联系人",
+                    "dataIndex": "contactMan"
+                },
+                {
+                    "title": "联系电话",
+                    "dataIndex": "contactNumber"
+                },
+                {
+                    "title": "供货产品",
+                    "dataIndex": "supplyProducts"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择供应商..."
+                }
+            ]
+        },
+        {
+            "title": "关联票据",
+            "dataIndex": "relatednotes",
+            "type": "popTable",
+            "path": "/tower-supply/invoice?invoiceStatus=1",
+            "width": 1011,
+            "value": "supplierName",
+            "dependencies": true,
+            "readOnly": true,
+            "selectType": "checkbox",
+            "columns": [
+                {
+                    "title": "票据编号",
+                    "dataIndex": "billNumber",
+                    "type": "string"
+                },
+                {
+                    "title": "发票号",
+                    "dataIndex": "invoiceNumber"
+                },
+                {
+                    "title": "票据金额",
+                    "dataIndex": "invoiceAmount"
+                },
+                {
+                    "title": "收票日",
+                    "dataIndex": "collectInvoiceDate",
+                    "type": "string"
+                },
+                {
+                    "title": "发票类型",
+                    "dataIndex": "invoiceType",
+                    "type": "select",
+                    "search": true
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择供应商..."
+                }
+            ]
+        },
+        {
+            "title": "请款金额",
+            "dataIndex": "pleasePayAmount",
+            "type": "number",
+            "disabled": true
+        },
+        {
+            "title": "关联收货单",
+            "dataIndex": "receiptNumbers",
+            "disabled": true
+        },
+        {
+            "title": "开户银行",
+            "dataIndex": "openBank"
+        },
+        {
+            "title": "银行账号",
+            "dataIndex": "openBankNumber",
+            "type": "string"
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "paymentMethod",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "电汇",
+                    "value": 1
+                },
+                {
+                    "label": "承兑",
+                    "value": 2
+                },
+                {
+                    "label": "现金",
+                    "value": 3
+                }
+            ]
+        },
+        {
+            "title": "请款类别",
+            "dataIndex": "pleasePayType"
+        },
+        {
+            "title": "请款机构",
+            "dataIndex": "pleasePayOrganization",
+            "type": "string"
+        }
+    ],
+    "ApprovalInformation": [
+        {
+            "title": "操作部门",
+            "dataIndex": "deptName"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "optUserName"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "optTime"
+        },
+        {
+            "title": "状态",
+            "dataIndex": "status"
+        }
+    ],
+    "OperationInformation": [
+        {
+            "title": "操作部门",
+            "dataIndex": "deptName"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "optUserName"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "optTime"
+        },
+        {
+            "title": "状态",
+            "dataIndex": "status"
+        },
+        {
+            "title": "付款日",
+            "dataIndex": "payDay"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        }
+    ],
+    "ApplicationInformation": [
+        {
+            "title": "所属供应商",
+            "dataIndex": "description",
+            "disabled": true
+        },
+        {
+            "title": "关联票据",
+            "dataIndex": "relatednotes"
+        },
+        {
+            "title": "请款金额",
+            "dataIndex": "pleasePayAmount",
+            "type": "number"
+        },
+        {
+            "title": "关联收货单",
+            "dataIndex": "associatedreceipt"
+        },
+        {
+            "title": "开户银行",
+            "dataIndex": "openBank"
+        },
+        {
+            "title": "银行账号",
+            "dataIndex": "openBankNumber",
+            "type": "string"
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "paymentMethod",
+            "type": "string"
+        },
+        {
+            "title": "请款类别",
+            "dataIndex": "pleasePayType",
+            "type": "integer"
+        },
+        {
+            "title": "请款机构",
+            "dataIndex": "pleasePayOrganization",
+            "type": "string"
+        }
+    ],
+    "operationInfo": [
+        {
+            "title": "操作部门",
+            "dataIndex": "deptName"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "optUserName"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "optTime"
+        }
+    ],
+    "EditList": [
+        {
+            "title": "所属供应商",
+            "dataIndex": "description",
+            "disabled": true
+        },
+        {
+            "title": "关联票据",
+            "dataIndex": "relatednotes"
+        },
+        {
+            "title": "请款金额",
+            "dataIndex": "pleasePayAmount",
+            "type": "number"
+        },
+        {
+            "title": "关联收货单",
+            "dataIndex": "associatedreceipt"
+        },
+        {
+            "title": "开户银行",
+            "dataIndex": "openBank"
+        },
+        {
+            "title": "银行账号",
+            "dataIndex": "openBankNumber",
+            "type": "string"
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "paymentMethod",
+            "type": "string"
+        },
+        {
+            "title": "请款类别",
+            "dataIndex": "pleasePayType",
+            "type": "integer"
+        },
+        {
+            "title": "请款机构",
+            "dataIndex": "pleasePayOrganization",
+            "type": "string"
+        }
+    ],
+    "operationList": [
+        {
+            "title": "操作部门",
+            "dataIndex": "deptName"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "optUserName"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "optTime"
         }
     ]
 }

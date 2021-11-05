@@ -178,7 +178,7 @@ export default function SalesPlanEdit() {
                 columns={taskNoticeEditSpec.map(item => item.dataIndex === "materialStandard" ? ({ ...item, enum: materialStandardEnum }) : item)}
                 dataSource={data || {}} edit col={3} />
             <DetailTitle title="产品信息" operation={[<Button key="select" type="primary" disabled={!saleOrderId} onClick={handleSelectClick}>选择杆塔明细</Button>]} />
-            <CommonTable columns={[{
+            <CommonTable columns={[...salesAssist, {
                 title: "操作",
                 dataIndex: "opration",
                 width: 30,
@@ -186,7 +186,7 @@ export default function SalesPlanEdit() {
                 render: (_: any, records: any) => <>
                     <Button type="link" onClick={() => deleteProject(records.id)}>删除</Button>
                 </>
-            }, ...salesAssist]} scroll={{ x: true }} dataSource={productDetails} />
+            }]} scroll={{ x: true }} dataSource={productDetails} />
         </Spin>
     </DetailContent>
 }

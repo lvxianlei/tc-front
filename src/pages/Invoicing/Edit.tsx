@@ -34,7 +34,8 @@ export default function Edit() {
 
     const { run: logicWeightRun } = useRequest<{ [key: string]: any }>((id) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/taskNotice/getLogicWeightByContractId?contractId=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/taskNotice/getLogicWeightByContractId?contractId=
+            ${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -212,8 +213,7 @@ export default function Edit() {
                 dataSource={generateInitValues(baseInfoHead)} edit />
 
             <DetailTitle title="发票信息" />
-            <BaseInfo form={invoicForm} columns={invoiceHead} dataSource={data?.invoicingInfoVo || {}} edit />
-
+            <BaseInfo form={invoicForm} columns={invoiceHead} dataSource={data?.invoicingInfoVo || {}} edit/>
             <DetailTitle title="开票明细" operation={[]} />
 
             <EditTable onChange={handleEditTableChange} form={billingForm} columns={billingHead} dataSource={data?.invoicingDetailDtos || []} />

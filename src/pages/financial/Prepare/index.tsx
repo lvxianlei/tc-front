@@ -4,7 +4,8 @@ import { useHistory } from 'react-router-dom'
 import { Page } from '../../common'
 import Edit from "./Edit"
 import Overview from "./Overview"
-import { baseinfo } from "../financialData.json"
+import AttachFile from "./AttachFile"
+import { ApplicationForPayment } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 interface EditRefProps {
@@ -13,12 +14,41 @@ interface EditRefProps {
 export default function ApplyPayment() {
     const history = useHistory()
     const editRef = useRef<EditRefProps>()
+    const fileRef = useRef<EditRefProps>()
     const [visible, setVisible] = useState<boolean>(false)
     const [type, setType] = useState<"new" | "edit">("new")
     const [detailVisible, setDetailVisible] = useState<boolean>(false)
-    const { loading, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    const [successVisible, setSuccessVisible] = useState<boolean>(false)
+    const [detailId, setDetailId] = useState<string>("")
+    const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market//applyPayment?id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/applyPayment?id=${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const { run: cancelRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/applyPayment/recallApply?id=${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const { run: approvalRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/applyPayment/initiateApproval?id=${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+    const { run: successRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/applyPayment/initiateApproval?id=${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -38,13 +68,15 @@ export default function ApplyPayment() {
         if (isClose) {
             message.success("票据创建成功...")
             setVisible(false)
+            history.go(0)
             resove(true)
         }
     })
+
     const handleDelete = (id: string) => {
         Modal.confirm({
             title: "删除",
-            content: "确定删除此开票申请吗？",
+            content: "确定删除此请款申请吗？",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
                     resove(await deleteRun(id))
@@ -57,22 +89,70 @@ export default function ApplyPayment() {
         })
     }
 
+    const handleCancel = (id: string) => {
+        Modal.confirm({
+            title: "撤回请款申请",
+            content: "确定撤回此请款申请吗？",
+            onOk: () => new Promise(async (resove, reject) => {
+                try {
+                    resove(await cancelRun(id))
+                    message.success("撤回成功...")
+                    history.go(0)
+                } catch (error) {
+                    reject(error)
+                }
+            })
+        })
+    }
+
+    const handleApprovalRun = (id: string) => {
+        Modal.confirm({
+            title: "发起请款申请",
+            content: "发起此请款申请吗？",
+            onOk: () => new Promise(async (resove, reject) => {
+                try {
+                    resove(await approvalRun(id))
+                    message.success("撤回成功...")
+                    history.go(0)
+                } catch (error) {
+                    reject(error)
+                }
+            })
+        })
+    }
+
+    const handleSuccessRun = async () => {
+        const result = await fileRef.current?.onSubmit()
+        message.success("成功完成...")
+        setSuccessVisible(false)
+        history.go(0)
+    }
+
     return <>
-        <Modal style={{ padding: 0 }} visible={visible} width={1011} title="创建" onOk={handleModalOk} onCancel={() => setVisible(false)}>
-            <Edit type={type} ref={editRef} />
+        <Modal style={{ padding: 0 }} visible={visible} width={1011} title={type === "new" ? "创建" : "编辑"} onOk={handleModalOk} onCancel={() => setVisible(false)}>
+            <Edit type={type} ref={editRef} id={detailId} />
         </Modal>
         <Modal
-            style={{ padding: 0 }}
             visible={detailVisible} width={1011}
             footer={<Button type="primary" onClick={() => setDetailVisible(false)}>确认</Button>}
             title="详情"
-            onCancel={() => setVisible(false)}>
-            <Overview />
+            onCancel={() => setDetailVisible(false)}>
+            <Overview id={detailId} />
+        </Modal>
+        <Modal visible={successVisible} width={1011}
+            title="附件上传"
+            onCancel={() => {
+                setSuccessVisible(false)
+                history.go(0)
+            }}
+            onOk={() => handleSuccessRun()}
+        >
+            <AttachFile id={detailId} ref={fileRef} />
         </Modal>
         <Page
             path="/tower-supply/applyPayment"
             columns={[
-                ...baseinfo,
+                ...ApplicationForPayment,
                 {
                     title: "操作",
                     dataIndex: "opration",
@@ -80,15 +160,34 @@ export default function ApplyPayment() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link" onClick={() => history.push(`/project/applyPayment/detail/${record.id}`)}>查看</Button>
-                            <Button type="link" onClick={() => history.push(`/project/applyPayment/edit/${record.id}`)}>编辑</Button>
-                            <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>
+                            <a onClick={() => {
+                                setDetailId(record.id)
+                                setDetailVisible(true)
+                            }}>详情</a>
+                            <Button
+                                type="link"
+                                disabled={![0, 3].includes(record.applyStatus)}
+                                onClick={() => {
+                                    setType("edit")
+                                    setDetailId(record.id)
+                                    setVisible(true)
+                                }} >编辑</Button>
+                            {[0].includes(record.applyStatus) && <a onClick={() => handleApprovalRun(record.id)}>发起</a>}
+                            <Button type="link" disabled={![1].includes(record.applyStatus)} onClick={() => handleCancel(record.id)}>撤回</Button>
+                            {[0, 3].includes(record.applyStatus) && <a onClick={() => handleDelete(record.id)}>删除</a>}
+                            <Button type="link" onClick={() => {
+                                setDetailId(record.id)
+                                setSuccessVisible(true)
+                            }}>完成</Button>
                         </>
                     }
                 }]}
             extraOperation={<>
-                <Button type="primary">导出</Button>
-                <Button type="primary" onClick={() => setVisible(true)}>申请</Button>
+                <Button type="primary" ghost>导出</Button>
+                <Button type="primary" ghost onClick={() => {
+                    setType("new")
+                    setVisible(true)
+                }}>申请</Button>
             </>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[

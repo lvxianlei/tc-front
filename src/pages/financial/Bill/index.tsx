@@ -14,6 +14,7 @@ export default function Invoice() {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
     const [detailVisible, setDetailVisible] = useState<boolean>(false)
+    const [detailedId, setDetailedId] = useState<string>("")
     const [type, setType] = useState<"new" | "edit">("new")
     const editRef = useRef<EditRefProps>()
     const { loading, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
@@ -60,16 +61,22 @@ export default function Invoice() {
     })
 
     return <>
-        <Modal style={{ padding: 0 }} visible={visible} width={1011} title="创建" onOk={handleModalOk} onCancel={() => setVisible(false)}>
-            <Edit type={type} ref={editRef} />
+        <Modal
+            style={{ padding: 0 }}
+            visible={visible}
+            width={1011}
+            title={type === "new" ? "创建" : "编辑"}
+            onOk={handleModalOk}
+            onCancel={() => setVisible(false)}>
+            <Edit type={type} ref={editRef} id={detailedId} />
         </Modal>
         <Modal
             style={{ padding: 0 }}
             visible={detailVisible} width={1011}
             footer={<Button type="primary" onClick={() => setDetailVisible(false)}>确认</Button>}
             title="详情"
-            onCancel={() => setVisible(false)}>
-            <Overview />
+            onCancel={() => setDetailVisible(false)}>
+            <Overview id={detailedId} />
         </Modal>
         <Page
             path="/tower-supply/invoice"
@@ -82,19 +89,25 @@ export default function Invoice() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link" onClick={() => setDetailVisible(true)}>查看</Button>
-                            <Button type="link" onClick={() => setVisible(true)}>编辑</Button>
+                            <Button type="link" onClick={() => {
+                                setDetailVisible(true)
+                                setDetailedId(record.id)
+                            }}>查看</Button>
+                            <Button type="link" onClick={() => {
+                                setType("edit")
+                                setDetailedId(record.id)
+                                setVisible(true)
+                            }}>编辑</Button>
                             <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>
                         </>
                     }
                 }]}
             extraOperation={<>
-                <Button type="primary">导出</Button>
-                <Button type="primary"
-                    onClick={() => {
-                        setVisible(true)
-                        setType("new")
-                    }}>创建</Button>
+                <Button type="primary" ghost>导出</Button>
+                <Button type="primary" ghost onClick={() => {
+                    setType("new")
+                    setVisible(true)
+                }}>创建</Button>
             </>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[

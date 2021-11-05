@@ -93,7 +93,8 @@ const directorList = [
 			{
 				title: '',
 				dataIndex: 'questionnaire',
-				path: '/question/questionMngt'
+				path: '/question/questionMngt',
+				state: 1
 			}
 		]
 	}, {
@@ -192,7 +193,7 @@ const workmanList = [
 				title: '待校核',
 				dataIndex: 'segmentMaterialToBeCheck',
 				path: '/workMngt/pickList',
-				state: 3
+				state: 2
 			}, {
 				title: '待配段',
 				dataIndex: 'rodMaterialToBeMatch',

@@ -185,12 +185,6 @@
             "type": "number"
         },
         {
-            "title": "申请时间",
-            "dataIndex": "launchTime",
-            "type": "date",
-            "format": "YYYY-MM-DD"
-        },
-        {
             "title": "制单人",
             "dataIndex": "createUser"
         },

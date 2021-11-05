@@ -2,11 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message, Table } from 'antd';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import ConfirmableButton from '../../../../components/ConfirmableButton';
-import { Page } from '../../../common';
-import { IClient } from '../../../IClient';
 import RequestUtil from '../../../../utils/RequestUtil';
-import ApplicationContext from "../../../../configuration/ApplicationContext";
 import AuthUtil from '../../../../utils/AuthUtil';
 import '../../StockPublicStyle.less';
 import './detail.less';
@@ -30,7 +26,7 @@ export default function RawMaterialStock(): React.ReactNode {
     const [ExWarehousingListdata, setExWarehousingListdata] = useState<any[]>([{}]);//详情-出库信息列表数据
     const [OutLibraryListdata, setOutLibraryListdata] = useState<any[]>([{}]);//出库-原材料信息列表数据
     const [ApplyListdata, setApplyListdata] = useState<any[]>([{}]);//出库-缺料申请-信息列表数据
-    const [totalWeight, setTotalWeight] = useState<number>(0);//总重量
+    const [totalWeight, setTotalWeight] = useState<any>(0);//总重量
     const [MaterialShortageTotalWeight, setMaterialShortageTotalWeight] = useState<number>(0);//缺料总重量
     const [isDetailModal, setIsDetailModal] = useState<boolean>(false);//详情弹框显示
     const [isOutLibraryModal, setIsOutLibraryModal] = useState<boolean>(false);//出库弹框显示
@@ -58,7 +54,7 @@ export default function RawMaterialStock(): React.ReactNode {
             title: '状态',
             dataIndex: 'outStockItemStatus',
             width: 120,
-            render: (text: any) => text == 0 ? '待出库' : text == 1 ? '已出库' : '缺料中'
+            render: (text: any) => text == 0 ? '待出库' : text == 1 ? '缺料中' : '已出库'
         }, {
             title: '最新状态变更时间',
             dataIndex: 'updateTime',
@@ -109,7 +105,7 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 120,
         }, {
             title: '出库时间',
-            dataIndex: 'updatetime',
+            dataIndex: 'outStockTime',
             width: 140,
         }, {
             title: '仓库',
@@ -133,10 +129,10 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 80,
             fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
-                // 0待出库 1 已出库 2 缺料中
+                // 0待出库 2 已出库  1缺料中
                 <Space direction="horizontal" size="small">
                     {record.outStockItemStatus == 0 ? <Button type='link' onClick={() => { IssueOperation(record) }}>出库</Button> : null}
-                    {record.outStockItemStatus == 1 ? <Button type='link' onClick={() => { getDetailData(record.id) }}>详情</Button> : null}
+                    {record.outStockItemStatus == 2 ? <Button type='link' onClick={() => { getDetailData(record.id) }}>详情</Button> : null}
                 </Space>
             )
         }
@@ -398,6 +394,10 @@ export default function RawMaterialStock(): React.ReactNode {
             }
         },
     ];//出库弹框-缺料申请原材料信息表头
+    const { search } = history.location
+    const paramsString = search.substring(1)
+    const searchParams = new URLSearchParams(paramsString)
+    const weight: any = searchParams.get('weight')
     //获取列表数据
     const getLoadData = async () => {
         console.log('请求数据')
@@ -413,9 +413,9 @@ export default function RawMaterialStock(): React.ReactNode {
             updateTimeEnd: dateString[1] ? dateString[1] + ' 23:59:59' : '',
         })
         setListdata(data.outStockDetailPage.records);
-        setTotalWeight(data.width)
-        setMaterialShortageTotalWeight(data.excessWidth)
-        setTotal(data.total);
+        // setTotalWeight(data.weight)
+        setMaterialShortageTotalWeight(data.excessWeight)
+        setTotal(data.outStockDetailPage.total);
     }
     //获取列表详情数据数据
     const getDetailData = async (id: any) => {
@@ -465,15 +465,12 @@ export default function RawMaterialStock(): React.ReactNode {
         setApplyListdata([record]);
         console.log(record)
         const data: any = await RequestUtil.get(`/tower-storage/materialStock`, {
-            params: {
-                warehouseId: record.id,//仓库id
-                materialTexture: record.materialTexture,//材质
-                productName: record.productName,//品名
-                standard: record.standard,//标准
-                lengthMin: record.length,//长度最小值
-                lengthMax: record.length,//长度最大值
-                spec: record.spec,//规格
-            }
+            materialTexture: record.materialTexture,//材质
+            productName: record.productName,//品名
+            standard: record.standard,//标准
+            lengthMin: record.length,//长度最小值
+            lengthMax: record.length,//长度最大值
+            spec: record.spec,//规格
         });
         setOutLibraryListdata(data.materialStockPage.records);
         setIsOutLibraryModal(true)
@@ -622,12 +619,12 @@ export default function RawMaterialStock(): React.ReactNode {
                             <Select.Option
                                 value="1"
                             >
-                                已出库
+                                缺料中
                             </Select.Option>
                             <Select.Option
                                 value="2"
                             >
-                                缺料中
+                                已出库
                             </Select.Option>
                         </Select>
                     </div>
@@ -714,7 +711,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 >返回上一级</Button>
             </div>
             <div className="tip_public_Stock">
-                <div>总重量： {totalWeight} 吨， 缺料总重量：{MaterialShortageTotalWeight} 吨</div>
+                <div>总重量： {Number(weight) > 0 ? weight : 0} 吨， 缺料总重量：{MaterialShortageTotalWeight} 吨</div>
             </div>
             <div className="page_public_Stock">
                 <Table

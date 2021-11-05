@@ -117,7 +117,7 @@ export default function AssemblyWeldingCheck(): React.ReactNode {
             key: 'singleNum' 
         }, 
         {
-            title: '工艺',
+            title: '备注',
             dataIndex: 'description', 
             key: 'description' 
         }

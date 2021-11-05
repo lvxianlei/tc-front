@@ -9,12 +9,13 @@ import { Space, DatePicker, Select, Button, Popconfirm, message, Row, Col, Form,
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
 import TowerLoftingAssign from './TowerLoftingAssign';
 import RequestUtil from '../../../utils/RequestUtil';
 import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import useRequest from '@ahooksjs/use-request';
+import AuthUtil from '../../../utils/AuthUtil';
 
 
 export default function TowerInformation(): React.ReactNode {
@@ -23,6 +24,8 @@ export default function TowerInformation(): React.ReactNode {
     const [ refresh, setRefresh ] = useState(false);
     const [ loftingUser, setLoftingUser ] = useState([]);
     const [ checkUser, setcheckUser ] = useState([]);
+    const location = useLocation<{ state: string }>();
+    const userId = AuthUtil.getUserId();
     
     const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
@@ -164,19 +167,25 @@ export default function TowerInformation(): React.ReactNode {
             width: 250,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    {
-                        record.status === 1 ? 
-                        <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/lofting/${ record.id }` }>放样</Link> : <Button type="link" disabled>放样</Button>
+                    { userId === record.loftingUser ?
+                        <>{record.status === 1 ? 
+                        <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/lofting/${ record.id }` }>放样</Link> : <Button type="link" disabled>放样</Button>}
+                        {record.status === 1 ? 
+                        <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/NCProgram/${ record.id }` }>NC程序</Link> : <Button type="link" disabled>NC程序</Button>}</>
+                        : null
+                    }
+                    { userId === record.checkUser ? 
+                        <>{
+                            record.status === 2 ? 
+                            <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerCheck/${ record.id }` }>校核</Link> : <Button type="link" disabled>校核</Button>
+                        }</>
+                        : null
                     }
                     {
                         record.status === 1 ? 
-                        <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/NCProgram/${ record.id }` }>NC程序</Link> : <Button type="link" disabled>NC程序</Button>
+                        <Button type="link" disabled>塔型放样明细</Button> : <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerLoftingDetails/${ record.id }` }>塔型放样明细</Link>
                     }
-                    {
-                        record.status === 2 ? 
-                        <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerCheck/${ record.id }` }>校核</Link> : <Button type="link" disabled>校核</Button>
-                    }
-                    <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerLoftingDetails/${ record.id }` }>塔型放样明细</Link>
+                    
                 </Space>
             )
         }
@@ -194,7 +203,8 @@ export default function TowerInformation(): React.ReactNode {
         requestData={{ productCategoryId: params.id }}
         extraOperation={ <Space direction="horizontal" size="small">
             {/* <Button type="primary" ghost>导出</Button> */}
-            <Popconfirm
+            {
+                userId === location.state ? <><Popconfirm
                 title="确认提交?"
                 onConfirm={ () => {
                     RequestUtil.post(`/tower-science/productCategory/submit`, { productCategoryId: params.id }).then(res => {
@@ -207,14 +217,16 @@ export default function TowerInformation(): React.ReactNode {
             >
                 <Button type="primary" ghost>提交</Button>
             </Popconfirm>
-            <TowerLoftingAssign id={ params.id } update={ onRefresh } />
+            <TowerLoftingAssign id={ params.id } update={ onRefresh } /></>
+            : null
+        }
             <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
         </Space> }
         searchFormItems={ [
             {
                 name: 'updateStatusTime',
                 label: '最新状态变更时间',
-                children: <DatePicker />
+                children: <DatePicker.RangePicker />
             },
             {
                 name: 'status',
@@ -275,8 +287,8 @@ export default function TowerInformation(): React.ReactNode {
         onFilterSubmit = { (values: Record<string, any>) => {
             if(values.updateStatusTime) {
                 const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
-                values.updateStatusTimeStart = formatDate[0];
-                values.updateStatusTimeEnd = formatDate[1];
+                values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
+                values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             }
             return values;
         } }

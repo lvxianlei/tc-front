@@ -1,0 +1,40 @@
+{
+    "baseInfoData": [
+        {
+            "dataIndex": "contractName",
+            "title": "出库计划号"
+        },
+        {
+            "dataIndex": "customerName",
+            "title": "发货通知单编号"
+        },
+        {
+            "dataIndex": "aeName",
+            "title": "项目名称"
+        },
+        {
+            "dataIndex": "aePhone",
+            "title": "出库日期"
+        },
+        {
+            "dataIndex": "designContactsName",
+            "title": "计划号"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "司机"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "车牌号"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "出库状态"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "备注"
+        }
+    ]
+}

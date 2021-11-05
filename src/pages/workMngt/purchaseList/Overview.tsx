@@ -17,9 +17,6 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
     }), { refreshDeps: [id] })
 
     return <Spin spinning={loading}>
-        <DetailContent>
-            <DetailTitle title="配料方案" />
-            <CommonTable columns={data?.headerColumnVos || []} dataSource={data?.schemeData || []} />
-        </DetailContent>
+        <CommonTable columns={data?.headerColumnVos || []} dataSource={data?.schemeData || []} />
     </Spin>
 }

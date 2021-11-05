@@ -71,15 +71,17 @@ export default function Invoicing() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link">详情</Button>
-                            <Button type="link">编辑</Button>
-                            <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>
+                            <Link to={`/workMngt/receiving/detail/${record.id}`}>详情</Link>
+                            <Button type="link" onClick={() => history.push(`/workMngt/receiving/edit/${record.id}`)}>编辑</Button>
+                            <a onClick={() => handleDelete(record.id)}>删除</a>
                         </>
                     }
                 }]}
             extraOperation={<>
                 <Button type="primary" ghost>导出</Button>
-                <Button type="primary" ghost>创建</Button>
+                <Button type="primary" ghost onClick={() => {
+                    setVisible(true)
+                }}>创建</Button>
             </>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[

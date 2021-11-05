@@ -54,8 +54,9 @@ interface PagenationProps {
     pageSize: number
 }
 
-export const PopTableContent: React.FC<{ data: PopTableData, onChange?: (event: any) => void }> = ({ data, onChange }) => {
-    const [select, setSelect] = useState<any[]>([])
+export const PopTableContent: React.FC<{ data: PopTableData, value?: string, onChange?: (event: any) => void }> = ({ data, value = "", onChange }) => {
+    const initValue = data.selectType === "checkbox" && value ? value.split(",") : []
+    const [select, setSelect] = useState<any[]>(initValue)
     const [pagenation, setPagenation] = useState<PagenationProps>({
         current: 1,
         pageSize: 10
@@ -128,7 +129,11 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
     const [popContent, setPopContent] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: {} })
     const [value, setValue] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: {} })
 
-    const handleChange = (event: any) => setPopContent({ id: event[0].id, value: event[0][data.value || "name" || "id"], records: event })
+    const handleChange = (event: any) => {
+        const newPopContent = { id: event[0]?.id, value: event[0]?.[data.value || "name" || "id"], records: event }
+        const checkboxContent = { id: event[0]?.id, value: event.map((item: any) => item[data.value || "name" || "id"]).join(","), records: event }
+        setPopContent(data.selectType === "checkbox" ? checkboxContent : newPopContent)
+    }
 
     const handleOk = () => {
         const depFalseValue = popContent.id || popContent.value
@@ -150,9 +155,14 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
         setVisible(false)
     }
 
+    const formatValue = () => {
+        let initValue = typeof props.value === "string" ? props.value : value.value
+        return initValue
+    }
+
     return <>
         <Modal width={data.width || 520} title={`选择${data.title}`} destroyOnClose visible={visible} onOk={handleOk} onCancel={handleCancel}>
-            <PopTableContent data={data} onChange={handleChange} />
+            <PopTableContent value={formatValue()} data={data} onChange={handleChange} />
         </Modal>
         <Input
             {...props}
@@ -160,7 +170,7 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
             style={{ width: "100%", height: "100%", ...props.style }}
             onChange={inputChange}
             readOnly={data.readOnly === undefined ? true : data.readOnly}
-            value={typeof props.value === "string" ? props.value : value.value}
+            value={formatValue()}
             addonAfter={<PlusOutlined onClick={() => !data.disabled && setVisible(true)} />} />
     </>
 }

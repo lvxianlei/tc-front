@@ -408,6 +408,7 @@ export default function Questionnaire(): React.ReactNode {
         setSelectVisible(false);
         setWeldingDetailedStructureList([ ...weldingDetailedStructureList, ...newComponentList]);
         setSelectedRowKeys([]);
+        setSelectedRows([]);
     }
     
     /**
@@ -494,7 +495,7 @@ export default function Questionnaire(): React.ReactNode {
                 setSelectedRowKeys(selectedKeys);
                 setSelectedRows(selectedRows);
             }, getCheckboxProps: (record: Record<string, any>) => ({
-                disabled: record.basicsPartNumNow === 0
+                disabled: Number(record.basicsPartNumNow) === 0
             })  } } />
         </Modal>
     </>

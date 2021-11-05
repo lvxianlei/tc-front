@@ -258,6 +258,10 @@
             ]
         },
         {
+            "title": "电压等级",
+            "dataIndex": "voltagelevel"
+        },
+        {
             "title": "包号",
             "dataIndex": "packageCode"
         },
@@ -282,6 +286,10 @@
                     "message": "请输入投标人名称..."
                 }
             ]
+        },
+        {
+            "title": "单价（元）",
+            "dataIndex": "price"
         },
         {
             "title": "总价（万元）",
@@ -390,10 +398,9 @@
             "dataIndex": "mackUser"
         },
         {
-            "title": "接收人签字及时间",
+            "title": "接收人接收及日期",
             "dataIndex": "receiveUserDate",
-            "type": "date",
-            "format": "YYYY-MM-DD"
+            "type": "date"
         },
         {
             "title": "授权人",
@@ -1270,6 +1277,21 @@
         }
     ],
     "salesAssist": [
+        {
+            "title": "状态",
+            "dataIndex": "productStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "未下发"
+                },
+                {
+                    "value": 1,
+                    "label": "已下发"
+                }
+            ]
+        },
         {
             "title": "线路名称",
             "dataIndex": "lineName"

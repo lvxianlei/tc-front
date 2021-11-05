@@ -42,30 +42,11 @@
         },
         {
             "title": "塔型采购状态",
-            "dataIndex": "purchaseTaskStatus",
-            "type": "select",
-            "enum": [
-                {
-                    "lable": "待完成",
-                    "value": 1
-                },
-                {
-                    "lable": "待接收",
-                    "value": 2
-                },
-                {
-                    "lable": "已完成",
-                    "value": 3
-                }
-            ]
-        },
-        {
-            "title": "最新状态变更时间",
             "dataIndex": "purchaseStatusUpdateTime",
             "type": "string"
         }
     ],
-    "ListIngredients": [
+    "ListIngredient": [
         {
             "title": "材质",
             "dataIndex": "structureTexture",
@@ -93,8 +74,76 @@
         },
         {
             "title": "搭配数量",
-            "dataIndex": "",
+            "dataIndex": "matchingquantity",
+            "type": "number"
+        },
+        {
+            "lable": "待完成",
+            "value": 1
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "string"
+        }
+    ],
+    "PlanList": [
+        {
+            "title": "生产未领料（支）",
+            "dataIndex": "productionuncollected",
             "type": ""
+        },
+        {
+            "title": "仓库库存（支）",
+            "dataIndex": "warehouseinventory",
+            "type": "string"
+        },
+        {
+            "title": "在途库存（支）",
+            "dataIndex": "transportationinventory",
+            "type": "string"
+        },
+        {
+            "title": "计划采购（本次）",
+            "dataIndex": "purchasePlanNumber",
+            "type": "string"
+        }
+    ],
+    "ListIngredients": [
+        {
+            "title": "件号",
+            "dataIndex": "index",
+            "type": "string"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture",
+            "type": "string"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "standard",
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec",
+            "type": "string"
+        },
+        {
+            "title": "配料品名",
+            "dataIndex": "materialName",
+            "type": "string"
+        },
+        {
+            "title": "搭配长度（mm）",
+            "dataIndex": "length",
+            "type": "string"
+        },
+        {
+            "title": "搭配数量",
+            "dataIndex": "materialNum",
+            "type": "number"
         },
         {
             "title": "重量（吨）",
@@ -103,30 +152,8 @@
         },
         {
             "title": "备注",
-            "dataIndex": "",
-            "type": ""
-        }
-    ],
-    "PlanList": [
-        {
-            "title": "生产未领料（支）",
-            "dataIndex": "",
-            "type": ""
-        },
-        {
-            "title": "仓库库存（支）",
-            "dataIndex": "",
-            "type": ""
-        },
-        {
-            "title": "在途库存（支）",
-            "dataIndex": "",
-            "type": ""
-        },
-        {
-            "title": "计划采购（本次）",
-            "dataIndex": "purchasePlanNumber",
-            "type": "string"
+            "dataIndex": "remarks",
+            "type": "textarea"
         }
     ],
     "BatchingScheme": [
@@ -136,8 +163,8 @@
             "type": "string"
         },
         {
-            "title": "规格",
-            "dataIndex": "structureSpec",
+            "title": "零件4",
+            "dataIndex": "part4",
             "type": "string"
         },
         {
@@ -147,13 +174,11 @@
         },
         {
             "title": "余料长度",
-            "dataIndex": "plannedSurplusLength",
-            "type": "number"
+            "dataIndex": "surpluslength"
         },
         {
             "title": "利用率",
-            "dataIndex": "utilizationRate",
-            "type": "string"
+            "dataIndex": "utilizationrate"
         }
     ]
 }

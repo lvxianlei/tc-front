@@ -81,7 +81,7 @@ const EditableProTableList: React.FC<any> = forwardRef(({ data, deleteProduct },
 
     return <>
         {data.map((item: any, index: number) => <div key={index}>
-            <DetailTitle title={`产品类型:${item.voltage}${item.productName}`} operation={[<Button type="primary" key="delete" onClick={() => deleteProduct && deleteProduct(item)}>删除产品</Button>]} />
+            <DetailTitle title={`产品类型:${item.voltage}kv${item.productName}`} operation={[<Button type="primary" key="delete" onClick={() => deleteProduct && deleteProduct(item)}>删除产品</Button>]} />
             <EditableProTableListItem data={item} index={index} key={index} ref={(itemRef: any) => { currentRef.current[index] = itemRef }} />
         </div>)}
     </>
@@ -200,7 +200,7 @@ export default function CostEdit() {
             setVisible(false)
             form.resetFields()
         }} destroyOnClose>
-            <Form form={form}>
+            <Form form={form} labelAlign="right">
                 <Form.Item label="产品类型" name="productName" rules={[
                     {
                         "required": true,

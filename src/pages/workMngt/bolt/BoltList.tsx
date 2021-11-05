@@ -11,6 +11,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import styles from './BoltList.module.less';
 import { Link, useLocation } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
+import AuthUtil from '../../../utils/AuthUtil';
 
 enum PriorityType {
     HIGH = 1,              
@@ -129,13 +130,13 @@ export default function BoltList(): React.ReactNode {
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                     <Link to={ `/workMngt/boltList/boltInformation/${ record.loftingTask }/${ record.id }` }>螺栓信息</Link>
                     {
-                        record.boltStatus === 2 ? <Link to={ `/workMngt/boltList/boltListing/${ record.id }` }>螺栓清单</Link> : <Button type="link" disabled>螺栓清单</Button>
+                        record.boltStatus === 2 && record.boltLeader === userId ? <Link to={ `/workMngt/boltList/boltListing/${ record.id }` }>螺栓清单</Link> : <Button type="link" disabled>螺栓清单</Button>
                     }
                     {
-                        record.boltStatus === 3 ? <Link to={ `/workMngt/boltList/boltCheck/${ record.id }` }>校核</Link> : <Button type="link" disabled>校核</Button>
+                        record.boltStatus === 3 && record.loftingLeader === userId ? <Link to={ `/workMngt/boltList/boltCheck/${ record.id }` }>校核</Link> : <Button type="link" disabled>校核</Button>
                     }
                     {
-                        record.boltStatus === 4 ? 
+                        record.boltStatus === 4 && record.loftingLeader === userId ? 
                         <Popconfirm
                             title="确认提交?"
                             onConfirm={ () => RequestUtil.put(`/tower-science/boltRecord/submit?id=${ record.id }`).then(res => {
@@ -154,6 +155,7 @@ export default function BoltList(): React.ReactNode {
 
     const [ refresh, setRefresh ] = useState(false);
     const location = useLocation<{ state: {} }>();
+    const userId = AuthUtil.getUserId();
     return <Page
         path="/tower-science/boltRecord"
         columns={ columns }

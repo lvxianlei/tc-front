@@ -493,12 +493,12 @@ export default function Information(): React.ReactNode {
             searchFormItems={[
                 {
                     name: 'omnipotentQuery',
-                    children: <Input placeholder="请输入项目名称/项目编码/审批编号/关联合同/制单人进行查询" maxLength={200} />
+                    children: <Input placeholder="请输入项目名称/项目编码/审批编号/关联合同/制单人进行查询" style={{width:"380px"}} maxLength={200} />
                 },
                 {
                     name: 'processTypeId',
                     label: '审批类型',
-                    children: <Select style={{ width: 160 }}>
+                    children: <Select style={{width:"380px"}}>
                         {auditType?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}
                     </Select>
                 },
@@ -510,7 +510,7 @@ export default function Information(): React.ReactNode {
                 {
                     name: 'auditStatus',
                     label: '审批状态',
-                    children: <Select style={{ width: 160 }}>
+                    children: <Select style={{ width: "140px" }}>
                         <Select.Option value={0} key="audit-0">审批中</Select.Option>
                         <Select.Option value={1} key="audit-1">已通过</Select.Option>
                         <Select.Option value={2} key="audit-2">已驳回</Select.Option>

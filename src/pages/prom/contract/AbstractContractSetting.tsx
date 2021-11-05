@@ -737,7 +737,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                 (fields: FormListFieldData[], operation: FormListOperation): React.ReactNode => {
                                     return (
                                         <>
-                                            <Button type="primary" onClick={() => (operation.add({ returnedRate: 0, returnedAmount: 0 }))} className={styles.btn}>新增</Button>
+                                            <Button type="primary" onClick={() => (operation.add({ returnedRate: 0, returnedAmount: 0 }))} className={styles.btn}>新增一行</Button>
                                             <Row className={styles.FormHeader}>
                                                 <Col span={2}>期次</Col>
                                                 <Col span={4}>计划名称</Col>
@@ -938,9 +938,9 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                             console.log(info.file, info.fileList);
                                                         }
                                                     }} showUploadList={false}>
-                                                    <Button type="primary">添加</Button>
+                                                    <Button type="primary">添加附件</Button>
                                                 </Upload>
-                                                <Button type="primary" onClick={async () => {
+                                                {/* <Button type="primary" onClick={async () => {
                                                     let attachInfoDtos: any[] = this.getForm()?.getFieldValue("attachInfoDtos");
                                                     let checked: number[] = this.state.checkList || [];
                                                     let batchId: any[] = [];
@@ -963,7 +963,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                         },
                                                         checkList: []
                                                     })
-                                                }}>删除</Button>
+                                                }}>删除</Button> */}
                                             </Space>
                                             {
                                                 fields.map<React.ReactNode>((field: FormListFieldData, index: number): React.ReactNode => (

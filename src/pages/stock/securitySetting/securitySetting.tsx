@@ -21,9 +21,9 @@ const SecuritySetting = (): React.ReactNode => {
             dataIndex: 'productName',
         },
         {
-            key: 'projectNumber',
+            key: 'standard',
             title: '标准',
-            dataIndex: 'projectNumber'
+            dataIndex: 'standard'
         },
         {
             key: 'spec',
@@ -31,9 +31,9 @@ const SecuritySetting = (): React.ReactNode => {
             dataIndex: 'spec',
         },
         {
-            key: 'material_texture',
+            key: 'materialTexture',
             title: '材质',
-            dataIndex: 'material_texture'
+            dataIndex: 'materialTexture'
         },
         {
             key: 'safetyStock',
@@ -77,7 +77,7 @@ const SecuritySetting = (): React.ReactNode => {
     }, [current, size]);
     // 获取列表
     const getColumnsData = async () => {
-        const data: any = await RequestUtil.get('/tower-storage/safetyStock', {
+        const data: any = await RequestUtil.get(`/tower-storage/safetyStock`, {
             current,
             size,
         })
@@ -86,7 +86,7 @@ const SecuritySetting = (): React.ReactNode => {
     }
     // 编辑
     const submit = async () => {
-        await RequestUtil.put(`/tower-storage/safetyStock/${id}`, {
+        await RequestUtil.put(`/tower-storage/safetyStock/${id}?safetyStock=${safetyStock}&alarmStock=${alarmStock}`, {
             safetyStock,
             alarmStock,
         })

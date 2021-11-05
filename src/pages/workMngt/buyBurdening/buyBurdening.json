@@ -1,0 +1,288 @@
+{
+    "baseInfo": [
+        {
+            "title": "原材料任务编号",
+            "dataIndex": "purchaseNumber",
+            "type": "integer"
+        },
+        {
+            "title": "内部合同编号",
+            "dataIndex": "internalNumber",
+            "type": "string"
+        },
+        {
+            "title": "塔型（个）",
+            "dataIndex": "productCategoryNum",
+            "type": "number"
+        },
+        {
+            "title": "杆塔（基）",
+            "dataIndex": "productNum",
+            "type": "number"
+        },
+        {
+            "title": "配料负责人",
+            "dataIndex": "batcher",
+            "type": "string"
+        },
+        {
+            "title": "配料状态",
+            "dataIndex": "batcheTaskStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "待完成",
+                    "value": 1
+                },
+                {
+                    "label": "待接收",
+                    "value": 2
+                },
+                {
+                    "label": "已完成",
+                    "value": 3
+                }
+            ]
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "batcheStatusUpdateTime",
+            "type": "date",
+            "format": "YYYY-MM-DD HH:mm"
+        }
+    ],
+    "SeeList": [
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "type": "string"
+        },
+        {
+            "title": "杆塔（基）",
+            "dataIndex": "productNum",
+            "type": "integer"
+        },
+        {
+            "title": "提料重量（吨）",
+            "dataIndex": "totalWeight",
+            "type": "number"
+        },
+        {
+            "title": "配料人",
+            "dataIndex": "batcher",
+            "type": "string"
+        },
+        {
+            "title": "塔型配料状态",
+            "dataIndex": "batcheTaskStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "待完成",
+                    "value": 1
+                },
+                {
+                    "label": "待接收",
+                    "value": 2
+                },
+                {
+                    "label": "已完成",
+                    "value": 3
+                }
+            ]
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "batcheStatusUpdateTime",
+            "type": "date",
+            "format": "YYYY-MM-DD HH:mm"
+        },
+        {
+            "title": "方案编号",
+            "dataIndex": "schemeNumber",
+            "type": "string"
+        }
+    ],
+    "ComponentDetails": [
+        {
+            "title": "件号",
+            "dataIndex": "num",
+            "type": "integer"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string"
+        },
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "已配/未配",
+            "dataIndex": "equipped"
+        }
+    ],
+    "detailClassification": [
+        {
+            "title": "件号",
+            "dataIndex": "num",
+            "type": "integer"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string"
+        },
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "已配/未配",
+            "dataIndex": "equipped/notequipped"
+        }
+    ],
+    "Batchingschemed": [
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string"
+        },
+        {
+            "title": "原材料长度(mm)",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "零件1",
+            "dataIndex": "part1",
+            "type": "string"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "零件2",
+            "dataIndex": "part2",
+            "type": "string"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "零件3",
+            "dataIndex": "part3",
+            "type": "string"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "零件4",
+            "dataIndex": "part4",
+            "type": "string"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "余料长度",
+            "dataIndex": "surpluslength"
+        },
+        {
+            "title": "利用率",
+            "dataIndex": "utilizationrate"
+        }
+    ],
+    "BatchingSchemes": [
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string"
+        },
+        {
+            "title": "原材料长度(mm)",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "零件1",
+            "dataIndex": "part1",
+            "type": "string"
+        },
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "零件2",
+            "dataIndex": "part2",
+            "type": "string"
+        },
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "零件3",
+            "dataIndex": "part3",
+            "type": "string"
+        },
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "零件4",
+            "dataIndex": "part4",
+            "type": "string"
+        },
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "余料长度",
+            "dataIndex": "surpluslength"
+        },
+        {
+            "title": "利用率",
+            "dataIndex": "utilizationrate"
+        }
+    ]
+}
