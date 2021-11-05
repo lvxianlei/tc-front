@@ -26,6 +26,11 @@ interface IAttachVos {
     readonly userName?: string;
 }
 
+interface IData {
+    readonly ncCount: string; 
+    readonly structureCount: string; 
+}
+
 export default function NCProgram(): React.ReactNode {
     const columns = [
         {
@@ -101,9 +106,15 @@ export default function NCProgram(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string, productSegmentId: string }>();
     const [ refresh, setRefresh ] = useState(false);
-    const { loading, data }: Record<string, any> = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-science/productNc/count?productCategoryId=${ params.id }`);
-        resole(data)
+    const [ data, setData ] = useState<IData>();
+
+    const getData = async () => {
+        const data = await RequestUtil.get<IData>(`/tower-science/productNc/count?productSegmentId=${ params.productSegmentId }`);
+        setData(data)
+    }
+    const { loading }: Record<string, any> = useRequest(() => new Promise(async (resole, reject) => {
+        getData();
+        resole(true);
     }), {})
 
     if (loading) {
@@ -114,13 +125,13 @@ export default function NCProgram(): React.ReactNode {
     
     return <Page
         path="/tower-science/productNc"
-        requestData={{ productCategoryId: params.id }}
+        requestData={{ id: params.productSegmentId }}
         columns={ columns }
         headTabs={ [] }
         refresh={ refresh }
         extraOperation={ <Space direction="horizontal" size="small">
             <Button type="primary" ghost onClick={ () => downloadTemplate(`/tower-science/productNc/downloadSummary?productCategoryId=${ params.id }`, "NC文件汇总" , {}, true ) }>下载</Button>
-            <p>NC程序数 { data.ncCount }/{ data.structureCount }</p>
+            <p>NC程序数 { data?.ncCount }/{ data?.structureCount }</p>
             <Upload 
                 action={ () => {
                     const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
@@ -157,6 +168,7 @@ export default function NCProgram(): React.ReactNode {
                             if(res) {
                                 message.success('上传成功');
                                 setRefresh(!refresh);
+                                getData();
                             }
                         })
                     }

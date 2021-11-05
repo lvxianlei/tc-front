@@ -173,7 +173,7 @@ export default abstract class AbstractUserSetting<P extends RouteComponentProps,
                 label: '所属部门',
                 name: 'departmentId',
                 initialValue: this.state.user?.departmentId,
-                children: <TreeSelect showSearch={true} placeholder="请选择所属机构" multiple={true}
+                children: <TreeSelect showSearch={true} placeholder="请选择所属机构"
                     className={layoutStyles.width100} treeData={this.wrapRole2DataNode(this.state.department)} />,
                 rules: [{
                     required: true,

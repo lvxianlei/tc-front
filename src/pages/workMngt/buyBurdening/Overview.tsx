@@ -2,70 +2,11 @@ import React, { useState } from 'react'
 import { Input, DatePicker, Select, Button, Form } from 'antd'
 import { useHistory, Link, useParams } from 'react-router-dom'
 import { Page } from '../../common';
-
+import { SeeList } from "./buyBurdening.json"
 export default function Overview(): React.ReactNode {
-    const [refresh, setRefresh] = useState<boolean>(false);
-    const [confirmLeader, setConfirmLeader] = useState<any | undefined>([]);
     const params = useParams<{ id: string }>()
     const [filterValue, setFilterValue] = useState({ purchaseTaskId: params.id });
-    const columns = [
-        {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            width: 50,
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-        },
-        {
-            key: 'rawMaterialTaskNum',
-            title: '原材料任务编号',
-            width: 100,
-            dataIndex: 'rawMaterialTaskNum'
-        },
-        {
-            key: 'insideContractNum',
-            title: '内部合同编号',
-            width: 100,
-            dataIndex: 'insideContractNum',
-        },
-        {
-            key: 'towerModel',
-            title: '塔型(个)',
-            width: 200,
-            dataIndex: 'towerModel'
-        },
-        {
-            key: 'poleTower',
-            title: '杆塔(基)',
-            width: 200,
-            dataIndex: 'poleTower'
-        },
-        {
-            key: 'burdeningLeader',
-            title: '配料负责人',
-            width: 100,
-            dataIndex: 'burdeningLeader'
-        },
-        {
-            key: 'burdeningState',
-            title: '配料状态',
-            width: 100,
-            dataIndex: 'burdeningState'
-        },
-        {
-            key: 'updateStatusTime',
-            title: '最新状态变更时间',
-            width: 100,
-            dataIndex: 'updateStatusTime'
-        },
-        {
-            key: 'operation',
-            title: '操作',
-            width: 100,
-            dataIndex: 'operation',
-            render: (_: any, records: any) => <Link type="link" to={`/workMngt/buyBurdening/detail/${records.id}`}>查看</Link>
-        }
-    ]
+
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -80,9 +21,19 @@ export default function Overview(): React.ReactNode {
     return <>
         <Page
             path="/tower-supply/purchaseTaskTower"
-            columns={columns}
-            refresh={refresh}
-            extraOperation={<Button type="primary">导出</Button>}
+            columns={[
+                ...SeeList,
+                {
+                    title: '操作',
+                    width: 100,
+                    dataIndex: 'operation',
+                    render: (_: any, records: any) => (<>
+                        <Link to={`/workMngt/buyBurdening/component/${records.id}`}>明细</Link>
+                        <Button type="link" >配料方案</Button>
+                    </>)
+                }
+            ]}
+            extraOperation={<Button type="primary" ghost>导出</Button>}
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
@@ -104,7 +55,7 @@ export default function Overview(): React.ReactNode {
                     name: 'confirmId',
                     label: '配料人',
                     children: <div>
-                        <Select style={{ width: '100px' }} defaultValue="部门">
+                        {/* <Select style={{ width: '100px' }} defaultValue="部门">
                             {confirmLeader && confirmLeader.map((item: any) => {
                                 return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
                             })}
@@ -113,7 +64,7 @@ export default function Overview(): React.ReactNode {
                             {confirmLeader && confirmLeader.map((item: any) => {
                                 return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
                             })}
-                        </Select>
+                        </Select> */}
                     </div>
                 },
                 {

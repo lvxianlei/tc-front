@@ -9,12 +9,13 @@ import { Space, DatePicker, Select, Button, Row, Col, Form, TreeSelect, Spin, me
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
 import WithSectionModal from './WithSectionModal';
 import { TreeNode } from 'antd/lib/tree-select';
 import RequestUtil from '../../../utils/RequestUtil';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import useRequest from '@ahooksjs/use-request';
+import AuthUtil from '../../../utils/AuthUtil';
 
 export default function PoleInformation(): React.ReactNode {
     const columns = [
@@ -84,12 +85,18 @@ export default function PoleInformation(): React.ReactNode {
             width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    {  
-                        record.loftingStatus === 2 ? <WithSectionModal id={ record.id } updateList={ () => setRefresh(!refresh) }/> : <Button type="link" disabled>配段</Button> 
+                    {   userId === record.loftingUser ?
+                        <>{  
+                            record.loftingStatus === 2 ? <WithSectionModal id={ record.id } updateList={ () => setRefresh(!refresh) }/> : <Button type="link" disabled>配段</Button> 
+                        }</>
+                        : null
                     }
                     <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/poleLoftingDetails/${ record.id }` }>杆塔放样明细</Link>
-                    {  
-                        record.loftingStatus === 3 ? <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ record.id }` }>包装清单</Link> : <Button type="link" disabled>包装清单</Button> 
+                    {   userId === record.loftingUser ?
+                        <>{  
+                            record.loftingStatus === 3 ? <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ record.id }` }>包装清单</Link> : <Button type="link" disabled>包装清单</Button> 
+                        }</>
+                        : null
                     }
                 </Space>
             )
@@ -106,6 +113,8 @@ export default function PoleInformation(): React.ReactNode {
     }), {})
     const departmentData: any = data || [];
     const [ materialUser,setMaterialUser ] = useState([]);
+    const location = useLocation<{ state: string }>();
+    const userId = AuthUtil.getUserId();
 
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles && roles.forEach((role: any & SelectDataNode): void => {
@@ -150,10 +159,14 @@ export default function PoleInformation(): React.ReactNode {
         refresh={ refresh }
         extraOperation={ <Space direction="horizontal" size="small">
             {/* <Button type="primary" ghost>导出</Button> */}
-            <Button type="primary" onClick={ () => RequestUtil.post(`/tower-science/product/submit`, { productCategoryId: params.id }).then(res => {
-                message.success('包装清单保存成功');
-                history.goBack();
-            }) } ghost>完成汇总</Button>
+            {
+                userId === location.state ? 
+                <Button type="primary" onClick={ () => RequestUtil.post(`/tower-science/product/submit`, { productCategoryId: params.id }).then(res => {
+                    message.success('包装清单保存成功');
+                    history.goBack();
+                }) } ghost>完成汇总</Button>
+                : null
+            }
             <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
         </Space>}
         searchFormItems={ [
@@ -163,14 +176,15 @@ export default function PoleInformation(): React.ReactNode {
                 children: <DatePicker.RangePicker />
             },
             {
-                name: 'materialStatus',
+                name: 'loftingStatus',
                 label: '杆塔放样状态',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
                     <Select.Option value={ "" } key="5">全部</Select.Option>
-                    <Select.Option value={ 1 } key="1">配段中</Select.Option>
-                    <Select.Option value={ 2 } key="2">出单中</Select.Option>
-                    <Select.Option value={ 3 } key="3">已完成 </Select.Option>
-                    <Select.Option value={ 4 } key="4">已提交</Select.Option>
+                    <Select.Option value={ 1 } key="1">待开始</Select.Option>
+                    <Select.Option value={ 2 } key="2">配段中</Select.Option>
+                    <Select.Option value={ 3 } key="3">出单中</Select.Option>
+                    <Select.Option value={ 4 } key="4">已完成 </Select.Option>
+                    <Select.Option value={ 5 } key="5">已提交</Select.Option>
                 </Select>
             },
             {

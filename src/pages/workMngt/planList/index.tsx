@@ -61,7 +61,7 @@ export default function Invoicing() {
             }]}
         extraOperation={<>
             <Button type="primary" ghost>导出</Button>
-            <Button type="primary" ghost>创建采购计划</Button>
+            <Button type="primary" ghost onClick={() => message.warning("预留按钮,暂无功能...")}>创建采购计划</Button>
         </>}
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[

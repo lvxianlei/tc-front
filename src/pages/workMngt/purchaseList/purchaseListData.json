@@ -111,34 +111,39 @@
     ],
     "ListIngredients": [
         {
+            "title": "件号",
+            "dataIndex": "index",
+            "type": "string"
+        },
+        {
             "title": "材质",
-            "dataIndex": "structureTexture",
+            "dataIndex": "materialTexture",
             "type": "string"
         },
         {
             "title": "标准",
-            "dataIndex": "materialStandardName",
+            "dataIndex": "standard",
             "type": "string"
         },
         {
             "title": "规格",
-            "dataIndex": "structureSpec",
+            "dataIndex": "spec",
             "type": "string"
         },
         {
             "title": "配料品名",
-            "dataIndex": "doseName",
+            "dataIndex": "materialName",
             "type": "string"
         },
         {
-            "title": "搭配长度",
-            "dataIndex": "collocationLength",
+            "title": "搭配长度（mm）",
+            "dataIndex": "length",
+            "type": "string"
+        },
+        {
+            "title": "搭配数量",
+            "dataIndex": "materialNum",
             "type": "number"
-        },
-        {
-            "title": "零件1",
-            "dataIndex": "part1",
-            "type": "string"
         },
         {
             "title": "重量（吨）",
@@ -146,24 +151,9 @@
             "type": "number"
         },
         {
-            "title": "零件2",
-            "dataIndex": "part2",
-            "type": "string"
-        },
-        {
-            "title": "仓库库存（支）",
-            "dataIndex": "",
-            "type": ""
-        },
-        {
-            "title": "零件3",
-            "dataIndex": "part3",
-            "type": "string"
-        },
-        {
-            "title": "计划采购（本次）",
-            "dataIndex": "purchasePlanNumber",
-            "type": "string"
+            "title": "备注",
+            "dataIndex": "remarks",
+            "type": "textarea"
         }
     ],
     "BatchingScheme": [

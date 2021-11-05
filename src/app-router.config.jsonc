@@ -1361,6 +1361,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 工作管理-采购配料
+      "name": "配料明细",
+      "path": "/workMngt/buyBurdening/component/:id",
+      "module": "./pages/workMngt/buyBurdening/Detail",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 问题单
       "name": "问题单列表",
       "path": "/question/questionMngt",
@@ -1488,6 +1495,111 @@
       "name": "工作台",
       "path": "/financial/prepare",
       "module": "./pages/financial/Prepare/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装车间-加工任务面板
+      "name": "加工任务面板",
+      "path": "/packagingWorkshop/processingTask",
+      "module": "./pages/package-workshop/processingTask/ProcessingTaskList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装车间-成品入库列表
+      "name": "成品入库列表",
+      "path": "/packagingWorkshop/warehousing",
+      "module": "./pages/package-workshop/warehousing/WarehousingList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装车间-成品入库列表-查看
+      "name": "明细查看",
+      "path": "/packagingWorkshop/warehousing/detail/:id",
+      "module": "./pages/package-workshop/warehousing/WarehousingView",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装车间-成品出库计划
+      "name": "成品出库计划",
+      "path": "/packagingWorkshop/deliveryPlan",
+      "module": "./pages/package-workshop/deliveryPlan/DeliveryPlanList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装车间-成品出库计划-查看
+      "name": "成品出库计划",
+      "path": "/packagingWorkshop/deliveryPlan/detail/:id",
+      "module": "./pages/package-workshop/deliveryPlan/DeliveryView",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装车间-成品出库计划-成品出库
+      "name": "成品出库计划",
+      "path": "/packagingWorkshop/deliveryPlan/delivery/:id",
+      "module": "./pages/package-workshop/deliveryPlan/Delivery",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装车间-成品库存
+      "name": "成品库存",
+      "path": "/packagingWorkshop/stock",
+      "module": "./pages/package-workshop/stock/StockList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 车辆转运-运输任务面板
+      "name": "运输任务面板",
+      "path": "/vehicleTransport/transportTask",
+      "module": "./pages/VehicleTransport/TransportTask",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 镀锌车间-日计划列表
+      "name": "日计划列表",
+      "path": "/galvanizingWorkshop/dailySchedule",
+      "module": "./pages/GalvanizingWorkshop/DailySchedule",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 镀锌车间-过磅单列表
+      "name": "过磅单列表",
+      "path": "/galvanizingWorkshop/weighingList",
+      "module": "./pages/GalvanizingWorkshop/WeighingList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 基础配置-产线管理
+      "name": "产线管理",
+      "path": "/baseSetting/productionLineMngt",
+      "module": "./pages/baseSetting/ProductionLineMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 基础配置-工序管理
+      "name": "工序管理",
+      "path": "/baseSetting/processMngt",
+      "module": "./pages/baseSetting/ProcessMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 基础配置-车间派工设备管理
+      "name": "车间派工设备管理",
+      "path": "/baseSetting/workshopDispatchEquipmentMngt",
+      "module": "./pages/baseSetting/WorkshopDispatchEquipmentMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 基础配置-车间班组管理
+      "name": "车间班组管理",
+      "path": "/baseSetting/workshopTeamMngt",
+      "module": "./pages/baseSetting/WorkshopTeamMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 基础配置-成品库配置
+      "name": "成品库配置",
+      "path": "/baseSetting/shippingDepartmentConfig",
+      "module": "./pages/baseSetting/ShippingDepartmentConfig",
       "exact": true,
       "authority": "approvalm"
     }

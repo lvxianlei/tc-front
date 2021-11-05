@@ -1,0 +1,52 @@
+{
+    "baseInfoData": [
+        {
+            "dataIndex": "contractName",
+            "title": "入库单编号"
+        },
+        {
+            "dataIndex": "customerName",
+            "title": "内部合同编号"
+        },
+        {
+            "dataIndex": "aeName",
+            "title": "订单编号"
+        },
+        {
+            "dataIndex": "aePhone",
+            "title": "工程名称"
+        },
+        {
+            "dataIndex": "designContactsName",
+            "title": "产品类别"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "计划号"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "包装时间"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "车间"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "仓库"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "库位"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "班组"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "打包人员"
+        }
+    ]
+}

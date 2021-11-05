@@ -9,19 +9,34 @@ import useRequest from '@ahooksjs/use-request'
 import ApplicationContext from "../../../configuration/ApplicationContext"
 interface EditProps {
     type: "new" | "edit",
+    id: string,
     ref?: React.RefObject<{ onSubmit: () => Promise<any> }>
 }
 
-export default forwardRef(function Edit({ type }: EditProps, ref) {
+export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const invoiceTypeEnum = (ApplicationContext.get().dictionaryOption as any)["1210"].map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
     const [baseForm] = Form.useForm()
     const [attchs, setAttachs] = useState<any[]>([])
-    const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
+
+    const { data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/invoice`, data)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/invoice/${id}`)
+            baseForm.setFieldsValue({
+                ...result,
+                receiptVos: result.receiptVos.map((item: any) => item.receiptNumber).join(",")
+            })
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: type === "new" })
+
+    const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/invoice`, { ...postData, id: data?.id })
             resole(result)
         } catch (error) {
             reject(error)
@@ -33,9 +48,9 @@ export default forwardRef(function Edit({ type }: EditProps, ref) {
             const baseData = await baseForm.validateFields()
             await saveRun({
                 ...baseData,
-                supplierName: baseData.supplierName.value,
-                supplierId: baseData.supplierName.id,
-                receiptDtos: baseData.receiptVos.records?.map((item: any) => ({ receiptId: item.id, receiptNumber: item.receiveNumber }))
+                supplierName: baseData.supplierName.value || data?.supplierName,
+                supplierId: baseData.supplierName.id || data?.supplierId,
+                receiptDtos: baseData.receiptVos.records?.map((item: any) => ({ receiptId: item.id, receiptNumber: item.receiveNumber })) || data?.receiptVos
             })
             resolve(true)
         } catch (error) {
@@ -76,7 +91,7 @@ export default forwardRef(function Edit({ type }: EditProps, ref) {
                 return ({ ...item, type: "select", enum: invoiceTypeEnum })
             }
             return item
-        })} col={3} dataSource={{}} edit />
+        })} col={3} dataSource={data || {}} edit />
         <DetailTitle title="相关附件" operation={[<Upload
             key="sub"
             name="file"

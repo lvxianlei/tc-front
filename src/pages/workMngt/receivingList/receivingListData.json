@@ -80,7 +80,7 @@
         {
             "title": "数量合计",
             "dataIndex": "quantity",
-            "type": "integer"
+            "type": "number"
         },
         {
             "title": "重量（kg）合计",
@@ -88,14 +88,14 @@
             "type": "number"
         },
         {
-            "title": "备注",
-            "dataIndex": "remark",
-            "type": "string"
-        },
-        {
             "title": "价税合计（元）",
             "dataIndex": "price",
             "type": "number"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark",
+            "type": "textarea"
         }
     ],
     "CargoDetails": [

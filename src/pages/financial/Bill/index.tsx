@@ -61,15 +61,21 @@ export default function Invoice() {
     })
 
     return <>
-        <Modal style={{ padding: 0 }} visible={visible} width={1011} title="创建" onOk={handleModalOk} onCancel={() => setVisible(false)}>
-            <Edit type={type} ref={editRef} />
+        <Modal
+            style={{ padding: 0 }}
+            visible={visible}
+            width={1011}
+            title={type === "new" ? "创建" : "编辑"}
+            onOk={handleModalOk}
+            onCancel={() => setVisible(false)}>
+            <Edit type={type} ref={editRef} id={detailedId} />
         </Modal>
         <Modal
             style={{ padding: 0 }}
             visible={detailVisible} width={1011}
             footer={<Button type="primary" onClick={() => setDetailVisible(false)}>确认</Button>}
             title="详情"
-            onCancel={() => setVisible(false)}>
+            onCancel={() => setDetailVisible(false)}>
             <Overview id={detailedId} />
         </Modal>
         <Page
@@ -87,7 +93,11 @@ export default function Invoice() {
                                 setDetailVisible(true)
                                 setDetailedId(record.id)
                             }}>查看</Button>
-                            <Button type="link" onClick={() => setVisible(true)}>编辑</Button>
+                            <Button type="link" onClick={() => {
+                                setType("edit")
+                                setDetailedId(record.id)
+                                setVisible(true)
+                            }}>编辑</Button>
                             <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>
                         </>
                     }
@@ -95,8 +105,8 @@ export default function Invoice() {
             extraOperation={<>
                 <Button type="primary" ghost>导出</Button>
                 <Button type="primary" ghost onClick={() => {
-                    setVisible(true)
                     setType("new")
+                    setVisible(true)
                 }}>创建</Button>
             </>}
             onFilterSubmit={onFilterSubmit}

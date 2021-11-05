@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { Input, DatePicker, Select, Button, Form } from 'antd'
-import { useHistory, Link } from 'react-router-dom'
-import { baseInfo } from "./buyBurdening.json"
+import { useParams } from 'react-router-dom'
+import { ComponentDetails } from "./buyBurdening.json"
 import { Page } from '../../common';
 
 export default function EnquiryList(): React.ReactNode {
-    const [filterValue, setFilterValue] = useState({});
+    const params = useParams<{ id: string }>()
+    const [filterValue, setFilterValue] = useState({ purchaseTaskTowerId: params.id });
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -19,17 +20,19 @@ export default function EnquiryList(): React.ReactNode {
 
     return <>
         <Page
-            path="/tower-supply/materialPurchaseTask/inquirer"
-            columns={[
-                ...baseInfo,
-                {
-                    title: '操作',
-                    width: 100,
-                    dataIndex: 'operation',
-                    render: (_: any, records: any) => <Link to={`/workMngt/buyBurdening/detail/${records.id}`}>查看</Link>
+            path="/tower-supply/purchaseTaskTower/component"
+            columns={ComponentDetails.map((item: any) => {
+                if (item.dataIndex === "equipped") {
+                    return ({ ...item, render: (text: any, records: any) => <>{text} / {records.notequipped}</> })
                 }
-            ]}
-            extraOperation={<Button type="primary" ghost>导出</Button>}
+                return item
+            })}
+            extraOperation={<>
+                <Button type="primary" ghost>导出</Button>
+                <Button type="primary" ghost>完成</Button>
+                <Button type="primary" ghost>配料</Button>
+                <Button type="primary" ghost>返回上一级</Button>
+            </>}
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[

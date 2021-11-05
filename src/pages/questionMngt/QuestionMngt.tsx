@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker,  Button, Select } from 'antd'
-import { Link } from 'react-router-dom'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 
 export default function QuestionMngt(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
+    const location = useLocation<{ state: number }>();
+    const history = useHistory();
     const columns = [
         {
             key: 'index',
@@ -111,9 +113,9 @@ export default function QuestionMngt(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     {
-                        record.type==='WTD-TL'||record.type==='WTD-FY'||record.type==='WTD-LS'? <Link to={`/question/questionMngt/otherDetail/${record.id}/${record.type}/${record.status}`}>查看详情</Link>:
-                        record.type==='WTD-ZH'? <Link to={`/question/questionMngt/assemblyWeldDetail/${record.id}/${record.status}`}>查看详情</Link>:
-                        <Link to={`/question/questionMngt/sampleDrawDetail/${record.id}/${record.status}`}>查看详情</Link>
+                        record.type==='WTD-TL'||record.type==='WTD-FY'||record.type==='WTD-LS'? <Button type='link' onClick={()=>history.push({pathname:`/question/questionMngt/otherDetail/${record.id}/${record.type}/${record.status}`,state: record.recipient})}>查看详情</Button>:
+                        record.type==='WTD-ZH'? <Button  type='link' onClick={()=>history.push({pathname:`/question/questionMngt/assemblyWeldDetail/${record.id}/${record.status}`,state: record.recipient})}>查看详情</Button>:
+                        <Button type='link' onClick={()=>history.push({pathname:`/question/questionMngt/sampleDrawDetail/${record.id}/${record.status}`,state: record.recipient})}>查看详情</Button>
                     }
                 </Space>
             )
@@ -136,6 +138,7 @@ export default function QuestionMngt(): React.ReactNode {
             // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
+            requestData={ { status: location.state } }
             searchFormItems={[
                 {
                     name: 'updateTime',
