@@ -696,7 +696,7 @@
     },
     { // 驾驶舱-合同看板-明细
       "name": "明细",
-      "path": "/stock/viewContract/particulars",
+      "path": "/stock/viewContract/particulars/:contractId",
       "module": "./pages/stock/viewContract/particulars",
       "exact": true,
       "authority": "approvalm"
@@ -743,10 +743,17 @@
       "exact": true,
       "authority": "approvalm"
     },
-    { //合同管理-询价比
-      "name": "询价比",
+    {//合同管理-询比价
+      "name": "询比价",
       "path": "/contract-mngt/enquiryCompare",
       "module": "./pages/contract-mngt/enquiryCompare",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    {//合同管理-询比价-询价信息
+      "name": "询价信息",
+      "path": "/contract-mngt/enquiryCompare/enquiryInformation",
+      "module": "./pages/contract-mngt/enquiryInformation",
       "exact": true,
       "authority": "approvalm"
     },
@@ -1498,6 +1505,41 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 车间工作管理-加工任务面板
+      "name": "加工任务面板",
+      "path": "/workshopManagement/processingTask",
+      "module": "./pages/mngt-workshop/processingTask/ProcessingTaskList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 车间工作管理-试装计划任务列表
+      "name": "试装计划任务列表",
+      "path": "/workshopManagement/trialAssemblyTask",
+      "module": "./pages/mngt-workshop/trialAssemblyTask/TrialAssemblyTaskList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 车间工作管理-试装计划任务列表-构件明细
+      "name": "构件明细",
+      "path": "/workshopManagement/trialAssemblyTask/componentDetail/:id",
+      "module": "./pages/mngt-workshop/ComponentDetails",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 车间工作管理-车间转运接收列表
+      "name": "车间转运接收列表",
+      "path": "/workshopManagement/workshopTransfer",
+      "module": "./pages/mngt-workshop/workshopTransfer/WorkshopTransferList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 车间工作管理-车间转运接收列表-构件明细
+      "name": "构件明细",
+      "path": "/workshopManagement/workshopTransfer/componentDetail/:id",
+      "module": "./pages/mngt-workshop/ComponentDetails",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 包装车间-加工任务面板
       "name": "加工任务面板",
       "path": "/packagingWorkshop/processingTask",
@@ -1600,6 +1642,13 @@
       "name": "成品库配置",
       "path": "/baseSetting/shippingDepartmentConfig",
       "module": "./pages/baseSetting/ShippingDepartmentConfig",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 基础配置-车辆管理
+      "name": "车辆管理",
+      "path": "/baseSetting/vehicleMngt",
+      "module": "./pages/baseSetting/VehicleMngt",
       "exact": true,
       "authority": "approvalm"
     }

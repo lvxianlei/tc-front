@@ -76,7 +76,7 @@ export default function ViewReceivingNoteDetail(): React.ReactNode {
         <div>
             <Page
                 // path="/tower-market/projectInfo"
-                path=""
+                path="/tower-storage/receiveStock/detail"
                 columns={columns}
                 filterValue={filterValue}
                 extraOperation={<div><Link to="/project/management/new"><Button type="primary">导出</Button></Link><span style={{ fontSize: "18px", color: "orange", }}>已收货：重量(支)合计：2209.090 价税合计(元)合计：51425.00 待收货：重量(支)合计：2209.900 价税合计(元)合计：51425.00</span><Button>申请质检</Button><Button onClick={() => { history.goBack() }}>返回上一级</Button></div>}

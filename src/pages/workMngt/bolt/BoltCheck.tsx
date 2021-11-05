@@ -197,7 +197,7 @@ export default function BoltCheck(): React.ReactNode {
             <Tabs onChange={ tabChange } type="card">
                 {
                     detailData.map((item: ITab) => {
-                        return <Tabs.TabPane tab={ item.basicHeight } key={ item.id }>
+                        return <Tabs.TabPane tab={ item.basicHeight + 'm呼高' } key={ item.id }>
                             <Form form={ form } className={ styles.descripForm }>
                                 <CommonTable columns={ columnsSetting } dataSource={ dataSource } pagination={ false } />
                             </Form>

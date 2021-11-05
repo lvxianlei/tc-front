@@ -87,6 +87,12 @@ const columns = [
         dataIndex: 'totalWeight'
     },
     {
+        key: 'totalWeight',
+        title: '总计重量（kg）',
+        width: 200,
+        dataIndex: 'totalWeight'
+    },
+    {
         key: 'ncName',
         title: 'NC程序名称',
         width: 200,

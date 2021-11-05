@@ -11,6 +11,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import styles from './AssemblyWelding.module.less';
 import { Link, useLocation } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
+import AuthUtil from '../../../utils/AuthUtil';
 
 enum PriorityType {
     HIGH = '1',              
@@ -123,13 +124,13 @@ export default function AssemblyWeldingList(): React.ReactNode {
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                     <Link to={ `/workMngt/assemblyWeldingList/assemblyWeldingInformation/${ record.id }` }>组焊信息</Link>
                     {
-                        record.status === 2 ? <Link to={ `/workMngt/assemblyWeldingList/assemblyWeldingListing/${ record.id }/${ record.productCategoryId }` }>组焊清单</Link> : <Button type="link" disabled>组焊清单</Button>
+                        record.status === 2 && record.weldingLeader === userId ? <Link to={ `/workMngt/assemblyWeldingList/assemblyWeldingListing/${ record.id }/${ record.productCategoryId }` }>组焊清单</Link> : <Button type="link" disabled>组焊清单</Button>
                     }
                     {
-                        record.status === 3 ? <Link to={ `/workMngt/assemblyWeldingList/assemblyWeldingCheck/${ record.id }/${ record.productCategoryId }` }>校核</Link> : <Button type="link" disabled>校核</Button>
+                        record.status === 3 && record.weldingCheck === userId ? <Link to={ `/workMngt/assemblyWeldingList/assemblyWeldingCheck/${ record.id }/${ record.productCategoryId }` }>校核</Link> : <Button type="link" disabled>校核</Button>
                     }
                     {
-                        record.status === 4 ? 
+                        record.status === 4 && record.weldingCheck === userId ? 
                         <Popconfirm
                             title="确认提交?"
                             onConfirm={ () => RequestUtil.post(`/tower-science/welding/submitWelding`, { weldingId: record.id }).then(res => {
@@ -148,6 +149,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
 
     const [ refresh, setRefresh ] = useState(false);
     const location = useLocation<{ state: {} }>();
+    const userId = AuthUtil.getUserId();
     return <Page
         path="/tower-science/welding"
         columns={ columns }

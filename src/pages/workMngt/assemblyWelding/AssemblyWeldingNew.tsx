@@ -209,7 +209,8 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
         this.setState({
             selectVisible: false,
             weldingDetailedStructureList: [ ...weldingDetailedStructureList, ...newComponentList],
-            selectedRowKeys: []
+            selectedRowKeys: [],
+            selectedRows: []
         })
     }
     
@@ -551,7 +552,7 @@ class AssemblyWeldingNew extends React.Component<IAssemblyWeldingNewRouteProps, 
                         selectedRowKeys: selectedKeys
                     })
                 }, getCheckboxProps: (record: Record<string, any>) => ({
-                    disabled: record.basicsPartNumNow === 0
+                    disabled: Number(record.basicsPartNumNow) === 0
                 }) } } />
             </Modal>
         </> 

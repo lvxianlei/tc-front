@@ -6,7 +6,7 @@
         },
         {
             "title": "收货单编号",
-            "dataIndex": "receiptNumber"
+            "dataIndex": "receiveNumber"
         },
         {
             "title": "收货完成时间",
@@ -26,19 +26,19 @@
         },
         {
             "title": "贷款运费合计(元)",
-            "dataIndex": "loansFreight"
+            "dataIndex": "price"
         },
         {
             "title": "关联请款编号",
-            "dataIndex": "associatedPaymentRequestNumber"
+            "dataIndex": "pleasePayNumber"
         },
         {
             "title": "关联票据编号",
-            "dataIndex": "associatedBillNumber"
+            "dataIndex": "billNumber"
         },
         {
             "title": "付款状态",
-            "dataIndex": "payStatus"
+            "dataIndex": "invoiceStatus"
         }
     ],
     "viewReceivingNoteDetail": [

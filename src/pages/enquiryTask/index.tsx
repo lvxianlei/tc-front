@@ -1,3 +1,4 @@
+//询价任务
 import React, { useState } from 'react'
 import { Input, DatePicker, Select, Button, Modal, Form, Descriptions, Space, message } from 'antd'
 import { useHistory } from 'react-router-dom'
@@ -28,19 +29,6 @@ export default function EnquiryTask(): React.ReactNode {
     const [form] = Form.useForm();
     const history = useHistory();
 
-    // const { loading, run: deleteRun } = useRequest<{ [key: string]: any }>((inquiryId: number) => new Promise(async (resole, reject) => {
-    //     try {
-    //         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryTask/${inquiryId}`)
-    //         console.log(result);
-    //         resole(result)
-    //     } catch (error) {
-    //         reject(error)
-    //     }
-    // }), { manual: true })
-
-    // const result: { [key: string]: any } = RequestUtil.get(`/tower-supply/inquiryTask/${inquiryId}`)
-    // console.log(result);
-
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -52,11 +40,11 @@ export default function EnquiryTask(): React.ReactNode {
         return value
     }
 
-    const taskDetail = (inquiryId: number) => {
+    const taskDetail = async (inquiryId: number) => {
         setIsModalVisible(true);
         setId(inquiryId);
         setInquiryId(inquiryId);
-        const result: { [key: string]: any } = RequestUtil.get(`/tower-supply/inquiryTask/${inquiryId}`)
+        const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryTask/${inquiryId}`)
         console.log(result);
         // setColumnsData(result)
         setObj(result);
@@ -108,14 +96,19 @@ export default function EnquiryTask(): React.ReactNode {
         console.log(result);
     }
 
-    const handleChange = (value: any) => {
+    const handleChange = async (value: any) => {
         console.log(`selected ${value}`);
-        setDeptId(value);
+        // setDeptId(value);
+        // sinzetech-user/department/tree
+        const result: { [key: string]: any } = await RequestUtil.get(`/sinzetech-user/department/tree`);
+        console.log(result);
     }
 
-    const handleChange1 = (value: any) => {
-        console.log(`selected ${value}`);
-        setInquirerId(value);
+    const handleChange1 = async (departmentId: any) => {
+        console.log(departmentId);
+        // setInquirerId(value);
+        const result: { [key: string]: any } = await RequestUtil.get(`/sinzetech-user/user?departmentId=${departmentId}&size=1000`);
+        console.log(result);
     }
 
     const onChange = (date: any, dateString: any) => {
@@ -305,11 +298,7 @@ export default function EnquiryTask(): React.ReactNode {
                 <Select.Option value="2">Lucy</Select.Option>
                 <Select.Option value="3">yiminghe</Select.Option>
             </Select>
-            人员 *<Select defaultValue="lucy" style={{ width: 120 }} onChange={handleChange1}>
-                <Select.Option value="1">Jack</Select.Option>
-                <Select.Option value="2">Lucy</Select.Option>
-                <Select.Option value="3">yiminghe</Select.Option>
-            </Select>
+            人员 *<Button onClick={()=>{handleChange1(id)}}>aaa</Button>
             <div>
                 计划交付时间 *<DatePicker onChange={onChange} />
             </div>

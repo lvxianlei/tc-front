@@ -1,32 +1,18 @@
-import React, { useState } from 'react'
+//合同看板-明细
+import React, { useEffect, useState } from 'react'
 import { Button, TableColumnProps, Select, DatePicker, Input } from 'antd'
-import { Link, useHistory, } from 'react-router-dom'
-import { Page } from '../../common'
+import { Link, useHistory, useLocation, } from 'react-router-dom'
+import { CommonTable, DetailContent, DetailTitle, Page } from '../../common'
 import { particulars } from "./viewContract.json"
-//状态
-const projectType = [
-    {
-        value: 0,
-        label: "待收票"
-    },
-    {
-        value: 1,
-        label: "已收票"
-    },
-    {
-        value: 2,
-        label: "待付款"
-    },
-    {
-        value: 3,
-        label: "已付款"
-    }
-]
+import useRequest from '_@ahooksjs_use-request@2.8.13@@ahooksjs/use-request'
+import RequestUtil from '../../../utils/RequestUtil'
 
 export default function Particulars(): React.ReactNode {
-    const history = useHistory()
+    const history = useHistory();
     const [filterValue, setFilterValue] = useState({});
     const { RangePicker } = DatePicker;
+    const [columnsData, setColumnsData] = useState<any>([]);
+    // const [contractId, setContractId] = useState<any>(0);
     const onFilterSubmit = (value: any) => {
         if (value.startBidBuyEndTime) {
             const formatDate = value.startBidBuyEndTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -42,37 +28,52 @@ export default function Particulars(): React.ReactNode {
         setFilterValue(value)
         return value
     }
+    console.log(history.location.pathname);
+    const contractId = history.location.pathname.slice(32);
+    // console.log(contractId);
+    const aa = async () => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/detail?contractId=${contractId}`);
+            console.log(result);
+            console.log(result.ReceiveStockDetailPage.records);
+            setColumnsData(result.ReceiveStockDetailPage.records);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    useEffect(() => {
+        aa();
+    }, [])
 
     return (
         <div>
-            <Page
-                path="/tower-market/contract"//no
-                columns={[
-                    {
-                        key: 'index',
-                        title: '序号',
-                        dataIndex: 'index',
-                        fixed:"left",
-                        width: 50,
-                        render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-                    },
-                    ...particulars
-                    ,
-                    {
-                        key: 'operation',
-                        title: '操作',
-                        dataIndex: 'operation',
-                        fixed:"right",
-                        render: (_: any, records: any) => <>
-                            <Button type="link" onClick={() => { }}>质保单</Button>
-                            <Button type="link" onClick={() => { }}>质检单</Button>
-                        </>
-                    },]}
-                filterValue={filterValue}
-                extraOperation={<div><Link to="/project/management/new"><Button type="primary">导出</Button></Link><span style={{fontSize:"20px",color:"#F59A23"}}>已收货：重量(支)合计：2209.900     价税合计(元)合计：51425.00</span><Button onClick={()=>history.goBack()}>返回上一级</Button></div>}
-                onFilterSubmit={onFilterSubmit}
-                searchFormItems={[]}
-            />
+            <DetailContent>
+                <DetailTitle title="操作信息" />
+                <CommonTable
+                    columns={[
+                        {
+                            key: 'index',
+                            title: '序号',
+                            dataIndex: 'index',
+                            fixed: "left",
+                            width: 50,
+                            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                        },
+                        ...particulars,
+                        {
+                            key: 'operation',
+                            title: '操作',
+                            dataIndex: 'operation',
+                            fixed: "right",
+                            render: (_: any, records: any) => <>
+                                <Button type="link" onClick={() => { }}>质保单</Button>
+                                <Button type="link" onClick={() => { }}>质检单</Button>
+                            </>
+                        }
+                    ]}
+                    dataSource={columnsData}
+                />
+            </DetailContent>
         </div>
     )
 }
