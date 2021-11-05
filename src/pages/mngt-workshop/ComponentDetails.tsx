@@ -27,7 +27,7 @@ export default function ConfirmTaskDetail(): React.ReactNode {
     const [ detailData, setDetailData ] = useState<any | undefined>(undefined);
     const page = {
         current: 1,
-        pageSize: 10
+        pageSize: 20
     };
 
     const getTableDataSource = (pagination: TablePaginationConfig) => new Promise(async (resole, reject) => {
