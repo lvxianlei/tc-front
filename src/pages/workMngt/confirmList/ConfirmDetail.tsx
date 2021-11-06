@@ -378,11 +378,11 @@ export default function ConfirmDetail(): React.ReactNode {
             </span>
           ) : (
               <Space>
-                  <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
+                  <Typography.Link disabled={editingKey !== ''||params.status==='3'} onClick={() => edit(record)}>
                       编辑
                   </Typography.Link>
                   <Popconfirm title="确定删除该条数据吗？" onConfirm={() => onDelete(record.key)} disabled={editingKey !== ''}>
-                    <Typography.Link disabled={editingKey !== ''}>
+                    <Typography.Link disabled={editingKey !== ''||params.status==='3'}>
                         删除
                     </Typography.Link>
                   </Popconfirm>
@@ -413,7 +413,7 @@ export default function ConfirmDetail(): React.ReactNode {
     }
     const handleModalCancel = () => {setVisible(false);form.resetFields();}
     const handlePictureModalCancel = () => {setPictureVisible(false)}
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string, status: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
         resole(data);
@@ -513,7 +513,8 @@ export default function ConfirmDetail(): React.ReactNode {
     
     return <Spin spinning={loading}>
             <DetailContent operation={[
-                <Space>
+              <>
+                {params.status==='3'?<Space>
                     <Button type='primary' onClick={async () => {
                         try {
                           const saveData:any = {
@@ -595,8 +596,8 @@ export default function ConfirmDetail(): React.ReactNode {
                          <Button key="goback">返回</Button>
                     </Popconfirm>: <Button key="goback" onClick={() => history.goBack()}>返回</Button>}
                    
-                </Space>
-            ]}>
+                </Space>: <Button key="goback" onClick={() => history.goBack()}>返回</Button>}
+            </>]}>
                 <div style={{display:'flex',justifyContent:'space-between'}}>
                     <Space>
                         {/* <Button type='primary' ghost onClick={() => history.goBack()}>导出</Button>
@@ -606,7 +607,7 @@ export default function ConfirmDetail(): React.ReactNode {
                     </Space>
                     <Space>
                         {/* <Button type='primary' ghost onClick={() => history.goBack()}>导入</Button> */}
-                        <Button type='primary' ghost onClick={() => setVisible(true)}>添加</Button>
+                        {params.status==='3'?<Button type='primary' ghost onClick={() => setVisible(true)}>添加</Button>:null}
                     </Space>
                 </div>
                 <Form form={formRef} component={false}>
@@ -631,8 +632,8 @@ export default function ConfirmDetail(): React.ReactNode {
                 <DetailTitle title="备注"/>
                 {detailData?<TextArea maxLength={ 200 } defaultValue={detailData?.description} onChange={(e)=>{
                     setDescription(e.target.value)
-                }}/>:null}
-                <DetailTitle title="附件信息" operation={[<Upload
+                }} disabled={params.status!=='3'}/>:null}
+                <DetailTitle title="附件信息" operation={[params.status==='3'?<Upload
                     action={ () => {
                       const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
                       return baseUrl+'/sinzetech-resource/oss/put-file'
@@ -647,7 +648,7 @@ export default function ConfirmDetail(): React.ReactNode {
                     showUploadList={ false }
                     data={ { productCategoryId: params.id } }
                     onChange={ uploadChange}
-                ><Button key="enclosure" type="primary" ghost>添加</Button></Upload>]} />
+                ><Button key="enclosure" type="primary" ghost>添加</Button></Upload>:null]} />
                 <CommonTable columns={[
                     {
                         title: '附件名称',
@@ -655,19 +656,19 @@ export default function ConfirmDetail(): React.ReactNode {
                         key: 'name',
                     },
                     {
-                        key: 'operation',
-                        title: '操作',
-                        dataIndex: 'operation',
-                        render: (_: undefined, record: any): React.ReactNode => (
-                            <Space direction="horizontal" size="small">
-                                <Button type="link" onClick={() => downLoadFile(record.id?record.filePath:record.link)}>下载</Button>
-                                {record.fileSuffix==='pdf'?<Button type='link' onClick={()=>{window.open(record.id?record.filePath:record.link)}}>预览</Button>:null}
-                                {['jpg','jpeg', 'png', 'gif'].includes(record.fileSuffix)?<Button type='link' onClick={()=>{setPictureUrl(record.id?record.filePath:record.link);setPictureVisible(true);}}>预览</Button>:null}
-                                <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
+                      key: 'operation',
+                      title: '操作',
+                      dataIndex: 'operation',
+                      render: (_: undefined, record: any): React.ReactNode => (
+                          <Space direction="horizontal" size="small">
+                              <Button type="link" onClick={() => downLoadFile(record.id?record.filePath:record.link)}>下载</Button>
+                              {record.fileSuffix==='pdf'?<Button type='link' onClick={()=>{window.open(record.id?record.filePath:record.link)}}>预览</Button>:null}
+                              {['jpg','jpeg', 'png', 'gif'].includes(record.fileSuffix)?<Button type='link' onClick={()=>{setPictureUrl(record.id?record.filePath:record.link);setPictureVisible(true);}}>预览</Button>:null}
+                              <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
 
-                            </Space>
-                        )
-                    }
+                          </Space>
+                      )
+                  }
                 ]} dataSource={attachInfo}  pagination={ false }/>
             </DetailContent>
             <Modal visible={pictureVisible} onCancel={handlePictureModalCancel} footer={false}>
