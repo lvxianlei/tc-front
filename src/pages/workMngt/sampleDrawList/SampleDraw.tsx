@@ -80,7 +80,7 @@ export default function SampleDraw(): React.ReactNode {
             // fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Popconfirm
+                    {params.status==='2'?<Popconfirm
                         title="要删除该条数据吗？"
                         okText="确认"
                         cancelText="取消"
@@ -90,10 +90,10 @@ export default function SampleDraw(): React.ReactNode {
                             setRefresh(!refresh)
                         })}
                     >
-                        <Button type="link" >
+                        <Button type="link">
                             删除
                         </Button>
-                    </Popconfirm>
+                    </Popconfirm>:null}
                     <Button type='link' onClick={async () => {
                         const url:any = await RequestUtil.get(`/tower-science/smallSample/sampleView/${record.id}`);
                         setUrl(url?.filePath);

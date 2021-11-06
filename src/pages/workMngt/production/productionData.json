@@ -36,14 +36,19 @@
             "type": "integer"
         },
         {
-            "title": "搭配数量",
-            "dataIndex": "quantity",
-            "type": "integer"
-        },
-        {
             "title": "配料状态",
             "dataIndex": "loftingState",
-            "type": "integer"
+            "type": "select",
+            "enum": [
+                {
+                    "label": "待完成",
+                    "value": 1
+                },
+                {
+                    "label": "已完成",
+                    "value": 2
+                }
+            ]
         },
         {
             "title": "最新状态变更时间",

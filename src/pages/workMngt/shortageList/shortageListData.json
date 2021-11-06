@@ -7,7 +7,7 @@
         },
         {
             "title": "采购员",
-            "dataIndex": "purchaseId",
+            "dataIndex": "purchasePersonName",
             "type":"string"
         },
         {
@@ -48,7 +48,25 @@
         {
             "title": "状态",
             "dataIndex": "shortageStatus",
-            "type":"integer"
+            "type": "select",
+            "enum": [
+                {
+                    "label": "待处理",
+                    "value": 1
+                },
+                {
+                    "label": "已处理",
+                    "value": 2
+                },
+                {
+                    "label": "已完成",
+                    "value": 3
+                },
+                {
+                    "label": "已取消",
+                    "value": 4
+                }
+            ]
         }                     
     ],
     "operationInformation":[

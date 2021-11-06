@@ -36,24 +36,25 @@ export default function Overview(): React.ReactNode {
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
-                    name: 'fuzzyMsg',
-                    label: '查询',
-                    children: <Input placeholder="塔型/方案编号" maxLength={200} />
-                },
-                {
                     name: 'startBatcheStatusUpdateTime',
                     label: '最新状态变更时间',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'status',
-                    label: '配料状态',
+                    name: 'batcheTaskStatus',
+                    label: '塔型配料状态',
                     children: <Select style={{ width: "100px" }} defaultValue="请选择">
-                        <Select.Option value={1} key={1}>待接收</Select.Option>
-                        <Select.Option value={2} key={2}>待完成</Select.Option>
-                        <Select.Option value={3} key={3}>已完成</Select.Option>
+                        <Select.Option value="">全部</Select.Option>
+                        <Select.Option value="1">待接收</Select.Option>
+                        <Select.Option value="2">待完成</Select.Option>
+                        <Select.Option value="3">已完成</Select.Option>
                     </Select>
-                }
+                },
+                {
+                    name: 'fuzzyQuery',
+                    label: '查询',
+                    children: <Input placeholder="塔型/方案编号" maxLength={200} />
+                },
             ]}
         />
     </>

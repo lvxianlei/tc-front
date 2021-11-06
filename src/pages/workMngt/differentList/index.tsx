@@ -1,29 +1,30 @@
-import React, { useState } from "react"
-import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
-import { Link, useHistory } from 'react-router-dom'
-import { Page } from '../../common'
-import { baseInfoList } from './differentListData.json'
+import React, {useState} from "react"
+import {Button, Input, DatePicker, Select, Modal, message} from 'antd'
+import {Link, useHistory} from 'react-router-dom'
+import {Page} from '../../common'
+import {baseInfoList} from './differentListData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+
 export default function Invoicing() {
     const history = useHistory()
     const [filterValue, setFilterValue] = useState<any>({})
-    const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    const {run: deleteRun} = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/invoicing?id=${id}`)
             resole(result)
         } catch (error) {
             reject(error)
         }
-    }), { manual: true })
+    }), {manual: true})
 
     const onFilterSubmit = (value: any) => {
-        if (value.startLaunchTime) {
-            const formatDate = value.startLaunchTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startLaunchTime = formatDate[0]
-            value.endLaunchTime = formatDate[1]
+        if (value.startStatusUpdateTime) {
+            const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startStatusUpdateTime = formatDate[0] +" 00:00:00"
+            value.endStatusUpdateTime = formatDate[1]+" 23:59:59"
         }
-        setFilterValue({ ...filterValue, ...value })
+        setFilterValue({...filterValue, ...value})
         return value
     }
 
@@ -62,21 +63,22 @@ export default function Invoicing() {
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {
-                name: 'fuzzyQuery',
-                children: <Input placeholder="编号/内部合同编号/工程名称/票面单位/业务经理" style={{ width: 300 }} />
+                name: 'startStatusUpdateTime',
+                label: '最新状态变更时间',
+                children: <DatePicker.RangePicker format="YYYY-MM-DD"/>
             },
             {
-                name: 'isOpen',
-                label: '是否已全开',
-                children: <Select style={{ width: 200 }}>
-                    <Select.Option value="2">发票已开全</Select.Option>
-                    <Select.Option value="3">发票未开全</Select.Option>
+                name: 'diffStatus',
+                label: '处理状态',
+                children: <Select style={{width: 200}}>
+                    <Select.Option value="1">待处理</Select.Option>
+                    <Select.Option value="2">已完成</Select.Option>
                 </Select>
             },
             {
-                name: 'contractType',
-                label: '开票时合同状态',
-                children: <Select style={{ width: 200 }}>
+                name: 'handler',
+                label: '处理人',
+                children: <Select style={{width: 200}}>
                     <Select.Option value="1">不下计划</Select.Option>
                     <Select.Option value="2">未下计划</Select.Option>
                     <Select.Option value="3">未下完计划</Select.Option>
@@ -85,10 +87,11 @@ export default function Invoicing() {
                 </Select>
             },
             {
-                name: 'startLaunchTime',
-                label: '申请日期',
-                children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                name: 'fuzzyQuery',
+                label: '查看',
+                children: <Input placeholder="差异编号/内部合同编号/生产批次/塔型" style={{width: 300}}/>
             }
+
         ]}
     />
 }

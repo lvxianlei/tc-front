@@ -20,8 +20,8 @@ export default function Invoicing() {
     const onFilterSubmit = (value: any) => {
         if (value.startStatusUpdateTime) {
             const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startStatusUpdateTime = formatDate[0]
-            value.endStatusUpdateTime = formatDate[1]
+            value.startStatusUpdateTime = formatDate[0] + " 00:00:00"
+            value.endStatusUpdateTime = formatDate[1] + " 23:59:59"
         }
         setFilterValue({ ...filterValue, ...value })
         return value

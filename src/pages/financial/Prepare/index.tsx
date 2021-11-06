@@ -69,8 +69,8 @@ export default function ApplyPayment() {
     const onFilterSubmit = (value: any) => {
         if (value.updateStartTime) {
             const formatDate = value.updateStartTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateStartTime = formatDate[0]
-            value.updateEndTime = formatDate[1]
+            value.updateStartTime = formatDate[0] +" 00:00:00"
+            value.updateEndTime = formatDate[1] +" 23:59:59"
         }
         return value
     }

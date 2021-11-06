@@ -144,7 +144,6 @@ export default function NCProgram(): React.ReactNode {
                         'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
                     }
                 }
-                data={ { productCategoryId: params.id } }
                 multiple={ true }
                 showUploadList={ false }
                 onChange={ (info) => {
@@ -152,8 +151,8 @@ export default function NCProgram(): React.ReactNode {
                         message.warning(info.file.response?.msg)
                     } 
                     if(info.file.response && info.file.response?.success){
-                        const dataInfo = info.file.response.data;
-                        const fileInfo = dataInfo.name.split(".");
+                        const dataInfo = info.file.response.data
+                        const fileInfo = dataInfo.name.split(".")
                         RequestUtil.post(`/tower-science/productNc/importProductNc`, {
                             attachInfoList: [{
                                 filePath: dataInfo.name,
@@ -163,7 +162,7 @@ export default function NCProgram(): React.ReactNode {
                                 userName: dataInfo.userName,
                                 fileSuffix: fileInfo[fileInfo.length - 1]
                             }],
-                            productCategoryId: params.id
+                            segmentId: params.productSegmentId
                         }).then(res => {
                             if(res) {
                                 message.success('上传成功');

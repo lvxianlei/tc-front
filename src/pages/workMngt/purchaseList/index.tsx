@@ -15,8 +15,8 @@ export default function Invoicing() {
     const onFilterSubmit = (value: any) => {
         if (value.startPurchaseStatusUpdateTime) {
             const formatDate = value.startPurchaseStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startPurchaseStatusUpdateTime = formatDate[0]
-            value.endPurchaseStatusUpdateTime = formatDate[1]
+            value.startPurchaseStatusUpdateTime = formatDate[0] +" 00:00:00"
+            value.endPurchaseStatusUpdateTime = formatDate[1]+" 23:59:59"
         }
         return value
     }
@@ -66,10 +66,6 @@ export default function Invoicing() {
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
-                    name: 'fuzzyQuery',
-                    children: <Input placeholder="编号/内部合同编号/工程名称/票面单位/业务经理" style={{ width: 300 }} />
-                },
-                {
                     name: 'startPurchaseStatusUpdateTime',
                     label: '最新状态变更时间',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
@@ -78,11 +74,27 @@ export default function Invoicing() {
                     name: 'purchaseTaskStatus',
                     label: '塔型采购状态',
                     children: <Select style={{ width: 200 }}>
+                        <Select.Option value="">全部</Select.Option>
                         <Select.Option value="1">待完成</Select.Option>
                         <Select.Option value="2">待接收</Select.Option>
                         <Select.Option value="3">已完成</Select.Option>
                     </Select>
-                }
+                },
+                {
+                    name: 'purchaseTaskStatus',
+                    label: '采购人',
+                    children: <Select style={{ width: 200 }}>
+                        <Select.Option value="">全部</Select.Option>
+                        <Select.Option value="1">待完成</Select.Option>
+                        <Select.Option value="2">待接收</Select.Option>
+                        <Select.Option value="3">已完成</Select.Option>
+                    </Select>
+                },
+                {
+                    name: 'fuzzyQuery',
+                    label: '查询',
+                    children: <Input placeholder="原材料任务编号/采购计划编号/塔型" style={{ width: 300 }} />
+                },
             ]}
             tableProps={{
                 rowSelection: {

@@ -6,7 +6,7 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, Button, Modal, Select, Form, Table, Popconfirm, message, Row, Col } from 'antd';
+import { Space, Input, Button, Modal, Select, Form, Popconfirm, message, Row, Col } from 'antd';
 import { CommonTable, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
@@ -14,9 +14,23 @@ import { useForm } from 'antd/es/form/Form';
  import styles from './WorkshopEquipmentMngt.module.less';
 import WorkshopUserSelectionComponent from '../../components/WorkshopUserModal';
 
-interface IProcessList {
-    readonly time?: string;
-    readonly atime?: string;
+interface IDetail {
+    readonly name?: string;
+    readonly id?: string;
+    readonly deptProcessesId?: string;
+    readonly deptProcessesName?: string;
+    readonly productionLinesId?: string;
+    readonly productionLinesName?: string;
+    readonly workshopDeptId?: string;
+    readonly workshopDeptName?: string;
+    readonly teamUserVOList?: ITeamUserList[];
+}
+
+interface ITeamUserList {
+    readonly name?: string;
+    readonly position?: string;
+    readonly teamId?: string;
+    readonly userId?: string;
 }
 export default function WorkshopTeamMngt(): React.ReactNode {
     const columns = [
@@ -28,16 +42,16 @@ export default function WorkshopTeamMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
         },
         {
-            key: 'taskNum',
+            key: 'workshopDeptName',
             title: '车间名称',
             width: 150,
-            dataIndex: 'taskNum'
+            dataIndex: 'workshopDeptName'
         },
         {
-            key: 'name',
+            key: 'deptProcessesName',
             title: '工序',
             width: 200,
-            dataIndex: 'name'
+            dataIndex: 'deptProcessesName'
         },
         {
             key: 'name',
@@ -46,22 +60,22 @@ export default function WorkshopTeamMngt(): React.ReactNode {
             dataIndex: 'name'
         },
         {
-            key: 'name',
+            key: 'productionLinesName',
             title: '所属产线',
             width: 200,
-            dataIndex: 'name'
+            dataIndex: 'productionLinesName'
         },
         {
-            key: 'name',
+            key: 'createUserName',
             title: '制单人',
             width: 200,
-            dataIndex: 'name'
+            dataIndex: 'createUserName'
         },
         {
-            key: 'name',
+            key: 'createTime',
             title: '制单时间',
             width: 200,
-            dataIndex: 'name'
+            dataIndex: 'createTime'
         },
         {
             key: 'operation',
@@ -72,14 +86,14 @@ export default function WorkshopTeamMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type="link" onClick={ () => {
-                        getList();
+                        getList(record.id);
                         setVisible(true);
                         setTitle('编辑');
                     } }>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => {
-                            RequestUtil.post(``).then(res => {
+                            RequestUtil.delete(`/tower-production/team`, { id: record.id }).then(res => {
                                 message.success('删除成功');
                                 setRefresh(!refresh);
                             });
@@ -96,14 +110,14 @@ export default function WorkshopTeamMngt(): React.ReactNode {
 
     const tableColumns = [
         {
-            key: 'time',
+            key: 'createTime',
             title: '姓名',
-            dataIndex: 'time'
+            dataIndex: 'createTime'
         },
         {
-            key: 'time',
+            key: 'position',
             title: '职位',
-            dataIndex: 'time'
+            dataIndex: 'position'
         },
         {
             key: 'operation',
@@ -144,9 +158,10 @@ export default function WorkshopTeamMngt(): React.ReactNode {
         setUserList([...userList]);
     }
 
-    const getList = async () => {
-        const data = await RequestUtil.post<IProcessList[]>(``);
-
+    const getList = async (id: string) => {
+        const data = await RequestUtil.get<IDetail>(`/tower-production/team?id=${ id }`);
+        setDetail(data);
+        setUserList(data?.teamUserVOList || [])
     }
 
     const [ refresh, setRefresh ] = useState(false);
@@ -156,30 +171,29 @@ export default function WorkshopTeamMngt(): React.ReactNode {
     const [ filterValue, setFilterValue ] = useState({});
     const [ disabled, setDisabled] = useState(false);
     const [ disabled2, setDisabled2 ] = useState(false);
-    const [ userList, setUserList ] = useState([]);
+    const [ userList, setUserList ] = useState<ITeamUserList[]>([]);
     const [ title, setTitle ] = useState('新增');
+    const [ detail, setDetail ] = useState<IDetail>({});
     return (
         <>
             <Form form={searchForm} layout="inline" style={{margin:'20px'}} onFinish={(value: Record<string, any>) => {
                 setFilterValue(value)
                 setRefresh(!refresh);
             }}>
-                <Form.Item label='' name='materialName'>
-                    <Input placeholder="请输入派工设备/班组名称进行查询"/>
+                <Form.Item label='' name='name'>
+                    <Input placeholder="请输入班组名称进行查询"/>
                 </Form.Item>
-                <Form.Item label='选择车间' name='a'>
+                <Form.Item label='选择车间' name='workshopDeptId'>
                     <Select placeholder="请选择" className={ styles.width150 } onChange={ (e) => {
                         console.log(e)
-                        searchForm.setFieldsValue({ structureTexture: '' });
+                        searchForm.setFieldsValue({ deptProcessesId: '' });
                     } }>
                         <Select.Option value={ 1 } key="4">全部</Select.Option>
                         <Select.Option value={ 2 } key="">全部222</Select.Option>
                     </Select>
                 </Form.Item>
-                <Form.Item label='选择工序' name='structureTexture'>
-                    <Select placeholder="请选择" className={ styles.width150 } onChange={ (e) => {
-                        console.log(e)
-                    } }>
+                <Form.Item label='选择工序' name='deptProcessesId'>
+                    <Select placeholder="请选择" className={ styles.width150 }>
                         <Select.Option value={ 1 } key="4">全部</Select.Option>
                         <Select.Option value={ 2 } key="">全部222</Select.Option>
                     </Select>
@@ -204,7 +218,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                 <Form form={ form } labelCol={{ span: 6 }}>
                     <Row>
                         <Col span={ 12 }>
-                            <Form.Item name="dept" label="所属车间" rules={[{
+                            <Form.Item name="workshopDeptId" initialValue={ detail.workshopDeptId } label="所属车间" rules={[{
                                     "required": true,
                                     "message": "请选择所属车间"
                                 }]}>
@@ -218,7 +232,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={ 12 }>
-                            <Form.Item name="dept" label="工序" rules={[{
+                            <Form.Item name="deptProcessesId"initialValue={ detail.deptProcessesId } label="工序" rules={[{
                                     "required": true,
                                     "message": "请选择工序"
                                 }]}>
@@ -234,7 +248,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                     </Row>
                     <Row>
                         <Col span={ 12 }>
-                            <Form.Item name="dept" label="班组名称" rules={[{
+                            <Form.Item name="name" label="班组名称" initialValue={ detail.name } rules={[{
                                     "required": true,
                                     "message": "请输入班组名称"
                                 }]}>
@@ -242,7 +256,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={ 12 }>
-                            <Form.Item name="dept" label="所属产线" rules={[{
+                            <Form.Item name="productionLinesId" label="所属产线" initialValue={ detail.productionLinesId } rules={[{
                                     "required": true,
                                     "message": "请选择所属产线"
                                 }]}>
