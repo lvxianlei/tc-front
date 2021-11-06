@@ -6,16 +6,24 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, Button, Modal, Select, Form, Table, Popconfirm, message, Row, Col } from 'antd';
+import { Space, Input, Button, Modal, Select, Form, Popconfirm, message, Row, Col } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
 import { useForm } from 'antd/es/form/Form';
 import styles from './WorkshopEquipmentMngt.module.less';
 
-interface IProcessList {
-    readonly time?: string;
-    readonly atime?: string;
+interface IDetail {
+    readonly name?: string;
+    readonly id?: string;
+    readonly workshopDeptName?: string;
+    readonly deptProcessesName?: string;
+    readonly deptProcessesId?: string;
+    readonly productionLinesName?: string;
+    readonly accountEquipmentId?: string;
+    readonly accountEquipmentName?: string;
+    readonly status?: string;
+    readonly workshopDeptId?: string;
 }
 export default function WorkshopEquipmentMngt(): React.ReactNode {
     const columns = [
@@ -27,46 +35,46 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
         },
         {
-            key: 'taskNum',
+            key: 'workshopDeptName',
             title: '车间名称',
             width: 150,
-            dataIndex: 'taskNum'
+            dataIndex: 'workshopDeptName'
         },
         {
-            key: 'internalNumber',
+            key: 'name',
             title: '派工设备名称',
-            dataIndex: 'internalNumber',
+            dataIndex: 'name',
             width: 120
         },
         {
-            key: 'name',
+            key: 'deptProcessesName',
             title: '工序',
             width: 200,
-            dataIndex: 'name'
+            dataIndex: 'deptProcessesName'
         },
         {
-            key: 'name',
+            key: 'productionLinesName',
             title: '设备所属产线',
             width: 200,
-            dataIndex: 'name'
+            dataIndex: 'productionLinesName'
         },
         {
-            key: 'name',
+            key: 'status',
             title: '设备状态',
             width: 200,
-            dataIndex: 'name'
+            dataIndex: 'status'
         },
         {
-            key: 'name',
+            key: 'createUserName',
             title: '制单人',
             width: 200,
-            dataIndex: 'name'
+            dataIndex: 'createUserName'
         },
         {
-            key: 'name',
+            key: 'createTime',
             title: '制单时间',
             width: 200,
-            dataIndex: 'name'
+            dataIndex: 'createTime'
         },
         {
             key: 'operation',
@@ -77,13 +85,14 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type="link" onClick={ () => {
-                        getList();
+                        getList(record.id);
                         setVisible(true);
+                        setTitle('编辑');
                     } }>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => {
-                            RequestUtil.post(``).then(res => {
+                            RequestUtil.delete(`/tower-production/equipment?equipmentId=${ record.id }`).then(res => {
                                 message.success('删除成功');
                                 setRefresh(!refresh);
                             });
@@ -109,9 +118,9 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
         form.resetFields();
     }
 
-    const getList = async () => {
-        const data = await RequestUtil.post<IProcessList[]>(``);
-
+    const getList = async (id: string) => {
+        const data = await RequestUtil.get<IDetail>(`/tower-production/equipment/info?equipmentId=${ id }`);
+        setDetail(data);
     }
 
     const [ refresh, setRefresh ] = useState(false);
@@ -121,25 +130,27 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
     const [ filterValue, setFilterValue ] = useState({});
     const [ disabled, setDisabled] = useState(false);
     const [ disabled2, setDisabled2 ] = useState(false);
+    const [ detail, setDetail ] = useState<IDetail>({});
+    const [ title, setTitle ] = useState('新增');
     return (
         <>
             <Form form={searchForm} layout="inline" style={{margin:'20px'}} onFinish={(value: Record<string, any>) => {
                 setFilterValue(value)
                 setRefresh(!refresh);
             }}>
-                <Form.Item label='' name='materialName'>
+                <Form.Item label='' name='name'>
                     <Input placeholder="请输入派工设备进行查询"/>
                 </Form.Item>
-                <Form.Item label='选择车间' name='a'>
+                <Form.Item label='选择车间' name='workshopDeptId'>
                     <Select placeholder="请选择" className={ styles.width150 } onChange={ (e) => {
                         console.log(e)
-                        searchForm.setFieldsValue({ structureTexture: '' });
+                        searchForm.setFieldsValue({ deptProcessesId: '' });
                     } }>
                         <Select.Option value={ 1 } key="4">全部</Select.Option>
                         <Select.Option value={ 2 } key="">全部222</Select.Option>
                     </Select>
                 </Form.Item>
-                <Form.Item label='选择工序' name='structureTexture'>
+                <Form.Item label='选择工序' name='deptProcessesId'>
                     <Select placeholder="请选择" className={ styles.width150 } onChange={ (e) => {
                         console.log(e)
                     } }>
@@ -147,10 +158,11 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                         <Select.Option value={ 2 } key="">全部222</Select.Option>
                     </Select>
                 </Form.Item>
-                <Form.Item label='状态' name='b'>
+                <Form.Item label='状态' name='status'>
                     <Select placeholder="请选择" className={ styles.width150 }>
-                        <Select.Option value={ 1 } key="4">全部</Select.Option>
-                        <Select.Option value={ 2 } key="">全部222</Select.Option>
+                        <Select.Option value={ 1 } key="1">正常</Select.Option>
+                        <Select.Option value={ 2 } key="2">停用</Select.Option>
+                        <Select.Option value={ 3 } key="3">维修中</Select.Option>
                     </Select>
                 </Form.Item>
                 <Form.Item>
@@ -169,11 +181,11 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                 searchFormItems={ [] }
                 requestData={{ ...filterValue }}
             />
-            <Modal visible={ visible } width="60%" title="按车间设置工序顺序" okText="保存" cancelText="取消" onOk={ save } onCancel={ cancel }>
+            <Modal visible={ visible } width="60%" title={ title + '设备信息' } okText="保存" cancelText="取消" onOk={ save } onCancel={ cancel }>
                 <Form form={ form } labelCol={{ span: 8 }}>
                     <Row>
                         <Col span={ 8 }>
-                            <Form.Item name="dept" label="所属车间" rules={[{
+                            <Form.Item name="workshopDeptId" initialValue={ detail.workshopDeptId } label="所属车间" rules={[{
                                     "required": true,
                                     "message": "请选择所属车间"
                                 }]}>
@@ -187,11 +199,11 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={ 8 }>
-                            <Form.Item name="dept" label="工序" rules={[{
+                            <Form.Item name="deptProcessesId" label="工序" initialValue={ detail.deptProcessesId } rules={[{
                                     "required": true,
                                     "message": "请选择工序"
                                 }]}>
-                                <Select placeholder="请选择"  disabled={ disabled } onChange={ (e) => {
+                                <Select placeholder="请选择" disabled={ disabled } onChange={ (e) => {
                                     console.log(e)
                                     setDisabled2(true);
                                 } }>
@@ -201,7 +213,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={ 8 }>
-                            <Form.Item name="dept" label="派工设备名称" rules={[{
+                            <Form.Item name="name" label="派工设备名称" initialValue={ detail.name } rules={[{
                                     "required": true,
                                     "message": "请输入派工设备名称"
                                 }]}>
@@ -211,7 +223,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                     </Row>
                     <Row>
                         <Col span={ 8 }>
-                            <Form.Item name="dept" label="所属产线" rules={[{
+                            <Form.Item name="deptProcessesId" label="所属产线" initialValue={ detail.deptProcessesId } rules={[{
                                     "required": true,
                                     "message": "请选择所属产线"
                                 }]}>
@@ -222,16 +234,16 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={ 8 }>
-                            <Form.Item name="dept" label="台账设备关联">
+                            <Form.Item name="accountEquipmentId" label="台账设备关联">
                                 <Button>+关联设备</Button>
                             </Form.Item>
                         </Col>
                         <Col span={ 8 }>
-                            <Form.Item name="dept" label="状态">
+                            <Form.Item name="status" initialValue={ detail.status } label="状态">
                                 <Select placeholder="请选择">
                                     <Select.Option value={ 1 } key="1">正常</Select.Option>
                                     <Select.Option value={ 2 } key="2">停用</Select.Option>
-                                    <Select.Option value={ 3 } key="3">维修</Select.Option>
+                                    <Select.Option value={ 3 } key="3">维修中</Select.Option>
                                 </Select>
                             </Form.Item>
                         </Col>

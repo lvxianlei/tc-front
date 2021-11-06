@@ -30,7 +30,7 @@ interface BaseInfoProps {
 function formatDataType(dataItem: any, dataSource: any): string {
     const value = dataSource[dataItem.dataIndex]
     const types: any = {
-        number: (value && value !== -1 && value !== 0 && value !== "0") ? value : "-",
+        number: (value && value !== -1 ) ? value : "-",
         select: ((value || value === 0) && dataItem.enum) ? (dataItem.enum.find((item: any) => item.value === value)?.label || "-") : "-",
         date: value ? moment(value).format(dataItem.format || "YYYY-MM-DD HH:mm:ss") : "-",
         string: (value && !["-1", -1, "0", 0].includes(value)) ? value : "-",

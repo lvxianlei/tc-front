@@ -234,10 +234,10 @@ export default function PackingListNew(): React.ReactNode {
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
             width: 100,
-            render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Popconfirm
                     title="确认移除?"
-                    onConfirm={ () => remove(record) }
+                    onConfirm={ () => remove(record, index) }
                     okText="确认"
                     cancelText="取消"
                 >
@@ -247,32 +247,18 @@ export default function PackingListNew(): React.ReactNode {
         }
     ]
 
-    const remove = async (value: Record<string, any>) => {
-        // if(stayDistrict.length > 0) {
-            const newPackagingData = packagingData.filter((item: IBundle) => {
-                return item.structureId !== value.structureId;
-            })
-            setPackagingData(newPackagingData); 
-            if(!value.topId) {
-                const newValue = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/delRecord?packageRecordId=${ value.id }`);
-                setStayDistrict([ ...stayDistrict, newValue ]);
-            } else {
-                setStayDistrict([ ...stayDistrict, value ]);
-            }
-            // stayDistrict.forEach((item: IBundle, ind: number) => {
-            //     if(item.id === value.id) {
-            //         stayDistrict[ind] = {
-            //             ...item,
-            //             structureNum: value.structureCount
-            //         }  
-            //         setStayDistrict([...stayDistrict])
-            //     } else {
-            //         setStayDistrict([ ...stayDistrict, value ]);
-            //     }
-            // })
-        // } else {
-        //     setStayDistrict([ ...stayDistrict, value ]);
-        // }
+    const remove = async (value: Record<string, any>, index: number) => {
+        // const newPackagingData = packagingData.filter((item: IBundle) => {
+        //     return item.structureId !== value.structureId;
+        // })
+        packagingData.splice(index, 1)
+        setPackagingData([...packagingData]); 
+        if(value.id) {
+            const newValue = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/delRecord?packageRecordId=${ value.id }`);
+            setStayDistrict([ ...stayDistrict, newValue ]);
+        } else {
+            setStayDistrict([ ...stayDistrict, value ]);
+        }
     }
     
     const packaging = () => {
@@ -337,24 +323,6 @@ export default function PackingListNew(): React.ReactNode {
             num: e
         }
         setPackagingData([ ...packagingData ])
-        // if(e < structureCount) {
-        //     stayDistrict.forEach((item: IBundle, ind: number) => {
-        //         if(item.id === packagingData[index].id) {
-        //             stayDistrict[ind] = {
-        //                 ...item,
-        //                 structureNum: (packagingData[index]?.structureCount || 0) - (e || 0)
-        //             }  
-        //             setStayDistrict([...stayDistrict])
-        //         } else {
-        //             setStayDistrict([...stayDistrict, { ...packagingData[index], structureNum: (packagingData[index]?.structureCount || 0) - (e || 0) }])
-        //         }
-        //     })
-        // } else {
-        //     const data = stayDistrict.filter((item: IBundle) => {
-        //         return item.id !== packagingData[index].id;
-        //     })
-        //     setStayDistrict([ ...data ])
-        // }
     }
 
     if (loading) {

@@ -115,7 +115,7 @@ export default function VehicleMngt(): React.ReactNode {
     }
     
     const getList = async (id: string) => {
-        const data = await RequestUtil.post<IDetail>(`/tower-production/vehicle/info?vehicleId=${ id }`);
+        const data = await RequestUtil.get<IDetail>(`/tower-production/vehicle/info?vehicleId=${ id }`);
         setDetail(data);
     }
 
