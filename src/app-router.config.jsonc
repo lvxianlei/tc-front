@@ -869,7 +869,7 @@
     },
     { // 工作管理-确认列表-确认明细
       "name": "确认明细",
-      "path": "/workMngt/confirmList/confirmDetail/:id",
+      "path": "/workMngt/confirmList/confirmDetail/:id/:status",
       "module": "./pages/workMngt/confirmList/ConfirmDetail",
       "exact": true,
       // "authority": "rd_draw_product_detail_list"

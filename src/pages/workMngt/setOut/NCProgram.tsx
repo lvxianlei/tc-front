@@ -144,7 +144,6 @@ export default function NCProgram(): React.ReactNode {
                         'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
                     }
                 }
-                data={ { productCategoryId: params.id } }
                 multiple={ true }
                 showUploadList={ false }
                 onChange={ (info) => {
@@ -163,7 +162,7 @@ export default function NCProgram(): React.ReactNode {
                                 userName: dataInfo.userName,
                                 fileSuffix: fileInfo[fileInfo.length - 1]
                             }],
-                            productCategoryId: params.id
+                            segmentId: params.productSegmentId
                         }).then(res => {
                             if(res) {
                                 message.success('上传成功');
