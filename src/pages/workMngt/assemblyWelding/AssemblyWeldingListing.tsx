@@ -5,7 +5,7 @@
 */
 
 import React from 'react'
-import { Button, message, Popconfirm, Space, Spin, TablePaginationConfig } from 'antd';
+import { Button, message, Modal, Popconfirm, Space, Spin, TablePaginationConfig, Upload } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable } from '../../common';
 import useRequest from '@ahooksjs/use-request';
@@ -14,6 +14,7 @@ import { useState } from 'react';
 import styles from './AssemblyWelding.module.less';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import AssemblyWeldingNew, { IBaseData } from './AssemblyWeldingNew';
+import AuthUtil from '../../../utils/AuthUtil';
 
 interface IResponseData {
     readonly id: number;
@@ -153,6 +154,8 @@ export default function AssemblyWeldingListing(): React.ReactNode {
     const [ visible, setVisible ] = useState(false);
     const [ name, setName ] = useState('');
     const [ record, setRecord ] = useState<IBaseData>({});
+    const [ url, setUrl ] = useState<string>('');
+    const [ urlVisible, setUrlVisible ] = useState<boolean>(false);
 
     const getTableDataSource = (pagination: TablePaginationConfig) => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<IResponseData>(`/tower-science/welding/getDetailedById`, { weldingId: params.id, ...pagination });
@@ -174,12 +177,41 @@ export default function AssemblyWeldingListing(): React.ReactNode {
             <DetailContent>
                 <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
                     {/* <Button type="primary" ghost>导出</Button> */}
-                    {/* <Button type="primary" onClick={ () => downloadTemplate('/tower-science/welding/exportTemplate', '模板') } ghost>模板下载</Button> */}
+                    <Button type="primary" onClick={ () => downloadTemplate('/tower-science/welding/exportTemplate', '模板') } ghost>模板下载</Button>
                     <Button type="primary"  onClick={ () => RequestUtil.post<IResponseData>(`/tower-science/welding/submitForVerification`, { weldingId: params.id }).then(res => {
                         history.goBack();
                     }) } >完成组焊清单</Button>
                     <Button type="primary" onClick={ () => { setVisible(true); setName('添加组焊'); } }>添加组焊</Button>
-                    {/* <Button type="primary" ghost>导入</Button> */}
+                    <Upload 
+                        action={ () => {
+                            const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                            return baseUrl+'/tower-science/welding/import'
+                        } } 
+                        headers={
+                            {
+                                'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                                'Tenant-Id': AuthUtil.getTenantId(),
+                                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                            }
+                        }
+                        showUploadList={ false }
+                        onChange={ (info) => {
+                            if(info.file.response && !info.file.response?.success) {
+                                message.warning(info.file.response?.msg)
+                            }
+                            if(info.file.response && info.file.response?.success){
+                                if(Object.keys(info.file.response?.data).length > 0){
+                                    setUrl(info.file.response?.data);
+                                    setUrlVisible(true);
+                                }else{
+                                    message.success('导入成功！');
+                                    history.go(0);
+                                }
+                            } 
+                        } }
+                    >
+                        <Button type="primary" ghost>导入</Button>
+                    </Upload>
                     <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
                 </Space>
                 <CommonTable 
@@ -204,5 +236,17 @@ export default function AssemblyWeldingListing(): React.ReactNode {
             </DetailContent>
         </Spin>
         { visible ? <AssemblyWeldingNew id={ params.id } segmentId={ record.id } record={ record } productCategoryId={ params.productCategoryId } name={ name } updateList={ () => history.go(0) } visible={ visible } modalCancel={ () => setVisible(false) }/> : null}
+        <Modal 
+            visible={urlVisible} 
+            onOk={()=>{
+                window.open(url);
+                setUrlVisible(false);
+            }} 
+            onCancel={()=>{setUrlVisible(false);setUrl('')}} 
+            title='提示' 
+            okText='下载'
+        >
+            当前存在错误数据，请重新下载上传！
+        </Modal>
     </>
 }
