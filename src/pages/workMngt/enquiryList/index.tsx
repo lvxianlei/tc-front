@@ -114,7 +114,7 @@ export default function EnquiryList(): React.ReactNode {
                     children: <Select
                         disabled={!deptId}
                         style={{ width: 100 }}
-                    >{userData?.records.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}</Select>
+                    >{userData?.records?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}</Select>
                 },
             ]}
         />
