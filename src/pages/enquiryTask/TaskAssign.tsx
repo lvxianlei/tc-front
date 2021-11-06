@@ -1,6 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react"
-import { Form, Row, Col, Select, DatePicker } from 'antd'
-import { overviewBaseInfo } from "./enquiryTask.json"
+import { Form, Select, DatePicker } from 'antd'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 interface OverviewProps {

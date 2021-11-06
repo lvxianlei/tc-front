@@ -56,7 +56,7 @@ export default function EnquiryList(): React.ReactNode {
     })
 
     return <>
-        <Modal width={1011} visible={visible} onOk={handleModal} onCancel={() => {
+        <Modal title="询价信息" width={1011} visible={visible} onOk={handleModal} onCancel={() => {
             editRef.current?.resetFields()
             setVisible(false)
         }} >

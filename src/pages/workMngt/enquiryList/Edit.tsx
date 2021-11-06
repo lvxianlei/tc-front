@@ -14,12 +14,12 @@ export default forwardRef(function Edit({ detailId }: EditProps, ref): JSX.Eleme
     const [form] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryTask/taskResult/${detailId}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryTask/inquirer/${detailId}`)
             resole(result)
         } catch (error) {
             reject(error)
         }
-    }))
+    }), { refreshDeps: [detailId] })
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {

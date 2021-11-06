@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Form, Button, Spin } from 'antd'
+import { Button, Spin, Row } from 'antd'
 import { CurrentPriceInformation } from "./enquiryTask.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
@@ -20,7 +20,7 @@ export default function ({ id }: OverviewProps) {
     return <Spin spinning={loading}>
         <DetailTitle title="当前价格信息" />
         <CommonTable columns={CurrentPriceInformation} dataSource={data?.materialDetails || []} />
-        <div>{data?.inquirerDescription}</div>
+        <Row style={{ backgroundColor: "#f1f1f1", minHeight: 40, padding: 10 }}>{data?.inquirerDescription}</Row>
         <DetailTitle title="附件" />
         <CommonTable columns={[
             {

@@ -44,7 +44,7 @@ export default function EnquiryTask(): React.ReactNode {
             value.startStatusUpdateTime = formatDate[0] + ' 00:00:00';
             value.endStatusUpdateTime = formatDate[1] + ' 23:59:59';
         }
-        setFilterValue(value)
+        setFilterValue({ ...filterValue, ...value })
         return value
     }
 
@@ -75,9 +75,15 @@ export default function EnquiryTask(): React.ReactNode {
     }
 
     const handleFinishTask = async (id: string) => {
-        await finishTaskRun(id)
-        message.success("提交成功...")
-        history.go(0)
+        Modal.confirm({
+            title: "提交/完成",
+            content: "确认提交/完成？",
+            onOk: async () => {
+                await finishTaskRun(id)
+                message.success("提交成功...")
+                history.go(0)
+            }
+        })
     }
 
     return <>
