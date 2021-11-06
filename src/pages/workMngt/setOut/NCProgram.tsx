@@ -152,8 +152,8 @@ export default function NCProgram(): React.ReactNode {
                         message.warning(info.file.response?.msg)
                     } 
                     if(info.file.response && info.file.response?.success){
-                        const dataInfo = info.file.response.data
-                        const fileInfo = dataInfo.name.split(".")
+                        const dataInfo = info.file.response.data;
+                        const fileInfo = dataInfo.name.split(".");
                         RequestUtil.post(`/tower-science/productNc/importProductNc`, {
                             attachInfoList: [{
                                 filePath: dataInfo.name,
