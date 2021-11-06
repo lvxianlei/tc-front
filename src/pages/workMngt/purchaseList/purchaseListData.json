@@ -2,12 +2,14 @@
     "baseInfo": [
         {
             "title": "原材料任务编号",
-            "dataIndex": "materialCategoryId",
-            "type": "integer"
+            "dataIndex": "purchaseNumber",
+            "width": 200,
+            "type": "string"
         },
         {
             "title": "采购计划编号",
-            "dataIndex": "purchaseTaskId",
+            "dataIndex": "purchasePlanNumber",
+            "width": 200,
             "type": "integer"
         },
         {
@@ -17,7 +19,7 @@
         },
         {
             "title": "杆塔（基）",
-            "dataIndex": "productId",
+            "dataIndex": "productNum",
             "type": "integer"
         },
         {
@@ -42,8 +44,22 @@
         },
         {
             "title": "塔型采购状态",
-            "dataIndex": "purchaseStatusUpdateTime",
-            "type": "string"
+            "dataIndex": "purchaseTaskStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "待完成",
+                    "value": 1
+                },
+                {
+                    "label": "待接收",
+                    "value": 2
+                },
+                {
+                    "label": "已完成",
+                    "value": 3
+                }
+            ]
         }
     ],
     "ListIngredient": [

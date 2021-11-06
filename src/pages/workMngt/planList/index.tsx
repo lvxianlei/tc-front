@@ -18,10 +18,10 @@ export default function Invoicing() {
     }), { manual: true })
 
     const onFilterSubmit = (value: any) => {
-        if (value.startLaunchTime) {
-            const formatDate = value.startLaunchTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startLaunchTime = formatDate[0]
-            value.endLaunchTime = formatDate[1]
+        if (value.startStatusUpdateTime) {
+            const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startStatusUpdateTime = formatDate[0] +" 00:00:00"
+            value.endStatusUpdateTime = formatDate[1] +" 23:59:59"
         }
         return value
     }
@@ -66,12 +66,12 @@ export default function Invoicing() {
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {
-                name: 'startPurchaseStatusUpdateTime',
+                name: 'startStatusUpdateTime',
                 label: '最新状态变更时间',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
             },
             {
-                name: 'purchaseTaskStatus',
+                name: 'planStatus',
                 label: '计划状态',
                 children: <Select style={{ width: 200 }}>
                     <Select.Option value="1">待完成</Select.Option>、
@@ -79,7 +79,7 @@ export default function Invoicing() {
                 </Select>
             },
             {
-                name: 'isOpen',
+                name: 'purchaseType',
                 label: '采购类型',
                 children: <Select style={{ width: 200 }}>
                     <Select.Option value="1">外部</Select.Option>
@@ -88,7 +88,7 @@ export default function Invoicing() {
                 </Select>
             },
             {
-                name: 'contractType',
+                name: 'purchasePlanCode',
                 label: '采购计划编号',
                 children: <Input />
             }

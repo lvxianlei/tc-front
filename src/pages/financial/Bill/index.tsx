@@ -34,8 +34,8 @@ export default function Invoice() {
     const onFilterSubmit = (value: any) => {
         if (value.updateEndTime) {
             const formatDate = value.updateEndTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateStartTime = formatDate[0]
-            value.updateEndTime = formatDate[1]
+            value.updateStartTime = formatDate[0] +" 00:00:00"
+            value.updateEndTime = formatDate[1]+ " 23:59:59"
         }
         return value
     }

@@ -15,7 +15,7 @@ export default function Invoicing() {
     const [materialData, setMaterialData] = useState<{ [key: string]: any }>({});
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/invoicing?id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-storage/receiveStock?receiveStockById=${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -23,10 +23,20 @@ export default function Invoicing() {
     }), { manual: true })
 
     const onFilterSubmit = (value: any) => {
-        if (value.startLaunchTime) {
-            const formatDate = value.startLaunchTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startLaunchTime = formatDate[0]
-            value.endLaunchTime = formatDate[1]
+        if (value.startStatusUpdateTime) {
+            const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startStatusUpdateTime = formatDate[0] +" 00:00:00"
+            value.endStatusUpdateTime = formatDate[1] +" 23:59:59"
+        }
+        if (value.startReceiveTime) {
+            const formatDate = value.startReceiveTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startReceiveTime = formatDate[0] +" 00:00:00"
+            value.endReceiveTime = formatDate[1] +" 23:59:59"
+        }
+        if (value.startCompleteTime) {
+            const formatDate = value.startCompleteTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startCompleteTime = formatDate[0] +" 00:00:00"
+            value.endCompleteTime = formatDate[1] +" 23:59:59"
         }
         return value
     }
@@ -42,7 +52,7 @@ export default function Invoicing() {
     const handleDelete = (id: string) => {
         Modal.confirm({
             title: "删除",
-            content: "确定删除此开票申请吗？",
+            content: "确定删除此收货单信息吗？",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
                     resove(await deleteRun(id))
@@ -93,24 +103,36 @@ export default function Invoicing() {
             </>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
+
                 {
-                    name: 'fuzzyQuery',
-                    children: <Input placeholder="编号/内部合同编号/工程名称/票面单位/业务经理" style={{ width: 300 }} />
-                },
-                {
-                    name: 'startPurchaseStatusUpdateTime',
+                    name: 'startStatusUpdateTime',
                     label: '最新状态变更时间',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'purchaseTaskStatus',
+                    name: 'receiveStatus',
                     label: '收货单状态',
                     children: <Select style={{ width: 200 }}>
-                        <Select.Option value="1">待完成</Select.Option>
-                        <Select.Option value="2">待接收</Select.Option>
-                        <Select.Option value="3">已完成</Select.Option>
+                        <Select.Option value="">全部</Select.Option>
+                        <Select.Option value="0">待完成</Select.Option>
+                        <Select.Option value="1">已完成</Select.Option>
                     </Select>
-                }
+                },
+                {
+                    name: 'startReceiveTime',
+                    label: '约定时间',
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                },
+                {
+                    name: 'startCompleteTime',
+                    label: '完成时间',
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                },
+                {
+                    name: 'fuzzyQuery',
+                    label: '查询',
+                    children: <Input placeholder="供应商/联系人/收货单号/联系电话" style={{ width: 300 }} />
+                },
             ]}
         />
     </>

@@ -9,10 +9,10 @@ export default function Invoicing() {
     const [detailId, setDetailId] = useState<string>("")
 
     const onFilterSubmit = (value: any) => {
-        if (value.startLaunchTime) {
-            const formatDate = value.startLaunchTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startLaunchTime = formatDate[0]
-            value.endLaunchTime = formatDate[1]
+        if (value.startStatusUpdateTime) {
+            const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startStatusUpdateTime = formatDate[0]+" 00:00:00"
+            value.endStatusUpdateTime = formatDate[1]+" 23:59:59"
         }
         return value
     }
@@ -44,22 +44,33 @@ export default function Invoicing() {
             extraOperation={<Button type="primary" ghost>导出</Button>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
+
                 {
-                    name: 'fuzzyQuery',
-                    children: <Input placeholder="编号/内部合同编号/工程名称/票面单位/业务经理" style={{ width: 300 }} />
-                },
-                {
-                    name: 'startPurchaseStatusUpdateTime',
+                    name: 'startStatusUpdateTime',
                     label: '最新状态变更时间',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'purchaseTaskStatus',
+                    name: 'loftingState',
                     label: '状态',
+                    children: <Select style={{ width: 200 }}>
+                        <Select.Option value="">全部</Select.Option>、
+                        <Select.Option value="1">待完成</Select.Option>、
+                        <Select.Option value="2">已完成</Select.Option>
+                    </Select>
+                },
+                {
+                    name: 'loftingId',
+                    label: '配料负责人',
                     children: <Select style={{ width: 200 }}>
                         <Select.Option value="1">待完成</Select.Option>、
                         <Select.Option value="2">已完成</Select.Option>
                     </Select>
+                },
+                {
+                    name: 'fuzzyQuery',
+                    label: '查询',
+                    children: <Input placeholder="方案编号/任务编号/生产批次/塔型" style={{ width: 300 }} />
                 }
             ]}
         />
