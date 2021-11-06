@@ -3,32 +3,38 @@
         {
             "title": "原材料任务编号",
             "dataIndex": "purchaseNumber",
-            "type": "integer"
+            "width": 100,
+            "type": "string"
         },
         {
             "title": "内部合同编号",
             "dataIndex": "internalNumber",
+            "width": 100,
             "type": "string"
         },
         {
             "title": "塔型（个）",
             "dataIndex": "productCategoryNum",
+            "width": 50,
             "type": "number"
         },
         {
             "title": "杆塔（基）",
             "dataIndex": "productNum",
+            "width": 50,
             "type": "number"
         },
         {
             "title": "配料负责人",
             "dataIndex": "batcher",
+            "width": 100,
             "type": "string"
         },
         {
             "title": "配料状态",
             "dataIndex": "batcheTaskStatus",
             "type": "select",
+            "width": 50,
             "enum": [
                 {
                     "label": "待完成",
@@ -60,11 +66,13 @@
         {
             "title": "杆塔（基）",
             "dataIndex": "productNum",
+            "width": 50,
             "type": "integer"
         },
         {
             "title": "提料重量（吨）",
             "dataIndex": "totalWeight",
+            "width": 50,
             "type": "number"
         },
         {

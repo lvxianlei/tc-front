@@ -5,12 +5,14 @@ import { Page } from '../../common'
 import { baseInfo } from "../purchaseList/purchaseListData.json"
 export default function RelationList() {
     const history = useHistory()
+    const [filterValue, setFilterValue] = useState({})
     const onFilterSubmit = (value: any) => {
         if (value.startPurchaseStatusUpdateTime) {
             const formatDate = value.startPurchaseStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startPurchaseStatusUpdateTime = formatDate[0]
             value.endPurchaseStatusUpdateTime = formatDate[1]
         }
+        setFilterValue({ ...filterValue, ...value })
         return value
     }
 
@@ -18,10 +20,11 @@ export default function RelationList() {
         path="/tower-supply/purchaseTaskTower/purchaser"
         columns={baseInfo}
         onFilterSubmit={onFilterSubmit}
+        filterValue={filterValue}
         searchFormItems={[
             {
                 name: 'fuzzyQuery',
-                children: <Input placeholder="编号/内部合同编号/工程名称/票面单位/业务经理" style={{ width: 300 }} />
+                children: <Input placeholder="任务编号/塔型" style={{ width: 300 }} />
             },
             {
                 name: 'startPurchaseStatusUpdateTime',

@@ -12,27 +12,29 @@
         },
         {
             "title": "客户名称",
-            "width": 200,
+            "width": 50,
             "dataIndex": "biddingPerson"
         },
         {
             "title": "项目负责人",
-            "width": 200,
+            "width": 50,
             "dataIndex": "projectLeader"
         },
         {
             "title": "投标截止时间",
-            "width": 100,
+            "width": 50,
             "dataIndex": "biddingEndTime"
         },
         {
             "title": "计划交付时间",
-            "width": 100,
-            "dataIndex": "plannedDeliveryTime"
+            "width": 50,
+            "dataIndex": "plannedDeliveryTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "任务状态",
-            "width": 250,
+            "width": 50,
             "dataIndex": "inquiryStatus",
             "type": "select",
             "enum": [
@@ -65,11 +67,13 @@
         {
             "title": "最新状态变更时间",
             "width": 100,
-            "dataIndex": "statusUpdateTime"
+            "dataIndex": "statusUpdateTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "询价人",
-            "width": 100,
+            "width": 50,
             "dataIndex": "inquirer"
         }
     ],

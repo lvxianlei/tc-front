@@ -1,10 +1,8 @@
 import React, { useState, useRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { Page } from '../../common'
 import { baseInfo } from "./purchaseListData.json"
-import useRequest from '@ahooksjs/use-request'
-import RequestUtil from '../../../utils/RequestUtil'
 import Overview from "./Overview"
 import PurchasePlan from "./PurchasePlan"
 export default function Invoicing() {

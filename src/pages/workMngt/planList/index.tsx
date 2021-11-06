@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { Page } from '../../common'
@@ -7,7 +7,7 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 export default function Invoicing() {
     const history = useHistory()
-
+    const [filterValue, setFilterValue] = useState<any>({})
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPurchasePlan/${id}`)
@@ -18,11 +18,12 @@ export default function Invoicing() {
     }), { manual: true })
 
     const onFilterSubmit = (value: any) => {
-        if (value.startLaunchTime) {
-            const formatDate = value.startLaunchTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startLaunchTime = formatDate[0]
-            value.endLaunchTime = formatDate[1]
+        if (value.startStatusUpdateTime) {
+            const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startStatusUpdateTime = formatDate[0]
+            value.endStatusUpdateTime = formatDate[1]
         }
+        setFilterValue({ ...filterValue, ...value })
         return value
     }
 
@@ -64,22 +65,24 @@ export default function Invoicing() {
             <Button type="primary" ghost onClick={() => message.warning("预留按钮,暂无功能...")}>创建采购计划</Button>
         </>}
         onFilterSubmit={onFilterSubmit}
+        filterValue={filterValue}
         searchFormItems={[
             {
-                name: 'startPurchaseStatusUpdateTime',
+                name: 'startStatusUpdateTime',
                 label: '最新状态变更时间',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
             },
             {
-                name: 'purchaseTaskStatus',
+                name: 'planStatus',
                 label: '计划状态',
                 children: <Select style={{ width: 200 }}>
                     <Select.Option value="1">待完成</Select.Option>、
                     <Select.Option value="2">已完成</Select.Option>
+                    <Select.Option value="3">已取消</Select.Option>
                 </Select>
             },
             {
-                name: 'isOpen',
+                name: 'purchaseType',
                 label: '采购类型',
                 children: <Select style={{ width: 200 }}>
                     <Select.Option value="1">外部</Select.Option>
@@ -88,7 +91,7 @@ export default function Invoicing() {
                 </Select>
             },
             {
-                name: 'contractType',
+                name: 'purchasePlanCode',
                 label: '采购计划编号',
                 children: <Input />
             }
