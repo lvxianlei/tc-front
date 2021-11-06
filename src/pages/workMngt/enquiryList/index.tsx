@@ -7,7 +7,8 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 export default function EnquiryList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false)
-    const [filterValue, setFilterValue] = useState({})
+    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({})
+    const [deptId, setDeptId] = useState<string>("")
     const [detailId, setDetailId] = useState<string>("")
     const editRef = useRef<{ onSubmit: () => void }>({ onSubmit: () => { } })
 
@@ -18,14 +19,22 @@ export default function EnquiryList(): React.ReactNode {
         } catch (error) {
             reject(error)
         }
+    }))
+
+    const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/sinzetech-user/user?departmentId=${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
     }), { manual: true })
 
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
-            value.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
-            delete value.statusUpdateTime
+            value.updateStatusTimeStart = formatDate[0]
+            value.updateStatusTimeEnd = formatDate[1]
         }
         setFilterValue({ ...filterValue, ...value })
         return value
@@ -92,12 +101,21 @@ export default function EnquiryList(): React.ReactNode {
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'confirmId',
+                    name: 'deptId',
                     label: '询价人',
-                    children: <div>
-
-                    </div>
-                }
+                    children: <Select onChange={(value: string) => {
+                        setDeptId(value)
+                        getUser(value)
+                    }} style={{ width: 100 }}>{deptData?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}</Select>
+                },
+                {
+                    name: 'inquirerId',
+                    label: '',
+                    children: <Select
+                        disabled={!deptId}
+                        style={{ width: 100 }}
+                    >{userData?.records.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}</Select>
+                },
             ]}
         />
     </>
