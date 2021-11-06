@@ -151,9 +151,6 @@ export default function ContractMngt() {
                 {/* 询比价基本信息 */}
                 <Descriptions title="询比价基本信息" column={3} bordered>
                     <Descriptions.Item label="询比价编号"><input placeholder="自动生成" style={{ border: "none", outline: "none" }} /></Descriptions.Item>
-                    <Descriptions.Item label="类型">
-                        <Select placeholder="请选择 " bordered={false}></Select>
-                    </Descriptions.Item>
                     <Descriptions.Item label="用途"><input placeholder="请输入" style={{ border: "none", outline: "none" }} /></Descriptions.Item>
                 </Descriptions>
                 <Page
