@@ -16,8 +16,13 @@ export default function ContractMngt() {
     const [columnsData, setColumnsData] = useState([]);
     const [comparisonPriceId, setComparisonPriceId] = useState(0);
     const [id, setId] = useState(0);
+    const [filterValue, setFilterValue] = useState({planStatus:1});
     const { Option } = Select;
     const history = useHistory();
+    const onFilterSubmit = (value:any)=>{
+        setFilterValue({...filterValue,...value})
+        return ({...filterValue,...value});
+    };
     //创建
     const showModal = () => {
         setIsModalVisible(true);
@@ -137,23 +142,13 @@ export default function ContractMngt() {
                         name: 'inquire',
                         label: '查询',
                         children: <Input style={{ width: "150px" }} placeholder="询比价编号" />
-                    },
-                    // 询比价类型
-                    {
-                        name: 'inquire',
-                        label: '询比价类型',
-                        children: <Select placeholder="请选择" style={{ width: "100px" }}>
-                        </Select>
-                    },
+                    }
                 ]}
             />
             <Modal title="创建" width="1000px" footer={buttons} visible={isModalVisible} onCancel={handleCancel}>
                 {/* 询比价基本信息 */}
                 <Descriptions title="询比价基本信息" column={3} bordered>
                     <Descriptions.Item label="询比价编号"><input placeholder="自动生成" style={{ border: "none", outline: "none" }} /></Descriptions.Item>
-                    <Descriptions.Item label="类型">
-                        <Select placeholder="请选择 " bordered={false}></Select>
-                    </Descriptions.Item>
                     <Descriptions.Item label="用途"><input placeholder="请输入" style={{ border: "none", outline: "none" }} /></Descriptions.Item>
                 </Descriptions>
                 <Page
@@ -242,8 +237,9 @@ export default function ContractMngt() {
             </Modal>
             <Modal title="选择计划" width="1000px" footer={buttons2} visible={isModalVisible2} onCancel={handleCancel2}>
                 <Page
-                    path=""
-
+                    path="/tower-supply/materialPurchasePlan"
+                    filterValue={filterValue}
+                    onFilterSubmit={onFilterSubmit}
                     //表格
                     columns={[
                         {
