@@ -12,9 +12,15 @@ import RequestUtil from '../../utils/RequestUtil';
 import { useForm } from 'antd/es/form/Form';
 
 interface IDetailData {
-    readonly time?: string;
+    readonly createTime?: string;
+    readonly createUserName?: string;
+    readonly deptProcessesId?: string;
+    readonly deptProcessesName	?: string;
+    readonly description?: string;
+    readonly id?: string;
     readonly name?: string;
-    readonly atime?: string;
+    readonly workshopDeptId?: string;
+    readonly workshopDeptName?: string;
 }
 export default function ProductionLineMngt(): React.ReactNode {
     const columns = [
@@ -26,40 +32,40 @@ export default function ProductionLineMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
         },
         {
-            key: 'taskNum',
+            key: 'name',
             title: '产线名称',
             width: 150,
-            dataIndex: 'taskNum'
+            dataIndex: 'name'
         },
         {
-            key: 'internalNumber',
+            key: 'workshopDeptName',
             title: '所属车间',
-            dataIndex: 'internalNumber',
+            dataIndex: 'workshopDeptName',
             width: 120
         },
         {
-            key: 'name',
+            key: 'deptProcessesName',
             title: '所属工序',
             width: 200,
-            dataIndex: 'name'
+            dataIndex: 'deptProcessesName'
         },
         {
-            key: 'name',
+            key: 'description',
             title: '备注',
             width: 200,
-            dataIndex: 'name'
+            dataIndex: 'description'
         },
         {
-            key: 'name',
+            key: 'createUserName',
             title: '制单人',
             width: 200,
-            dataIndex: 'name'
+            dataIndex: 'createUserName'
         },
         {
-            key: 'name',
+            key: 'createTime',
             title: '制单时间',
             width: 200,
-            dataIndex: 'name'
+            dataIndex: 'createTime'
         },
         {
             key: 'operation',
@@ -72,12 +78,12 @@ export default function ProductionLineMngt(): React.ReactNode {
                     <Button type="link" onClick={ () => {
                         setVisible(true);
                         setTitle("编辑");
-                        setDetailData({name: 'aaaa'});
+                        getList(record.id);
                     } }>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => {
-                            RequestUtil.post(``).then(res => {
+                            RequestUtil.delete(`/tower-production/productionLines/remove`).then(res => {
                                 message.success('删除成功');
                                 setRefresh(!refresh);
                             });
@@ -103,8 +109,9 @@ export default function ProductionLineMngt(): React.ReactNode {
         form.resetFields();
     }
 
-    const getList = async () => {
-        const data = await RequestUtil.post<IDetailData[]>(``);
+    const getList = async (id: string) => {
+        const data = await RequestUtil.get<IDetailData>(`/tower-production/productionLines/detail?id=${ id }`);
+        setDetailData(data);
     }
 
     const [ refresh, setRefresh ] = useState(false);
@@ -116,14 +123,14 @@ export default function ProductionLineMngt(): React.ReactNode {
     return (
         <>
             <Page
-                path="/tower-science/loftingList/loftingPage"
+                path="/tower-production/productionLines/page"
                 columns={ columns }
                 headTabs={ [] }
                 extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle("新增");} } ghost>新增产线</Button> }
                 refresh={ refresh }
                 searchFormItems={ [
                     {
-                        name: 'fuzzyMsg',
+                        name: 'productionLinesName',
                         label: '',
                         children: <Input placeholder="请输入产线名称进行查询"/>
                     }
@@ -140,18 +147,19 @@ export default function ProductionLineMngt(): React.ReactNode {
                         }]}>
                         <Input placeholder="请输入" maxLength={ 50 } />
                     </Form.Item>
-                    <Form.Item name="dept" label="所属车间" rules={[{
+                    <Form.Item name="workshopDeptId" label="所属车间" initialValue={ detailData.workshopDeptId } rules={[{
                             "required": true,
                             "message": "请选择所属车间"
                         }]}>
                         <Select placeholder="请选择" onChange={ (e) => {
                             setProcessDisabled(false);
+                            form.setFieldsValue({ deptProcessesId: '' });
                         } }>
                             <Select.Option value={ 1 } key="4">全部</Select.Option>
                             <Select.Option value={ 2 } key="">全部222</Select.Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item name="a" label="所属工序" rules={[{
+                    <Form.Item name="deptProcessesId" label="所属工序" initialValue={ detailData.deptProcessesId } rules={[{
                             "required": true,
                             "message": "请选择所属工序"
                         }]}>
@@ -160,7 +168,7 @@ export default function ProductionLineMngt(): React.ReactNode {
                             <Select.Option value={ 2 } key="">全部222</Select.Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item name="description" label="备注">
+                    <Form.Item name="description" label="备注" initialValue={ detailData.description }>
                         <Input placeholder="请输入" maxLength={ 300 } />
                     </Form.Item>
                 </Form>

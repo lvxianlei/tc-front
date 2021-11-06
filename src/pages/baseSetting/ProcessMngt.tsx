@@ -14,28 +14,36 @@ import { useForm } from 'antd/es/form/Form';
 import styles from './ProcessMngt.module.less';
 
 interface IProcessList {
-    readonly time?: string;
-    readonly atime?: string;
+    readonly sort?: string;
+    readonly name?: string;
+    readonly id?: string;
+}
+
+interface IDetailData {
+    readonly deptId?: string;
+    readonly deptName?: string;
+    readonly id?: string;
+    readonly deptProcessesDetailList?: IProcessList[];
 }
 export default function ProcessMngt(): React.ReactNode {
     const columns = [
         {
-            key: 'taskNum',
+            key: 'deptName',
             title: '所属部门',
             width: 150,
-            dataIndex: 'taskNum'
+            dataIndex: 'deptName'
         },
         {
-            key: 'internalNumber',
+            key: 'createUserName',
             title: '制单人',
-            dataIndex: 'internalNumber',
+            dataIndex: 'createUserName',
             width: 120
         },
         {
-            key: 'name',
+            key: 'createTime',
             title: '制单时间',
             width: 200,
-            dataIndex: 'name'
+            dataIndex: 'createTime'
         },
         {
             key: 'operation',
@@ -46,13 +54,13 @@ export default function ProcessMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type="link" onClick={ () => {
-                        getList();
+                        getList(record.id);
                         setVisible(true);
                     } }>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => {
-                            RequestUtil.post(``).then(res => {
+                            RequestUtil.delete(`/tower-production/workshopDept/remove?id=${ record.id }`).then(res => {
                                 message.success('删除成功');
                                 setRefresh(!refresh);
                             });
@@ -75,11 +83,11 @@ export default function ProcessMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
         },
         {
-            key: 'time',
+            key: 'name',
             title: '工序',
-            dataIndex: 'time',
+            dataIndex: 'name',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={ ["data", index, "time"] } initialValue={ _ } rules={[{ 
+                <Form.Item name={ ["data", index, "name"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请输入工序" }]}>
                     <Input maxLength={ 50 } key={ index } bordered={false} />
@@ -87,11 +95,11 @@ export default function ProcessMngt(): React.ReactNode {
             )  
         },
         {
-            key: 'time',
+            key: 'sort',
             title: '顺序',
-            dataIndex: 'time',
+            dataIndex: 'sort',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={ ["data", index, "time"] } initialValue={ _ } rules={[{ 
+                <Form.Item name={ ["data", index, "sort"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请输入顺序" }]}>
                     <Input type="number" min={ 1 } key={ index } bordered={false} />
@@ -131,8 +139,8 @@ export default function ProcessMngt(): React.ReactNode {
     const addRow = () => {
         let processListValues = form.getFieldsValue(true).data || [];
         let newData = {
-            time: '',
-            atime: ''
+            name: '',
+            sort: ''
         }
         setProcessList([...processListValues, newData]);
         form.setFieldsValue({ data: [...processListValues, newData] })
@@ -145,26 +153,28 @@ export default function ProcessMngt(): React.ReactNode {
         form.setFieldsValue({ data: [...processListValues] })
     }
 
-    const getList = async () => {
-        const data = await RequestUtil.post<IProcessList[]>(``);
-        setProcessList(data);
+    const getList = async (id: string) => {
+        const data = await RequestUtil.post<IDetailData>(`/tower-production/workshopDept/detail?deptId=${ id }`);
+        setDetailData(data);
+        setProcessList(data?.deptProcessesDetailList || []);
     }
 
     const [ refresh, setRefresh ] = useState(false);
     const [ visible, setVisible ] = useState(false);
     const [ form ] = useForm();
+    const [ detailData, setDetailData ] = useState<IDetailData>({});
     const [ processList, setProcessList ] = useState<IProcessList[]>([]);
     return (
         <>
             <Page
-                path="/tower-science/loftingList/loftingPage"
+                path="/tower-production/workshopDept/page"
                 columns={ columns }
                 headTabs={ [] }
                 extraOperation={ <Button type="primary" onClick={ () => setVisible(true) } ghost>新增</Button> }
                 refresh={ refresh }
                 searchFormItems={ [
                     {
-                        name: 'fuzzyMsg',
+                        name: 'deptName',
                         label: '',
                         children: <Input placeholder="请输入部门名称进行查询"/>
                     }
@@ -175,19 +185,19 @@ export default function ProcessMngt(): React.ReactNode {
             />
             <Modal visible={ visible } width="40%" title="按车间设置工序顺序" okText="保存" cancelText="取消" onOk={ save } onCancel={ cancel }>
                 <Form form={ form }>
-                <Form.Item name="dept" label="所属车间" rules={[{
-                        "required": true,
-                        "message": "请选择所属车间"
-                    }]}>
-                        <Select placeholder="请选择" onChange={ (e) => {
-                            console.log(e)
-                        } }>
-                            <Select.Option value={ 1 } key="4">全部</Select.Option>
-                            <Select.Option value={ 2 } key="">全部222</Select.Option>
-                        </Select>
-                </Form.Item>
-                <Button type="primary" onClick={ addRow }>新增一行</Button>
-                <Table rowKey="index" dataSource={[...processList]} pagination={false} columns={tableColumns} className={styles.addModal}/>
+                    <Form.Item name="deptId" label="所属车间" initialValue={ detailData.deptId } rules={[{
+                            "required": true,
+                            "message": "请选择所属车间"
+                        }]}>
+                            <Select placeholder="请选择" onChange={ (e) => {
+                                console.log(e)
+                            } }>
+                                <Select.Option value={ 1 } key="4">全部</Select.Option>
+                                <Select.Option value={ 2 } key="">全部222</Select.Option>
+                            </Select>
+                    </Form.Item>
+                    <Button type="primary" onClick={ addRow }>新增一行</Button>
+                    <Table rowKey="index" dataSource={[...processList]} pagination={false} columns={tableColumns} className={styles.addModal}/>
                 </Form>
             </Modal>
         </>
