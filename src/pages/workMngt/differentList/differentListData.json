@@ -33,7 +33,17 @@
         {
             "title": "状态",
             "dataIndex": "diffStatus",
-            "type": "integer"
+            "type": "select",
+            "enum": [
+                {
+                    "label": "待处理",
+                    "value": 1
+                },
+                {
+                    "label": "已完成",
+                    "value": 2
+                }
+            ]
         },
         {
             "title": "处理人",
@@ -54,7 +64,7 @@
         },
         {
             "title": "更改前材质",
-            "dataIndex": "beforechangematerial",
+            "dataIndex": "structureTexture",
             "type": "string"
         },
         {
@@ -64,7 +74,7 @@
         },
         {
             "title": "更改前规格",
-            "dataIndex": "beforechangeSpec",
+            "dataIndex": "structureSpec",
             "type": "string"
         },
         {
@@ -74,7 +84,7 @@
         },
         {
             "title": "更改前长度（mm）",
-            "dataIndex": "beforechangeLength",
+            "dataIndex": "length",
             "type": "string"
         },
         {
@@ -84,7 +94,7 @@
         },
         {
             "title": "单数量",
-            "dataIndex": "singlequantity"
+            "dataIndex": "num"
         },
         {
             "title": "基数",
@@ -103,7 +113,18 @@
         },
         {
             "title": "状态",
-            "dataIndex": "confirmStatus"
+            "dataIndex": "diffComponentStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "未申请",
+                    "value": 1
+                },
+                {
+                    "label": "已申请",
+                    "value": 2
+                }
+            ]
         }
     ],
     "MaterialShortage": [
