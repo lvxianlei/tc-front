@@ -25,6 +25,13 @@ interface IDetail {
     readonly status?: string;
     readonly workshopDeptId?: string;
 }
+interface IProcess {
+    readonly createTime?: string;
+    readonly createUserName?: string;
+    readonly deptId?: string;
+    readonly deptName?: string;
+    readonly id?: string;
+}
 export default function WorkshopEquipmentMngt(): React.ReactNode {
     const columns = [
         {
@@ -88,6 +95,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                         getList(record.id);
                         setVisible(true);
                         setTitle('编辑');
+                        getProcess();
                     } }>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
@@ -123,6 +131,11 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
         setDetail(data);
     }
 
+    const getProcess = async () => {
+        const data = await RequestUtil.get<IProcess[]>(`/tower-production/workshopDept/list`);
+        setProcess(data);
+    }
+
     const [ refresh, setRefresh ] = useState(false);
     const [ visible, setVisible ] = useState(false);
     const [ form ] = useForm();
@@ -132,6 +145,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
     const [ disabled2, setDisabled2 ] = useState(false);
     const [ detail, setDetail ] = useState<IDetail>({});
     const [ title, setTitle ] = useState('新增');
+    const [ process, setProcess ] = useState<IProcess[]>([]);
     return (
         <>
             <Form form={searchForm} layout="inline" style={{margin:'20px'}} onFinish={(value: Record<string, any>) => {
@@ -176,7 +190,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                 path="/tower-science/loftingList/loftingPage"
                 columns={ columns }
                 headTabs={ [] }
-                extraOperation={ <Button type="primary" onClick={ () => setVisible(true) } ghost>新增</Button> }
+                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle("新增"); getProcess();} } ghost>新增</Button> }
                 refresh={ refresh }
                 searchFormItems={ [] }
                 requestData={{ ...filterValue }}
@@ -192,6 +206,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                                 <Select placeholder="请选择" onChange={ (e) => {
                                     console.log(e)
                                     setDisabled(true);
+                                    form.setFieldsValue({ deptProcessesId: '', productionLinesId: '' });
                                 } }>
                                     <Select.Option value={ 1 } key="4">全部</Select.Option>
                                     <Select.Option value={ 2 } key="">全部222</Select.Option>
@@ -206,9 +221,11 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                                 <Select placeholder="请选择" disabled={ disabled } onChange={ (e) => {
                                     console.log(e)
                                     setDisabled2(true);
+                                    form.setFieldsValue({ productionLinesId: '' });
                                 } }>
-                                    <Select.Option value={ 1 } key="4">全部</Select.Option>
-                                    <Select.Option value={ 2 } key="">全部222</Select.Option>
+                                    { process.map((item: any) => {
+                                        return <Select.Option key={ item.id } value={ item.id }>{ item.deptName }</Select.Option>
+                                    }) }
                                 </Select>
                             </Form.Item>
                         </Col>
@@ -223,7 +240,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                     </Row>
                     <Row>
                         <Col span={ 8 }>
-                            <Form.Item name="deptProcessesId" label="所属产线" initialValue={ detail.deptProcessesId } rules={[{
+                            <Form.Item name="productionLinesId" label="所属产线" initialValue={ detail.deptProcessesId } rules={[{
                                     "required": true,
                                     "message": "请选择所属产线"
                                 }]}>

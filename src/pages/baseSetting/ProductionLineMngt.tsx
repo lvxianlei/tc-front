@@ -22,6 +22,14 @@ interface IDetailData {
     readonly workshopDeptId?: string;
     readonly workshopDeptName?: string;
 }
+
+interface IProcess {
+    readonly createTime?: string;
+    readonly createUserName?: string;
+    readonly deptId?: string;
+    readonly deptName?: string;
+    readonly id?: string;
+}
 export default function ProductionLineMngt(): React.ReactNode {
     const columns = [
         {
@@ -79,6 +87,7 @@ export default function ProductionLineMngt(): React.ReactNode {
                         setVisible(true);
                         setTitle("编辑");
                         getList(record.id);
+                        getProcess();
                     } }>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
@@ -114,19 +123,25 @@ export default function ProductionLineMngt(): React.ReactNode {
         setDetailData(data);
     }
 
+    const getProcess = async () => {
+        const data = await RequestUtil.get<IProcess[]>(`/tower-production/workshopDept/list`);
+        setProcess(data);
+    }
+
     const [ refresh, setRefresh ] = useState(false);
     const [ visible, setVisible ] = useState(false);
     const [ title, setTitle ] = useState('新增');
     const [ form ] = useForm();
     const [ processDisabled, setProcessDisabled ] = useState(true);
     const [ detailData, setDetailData ] = useState<IDetailData>({});
+    const [ process, setProcess ] = useState<IProcess[]>([]);
     return (
         <>
             <Page
                 path="/tower-production/productionLines/page"
                 columns={ columns }
                 headTabs={ [] }
-                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle("新增");} } ghost>新增产线</Button> }
+                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle("新增"); getProcess();} } ghost>新增产线</Button> }
                 refresh={ refresh }
                 searchFormItems={ [
                     {
@@ -164,8 +179,9 @@ export default function ProductionLineMngt(): React.ReactNode {
                             "message": "请选择所属工序"
                         }]}>
                         <Select placeholder="请选择" disabled={ processDisabled }>
-                            <Select.Option value={ 1 } key="4">全部</Select.Option>
-                            <Select.Option value={ 2 } key="">全部222</Select.Option>
+                            { process.map((item: any) => {
+                                return <Select.Option key={ item.id } value={ item.id }>{ item.deptName }</Select.Option>
+                            }) }
                         </Select>
                     </Form.Item>
                     <Form.Item name="description" label="备注" initialValue={ detailData.description }>
