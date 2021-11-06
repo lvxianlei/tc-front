@@ -1,4 +1,3 @@
-
 /**
  * @author zyc
  * @copyright © 2021 
@@ -11,11 +10,28 @@ import { CommonTable, DetailTitle, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
 import { useForm } from 'antd/es/form/Form';
-import styles from './ProcessMngt.module.less';
+import styles from './ShippingDepartmentConfig.module.less';
 
 interface IProcessList {
-    readonly time?: string;
-    readonly atime?: string;
+    readonly region?: string;
+    readonly position?: string;
+}
+interface IWarehouseKeeperList {
+    readonly keeperName?: string;
+    readonly warehouseId?: string;
+    readonly keeperUserId?: string;
+    readonly id?: string;
+}
+interface IDetailData {
+    readonly code?: string;
+    readonly id?: string;
+    readonly leader?: string;
+    readonly leaderName?: string;
+    readonly name?: string;
+    readonly status?: string;
+    readonly warehouseType?: string;
+    readonly warehousePositionVOList?: IProcessList[];
+    readonly warehouseKeeperVOList?: IWarehouseKeeperList[];
 }
 export default function ShippingDepartmentConfig(): React.ReactNode {
     const columns = [
@@ -27,34 +43,39 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
         },
         {
-            key: 'taskNum',
+            key: 'code',
             title: '仓库编号',
             width: 150,
-            dataIndex: 'taskNum'
+            dataIndex: 'code'
         },
         {
-            key: 'internalNumber',
+            key: 'name',
             title: '仓库名称',
-            dataIndex: 'internalNumber',
+            dataIndex: 'name',
             width: 120
         },
         {
-            key: 'name',
+            key: 'warehouseType',
             title: '仓库类型',
             width: 200,
-            dataIndex: 'name'
+            dataIndex: 'warehouseType'
         },
         {
-            key: 'name',
+            key: 'leader',
             title: '负责人',
             width: 200,
-            dataIndex: 'name'
+            dataIndex: 'leader'
         },
         {
-            key: 'name',
+            key: 'keeperName',
             title: '保管员',
             width: 200,
-            dataIndex: 'name'
+            dataIndex: 'keeperName',
+            render: (_: any, record: Record<string, any>): React.ReactNode => {
+                return <span>{record.warehouseKeeperVOList.map((item: IWarehouseKeeperList) => {
+                    return item.keeperName;
+                }).join(',')}</span>
+            }  
         },
         {
             key: 'operation',
@@ -65,14 +86,14 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type="link" onClick={ () => {
-                        getList();
+                        getList(record.id);
                         setVisible(true);
                         setTitle('编辑');
                     } }>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => {
-                            RequestUtil.post(``).then(res => {
+                            RequestUtil.delete(`/tower-production/warehouse?warehouseId=${ record.id }`).then(res => {
                                 message.success('删除成功');
                                 setRefresh(!refresh);
                             });
@@ -94,9 +115,9 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
             dataIndex: 'time'
         },
         {
-            key: 'time',
+            key: 'keeperName',
             title: '姓名',
-            dataIndex: 'time'
+            dataIndex: 'keeperName'
         },
         {
             key: 'operation',
@@ -125,26 +146,26 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
         },
         {
-            key: 'time',
+            key: 'region',
             title: '库区',
-            dataIndex: 'time',
+            dataIndex: 'region',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={ ["data", index, "time"] } initialValue={ _ } rules={[{ 
+                <Form.Item name={ ["data", index, "region"] } initialValue={ _ } rules={[{ 
                     "required": true,
-                    "message": "请输入工序" }]}>
+                    "message": "请输入库区" }]}>
                     <Input maxLength={ 50 } key={ index } bordered={false} />
                 </Form.Item>
             )  
         },
         {
-            key: 'time',
+            key: 'position',
             title: '库位',
-            dataIndex: 'time',
+            dataIndex: 'position',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={ ["data", index, "time"] } initialValue={ _ } rules={[{ 
+                <Form.Item name={ ["data", index, "position"] } initialValue={ _ } rules={[{ 
                     "required": true,
-                    "message": "请输入顺序" }]}>
-                    <Input type="number" min={ 1 } key={ index } bordered={false} />
+                    "message": "请输入库位" }]}>
+                    <Input maxLength={ 50 } key={ index } bordered={false} />
                 </Form.Item>
             )  
         },
@@ -181,8 +202,8 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
     const addRow = () => {
         let reservoirListValues = form.getFieldsValue(true).data || [];
         let newData = {
-            time: '',
-            atime: ''
+            position: '',
+            region: ''
         }
         setReservoirList([...reservoirListValues, newData]);
         form.setFieldsValue({ data: [...reservoirListValues, newData] })
@@ -195,9 +216,11 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
         form.setFieldsValue({ data: [...reservoirListValues] })
     }
 
-    const getList = async () => {
-        const data = await RequestUtil.post<IProcessList[]>(``);
-        setReservoirList(data);
+    const getList = async (id: string) => {
+        const data = await RequestUtil.get<IDetailData>(`/tower-production/warehouse/detail/${ id }`);
+        setReservoirList(data?.warehousePositionVOList || []);
+        setUserList(data?.warehouseKeeperVOList || []);
+        setDetailData(data);
     }
 
     const delUserRow = (index: number) => {
@@ -210,11 +233,12 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
     const [ form ] = useForm();
     const [ reservoirList, setReservoirList ] = useState<IProcessList[]>([]);
     const [ title, setTitle ] = useState('新增');
-    const [ userList, setUserList ] = useState([]);
+    const [ userList, setUserList ] = useState<IWarehouseKeeperList[]>([]);
+    const [ detailData, setDetailData ] = useState<IDetailData>({});
     return (
         <>
             <Page
-                path="/tower-science/loftingList/loftingPage"
+                path="/tower-production/warehouse"
                 columns={ columns }
                 headTabs={ [] }
                 extraOperation={ <Button type="primary" onClick={ () => setVisible(true) } ghost>新增</Button> }
@@ -235,7 +259,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                     <DetailTitle title="基础信息"/>
                     <Row>
                         <Col span={ 12 }>
-                            <Form.Item name="dept" label="仓库编号" rules={[{
+                            <Form.Item name="code" label="仓库编号" initialValue={ detailData.code } rules={[{
                                     "required": true,
                                     "message": "请输入仓库编号"
                                 }]}>
@@ -243,7 +267,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={ 12 }>
-                            <Form.Item name="dept" label="仓库名称" rules={[{
+                            <Form.Item name="name" label="仓库名称" initialValue={ detailData.name } rules={[{
                                     "required": true,
                                     "message": "请输入仓库名称"
                                 }]}>
@@ -253,7 +277,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                     </Row>
                     <Row>
                         <Col span={ 12 }>
-                            <Form.Item name="dept" label="仓库类型" rules={[{
+                            <Form.Item name="warehouseType" label="仓库类型" initialValue={ detailData.warehouseType } rules={[{
                                     "required": true,
                                     "message": "请输入仓库类型"
                                 }]}>
@@ -261,7 +285,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={ 12 }>
-                            <Form.Item name="dept" label="负责人" rules={[{
+                            <Form.Item name="leader" label="负责人" initialValue={ detailData.leader } rules={[{
                                     "required": true,
                                     "message": "请选择负责人"
                                 }]}>
