@@ -30,7 +30,12 @@ export default forwardRef(function Edit({ detailId }: EditProps, ref): JSX.Eleme
         }
     }), { manual: true })
 
-    useImperativeHandle(ref, () => ({ onSubmit }), [ref])
+    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref])
+
+    const resetFields = () => {
+        form.resetFields()
+        setAttachs([])
+    }
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
