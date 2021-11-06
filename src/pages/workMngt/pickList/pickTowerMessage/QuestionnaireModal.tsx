@@ -120,7 +120,7 @@ class QuestionnaireModal extends React.Component<IQuestionnaireModalRouteProps, 
      */
     public render(): React.ReactNode {
         const record: IRecord = this.props.record;
-        {this.props.title!=='查看问题单'?this.getForm()?.setFieldsValue({ description: '', newValue: ''}):this.getForm()?.setFieldsValue({ description: record.description, newValue: record.newValue })};
+        {this.props.title!=='查看问题单'?this.getForm()?.setFieldsValue({ description: '', newValue: '', currentValue: record.currentValue }):this.getForm()?.setFieldsValue({ description: record.description, newValue: record.newValue})};
         return <>
             <Modal
                 visible={ this.props.visible } 
@@ -142,7 +142,8 @@ class QuestionnaireModal extends React.Component<IQuestionnaireModalRouteProps, 
                         },
                         {
                             "dataIndex": "currentValue",
-                            "title": "原字段信息"
+                            "title": "原字段信息",
+                            "type": "number"
                         }]
                     } dataSource={ {
                         problemFieldName: record.problemFieldName,
