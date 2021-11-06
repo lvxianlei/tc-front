@@ -17,14 +17,13 @@ import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import useRequest from '@ahooksjs/use-request';
 import AuthUtil from '../../../utils/AuthUtil';
 
-
 export default function TowerInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const [ refresh, setRefresh ] = useState(false);
     const [ loftingUser, setLoftingUser ] = useState([]);
     const [ checkUser, setcheckUser ] = useState([]);
-    const location = useLocation<{ state: string }>();
+    const location = useLocation<{ loftingLeader: string, status: number }>();
     const userId = AuthUtil.getUserId();
     
     const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
@@ -204,22 +203,25 @@ export default function TowerInformation(): React.ReactNode {
         extraOperation={ <Space direction="horizontal" size="small">
             {/* <Button type="primary" ghost>导出</Button> */}
             {
-                userId === location.state ? <><Popconfirm
-                title="确认提交?"
-                onConfirm={ () => {
-                    RequestUtil.post(`/tower-science/productCategory/submit`, { productCategoryId: params.id }).then(res => {
-                        message.success('提交成功');
-                        history.goBack();
-                    });
-                } }
-                okText="提交"
-                cancelText="取消"
-            >
-                <Button type="primary" ghost>提交</Button>
-            </Popconfirm>
-            <TowerLoftingAssign id={ params.id } update={ onRefresh } /></>
-            : null
-        }
+                userId === location.state.loftingLeader ? <>
+                <Popconfirm
+                    title="确认提交?"
+                    onConfirm={ () => {
+                        RequestUtil.post(`/tower-science/productCategory/submit`, { productCategoryId: params.id }).then(res => {
+                            message.success('提交成功');
+                            history.goBack();
+                        });
+                    } }
+                    okText="提交"
+                    cancelText="取消"
+                    disabled={ !(location.state.status < 3) }
+                >
+                    <Button type="primary" disabled={ !(location.state.status < 3) } ghost>提交</Button>
+                </Popconfirm>
+                { location.state.status < 3 ? <TowerLoftingAssign id={ params.id } update={ onRefresh } /> : <Button type="primary" disabled ghost>塔型放样指派</Button> }
+                </>
+                : null
+            }
             <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
         </Space> }
         searchFormItems={ [
