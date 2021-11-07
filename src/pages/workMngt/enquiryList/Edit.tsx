@@ -51,10 +51,13 @@ export default forwardRef(function Edit({ detailId }: EditProps, ref): JSX.Eleme
     })
 
     const uploadChange = (event: any) => {
+        console.log(event);
+        
         if (event.file.status === "done") {
             if (event.file.response.code === 200) {
                 const dataInfo = event.file.response.data
                 const fileInfo = dataInfo.name.split(".")
+                console.log(fileInfo);
                 setAttachs([...attchs, {
                     id: "",
                     uid: attchs.length,
@@ -101,19 +104,25 @@ export default forwardRef(function Edit({ detailId }: EditProps, ref): JSX.Eleme
             dataIndex: "inquirerDescription",
             type: "textarea"
         }]} dataSource={{}} edit />
-        <DetailTitle title="相关附件" operation={[<Upload
-            key="sub"
-            name="file"
-            multiple={true}
-            action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
-            headers={{
-                'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                'Tenant-Id': AuthUtil.getTenantId(),
-                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-            }}
-            showUploadList={false}
-            onChange={uploadChange}
-        ><Button key="enclosure" type="primary" ghost>上传附件</Button></Upload>]} />
+        <DetailTitle title="相关附件" operation={
+            [
+                <Upload
+                    key="sub"
+                    name="file"
+                    multiple={true}
+                    action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
+                    headers={{
+                        'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                        'Tenant-Id': AuthUtil.getTenantId(),
+                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                    }}
+                    showUploadList={false}
+                    onChange={uploadChange}
+                >
+                    <Button key="enclosure" type="primary" ghost>上传附件</Button>
+                </Upload>
+            ]
+        } />
         <CommonTable columns={[
             {
                 title: "附件名称",
