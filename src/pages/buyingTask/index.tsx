@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 //采购任务下的原材料
 import React, { useState, useRef } from 'react';
-import { Modal, Descriptions, Button, DatePicker, Select, Input, message } from 'antd';
+import { Modal, Descriptions, Button, DatePicker, Select, Input } from 'antd';
 import { CommonTable, DetailContent, DetailTitle, Page } from '../common'
 import { buyingTask, operatingInformation } from "./buyingTask.json"
 import { useHistory } from 'react-router';
@@ -20,11 +20,7 @@ export default function rawMaterial() {
     const [isModalVisible2, setIsModalVisible2] = useState(false);
     const [isModalVisible3, setIsModalVisible3] = useState(false);
     const [columnsData, setColumnsData] = useState([]);
-    const [batcherDeptId, setBatcherDeptId] = useState(0);//配料人部门id
-    const [batcherId, setBatcherId] = useState(0);//配料人id
     const [id, setId] = useState(0);//采购任务id
-    const [purchaserDeptId, setPurchaserDeptId] = useState(0);//采购人部门id
-    const [purchaserId, setPurchaserId] = useState(0);//采购人id
     const [obj, setObj] = useState<any>({});
     const [rejectionDescription, setRejectionDescription] = useState("");
     const history = useHistory();
