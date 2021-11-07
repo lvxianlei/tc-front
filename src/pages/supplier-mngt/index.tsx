@@ -1,26 +1,38 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Select, Button, Modal, Form, Popconfirm, Row, Col, TreeSelect, message, Descriptions } from 'antd'
+import { Input, Select, Button, Modal, Form, message, Descriptions } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { CommonTable, DetailContent, DetailTitle, Page, BaseInfo } from '../common';
+import { CommonTable, DetailContent, DetailTitle, Page } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
-import moment from 'moment';
-import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
-import { TreeNode } from 'antd/lib/tree-select';
 import useRequest from '@ahooksjs/use-request';
 import { supplierMngt, supplierMngt1, AddEditDetail } from "./supplier-mngt.json"
+import ApplicationContext from "../../configuration/ApplicationContext"
+import { Key } from 'rc-select/lib/interface/generator';
 // import styles from './confirm.module.less';
 
 export default function SupplierMngt(): React.ReactNode {
-    const [refresh, setRefresh] = useState<boolean>(false);
-    const [department, setDepartment] = useState<any | undefined>([]);
+    //供应商类型
+    const invoiceTypeEnum = (ApplicationContext.get().dictionaryOption as any)["144"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
+    //质量保证体系
+    const invoiceTypeEnum1 = (ApplicationContext.get().dictionaryOption as any)["145"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
+    //产品类型
+    const invoiceTypeEnum2 = (ApplicationContext.get().dictionaryOption as any)["101"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
+    const [refresh, setRefresh] = useState<boolean>(true);
     const [filterValue, setFilterValue] = useState({});
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisible1, setIsModalVisible1] = useState(false);
     const [isModalVisible2, setIsModalVisible2] = useState(false);
-    const [materialCategoryId, setMaterialCategoryId] = useState("");
-    const [supplierId, setSupplierId] = useState("");
     const [columnsData, setColumnsData] = useState([]);
     const [obj, setObj] = useState<any>({});
+    const [obj1, setObj1] = useState<any>({});
     const [bankAccount, setBankAccount] = useState("");//开户账号
     const [bankDeposit, setBankDeposit] = useState("");//开户行
     const [contactMan, setContactMan] = useState("");//联系人
@@ -31,9 +43,6 @@ export default function SupplierMngt(): React.ReactNode {
     const [supplierName, setSupplierName] = useState("");//供应商名称
     const [supplierType, setSupplierType] = useState(0);//供应商类型
     const [supplyProducts, setSupplyProducts] = useState("");//供货产品
-
-    const [form] = Form.useForm();
-    const history = useHistory();
 
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
@@ -62,13 +71,17 @@ export default function SupplierMngt(): React.ReactNode {
         const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/supplier`, { bankAccount, bankDeposit, contactMan, contactManTel, description, qualityAssurance, supplierCode, supplierName, supplierType, supplyProducts }, { "Content-Type": "application/json" })
         console.log(result);
     }
+    const edit = (record: any) => {
+        setIsModalVisible(true)
+        console.log(record);
+        setObj1(record);
+    }
     const detail = async (supplierId: string) => {
         ///tower-supply/supplier/{supplierId}
         setIsModalVisible2(true);
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/supplier/${supplierId}`)
         console.log(result);
         setObj(result);
-        console.log(obj);
     }
     const handleCancel2 = () => {
         setIsModalVisible2(false);
@@ -108,6 +121,7 @@ export default function SupplierMngt(): React.ReactNode {
         // console.log(id);
         const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/supplier?supplierId=${supplierId}`, {});
         console.log(result);
+        message.success('删除成功');
     }
     return <>
         <Page
@@ -126,7 +140,7 @@ export default function SupplierMngt(): React.ReactNode {
                     render: (_: any, record: any) => {
                         // console.log(record);
                         return <>
-                            <Button type="link" onClick={() => setIsModalVisible(true)}>编辑</Button>
+                            <Button type="link" onClick={() => edit(record)}>编辑</Button>
                             <Button type="link" onClick={() => { detail(record.id) }}>详情</Button>
                             <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>
                         </>
@@ -172,35 +186,41 @@ export default function SupplierMngt(): React.ReactNode {
         />
         <Modal width="700px" title="编辑" visible={isModalVisible} footer={buttons} onCancel={handleCancel}>
             <Descriptions title="供应商基础信息" bordered column={2} labelStyle={{ textAlign: 'center' }}>
-                <Descriptions.Item label="供应商编号"><input style={{ border: "none", outline: "none" }} value={supplierCode} onChange={(e) => { setSupplierCode(e.target.value) }} /></Descriptions.Item>
-                <Descriptions.Item label="供应商名称 *"><input placeholder='请输入' style={{ border: "none", outline: "none" }} value={supplierName} onChange={(e) => { setSupplierName(e.target.value) }} /></Descriptions.Item>
+                <Descriptions.Item label="供应商编号"><input placeholder={obj1.supplierCode} style={{ border: "none", outline: "none" }} value={supplierCode} onChange={(e) => { setSupplierCode(e.target.value) }} /></Descriptions.Item>
+                <Descriptions.Item label="供应商名称 *"><input placeholder={obj1.supplierName} style={{ border: "none", outline: "none" }} value={supplierName} onChange={(e) => { setSupplierName(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="供应商类型 *">
-                    <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange}>
-                        <Select.Option value="1">Jack</Select.Option>
-                        <Select.Option value="2">Lucy</Select.Option>
-                        <Select.Option value="3">yiminghe</Select.Option>
+                    <Select defaultValue={obj1.supplierType} style={{ width: 120 }} bordered={false} onChange={handleChange}>
+                        {
+                            invoiceTypeEnum.map((item: any) => {
+                                return <Select.Option value={item.value}>{item.label}</Select.Option>
+                            })
+                        }
                     </Select>
                 </Descriptions.Item>
                 <Descriptions.Item label="质量保证体系 *">
-                    <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange1}>
-                        <Select.Option value="1">Jack</Select.Option>
-                        <Select.Option value="2">Lucy</Select.Option>
-                        <Select.Option value="3">yiminghe</Select.Option>
+                    <Select defaultValue={obj1.qualityAssurance} style={{ width: 120 }} bordered={false} onChange={handleChange1}>
+                        {
+                            invoiceTypeEnum1.map((item: any) => {
+                                return <Select.Option value={item.value}>{item.label}</Select.Option>
+                            })
+                        }
                     </Select>
                 </Descriptions.Item>
-                <Descriptions.Item label="联系人 *"><input style={{ border: "none", outline: "none" }} value={contactMan} onChange={(e) => { setContactMan(e.target.value) }} /></Descriptions.Item>
-                <Descriptions.Item label="联系电话 *"><input style={{ border: "none", outline: "none" }} value={contactManTel} onChange={(e) => { setContactManTel(e.target.value) }} /></Descriptions.Item>
+                <Descriptions.Item label="联系人 *"><input placeholder={obj1.contactMan} style={{ border: "none", outline: "none" }} value={contactMan} onChange={(e) => { setContactMan(e.target.value) }} /></Descriptions.Item>
+                <Descriptions.Item label="联系电话 *"><input placeholder={obj1.contactManTel} style={{ border: "none", outline: "none" }} value={contactManTel} onChange={(e) => { setContactManTel(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="主要供货产品 *">
-                    <Select defaultValue="lucy" style={{ width: 120 }} bordered={false} onChange={handleChange2}>
-                        <Select.Option value="Jack">Jack</Select.Option>
-                        <Select.Option value="Lucy">Lucy</Select.Option>
-                        <Select.Option value="yiminghe">yiminghe</Select.Option>
+                    <Select defaultValue={obj1.supplyProducts} style={{ width: 120 }} bordered={false} onChange={handleChange2}>
+                        {
+                            invoiceTypeEnum2.map((item: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }) => {
+                                return <Select.Option value={item.value}>{item.label}</Select.Option>
+                            })
+                        }
                     </Select></Descriptions.Item>
-                <Descriptions.Item label="备注"><input style={{ border: "none", outline: "none" }} value={description} onChange={(e) => { setDescription(e.target.value) }} /></Descriptions.Item>
+                <Descriptions.Item label="备注"><input placeholder={obj1.description} style={{ border: "none", outline: "none" }} value={description} onChange={(e) => { setDescription(e.target.value) }} /></Descriptions.Item>
             </Descriptions>
             <Descriptions title="供应商账户信息" bordered column={2} labelStyle={{ textAlign: 'center' }}>
-                <Descriptions.Item label="开户银行 *"><input style={{ border: "none", outline: "none" }} value={bankDeposit} onChange={(e) => { setBankDeposit(e.target.value) }} /></Descriptions.Item>
-                <Descriptions.Item label="银行账号 *"><input style={{ border: "none", outline: "none" }} value={bankAccount} onChange={(e) => { setBankAccount(e.target.value) }} /></Descriptions.Item>
+                <Descriptions.Item label="开户银行 *"><input placeholder={obj1.bankDeposit} style={{ border: "none", outline: "none" }} value={bankDeposit} onChange={(e) => { setBankDeposit(e.target.value) }} /></Descriptions.Item>
+                <Descriptions.Item label="银行账号 *"><input placeholder={obj1.bankAccount} style={{ border: "none", outline: "none" }} value={bankAccount} onChange={(e) => { setBankAccount(e.target.value) }} /></Descriptions.Item>
             </Descriptions>
             <DetailContent>
                 <DetailTitle title="操作信息" />
@@ -213,34 +233,40 @@ export default function SupplierMngt(): React.ReactNode {
             </DetailContent>
         </Modal>
         <Modal width="800px" title="创建" visible={isModalVisible1} footer={buttons1} onCancel={handleCancel1}>
-            {/* <Descriptions title="供应商基础信息" bordered column={2} labelStyle={{ textAlign: 'center' }}>
+            <Descriptions title="供应商基础信息" bordered column={2} labelStyle={{ textAlign: 'center' }}>
                 <Descriptions.Item label="供应商编号"><input style={{ border: "none", outline: "none" }} value={supplierCode} onChange={(e) => { setSupplierCode(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="供应商名称 *"><input placeholder='请输入' style={{ border: "none", outline: "none" }} value={supplierName} onChange={(e) => { setSupplierName(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="供应商类型 *">
                     <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange}>
-                        <Select.Option value="1">Jack</Select.Option>
-                        <Select.Option value="2">Lucy</Select.Option>
-                        <Select.Option value="3">yiminghe</Select.Option>
+                        {
+                            invoiceTypeEnum.map((item: any) => {
+                                return <Select.Option value={item.value}>{item.label}</Select.Option>
+                            })
+                        }
                     </Select>
                 </Descriptions.Item>
                 <Descriptions.Item label="质量保证体系 *">
                     <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange1}>
-                        <Select.Option value="1">Jack</Select.Option>
-                        <Select.Option value="2">Lucy</Select.Option>
-                        <Select.Option value="3">yiminghe</Select.Option>
+                        {
+                            invoiceTypeEnum1.map((item: any) => {
+                                return <Select.Option value={item.value}>{item.label}</Select.Option>
+                            })
+                        }
                     </Select>
                 </Descriptions.Item>
                 <Descriptions.Item label="联系人 *"><input style={{ border: "none", outline: "none" }} value={contactMan} onChange={(e) => { setContactMan(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="联系电话 *"><input style={{ border: "none", outline: "none" }} value={contactManTel} onChange={(e) => { setContactManTel(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="主要供货产品 *">
-                    <Select defaultValue="lucy" style={{ width: 120 }} bordered={false} onChange={handleChange2}>
-                        <Select.Option value="1">Jack</Select.Option>
-                        <Select.Option value="2">Lucy</Select.Option>
-                        <Select.Option value="3">yiminghe</Select.Option>
+                    <Select style={{ width: 120 }} bordered={false} onChange={handleChange2}>
+                        {
+                            invoiceTypeEnum2.map((item: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }) => {
+                                return <Select.Option value={item.value}>{item.label}</Select.Option>
+                            })
+                        }
                     </Select></Descriptions.Item>
                 <Descriptions.Item label="备注"><input style={{ border: "none", outline: "none" }} value={description} onChange={(e) => { setDescription(e.target.value) }} /></Descriptions.Item>
-            </Descriptions> */}
-            <BaseInfo
+            </Descriptions>
+            {/* <BaseInfo
                 columns={[
                     ...supplierMngt1
                 ]}
@@ -248,7 +274,7 @@ export default function SupplierMngt(): React.ReactNode {
                 dataSource={{}}
                 edit
                 col={2}
-            />
+            /> */}
             <Descriptions title="供应商账户信息" bordered column={2} labelStyle={{ textAlign: 'center' }}>
                 <Descriptions.Item label="开户银行 *"><input style={{ border: "none", outline: "none" }} value={bankDeposit} onChange={(e) => { setBankDeposit(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="银行账号 *"><input style={{ border: "none", outline: "none" }} value={bankAccount} onChange={(e) => { setBankAccount(e.target.value) }} /></Descriptions.Item>
