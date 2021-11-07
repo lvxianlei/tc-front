@@ -19,15 +19,15 @@
                 },
                 {
                     "value": 2,
-                    "label": "待指派"
+                    "label": "已完成"
                 },
                 {
                     "value": 3,
-                    "label": "待完成"
+                    "label": "待指派"
                 },
                 {
                     "value": 4,
-                    "label": "已完成"
+                    "label": "待完成"
                 },
                 {
                     "value": 5,
@@ -64,26 +64,56 @@
             "dataIndex": "inquirer"
         }
     ],
-    "enquiryTaskAction": [
+    "overviewBaseInfo": [
         {
-            "title": "序号",
-            "dataIndex": "index"
+            "title": "编号",
+            "dataIndex": "inquiryNumber"
         },
         {
-            "title": "操作部门",
-            "dataIndex": "createDeptName"
+            "title": "项目名称",
+            "dataIndex": "projectName"
         },
         {
-            "title": "操作人",
+            "title": "客户名称",
+            "dataIndex": "biddingPerson"
+        },
+        {
+            "title": "投标截止时间",
+            "dataIndex": "biddingEndTime"
+        },
+        {
+            "title": "项目负责人",
+            "dataIndex": "projectLeader"
+        },
+        {
+            "title": "信息申请人",
             "dataIndex": "createUserName"
         },
         {
-            "title": "操作时间",
+            "title": "申请时间",
             "dataIndex": "createTime"
         },
         {
+            "title": "备注",
+            "dataIndex": "taskDescription"
+        }
+    ],
+    "enquiryTaskAction": [
+        {
+            "title": "操作部门",
+            "dataIndex": "deptName"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "optUserName"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "optTime"
+        },
+        {
             "title": "任务状态",
-            "dataIndex": "currentStatus"
+            "dataIndex": "optName"
         },
         {
             "title": "备注",
@@ -91,10 +121,6 @@
         }
     ],
     "CurrentPriceInformation": [
-        {
-            "title": "序号",
-            "dataIndex": "index"
-        },
         {
             "title": "原材料名称",
             "dataIndex": "materialName"

@@ -7,9 +7,10 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 export default function EnquiryList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false)
-    const [filterValue, setFilterValue] = useState({})
+    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({})
+    const [deptId, setDeptId] = useState<string>("")
     const [detailId, setDetailId] = useState<string>("")
-    const editRef = useRef<{ onSubmit: () => void }>({ onSubmit: () => { } })
+    const editRef = useRef<{ onSubmit: () => void, resetFields: () => void }>({ onSubmit: () => { }, resetFields: () => { } })
 
     const { data: deptData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -18,14 +19,27 @@ export default function EnquiryList(): React.ReactNode {
         } catch (error) {
             reject(error)
         }
+    }))
+
+    const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/sinzetech-user/user?departmentId=${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
     }), { manual: true })
 
     const onFilterSubmit = (value: any) => {
-        if (value.statusUpdateTime) {
-            const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
-            value.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
-            delete value.statusUpdateTime
+        if (value.startStatusUpdateTime) {
+            const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startStatusUpdateTime = formatDate[0] + " 00:00:00"
+            value.endStatusUpdateTime = formatDate[1] + " 23:59:59"
+        }
+        if (value.startPlannedDeliveryTime) {
+            const formatDate = value.startPlannedDeliveryTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startPlannedDeliveryTime = formatDate[0] + " 00:00:00"
+            value.endPlannedDeliveryTime = formatDate[1] + " 23:59:59"
         }
         setFilterValue({ ...filterValue, ...value })
         return value
@@ -42,7 +56,10 @@ export default function EnquiryList(): React.ReactNode {
     })
 
     return <>
-        <Modal width={1011} visible={visible} onOk={handleModal} onCancel={() => setVisible(false)} >
+        <Modal title="询价信息" width={1011} visible={visible} onOk={handleModal} onCancel={() => {
+            editRef.current?.resetFields()
+            setVisible(false)
+        }} >
             <Edit detailId={detailId} ref={editRef} />
         </Modal>
         <Page
@@ -64,40 +81,48 @@ export default function EnquiryList(): React.ReactNode {
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
-                    name: 'fuzzyMsg',
+                    name: 'fuzzyQuery',
                     label: '查询',
-                    children: <Input placeholder="任务编号/项目名称/项目负责人/客户名称" maxLength={200} />
+                    children: <Input placeholder="" maxLength={200} />
                 },
                 {
-                    name: 'statusUpdateTime',
+                    name: 'startStatusUpdateTime',
                     label: '最新状态变更时间',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'status',
+                    name: 'inquiryStatus',
                     label: '任务状态',
                     children: <Select style={{ width: "100px" }}>
-                        <Select.Option value={''} key={''}>全部</Select.Option>
                         <Select.Option value={1} key={1}>待确认</Select.Option>
-                        <Select.Option value={2} key={2}>待指派</Select.Option>
-                        <Select.Option value={3} key={3}>待完成</Select.Option>
-                        <Select.Option value={4} key={4}>已完成</Select.Option>
+                        <Select.Option value={2} key={2}>已完成</Select.Option>
+                        <Select.Option value={3} key={3}>待指派</Select.Option>
+                        <Select.Option value={4} key={4}>待完成</Select.Option>
                         <Select.Option value={5} key={5}>已提交</Select.Option>
-                        <Select.Option value={0} key={0}>已拒绝</Select.Option>
+                        <Select.Option value={6} key={6}>已拒绝</Select.Option>
                     </Select>
                 },
                 {
-                    name: 'statusUpdateTime',
+                    name: 'startPlannedDeliveryTime',
                     label: '计划交付时间',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'confirmId',
+                    name: 'deptId',
                     label: '询价人',
-                    children: <div>
-
-                    </div>
-                }
+                    children: <Select onChange={(value: string) => {
+                        setDeptId(value)
+                        getUser(value)
+                    }} style={{ width: 100 }}>{deptData?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}</Select>
+                },
+                {
+                    name: 'inquirerId',
+                    label: '',
+                    children: <Select
+                        disabled={!deptId}
+                        style={{ width: 100 }}
+                    >{userData?.records?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}</Select>
+                },
             ]}
         />
     </>

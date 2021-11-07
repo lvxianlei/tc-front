@@ -8,7 +8,17 @@
         {
             "title": "收货单状态",
             "dataIndex": "receiveStatus",
-            "type": "integer"
+            "type": "select",
+            "enum": [
+                {
+                    "label": "待完成",
+                    "value": 0
+                },
+                {
+                    "label": "已完成",
+                    "value": 1
+                }
+            ]
         },
         {
             "title": "供应商",
@@ -32,12 +42,12 @@
         },
         {
             "title": "约定到货时间",
-            "dataIndex": "startReceiveTime",
+            "dataIndex": "receiveTime",
             "type": "string"
         },
         {
             "title": "完成时间",
-            "dataIndex": "startCompleteTime",
+            "dataIndex": "updateTime",
             "type": ""
         },
         {

@@ -1,17 +1,24 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 //采购任务下的原材料
-import React, { useState } from 'react';
-import { Modal, Descriptions, Button, DatePicker, Select, Input } from 'antd';
+import React, { useState, useRef } from 'react';
+import { Modal, Descriptions, Button, DatePicker, Select, Input, message } from 'antd';
 import { CommonTable, DetailContent, DetailTitle, Page } from '../common'
 import { buyingTask, operatingInformation } from "./buyingTask.json"
 import { useHistory } from 'react-router';
 import RequestUtil from '../../utils/RequestUtil';
+import TaskAssign from './TaskAssign';
+interface TaskAssignRef {
+    onSubmit: () => void
+    resetFields: () => void
+}
 export default function rawMaterial() {
+    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({})
+    const [detailId, setDetailId] = useState<string>("")
+    const tarkRef = useRef<TaskAssignRef>({ onSubmit: () => { }, resetFields: () => { } })
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisible1, setIsModalVisible1] = useState(false);
     const [isModalVisible2, setIsModalVisible2] = useState(false);
     const [isModalVisible3, setIsModalVisible3] = useState(false);
-    const [confirmLeader, setConfirmLeader] = useState<any | undefined>([]);
     const [columnsData, setColumnsData] = useState([]);
     const [batcherDeptId, setBatcherDeptId] = useState(0);//配料人部门id
     const [batcherId, setBatcherId] = useState(0);//配料人id
@@ -91,8 +98,19 @@ export default function rawMaterial() {
     ]
     const buttons1: {} | null | undefined = [
         <div>
-            <Button onClick={() => setIsModalVisible1(false)}>关闭</Button>
-            <Button onClick={() => { save(batcherDeptId, batcherId, id, purchaserDeptId, purchaserId) }}>保存并提交</Button>
+            <Button
+                key="close"
+                onClick={() => {
+                    tarkRef.current?.resetFields()
+                    setIsModalVisible1(false)
+                }}>关闭</Button>
+            <Button
+                key="save"
+                onClick={async () => {
+                    const result = await tarkRef.current?.onSubmit()
+                    // message.success("保存并提交成功...")
+                    // history.go(0)
+                }}>保存并提交</Button>
         </div>
     ]
     const buttons2: {} | null | undefined = [
@@ -107,11 +125,21 @@ export default function rawMaterial() {
             <Button onClick={() => { submit(rejectionDescription, id) }}>提交</Button>
         </div>
     ]
+
+    const onFilterSubmit = (value: any) => {
+        if (value.startStatusUpdateTime) {
+            const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startStatusUpdateTime = formatDate[0] + ' 00:00:00';
+            value.endStatusUpdateTime = formatDate[1] + ' 23:59:59';
+        }
+        setFilterValue({ ...filterValue, ...value })
+        return value
+    }
+
     return (
         <div>
             <Page
                 path="/tower-supply/materialPurchaseTask"
-                // path=""
                 columns={[
                     {
                         title: "序号",
@@ -119,18 +147,6 @@ export default function rawMaterial() {
                         fixed: "left",
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
-                    // {buyingTask!.map((item: { title: string; }) => {
-                    //     if (item.title === "completionProgresdemand") {
-                    //         return ({
-                    //             ...item,
-                    //             render: (text: string | number, record: { demand: string | number; }) => {
-                    //                 const completionProgres = [1, "-1", 0, "0"].includes(text) ? "0" : text
-                    //                 const demand = [-1, "-1", 0, "0"].includes(record.demand) ? "0" : record.demand
-                    //                 return <div>{completionProgres}/{demand}</div>
-                    //             }
-                    //         })
-                    //     }
-                    // })},
                     ...buyingTask,
                     {
                         title: "操作",
@@ -138,54 +154,50 @@ export default function rawMaterial() {
                         fixed: "right",
                         render: (_: any, records: any) => <>
                             <Button type="link" onClick={() => { detail(records.id) }}>任务详情</Button>
-                            <Button type="link" onClick={() => { designate(records.id) }}>指派</Button>
+                            <Button type="link" onClick={() => {
+                                setDetailId(records.id)
+                                setIsModalVisible1(true)
+                            }}>指派</Button>
                             <Button type="link" onClick={() => { history.push(`/buyingTask/materialList`) }}>用料清单</Button>
                             <Button type="link" onClick={() => { setIsModalVisible2(true) }}>提交任务</Button>
                         </>
                     }
                 ]}
+                filterValue={filterValue}
+                onFilterSubmit={onFilterSubmit}
                 searchFormItems={[
                     {
-                        name: 'statusUpdateTime',
+                        name: 'startStatusUpdateTime',
                         label: '最新状态变更时间',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                     {
-                        name: 'status',
+                        name: 'taskStatus',
                         label: '任务状态',
                         children: <Select style={{ width: "100px" }}>
                             <Select.Option value={1} key={1}>待确认</Select.Option>
-                            <Select.Option value={2} key={2}>待指派</Select.Option>
-                            <Select.Option value={3} key={3}>待完成</Select.Option>
-                            <Select.Option value={4} key={4}>已完成</Select.Option>
-                            <Select.Option value={5} key={5}>已提交</Select.Option>
-                            <Select.Option value={0} key={0}>已拒绝</Select.Option>
+                            <Select.Option value={2} key={2}>已拒绝</Select.Option>
+                            <Select.Option value={3} key={3}>待指派</Select.Option>
+                            <Select.Option value={4} key={4}>待接收</Select.Option>
+                            <Select.Option value={5} key={5}>待完成</Select.Option>
+                            <Select.Option value={0} key={6}>已完成</Select.Option>
+                            <Select.Option value={0} key={7}>已提交</Select.Option>
                         </Select>
                     },
                     {
                         name: 'confirmId',
                         label: '询价人',
                         children: <div>
-                            <Select style={{ width: '100px' }} defaultValue="部门">
-                                {confirmLeader && confirmLeader.map((item: any) => {
-                                    return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                                })}
-                            </Select>
-                            <Select style={{ width: '100px' }} defaultValue="人员">
-                                {confirmLeader && confirmLeader.map((item: any) => {
-                                    return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                                })}
-                            </Select>
                         </div>
                     },
                     {
-                        name: 'fuzzyMsg',
+                        name: 'fuzzyQuery',
                         label: '查询',
                         children: <Input maxLength={200} />
                     },
                 ]}
             />
-            <Modal width="700px" title="原材料采购任务详情" visible={isModalVisible} footer={buttons} onCancel={handleCancel}>
+            <Modal width={1011} title="原材料采购任务详情" visible={isModalVisible} footer={buttons} onCancel={handleCancel}>
                 {/* 基本信息 */}
                 <Descriptions title="基本信息" column={2} bordered>
                     <Descriptions.Item label="任务单编号">{obj.taskNoticeNumber}</Descriptions.Item>
@@ -236,33 +248,15 @@ export default function rawMaterial() {
                     />
                 </DetailContent>
             </Modal>
-            <Modal width="700px" title="指派" visible={isModalVisible1} footer={buttons1} onCancel={handleCancel1}>
-                配料人 *<Select defaultValue="请选择部门" style={{ width: 120 }} onChange={handleChange}>
-                    <Select.Option value="1">Jack</Select.Option>
-                    <Select.Option value="2">Lucy</Select.Option>
-                </Select>
-                <Select defaultValue="请选择人员" style={{ width: 120 }} onChange={handleChange1}>
-                    <Select.Option value="1">Jack</Select.Option>
-                    <Select.Option value="2">Lucy</Select.Option>
-                </Select>
-                <div>
-                    采购人 *<Select defaultValue="请选择部门" style={{ width: 120 }} onChange={handleChange2}>
-                        <Select.Option value="1">Jack</Select.Option>
-                        <Select.Option value="2">Lucy</Select.Option>
-                    </Select>
-                    <Select defaultValue="请选择人员" style={{ width: 120 }} onChange={handleChange3}>
-                        <Select.Option value="1">Jack</Select.Option>
-                        <Select.Option value="2">Lucy</Select.Option>
-                    </Select>
-                </div>
+            <Modal width={1011} title="指派信息" visible={isModalVisible1} footer={buttons1} onCancel={handleCancel1}>
+                <TaskAssign id={detailId} ref={tarkRef} />
             </Modal>
-            <Modal width="700px" title="提交/完成" visible={isModalVisible2} footer={buttons2} onCancel={handleCancel2} >
+            <Modal width={1011} title="提交/完成" visible={isModalVisible2} footer={buttons2} onCancel={handleCancel2} >
                 <div style={{ width: "100%", height: "100%", textAlign: "center" }}>确认提交/完成？</div>
             </Modal>
-            <Modal width="700px" title="拒绝" visible={isModalVisible3} footer={buttons3} onCancel={handleCancel3}>
+            <Modal width={1011} title="拒绝" visible={isModalVisible3} footer={buttons3} onCancel={handleCancel3}>
                 拒绝原因 *<Input placeholder="请输入" value={rejectionDescription} onChange={(e) => { setRejectionDescription(e.target.value) }} />
             </Modal>
-            <Button onClick={() => { aa() }}>aa</Button>
         </div>
     )
 }
