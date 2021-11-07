@@ -50,7 +50,9 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 ...baseData,
                 supplierName: baseData.supplierName.value || data?.supplierName,
                 supplierId: baseData.supplierName.id || data?.supplierId,
-                receiptDtos: baseData.receiptVos.records?.map((item: any) => ({ receiptId: item.id, receiptNumber: item.receiveNumber })) || data?.receiptVos
+                receiptDtos: baseData.receiptVos.records?.map((item: any) => ({ receiptId: item.id, receiptNumber: item.receiveNumber })) || data?.receiptVos,
+                invoiceAttachInfoDtos:attchs
+
             })
             resolve(true)
         } catch (error) {

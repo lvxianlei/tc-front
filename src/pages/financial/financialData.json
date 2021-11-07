@@ -7,7 +7,7 @@
         },
         {
             "title": "请款编号",
-            "dataIndex": "reqFundsNumber",
+            "dataIndex": "pleasePayNumber",
             "type": "string"
         },
         {
@@ -16,7 +16,7 @@
         },
         {
             "title": "关联收货单",
-            "dataIndex": "receipt"
+            "dataIndex": "receiptNumbers"
         },
         {
             "title": "票据金额",
@@ -44,7 +44,7 @@
         },
         {
             "title": "状态",
-            "dataIndex": "status",
+            "dataIndex": "invoiceStatus",
             "type": "select",
             "enum": [
                 {
@@ -566,7 +566,7 @@
         },
         {
             "title": "状态",
-            "dataIndex": "status"
+            "dataIndex": "invoiceStatus"
         }
     ],
     "OperationInformation": [
@@ -584,7 +584,7 @@
         },
         {
             "title": "状态",
-            "dataIndex": "status"
+            "dataIndex": "invoiceStatus"
         },
         {
             "title": "付款日",
@@ -612,7 +612,7 @@
         },
         {
             "title": "关联收货单",
-            "dataIndex": "associatedreceipt"
+            "dataIndex": "receiptNumbers"
         },
         {
             "title": "开户银行",
@@ -670,7 +670,7 @@
         },
         {
             "title": "关联收货单",
-            "dataIndex": "associatedreceipt"
+            "dataIndex": "receiptNumbers"
         },
         {
             "title": "开户银行",

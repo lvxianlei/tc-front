@@ -61,7 +61,8 @@ export default function Overview() {
         </Modal>
         <DetailContent title={[
             <Button key="export" type="primary" style={{ marginRight: 16 }}>导出</Button>,
-            <Button key="peiliao" type="primary" ghost onClick={() => setVisible(true)}>配料</Button>
+            <Button key="peiliao" type="primary" ghost onClick={() => setVisible(true)} style={{ marginRight: 16 }}>配料</Button>,
+            <Button key="peiliao" type="primary" ghost onClick={() => setVisible(true)}>临时生成生产配料信息</Button>
         ]} operation={[
             <Button type="primary" ghost key="cancel" onClick={() => history.go(-1)}>返回</Button>
         ]}>

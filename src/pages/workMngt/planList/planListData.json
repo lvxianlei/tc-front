@@ -28,9 +28,9 @@
         },
         {
             "title": "塔型（个）",
-            "dataIndex": "productCategory",
+            "dataIndex": "productCategoryNum",
             "width": 100,
-            "type": "string"
+            "type": "integer"
         },
         {
             "title": "杆塔（基）",

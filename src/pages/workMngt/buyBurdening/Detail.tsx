@@ -31,6 +31,16 @@ export default function EnquiryList(): React.ReactNode {
         }
     }), { manual: true })
 
+    const { run: createScheme } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/initData/scheme?purchaseTaskTowerId=${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -57,6 +67,22 @@ export default function EnquiryList(): React.ReactNode {
                     }
                 })
             }
+        })
+    }
+
+    const createBatchingScheme = () => {
+        Modal.confirm({
+            title: "临时生成配料方案",
+            content: "确定要生成提料配料方案吗？",
+            onOk: () => new Promise(async (resove, reject) => {
+                try {
+                    resove(await createScheme(params.id))
+                    message.success("成功生成配料方案...")
+                    // history.go(0)
+                } catch (error) {
+                    reject(error)
+                }
+            })
         })
     }
 
@@ -88,6 +114,7 @@ export default function EnquiryList(): React.ReactNode {
                 <Button type="primary" ghost onClick={handleSuccess}>完成</Button>
                 <Button type="primary" ghost onClick={() => setVisible(true)}>配料</Button>
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
+                <Button type="primary" ghost onClick={() => createBatchingScheme()}>临时创建配料方案</Button>
             </>}
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
