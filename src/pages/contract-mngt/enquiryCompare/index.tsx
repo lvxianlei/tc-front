@@ -23,6 +23,15 @@ export default function ContractMngt() {
     const [oprationType, setOprationType] = useState<"new" | "edit">("new")
     const [form] = Form.useForm()
 
+    const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/comparisonPrice?id=${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     const { run: cancelRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/comparisonPrice/cancelComparisonPrice`, { ...data })
@@ -60,6 +69,23 @@ export default function ContractMngt() {
             reject(false)
         }
     })
+
+    const handleDelete = (id: string) => {
+        Modal.confirm({
+            title: "删除",
+            content: "确定删除/取消吗？",
+            onOk: () => new Promise(async (resove, reject) => {
+                try {
+                    resove(await deleteRun(id))
+                    message.success("删除成功...")
+                    history.go(0)
+                } catch (error) {
+                    reject(error)
+                }
+            })
+        })
+    }
+
     return (
         <>
             <Modal title={oprationType === "new" ? "添加报价" : "编辑报价"} width={1011} visible={visible} onOk={handleAddOk} onCancel={() => {
@@ -110,7 +136,7 @@ export default function ContractMngt() {
                                 setDetailId(records.id)
                                 setOprationVisible(true)
                             }}>操作信息</Button>
-                            {records.comparisonStatus === 2 && <a type="link" onClick={() => { }}>删除</a>}
+                            {records.comparisonStatus === 1 && <a type="link" onClick={() => handleDelete(records.id)}>删除</a>}
                         </>
                     }
                 ]}

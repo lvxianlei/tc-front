@@ -98,6 +98,61 @@
             "dataIndex": "total"
         }
     ],
+    "addPriceHead": [
+        {
+            "title": "物料编码",
+            "dataIndex": "materialCode"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandard"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec"
+        },
+        {
+            "title": "宽度（mm）",
+            "dataIndex": "width",
+            "type": "number"
+        },
+        {
+            "title": "厚度（mm）",
+            "dataIndex": "thickness",
+            "type": "number"
+        },
+        {
+            "title": "长度（mm）",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num",
+            "type": "number"
+        },
+        {
+            "title": "单重（吨）",
+            "dataIndex": "weight",
+            "type": "number"
+        },
+        {
+            "title": "含税报价（单价）",
+            "dataIndex": "taxOffer"
+        },
+        {
+            "title": "不含税报价（单价）",
+            "dataIndex": "offer"
+        }
+    ],
     "choosePlanList": [
         {
             "title": "采购计划编号",
