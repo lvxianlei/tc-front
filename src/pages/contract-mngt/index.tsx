@@ -1,9 +1,9 @@
 // 合同管理-原材料合同管理
 import React, { useState } from 'react'
 //page 组件
-import { CommonTable, DetailContent, DetailTitle, Page } from "../common"
+import { BaseInfo, CommonTable, DetailContent, DetailTitle, Page } from "../common"
 // 表格数据
-import { contract, contract1, contract2, contract7 } from "./contract.json"
+import { contract, contract1, contract2, contract7, contract8 } from "./contract.json"
 //路由
 import { Link, } from 'react-router-dom'
 // antd
@@ -226,77 +226,24 @@ export default function ContractMngt() {
                 ]}
             />
             <Modal title="创建" width="900px" footer={buttons} visible={isModalVisible} onCancel={handleCancel}>
-                {/* 合同基本信息 */}
-                <Descriptions title="合同基本信息" column={2} bordered>
-                    <Descriptions.Item label="合同编号 *"><input placeholder="自动生成" style={{ border: "none", outline: "none" }} value={contractNumber} onChange={(e) => { setContractNumber(e.target.value) }} /></Descriptions.Item>
-                    <Descriptions.Item label="关联采购计划 *">
-                        {/* 跳工作管理下的计划列表 */}
-                        <Select placeholder="请选择 " bordered={false} onChange={handleChange}>
-                            <Select.Option value="aa">aa</Select.Option>
-                            <Select.Option value="bb">bb</Select.Option>
-                        </Select>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="供应商 *">
-                        <Select placeholder="请选择" bordered={false} onChange={handleChange1}>
-                            <Select.Option value="aa">aa</Select.Option>
-                            <Select.Option value="bb">bb</Select.Option>
-                        </Select>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="签订时间 *">
-                        <DatePicker onChange={onChange} />
-                    </Descriptions.Item>
-                    <Descriptions.Item label="经办人 *">
-                        <Select placeholder="请选择部门" bordered={false} onChange={handleChange3}>
-                            <Select.Option value="1">aa</Select.Option>
-                            <Select.Option value="2">bb</Select.Option>
-                        </Select>
-                        <Select placeholder="请选择人员" bordered={false} onChange={handleChange4}>
-                            <Select.Option value="1">aa</Select.Option>
-                            <Select.Option value="2">bb</Select.Option>
-                        </Select>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="交货方式 *">
-                        <Select placeholder="请选择" bordered={false} onChange={handleChange5}>
-                            <Select.Option value="1">需方场地</Select.Option>
-                        </Select>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="材料标准 *">
-                        <Select placeholder="请选择" bordered={false} onChange={handleChange6}>
-                            <Select.Option value="1">国网</Select.Option>
-                        </Select>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="运输承担 *">
-                        <Select placeholder="请选择" bordered={false} onChange={handleChange7}>
-                            <Select.Option value="供方">供方</Select.Option>
-                            <Select.Option value="需方">需方</Select.Option>
-                        </Select>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="运输方式 *">
-                        <Select placeholder="请选择" bordered={false} onChange={handleChange8}>
-                            <Select.Option value="1">汽运</Select.Option>
-                        </Select>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="卸车承担 *">
-                        <Select placeholder="请选择" bordered={false} onChange={handleChange9}>
-                            <Select.Option value="供方">供方</Select.Option>
-                            <Select.Option value="需方">需方</Select.Option>
-                        </Select>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="备注">
-                        <input placeholder="请输入" style={{ border: "none", outline: "none" }} />
-                    </Descriptions.Item>
-                </Descriptions>
-                {/* 询比价信息 */}
-                <Descriptions title="询比价信息" column={1} bordered>
+                <DetailTitle title={'合同基本信息'} />
+                <BaseInfo
+                    dataSource={{}}
+                    columns={[...contract8]}
+                    col={2}
+                    edit
+                />
+                <DetailTitle title={'询比价信息'} />
+                <Descriptions column={1} bordered>
                     <Descriptions.Item label="询比价名称"><div onClick={() => { setIsModalVisible4(true) }}>请选择</div></Descriptions.Item>
                 </Descriptions>
-                {/* 上传附件 */}
-                <Descriptions title="上传附件" column={2} bordered>
-                    <Descriptions.Item label="附件名称附件名称附件名称附件名称附件名称">预览 下载 删除</Descriptions.Item>
+                <DetailTitle title={'上传附件'} />
+                <Descriptions column={2} bordered>
+                    <Descriptions.Item label="附件名称附件名称附件名称附件名称附件名称"><Button type="link">预览</Button><Button type="link">下载</Button><Button type="link">删除</Button></Descriptions.Item>
                 </Descriptions>
+                <DetailTitle title={'原材料信息'} />
                 <Page
                     path=""
-                    //表格
                     columns={[
                         {
                             title: "序号",
@@ -314,10 +261,10 @@ export default function ContractMngt() {
                             </>
                         }
                     ]}
-                    extraOperation={<div><div>原材料信息</div><b style={{ color: "#F59A23" }}>重量合计（吨）：62.00  含税金额合计（元）：371010    不含税金额合计（元）322778.7</b> <Link to="/contract-mngt/index"><Button onClick={showModal1} style={{ marginLeft: "50px" }} >添加</Button></Link></div>}
-                    //头部时间
+                    extraOperation={<div><b style={{ color: "#F59A23" }}>重量合计（吨）：62.00  含税金额合计（元）：371010    不含税金额合计（元）322778.7</b> <Link to="/contract-mngt/index"><Button onClick={showModal1} style={{ marginLeft: "50px" }} >添加</Button></Link></div>}
                     searchFormItems={[]}
                 />
+
             </Modal>
             <Modal title="添加原材料" width="1200px" footer={buttons1} visible={isModalVisible1} onCancel={handleCancel1}>
                 <Page
