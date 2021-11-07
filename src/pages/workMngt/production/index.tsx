@@ -38,10 +38,21 @@ export default function Invoicing() {
                                     setDetailId(record.id)
                                     setVisible(true)
                                 }}>配料单</Button>
-                        </>
+                            <Button type="link"
+                                    onClick={() => {
+
+                                    }}>生成放样构件</Button>
+                            <Button type="link"
+                                    onClick={() => {
+
+                                    }}>生成差异列表</Button>
+                            </>
                     }
                 }]}
-            extraOperation={<Button type="primary" ghost>导出</Button>}
+            extraOperation={<><Button type="primary" ghost>导出</Button>
+                <Button type="primary" ghost>临时生成生产数据</Button>
+            </>}
+
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
 

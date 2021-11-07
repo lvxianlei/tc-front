@@ -12,7 +12,8 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan/purchase?purchaserTaskTowerIds=${ids.join(",")}&purchaseType=1`)
-            setDataSource(result?.lists || [])
+            //TODO 临时初始数据
+            setDataSource(result?.lists.map((item:any)=>({...item,planPurchaseNum:1})) || [])
             resole(result)
         } catch (error) {
             reject(error)
@@ -59,7 +60,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                         return ({
                             ...item,
                             render: (_: any, record: any, index: number) => {
-                                return <InputNumber key={index} onChange={(value: number) => handleInputChange(value, index)} style={{ height: 27 }} />
+                                return <InputNumber value ={_||1} key={index} onChange={(value: number) => handleInputChange(value, index)} style={{ height: 27 }} />
                             }
                         })
                     }

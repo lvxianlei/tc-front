@@ -715,27 +715,6 @@
       "exact": true,
       "authority": "approvalm"
     },
-    { //供应商管理-创建
-      "name": "供应商管理创建",
-      "path": "/supplier-mngt/supplierAdd",
-      "module": "./pages/supplier-mngt/supplierAdd",
-      "exact": true,
-      "authority": "approvalm"
-    },
-    { //供应商管理-编辑
-      "name": "供应商管理编辑",
-      "path": "/supplier-mngt/supplierEdit",
-      "module": "./pages/supplier-mngt/supplierEdit",
-      "exact": true,
-      "authority": "approvalm"
-    },
-    { //供应商管理-详情
-      "name": "供应商管理详情",
-      "path": "/supplier-mngt/supplierDetail",
-      "module": "./pages/supplier-mngt/supplierDetail",
-      "exact": true,
-      "authority": "approvalm"
-    },
     { //合同管理-原材料合同管理
       "name": "原材料合同管理",
       "path": "/contract-mngt/index",
