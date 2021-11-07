@@ -743,17 +743,17 @@
       "exact": true,
       "authority": "approvalm"
     },
-    {//合同管理-询比价
+    { //合同管理-询比价
       "name": "询比价",
       "path": "/contract-mngt/enquiryCompare",
-      "module": "./pages/contract-mngt/enquiryCompare",
+      "module": "./pages/contract-mngt/enquiryCompare/index",
       "exact": true,
       "authority": "approvalm"
     },
-    {//合同管理-询比价-询价信息
+    { //合同管理-询比价-询价信息
       "name": "询价信息",
-      "path": "/contract-mngt/enquiryCompare/enquiryInformation",
-      "module": "./pages/contract-mngt/enquiryInformation",
+      "path": "/contract-mngt/enquiryCompare/enquiry/:id",
+      "module": "./pages/contract-mngt/enquiryCompare/Overview",
       "exact": true,
       "authority": "approvalm"
     },

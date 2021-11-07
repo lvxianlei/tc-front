@@ -74,7 +74,7 @@ class Login extends AsyncComponent<ILoginRouteProps, ILoginState> {
      */
     private async onSubmit(values: Record<string, any>) {
         AuthUtil.setTenantId(this.state.tenant.tenantId, { expires: 7 })
-        values.password = MD5(values.password).toString()
+        // values.password = MD5(values.password).toString()
         const { access_token, refresh_token, user_id, tenant_id, ...result } = await RequestUtil.post('/sinzetech-auth/oauth/token', {
             ...values,
             tenantId: this.state.tenant.tenantId
