@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Spin, Image, Space, Upload, message, Popconfirm } from 'antd';
+import { Button, Spin, Image, Space, Upload, message, Popconfirm, Modal } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable } from '../../../common';
 import useRequest from '@ahooksjs/use-request';
@@ -13,6 +13,7 @@ export default function PickTowerDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, productSegmentId: string, status: string }>()
     const [ url, setUrl ] = useState<string>('')
+    const [ visible, setVisible ] = useState<boolean>(false)
     const [ urlBase, setUrlBase ] = useState<undefined|any>('')
     const [ tableDataSource, setTableDataSource ] = useState<any[]>([])
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
@@ -48,13 +49,19 @@ export default function PickTowerDetail(): React.ReactNode {
                     title="确认保存数据?"
                     onConfirm={ async () => {
                         if(tableDataSource&&tableDataSource.length>0){
-                            await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save`,tableDataSource).then(()=>{
-                                message.success('保存成功！')
-                            }).then(()=>{
-                                history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}`)
-                            })
+                            const value = await RequestUtil.post(`/tower-science/drawProductStructure/check/cover`,tableDataSource)
+                            if(value){
+                                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=0`,tableDataSource).then(()=>{
+                                    message.success('保存成功！')
+                                }).then(()=>{
+                                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}`)
+                                })
+                            }else{
+                                setVisible(true)
+                            }
+                            
                         }else{
-                            message.success('当前无数据，不可保存！')
+                            message.error('当前无数据，不可保存！')
                         }
                         
                     } }
@@ -116,6 +123,23 @@ export default function PickTowerDetail(): React.ReactNode {
                     </div>
                 </div>
             </DetailContent>
+            <Modal visible={visible} title='' onCancel={()=>{setVisible(false)}} okText='是' cancelText='否' footer={<Space><Button onClick={async ()=>{
+                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=1`,tableDataSource).then(()=>{
+                    message.success('保存成功！')
+                }).then(()=>{
+                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}`)
+                })
+            }}>是</Button><Button onClick={async ()=>{
+                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=0`,tableDataSource).then(()=>{
+                    message.success('保存成功！')
+                }).then(()=>{
+                    setVisible(false);
+                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}`)
+                })
+                
+            }}>否</Button></Space>}>
+                存在相同构件编号，确定覆盖？
+            </Modal>
         </Spin>
     </>
 }

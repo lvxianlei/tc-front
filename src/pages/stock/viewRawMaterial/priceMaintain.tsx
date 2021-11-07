@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { Button, TableColumnProps, Select, DatePicker, Input, Modal, Descriptions } from 'antd'
+import { Button, Select, DatePicker, Input, Modal, Descriptions } from 'antd'
 import { Link, useHistory, } from 'react-router-dom'
-import { priceMaintain, dataSource } from "./ViewRawMaterial.json"
+import { priceMaintain } from "./ViewRawMaterial.json"
 import { Page } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
 //原材料类型
@@ -62,8 +62,6 @@ export default function PriceMaintain(): React.ReactNode {
     var moment = require('moment');
     moment().format();
 
-    const { RangePicker } = DatePicker;
-
     const onFilterSubmit = (value: any) => {
         if (value.startBidBuyEndTime) {
             const formatDate = value.startBidBuyEndTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -79,7 +77,6 @@ export default function PriceMaintain(): React.ReactNode {
         setFilterValue(value)
         return value
     }
-
     const edit = (id: any, price: any, priceSource: any, quotationTime: any) => {
         setId(id);
         setPrice(price);
@@ -91,7 +88,6 @@ export default function PriceMaintain(): React.ReactNode {
         setIsModalVisible(false);
     };
     const del = async (materialPriceId: number) => {
-        ///tower-supply/materialPrice
         const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/materialPrice/${materialPriceId}`,{});
         console.log(result);
     }
@@ -127,8 +123,15 @@ export default function PriceMaintain(): React.ReactNode {
         setPrice(Number(e.target.value))
     }
     const lead = async () => {
-        ///tower-supply/materialPrice/excelTemplate
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPrice/excelTemplate`);
+        console.log(result);
+    }
+    const save = async (id: any, price: any, priceSource: any, quotationTime: any) => {
+        const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialPrice`, { id, price, priceSource, quotationTime }, { "Content-Type": "application/json" })
+        console.log(result);
+    }
+    const save1 = async (materialCategoryName: string, materialName: string, materialSpec: string, materialStandardName: string, priceSource: string, quotationTime: string) => {
+        const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPrice`, { id, materialCategoryId, materialCategoryName, materialId, materialName, materialSpec, materialStandard, materialStandardName, price, priceSource, quotationTime }, { "Content-Type": "application/json" })
         console.log(result);
     }
     const buttons: {} | null | undefined = [
@@ -137,25 +140,12 @@ export default function PriceMaintain(): React.ReactNode {
             <Button onClick={() => { save(id, price, priceSource, quotationTime) }}>保存</Button>
         </div>
     ]
-    const save = async (id: any, price: any, priceSource: any, quotationTime: any) => {
-        const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialPrice`, { id, price, priceSource, quotationTime }, { "Content-Type": "application/json" })
-        console.log(result);
-    }
     const buttons1: {} | null | undefined = [
         <div>
             <Button onClick={() => { handleCancel1() }}>关闭</Button>
             <Button onClick={() => { save1(materialCategoryName, materialName, materialSpec, materialStandardName, priceSource, quotationTime) }}>保存</Button>
         </div>
     ]
-    console.log("asdfsdgvdfbd");
-
-    console.log(id, materialCategoryId, materialId, materialStandard, "dfoigddbndjnbd");
-
-    const save1 = async (materialCategoryName: string, materialName: string, materialSpec: string, materialStandardName: string, priceSource: string, quotationTime: string) => {
-        ///tower-supply/materialPrice
-        const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPrice`, { id, materialCategoryId, materialCategoryName, materialId, materialName, materialSpec, materialStandard, materialStandardName, price, priceSource, quotationTime }, { "Content-Type": "application/json" })
-        console.log(result);
-    }
     return (
         <div>
             <Page

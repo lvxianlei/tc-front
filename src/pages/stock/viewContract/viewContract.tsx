@@ -1,6 +1,6 @@
 //合同看板
 import React, { useState } from 'react'
-import { Button, TableColumnProps, Select, DatePicker, Input } from 'antd'
+import { Button, Select, DatePicker, Input } from 'antd'
 import { Link, useHistory, useParams, } from 'react-router-dom'
 import { Page } from '../../common'
 import { viewContract } from "./viewContract.json"
@@ -24,10 +24,8 @@ const projectType = [
         label: "已付款"
     }
 ]
-
 export default function ViewContract(): React.ReactNode {
     const history = useHistory()
-    const params = useParams();
     const [filterValue, setFilterValue] = useState({});
     const { RangePicker } = DatePicker;
     const onFilterSubmit = (value: any) => {
@@ -36,7 +34,6 @@ export default function ViewContract(): React.ReactNode {
             value.startBidBuyEndTime = formatDate[0]
             value.endBidBuyEndTime = formatDate[1]
         }
-
         if (value.startBiddingEndTime) {
             const formatDate = value.startBiddingEndTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startBiddingEndTime = formatDate[0]
@@ -46,21 +43,8 @@ export default function ViewContract(): React.ReactNode {
         return value
     }
     const particulars = async (contractId: number) => {
-        // const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/detail?contractId=${contractId}`)
-        // console.log(result);
-        // const a = result.ReceiveStockDetailPage
-        // const b = result.receiveStockMessage
-        // console.log(a, b, "sdvdfbd");
         history.push(`/stock/viewContract/particulars/${contractId}`)
-        // history.push({
-        //     pathname: `/stock/viewContract/particulars`,
-        //     state: {
-        //         contractId
-        //     }
-        // })
     }
-
-
     return (
         <div>
             <Page
