@@ -551,6 +551,12 @@
             "type": "string"
         }
     ],
+    "ApplicationDetail":[
+        {
+            "title": "开户银行",
+            "dataIndex": "openBank"
+        }
+    ],
     "ApprovalInformation": [
         {
             "title": "操作部门",

@@ -95,8 +95,8 @@ export default function SupplierMngt(): React.ReactNode {
         setQualityAssurance(value);
     }
     const handleChange2 = (value: any) => {
-        console.log(`selected ${value}`);
-        setSupplyProducts(value);
+        console.log(value.toString());
+        setSupplyProducts(value.toString());
     }
     const buttons: {} | null | undefined = [
         <div>
@@ -209,7 +209,7 @@ export default function SupplierMngt(): React.ReactNode {
                 <Descriptions.Item label="联系人 *"><input placeholder={obj1.contactMan} style={{ border: "none", outline: "none" }} value={contactMan} onChange={(e) => { setContactMan(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="联系电话 *"><input placeholder={obj1.contactManTel} style={{ border: "none", outline: "none" }} value={contactManTel} onChange={(e) => { setContactManTel(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="主要供货产品 *">
-                    <Select defaultValue={obj1.supplyProducts} style={{ width: 120 }} bordered={false} onChange={handleChange2}>
+                    <Select mode="tags" defaultValue={obj1.supplyProducts} style={{ width: 120 }} bordered={false} onChange={handleChange2}>
                         {
                             invoiceTypeEnum2.map((item: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }) => {
                                 return <Select.Option value={item.value}>{item.label}</Select.Option>
@@ -257,7 +257,7 @@ export default function SupplierMngt(): React.ReactNode {
                 <Descriptions.Item label="联系人 *"><input style={{ border: "none", outline: "none" }} value={contactMan} onChange={(e) => { setContactMan(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="联系电话 *"><input style={{ border: "none", outline: "none" }} value={contactManTel} onChange={(e) => { setContactManTel(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="主要供货产品 *">
-                    <Select style={{ width: 120 }} bordered={false} onChange={handleChange2}>
+                    <Select mode="tags" style={{ width: 120 }} bordered={false} onChange={handleChange2}>
                         {
                             invoiceTypeEnum2.map((item: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }) => {
                                 return <Select.Option value={item.value}>{item.label}</Select.Option>
@@ -293,11 +293,11 @@ export default function SupplierMngt(): React.ReactNode {
             <Descriptions title="供应商基础信息" bordered column={2} labelStyle={{ textAlign: 'center' }}>
                 <Descriptions.Item label="供应商编号">{obj.supplierCode}</Descriptions.Item>
                 <Descriptions.Item label="供应商名称">{obj.supplierName}</Descriptions.Item>
-                <Descriptions.Item label="供应商类型">{obj.supplierType}</Descriptions.Item>
-                <Descriptions.Item label="质量保证体系">{obj.qualityAssurance}</Descriptions.Item>
+                <Descriptions.Item label="供应商类型">{obj.supplierTypeName}</Descriptions.Item>
+                <Descriptions.Item label="质量保证体系">{obj.qualityAssuranceName}</Descriptions.Item>
                 <Descriptions.Item label="联系人">{obj.contactMan}</Descriptions.Item>
                 <Descriptions.Item label="联系电话">{obj.contactManTel}</Descriptions.Item>
-                <Descriptions.Item label="主要供货产品">{obj.supplyProducts}</Descriptions.Item>
+                <Descriptions.Item label="主要供货产品">{obj.supplyProductsName}</Descriptions.Item>
                 <Descriptions.Item label="备注">{obj.description}</Descriptions.Item>
             </Descriptions>
             <Descriptions title="供应商账户信息" bordered column={2} labelStyle={{ textAlign: 'center' }}>

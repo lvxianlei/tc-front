@@ -115,19 +115,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             }
             return item;
         })} col={3} dataSource={{}} edit />
-        <DetailTitle title="相关附件" operation={[<Upload
-            key="sub"
-            name="file"
-            multiple={true}
-            action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
-            headers={{
-                'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                'Tenant-Id': AuthUtil.getTenantId(),
-                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-            }}
-            showUploadList={false}
-            onChange={uploadChange}
-        ><Button key="enclosure" type="primary" ghost>上传附件</Button></Upload>]} />
         <CommonTable columns={[
             {
                 title: "附件名称",
