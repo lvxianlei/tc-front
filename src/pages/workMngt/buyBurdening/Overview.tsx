@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
-import { Input, DatePicker, Select, Button, Form } from 'antd'
+import {Input, DatePicker, Select, Button, Form, Modal, message} from 'antd'
 import { useHistory, Link, useParams } from 'react-router-dom'
 import { Page } from '../../common';
 import { SeeList } from "./buyBurdening.json"
+import useRequest from "@ahooksjs/use-request";
+import RequestUtil from "../../../utils/RequestUtil";
 export default function Overview(): React.ReactNode {
     const params = useParams<{ id: string }>()
     const [filterValue, setFilterValue] = useState({ purchaseTaskId: params.id });
@@ -16,6 +18,31 @@ export default function Overview(): React.ReactNode {
         return value
     }
 
+    const { run: createComponent } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/initData/materialWithdrawal?purchaseTaskTowerId=${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+
+    const handleCreateComponent = (id: string) => {
+        Modal.confirm({
+            title: "生成提料数据",
+            content: "确定要生成提料数据吗？",
+            onOk: () => new Promise(async (resove, reject) => {
+                try {
+                    resove(await createComponent(id))
+                    message.success("生成提料数据...")
+                    // history.go(0)
+                } catch (error) {
+                    reject(error)
+                }
+            })
+        })
+    }
     return <>
         <Page
             path="/tower-supply/purchaseTaskTower"
@@ -23,11 +50,13 @@ export default function Overview(): React.ReactNode {
                 ...SeeList,
                 {
                     title: '操作',
-                    width: 100,
+                    width: 250,
                     dataIndex: 'operation',
                     render: (_: any, records: any) => (<>
                         <Link to={`/workMngt/buyBurdening/component/${records.id}`}>明细</Link>
                         <Button type="link" >配料方案</Button>
+                        <Button type="link" onClick={()=> handleCreateComponent(records.id)
+                        } >临时造数据</Button>
                     </>)
                 }
             ]}
