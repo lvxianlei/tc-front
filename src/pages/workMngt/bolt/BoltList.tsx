@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, Popconfirm } from 'antd';
+import { Space, Input, DatePicker, Select, Button, Popconfirm, Form } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './BoltList.module.less';
@@ -172,14 +172,16 @@ export default function BoltList(): React.ReactNode {
             {
                 name: 'boltStatus',
                 label: '螺栓清单状态',
-                children: <Select style={{ width: '120px' }} placeholder="请选择">
-                    <Select.Option value="" key="6">全部</Select.Option>
-                    <Select.Option value="1" key="1">待开始</Select.Option>
-                    <Select.Option value="2" key="2">进行中</Select.Option>
-                    <Select.Option value="3" key="3">校核中</Select.Option>
-                    <Select.Option value="4" key="4">已完成</Select.Option>
-                    <Select.Option value="5" key="5">已提交</Select.Option>
-                </Select>
+                children: <Form.Item name="boltStatus" initialValue={ location.state }>
+                    <Select style={{ width: '120px' }} placeholder="请选择">
+                        <Select.Option value="" key="6">全部</Select.Option>
+                        <Select.Option value="1" key="1">待开始</Select.Option>
+                        <Select.Option value="2" key="2">进行中</Select.Option>
+                        <Select.Option value="3" key="3">校核中</Select.Option>
+                        <Select.Option value="4" key="4">已完成</Select.Option>
+                        <Select.Option value="5" key="5">已提交</Select.Option>
+                    </Select>
+                </Form.Item>
             },
             {
                 name: 'plannedTime',

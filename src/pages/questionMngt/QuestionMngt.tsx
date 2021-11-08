@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker,  Button, Select } from 'antd'
+import { Space, Input, DatePicker,  Button, Select, Form } from 'antd'
 import { Link, useHistory, useLocation } from 'react-router-dom'
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -148,13 +148,15 @@ export default function QuestionMngt(): React.ReactNode {
                 {
                     name: 'status',
                     label: '问题单状态',
-                    children:  <Select style={{width:'100px'}}>
-                                    <Select.Option value={''} key ={''}>全部</Select.Option>
-                                    <Select.Option value={1} key={1}>待修改</Select.Option>
-                                    <Select.Option value={2} key={2}>已修改</Select.Option>
-                                    <Select.Option value={3} key={3}>已拒绝</Select.Option>
-                                    <Select.Option value={4} key={4}>已删除</Select.Option>
-                                </Select>
+                    children:  <Form.Item name="status" initialValue={ location.state }>
+                        <Select style={{width:'100px'}}>
+                            <Select.Option value={''} key ={''}>全部</Select.Option>
+                            <Select.Option value={1} key={1}>待修改</Select.Option>
+                            <Select.Option value={2} key={2}>已修改</Select.Option>
+                            <Select.Option value={3} key={3}>已拒绝</Select.Option>
+                            <Select.Option value={4} key={4}>已删除</Select.Option>
+                        </Select>
+                    </Form.Item>
                 },
                 {
                     name: 'type',
