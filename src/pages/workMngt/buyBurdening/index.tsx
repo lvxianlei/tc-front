@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Input, DatePicker, Select, Button, Form } from 'antd'
 import { Link } from 'react-router-dom'
 import { baseInfo } from "./buyBurdening.json"
-import { IntgSelect, Page } from '../../common';
+import { IntgSelect, Page } from '../../common'
 
 export default function EnquiryList(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
