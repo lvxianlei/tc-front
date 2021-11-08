@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Button, Select, TreeSelect } from 'antd'
-import { useHistory } from 'react-router-dom'
+import { Space, Input, DatePicker, Button, Select, TreeSelect, Form } from 'antd'
+import { useHistory, useLocation } from 'react-router-dom'
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common'
 import { TreeNode } from 'antd/lib/tree-select';
@@ -14,6 +14,7 @@ export default function ConfirmList(): React.ReactNode {
     const [confirmLeader, setConfirmLeader] = useState<any|undefined>([]);
     const [department, setDepartment] = useState<any|undefined>([]);
     const [filterValue, setFilterValue] = useState({});
+    const location = useLocation<{ state: number }>();
     const history = useHistory();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
@@ -158,19 +159,22 @@ export default function ConfirmList(): React.ReactNode {
             filterValue={filterValue}
             // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
+            requestData={{status: location.state}}
             searchFormItems={[
                 {
                     name: 'status',
                     label: '任务状态',
-                    children: <Select style={{width:"100px"}}>
-                        {/* <Select.Option value={1} key={1}>待确认</Select.Option>
-                        <Select.Option value={2} key={2}>待指派</Select.Option> */}
-                        <Select.Option value={''} key ={''}>全部</Select.Option>
-                        <Select.Option value={3} key={3}>待完成</Select.Option>
-                        <Select.Option value={4} key={4}>已完成</Select.Option>
-                        {/* <Select.Option value={5} key={5}>已提交</Select.Option>
-                        <Select.Option value={0} key={0}>已拒绝</Select.Option> */}
-                    </Select>
+                    children: <Form.Item name="status" initialValue={ location.state }>
+                        <Select style={{width:"100px"}}>
+                            {/* <Select.Option value={1} key={1}>待确认</Select.Option>
+                            <Select.Option value={2} key={2}>待指派</Select.Option> */}
+                            <Select.Option value={''} key ={''}>全部</Select.Option>
+                            <Select.Option value={3} key={3}>待完成</Select.Option>
+                            <Select.Option value={4} key={4}>已完成</Select.Option>
+                            {/* <Select.Option value={5} key={5}>已提交</Select.Option>
+                            <Select.Option value={0} key={0}>已拒绝</Select.Option> */}
+                        </Select>
+                    </Form.Item>
                 },
                 {
                     name: 'planTime',

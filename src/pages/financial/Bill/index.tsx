@@ -10,6 +10,7 @@ import RequestUtil from '../../../utils/RequestUtil'
 import ApplicationContext from "../../../configuration/ApplicationContext"
 interface EditRefProps {
     onSubmit: () => void
+    resetFields: () => void
 }
 export default function Invoice() {
     const history = useHistory()
@@ -34,8 +35,8 @@ export default function Invoice() {
     const onFilterSubmit = (value: any) => {
         if (value.updateEndTime) {
             const formatDate = value.updateEndTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateStartTime = formatDate[0] +" 00:00:00"
-            value.updateEndTime = formatDate[1]+ " 23:59:59"
+            value.updateStartTime = formatDate[0] + " 00:00:00"
+            value.updateEndTime = formatDate[1] + " 23:59:59"
         }
         return value
     }
@@ -57,30 +58,39 @@ export default function Invoice() {
     }
 
     const handleModalOk = () => new Promise(async (resove, reject) => {
-        const isClose = await editRef.current?.onSubmit()
-        if (isClose) {
+        try {
+            await editRef.current?.onSubmit()
             message.success("票据创建成功...")
             setVisible(false)
             resove(true)
+        } catch (error) {
+            reject(false)
         }
     })
 
     return <>
         <Modal
-            style={{ padding: 0 }}
             visible={visible}
             width={1011}
             title={type === "new" ? "创建" : "编辑"}
             onOk={handleModalOk}
-            onCancel={() => setVisible(false)}>
+            onCancel={() => {
+                editRef.current?.resetFields()
+                setType("new")
+                setDetailedId("")
+                setVisible(false)
+            }}>
             <Edit type={type} ref={editRef} id={detailedId} />
         </Modal>
         <Modal
-            style={{ padding: 0 }}
-            visible={detailVisible} width={1011}
+            visible={detailVisible}
+            width={1011}
             footer={<Button type="primary" onClick={() => setDetailVisible(false)}>确认</Button>}
             title="详情"
-            onCancel={() => setDetailVisible(false)}>
+            onCancel={() => {
+                setDetailedId("")
+                setDetailVisible(false)
+            }}>
             <Overview id={detailedId} />
         </Modal>
         <Page

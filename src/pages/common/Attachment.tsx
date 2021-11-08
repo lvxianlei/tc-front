@@ -1,0 +1,106 @@
+import React, { useState, useImperativeHandle, forwardRef, useCallback, useEffect } from 'react'
+import { Button, Upload, Modal, Image } from 'antd'
+import { DetailTitle, CommonTable } from "../common"
+import AuthUtil from "../../utils/AuthUtil"
+import { downLoadFile } from "../../utils"
+
+interface FileProps {
+    id?: string,
+    uid?: number | string,
+    link: string,
+    name: string,
+    description: string,
+    filePath: string,
+    fileSize: string | number,
+    fileSuffix: string,
+    userName: string,
+    fileUploadTime: string
+}
+
+interface AttachmentProps {
+    dataSource?: FileProps[]
+    edit?: boolean
+}
+
+export default forwardRef(function ({ dataSource = [], edit = false }: AttachmentProps, ref): JSX.Element {
+    const [attchs, setAttachs] = useState<FileProps[]>(dataSource)
+    const [visible, setVisible] = useState<boolean>(false)
+    const [picUrl, setPicUrl] = useState<string>()
+
+    useEffect(() => setAttachs(dataSource), [JSON.stringify(dataSource)])
+
+    const deleteAttachData = useCallback((id: number) => setAttachs(attchs.filter((item: any) => item.uid ? item.uid !== id : item.id !== id)), [setAttachs, attchs])
+
+    const uploadChange = useCallback((event: any) => {
+        if (event.file.status === "done") {
+            if (event.file.response.code === 200) {
+                const dataInfo = event.file.response.data
+                const fileInfo = dataInfo.name.split(".")
+                setAttachs([...attchs, {
+                    id: "",
+                    uid: attchs.length,
+                    link: dataInfo.link,
+                    name: dataInfo.originalName.split(".")[0],
+                    description: "",
+                    filePath: dataInfo.name,
+                    fileSize: dataInfo.size,
+                    fileSuffix: fileInfo[fileInfo.length - 1],
+                    userName: dataInfo.userName,
+                    fileUploadTime: dataInfo.fileUploadTime
+                }])
+            }
+        }
+    }, [setAttachs, attchs])
+
+    useImperativeHandle(ref, () => ({ getDataSource, dataSource: attchs }), [JSON.stringify(attchs)])
+
+    const getDataSource = useCallback(() => attchs, [attchs])
+
+    const handleCat = useCallback((record: FileProps) => {
+        setPicUrl(edit ? record.link : record.filePath)
+        setVisible(true)
+    }, [setPicUrl, setVisible])
+
+    const handleCancel = useCallback(() => setVisible(false), [setVisible])
+
+    return <>
+        <Modal width={1011} visible={visible} onCancel={handleCancel} footer={false}>
+            <Image src={picUrl} preview={false} />
+        </Modal>
+        <DetailTitle
+            title="相关附件"
+            {...edit ? {
+                operation: [
+                    <Upload
+                        key="sub"
+                        name="file"
+                        multiple={false}
+                        action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
+                        headers={{
+                            'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                            'Tenant-Id': AuthUtil.getTenantId(),
+                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                        }}
+                        showUploadList={false}
+                        onChange={uploadChange}
+                    >
+                        <Button key="enclosure" type="primary" ghost>上传附件</Button>
+                    </Upload>
+                ]
+            } : {}} />
+        <CommonTable columns={[
+            {
+                title: "附件名称",
+                dataIndex: "name"
+            },
+            {
+                title: "操作",
+                dataIndex: "opration",
+                render: (_: any, record: any) => (<>
+                    <a onClick={() => handleCat(record)}>查看</a>
+                    <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
+                    {edit && <a onClick={() => deleteAttachData(record.uid || record.id)}>删除</a>}
+                </>)
+            }]} dataSource={attchs} />
+    </>
+})

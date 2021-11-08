@@ -1,0 +1,275 @@
+{
+    "comparison": [
+        {
+            "title": "询比价编号",
+            "dataIndex": "comparisonNumber"
+        },
+        {
+            "title": "用途",
+            "dataIndex": "purpose"
+        },
+        {
+            "title": "询比价状态",
+            "dataIndex": "comparisonStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "询价中",
+                    "value": 1
+                },
+                {
+                    "label": "已询价",
+                    "value": 2
+                },
+                {
+                    "label": "取消",
+                    "value": 3
+                }
+            ]
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "updateTime"
+        },
+        {
+            "title": "询价人",
+            "dataIndex": "comparisonPersonId"
+        }
+    ],
+    "editBaseInfo": [
+        {
+            "title": "询比价编号",
+            "dataIndex": "comparisonNumber",
+            "disabled": true
+        },
+        {
+            "title": "用途",
+            "dataIndex": "purpose"
+        }
+    ],
+    "materialColumns": [
+        {
+            "title": "物料编码",
+            "dataIndex": "materialCode"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandard"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec"
+        },
+        {
+            "title": "宽度（mm）",
+            "dataIndex": "width",
+            "type": "number"
+        },
+        {
+            "title": "厚度（mm）",
+            "dataIndex": "thickness",
+            "type": "number"
+        },
+        {
+            "title": "长度（mm）",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num",
+            "type": "number"
+        },
+        {
+            "title": "单重（吨）",
+            "dataIndex": "weight",
+            "type": "number"
+        },
+        {
+            "title": "总重（吨）",
+            "dataIndex": "total"
+        }
+    ],
+    "addPriceHead": [
+        {
+            "title": "物料编码",
+            "dataIndex": "materialCode"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandard"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec"
+        },
+        {
+            "title": "宽度（mm）",
+            "dataIndex": "width",
+            "type": "number"
+        },
+        {
+            "title": "厚度（mm）",
+            "dataIndex": "thickness",
+            "type": "number"
+        },
+        {
+            "title": "长度（mm）",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num",
+            "type": "number"
+        },
+        {
+            "title": "单重（吨）",
+            "dataIndex": "weight",
+            "type": "number"
+        },
+        {
+            "title": "含税报价（单价）",
+            "dataIndex": "taxOffer"
+        },
+        {
+            "title": "不含税报价（单价）",
+            "dataIndex": "offer"
+        }
+    ],
+    "choosePlanList": [
+        {
+            "title": "采购计划编号",
+            "dataIndex": "purchasePlanCode",
+            "width": 150,
+            "type": "string"
+        },
+        {
+            "title": "采购类型",
+            "dataIndex": "purchaseType",
+            "type": "select",
+            "width": 50,
+            "enum": [
+                {
+                    "label": "外部",
+                    "value": 1
+                },
+                {
+                    "label": "内部",
+                    "value": 2
+                },
+                {
+                    "label": "缺料",
+                    "value": 3
+                }
+            ]
+        },
+        {
+            "title": "塔型（个）",
+            "dataIndex": "productCategory",
+            "width": 50,
+            "type": "string"
+        },
+        {
+            "title": "杆塔（基）",
+            "dataIndex": "productNum",
+            "width": 50,
+            "type": "integer"
+        },
+        {
+            "title": "圆钢收货量（吨）/总重（吨）",
+            "dataIndex": "roundSteelTotal",
+            "width": 50,
+            "type": "number"
+        },
+        {
+            "title": "角钢收货量（吨）/总重（吨）",
+            "dataIndex": "angleSteelTotal",
+            "width": 50,
+            "type": "number"
+        },
+        {
+            "title": "钢板收货量（吨）/总重（吨）",
+            "dataIndex": "steelPlateTotal",
+            "width": 50,
+            "type": "number"
+        },
+        {
+            "title": "采购人",
+            "dataIndex": "purchaserId",
+            "type": "string"
+        }
+    ],
+    "addMaterial": {
+        "title": "原材料",
+        "type": "popTable",
+        "path": "/tower-system/material",
+        "width": 1011,
+        "selectType": "checkbox",
+        "dependencies": true,
+        "readOnly": true,
+        "columns": [
+            {
+                "title": "物料编号",
+                "dataIndex": "materialCode",
+                "search": true
+            },
+            {
+                "title": "品名",
+                "dataIndex": "materialName",
+                "search": true
+            },
+            {
+                "title": "标准",
+                "dataIndex": "standard"
+            },
+            {
+                "title": "材料",
+                "dataIndex": "rowMaterial"
+            },
+            {
+                "title": "材质",
+                "dataIndex": "materialTexture"
+            },
+            {
+                "title": "规格",
+                "dataIndex": "spec"
+            }
+        ]
+    },
+    "operation": [
+        {
+            "title": "操作部门",
+            "dataIndex": "deptName"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "optUserName"
+        },
+        {
+            "title": "操作时间",
+            "dataIndex": "optTime",
+            "type": "date"
+        },
+        {
+            "title": "操作类型",
+            "dataIndex": "optName"
+        }
+    ]
+}

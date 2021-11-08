@@ -156,12 +156,12 @@ export default function RawMaterialStock(): React.ReactNode {
             receiveStockId: params.id,
             receiveStatus: status,
         });
-        setListdata(data.ReceiveStockDetailPage.records)
+        setListdata(data.receiveStockDetailPage.records)
         setReceiveWeight(data.receiveStockMessage.receiveWeight)
         setReceivePrice(data.receiveStockMessage.receivePrice)
         setWaitWeight(data.receiveStockMessage.waitWeight)
         setwaitPrice(data.receiveStockMessage.waitPrice)
-        setTotal(data.ReceiveStockDetailPage.total)
+        setTotal(data.receiveStockDetailPage.total)
     }
     // 重置
     const reset = () => {
