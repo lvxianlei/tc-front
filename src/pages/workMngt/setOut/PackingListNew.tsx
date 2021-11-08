@@ -28,6 +28,7 @@ interface IBundle {
     readonly structureCount?: number;
     readonly materialSpec?: string;
     readonly structureId?: string;
+    readonly topId?: string;
 }
 
 interface IPackingList {
@@ -282,7 +283,7 @@ export default function PackingListNew(): React.ReactNode {
         setPackagingData([ ...data, ...packagingData ]);
         let newStayDistrict: IBundle[] = stayDistrict?.filter((item: IBundle) => {
             return selectedRows.every((items: IBundle) => {
-                return item.id !== items.id;
+                return item.topId !== items.topId;
             })
         })
         setStayDistrict(newStayDistrict);
