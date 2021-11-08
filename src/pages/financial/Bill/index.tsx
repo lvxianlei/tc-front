@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react"
-import { Button, DatePicker, Select, Modal, message } from 'antd'
+import { Button, DatePicker, Select, Modal, message, Input } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { Page } from '../../common'
 import Edit from "./Edit"
@@ -22,6 +22,7 @@ export default function Invoice() {
     const [detailVisible, setDetailVisible] = useState<boolean>(false)
     const [detailedId, setDetailedId] = useState<string>("")
     const [type, setType] = useState<"new" | "edit">("new")
+    const [filterValue, setFilterValue] = useState<any>({})
     const editRef = useRef<EditRefProps>()
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
@@ -38,6 +39,7 @@ export default function Invoice() {
             value.updateStartTime = formatDate[0] + " 00:00:00"
             value.updateEndTime = formatDate[1] + " 23:59:59"
         }
+        setFilterValue({ ...filterValue, ...value })
         return value
     }
 
@@ -95,6 +97,7 @@ export default function Invoice() {
         </Modal>
         <Page
             path="/tower-supply/invoice"
+            filterValue={filterValue}
             columns={[
                 ...baseinfo,
                 {
@@ -127,9 +130,14 @@ export default function Invoice() {
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
+                    name: 'fuzzyQuery',
+                    label: '查询',
+                    children: <Input placeholder="票据编号/请款编号/发票号" style={{ width: 200 }} />
+                },
+                {
                     name: 'updateEndTime',
                     label: '最近状态变更时间',
-                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 200 }} />
                 },
                 {
                     name: 'invoiceStatus',

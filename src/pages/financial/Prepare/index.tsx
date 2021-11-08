@@ -32,6 +32,7 @@ export default function ApplyPayment() {
     const [detailVisible, setDetailVisible] = useState<boolean>(false)
     const [successVisible, setSuccessVisible] = useState<boolean>(false)
     const [detailId, setDetailId] = useState<string>("")
+    const [filterValue, setFilterValue] = useState<any>({})
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/applyPayment?id=${id}`)
@@ -74,6 +75,7 @@ export default function ApplyPayment() {
             value.updateStartTime = formatDate[0] + " 00:00:00"
             value.updateEndTime = formatDate[1] + " 23:59:59"
         }
+        setFilterValue({ ...filterValue, ...value })
         return value
     }
     const handleModalOk = () => new Promise(async (resove, reject) => {
@@ -146,7 +148,14 @@ export default function ApplyPayment() {
     return <>
         <Modal style={{ padding: 0 }} visible={visible}
             width={1011} title={type === "new" ? "创建申请信息" : "编辑申请信息"}
-            onOk={handleModalOk}
+            footer={[
+                <Button key="close" type="primary" ghost onClick={() => {
+                    editRef.current?.resetFields()
+                    setVisible(false)
+                }}>关闭</Button>,
+                <Button key="save" type="primary" onClick={handleModalOk}>保存</Button>,
+                <Button key="saveOr" type="primary" ghost onClick={() => message.warning("等待接口开发...")} >保存并发起审批</Button>
+            ]}
             onCancel={() => {
                 editRef.current?.resetFields()
                 setVisible(false)
@@ -220,6 +229,7 @@ export default function ApplyPayment() {
                 }}>申请</Button>
             </>}
             onFilterSubmit={onFilterSubmit}
+            filterValue={filterValue}
             searchFormItems={[
                 {
                     name: 'updateStartTime',

@@ -8,7 +8,11 @@ import Overview from "./Overview"
 import { contract } from "./contract.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
+import ApplicationContext from "../../configuration/ApplicationContext"
 export default function ContractMngt(): JSX.Element {
+    const materialStandardEnum = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const deliveryMethodEnum = (ApplicationContext.get().dictionaryOption as any)["128"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const transportMethodEnum = (ApplicationContext.get().dictionaryOption as any)["129"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const history = useHistory()
     const [editVisible, setEditVisible] = useState<boolean>(false)
     const [overviewVisible, setOverviewVisible] = useState<boolean>(false)
@@ -89,7 +93,18 @@ export default function ContractMngt(): JSX.Element {
                         fixed: "left",
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
-                    ...contract,
+                    ...contract.map((item: any) => {
+                        switch (item.dataIndex) {
+                            case "materialStandard":
+                                return ({ ...item, enum: materialStandardEnum })
+                            case "deliveryMethod":
+                                return ({ ...item, enum: deliveryMethodEnum })
+                            case "transportMethod":
+                                return ({ ...item, enum: transportMethodEnum })
+                            default:
+                                return item
+                        }
+                    }),
                     {
                         title: "操作",
                         dataIndex: "opration",

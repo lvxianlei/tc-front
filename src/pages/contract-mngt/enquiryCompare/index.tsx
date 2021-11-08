@@ -1,7 +1,7 @@
 // 合同管理-询比价
 import React, { useState, useRef } from 'react'
 import { useHistory, Link } from "react-router-dom"
-import { Page } from "../../common"
+import { IntgSelect, Page } from "../../common"
 import { Select, Input, Button, Modal, DatePicker, message, Form } from 'antd'
 import { comparison } from "./enquiry.json"
 import useRequest from '@ahooksjs/use-request'
@@ -42,7 +42,14 @@ export default function ContractMngt() {
     }), { manual: true })
 
     const onFilterSubmit = (value: any) => {
-        setFilterValue({ ...filterValue, ...value })
+        if (value.updateStartTime) {
+            const formatDate = value.updateStartTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.updateStartTime = formatDate[0] + " 00:00:00"
+            value.updateEndTime = formatDate[1] + " 23:59:59"
+        }
+        if (value.comparisonPricePersonId) {
+            value.comparisonPricePersonId = value.comparisonPricePersonId.second
+        }
         setFilterValue({ ...filterValue, ...value })
         return ({ ...filterValue, ...value })
     }
@@ -152,26 +159,23 @@ export default function ContractMngt() {
                 onFilterSubmit={onFilterSubmit}
                 searchFormItems={[
                     {
-                        name: 'updateTime',
+                        name: 'updateStartTime',
                         label: '最新状态变更时间',
                         children: <DatePicker style={{ width: "150px" }} />
                     },
                     {
-                        name: 'outStockUserName',
+                        name: 'comparisonPriceStatus',
                         label: '状态',
                         children: <Select placeholder="请选择" style={{ width: "100px" }}>
+                            <Select.Option value={1}>询价中</Select.Option>
+                            <Select.Option value={2}>已询价</Select.Option>
+                            <Select.Option value={3}>已取消）</Select.Option>
                         </Select>
                     },
                     {
-                        name: 'pickingPerson',
+                        name: 'comparisonPricePersonId',
                         label: '询价人',
-                        children: <Select placeholder="部门" style={{ width: "100px" }}>
-                        </Select>
-                    },
-                    {
-                        name: 'pickingPerson',
-                        children: <Select placeholder="人员" style={{ width: "100px" }}>
-                        </Select>
+                        children: <IntgSelect width={200} />
                     },
                     {
                         name: 'inquire',

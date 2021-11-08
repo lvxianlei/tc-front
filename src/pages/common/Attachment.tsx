@@ -23,7 +23,7 @@ interface AttachmentProps {
 }
 export interface AttachmentRef {
     getDataSource: () => FileProps[]
-    dataSource: FileProps[]
+    dataSource?: FileProps[]
     resetFields: () => void
 }
 export default forwardRef(function ({ dataSource = [], edit = false }: AttachmentProps, ref): JSX.Element {

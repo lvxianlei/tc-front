@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { Page } from '../../common'
+import { IntgSelect, Page } from '../../common'
 import { baseInfo } from "./purchaseListData.json"
 import Overview from "./Overview"
 import PurchasePlan from "./PurchasePlan"
@@ -15,8 +15,12 @@ export default function Invoicing() {
     const onFilterSubmit = (value: any) => {
         if (value.startPurchaseStatusUpdateTime) {
             const formatDate = value.startPurchaseStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startPurchaseStatusUpdateTime = formatDate[0] +" 00:00:00"
-            value.endPurchaseStatusUpdateTime = formatDate[1]+" 23:59:59"
+            value.startPurchaseStatusUpdateTime = formatDate[0] + " 00:00:00"
+            value.endPurchaseStatusUpdateTime = formatDate[1] + " 23:59:59"
+        }
+        if (value.purchaserId) {
+            value.purchaserDeptId = value.purchaserId.first
+            value.purchaserId = value.purchaserId.second
         }
         return value
     }
@@ -81,14 +85,9 @@ export default function Invoicing() {
                     </Select>
                 },
                 {
-                    name: 'purchaseTaskStatus',
+                    name: 'purchaserId',
                     label: '采购人',
-                    children: <Select style={{ width: 200 }}>
-                        <Select.Option value="">全部</Select.Option>
-                        <Select.Option value="1">待完成</Select.Option>
-                        <Select.Option value="2">待接收</Select.Option>
-                        <Select.Option value="3">已完成</Select.Option>
-                    </Select>
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyQuery',
