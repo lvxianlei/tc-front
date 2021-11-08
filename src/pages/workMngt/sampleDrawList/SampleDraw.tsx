@@ -155,7 +155,7 @@ export default function SampleDraw(): React.ReactNode {
                 extraOperation={
                     <Space>
                     {/* <Button type="primary">导出</Button> */}
-                    <Upload
+                    {params.status==='2'?<Upload
                         accept="image/png,image/jpeg"
                         multiple={true}
                         action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
@@ -166,7 +166,7 @@ export default function SampleDraw(): React.ReactNode {
                         }}
                         onChange={uploadChange}
                         showUploadList={false}
-                    ><Button type="primary" >导入</Button></Upload>
+                    ><Button type="primary" >导入</Button></Upload>:null}
                     <Button type="primary" onClick={()=>{
                         downloadTemplate(`/tower-science/smallSample/download/${params.id}`, '小样图', {} , true)
                     }}>下载小样图</Button>
