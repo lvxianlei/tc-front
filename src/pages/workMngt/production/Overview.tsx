@@ -39,7 +39,7 @@ export default function Overview() {
     }), { manual: true })
 
     const handleModelOk = () => {
-
+        setVisible(false)
     }
 
     return <>
@@ -61,7 +61,7 @@ export default function Overview() {
         </Modal>
         <DetailContent title={[
             <Button key="export" type="primary" style={{ marginRight: 16 }}>导出</Button>,
-            <Button key="peiliao" type="primary" ghost onClick={() => setVisible(true)}>配料</Button>
+            <Button key="peiliao" type="primary" ghost onClick={() => setVisible(true)} style={{ marginRight: 16 }}>配料</Button>
         ]} operation={[
             <Button type="primary" ghost key="cancel" onClick={() => history.go(-1)}>返回</Button>
         ]}>

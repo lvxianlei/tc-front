@@ -2,8 +2,10 @@ import React, { useState } from "react"
 import { Input, DatePicker, Select } from 'antd'
 import { Page } from '../../common'
 import { baseInfo } from "../purchaseList/purchaseListData.json"
+import {useParams} from "react-router-dom";
 export default function RelationList() {
-    const [filterValue, setFilterValue] = useState({})
+    const params = useParams<{id:string}>();
+    const [filterValue, setFilterValue] = useState({purchasePlanId:params.id})
     const onFilterSubmit = (value: any) => {
         if (value.startPurchaseStatusUpdateTime) {
             const formatDate = value.startPurchaseStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))

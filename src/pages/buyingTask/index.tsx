@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 //采购任务下的原材料
 import React, { useState, useRef } from 'react';
-import { Modal, Descriptions, Button, DatePicker, Select, Input, message } from 'antd';
+import { Modal, Descriptions, Button, DatePicker, Select, Input } from 'antd';
 import { CommonTable, DetailContent, DetailTitle, Page } from '../common'
 import { buyingTask, operatingInformation } from "./buyingTask.json"
 import { useHistory } from 'react-router';
@@ -20,11 +20,7 @@ export default function rawMaterial() {
     const [isModalVisible2, setIsModalVisible2] = useState(false);
     const [isModalVisible3, setIsModalVisible3] = useState(false);
     const [columnsData, setColumnsData] = useState([]);
-    const [batcherDeptId, setBatcherDeptId] = useState(0);//配料人部门id
-    const [batcherId, setBatcherId] = useState(0);//配料人id
     const [id, setId] = useState(0);//采购任务id
-    const [purchaserDeptId, setPurchaserDeptId] = useState(0);//采购人部门id
-    const [purchaserId, setPurchaserId] = useState(0);//采购人id
     const [obj, setObj] = useState<any>({});
     const [rejectionDescription, setRejectionDescription] = useState("");
     const history = useHistory();
@@ -40,40 +36,13 @@ export default function rawMaterial() {
     const handleCancel3 = () => {
         setIsModalVisible3(false);
     };
-    const handleChange = (value: any) => {
-        console.log(`selected ${value}`);
-        setBatcherDeptId(value);
-    }
-    const handleChange1 = (value: any) => {
-        console.log(`selected ${value}`);
-        setBatcherId(value);
-    }
-    const handleChange2 = (value: any) => {
-        console.log(`selected ${value}`);
-        setPurchaserDeptId(value);
-    }
-    const handleChange3 = (value: any) => {
-        console.log(`selected ${value}`);
-        setPurchaserId(value);
-    }
     //点击生成10条数据
     const aa = async () => {
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/initData/materialPurchaseTask`)
         console.log(result);
     }
-    const designate = (id: number) => {
-        setIsModalVisible1(true)
-        // console.log(id);
-        setId(id);
-    }
-    const save = async (batcherDeptId: number, batcherId: number, id: number, purchaserDeptId: number, purchaserId: number) => {
-        const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialPurchaseTask/taskAssignments`, { batcherDeptId, batcherId, id, purchaserDeptId, purchaserId }, { "Content-Type": "application/json" })
-        console.log(result);
-    }
     const detail = async (purchaseId: any) => {
-        setIsModalVisible(true)
-        // console.log(purchaseId);
-        ///tower-supply/materialPurchaseTask/{purchaseId}
+        setIsModalVisible(true);
         setId(purchaseId);
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchaseTask/${purchaseId}`)
         console.log(result);
@@ -82,8 +51,8 @@ export default function rawMaterial() {
     const receive = async (purchaseId: number) => {
         const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialPurchaseTask/taskReceive/${purchaseId}`, {}, { "Content-Type": "application/json" })
         console.log(result);
+        setIsModalVisible(false);
     }
-    // console.log(id);
     const submit = async (rejectionDescription: string, id: number) => {
         const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialPurchaseTask/taskRejection`, { rejectionDescription, id }, { "Content-Type": "application/json" })
         console.log(result);
@@ -107,7 +76,8 @@ export default function rawMaterial() {
             <Button
                 key="save"
                 onClick={async () => {
-                    const result = await tarkRef.current?.onSubmit()
+                    const result = await tarkRef.current?.onSubmit();
+                    setIsModalVisible1(false);
                     // message.success("保存并提交成功...")
                     // history.go(0)
                 }}>保存并提交</Button>

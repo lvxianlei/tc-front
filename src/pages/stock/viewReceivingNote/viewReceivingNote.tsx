@@ -36,9 +36,7 @@ export default function ViewReceivingNote(): React.ReactNode {
     const [obj, setObj] = useState<any>({})
     const [obj1, setObj1] = useState<any>({});
     const [receiptVos, setReceiptVos] = useState<any>([]);
-
     const history = useHistory();
-
     const onFilterSubmit = (value: any) => {
         if (value.startBidBuyEndTime) {
             const formatDate = value.startBidBuyEndTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -74,7 +72,6 @@ export default function ViewReceivingNote(): React.ReactNode {
         setObj1(result);
         setColumnsData1(result.operationRecordInfoVos)
     }
-
     const buttons: {} | null | undefined = [
         <div>
             <Button onClick={() => { handleCancel() }}>关闭</Button>
@@ -83,7 +80,6 @@ export default function ViewReceivingNote(): React.ReactNode {
     const buttons1: {} | null | undefined = [
         <div>
             <Button onClick={() => { handleCancel1() }}>关闭</Button>
-            <Button>保存</Button>
         </div>
     ]
     return (

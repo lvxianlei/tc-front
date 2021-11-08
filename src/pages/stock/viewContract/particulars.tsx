@@ -30,7 +30,6 @@ export default function Particulars(): React.ReactNode {
     }
     console.log(history.location.pathname);
     const contractId = history.location.pathname.slice(32);
-    // console.log(contractId);
     const aa = async () => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/detail?contractId=${contractId}`);
