@@ -121,7 +121,7 @@ export default function VehicleMngt(): React.ReactNode {
 
     const [ refresh, setRefresh ] = useState(false);
     const [ visible, setVisible ] = useState(false);
-    const [ form ] = useForm();
+    const [ form ] = Form.useForm();
     const [ detail, setDetail ] = useState<IDetail>({});
     const [ title, setTitle ] = useState('新增');
     return (
