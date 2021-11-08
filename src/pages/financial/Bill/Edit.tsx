@@ -21,7 +21,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const [baseForm] = Form.useForm()
     const [attchs, setAttachs] = useState<any[]>([])
 
-    const { data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/invoice/${id}`)
             baseForm.setFieldsValue({
@@ -32,9 +32,9 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === "new" })
+    }), { manual: type === "new", refreshDeps: [id] })
 
-    const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
+    const { run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/invoice`, { ...postData, id: data?.id })
             resole(result)
@@ -51,7 +51,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 supplierName: baseData.supplierName.value || data?.supplierName,
                 supplierId: baseData.supplierName.id || data?.supplierId,
                 receiptDtos: baseData.receiptVos.records?.map((item: any) => ({ receiptId: item.id, receiptNumber: item.receiveNumber })) || data?.receiptVos,
-                invoiceAttachInfoDtos:attchs
+                invoiceAttachInfoDtos: attchs
 
             })
             resolve(true)
@@ -60,7 +60,12 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         }
     })
 
-    useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit])
+    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit])
+
+    const resetFields = () => {
+        baseForm.resetFields()
+        setAttachs([])
+    }
 
     const uploadChange = (event: any) => {
         if (event.file.status === "done") {

@@ -1,10 +1,8 @@
 import React, { useState, useImperativeHandle, forwardRef } from "react"
-import { Button, Upload, Form } from 'antd'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../../common'
+import { Spin, Form } from 'antd'
+import { DetailContent, DetailTitle, BaseInfo } from '../../common'
 import { ApplicationList } from "../financialData.json"
 import RequestUtil from '../../../utils/RequestUtil'
-import AuthUtil from "../../../utils/AuthUtil"
-import { downLoadFile } from "../../../utils"
 import useRequest from '@ahooksjs/use-request'
 import ApplicationContext from "../../../configuration/ApplicationContext"
 interface EditProps {
@@ -27,7 +25,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         label: item.name
     }))
     const [baseForm] = Form.useForm()
-    const [attchs, setAttachs] = useState<any[]>([])
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -40,7 +37,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === "new" })
+    }), { manual: type === "new", refreshDeps: [id] })
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
@@ -56,77 +53,49 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             const baseData = await baseForm.validateFields()
             await saveRun({
                 ...baseData,
-                supplierId: baseData.supplierName.id,
-                supplierName: baseData.supplierName.value,
-                applyPaymentInvoiceDtos: baseData.relatednotes.records.map((item: any) => ({ invoiceId: item.id, billNumber: item.billNumber }))
+                supplierId: baseData.supplierName?.id || data?.supplierId,
+                supplierName: baseData.supplierName?.value || data?.supplierName,
+                applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
+                    invoiceId: item.id, billNumber: item.billNumber
+                })) || data?.applyPaymentInvoiceVos
             })
             resolve(true)
         } catch (error) {
+            console.log(error)
             reject(false)
         }
     })
 
-    useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit])
+    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit])
 
-    const uploadChange = (event: any) => {
-        if (event.file.status === "done") {
-            if (event.file.response.code === 200) {
-                const dataInfo = event.file.response.data
-                const fileInfo = dataInfo.name.split(".")
-                setAttachs([...attchs, {
-                    id: "",
-                    uid: attchs.length,
-                    link: dataInfo.link,
-                    name: dataInfo.originalName.split(".")[0],
-                    description: "",
-                    filePath: dataInfo.name,
-                    fileSize: dataInfo.size,
-                    fileSuffix: fileInfo[fileInfo.length - 1],
-                    userName: dataInfo.userName,
-                    fileUploadTime: dataInfo.fileUploadTime
-                }])
-            }
-        }
+    const resetFields = () => {
+        baseForm.resetFields()
     }
+
     const handleBaseInfoChange = (fields: any) => {
         if (fields.relatednotes) {
             console.log(fields.records)
         }
     }
-    const deleteAttachData = (id: number) => {
-        setAttachs(attchs.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
-    }
 
     return <DetailContent>
-        <DetailTitle title="申请信息" />
-        <BaseInfo form={baseForm} onChange={handleBaseInfoChange} columns={ApplicationList.map((item: any) => {
-            if (item.dataIndex === "relatednotes") {
-                return ({
-                    ...item,
-                    columns: item.columns.map((item: any) => item.dataIndex === "invoiceType" ? ({ ...item, enum: invoiceTypeEnum }) : item)
-                })
-            }
+        <Spin spinning={loading}>
+            <BaseInfo form={baseForm} onChange={handleBaseInfoChange} columns={ApplicationList.map((item: any) => {
+                if (item.dataIndex === "relatednotes") {
+                    return ({
+                        ...item,
+                        columns: item.columns.map((item: any) => item.dataIndex === "invoiceType" ? ({ ...item, enum: invoiceTypeEnum }) : item)
+                    })
+                }
 
-            if(item.dataIndex==="pleasePayType"){
-                return ({...item,type:"select",enum:pleasePayTypeEnum});
-            }
-            if(item.dataIndex==="paymentMethod"){
-                return ({...item,type:"select",enum:paymentMethodEnum});
-            }
-            return item;
-        })} col={3} dataSource={{}} edit />
-        <CommonTable columns={[
-            {
-                title: "附件名称",
-                dataIndex: "name"
-            },
-            {
-                title: "操作",
-                dataIndex: "opration",
-                render: (_: any, record: any) => (<>
-                    <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
-                    <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
-                </>)
-            }]} dataSource={attchs} />
+                if (item.dataIndex === "pleasePayType") {
+                    return ({ ...item, type: "select", enum: pleasePayTypeEnum });
+                }
+                if (item.dataIndex === "paymentMethod") {
+                    return ({ ...item, type: "select", enum: paymentMethodEnum });
+                }
+                return item;
+            })} col={3} dataSource={{}} edit />
+        </Spin>
     </DetailContent>
 })

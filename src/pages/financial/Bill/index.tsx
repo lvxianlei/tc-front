@@ -10,6 +10,7 @@ import RequestUtil from '../../../utils/RequestUtil'
 import ApplicationContext from "../../../configuration/ApplicationContext"
 interface EditRefProps {
     onSubmit: () => void
+    resetFields: () => void
 }
 export default function Invoice() {
     const history = useHistory()
@@ -34,8 +35,8 @@ export default function Invoice() {
     const onFilterSubmit = (value: any) => {
         if (value.updateEndTime) {
             const formatDate = value.updateEndTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateStartTime = formatDate[0] +" 00:00:00"
-            value.updateEndTime = formatDate[1]+ " 23:59:59"
+            value.updateStartTime = formatDate[0] + " 00:00:00"
+            value.updateEndTime = formatDate[1] + " 23:59:59"
         }
         return value
     }
@@ -67,12 +68,14 @@ export default function Invoice() {
 
     return <>
         <Modal
-            style={{ padding: 0 }}
             visible={visible}
             width={1011}
             title={type === "new" ? "创建" : "编辑"}
             onOk={handleModalOk}
-            onCancel={() => setVisible(false)}>
+            onCancel={() => {
+                editRef.current?.resetFields()
+                setVisible(false)
+            }}>
             <Edit type={type} ref={editRef} id={detailedId} />
         </Modal>
         <Modal
