@@ -20,8 +20,8 @@ export default function SupplierMngt(): React.ReactNode {
         value: item.id,
         label: item.name
     }))
-    //产品类型
-    const invoiceTypeEnum2 = (ApplicationContext.get().dictionaryOption as any)["101"].map((item: { id: string, name: string }) => ({
+    //主要供货产品
+    const invoiceTypeEnum2 = (ApplicationContext.get().dictionaryOption as any)["148"].map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))

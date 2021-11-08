@@ -7,6 +7,7 @@ import { buyingTask, operatingInformation } from "./buyingTask.json"
 import { useHistory } from 'react-router';
 import RequestUtil from '../../utils/RequestUtil';
 import TaskAssign from './TaskAssign';
+import useRequest from '@ahooksjs/use-request';
 interface TaskAssignRef {
     onSubmit: () => void
     resetFields: () => void
@@ -21,9 +22,13 @@ export default function rawMaterial() {
     const [isModalVisible3, setIsModalVisible3] = useState(false);
     const [columnsData, setColumnsData] = useState([]);
     const [id, setId] = useState(0);//采购任务id
+    const [purchaserDeptId, setPurchaserDeptId] = useState(0);//采购人部门id
+    const [purchaserId, setPurchaserId] = useState(0);//采购人id
+    const [inquiryId, setInquiryId] = useState("");
     const [obj, setObj] = useState<any>({});
     const [rejectionDescription, setRejectionDescription] = useState("");
     const history = useHistory();
+
     const handleCancel = () => {
         setIsModalVisible(false);
     };
@@ -44,6 +49,7 @@ export default function rawMaterial() {
     const detail = async (purchaseId: any) => {
         setIsModalVisible(true);
         setId(purchaseId);
+        setInquiryId(purchaseId);
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchaseTask/${purchaseId}`)
         console.log(result);
         setObj(result);
@@ -214,7 +220,7 @@ export default function rawMaterial() {
                             },
                             ...operatingInformation,
                         ]}
-                        dataSource={columnsData}
+                        dataSource={obj.optRecordList || []}
                     />
                 </DetailContent>
             </Modal>

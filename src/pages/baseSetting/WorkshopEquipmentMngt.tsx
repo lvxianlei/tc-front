@@ -138,7 +138,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
 
     const [ refresh, setRefresh ] = useState(false);
     const [ visible, setVisible ] = useState(false);
-    const [ form ] = useForm();
+    const [ form ] = Form.useForm();
     const [ searchForm ] = useForm();
     const [ filterValue, setFilterValue ] = useState({});
     const [ disabled, setDisabled] = useState(false);

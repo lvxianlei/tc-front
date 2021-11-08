@@ -6,13 +6,17 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, Button, Modal, Select, Form, Popconfirm, message, Row, Col } from 'antd';
+import { Space, Input, Button, Modal, Select, Form, Popconfirm, message, Row, Col, TreeSelect } from 'antd';
 import { CommonTable, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
-import { useForm } from 'antd/es/form/Form';
  import styles from './WorkshopEquipmentMngt.module.less';
 import WorkshopUserSelectionComponent from '../../components/WorkshopUserModal';
+import { wrapRole2DataNode } from './deptUtil';
+import { TreeNode } from 'antd/lib/tree-select';
+import useRequest from '@ahooksjs/use-request';
+import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
+import { IDeptProcessesDetailList, IProcess } from './ProductionLineMngt';
 
 interface IDetail {
     readonly name?: string;
@@ -164,16 +168,38 @@ export default function WorkshopTeamMngt(): React.ReactNode {
         setUserList(data?.teamUserVOList || [])
     }
 
+    const renderTreeNodes = (data:any) => data.map((item:any) => {
+        if (item.children) {
+            item.disabled = true;
+            return (<TreeNode key={ item.id + ',' + item.titl } title={ item.title } value={ item.id + ',' + item.title } disabled={ item.disabled } className={ styles.node } >
+                { renderTreeNodes(item.children) }
+            </TreeNode>);
+        }
+        return <TreeNode { ...item } key={ item.id + ',' + item.titl } title={ item.title } value={ item.id + ',' + item.title } />;
+    });
+    
+    const getProcess = async (id: string) => {
+        const data = await RequestUtil.get<IProcess>(`/tower-production/workshopDept/detail?deptId=${ id }`);
+        setProcess(data?.deptProcessesDetailList || []);
+    }
+
+
     const [ refresh, setRefresh ] = useState(false);
     const [ visible, setVisible ] = useState(false);
-    const [ form ] = useForm();
-    const [ searchForm ] = useForm();
+    const [ form ] = Form.useForm();
+    const [ searchForm ] = Form.useForm();
     const [ filterValue, setFilterValue ] = useState({});
     const [ disabled, setDisabled] = useState(false);
     const [ disabled2, setDisabled2 ] = useState(false);
     const [ userList, setUserList ] = useState<ITeamUserList[]>([]);
     const [ title, setTitle ] = useState('新增');
     const [ detail, setDetail ] = useState<IDetail>({});
+    const [ process, setProcess ] = useState<IDeptProcessesDetailList[]>([]);
+    const { data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
+        resole(data);
+    }), {})
+    const departmentData: any = data || [];
     return (
         <>
             <Form form={searchForm} layout="inline" style={{margin:'20px'}} onFinish={(value: Record<string, any>) => {
@@ -206,7 +232,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                 </Form.Item>
             </Form>
             <Page
-                path="/tower-science/loftingList/loftingPage"
+                path="/tower-production/team/page"
                 columns={ columns }
                 headTabs={ [] }
                 extraOperation={ <Button type="primary" onClick={ () => setVisible(true) } ghost>新增</Button> }
@@ -222,17 +248,17 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                                     "required": true,
                                     "message": "请选择所属车间"
                                 }]}>
-                                <Select placeholder="请选择" onChange={ (e) => {
-                                    console.log(e)
-                                    setDisabled(true);
-                                } }>
-                                    <Select.Option value={ 1 } key="4">全部</Select.Option>
-                                    <Select.Option value={ 2 } key="">全部222</Select.Option>
-                                </Select>
+                                <TreeSelect placeholder="请选择" style={{ width: "100%" }} onChange={(e) => {
+                                    setDisabled(false);
+                                    form.setFieldsValue({ deptProcessesId: '' });
+                                    getProcess(e.toString().split(',')[0]);
+                                }}>
+                                    { renderTreeNodes(wrapRole2DataNode(departmentData)) }
+                                </TreeSelect>
                             </Form.Item>
                         </Col>
                         <Col span={ 12 }>
-                            <Form.Item name="deptProcessesId"initialValue={ detail.deptProcessesId } label="工序" rules={[{
+                            <Form.Item name="deptProcessesId" initialValue={ detail.deptProcessesId } label="工序" rules={[{
                                     "required": true,
                                     "message": "请选择工序"
                                 }]}>

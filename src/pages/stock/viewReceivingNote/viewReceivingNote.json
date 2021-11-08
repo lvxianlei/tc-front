@@ -13,7 +13,7 @@
             "dataIndex": "receivingTime"
         },
         {
-            "title": "重量合集(吨)",
+            "title": "重量合计(吨)",
             "dataIndex": "weight"
         },
         {
@@ -25,7 +25,7 @@
             "dataIndex": "freight"
         },
         {
-            "title": "贷款运费合计(元)",
+            "title": "货款运费合计(元)",
             "dataIndex": "price"
         },
         {
