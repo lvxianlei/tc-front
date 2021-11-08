@@ -58,11 +58,13 @@ export default function Invoice() {
     }
 
     const handleModalOk = () => new Promise(async (resove, reject) => {
-        const isClose = await editRef.current?.onSubmit()
-        if (isClose) {
+        try {
+            await editRef.current?.onSubmit()
             message.success("票据创建成功...")
             setVisible(false)
             resove(true)
+        } catch (error) {
+            reject(false)
         }
     })
 
@@ -74,16 +76,21 @@ export default function Invoice() {
             onOk={handleModalOk}
             onCancel={() => {
                 editRef.current?.resetFields()
+                setType("new")
+                setDetailedId("")
                 setVisible(false)
             }}>
             <Edit type={type} ref={editRef} id={detailedId} />
         </Modal>
         <Modal
-            style={{ padding: 0 }}
-            visible={detailVisible} width={1011}
+            visible={detailVisible}
+            width={1011}
             footer={<Button type="primary" onClick={() => setDetailVisible(false)}>确认</Button>}
             title="详情"
-            onCancel={() => setDetailVisible(false)}>
+            onCancel={() => {
+                setDetailedId("")
+                setDetailVisible(false)
+            }}>
             <Overview id={detailedId} />
         </Modal>
         <Page

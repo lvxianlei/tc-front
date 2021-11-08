@@ -1,8 +1,8 @@
 import React from "react"
-import { Button, message, Spin } from 'antd'
+import { Spin } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { DetailTitle, CommonTable, BaseInfo } from '../../common'
-import { billinformation, operation } from "../financialData.json"
+import { DetailTitle, BaseInfo, Attachment } from '../../common'
+import { billinformation } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import ApplicationContext from "../../../configuration/ApplicationContext"
@@ -22,7 +22,7 @@ export default function Overview({ id }: OverviewProps) {
         } catch (error) {
             reject(error)
         }
-    }))
+    }), { refreshDeps: [id] })
 
     return <Spin spinning={loading}>
         <DetailTitle title="票据信息" />
@@ -32,24 +32,6 @@ export default function Overview({ id }: OverviewProps) {
             }
             return item
         })} dataSource={data || {}} />
-        <DetailTitle title="相关附件" />
-        <CommonTable
-            columns={[{
-                title: "名称",
-                dataIndex: "name",
-                width: 300
-            },
-            {
-                title: "操作",
-                dataIndex: "opration",
-                render: (_: any, records: any) => <>
-                    <Button type="link">查看</Button>
-                </>
-            }]}
-            dataSource={data?.invoiceAttachInfoVos}
-            showHeader={false}
-        />
-        <DetailTitle title="操作信息" />
-        <CommonTable columns={operation} dataSource={data?.operationRecordInfoVos} />
+        <Attachment dataSource={data?.invoiceAttachInfoVos || []} />
     </Spin>
 }
