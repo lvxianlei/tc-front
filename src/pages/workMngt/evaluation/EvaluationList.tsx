@@ -13,7 +13,7 @@ import { useLocation } from 'react-router-dom';
 
 export default function EvaluationList(): React.ReactNode {
     const [ refresh, setRefresh ] = useState(false);
-    const location = useLocation<{ state: {} }>();
+    const location = useLocation<{ state: number }>();
 
     const columns = [
         {
@@ -140,11 +140,13 @@ export default function EvaluationList(): React.ReactNode {
             {
                 name: 'status',
                 label: '任务状态',
-                children: <Select style={{ width: '120px' }} placeholder="请选择">
-                    <Select.Option value="" key="2">全部</Select.Option>
-                    <Select.Option value="3" key="3">待完成</Select.Option>
-                    <Select.Option value="4" key="4">已完成</Select.Option>
-                </Select>
+                children: <Form.Item name="status" initialValue={ location.state }>
+                    <Select style={{ width: '120px' }} placeholder="请选择">
+                        <Select.Option value="" key="2">全部</Select.Option>
+                        <Select.Option value={ 3 } key="3">待完成</Select.Option>
+                        <Select.Option value={ 4 } key="4">已完成</Select.Option>
+                    </Select>
+                </Form.Item>
             },
             {
                 name: 'expectDeliverTimeAll',

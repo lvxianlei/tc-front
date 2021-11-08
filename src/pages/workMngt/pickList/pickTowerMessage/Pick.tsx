@@ -371,12 +371,15 @@ export default function Lofting(): React.ReactNode {
                                 setEditorLock('锁定');
                             } else {
                                 const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
-                                console.log(rowChangeList)
-                                console.log(newRowChangeList)
                                 let values = getForm()?.getFieldsValue(true).data;
                                 if(values) {
                                     let changeValues = values.filter((item: any, index: number) => {
                                         return newRowChangeList.indexOf(index) !== -1;
+                                    }).map((item:any)=>{
+                                        return {
+                                            ...item,
+                                            productCategory: params.id
+                                        }
                                     })
                                     RequestUtil.post(`/tower-science/drawProductStructure/submit?productCategoryId=${params.id}`, [ ...changeValues ]).then(res => {
                                         setColumns(columnsSetting);
