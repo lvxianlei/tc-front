@@ -6,7 +6,8 @@
         },
         {
             "dataIndex": "currentValue",
-            "title": "原字段信息"
+            "title": "原字段信息",
+            "type": "number"
         },
         {
             "dataIndex": "description",
