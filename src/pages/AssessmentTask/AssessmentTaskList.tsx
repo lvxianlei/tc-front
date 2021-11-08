@@ -104,7 +104,7 @@ export default function AssessmentTaskList(): React.ReactNode {
                         : <Button type="link" disabled>指派</Button>
                     }
                     {
-                        record.status === 4 && record.status === 5 ? 
+                        record.status === 4 || record.status === 5 ? 
                         <AssessmentInformation id={ record.id } />
                         : <Button type="link" disabled>评估信息</Button>
                     }
