@@ -172,8 +172,7 @@ export default function SampleDrawCheck(): React.ReactNode {
                         <Image src={questionDetail?.currentFile?.filePath||''} height={100}/>
                     </Descriptions.Item>
                     {questionStatus!==1?<Descriptions.Item label={<Upload 
-                        key="sub"
-                        name="file"
+                        accept="image/png,image/jpeg"
                         multiple={true}
                         action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
                         headers={{
