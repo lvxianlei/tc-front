@@ -1,34 +1,13 @@
 import React, { useState, useRef } from 'react'
 import { Input, DatePicker, Select, Button, Modal, message } from 'antd'
-import { Page } from '../../common';
+import { Page, IntgSelect } from '../../common';
 import { baseInfo } from "./enquiryList.json"
 import Edit from "./Edit"
-import useRequest from '@ahooksjs/use-request'
-import RequestUtil from '../../../utils/RequestUtil'
 export default function EnquiryList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false)
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({})
-    const [deptId, setDeptId] = useState<string>("")
     const [detailId, setDetailId] = useState<string>("")
     const editRef = useRef<{ onSubmit: () => void, resetFields: () => void }>({ onSubmit: () => { }, resetFields: () => { } })
-
-    const { data: deptData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/sinzetech-user/department`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }))
-
-    const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/sinzetech-user/user?departmentId=${id}`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
 
     const onFilterSubmit = (value: any) => {
         if (value.startStatusUpdateTime) {
@@ -40,6 +19,10 @@ export default function EnquiryList(): React.ReactNode {
             const formatDate = value.startPlannedDeliveryTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startPlannedDeliveryTime = formatDate[0] + " 00:00:00"
             value.endPlannedDeliveryTime = formatDate[1] + " 23:59:59"
+        }
+        if (value.inquirerId) {
+            value.deptId = value.inquirerId.first
+            value.inquirerId = value.inquirerId.second
         }
         setFilterValue({ ...filterValue, ...value })
         return value
@@ -108,21 +91,10 @@ export default function EnquiryList(): React.ReactNode {
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'deptId',
-                    label: '询价人',
-                    children: <Select onChange={(value: string) => {
-                        setDeptId(value)
-                        getUser(value)
-                    }} style={{ width: 100 }}>{deptData?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}</Select>
-                },
-                {
                     name: 'inquirerId',
-                    label: '',
-                    children: <Select
-                        disabled={!deptId}
-                        style={{ width: 100 }}
-                    >{userData?.records?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}</Select>
-                },
+                    label: '询价人',
+                    children: <IntgSelect width={200} />
+                }
             ]}
         />
     </>

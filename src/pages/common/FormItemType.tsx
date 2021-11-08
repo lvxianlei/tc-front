@@ -129,6 +129,7 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
     const [popContent, setPopContent] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: {} })
     const [value, setValue] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: {} })
 
+    useEffect(() => setValue(props.value), [JSON.stringify(props.value || "")])
     const handleChange = (event: any) => {
         const newPopContent = { id: event[0]?.id, value: event[0]?.[data.value || "name" || "id"], records: event }
         const checkboxContent = { id: event[0]?.id, value: event.map((item: any) => item[data.value || "name" || "id"]).join(","), records: event }

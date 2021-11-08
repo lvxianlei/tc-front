@@ -25,7 +25,7 @@ export default function Invoice() {
     const editRef = useRef<EditRefProps>()
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/invoice?id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/invoice?id=${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -44,7 +44,7 @@ export default function Invoice() {
     const handleDelete = (id: string) => {
         Modal.confirm({
             title: "删除",
-            content: "确定删除此开票申请吗？",
+            content: "确定删除此票据吗？",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
                     resove(await deleteRun(id))
@@ -60,7 +60,7 @@ export default function Invoice() {
     const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
             await editRef.current?.onSubmit()
-            message.success("票据创建成功...")
+            message.success(`票据${type === "new" ? "创建" : "编辑"}成功...`)
             setVisible(false)
             resove(true)
         } catch (error) {

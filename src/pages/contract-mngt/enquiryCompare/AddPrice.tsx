@@ -1,7 +1,7 @@
-import React, { forwardRef, useState, useImperativeHandle } from "react"
+import React, { forwardRef, useState, useImperativeHandle, useRef } from "react"
 import { Upload, Button, Form, Spin, InputNumber } from "antd"
 import { addPriceHead } from "./enquiry.json"
-import { BaseInfo, CommonTable, DetailTitle } from "../../common"
+import { BaseInfo, CommonTable, DetailTitle, Attachment, AttachmentRef } from "../../common"
 import AuthUtil from "../../../utils/AuthUtil"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -11,16 +11,14 @@ interface AddPriceProps {
     materialLists: any[]
 }
 export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, ref): JSX.Element {
-    const [attchs, setAttachs] = useState<any[]>([])
     const [materials, setMaterials] = useState<any[]>(materialLists || [])
     const [form] = Form.useForm()
-
+    const attachRef = useRef<AttachmentRef>()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryQuotation/${id}`)
             form.setFieldsValue({ supplier: result.supplierName })
             setMaterials(result?.inquiryQuotationOfferVos)
-            setAttachs(result?.inquiryQuotationAttachInfoVos)
             resole(result)
         } catch (error) {
             reject(error)
@@ -36,32 +34,11 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
         }
     }), { manual: true })
 
-    const uploadChange = (event: any) => {
-        if (event.file.status === "done") {
-            if (event.file.response.code === 200) {
-                const dataInfo = event.file.response.data
-                const fileInfo = dataInfo.name.split(".")
-                setAttachs([...attchs, {
-                    id: "",
-                    uid: attchs.length,
-                    link: dataInfo.link,
-                    name: dataInfo.originalName.split(".")[0],
-                    description: "",
-                    filePath: dataInfo.name,
-                    fileSize: dataInfo.size,
-                    fileSuffix: fileInfo[fileInfo.length - 1],
-                    userName: dataInfo.userName,
-                    fileUploadTime: dataInfo.fileUploadTime
-                }])
-            }
-        }
-    }
-
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref])
 
     const resetFields = () => {
         form.resetFields()
-        setAttachs([])
+        attachRef.current?.resetFields()
         setMaterials([])
     }
 
@@ -70,8 +47,11 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
         return saveRun({
             supplierId: formData.supplier?.id || data?.supplierId,
             supplierName: formData.supplier?.value || data?.supplierName,
-            inquiryQuotationOfferDtos: materials,
-            inquiryQuotationAttachInfoDtos: attchs
+            inquiryQuotationOfferDtos: materials.map((item: any) => {
+                delete item.id
+                return item
+            }),
+            inquiryQuotationAttachInfoDtos: attachRef.current?.getDataSource()
         })
     }
 
@@ -129,34 +109,6 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
             }
             return item
         })} dataSource={materials} />
-        <DetailTitle title="相关附件" operation={[<Upload
-            key="sub"
-            name="file"
-            multiple={true}
-            action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
-            headers={{
-                'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                'Tenant-Id': AuthUtil.getTenantId(),
-                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-            }}
-            showUploadList={false}
-            onChange={uploadChange}
-        ><Button key="enclosure" type="primary" ghost>上传附件</Button></Upload>]} />
-        <CommonTable
-            columns={[{
-                title: "名称",
-                dataIndex: "name",
-                width: 300
-            },
-            {
-                title: "操作",
-                dataIndex: "opration",
-                render: (_: any, records: any) => <>
-                    <Button type="link">查看</Button>
-                </>
-            }]}
-            dataSource={attchs}
-            showHeader={false}
-        />
+        <Attachment dataSource={data?.inquiryQuotationAttachInfoVos || []} ref={attachRef} edit />
     </Spin>
 })

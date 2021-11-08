@@ -33,7 +33,7 @@ export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             const baseData = await baseForm.validateFields()
-            await saveRun({ ...baseData, id: Number(data?.id || 0) })
+            await saveRun(type === "new" ? ({ ...baseData }) : ({ ...baseData, id: data?.id }))
             resolve(true)
         } catch (error) {
             reject(false)

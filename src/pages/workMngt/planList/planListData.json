@@ -58,7 +58,7 @@
         },
         {
             "title": "采购人",
-            "dataIndex": "purchaserId",
+            "dataIndex": "purchaserName",
             "type": "string"
         }
     ],

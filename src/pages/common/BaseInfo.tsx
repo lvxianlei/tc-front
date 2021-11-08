@@ -30,7 +30,7 @@ interface BaseInfoProps {
 function formatDataType(dataItem: any, dataSource: any): string {
     const value = dataSource[dataItem.dataIndex]
     const types: any = {
-        number: (value && value !== -1 ) ? value : "-",
+        number: (value && value !== -1) ? value : "-",
         select: ((value || value === 0) && dataItem.enum) ? (dataItem.enum.find((item: any) => item.value === value)?.label || "-") : "-",
         date: value ? moment(value).format(dataItem.format || "YYYY-MM-DD HH:mm:ss") : "-",
         string: (value && !["-1", -1, "0", 0].includes(value)) ? value : "-",
@@ -78,7 +78,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
                     <Col span={24} >
                         <div style={{ height: 56, marginBottom: item.type === "textarea" ? 20 : 0 }}>
                             <Form.Item className="baseInfoForm" name={item.dataIndex} label={item.title} rules={item.rules || []}>
-                                {item.render ? item.render() : <FormItemType type={item.type} data={item} />}
+                                {item.render ? item.render(item) : <FormItemType type={item.type} data={item} />}
                             </Form.Item>
                         </div>
                     </Col>

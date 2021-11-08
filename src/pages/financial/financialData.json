@@ -334,7 +334,7 @@
     ],
     "ApplicationForPayment": [
         {
-            "title": "付款编号",
+            "title": "请款编号",
             "dataIndex": "pleasePayNumber"
         },
         {

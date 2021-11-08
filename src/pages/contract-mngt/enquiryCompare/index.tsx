@@ -114,6 +114,7 @@ export default function ContractMngt() {
                     {
                         "title": "序号",
                         "dataIndex": "index",
+                        "width": 30,
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
                     ...comparison,
