@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { Button, TableColumnProps, Select, DatePicker, Input, Descriptions, Modal } from 'antd'
 import { Link, useHistory, } from 'react-router-dom'
-import { CommonTable, DetailContent, DetailTitle, Page } from '../../common'
+import { Attachment, CommonTable, DetailContent, DetailTitle, Page } from '../../common'
 import { viewReceivingNote, operatingInformation, ApprovalInformation, operatingInformation1 } from "./viewReceivingNote.json"
 import RequestUtil from '../../../utils/RequestUtil'
+var moment = require('moment');
+moment().format();
 //状态
 const projectType = [
     {
@@ -163,7 +165,7 @@ export default function ViewReceivingNote(): React.ReactNode {
                 searchFormItems={[
                     {
                         name: 'updateTime',
-                        label: '最新状态变更时间',
+                        label: '收货完成时间',
                         children: <RangePicker />
                     },
                     {
@@ -181,7 +183,8 @@ export default function ViewReceivingNote(): React.ReactNode {
                 ]}
             />
             <Modal width="700px" title="详情" visible={isModalVisible} footer={buttons} onCancel={handleCancel} >
-                <Descriptions title="申请信息" bordered column={2} labelStyle={{ textAlign: 'center' }}>
+                <DetailTitle title="申请信息" />
+                <Descriptions bordered column={2} labelStyle={{ textAlign: 'center' }}>
                     <Descriptions.Item label="所属供应商">{obj1.supplierName}</Descriptions.Item>
                     <Descriptions.Item label="请款金额">{obj1.pleasePayAmount}</Descriptions.Item>
                     <Descriptions.Item label="关联票据">{obj1.billNumbers}</Descriptions.Item>
@@ -225,24 +228,18 @@ export default function ViewReceivingNote(): React.ReactNode {
                 </DetailContent>
             </Modal>
             <Modal width="700px" title="详情" visible={isModalVisible1} footer={buttons1} onCancel={handleCancel1} >
-                <Descriptions title="票据信息" bordered column={2} labelStyle={{ textAlign: 'right' }}>
+                <DetailTitle title="票据信息" />
+                <Descriptions bordered column={2} labelStyle={{ textAlign: 'right' }}>
                     <Descriptions.Item label="票据编号">{obj.billNumber}</Descriptions.Item>
                     <Descriptions.Item label="所属供应商">{obj.supplierName}</Descriptions.Item>
                     <Descriptions.Item label="开票单位">{obj.invoiceUnit}</Descriptions.Item>
                     <Descriptions.Item label="发票号">{obj.invoiceNumber}</Descriptions.Item>
                     <Descriptions.Item label="发票类型">{obj.invoiceType}</Descriptions.Item>
                     <Descriptions.Item label="发票金额">{obj.invoiceAmount}</Descriptions.Item>
-                    <Descriptions.Item label="收货单">{ }</Descriptions.Item>
-                    <Descriptions.Item label="收票日">{obj.collectInvoiceDate}</Descriptions.Item>
+                    <Descriptions.Item label="收货单">{obj.receiptNumbers}</Descriptions.Item>
+                    <Descriptions.Item label="开票日">{moment(obj.collectInvoiceDate).format("YYYY-MM-DD")}</Descriptions.Item>
                 </Descriptions>
-                <Descriptions title="相关附件" bordered column={1} labelStyle={{ textAlign: 'center' }}>
-                    <Descriptions.Item label="附件名称附件名称附件名称附件名称附件名称">
-                        <span style={{ color: "#FF8C00" }}>查看</span>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="附件名称附件名称附件名称附件名称附件名称">
-                        <span style={{ color: "#FF8C00" }}>查看</span>
-                    </Descriptions.Item>
-                </Descriptions>
+                <Attachment dataSource={obj?.invoiceAttachInfoVos || []} />
                 <DetailContent>
                     <DetailTitle title="操作信息" />
                     <CommonTable

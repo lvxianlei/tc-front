@@ -13,6 +13,10 @@
             "dataIndex": "supplierName"
         },
         {
+            "title": "添加时间",
+            "dataIndex": "createTime"
+        },
+        {
             "title": "联系人",
             "dataIndex": "contactMan"
         },
