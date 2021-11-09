@@ -90,7 +90,7 @@
         },
         {
             "title": "搭配数量",
-            "dataIndex": "matchingquantity",
+            "dataIndex": "num",
             "type": "number"
         },
         {
@@ -106,17 +106,17 @@
     "PlanList": [
         {
             "title": "生产未领料（支）",
-            "dataIndex": "productionuncollected",
+            "dataIndex": "uncollectedMaterial",
             "type": ""
         },
         {
             "title": "仓库库存（支）",
-            "dataIndex": "warehouseinventory",
+            "dataIndex": "warehouseStock",
             "type": "string"
         },
         {
             "title": "在途库存（支）",
-            "dataIndex": "transportationinventory",
+            "dataIndex": "transitStock",
             "type": "string"
         },
         {
@@ -129,6 +129,7 @@
         {
             "title": "件号",
             "dataIndex": "index",
+            "width": 50,
             "type": "string"
         },
         {

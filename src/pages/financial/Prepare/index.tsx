@@ -11,7 +11,7 @@ import RequestUtil from '../../../utils/RequestUtil'
 import ApplicationContext from "../../../configuration/ApplicationContext"
 
 interface EditRefProps {
-    onSubmit: () => void
+    onSubmit: (type?: "saveAndApply" | "save") => void
     resetFields: () => void
 }
 
@@ -78,9 +78,9 @@ export default function ApplyPayment() {
         setFilterValue({ ...filterValue, ...value })
         return value
     }
-    const handleModalOk = () => new Promise(async (resove, reject) => {
+    const handleModalOk = (type?: "saveAndApply" | "save") => new Promise(async (resove, reject) => {
         try {
-            const isClose = await editRef.current?.onSubmit()
+            const isClose = await editRef.current?.onSubmit(type)
             message.success("票据创建成功...")
             setVisible(false)
             history.go(0)
@@ -129,7 +129,7 @@ export default function ApplyPayment() {
             onOk: () => new Promise(async (resove, reject) => {
                 try {
                     resove(await approvalRun(id))
-                    message.success("撤回成功...")
+                    message.success("成功发起请款申请...")
                     history.go(0)
                 } catch (error) {
                     reject(error)
@@ -146,27 +146,37 @@ export default function ApplyPayment() {
     }
 
     return <>
-        <Modal style={{ padding: 0 }} visible={visible}
+        <Modal visible={visible}
             width={1011} title={type === "new" ? "创建申请信息" : "编辑申请信息"}
             footer={[
-                <Button key="close" type="primary" ghost onClick={() => {
-                    editRef.current?.resetFields()
+                <Button key="close" type="primary" ghost onClick={async () => {
+                    await editRef.current?.resetFields()
+                    setDetailId("")
+                    setType("new")
                     setVisible(false)
                 }}>关闭</Button>,
-                <Button key="save" type="primary" onClick={handleModalOk}>保存</Button>,
-                <Button key="saveOr" type="primary" ghost onClick={() => message.warning("等待接口开发...")} >保存并发起审批</Button>
+                <Button key="save" type="primary" onClick={() => handleModalOk()}>保存</Button>,
+                <Button key="saveOr" type="primary" ghost onClick={() => handleModalOk("saveAndApply")} >保存并发起审批</Button>
             ]}
             onCancel={() => {
                 editRef.current?.resetFields()
+                setDetailId("")
+                setType("new")
                 setVisible(false)
             }}>
             <Edit type={type} ref={editRef} id={detailId} />
         </Modal>
         <Modal
             visible={detailVisible} width={1011}
-            footer={<Button type="primary" onClick={() => setDetailVisible(false)}>确认</Button>}
+            footer={<Button type="primary" onClick={() => {
+                setDetailId("")
+                setDetailVisible(false)
+            }}>确认</Button>}
             title="详情"
-            onCancel={() => setDetailVisible(false)}>
+            onCancel={() => {
+                setDetailId("")
+                setDetailVisible(false)
+            }}>
             <Overview id={detailId} />
         </Modal>
         <Modal visible={successVisible} width={1011}
@@ -182,6 +192,7 @@ export default function ApplyPayment() {
         <Page
             path="/tower-supply/applyPayment"
             columns={[
+                { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
                 ...ApplicationForPayment.map((item: any) => {
                     if (item.dataIndex === "pleasePayType") {
                         return ({ ...item, type: "select", enum: pleasePayTypeEnum });
@@ -210,7 +221,7 @@ export default function ApplyPayment() {
                                     setDetailId(record.id)
                                     setVisible(true)
                                 }}>编辑</Button>
-                            {[0].includes(record.applyStatus) && <a onClick={() => handleApprovalRun(record.id)}>发起</a>}
+                            {[0, 3].includes(record.applyStatus) && <a onClick={() => handleApprovalRun(record.id)}>发起</a>}
                             <Button type="link" disabled={![1].includes(record.applyStatus)}
                                 onClick={() => handleCancel(record.id)}>撤回</Button>
                             {[0, 3].includes(record.applyStatus) && <a onClick={() => handleDelete(record.id)}>删除</a>}
@@ -266,20 +277,8 @@ export default function ApplyPayment() {
                 {
                     label: '查询',
                     name: 'fuzzyQuery',
-                    children: <Input placeholder="请款编号/关联票据/供应商/请款机构" style={{ width: 300 }} />
-                },
-                {
-                    name: 'contractType',
-                    label: '供应商',
-                    children: <Select style={{ width: 200 }}>
-                        <Select.Option value="1">不下计划</Select.Option>
-                        <Select.Option value="2">未下计划</Select.Option>
-                        <Select.Option value="3">未下完计划</Select.Option>
-                        <Select.Option value="4">未发完货</Select.Option>
-                        <Select.Option value="5">已发完货</Select.Option>
-                    </Select>
+                    children: <Input placeholder="请款编号/关联到货单/关联票据/供应商" style={{ width: 300 }} />
                 }
-
             ]}
         />
     </>

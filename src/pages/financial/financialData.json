@@ -466,7 +466,7 @@
             "type": "popTable",
             "path": "/tower-supply/invoice?invoiceStatus=1",
             "width": 1011,
-            "value": "supplierName",
+            "value": "billNumber",
             "dependencies": true,
             "readOnly": true,
             "selectType": "checkbox",
@@ -499,7 +499,7 @@
             "rules": [
                 {
                     "required": true,
-                    "message": "请选择供应商..."
+                    "message": "请选择关联票据..."
                 }
             ]
         },
@@ -516,12 +516,13 @@
         },
         {
             "title": "开户银行",
-            "dataIndex": "openBank"
+            "dataIndex": "openBank",
+            "disabled": true
         },
         {
             "title": "银行账号",
             "dataIndex": "openBankNumber",
-            "type": "string"
+            "disabled": true
         },
         {
             "title": "付款方式",
@@ -549,7 +550,7 @@
         {
             "title": "请款机构",
             "dataIndex": "pleasePayOrganization",
-            "type": "string"
+            "type": "select"
         }
     ],
     "ApplicationDetail": [

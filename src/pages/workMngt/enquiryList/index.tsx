@@ -25,7 +25,7 @@ export default function EnquiryList(): React.ReactNode {
             value.inquirerId = value.inquirerId.second
         }
         setFilterValue({ ...filterValue, ...value })
-        return value
+        return ({ ...filterValue, ...value })
     }
 
     const handleModal = () => new Promise(async (resove, reject) => {
@@ -46,8 +46,9 @@ export default function EnquiryList(): React.ReactNode {
             <Edit detailId={detailId} ref={editRef} />
         </Modal>
         <Page
-            path="/tower-supply/inquiryTask"
+            path="/tower-supply/inquiryTask/inquirer"
             columns={[
+                { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
                 ...baseInfo,
                 {
                     key: "operation",

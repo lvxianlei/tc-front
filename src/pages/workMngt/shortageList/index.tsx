@@ -62,6 +62,7 @@ export default function Invoicing() {
             path="/tower-supply/materialShortage"
             filterValue={filterValue}
             columns={[
+                { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
                 ...baseInfo,
                 {
                     title: "操作",
@@ -71,8 +72,9 @@ export default function Invoicing() {
                     render: (_: any, record: any) => {
                         return <>
                             <a onClick={() => {
-                                setCancelId(record.id)
-                                setVisible(true)
+                                // setCancelId(record.id)
+                                // setVisible(true)
+                                message.warning("操作记录加急开发中...")
                             }}>查看</a>
                             <Button
                                 type="link"

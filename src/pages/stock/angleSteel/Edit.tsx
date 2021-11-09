@@ -46,18 +46,13 @@ export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
 
     useImperativeHandle(ref, () => ({ onSubmit, loading: saveLoading }), [ref, onSubmit])
 
-    return <DetailContent>
-        <DetailTitle title="票据信息" />
-        <BaseInfo
-            form={baseForm}
-            columns={angleConfigStrategy.map((item: any) => {
-                if (item.dataIndex === "materialTexture") {
-                    return ({ ...item, type: "select", enum: materialTextureEnum })
-                }
-                return item
-            })}
-            col={3}
-            dataSource={data}
-            edit />
-    </DetailContent>
+    return <BaseInfo
+        form={baseForm}
+        columns={angleConfigStrategy.map((item: any) => {
+            if (item.dataIndex === "materialTexture") {
+                return ({ ...item, type: "select", enum: materialTextureEnum })
+            }
+            return item
+        })}
+        col={3} dataSource={data} edit />
 })

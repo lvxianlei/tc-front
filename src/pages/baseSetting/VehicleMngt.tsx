@@ -18,7 +18,7 @@ interface IDetail {
     readonly id?: string;
     readonly registrationNumber?: string;
     readonly vehicleType?: string;
-    readonly accountEquipmentId?: string;
+    readonly accountEquipmentId?: string | number;
     readonly accountEquipmentName?: string;
     readonly status?: string;
     readonly description?: string;
@@ -105,11 +105,18 @@ export default function VehicleMngt(): React.ReactNode {
     const save = () => {
         form.validateFields().then(res => {
             let value = form.getFieldsValue(true);
-            value = {
-                ...value,
-                id: detail.id,
-                accountEquipmentId: detail.accountEquipmentId ? detail.accountEquipmentId : selectedRows[0].id,
-                accountEquipmentName: detail.accountEquipmentName ? detail.accountEquipmentName : selectedRows[0].id
+            if(selectedRows[0] || detail.accountEquipmentId) {
+                value = {
+                    ...value,
+                    id: detail.id,
+                    accountEquipmentId: detail.accountEquipmentId ? detail.accountEquipmentId : selectedRows[0].id,
+                    accountEquipmentName: detail.accountEquipmentName ? detail.accountEquipmentName : selectedRows[0].deviceName
+                }
+            } else {
+                value = {
+                    ...value,
+                    id: detail.id
+                }
             }
             RequestUtil.post<IDetail>(`/tower-production/vehicle`, { ...value }).then(res => {
                 message.success('保存成功！')
@@ -130,7 +137,11 @@ export default function VehicleMngt(): React.ReactNode {
     }
     
     const getList = async (id: string) => {
-        const data = await RequestUtil.get<IDetail>(`/tower-production/vehicle/info?vehicleId=${ id }`);
+        let data = await RequestUtil.get<IDetail>(`/tower-production/vehicle/info?vehicleId=${ id }`);
+        data = {
+            ...data, 
+            accountEquipmentId: data.accountEquipmentId === -1 ? undefined : data.accountEquipmentId
+        }
         setDetail(data);
         form.setFieldsValue({...data});
     }

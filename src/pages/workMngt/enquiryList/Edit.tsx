@@ -1,17 +1,16 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react'
-import { Spin, Button, Upload, Form } from 'antd'
-import { DetailTitle, CommonTable, BaseInfo } from '../../common'
+import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react'
+import { Spin, Input, Form, message } from 'antd'
+import { DetailTitle, CommonTable, BaseInfo, Attachment, AttachmentRef } from '../../common'
 import { CurrentPriceInformation } from "./enquiryList.json"
-import AuthUtil from "../../../utils/AuthUtil"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import { downLoadFile } from "../../../utils"
 interface EditProps {
     detailId: string
 }
 export default forwardRef(function Edit({ detailId }: EditProps, ref): JSX.Element {
-    const [attchs, setAttachs] = useState<any[]>([])
+    const attchRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
     const [form] = Form.useForm()
+    const [inquirerDescription, setInquirerDescription] = useState<string>()
     const { loading, data } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryTask/inquirer/${detailId}`)
@@ -30,19 +29,20 @@ export default forwardRef(function Edit({ detailId }: EditProps, ref): JSX.Eleme
         }
     }), { manual: true })
 
-    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref])
-
     const resetFields = () => {
         form.resetFields()
-        setAttachs([])
+        attchRef.current?.resetFields()
     }
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            const formData = await form.validateFields()
+            if (!inquirerDescription) {
+                message.warning("请输入补充信息")
+                return
+            }
             const result = await saveRun({
-                inquirerDescription: formData.inquirerDescription,
-                inquirerAttachList: attchs
+                inquirerDescription: inquirerDescription,
+                inquirerAttachList: attchRef.current?.getDataSource()
             })
             resolve(result)
         } catch (error) {
@@ -50,91 +50,14 @@ export default forwardRef(function Edit({ detailId }: EditProps, ref): JSX.Eleme
         }
     })
 
-    const uploadChange = (event: any) => {
-        console.log(event);
-        
-        if (event.file.status === "done") {
-            if (event.file.response.code === 200) {
-                const dataInfo = event.file.response.data
-                const fileInfo = dataInfo.name.split(".")
-                console.log(fileInfo);
-                setAttachs([...attchs, {
-                    id: "",
-                    uid: attchs.length,
-                    link: dataInfo.link,
-                    name: dataInfo.originalName.split(".")[0],
-                    description: "",
-                    filePath: dataInfo.name,
-                    fileSize: dataInfo.size,
-                    fileSuffix: fileInfo[fileInfo.length - 1],
-                    userName: dataInfo.userName,
-                    fileUploadTime: dataInfo.fileUploadTime
-                }])
-            }
-        }
-    }
-
-    const deleteAttachData = (id: number) => {
-        setAttachs(attchs.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
-    }
+    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields])
 
     return <Spin spinning={loading}>
-        <DetailTitle title="相关附件" />
-        <CommonTable
-            columns={[{
-                title: "名称",
-                dataIndex: "name",
-                width: 300
-            },
-            {
-                title: "操作",
-                dataIndex: "opration",
-                render: (_: any, records: any) => <>
-                    <Button type="link">查看</Button>
-                </>
-            }]}
-            dataSource={data?.inquirerAttachList || []}
-            showHeader={false}
-        />
-        <DetailTitle title="相关附件" />
+        <Attachment dataSource={data?.projectAttachList || []} />
+        <DetailTitle title="当前价格信息" />
         <CommonTable columns={CurrentPriceInformation} dataSource={data?.materialDetails || []} />
         <DetailTitle title="补充信息" />
-        <BaseInfo form={form} col={2} columns={[{
-            title: "",
-            dataIndex: "inquirerDescription",
-            type: "textarea"
-        }]} dataSource={{}} edit />
-        <DetailTitle title="相关附件" operation={
-            [
-                <Upload
-                    key="sub"
-                    name="file"
-                    multiple={true}
-                    action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
-                    headers={{
-                        'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                        'Tenant-Id': AuthUtil.getTenantId(),
-                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                    }}
-                    showUploadList={false}
-                    onChange={uploadChange}
-                >
-                    <Button key="enclosure" type="primary" ghost>上传附件</Button>
-                </Upload>
-            ]
-        } />
-        <CommonTable columns={[
-            {
-                title: "附件名称",
-                dataIndex: "name"
-            },
-            {
-                title: "操作",
-                dataIndex: "opration",
-                render: (_: any, record: any) => (<>
-                    <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
-                    <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
-                </>)
-            }]} dataSource={attchs} />
+        <Input.TextArea name="inquirerDescription" value={inquirerDescription} onChange={(event: any) => setInquirerDescription(event.target.value)} />
+        <Attachment title="上传附件" edit ref={attchRef} />
     </Spin>
 })

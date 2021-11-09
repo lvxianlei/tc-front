@@ -18,6 +18,7 @@ interface FileProps {
 }
 
 interface AttachmentProps {
+    title?: string
     dataSource?: FileProps[]
     edit?: boolean
 }
@@ -26,7 +27,7 @@ export interface AttachmentRef {
     dataSource?: FileProps[]
     resetFields: () => void
 }
-export default forwardRef(function ({ dataSource = [], edit = false }: AttachmentProps, ref): JSX.Element {
+export default forwardRef(function ({ dataSource = [], title = "相关附件", edit = false }: AttachmentProps, ref): JSX.Element {
     const [attchs, setAttachs] = useState<FileProps[]>(dataSource)
     const [visible, setVisible] = useState<boolean>(false)
     const [picUrl, setPicUrl] = useState<string>()
@@ -80,7 +81,7 @@ export default forwardRef(function ({ dataSource = [], edit = false }: Attachmen
             <Image src={picUrl} preview={false} />
         </Modal>
         <DetailTitle
-            title="相关附件"
+            title={title}
             {...edit ? {
                 operation: [
                     <Upload

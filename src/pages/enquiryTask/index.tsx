@@ -5,7 +5,7 @@ import { Input, DatePicker, Select, Button, Modal, message } from 'antd'
 import { enquiryTaskList } from "./enquiryTask.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
-import { Page } from '../common';
+import { IntgSelect, Page } from '../common'
 import Overview from './Overview'
 import TaskAssign from './TaskAssign'
 import TaskResult from './TaskResult'
@@ -43,6 +43,10 @@ export default function EnquiryTask(): React.ReactNode {
             const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startStatusUpdateTime = formatDate[0] + ' 00:00:00';
             value.endStatusUpdateTime = formatDate[1] + ' 23:59:59';
+        }
+        if (value.inquirerId) {
+            value.deptId = value.inquirerId.first;
+            value.inquirerId = value.inquirerId.second;
         }
         setFilterValue({ ...filterValue, ...value })
         return value
@@ -137,15 +141,15 @@ export default function EnquiryTask(): React.ReactNode {
                                 setCurrentData(record)
                                 setOverviewVisible(true)
                             }}>任务详情</a>
-                            {record.inquiryStatus === 3 && <Button type="link" onClick={() => {
+                            <Button type="link" disabled={record.inquiryStatus !== 3} onClick={() => {
                                 setDetailId(record.id)
                                 setTaskVisible(true)
-                            }}>指派</Button>}
-                            {record.inquiryStatus === 2 && <Button type="link" onClick={() => {
+                            }}>指派</Button>
+                            <Button type="link" disabled={record.inquiryStatus !== 2} onClick={() => {
                                 setDetailId(record.id)
                                 setTaskResultVisible(true)
-                            }}>询价结果</Button>}
-                            {record.inquiryStatus === 2 && <Button type="link" onClick={() => handleFinishTask(record.id)}>提交任务</Button>}
+                            }}>询价结果</Button>
+                            <Button type="link" disabled={record.inquiryStatus !== 2} onClick={() => handleFinishTask(record.id)}>提交任务</Button>
                         </>
                     }
                 }]}
@@ -171,11 +175,9 @@ export default function EnquiryTask(): React.ReactNode {
                     </Select>
                 },
                 {
-                    name: 'confirmId',
+                    name: 'inquirerId',
                     label: '询价人',
-                    children: <div>
-
-                    </div>
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyQuery',

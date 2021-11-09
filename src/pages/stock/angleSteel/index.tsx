@@ -96,7 +96,7 @@ const AngleSteel = () => {
         </Modal>
 
         <DetailContent>
-            <DetailTitle title="配置基础配置" />
+            <DetailTitle title="配料基础配置" />
             <CommonTable
                 loading={loading}
                 columns={[
