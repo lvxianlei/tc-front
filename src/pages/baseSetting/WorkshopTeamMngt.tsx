@@ -107,6 +107,8 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                         getList(record.id);
                         setVisible(true);
                         setTitle('编辑');
+                        setDisabled(false);
+                        setDisabled2(false);
                     } }>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
@@ -173,22 +175,29 @@ export default function WorkshopTeamMngt(): React.ReactNode {
             RequestUtil.post<IDetail>(`/tower-production/team`, { ...value }).then(res => {
                 message.success('保存成功！');
                 setVisible(false);
-                form.resetFields();
                 setDisabled(true);
                 setDisabled2(true);
                 setUserList([]);
+                setDetail({});
+                setLine([]);
+                setProcess([]);
+                form.resetFields();
+                form.setFieldsValue({ deptProcessesId: '', name: '', productionLinesId: '', workshopDeptId: '' })
                 setRefresh(!refresh);
-                form.setFieldsValue({id: '', name: '', })
             });
         })
     }
 
     const cancel = () => {
         setVisible(false);
-        form.resetFields();
-        setUserList([]);
         setDisabled(true);
         setDisabled2(true);
+        setUserList([]);
+        setDetail({});
+        setLine([]);
+        setProcess([]);
+        form.resetFields();
+        form.setFieldsValue({ deptProcessesId: '', name: '', productionLinesId: '', workshopDeptId: '' })
     }
 
     const delRow = (index: number) => {
@@ -210,16 +219,6 @@ export default function WorkshopTeamMngt(): React.ReactNode {
         setUserList(newData?.teamUserVOList || []);
         form.setFieldsValue({ ...newData })
     }
-
-    const renderTreeNodes = (data:any) => data.map((item:any) => {
-        if (item.children) {
-            item.disabled = true;
-            return (<TreeNode key={ item.id + ',' + item.title } title={ item.title } value={ item.id + ',' + item.title } disabled={ item.disabled } className={ styles.node } >
-                { renderTreeNodes(item.children) }
-            </TreeNode>);
-        }
-        return <TreeNode { ...item } key={ item.id + ',' + item.title } title={ item.title } value={ item.id + ',' + item.title } />;
-    });
     
     const getProcess = async (id: string) => {
         const data = await RequestUtil.get<IProcess>(`/tower-production/workshopDept/detail?deptId=${ id }`);
@@ -244,7 +243,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
     const [ process, setProcess ] = useState<IDeptProcessesDetailList[]>([]);
     const [ line, setLine ] = useState<ILineList[]>([]);
     const { data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
+        const data = await RequestUtil.get<SelectDataNode[]>(`/tower-production/workshopDept/list`);
         resole(data);
     }), {})
     const departmentData: any = data || [];
@@ -253,7 +252,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
             <Form form={searchForm} layout="inline" style={{margin:'20px'}} onFinish={(value: Record<string, any>) => {
                 value = {
                     ...value,
-                    workshopDeptId: value.workshopDeptId.split(',')[0]
+                    workshopDeptId: value.workshopDeptId && value.workshopDeptId.split(',')[0]
                 }
                 setFilterValue(value)
                 setRefresh(!refresh);
@@ -262,12 +261,14 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                     <Input placeholder="请输入班组名称进行查询"/>
                 </Form.Item>
                 <Form.Item label='选择车间' name='workshopDeptId'>
-                    <TreeSelect placeholder="请选择" style={{ width: "150px" }} onChange={(e) => {
+                    <Select placeholder="请选择" style={{ width: "150px" }} onChange={(e: string) => {
                         searchForm.setFieldsValue({ deptProcessesId: ''});
                         getProcess(e.toString().split(',')[0]);
                     }}>
-                        { renderTreeNodes(wrapRole2DataNode(departmentData)) }
-                    </TreeSelect>
+                        { departmentData.map((item: any) => {
+                            return <Select.Option key={ item.deptId + ',' + item.deptName } value={ item.deptId + ',' + item.deptName }>{ item.deptName }</Select.Option>
+                        }) }
+                    </Select>
                 </Form.Item>
                 <Form.Item label='选择工序' name='deptProcessesId'>
                     <Select placeholder="请选择" style={{ width: "150px" }}>
@@ -300,13 +301,15 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                                     "required": true,
                                     "message": "请选择所属车间"
                                 }]}>
-                                <TreeSelect placeholder="请选择" style={{ width: "100%" }} onChange={(e) => {
+                                <Select placeholder="请选择" onChange={(e: string) => {
                                     setDisabled(false);
                                     form.setFieldsValue({ deptProcessesId: '', productionLinesId: '' });
                                     getProcess(e.toString().split(',')[0]);
                                 }}>
-                                    { renderTreeNodes(wrapRole2DataNode(departmentData)) }
-                                </TreeSelect>
+                                    { departmentData.map((item: any) => {
+                                        return <Select.Option key={ item.deptId + ',' + item.deptName } value={ item.deptId + ',' + item.deptName }>{ item.deptName }</Select.Option>
+                                    }) }
+                                </Select>
                             </Form.Item>
                         </Col>
                         <Col span={ 12 }>

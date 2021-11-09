@@ -136,7 +136,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                 productionLinesId: value.productionLinesId.split(',')[0],
                 productionLinesName: value.productionLinesId.split(',')[1],
                 accountEquipmentId: detail.accountEquipmentId ? detail.accountEquipmentId : selectedRows[0].id,
-                accountEquipmentName: detail.accountEquipmentName ? detail.accountEquipmentName : selectedRows[0].name,
+                accountEquipmentName: detail.accountEquipmentName ? detail.accountEquipmentName : selectedRows[0].deviceName,
             }
             RequestUtil.post<IDetail>(`/tower-production/equipment`, { ...value }).then(res => {
                 message.success('保存成功！');
@@ -226,7 +226,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                         getProcess(e.toString().split(',')[0]);
                     }}>
                         { departmentData.map((item: any) => {
-                            return <Select.Option key={ item.deptId + ',' + item.deptName } value={ item.deptId + ',' + item.deptName }>{ item.deptName }</Select.Option>
+                            return <Select.Option key={ item.deptId } value={ item.deptId }>{ item.deptName }</Select.Option>
                         }) }
                     </Select>
                 </Form.Item>
@@ -321,8 +321,8 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                             <Form.Item name="accountEquipmentName" initialValue={ detail.accountEquipmentName } label="台账设备关联">
                                 <Input maxLength={ 50 } value={ detail.accountEquipmentName } addonAfter={ <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
                                         setSelectedRows(selectedRows);
-                                        setDetail({ ...detail, accountEquipmentName: selectedRows[0].name });
-                                        form.setFieldsValue({ accountEquipmentName: selectedRows[0].name })
+                                        setDetail({ ...detail, accountEquipmentName: selectedRows[0].deviceName });
+                                        form.setFieldsValue({ accountEquipmentName: selectedRows[0].deviceName })
                                     } }/> } disabled/>
                             </Form.Item>
                         </Col>

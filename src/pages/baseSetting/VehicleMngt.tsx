@@ -124,8 +124,9 @@ export default function VehicleMngt(): React.ReactNode {
     const cancel = () => {
         setVisible(false);
         setDetail({});
-        form.resetFields();
         setSelectedRows([]);
+        form.resetFields();
+        form.setFieldsValue({ name: '', registrationNumber: '', status: '', vehicleType: '' });
     }
     
     const getList = async (id: string) => {
@@ -227,10 +228,12 @@ export default function VehicleMngt(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={ 8 }>
-                            <Form.Item name="accountEquipmentId" label="台账设备关联">
-                                <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
+                            <Form.Item name="accountEquipmentName" label="台账设备关联">
+                                <Input maxLength={ 50 } value={ detail.accountEquipmentName } addonAfter={ <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
                                     setSelectedRows(selectedRows);
-                                } }/>
+                                    setDetail({ ...detail, accountEquipmentName: selectedRows[0].deviceName });
+                                    form.setFieldsValue({ accountEquipmentName: selectedRows[0].deviceName })
+                                } }/> } disabled/>
                             </Form.Item>
                         </Col>
                         <Col span={ 8 }>
