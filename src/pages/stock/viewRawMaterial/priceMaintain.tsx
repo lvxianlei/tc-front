@@ -1,3 +1,4 @@
+//原材料看板-价格维护
 import React, { useState } from 'react'
 import { Button, Select, DatePicker, Input, Modal, Descriptions } from 'antd'
 import { Link, useHistory, } from 'react-router-dom'
@@ -57,8 +58,10 @@ export default function PriceMaintain(): React.ReactNode {
     const [materialStandard, setMaterialStandard] = useState(0);//原材料标准id
     const [materialStandardName, setMaterialStandardName] = useState("");//原材料标准名称
     const [price, setPrice] = useState(0);//原材料价格
+    const [price1, setPrice1] = useState("");
     const [priceSource, setPriceSource] = useState("");//价格来源
     const [quotationTime, setQuotationTime] = useState("");//报价时间
+    const [obj, setObj] = useState<any>({})
     var moment = require('moment');
     moment().format();
 
@@ -77,18 +80,19 @@ export default function PriceMaintain(): React.ReactNode {
         setFilterValue(value)
         return value
     }
-    const edit = (id: any, price: any, priceSource: any, quotationTime: any) => {
+    const edit = (id: any, price: any, priceSource: any, quotationTime: any, record: any) => {
         setId(id);
         setPrice(price);
         setPriceSource(priceSource);
         setQuotationTime(quotationTime);
         setIsModalVisible(true);
+        setObj(record);
     }
     const handleCancel = () => {
         setIsModalVisible(false);
     };
     const del = async (materialPriceId: number) => {
-        const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/materialPrice/${materialPriceId}`,{});
+        const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/materialPrice/${materialPriceId}`, {});
         console.log(result);
     }
     const handleCancel1 = () => {
@@ -120,7 +124,38 @@ export default function PriceMaintain(): React.ReactNode {
         setQuotationTime(a);
     }
     const value = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPrice(Number(e.target.value))
+        let val = e.target.value.replace(/(^\s*)|(\s*$)/g, "")
+        console.log(val);
+        var reg = /[^\d.]/g
+        // 只能是数字和小数点，不能是其他输入
+        val = val.replace(reg, "")
+        // // 保证第一位只能是数字，不能是点
+        val = val.replace(/^\./g, "");
+        // // 小数只能出现1位
+        val = val.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+        // // 小数点后面保留2位
+        val = val.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');
+        console.log(val);
+        const value = Number(val);
+        setPrice(value);
+    }
+    const input = (e: any) => {
+        e.target.value = e.target.value.replace(/[^\d]/g, '')
+    }
+    const value1 = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let val = e.target.value.replace(/(^\s*)|(\s*$)/g, "")
+        console.log(val);
+        var reg = /[^\d.]/g
+        // 只能是数字和小数点，不能是其他输入
+        val = val.replace(reg, "")
+        // // 保证第一位只能是数字，不能是点
+        val = val.replace(/^\./g, "");
+        // // 小数只能出现1位
+        val = val.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+        // // 小数点后面保留2位
+        val = val.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');
+        console.log(val);
+        setPrice1(val);
     }
     const lead = async () => {
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPrice/excelTemplate`);
@@ -133,6 +168,7 @@ export default function PriceMaintain(): React.ReactNode {
     const save1 = async (materialCategoryName: string, materialName: string, materialSpec: string, materialStandardName: string, priceSource: string, quotationTime: string) => {
         const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPrice`, { id, materialCategoryId, materialCategoryName, materialId, materialName, materialSpec, materialStandard, materialStandardName, price, priceSource, quotationTime }, { "Content-Type": "application/json" })
         console.log(result);
+        setIsModalVisible1(false);
     }
     const buttons: {} | null | undefined = [
         <div>
@@ -164,9 +200,8 @@ export default function PriceMaintain(): React.ReactNode {
                         fixed: 'right',
                         width: 100,
                         render: (_: undefined, record: any): React.ReactNode => {
-                            console.log(record);
                             return <div>
-                                <Button type="link" onClick={() => { edit(record.id, record.price, record.priceSource, record.quotationTime) }}>编辑</Button>
+                                <Button type="link" onClick={() => { edit(record.id, record.price, record.priceSource, record.quotationTime, record) }}>编辑</Button>
                                 <Button type="link" onClick={() => { del(record.id) }}>删除</Button>
                             </div>
                         }
@@ -212,27 +247,28 @@ export default function PriceMaintain(): React.ReactNode {
             />
             <Modal width="700px" title="编辑" visible={isModalVisible} footer={buttons} onCancel={handleCancel}>
                 <Descriptions title="价格信息" bordered column={2} labelStyle={{ textAlign: 'right' }}>
-                    <Descriptions.Item label="原材料名称">Zhou Maomao</Descriptions.Item>
-                    <Descriptions.Item label="原材料规格">Zhou Maomao</Descriptions.Item>
-                    <Descriptions.Item label="原材料标准">Zhou Maomao</Descriptions.Item>
-                    <Descriptions.Item label="原材料类型">Zhou Maomao</Descriptions.Item>
-                    <Descriptions.Item label="价格 *">￥<input placeholder='请输入' style={{ border: "none", outline: "none" }} value={price} onChange={(e) => { value(e) }} />/吨</Descriptions.Item>
+                    <Descriptions.Item label="原材料名称">{obj.materialName}</Descriptions.Item>
+                    <Descriptions.Item label="原材料规格">{obj.materialSpec}</Descriptions.Item>
+                    <Descriptions.Item label="原材料标准">{obj.materialStandardName}</Descriptions.Item>
+                    <Descriptions.Item label="原材料类型">{obj.materialCategoryName}</Descriptions.Item>
+                    <Descriptions.Item label="价格 *">￥<input type="number" maxLength={20} style={{ border: "none", outline: "none" }} value={price} onChange={(e) => { value(e) }} />/吨</Descriptions.Item>
                     <Descriptions.Item label="价格来源 *">
-                        <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange4}>
+                        <Select defaultValue={obj.priceSource} style={{ width: 120 }} bordered={false} onChange={handleChange4}>
                             <Select.Option value="南山钢铁有限公司">南山钢铁有限公司</Select.Option>
                             <Select.Option value="钢铁网">钢铁网</Select.Option>
                         </Select>
                     </Descriptions.Item>
                     <Descriptions.Item label="报价时间 *">
-                        <DatePicker onChange={onChange} />
+                        {obj.quotationTime}
                     </Descriptions.Item>
-                    <Descriptions.Item label="UserName">Zhou Maomao</Descriptions.Item>
+                    <Descriptions.Item label="">{ }</Descriptions.Item>
                 </Descriptions>
             </Modal>
             {/* 添加 */}
             <Modal width="700px" title="添加" visible={isModalVisible1} footer={buttons1} onCancel={handleCancel1}>
                 <Descriptions title="价格信息" bordered column={2} labelStyle={{ textAlign: 'right' }}>
-                    <Descriptions.Item label="原材料名称 *">
+                    {/* labelStyle */}
+                    <Descriptions.Item label="原材料名称 *" >
                         <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange}>
                             <Select.Option value="角钢">角钢</Select.Option>
                             <Select.Option value="钢板">钢板</Select.Option>
@@ -261,7 +297,7 @@ export default function PriceMaintain(): React.ReactNode {
                             <Select.Option value="大角钢">大角钢</Select.Option>
                         </Select>
                     </Descriptions.Item>
-                    <Descriptions.Item label="价格 *">￥<input placeholder='请输入' style={{ border: "none", outline: "none" }} value={price} onChange={(e) => { value(e) }} />/吨</Descriptions.Item>
+                    <Descriptions.Item label="价格 *">￥<input placeholder='请输入' onInput={(e) => input(e)} value={price1} maxLength={20} style={{ border: "none", outline: "none" }} onChange={(e) => value1(e)} />/吨</Descriptions.Item>
                     <Descriptions.Item label="价格来源 *">
                         <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange4}>
                             <Select.Option value="南山钢铁有限公司">南山钢铁有限公司</Select.Option>
@@ -269,9 +305,9 @@ export default function PriceMaintain(): React.ReactNode {
                         </Select>
                     </Descriptions.Item>
                     <Descriptions.Item label="报价时间 *">
-                        <DatePicker onChange={onChange} />
+                        <DatePicker showTime onChange={onChange} />
                     </Descriptions.Item>
-                    <Descriptions.Item label="">Zhou Maomao</Descriptions.Item>
+                    <Descriptions.Item label="">{ }</Descriptions.Item>
                 </Descriptions>
             </Modal>
         </div>

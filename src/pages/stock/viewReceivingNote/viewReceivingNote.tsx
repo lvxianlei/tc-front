@@ -8,18 +8,22 @@ import RequestUtil from '../../../utils/RequestUtil'
 const projectType = [
     {
         value: 0,
-        label: "待收票"
+        label: "全部"
     },
     {
         value: 1,
-        label: "已收票"
+        label: "待收票"
     },
     {
         value: 2,
-        label: "待付款"
+        label: "已收票"
     },
     {
         value: 3,
+        label: "待付款"
+    },
+    {
+        value: 4,
         label: "已付款"
     }
 ]
@@ -165,7 +169,7 @@ export default function ViewReceivingNote(): React.ReactNode {
                     {
                         name: 'rawMaterialType',
                         label: '状态',
-                        children: <Select style={{ width: "150px" }}>
+                        children: <Select style={{ width: "150px" }} defaultValue={"全部"}>
                             {projectType.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                         </Select>
                     },

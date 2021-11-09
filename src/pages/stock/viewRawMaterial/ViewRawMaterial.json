@@ -35,10 +35,6 @@
     ],
     "dataSource":[
         {
-            "title": "序号",
-            "dataIndex": "index"
-        },
-        {
             "title": "价格来源",
             "dataIndex": "priceSource"
         },
@@ -107,10 +103,6 @@
     ],
     "priceInformation":[
         {
-            "title": "序号",
-            "dataIndex": "index"
-        },
-        {
             "title": "价格",
             "dataIndex": "price"
         },
@@ -120,11 +112,11 @@
         },
         {
             "title": "来源",
-            "dataIndex": "source"
+            "dataIndex": "priceSource"
         },
         {
             "title": "添加人",
-            "dataIndex": "addPeople"
+            "dataIndex": "bidder"
         }
     ]
 }
