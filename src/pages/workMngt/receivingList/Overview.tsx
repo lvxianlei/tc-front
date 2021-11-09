@@ -44,7 +44,7 @@ export default function Edit() {
             <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
         </Row>
         <Row style={{ lineHeight: "32px", fontWeight: 600 }}>已收货：重量(支)合计：2209.090     价税合计(元)合计：51425.00   待收货：重量(支)合计：2209.900     价税合计(元)合计：51425.00</Row>
-        <CommonTable loading={loading} columns={[...CargoDetails, {
+        <CommonTable loading={loading} haveIndex columns={[...CargoDetails, {
             title: "操作",
             dataIndex: "opration",
             render: () => <>

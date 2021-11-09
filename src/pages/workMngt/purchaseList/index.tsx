@@ -45,6 +45,12 @@ export default function Invoicing() {
         <Page
             path="/tower-supply/purchaseTaskTower/purchaser"
             columns={[
+                {
+                    title: "序号",
+                    dataIndex: "index",
+                    width: 40,
+                    render: (_: any, _a: any, index: number) => <>{index + 1}</>
+                },
                 ...baseInfo,
                 {
                     title: "操作",

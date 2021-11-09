@@ -84,11 +84,11 @@
         },
         {
             "title": "规格",
-            "dataIndex": "structureSpec"
+            "dataIndex": "materialSpec"
         },
         {
             "title": "原材料类型",
-            "dataIndex": "rawMaterialType"
+            "dataIndex": "materialCategoryName"
         },
         {
             "title": "原材料标准",
@@ -96,7 +96,7 @@
         },
         {
             "title": "更新时间",
-            "dataIndex": "updateTime"
+            "dataIndex": "priceUpdateTime"
         },
         {
             "title": "价格来源",
