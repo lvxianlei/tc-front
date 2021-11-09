@@ -109,8 +109,8 @@ export default function VehicleMngt(): React.ReactNode {
                 value = {
                     ...value,
                     id: detail.id,
-                    accountEquipmentId: detail.accountEquipmentId ? detail.accountEquipmentId : selectedRows[0].id,
-                    accountEquipmentName: detail.accountEquipmentName ? detail.accountEquipmentName : selectedRows[0].deviceName
+                    accountEquipmentId: selectedRows[0].id ? selectedRows[0].id : detail.accountEquipmentId,
+                    accountEquipmentName: selectedRows[0].deviceName ? selectedRows[0].deviceName : detail.accountEquipmentName
                 }
             } else {
                 value = {

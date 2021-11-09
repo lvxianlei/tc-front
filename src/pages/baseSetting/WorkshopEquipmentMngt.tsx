@@ -103,6 +103,8 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                     <Button type="link" onClick={ () => {
                         getList(record.id);
                         setVisible(true);
+                        setDisabled(false);
+                        setDisabled2(false);
                         setTitle('编辑');
                     } }>编辑</Button>
                     <Popconfirm
@@ -136,8 +138,8 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                     deptProcessesName: value.deptProcessesId.split(',')[1],
                     productionLinesId: value.productionLinesId.split(',')[0],
                     productionLinesName: value.productionLinesId.split(',')[1],
-                    accountEquipmentId: detail.accountEquipmentId ? detail.accountEquipmentId : selectedRows[0].id,
-                    accountEquipmentName: detail.accountEquipmentName ? detail.accountEquipmentName : selectedRows[0].deviceName
+                    accountEquipmentId: selectedRows[0].id ? selectedRows[0].id : detail.accountEquipmentId,
+                    accountEquipmentName: selectedRows[0].deviceName ? selectedRows[0].deviceName : detail.accountEquipmentName
                 }
             } else {
                 value = {
@@ -195,8 +197,8 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
     }
 
     const getProcess = async (id: string) => {
-        const data = await RequestUtil.get<IProcess>(`/tower-production/workshopDept/detail?deptId=${ id }`);
-        setProcess(data?.deptProcessesDetailList || []);
+        const data = await RequestUtil.get<IProcess[]>(`/tower-production/workshopDept/workshopDeptDetail?id=${ id }`);
+        setProcess(data || []);
     }
 
     const getLine = async (id: string) => {
@@ -240,12 +242,12 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                         getProcess(e.toString().split(',')[0]);
                     }}>
                         { departmentData.map((item: any) => {
-                            return <Select.Option key={ item.deptId } value={ item.deptId }>{ item.deptName }</Select.Option>
+                            return <Select.Option key={ item.id } value={ item.id }>{ item.deptName }</Select.Option>
                         }) }
                     </Select>
                 </Form.Item>
                 <Form.Item label='选择工序' name='deptProcessesId'>
-                    <Select placeholder="请选择" style={{ width: "150px" }}>
+                    <Select placeholder="请选择" style={{ width: "150px" }} disabled={ !(searchForm.getFieldsValue(true).workshopDeptId) }>
                         { process.map((item: any) => {
                             return <Select.Option key={ item.id } value={ item.ide }>{ item.name }</Select.Option>
                         }) }
@@ -262,7 +264,10 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                     <Button type="primary" htmlType="submit">查询</Button>
                 </Form.Item>
                 <Form.Item>
-                    <Button htmlType="reset">重置</Button>
+                    <Button onClick={ () => {
+                        searchForm.resetFields();
+                        setProcess([]);
+                    } }>重置</Button>
                 </Form.Item>
             </Form>
             <Page
@@ -288,7 +293,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                                     getProcess(e.toString().split(',')[0]);
                                 }}>
                                     { departmentData.map((item: any) => {
-                                        return <Select.Option key={ item.deptId + ',' + item.deptName } value={ item.deptId + ',' + item.deptName }>{ item.deptName }</Select.Option>
+                                        return <Select.Option key={ item.id + ',' + item.deptName } value={ item.id + ',' + item.deptName }>{ item.deptName }</Select.Option>
                                     }) }
                                 </Select>
                             </Form.Item>

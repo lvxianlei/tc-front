@@ -205,11 +205,11 @@ export default function ProcessMngt(): React.ReactNode {
     const renderTreeNodes = (data:any) => data.map((item:any) => {
         if (item.children) {
             item.disabled = true;
-            return (<TreeNode key={ item.id + ',' + item.titl } title={ item.title } value={ item.id + ',' + item.title } disabled={ item.disabled } className={ styles.node } >
+            return (<TreeNode key={ item.id + ',' + item.title } title={ item.title } value={ item.id + ',' + item.title } disabled={ item.disabled } className={ styles.node } >
                 { renderTreeNodes(item.children) }
             </TreeNode>);
         }
-        return <TreeNode { ...item } key={ item.id + ',' + item.titl } title={ item.title } value={ item.id + ',' + item.title } />;
+        return <TreeNode { ...item } key={ item.id + ',' + item.title } title={ item.title } value={ item.id + ',' + item.title } />;
     });
 
     const [ refresh, setRefresh ] = useState(false);
