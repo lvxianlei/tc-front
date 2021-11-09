@@ -6,15 +6,12 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, Button, Modal, Select, Form, Table, Popconfirm, message, Row, Col } from 'antd';
+import { Space, Input, Button, Modal, Select, Form, Popconfirm, message, Row, Col } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
-import { useForm } from 'antd/es/form/Form';
-import styles from './ProcessMngt.module.less';
 import EquipmentSelectionModal, { IData } from '../../components/EquipmentSelectionModal';
 import { carOptions } from '../../configuration/DictionaryOptions';
-import dayjs from 'dayjs';
 
 interface IDetail {
     readonly name?: string;

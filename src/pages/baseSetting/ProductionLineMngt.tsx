@@ -4,14 +4,11 @@
  * @description 产线管理
  */
 
-import React, { useEffect, useState } from 'react';
-import { Space, Input, Button, Modal, Select, Form, Popconfirm, message, TreeSelect } from 'antd';
+import React, { useState } from 'react';
+import { Space, Input, Button, Modal, Select, Form, Popconfirm, message } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
-import { TreeNode } from 'antd/lib/tree-select';
-import styles from './ProcessMngt.module.less';
-import { wrapRole2DataNode } from './deptUtil';
 import useRequest from '@ahooksjs/use-request';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 
@@ -172,18 +169,8 @@ export default function ProductionLineMngt(): React.ReactNode {
         setProcess(data?.deptProcessesDetailList || []);
     }
 
-    const renderTreeNodes = (data:any) => data.map((item:any) => {
-        if (item.children) {
-            item.disabled = true;
-            return (<TreeNode key={ item.id + ',' + item.title } title={ item.title } value={ item.id + ',' + item.title } disabled={ item.disabled } className={ styles.node } >
-                { renderTreeNodes(item.children) }
-            </TreeNode>);
-        }
-        return <TreeNode { ...item } key={ item.id + ',' + item.title } title={ item.title } value={ item.id + ',' + item.title } />;
-    });
-
     const { data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
+        const data = await RequestUtil.get<SelectDataNode[]>(`/tower-production/workshopDept/list`);
         resole(data);
     }), {})
     const departmentData: any = data || [];
@@ -218,13 +205,15 @@ export default function ProductionLineMngt(): React.ReactNode {
                             "required": true,
                             "message": "请选择所属车间"
                         }]}>
-                        <TreeSelect placeholder="请选择" style={{ width: "100%" }} onChange={(e) => {
-                            setProcessDisabled(false);
-                            form.setFieldsValue({ deptProcessesId: '' });
-                            getProcess(e.toString().split(',')[0]);
-                        }}>
-                            { renderTreeNodes(wrapRole2DataNode(departmentData)) }
-                        </TreeSelect>
+                        <Select placeholder="请选择">
+                            { departmentData.map((item: any) => {
+                                return <Select.Option key={ item.deptId + ',' + item.deptName } value={ item.deptId + ',' + item.deptName } onChange={(e: any) => {
+                                    setProcessDisabled(false);
+                                    form.setFieldsValue({ deptProcessesId: '' });
+                                    getProcess(e.toString().split(',')[0]);
+                                }}>{ item.deptName }</Select.Option>
+                            }) }
+                        </Select>
                     </Form.Item>
                     <Form.Item name="deptProcessesId" label="所属工序" initialValue={ detailData.deptProcessesId } rules={[{
                             "required": true,

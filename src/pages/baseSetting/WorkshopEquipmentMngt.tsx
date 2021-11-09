@@ -1,4 +1,3 @@
-
 /**
  * @author zyc
  * @copyright © 2021 
@@ -13,12 +12,10 @@ import RequestUtil from '../../utils/RequestUtil';
 import { useForm } from 'antd/es/form/Form';
 import styles from './WorkshopEquipmentMngt.module.less';
 import EquipmentSelectionModal, { IData } from '../../components/EquipmentSelectionModal';
-import { wrapRole2DataNode } from './deptUtil';
 import useRequest from '@ahooksjs/use-request';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { IProcess } from './ProductionLineMngt';
 import { ILineList } from './WorkshopTeamMngt';
-import { TreeNode } from 'antd/lib/tree-select';
 import { SelectValue } from 'antd/lib/select';
 
 interface IDetail {
@@ -144,20 +141,29 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
             RequestUtil.post<IDetail>(`/tower-production/equipment`, { ...value }).then(res => {
                 message.success('保存成功！');
                 setVisible(false);
-                form.resetFields();
                 setDisabled(true);
                 setDisabled2(true);
+                setDetail({});
+                setLine([]);
+                setProcess([]);
+                setSelectedRows([]);
+                form.resetFields();
+                form.setFieldsValue({ deptProcessesId: '', name: '', productionLinesId: '', status: '', workshopDeptId: '',accountEquipmentName: '' });
                 setRefresh(!refresh);
-                form.setFieldsValue({id: '', name: '', })
             });
         })
     }
 
     const cancel = () => {
         setVisible(false);
-        form.resetFields();
         setDisabled(true);
         setDisabled2(true);
+        setDetail({});
+        setLine([]);
+        setProcess([]);
+        setSelectedRows([]);
+        form.resetFields();
+        form.setFieldsValue({ deptProcessesId: '', name: '', productionLinesId: '', status: '', workshopDeptId: '',accountEquipmentName: '' });
     }
 
     const getList = async (id: string) => {
@@ -184,16 +190,6 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
         setLine(data || []);
     }
 
-    const renderTreeNodes = (data:any) => data.map((item:any) => {
-        if (item.children) {
-            item.disabled = true;
-            return (<TreeNode key={ item.id + ',' + item.title } title={ item.title } value={ item.id + ',' + item.title } disabled={ item.disabled } className={ styles.node } >
-                { renderTreeNodes(item.children) }
-            </TreeNode>);
-        }
-        return <TreeNode { ...item } key={ item.id + ',' + item.title } title={ item.title } value={ item.id + ',' + item.title } />;
-    });
-
     const [ refresh, setRefresh ] = useState(false);
     const [ visible, setVisible ] = useState(false);
     const [ form ] = Form.useForm();
@@ -207,7 +203,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
     const [ selectedRows, setSelectedRows ] = useState<IData[] | any>({});
     const [ line, setLine ] = useState<ILineList[]>([]);
     const { data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
+        const data = await RequestUtil.get<SelectDataNode[]>(`/tower-production/workshopDept/list`);
         resole(data);
     }), {})
     const departmentData: any = data || [];
@@ -216,7 +212,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
             <Form form={searchForm} layout="inline" style={{margin:'20px'}} onFinish={(value: Record<string, any>) => {
                 value = {
                     ...value,
-                    workshopDeptId: value.workshopDeptId.split(',')[0]
+                    workshopDeptId: value.workshopDeptId && value.workshopDeptId.split(',')[0]
                 }
                 setFilterValue(value)
                 setRefresh(!refresh);
@@ -225,12 +221,14 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                     <Input placeholder="请输入派工设备进行查询"/>
                 </Form.Item>
                 <Form.Item label='选择车间' name='workshopDeptId'>
-                    <TreeSelect placeholder="请选择" style={{ width: "150px" }} onChange={(e) => {
+                    <Select placeholder="请选择" style={{ width: "150px" }} onChange={(e: string) => {
                         searchForm.setFieldsValue({ deptProcessesId: '' });
                         getProcess(e.toString().split(',')[0]);
                     }}>
-                        { renderTreeNodes(wrapRole2DataNode(departmentData)) }
-                    </TreeSelect>
+                        { departmentData.map((item: any) => {
+                            return <Select.Option key={ item.deptId + ',' + item.deptName } value={ item.deptId + ',' + item.deptName }>{ item.deptName }</Select.Option>
+                        }) }
+                    </Select>
                 </Form.Item>
                 <Form.Item label='选择工序' name='deptProcessesId'>
                     <Select placeholder="请选择" style={{ width: "150px" }}>
@@ -257,7 +255,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                 path="/tower-production/equipment"
                 columns={ columns }
                 headTabs={ [] }
-                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle("新增"); } } ghost>新增</Button> }
+                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle("新增");} } ghost>新增</Button> }
                 refresh={ refresh }
                 searchFormItems={ [] }
                 requestData={{ ...filterValue }}
@@ -270,13 +268,15 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                                     "required": true,
                                     "message": "请选择所属车间"
                                 }]}>
-                                <TreeSelect placeholder="请选择" style={{ width: "100%" }} onChange={(e) => {
+                                <Select placeholder="请选择" onChange={(e: string) => {
                                     setDisabled(false);
                                     form.setFieldsValue({ deptProcessesId: '', productionLinesId: '' });
                                     getProcess(e.toString().split(',')[0]);
                                 }}>
-                                    { renderTreeNodes(wrapRole2DataNode(departmentData)) }
-                                </TreeSelect>
+                                    { departmentData.map((item: any) => {
+                                        return <Select.Option key={ item.deptId + ',' + item.deptName } value={ item.deptId + ',' + item.deptName }>{ item.deptName }</Select.Option>
+                                    }) }
+                                </Select>
                             </Form.Item>
                         </Col>
                         <Col span={ 8 }>
@@ -318,10 +318,12 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={ 8 }>
-                            <Form.Item name="accountEquipmentId" label="台账设备关联">
-                                <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
+                            <Form.Item name="accountEquipmentName" initialValue={ detail.accountEquipmentName } label="台账设备关联">
+                                <Input maxLength={ 50 } value={ detail.accountEquipmentName } addonAfter={ <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
                                         setSelectedRows(selectedRows);
-                                    } }/>
+                                        setDetail({ ...detail, accountEquipmentName: selectedRows[0].name });
+                                        form.setFieldsValue({ accountEquipmentName: selectedRows[0].name })
+                                    } }/> } disabled/>
                             </Form.Item>
                         </Col>
                         <Col span={ 8 }>
