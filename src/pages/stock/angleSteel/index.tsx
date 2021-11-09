@@ -94,68 +94,66 @@ const AngleSteel = () => {
         }}>
             <BaseInfo form={baseInfoForm} columns={baseInfo} dataSource={{}} edit />
         </Modal>
-
-        <DetailContent>
-            <DetailTitle title="配料基础配置" />
-            <CommonTable
-                loading={loading}
-                columns={[
-                    {
-                        key: 'index',
-                        title: '序号',
-                        dataIndex: 'index',
-                        width: 50,
-                        render: (_, _b, index) => {
-                            return <span>{index + 1}</span>
-                        }
-                    },
-                    ...baseInfo,
-                    {
-                        title: "操作",
-                        dataIndex: "opration",
-                        render: (_: any, records: any) => <Button type="link" onClick={() => {
-                            setIngredientsConfigVisible(true)
-                            setMaterialId(records.id)
-                            baseInfoForm.setFieldsValue(records)
-                        }}>编辑</Button>
+        <DetailTitle title="配料基础配置" />
+        <CommonTable
+            loading={loading}
+            columns={[
+                {
+                    key: 'index',
+                    title: '序号',
+                    dataIndex: 'index',
+                    width: 50,
+                    render: (_, _b, index) => {
+                        return <span>{index + 1}</span>
                     }
-                ]}
-                dataSource={data?.ingredientsConfigVos || []}
-            />
-            <DetailTitle title="材质配料设定" operation={[
-                <Button key="add" type="primary" ghost style={{ marginRight: 16 }} onClick={() => {
-                    setVisible(true)
-                    setType("new")
-                    setMaterialData({})
-                }}>添加</Button>,
-                <Button key="goback" type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
-            ]} />
-            <CommonTable
-                loading={loading}
-                columns={[...material.map((item: any) => {
-                    if (item.dataIndex === "materialTexture") {
-                        return ({
-                            ...item,
-                            type: "select",
-                            enum: materialTextureEnum
-                        })
-                    }
-                    return item
-                }),
+                },
+                ...baseInfo,
                 {
                     title: "操作",
                     dataIndex: "opration",
-                    render: (_: any, records: any) => <>
-                        <Button type="link" onClick={() => {
-                            setVisible(true)
-                            setType("edit")
-                            setMaterialData(records)
-                        }}>编辑</Button>
-                        <Button type="link" loading={deleteLoading} onClick={() => deleteItem(records.id)}>删除</Button>
-                    </>
-                }]}
-                dataSource={data?.ingredientsMaterialConfigVos || []} />
-        </DetailContent>
+                    render: (_: any, records: any) => <Button type="link" onClick={() => {
+                        setIngredientsConfigVisible(true)
+                        setMaterialId(records.id)
+                        baseInfoForm.setFieldsValue(records)
+                    }}>编辑</Button>
+                }
+            ]}
+            dataSource={data?.ingredientsConfigVos || []}
+        />
+        <DetailTitle title="材质配料设定" operation={[
+            <Button key="add" type="primary" ghost style={{ marginRight: 16 }} onClick={() => {
+                setVisible(true)
+                setType("new")
+                setMaterialData({})
+            }}>添加</Button>,
+            <Button key="goback" type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
+        ]} />
+        <CommonTable
+            loading={loading}
+            haveIndex
+            columns={[...material.map((item: any) => {
+                if (item.dataIndex === "materialTexture") {
+                    return ({
+                        ...item,
+                        type: "select",
+                        enum: materialTextureEnum
+                    })
+                }
+                return item
+            }),
+            {
+                title: "操作",
+                dataIndex: "opration",
+                render: (_: any, records: any) => <>
+                    <Button type="link" onClick={() => {
+                        setVisible(true)
+                        setType("edit")
+                        setMaterialData(records)
+                    }}>编辑</Button>
+                    <Button type="link" loading={deleteLoading} onClick={() => deleteItem(records.id)}>删除</Button>
+                </>
+            }]}
+            dataSource={data?.ingredientsMaterialConfigVos || []} />
     </>
 }
 

@@ -3,7 +3,7 @@
         {
             "title": "采购计划编号",
             "dataIndex": "purchasePlanCode",
-            "width": 200,
+            "width": 100,
             "type": "string"
         },
         {
@@ -60,6 +60,31 @@
             "title": "采购人",
             "dataIndex": "purchaserName",
             "type": "string"
+        },
+        {
+            "title": "计划状态",
+            "dataIndex": "purchasePlanStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "待完成",
+                    "value": 1
+                },
+                {
+                    "label": "已完成",
+                    "value": 2
+                },
+                {
+                    "label": "已取消",
+                    "value": 3
+                }
+            ]
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "updateTime",
+            "type": "date",
+            "format": "YYYY-MM-DD HH:mm"
         }
     ],
     "AssociatedTowerType": [
