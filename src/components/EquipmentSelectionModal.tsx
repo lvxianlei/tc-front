@@ -19,9 +19,13 @@ export interface IEquipmentSelectionModalProps extends IAbstractSelectableModalP
     readonly projectId?: string;
 }
 export interface IEquipmentSelectionModalState extends IAbstractSelectableModalState {
-    readonly tableDataSource: [];
+    readonly tableDataSource: IData[];
 }
 
+export interface IData {
+    readonly id?: string;
+    readonly name?: string;
+}
 /**
  * Equipment Selection Modal
  */
@@ -56,22 +60,22 @@ export default class EquipmentSelectionModal extends AbstractFilteredSelectionMo
     }
 
     public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/contract', {
-            ...filterValues,
-            projectId: this.props.projectId,
-            current: pagination.current || this.state.tablePagination?.current,
-            size: pagination.pageSize || this.state.tablePagination?.pageSize,
-            status: this.props.status
-        });
+        // const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/contract', {
+        //     ...filterValues,
+        //     projectId: this.props.projectId,
+        //     current: pagination.current || this.state.tablePagination?.current,
+        //     size: pagination.pageSize || this.state.tablePagination?.pageSize,
+        //     status: this.props.status
+        // });
         this.setState({
             ...filterValues,
-            tableDataSource: resData.records,
-            tablePagination: {
-                ...this.state.tablePagination,
-                current: resData.current,
-                pageSize: resData.size,
-                total: resData.total
-            }
+            tableDataSource: [{ name: '塔型一', id: '1541465465165' }],
+            // tablePagination: {
+            //     ...this.state.tablePagination,
+            //     current: resData.current,
+            //     pageSize: resData.size,
+            //     total: resData.total
+            // }
         });
     }
 
@@ -114,9 +118,9 @@ export default class EquipmentSelectionModal extends AbstractFilteredSelectionMo
             dataIndex: 'contractNumber',
             width: '15%',
         }, {
-            key: 'contractName',
+            key: 'name',
             title: '设备名称',
-            dataIndex: 'contractName',
+            dataIndex: 'name',
             width: '15%',
         }, {
             key: 'saleType',

@@ -12,7 +12,9 @@ import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
 import { useForm } from 'antd/es/form/Form';
 import styles from './ProcessMngt.module.less';
-import EquipmentSelectionModal from '../../components/EquipmentSelectionModal';
+import EquipmentSelectionModal, { IData } from '../../components/EquipmentSelectionModal';
+import { carOptions } from '../../configuration/DictionaryOptions';
+import dayjs from 'dayjs';
 
 interface IDetail {
     readonly name?: string;
@@ -39,10 +41,10 @@ export default function VehicleMngt(): React.ReactNode {
             width: 120
         },
         {
-            key: 'vehicleType',
+            key: 'vehicleName',
             title: '车辆类型',
             width: 200,
-            dataIndex: 'vehicleType'
+            dataIndex: 'vehicleName'
         },
         {
             key: 'status',
@@ -105,18 +107,34 @@ export default function VehicleMngt(): React.ReactNode {
 
     const save = () => {
         form.validateFields().then(res => {
-            console.log(form.getFieldsValue(true));
+            let value = form.getFieldsValue(true);
+            value = {
+                ...value,
+                id: detail.id,
+                accountEquipmentId: detail.accountEquipmentId ? detail.accountEquipmentId : selectedRows[0].id,
+                accountEquipmentName: detail.accountEquipmentName ? detail.accountEquipmentName : selectedRows[0].id
+            }
+            RequestUtil.post<IDetail>(`/tower-production/vehicle`, { ...value }).then(res => {
+                message.success('保存成功！')
+                setVisible(false);
+                setDetail({});
+                form.resetFields();
+                setRefresh(!refresh);
+            });
         })
     }
 
     const cancel = () => {
         setVisible(false);
+        setDetail({});
         form.resetFields();
+        setSelectedRows([]);
     }
     
     const getList = async (id: string) => {
         const data = await RequestUtil.get<IDetail>(`/tower-production/vehicle/info?vehicleId=${ id }`);
         setDetail(data);
+        form.setFieldsValue({...data});
     }
 
     const [ refresh, setRefresh ] = useState(false);
@@ -124,13 +142,14 @@ export default function VehicleMngt(): React.ReactNode {
     const [ form ] = Form.useForm();
     const [ detail, setDetail ] = useState<IDetail>({});
     const [ title, setTitle ] = useState('新增');
+    const [ selectedRows, setSelectedRows ] = useState<IData[] | any>({});
     return (
         <>
             <Page
                 path="/tower-production/vehicle"
                 columns={ columns }
                 headTabs={ [] }
-                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setDetail({});} } ghost>新增</Button> }
+                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle('新增');} } ghost>新增</Button> }
                 refresh={ refresh }
                 searchFormItems={ [
                     {
@@ -141,17 +160,18 @@ export default function VehicleMngt(): React.ReactNode {
                     {
                         name: 'vehicleType',
                         label: '车辆类型',
-                        children: <Select placeholder="请选择">
-                            <Select.Option value={ 1 } key="1">全部</Select.Option>
-                            <Select.Option value={ 2 } key="2">正常</Select.Option>
-                            <Select.Option value={ 3 } key="3">停用</Select.Option>
-                            <Select.Option value={ 4 } key="4">维修中</Select.Option>
+                        children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: '150px' }}>
+                            { carOptions && carOptions.map(({ id, name }, index) => {
+                                return <Select.Option key={index} value={id}>
+                                    {name}
+                                </Select.Option>
+                            }) }
                         </Select>
                     },
                     {
                         name: 'status',
                         label: '状态',
-                        children: <Select placeholder="请选择">
+                        children: <Select placeholder="请选择" style={{ width: '150px' }}>
                             <Select.Option value={ 1 } key="1">正常</Select.Option>
                             <Select.Option value={ 2 } key="2">停用</Select.Option>
                             <Select.Option value={ 3 } key="3">维修中</Select.Option>
@@ -166,7 +186,7 @@ export default function VehicleMngt(): React.ReactNode {
                 <Form form={ form } labelCol={{ span: 8 }}>
                     <Row>
                         <Col span={ 8 }>
-                            <Form.Item name="registrationNumber" initialValue={ detail.registrationNumber } label="车辆设备号/车牌号" rules={[{
+                            <Form.Item name="registrationNumber" initialValue={ detail?.registrationNumber } label="车辆设备号/车牌号" rules={[{
                                     "required": true,
                                     "message": "请输入车辆设备号/车牌号"
                                 }]}>
@@ -174,7 +194,7 @@ export default function VehicleMngt(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={ 8 }>
-                            <Form.Item name="name" label="车辆名称" initialValue={ detail.name } rules={[{
+                            <Form.Item name="name" label="车辆名称" initialValue={ detail?.name } rules={[{
                                     "required": true,
                                     "message": "请输入车辆名称"
                                 }]}>
@@ -182,20 +202,23 @@ export default function VehicleMngt(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={ 8 }>
-                            <Form.Item name="vehicleType" label="车辆种类" initialValue={ detail.vehicleType } rules={[{
+                            <Form.Item name="vehicleType" label="车辆种类" initialValue={ detail?.vehicleType } rules={[{
                                     "required": true,
                                     "message": "请选择所属产线"
                                 }]}>
-                                <Select placeholder="请选择">
-                                    <Select.Option value={ 1 } key="4">全部</Select.Option>
-                                    <Select.Option value={ 2 } key="">全部222</Select.Option>
+                                <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode}>
+                                { carOptions && carOptions.map(({ id, name }, index) => {
+                                        return <Select.Option key={index} value={id}>
+                                            {name}
+                                        </Select.Option>
+                                    }) }
                                 </Select>
                             </Form.Item>
                         </Col>
                     </Row>
                     <Row>
                         <Col span={ 8 }>
-                            <Form.Item name="status" label="车辆状态" initialValue={ detail.status } rules={[{
+                            <Form.Item name="status" label="车辆状态" initialValue={ detail?.status } rules={[{
                                     "required": true,
                                     "message": "请选择车辆状态"
                                 }]}>
@@ -209,7 +232,7 @@ export default function VehicleMngt(): React.ReactNode {
                         <Col span={ 8 }>
                             <Form.Item name="accountEquipmentId" label="台账设备关联">
                                 <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
-                                    console.log(selectedRows)
+                                    setSelectedRows(selectedRows);
                                 } }/>
                             </Form.Item>
                         </Col>

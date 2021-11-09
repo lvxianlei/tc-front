@@ -329,7 +329,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                                     "required": true,
                                     "message": "请输入仓库类型"
                                 }]}>
-                                 <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                                <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
                                     { warehouseOptions && warehouseOptions.map(({ id, name }, index) => {
                                         return <Select.Option key={index} value={id}>
                                             {name}
