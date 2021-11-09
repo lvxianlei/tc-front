@@ -122,7 +122,7 @@ export default function ProcessMngt(): React.ReactNode {
                 <Space direction="horizontal" size="small">
                     <Popconfirm
                         title="确认删除?"
-                        onConfirm={ () => delRow(index) }
+                        onConfirm={ () => delRow(index, record) }
                         okText="确认"
                         cancelText="取消"
                     >
@@ -171,11 +171,22 @@ export default function ProcessMngt(): React.ReactNode {
         form.setFieldsValue({ deptProcessesDetailList: [...processListValues, newData] })
     }
 
-    const delRow = (index: number) => {
+    const delRow = async (index: number, record: Record<string, any>) => {
         let processListValues = form.getFieldsValue(true).deptProcessesDetailList || []; 
-        processListValues.splice(index, 1);
-        setProcessList([...processListValues]);
-        form.setFieldsValue({ deptProcessesDetailList: [...processListValues] })
+        if(record.id) {
+            const data = await RequestUtil.get<boolean>(`/tower-production/workshopDept/checkProductionLines?processesId=${ record.id }`)
+            if(data) {
+                processListValues.splice(index, 1);
+                setProcessList([...processListValues]);
+                form.setFieldsValue({ deptProcessesDetailList: [...processListValues] })
+            } else {
+                message.warning('当前工序已被引用，不可移除')
+            }
+        } else {
+            processListValues.splice(index, 1);
+            setProcessList([...processListValues]);
+            form.setFieldsValue({ deptProcessesDetailList: [...processListValues] })
+        }
     }
 
     const getList = async (id: string) => {
