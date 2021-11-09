@@ -27,6 +27,10 @@ export default function rawMaterial() {
     const [inquiryId, setInquiryId] = useState("");
     const [obj, setObj] = useState<any>({});
     const [rejectionDescription, setRejectionDescription] = useState("");
+    // const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
+    //     const data = await RequestUtil.get(`/materialPurchaseTask?current=1&size=20&type=`);
+    //     resole(data);
+    // }), {})
     const history = useHistory();
 
     const handleCancel = () => {
@@ -67,8 +71,13 @@ export default function rawMaterial() {
     const buttons: {} | null | undefined = [
         <div>
             <Button onClick={() => setIsModalVisible(false)}>关闭</Button>&emsp; &emsp; &emsp; &emsp; &emsp;
-            <Button onClick={() => setIsModalVisible3(true)}>拒绝</Button>
-            <Button onClick={() => { receive(id) }}>接受</Button>
+            {/* {
+                data?.records.taskStatus === 1 ? <div>
+                    <Button onClick={() => setIsModalVisible3(true)}>拒绝</Button>
+                    <Button onClick={() => { receive(id) }}>接受</Button>
+                </div> : null
+            } */}
+
         </div>
     ]
     const buttons1: {} | null | undefined = [

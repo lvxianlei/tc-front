@@ -91,6 +91,7 @@
     "mockjs": "^1.1.0",
     "modify-source-webpack-plugin": "^1.1.0-beta.3",
     "react-app-rewired": "^2.1.8",
+    "react-cropper": "^2.1.8",
     "yapi-to-typescript": "^3.26.0"
   }
 }

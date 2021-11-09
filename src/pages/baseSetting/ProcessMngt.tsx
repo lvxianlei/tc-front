@@ -122,7 +122,7 @@ export default function ProcessMngt(): React.ReactNode {
                 <Space direction="horizontal" size="small">
                     <Popconfirm
                         title="确认删除?"
-                        onConfirm={ () => delRow(index) }
+                        onConfirm={ () => delRow(index, record) }
                         okText="确认"
                         cancelText="取消"
                     >
@@ -146,34 +146,47 @@ export default function ProcessMngt(): React.ReactNode {
             RequestUtil.post<IDetailData>(`/tower-production/workshopDept/submit`, { ...value }).then(res => {
                 message.success('保存成功！')
                 setVisible(false);
-                form.resetFields();
                 setProcessList([]);
+                setDetailData({});
                 setRefresh(!refresh);
+                form.setFieldsValue({ deptId: '', deptProcessesDetailList: [] });
             });
         })
     }
 
     const cancel = () => {
         setVisible(false);
-        form.resetFields();
+        form.setFieldsValue({ deptId: '', deptProcessesDetailList: [] });
         setProcessList([]);
+        setDetailData({});
     }
 
     const addRow = () => {
-        let processListValues = form.getFieldsValue(true).data || [];
+        let processListValues = form.getFieldsValue(true).deptProcessesDetailList || [];
         let newData = {
             name: '',
-            sort: ''
+            sort: undefined
         }
         setProcessList([...processListValues, newData]);
         form.setFieldsValue({ deptProcessesDetailList: [...processListValues, newData] })
     }
 
-    const delRow = (index: number) => {
-        let processListValues = form.getFieldsValue(true).data || []; 
-        processListValues.splice(index, 1);
-        setProcessList([...processListValues]);
-        form.setFieldsValue({ data: [...processListValues] })
+    const delRow = async (index: number, record: Record<string, any>) => {
+        let processListValues = form.getFieldsValue(true).deptProcessesDetailList || []; 
+        if(record.id) {
+            const data = await RequestUtil.get<boolean>(`/tower-production/workshopDept/checkProductionLines?processesId=${ record.id }`)
+            if(data) {
+                processListValues.splice(index, 1);
+                setProcessList([...processListValues]);
+                form.setFieldsValue({ deptProcessesDetailList: [...processListValues] })
+            } else {
+                message.warning('当前工序已被引用，不可移除')
+            }
+        } else {
+            processListValues.splice(index, 1);
+            setProcessList([...processListValues]);
+            form.setFieldsValue({ deptProcessesDetailList: [...processListValues] })
+        }
     }
 
     const getList = async (id: string) => {
@@ -234,11 +247,11 @@ export default function ProcessMngt(): React.ReactNode {
                             "required": true,
                             "message": "请选择所属车间"
                         }]}>
-                            <TreeSelect placeholder="请选择" style={{ width: "150px" }} onChange={ (e) => {
-                                getList(e.toString().split(',')[0]);
-                            } }>
-                                { renderTreeNodes(wrapRole2DataNode(departmentData)) }
-                            </TreeSelect>
+                        <TreeSelect placeholder="请选择" style={{ width: "150px" }} onChange={ (e) => {
+                            getList(e.toString().split(',')[0]);
+                        } }>
+                            { renderTreeNodes(wrapRole2DataNode(departmentData)) }
+                        </TreeSelect>
                     </Form.Item>
                     <Button type="primary" onClick={ addRow }>新增一行</Button>
                     <Table rowKey="id" dataSource={[...processList]} pagination={false} columns={tableColumns} className={styles.addModal}/>

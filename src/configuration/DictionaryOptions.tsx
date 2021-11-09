@@ -16,6 +16,7 @@ export enum DictionaryEnums {
     SALE_TYPE = 123,
     BOLT_TYPE = 105,
     WAREHOUSE_TYPE = 127,
+    CAR_TYPE = 146,
 }
 
 let productType: IDict[] | undefined = [];
@@ -30,6 +31,7 @@ let winBidType: IDict[] | undefined = [];
 let saleType: IDict[] | undefined = [];
 let boltType: IDict[] | undefined = [];
 let warehouseType: IDict[] | undefined = [];
+let carType: IDict[] | undefined = [];
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
     voltageGrade = dictionary[DictionaryEnums.VOLTAGE_GRADE];
@@ -43,6 +45,7 @@ if (dictionary) {
     saleType = dictionary[DictionaryEnums.SALE_TYPE];
     boltType = dictionary[DictionaryEnums.BOLT_TYPE];
     warehouseType = dictionary[DictionaryEnums.WAREHOUSE_TYPE];
+    carType = dictionary[DictionaryEnums.CAR_TYPE];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -57,3 +60,4 @@ export const winBidTypeOptions = winBidType; //中标类型
 export const saleTypeOptions = saleType; //销售类型
 export const boltTypeOptions = boltType; //螺栓类型
 export const warehouseOptions = warehouseType; //仓库类型
+export const carOptions = carType; //车辆类型

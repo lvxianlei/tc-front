@@ -196,9 +196,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
     const save = () => {
         form.validateFields().then(res => {
             let value = form.getFieldsValue(true);
-            if(!selectedRows[0]) {
-                message.warning('请选择负责人')
-            } else {
+            if(selectedRows[0] || detailData.leader) {
                 value = {
                     ...value,
                     id: detailData.id,
@@ -224,16 +222,19 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                         setRefresh(!refresh);
                     });
                 }  
+            } else {
+                message.warning('请选择负责人');
             }
         })
     }
 
     const clear = () => {
-        form.setFieldsValue({ code: '', name: '', warehouseType: '', leaderName: '', id: '', leader: '', warehouseKeeperVOList: [], warehousePositionVOList: []});
         setUserList([]);
         setSelectedRows([]);
         setDetailData({});
         setReservoirList([]);
+        form.resetFields();
+        form.setFieldsValue({ code: '', name: '', warehouseType: '', leaderName: '' });
     }
 
     const cancel = () => {
@@ -289,7 +290,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                 path="/tower-production/warehouse"
                 columns={ columns }
                 headTabs={ [] }
-                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle('新增');console.log(detailData,form.getFieldsValue(true))} } ghost>新增</Button> }
+                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle('新增');} } ghost>新增</Button> }
                 refresh={ refresh }
                 searchFormItems={ [
                     {
@@ -329,7 +330,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                                     "required": true,
                                     "message": "请输入仓库类型"
                                 }]}>
-                                 <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                                <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
                                     { warehouseOptions && warehouseOptions.map(({ id, name }, index) => {
                                         return <Select.Option key={index} value={id}>
                                             {name}
@@ -340,18 +341,16 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                         </Col>
                         <Col span={ 12 }>
                             <Form.Item name="leaderName" label="负责人" initialValue={ detailData?.leaderName }>
-                                <WorkshopUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
+                                <Input maxLength={ 50 } value={ detailData.leaderName } addonAfter={ <WorkshopUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
                                     setSelectedRows(selectedRows);
-                                    form.setFieldsValue({leaderName: selectedRows.name});
-                                    setDetailData({leaderName: selectedRows.name})
-                                } } buttonType="link" buttonTitle="+选择负责人" />
+                                    form.setFieldsValue({leaderName: selectedRows[0].name});
+                                } } buttonType="link" buttonTitle="+选择负责人" /> } disabled/>
                             </Form.Item>
                         </Col>
                     </Row>
                     <DetailTitle title="保管员" operation={[<WorkshopUserSelectionComponent rowSelectionType="checkbox" onSelect={ (selectedRows: IUser[] | any) => {
                         selectedRows = selectedRows.map((item: IUser) => {
                             return {
-                                ...item,
                                 keeperUserId: item.id,
                                 keeperName: item.name
                             }
