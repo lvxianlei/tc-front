@@ -4,12 +4,11 @@
  * @description 产线管理
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Space, Input, Button, Modal, Select, Form, Popconfirm, message, TreeSelect } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
-import { useForm } from 'antd/es/form/Form';
 import { TreeNode } from 'antd/lib/tree-select';
 import styles from './ProcessMngt.module.less';
 import { wrapRole2DataNode } from './deptUtil';
@@ -41,6 +40,14 @@ export interface IDeptProcessesDetailList {
     readonly sort?: string;
 }
 export default function ProductionLineMngt(): React.ReactNode {
+    const [ refresh, setRefresh ] = useState(false);
+    const [ visible, setVisible ] = useState(false);
+    const [ title, setTitle ] = useState('新增');
+    const [ form ] = Form.useForm();
+    const [ processDisabled, setProcessDisabled ] = useState(true);
+    const [ detailData, setDetailData ] = useState<IDetailData>({});
+    const [ process, setProcess ] = useState<IDeptProcessesDetailList[]>([]);
+
     const columns = [
         {
             key: 'index',
@@ -132,17 +139,21 @@ export default function ProductionLineMngt(): React.ReactNode {
             RequestUtil.post<IDetailData>(`/tower-production/productionLines/submit`, { ...value }).then(res => {
                 message.success('保存成功！');
                 setVisible(false);
-                form.resetFields();
-                setProcessDisabled(true);
                 setRefresh(!refresh);
+                setProcessDisabled(true);
+                setProcess([]);
+                setDetailData({});
+                form.setFieldsValue({ name: '', deptProcessesId: '', workshopDeptId: '', description: '', createTime: '', creatUser: '', deptProcessesName: '', id: '', workshopDeptName: '' });
             });
         })
     }
 
     const cancel = () => {
-        setVisible(false);
         setProcessDisabled(true);
-        form.resetFields();
+        setProcess([]);
+        setDetailData({});
+        form.setFieldsValue({ name: '', deptProcessesId: '', workshopDeptId: '', description: '', createTime: '', creatUser: '', deptProcessesName: '', id: '', workshopDeptName: '' });
+        setVisible(false);
     }
 
     const getList = async (id: string) => {
@@ -171,13 +182,6 @@ export default function ProductionLineMngt(): React.ReactNode {
         return <TreeNode { ...item } key={ item.id + ',' + item.title } title={ item.title } value={ item.id + ',' + item.title } />;
     });
 
-    const [ refresh, setRefresh ] = useState(false);
-    const [ visible, setVisible ] = useState(false);
-    const [ title, setTitle ] = useState('新增');
-    const [ form ] = Form.useForm();
-    const [ processDisabled, setProcessDisabled ] = useState(true);
-    const [ detailData, setDetailData ] = useState<IDetailData>({});
-    const [ process, setProcess ] = useState<IDeptProcessesDetailList[]>([]);
     const { data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
         resole(data);
@@ -189,7 +193,7 @@ export default function ProductionLineMngt(): React.ReactNode {
                 path="/tower-production/productionLines/page"
                 columns={ columns }
                 headTabs={ [] }
-                extraOperation={ <Button type="primary" onClick={ () => {setDetailData({}); form.resetFields(); setVisible(true); setTitle("新增");} } ghost>新增产线</Button> }
+                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle("新增");} } ghost>新增产线</Button> }
                 refresh={ refresh }
                 searchFormItems={ [
                     {
@@ -204,13 +208,13 @@ export default function ProductionLineMngt(): React.ReactNode {
             />
             <Modal visible={ visible } width="40%" title={ title + "产线" } okText="保存" cancelText="取消" onOk={ save } onCancel={ cancel }>
                 <Form form={ form } labelCol={{ span: 4 }}>
-                    <Form.Item name="name" label="产线名称" initialValue={ detailData?.name } rules={[{
+                    <Form.Item name="name" label="产线名称" initialValue={ detailData.name } rules={[{
                             "required": true,
                             "message": "请输入产线名称"
                         }]}>
                         <Input placeholder="请输入" maxLength={ 50 } />
                     </Form.Item>
-                    <Form.Item name="workshopDeptId" label="所属车间" initialValue={ detailData?.workshopDeptId } rules={[{
+                    <Form.Item name="workshopDeptId" label="所属车间" initialValue={ detailData.workshopDeptId } rules={[{
                             "required": true,
                             "message": "请选择所属车间"
                         }]}>
@@ -222,7 +226,7 @@ export default function ProductionLineMngt(): React.ReactNode {
                             { renderTreeNodes(wrapRole2DataNode(departmentData)) }
                         </TreeSelect>
                     </Form.Item>
-                    <Form.Item name="deptProcessesId" label="所属工序" initialValue={ detailData?.deptProcessesId } rules={[{
+                    <Form.Item name="deptProcessesId" label="所属工序" initialValue={ detailData.deptProcessesId } rules={[{
                             "required": true,
                             "message": "请选择所属工序"
                         }]}>
@@ -232,7 +236,7 @@ export default function ProductionLineMngt(): React.ReactNode {
                             }) }
                         </Select>
                     </Form.Item>
-                    <Form.Item name="description" label="备注" initialValue={ detailData?.description }>
+                    <Form.Item name="description" label="备注" initialValue={ detailData.description }>
                         <Input placeholder="请输入" maxLength={ 300 } />
                     </Form.Item>
                 </Form>

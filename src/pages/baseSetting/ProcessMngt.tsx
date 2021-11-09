@@ -146,34 +146,36 @@ export default function ProcessMngt(): React.ReactNode {
             RequestUtil.post<IDetailData>(`/tower-production/workshopDept/submit`, { ...value }).then(res => {
                 message.success('保存成功！')
                 setVisible(false);
-                form.resetFields();
                 setProcessList([]);
+                setDetailData({});
                 setRefresh(!refresh);
+                form.setFieldsValue({ deptId: '', deptProcessesDetailList: [] });
             });
         })
     }
 
     const cancel = () => {
         setVisible(false);
-        form.resetFields();
+        form.setFieldsValue({ deptId: '', deptProcessesDetailList: [] });
         setProcessList([]);
+        setDetailData({});
     }
 
     const addRow = () => {
-        let processListValues = form.getFieldsValue(true).data || [];
+        let processListValues = form.getFieldsValue(true).deptProcessesDetailList || [];
         let newData = {
             name: '',
-            sort: ''
+            sort: undefined
         }
         setProcessList([...processListValues, newData]);
         form.setFieldsValue({ deptProcessesDetailList: [...processListValues, newData] })
     }
 
     const delRow = (index: number) => {
-        let processListValues = form.getFieldsValue(true).data || []; 
+        let processListValues = form.getFieldsValue(true).deptProcessesDetailList || []; 
         processListValues.splice(index, 1);
         setProcessList([...processListValues]);
-        form.setFieldsValue({ data: [...processListValues] })
+        form.setFieldsValue({ deptProcessesDetailList: [...processListValues] })
     }
 
     const getList = async (id: string) => {
@@ -234,11 +236,11 @@ export default function ProcessMngt(): React.ReactNode {
                             "required": true,
                             "message": "请选择所属车间"
                         }]}>
-                            <TreeSelect placeholder="请选择" style={{ width: "150px" }} onChange={ (e) => {
-                                getList(e.toString().split(',')[0]);
-                            } }>
-                                { renderTreeNodes(wrapRole2DataNode(departmentData)) }
-                            </TreeSelect>
+                        <TreeSelect placeholder="请选择" style={{ width: "150px" }} onChange={ (e) => {
+                            getList(e.toString().split(',')[0]);
+                        } }>
+                            { renderTreeNodes(wrapRole2DataNode(departmentData)) }
+                        </TreeSelect>
                     </Form.Item>
                     <Button type="primary" onClick={ addRow }>新增一行</Button>
                     <Table rowKey="id" dataSource={[...processList]} pagination={false} columns={tableColumns} className={styles.addModal}/>
