@@ -25,7 +25,7 @@ interface IDetail {
     readonly deptProcessesName?: string;
     readonly deptProcessesId?: string;
     readonly productionLinesName?: string;
-    readonly accountEquipmentId?: string;
+    readonly accountEquipmentId?: string | number;
     readonly accountEquipmentName?: string;
     readonly status?: string;
     readonly workshopDeptId?: string;
@@ -126,17 +126,30 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
     const save = () => {
         form.validateFields().then(res => {
             let value = form.getFieldsValue(true);
-            value = {
-                ...value,
-                id: detail.id,
-                workshopDeptId: value.workshopDeptId.split(',')[0],
-                workshopDeptName: value.workshopDeptId.split(',')[1],
-                deptProcessesId: value.deptProcessesId.split(',')[0],
-                deptProcessesName: value.deptProcessesId.split(',')[1],
-                productionLinesId: value.productionLinesId.split(',')[0],
-                productionLinesName: value.productionLinesId.split(',')[1],
-                accountEquipmentId: detail.accountEquipmentId ? detail.accountEquipmentId : selectedRows[0].id,
-                accountEquipmentName: detail.accountEquipmentName ? detail.accountEquipmentName : selectedRows[0].deviceName,
+            if(selectedRows[0] || detail.accountEquipmentId) {
+                value = {
+                    ...value,
+                    id: detail.id,
+                    workshopDeptId: value.workshopDeptId.split(',')[0],
+                    workshopDeptName: value.workshopDeptId.split(',')[1],
+                    deptProcessesId: value.deptProcessesId.split(',')[0],
+                    deptProcessesName: value.deptProcessesId.split(',')[1],
+                    productionLinesId: value.productionLinesId.split(',')[0],
+                    productionLinesName: value.productionLinesId.split(',')[1],
+                    accountEquipmentId: detail.accountEquipmentId ? detail.accountEquipmentId : selectedRows[0].id,
+                    accountEquipmentName: detail.accountEquipmentName ? detail.accountEquipmentName : selectedRows[0].deviceName
+                }
+            } else {
+                value = {
+                    ...value,
+                    id: detail.id,
+                    workshopDeptId: value.workshopDeptId.split(',')[0],
+                    workshopDeptName: value.workshopDeptId.split(',')[1],
+                    deptProcessesId: value.deptProcessesId.split(',')[0],
+                    deptProcessesName: value.deptProcessesId.split(',')[1],
+                    productionLinesId: value.productionLinesId.split(',')[0],
+                    productionLinesName: value.productionLinesId.split(',')[1],
+                }
             }
             RequestUtil.post<IDetail>(`/tower-production/equipment`, { ...value }).then(res => {
                 message.success('保存成功！');
@@ -173,6 +186,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
             deptProcessesId: data.deptProcessesId + ',' + data.deptProcessesName,
             workshopDeptId: data.workshopDeptId + ',' + data.workshopDeptName,
             productionLinesId: data.productionLinesId + ',' + data.productionLinesName,
+            accountEquipmentId: data.accountEquipmentId === -1 ? undefined : data.accountEquipmentId
         }
         setDetail(newData);
         getProcess(data.workshopDeptId || '');
