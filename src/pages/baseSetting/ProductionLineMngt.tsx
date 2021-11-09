@@ -25,17 +25,11 @@ export interface IDetailData {
 }
 
 export interface IProcess {
-    readonly deptProcessesDetailList?: IDeptProcessesDetailList[];
-    readonly deptId?: string;
-    readonly deptName?: string;
-    readonly id?: string;
-}
-
-export interface IDeptProcessesDetailList {
     readonly id?: string;
     readonly name?: string;
     readonly sort?: string;
 }
+
 export default function ProductionLineMngt(): React.ReactNode {
     const [ refresh, setRefresh ] = useState(false);
     const [ visible, setVisible ] = useState(false);
@@ -43,7 +37,7 @@ export default function ProductionLineMngt(): React.ReactNode {
     const [ form ] = Form.useForm();
     const [ processDisabled, setProcessDisabled ] = useState(true);
     const [ detailData, setDetailData ] = useState<IDetailData>({});
-    const [ process, setProcess ] = useState<IDeptProcessesDetailList[]>([]);
+    const [ process, setProcess ] = useState<IProcess[]>([]);
 
     const columns = [
         {
@@ -165,9 +159,8 @@ export default function ProductionLineMngt(): React.ReactNode {
     }
 
     const getProcess = async (id: string) => {
-        console.log(id)
-        const data = await RequestUtil.get<IProcess>(`/tower-production/workshopDept/detail?deptId=${ id }`);
-        setProcess(data?.deptProcessesDetailList || []);
+        const data = await RequestUtil.get<IProcess[]>(`/tower-production/workshopDept/workshopDeptDetail?id=${ id }`);
+        setProcess(data || []);
     }
 
     const { data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
@@ -212,7 +205,7 @@ export default function ProductionLineMngt(): React.ReactNode {
                             getProcess(e.toString().split(',')[0]);
                         }}>
                             { departmentData.map((item: any) => {
-                                return <Select.Option key={ item.deptId + ',' + item.deptName } value={ item.deptId + ',' + item.deptName }>{ item.deptName }</Select.Option>
+                                return <Select.Option key={ item.id + ',' + item.deptName } value={ item.id + ',' + item.deptName }>{ item.deptName }</Select.Option>
                             }) }
                         </Select>
                     </Form.Item>

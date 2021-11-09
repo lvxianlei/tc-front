@@ -200,8 +200,8 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                 value = {
                     ...value,
                     id: detailData.id,
-                    leader: detailData.leader ? detailData.leader : selectedRows[0].id,
-                    leaderName: detailData.leaderName ? detailData.leaderName : selectedRows[0].name,
+                    leader: selectedRows[0].id ? selectedRows[0].id : detailData.leader,
+                    leaderName: selectedRows[0].name ? selectedRows[0].name : detailData.leaderName,
                     warehousePositionDTOList: value.warehousePositionVOList,
                     warehouseKeeperDTOList: userList,
                     warehousePositionDTODeleteList: warehousePositionDTODeleteList,
