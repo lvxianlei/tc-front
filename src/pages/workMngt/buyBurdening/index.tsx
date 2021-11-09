@@ -24,12 +24,13 @@ export default function EnquiryList(): React.ReactNode {
         <Page
             path="/tower-supply/materialPurchaseTask/inquirer"
             columns={[
+                { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
                 ...baseInfo,
                 {
                     title: '操作',
                     width: 100,
                     dataIndex: 'operation',
-                    render: (_: any, records: any) => <Link to={`/workMngt/buyBurdening/detail/${records.id}`}>查看</Link>
+                    render: (_: any, records: any) => <Button type="link" disabled={![1, 3].includes(records.batcheTaskStatus)}><Link to={`/workMngt/buyBurdening/detail/${records.id}`}>查看</Link></Button>
                 }
             ]}
             extraOperation={<Button type="primary" ghost>导出</Button>}

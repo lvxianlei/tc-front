@@ -19,5 +19,5 @@ export default function Overview({ id }: OverviewProps) {
         }
     }))
 
-    return <CommonTable loading={loading} columns={operationInformation} dataSource={data || []} />
+    return <CommonTable haveIndex loading={loading} columns={operationInformation} dataSource={data || []} />
 }

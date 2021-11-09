@@ -65,6 +65,7 @@ export default function Invoice() {
             message.success(`票据${type === "new" ? "创建" : "编辑"}成功...`)
             setVisible(false)
             resove(true)
+            history.go(0)
         } catch (error) {
             reject(false)
         }
@@ -99,7 +100,15 @@ export default function Invoice() {
             path="/tower-supply/invoice"
             filterValue={filterValue}
             columns={[
-                ...baseinfo,
+                { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
+                ...baseinfo.map((item: any) => {
+                    switch (item.dataIndex) {
+                        case "invoiceType":
+                            return ({ ...item, type: "select", enum: invoiceTypeEnum })
+                        default:
+                            return item
+                    }
+                }),
                 {
                     title: "操作",
                     dataIndex: "opration",
@@ -111,7 +120,7 @@ export default function Invoice() {
                                 setDetailVisible(true)
                                 setDetailedId(record.id)
                             }}>查看</Button>
-                            <Button type="link" onClick={() => {
+                            <Button type="link" disabled={![1].includes(record.invoiceStatus)} onClick={() => {
                                 setType("edit")
                                 setDetailedId(record.id)
                                 setVisible(true)
@@ -132,7 +141,7 @@ export default function Invoice() {
                 {
                     name: 'fuzzyQuery',
                     label: '查询',
-                    children: <Input placeholder="票据编号/请款编号/发票号" style={{ width: 200 }} />
+                    children: <Input placeholder="票据编号/请款编号/发票号/供应商" style={{ width: 200 }} />
                 },
                 {
                     name: 'updateEndTime',

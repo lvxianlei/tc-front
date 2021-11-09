@@ -60,16 +60,23 @@ interface TextData extends ColumnsItem {
 interface CommonTableProps {
     columns: TableColumnProps<object>[]
     dataSource?: object[]
+    haveIndex?: boolean
     [key: string]: any
 }
 
-export default function CommonTable({ columns, dataSource = [], ...props }: CommonTableProps): JSX.Element {
+export default function CommonTable({ columns, dataSource = [], haveIndex = false, ...props }: CommonTableProps): JSX.Element {
     columns = columns.map((item: any, index: number) => generateRender(item.type || "text", item))
     return <Table
         size="small"
         scroll={{ x: true }}
         rowKey={(_: any, record: any) => `common_table_${record.id || record.title || JSON.stringify(record)}`}
-        columns={columns}
+        columns={haveIndex ? [{
+            title: "序号",
+            dataIndex: "index",
+            width: 50,
+            className: styles.tableCell,
+            render: (_: any, _a: any, index: number) => <>{index + 1}</>
+        }, ...columns] : columns}
         onRow={() => ({ className: styles.tableRow })}
         dataSource={dataSource}
         {...props}

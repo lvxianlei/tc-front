@@ -1,8 +1,8 @@
-import React, {useState} from "react"
-import {Button, Input, Select, DatePicker, Modal, message} from 'antd'
-import {useHistory, useParams} from 'react-router-dom'
-import {Page} from '../../common'
-import {SeeList} from "./differentListData.json"
+import React, { useState } from "react"
+import { Button, Input, Select, DatePicker, Modal, message } from 'antd'
+import { useHistory, useParams } from 'react-router-dom'
+import { Page } from '../../common'
+import { SeeList } from "./differentListData.json"
 import Edit from "./Edit"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -10,10 +10,10 @@ import RequestUtil from '../../../utils/RequestUtil'
 export default function Overview() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
-    const [filterValue, setFilterValue] = useState({diffId: params.id})
+    const [filterValue, setFilterValue] = useState({ diffId: params.id })
     const [visible, setVisible] = useState<boolean>(false)
 
-    const {run: submitRun} = useRequest<boolean>(() => new Promise(async (resole, reject) => {
+    const { run: submitRun } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
         try {
             await RequestUtil.put(`/tower-supply/componentDiff?diffId=${params.id}`)
             message.success("提交完成...")
@@ -21,7 +21,7 @@ export default function Overview() {
         } catch (error) {
             reject(false)
         }
-    }), {manual: true})
+    }), { manual: true })
 
 
     const onFilterSubmit = (value: any) => {
@@ -30,7 +30,7 @@ export default function Overview() {
             value.startLaunchTime = formatDate[0]
             value.endLaunchTime = formatDate[1]
         }
-        setFilterValue({...filterValue, ...value})
+        setFilterValue({ ...filterValue, ...value })
         return value
     }
 
@@ -45,18 +45,21 @@ export default function Overview() {
 
     return <>
         <Modal title="缺料申请" visible={visible} width={1011} onCancel={() => setVisible(false)}>
-            <Edit/>
+            <Edit />
         </Modal>
         <Page
             path={`/tower-supply/componentDiff/diffDetail`}
-            columns={SeeList}
+            columns={[{ title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> }, ...SeeList]}
             extraOperation={<>
                 <Button type="primary" ghost>导出</Button>
                 <Button type="primary" ghost onClick={handleComponentDiff}>处理完成</Button>
-                <Button type="primary" ghost onClick={() => setVisible(true)}>缺料申请</Button>
+                <Button type="primary" ghost onClick={() => {
+                    // setVisible(true)
+                    message.warning("算法完成后可用...")
+                }}>缺料申请</Button>
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
             </>}
-            filterValue={{...filterValue, diffId: params.id}}
+            filterValue={{ ...filterValue, diffId: params.id }}
             onFilterSubmit={onFilterSubmit}
             tableProps={{
                 rowSelection: {
@@ -67,7 +70,7 @@ export default function Overview() {
                 {
                     name: 'isOpen',
                     label: '状态',
-                    children: <Select style={{width: 200}}>
+                    children: <Select style={{ width: 200 }}>
                         <Select.Option value="1">未申请</Select.Option>
                         <Select.Option value="2">已申请</Select.Option>
                     </Select>
@@ -75,7 +78,7 @@ export default function Overview() {
                 {
                     name: 'materialLeader',
                     label: '提料人',
-                    children: <Select style={{width: 200}}>
+                    children: <Select style={{ width: 200 }}>
                         <Select.Option value="1">待审批</Select.Option>
                         <Select.Option value="2">已拒绝</Select.Option>
                         <Select.Option value="3">已撤回</Select.Option>
@@ -84,7 +87,7 @@ export default function Overview() {
                 },
                 {
                     name: 'fuzzyQuery',
-                    children: <Input placeholder="材质/规格/长度" style={{width: 300}}/>
+                    children: <Input placeholder="材质/规格/长度" style={{ width: 300 }} />
                 },
 
             ]}

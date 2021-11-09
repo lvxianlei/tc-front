@@ -1,21 +1,19 @@
-import React, { useState } from 'react'
-import { Input, DatePicker, Select, Button, Form, Modal, message } from 'antd'
-import { useHistory, Link, useParams } from 'react-router-dom'
+import React from 'react'
+import { Input, DatePicker, Select, Button, Modal, message } from 'antd'
+import { Link, useParams } from 'react-router-dom'
 import { Page } from '../../common';
 import { SeeList } from "./buyBurdening.json"
 import useRequest from "@ahooksjs/use-request";
 import RequestUtil from "../../../utils/RequestUtil";
 export default function Overview(): React.ReactNode {
     const params = useParams<{ id: string }>()
-    const [filterValue, setFilterValue] = useState({ purchaseTaskId: params.id });
     const onFilterSubmit = (value: any) => {
         if (value.startBatcheStatusUpdateTime) {
             const formatDate = value.startBatcheStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startBatcheStatusUpdateTime = formatDate[0] + ' 00:00:00';
             value.endBatcheStatusUpdateTime = formatDate[1] + ' 23:59:59';
         }
-        setFilterValue({ ...value, ...filterValue })
-        return ({ ...value, ...filterValue })
+        return ({ ...value, purchaseTaskId: params.id })
     }
 
     const { run: createComponent } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
@@ -61,7 +59,7 @@ export default function Overview(): React.ReactNode {
                 }
             ]}
             extraOperation={<Button type="primary" ghost>导出</Button>}
-            filterValue={filterValue}
+            filterValue={{ purchaseTaskId: params.id }}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {

@@ -46,6 +46,12 @@ export default function Invoicing() {
     return <Page
         path="/tower-supply/materialPurchasePlan"
         columns={[
+            {
+                title: "序号",
+                dataIndex: "index",
+                width: 40,
+                render: (_: any, _a: any, index: number) => <>{index + 1}</>
+            },
             ...baseInfoList,
             {
                 title: "操作",

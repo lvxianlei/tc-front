@@ -63,15 +63,13 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     }
 
     return <Spin spinning={loading}>
-        <DetailContent>
-            <DetailTitle title="票据信息" />
-            <BaseInfo form={baseForm} columns={bilinformation.map((item: any) => {
-                if (item.dataIndex === "invoiceType") {
-                    return ({ ...item, type: "select", enum: invoiceTypeEnum })
-                }
-                return item
-            })} col={3} dataSource={{}} edit />
-            <Attachment ref={attchsRef} edit />
-        </DetailContent>
+        <DetailTitle title="票据信息" />
+        <BaseInfo form={baseForm} columns={bilinformation.map((item: any) => {
+            if (item.dataIndex === "invoiceType") {
+                return ({ ...item, type: "select", enum: invoiceTypeEnum })
+            }
+            return item
+        })} col={3} dataSource={{}} edit />
+        <Attachment ref={attchsRef} edit />
     </Spin>
 })

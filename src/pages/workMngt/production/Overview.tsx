@@ -50,7 +50,7 @@ export default function Overview() {
             </Row>
             <Row gutter={10}>
                 <Col span={12}>
-                    <CommonTable columns={ConstructionDetails} dataSource={data?.detail || []} pagination={false} />
+                    <CommonTable haveIndex columns={ConstructionDetails} dataSource={data?.detail || []} pagination={false} />
                 </Col>
                 <Col span={12}>
                     <CommonTable columns={ComponentDetail} dataSource={data?.detail || []} pagination={false} />
@@ -66,7 +66,7 @@ export default function Overview() {
             <Button type="primary" ghost key="cancel" onClick={() => history.go(-1)}>返回</Button>
         ]}>
             <Spin spinning={loading}>
-                <CommonTable columns={ConstructionDetails.map((item: any) => {
+                <CommonTable haveIndex columns={ConstructionDetails.map((item: any) => {
                     if (item.dataIndex === "alreadyIngredients") {
                         return ({
                             ...item,
@@ -80,7 +80,7 @@ export default function Overview() {
                     return item
                 })} dataSource={data?.detail || []} />
                 <DetailTitle title="生产配料方案" />
-                <CommonTable columns={ProductionIngredients} dataSource={data?.programme || []} />
+                <CommonTable haveIndex columns={ProductionIngredients} dataSource={data?.programme || []} />
             </Spin>
         </DetailContent>
     </>

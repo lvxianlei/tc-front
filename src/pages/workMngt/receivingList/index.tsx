@@ -25,18 +25,18 @@ export default function Invoicing() {
     const onFilterSubmit = (value: any) => {
         if (value.startStatusUpdateTime) {
             const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startStatusUpdateTime = formatDate[0] +" 00:00:00"
-            value.endStatusUpdateTime = formatDate[1] +" 23:59:59"
+            value.startStatusUpdateTime = formatDate[0] + " 00:00:00"
+            value.endStatusUpdateTime = formatDate[1] + " 23:59:59"
         }
         if (value.startReceiveTime) {
             const formatDate = value.startReceiveTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startReceiveTime = formatDate[0] +" 00:00:00"
-            value.endReceiveTime = formatDate[1] +" 23:59:59"
+            value.startReceiveTime = formatDate[0] + " 00:00:00"
+            value.endReceiveTime = formatDate[1] + " 23:59:59"
         }
         if (value.startCompleteTime) {
             const formatDate = value.startCompleteTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startCompleteTime = formatDate[0] +" 00:00:00"
-            value.endCompleteTime = formatDate[1] +" 23:59:59"
+            value.startCompleteTime = formatDate[0] + " 00:00:00"
+            value.endCompleteTime = formatDate[1] + " 23:59:59"
         }
         return value
     }
@@ -75,25 +75,30 @@ export default function Invoicing() {
         </Modal>
         <Page
             path="/tower-storage/receiveStock"
-            columns={[
-                ...baseInfo,
-                {
-                    title: "操作",
-                    dataIndex: "opration",
-                    fixed: "right",
-                    width: 100,
-                    render: (_: any, record: any) => {
-                        return <>
-                            <Link to={`/workMngt/receiving/detail/${record.id}`}>详情</Link>
-                            <Button type="link" onClick={() => {
-                                setDetailId(record.id)
-                                setType("edit")
-                                setVisible(true)
-                            }}>编辑</Button>
-                            <a onClick={() => handleDelete(record.id)}>删除</a>
-                        </>
-                    }
-                }]}
+            columns={[{
+                title: "序号",
+                dataIndex: "index",
+                width: 40,
+                render: (_: any, _a: any, index: number) => <>{index + 1}</>
+            },
+            ...baseInfo,
+            {
+                title: "操作",
+                dataIndex: "opration",
+                fixed: "right",
+                width: 100,
+                render: (_: any, record: any) => {
+                    return <>
+                        <Link to={`/workMngt/receiving/detail/${record.id}`}>详情</Link>
+                        <Button type="link" onClick={() => {
+                            setDetailId(record.id)
+                            setType("edit")
+                            setVisible(true)
+                        }}>编辑</Button>
+                        <a onClick={() => handleDelete(record.id)}>删除</a>
+                    </>
+                }
+            }]}
             extraOperation={<>
                 <Button type="primary" ghost>导出</Button>
                 <Button type="primary" ghost onClick={() => {
