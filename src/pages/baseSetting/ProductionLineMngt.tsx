@@ -165,6 +165,7 @@ export default function ProductionLineMngt(): React.ReactNode {
     }
 
     const getProcess = async (id: string) => {
+        console.log(id)
         const data = await RequestUtil.get<IProcess>(`/tower-production/workshopDept/detail?deptId=${ id }`);
         setProcess(data?.deptProcessesDetailList || []);
     }
@@ -205,13 +206,13 @@ export default function ProductionLineMngt(): React.ReactNode {
                             "required": true,
                             "message": "请选择所属车间"
                         }]}>
-                        <Select placeholder="请选择">
+                        <Select placeholder="请选择" onChange={(e: any) => {
+                            setProcessDisabled(false);
+                            form.setFieldsValue({ deptProcessesId: '' });
+                            getProcess(e.toString().split(',')[0]);
+                        }}>
                             { departmentData.map((item: any) => {
-                                return <Select.Option key={ item.deptId + ',' + item.deptName } value={ item.deptId + ',' + item.deptName } onChange={(e: any) => {
-                                    setProcessDisabled(false);
-                                    form.setFieldsValue({ deptProcessesId: '' });
-                                    getProcess(e.toString().split(',')[0]);
-                                }}>{ item.deptName }</Select.Option>
+                                return <Select.Option key={ item.deptId + ',' + item.deptName } value={ item.deptId + ',' + item.deptName }>{ item.deptName }</Select.Option>
                             }) }
                         </Select>
                     </Form.Item>

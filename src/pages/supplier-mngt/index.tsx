@@ -1,3 +1,4 @@
+//供应商管理
 import React, { useState } from 'react'
 import { Input, Select, Button, Modal, Form, message, Descriptions } from 'antd'
 import { useHistory } from 'react-router-dom'
@@ -63,6 +64,7 @@ export default function SupplierMngt(): React.ReactNode {
     const save1 = async (bankAccount: string, bankDeposit: string, contactMan: string, contactManTel: string, description: string, qualityAssurance: number, supplierCode: string, supplierName: string, supplierType: number, supplyProducts: string) => {
         const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/supplier`, { bankAccount, bankDeposit, contactMan, contactManTel, description, qualityAssurance, supplierCode, supplierName, supplierType, supplyProducts }, { "Content-Type": "application/json" })
         console.log(result);
+        setIsModalVisible1(false);
     }
     const handleCancel = () => {
         setIsModalVisible(false);
@@ -180,13 +182,13 @@ export default function SupplierMngt(): React.ReactNode {
                 {
                     name: 'fuzzyMsg',
                     label: '查询',
-                    children: <Input maxLength={200} />
+                    children: <Input placeholder="供应商编号/供应商名称/联系人/联系电话" maxLength={200} />
                 },
             ]}
         />
         <Modal width="700px" title="编辑" visible={isModalVisible} footer={buttons} onCancel={handleCancel}>
             <Descriptions title="供应商基础信息" bordered column={2} labelStyle={{ textAlign: 'center' }}>
-                <Descriptions.Item label="供应商编号"><input placeholder={obj1.supplierCode} style={{ border: "none", outline: "none" }} value={supplierCode} onChange={(e) => { setSupplierCode(e.target.value) }} /></Descriptions.Item>
+                <Descriptions.Item label="供应商编号">{obj1.supplierCode}</Descriptions.Item>
                 <Descriptions.Item label="供应商名称 *"><input placeholder={obj1.supplierName} style={{ border: "none", outline: "none" }} value={supplierName} onChange={(e) => { setSupplierName(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="供应商类型 *">
                     <Select defaultValue={obj1.supplierType} style={{ width: 120 }} bordered={false} onChange={handleChange}>
@@ -234,8 +236,8 @@ export default function SupplierMngt(): React.ReactNode {
         </Modal>
         <Modal width="800px" title="创建" visible={isModalVisible1} footer={buttons1} onCancel={handleCancel1}>
             <Descriptions title="供应商基础信息" bordered column={2} labelStyle={{ textAlign: 'center' }}>
-                <Descriptions.Item label="供应商编号"><input style={{ border: "none", outline: "none" }} value={supplierCode} onChange={(e) => { setSupplierCode(e.target.value) }} /></Descriptions.Item>
-                <Descriptions.Item label="供应商名称 *"><input placeholder='请输入' style={{ border: "none", outline: "none" }} value={supplierName} onChange={(e) => { setSupplierName(e.target.value) }} /></Descriptions.Item>
+                <Descriptions.Item label="供应商编号">自动生成</Descriptions.Item>
+                <Descriptions.Item label="供应商名称 *"><input placeholder='请输入' maxLength={50} style={{ border: "none", outline: "none" }} value={supplierName} onChange={(e) => { setSupplierName(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="供应商类型 *">
                     <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange}>
                         {
@@ -254,8 +256,8 @@ export default function SupplierMngt(): React.ReactNode {
                         }
                     </Select>
                 </Descriptions.Item>
-                <Descriptions.Item label="联系人 *"><input style={{ border: "none", outline: "none" }} value={contactMan} onChange={(e) => { setContactMan(e.target.value) }} /></Descriptions.Item>
-                <Descriptions.Item label="联系电话 *"><input style={{ border: "none", outline: "none" }} value={contactManTel} onChange={(e) => { setContactManTel(e.target.value) }} /></Descriptions.Item>
+                <Descriptions.Item label="联系人 *"><input type="text" maxLength={10} style={{ border: "none", outline: "none" }} value={contactMan} onChange={(e) => { setContactMan(e.target.value) }} /></Descriptions.Item>
+                <Descriptions.Item label="联系电话 *"><input maxLength={20} type="number" style={{ border: "none", outline: "none" }} value={contactManTel} onChange={(e) => { setContactManTel(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="主要供货产品 *">
                     <Select mode="tags" style={{ width: 120 }} bordered={false} onChange={handleChange2}>
                         {
