@@ -20,9 +20,9 @@ export default function Overview() {
         }
     }))
 
-    const { loading: getIngredients, run: getIngredientsRun } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading: getIngredients, run: getIngredientsRun } = useRequest<{ [key: string]: any }>((productionBatch: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/detail/${params.id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/initData/ingredientsProgramme?productionBatch=${productionBatch}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -38,7 +38,7 @@ export default function Overview() {
         }
     }), { manual: true })
 
-    const handleModelOk = () => {
+    const handleModelOk = async () => {
         setVisible(false)
     }
 

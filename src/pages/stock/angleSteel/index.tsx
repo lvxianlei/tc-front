@@ -40,7 +40,7 @@ const AngleSteel = () => {
         }
     }), { manual: true })
 
-    const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
+    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/angleConfigStrategy/updateIngredientsConfig`, { ...data, id: materialId })
             resole(result)
@@ -55,7 +55,7 @@ const AngleSteel = () => {
             message.success("材质配料设定成功...")
             setVisible(false)
             resove(true)
-            history.go(0)
+            // history.go(0)
         }
     })
 
@@ -146,9 +146,9 @@ const AngleSteel = () => {
                 dataIndex: "opration",
                 render: (_: any, records: any) => <>
                     <Button type="link" onClick={() => {
-                        setVisible(true)
                         setType("edit")
                         setMaterialData(records)
+                        setVisible(true)
                     }}>编辑</Button>
                     <Button type="link" loading={deleteLoading} onClick={() => deleteItem(records.id)}>删除</Button>
                 </>

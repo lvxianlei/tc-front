@@ -1,6 +1,6 @@
 import React, { useImperativeHandle, forwardRef, useEffect } from "react"
-import { Form } from 'antd'
-import { DetailContent, DetailTitle, BaseInfo } from '../../common'
+import { Form, InputNumber, Row, Col } from 'antd'
+import { BaseInfo } from '../../common'
 import { angleConfigStrategy } from "./angleSteel.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
@@ -33,7 +33,16 @@ export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             const baseData = await baseForm.validateFields()
-            await saveRun(type === "new" ? ({ ...baseData }) : ({ ...baseData, id: data?.id }))
+            await saveRun(type === "new" ? ({
+                ...baseData,
+                thickness: `${baseData.thicknessMin}~${baseData.thicknessMax}`,
+                width: `${baseData.widthMin}~${baseData.widthMax}`
+            }) : ({
+                ...baseData,
+                thickness: `${baseData.thicknessMin}~${baseData.thicknessMax}`,
+                width: `${baseData.widthMin}~${baseData.widthMax}`,
+                id: data?.id
+            }))
             resolve(true)
         } catch (error) {
             reject(false)
@@ -41,7 +50,14 @@ export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
     })
 
     useEffect(() => {
-        type === "new" ? baseForm.resetFields() : baseForm.setFieldsValue(data)
+        if (type === "new") {
+            baseForm.resetFields()
+        } else {
+            const thickness = data.thickness.split("~")
+            const width = data.width.split("~")
+            baseForm.setFieldsValue({ data, widthMin: width[0], widthMax: width[1], thicknessMin: thickness[0], thicknessMax: thickness[1] })
+        }
+
     }, [JSON.stringify(data), type])
 
     useImperativeHandle(ref, () => ({ onSubmit, loading: saveLoading }), [ref, onSubmit])
@@ -49,10 +65,30 @@ export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
     return <BaseInfo
         form={baseForm}
         columns={angleConfigStrategy.map((item: any) => {
-            if (item.dataIndex === "materialTexture") {
-                return ({ ...item, type: "select", enum: materialTextureEnum })
+            switch (item.dataIndex) {
+                case "materialTexture":
+                    return ({ ...item, type: "select", enum: materialTextureEnum })
+                case "thickness":
+                    return ({
+                        ...item,
+                        render: () => <Row>
+                            <Col span={11}><Form.Item name="thicknessMin" rules={[{ required: true, message: "请输入最小值..." }]}><InputNumber /></Form.Item></Col>
+                            <Col span={2} style={{ lineHeight: "32px" }}>~</Col>
+                            <Col span={11}><Form.Item name="thicknessMax" rules={[{ required: true, message: "请输入最大值..." }]}><InputNumber /></Form.Item></Col>
+                        </Row>
+                    })
+                case "width":
+                    return ({
+                        ...item,
+                        render: () => <Row>
+                            <Col span={11}><Form.Item name="widthMin" rules={[{ required: true, message: "请输入最小值..." }]}><InputNumber /></Form.Item></Col>
+                            <Col span={2} style={{ lineHeight: "32px" }}>~</Col>
+                            <Col span={11}><Form.Item name="widthMax" rules={[{ required: true, message: "请输入最大值..." }]}><InputNumber /></Form.Item></Col>
+                        </Row>
+                    })
+                default:
+                    return item
             }
-            return item
         })}
         col={3} dataSource={data} edit />
 })

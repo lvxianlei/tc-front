@@ -14,24 +14,12 @@
         {
             "title": "厚度",
             "dataIndex": "thickness",
-            "type": "number",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入厚度..."
-                }
-            ]
+            "type": "number"
         },
         {
             "title": "宽度",
             "dataIndex": "width",
-            "type": "number",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入宽度..."
-                }
-            ]
+            "type": "number"
         },
         {
             "title": "夹钳总损耗",
