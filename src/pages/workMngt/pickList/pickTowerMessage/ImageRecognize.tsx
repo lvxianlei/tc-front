@@ -6,6 +6,9 @@ import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../../utils/RequestUtil';
 import AuthUtil from '../../../../utils/AuthUtil';
 import { useState } from 'react';
+import Cropper from "react-cropper";
+import "cropperjs/dist/cropper.css";
+import "./recognize.less";
 
 
 
@@ -19,8 +22,9 @@ export default function PickTowerDetail(): React.ReactNode {
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         // const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
         resole(data)
-    }), {})
-    const detailData: any = data;
+    }), {});
+    const [cropData, setCropData] = useState("");
+    const [cropper, setCropper] = useState<any>();
     const towerColumns = [
         { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
         { title: '段名', dataIndex: 'segmentName', key: 'segmentName', },
@@ -41,7 +45,12 @@ export default function PickTowerDetail(): React.ReactNode {
                 tableDataSource&&setTableDataSource([...tableDataSource])
             }}>删除</Button>
         )}
-    ]
+    ];
+    const getCropData = () => {
+        if (typeof cropper !== "undefined") {
+          setCropData(cropper.getCroppedCanvas().toDataURL());
+        }
+    };
     return <>
         <Spin spinning={loading}>
             <DetailContent operation={[
@@ -111,15 +120,47 @@ export default function PickTowerDetail(): React.ReactNode {
                     } } showUploadList= {false}>
                         <Button type="primary">选择图片</Button>
                     </Upload>
+                    <Button type='primary' onClick={getCropData} disabled={!urlBase}>确认剪裁</Button>
                     <Button type='primary' onClick={async ()=>{
-                        const tableDataSource: any[]  = await RequestUtil.post(`/tower-science/drawProductStructure/ocr`,{base64File: urlBase, productSegmentId: params.productSegmentId});
+                        const tableDataSource: any[]  = await RequestUtil.post(`/tower-science/drawProductStructure/ocr`,{base64File: cropData, productSegmentId: params.productSegmentId});
                         setTableDataSource(tableDataSource);
-                    }} disabled={!urlBase}>识别文字</Button>
+                    }} disabled={!cropData}>识别文字</Button>
                 </Space>
                 <div style={{ display: 'flex' }}>
                     <CommonTable dataSource={[...tableDataSource]} columns={towerColumns} pagination={false} rowKey='index'/>
                     <div style={{ boxShadow:'0px 0px 5px 5px #ccc', width:'100%', marginLeft:'10px', textAlign:'center'}}>
-                        {url?<Image src={url} />:<span style={{lineHeight:"200px"}}>当前暂无图片</span>}
+                        {urlBase?<div>
+                            <div style={{ width: "100%" }}>
+                                <Cropper
+                                    style={{ height: 300, width: "100%" }}
+                                    zoomTo={0.5}
+                                    initialAspectRatio={1}
+                                    preview=".img-preview"
+                                    src={urlBase}
+                                    viewMode={1}
+                                    minCropBoxHeight={10}
+                                    minCropBoxWidth={10}
+                                    background={false}
+                                    responsive={true}
+                                    autoCropArea={1}
+                                    checkOrientation={false} 
+                                    onInitialized={(instance) => {
+                                        setCropper(instance);
+                                    }}
+                                    guides={true}
+                                    />
+                            </div>
+                            <div>
+                                <div className="box" style={{ width: "100%", float: "right" }}>
+                                {/* <h1>Preview</h1> */}
+                                {/* <div
+                                    className="img-preview"
+                                    style={{ width: "100%", float: "left", height: "500px" }}
+                                /> */}
+                                    {cropData?<Image style={{ width: "100%" }} src={cropData} alt="cropped" />:null}
+                                </div>
+                            </div>
+                        </div>:<span style={{lineHeight:"200px"}}>当前暂无图片</span>}
                     </div>
                 </div>
             </DetailContent>
