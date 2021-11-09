@@ -61,7 +61,7 @@
             "dataIndex": "description"
         }
     ],
-    "contract1": [
+    "material": [
         {
             "title": "材料名称",
             "dataIndex": "materialName"
@@ -105,238 +105,75 @@
         {
             "title": "不含税单价（元）合计",
             "dataIndex": "totalAmount"
-        },
-        {
-            "title": "操作",
-            "dataIndex": "operation"
         }
     ],
-    "contract2": [
-        {
-            "title": "物料编号",
-            "dataIndex": "materialCode"
-        },
-        {
-            "title": "品名",
-            "dataIndex": "materialName"
-        },
-        {
-            "title": "标准",
-            "dataIndex": "standard"
-        },
-        {
-            "title": "材料",
-            "dataIndex": "rowMaterial"
-        },
-        {
-            "title": "材质",
-            "dataIndex": "materialTexture"
-        },
-        {
-            "title": "规格",
-            "dataIndex": "spec"
-        }
-    ],
-    "contract3": [
-        {
-            "title": "询比价编号",
-            "dataIndex": "comparisonNumber"
-        },
-        {
-            "title": "用途",
-            "dataIndex": "purpose"
-        },
-        {
-            "title": "询比价状态",
-            "dataIndex": "comparisonStatus",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "询价中",
-                    "value": 1
-                },
-                {
-                    "label": "已询价",
-                    "value": 2
-                },
-                {
-                    "label": "取消",
-                    "value": 3
-                }
-            ]
-        },
-        {
-            "title": "最新状态变更时间",
-            "dataIndex": "updateTime"
-        },
-        {
-            "title": "询价人",
-            "dataIndex": "comparisonPersonId"
-        }
-    ],
-    "contract4": [
-        {
-            "title": "物料编码",
-            "dataIndex": "materialCode"
-        },
-        {
-            "title": "品名",
-            "dataIndex": "materialName"
-        },
-        {
-            "title": "标准",
-            "dataIndex": "materialStandard"
-        },
-        {
-            "title": "材质",
-            "dataIndex": "materialTexture"
-        },
-        {
-            "title": "规格",
-            "dataIndex": "spec"
-        },
-        {
-            "title": "宽度（mm）",
-            "dataIndex": "width"
-        },
-        {
-            "title": "厚度（mm）",
-            "dataIndex": "thickness"
-        },
-        {
-            "title": "长度（mm）",
-            "dataIndex": "length"
-        },
-        {
-            "title": "数量",
-            "dataIndex": "number"
-        },
-        {
-            "title": "单重（吨）",
-            "dataIndex": "singleWeight"
-        },
-        {
-            "title": "总重（吨）",
-            "dataIndex": "totalWeight"
-        },
-        {
-            "title": "操作",
-            "dataIndex": "operation"
-        }
-    ],
-    "contract5": [
-        {
-            "title": "采购计划编号",
-            "dataIndex": "purchasePlanNumber"
-        },
-        {
-            "title": "采购类型",
-            "dataIndex": "purchaseType"
-        },
-        {
-            "title": "塔型（个）",
-            "dataIndex": "productCategory"
-        },
-        {
-            "title": "杆塔（基）",
-            "dataIndex": "productNum"
-        },
-        {
-            "title": "圆钢收货量（吨）/总重（吨）",
-            "dataIndex": "roundSteelArrival/roundSteelTotal"
-        },
-        {
-            "title": "角钢收货量（吨）/总重（吨）",
-            "dataIndex": "angleSteelArrival/angleSteelTotal"
-        },
-        {
-            "title": "钢板收货量（吨）/总重（吨）",
-            "dataIndex": "steelPlateArrival/steelPlateTotal"
-        },
-        {
-            "title": "采购人",
-            "dataIndex": "purchaserId"
-        },
-        {
-            "title": "计划状态",
-            "dataIndex": "purchaseTaskStatus"
-        }
-    ],
-    "contract6": [
-        {
-            "title": "序号",
-            "dataIndex": "index"
-        },
-        {
-            "title": "操作部门",
-            "dataIndex": "deptName"
-        },
-        {
-            "title": "操作人",
-            "dataIndex": "optUserName"
-        },
-        {
-            "title": "操作时间",
-            "dataIndex": "optTime"
-        },
-        {
-            "title": "操作",
-            "dataIndex": "operation"
-        },
-        {
-            "title": "备注",
-            "dataIndex": "description"
-        }
-    ],
-    "contract7":[
-        {
-            "title": "询比价编号",
-            "dataIndex": "comparisonNumber"
-        },
-        {
-            "title": "用途",
-            "dataIndex": "purpose"
-        },
-        {
-            "title": "询比价状态",
-            "dataIndex": "comparisonStatus",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "询价中",
-                    "value": 1
-                },
-                {
-                    "label": "已询价",
-                    "value": 2
-                },
-                {
-                    "label": "取消",
-                    "value": 3
-                }
-            ]
-        },
-        {
-            "title": "最新状态变更时间",
-            "dataIndex": "updateTime"
-        },
-        {
-            "title": "询价人",
-            "dataIndex": "comparisonPersonId"
-        }
-    ],
-    "contract8":[
+    "contractBaseInfo": [
         {
             "title": "合同编号",
-            "dataIndex": "contractNumber"
+            "dataIndex": "contractNumber",
+            "disabled": true
         },
         {
             "title": "关联采购计划",
-            "dataIndex": "purchasePlanNumber"
+            "dataIndex": "purchasePlan",
+            "type": "popTable",
+            "path": "/tower-supply/materialPurchasePlan",
+            "width": 1011,
+            "value": "purchasePlanCode",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "采购计划编号",
+                    "dataIndex": "purchasePlanCode",
+                    "width": 200,
+                    "type": "string",
+                    "search": true
+                },
+                {
+                    "title": "采购类型",
+                    "dataIndex": "purchaseType",
+                    "type": "select",
+                    "width": 100,
+                    "search": true,
+                    "enum": [
+                        {
+                            "label": "外部",
+                            "value": 1
+                        },
+                        {
+                            "label": "内部",
+                            "value": 2
+                        },
+                        {
+                            "label": "缺料",
+                            "value": 3
+                        }
+                    ]
+                },
+                {
+                    "title": "塔型（个）",
+                    "dataIndex": "productCategoryNum",
+                    "width": 100,
+                    "type": "integer"
+                },
+                {
+                    "title": "杆塔（基）",
+                    "dataIndex": "productNum",
+                    "width": 100,
+                    "type": "integer"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请关联采购计划..."
+                }
+            ]
         },
         {
             "title": "供应商",
-            "dataIndex": "supplierName",
+            "dataIndex": "supplier",
             "type": "popTable",
             "path": "/tower-supply/supplier",
             "width": 1011,
@@ -374,7 +211,8 @@
         },
         {
             "title": "签订时间",
-            "dataIndex": "signingTime"
+            "dataIndex": "signingTime",
+            "type": "date"
         },
         {
             "title": "经办人",
@@ -382,27 +220,145 @@
         },
         {
             "title": "交货方式",
-            "dataIndex": "deliveryMethod"
+            "dataIndex": "deliveryMethod",
+            "type": "select"
         },
         {
-            "title":"材料标准",
-            "dataIndex":"materialStandard"
+            "title": "材料标准",
+            "dataIndex": "materialStandard",
+            "type": "select"
         },
         {
             "title": "运输承担",
-            "dataIndex": "transportBear"
+            "dataIndex": "transportBear",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "供方"
+                },
+                {
+                    "value": 2,
+                    "label": "需方"
+                }
+            ]
         },
         {
             "title": "运输方式",
-            "dataIndex": "transportMethod"
+            "dataIndex": "transportMethod",
+            "type": "select"
         },
         {
             "title": "卸车承担",
-            "dataIndex": "unloadBear"
+            "dataIndex": "unloadBear",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "供方"
+                },
+                {
+                    "value": 2,
+                    "label": "需方"
+                }
+            ]
         },
         {
             "title": "备注",
-            "dataIndex": "description"
+            "dataIndex": "description",
+            "type": "textarea"
         }
-    ]
+    ],
+    "comparison": [
+        {
+            "title": "询比价信息",
+            "dataIndex": "comparisonPrice",
+            "type": "popTable",
+            "path": "/tower-supply/comparisonPrice",
+            "width": 1011,
+            "value": "comparisonNumber",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "询比价编号",
+                    "dataIndex": "comparisonNumber"
+                },
+                {
+                    "title": "用途",
+                    "dataIndex": "purpose"
+                },
+                {
+                    "title": "询比价状态",
+                    "dataIndex": "comparisonStatus",
+                    "type": "select",
+                    "enum": [
+                        {
+                            "label": "询价中",
+                            "value": 1
+                        },
+                        {
+                            "label": "已询价",
+                            "value": 2
+                        },
+                        {
+                            "label": "取消",
+                            "value": 3
+                        }
+                    ]
+                },
+                {
+                    "title": "最新状态变更时间",
+                    "dataIndex": "updateTime"
+                },
+                {
+                    "title": "询价人",
+                    "dataIndex": "comparisonPersonId"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择供应商..."
+                }
+            ]
+        }
+    ],
+    "addMaterial": {
+        "title": "原材料",
+        "type": "popTable",
+        "path": "/tower-system/material",
+        "width": 1011,
+        "selectType": "checkbox",
+        "dependencies": true,
+        "readOnly": true,
+        "columns": [
+            {
+                "title": "物料编号",
+                "dataIndex": "materialCode",
+                "search": true
+            },
+            {
+                "title": "品名",
+                "dataIndex": "materialName",
+                "search": true
+            },
+            {
+                "title": "标准",
+                "dataIndex": "standard"
+            },
+            {
+                "title": "材料",
+                "dataIndex": "rowMaterial"
+            },
+            {
+                "title": "材质",
+                "dataIndex": "materialTexture"
+            },
+            {
+                "title": "规格",
+                "dataIndex": "spec"
+            }
+        ]
+    }
 }

@@ -158,7 +158,7 @@
         },
         {
             "title": "搭配数量",
-            "dataIndex": "materialNum",
+            "dataIndex": "num",
             "type": "number"
         },
         {

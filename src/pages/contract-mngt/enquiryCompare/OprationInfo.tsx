@@ -23,5 +23,10 @@ export default function Opreation({ id }: OpreationProps): JSX.Element {
     if (data?.length === 0) {
         return <Result title="功能假设中..." status="500" />
     }
-    return <CommonTable loading={loading} columns={operation} dataSource={data || []} />
+    return <CommonTable loading={loading} columns={[{
+        "title": "序号",
+        "dataIndex": "index",
+        "width": 30,
+        render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+    }, ...operation]} dataSource={data || []} />
 }

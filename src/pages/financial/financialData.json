@@ -192,7 +192,8 @@
                 },
                 {
                     "title": "材料名称",
-                    "dataIndex": "productName"
+                    "dataIndex": "productName",
+                    "search": true
                 },
                 {
                     "title": "重量（吨）合计",
@@ -334,7 +335,7 @@
     ],
     "ApplicationForPayment": [
         {
-            "title": "付款编号",
+            "title": "请款编号",
             "dataIndex": "pleasePayNumber"
         },
         {
@@ -551,7 +552,7 @@
             "type": "string"
         }
     ],
-    "ApplicationDetail":[
+    "ApplicationDetail": [
         {
             "title": "开户银行",
             "dataIndex": "openBank"

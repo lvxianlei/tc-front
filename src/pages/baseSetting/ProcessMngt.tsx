@@ -6,12 +6,15 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, Button, Modal, Select, Form, Table, Popconfirm, message } from 'antd';
+import { Space, Input, Button, Modal, Form, Table, Popconfirm, message, TreeSelect } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
-import { useForm } from 'antd/es/form/Form';
 import styles from './ProcessMngt.module.less';
+import { TreeNode } from 'antd/lib/tree-select';
+import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
+import useRequest from '@ahooksjs/use-request';
+import { wrapRole2DataNode } from './deptUtil';
 
 interface IProcessList {
     readonly sort?: string;
@@ -22,7 +25,7 @@ interface IProcessList {
 interface IDetailData {
     readonly deptId?: string;
     readonly deptName?: string;
-    readonly id?: string;
+    readonly id?: string | number;
     readonly deptProcessesDetailList?: IProcessList[];
 }
 export default function ProcessMngt(): React.ReactNode {
@@ -54,7 +57,7 @@ export default function ProcessMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type="link" onClick={ () => {
-                        getList(record.id);
+                        getList(record.deptId);
                         setVisible(true);
                     } }>编辑</Button>
                     <Popconfirm
@@ -77,17 +80,22 @@ export default function ProcessMngt(): React.ReactNode {
 
     const tableColumns = [
         {
-            key: 'index',
+            key: 'id',
             title: '序号',
-            dataIndex: 'index',
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+            dataIndex: 'id',
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<>
+                <span>{ index + 1 }</span>
+                <Form.Item name={['deptProcessesDetailList',index, "id"]} style={{ display: "none" }}>
+                    <Input size="small"/>
+                </Form.Item>
+            </>)
         },
         {
             key: 'name',
             title: '工序',
             dataIndex: 'name',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={ ["data", index, "name"] } initialValue={ _ } rules={[{ 
+                <Form.Item name={ ["deptProcessesDetailList", index, "name"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请输入工序" }]}>
                     <Input maxLength={ 50 } key={ index } bordered={false} />
@@ -99,7 +107,7 @@ export default function ProcessMngt(): React.ReactNode {
             title: '顺序',
             dataIndex: 'sort',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={ ["data", index, "sort"] } initialValue={ _ } rules={[{ 
+                <Form.Item name={ ["deptProcessesDetailList", index, "sort"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请输入顺序" }]}>
                     <Input type="number" min={ 1 } key={ index } bordered={false} />
@@ -114,7 +122,7 @@ export default function ProcessMngt(): React.ReactNode {
                 <Space direction="horizontal" size="small">
                     <Popconfirm
                         title="确认删除?"
-                        onConfirm={ () => delRow(index) }
+                        onConfirm={ () => delRow(index, record) }
                         okText="确认"
                         cancelText="取消"
                     >
@@ -127,43 +135,93 @@ export default function ProcessMngt(): React.ReactNode {
 
     const save = () => {
         form.validateFields().then(res => {
-            console.log(form.getFieldsValue(true));
+            let value = form.getFieldsValue(true);
+            value = {
+                ...value,
+                id: detailData.id === -1 ? '' : detailData.id,
+                deptId: value.deptId.split(',')[0],
+                deptName: value.deptId.split(',')[1],
+                deptProcessesList: value.deptProcessesDetailList
+            }
+            RequestUtil.post<IDetailData>(`/tower-production/workshopDept/submit`, { ...value }).then(res => {
+                message.success('保存成功！')
+                setVisible(false);
+                setProcessList([]);
+                setDetailData({});
+                setRefresh(!refresh);
+                form.setFieldsValue({ deptId: '', deptProcessesDetailList: [] });
+            });
         })
     }
 
     const cancel = () => {
         setVisible(false);
-        form.resetFields();
+        form.setFieldsValue({ deptId: '', deptProcessesDetailList: [] });
+        setProcessList([]);
+        setDetailData({});
     }
 
     const addRow = () => {
-        let processListValues = form.getFieldsValue(true).data || [];
+        let processListValues = form.getFieldsValue(true).deptProcessesDetailList || [];
         let newData = {
             name: '',
-            sort: ''
+            sort: undefined
         }
         setProcessList([...processListValues, newData]);
-        form.setFieldsValue({ data: [...processListValues, newData] })
+        form.setFieldsValue({ deptProcessesDetailList: [...processListValues, newData] })
     }
 
-    const delRow = (index: number) => {
-        let processListValues = form.getFieldsValue(true).data || []; 
-        processListValues.splice(index, 1);
-        setProcessList([...processListValues]);
-        form.setFieldsValue({ data: [...processListValues] })
+    const delRow = async (index: number, record: Record<string, any>) => {
+        let processListValues = form.getFieldsValue(true).deptProcessesDetailList || []; 
+        if(record.id) {
+            const data = await RequestUtil.get<boolean>(`/tower-production/workshopDept/checkProductionLines?processesId=${ record.id }`)
+            if(data) {
+                processListValues.splice(index, 1);
+                setProcessList([...processListValues]);
+                form.setFieldsValue({ deptProcessesDetailList: [...processListValues] })
+            } else {
+                message.warning('当前工序已被引用，不可移除')
+            }
+        } else {
+            processListValues.splice(index, 1);
+            setProcessList([...processListValues]);
+            form.setFieldsValue({ deptProcessesDetailList: [...processListValues] })
+        }
     }
 
     const getList = async (id: string) => {
-        const data = await RequestUtil.post<IDetailData>(`/tower-production/workshopDept/detail?deptId=${ id }`);
-        setDetailData(data);
-        setProcessList(data?.deptProcessesDetailList || []);
+        const data = await RequestUtil.get<IDetailData>(`/tower-production/workshopDept/detail?deptId=${ id }`);
+        if(data.id !== -1) {
+            const newData = {
+                ...data,
+                deptId: data.deptId + ',' + data.deptName
+            }
+            setDetailData(newData);
+            setProcessList(newData?.deptProcessesDetailList || []);
+            form.setFieldsValue({ deptId: newData.deptId, deptProcessesDetailList: [...newData?.deptProcessesDetailList || []] })
+        }
     }
+
+    const renderTreeNodes = (data:any) => data.map((item:any) => {
+        if (item.children) {
+            item.disabled = true;
+            return (<TreeNode key={ item.id + ',' + item.titl } title={ item.title } value={ item.id + ',' + item.title } disabled={ item.disabled } className={ styles.node } >
+                { renderTreeNodes(item.children) }
+            </TreeNode>);
+        }
+        return <TreeNode { ...item } key={ item.id + ',' + item.titl } title={ item.title } value={ item.id + ',' + item.title } />;
+    });
 
     const [ refresh, setRefresh ] = useState(false);
     const [ visible, setVisible ] = useState(false);
-    const [ form ] = useForm();
+    const [ form ] = Form.useForm();
     const [ detailData, setDetailData ] = useState<IDetailData>({});
     const [ processList, setProcessList ] = useState<IProcessList[]>([]);
+    const { data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
+        resole(data);
+    }), {})
+    const departmentData: any = data || [];
     return (
         <>
             <Page
@@ -189,15 +247,14 @@ export default function ProcessMngt(): React.ReactNode {
                             "required": true,
                             "message": "请选择所属车间"
                         }]}>
-                            <Select placeholder="请选择" onChange={ (e) => {
-                                console.log(e)
-                            } }>
-                                <Select.Option value={ 1 } key="4">全部</Select.Option>
-                                <Select.Option value={ 2 } key="">全部222</Select.Option>
-                            </Select>
+                        <TreeSelect placeholder="请选择" style={{ width: "150px" }} onChange={ (e) => {
+                            getList(e.toString().split(',')[0]);
+                        } }>
+                            { renderTreeNodes(wrapRole2DataNode(departmentData)) }
+                        </TreeSelect>
                     </Form.Item>
                     <Button type="primary" onClick={ addRow }>新增一行</Button>
-                    <Table rowKey="index" dataSource={[...processList]} pagination={false} columns={tableColumns} className={styles.addModal}/>
+                    <Table rowKey="id" dataSource={[...processList]} pagination={false} columns={tableColumns} className={styles.addModal}/>
                 </Form>
             </Modal>
         </>

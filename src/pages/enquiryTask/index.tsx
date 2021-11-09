@@ -1,7 +1,7 @@
 //询价任务
-import React, { useState, useRef, useEffect, Fragment } from 'react'
+import React, { useState, useRef, Fragment } from 'react'
 import { useHistory } from "react-router-dom"
-import { Input, DatePicker, Select, Button, Modal, Form, Descriptions, Space, message } from 'antd'
+import { Input, DatePicker, Select, Button, Modal, message } from 'antd'
 import { enquiryTaskList } from "./enquiryTask.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'

@@ -6,13 +6,18 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, Button, Modal, Select, Form, Popconfirm, message, Row, Col } from 'antd';
+import { Space, Input, Button, Modal, Select, Form, Popconfirm, message, Row, Col, TreeSelect } from 'antd';
 import { CommonTable, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
-import { useForm } from 'antd/es/form/Form';
  import styles from './WorkshopEquipmentMngt.module.less';
-import WorkshopUserSelectionComponent from '../../components/WorkshopUserModal';
+import WorkshopUserSelectionComponent, { IUser } from '../../components/WorkshopUserModal';
+import { wrapRole2DataNode } from './deptUtil';
+import { TreeNode } from 'antd/lib/tree-select';
+import useRequest from '@ahooksjs/use-request';
+import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
+import { IDeptProcessesDetailList, IProcess } from './ProductionLineMngt';
+import { SelectValue } from 'antd/lib/select';
 
 interface IDetail {
     readonly name?: string;
@@ -32,6 +37,19 @@ interface ITeamUserList {
     readonly teamId?: string;
     readonly userId?: string;
 }
+
+export interface ILineList {
+    readonly createTime?: string;
+    readonly createUserName?: string;
+    readonly deptProcessesId?: string;
+    readonly deptProcessesName?: string;
+    readonly description?: string;
+    readonly id?: string;
+    readonly name?: string;
+    readonly workshopDeptId?: string;
+    readonly workshopDeptName?: string;
+}
+
 export default function WorkshopTeamMngt(): React.ReactNode {
     const columns = [
         {
@@ -89,6 +107,8 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                         getList(record.id);
                         setVisible(true);
                         setTitle('编辑');
+                        setDisabled(false);
+                        setDisabled2(false);
                     } }>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
@@ -110,9 +130,9 @@ export default function WorkshopTeamMngt(): React.ReactNode {
 
     const tableColumns = [
         {
-            key: 'createTime',
+            key: 'name',
             title: '姓名',
-            dataIndex: 'createTime'
+            dataIndex: 'name'
         },
         {
             key: 'position',
@@ -140,17 +160,44 @@ export default function WorkshopTeamMngt(): React.ReactNode {
 
     const save = () => {
         form.validateFields().then(res => {
-            console.log(form.getFieldsValue(true));
-            console.log(userList);
+            let value = form.getFieldsValue(true);
+            value = {
+                ...value,
+                id: detail.id,
+                workshopDeptId: value.workshopDeptId.split(',')[0],
+                workshopDeptName: value.workshopDeptId.split(',')[1],
+                deptProcessesId: value.deptProcessesId.split(',')[0],
+                deptProcessesName: value.deptProcessesId.split(',')[1],
+                productionLinesId: value.productionLinesId.split(',')[0],
+                productionLinesName: value.productionLinesId.split(',')[1],
+                teamUserSaveDTOList: userList
+            }
+            RequestUtil.post<IDetail>(`/tower-production/team`, { ...value }).then(res => {
+                message.success('保存成功！');
+                setVisible(false);
+                setDisabled(true);
+                setDisabled2(true);
+                setUserList([]);
+                setDetail({});
+                setLine([]);
+                setProcess([]);
+                form.resetFields();
+                form.setFieldsValue({ deptProcessesId: '', name: '', productionLinesId: '', workshopDeptId: '' })
+                setRefresh(!refresh);
+            });
         })
     }
 
     const cancel = () => {
         setVisible(false);
-        form.resetFields();
+        setDisabled(true);
+        setDisabled2(true);
         setUserList([]);
-        setDisabled(false);
-        setDisabled2(false);
+        setDetail({});
+        setLine([]);
+        setProcess([]);
+        form.resetFields();
+        form.setFieldsValue({ deptProcessesId: '', name: '', productionLinesId: '', workshopDeptId: '' })
     }
 
     const delRow = (index: number) => {
@@ -160,23 +207,53 @@ export default function WorkshopTeamMngt(): React.ReactNode {
 
     const getList = async (id: string) => {
         const data = await RequestUtil.get<IDetail>(`/tower-production/team?id=${ id }`);
-        setDetail(data);
-        setUserList(data?.teamUserVOList || [])
+        const newData = {
+            ...data,
+            deptProcessesId: data.deptProcessesId + ',' + data.deptProcessesName,
+            workshopDeptId: data.workshopDeptId + ',' + data.workshopDeptName,
+            productionLinesId: data.productionLinesId + ',' + data.productionLinesName,
+        }
+        setDetail(newData);
+        getProcess(data.workshopDeptId || '');
+        getLine(data.deptProcessesId || '')
+        setUserList(newData?.teamUserVOList || []);
+        form.setFieldsValue({ ...newData })
+    }
+    
+    const getProcess = async (id: string) => {
+        const data = await RequestUtil.get<IProcess>(`/tower-production/workshopDept/detail?deptId=${ id }`);
+        setProcess(data?.deptProcessesDetailList || []);
+    }
+
+    const getLine = async (id: string) => {
+        const data = await RequestUtil.get<ILineList[]>(`/tower-production/productionLines/list?deptProcessesId=${ id }`);
+        setLine(data || []);
     }
 
     const [ refresh, setRefresh ] = useState(false);
     const [ visible, setVisible ] = useState(false);
-    const [ form ] = useForm();
-    const [ searchForm ] = useForm();
+    const [ form ] = Form.useForm();
+    const [ searchForm ] = Form.useForm();
     const [ filterValue, setFilterValue ] = useState({});
-    const [ disabled, setDisabled] = useState(false);
-    const [ disabled2, setDisabled2 ] = useState(false);
+    const [ disabled, setDisabled] = useState(true);
+    const [ disabled2, setDisabled2 ] = useState(true);
     const [ userList, setUserList ] = useState<ITeamUserList[]>([]);
     const [ title, setTitle ] = useState('新增');
     const [ detail, setDetail ] = useState<IDetail>({});
+    const [ process, setProcess ] = useState<IDeptProcessesDetailList[]>([]);
+    const [ line, setLine ] = useState<ILineList[]>([]);
+    const { data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get<SelectDataNode[]>(`/tower-production/workshopDept/list`);
+        resole(data);
+    }), {})
+    const departmentData: any = data || [];
     return (
         <>
             <Form form={searchForm} layout="inline" style={{margin:'20px'}} onFinish={(value: Record<string, any>) => {
+                value = {
+                    ...value,
+                    workshopDeptId: value.workshopDeptId && value.workshopDeptId.split(',')[0]
+                }
                 setFilterValue(value)
                 setRefresh(!refresh);
             }}>
@@ -184,18 +261,20 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                     <Input placeholder="请输入班组名称进行查询"/>
                 </Form.Item>
                 <Form.Item label='选择车间' name='workshopDeptId'>
-                    <Select placeholder="请选择" className={ styles.width150 } onChange={ (e) => {
-                        console.log(e)
-                        searchForm.setFieldsValue({ deptProcessesId: '' });
-                    } }>
-                        <Select.Option value={ 1 } key="4">全部</Select.Option>
-                        <Select.Option value={ 2 } key="">全部222</Select.Option>
+                    <Select placeholder="请选择" style={{ width: "150px" }} onChange={(e: string) => {
+                        searchForm.setFieldsValue({ deptProcessesId: ''});
+                        getProcess(e.toString().split(',')[0]);
+                    }}>
+                        { departmentData.map((item: any) => {
+                            return <Select.Option key={ item.deptId + ',' + item.deptName } value={ item.deptId + ',' + item.deptName }>{ item.deptName }</Select.Option>
+                        }) }
                     </Select>
                 </Form.Item>
                 <Form.Item label='选择工序' name='deptProcessesId'>
-                    <Select placeholder="请选择" className={ styles.width150 }>
-                        <Select.Option value={ 1 } key="4">全部</Select.Option>
-                        <Select.Option value={ 2 } key="">全部222</Select.Option>
+                    <Select placeholder="请选择" style={{ width: "150px" }}>
+                        { process.map((item: any) => {
+                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                        }) }
                     </Select>
                 </Form.Item>
                 <Form.Item>
@@ -206,10 +285,10 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                 </Form.Item>
             </Form>
             <Page
-                path="/tower-science/loftingList/loftingPage"
+                path="/tower-production/team/page"
                 columns={ columns }
                 headTabs={ [] }
-                extraOperation={ <Button type="primary" onClick={ () => setVisible(true) } ghost>新增</Button> }
+                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle('新增'); } } ghost>新增</Button> }
                 refresh={ refresh }
                 searchFormItems={ [] }
                 requestData={{ ...filterValue }}
@@ -222,26 +301,30 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                                     "required": true,
                                     "message": "请选择所属车间"
                                 }]}>
-                                <Select placeholder="请选择" onChange={ (e) => {
-                                    console.log(e)
-                                    setDisabled(true);
-                                } }>
-                                    <Select.Option value={ 1 } key="4">全部</Select.Option>
-                                    <Select.Option value={ 2 } key="">全部222</Select.Option>
+                                <Select placeholder="请选择" onChange={(e: string) => {
+                                    setDisabled(false);
+                                    form.setFieldsValue({ deptProcessesId: '', productionLinesId: '' });
+                                    getProcess(e.toString().split(',')[0]);
+                                }}>
+                                    { departmentData.map((item: any) => {
+                                        return <Select.Option key={ item.deptId + ',' + item.deptName } value={ item.deptId + ',' + item.deptName }>{ item.deptName }</Select.Option>
+                                    }) }
                                 </Select>
                             </Form.Item>
                         </Col>
                         <Col span={ 12 }>
-                            <Form.Item name="deptProcessesId"initialValue={ detail.deptProcessesId } label="工序" rules={[{
+                            <Form.Item name="deptProcessesId" initialValue={ detail.deptProcessesId } label="工序" rules={[{
                                     "required": true,
                                     "message": "请选择工序"
                                 }]}>
-                                <Select placeholder="请选择"  disabled={ disabled } onChange={ (e) => {
-                                    console.log(e)
-                                    setDisabled2(true);
+                                <Select placeholder="请选择" disabled={ disabled } onChange={ (e: SelectValue = '') => {
+                                    setDisabled2(false);
+                                    form.setFieldsValue({ productionLinesId: '' });
+                                    getLine(e.toString().split(',')[0]);
                                 } }>
-                                    <Select.Option value={ 1 } key="4">全部</Select.Option>
-                                    <Select.Option value={ 2 } key="">全部222</Select.Option>
+                                    { process.map((item: any) => {
+                                        return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
+                                    }) }
                                 </Select>
                             </Form.Item>
                         </Col>
@@ -261,16 +344,24 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                                     "message": "请选择所属产线"
                                 }]}>
                                 <Select placeholder="请选择" disabled={ disabled2 }>
-                                    <Select.Option value={ 1 } key="4">全部</Select.Option>
-                                    <Select.Option value={ 2 } key="">全部222</Select.Option>
+                                    { line.map((item: any) => {
+                                        return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
+                                    }) }
                                 </Select>
                             </Form.Item>
                         </Col>
                     </Row>
                 </Form>
                 <p>班组成员</p>
-                <WorkshopUserSelectionComponent onSelect={ (selectedRows: object[] | any) => {
-                    console.log(selectedRows)
+                <WorkshopUserSelectionComponent rowSelectionType="checkbox" buttonTitle="添加员工" onSelect={ (selectedRows: object[] | any) => {
+                    selectedRows = selectedRows.map((item: IUser) => {
+                        return {
+                            userId: item.id,
+                            name: item.name,
+                            position: item.stationName || '1',
+                            teamId: detail.id
+                        }
+                    })
                     setUserList(selectedRows);
                 } }/>
                 <CommonTable columns={ tableColumns } dataSource={ userList } pagination={ false } />

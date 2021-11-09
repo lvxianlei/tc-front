@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Input, DatePicker, Select, Button, Form } from 'antd'
 import { Link } from 'react-router-dom'
 import { baseInfo } from "./buyBurdening.json"
-import { Page } from '../../common';
+import { IntgSelect, Page } from '../../common'
 
 export default function EnquiryList(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
@@ -11,6 +11,10 @@ export default function EnquiryList(): React.ReactNode {
             const formatDate = value.startBatcheStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startBatcheStatusUpdateTime = formatDate[0] + ' 00:00:00';
             value.endBatcheStatusUpdateTime = formatDate[1] + ' 23:59:59';
+        }
+        if (value.batcherId) {
+            value.batcherDeptId = value.batcherId.first
+            value.batcherId = value.batcherId.second
         }
         setFilterValue(value)
         return value
@@ -50,18 +54,7 @@ export default function EnquiryList(): React.ReactNode {
                 {
                     name: 'batcherId',
                     label: '配料人',
-                    children: <div>
-                        {/* <Select style={{ width: '100px' }} defaultValue="部门">
-                            {confirmLeader && confirmLeader.map((item: any) => {
-                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                            })}
-                        </Select>
-                        <Select style={{ width: '100px' }} defaultValue="人员">
-                            {confirmLeader && confirmLeader.map((item: any) => {
-                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                            })}
-                        </Select> */}
-                    </div>
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyQuery',

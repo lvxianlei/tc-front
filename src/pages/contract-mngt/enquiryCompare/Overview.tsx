@@ -56,10 +56,8 @@ export default function Overview(): JSX.Element {
         })
     }
 
-    const handleSelect = (id: string, value: string) => {
-        console.log(id, value)
-        setMaterialList(materialLists.map((item: any) => item.id === id ? ({ ...item, winBidSupplierId: value }) : item))
-    }
+    const handleSelect = (id: string, value: string) => setMaterialList(materialLists.map((item: any) => item.id === id ? ({ ...item, winBidSupplierId: value }) : item))
+
 
     const handleAddPriceOk = () => new Promise(async (resolve, reject) => {
         try {

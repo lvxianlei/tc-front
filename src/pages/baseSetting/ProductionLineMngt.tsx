@@ -9,9 +9,10 @@ import { Space, Input, Button, Modal, Select, Form, Popconfirm, message } from '
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
-import { useForm } from 'antd/es/form/Form';
+import useRequest from '@ahooksjs/use-request';
+import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 
-interface IDetailData {
+export interface IDetailData {
     readonly createTime?: string;
     readonly createUserName?: string;
     readonly deptProcessesId?: string;
@@ -23,14 +24,27 @@ interface IDetailData {
     readonly workshopDeptName?: string;
 }
 
-interface IProcess {
-    readonly createTime?: string;
-    readonly createUserName?: string;
+export interface IProcess {
+    readonly deptProcessesDetailList?: IDeptProcessesDetailList[];
     readonly deptId?: string;
     readonly deptName?: string;
     readonly id?: string;
 }
+
+export interface IDeptProcessesDetailList {
+    readonly id?: string;
+    readonly name?: string;
+    readonly sort?: string;
+}
 export default function ProductionLineMngt(): React.ReactNode {
+    const [ refresh, setRefresh ] = useState(false);
+    const [ visible, setVisible ] = useState(false);
+    const [ title, setTitle ] = useState('新增');
+    const [ form ] = Form.useForm();
+    const [ processDisabled, setProcessDisabled ] = useState(true);
+    const [ detailData, setDetailData ] = useState<IDetailData>({});
+    const [ process, setProcess ] = useState<IDeptProcessesDetailList[]>([]);
+
     const columns = [
         {
             key: 'index',
@@ -87,12 +101,13 @@ export default function ProductionLineMngt(): React.ReactNode {
                         setVisible(true);
                         setTitle("编辑");
                         getList(record.id);
-                        getProcess();
+                        setProcessDisabled(false);
+                        getProcess(record.workshopDeptId);
                     } }>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => {
-                            RequestUtil.delete(`/tower-production/productionLines/remove`).then(res => {
+                            RequestUtil.delete(`/tower-production/productionLines/remove?id=${ record.id }`).then(res => {
                                 message.success('删除成功');
                                 setRefresh(!refresh);
                             });
@@ -109,39 +124,63 @@ export default function ProductionLineMngt(): React.ReactNode {
 
     const save = () => {
         form.validateFields().then(res => {
-            console.log(form.getFieldsValue(true));
+            let value = form.getFieldsValue(true);
+            value = {
+                ...value,
+                id: detailData.id,
+                workshopDeptId: value.workshopDeptId.split(',')[0],
+                workshopDeptName: value.workshopDeptId.split(',')[1],
+                deptProcessesId: value.deptProcessesId.split(',')[0],
+                deptProcessesName: value.deptProcessesId.split(',')[1],
+            }
+            RequestUtil.post<IDetailData>(`/tower-production/productionLines/submit`, { ...value }).then(res => {
+                message.success('保存成功！');
+                setVisible(false);
+                setRefresh(!refresh);
+                setProcessDisabled(true);
+                setProcess([]);
+                setDetailData({});
+                form.setFieldsValue({ name: '', deptProcessesId: '', workshopDeptId: '', description: '', createTime: '', creatUser: '', deptProcessesName: '', id: '', workshopDeptName: '' });
+            });
         })
     }
 
     const cancel = () => {
+        setProcessDisabled(true);
+        setProcess([]);
+        setDetailData({});
+        form.setFieldsValue({ name: '', deptProcessesId: '', workshopDeptId: '', description: '', createTime: '', creatUser: '', deptProcessesName: '', id: '', workshopDeptName: '' });
         setVisible(false);
-        form.resetFields();
     }
 
     const getList = async (id: string) => {
         const data = await RequestUtil.get<IDetailData>(`/tower-production/productionLines/detail?id=${ id }`);
-        setDetailData(data);
+        const newData = {
+            ...data,
+            deptProcessesId: data.deptProcessesId + ',' + data.deptProcessesName,
+            workshopDeptId: data.workshopDeptId + ',' + data.workshopDeptName,
+        }
+        setDetailData(newData);
+        form.setFieldsValue({...newData})
     }
 
-    const getProcess = async () => {
-        const data = await RequestUtil.get<IProcess[]>(`/tower-production/workshopDept/list`);
-        setProcess(data);
+    const getProcess = async (id: string) => {
+        const data = await RequestUtil.get<IProcess>(`/tower-production/workshopDept/detail?deptId=${ id }`);
+        setProcess(data?.deptProcessesDetailList || []);
     }
 
-    const [ refresh, setRefresh ] = useState(false);
-    const [ visible, setVisible ] = useState(false);
-    const [ title, setTitle ] = useState('新增');
-    const [ form ] = useForm();
-    const [ processDisabled, setProcessDisabled ] = useState(true);
-    const [ detailData, setDetailData ] = useState<IDetailData>({});
-    const [ process, setProcess ] = useState<IProcess[]>([]);
+    const { data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get<SelectDataNode[]>(`/tower-production/workshopDept/list`);
+        resole(data);
+    }), {})
+    const departmentData: any = data || [];
     return (
         <>
             <Page
                 path="/tower-production/productionLines/page"
                 columns={ columns }
                 headTabs={ [] }
-                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle("新增"); getProcess();} } ghost>新增产线</Button> }
+                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle("新增");} } ghost>新增产线</Button> }
                 refresh={ refresh }
                 searchFormItems={ [
                     {
@@ -156,7 +195,7 @@ export default function ProductionLineMngt(): React.ReactNode {
             />
             <Modal visible={ visible } width="40%" title={ title + "产线" } okText="保存" cancelText="取消" onOk={ save } onCancel={ cancel }>
                 <Form form={ form } labelCol={{ span: 4 }}>
-                    <Form.Item name="name" label="产线名称" initialValue={ detailData?.name } rules={[{
+                    <Form.Item name="name" label="产线名称" initialValue={ detailData.name } rules={[{
                             "required": true,
                             "message": "请输入产线名称"
                         }]}>
@@ -166,12 +205,14 @@ export default function ProductionLineMngt(): React.ReactNode {
                             "required": true,
                             "message": "请选择所属车间"
                         }]}>
-                        <Select placeholder="请选择" onChange={ (e) => {
-                            setProcessDisabled(false);
-                            form.setFieldsValue({ deptProcessesId: '' });
-                        } }>
-                            <Select.Option value={ 1 } key="4">全部</Select.Option>
-                            <Select.Option value={ 2 } key="">全部222</Select.Option>
+                        <Select placeholder="请选择">
+                            { departmentData.map((item: any) => {
+                                return <Select.Option key={ item.deptId + ',' + item.deptName } value={ item.deptId + ',' + item.deptName } onChange={(e: any) => {
+                                    setProcessDisabled(false);
+                                    form.setFieldsValue({ deptProcessesId: '' });
+                                    getProcess(e.toString().split(',')[0]);
+                                }}>{ item.deptName }</Select.Option>
+                            }) }
                         </Select>
                     </Form.Item>
                     <Form.Item name="deptProcessesId" label="所属工序" initialValue={ detailData.deptProcessesId } rules={[{
@@ -180,7 +221,7 @@ export default function ProductionLineMngt(): React.ReactNode {
                         }]}>
                         <Select placeholder="请选择" disabled={ processDisabled }>
                             { process.map((item: any) => {
-                                return <Select.Option key={ item.id } value={ item.id }>{ item.deptName }</Select.Option>
+                                return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
                             }) }
                         </Select>
                     </Form.Item>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {Input, DatePicker, Select, Button, Form, Modal, message} from 'antd'
+import { Input, DatePicker, Select, Button, Form, Modal, message } from 'antd'
 import { useHistory, Link, useParams } from 'react-router-dom'
 import { Page } from '../../common';
 import { SeeList } from "./buyBurdening.json"
@@ -14,8 +14,8 @@ export default function Overview(): React.ReactNode {
             value.startBatcheStatusUpdateTime = formatDate[0] + ' 00:00:00';
             value.endBatcheStatusUpdateTime = formatDate[1] + ' 23:59:59';
         }
-        setFilterValue({ ...filterValue, ...value })
-        return value
+        setFilterValue({ ...value, ...filterValue })
+        return ({ ...value, ...filterValue })
     }
 
     const { run: createComponent } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
@@ -55,7 +55,7 @@ export default function Overview(): React.ReactNode {
                     render: (_: any, records: any) => (<>
                         <Link to={`/workMngt/buyBurdening/component/${records.id}`}>明细</Link>
                         <Button type="link" >配料方案</Button>
-                        <Button type="link" onClick={()=> handleCreateComponent(records.id)
+                        <Button type="link" onClick={() => handleCreateComponent(records.id)
                         } >临时造数据</Button>
                     </>)
                 }

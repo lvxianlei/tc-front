@@ -1,5 +1,5 @@
 import React, { useState, useImperativeHandle, forwardRef, useCallback, useEffect } from 'react'
-import { Button, Upload, Modal, Image } from 'antd'
+import { Button, Upload, Modal, Image, message } from 'antd'
 import { DetailTitle, CommonTable } from "../common"
 import AuthUtil from "../../utils/AuthUtil"
 import { downLoadFile } from "../../utils"
@@ -21,7 +21,11 @@ interface AttachmentProps {
     dataSource?: FileProps[]
     edit?: boolean
 }
-
+export interface AttachmentRef {
+    getDataSource: () => FileProps[]
+    dataSource?: FileProps[]
+    resetFields: () => void
+}
 export default forwardRef(function ({ dataSource = [], edit = false }: AttachmentProps, ref): JSX.Element {
     const [attchs, setAttachs] = useState<FileProps[]>(dataSource)
     const [visible, setVisible] = useState<boolean>(false)
@@ -52,13 +56,21 @@ export default forwardRef(function ({ dataSource = [], edit = false }: Attachmen
         }
     }, [setAttachs, attchs])
 
-    useImperativeHandle(ref, () => ({ getDataSource, dataSource: attchs }), [JSON.stringify(attchs)])
+    useImperativeHandle(ref, () => ({ getDataSource, dataSource: attchs, resetFields }), [JSON.stringify(attchs)])
 
     const getDataSource = useCallback(() => attchs, [attchs])
 
+    const resetFields = useCallback(() => setAttachs([]), [attchs, setAttachs])
+
     const handleCat = useCallback((record: FileProps) => {
-        setPicUrl(edit ? record.link : record.filePath)
-        setVisible(true)
+        if (["png", "jpeg", "jpg"].includes(record.fileSuffix)) {
+            setPicUrl(record.filePath)
+            setVisible(true)
+        } else if (["pdf"].includes(record.fileSuffix)) {
+            window.open(record.filePath)
+        } else {
+            message.warning("暂只支持*.png,*.jpeg,*.jpg,*.pdf预览...")
+        }
     }, [setPicUrl, setVisible])
 
     const handleCancel = useCallback(() => setVisible(false), [setVisible])
@@ -97,7 +109,7 @@ export default forwardRef(function ({ dataSource = [], edit = false }: Attachmen
                 title: "操作",
                 dataIndex: "opration",
                 render: (_: any, record: any) => (<>
-                    <a onClick={() => handleCat(record)}>查看</a>
+                    {!edit && <a onClick={() => handleCat(record)}>查看</a>}
                     <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
                     {edit && <a onClick={() => deleteAttachData(record.uid || record.id)}>删除</a>}
                 </>)

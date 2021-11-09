@@ -19,9 +19,14 @@ export interface IEquipmentSelectionModalProps extends IAbstractSelectableModalP
     readonly projectId?: string;
 }
 export interface IEquipmentSelectionModalState extends IAbstractSelectableModalState {
-    readonly tableDataSource: [];
+    readonly tableDataSource: IData[];
+    readonly departmentData: [];
 }
 
+export interface IData {
+    readonly id?: string;
+    readonly deviceName?: string;
+}
 /**
  * Equipment Selection Modal
  */
@@ -56,40 +61,40 @@ export default class EquipmentSelectionModal extends AbstractFilteredSelectionMo
     }
 
     public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/contract', {
+        const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-equipment/device', {
             ...filterValues,
             projectId: this.props.projectId,
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize || this.state.tablePagination?.pageSize,
             status: this.props.status
         });
+        const data = await RequestUtil.get<[]>(`/tower-production/workshopDept/list`);
         this.setState({
             ...filterValues,
+            // tableDataSource: [{ deviceName: '塔型一', id: '1541465465165' }],
             tableDataSource: resData.records,
             tablePagination: {
                 ...this.state.tablePagination,
                 current: resData.current,
                 pageSize: resData.size,
                 total: resData.total
-            }
+            },
+            departmentData: data
         });
     }
 
     public getFilterFormItemProps(): FormItemProps[] {
         return [{
-            name: 'projectName',
+            name: 'selectName',
             children: <Input placeholder="请输入设备名称进行搜索" />
         },{
-            name: 'saleType',
+            name: 'useDeptId',
             label: '使用部门',
-            children:
-                <Select placeholder="请选择销售类型" className={styles.select_width} getPopupContainer={triggerNode => triggerNode.parentNode}>
-                    {saleTypeOptions && saleTypeOptions.map(({ id, name }, index) => {
-                        return <Option key={index} value={id}>
-                            {name}
-                        </Option>
-                    })}
-                </Select>
+            children: <Select placeholder="请选择">
+                { this.state.departmentData?.map((item: any) => {
+                    return <Select.Option key={ item.deptId } value={ item.deptId }>{ item.deptName }</Select.Option>
+                }) }
+            </Select>
 
         }];
     }
@@ -109,40 +114,54 @@ export default class EquipmentSelectionModal extends AbstractFilteredSelectionMo
 
     public getTableColumns(): TableColumnType<object>[] {
         return [{
-            key: 'contractNumber',
+            key: 'deviceType',
             title: '设备类别',
-            dataIndex: 'contractNumber',
+            dataIndex: 'deviceType',
             width: '15%',
         }, {
-            key: 'contractName',
+            key: 'deviceName',
             title: '设备名称',
-            dataIndex: 'contractName',
+            dataIndex: 'deviceName',
             width: '15%',
         }, {
-            key: 'saleType',
+            key: 'spec',
             title: '型号规格',
-            dataIndex: 'saleType',
+            dataIndex: 'spec',
             width: '15%',
         }, {
-            key: 'customerCompany',
+            key: 'deviceNumber',
             title: '设备编码',
-            dataIndex: 'customerCompany',
+            dataIndex: 'deviceNumber',
             width: '15%',
         }, {
-            key: 'signCustomerName',
+            key: 'useDeptName',
             title: '使用部门',
-            dataIndex: 'signCustomerName',
+            dataIndex: 'useDeptName',
             width: '15%',
         }, {
-            key: 'deliveryTime',
+            key: 'usePlace',
             title: '使用场所',
-            dataIndex: 'deliveryTime',
+            dataIndex: 'usePlace',
             width: '15%',
         }, {
-            key: 'deliveryTime',
-            title: '设别状态',
-            dataIndex: 'deliveryTime',
+            key: 'operatingStatus',
+            title: '设备状态',
+            dataIndex: 'operatingStatus',
             width: '15%',
+            render: (status: number): React.ReactNode => {
+                switch (status) {
+                    case 0:
+                        return '完好';
+                    case 1:
+                        return '闲置';
+                    case 2:
+                        return '停用';
+                    case 3:
+                        return '报废';
+                    case 4:
+                        return '已变卖';
+                }
+            }  
         }];
     }
 

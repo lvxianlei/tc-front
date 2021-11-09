@@ -1,6 +1,6 @@
 import React, { useImperativeHandle, forwardRef, useRef } from "react"
 import { Spin, Form } from 'antd'
-import { DetailContent, DetailTitle, BaseInfo, Attachment } from '../../common'
+import { DetailContent, DetailTitle, BaseInfo, Attachment, AttachmentRef } from '../../common'
 import { bilinformation } from "../financialData.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
@@ -15,7 +15,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         value: item.id,
         label: item.name
     }))
-    const attchsRef = useRef<{ getDataSource: () => any[] }>({ getDataSource: () => [] })
+    const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
     const [baseForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -59,6 +59,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
 
     const resetFields = () => {
         baseForm.resetFields()
+        attchsRef.current.resetFields()
     }
 
     return <Spin spinning={loading}>

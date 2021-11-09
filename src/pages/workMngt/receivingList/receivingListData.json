@@ -52,7 +52,7 @@
         },
         {
             "title": "创建人",
-            "dataIndex": "createUser",
+            "dataIndex": "createUserName",
             "type": "integer"
         }
     ],
