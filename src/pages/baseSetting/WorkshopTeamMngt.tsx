@@ -158,30 +158,34 @@ export default function WorkshopTeamMngt(): React.ReactNode {
     const save = () => {
         form.validateFields().then(res => {
             let value = form.getFieldsValue(true);
-            value = {
-                ...value,
-                id: detail.id,
-                workshopDeptId: value.workshopDeptId.split(',')[0],
-                workshopDeptName: value.workshopDeptId.split(',')[1],
-                deptProcessesId: value.deptProcessesId.split(',')[0],
-                deptProcessesName: value.deptProcessesId.split(',')[1],
-                productionLinesId: value.productionLinesId.split(',')[0],
-                productionLinesName: value.productionLinesId.split(',')[1],
-                teamUserSaveDTOList: userList
+            if(userList.length > 0) {
+                value = {
+                    ...value,
+                    id: detail.id,
+                    workshopDeptId: value.workshopDeptId.split(',')[0],
+                    workshopDeptName: value.workshopDeptId.split(',')[1],
+                    deptProcessesId: value.deptProcessesId.split(',')[0],
+                    deptProcessesName: value.deptProcessesId.split(',')[1],
+                    productionLinesId: value.productionLinesId.split(',')[0],
+                    productionLinesName: value.productionLinesId.split(',')[1],
+                    teamUserSaveDTOList: userList
+                }
+                RequestUtil.post<IDetail>(`/tower-production/team`, { ...value }).then(res => {
+                    message.success('保存成功！');
+                    setVisible(false);
+                    setDisabled(true);
+                    setDisabled2(true);
+                    setUserList([]);
+                    setDetail({});
+                    setLine([]);
+                    setProcess([]);
+                    form.resetFields();
+                    form.setFieldsValue({ deptProcessesId: '', name: '', productionLinesId: '', workshopDeptId: '' })
+                    setRefresh(!refresh);
+                });
+            } else {
+                message.warning('车间班组员工不可为空')
             }
-            RequestUtil.post<IDetail>(`/tower-production/team`, { ...value }).then(res => {
-                message.success('保存成功！');
-                setVisible(false);
-                setDisabled(true);
-                setDisabled2(true);
-                setUserList([]);
-                setDetail({});
-                setLine([]);
-                setProcess([]);
-                form.resetFields();
-                form.setFieldsValue({ deptProcessesId: '', name: '', productionLinesId: '', workshopDeptId: '' })
-                setRefresh(!refresh);
-            });
         })
     }
 
@@ -356,7 +360,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                         </Col>
                     </Row>
                 </Form>
-                <p>班组成员</p>
+                <p>*班组成员</p>
                 <WorkshopUserSelectionComponent rowSelectionType="checkbox" buttonTitle="添加员工" onSelect={ (selectedRows: object[] | any) => {
                     selectedRows = selectedRows.map((item: IUser) => {
                         return {
