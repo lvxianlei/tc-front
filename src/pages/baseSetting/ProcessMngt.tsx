@@ -92,7 +92,7 @@ export default function ProcessMngt(): React.ReactNode {
         },
         {
             key: 'name',
-            title: '工序',
+            title: '*工序',
             dataIndex: 'name',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["deptProcessesDetailList", index, "name"] } initialValue={ _ } rules={[{ 
@@ -104,7 +104,7 @@ export default function ProcessMngt(): React.ReactNode {
         },
         {
             key: 'sort',
-            title: '顺序',
+            title: '*顺序',
             dataIndex: 'sort',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["deptProcessesDetailList", index, "sort"] } initialValue={ _ } rules={[{ 
