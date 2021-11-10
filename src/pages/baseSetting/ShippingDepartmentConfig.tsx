@@ -239,7 +239,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
         setDetailData({});
         setReservoirList([]);
         form.resetFields();
-        form.setFieldsValue({ code: '', name: '', warehouseType: '', leaderName: '' });
+        form.setFieldsValue({ code: '', name: '', warehouseType: '', leaderName: '', warehousePositionVOList: [] });
     }
 
     const cancel = () => {
