@@ -7,10 +7,11 @@ import { enclosure } from '../project/managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import { downLoadFile } from "../../utils"
+import ApplicationContext from "../../configuration/ApplicationContext"
 export default function Edit() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
-
+    const productType: any = (ApplicationContext.get().dictionaryOption as any)["101"]
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/invoicing/getInvoicingInfo/${params.id}`)
@@ -49,7 +50,18 @@ export default function Edit() {
     ]} operation={[<Button key="cancel" onClick={() => history.go(-1)}>返回</Button>]}>
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
-            <BaseInfo columns={baseInfoHead} dataSource={data || {}} />
+            <BaseInfo columns={baseInfoHead.map((item: any) => {
+                if (item.dataIndex === "productTypeId") {
+                    return ({
+                        ...item,
+                        enum: productType.map((product: any) => ({
+                            value: product.id,
+                            label: product.name
+                        }))
+                    })
+                }
+                return item
+            })} dataSource={data || {}} />
 
             <DetailTitle title="发票信息" />
             <BaseInfo columns={invoiceHead} dataSource={data?.invoicingInfoVo || []} />

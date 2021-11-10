@@ -7,7 +7,6 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 export default function Invoicing() {
     const history = useHistory()
-
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/invoicing?id=${id}`)
@@ -70,8 +69,8 @@ export default function Invoicing() {
                 name: 'isOpen',
                 label: '是否已全开',
                 children: <Select style={{ width: 200 }}>
-                    <Select.Option value="2">发票已开全</Select.Option>
-                    <Select.Option value="3">发票未开全</Select.Option>
+                    <Select.Option value="2">发票未开全</Select.Option>
+                    <Select.Option value="3">发票已开全</Select.Option>
                 </Select>
             },
             {

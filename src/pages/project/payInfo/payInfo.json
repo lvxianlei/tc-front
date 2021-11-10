@@ -157,7 +157,7 @@
         },
         {
             "title": "保证金退回账户",
-            "dataIndex": "return_bank_number",
+            "dataIndex": "returnBankNumber",
             "type": "string"
         },
         {

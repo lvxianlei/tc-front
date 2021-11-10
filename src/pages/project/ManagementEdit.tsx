@@ -100,7 +100,6 @@ export default function BaseInfoEdit(): JSX.Element {
   }
 
   return <>
-    <ManagementDetailTabsTitle />
     <DetailContent operation={[
       <Button
         key="save"

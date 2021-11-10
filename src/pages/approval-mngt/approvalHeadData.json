@@ -98,7 +98,18 @@
         },
         {
             "title": "是否有合同版本",
-            "dataIndex": "contract"
+            "dataIndex": "contract",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "是",
+                    "value": 1
+                },
+                {
+                    "label": "否",
+                    "value": 2
+                }
+            ]
         },
         {
             "title": "货款结算条件及方式",

@@ -46,7 +46,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 resole(result)
                 return
             } else {
-                const result: { [key: string]: any } = await RequestUtil.post(`/applyPayment/saveAndStartApplyPayment`, data)
+                const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/applyPayment/saveAndStartApplyPayment`, data)
                 resole(result)
                 return
             }
@@ -87,7 +87,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 pleasePayAmount = Number(pleasePayAmount + parseFloat(item.pleasePayAmount || "0").toFixed(2))
                 receiptVos = [...receiptVos, ...item.receiptVos]
             })
-            console.log(fields.relatednotes.records)
             baseForm.setFieldsValue({
                 pleasePayAmount,
                 receiptNumbers: receiptVos.map((item: any) => item.receiptNumber).join(",")
