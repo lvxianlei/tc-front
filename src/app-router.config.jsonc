@@ -1631,6 +1631,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 公告管理
+      "name": "公告管理",
+      "path": "/announcement",
+      "module": "./pages/Announcement/AnnouncementMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 系统日志
       "name": "登录日志",
       "path": "/systemLog/login",

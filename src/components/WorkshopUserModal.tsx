@@ -88,7 +88,11 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
 
     //接口、获值
     public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-        let resData: IResponseData = await RequestUtil.get<IResponseData>(`/sinzetech-user/user`);
+        let resData: IResponseData = await RequestUtil.get<IResponseData>(`/sinzetech-user/user`, {
+            ...filterValues,
+            current: pagination.current || this.state.tablePagination?.current,
+            size: pagination.pageSize || this.state.tablePagination?.pageSize
+        });
         const selectKeys: [] = this.props.selectKey;
         let newData: IUser[] = resData.records;
         selectKeys?.forEach((item: IUser) => {
@@ -97,19 +101,26 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
         this.setState({
             ...filterValues,
             tableDataSource: newData,
+            tablePagination: {
+                ...this.state.tablePagination,
+                current: resData.current,
+                pageSize: resData.size,
+                total: resData.total
+            },
         });
     }
 
     //查询字段
     public getFilterFormItemProps(): FormItemProps[] {
         return [{
-            name: 'internalNumber',
+            name: 'name',
             children: <Input placeholder="请输入姓名进行查询" />
         }, ]
     }
 
     //查询
     public onFilterSubmit = async (values: Record<string, any>) => {
+        console.log(values)
         this.getTable(values);
     }
     //dataSource
@@ -194,6 +205,9 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
                                 isModalVisible: false
                             })
                             if (this.state.tableDataSource.length > 0) {
+                                this.setState({
+                                    selectedRowKeys: []
+                                })
                                 this.props.onSelect(this.state.selectedRows)
                             }
                         }

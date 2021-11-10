@@ -15,8 +15,6 @@ import { saleTypeOptions } from '../configuration/DictionaryOptions';
 
 const { Option } = Select;
 export interface IEquipmentSelectionModalProps extends IAbstractSelectableModalProps {
-    readonly status?: number;
-    readonly projectId?: string;
 }
 export interface IEquipmentSelectionModalState extends IAbstractSelectableModalState {
     readonly tableDataSource: IData[];
@@ -63,10 +61,8 @@ export default class EquipmentSelectionModal extends AbstractFilteredSelectionMo
     public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-equipment/device', {
             ...filterValues,
-            projectId: this.props.projectId,
             current: pagination.current || this.state.tablePagination?.current,
             size: pagination.pageSize || this.state.tablePagination?.pageSize,
-            status: this.props.status
         });
         const data = await RequestUtil.get<[]>(`/tower-production/workshopDept/list`);
         this.setState({
@@ -184,6 +180,9 @@ export default class EquipmentSelectionModal extends AbstractFilteredSelectionMo
                                 isModalVisible: false
                             })
                             if (this.state.tableDataSource.length > 0) {
+                                this.setState({
+                                    selectedRowKeys: []
+                                })
                                 this.props.onSelect(this.state.selectedRows)
                             }
                         }

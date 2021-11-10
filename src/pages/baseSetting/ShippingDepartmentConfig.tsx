@@ -13,6 +13,7 @@ import { useForm } from 'antd/es/form/Form';
 import styles from './ShippingDepartmentConfig.module.less';
 import WorkshopUserSelectionComponent, { IUser } from '../../components/WorkshopUserModal';
 import { warehouseOptions } from '../../configuration/DictionaryOptions';
+import { useHistory } from 'react-router-dom';
 
 interface IProcessList {
     readonly region?: string;
@@ -97,7 +98,8 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                         onConfirm={ () => {
                             RequestUtil.delete(`/tower-production/warehouse?warehouseId=${ record.id }`).then(res => {
                                 message.success('删除成功');
-                                setRefresh(!refresh);
+                                // setRefresh(!refresh);
+                                history.go(0);
                             });
                         } }
                         okText="确认"
@@ -212,14 +214,17 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                         message.success('保存成功！')
                         setVisible(false);
                         clear();
-                        setRefresh(!refresh);
+                        // setRefresh(!refresh);
+                        history.go(0);
+                        
                     });
                 } else {
                     RequestUtil.put<IDetailData>(`/tower-production/warehouse`, { ...value }).then(res => {
                         message.success('保存成功！')
                         setVisible(false);
                         clear();
-                        setRefresh(!refresh);
+                        // setRefresh(!refresh);
+                        history.go(0);
                     });
                 }  
             } else {
@@ -234,7 +239,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
         setDetailData({});
         setReservoirList([]);
         form.resetFields();
-        form.setFieldsValue({ code: '', name: '', warehouseType: '', leaderName: '' });
+        form.setFieldsValue({ code: '', name: '', warehouseType: '', leaderName: '', warehousePositionVOList: [] });
     }
 
     const cancel = () => {
@@ -284,6 +289,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
     const [ selectedRows, setSelectedRows ] = useState<IUser[] | any>({});
     const [ warehousePositionDTODeleteList, setWarehousePositionDTODeleteList ] = useState<IProcessList[]>([]);
     const [ warehouseKeeperDTODeleteList, setWarehouseKeeperDTODeleteList ] = useState<IWarehouseKeeperList[]>([]);
+    const history = useHistory();
     return (
         <>
             <Page
@@ -319,6 +325,10 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                             <Form.Item name="name" label="仓库名称" initialValue={ detailData?.name } rules={[{
                                     "required": true,
                                     "message": "请输入仓库名称"
+                                },
+                                {
+                                  pattern: /^[^\s]*$/,
+                                  message: '禁止输入空格',
                                 }]}>
                                 <Input maxLength={ 50 }/>
                             </Form.Item>

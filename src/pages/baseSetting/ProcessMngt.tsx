@@ -15,6 +15,7 @@ import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import useRequest from '@ahooksjs/use-request';
 import { wrapRole2DataNode } from './deptUtil';
+import { useHistory } from 'react-router';
 
 interface IProcessList {
     readonly sort?: string;
@@ -65,7 +66,8 @@ export default function ProcessMngt(): React.ReactNode {
                         onConfirm={ () => {
                             RequestUtil.delete(`/tower-production/workshopDept/remove?id=${ record.id }`).then(res => {
                                 message.success('删除成功');
-                                setRefresh(!refresh);
+                                // setRefresh(!refresh);
+                                history.go(0);
                             });
                         } }
                         okText="确认"
@@ -97,7 +99,11 @@ export default function ProcessMngt(): React.ReactNode {
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["deptProcessesDetailList", index, "name"] } initialValue={ _ } rules={[{ 
                     "required": true,
-                    "message": "请输入工序" }]}>
+                    "message": "请输入工序" },
+                    {
+                      pattern: /^[^\s]*$/,
+                      message: '禁止输入空格',
+                    }]}>
                     <Input maxLength={ 50 } key={ index } bordered={false} />
                 </Form.Item>
             )  
@@ -148,7 +154,8 @@ export default function ProcessMngt(): React.ReactNode {
                 setVisible(false);
                 setProcessList([]);
                 setDetailData({});
-                setRefresh(!refresh);
+                // setRefresh(!refresh);
+                history.go(0);
                 form.setFieldsValue({ deptId: '', deptProcessesDetailList: [] });
             });
         })
@@ -221,6 +228,8 @@ export default function ProcessMngt(): React.ReactNode {
     const [ form ] = Form.useForm();
     const [ detailData, setDetailData ] = useState<IDetailData>({});
     const [ processList, setProcessList ] = useState<IProcessList[]>([]);
+    const [ filterValue, setFilterValue ] = useState({});
+    const history = useHistory();
     const { data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
         resole(data);
@@ -241,7 +250,9 @@ export default function ProcessMngt(): React.ReactNode {
                         children: <Input placeholder="请输入部门名称进行查询"/>
                     }
                 ] }
+                filterValue={ filterValue }
                 onFilterSubmit = { (values: Record<string, any>) => {
+                    setFilterValue(values);
                     return values;
                 } }
             />
