@@ -61,8 +61,9 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
         const data = await RequestUtil.get<IDetailData>(`/tower-science/productSegment/distribution?productId=${ this.props.id }`);
         this.setState({
             visible: true,
-            detailData: data
+            detailData: {...data}
         })
+        this.getForm()?.setFieldsValue({ productSegmentListDTOList: [...data.loftingProductSegmentList || []] });
     }
 
     protected save = (path: string) => {
@@ -104,11 +105,11 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
     public render(): React.ReactNode {
         const detailData: IDetailData | undefined = this.state.detailData;
         return <>
-            <Button type="link" onClick={ () => this.modalShow() } ghost>配段</Button>
+            <Button type="link" key={this.props.id} onClick={ () => this.modalShow() } ghost>配段</Button>
             <Modal
                 visible={ this.state.visible } 
                 width="40%" 
-                title="配段" 
+                title="配段"
                 footer={ <Space>
                     <Button type="ghost" onClick={() => this.modalCancel() }>关闭</Button>
                     <Button type="primary" onClick={() => this.save('/tower-science/productSegment/distribution/save') } ghost>保存</Button>
@@ -116,36 +117,34 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                 </Space> } 
                 onCancel={ () => this.modalCancel() }
             >
-                <DetailContent>
+                <DetailContent key={this.props.id}>
                     <p>配段信息</p>
                     <Form ref={ this.form } className={ styles.descripForm }>
                         <Descriptions title="" bordered size="small" colon={ false } column={ 2 }>
-                                <Descriptions.Item label="塔型">    
-                                    <span>{ detailData?.productCategoryName }</span>
-                                </Descriptions.Item>
-                                <Descriptions.Item label="杆塔号">    
-                                    <span>{ detailData?.productNumber }</span>
-                                </Descriptions.Item>
-                                {
-                                    detailData?.loftingProductSegmentList?.map((items: IProductSegmentList, index: number) => {
-                                        return <>
-                                        <Descriptions.Item label="段号">    
+                            <Descriptions.Item label="塔型">    
+                                <span>{ detailData?.productCategoryName }</span>
+                            </Descriptions.Item>
+                            <Descriptions.Item label="杆塔号">    
+                                <span>{ detailData?.productNumber }</span>
+                            </Descriptions.Item>
+                            {
+                                [...detailData?.loftingProductSegmentList || []]?.map((items: IProductSegmentList, index: number) => {
+                                    return <>
+                                        <Descriptions.Item key={ index+'_'+this.props.id } label="段号">    
                                             <Form.Item name={ ["productSegmentListDTOList", index, "segmentName"] }>
                                                 <span>{ items.segmentName }</span>
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="段数">    
-                                            <Form.Item name={ ["productSegmentListDTOList", index, "count"] } initialValue={ items.count }>
+                                        <Descriptions.Item key={ index } label="段数">    
+                                            <Form.Item key={ index+'_'+this.props.id } name={ ["productSegmentListDTOList", index, "count"] } initialValue={ items.count }>
                                                 <Input placeholder="请输入"/>
                                             </Form.Item>
                                         </Descriptions.Item>
                                     </>
-                                    })
-                                }
-                                
+                                })
+                            }   
                         </Descriptions>
                     </Form>
-                   
                 </DetailContent>
             </Modal>
         </>
