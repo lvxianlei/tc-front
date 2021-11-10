@@ -160,7 +160,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                 <Form.Item name={ ["warehousePositionVOList", index, "region"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请输入库区" }]}>
-                    <Input maxLength={ 50 } key={ index } bordered={false} />
+                    <Input maxLength={ 50 } key={ index } />
                 </Form.Item>
             )  
         },
@@ -172,7 +172,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                 <Form.Item name={ ["warehousePositionVOList", index, "position"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请输入库位" }]}>
-                    <Input maxLength={ 50 } key={ index } bordered={false} />
+                    <Input maxLength={ 50 } key={ index } />
                 </Form.Item>
             )  
         },

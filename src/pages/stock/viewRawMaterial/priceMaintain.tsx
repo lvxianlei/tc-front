@@ -118,14 +118,10 @@ export default function PriceMaintain(): React.ReactNode {
         console.log(`selected ${value}`);
         setPriceSource(value);
     }
-    const disabledDate=(current: number)=> {
-        // Can not select days before today and today
-        return current && current < moment().endOf('day');
-      }
     const disabledDateTime = () => {
         return {
-            disabledHours: () => [0,24],
-            disabledMinutes: () => [30,60],
+            disabledHours: () => [0, 24],
+            disabledMinutes: () => [30, 60],
             disabledSeconds: () => [55, 56],
         };
     }
@@ -177,7 +173,7 @@ export default function PriceMaintain(): React.ReactNode {
         console.log(result);
     }
     const save1 = async (materialCategoryName: string, materialName: string, materialSpec: string, materialStandardName: string, priceSource: string, quotationTime: string) => {
-        const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPrice`, { id, materialCategoryId, materialCategoryName, materialId, materialName, materialSpec, materialStandard, materialStandardName, price, priceSource, quotationTime }, { "Content-Type": "application/json" })
+        const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPrice`, { materialCategoryId, materialCategoryName, materialId, materialName, materialSpec, materialStandard, materialStandardName, price, priceSource, quotationTime }, { "Content-Type": "application/json" })
         console.log(result);
         setIsModalVisible1(false);
     }
@@ -226,7 +222,6 @@ export default function PriceMaintain(): React.ReactNode {
                     }}>导入</Button>
                     <Button type="primary" style={{ marginLeft: "50px" }} onClick={() => {
                         setIsModalVisible1(true);
-                        setId(Math.floor(Math.random() * 10));
                         setMaterialCategoryId(Math.floor(Math.random() * 10));
                         setMaterialId(Math.floor(Math.random() * 10));
                         setMaterialStandard(Math.floor(Math.random() * 10));
@@ -319,7 +314,7 @@ export default function PriceMaintain(): React.ReactNode {
                         {/* <DatePicker showTime onChange={onChange} /> */}
                         <DatePicker
                             format="YYYY-MM-DD HH:mm:ss"
-                            disabledDate={(current) => {return current < moment().subtract(1, "day")}}
+                            disabledDate={(current) => { return current && current >= moment().endOf('day') }}
                             disabledTime={disabledDateTime}
                             showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
                             onChange={onChange}

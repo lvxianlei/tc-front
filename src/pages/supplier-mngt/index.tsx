@@ -233,7 +233,7 @@ export default function SupplierMngt(): React.ReactNode {
                 <Descriptions.Item label="联系人 *"><input placeholder={obj1.contactMan} style={{ border: "none", outline: "none" }} value={contactMan} onChange={(e) => { setContactMan(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="联系电话 *"><input placeholder={obj1.contactManTel} style={{ border: "none", outline: "none" }} value={contactManTel} onChange={(e) => { setContactManTel(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="主要供货产品 *">
-                    <Select mode="tags" defaultValue={obj1.supplyProducts} style={{ width: 120 }} bordered={false} onChange={handleChange2}>
+                    <Select mode="multiple" searchValue="" defaultValue={obj1.supplyProducts} style={{ width: 120 }} bordered={false} onChange={handleChange2}>
                         {
                             invoiceTypeEnum2.map((item: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }) => {
                                 return <Select.Option value={item.value}>{item.label}</Select.Option>
@@ -281,7 +281,7 @@ export default function SupplierMngt(): React.ReactNode {
                 <Descriptions.Item label="联系人 *"><input type="text" maxLength={10} style={{ border: "none", outline: "none" }} value={contactMan} onChange={(e) => { setContactMan(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="联系电话 *"><input maxLength={20} type="number" style={{ border: "none", outline: "none" }} value={contactManTel} onChange={(e) => { setContactManTel(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="主要供货产品 *">
-                    <Select mode="multiple" style={{ width: 120 }} bordered={false} onChange={handleChange2}>
+                    <Select mode="multiple" searchValue="" style={{ width: 120 }} bordered={false} onChange={handleChange2}>
                         {
                             invoiceTypeEnum2.map((item: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }) => {
                                 return <Select.Option value={item.value}>{item.label}</Select.Option>

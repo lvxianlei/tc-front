@@ -30,6 +30,7 @@ export default function ({ id }: OverviewProps) {
             {
                 title: "操作", dataIndex: "opration", render: (_: any, records: any) => <>
                     <Button type="link">下载</Button>
+                    <Button type="link">查看</Button>
                 </>
             }
         ]} dataSource={data?.inquirerAttachList || []} />
