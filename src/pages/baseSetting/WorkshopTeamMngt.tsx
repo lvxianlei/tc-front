@@ -360,7 +360,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                         </Col>
                     </Row>
                 </Form>
-                <p>*班组成员</p>
+                <p><span style={{ color: 'red' }}>*</span>班组成员</p>
                 <WorkshopUserSelectionComponent rowSelectionType="checkbox" buttonTitle="添加员工" onSelect={ (selectedRows: object[] | any) => {
                     selectedRows = selectedRows.map((item: IUser) => {
                         return {
