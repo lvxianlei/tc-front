@@ -94,6 +94,17 @@ export default class EquipmentSelectionModal extends AbstractFilteredSelectionMo
 
         }];
     }
+    
+    /**
+     * @description 取消操作 
+     * @param event 
+     */
+     public handleCancel = (): void => {
+        this.setState({
+            isModalVisible: false,
+            selectedRowKeys: []
+        })
+    };
 
     public onFilterSubmit = async (values: Record<string, any>) => {
         this.getTable(values, {
