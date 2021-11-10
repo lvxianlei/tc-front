@@ -153,12 +153,12 @@
     "ComponentDetail": [
         {
             "title": "材质",
-            "dataIndex": "materialTexture",
+            "dataIndex": "structureTexture",
             "type": "string"
         },
         {
             "title": "规格",
-            "dataIndex": "spec",
+            "dataIndex": "structureSpec",
             "type": "string"
         },
         {
@@ -168,7 +168,7 @@
         },
         {
             "title": "类型",
-            "dataIndex": ""
+            "dataIndex": "materialTypeName"
         }
     ],
     "BatchingScheme": [

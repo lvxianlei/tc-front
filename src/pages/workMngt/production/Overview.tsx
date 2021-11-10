@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import { Button, message, Spin, Modal } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, CommonTable } from '../../common'
@@ -7,11 +7,14 @@ import { ConstructionDetails, ProductionIngredients } from "./productionData.jso
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 
+interface IngredientsRef {
+    onSubmit: (type: "save" | "saveAndSubmit") => void
+}
 export default function Overview() {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
     const params = useParams<{ id: string }>()
-
+    const ingredientRef = useRef<IngredientsRef>({ onSubmit: () => { } })
     const { loading, data } = useRequest<{ detail: any[], programme: any[] }>(() => new Promise(async (resole, reject) => {
         try {
             const detail: any[] = await RequestUtil.get(`/tower-supply/produceIngredients/detail/${params.id}`)
@@ -22,13 +25,19 @@ export default function Overview() {
         }
     }))
 
-    const handleModelOk = async () => {
+    const handleModelOk = async (type: "save" | "saveAndSubmit") => {
+        await ingredientRef.current.onSubmit(type)
+        message.success("配料成功...")
         setVisible(false)
     }
 
     return <>
-        <Modal title="配料" width={1011} visible={visible} onCancel={() => setVisible(false)} onOk={handleModelOk}>
-            <Ingredients id={params.id} />
+        <Modal title="配料" width={1011} footer={[
+            <Button key="close" type="primary" ghost onClick={() => setVisible(false)}>关闭</Button>,
+            <Button key="save" type="primary" onClick={() => handleModelOk("save")}>保存</Button>,
+            <Button key="saveAndSubmit" type="primary" onClick={() => handleModelOk("saveAndSubmit")}>保存并提交</Button>
+        ]} visible={visible} onCancel={() => setVisible(false)}>
+            <Ingredients ref={ingredientRef} />
         </Modal>
         <DetailContent title={[
             <Button key="export" type="primary" style={{ marginRight: 16 }}>导出</Button>,
