@@ -11,6 +11,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
+import { useHistory } from 'react-router-dom';
 
 export interface IDetailData {
     readonly createTime?: string;
@@ -38,6 +39,7 @@ export default function ProductionLineMngt(): React.ReactNode {
     const [ processDisabled, setProcessDisabled ] = useState(true);
     const [ detailData, setDetailData ] = useState<IDetailData>({});
     const [ process, setProcess ] = useState<IProcess[]>([]);
+    const history = useHistory();
 
     const columns = [
         {
@@ -103,7 +105,8 @@ export default function ProductionLineMngt(): React.ReactNode {
                         onConfirm={ () => {
                             RequestUtil.delete(`/tower-production/productionLines/remove?id=${ record.id }`).then(res => {
                                 message.success('删除成功');
-                                setRefresh(!refresh);
+                                // setRefresh(!refresh);
+                                history.go(0);
                             });
                         } }
                         okText="确认"
@@ -130,7 +133,8 @@ export default function ProductionLineMngt(): React.ReactNode {
             RequestUtil.post<IDetailData>(`/tower-production/productionLines/submit`, { ...value }).then(res => {
                 message.success('保存成功！');
                 setVisible(false);
-                setRefresh(!refresh);
+                // setRefresh(!refresh);
+                history.go(0);
                 setProcessDisabled(true);
                 setProcess([]);
                 setDetailData({});

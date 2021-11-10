@@ -12,6 +12,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
 import EquipmentSelectionModal, { IData } from '../../components/EquipmentSelectionModal';
 import { carOptions } from '../../configuration/DictionaryOptions';
+import { useHistory } from 'react-router-dom';
 
 interface IDetail {
     readonly name?: string;
@@ -89,7 +90,8 @@ export default function VehicleMngt(): React.ReactNode {
                         onConfirm={ () => {
                             RequestUtil.delete(`/tower-production/vehicle?vehicleId=${ record.id }`).then(res => {
                                 message.success('删除成功');
-                                setRefresh(!refresh);
+                                // setRefresh(!refresh);
+                                history.go(0);
                             });
                         } }
                         okText="确认"
@@ -123,7 +125,8 @@ export default function VehicleMngt(): React.ReactNode {
                 setVisible(false);
                 setDetail({});
                 form.resetFields();
-                setRefresh(!refresh);
+                // setRefresh(!refresh);
+                history.go(0);
             });
         })
     }
@@ -151,7 +154,8 @@ export default function VehicleMngt(): React.ReactNode {
     const [ form ] = Form.useForm();
     const [ detail, setDetail ] = useState<IDetail>({});
     const [ title, setTitle ] = useState('新增');
-    const [ selectedRows, setSelectedRows ] = useState<IData[] | any>({});
+    const [ selectedRows, setSelectedRows ] = useState<IData[] | any>({});    
+    const history = useHistory();
     return (
         <>
             <Page
