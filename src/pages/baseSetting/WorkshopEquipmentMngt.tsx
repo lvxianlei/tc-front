@@ -138,8 +138,8 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                     deptProcessesName: value.deptProcessesId.split(',')[1],
                     productionLinesId: value.productionLinesId.split(',')[0],
                     productionLinesName: value.productionLinesId.split(',')[1],
-                    accountEquipmentId: selectedRows[0].id ? selectedRows[0].id : detail.accountEquipmentId,
-                    accountEquipmentName: selectedRows[0].deviceName ? selectedRows[0].deviceName : detail.accountEquipmentName
+                    accountEquipmentId: selectedRows[0] && selectedRows[0].id ? selectedRows[0].id : detail.accountEquipmentId,
+                    accountEquipmentName: selectedRows[0] && selectedRows[0].deviceName ? selectedRows[0].deviceName : detail.accountEquipmentName
                 }
             } else {
                 value = {

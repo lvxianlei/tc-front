@@ -6,7 +6,7 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, Button, Modal, Form, Table, Popconfirm, message, TreeSelect } from 'antd';
+import { Space, Input, Button, Modal, Form, Table, Popconfirm, message, TreeSelect, InputNumber } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
@@ -92,7 +92,7 @@ export default function ProcessMngt(): React.ReactNode {
         },
         {
             key: 'name',
-            title: '工序',
+            title: '*工序',
             dataIndex: 'name',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["deptProcessesDetailList", index, "name"] } initialValue={ _ } rules={[{ 
@@ -104,13 +104,13 @@ export default function ProcessMngt(): React.ReactNode {
         },
         {
             key: 'sort',
-            title: '顺序',
+            title: '*顺序',
             dataIndex: 'sort',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["deptProcessesDetailList", index, "sort"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请输入顺序" }]}>
-                    <Input type="number" min={ 1 } key={ index } bordered={false} />
+                    <InputNumber step={1} min={ 1 } precision={ 0 } key={ index } bordered={false} />
                 </Form.Item>
             )  
         },
@@ -199,6 +199,10 @@ export default function ProcessMngt(): React.ReactNode {
             setDetailData(newData);
             setProcessList(newData?.deptProcessesDetailList || []);
             form.setFieldsValue({ deptId: newData.deptId, deptProcessesDetailList: [...newData?.deptProcessesDetailList || []] })
+        } else {
+            setDetailData({});
+            setProcessList([]);
+            form.setFieldsValue({ deptProcessesDetailList: [] })
         }
     }
 

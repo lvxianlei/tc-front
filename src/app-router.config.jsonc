@@ -1630,6 +1630,13 @@
       "module": "./pages/baseSetting/VehicleMngt",
       "exact": true,
       "authority": "approvalm"
+    },
+    { // 系统日志
+      "name": "登录日志",
+      "path": "/systemLog/login",
+      "module": "./pages/system-log/Login",
+      "exact": true,
+      "authority": "approvalm"
     }
   ]
 }
