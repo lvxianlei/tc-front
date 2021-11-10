@@ -199,6 +199,10 @@ export default function ProcessMngt(): React.ReactNode {
             setDetailData(newData);
             setProcessList(newData?.deptProcessesDetailList || []);
             form.setFieldsValue({ deptId: newData.deptId, deptProcessesDetailList: [...newData?.deptProcessesDetailList || []] })
+        } else {
+            setDetailData({});
+            setProcessList([]);
+            form.setFieldsValue({ deptProcessesDetailList: [] })
         }
     }
 
