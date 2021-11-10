@@ -99,7 +99,11 @@ export default function ProcessMngt(): React.ReactNode {
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["deptProcessesDetailList", index, "name"] } initialValue={ _ } rules={[{ 
                     "required": true,
-                    "message": "请输入工序" }]}>
+                    "message": "请输入工序" },
+                    {
+                      pattern: /^[^\s]*$/,
+                      message: '禁止输入空格',
+                    }]}>
                     <Input maxLength={ 50 } key={ index } bordered={false} />
                 </Form.Item>
             )  

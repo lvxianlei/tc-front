@@ -196,6 +196,10 @@ export default function ProductionLineMngt(): React.ReactNode {
                     <Form.Item name="name" label="产线名称" initialValue={ detailData.name } rules={[{
                             "required": true,
                             "message": "请输入产线名称"
+                        },
+                        {
+                          pattern: /^[^\s]*$/,
+                          message: '禁止输入空格',
                         }]}>
                         <Input placeholder="请输入" maxLength={ 50 } />
                     </Form.Item>

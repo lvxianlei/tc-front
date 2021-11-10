@@ -334,6 +334,10 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                             <Form.Item name="name" label="班组名称" initialValue={ detail.name } rules={[{
                                     "required": true,
                                     "message": "请输入班组名称"
+                                },
+                                {
+                                  pattern: /^[^\s]*$/,
+                                  message: '禁止输入空格',
                                 }]}>
                                 <Input maxLength={ 50 }/>
                             </Form.Item>

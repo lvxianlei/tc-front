@@ -318,6 +318,10 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                             <Form.Item name="name" label="派工设备名称" initialValue={ detail.name } rules={[{
                                     "required": true,
                                     "message": "请输入派工设备名称"
+                                },
+                                {
+                                  pattern: /^[^\s]*$/,
+                                  message: '禁止输入空格',
                                 }]}>
                                 <Input maxLength={ 50 }/>
                             </Form.Item>
