@@ -151,6 +151,11 @@
             "type": "string"
         },
         {
+            "title": "投标保证金利息",
+            "dataIndex": "payRates",
+            "type": "string"
+        },
+        {
             "title": "保证金退回日期",
             "dataIndex": "returnTime",
             "type": "date"
