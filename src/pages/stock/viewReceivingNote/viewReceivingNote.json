@@ -22,7 +22,7 @@
         },
         {
             "title": "运费(元)",
-            "dataIndex": "freight"
+            "dataIndex": "price"
         },
         {
             "title": "货款运费合计(元)",
