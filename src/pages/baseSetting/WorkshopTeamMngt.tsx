@@ -10,13 +10,10 @@ import { Space, Input, Button, Modal, Select, Form, Popconfirm, message, Row, Co
 import { CommonTable, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
- import styles from './WorkshopEquipmentMngt.module.less';
 import WorkshopUserSelectionComponent, { IUser } from '../../components/WorkshopUserModal';
-import { wrapRole2DataNode } from './deptUtil';
-import { TreeNode } from 'antd/lib/tree-select';
 import useRequest from '@ahooksjs/use-request';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
-import { IDeptProcessesDetailList, IProcess } from './ProductionLineMngt';
+import { IProcess } from './ProductionLineMngt';
 import { SelectValue } from 'antd/lib/select';
 
 interface IDetail {
@@ -161,30 +158,34 @@ export default function WorkshopTeamMngt(): React.ReactNode {
     const save = () => {
         form.validateFields().then(res => {
             let value = form.getFieldsValue(true);
-            value = {
-                ...value,
-                id: detail.id,
-                workshopDeptId: value.workshopDeptId.split(',')[0],
-                workshopDeptName: value.workshopDeptId.split(',')[1],
-                deptProcessesId: value.deptProcessesId.split(',')[0],
-                deptProcessesName: value.deptProcessesId.split(',')[1],
-                productionLinesId: value.productionLinesId.split(',')[0],
-                productionLinesName: value.productionLinesId.split(',')[1],
-                teamUserSaveDTOList: userList
+            if(userList.length > 0) {
+                value = {
+                    ...value,
+                    id: detail.id,
+                    workshopDeptId: value.workshopDeptId.split(',')[0],
+                    workshopDeptName: value.workshopDeptId.split(',')[1],
+                    deptProcessesId: value.deptProcessesId.split(',')[0],
+                    deptProcessesName: value.deptProcessesId.split(',')[1],
+                    productionLinesId: value.productionLinesId.split(',')[0],
+                    productionLinesName: value.productionLinesId.split(',')[1],
+                    teamUserSaveDTOList: userList
+                }
+                RequestUtil.post<IDetail>(`/tower-production/team`, { ...value }).then(res => {
+                    message.success('保存成功！');
+                    setVisible(false);
+                    setDisabled(true);
+                    setDisabled2(true);
+                    setUserList([]);
+                    setDetail({});
+                    setLine([]);
+                    setProcess([]);
+                    form.resetFields();
+                    form.setFieldsValue({ deptProcessesId: '', name: '', productionLinesId: '', workshopDeptId: '' })
+                    setRefresh(!refresh);
+                });
+            } else {
+                message.warning('车间班组员工不可为空')
             }
-            RequestUtil.post<IDetail>(`/tower-production/team`, { ...value }).then(res => {
-                message.success('保存成功！');
-                setVisible(false);
-                setDisabled(true);
-                setDisabled2(true);
-                setUserList([]);
-                setDetail({});
-                setLine([]);
-                setProcess([]);
-                form.resetFields();
-                form.setFieldsValue({ deptProcessesId: '', name: '', productionLinesId: '', workshopDeptId: '' })
-                setRefresh(!refresh);
-            });
         })
     }
 
@@ -221,8 +222,8 @@ export default function WorkshopTeamMngt(): React.ReactNode {
     }
     
     const getProcess = async (id: string) => {
-        const data = await RequestUtil.get<IProcess>(`/tower-production/workshopDept/detail?deptId=${ id }`);
-        setProcess(data?.deptProcessesDetailList || []);
+        const data = await RequestUtil.get<IProcess[]>(`/tower-production/workshopDept/workshopDeptDetail?id=${ id }`);
+        setProcess(data || []);
     }
 
     const getLine = async (id: string) => {
@@ -240,7 +241,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
     const [ userList, setUserList ] = useState<ITeamUserList[]>([]);
     const [ title, setTitle ] = useState('新增');
     const [ detail, setDetail ] = useState<IDetail>({});
-    const [ process, setProcess ] = useState<IDeptProcessesDetailList[]>([]);
+    const [ process, setProcess ] = useState<IProcess[]>([]);
     const [ line, setLine ] = useState<ILineList[]>([]);
     const { data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<SelectDataNode[]>(`/tower-production/workshopDept/list`);
@@ -266,12 +267,12 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                         getProcess(e.toString().split(',')[0]);
                     }}>
                         { departmentData.map((item: any) => {
-                            return <Select.Option key={ item.deptId + ',' + item.deptName } value={ item.deptId + ',' + item.deptName }>{ item.deptName }</Select.Option>
+                            return <Select.Option key={ item.id + ',' + item.deptName } value={ item.id + ',' + item.deptName }>{ item.deptName }</Select.Option>
                         }) }
                     </Select>
                 </Form.Item>
                 <Form.Item label='选择工序' name='deptProcessesId'>
-                    <Select placeholder="请选择" style={{ width: "150px" }}>
+                    <Select placeholder="请选择" style={{ width: "150px" }} disabled={ !(searchForm.getFieldsValue(true).workshopDeptId) }>
                         { process.map((item: any) => {
                             return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
                         }) }
@@ -281,7 +282,10 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                     <Button type="primary" htmlType="submit">查询</Button>
                 </Form.Item>
                 <Form.Item>
-                    <Button htmlType="reset">重置</Button>
+                    <Button onClick={ () => {
+                        searchForm.resetFields();
+                        setProcess([]);
+                    } }>重置</Button>
                 </Form.Item>
             </Form>
             <Page
@@ -307,7 +311,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                                     getProcess(e.toString().split(',')[0]);
                                 }}>
                                     { departmentData.map((item: any) => {
-                                        return <Select.Option key={ item.deptId + ',' + item.deptName } value={ item.deptId + ',' + item.deptName }>{ item.deptName }</Select.Option>
+                                        return <Select.Option key={ item.id + ',' + item.deptName } value={ item.id + ',' + item.deptName }>{ item.deptName }</Select.Option>
                                     }) }
                                 </Select>
                             </Form.Item>
@@ -334,6 +338,10 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                             <Form.Item name="name" label="班组名称" initialValue={ detail.name } rules={[{
                                     "required": true,
                                     "message": "请输入班组名称"
+                                },
+                                {
+                                  pattern: /^[^\s]*$/,
+                                  message: '禁止输入空格',
                                 }]}>
                                 <Input maxLength={ 50 }/>
                             </Form.Item>
@@ -352,7 +360,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                         </Col>
                     </Row>
                 </Form>
-                <p>班组成员</p>
+                <p>*班组成员</p>
                 <WorkshopUserSelectionComponent rowSelectionType="checkbox" buttonTitle="添加员工" onSelect={ (selectedRows: object[] | any) => {
                     selectedRows = selectedRows.map((item: IUser) => {
                         return {

@@ -87,7 +87,7 @@ export default function PoleInformation(): React.ReactNode {
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                     {   userId === record.loftingUser ?
                         <>{  
-                            record.loftingStatus === 2 ? <WithSectionModal id={ record.id } updateList={ () => setRefresh(!refresh) }/> : <Button type="link" disabled>配段</Button> 
+                            record.loftingStatus === 2 ? <WithSectionModal key={ record.id } id={ record.id } updateList={ () => setRefresh(!refresh) }/> : <Button type="link" disabled>配段</Button> 
                         }</>
                         : null
                     }

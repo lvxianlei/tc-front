@@ -17,7 +17,7 @@ import '../../components/AbstractMngtComponent.module.less'
 export interface PageProps extends RouteComponentProps, WithTranslation {
     path: string
     columns: TableColumnType<object>[]
-    extraOperation?: ReactNode
+    extraOperation?: ReactNode | ((data: any) => ReactNode)
     tableProps?: TableProps<any>
     searchFormItems: FormItemProps[]
     headTabs?: ITabItem[]
@@ -25,6 +25,7 @@ export interface PageProps extends RouteComponentProps, WithTranslation {
     requestData?: {}
     refresh?: boolean//刷新
     filterValue?: {} //查询条件
+    sourceKey?: string
 }
 
 export interface IResponseData {
@@ -37,6 +38,7 @@ export interface IResponseData {
 interface PageState extends IAbstractMngtComponentState {
     name: string
     tableDataSource: object[]
+    resData: any
     readonly selectedUserKeys: []
     readonly selectedUsers: []
 }
@@ -54,9 +56,10 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
             tableDataSource: []
         };
     }
-
     protected async fetchTableData(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
+
         try {
+            const sourceDataKey: string[] = this.props.sourceKey?.split(".") || []
             const resData: IResponseData = await RequestUtil.get<IResponseData>(this.props.path, {
                 ...this.props.requestData,
                 ...filterValues,
@@ -66,7 +69,10 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
             });
             this.setState({
                 ...filterValues,
-                tableDataSource: resData.records || resData,
+                resData,
+                tableDataSource: this.props.sourceKey ? sourceDataKey.reduce((acc, key) => {
+                    return acc && key in acc ? acc[key] : null;
+                }, (resData as any)) : resData.records || resData,
                 tablePagination: {
                     ...this.state.tablePagination,
                     current: resData.current,
@@ -120,7 +126,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
     protected renderExtraOperationContent(): React.ReactNode {
         return (
             <Space direction="horizontal" size="middle">
-                {this.props.extraOperation!}
+                {typeof this.props.extraOperation === "function" ? this.props.extraOperation(this.state.resData) : this.props.extraOperation}
             </Space>
         );
     }

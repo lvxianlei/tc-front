@@ -53,9 +53,9 @@ export default forwardRef(function Edit({ detailId }: EditProps, ref): JSX.Eleme
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields])
 
     return <Spin spinning={loading}>
-        <Attachment dataSource={data?.projectAttachList || []} />
+        <Attachment dataSource={data?.projectAttachList} />
         <DetailTitle title="当前价格信息" />
-        <CommonTable columns={CurrentPriceInformation} dataSource={data?.materialDetails || []} />
+        <CommonTable haveIndex columns={CurrentPriceInformation} dataSource={data?.materialDetails || []} />
         <DetailTitle title="补充信息" />
         <Input.TextArea name="inquirerDescription" value={inquirerDescription} onChange={(event: any) => setInquirerDescription(event.target.value)} />
         <Attachment title="上传附件" edit ref={attchRef} />

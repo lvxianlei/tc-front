@@ -1,26 +1,28 @@
 import React, { useState } from "react"
 import { Input, DatePicker, Select } from 'antd'
-import { Page } from '../../common'
+import { IntgSelect, Page } from '../../common'
 import { baseInfo } from "../purchaseList/purchaseListData.json"
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 export default function RelationList() {
-    const params = useParams<{id:string}>();
-    const [filterValue, setFilterValue] = useState({purchasePlanId:params.id})
+    const params = useParams<{ id: string }>();
     const onFilterSubmit = (value: any) => {
         if (value.startPurchaseStatusUpdateTime) {
             const formatDate = value.startPurchaseStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startPurchaseStatusUpdateTime = formatDate[0] + " 00:00:00"
             value.endPurchaseStatusUpdateTime = formatDate[1] + " 23:59:59"
         }
-        setFilterValue({ ...filterValue, ...value })
-        return value
+        if (value.purchaserId) {
+            value.purchaserDeptId = value.purchaserId.first
+            value.purchaserId = value.purchaserId.second
+        }
+        return ({ ...value, purchasePlanId: params.id })
     }
 
     return <Page
         path="/tower-supply/purchaseTaskTower/purchaser"
         columns={baseInfo}
         onFilterSubmit={onFilterSubmit}
-        filterValue={filterValue}
+        filterValue={{ purchasePlanId: params.id }}
         searchFormItems={[
             {
                 name: 'startPurchaseStatusUpdateTime',
@@ -40,11 +42,7 @@ export default function RelationList() {
             {
                 name: 'purchaserId',
                 label: '采购人',
-                children: <Select style={{ width: 200 }}>
-                    <Select.Option value="1">待完成</Select.Option>
-                    <Select.Option value="2">待接收</Select.Option>
-                    <Select.Option value="3">已完成</Select.Option>
-                </Select>
+                children: <IntgSelect width={200} />
             },
             {
                 name: 'fuzzyQuery',

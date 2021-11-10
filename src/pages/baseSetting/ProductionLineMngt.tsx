@@ -11,6 +11,8 @@ import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
+import { useHistory } from 'react-router-dom';
+import styles from './WorkshopEquipmentMngt.module.less';
 
 export interface IDetailData {
     readonly createTime?: string;
@@ -25,17 +27,11 @@ export interface IDetailData {
 }
 
 export interface IProcess {
-    readonly deptProcessesDetailList?: IDeptProcessesDetailList[];
-    readonly deptId?: string;
-    readonly deptName?: string;
-    readonly id?: string;
-}
-
-export interface IDeptProcessesDetailList {
     readonly id?: string;
     readonly name?: string;
     readonly sort?: string;
 }
+
 export default function ProductionLineMngt(): React.ReactNode {
     const [ refresh, setRefresh ] = useState(false);
     const [ visible, setVisible ] = useState(false);
@@ -43,7 +39,8 @@ export default function ProductionLineMngt(): React.ReactNode {
     const [ form ] = Form.useForm();
     const [ processDisabled, setProcessDisabled ] = useState(true);
     const [ detailData, setDetailData ] = useState<IDetailData>({});
-    const [ process, setProcess ] = useState<IDeptProcessesDetailList[]>([]);
+    const [ process, setProcess ] = useState<IProcess[]>([]);
+    const history = useHistory();
 
     const columns = [
         {
@@ -109,7 +106,8 @@ export default function ProductionLineMngt(): React.ReactNode {
                         onConfirm={ () => {
                             RequestUtil.delete(`/tower-production/productionLines/remove?id=${ record.id }`).then(res => {
                                 message.success('删除成功');
-                                setRefresh(!refresh);
+                                // setRefresh(!refresh);
+                                history.go(0);
                             });
                         } }
                         okText="确认"
@@ -136,7 +134,8 @@ export default function ProductionLineMngt(): React.ReactNode {
             RequestUtil.post<IDetailData>(`/tower-production/productionLines/submit`, { ...value }).then(res => {
                 message.success('保存成功！');
                 setVisible(false);
-                setRefresh(!refresh);
+                // setRefresh(!refresh);
+                history.go(0);
                 setProcessDisabled(true);
                 setProcess([]);
                 setDetailData({});
@@ -165,9 +164,8 @@ export default function ProductionLineMngt(): React.ReactNode {
     }
 
     const getProcess = async (id: string) => {
-        console.log(id)
-        const data = await RequestUtil.get<IProcess>(`/tower-production/workshopDept/detail?deptId=${ id }`);
-        setProcess(data?.deptProcessesDetailList || []);
+        const data = await RequestUtil.get<IProcess[]>(`/tower-production/workshopDept/workshopDeptDetail?id=${ id }`);
+        setProcess(data || []);
     }
 
     const { data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
@@ -199,6 +197,10 @@ export default function ProductionLineMngt(): React.ReactNode {
                     <Form.Item name="name" label="产线名称" initialValue={ detailData.name } rules={[{
                             "required": true,
                             "message": "请输入产线名称"
+                        },
+                        {
+                          pattern: /^[^\s]*$/,
+                          message: '禁止输入空格',
                         }]}>
                         <Input placeholder="请输入" maxLength={ 50 } />
                     </Form.Item>
@@ -212,11 +214,11 @@ export default function ProductionLineMngt(): React.ReactNode {
                             getProcess(e.toString().split(',')[0]);
                         }}>
                             { departmentData.map((item: any) => {
-                                return <Select.Option key={ item.deptId + ',' + item.deptName } value={ item.deptId + ',' + item.deptName }>{ item.deptName }</Select.Option>
+                                return <Select.Option key={ item.id + ',' + item.deptName } value={ item.id + ',' + item.deptName }>{ item.deptName }</Select.Option>
                             }) }
                         </Select>
                     </Form.Item>
-                    <Form.Item name="deptProcessesId" label="所属工序" initialValue={ detailData.deptProcessesId } rules={[{
+                    <Form.Item name="deptProcessesId" label="所属工序" className={ styles.maxWidth80 } initialValue={ detailData.deptProcessesId } rules={[{
                             "required": true,
                             "message": "请选择所属工序"
                         }]}>

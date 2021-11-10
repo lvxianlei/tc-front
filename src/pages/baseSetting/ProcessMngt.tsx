@@ -6,7 +6,7 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, Button, Modal, Form, Table, Popconfirm, message, TreeSelect } from 'antd';
+import { Space, Input, Button, Modal, Form, Table, Popconfirm, message, TreeSelect, InputNumber } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
@@ -15,6 +15,7 @@ import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import useRequest from '@ahooksjs/use-request';
 import { wrapRole2DataNode } from './deptUtil';
+import { useHistory } from 'react-router';
 
 interface IProcessList {
     readonly sort?: string;
@@ -65,7 +66,8 @@ export default function ProcessMngt(): React.ReactNode {
                         onConfirm={ () => {
                             RequestUtil.delete(`/tower-production/workshopDept/remove?id=${ record.id }`).then(res => {
                                 message.success('删除成功');
-                                setRefresh(!refresh);
+                                // setRefresh(!refresh);
+                                history.go(0);
                             });
                         } }
                         okText="确认"
@@ -92,25 +94,29 @@ export default function ProcessMngt(): React.ReactNode {
         },
         {
             key: 'name',
-            title: '工序',
+            title: '*工序',
             dataIndex: 'name',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["deptProcessesDetailList", index, "name"] } initialValue={ _ } rules={[{ 
                     "required": true,
-                    "message": "请输入工序" }]}>
+                    "message": "请输入工序" },
+                    {
+                      pattern: /^[^\s]*$/,
+                      message: '禁止输入空格',
+                    }]}>
                     <Input maxLength={ 50 } key={ index } bordered={false} />
                 </Form.Item>
             )  
         },
         {
             key: 'sort',
-            title: '顺序',
+            title: '*顺序',
             dataIndex: 'sort',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["deptProcessesDetailList", index, "sort"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请输入顺序" }]}>
-                    <Input type="number" min={ 1 } key={ index } bordered={false} />
+                    <InputNumber step={1} min={ 1 } precision={ 0 } key={ index } bordered={false} />
                 </Form.Item>
             )  
         },
@@ -148,7 +154,8 @@ export default function ProcessMngt(): React.ReactNode {
                 setVisible(false);
                 setProcessList([]);
                 setDetailData({});
-                setRefresh(!refresh);
+                // setRefresh(!refresh);
+                history.go(0);
                 form.setFieldsValue({ deptId: '', deptProcessesDetailList: [] });
             });
         })
@@ -199,17 +206,21 @@ export default function ProcessMngt(): React.ReactNode {
             setDetailData(newData);
             setProcessList(newData?.deptProcessesDetailList || []);
             form.setFieldsValue({ deptId: newData.deptId, deptProcessesDetailList: [...newData?.deptProcessesDetailList || []] })
+        } else {
+            setDetailData({});
+            setProcessList([]);
+            form.setFieldsValue({ deptProcessesDetailList: [] })
         }
     }
 
     const renderTreeNodes = (data:any) => data.map((item:any) => {
         if (item.children) {
             item.disabled = true;
-            return (<TreeNode key={ item.id + ',' + item.titl } title={ item.title } value={ item.id + ',' + item.title } disabled={ item.disabled } className={ styles.node } >
+            return (<TreeNode key={ item.id + ',' + item.title } title={ item.title } value={ item.id + ',' + item.title } disabled={ item.disabled } className={ styles.node } >
                 { renderTreeNodes(item.children) }
             </TreeNode>);
         }
-        return <TreeNode { ...item } key={ item.id + ',' + item.titl } title={ item.title } value={ item.id + ',' + item.title } />;
+        return <TreeNode { ...item } key={ item.id + ',' + item.title } title={ item.title } value={ item.id + ',' + item.title } />;
     });
 
     const [ refresh, setRefresh ] = useState(false);
@@ -217,6 +228,8 @@ export default function ProcessMngt(): React.ReactNode {
     const [ form ] = Form.useForm();
     const [ detailData, setDetailData ] = useState<IDetailData>({});
     const [ processList, setProcessList ] = useState<IProcessList[]>([]);
+    const [ filterValue, setFilterValue ] = useState({});
+    const history = useHistory();
     const { data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
         resole(data);
@@ -237,7 +250,9 @@ export default function ProcessMngt(): React.ReactNode {
                         children: <Input placeholder="请输入部门名称进行查询"/>
                     }
                 ] }
+                filterValue={ filterValue }
                 onFilterSubmit = { (values: Record<string, any>) => {
+                    setFilterValue(values);
                     return values;
                 } }
             />

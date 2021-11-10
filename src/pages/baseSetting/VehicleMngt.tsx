@@ -12,6 +12,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
 import EquipmentSelectionModal, { IData } from '../../components/EquipmentSelectionModal';
 import { carOptions } from '../../configuration/DictionaryOptions';
+import { useHistory } from 'react-router-dom';
 
 interface IDetail {
     readonly name?: string;
@@ -89,7 +90,8 @@ export default function VehicleMngt(): React.ReactNode {
                         onConfirm={ () => {
                             RequestUtil.delete(`/tower-production/vehicle?vehicleId=${ record.id }`).then(res => {
                                 message.success('删除成功');
-                                setRefresh(!refresh);
+                                // setRefresh(!refresh);
+                                history.go(0);
                             });
                         } }
                         okText="确认"
@@ -109,8 +111,8 @@ export default function VehicleMngt(): React.ReactNode {
                 value = {
                     ...value,
                     id: detail.id,
-                    accountEquipmentId: detail.accountEquipmentId ? detail.accountEquipmentId : selectedRows[0].id,
-                    accountEquipmentName: detail.accountEquipmentName ? detail.accountEquipmentName : selectedRows[0].deviceName
+                    accountEquipmentId: selectedRows[0] && selectedRows[0].id ? selectedRows[0].id : detail.accountEquipmentId,
+                    accountEquipmentName: selectedRows[0] && selectedRows[0].deviceName ? selectedRows[0].deviceName : detail.accountEquipmentName
                 }
             } else {
                 value = {
@@ -123,7 +125,8 @@ export default function VehicleMngt(): React.ReactNode {
                 setVisible(false);
                 setDetail({});
                 form.resetFields();
-                setRefresh(!refresh);
+                // setRefresh(!refresh);
+                history.go(0);
             });
         })
     }
@@ -151,7 +154,8 @@ export default function VehicleMngt(): React.ReactNode {
     const [ form ] = Form.useForm();
     const [ detail, setDetail ] = useState<IDetail>({});
     const [ title, setTitle ] = useState('新增');
-    const [ selectedRows, setSelectedRows ] = useState<IData[] | any>({});
+    const [ selectedRows, setSelectedRows ] = useState<IData[] | any>({});    
+    const history = useHistory();
     return (
         <>
             <Page
@@ -192,7 +196,7 @@ export default function VehicleMngt(): React.ReactNode {
                 } }
             />
             <Modal visible={ visible } width="60%" title={ title } okText="保存" cancelText="取消" onOk={ save } onCancel={ cancel }>
-                <Form form={ form } labelCol={{ span: 8 }}>
+                <Form form={ form } labelCol={{ span: 10 }}>
                     <Row>
                         <Col span={ 8 }>
                             <Form.Item name="registrationNumber" initialValue={ detail?.registrationNumber } label="车辆设备号/车牌号" rules={[{
@@ -206,6 +210,10 @@ export default function VehicleMngt(): React.ReactNode {
                             <Form.Item name="name" label="车辆名称" initialValue={ detail?.name } rules={[{
                                     "required": true,
                                     "message": "请输入车辆名称"
+                                },
+                                {
+                                  pattern: /^[^\s]*$/,
+                                  message: '禁止输入空格',
                                 }]}>
                                 <Input maxLength={ 50 }/>
                             </Form.Item>
@@ -213,7 +221,7 @@ export default function VehicleMngt(): React.ReactNode {
                         <Col span={ 8 }>
                             <Form.Item name="vehicleType" label="车辆种类" initialValue={ detail?.vehicleType } rules={[{
                                     "required": true,
-                                    "message": "请选择所属产线"
+                                    "message": "请选择车辆种类"
                                 }]}>
                                 <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode}>
                                 { carOptions && carOptions.map(({ id, name }, index) => {
@@ -240,7 +248,7 @@ export default function VehicleMngt(): React.ReactNode {
                         </Col>
                         <Col span={ 8 }>
                             <Form.Item name="accountEquipmentName" label="台账设备关联">
-                                <Input maxLength={ 50 } value={ detail.accountEquipmentName } addonAfter={ <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
+                                <Input maxLength={ 50 } value={ detail.accountEquipmentName } suffix={ <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
                                     setSelectedRows(selectedRows);
                                     setDetail({ ...detail, accountEquipmentName: selectedRows[0].deviceName });
                                     form.setFieldsValue({ accountEquipmentName: selectedRows[0].deviceName })

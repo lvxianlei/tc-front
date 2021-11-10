@@ -260,6 +260,7 @@ export default function Information(): React.ReactNode {
                         ...item,
                         productType: item.productName,
                         price: item.data.cc || "0",
+                        accountingPrice: item.data.accountingPrice || "0",
                         logisticsPrice: item.logistics_price || "0"
                     })) || []
                 ]
@@ -493,12 +494,12 @@ export default function Information(): React.ReactNode {
             searchFormItems={[
                 {
                     name: 'omnipotentQuery',
-                    children: <Input placeholder="请输入项目名称/项目编码/审批编号/关联合同/制单人进行查询" style={{width:"380px"}} maxLength={200} />
+                    children: <Input placeholder="请输入项目名称/项目编码/审批编号/关联合同/制单人进行查询" style={{ width: "380px" }} maxLength={200} />
                 },
                 {
                     name: 'processTypeId',
                     label: '审批类型',
-                    children: <Select style={{width:"380px"}}>
+                    children: <Select style={{ width: "380px" }}>
                         {auditType?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}
                     </Select>
                 },
