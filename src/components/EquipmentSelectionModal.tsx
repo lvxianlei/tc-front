@@ -168,7 +168,7 @@ export default class EquipmentSelectionModal extends AbstractFilteredSelectionMo
                     this.setState({
                         isModalVisible: true
                     })
-                }}>+关联设备</Button>
+                }} style={{ padding: '0', lineHeight: 1, height: 'auto' }}>+关联设备</Button>
                 <Modal
                     title={this.state.confirmTitle}
                     visible={this.state.isModalVisible}

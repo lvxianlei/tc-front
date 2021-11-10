@@ -12,6 +12,7 @@ import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { useHistory } from 'react-router-dom';
+import styles from './WorkshopEquipmentMngt.module.less';
 
 export interface IDetailData {
     readonly createTime?: string;
@@ -217,7 +218,7 @@ export default function ProductionLineMngt(): React.ReactNode {
                             }) }
                         </Select>
                     </Form.Item>
-                    <Form.Item name="deptProcessesId" label="所属工序" initialValue={ detailData.deptProcessesId } rules={[{
+                    <Form.Item name="deptProcessesId" label="所属工序" className={ styles.maxWidth80 } initialValue={ detailData.deptProcessesId } rules={[{
                             "required": true,
                             "message": "请选择所属工序"
                         }]}>

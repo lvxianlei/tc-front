@@ -9,7 +9,6 @@ import { Space, Input, Button, Modal, Form, Table, Popconfirm, message, Row, Col
 import { CommonTable, DetailTitle, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
-import { useForm } from 'antd/es/form/Form';
 import styles from './ShippingDepartmentConfig.module.less';
 import WorkshopUserSelectionComponent, { IUser } from '../../components/WorkshopUserModal';
 import { warehouseOptions } from '../../configuration/DictionaryOptions';
@@ -33,6 +32,7 @@ interface IDetailData {
     readonly name?: string;
     readonly status?: string;
     readonly warehouseType?: string;
+    readonly warehouseTypeName?: string;
     readonly warehousePositionVOList?: IProcessList[];
     readonly warehouseKeeperVOList?: IWarehouseKeeperList[];
 }
@@ -207,7 +207,9 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                     warehousePositionDTOList: value.warehousePositionVOList,
                     warehouseKeeperDTOList: userList,
                     warehousePositionDTODeleteList: warehousePositionDTODeleteList,
-                    warehouseKeeperDTODeleteList: warehouseKeeperDTODeleteList
+                    warehouseKeeperDTODeleteList: warehouseKeeperDTODeleteList,
+                    warehouseTypeName: value.warehouseType.split(',')[1],
+                    warehouseType: value.warehouseType.split(',')[0]
                 }
                 if(title==='新增') {
                     RequestUtil.post<IDetailData>(`/tower-production/warehouse`, { ...value }).then(res => {
@@ -266,7 +268,11 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
     }
 
     const getList = async (id: string) => {
-        const data = await RequestUtil.get<IDetailData>(`/tower-production/warehouse/detail/${ id }`);
+        let data = await RequestUtil.get<IDetailData>(`/tower-production/warehouse/detail/${ id }`);
+        data={
+            ...data,
+            warehouseType: data.warehouseType + ',' + data.warehouseTypeName
+        }
         setReservoirList(data?.warehousePositionVOList || []);
         setUserList(data?.warehouseKeeperVOList || []);
         setDetailData(data);
@@ -342,7 +348,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                                 }]}>
                                 <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
                                     { warehouseOptions && warehouseOptions.map(({ id, name }, index) => {
-                                        return <Select.Option key={index} value={id}>
+                                        return <Select.Option key={index} value={id+','+name}>
                                             {name}
                                         </Select.Option>
                                     }) }
@@ -350,7 +356,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={ 12 }>
-                            <Form.Item name="leaderName" label="负责人" initialValue={ detailData?.leaderName }>
+                            <Form.Item name="leaderName" label="*负责人" initialValue={ detailData?.leaderName }>
                                 <Input maxLength={ 50 } value={ detailData.leaderName } addonAfter={ <WorkshopUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
                                     setSelectedRows(selectedRows);
                                     form.setFieldsValue({leaderName: selectedRows[0].name});
@@ -368,7 +374,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                         setUserList(selectedRows)
                     } } buttonTitle="选择保管员" />]}/>
                     <CommonTable columns={userColumns} dataSource={userList} showHeader={false} pagination={false} />
-                    <DetailTitle title="库区库位信息"/>
+                    <p style={{ fontSize: '16px', marginTop: '10px' }}>库区库位信息</p>
                     <Button type="primary" onClick={ addRow }>添加行</Button>
                     <Table rowKey="index" dataSource={[...reservoirList]} pagination={false} columns={tableColumns} className={styles.addModal}/>
                 </Form>

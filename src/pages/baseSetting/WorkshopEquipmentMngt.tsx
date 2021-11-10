@@ -299,7 +299,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={ 8 }>
-                            <Form.Item name="deptProcessesId" label="工序" initialValue={ detail.deptProcessesId } rules={[{
+                            <Form.Item name="deptProcessesId" className={ styles.maxWidth60 } label="工序" initialValue={ detail.deptProcessesId } rules={[{
                                     "required": true,
                                     "message": "请选择工序"
                                 }]}>
@@ -329,7 +329,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                     </Row>
                     <Row>
                         <Col span={ 8 }>
-                            <Form.Item name="productionLinesId" label="所属产线" initialValue={ detail.deptProcessesId } rules={[{
+                            <Form.Item name="productionLinesId" className={ styles.maxWidth60 } label="所属产线" initialValue={ detail.deptProcessesId } rules={[{
                                     "required": true,
                                     "message": "请选择所属产线"
                                 }]}>
@@ -342,7 +342,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                         </Col>
                         <Col span={ 8 }>
                             <Form.Item name="accountEquipmentName" initialValue={ detail.accountEquipmentName } label="台账设备关联">
-                                <Input maxLength={ 50 } value={ detail.accountEquipmentName } addonAfter={ <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
+                                <Input maxLength={ 50 } value={ detail.accountEquipmentName } suffix={ <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
                                         setSelectedRows(selectedRows);
                                         setDetail({ ...detail, accountEquipmentName: selectedRows[0].deviceName });
                                         form.setFieldsValue({ accountEquipmentName: selectedRows[0].deviceName })
