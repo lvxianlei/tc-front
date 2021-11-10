@@ -56,15 +56,37 @@ export default function SupplierMngt(): React.ReactNode {
         return value
     }
     const add = () => {
-        setIsModalVisible1(true)
+        setIsModalVisible1(true);
+        if (supplierName || supplierType || description || qualityAssurance || contactMan || contactManTel || supplyProducts || bankAccount || bankDeposit) {
+            setSupplierName("");
+            setSupplierType(0);
+            setQualityAssurance(0);
+            setContactMan("");
+            setContactManTel("");
+            setSupplyProducts("");
+            setBankAccount("");
+            setBankDeposit("");
+            setDescription([].toString());
+        }
     }
     const handleCancel1 = () => {
         setIsModalVisible1(false);
     };
     const save1 = async (bankAccount: string, bankDeposit: string, contactMan: string, contactManTel: string, description: string, qualityAssurance: number, supplierCode: string, supplierName: string, supplierType: number, supplyProducts: string) => {
-        const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/supplier`, { bankAccount, bankDeposit, contactMan, contactManTel, description, qualityAssurance, supplierCode, supplierName, supplierType, supplyProducts }, { "Content-Type": "application/json" })
-        console.log(result);
-        setIsModalVisible1(false);
+        if (!supplierName || !supplierType || !qualityAssurance || !contactMan || !contactManTel || !supplyProducts || !bankAccount || !bankDeposit) {
+            message.info('请输入必填项');
+            // message.info('请输入供应商类型');
+            // message.info('请输入质量保证体系');
+            // message.info('请输入联系人');
+            // message.info('请输入联系人电话');
+            // message.info('请输入供货产品');
+            // message.info('请输入开户账号');
+            // message.info('请输入开户银行');
+        } else {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/supplier`, { bankAccount, bankDeposit, contactMan, contactManTel, description, qualityAssurance, supplierCode, supplierName, supplierType, supplyProducts }, { "Content-Type": "application/json" })
+            console.log(result);
+            setIsModalVisible1(false);
+        }
     }
     const handleCancel = () => {
         setIsModalVisible(false);
@@ -259,7 +281,7 @@ export default function SupplierMngt(): React.ReactNode {
                 <Descriptions.Item label="联系人 *"><input type="text" maxLength={10} style={{ border: "none", outline: "none" }} value={contactMan} onChange={(e) => { setContactMan(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="联系电话 *"><input maxLength={20} type="number" style={{ border: "none", outline: "none" }} value={contactManTel} onChange={(e) => { setContactManTel(e.target.value) }} /></Descriptions.Item>
                 <Descriptions.Item label="主要供货产品 *">
-                    <Select mode="tags" style={{ width: 120 }} bordered={false} onChange={handleChange2}>
+                    <Select mode="multiple" style={{ width: 120 }} bordered={false} onChange={handleChange2}>
                         {
                             invoiceTypeEnum2.map((item: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }) => {
                                 return <Select.Option value={item.value}>{item.label}</Select.Option>

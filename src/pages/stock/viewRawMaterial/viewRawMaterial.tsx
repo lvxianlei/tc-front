@@ -7,48 +7,6 @@ import AntdCharts from "./antdCharts"
 import { CommonTable, Page } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
 import ApplicationContext from '../../../configuration/ApplicationContext'
-//原材料类型
-const projectType = [
-    {
-        value: 0,
-        label: "全部"
-    },
-    {
-        value: 0,
-        label: "焊管"
-    },
-    {
-        value: 1,
-        label: "钢板"
-    },
-    {
-        value: 2,
-        label: "圆钢"
-    },
-    {
-        value: 3,
-        label: "大角钢"
-    }
-]
-
-const currentProjectStage = [
-    {
-        value: 0,
-        label: "国网B级"
-    },
-    {
-        value: 1,
-        label: "国网C级"
-    },
-    {
-        value: 2,
-        label: "国网D\级"
-    },
-    {
-        value: 3,
-        label: "国网正公差"
-    }
-]
 
 export default function ViewRawMaterial(): React.ReactNode {
     //原材料标准
@@ -56,7 +14,7 @@ export default function ViewRawMaterial(): React.ReactNode {
         value: item.id,
         label: item.name
     }))
-    console.log(invoiceTypeEnum, "12324234353");
+
 
     const history = useHistory()
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -64,6 +22,8 @@ export default function ViewRawMaterial(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
     const [materialPriceId, setMaterialPriceId] = useState(0);
     const [arr, setArr] = useState<any>([]);
+    //原材料类型
+    const [projectType, setProjectType] = useState<any>([]);
     const { RangePicker } = DatePicker;
 
     const onFilterSubmit = (value: any) => {
@@ -104,12 +64,12 @@ export default function ViewRawMaterial(): React.ReactNode {
     const goPrice = () => {
         history.push(`/stock/viewRawMaterial/priceMaintain`)
     }
-    const buttons: {} | null | undefined=[
+    const buttons: {} | null | undefined = [
         <div>
             <Button onClick={() => setIsModalVisible(false)}>关闭</Button>
         </div>
     ]
-    const buttons1: {} | null | undefined=[
+    const buttons1: {} | null | undefined = [
         <div>
             <Button onClick={() => setIsModalVisible1(false)}>关闭</Button>
         </div>
@@ -125,6 +85,18 @@ export default function ViewRawMaterial(): React.ReactNode {
     }
     useEffect(() => {
         aa();
+    }, [])
+    const bb = async () => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/materialCategory?current=1&size=20`);
+            console.log(result);
+            setProjectType(result);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    useEffect(() => {
+        bb();
     }, [])
     return (
         <div>
@@ -164,7 +136,7 @@ export default function ViewRawMaterial(): React.ReactNode {
                         name: 'rawMaterialType',
                         label: '原材料类型',
                         children: <Select style={{ width: "150px" }} defaultValue={"全部"}>
-                            {projectType.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+                            {projectType.map((item: any, index: number) => <Select.Option value={item.name} key={index}>{item.name}</Select.Option>)}
                         </Select>
                     },
                     {
