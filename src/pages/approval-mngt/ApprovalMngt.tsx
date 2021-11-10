@@ -259,9 +259,12 @@ export default function Information(): React.ReactNode {
                     ...result.productArr?.map((item: any) => ({
                         ...item,
                         productType: item.productName,
-                        price: item.data.cc || "0",
-                        accountingPrice: item.data.accountingPrice || "0",
-                        logisticsPrice: item.logistics_price || "0"
+                        price: item.data.cc || "0.00",
+                        accountingPrice: item.data.accountingPrice || "0.00",
+                        logisticsPrice: item.logistics_price || "0.00",
+                        applyPrice: item.applyPrice || "0.00",
+                        outFactoryPrice: (parseFloat(item.data.accountingPrice || "0") - parseFloat(item.logistics_price || "0")).toFixed(2),
+                        offerDiff: (parseFloat(item.data.accountingPrice || "0") - parseFloat(item.applyPrice || "0")).toFixed(2)
                     })) || []
                 ]
             })
@@ -283,24 +286,22 @@ export default function Information(): React.ReactNode {
     }
 
     const calculate = (data: any) => {
-        const price = parseFloat(data.price || "0")
         const logisticsPrice = parseFloat(data.logisticsPrice || "0")
         const applyPrice = parseFloat(data.applyPrice || "0")
         const outFactoryPrice = parseFloat(data.outFactoryPrice || "0")
-
         return ({
-            price: (outFactoryPrice + logisticsPrice).toFixed(2),
-            offerDiff: (price - applyPrice).toFixed(2)
+            accountingPrice: (outFactoryPrice + logisticsPrice).toFixed(2),
+            offerDiff: (outFactoryPrice + logisticsPrice - applyPrice).toFixed(2)
         })
     }
 
     const outFactoryTableChange = (fields: any, allFields: any) => {
         if (fields.submit.length - 1 >= 0) {
-            // const currentRowData = fields.submit[fields.submit.length - 1]
             const newFields = allFields.submit.map((item: any, index: number) => index === fields.submit.length - 1 ? ({
                 ...item,
                 ...calculate(item)
             }) : item)
+
             outFactoryTableForm.setFieldsValue({ submit: newFields })
         }
     }

@@ -844,6 +844,8 @@
         {
             "title": "出厂单价",
             "dataIndex": "outFactoryPrice",
+            "disabled": true,
+            "type": "number",
             "rules": [
                 {
                     "required": true,
@@ -866,6 +868,7 @@
             "title": "核算价格",
             "dataIndex": "accountingPrice",
             "type": "number",
+            "disabled": true,
             "rules": [
                 {
                     "required": true,
