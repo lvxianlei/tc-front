@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Input, DatePicker, Select, Button, Form } from 'antd'
+import { Input, DatePicker, Select, Button } from 'antd'
 import { Link } from 'react-router-dom'
 import { baseInfo } from "./buyBurdening.json"
 import { IntgSelect, Page } from '../../common'
@@ -30,7 +30,8 @@ export default function EnquiryList(): React.ReactNode {
                     title: '操作',
                     width: 100,
                     dataIndex: 'operation',
-                    render: (_: any, records: any) => <Button type="link" disabled={![1, 3].includes(records.batcheTaskStatus)}><Link to={`/workMngt/buyBurdening/detail/${records.id}`}>查看</Link></Button>
+                    //disabled={![1, 3].includes(records.batcheTaskStatus)}
+                    render: (_: any, records: any) => <Link to={`/workMngt/buyBurdening/detail/${records.id}`}><Button type="link" >查看</Button></Link>
                 }
             ]}
             extraOperation={<Button type="primary" ghost>导出</Button>}

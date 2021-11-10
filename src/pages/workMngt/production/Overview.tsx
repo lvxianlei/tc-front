@@ -1,15 +1,20 @@
-import React, { useState } from "react"
-import { Button, message, Spin, Modal, Row, Col } from 'antd'
+import React, { useState, useRef } from "react"
+import { Button, message, Spin, Modal } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, CommonTable } from '../../common'
-import { ConstructionDetails, ProductionIngredients, ComponentDetail } from "./productionData.json"
+import Ingredients from "./Ingredients"
+import { ConstructionDetails, ProductionIngredients } from "./productionData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+
+interface IngredientsRef {
+    onSubmit: (type: "save" | "saveAndSubmit") => void
+}
 export default function Overview() {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
     const params = useParams<{ id: string }>()
-
+    const ingredientRef = useRef<IngredientsRef>({ onSubmit: () => { } })
     const { loading, data } = useRequest<{ detail: any[], programme: any[] }>(() => new Promise(async (resole, reject) => {
         try {
             const detail: any[] = await RequestUtil.get(`/tower-supply/produceIngredients/detail/${params.id}`)
@@ -20,44 +25,19 @@ export default function Overview() {
         }
     }))
 
-    const { loading: getIngredients, run: getIngredientsRun } = useRequest<{ [key: string]: any }>((productionBatch: string) => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/initData/ingredientsProgramme?productionBatch=${productionBatch}`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
-
-    const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/purchaseTaskTower/component?purchaseTaskTowerId=${params.id}`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
-
-    const handleModelOk = async () => {
+    const handleModelOk = async (type: "save" | "saveAndSubmit") => {
+        await ingredientRef.current.onSubmit(type)
+        message.success("配料成功...")
         setVisible(false)
     }
 
     return <>
-        <Modal title="配料" width={1011} visible={visible} onCancel={() => setVisible(false)} onOk={handleModelOk}>
-            <Row gutter={10}>
-                <Col span={12}>生产构件明细</Col>
-                <Col span={12}>采购配料方案剩余原材料</Col>
-            </Row>
-            <Row gutter={10}>
-                <Col span={12}>
-                    <CommonTable haveIndex columns={ConstructionDetails} dataSource={data?.detail || []} pagination={false} />
-                </Col>
-                <Col span={12}>
-                    <CommonTable columns={ComponentDetail} dataSource={data?.detail || []} pagination={false} />
-                </Col>
-            </Row>
-            <DetailTitle title="生产配料方案" />
-            <CommonTable columns={ProductionIngredients} dataSource={[]} />
+        <Modal title="配料" width={1011} footer={[
+            <Button key="close" type="primary" ghost onClick={() => setVisible(false)}>关闭</Button>,
+            <Button key="save" type="primary" onClick={() => handleModelOk("save")}>保存</Button>,
+            <Button key="saveAndSubmit" type="primary" onClick={() => handleModelOk("saveAndSubmit")}>保存并提交</Button>
+        ]} visible={visible} onCancel={() => setVisible(false)}>
+            <Ingredients ref={ingredientRef} />
         </Modal>
         <DetailContent title={[
             <Button key="export" type="primary" style={{ marginRight: 16 }}>导出</Button>,

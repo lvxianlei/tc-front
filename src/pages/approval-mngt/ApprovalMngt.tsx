@@ -141,8 +141,8 @@ export default function Information(): React.ReactNode {
         const result = await run({ path: "/tower-market/biddingEvaluation/submitAudit", data: postData })
         if (result) {
             message.success("成功创建申请...")
-            setBidingVisible(false)
-            history.go(0)
+            // setBidingVisible(false)
+            // history.go(0)
         } else {
             message.error(`创建申请失败！原因：${result}`)
         }
@@ -251,19 +251,19 @@ export default function Information(): React.ReactNode {
         if (Object.keys(changedFields).length > 0 && Object.keys(changedFields)[0] === "projectName") {
             const { biddingEndTime, biddingPerson, projectNumber, projectLeader, biddingAgency, id } = changedFields.projectName?.records[0]
             const result: any = await productRun(id)
-            const sorceData: any = outFactoryTableForm.getFieldsValue().submit
             outFactoryForm.setFieldsValue({ bidDeadline: biddingEndTime, biddingPerson, projectNumber, projectLeader, biddingAgency })
             outFactoryTableForm.setFieldsValue({
-                submit: [
-                    ...sorceData,
-                    ...result.productArr?.map((item: any) => ({
-                        ...item,
-                        productType: item.productName,
-                        price: item.data.cc || "0",
-                        accountingPrice: item.data.accountingPrice || "0",
-                        logisticsPrice: item.logistics_price || "0"
-                    })) || []
-                ]
+                submit: result.productArr?.map((item: any) => ({
+                    ...item,
+                    productType: item.productName,
+                    price: item.data.cc || "0.00",
+                    accountingPrice: item.data.accountingPrice || "0.00",
+                    logisticsPrice: item.logistics_price || "0.00",
+                    applyPrice: item.applyPrice || "0.00",
+                    outFactoryPrice: (parseFloat(item.data.accountingPrice || "0") - parseFloat(item.logistics_price || "0")).toFixed(2),
+                    offerDiff: (parseFloat(item.data.accountingPrice || "0") - parseFloat(item.applyPrice || "0")).toFixed(2)
+                })) || []
+
             })
         }
     }
@@ -283,24 +283,22 @@ export default function Information(): React.ReactNode {
     }
 
     const calculate = (data: any) => {
-        const price = parseFloat(data.price || "0")
         const logisticsPrice = parseFloat(data.logisticsPrice || "0")
         const applyPrice = parseFloat(data.applyPrice || "0")
         const outFactoryPrice = parseFloat(data.outFactoryPrice || "0")
-
         return ({
-            price: (outFactoryPrice + logisticsPrice).toFixed(2),
-            offerDiff: (price - applyPrice).toFixed(2)
+            accountingPrice: (outFactoryPrice + logisticsPrice).toFixed(2),
+            offerDiff: (outFactoryPrice + logisticsPrice - applyPrice).toFixed(2)
         })
     }
 
     const outFactoryTableChange = (fields: any, allFields: any) => {
         if (fields.submit.length - 1 >= 0) {
-            // const currentRowData = fields.submit[fields.submit.length - 1]
             const newFields = allFields.submit.map((item: any, index: number) => index === fields.submit.length - 1 ? ({
                 ...item,
                 ...calculate(item)
             }) : item)
+
             outFactoryTableForm.setFieldsValue({ submit: newFields })
         }
     }
@@ -494,12 +492,12 @@ export default function Information(): React.ReactNode {
             searchFormItems={[
                 {
                     name: 'omnipotentQuery',
-                    children: <Input placeholder="请输入项目名称/项目编码/审批编号/关联合同/制单人进行查询" style={{ width: "380px" }} maxLength={200} />
+                    children: <Input placeholder="项目名称/项目编码/审批编号/关联合同/制单人" style={{ width: "300px" }} maxLength={200} />
                 },
                 {
                     name: 'processTypeId',
                     label: '审批类型',
-                    children: <Select style={{ width: "380px" }}>
+                    children: <Select style={{ width: "200px" }}>
                         {auditType?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}
                     </Select>
                 },

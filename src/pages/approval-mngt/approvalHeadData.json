@@ -98,7 +98,18 @@
         },
         {
             "title": "是否有合同版本",
-            "dataIndex": "contract"
+            "dataIndex": "contract",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "是",
+                    "value": 1
+                },
+                {
+                    "label": "否",
+                    "value": 2
+                }
+            ]
         },
         {
             "title": "货款结算条件及方式",
@@ -133,7 +144,8 @@
         },
         {
             "title": "关联合同",
-            "dataIndex": "internalNumber"
+            "dataIndex": "internalNumber",
+            "type": "string"
         },
         {
             "title": "审批单类型",
@@ -405,10 +417,6 @@
                 {
                     "title": "合同名称",
                     "dataIndex": "contractName"
-                },
-                {
-                    "title": "销售类型",
-                    "dataIndex": "saleType"
                 },
                 {
                     "title": "业主单位",
@@ -844,6 +852,8 @@
         {
             "title": "出厂单价",
             "dataIndex": "outFactoryPrice",
+            "disabled": true,
+            "type": "number",
             "rules": [
                 {
                     "required": true,
@@ -866,6 +876,7 @@
             "title": "核算价格",
             "dataIndex": "accountingPrice",
             "type": "number",
+            "disabled": true,
             "rules": [
                 {
                     "required": true,

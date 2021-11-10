@@ -27,6 +27,13 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
                 render: (text: number) => <>{text && text !== -1 ? text : 0}</>,
                 ...data
             })
+        case "string":
+            return ({
+                ellipsis: true,
+                onCell: () => ({ className: styles.tableCell }),
+                render: (text: number) => <>{text && text !== -1 ? text : "-"}</>,
+                ...data
+            })
         default:
             return ({ ellipsis: true, onCell: () => ({ className: styles.tableCell }), ...data })
     }

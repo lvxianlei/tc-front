@@ -13,9 +13,9 @@ export default function Invoicing() {
     const [visible, setVisible] = useState<boolean>(false)
     const [generaterVisible, setGenerteVisible] = useState<boolean>(false)
     const [detailId, setDetailId] = useState<string>("")
-    const { loading, run: saveRun } = useRequest<any[]>((id: string) => new Promise(async (resole, reject) => {
+    const { loading, run: saveRun } = useRequest<any[]>((id: string, productCategoryName: string) => new Promise(async (resole, reject) => {
         try {
-            const result: any[] = await RequestUtil.get(`/tower-supply/initData/ingredients?materialTaskCode=${id}`)
+            const result: any[] = await RequestUtil.get(`/tower-supply/initData/ingredients?materialTaskCode=${id}&productCategoryName=${productCategoryName}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -39,7 +39,7 @@ export default function Invoicing() {
     }
     const handleGenerateOk = async () => {
         const formData = await form.validateFields()
-        await saveRun(formData.materialTaskCode)
+        await saveRun(formData.materialTaskCode, formData.productCategoryName)
         message.success("成功生成配料方案...")
         history.go(0)
     }
@@ -57,6 +57,11 @@ export default function Invoicing() {
                 <Form.Item rules={[
                     { required: true, message: "请输入原材料编号..." }
                 ]} name="materialTaskCode" label="原材料任务编号">
+                    <Input />
+                </Form.Item>
+                <Form.Item rules={[
+                    { required: true, message: "请输入塔形..." }
+                ]} name="productCategoryName" label="塔形">
                     <Input />
                 </Form.Item>
             </Form>
@@ -78,7 +83,7 @@ export default function Invoicing() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <Link to={`/workMngt/production/detailed/${record.productionBatch}`}>明细</Link>
+                            <Link to={`/workMngt/production/detailed/${record.id}`}>明细</Link>
                             <Button type="link"
                                 onClick={() => {
                                     setDetailId(record.id)
@@ -91,7 +96,7 @@ export default function Invoicing() {
                                 }}>生成放样构件</Button>
                             <Button type="link"
                                 onClick={() => {
-
+                                    message.warning("啥也没有...")
                                 }}>生成差异列表</Button>
                         </>
                     }
@@ -100,7 +105,6 @@ export default function Invoicing() {
                 <Button type="primary" ghost>导出</Button>
                 <Button type="primary" loading={loading} ghost onClick={() => setGenerteVisible(true)}>临时生成生产数据</Button>
             </>}
-
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
 

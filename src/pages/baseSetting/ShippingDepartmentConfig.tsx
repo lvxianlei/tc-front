@@ -32,6 +32,7 @@ interface IDetailData {
     readonly name?: string;
     readonly status?: string;
     readonly warehouseType?: string;
+    readonly warehouseTypeName?: string;
     readonly warehousePositionVOList?: IProcessList[];
     readonly warehouseKeeperVOList?: IWarehouseKeeperList[];
 }
@@ -159,7 +160,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                 <Form.Item name={ ["warehousePositionVOList", index, "region"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请输入库区" }]}>
-                    <Input maxLength={ 50 } key={ index } bordered={false} />
+                    <Input maxLength={ 50 } key={ index } />
                 </Form.Item>
             )  
         },
@@ -171,7 +172,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                 <Form.Item name={ ["warehousePositionVOList", index, "position"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请输入库位" }]}>
-                    <Input maxLength={ 50 } key={ index } bordered={false} />
+                    <Input maxLength={ 50 } key={ index } />
                 </Form.Item>
             )  
         },
@@ -206,7 +207,9 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                     warehousePositionDTOList: value.warehousePositionVOList,
                     warehouseKeeperDTOList: userList,
                     warehousePositionDTODeleteList: warehousePositionDTODeleteList,
-                    warehouseKeeperDTODeleteList: warehouseKeeperDTODeleteList
+                    warehouseKeeperDTODeleteList: warehouseKeeperDTODeleteList,
+                    warehouseTypeName: value.warehouseType.split(',')[1],
+                    warehouseType: value.warehouseType.split(',')[0]
                 }
                 if(title==='新增') {
                     RequestUtil.post<IDetailData>(`/tower-production/warehouse`, { ...value }).then(res => {
@@ -265,7 +268,11 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
     }
 
     const getList = async (id: string) => {
-        const data = await RequestUtil.get<IDetailData>(`/tower-production/warehouse/detail/${ id }`);
+        let data = await RequestUtil.get<IDetailData>(`/tower-production/warehouse/detail/${ id }`);
+        data={
+            ...data,
+            warehouseType: data.warehouseType + ',' + data.warehouseTypeName
+        }
         setReservoirList(data?.warehousePositionVOList || []);
         setUserList(data?.warehouseKeeperVOList || []);
         setDetailData(data);
@@ -341,7 +348,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                                 }]}>
                                 <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
                                     { warehouseOptions && warehouseOptions.map(({ id, name }, index) => {
-                                        return <Select.Option key={index} value={id}>
+                                        return <Select.Option key={index} value={id+','+name}>
                                             {name}
                                         </Select.Option>
                                     }) }
@@ -349,7 +356,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={ 12 }>
-                            <Form.Item name="leaderName" label="*负责人" initialValue={ detailData?.leaderName }>
+                            <Form.Item name="leaderName" label={<span><span style={{ color: 'red' }}>*</span>负责人</span>} initialValue={ detailData?.leaderName }>
                                 <Input maxLength={ 50 } value={ detailData.leaderName } addonAfter={ <WorkshopUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
                                     setSelectedRows(selectedRows);
                                     form.setFieldsValue({leaderName: selectedRows[0].name});

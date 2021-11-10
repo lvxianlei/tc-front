@@ -186,7 +186,7 @@
         },
         {
             "title": "制单人",
-            "dataIndex": "createUser"
+            "dataIndex": "createUserName"
         },
         {
             "title": "制单时间",
@@ -385,11 +385,11 @@
             "enum": [
                 {
                     "value": 2,
-                    "label": "发票未开完"
+                    "label": "发票未开全"
                 },
                 {
                     "value": 3,
-                    "label": "发票已开完"
+                    "label": "发票已开全"
                 }
             ],
             "rules": [
