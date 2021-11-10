@@ -349,7 +349,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={ 12 }>
-                            <Form.Item name="leaderName" label="负责人" initialValue={ detailData?.leaderName }>
+                            <Form.Item name="leaderName" label="*负责人" initialValue={ detailData?.leaderName }>
                                 <Input maxLength={ 50 } value={ detailData.leaderName } addonAfter={ <WorkshopUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
                                     setSelectedRows(selectedRows);
                                     form.setFieldsValue({leaderName: selectedRows[0].name});
