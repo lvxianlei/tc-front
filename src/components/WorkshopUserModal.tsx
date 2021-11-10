@@ -81,6 +81,17 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
         }
     }
 
+    /**
+     * @description 取消操作 
+     * @param event 
+     */
+     public handleCancel = (): void => {
+        this.setState({
+            isModalVisible: false,
+            selectedRowKeys: []
+        })
+    };
+
     //componentDidMount
     public componentDidMount(): void {
         this.getTable({})
@@ -120,7 +131,6 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
 
     //查询
     public onFilterSubmit = async (values: Record<string, any>) => {
-        console.log(values)
         this.getTable(values);
     }
     //dataSource
