@@ -28,7 +28,7 @@ export default forwardRef(function Ingredients(_, ref) {
 
     const onSubmit = (type: "save" | "saveAndSubmit") => new Promise(async (resove, reject) => {
         try {
-            await saveRun({ productId: params.id, schemeVOS: data?.schemeVOS }, type)
+            await saveRun({ produceId: params.id, schemeDtos: data?.schemeVOS }, type)
             resove(true)
         } catch (error) {
             reject(false)
