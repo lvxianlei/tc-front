@@ -116,7 +116,7 @@ export default function ProcessMngt(): React.ReactNode {
                 <Form.Item name={ ["deptProcessesDetailList", index, "sort"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请输入顺序" }]}>
-                    <InputNumber step={1} min={ 1 } precision={ 0 } key={ index } bordered={false} />
+                    <InputNumber step={1} min={ 1 } maxLength={ 10 } precision={ 0 } key={ index } bordered={false} />
                 </Form.Item>
             )  
         },
