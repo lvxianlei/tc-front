@@ -1,0 +1,43 @@
+.receiving_modal {
+    .receiving_info {
+        display: flex;
+
+        .part {
+            width: 50%;
+
+            .item {
+                display: flex;
+                height: 40px;
+
+                .tip {
+                    width: 60px;
+                    background-color: #eee;
+                    text-align: right;
+                    line-height: 40px;
+                    padding-right: 5px;
+
+                    span {
+                        color: red;
+                    }
+                }
+
+                .info {
+                    flex: 1;
+                    padding: 0 10px;
+                    border: 1px solid #eee;
+                    display: flex;
+                    align-items: center;
+                    overflow: hidden;
+                    .select {
+                        .ant-select-selector {
+                            border: none;
+                        }
+                    }
+                    .ant-input{
+                        border: none;
+                    }
+                }
+            }
+        }
+    }
+}

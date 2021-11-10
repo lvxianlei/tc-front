@@ -71,13 +71,12 @@ export default function rawMaterial() {
     const buttons: {} | null | undefined = [
         <div>
             <Button onClick={() => setIsModalVisible(false)}>关闭</Button>&emsp; &emsp; &emsp; &emsp; &emsp;
-            {/* {
-                data?.records.taskStatus === 1 ? <div>
+            {
+                obj.taskStatus === 1 ? <span>
                     <Button onClick={() => setIsModalVisible3(true)}>拒绝</Button>
                     <Button onClick={() => { receive(id) }}>接受</Button>
-                </div> : null
-            } */}
-
+                </span> : null
+            }
         </div>
     ]
     const buttons1: {} | null | undefined = [
@@ -137,15 +136,20 @@ export default function rawMaterial() {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        render: (_: any, records: any) => <>
-                            <Button type="link" onClick={() => { detail(records.id) }}>任务详情</Button>
-                            <Button type="link" onClick={() => {
-                                setDetailId(records.id)
-                                setIsModalVisible1(true)
-                            }}>指派</Button>
-                            <Button type="link" onClick={() => { history.push(`/buyingTask/materialList`) }}>用料清单</Button>
-                            <Button type="link" onClick={() => { setIsModalVisible2(true) }}>提交任务</Button>
-                        </>
+                        render: (_: any, records: any) => {
+                            return <>
+                                <Button type="link" onClick={() => { detail(records.id) }}>任务详情</Button>
+                                {
+                                    records.taskStatus === 3 ? <Button type="link" onClick={() => { setDetailId(records.id); setIsModalVisible1(true) }}>指派</Button> : null
+                                }
+                                {
+                                    records.taskStatus === 2 ? <span>
+                                        <Button type="link" onClick={() => { history.push(`/buyingTask/materialList`) }}>用料清单</Button>
+                                        <Button type="link" onClick={() => { setIsModalVisible2(true) }}>提交任务</Button>
+                                    </span> : null
+                                }
+                            </>
+                        }
                     }
                 ]}
                 filterValue={filterValue}

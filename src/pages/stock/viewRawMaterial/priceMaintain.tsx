@@ -118,6 +118,17 @@ export default function PriceMaintain(): React.ReactNode {
         console.log(`selected ${value}`);
         setPriceSource(value);
     }
+    const disabledDate=(current: number)=> {
+        // Can not select days before today and today
+        return current && current < moment().endOf('day');
+      }
+    const disabledDateTime = () => {
+        return {
+            disabledHours: () => [0,24],
+            disabledMinutes: () => [30,60],
+            disabledSeconds: () => [55, 56],
+        };
+    }
     const onChange = (date: any, dateString: any) => {
         console.log(date, dateString);
         const a = moment(dateString).format("YYYY-MM-DD HH:mm:ss");
@@ -139,9 +150,9 @@ export default function PriceMaintain(): React.ReactNode {
         const value = Number(val);
         setPrice(value);
     }
-    const input = (e: any) => {
-        e.target.value = e.target.value.replace(/[^\d]/g, '')
-    }
+    // const input = (e: any) => {
+    //     e.target.value = e.target.value.replace(/[^\d]/g, '')
+    // }
     const value1 = (e: React.ChangeEvent<HTMLInputElement>) => {
         let val = e.target.value.replace(/(^\s*)|(\s*$)/g, "")
         console.log(val);
@@ -297,7 +308,7 @@ export default function PriceMaintain(): React.ReactNode {
                             <Select.Option value="大角钢">大角钢</Select.Option>
                         </Select>
                     </Descriptions.Item>
-                    <Descriptions.Item label="价格 *">￥<input placeholder='请输入' onInput={(e) => input(e)} value={price1} maxLength={20} style={{ border: "none", outline: "none" }} onChange={(e) => value1(e)} />/吨</Descriptions.Item>
+                    <Descriptions.Item label="价格 *">￥<input placeholder='请输入' type="text" value={price1} maxLength={20} style={{ border: "none", outline: "none" }} onChange={(e) => value1(e)} />/吨</Descriptions.Item>
                     <Descriptions.Item label="价格来源 *">
                         <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange4}>
                             <Select.Option value="南山钢铁有限公司">南山钢铁有限公司</Select.Option>
@@ -305,7 +316,14 @@ export default function PriceMaintain(): React.ReactNode {
                         </Select>
                     </Descriptions.Item>
                     <Descriptions.Item label="报价时间 *">
-                        <DatePicker showTime onChange={onChange} />
+                        {/* <DatePicker showTime onChange={onChange} /> */}
+                        <DatePicker
+                            format="YYYY-MM-DD HH:mm:ss"
+                            disabledDate={(current) => {return current < moment().subtract(1, "day")}}
+                            disabledTime={disabledDateTime}
+                            showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+                            onChange={onChange}
+                        />
                     </Descriptions.Item>
                     <Descriptions.Item label="">{ }</Descriptions.Item>
                 </Descriptions>

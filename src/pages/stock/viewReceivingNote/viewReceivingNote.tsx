@@ -110,7 +110,7 @@ export default function ViewReceivingNote(): React.ReactNode {
                         render: (text, record: any) => {
                             // console.log(record);
                             return <div>
-                                <Button type="link" onClick={() => history.push(`/stock/rawMaterialWarehousing/detail/${record.id}`)}>{record.receiveNumber}</Button>
+                                <Button type="link" onClick={() => history.push(`/stock/viewReceivingNote/viewReceivingNoteDetail`)}>{record.receiveNumber}</Button>
                             </div>
                         }
                     },
