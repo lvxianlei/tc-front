@@ -30,13 +30,13 @@
             "title": "塔型（个）",
             "dataIndex": "productCategoryNum",
             "width": 100,
-            "type": "integer"
+            "type": "string"
         },
         {
             "title": "杆塔（基）",
             "dataIndex": "productNum",
             "width": 100,
-            "type": "integer"
+            "type": "string"
         },
         {
             "title": "圆钢收货量（吨）/总重（吨）",
@@ -96,12 +96,12 @@
         {
             "title": "杆塔数",
             "dataIndex": "productNum",
-            "type": "integer"
+            "type": "string"
         },
         {
             "title": "原材料任务编号",
             "dataIndex": "materialCategoryId",
-            "type": "integer"
+            "type": "string"
         },
         {
             "title": "圆钢总重（吨）",
@@ -121,12 +121,12 @@
         {
             "title": "采购负责人",
             "dataIndex": "purchaserId",
-            "type": "integer"
+            "type": "string"
         },
         {
             "title": "塔型采购状态",
             "dataIndex": "purchaseType",
-            "type": "integer"
+            "type": "string"
         },
         {
             "title": "最新状态变更时间",
@@ -137,22 +137,22 @@
     "PurchaseList": [
         {
             "title": "材质",
-            "dataIndex": "materialTexture",
+            "dataIndex": "structureTexture",
             "type": "string"
         },
         {
             "title": "标准",
             "dataIndex": "standard",
-            "type": "integer"
+            "type": "string"
         },
         {
             "title": "规格",
-            "dataIndex": "spec",
+            "dataIndex": "planPurchaseNum",
             "type": "string"
         },
         {
             "title": "配料品名",
-            "dataIndex": "doseName",
+            "dataIndex": "materialName",
             "type": "string"
         },
         {
@@ -166,55 +166,55 @@
             "type": "number"
         },
         {
-            "title": "单个重量 kg",
-            "dataIndex": "weight",
+            "title": "单个重量kg",
+            "dataIndex": "singleWeight",
             "type": "number"
         },
         {
             "title": "已采购量",
-            "dataIndex": "purchasedquantity",
+            "dataIndex": "alreadyPurchaseNum",
             "type": "string"
         },
         {
             "title": "计划采购量",
-            "dataIndex": "plannedpurchasequantity",
+            "dataIndex": "planPurchaseNum",
             "type": "string"
         }
     ],
     "PurchaseTypeStatistics": [
         {
             "title": "类型",
-            "dataIndex": "purchaseType",
-            "type": "integer"
+            "dataIndex": "materialCategoryName",
+            "type": "string"
         },
         {
             "title": "品名",
-            "dataIndex": "doseName",
+            "dataIndex": "materialName",
             "type": "string"
         },
         {
             "title": "标准",
             "dataIndex": "standard",
-            "type": "integer"
+            "type": "string"
         },
         {
             "title": "材质",
-            "dataIndex": "materialTexture",
+            "dataIndex": "structureTexture",
             "type": "string"
         },
         {
             "title": "规格",
-            "dataIndex": "spec",
+            "dataIndex": "structureSpec",
             "type": "string"
         },
         {
             "title": "已采购总量",
-            "dataIndex": "totalpurchased",
+            "dataIndex": "alreadyPurchaseWeight",
             "type": "string"
         },
         {
             "title": "计划采购总量（吨）",
-            "dataIndex": "totalplannedpurchases",
+            "dataIndex": "planPurchaseWeight",
             "type": "string"
         }
     ]
