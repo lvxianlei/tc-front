@@ -191,6 +191,7 @@ export default function ApplyPayment() {
         </Modal>
         <Page
             path="/tower-supply/applyPayment"
+            sourceKey="page.records"
             columns={[
                 { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
                 ...ApplicationForPayment.map((item: any) => {
@@ -232,12 +233,13 @@ export default function ApplyPayment() {
                         </>
                     }
                 }]}
-            extraOperation={<>
+            extraOperation={(data: any) => <>
                 <Button type="primary" ghost>导出</Button>
                 <Button type="primary" ghost onClick={() => {
                     setType("new")
                     setVisible(true)
                 }}>申请</Button>
+                <span>累计付款金额：{data?.totalPleasePayAmount || 0}</span>
             </>}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
