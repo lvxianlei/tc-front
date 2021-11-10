@@ -342,7 +342,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                         </Col>
                         <Col span={ 8 }>
                             <Form.Item name="accountEquipmentName" initialValue={ detail.accountEquipmentName } label="台账设备关联">
-                                <Input maxLength={ 50 } value={ detail.accountEquipmentName } addonAfter={ <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
+                                <Input maxLength={ 50 } value={ detail.accountEquipmentName } suffix={ <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
                                         setSelectedRows(selectedRows);
                                         setDetail({ ...detail, accountEquipmentName: selectedRows[0].deviceName });
                                         form.setFieldsValue({ accountEquipmentName: selectedRows[0].deviceName })

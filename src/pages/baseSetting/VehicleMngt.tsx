@@ -196,7 +196,7 @@ export default function VehicleMngt(): React.ReactNode {
                 } }
             />
             <Modal visible={ visible } width="60%" title={ title } okText="保存" cancelText="取消" onOk={ save } onCancel={ cancel }>
-                <Form form={ form } labelCol={{ span: 8 }}>
+                <Form form={ form } labelCol={{ span: 10 }}>
                     <Row>
                         <Col span={ 8 }>
                             <Form.Item name="registrationNumber" initialValue={ detail?.registrationNumber } label="车辆设备号/车牌号" rules={[{
@@ -221,7 +221,7 @@ export default function VehicleMngt(): React.ReactNode {
                         <Col span={ 8 }>
                             <Form.Item name="vehicleType" label="车辆种类" initialValue={ detail?.vehicleType } rules={[{
                                     "required": true,
-                                    "message": "请选择所属产线"
+                                    "message": "请选择车辆种类"
                                 }]}>
                                 <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode}>
                                 { carOptions && carOptions.map(({ id, name }, index) => {
@@ -248,7 +248,7 @@ export default function VehicleMngt(): React.ReactNode {
                         </Col>
                         <Col span={ 8 }>
                             <Form.Item name="accountEquipmentName" label="台账设备关联">
-                                <Input maxLength={ 50 } value={ detail.accountEquipmentName } addonAfter={ <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
+                                <Input maxLength={ 50 } value={ detail.accountEquipmentName } suffix={ <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
                                     setSelectedRows(selectedRows);
                                     setDetail({ ...detail, accountEquipmentName: selectedRows[0].deviceName });
                                     form.setFieldsValue({ accountEquipmentName: selectedRows[0].deviceName })
