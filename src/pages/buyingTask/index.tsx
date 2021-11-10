@@ -136,20 +136,12 @@ export default function rawMaterial() {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        render: (_: any, records: any) => {
-                            return <>
-                                <Button type="link" onClick={() => { detail(records.id) }}>任务详情</Button>
-                                {
-                                    records.taskStatus === 3 ? <Button type="link" onClick={() => { setDetailId(records.id); setIsModalVisible1(true) }}>指派</Button> : null
-                                }
-                                {
-                                    records.taskStatus === 2 ? <span>
-                                        <Button type="link" onClick={() => { history.push(`/buyingTask/materialList`) }}>用料清单</Button>
-                                        <Button type="link" onClick={() => { setIsModalVisible2(true) }}>提交任务</Button>
-                                    </span> : null
-                                }
-                            </>
-                        }
+                        render: (_: any, records: any) => <>
+                            <Button type="link" onClick={() => { detail(records.id) }}>任务详情</Button>
+                            <Button type="link" disabled={records.taskStatus !== 3} onClick={() => { setDetailId(records.id); setIsModalVisible1(true) }}>指派</Button>
+                            <Button type="link" disabled={records.taskStatus !== 2} onClick={() => history.push(`/buyingTask/materialList`)}>用料清单</Button>
+                            <Button type="link" disabled={records.taskStatus !== 2} onClick={() => setIsModalVisible2(true)}>提交任务</Button>
+                        </>
                     }
                 ]}
                 filterValue={filterValue}
