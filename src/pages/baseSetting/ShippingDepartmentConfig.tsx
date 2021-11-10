@@ -9,7 +9,6 @@ import { Space, Input, Button, Modal, Form, Table, Popconfirm, message, Row, Col
 import { CommonTable, DetailTitle, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
-import { useForm } from 'antd/es/form/Form';
 import styles from './ShippingDepartmentConfig.module.less';
 import WorkshopUserSelectionComponent, { IUser } from '../../components/WorkshopUserModal';
 import { warehouseOptions } from '../../configuration/DictionaryOptions';
@@ -368,7 +367,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                         setUserList(selectedRows)
                     } } buttonTitle="选择保管员" />]}/>
                     <CommonTable columns={userColumns} dataSource={userList} showHeader={false} pagination={false} />
-                    <DetailTitle title="库区库位信息"/>
+                    <p style={{ fontSize: '16px', marginTop: '10px' }}>库区库位信息</p>
                     <Button type="primary" onClick={ addRow }>添加行</Button>
                     <Table rowKey="index" dataSource={[...reservoirList]} pagination={false} columns={tableColumns} className={styles.addModal}/>
                 </Form>

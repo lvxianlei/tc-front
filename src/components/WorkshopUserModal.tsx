@@ -189,7 +189,7 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
     public render(): React.ReactNode {
         return (
             <>
-                <Button type={this.props.buttonType || 'primary'} onClick={()=>{
+                <Button type={this.props.buttonType || 'primary'} style={this.props.buttonType==='link'?{ paddingBottom: '0', paddingTop: '0', height: 'auto', lineHeight: 1 }:{}} onClick={()=>{
                     this.setState({
                         isModalVisible: true
                     })

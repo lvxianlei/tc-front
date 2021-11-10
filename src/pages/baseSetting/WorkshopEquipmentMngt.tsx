@@ -299,7 +299,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={ 8 }>
-                            <Form.Item name="deptProcessesId" label="工序" initialValue={ detail.deptProcessesId } rules={[{
+                            <Form.Item name="deptProcessesId" className={ styles.maxWidth60 } label="工序" initialValue={ detail.deptProcessesId } rules={[{
                                     "required": true,
                                     "message": "请选择工序"
                                 }]}>
@@ -329,7 +329,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                     </Row>
                     <Row>
                         <Col span={ 8 }>
-                            <Form.Item name="productionLinesId" label="所属产线" initialValue={ detail.deptProcessesId } rules={[{
+                            <Form.Item name="productionLinesId" className={ styles.maxWidth60 } label="所属产线" initialValue={ detail.deptProcessesId } rules={[{
                                     "required": true,
                                     "message": "请选择所属产线"
                                 }]}>
