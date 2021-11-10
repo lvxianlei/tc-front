@@ -613,6 +613,19 @@
                         ]
                     },
                     {
+                        "label": "公告管理",
+                        "icon": "technology",
+                        "path": "/announcement",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "公告管理",
+                                "path": "/announcement",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
                         "label": "系统日志",
                         "icon": "technology",
                         "path": "/systemLog",
