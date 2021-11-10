@@ -1638,6 +1638,27 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 公告管理-新发布
+      "name": "新发布",
+      "path": "/announcement/new",
+      "module": "./pages/Announcement/AnnouncementNew",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 公告管理-编辑
+      "name": "编辑",
+      "path": "/announcement/edit/:id",
+      "module": "./pages/Announcement/AnnouncementNew",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 公告管理-详情
+      "name": "详情",
+      "path": "/announcement/detail/:id",
+      "module": "./pages/Announcement/AnnouncementDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 系统日志
       "name": "登录日志",
       "path": "/systemLog/login",

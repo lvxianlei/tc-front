@@ -1,0 +1,82 @@
+{
+    "code": 200,
+    "msg":"veniam",
+    "success":false,
+    "data":{
+        "attachVos":[
+            {
+                "description":"ea aliqu",
+                "filePath":"cupidatat culpa",
+                "fileSize":47573800.96326709,
+                "fileSuffix":"Excepteur mollit",
+                "fileUploadTime":"1973-11-20T16:46:30.215Z",
+                "id":54968338,
+                "name":"magna adipisicing",
+                "userName":"dolor ut"
+            },
+            {
+                "description":"Excepteur amet sed culpa eiusmod",
+                "filePath":"velit dolor nisi minim",
+                "fileSize":-83965641.46183257,
+                "fileSuffix":"aliqua proident do",
+                "fileUploadTime":"1975-05-24T14:35:24.566Z",
+                "id":51452642,
+                "name":"in est eiusmod in anim",
+                "userName":"non dolor"
+            },
+            {
+                "description":"voluptate",
+                "filePath":"Lorem",
+                "fileSize":-64155366.42310906,
+                "fileSuffix":"sint in",
+                "fileUploadTime":"2014-12-17T10:04:45.15Z",
+                "id":-21742188,
+                "name":"enim",
+                "userName":"dolor"
+            }
+        ],
+        "businessRecordVos":[
+            {
+                "createTime":"2009-11-21T08:12:22.52Z",
+                "createUserName":"magna irure",
+                "recordType":"cupidatat",
+                "stateAfter":"enim ullamco",
+                "stateFront":"aute"
+            },
+            {
+                "createTime":"1948-01-03T21:18:35.683Z",
+                "createUserName":"ullamco consequat re",
+                "recordType":"non minim esse",
+                "stateAfter":"adipisicing laboris eu anim ut",
+                "stateFront":"dolore exercitation Lorem mollit"
+            },
+            {
+                "createTime":"2013-01-11T23:56:03.75Z",
+                "createUserName":"culpa exercitation amet aliqua",
+                "recordType":"mag",
+                "stateAfter":"id",
+                "stateFront":"ullamco ad in"
+            },
+            {
+                "createTime":"2017-01-19T07:25:08.645Z",
+                "createUserName":"",
+                "recordType":"sit ea",
+                "stateAfter":"labore dolore",
+                "stateFront":"non pariatur Ut"
+            },
+            {
+                "createTime":"2000-03-10T12:34:01.611Z",
+                "createUserName":"in esse",
+                "recordType":"culpa quis consectetur",
+                "stateAfter":"tempor ea",
+                "stateFront":"est ex cillum"
+            }
+        ],
+        "content":"dolore esse",
+        "id":35902260,
+        "releaseTime":"2008-04-13T21:08:35.243Z",
+        "stateName":"nostrud cillum enim",
+        "title":"proident velit",
+        "userNames":"incididunt"
+    }
+}
