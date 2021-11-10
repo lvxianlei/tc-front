@@ -139,11 +139,6 @@ export default function Invoice() {
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
-                    name: 'fuzzyQuery',
-                    label: '查询',
-                    children: <Input placeholder="票据编号/请款编号/发票号/供应商" style={{ width: 200 }} />
-                },
-                {
                     name: 'updateEndTime',
                     label: '最近状态变更时间',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 200 }} />
@@ -164,6 +159,11 @@ export default function Invoice() {
                     children: <Select style={{ width: 200 }}>
                         {invoiceTypeEnum.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
                     </Select>
+                },
+                {
+                    name: 'fuzzyQuery',
+                    label: '查询',
+                    children: <Input placeholder="票据编号/请款编号/发票号/供应商" style={{ width: 230 }} />
                 }
             ]}
         />
