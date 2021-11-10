@@ -11,7 +11,6 @@ interface EditProps {
 }
 
 export default forwardRef(function Edit({ type, id }: EditProps, ref) {
-    console.log(id,"--------")
     const invoiceTypeEnum = (ApplicationContext.get().dictionaryOption as any)["1210"].map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
