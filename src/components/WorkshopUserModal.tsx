@@ -205,6 +205,9 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
                                 isModalVisible: false
                             })
                             if (this.state.tableDataSource.length > 0) {
+                                this.setState({
+                                    selectedRowKeys: []
+                                })
                                 this.props.onSelect(this.state.selectedRows)
                             }
                         }
