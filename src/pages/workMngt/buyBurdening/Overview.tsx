@@ -1,12 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Input, DatePicker, Select, Button, Modal, message } from 'antd'
-import { Link, useParams } from 'react-router-dom'
-import { Page } from '../../common';
+import { Link, useParams, useHistory } from 'react-router-dom'
+import { Page } from '../../common'
+import TaskTower from './TaskTower'
 import { SeeList } from "./buyBurdening.json"
-import useRequest from "@ahooksjs/use-request";
-import RequestUtil from "../../../utils/RequestUtil";
+import useRequest from "@ahooksjs/use-request"
+import RequestUtil from "../../../utils/RequestUtil"
 export default function Overview(): React.ReactNode {
     const params = useParams<{ id: string }>()
+    const history = useHistory()
+    const [visible, setVisible] = useState<boolean>(false)
+    const [chooseId, setChooseId] = useState<string>("")
     const onFilterSubmit = (value: any) => {
         if (value.startBatcheStatusUpdateTime) {
             const formatDate = value.startBatcheStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -34,14 +38,19 @@ export default function Overview(): React.ReactNode {
                 try {
                     resove(await createComponent(id))
                     message.success("生成提料数据...")
-                    // history.go(0)
+                    history.go(0)
                 } catch (error) {
                     reject(error)
                 }
             })
         })
     }
+
     return <>
+        <Modal title="配料方案" visible={visible} width={1011}
+            footer={<Button type="primary" onClick={() => setVisible(false)}>确认</Button>} onCancel={() => setVisible(false)}>
+            <TaskTower id={chooseId} />
+        </Modal>
         <Page
             path="/tower-supply/purchaseTaskTower"
             columns={[
@@ -52,7 +61,10 @@ export default function Overview(): React.ReactNode {
                     dataIndex: 'operation',
                     render: (_: any, records: any) => (<>
                         <Link to={`/workMngt/buyBurdening/component/${records.id}`}>明细</Link>
-                        <Button type="link" >配料方案</Button>
+                        <Button type="link" onClick={() => {
+                            setChooseId(records.id)
+                            setVisible(true)
+                        }} >配料方案</Button>
                         <Button type="link" onClick={() => handleCreateComponent(records.id)
                         } >临时造数据</Button>
                     </>)

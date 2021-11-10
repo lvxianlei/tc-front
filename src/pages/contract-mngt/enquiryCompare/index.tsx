@@ -95,7 +95,7 @@ export default function ContractMngt() {
 
     return (
         <>
-            <Modal title={oprationType === "new" ? "添加报价" : "编辑报价"} width={1011} visible={visible} onOk={handleAddOk} onCancel={() => {
+            <Modal title={oprationType === "new" ? "创建" : "编辑"} width={1011} visible={visible} onOk={handleAddOk} onCancel={() => {
                 editRef.current?.resetFields()
                 setVisible(false)
             }}>
