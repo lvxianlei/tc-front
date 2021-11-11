@@ -160,7 +160,11 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["warehousePositionVOList", index, "region"] } initialValue={ _ } rules={[{ 
                     "required": true,
-                    "message": "请输入库区" }]}>
+                    "message": "请输入库区" },
+                    {
+                      pattern: /^[^\s]*$/,
+                      message: '禁止输入空格',
+                    }]}>
                     <Input maxLength={ 50 } key={ index } />
                 </Form.Item>
             )  
@@ -172,7 +176,11 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["warehousePositionVOList", index, "position"] } initialValue={ _ } rules={[{ 
                     "required": true,
-                    "message": "请输入库位" }]}>
+                    "message": "请输入库位" },
+                    {
+                      pattern: /^[^\s]*$/,
+                      message: '禁止输入空格',
+                    }]}>
                     <Input maxLength={ 50 } key={ index } />
                 </Form.Item>
             )  
