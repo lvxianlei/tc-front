@@ -10,7 +10,18 @@
         },
         {
             "title": "合同状态",
-            "dataIndex": "contractStatus"
+            "dataIndex": "contractStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "执行中",
+                    "value": 1
+                },
+                {
+                    "label": "已完成",
+                    "value": 2
+                }
+            ]
         },
         {
             "title": "供应商",

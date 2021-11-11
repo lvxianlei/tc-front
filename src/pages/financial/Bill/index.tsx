@@ -148,7 +148,7 @@ export default function Invoice() {
                                 onClick={() => {
                                     setDetailVisible(true)
                                     setDetailedId(record.id)
-                                }}>查看</Button>
+                                }}>详情</Button>
                             <Button type="link" disabled={![1].includes(record.invoiceStatus)} onClick={() => {
                                 setType("edit")
                                 setDetailedId(record.id)

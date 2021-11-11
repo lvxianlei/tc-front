@@ -60,11 +60,12 @@ export default function Overview(): React.ReactNode {
                     width: 250,
                     dataIndex: 'operation',
                     render: (_: any, records: any) => (<>
-                        <Link to={`/workMngt/buyBurdening/component/${records.id}`}>明细</Link>
-                        <Button type="link" onClick={() => {
-                            setChooseId(records.id)
-                            setVisible(true)
-                        }} >配料方案</Button>
+                        <Button type="link" disabled={![1, 3].includes(records.batcheTaskStatus)} ><Link to={`/workMngt/buyBurdening/component/${records.id}`}>明细</Link></Button>
+                        <Button type="link" disabled={![3].includes(records.batcheTaskStatus)}
+                            onClick={() => {
+                                setChooseId(records.id)
+                                setVisible(true)
+                            }} >配料方案</Button>
                         <Button type="link" onClick={() => handleCreateComponent(records.id)
                         } >临时造数据</Button>
                     </>)

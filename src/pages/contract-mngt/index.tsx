@@ -54,6 +54,14 @@ export default function ContractMngt(): JSX.Element {
             })
         })
     }
+    const onFilterSubmit = (value: any) => {
+        if (value.signStartTime) {
+            const formatDate = value.signStartTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.signStartTime = formatDate[0] + " 00:00:00"
+            value.signEndTime = formatDate[1] + " 23:59:59"
+        }
+        return value
+    }
     return (
         <>
             <Modal
@@ -86,6 +94,7 @@ export default function ContractMngt(): JSX.Element {
             </Modal>
             <Page
                 path="/tower-supply/materialContract"
+                onFilterSubmit={onFilterSubmit}
                 columns={[
                     {
                         title: "序号",
@@ -135,14 +144,16 @@ export default function ContractMngt(): JSX.Element {
                 </>}
                 searchFormItems={[
                     {
-                        name: 'updateTime',
+                        name: 'signStartTime',
                         label: '签订时间',
                         children: <DatePicker.RangePicker style={{ width: "200px" }} format="YYYY-MM-DD" />
                     },
                     {
-                        name: 'outStockUserName',
+                        name: 'contractStatus',
                         label: '合同状态',
                         children: <Select placeholder="请选择" style={{ width: "100px" }}>
+                            <Select.Option value="1">执行中</Select.Option>
+                            <Select.Option value="2">已完成</Select.Option>
                         </Select>
                     },
                     {
