@@ -99,7 +99,7 @@ export default function Invoicing() {
                     name: 'fuzzyQuery',
                     label: '查询',
                     children: <Input placeholder="原材料任务编号/采购计划编号/塔型" style={{ width: 300 }} />
-                },
+                }
             ]}
             tableProps={{
                 rowSelection: {
@@ -107,7 +107,10 @@ export default function Invoicing() {
                     selectedRowKeys: generateIds,
                     onChange: (selectedRowKeys: any[]) => {
                         setGenerateIds(selectedRowKeys)
-                    }
+                    },
+                    getCheckboxProps: (record: any) => ({
+                        disabled: ![1].includes(record.purchaseTaskStatus) && ![-1, null].includes(record.purchasePlanId)
+                    })
                 }
             }}
         />

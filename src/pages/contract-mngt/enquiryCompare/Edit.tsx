@@ -14,7 +14,7 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
     const [selectRows, setSelectRows] = useState<any[]>([])
     const { loading, data, run } = useRequest<{ [key: string]: any }>((filterValue) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan`, { ...filterValue })
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan`, { ...filterValue, planStatus: 1 })
             resole(result)
         } catch (error) {
             reject(error)

@@ -137,7 +137,7 @@ export default function ContractMngt(): JSX.Element {
                     {
                         name: 'updateTime',
                         label: '签订时间',
-                        children: <DatePicker style={{ width: "150px" }} format="YYYY-MM-DD" />
+                        children: <DatePicker.RangePicker style={{ width: "200px" }} format="YYYY-MM-DD" />
                     },
                     {
                         name: 'outStockUserName',

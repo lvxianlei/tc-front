@@ -161,7 +161,7 @@ export default function ContractMngt() {
                     {
                         name: 'updateStartTime',
                         label: '最新状态变更时间',
-                        children: <DatePicker style={{ width: "150px" }} />
+                        children: <DatePicker.RangePicker style={{ width: "200px" }} format="YYYY-MM-DD"/>
                     },
                     {
                         name: 'comparisonPriceStatus',

@@ -1,9 +1,11 @@
 import React, { useState, useRef } from 'react'
+import { useHistory } from "react-router-dom"
 import { Input, DatePicker, Select, Button, Modal, message } from 'antd'
 import { Page, IntgSelect } from '../../common';
 import { baseInfo } from "./enquiryList.json"
 import Edit from "./Edit"
 export default function EnquiryList(): React.ReactNode {
+    const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({})
     const [detailId, setDetailId] = useState<string>("")
@@ -30,8 +32,9 @@ export default function EnquiryList(): React.ReactNode {
 
     const handleModal = () => new Promise(async (resove, reject) => {
         try {
-            const result = await editRef.current?.onSubmit()
+            await editRef.current?.onSubmit()
             message.success("保存成功...")
+            history.go(0)
             setVisible(false)
         } catch (error) {
             reject(false)
@@ -39,10 +42,25 @@ export default function EnquiryList(): React.ReactNode {
     })
 
     return <>
-        <Modal title="询价信息" width={1011} visible={visible} onOk={handleModal} onCancel={() => {
-            editRef.current?.resetFields()
-            setVisible(false)
-        }} >
+        <Modal
+            destroyOnClose
+            title="询价信息"
+            width={1011}
+            visible={visible}
+            footer={[
+                <Button type="primary" key="close" ghost
+                    onClick={() => {
+                        editRef.current?.resetFields()
+                        setDetailId("")
+                        setVisible(false)
+                    }}>关闭</Button>,
+                <Button key="save" type="primary" onClick={handleModal}>保存</Button>
+            ]}
+            onCancel={() => {
+                editRef.current?.resetFields()
+                setDetailId("")
+                setVisible(false)
+            }} >
             <Edit detailId={detailId} ref={editRef} />
         </Modal>
         <Page

@@ -199,7 +199,7 @@
                 },
                 {
                     "title": "供货产品",
-                    "dataIndex": "supplyProducts"
+                    "dataIndex": "supplyProductsName"
                 }
             ],
             "rules": [
@@ -319,7 +319,7 @@
             "rules": [
                 {
                     "required": true,
-                    "message": "请选择供应商..."
+                    "message": "请选择询比价信息..."
                 }
             ]
         }

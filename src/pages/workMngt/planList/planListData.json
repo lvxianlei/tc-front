@@ -147,7 +147,7 @@
         },
         {
             "title": "规格",
-            "dataIndex": "planPurchaseNum",
+            "dataIndex": "structureSpec",
             "type": "string"
         },
         {

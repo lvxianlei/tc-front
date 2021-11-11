@@ -30,9 +30,9 @@ export default function Edit() {
         <Button key="export" type="primary" ghost>导出</Button>
     ]} operation={[<Button key="" type="primary" ghost onClick={() => history.goBack()}>返回</Button>]}>
         <CommonTable loading={loading} columns={PurchaseList} dataSource={data?.records || []} />
-        <Row>
+        <span>
             {` 采购类型统计： 圆钢总重（t）：0     角钢总重（t）：66.473         钢板总重（t）：234.000`}
-        </Row>
+        </span>
         <CommonTable loading={purchasePlanLoading} columns={PurchaseTypeStatistics} dataSource={purchasePlanData || []} />
     </DetailContent>
 }

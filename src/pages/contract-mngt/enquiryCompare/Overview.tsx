@@ -62,7 +62,7 @@ export default function Overview(): JSX.Element {
     const handleAddPriceOk = () => new Promise(async (resolve, reject) => {
         try {
             await addPriceRef.current?.onSubmit()
-            message.success("成功添加报价...")
+            await message.success("成功添加报价...")
             setVisible(false)
             history.go(0)
             resolve(true)
@@ -74,6 +74,7 @@ export default function Overview(): JSX.Element {
     return <Spin spinning={loading}>
         <Modal
             width={1011}
+            destroyOnClose
             title={oprationType === "new" ? "添加报价" : "编辑报价"}
             visible={visible}
             onOk={handleAddPriceOk}

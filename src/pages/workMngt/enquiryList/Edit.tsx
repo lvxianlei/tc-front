@@ -56,8 +56,10 @@ export default forwardRef(function Edit({ detailId }: EditProps, ref): JSX.Eleme
         <Attachment dataSource={data?.projectAttachList} />
         <DetailTitle title="当前价格信息" />
         <CommonTable haveIndex columns={CurrentPriceInformation} dataSource={data?.materialDetails || []} />
-        <DetailTitle title="补充信息" />
-        <Input.TextArea name="inquirerDescription" value={inquirerDescription} onChange={(event: any) => setInquirerDescription(event.target.value)} />
-        <Attachment title="上传附件" edit ref={attchRef} />
+        {data?.inquiryStatus !== 2 && <>
+            <DetailTitle title="补充信息" />
+            <Input.TextArea name="inquirerDescription" value={inquirerDescription} onChange={(event: any) => setInquirerDescription(event.target.value)} />
+            <Attachment title="上传附件" edit ref={attchRef} />
+        </>}
     </Spin>
 })
