@@ -21,7 +21,6 @@ export interface IWorkshopUserSelectionComponentProps extends IAbstractSelectabl
     readonly buttonType?: ButtonType;
     readonly buttonTitle?: string;
     readonly rowSelectionType?: RowSelectionType | undefined;
-    readonly selectRow?: (row: DataType[]) => void;
 }
 
 export interface IResponseDataMore extends IResponseData {
@@ -89,7 +88,6 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
             selectedRowKeys,
             selectedRows
         });
-        this.props.selectRow && this.props.selectRow(selectedRows);
     }
 
     /**
@@ -101,7 +99,6 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
             isModalVisible: false,
             selectedRowKeys: []
         })
-        this.props.selectRow && this.props.selectRow([]);
     };
 
     //componentDidMount

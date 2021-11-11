@@ -376,22 +376,17 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                     </Row>
                     <DetailTitle title="保管员" operation={[<WorkshopUserSelectionComponent rowSelectionType="checkbox" onSelect={ (selectedRows: IUser[] | any) => {
                         setWarehouseKeeperDTODeleteList([...warehouseKeeperDTODeleteList, ...userList]);
-                        const res = new Map();
-                        let newRows = rows.filter((item: DataType) => !res.has(item.id) && res.set(item.id, 1));
-                        newRows = newRows.map((item: DataType) => {
+                        selectedRows = selectedRows.map((item: DataType) => {
                             return {
                                 keeperUserId: item.id,
                                 keeperName: item.name
                             }
                         })
+                        const rows = [...userList, ...selectedRows];
+                        const res = new Map();
+                        let newRows = rows.filter((item: DataType) => !res.has(item.keeperUserId) && res.set(item.keeperUserId, 1));
                         setUserList(newRows);
-                    } } buttonTitle="选择保管员" selectRow={ (row: DataType[]) => {
-                        if(row.length > 0) {
-                            setRows([...rows, ...row]);
-                        } else {
-                            setRows([]);
-                        }
-                    } }/>]}/>
+                    } } buttonTitle="选择保管员"/>]}/>
                     <CommonTable columns={userColumns} dataSource={userList} showHeader={false} pagination={false} />
                     <p style={{ fontSize: '16px', marginTop: '10px' }}>库区库位信息</p>
                     <Button type="primary" onClick={ addRow }>添加行</Button>
