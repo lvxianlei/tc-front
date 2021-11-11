@@ -108,20 +108,15 @@ export default function Overview(): JSX.Element {
             <CommonTable haveIndex columns={[...materialColumns, {
                 title: "中标供应商",
                 dataIndex: "winBidSupplierId",
-                render: (value: any, records: any) => {
-                    if (records.comparisonStatus !== 1) {
-                        return (<Select
-                            value={value === -1 ? "" : value}
-                            onChange={(value: string) => handleSelect(records.id, value)}
-                            style={{ width: 150, height: 32 }}>
-                            {data?.inquiryQuotationOfferActionVo?.inquiryQuotationOfferData.map((item: any) => <Select.Option
-                                value={item.id}
-                                key={item.id}>{item.supplierName}</Select.Option>)}
-                        </Select>)
-                    } else {
-                        return <>{records.winBidSupplierName}</>
-                    }
-                }
+                render: (value: any, records: any) => (<Select
+                    disabled={data?.comparisonStatus !== 1}
+                    value={value === -1 ? "" : value}
+                    onChange={(value: string) => handleSelect(records.id, value)}
+                    style={{ width: 150, height: 32 }}>
+                    {data?.inquiryQuotationOfferActionVo?.inquiryQuotationOfferData.map((item: any) => <Select.Option
+                        value={item.supplierId}
+                        key={item.id}>{item.supplierName}</Select.Option>)}
+                </Select>)
             }]} dataSource={materialLists} />
             <DetailTitle title="询价报价信息" />
             <CommonTable
