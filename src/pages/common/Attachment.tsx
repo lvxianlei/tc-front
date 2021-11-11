@@ -114,6 +114,6 @@ export default forwardRef(function ({ dataSource = [], title = "相关附件", e
                     <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
                     {edit && <a onClick={() => deleteAttachData(record.uid || record.id)}>删除</a>}
                 </>)
-            }]} dataSource={attchs} />
+            }]} showHeader={false} dataSource={attchs} />
     </>
 })

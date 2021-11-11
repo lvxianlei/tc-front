@@ -95,18 +95,18 @@ export default function ContractMngt() {
 
     return (
         <>
-            <Modal title={oprationType === "new" ? "添加报价" : "编辑报价"} width={1011} visible={visible} onOk={handleAddOk} onCancel={() => {
+            <Modal destroyOnClose title={oprationType === "new" ? "创建" : "编辑"} width={1011} visible={visible} onOk={handleAddOk} onCancel={() => {
                 editRef.current?.resetFields()
                 setVisible(false)
             }}>
                 <Edit id={detailId} type={oprationType} ref={editRef} />
             </Modal>
-            <Modal title="操作信息" width={1011}
+            <Modal destroyOnClose title="操作信息" width={1011}
                 visible={oprationVisible}
                 footer={[<Button type="primary" ghost key="close" onClick={() => setOprationVisible(false)}>关闭</Button>]}>
                 <OprationInfo id={detailId} />
             </Modal>
-            <Modal title="取消" visible={cancelVisible} onOk={handleCancel} onCancel={() => {
+            <Modal destroyOnClose title="取消" visible={cancelVisible} onOk={handleCancel} onCancel={() => {
                 form.resetFields()
                 setCancelVisible(false)
             }}>

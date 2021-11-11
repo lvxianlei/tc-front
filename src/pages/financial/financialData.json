@@ -545,7 +545,8 @@
         },
         {
             "title": "请款类别",
-            "dataIndex": "pleasePayType"
+            "dataIndex": "pleasePayType",
+            "type": "select"
         },
         {
             "title": "请款机构",

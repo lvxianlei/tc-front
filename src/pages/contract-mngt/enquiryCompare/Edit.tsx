@@ -1,6 +1,6 @@
 import React, { useState, forwardRef, useImperativeHandle, useRef } from "react"
 import { Button, Modal, Select, Input, Form, Row, Col, Spin } from "antd"
-import { BaseInfo, CommonTable, DetailTitle, PopTableContent, Page } from "../../common"
+import { BaseInfo, CommonTable, DetailTitle, PopTableContent, IntgSelect } from "../../common"
 import { editBaseInfo, materialColumns, addMaterial, choosePlanList } from "./enquiry.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -10,20 +10,21 @@ interface EditProps {
 }
 
 const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref) => {
-    const [filterValue, setFilterValue] = useState<any>({})
     const [form] = Form.useForm()
     const [selectRows, setSelectRows] = useState<any[]>([])
-    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data, run } = useRequest<{ [key: string]: any }>((filterValue) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan`, { ...filterValue })
             resole(result)
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [JSON.stringify(filterValue)] })
+    }))
+
     useImperativeHandle(ref, () => ({ selectRows }), [JSON.stringify(selectRows)])
+
     return <>
-        <Form form={form} onFinish={(values) => setFilterValue(values)}>
+        <Form form={form} onFinish={(values) => run({ ...values, purchaserId: values.purchaserId?.second, purchaserDeptId: values.purchaserId?.first })}>
             <Row>
                 <Col><Form.Item label="采购类型" name="purchaseType">
                     <Select style={{ width: 200 }}>
@@ -32,16 +33,19 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
                         <Select.Option value="3">缺料</Select.Option>
                     </Select>
                 </Form.Item></Col>
+                <Col><Form.Item label="采购人" name="purchaserId">
+                    <IntgSelect width={200} />
+                </Form.Item></Col>
                 <Col><Form.Item label="采购计划编号" name="purchasePlanCode">
                     <Input />
                 </Form.Item></Col>
                 <Col><Form.Item>
                     <Button type="primary" htmlType="submit" style={{ marginLeft: 12 }}>搜索</Button>
-                    <Button type="default" htmlType="reset" style={{ marginLeft: 12 }}>重置</Button>
+                    <Button type="default" onClick={() => form.resetFields()} htmlType="button" style={{ marginLeft: 12 }}>重置</Button>
                 </Form.Item></Col>
             </Row>
         </Form>
-        <CommonTable loading={loading} columns={choosePlanList} dataSource={data?.records || []} rowSelection={{
+        <CommonTable loading={loading} haveIndex columns={choosePlanList} dataSource={data?.records || []} rowSelection={{
             type: "radio",
             onChange: (_: any, selectedRows: any[]) => {
                 setSelectRows(selectedRows)
@@ -70,7 +74,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/comparisonPrice`, { ...data })
+            const postData = type === "new" ? data : ({ ...data, id })
+            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/comparisonPrice`, postData)
             resole(result)
         } catch (error) {
             reject(error)
@@ -122,11 +127,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         </Modal>
         <DetailTitle title="询比价基本信息" />
         <BaseInfo form={form} col={2} columns={editBaseInfo} dataSource={{}} edit />
-        <DetailTitle title="询价原材料" operation={[
+        <DetailTitle title="询价原材料 *" operation={[
             <Button type="primary" ghost key="add" style={{ marginRight: 16 }} onClick={() => setVisible(true)}>添加询价原材料</Button>,
             <Button type="primary" ghost key="choose" onClick={() => setChooseVisible(true)}>选择计划</Button>
         ]} />
         <CommonTable
+            haveIndex
             columns={[
                 ...materialColumns,
                 {

@@ -160,7 +160,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                 <Form.Item name={ ["warehousePositionVOList", index, "region"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请输入库区" }]}>
-                    <Input maxLength={ 50 } key={ index } bordered={false} />
+                    <Input maxLength={ 50 } key={ index } />
                 </Form.Item>
             )  
         },
@@ -172,7 +172,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                 <Form.Item name={ ["warehousePositionVOList", index, "position"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请输入库位" }]}>
-                    <Input maxLength={ 50 } key={ index } bordered={false} />
+                    <Input maxLength={ 50 } key={ index } />
                 </Form.Item>
             )  
         },
@@ -356,7 +356,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={ 12 }>
-                            <Form.Item name="leaderName" label="*负责人" initialValue={ detailData?.leaderName }>
+                            <Form.Item name="leaderName" label={<span><span style={{ color: 'red' }}>*</span>负责人</span>} initialValue={ detailData?.leaderName }>
                                 <Input maxLength={ 50 } value={ detailData.leaderName } addonAfter={ <WorkshopUserSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
                                     setSelectedRows(selectedRows);
                                     form.setFieldsValue({leaderName: selectedRows[0].name});

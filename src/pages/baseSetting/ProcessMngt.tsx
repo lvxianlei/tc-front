@@ -94,7 +94,7 @@ export default function ProcessMngt(): React.ReactNode {
         },
         {
             key: 'name',
-            title: '*工序',
+            title: <span><span style={{ color: 'red' }}>*</span>工序</span>,
             dataIndex: 'name',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["deptProcessesDetailList", index, "name"] } initialValue={ _ } rules={[{ 
@@ -104,19 +104,19 @@ export default function ProcessMngt(): React.ReactNode {
                       pattern: /^[^\s]*$/,
                       message: '禁止输入空格',
                     }]}>
-                    <Input maxLength={ 50 } key={ index } bordered={false} />
+                    <Input maxLength={ 50 } key={ index } />
                 </Form.Item>
             )  
         },
         {
             key: 'sort',
-            title: '*顺序',
+            title: <span><span style={{ color: 'red' }}>*</span>顺序</span>,
             dataIndex: 'sort',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["deptProcessesDetailList", index, "sort"] } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请输入顺序" }]}>
-                    <InputNumber step={1} min={ 1 } precision={ 0 } key={ index } bordered={false} />
+                    <InputNumber step={1} min={ 1 } maxLength={ 10 } precision={ 0 } key={ index } />
                 </Form.Item>
             )  
         },

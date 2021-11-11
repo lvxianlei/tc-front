@@ -229,7 +229,7 @@ export default function ProductionLineMngt(): React.ReactNode {
                         </Select>
                     </Form.Item>
                     <Form.Item name="description" label="备注" initialValue={ detailData.description }>
-                        <Input placeholder="请输入" maxLength={ 300 } />
+                        <Input placeholder="请输入" maxLength={ 200 } />
                     </Form.Item>
                 </Form>
             </Modal>
