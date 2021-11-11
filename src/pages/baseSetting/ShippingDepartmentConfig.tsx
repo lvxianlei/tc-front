@@ -13,6 +13,7 @@ import styles from './ShippingDepartmentConfig.module.less';
 import WorkshopUserSelectionComponent, { IUser } from '../../components/WorkshopUserModal';
 import { warehouseOptions } from '../../configuration/DictionaryOptions';
 import { useHistory } from 'react-router-dom';
+import { DataType } from '../../components/AbstractSelectableModal';
 
 interface IProcessList {
     readonly region?: string;
@@ -22,7 +23,7 @@ interface IWarehouseKeeperList {
     readonly keeperName?: string;
     readonly warehouseId?: string;
     readonly keeperUserId?: string;
-    readonly id?: string;
+    readonly id?: string | number;
 }
 interface IDetailData {
     readonly code?: string;
@@ -295,6 +296,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
     const [ selectedRows, setSelectedRows ] = useState<IUser[] | any>({});
     const [ warehousePositionDTODeleteList, setWarehousePositionDTODeleteList ] = useState<IProcessList[]>([]);
     const [ warehouseKeeperDTODeleteList, setWarehouseKeeperDTODeleteList ] = useState<IWarehouseKeeperList[]>([]);
+    const [ rows, setRows ] = useState<DataType[]>([]);
     const history = useHistory();
     return (
         <>
@@ -372,8 +374,16 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                                 keeperName: item.name
                             }
                         })
-                        setUserList(selectedRows);
-                    } } buttonTitle="选择保管员" />]}/>
+                        const res = new Map();
+                        const newRows = rows.filter((item: DataType) => !res.has(item.id) && res.set(item.id, 1));
+                        setUserList(newRows);
+                    } } buttonTitle="选择保管员" selectRow={ (row: DataType[]) => {
+                        if(row.length > 0) {
+                            setRows([...rows, ...row]);
+                        } else {
+                            setRows([]);
+                        }
+                    } }/>]}/>
                     <CommonTable columns={userColumns} dataSource={userList} showHeader={false} pagination={false} />
                     <p style={{ fontSize: '16px', marginTop: '10px' }}>库区库位信息</p>
                     <Button type="primary" onClick={ addRow }>添加行</Button>

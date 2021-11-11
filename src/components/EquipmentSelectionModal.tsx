@@ -11,7 +11,6 @@ import styles from './AbstractSelectableModal.module.less';
 import RequestUtil from '../utils/RequestUtil';
 import AbstractFilteredSelectionModal from './AbstractFilteredSelecableModal';
 import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from './AbstractSelectableModal';
-import { saleTypeOptions } from '../configuration/DictionaryOptions';
 
 const { Option } = Select;
 export interface IEquipmentSelectionModalProps extends IAbstractSelectableModalProps {
