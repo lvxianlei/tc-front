@@ -99,7 +99,7 @@
         },
         {
             "title": "数量",
-            "dataIndex": "number"
+            "dataIndex": "num"
         },
         {
             "title": "含税单价",
@@ -223,7 +223,13 @@
         {
             "title": "签订时间",
             "dataIndex": "signingTime",
-            "type": "date"
+            "type": "date",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择签订时间..."
+                }
+            ]
         },
         {
             "title": "经办人",
@@ -232,12 +238,24 @@
         {
             "title": "交货方式",
             "dataIndex": "deliveryMethod",
-            "type": "select"
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择交货方式..."
+                }
+            ]
         },
         {
             "title": "材料标准",
             "dataIndex": "materialStandard",
-            "type": "select"
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择材料标准..."
+                }
+            ]
         },
         {
             "title": "运输承担",
@@ -252,12 +270,24 @@
                     "value": 2,
                     "label": "需方"
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择运输承担..."
+                }
             ]
         },
         {
             "title": "运输方式",
             "dataIndex": "transportMethod",
-            "type": "select"
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择运输方式..."
+                }
+            ]
         },
         {
             "title": "卸车承担",
@@ -272,12 +302,24 @@
                     "value": 2,
                     "label": "需方"
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择卸车承担..."
+                }
             ]
         },
         {
             "title": "备注",
             "dataIndex": "description",
-            "type": "textarea"
+            "type": "textarea",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入备注..."
+                }
+            ]
         }
     ],
     "comparison": [

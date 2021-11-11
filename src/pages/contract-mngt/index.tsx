@@ -65,6 +65,7 @@ export default function ContractMngt(): JSX.Element {
     return (
         <>
             <Modal
+                destroyOnClose
                 title={oprationType === "new" ? "创建" : "编辑"}
                 width={1011}
                 visible={editVisible}
@@ -78,6 +79,7 @@ export default function ContractMngt(): JSX.Element {
                 <Edit id={detailId} type={oprationType} ref={editRef} />
             </Modal>
             <Modal
+                destroyOnClose
                 title="详情"
                 width={1011}
                 visible={overviewVisible}
@@ -105,11 +107,11 @@ export default function ContractMngt(): JSX.Element {
                     ...contract.map((item: any) => {
                         switch (item.dataIndex) {
                             case "materialStandard":
-                                return ({ ...item, enum: materialStandardEnum })
+                                return ({ ...item, type: "select", enum: materialStandardEnum })
                             case "deliveryMethod":
-                                return ({ ...item, enum: deliveryMethodEnum })
+                                return ({ ...item, type: "select", enum: deliveryMethodEnum })
                             case "transportMethod":
-                                return ({ ...item, enum: transportMethodEnum })
+                                return ({ ...item, type: "select", enum: transportMethodEnum })
                             default:
                                 return item
                         }
