@@ -263,7 +263,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
         let reservoirListValues = form.getFieldsValue(true).warehousePositionVOList || []; 
         reservoirListValues.splice(index, 1);
         setReservoirList([...reservoirListValues]);
-        setWarehousePositionDTODeleteList([...warehousePositionDTODeleteList ,record]);
+        setWarehousePositionDTODeleteList([...warehousePositionDTODeleteList, record]);
         form.setFieldsValue({ warehousePositionVOList: [...reservoirListValues] })
     }
 
@@ -365,13 +365,14 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                         </Col>
                     </Row>
                     <DetailTitle title="保管员" operation={[<WorkshopUserSelectionComponent rowSelectionType="checkbox" onSelect={ (selectedRows: IUser[] | any) => {
+                        setWarehouseKeeperDTODeleteList([...warehouseKeeperDTODeleteList, ...userList]);
                         selectedRows = selectedRows.map((item: IUser) => {
                             return {
                                 keeperUserId: item.id,
                                 keeperName: item.name
                             }
                         })
-                        setUserList(selectedRows)
+                        setUserList(selectedRows);
                     } } buttonTitle="选择保管员" />]}/>
                     <CommonTable columns={userColumns} dataSource={userList} showHeader={false} pagination={false} />
                     <p style={{ fontSize: '16px', marginTop: '10px' }}>库区库位信息</p>
