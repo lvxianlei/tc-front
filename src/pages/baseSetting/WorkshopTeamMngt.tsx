@@ -15,6 +15,7 @@ import useRequest from '@ahooksjs/use-request';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { IProcess } from './ProductionLineMngt';
 import { SelectValue } from 'antd/lib/select';
+import styles from './WorkshopEquipmentMngt.module.less';
 
 interface IDetail {
     readonly name?: string;
@@ -317,7 +318,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={ 12 }>
-                            <Form.Item name="deptProcessesId" initialValue={ detail.deptProcessesId } label="工序" rules={[{
+                            <Form.Item name="deptProcessesId" className={ styles.maxWidth60 } initialValue={ detail.deptProcessesId } label="工序" rules={[{
                                     "required": true,
                                     "message": "请选择工序"
                                 }]}>
@@ -347,7 +348,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={ 12 }>
-                            <Form.Item name="productionLinesId" label="所属产线" initialValue={ detail.productionLinesId } rules={[{
+                            <Form.Item name="productionLinesId" className={ styles.maxWidth60 } label="所属产线" initialValue={ detail.productionLinesId } rules={[{
                                     "required": true,
                                     "message": "请选择所属产线"
                                 }]}>
