@@ -10,7 +10,6 @@ interface EditProps {
 }
 
 const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref) => {
-    // const [filterValue, setFilterValue] = useState<any>({})
     const [form] = Form.useForm()
     const [selectRows, setSelectRows] = useState<any[]>([])
     const { loading, data, run } = useRequest<{ [key: string]: any }>((filterValue) => new Promise(async (resole, reject) => {
@@ -75,7 +74,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/comparisonPrice`, { ...data })
+            const postData = type === "new" ? data : ({ ...data, id })
+            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/comparisonPrice`, postData)
             resole(result)
         } catch (error) {
             reject(error)

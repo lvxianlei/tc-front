@@ -31,7 +31,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/applyPayment/${id}`)
             baseForm.setFieldsValue(formatData(ApplicationList, {
                 ...result,
-                relatednotes: result.applyPaymentInvoiceVos?.map((item: any) => item.billNumber).join(",")
+                relatednotes: { value: result.applyPaymentInvoiceVos?.map((item: any) => item.billNumber).join(","), records: result.applyPaymentInvoiceVos || [] }
             }))
             resole(result)
         } catch (error) {
@@ -71,7 +71,9 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 supplierId: baseData.supplierName?.id || data?.supplierId,
                 supplierName: baseData.supplierName?.value || data?.supplierName,
                 applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
-                    invoiceId: item.id, billNumber: item.billNumber
+                    invoiceId: item.id,
+                    billNumber: item.billNumber,
+                    id: item.id
                 })) || data?.applyPaymentInvoiceVos
             }
             await saveRun(postData, saveType)
