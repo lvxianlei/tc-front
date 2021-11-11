@@ -17,6 +17,7 @@ import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { IProcess } from './ProductionLineMngt';
 import { ILineList } from './WorkshopTeamMngt';
 import { SelectValue } from 'antd/lib/select';
+import { CloseOutlined } from '@ant-design/icons';
 
 interface IDetail {
     readonly name?: string;
@@ -342,11 +343,15 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                         </Col>
                         <Col span={ 8 }>
                             <Form.Item name="accountEquipmentName" initialValue={ detail.accountEquipmentName } label="台账设备关联">
-                                <Input maxLength={ 50 } value={ detail.accountEquipmentName } suffix={ <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
+                                <Input maxLength={ 50 } value={ detail.accountEquipmentName } addonBefore={ <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
                                         setSelectedRows(selectedRows);
                                         setDetail({ ...detail, accountEquipmentName: selectedRows[0].deviceName });
                                         form.setFieldsValue({ accountEquipmentName: selectedRows[0].deviceName })
-                                    } }/> } disabled/>
+                                    } }/> } addonAfter={<Button type="link" style={{ padding: '0', lineHeight: 1, height: 'auto' }} onClick={ () => {
+                                        setSelectedRows([]);
+                                        setDetail({ ...detail, accountEquipmentName: '' });
+                                        form.setFieldsValue({ accountEquipmentName: '' })
+                                    } }><CloseOutlined /></Button>} disabled />
                             </Form.Item>
                         </Col>
                         <Col span={ 8 }>
