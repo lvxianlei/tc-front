@@ -110,9 +110,9 @@ export default class EquipmentSelectionModal extends AbstractFilteredSelectionMo
 
     public getTableColumns(): TableColumnType<object>[] {
         return [{
-            key: 'deviceType',
+            key: 'deviceTypeName',
             title: '设备类别',
-            dataIndex: 'deviceType',
+            dataIndex: 'deviceTypeName',
             width: '15%',
         }, {
             key: 'deviceName',
