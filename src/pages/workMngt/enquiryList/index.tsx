@@ -32,7 +32,7 @@ export default function EnquiryList(): React.ReactNode {
 
     const handleModal = () => new Promise(async (resove, reject) => {
         try {
-            const result = await editRef.current?.onSubmit()
+            await editRef.current?.onSubmit()
             message.success("保存成功...")
             history.go(0)
             setVisible(false)
@@ -42,11 +42,25 @@ export default function EnquiryList(): React.ReactNode {
     })
 
     return <>
-        <Modal destroyOnClose title="询价信息" width={1011} visible={visible} onOk={handleModal} onCancel={() => {
-            editRef.current?.resetFields()
-            setDetailId("")
-            setVisible(false)
-        }} >
+        <Modal
+            destroyOnClose
+            title="询价信息"
+            width={1011}
+            visible={visible}
+            footer={[
+                <Button type="primary" key="close" ghost
+                    onClick={() => {
+                        editRef.current?.resetFields()
+                        setDetailId("")
+                        setVisible(false)
+                    }}>关闭</Button>,
+                <Button key="save" type="primary" onClick={handleModal}>保存</Button>
+            ]}
+            onCancel={() => {
+                editRef.current?.resetFields()
+                setDetailId("")
+                setVisible(false)
+            }} >
             <Edit detailId={detailId} ref={editRef} />
         </Modal>
         <Page

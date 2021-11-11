@@ -90,7 +90,7 @@
                 },
                 {
                     "title": "供货产品",
-                    "dataIndex": "supplyProducts"
+                    "dataIndex": "supplyProductsName"
                 }
             ],
             "rules": [
