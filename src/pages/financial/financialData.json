@@ -180,7 +180,8 @@
                 },
                 {
                     "title": "合同编号",
-                    "dataIndex": "contractNumber"
+                    "dataIndex": "contractNumber",
+                    "search": true
                 },
                 {
                     "title": "完成时间",
