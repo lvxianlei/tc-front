@@ -256,7 +256,8 @@
             },
             {
                 "title": "标准",
-                "dataIndex": "standard"
+                "dataIndex": "standard",
+                "search": true
             },
             {
                 "title": "材料",

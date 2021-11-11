@@ -112,22 +112,25 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     return <DetailContent>
         <Spin spinning={loading}>
             <BaseInfo form={baseForm} onChange={handleBaseInfoChange} columns={ApplicationList.map((item: any) => {
-                if (item.dataIndex === "relatednotes") {
-                    return ({
-                        ...item,
-                        columns: item.columns.map((item: any) => item.dataIndex === "invoiceType" ? ({ ...item, enum: invoiceTypeEnum }) : item)
-                    })
+                switch (item.dataIndex) {
+                    case "relatednotes":
+                        return ({
+                            ...item,
+                            columns: item.columns.map((item: any) => item.dataIndex === "invoiceType" ? ({
+                                ...item,
+                                type: "select",
+                                enum: invoiceTypeEnum
+                            }) : item)
+                        })
+                    case "pleasePayType":
+                        return ({ ...item, enum: pleasePayTypeEnum })
+                    case "paymentMethod":
+                        return ({ ...item, type: "select", enum: paymentMethodEnum })
+                    case "pleasePayOrganization":
+                        return ({ ...item, enum: deptData })
+                    default:
+                        return item
                 }
-                if (item.dataIndex === "pleasePayType") {
-                    return ({ ...item, enum: pleasePayTypeEnum });
-                }
-                if (item.dataIndex === "paymentMethod") {
-                    return ({ ...item, type: "select", enum: paymentMethodEnum });
-                }
-                if (item.dataIndex === "pleasePayOrganization") {
-                    return ({ ...item, enum: deptData })
-                }
-                return item;
             })} col={3} dataSource={{}} edit />
         </Spin>
     </DetailContent>

@@ -255,6 +255,7 @@ export default function ApplyPayment() {
                     name: 'applyStatus',
                     label: '审批状态',
                     children: <Select style={{ width: 200 }} defaultValue="全部">
+                        <Select.Option value="">全部</Select.Option>
                         <Select.Option value="0">未发起</Select.Option>
                         <Select.Option value="1">待审批</Select.Option>
                         <Select.Option value="2">已拒绝</Select.Option>
@@ -266,6 +267,7 @@ export default function ApplyPayment() {
                     name: 'pleasePayStatus',
                     label: '请款状态',
                     children: <Select style={{ width: 200 }} defaultValue="全部">
+                        <Select.Option value="">全部</Select.Option>
                         <Select.Option value="1">已创建</Select.Option>
                         <Select.Option value="2">待付款</Select.Option>
                         <Select.Option value="3">已付款</Select.Option>
@@ -275,6 +277,7 @@ export default function ApplyPayment() {
                     name: 'pleasePayType',
                     label: '请款类别',
                     children: <Select style={{ width: 200 }} defaultValue="全部">
+                        <Select.Option value="">全部</Select.Option>
                         {pleasePayTypeEnum.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
                     </Select>
                 },

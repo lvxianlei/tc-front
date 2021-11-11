@@ -28,6 +28,7 @@ export default function Invoicing() {
     const handlePurChasePlan = () => new Promise(async (resove, reject) => {
         try {
             const result = await purChasePlanRef.current?.onSubmit()
+            message.success("成功生成采购计划...")
             resove(true)
             history.go(0)
         } catch (error) {
@@ -57,7 +58,7 @@ export default function Invoicing() {
                     dataIndex: "opration",
                     fixed: "right",
                     width: 100,
-                    render: (_: any, record: any) => <Button type="link" onClick={() => {
+                    render: (_: any, record: any) => <Button disabled={![1, 3].includes(record.purchaseTaskStatus)} type="link" onClick={() => {
                         setVisible(true)
                         setChooseId(record.id)
                     }}>配料方案</Button>
@@ -108,9 +109,11 @@ export default function Invoicing() {
                     onChange: (selectedRowKeys: any[]) => {
                         setGenerateIds(selectedRowKeys)
                     },
-                    getCheckboxProps: (record: any) => ({
-                        disabled: ![1].includes(record.purchaseTaskStatus) && ![-1, null].includes(record.purchasePlanId)
-                    })
+                    getCheckboxProps: (record: any) => {
+                        return ({
+                            disabled: !([1].includes(record.purchaseTaskStatus) && [-1, null].includes(record.purchasePlanId))
+                        })
+                    }
                 }
             }}
         />

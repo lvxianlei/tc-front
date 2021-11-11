@@ -94,7 +94,7 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
                 },
                 {
                     "title": "联系电话",
-                    "dataIndex": "contactNumber"
+                    "dataIndex": "contactManTel"
                 },
                 {
                     "title": "供货产品",
