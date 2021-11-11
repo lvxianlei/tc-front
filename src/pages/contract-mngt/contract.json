@@ -33,7 +33,7 @@
         },
         {
             "title": "经办人",
-            "dataIndex": "operator"
+            "dataIndex": "operatorName"
         },
         {
             "title": "总重量",
@@ -45,7 +45,7 @@
         },
         {
             "title": "含税金额（元）合计",
-            "dataIndex": "taxTotalAmount"
+            "dataIndex": "totalTaxAmount"
         },
         {
             "title": "不含税单价（元）合计",
@@ -61,11 +61,33 @@
         },
         {
             "title": "运输承担",
-            "dataIndex": "transportBear"
+            "dataIndex": "transportBear",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "供方"
+                },
+                {
+                    "value": 2,
+                    "label": "需方"
+                }
+            ]
         },
         {
             "title": "卸车承担",
-            "dataIndex": "unloadBear"
+            "dataIndex": "unloadBear",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "供方"
+                },
+                {
+                    "value": 2,
+                    "label": "需方"
+                }
+            ]
         },
         {
             "title": "备注",
@@ -329,13 +351,13 @@
             "type": "popTable",
             "path": "/tower-supply/comparisonPrice",
             "width": 1011,
-            "value": "comparisonNumber",
+            "value": "comparisonPriceNumber",
             "dependencies": true,
             "readOnly": true,
             "columns": [
                 {
                     "title": "询比价编号",
-                    "dataIndex": "comparisonNumber"
+                    "dataIndex": "comparisonPriceNumber"
                 },
                 {
                     "title": "用途",

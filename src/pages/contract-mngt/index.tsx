@@ -159,9 +159,9 @@ export default function ContractMngt(): JSX.Element {
                         </Select>
                     },
                     {
-                        name: 'inquire',
+                        name: 'fuzzyQuery',
                         label: '查询',
-                        children: <Input style={{ width: "150px" }} placeholder="任务编号/项目名称/客户名称" />
+                        children: <Input style={{ width: "230px" }} placeholder="合同编号/关联采购计划/供应商" />
                     }
                 ]}
             />
