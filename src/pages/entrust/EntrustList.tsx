@@ -219,8 +219,8 @@ class EntrustList extends AbstractMngtComponent<IEntrustListWithRouteProps, IEnt
                                                     <Progress
                                                         type="circle"
                                                         strokeColor={{
-                                                            '0%': '#1890FF',
-                                                            '100%': '#4F53FF',
+                                                            '0%': '#FCE38A',
+                                                            '100%': '#F38181',
                                                         }}
                                                         trailColor={"#dcdcdc"}
                                                         width={80}
