@@ -90,7 +90,7 @@ export default function Invoicing() {
                 }]}
             extraOperation={<>
                 <Button type="primary" ghost>导出</Button>
-                <Button type="primary" ghost>生成采购计划</Button>
+                <Button type="primary" ghost onClick={() => message.warning("等待陈逍飞开发接口...")}>生成采购计划</Button>
             </>}
             onFilterSubmit={onFilterSubmit}
             tableProps={{
