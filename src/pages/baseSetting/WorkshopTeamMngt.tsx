@@ -16,6 +16,7 @@ import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { IProcess } from './ProductionLineMngt';
 import { SelectValue } from 'antd/lib/select';
 import styles from './WorkshopEquipmentMngt.module.less';
+import { DataType } from '../../components/AbstractSelectableModal';
 
 interface IDetail {
     readonly name?: string;
@@ -244,6 +245,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
     const [ detail, setDetail ] = useState<IDetail>({});
     const [ process, setProcess ] = useState<IProcess[]>([]);
     const [ line, setLine ] = useState<ILineList[]>([]);
+    const [ rows, setRows ] = useState<DataType[]>([]);
     const { data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<SelectDataNode[]>(`/tower-production/workshopDept/list`);
         resole(data);
@@ -371,7 +373,15 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                             teamId: detail.id
                         }
                     })
-                    setUserList(selectedRows);
+                    const res = new Map();
+                    const newRows = rows.filter((item: DataType) => !res.has(item.id) && res.set(item.id, 1));
+                    setUserList(newRows);
+                } } selectRow={ (row: DataType[]) => {
+                    if(row.length > 0) {
+                        setRows([...rows, ...row]);
+                    } else {
+                        setRows([]);
+                    }
                 } }/>
                 <CommonTable columns={ tableColumns } dataSource={ userList } pagination={ false } />
             </Modal>
