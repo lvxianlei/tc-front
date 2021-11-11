@@ -15,6 +15,8 @@ import useRequest from '@ahooksjs/use-request';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { IProcess } from './ProductionLineMngt';
 import { SelectValue } from 'antd/lib/select';
+import styles from './WorkshopEquipmentMngt.module.less';
+import { DataType } from '../../components/AbstractSelectableModal';
 
 interface IDetail {
     readonly name?: string;
@@ -243,6 +245,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
     const [ detail, setDetail ] = useState<IDetail>({});
     const [ process, setProcess ] = useState<IProcess[]>([]);
     const [ line, setLine ] = useState<ILineList[]>([]);
+    const [ rows, setRows ] = useState<DataType[]>([]);
     const { data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<SelectDataNode[]>(`/tower-production/workshopDept/list`);
         resole(data);
@@ -317,7 +320,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={ 12 }>
-                            <Form.Item name="deptProcessesId" initialValue={ detail.deptProcessesId } label="工序" rules={[{
+                            <Form.Item name="deptProcessesId" className={ styles.maxWidth60 } initialValue={ detail.deptProcessesId } label="工序" rules={[{
                                     "required": true,
                                     "message": "请选择工序"
                                 }]}>
@@ -347,7 +350,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={ 12 }>
-                            <Form.Item name="productionLinesId" label="所属产线" initialValue={ detail.productionLinesId } rules={[{
+                            <Form.Item name="productionLinesId" className={ styles.maxWidth60 } label="所属产线" initialValue={ detail.productionLinesId } rules={[{
                                     "required": true,
                                     "message": "请选择所属产线"
                                 }]}>
@@ -362,7 +365,9 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                 </Form>
                 <p><span style={{ color: 'red' }}>*</span>班组成员</p>
                 <WorkshopUserSelectionComponent rowSelectionType="checkbox" buttonTitle="添加员工" onSelect={ (selectedRows: object[] | any) => {
-                    selectedRows = selectedRows.map((item: IUser) => {
+                    const res = new Map();
+                    let newRows = rows.filter((item: DataType) => !res.has(item.id) && res.set(item.id, 1));
+                    newRows = newRows.map((item: DataType) => {
                         return {
                             userId: item.id,
                             name: item.name,
@@ -370,7 +375,13 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                             teamId: detail.id
                         }
                     })
-                    setUserList(selectedRows);
+                    setUserList(newRows);
+                } } selectRow={ (row: DataType[]) => {
+                    if(row.length > 0) {
+                        setRows([...rows, ...row]);
+                    } else {
+                        setRows([]);
+                    }
                 } }/>
                 <CommonTable columns={ tableColumns } dataSource={ userList } pagination={ false } />
             </Modal>

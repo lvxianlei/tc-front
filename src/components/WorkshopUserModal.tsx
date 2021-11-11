@@ -7,7 +7,7 @@ import { Button, FormItemProps, Input, Modal, Space } from 'antd';
 import { ColumnType, TablePaginationConfig, TableProps } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import RequestUtil from '../utils/RequestUtil';
-import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from './AbstractSelectableModal';
+import { DataType, IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from './AbstractSelectableModal';
 import styles from './AbstractSelectableModal.module.less';
 import AbstractFilteredSelecableModal from './AbstractFilteredSelecableModal';
 import { ButtonType } from 'antd/lib/button';
@@ -21,6 +21,7 @@ export interface IWorkshopUserSelectionComponentProps extends IAbstractSelectabl
     readonly buttonType?: ButtonType;
     readonly buttonTitle?: string;
     readonly rowSelectionType?: RowSelectionType | undefined;
+    readonly selectRow?: (row: DataType[]) => void;
 }
 
 export interface IResponseDataMore extends IResponseData {
@@ -66,7 +67,9 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
                 total: 0,
                 showSizeChanger: false
             },
-            confirmTitle: "选择人员"
+            confirmTitle: "选择人员",
+            selectedRows: [],
+            selectedRowKeys: []
         };
     }
 
@@ -81,6 +84,14 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
         }
     }
 
+    public onSelectChange = (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
+        this.setState({
+            selectedRowKeys,
+            selectedRows
+        });
+        this.props.selectRow && this.props.selectRow(selectedRows);
+    }
+
     /**
      * @description 取消操作 
      * @param event 
@@ -90,11 +101,12 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
             isModalVisible: false,
             selectedRowKeys: []
         })
+        this.props.selectRow && this.props.selectRow([]);
     };
 
     //componentDidMount
     public componentDidMount(): void {
-        this.getTable({})
+        
     }
 
     //接口、获值
@@ -117,7 +129,7 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
                 current: resData.current,
                 pageSize: resData.size,
                 total: resData.total
-            },
+            }
         });
     }
 
@@ -186,20 +198,11 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
         return 'id';
     }
 
-    public showModal = (): void => {
-        if (this.props.saleOrderId) {
-            this.setState({
-                isModalVisible: true
-            })
-            this.getTable({})
-        }
-
-    }
-
     public render(): React.ReactNode {
         return (
             <>
                 <Button type={this.props.buttonType || 'primary'} style={this.props.buttonType==='link'?{ paddingBottom: '0', paddingTop: '0', height: 'auto', lineHeight: 1 }:{}} onClick={()=>{
+                    this.getTable({})
                     this.setState({
                         isModalVisible: true
                     })

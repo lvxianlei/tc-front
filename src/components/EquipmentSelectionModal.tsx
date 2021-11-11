@@ -11,7 +11,6 @@ import styles from './AbstractSelectableModal.module.less';
 import RequestUtil from '../utils/RequestUtil';
 import AbstractFilteredSelectionModal from './AbstractFilteredSelecableModal';
 import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from './AbstractSelectableModal';
-import { saleTypeOptions } from '../configuration/DictionaryOptions';
 
 const { Option } = Select;
 export interface IEquipmentSelectionModalProps extends IAbstractSelectableModalProps {
@@ -46,16 +45,6 @@ export default class EquipmentSelectionModal extends AbstractFilteredSelectionMo
             },
             confirmTitle: "选择设备"
         };
-    }
-
-    public showModal = (): void => {
-        this.setState({
-            isModalVisible: true,
-        })
-    }
-
-    public componentDidMount(): void {
-        this.getTable({})
     }
 
     public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
@@ -176,6 +165,7 @@ export default class EquipmentSelectionModal extends AbstractFilteredSelectionMo
         return (
             <>
                 <Button type="link" onClick={()=>{
+                    this.getTable({});
                     this.setState({
                         isModalVisible: true
                     })
