@@ -72,8 +72,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 supplierName: baseData.supplierName?.value || data?.supplierName,
                 applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
                     invoiceId: item.id,
-                    billNumber: item.billNumber,
-                    id: item.id
+                    billNumber: item.billNumber
                 })) || data?.applyPaymentInvoiceVos
             }
             await saveRun(postData, saveType)

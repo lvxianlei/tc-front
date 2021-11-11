@@ -352,7 +352,7 @@
             "type": "number"
         },
         {
-            "title": "付款状态",
+            "title": "请款状态",
             "dataIndex": "pleasePayStatus",
             "type": "select",
             "enum": [
