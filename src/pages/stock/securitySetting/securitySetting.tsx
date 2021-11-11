@@ -56,8 +56,8 @@ const SecuritySetting = (): React.ReactNode => {
                             className='yello'
                             onClick={() => {
                                 setIsModal(true)
-                                setSafetyStock('')
-                                setAlarmStock('')
+                                setSafetyStock(item.safetyStock)
+                                setAlarmStock(item.alarmStock)
                                 setId(item.id)
                             }}
                         >编辑</span>

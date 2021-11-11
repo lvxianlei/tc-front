@@ -48,7 +48,7 @@ export default function IntgSelect({ onChange, width, value = { first: "", secon
     }, [setUserId, deptId, onChange])
 
     return <div style={{ width: width || "100%" }}>
-        <Select placeholder="部门" style={{ width: "50%" }} onChange={handleFirstChange} value={deptId} >{deptData?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}</Select>
-        <Select placeholder="人员" style={{ width: "50%" }} onChange={handleChange} value={userId} disabled={!deptId}>{userData?.records?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}</Select>
+        <Select placeholder="部门" style={{ width: "50%" }} onChange={handleFirstChange} >{deptData?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}</Select>
+        <Select placeholder="人员" style={{ width: "50%" }} onChange={handleChange} disabled={!deptId}>{userData?.records?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}</Select>
     </div>
 }

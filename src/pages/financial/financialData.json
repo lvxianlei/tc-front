@@ -28,7 +28,7 @@
             "type": "string"
         },
         {
-            "title": "收票日",
+            "title": "开票日",
             "dataIndex": "collectInvoiceDate",
             "type": "date",
             "format": "YYYY-MM-DD"
@@ -216,13 +216,13 @@
             ]
         },
         {
-            "title": "收票日",
+            "title": "开票日",
             "dataIndex": "collectInvoiceDate",
             "type": "date",
             "rules": [
                 {
                     "required": true,
-                    "message": "请输入收票日..."
+                    "message": "请输入开票日..."
                 }
             ]
         }
@@ -328,7 +328,7 @@
             "dataIndex": "receiptNumber"
         },
         {
-            "title": "收票日",
+            "title": "开票日",
             "dataIndex": "collectInvoiceDate",
             "type": "string"
         }
@@ -485,7 +485,7 @@
                     "dataIndex": "invoiceAmount"
                 },
                 {
-                    "title": "收票日",
+                    "title": "开票日",
                     "dataIndex": "collectInvoiceDate",
                     "type": "string"
                 },
