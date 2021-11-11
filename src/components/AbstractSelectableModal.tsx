@@ -45,6 +45,7 @@ export interface DataType {
     readonly keeperName?: string;
     readonly keeperUserId?: string | number;
     readonly stationName?: string;
+    readonly userId?: string | number;
 }
 
 export interface IResponseData {
