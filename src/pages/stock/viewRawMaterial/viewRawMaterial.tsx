@@ -14,14 +14,13 @@ export default function ViewRawMaterial(): React.ReactNode {
         value: item.id,
         label: item.name
     }))
-
-
     const history = useHistory()
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisible1, setIsModalVisible1] = useState(false);
     const [filterValue, setFilterValue] = useState({});
     const [materialPriceId, setMaterialPriceId] = useState(0);
     const [arr, setArr] = useState<any>([]);
+    const [arr1, setArr1] = useState<any>([]);
     //原材料类型
     const [projectType, setProjectType] = useState<any>([]);
     const { RangePicker } = DatePicker;
@@ -46,17 +45,19 @@ export default function ViewRawMaterial(): React.ReactNode {
         setIsModalVisible(true);
         setMaterialPriceId(Number(materialPriceId));
         console.log(materialPriceId);
-        ///tower-supply/materialPrice/history/{materialPriceId}
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPrice/history/${materialPriceId}`)
         console.log(result);
+        setArr(result);
     }
     const handleCancel = () => {
         setIsModalVisible(false);
     };
-    const state = async (materialPriceId: string) => {
+    const state = async (materialPriceId: number) => {
         setIsModalVisible1(true);
+        setMaterialPriceId(materialPriceId);
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPrice/priceSource/${materialPriceId}`)
         console.log(result);
+        setArr1(result);
     }
     const handleCancel1 = () => {
         setIsModalVisible1(false);
@@ -74,18 +75,6 @@ export default function ViewRawMaterial(): React.ReactNode {
             <Button onClick={() => setIsModalVisible1(false)}>关闭</Button>
         </div>
     ]
-    const aa = async () => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPrice/history/${materialPriceId}`);
-            console.log(result);
-            setArr(result);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    useEffect(() => {
-        aa();
-    }, [])
     const bb = async () => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/materialCategory?current=1&size=20`);
@@ -124,7 +113,7 @@ export default function ViewRawMaterial(): React.ReactNode {
                     }
                 ]}
                 filterValue={filterValue}
-                extraOperation={<div><Link to="/project/management/new"><Button type="primary">导出</Button></Link><Button type="link" style={{ marginLeft: "1050px" }} onClick={() => { goPrice() }}>价格维护</Button></div>}
+                extraOperation={<div><Link to="/project/management/new"><Button type="primary">导出</Button></Link><Button type="primary" style={{ marginLeft: "1050px" }} onClick={() => { goPrice() }}>价格维护</Button></div>}
                 onFilterSubmit={onFilterSubmit}
                 searchFormItems={[
                     {
@@ -157,7 +146,7 @@ export default function ViewRawMaterial(): React.ReactNode {
                 <div style={{ display: "flex" }}>
                     {/* 折线图 */}
                     <div>
-                        <AntdCharts />
+                        <AntdCharts arr={arr} />
                     </div>
                     <div style={{ width: "500px", height: "400px", marginLeft: "50px" }}>
                         {/* <Page
@@ -187,7 +176,7 @@ export default function ViewRawMaterial(): React.ReactNode {
                 </div>
             </Modal>
             <Modal width="700px" title="数据源" visible={isModalVisible1} onCancel={handleCancel1} footer={buttons1}>
-                <Page
+                {/* <Page
                     path={`/tower-supply/materialPrice/priceSource/${materialPriceId}`}
                     columns={[
                         {
@@ -198,6 +187,17 @@ export default function ViewRawMaterial(): React.ReactNode {
                         ...dataSource
                     ]}
                     searchFormItems={[]}
+                /> */}
+                <CommonTable
+                    columns={[
+                        {
+                            title: "序号",
+                            dataIndex: "index",
+                            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                        },
+                        ...dataSource
+                    ]}
+                    dataSource={arr1}
                 />
             </Modal>
         </div>

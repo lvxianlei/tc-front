@@ -8,6 +8,7 @@ import { useHistory } from 'react-router';
 import RequestUtil from '../../utils/RequestUtil';
 import TaskAssign from './TaskAssign';
 import useRequest from '@ahooksjs/use-request';
+import { downLoadFile } from '../../utils';
 interface TaskAssignRef {
     onSubmit: () => void
     resetFields: () => void
@@ -209,10 +210,15 @@ export default function rawMaterial() {
                     <Descriptions.Item label="总重量（吨）">{obj.totalWeight}</Descriptions.Item>
                 </Descriptions>
                 {/* 相关附件 */}
-                <Descriptions title="相关附件" column={1} bordered>
-                    <Descriptions.Item label="附件名称附件名称附件名称附件名称附件名称.pdf">下载 预览</Descriptions.Item>
-                    <Descriptions.Item label="附件名称附件名称附件名称附件名称附件名称.rar">下载</Descriptions.Item>
-                </Descriptions>
+                <DetailTitle title="相关附件" />
+                <CommonTable columns={[{
+                    title: "操作",
+                    dataIndex: "opration",
+                    render: (_: any, records: any) => <>
+                        <Button type="link" >预览</Button>
+                        <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
+                    </>
+                }]} dataSource={obj.taskNoticeAttachList || []} />
                 {/* 表格 */}
                 <DetailContent>
                     <DetailTitle title="操作信息" />
