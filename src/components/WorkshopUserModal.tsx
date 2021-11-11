@@ -106,7 +106,7 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
 
     //componentDidMount
     public componentDidMount(): void {
-        this.getTable({})
+        
     }
 
     //接口、获值
@@ -198,20 +198,11 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
         return 'id';
     }
 
-    public showModal = (): void => {
-        if (this.props.saleOrderId) {
-            this.setState({
-                isModalVisible: true
-            })
-            this.getTable({})
-        }
-
-    }
-
     public render(): React.ReactNode {
         return (
             <>
                 <Button type={this.props.buttonType || 'primary'} style={this.props.buttonType==='link'?{ paddingBottom: '0', paddingTop: '0', height: 'auto', lineHeight: 1 }:{}} onClick={()=>{
+                    this.getTable({})
                     this.setState({
                         isModalVisible: true
                     })

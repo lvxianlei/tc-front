@@ -47,16 +47,6 @@ export default class EquipmentSelectionModal extends AbstractFilteredSelectionMo
         };
     }
 
-    public showModal = (): void => {
-        this.setState({
-            isModalVisible: true,
-        })
-    }
-
-    public componentDidMount(): void {
-        this.getTable({})
-    }
-
     public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-equipment/device', {
             ...filterValues,
@@ -175,6 +165,7 @@ export default class EquipmentSelectionModal extends AbstractFilteredSelectionMo
         return (
             <>
                 <Button type="link" onClick={()=>{
+                    this.getTable({});
                     this.setState({
                         isModalVisible: true
                     })
