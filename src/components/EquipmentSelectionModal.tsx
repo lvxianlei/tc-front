@@ -12,7 +12,6 @@ import RequestUtil from '../utils/RequestUtil';
 import AbstractFilteredSelectionModal from './AbstractFilteredSelecableModal';
 import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from './AbstractSelectableModal';
 
-const { Option } = Select;
 export interface IEquipmentSelectionModalProps extends IAbstractSelectableModalProps {
 }
 export interface IEquipmentSelectionModalState extends IAbstractSelectableModalState {
@@ -93,6 +92,7 @@ export default class EquipmentSelectionModal extends AbstractFilteredSelectionMo
             isModalVisible: false,
             selectedRowKeys: []
         })
+        this.getForm()?.resetFields();
     };
 
     public onFilterSubmit = async (values: Record<string, any>) => {
@@ -110,9 +110,9 @@ export default class EquipmentSelectionModal extends AbstractFilteredSelectionMo
 
     public getTableColumns(): TableColumnType<object>[] {
         return [{
-            key: 'deviceType',
+            key: 'deviceTypeName',
             title: '设备类别',
-            dataIndex: 'deviceType',
+            dataIndex: 'deviceTypeName',
             width: '15%',
         }, {
             key: 'deviceName',
@@ -184,6 +184,7 @@ export default class EquipmentSelectionModal extends AbstractFilteredSelectionMo
                                 this.setState({
                                     selectedRowKeys: []
                                 })
+                                this.getForm()?.resetFields();
                                 this.props.onSelect(this.state.selectedRows)
                             }
                         }

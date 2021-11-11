@@ -245,7 +245,6 @@ export default function WorkshopTeamMngt(): React.ReactNode {
     const [ detail, setDetail ] = useState<IDetail>({});
     const [ process, setProcess ] = useState<IProcess[]>([]);
     const [ line, setLine ] = useState<ILineList[]>([]);
-    const [ rows, setRows ] = useState<DataType[]>([]);
     const { data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<SelectDataNode[]>(`/tower-production/workshopDept/list`);
         resole(data);
@@ -365,9 +364,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                 </Form>
                 <p><span style={{ color: 'red' }}>*</span>班组成员</p>
                 <WorkshopUserSelectionComponent rowSelectionType="checkbox" buttonTitle="添加员工" onSelect={ (selectedRows: object[] | any) => {
-                    const res = new Map();
-                    let newRows = rows.filter((item: DataType) => !res.has(item.id) && res.set(item.id, 1));
-                    newRows = newRows.map((item: DataType) => {
+                    selectedRows = selectedRows.map((item: DataType) => {
                         return {
                             userId: item.id,
                             name: item.name,
@@ -375,13 +372,11 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                             teamId: detail.id
                         }
                     })
+                    const res = new Map();
+                    const rows = [...userList, ...selectedRows]
+                    let newRows = rows.filter((item: DataType) => !res.has(item.userId) && res.set(item.userId, 1));
+                    console.log()
                     setUserList(newRows);
-                } } selectRow={ (row: DataType[]) => {
-                    if(row.length > 0) {
-                        setRows([...rows, ...row]);
-                    } else {
-                        setRows([]);
-                    }
                 } }/>
                 <CommonTable columns={ tableColumns } dataSource={ userList } pagination={ false } />
             </Modal>
