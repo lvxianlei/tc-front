@@ -33,7 +33,7 @@
         },
         {
             "title": "询价人",
-            "dataIndex": "comparisonPersonId"
+            "dataIndex": "comparisonPersonName"
         }
     ],
     "editBaseInfo": [
