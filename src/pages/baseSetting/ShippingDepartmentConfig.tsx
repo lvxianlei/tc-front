@@ -375,7 +375,6 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                         </Col>
                     </Row>
                     <DetailTitle title="保管员" operation={[<WorkshopUserSelectionComponent rowSelectionType="checkbox" onSelect={ (selectedRows: IUser[] | any) => {
-                        setWarehouseKeeperDTODeleteList([...warehouseKeeperDTODeleteList, ...userList]);
                         selectedRows = selectedRows.map((item: DataType) => {
                             return {
                                 keeperUserId: item.id,

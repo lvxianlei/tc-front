@@ -626,6 +626,24 @@
                         ]
                     },
                     {
+                        "label": "档案管理",
+                        "icon": "technology",
+                        "path": "/archivesMngt",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "资料管理",
+                                "path": "/archivesMngt/dataMngt",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "证件管理",
+                                "path": "/archivesMngt/certificateMngt",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
                         "label": "系统日志",
                         "icon": "technology",
                         "path": "/systemLog",
