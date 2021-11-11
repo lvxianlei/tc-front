@@ -2,7 +2,7 @@
     "comparison": [
         {
             "title": "询比价编号",
-            "dataIndex": "comparisonNumber"
+            "dataIndex": "comparisonPriceNumber"
         },
         {
             "title": "用途",
@@ -39,7 +39,7 @@
     "editBaseInfo": [
         {
             "title": "询比价编号",
-            "dataIndex": "comparisonNumber",
+            "dataIndex": "comparisonPriceNumber",
             "disabled": true
         },
         {

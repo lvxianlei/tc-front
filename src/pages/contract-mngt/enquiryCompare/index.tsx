@@ -103,6 +103,7 @@ export default function ContractMngt() {
             </Modal>
             <Modal destroyOnClose title="操作信息" width={1011}
                 visible={oprationVisible}
+                   onCancel={() => setOprationVisible(false)}
                 footer={[<Button type="primary" ghost key="close" onClick={() => setOprationVisible(false)}>关闭</Button>]}>
                 <OprationInfo id={detailId} />
             </Modal>
@@ -164,12 +165,12 @@ export default function ContractMngt() {
                         children: <DatePicker.RangePicker style={{ width: "200px" }} format="YYYY-MM-DD"/>
                     },
                     {
-                        name: 'comparisonPriceStatus',
+                        name: 'comparisonStatus',
                         label: '状态',
                         children: <Select placeholder="请选择" style={{ width: "100px" }}>
                             <Select.Option value={1}>询价中</Select.Option>
                             <Select.Option value={2}>已询价</Select.Option>
-                            <Select.Option value={3}>已取消）</Select.Option>
+                            <Select.Option value={3}>已取消</Select.Option>
                         </Select>
                     },
                     {
@@ -178,7 +179,7 @@ export default function ContractMngt() {
                         children: <IntgSelect width={200} />
                     },
                     {
-                        name: 'inquire',
+                        name: 'comparisonPriceNumber',
                         label: '查询',
                         children: <Input style={{ width: "150px" }} placeholder="询比价编号" />
                     }
