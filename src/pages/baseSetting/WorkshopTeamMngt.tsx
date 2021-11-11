@@ -365,7 +365,9 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                 </Form>
                 <p><span style={{ color: 'red' }}>*</span>班组成员</p>
                 <WorkshopUserSelectionComponent rowSelectionType="checkbox" buttonTitle="添加员工" onSelect={ (selectedRows: object[] | any) => {
-                    selectedRows = selectedRows.map((item: IUser) => {
+                    const res = new Map();
+                    let newRows = rows.filter((item: DataType) => !res.has(item.id) && res.set(item.id, 1));
+                    newRows = newRows.map((item: DataType) => {
                         return {
                             userId: item.id,
                             name: item.name,
@@ -373,8 +375,6 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                             teamId: detail.id
                         }
                     })
-                    const res = new Map();
-                    const newRows = rows.filter((item: DataType) => !res.has(item.id) && res.set(item.id, 1));
                     setUserList(newRows);
                 } } selectRow={ (row: DataType[]) => {
                     if(row.length > 0) {

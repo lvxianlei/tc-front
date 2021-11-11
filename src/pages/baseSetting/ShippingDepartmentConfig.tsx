@@ -22,7 +22,7 @@ interface IProcessList {
 interface IWarehouseKeeperList {
     readonly keeperName?: string;
     readonly warehouseId?: string;
-    readonly keeperUserId?: string;
+    readonly keeperUserId?: string | number;
     readonly id?: string | number;
 }
 interface IDetailData {
@@ -368,14 +368,14 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                     </Row>
                     <DetailTitle title="保管员" operation={[<WorkshopUserSelectionComponent rowSelectionType="checkbox" onSelect={ (selectedRows: IUser[] | any) => {
                         setWarehouseKeeperDTODeleteList([...warehouseKeeperDTODeleteList, ...userList]);
-                        selectedRows = selectedRows.map((item: IUser) => {
+                        const res = new Map();
+                        let newRows = rows.filter((item: DataType) => !res.has(item.id) && res.set(item.id, 1));
+                        newRows = newRows.map((item: DataType) => {
                             return {
                                 keeperUserId: item.id,
                                 keeperName: item.name
                             }
                         })
-                        const res = new Map();
-                        const newRows = rows.filter((item: DataType) => !res.has(item.id) && res.set(item.id, 1));
                         setUserList(newRows);
                     } } buttonTitle="选择保管员" selectRow={ (row: DataType[]) => {
                         if(row.length > 0) {

@@ -63,7 +63,7 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
             ...super.getState(),
             tablePagination: {
                 current: 1,
-                pageSize: 2,
+                pageSize: 10,
                 total: 0,
                 showSizeChanger: false
             },
