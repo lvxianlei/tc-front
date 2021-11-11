@@ -349,8 +349,8 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                                         form.setFieldsValue({ accountEquipmentName: selectedRows[0].deviceName })
                                     } }/> } addonAfter={<Button type="link" style={{ padding: '0', lineHeight: 1, height: 'auto' }} onClick={ () => {
                                         setSelectedRows([]);
-                                        setDetail({ ...detail, accountEquipmentName: '' });
-                                        form.setFieldsValue({ accountEquipmentName: '' })
+                                        setDetail({ ...detail, accountEquipmentName: '', accountEquipmentId: '' });
+                                        form.setFieldsValue({ accountEquipmentName: '', accountEquipmentId: '' })
                                     } }><CloseOutlined /></Button>} disabled />
                             </Form.Item>
                         </Col>
