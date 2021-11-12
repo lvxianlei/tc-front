@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, Button, Modal, Select, Form, Popconfirm, message, Row, Col, TreeSelect } from 'antd';
+import { Space, Input, Button, Modal, Select, Form, Popconfirm, message, Row, Col, TreeSelect, Spin } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
@@ -103,10 +103,10 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                 <Space direction="horizontal" size="small">
                     <Button type="link" onClick={ () => {
                         getList(record.id);
-                        setVisible(true);
                         setDisabled(false);
                         setDisabled2(false);
                         setTitle('编辑');
+                        setVisible(true);
                     } }>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
@@ -156,21 +156,13 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
             }
             RequestUtil.post<IDetail>(`/tower-production/equipment`, { ...value }).then(res => {
                 message.success('保存成功！');
-                setVisible(false);
-                setDisabled(true);
-                setDisabled2(true);
-                setDetail({});
-                setLine([]);
-                setProcess([]);
-                setSelectedRows([]);
-                form.resetFields();
-                form.setFieldsValue({ deptProcessesId: '', name: '', productionLinesId: '', status: '', workshopDeptId: '',accountEquipmentName: '' });
+                close();
                 setRefresh(!refresh);
             });
         })
     }
 
-    const cancel = () => {
+    const close = () => {
         setVisible(false);
         setDisabled(true);
         setDisabled2(true);
@@ -180,6 +172,11 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
         setSelectedRows([]);
         form.resetFields();
         form.setFieldsValue({ deptProcessesId: '', name: '', productionLinesId: '', status: '', workshopDeptId: '',accountEquipmentName: '' });
+        setLoading(true);
+    }
+
+    const cancel = () => {
+        close();
     }
 
     const getList = async (id: string) => {
@@ -200,11 +197,13 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
     const getProcess = async (id: string) => {
         const data = await RequestUtil.get<IProcess[]>(`/tower-production/workshopDept/workshopDeptDetail?id=${ id }`);
         setProcess(data || []);
+        setLoading(false);
     }
 
     const getLine = async (id: string) => {
         const data = await RequestUtil.get<ILineList[]>(`/tower-production/productionLines/list?deptProcessesId=${ id }`);
         setLine(data || []);
+        setLoading(false);
     }
 
     const [ refresh, setRefresh ] = useState(false);
@@ -219,6 +218,7 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
     const [ process, setProcess ] = useState<IProcess[]>([]);
     const [ selectedRows, setSelectedRows ] = useState<IData[] | any>({});
     const [ line, setLine ] = useState<ILineList[]>([]);
+    const [ loading, setLoading ] = useState(true);
     const { data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<SelectDataNode[]>(`/tower-production/workshopDept/list`);
         resole(data);
@@ -275,96 +275,99 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                 path="/tower-production/equipment"
                 columns={ columns }
                 headTabs={ [] }
-                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle("新增");} } ghost>新增</Button> }
+                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle("新增");
+                setLoading(false);} } ghost>新增</Button> }
                 refresh={ refresh }
                 searchFormItems={ [] }
                 requestData={{ ...filterValue }}
             />
             <Modal visible={ visible } width="60%" title={ title + '设备信息' } okText="保存" cancelText="取消" onOk={ save } onCancel={ cancel }>
-                <Form form={ form } labelCol={{ span: 8 }}>
-                    <Row>
-                        <Col span={ 8 }>
-                            <Form.Item name="workshopDeptId" initialValue={ detail.workshopDeptId } label="所属车间" rules={[{
-                                    "required": true,
-                                    "message": "请选择所属车间"
-                                }]}>
-                                <Select placeholder="请选择" onChange={(e: string) => {
-                                    setDisabled(false);
-                                    form.setFieldsValue({ deptProcessesId: '', productionLinesId: '' });
-                                    getProcess(e.toString().split(',')[0]);
-                                }}>
-                                    { departmentData.map((item: any) => {
-                                        return <Select.Option key={ item.id + ',' + item.deptName } value={ item.id + ',' + item.deptName }>{ item.deptName }</Select.Option>
-                                    }) }
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                        <Col span={ 8 }>
-                            <Form.Item name="deptProcessesId" className={ styles.maxWidth60 } label="工序" initialValue={ detail.deptProcessesId } rules={[{
-                                    "required": true,
-                                    "message": "请选择工序"
-                                }]}>
-                                <Select placeholder="请选择" disabled={ disabled } onChange={ (e: SelectValue = '') => {
-                                    setDisabled2(false);
-                                    form.setFieldsValue({ productionLinesId: '' });
-                                    getLine(e.toString().split(',')[0]);
-                                } }>
-                                    { process.map((item: any) => {
-                                        return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
-                                    }) }
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                        <Col span={ 8 }>
-                            <Form.Item name="name" label="派工设备名称" initialValue={ detail.name } rules={[{
-                                    "required": true,
-                                    "message": "请输入派工设备名称"
-                                },
-                                {
-                                  pattern: /^[^\s]*$/,
-                                  message: '禁止输入空格',
-                                }]}>
-                                <Input maxLength={ 50 }/>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={ 8 }>
-                            <Form.Item name="productionLinesId" className={ styles.maxWidth60 } label="所属产线" initialValue={ detail.deptProcessesId } rules={[{
-                                    "required": true,
-                                    "message": "请选择所属产线"
-                                }]}>
-                                <Select placeholder="请选择" disabled={ disabled2 }>
-                                    { line.map((item: any) => {
-                                        return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
-                                    }) }
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                        <Col span={ 8 }>
-                            <Form.Item name="accountEquipmentName" initialValue={ detail.accountEquipmentName } label="台账设备关联">
-                                <Input maxLength={ 50 } value={ detail.accountEquipmentName } addonBefore={ <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
-                                        setSelectedRows(selectedRows);
-                                        setDetail({ ...detail, accountEquipmentName: selectedRows[0].deviceName });
-                                        form.setFieldsValue({ accountEquipmentName: selectedRows[0].deviceName })
-                                    } }/> } addonAfter={<Button type="link" style={{ padding: '0', lineHeight: 1, height: 'auto' }} onClick={ () => {
-                                        setSelectedRows([]);
-                                        setDetail({ ...detail, accountEquipmentName: '', accountEquipmentId: '' });
-                                        form.setFieldsValue({ accountEquipmentName: '', accountEquipmentId: '' })
-                                    } }><CloseOutlined /></Button>} disabled />
-                            </Form.Item>
-                        </Col>
-                        <Col span={ 8 }>
-                            <Form.Item name="status" initialValue={ detail.status } label="状态">
-                                <Select placeholder="请选择">
-                                    <Select.Option value={ 1 } key="1">正常</Select.Option>
-                                    <Select.Option value={ 2 } key="2">停用</Select.Option>
-                                    <Select.Option value={ 3 } key="3">维修中</Select.Option>
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                </Form>
+                <Spin spinning={loading}>
+                    <Form form={ form } labelCol={{ span: 8 }}>
+                        <Row>
+                            <Col span={ 8 }>
+                                <Form.Item name="workshopDeptId" initialValue={ detail.workshopDeptId } label="所属车间" rules={[{
+                                        "required": true,
+                                        "message": "请选择所属车间"
+                                    }]}>
+                                    <Select placeholder="请选择" onChange={(e: string) => {
+                                        setDisabled(false);
+                                        form.setFieldsValue({ deptProcessesId: '', productionLinesId: '' });
+                                        getProcess(e.toString().split(',')[0]);
+                                    }}>
+                                        { departmentData.map((item: any) => {
+                                            return <Select.Option key={ item.id + ',' + item.deptName } value={ item.id + ',' + item.deptName }>{ item.deptName }</Select.Option>
+                                        }) }
+                                    </Select>
+                                </Form.Item>
+                            </Col>
+                            <Col span={ 8 }>
+                                <Form.Item name="deptProcessesId" className={ styles.maxWidth60 } label="工序" initialValue={ detail.deptProcessesId } rules={[{
+                                        "required": true,
+                                        "message": "请选择工序"
+                                    }]}>
+                                    <Select placeholder="请选择" disabled={ disabled } onChange={ (e: SelectValue = '') => {
+                                        setDisabled2(false);
+                                        form.setFieldsValue({ productionLinesId: '' });
+                                        getLine(e.toString().split(',')[0]);
+                                    } }>
+                                        { process.map((item: any) => {
+                                            return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
+                                        }) }
+                                    </Select>
+                                </Form.Item>
+                            </Col>
+                            <Col span={ 8 }>
+                                <Form.Item name="name" label="派工设备名称" initialValue={ detail.name } rules={[{
+                                        "required": true,
+                                        "message": "请输入派工设备名称"
+                                    },
+                                    {
+                                    pattern: /^[^\s]*$/,
+                                    message: '禁止输入空格',
+                                    }]}>
+                                    <Input maxLength={ 50 }/>
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span={ 8 }>
+                                <Form.Item name="productionLinesId" className={ styles.maxWidth60 } label="所属产线" initialValue={ detail.deptProcessesId } rules={[{
+                                        "required": true,
+                                        "message": "请选择所属产线"
+                                    }]}>
+                                    <Select placeholder="请选择" disabled={ disabled2 }>
+                                        { line.map((item: any) => {
+                                            return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
+                                        }) }
+                                    </Select>
+                                </Form.Item>
+                            </Col>
+                            <Col span={ 8 }>
+                                <Form.Item name="accountEquipmentName" initialValue={ detail.accountEquipmentName } label="台账设备关联">
+                                    <Input maxLength={ 50 } value={ detail.accountEquipmentName } addonBefore={ <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
+                                            setSelectedRows(selectedRows);
+                                            setDetail({ ...detail, accountEquipmentName: selectedRows[0].deviceName });
+                                            form.setFieldsValue({ accountEquipmentName: selectedRows[0].deviceName })
+                                        } }/> } addonAfter={<Button type="link" style={{ padding: '0', lineHeight: 1, height: 'auto' }} onClick={ () => {
+                                            setSelectedRows([]);
+                                            setDetail({ ...detail, accountEquipmentName: '', accountEquipmentId: '' });
+                                            form.setFieldsValue({ accountEquipmentName: '', accountEquipmentId: '' })
+                                        } }><CloseOutlined /></Button>} disabled />
+                                </Form.Item>
+                            </Col>
+                            <Col span={ 8 }>
+                                <Form.Item name="status" initialValue={ detail.status } label="状态">
+                                    <Select placeholder="请选择">
+                                        <Select.Option value={ 1 } key="1">正常</Select.Option>
+                                        <Select.Option value={ 2 } key="2">停用</Select.Option>
+                                        <Select.Option value={ 3 } key="3">维修中</Select.Option>
+                                    </Select>
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                    </Form>
+                </Spin>
             </Modal>
         </>
     )
