@@ -66,11 +66,15 @@ export default function Overview() {
                 <Button type="primary" ghost onClick={handleComponentDiff}>处理完成</Button>
                 <Button type="primary" ghost onClick={async () => {
                     // setVisible(true)
-                    await componentDiffRun({
-                        componentDiffDetailIds: generateIds
-                    })
-                    message.warning("成功生成缺料记录...")
-                    history.go(0)
+                    if (generateIds.length <= 0) {
+                        message.warning("请选择构件明细...")
+                    } else {
+                        await componentDiffRun({
+                            componentDiffDetailIds: generateIds
+                        })
+                        message.warning("成功生成缺料记录...")
+                        history.go(0)
+                    }
                 }}>缺料申请</Button>
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
             </>}
