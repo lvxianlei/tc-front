@@ -247,8 +247,8 @@ export default function VehicleMngt(): React.ReactNode {
                                 </Select>
                             </Form.Item>
                         </Col>
-                        <Col span={ 8 }>
-                            <Form.Item name="accountEquipmentName" label="台账设备关联">
+                        <Col span={ 11 }>
+                            <Form.Item name="accountEquipmentName" label="台账设备关联" labelCol={{ span: 7 }}>
                                 <Input maxLength={ 50 } value={ detail.accountEquipmentName } addonBefore={ <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
                                     setSelectedRows(selectedRows);
                                     setDetail({ ...detail, accountEquipmentName: selectedRows[0].deviceName });
@@ -260,7 +260,7 @@ export default function VehicleMngt(): React.ReactNode {
                                 } }><CloseOutlined /></Button>} disabled/>
                             </Form.Item>
                         </Col>
-                        <Col span={ 8 }>
+                        <Col span={ 4 }>
                         </Col>
                     </Row>
                 </Form>

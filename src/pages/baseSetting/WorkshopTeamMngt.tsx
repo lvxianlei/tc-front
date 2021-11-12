@@ -6,11 +6,11 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, Button, Modal, Select, Form, Popconfirm, message, Row, Col, TreeSelect } from 'antd';
+import { Space, Input, Button, Modal, Select, Form, Popconfirm, message, Row, Col, Spin } from 'antd';
 import { CommonTable, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../utils/RequestUtil';
-import WorkshopUserSelectionComponent, { IUser } from '../../components/WorkshopUserModal';
+import WorkshopUserSelectionComponent from '../../components/WorkshopUserModal';
 import useRequest from '@ahooksjs/use-request';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { IProcess } from './ProductionLineMngt';
@@ -174,15 +174,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                 }
                 RequestUtil.post<IDetail>(`/tower-production/team`, { ...value }).then(res => {
                     message.success('保存成功！');
-                    setVisible(false);
-                    setDisabled(true);
-                    setDisabled2(true);
-                    setUserList([]);
-                    setDetail({});
-                    setLine([]);
-                    setProcess([]);
-                    form.resetFields();
-                    form.setFieldsValue({ deptProcessesId: '', name: '', productionLinesId: '', workshopDeptId: '' })
+                    close();
                     setRefresh(!refresh);
                 });
             } else {
@@ -191,7 +183,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
         })
     }
 
-    const cancel = () => {
+    const close = () => {
         setVisible(false);
         setDisabled(true);
         setDisabled2(true);
@@ -199,8 +191,13 @@ export default function WorkshopTeamMngt(): React.ReactNode {
         setDetail({});
         setLine([]);
         setProcess([]);
+        setLoading(true);
         form.resetFields();
         form.setFieldsValue({ deptProcessesId: '', name: '', productionLinesId: '', workshopDeptId: '' })
+    }
+
+    const cancel = () => {
+        close();
     }
 
     const delRow = (index: number) => {
@@ -220,17 +217,19 @@ export default function WorkshopTeamMngt(): React.ReactNode {
         getProcess(data.workshopDeptId || '');
         getLine(data.deptProcessesId || '')
         setUserList(newData?.teamUserVOList || []);
-        form.setFieldsValue({ ...newData })
+        form.setFieldsValue({ ...newData });
     }
     
     const getProcess = async (id: string) => {
         const data = await RequestUtil.get<IProcess[]>(`/tower-production/workshopDept/workshopDeptDetail?id=${ id }`);
         setProcess(data || []);
+        setLoading(false);
     }
 
     const getLine = async (id: string) => {
         const data = await RequestUtil.get<ILineList[]>(`/tower-production/productionLines/list?deptProcessesId=${ id }`);
         setLine(data || []);
+        setLoading(false);
     }
 
     const [ refresh, setRefresh ] = useState(false);
@@ -245,6 +244,7 @@ export default function WorkshopTeamMngt(): React.ReactNode {
     const [ detail, setDetail ] = useState<IDetail>({});
     const [ process, setProcess ] = useState<IProcess[]>([]);
     const [ line, setLine ] = useState<ILineList[]>([]);
+    const [ loading, setLoading ] = useState(true);
     const { data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<SelectDataNode[]>(`/tower-production/workshopDept/list`);
         resole(data);
@@ -300,85 +300,87 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                 requestData={{ ...filterValue }}
             />
             <Modal visible={ visible } width="40%" title={ title + "班组" } okText="保存" cancelText="取消" onOk={ save } onCancel={ cancel }>
-                <Form form={ form } labelCol={{ span: 6 }}>
-                    <Row>
-                        <Col span={ 12 }>
-                            <Form.Item name="workshopDeptId" initialValue={ detail.workshopDeptId } label="所属车间" rules={[{
-                                    "required": true,
-                                    "message": "请选择所属车间"
-                                }]}>
-                                <Select placeholder="请选择" onChange={(e: string) => {
-                                    setDisabled(false);
-                                    form.setFieldsValue({ deptProcessesId: '', productionLinesId: '' });
-                                    getProcess(e.toString().split(',')[0]);
-                                }}>
-                                    { departmentData.map((item: any) => {
-                                        return <Select.Option key={ item.id + ',' + item.deptName } value={ item.id + ',' + item.deptName }>{ item.deptName }</Select.Option>
-                                    }) }
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                        <Col span={ 12 }>
-                            <Form.Item name="deptProcessesId" className={ styles.maxWidth60 } initialValue={ detail.deptProcessesId } label="工序" rules={[{
-                                    "required": true,
-                                    "message": "请选择工序"
-                                }]}>
-                                <Select placeholder="请选择" disabled={ disabled } onChange={ (e: SelectValue = '') => {
-                                    setDisabled2(false);
-                                    form.setFieldsValue({ productionLinesId: '' });
-                                    getLine(e.toString().split(',')[0]);
-                                } }>
-                                    { process.map((item: any) => {
-                                        return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
-                                    }) }
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={ 12 }>
-                            <Form.Item name="name" label="班组名称" initialValue={ detail.name } rules={[{
-                                    "required": true,
-                                    "message": "请输入班组名称"
-                                },
-                                {
-                                  pattern: /^[^\s]*$/,
-                                  message: '禁止输入空格',
-                                }]}>
-                                <Input maxLength={ 50 }/>
-                            </Form.Item>
-                        </Col>
-                        <Col span={ 12 }>
-                            <Form.Item name="productionLinesId" className={ styles.maxWidth60 } label="所属产线" initialValue={ detail.productionLinesId } rules={[{
-                                    "required": true,
-                                    "message": "请选择所属产线"
-                                }]}>
-                                <Select placeholder="请选择" disabled={ disabled2 }>
-                                    { line.map((item: any) => {
-                                        return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
-                                    }) }
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                </Form>
-                <p><span style={{ color: 'red' }}>*</span>班组成员</p>
-                <WorkshopUserSelectionComponent rowSelectionType="checkbox" buttonTitle="添加员工" onSelect={ (selectedRows: object[] | any) => {
-                    selectedRows = selectedRows.map((item: DataType) => {
-                        return {
-                            userId: item.id,
-                            name: item.name,
-                            position: item.stationName || '1',
-                            teamId: detail.id
-                        }
-                    })
-                    const res = new Map();
-                    const rows = [...userList, ...selectedRows]
-                    let newRows = rows.filter((item: DataType) => !res.has(item.userId) && res.set(item.userId, 1));
-                    console.log()
-                    setUserList(newRows);
-                } }/>
-                <CommonTable columns={ tableColumns } dataSource={ userList } pagination={ false } />
+                <Spin spinning={loading}>
+                    <Form form={ form } labelCol={{ span: 6 }}>
+                        <Row>
+                            <Col span={ 12 }>
+                                <Form.Item name="workshopDeptId" initialValue={ detail.workshopDeptId } label="所属车间" rules={[{
+                                        "required": true,
+                                        "message": "请选择所属车间"
+                                    }]}>
+                                    <Select placeholder="请选择" onChange={(e: string) => {
+                                        setDisabled(false);
+                                        form.setFieldsValue({ deptProcessesId: '', productionLinesId: '' });
+                                        getProcess(e.toString().split(',')[0]);
+                                    }}>
+                                        { departmentData.map((item: any) => {
+                                            return <Select.Option key={ item.id + ',' + item.deptName } value={ item.id + ',' + item.deptName }>{ item.deptName }</Select.Option>
+                                        }) }
+                                    </Select>
+                                </Form.Item>
+                            </Col>
+                            <Col span={ 12 }>
+                                <Form.Item name="deptProcessesId" className={ styles.maxWidth60 } initialValue={ detail.deptProcessesId } label="工序" rules={[{
+                                        "required": true,
+                                        "message": "请选择工序"
+                                    }]}>
+                                    <Select placeholder="请选择" disabled={ disabled } onChange={ (e: SelectValue = '') => {
+                                        setDisabled2(false);
+                                        form.setFieldsValue({ productionLinesId: '' });
+                                        getLine(e.toString().split(',')[0]);
+                                    } }>
+                                        { process.map((item: any) => {
+                                            return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
+                                        }) }
+                                    </Select>
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span={ 12 }>
+                                <Form.Item name="name" label="班组名称" initialValue={ detail.name } rules={[{
+                                        "required": true,
+                                        "message": "请输入班组名称"
+                                    },
+                                    {
+                                    pattern: /^[^\s]*$/,
+                                    message: '禁止输入空格',
+                                    }]}>
+                                    <Input maxLength={ 50 }/>
+                                </Form.Item>
+                            </Col>
+                            <Col span={ 12 }>
+                                <Form.Item name="productionLinesId" className={ styles.maxWidth60 } label="所属产线" initialValue={ detail.productionLinesId } rules={[{
+                                        "required": true,
+                                        "message": "请选择所属产线"
+                                    }]}>
+                                    <Select placeholder="请选择" disabled={ disabled2 }>
+                                        { line.map((item: any) => {
+                                            return <Select.Option key={ item.id + ',' + item.name } value={ item.id + ',' + item.name }>{ item.name }</Select.Option>
+                                        }) }
+                                    </Select>
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                    </Form>
+                    <p><span style={{ color: 'red' }}>*</span>班组成员</p>
+                    <WorkshopUserSelectionComponent rowSelectionType="checkbox" buttonTitle="添加员工" onSelect={ (selectedRows: object[] | any) => {
+                        selectedRows = selectedRows.map((item: DataType) => {
+                            return {
+                                userId: item.id,
+                                name: item.name,
+                                position: item.stationName || '1',
+                                teamId: detail.id
+                            }
+                        })
+                        const res = new Map();
+                        const rows = [...userList, ...selectedRows]
+                        let newRows = rows.filter((item: DataType) => !res.has(item.userId) && res.set(item.userId, 1));
+                        console.log()
+                        setUserList(newRows);
+                    } }/>
+                    <CommonTable columns={ tableColumns } dataSource={ userList } pagination={ false } />
+                </Spin>
             </Modal>
         </>
     )
