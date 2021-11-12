@@ -59,7 +59,7 @@ export default function PriceMaintain(): React.ReactNode {
     const [materialStandard, setMaterialStandard] = useState(0);//原材料标准id
     const [materialStandardName, setMaterialStandardName] = useState("");//原材料标准名称
     const [price, setPrice] = useState(0);//原材料价格
-    const [price1, setPrice1] = useState("");
+    const [price1, setPrice1] = useState(0);
     const [priceSource, setPriceSource] = useState("");//价格来源
     const [quotationTime, setQuotationTime] = useState("");//报价时间
     const [obj, setObj] = useState<any>({})
@@ -179,7 +179,8 @@ export default function PriceMaintain(): React.ReactNode {
         // // 小数点后面保留2位
         val = val.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');
         console.log(val);
-        setPrice1(val);
+        const value = Number(val);
+        setPrice1(value);
     }
     const lead = async () => {
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPrice/excelTemplate`);
@@ -197,12 +198,18 @@ export default function PriceMaintain(): React.ReactNode {
         }
     }
     const save1 = async (materialCategoryName: string, materialName: string, materialSpec: string, materialStandardName: string, priceSource: string, quotationTime: string) => {
-        const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPrice`, { materialCategoryId, materialCategoryName, materialId, materialName, materialSpec, materialStandard, materialStandardName, price, priceSource, quotationTime }, { "Content-Type": "application/json" })
-        console.log(result);
-        setIsModalVisible1(false);
+        if (!materialCategoryName || !materialName || !materialSpec || !materialStandardName || !priceSource || !quotationTime) {
+            message.info("请输入必填项");
+        } else {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPrice`, { materialCategoryId, materialCategoryName, materialId, materialName, materialSpec, materialStandard, materialStandardName, price, priceSource, quotationTime }, { "Content-Type": "application/json" })
+            console.log(result);
+            setIsModalVisible1(false);
+            history.go(0)
+        }
     }
     const confirm = () => {
         message.success('Click on Yes');
+        history.go(0);
     }
     const cancel = () => {
         message.error('Click on No');
@@ -353,7 +360,7 @@ export default function PriceMaintain(): React.ReactNode {
                             <Select.Option value="大角钢">大角钢</Select.Option>
                         </Select>
                     </Descriptions.Item>
-                    <Descriptions.Item label={<span>价格<span style={{ color: 'red' }}>*</span></span>}>￥<input placeholder='请输入' type="text" value={price1} maxLength={20} style={{ border: "none", outline: "none" }} onChange={(e) => value1(e)} />/吨</Descriptions.Item>
+                    <Descriptions.Item label={<span>价格<span style={{ color: 'red' }}>*</span></span>}><span>￥</span><Input width="40px" bordered={false} placeholder="请输入" type="text" value={price1} maxLength={20} onChange={(e) => value1(e)} /><span>/吨</span></Descriptions.Item>
                     <Descriptions.Item label={<span>价格来源<span style={{ color: 'red' }}>*</span></span>}>
                         <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange4}>
                             <Select.Option value="南山钢铁有限公司">南山钢铁有限公司</Select.Option>

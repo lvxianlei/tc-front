@@ -118,7 +118,7 @@ export default function ViewRawMaterial(): React.ReactNode {
                     }
                 ]}
                 filterValue={filterValue}
-                extraOperation={<div><Link to="/project/management/new"><Button type="primary">导出</Button></Link><Button type="primary" style={{ marginLeft: "1050px" }} onClick={() => { goPrice() }}>价格维护</Button></div>}
+                extraOperation={<div><Link to="/project/management/new"><Button type="primary">导出</Button></Link><Button style={{ marginLeft: "1090px", borderColor: "orange", color: "orange", borderRadius: "5px" }} onClick={() => { goPrice() }}>价格维护</Button></div>}
                 onFilterSubmit={onFilterSubmit}
                 searchFormItems={[
                     {
@@ -130,7 +130,7 @@ export default function ViewRawMaterial(): React.ReactNode {
                         name: 'rawMaterialType',
                         label: '原材料类型',
                         children: <Select style={{ width: "150px" }} defaultValue={"全部"}>
-                            {projectType.map((item: any, index: number) => <Select.Option value={item.name} key={index}>{item.name}</Select.Option>)}
+                            {projectType.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
                         </Select>
                     },
                     {
