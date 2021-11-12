@@ -11,9 +11,7 @@ import styles from './AbstractSelectableModal.module.less';
 import RequestUtil from '../utils/RequestUtil';
 import AbstractFilteredSelectionModal from './AbstractFilteredSelecableModal';
 import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from './AbstractSelectableModal';
-import { saleTypeOptions } from '../configuration/DictionaryOptions';
 
-const { Option } = Select;
 export interface IEquipmentSelectionModalProps extends IAbstractSelectableModalProps {
 }
 export interface IEquipmentSelectionModalState extends IAbstractSelectableModalState {
@@ -46,16 +44,6 @@ export default class EquipmentSelectionModal extends AbstractFilteredSelectionMo
             },
             confirmTitle: "选择设备"
         };
-    }
-
-    public showModal = (): void => {
-        this.setState({
-            isModalVisible: true,
-        })
-    }
-
-    public componentDidMount(): void {
-        this.getTable({})
     }
 
     public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
@@ -104,6 +92,7 @@ export default class EquipmentSelectionModal extends AbstractFilteredSelectionMo
             isModalVisible: false,
             selectedRowKeys: []
         })
+        this.getForm()?.resetFields();
     };
 
     public onFilterSubmit = async (values: Record<string, any>) => {
@@ -121,9 +110,9 @@ export default class EquipmentSelectionModal extends AbstractFilteredSelectionMo
 
     public getTableColumns(): TableColumnType<object>[] {
         return [{
-            key: 'deviceType',
+            key: 'deviceTypeName',
             title: '设备类别',
-            dataIndex: 'deviceType',
+            dataIndex: 'deviceTypeName',
             width: '15%',
         }, {
             key: 'deviceName',
@@ -176,6 +165,7 @@ export default class EquipmentSelectionModal extends AbstractFilteredSelectionMo
         return (
             <>
                 <Button type="link" onClick={()=>{
+                    this.getTable({});
                     this.setState({
                         isModalVisible: true
                     })
@@ -194,6 +184,7 @@ export default class EquipmentSelectionModal extends AbstractFilteredSelectionMo
                                 this.setState({
                                     selectedRowKeys: []
                                 })
+                                this.getForm()?.resetFields();
                                 this.props.onSelect(this.state.selectedRows)
                             }
                         }

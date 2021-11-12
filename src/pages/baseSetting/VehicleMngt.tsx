@@ -13,6 +13,7 @@ import RequestUtil from '../../utils/RequestUtil';
 import EquipmentSelectionModal, { IData } from '../../components/EquipmentSelectionModal';
 import { carOptions } from '../../configuration/DictionaryOptions';
 import { useHistory } from 'react-router-dom';
+import { CloseOutlined } from '@ant-design/icons';
 
 interface IDetail {
     readonly name?: string;
@@ -248,11 +249,15 @@ export default function VehicleMngt(): React.ReactNode {
                         </Col>
                         <Col span={ 8 }>
                             <Form.Item name="accountEquipmentName" label="台账设备关联">
-                                <Input maxLength={ 50 } value={ detail.accountEquipmentName } suffix={ <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
+                                <Input maxLength={ 50 } value={ detail.accountEquipmentName } addonBefore={ <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
                                     setSelectedRows(selectedRows);
                                     setDetail({ ...detail, accountEquipmentName: selectedRows[0].deviceName });
                                     form.setFieldsValue({ accountEquipmentName: selectedRows[0].deviceName })
-                                } }/> } disabled/>
+                                } }/> } addonAfter={<Button type="link" style={{ padding: '0', lineHeight: 1, height: 'auto' }} onClick={ () => {
+                                    setSelectedRows([]);
+                                    setDetail({ ...detail, accountEquipmentName: '', accountEquipmentId: '' });
+                                    form.setFieldsValue({ accountEquipmentName: '', accountEquipmentId: '' })
+                                } }><CloseOutlined /></Button>} disabled/>
                             </Form.Item>
                         </Col>
                         <Col span={ 8 }>

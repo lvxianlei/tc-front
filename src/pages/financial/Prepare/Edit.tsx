@@ -1,6 +1,6 @@
 import React, { useImperativeHandle, forwardRef } from "react"
 import { Spin, Form } from 'antd'
-import { DetailContent, BaseInfo } from '../../common'
+import { DetailContent, BaseInfo, formatData } from '../../common'
 import { ApplicationList } from "../financialData.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
@@ -29,24 +29,24 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/applyPayment/${id}`)
-            baseForm.setFieldsValue({
+            baseForm.setFieldsValue(formatData(ApplicationList, {
                 ...result,
-                relatednotes: result.applyPaymentInvoiceVos?.map((item: any) => item.billNumber).join(",")
-            })
+                relatednotes: { value: result.applyPaymentInvoiceVos?.map((item: any) => item.billNumber).join(","), records: result.applyPaymentInvoiceVos || [] }
+            }))
             resole(result)
         } catch (error) {
             reject(error)
         }
     }), { manual: type === "new", refreshDeps: [id] })
 
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any, type?: "save" | "saveAndApply") => new Promise(async (resole, reject) => {
+    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any, saveType?: "save" | "saveAndApply") => new Promise(async (resole, reject) => {
         try {
-            if (type === "saveAndApply") {
-                const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/applyPayment`, data)
+            if (saveType === "saveAndApply") {
+                const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/applyPayment/saveAndStartApplyPayment`, data)
                 resole(result)
                 return
             } else {
-                const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/applyPayment/saveAndStartApplyPayment`, data)
+                const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/applyPayment`, data)
                 resole(result)
                 return
             }
@@ -55,20 +55,29 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         }
     }), { manual: true })
 
-    const onSubmit = (type?: "save" | "saveAndApply") => new Promise(async (resolve, reject) => {
+    const onSubmit = (saveType?: "save" | "saveAndApply") => new Promise(async (resolve, reject) => {
         try {
             const baseData = await baseForm.validateFields()
-            await saveRun({
+            const postData = type === "new" ? {
                 ...baseData,
                 supplierId: baseData.supplierName?.id || data?.supplierId,
                 supplierName: baseData.supplierName?.value || data?.supplierName,
                 applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
                     invoiceId: item.id, billNumber: item.billNumber
                 })) || data?.applyPaymentInvoiceVos
-            })
+            } : {
+                ...baseData,
+                id: data?.id,
+                supplierId: baseData.supplierName?.id || data?.supplierId,
+                supplierName: baseData.supplierName?.value || data?.supplierName,
+                applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
+                    invoiceId: item.id,
+                    billNumber: item.billNumber
+                })) || data?.applyPaymentInvoiceVos
+            }
+            await saveRun(postData, saveType)
             resolve(true)
         } catch (error) {
-            console.log(error)
             reject(false)
         }
     })
@@ -84,8 +93,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             let pleasePayAmount = 0
             let receiptVos: any[] = []
             fields.relatednotes.records.forEach((item: any) => {
-                pleasePayAmount = Number(pleasePayAmount + parseFloat(item.pleasePayAmount || "0").toFixed(2))
-                receiptVos = [...receiptVos, ...item.receiptVos]
+                pleasePayAmount = Number(pleasePayAmount + parseFloat(item.invoiceAmount || "0").toFixed(2))
+                receiptVos = [...receiptVos, ...item.receiptNumbers]
             })
             baseForm.setFieldsValue({
                 pleasePayAmount,
@@ -103,22 +112,25 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     return <DetailContent>
         <Spin spinning={loading}>
             <BaseInfo form={baseForm} onChange={handleBaseInfoChange} columns={ApplicationList.map((item: any) => {
-                if (item.dataIndex === "relatednotes") {
-                    return ({
-                        ...item,
-                        columns: item.columns.map((item: any) => item.dataIndex === "invoiceType" ? ({ ...item, enum: invoiceTypeEnum }) : item)
-                    })
+                switch (item.dataIndex) {
+                    case "relatednotes":
+                        return ({
+                            ...item,
+                            columns: item.columns.map((item: any) => item.dataIndex === "invoiceType" ? ({
+                                ...item,
+                                type: "select",
+                                enum: invoiceTypeEnum
+                            }) : item)
+                        })
+                    case "pleasePayType":
+                        return ({ ...item, enum: pleasePayTypeEnum })
+                    case "paymentMethod":
+                        return ({ ...item, type: "select", enum: paymentMethodEnum })
+                    case "pleasePayOrganization":
+                        return ({ ...item, enum: deptData })
+                    default:
+                        return item
                 }
-                if (item.dataIndex === "pleasePayType") {
-                    return ({ ...item, type: "select", enum: pleasePayTypeEnum });
-                }
-                if (item.dataIndex === "paymentMethod") {
-                    return ({ ...item, type: "select", enum: paymentMethodEnum });
-                }
-                if (item.dataIndex === "pleasePayOrganization") {
-                    return ({ ...item, enum: deptData })
-                }
-                return item;
             })} col={3} dataSource={{}} edit />
         </Spin>
     </DetailContent>

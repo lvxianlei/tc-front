@@ -41,12 +41,16 @@ export default function Invoicing() {
         return value
     }
     const handleModalOk = () => new Promise(async (resove, reject) => {
-        const isClose = await editRef.current?.onSubmit()
-        if (isClose) {
-            message.success("材质配料设定成功...")
-            setVisible(false)
-            resove(true)
-            history.go(0)
+        try {
+            const isClose = await editRef.current?.onSubmit()
+            if (isClose) {
+                message.success("材质配料设定成功...")
+                setVisible(false)
+                resove(true)
+                history.go(0)
+            }
+        } catch (error) {
+            reject(false)
         }
     })
     const handleDelete = (id: string) => {
@@ -66,7 +70,7 @@ export default function Invoicing() {
     }
 
     return <>
-        <Modal visible={visible} width={1011} title="创建" onOk={handleModalOk} onCancel={() => {
+        <Modal destroyOnClose visible={visible} width={1011} title="创建" onOk={handleModalOk} onCancel={() => {
             setVisible(false)
             editRef.current?.resetFields()
             setMaterialData({})

@@ -1,0 +1,194 @@
+import React, { useState } from 'react';
+import { Spin, Button, Space, Modal, message, Image, Form, Input, Upload, Table, InputNumber, Popconfirm, Select, TreeSelect } from 'antd';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { DetailTitle, DetailContent, CommonTable } from '../../common';
+import RequestUtil from '../../../utils/RequestUtil';
+import useRequest from '@ahooksjs/use-request';
+import styles from './DataMngt.module.less';
+import { IData } from './DataMngt';
+import { wrapRole2DataNode } from '../../baseSetting/deptUtil';
+import { TreeNode } from 'antd/lib/tree-select';
+import { type } from 'os';
+
+export default function DataNew(): React.ReactNode {
+    const [ form ] = Form.useForm();
+    const history = useHistory();
+    const location = useLocation<{ type: string, data: IData[] }>();
+    const [ dataList, setDataList ] = useState<IData[]>([]);
+    const [ databaseData, setDatabaseData ] = useState([{id: '121321', title: 'asdasd'}]);
+
+    const tableColumns = [
+        {
+            key: 'dataNumber',
+            title: <span><span style={{ color: 'red' }}>*</span>资料编号</span>,
+            dataIndex: 'dataNumber',
+            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={ ["list", index, "dataNumber"] } key={ index } initialValue={ _ } rules={[{ 
+                    "required": true,
+                    "message": "请输入资料编号" },
+                    {
+                      pattern: /^[^\s]*$/,
+                      message: '禁止输入空格',
+                    }]}>
+                    <Input maxLength={ 50 }/>
+                </Form.Item>
+            )  
+        },
+        {
+            key: 'dataName',
+            title: <span><span style={{ color: 'red' }}>*</span>资料名称</span>,
+            dataIndex: 'dataName',
+            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={ ["list", index, "dataName"] } key={ index } initialValue={ _ } rules={[{ 
+                    "required": true,
+                    "message": "请输入资料名称" },
+                    {
+                      pattern: /^[^\s]*$/,
+                      message: '禁止输入空格',
+                    }]}>
+                    <Input maxLength={ 50 }/>
+                </Form.Item>
+            )  
+        },
+        {
+            key: 'dataType',
+            title: <span><span style={{ color: 'red' }}>*</span>资料类型</span>,
+            dataIndex: 'dataType',
+            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={ ["list", index, "dataType"] } key={ index } initialValue={ _ } rules={[{ 
+                    "required": true,
+                    "message": "请选择资料类型" }]}>
+                    <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                        <Select.Option key={1} value={123}>1</Select.Option>
+                        {/* { boltTypeOptions && boltTypeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={index} value={id}>
+                                {name}
+                            </Select.Option>
+                        }) } */}
+                    </Select>
+                </Form.Item>
+            )  
+        },
+        {
+            key: 'dataPlaceId',
+            title: <span><span style={{ color: 'red' }}>*</span>资料库</span>,
+            dataIndex: 'dataPlaceId',
+            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={ ["list", index, "dataPlaceId"] } key={ index } initialValue={ _ } rules={[{ 
+                    "required": true,
+                    "message": "请选择资料库" }]}>
+                    <TreeSelect placeholder="请选择" style={{ width: "150px" }}>
+                        { renderTreeNodes(wrapRole2DataNode(databaseData)) }
+                    </TreeSelect>
+                </Form.Item>
+            )  
+        },
+        {
+            key: 'designation',
+            title: '备注',
+            dataIndex: 'designation',
+            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={ ["list", index, "designation"] } key={ index } initialValue={ _ }>
+                    <Input maxLength={ 200 } key={ index }/>
+                </Form.Item>
+            )  
+        },
+        {
+            key: 'operation',
+            title: '操作',
+            dataIndex: 'operation',
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Space direction="horizontal" size="small">
+                    <Popconfirm
+                        title="确认删除?"
+                        onConfirm={ () => delRow(index) }
+                        okText="确认"
+                        cancelText="取消"
+                    >
+                        <Button type="link">删除</Button>
+                    </Popconfirm>
+                </Space>
+            )
+        }
+    ]
+
+    const renderTreeNodes = (data:any) => data.map((item:any) => {
+        if (item.children) {
+            item.disabled = true;
+            return (<TreeNode key={ item.id } title={ item.title } value={ item.id } disabled={ item.disabled } className={ styles.node } >
+                { renderTreeNodes(item.children) }
+            </TreeNode>);
+        }
+        return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id } />;
+    });
+
+    const addRow = () => {
+        const dataListValues = form.getFieldsValue(true).list || [];
+        const newRow = {
+            dataName: '',
+            dataNumber: '',
+            dataPlaceId: undefined,
+            dataType: '',
+            designation: ''
+        }
+        setDataList([
+            ...dataListValues,
+            newRow
+        ])
+        form.setFieldsValue({list: [...dataListValues, newRow]})
+    }
+
+    const delRow = (index: number) => {
+        const dataListValues = form.getFieldsValue(true).list;
+        dataListValues.splice(index, 1);
+        setDataList([...dataListValues]);
+    }
+
+    const save = (tip: number) => {
+        if(form) {
+            form.validateFields().then(res => {
+                let value = form.getFieldsValue(true);
+                if(tip === 0) {
+                    value = {
+                        ...value,
+                        dataStatus: 0
+                    }
+                } else {
+                    value = {
+                        ...value,
+                        dataStatus: 1
+                    }
+                }
+                console.log(value)
+            })
+        }
+    }
+
+    const { loading } = useRequest(() => new Promise(async (resole, reject) => {
+        if(location.state.type === 'edit') {
+            setDataList(location.state.data);
+        } else {
+            setDataList([]);
+        }
+        resole(true)
+    }), {})
+    if (loading) {
+        return <Spin spinning={loading}>
+            <div style={{ width: '100%', height: '300px' }}></div>
+        </Spin>
+    }
+
+    return ( <DetailContent operation={ [
+            <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
+                <Button type="primary" onClick={ () => save(0) }>保存</Button>
+                <Button type="primary" onClick={ () => save(1) }>保存并入库</Button>
+                <Button type="ghost" onClick={() => history.goBack()}>取消</Button>
+            </Space>
+        ] }>
+            <DetailTitle title="证书信息" operation={[location.state.type === 'new' ? <Button type="primary" onClick={ addRow }>新增一行</Button> : <></>]}/>
+            <Form form={ form }>
+                <Table rowKey="id" dataSource={[...dataList]} pagination={false} columns={location.state.type === 'edit' ? tableColumns.splice(0, 5) : tableColumns} className={styles.addModal}/>
+            </Form>
+        </DetailContent>
+    )
+}

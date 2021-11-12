@@ -21,6 +21,7 @@ export default function Invoicing() {
             reject(error)
         }
     }), { manual: true })
+
     const { run: getLoftingRun } = useRequest<any[]>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: any[] = await RequestUtil.get(`/tower-supply/initData/ingredientsComponent?productionBatch=${id}`)
@@ -29,6 +30,16 @@ export default function Invoicing() {
             reject(error)
         }
     }), { manual: true })
+
+    const { run: loftingRun } = useRequest<any[]>((productCategoryName: string, purchaseTaskId: string, productionBatch: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: any[] = await RequestUtil.get(`/tower-supply//initData/lofting?productCategoryName=${productCategoryName}&purchaseTaskId=${purchaseTaskId}&productionBatch=${productionBatch}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     const onFilterSubmit = (value: any) => {
         if (value.startStatusUpdateTime) {
             const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -92,11 +103,12 @@ export default function Invoicing() {
                             <Button type="link"
                                 onClick={async () => {
                                     await getLoftingRun(record.productionBatch)
-                                    message.success("生成成功...")
+                                    message.success("成功生成放样构件...")
                                 }}>生成放样构件</Button>
                             <Button type="link"
-                                onClick={() => {
-                                    message.warning("啥也没有...")
+                                onClick={async () => {
+                                    await loftingRun(record.productCategoryName, record.materialTaskId, record.productionBatch)
+                                    message.warning("成功生成差异列表...")
                                 }}>生成差异列表</Button>
                         </>
                     }

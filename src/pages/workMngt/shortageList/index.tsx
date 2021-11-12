@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message, Form } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { Page } from '../../common'
@@ -6,7 +6,7 @@ import { baseInfo } from "./shortageListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import Overview from "./Overview"
-
+import PurchasePlan from "../purchaseList/PurchasePlan"
 export default function Invoicing() {
     const history = useHistory()
     const [filterValue, setFilterValue] = useState<any>({})
@@ -14,6 +14,9 @@ export default function Invoicing() {
     const [cancelVisible, setCancelVisible] = useState<boolean>(false)
     const [cancelId, setCancelId] = useState<string>("")
     const [form] = Form.useForm()
+    const purChasePlanRef = useRef<{ onSubmit: () => void }>({ onSubmit: () => { } })
+    const [generateVisible, setGenerateVisible] = useState<boolean>(false)
+    const [generateIds, setGenerateIds] = useState<string[]>([])
     const { run: cancelRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialShortage`, { ...data })
@@ -44,7 +47,15 @@ export default function Invoicing() {
             reject(false)
         }
     })
-
+    const handlePurChasePlan = () => new Promise(async (resove, reject) => {
+        try {
+            const result = await purChasePlanRef.current?.onSubmit()
+            resove(true)
+            history.go(0)
+        } catch (error) {
+            reject(false)
+        }
+    })
     return <>
         <Modal title="操作信息" visible={visible} width={1011} onCancel={() => setVisible(false)}>
             <Overview id={cancelId} />
@@ -57,6 +68,9 @@ export default function Invoicing() {
                 <Form.Item rules={[{ required: true, message: "请填写取消原因..." }]} label="取消原因"
                     name="reason"><Input.TextArea /></Form.Item>
             </Form>
+        </Modal>
+        <Modal title="生成采购计划" visible={generateVisible} width={1011} onOk={handlePurChasePlan} onCancel={() => setGenerateVisible(false)}>
+            <PurchasePlan ids={generateIds} ref={purChasePlanRef} />
         </Modal>
         <Page
             path="/tower-supply/materialShortage"
@@ -90,12 +104,26 @@ export default function Invoicing() {
                 }]}
             extraOperation={<>
                 <Button type="primary" ghost>导出</Button>
-                <Button type="primary" ghost>生成采购计划</Button>
+                <Button type="primary" ghost onClick={() => {
+                    if (!generateIds || generateIds.length <= 0) {
+                        message.warning("必须选择任务才能生成采购计划...")
+                        return
+                    } else {
+                        setGenerateVisible(true)
+                    }
+                }}>生成采购计划</Button>
             </>}
             onFilterSubmit={onFilterSubmit}
             tableProps={{
                 rowSelection: {
-                    type: "checkbox"
+                    type: "checkbox",
+                    selectedRowKeys: generateIds,
+                    onChange: (selectedRowKeys: any[]) => {
+                        setGenerateIds(selectedRowKeys)
+                    },
+                    getCheckboxProps: (record: object[]) => ({
+                        disabled: false
+                    })
                 }
             }}
             searchFormItems={[

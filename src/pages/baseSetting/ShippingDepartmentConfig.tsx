@@ -13,6 +13,7 @@ import styles from './ShippingDepartmentConfig.module.less';
 import WorkshopUserSelectionComponent, { IUser } from '../../components/WorkshopUserModal';
 import { warehouseOptions } from '../../configuration/DictionaryOptions';
 import { useHistory } from 'react-router-dom';
+import { DataType } from '../../components/AbstractSelectableModal';
 
 interface IProcessList {
     readonly region?: string;
@@ -21,8 +22,8 @@ interface IProcessList {
 interface IWarehouseKeeperList {
     readonly keeperName?: string;
     readonly warehouseId?: string;
-    readonly keeperUserId?: string;
-    readonly id?: string;
+    readonly keeperUserId?: string | number;
+    readonly id?: string | number;
 }
 interface IDetailData {
     readonly code?: string;
@@ -159,7 +160,11 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["warehousePositionVOList", index, "region"] } initialValue={ _ } rules={[{ 
                     "required": true,
-                    "message": "请输入库区" }]}>
+                    "message": "请输入库区" },
+                    {
+                      pattern: /^[^\s]*$/,
+                      message: '禁止输入空格',
+                    }]}>
                     <Input maxLength={ 50 } key={ index } />
                 </Form.Item>
             )  
@@ -171,7 +176,11 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["warehousePositionVOList", index, "position"] } initialValue={ _ } rules={[{ 
                     "required": true,
-                    "message": "请输入库位" }]}>
+                    "message": "请输入库位" },
+                    {
+                      pattern: /^[^\s]*$/,
+                      message: '禁止输入空格',
+                    }]}>
                     <Input maxLength={ 50 } key={ index } />
                 </Form.Item>
             )  
@@ -263,7 +272,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
         let reservoirListValues = form.getFieldsValue(true).warehousePositionVOList || []; 
         reservoirListValues.splice(index, 1);
         setReservoirList([...reservoirListValues]);
-        setWarehousePositionDTODeleteList([...warehousePositionDTODeleteList ,record]);
+        setWarehousePositionDTODeleteList([...warehousePositionDTODeleteList, record]);
         form.setFieldsValue({ warehousePositionVOList: [...reservoirListValues] })
     }
 
@@ -295,6 +304,7 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
     const [ selectedRows, setSelectedRows ] = useState<IUser[] | any>({});
     const [ warehousePositionDTODeleteList, setWarehousePositionDTODeleteList ] = useState<IProcessList[]>([]);
     const [ warehouseKeeperDTODeleteList, setWarehouseKeeperDTODeleteList ] = useState<IWarehouseKeeperList[]>([]);
+    const [ rows, setRows ] = useState<DataType[]>([]);
     const history = useHistory();
     return (
         <>
@@ -365,14 +375,17 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                         </Col>
                     </Row>
                     <DetailTitle title="保管员" operation={[<WorkshopUserSelectionComponent rowSelectionType="checkbox" onSelect={ (selectedRows: IUser[] | any) => {
-                        selectedRows = selectedRows.map((item: IUser) => {
+                        selectedRows = selectedRows.map((item: DataType) => {
                             return {
                                 keeperUserId: item.id,
                                 keeperName: item.name
                             }
                         })
-                        setUserList(selectedRows)
-                    } } buttonTitle="选择保管员" />]}/>
+                        const rows = [...userList, ...selectedRows];
+                        const res = new Map();
+                        let newRows = rows.filter((item: DataType) => !res.has(item.keeperUserId) && res.set(item.keeperUserId, 1));
+                        setUserList(newRows);
+                    } } buttonTitle="选择保管员"/>]}/>
                     <CommonTable columns={userColumns} dataSource={userList} showHeader={false} pagination={false} />
                     <p style={{ fontSize: '16px', marginTop: '10px' }}>库区库位信息</p>
                     <Button type="primary" onClick={ addRow }>添加行</Button>

@@ -39,6 +39,7 @@ export default function Overview(): JSX.Element {
     }), { manual: true })
 
     const handleFinishPrice = async () => {
+
         Modal.confirm({
             title: "提交/完成",
             content: "确认提交/完成？",
@@ -46,7 +47,7 @@ export default function Overview(): JSX.Element {
             onOk: () => new Promise(async (resove, reject) => {
                 try {
                     await finishPriceRun({
-                        comparisonPriceDetailDtos: data?.comparisonPriceDetailVos
+                        comparisonPriceDetailDtos: materialLists
                     })
                     resove(true)
                 } catch (error) {
@@ -56,13 +57,15 @@ export default function Overview(): JSX.Element {
         })
     }
 
-    const handleSelect = (id: string, value: string) => setMaterialList(materialLists.map((item: any) => item.id === id ? ({ ...item, winBidSupplierId: value }) : item))
-
+    const handleSelect = (id: string, value: string) => setMaterialList(materialLists.map((item: any) => item.id === id ? ({
+        ...item,
+        winBidSupplierId: value
+    }) : item))
 
     const handleAddPriceOk = () => new Promise(async (resolve, reject) => {
         try {
             await addPriceRef.current?.onSubmit()
-            message.success("成功添加报价...")
+            await message.success("成功添加报价...")
             setVisible(false)
             history.go(0)
             resolve(true)
@@ -74,6 +77,7 @@ export default function Overview(): JSX.Element {
     return <Spin spinning={loading}>
         <Modal
             width={1011}
+            destroyOnClose
             title={oprationType === "new" ? "添加报价" : "编辑报价"}
             visible={visible}
             onOk={handleAddPriceOk}
@@ -93,32 +97,40 @@ export default function Overview(): JSX.Element {
                 onClick={handleFinishPrice}
                 disabled={data?.comparisonStatus !== 1}
             >完成询价</Button>,
-            <Button type="primary" style={{ marginRight: 16 }} ghost key="add" onClick={() => {
-                setOprationType("new")
-                setVisible(true)
-            }}>添加报价</Button>
+            <Button
+                disabled={data?.comparisonStatus !== 1}
+                type="primary"
+                style={{ marginRight: 16 }}
+                ghost key="add"
+                onClick={() => {
+                    setOprationType("new")
+                    setVisible(true)
+                }}>添加报价</Button>
         ]} operation={[
             <Button type="primary" ghost key="goback" onClick={() => history.goBack()}>返回</Button>
         ]}>
             <DetailTitle title="询价产品信息" />
-            <CommonTable columns={[...materialColumns, {
+            <CommonTable haveIndex columns={[...materialColumns, {
                 title: "中标供应商",
                 dataIndex: "winBidSupplierId",
-                render: (value: any, records: any) => <Select
-                    value={value}
+                render: (value: any, records: any) => (<Select
+                    disabled={data?.comparisonStatus !== 1}
+                    value={value === -1 ? "" : value}
                     onChange={(value: string) => handleSelect(records.id, value)}
                     style={{ width: 150, height: 32 }}>
                     {data?.inquiryQuotationOfferActionVo?.inquiryQuotationOfferData.map((item: any) => <Select.Option
-                        value={item.id}
+                        value={item.supplierId}
                         key={item.id}>{item.supplierName}</Select.Option>)}
-                </Select>
+                </Select>)
             }]} dataSource={materialLists} />
             <DetailTitle title="询价报价信息" />
             <CommonTable
+                haveIndex
                 columns={[
                     ...data?.inquiryQuotationOfferActionVo?.headerColumnVos || [],
                     {
                         title: "操作",
+                        fixed: "right",
                         dataIndex: "opration",
                         render: (_: any, records: any) => <>
                             <a onClick={() => {

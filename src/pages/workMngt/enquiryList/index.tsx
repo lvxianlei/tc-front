@@ -1,13 +1,16 @@
 import React, { useState, useRef } from 'react'
+import { useHistory } from "react-router-dom"
 import { Input, DatePicker, Select, Button, Modal, message } from 'antd'
 import { Page, IntgSelect } from '../../common';
 import { baseInfo } from "./enquiryList.json"
 import Edit from "./Edit"
 export default function EnquiryList(): React.ReactNode {
+    const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({})
     const [detailId, setDetailId] = useState<string>("")
-    const editRef = useRef<{ onSubmit: () => void, resetFields: () => void }>({ onSubmit: () => { }, resetFields: () => { } })
+    const [inquiryStatus, setInquiryStatus] = useState<number>(0)
+    const editRef = useRef<{ onSubmit: (type: "save" | "saveAndSubmit") => void, resetFields: () => void }>({ onSubmit: () => { }, resetFields: () => { } })
 
     const onFilterSubmit = (value: any) => {
         if (value.startStatusUpdateTime) {
@@ -28,10 +31,11 @@ export default function EnquiryList(): React.ReactNode {
         return ({ ...filterValue, ...value })
     }
 
-    const handleModal = () => new Promise(async (resove, reject) => {
+    const handleModal = (oprationType: "save" | "saveAndSubmit") => new Promise(async (resove, reject) => {
         try {
-            const result = await editRef.current?.onSubmit()
+            await editRef.current?.onSubmit(oprationType)
             message.success("保存成功...")
+            history.go(0)
             setVisible(false)
         } catch (error) {
             reject(false)
@@ -39,10 +43,34 @@ export default function EnquiryList(): React.ReactNode {
     })
 
     return <>
-        <Modal title="询价信息" width={1011} visible={visible} onOk={handleModal} onCancel={() => {
-            editRef.current?.resetFields()
-            setVisible(false)
-        }} >
+        <Modal
+            destroyOnClose
+            title="询价信息"
+            width={1011}
+            visible={visible}
+            footer={[
+                <Button type="primary" key="close" ghost
+                    onClick={() => {
+                        editRef.current?.resetFields()
+                        setDetailId("")
+                        setVisible(false)
+                    }}>关闭</Button>,
+                <Button
+                    key="save"
+                    type="primary"
+                    style={{ display: inquiryStatus === 4 ? "inline-block" : "none" }}
+                    onClick={() => handleModal("save")}>保存</Button>,
+                <Button
+                    key="saveAndSubmit"
+                    type="primary"
+                    style={{ display: inquiryStatus === 4 ? "inline-block" : "none" }}
+                    onClick={() => handleModal("saveAndSubmit")}>保存并提交</Button>
+            ]}
+            onCancel={() => {
+                editRef.current?.resetFields()
+                setDetailId("")
+                setVisible(false)
+            }} >
             <Edit detailId={detailId} ref={editRef} />
         </Modal>
         <Page
@@ -55,10 +83,12 @@ export default function EnquiryList(): React.ReactNode {
                     title: "操作",
                     width: 100,
                     dataIndex: "operation",
-                    render: (_: any, records: any) => <Button type="link" onClick={() => {
-                        setDetailId(records.id)
-                        setVisible(true)
-                    }}>询价信息</Button>
+                    render: (_: any, records: any) => <Button type="link"
+                        onClick={() => {
+                            setDetailId(records.id)
+                            setInquiryStatus(records.inquiryStatus)
+                            setVisible(true)
+                        }}>询价信息</Button>
                 }]}
             extraOperation={<Button type="primary">导出</Button>}
             filterValue={filterValue}

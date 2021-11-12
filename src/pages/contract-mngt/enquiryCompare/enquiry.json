@@ -2,7 +2,7 @@
     "comparison": [
         {
             "title": "询比价编号",
-            "dataIndex": "comparisonNumber"
+            "dataIndex": "comparisonPriceNumber"
         },
         {
             "title": "用途",
@@ -33,13 +33,13 @@
         },
         {
             "title": "询价人",
-            "dataIndex": "comparisonPersonId"
+            "dataIndex": "comparisonPersonName"
         }
     ],
     "editBaseInfo": [
         {
             "title": "询比价编号",
-            "dataIndex": "comparisonNumber",
+            "dataIndex": "comparisonPriceNumber",
             "disabled": true
         },
         {
@@ -214,6 +214,25 @@
             "title": "采购人",
             "dataIndex": "purchaserId",
             "type": "string"
+        },
+        {
+            "title": "计划状态",
+            "dataIndex": "purchasePlanStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "待完成",
+                    "value": 1
+                },
+                {
+                    "label": "已完成",
+                    "value": 2
+                },
+                {
+                    "label": "已取消",
+                    "value": 3
+                }
+            ]
         }
     ],
     "addMaterial": {
@@ -237,7 +256,8 @@
             },
             {
                 "title": "标准",
-                "dataIndex": "standard"
+                "dataIndex": "standard",
+                "search": true
             },
             {
                 "title": "材料",

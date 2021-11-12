@@ -1,8 +1,8 @@
 import React, { forwardRef, useState, useImperativeHandle, useRef } from "react"
-import { Upload, Button, Form, Spin, InputNumber } from "antd"
+import { useParams } from "react-router-dom"
+import { Form, Spin, InputNumber } from "antd"
 import { addPriceHead } from "./enquiry.json"
 import { BaseInfo, CommonTable, DetailTitle, Attachment, AttachmentRef } from "../../common"
-import AuthUtil from "../../../utils/AuthUtil"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 interface AddPriceProps {
@@ -14,6 +14,7 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
     const [materials, setMaterials] = useState<any[]>(materialLists || [])
     const [form] = Form.useForm()
     const attachRef = useRef<AttachmentRef>()
+    const params = useParams<{ id: string }>()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryQuotation/${id}`)
@@ -27,7 +28,10 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/inquiryQuotation`, { ...data })
+            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/inquiryQuotation`, {
+                ...data,
+                comparisonPriceId: params.id
+            })
             resole(result)
         } catch (error) {
             reject(error)
@@ -42,18 +46,23 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
         setMaterials([])
     }
 
-    const onSubmit = async () => {
-        const formData = await form.validateFields()
-        return saveRun({
-            supplierId: formData.supplier?.id || data?.supplierId,
-            supplierName: formData.supplier?.value || data?.supplierName,
-            inquiryQuotationOfferDtos: materials.map((item: any) => {
-                delete item.id
-                return item
-            }),
-            inquiryQuotationAttachInfoDtos: attachRef.current?.getDataSource()
-        })
-    }
+    const onSubmit = () => new Promise(async (resove, reject) => {
+        try {
+            const formData = await form.validateFields()
+            await saveRun({
+                supplierId: formData.supplier?.id || data?.supplierId,
+                supplierName: formData.supplier?.value || data?.supplierName,
+                inquiryQuotationOfferDtos: materials.map((item: any) => {
+                    delete item.id
+                    return item
+                }),
+                inquiryQuotationAttachInfoDtos: attachRef.current?.getDataSource()
+            })
+            resove(true)
+        } catch (error) {
+            reject(false)
+        }
+    })
 
     const handleChange = (id: string, value: number, name: string) => {
         setMaterials(materials.map((item: any) => item.id === id ? ({ ...item, [name]: value }) : item))
@@ -85,11 +94,11 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
                 },
                 {
                     "title": "联系电话",
-                    "dataIndex": "contactNumber"
+                    "dataIndex": "contactManTel"
                 },
                 {
                     "title": "供货产品",
-                    "dataIndex": "supplyProducts"
+                    "dataIndex": "supplyProductsName"
                 }
             ],
             "rules": [

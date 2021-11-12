@@ -172,7 +172,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 supplierId: baseFormData.supplierName.id,
                 supplierName: baseFormData.supplierName.value,
                 contractNumber: baseFormData.contractNumber.id,
-                lists: cargoData
+                lists: cargoData.map((item: any) => {
+                    delete item.id
+                    return item
+                })
             })
             resole(true)
         } catch (error) {
@@ -185,7 +188,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         setCargoData([])
     }
 
-    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref])
+    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, cargoData, onSubmit, resetFields])
 
     const handleBaseInfoChange = (fields: any) => {
         if (fields.contractNumber) {
@@ -194,10 +197,16 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     }
 
     return <>
-        <Modal width={1011} visible={visible} title="选择货物明细" onCancel={() => {
-            modalRef.current?.resetFields()
-            setVisible(false)
-        }} onOk={handleModalOk}>
+        <Modal
+            destroyOnClose
+            width={1011}
+            visible={visible}
+            title="选择货物明细"
+            onCancel={() => {
+                modalRef.current?.resetFields()
+                setVisible(false)
+            }}
+            onOk={handleModalOk}>
             <ChooseModal id={contractId} ref={modalRef} />
         </Modal>
         <DetailTitle title="收货单基础信息" />

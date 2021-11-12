@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import { Input, DatePicker, Select, Button, Form, Modal, Row, Col, message } from 'antd'
 import { useParams, useHistory } from 'react-router-dom'
 import { ComponentDetails, Batchingschemed } from "./buyBurdening.json"
-import { CommonTable, Page } from '../../common'
+import { CommonTable, IntgSelect, Page } from '../../common'
 import Batcher from "./Batcher"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -78,7 +78,7 @@ export default function EnquiryList(): React.ReactNode {
                 try {
                     resove(await createScheme(params.id))
                     message.success("成功生成配料方案...")
-                    // history.go(0)
+                    history.go(0)
                 } catch (error) {
                     reject(error)
                 }
@@ -136,23 +136,12 @@ export default function EnquiryList(): React.ReactNode {
                 {
                     name: 'confirmId',
                     label: '配料人',
-                    children: <div>
-                        {/* <Select style={{ width: '100px' }} defaultValue="部门">
-                            {confirmLeader && confirmLeader.map((item: any) => {
-                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                            })}
-                        </Select>
-                        <Select style={{ width: '100px' }} defaultValue="人员">
-                            {confirmLeader && confirmLeader.map((item: any) => {
-                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                            })}
-                        </Select> */}
-                    </div>
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyQuery',
                     label: '查询',
-                    children: <Input placeholder="任务编号/任务单编号/订单编号/内部合同编号" maxLength={200} />
+                    children: <Input placeholder="件号/材质/规格" maxLength={200} />
                 },
             ]}
         />

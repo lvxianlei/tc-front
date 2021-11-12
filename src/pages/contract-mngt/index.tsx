@@ -54,9 +54,18 @@ export default function ContractMngt(): JSX.Element {
             })
         })
     }
+    const onFilterSubmit = (value: any) => {
+        if (value.signStartTime) {
+            const formatDate = value.signStartTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.signStartTime = formatDate[0] + " 00:00:00"
+            value.signEndTime = formatDate[1] + " 23:59:59"
+        }
+        return value
+    }
     return (
         <>
             <Modal
+                destroyOnClose
                 title={oprationType === "new" ? "创建" : "编辑"}
                 width={1011}
                 visible={editVisible}
@@ -70,6 +79,7 @@ export default function ContractMngt(): JSX.Element {
                 <Edit id={detailId} type={oprationType} ref={editRef} />
             </Modal>
             <Modal
+                destroyOnClose
                 title="详情"
                 width={1011}
                 visible={overviewVisible}
@@ -86,6 +96,7 @@ export default function ContractMngt(): JSX.Element {
             </Modal>
             <Page
                 path="/tower-supply/materialContract"
+                onFilterSubmit={onFilterSubmit}
                 columns={[
                     {
                         title: "序号",
@@ -96,11 +107,11 @@ export default function ContractMngt(): JSX.Element {
                     ...contract.map((item: any) => {
                         switch (item.dataIndex) {
                             case "materialStandard":
-                                return ({ ...item, enum: materialStandardEnum })
+                                return ({ ...item, type: "select", enum: materialStandardEnum })
                             case "deliveryMethod":
-                                return ({ ...item, enum: deliveryMethodEnum })
+                                return ({ ...item, type: "select", enum: deliveryMethodEnum })
                             case "transportMethod":
-                                return ({ ...item, enum: transportMethodEnum })
+                                return ({ ...item, type: "select", enum: transportMethodEnum })
                             default:
                                 return item
                         }
@@ -135,20 +146,22 @@ export default function ContractMngt(): JSX.Element {
                 </>}
                 searchFormItems={[
                     {
-                        name: 'updateTime',
+                        name: 'signStartTime',
                         label: '签订时间',
-                        children: <DatePicker style={{ width: "150px" }} format="YYYY-MM-DD" />
+                        children: <DatePicker.RangePicker style={{ width: "200px" }} format="YYYY-MM-DD" />
                     },
                     {
-                        name: 'outStockUserName',
+                        name: 'contractStatus',
                         label: '合同状态',
                         children: <Select placeholder="请选择" style={{ width: "100px" }}>
+                            <Select.Option value="1">执行中</Select.Option>
+                            <Select.Option value="2">已完成</Select.Option>
                         </Select>
                     },
                     {
-                        name: 'inquire',
+                        name: 'fuzzyQuery',
                         label: '查询',
-                        children: <Input style={{ width: "150px" }} placeholder="任务编号/项目名称/客户名称" />
+                        children: <Input style={{ width: "230px" }} placeholder="合同编号/关联采购计划/供应商" />
                     }
                 ]}
             />

@@ -42,6 +42,10 @@ export interface DataType {
     readonly period?: number;
     readonly description?: string;
     readonly payCompanyName?: string;
+    readonly keeperName?: string;
+    readonly keeperUserId?: string | number;
+    readonly stationName?: string;
+    readonly userId?: string | number;
 }
 
 export interface IResponseData {

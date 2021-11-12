@@ -47,8 +47,8 @@ export default function ContractMngt() {
             value.updateStartTime = formatDate[0] + " 00:00:00"
             value.updateEndTime = formatDate[1] + " 23:59:59"
         }
-        if (value.comparisonPricePersonId) {
-            value.comparisonPricePersonId = value.comparisonPricePersonId.second
+        if (value.comparisonPersonId) {
+            value.comparisonPersonId = value.comparisonPersonId.second
         }
         setFilterValue({ ...filterValue, ...value })
         return ({ ...filterValue, ...value })
@@ -95,18 +95,19 @@ export default function ContractMngt() {
 
     return (
         <>
-            <Modal title={oprationType === "new" ? "添加报价" : "编辑报价"} width={1011} visible={visible} onOk={handleAddOk} onCancel={() => {
+            <Modal destroyOnClose title={oprationType === "new" ? "创建" : "编辑"} width={1011} visible={visible} onOk={handleAddOk} onCancel={() => {
                 editRef.current?.resetFields()
                 setVisible(false)
             }}>
                 <Edit id={detailId} type={oprationType} ref={editRef} />
             </Modal>
-            <Modal title="操作信息" width={1011}
+            <Modal destroyOnClose title="操作信息" width={1011}
                 visible={oprationVisible}
+                   onCancel={() => setOprationVisible(false)}
                 footer={[<Button type="primary" ghost key="close" onClick={() => setOprationVisible(false)}>关闭</Button>]}>
                 <OprationInfo id={detailId} />
             </Modal>
-            <Modal title="取消" visible={cancelVisible} onOk={handleCancel} onCancel={() => {
+            <Modal destroyOnClose title="取消" visible={cancelVisible} onOk={handleCancel} onCancel={() => {
                 form.resetFields()
                 setCancelVisible(false)
             }}>
@@ -161,24 +162,24 @@ export default function ContractMngt() {
                     {
                         name: 'updateStartTime',
                         label: '最新状态变更时间',
-                        children: <DatePicker style={{ width: "150px" }} />
+                        children: <DatePicker.RangePicker style={{ width: "200px" }} format="YYYY-MM-DD"/>
                     },
                     {
-                        name: 'comparisonPriceStatus',
+                        name: 'comparisonStatus',
                         label: '状态',
                         children: <Select placeholder="请选择" style={{ width: "100px" }}>
                             <Select.Option value={1}>询价中</Select.Option>
                             <Select.Option value={2}>已询价</Select.Option>
-                            <Select.Option value={3}>已取消）</Select.Option>
+                            <Select.Option value={3}>已取消</Select.Option>
                         </Select>
                     },
                     {
-                        name: 'comparisonPricePersonId',
+                        name: 'comparisonPersonId',
                         label: '询价人',
                         children: <IntgSelect width={200} />
                     },
                     {
-                        name: 'inquire',
+                        name: 'comparisonPriceNumber',
                         label: '查询',
                         children: <Input style={{ width: "150px" }} placeholder="询比价编号" />
                     }

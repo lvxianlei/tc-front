@@ -1,6 +1,6 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react"
 import { Spin, Row, Col, InputNumber } from "antd"
-import { DetailContent, DetailTitle, CommonTable } from '../../common'
+import { DetailTitle, CommonTable } from '../../common'
 import { ListIngredients, PlanList } from "./purchaseListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -13,7 +13,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan/purchase?purchaserTaskTowerIds=${ids.join(",")}&purchaseType=1`)
             //TODO 临时初始数据
-            setDataSource(result?.lists.map((item: any) => ({ ...item, planPurchaseNum: 1 })) || [])
+            setDataSource(result?.lists.map((item: any) => ({ ...item, planPurchaseNum: 0 })) || [])
             resole(result)
         } catch (error) {
             reject(error)
@@ -60,7 +60,8 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                         return ({
                             ...item,
                             render: (_: any, record: any, index: number) => {
-                                return <InputNumber value={_ || 1} key={index} onChange={(value: number) => handleInputChange(value, index)} style={{ height: 27 }} />
+                                console.log(_, record.purchasePlanNumber)
+                                return <InputNumber value={record.purchasePlanNumber} key={index} onChange={(value: number) => handleInputChange(value, index)} style={{ height: 27 }} />
                             }
                         })
                     }

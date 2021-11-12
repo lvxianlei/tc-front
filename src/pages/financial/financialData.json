@@ -28,7 +28,7 @@
             "type": "string"
         },
         {
-            "title": "收票日",
+            "title": "开票日",
             "dataIndex": "collectInvoiceDate",
             "type": "date",
             "format": "YYYY-MM-DD"
@@ -101,11 +101,11 @@
                 },
                 {
                     "title": "联系电话",
-                    "dataIndex": "contactNumber"
+                    "dataIndex": "contactManTel"
                 },
                 {
                     "title": "供货产品",
-                    "dataIndex": "supplyProducts"
+                    "dataIndex": "supplyProductsName"
                 }
             ],
             "rules": [
@@ -180,7 +180,8 @@
                 },
                 {
                     "title": "合同编号",
-                    "dataIndex": "contractNumber"
+                    "dataIndex": "contractNumber",
+                    "search": true
                 },
                 {
                     "title": "完成时间",
@@ -216,13 +217,14 @@
             ]
         },
         {
-            "title": "收票日",
+            "title": "开票日",
             "dataIndex": "collectInvoiceDate",
             "type": "date",
+            "format": "YYYY-MM-DD",
             "rules": [
                 {
                     "required": true,
-                    "message": "请输入收票日..."
+                    "message": "请输入开票日..."
                 }
             ]
         }
@@ -325,10 +327,10 @@
         },
         {
             "title": "收货单",
-            "dataIndex": "receiptNumber"
+            "dataIndex": "receiptNumbers"
         },
         {
-            "title": "收票日",
+            "title": "开票日",
             "dataIndex": "collectInvoiceDate",
             "type": "string"
         }
@@ -352,7 +354,7 @@
             "type": "number"
         },
         {
-            "title": "付款状态",
+            "title": "请款状态",
             "dataIndex": "pleasePayStatus",
             "type": "select",
             "enum": [
@@ -485,7 +487,7 @@
                     "dataIndex": "invoiceAmount"
                 },
                 {
-                    "title": "收票日",
+                    "title": "开票日",
                     "dataIndex": "collectInvoiceDate",
                     "type": "string"
                 },
@@ -545,7 +547,8 @@
         },
         {
             "title": "请款类别",
-            "dataIndex": "pleasePayType"
+            "dataIndex": "pleasePayType",
+            "type": "select"
         },
         {
             "title": "请款机构",

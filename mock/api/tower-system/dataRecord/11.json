@@ -1,0 +1,49 @@
+{
+    "code": 200,
+    "msg":"non cillum dolore adipisicing",
+    "success":true,
+    "data":{
+        "businessRecordVOList":[
+            {
+                "createTime":"2020-04-24T14:58:58.832Z",
+                "createUserName":"Excepteur nostru",
+                "recordType":"enim occ",
+                "stateAfter":"nostrud anim eu",
+                "stateFront":"proident commodo"
+            },
+            {
+                "createTime":"1964-08-19T22:36:12.161Z",
+                "createUserName":"commodo",
+                "recordType":"cupidatat cillum qui in",
+                "stateAfter":"ut",
+                "stateFront":"null"
+            },
+            {
+                "createTime":"1967-08-01T10:46:30.761Z",
+                "createUserName":"mi",
+                "recordType":"proident exercitation labore",
+                "stateAfter":"sed",
+                "stateFront":"veniam commodo"
+            },
+            {
+                "createTime":"2015-01-15T07:01:26.786Z",
+                "createUserName":"irure Lorem",
+                "recordType":"qui id nostrud ex",
+                "stateAfter":"proident ex dolore",
+                "stateFront":"dolor velit sint pariatu"
+            },
+            {
+                "createTime":"1985-12-03T02:13:03.201Z",
+                "createUserName":"ipsum quis est",
+                "recordType":"in sed Excepteur laborum",
+                "stateAfter":"Excepteur",
+                "stateFront":"velit ut"
+            }
+        ],
+        "dataName":"eu elit",
+        "dataNumber":"velit a",
+        "dataType":58283154,
+        "designation":"eu",
+        "id":26686214
+    }
+}

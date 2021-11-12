@@ -12,12 +12,12 @@ import { Key } from 'rc-select/lib/interface/generator';
 
 export default function SupplierMngt(): React.ReactNode {
     //供应商类型
-    const invoiceTypeEnum = (ApplicationContext.get().dictionaryOption as any)["144"].map((item: { id: string, name: string }) => ({
+    const supplierTypeEnum = (ApplicationContext.get().dictionaryOption as any)["144"].map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
     //质量保证体系
-    const invoiceTypeEnum1 = (ApplicationContext.get().dictionaryOption as any)["145"].map((item: { id: string, name: string }) => ({
+    const qualityAssuranceEnum = (ApplicationContext.get().dictionaryOption as any)["145"].map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
@@ -75,13 +75,6 @@ export default function SupplierMngt(): React.ReactNode {
     const save1 = async (bankAccount: string, bankDeposit: string, contactMan: string, contactManTel: string, description: string, qualityAssurance: number, supplierCode: string, supplierName: string, supplierType: number, supplyProducts: string) => {
         if (!supplierName || !supplierType || !qualityAssurance || !contactMan || !contactManTel || !supplyProducts || !bankAccount || !bankDeposit) {
             message.info('请输入必填项');
-            // message.info('请输入供应商类型');
-            // message.info('请输入质量保证体系');
-            // message.info('请输入联系人');
-            // message.info('请输入联系人电话');
-            // message.info('请输入供货产品');
-            // message.info('请输入开户账号');
-            // message.info('请输入开户银行');
         } else {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/supplier`, { bankAccount, bankDeposit, contactMan, contactManTel, description, qualityAssurance, supplierCode, supplierName, supplierType, supplyProducts }, { "Content-Type": "application/json" })
             console.log(result);
@@ -97,7 +90,6 @@ export default function SupplierMngt(): React.ReactNode {
     }
     const edit = (record: any) => {
         setIsModalVisible(true)
-        console.log(record);
         setObj1(record);
     }
     const detail = async (supplierId: string) => {
@@ -157,7 +149,16 @@ export default function SupplierMngt(): React.ReactNode {
                     render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                 }
                 ,
-                ...supplierMngt,
+                ...supplierMngt.map((item: any) => {
+                    switch (item.dataIndex) {
+                        case "supplierType":
+                            return ({ ...item, type: "select", enum: supplierTypeEnum })
+                        case "qualityAssurance":
+                            return ({ ...item, type: "select", enum: qualityAssuranceEnum })
+                        default:
+                            return item
+                    }
+                }),
                 {
                     title: "操作",
                     dataIndex: "opration",
@@ -215,7 +216,7 @@ export default function SupplierMngt(): React.ReactNode {
                 <Descriptions.Item label={<span>供应商类型<span style={{ color: 'red' }}>*</span></span>}>
                     <Select defaultValue={obj1.supplierType} style={{ width: 120 }} bordered={false} onChange={handleChange}>
                         {
-                            invoiceTypeEnum.map((item: any) => {
+                            supplierTypeEnum.map((item: any) => {
                                 return <Select.Option value={item.value}>{item.label}</Select.Option>
                             })
                         }
@@ -224,7 +225,7 @@ export default function SupplierMngt(): React.ReactNode {
                 <Descriptions.Item label={<span>质量保证体系<span style={{ color: 'red' }}>*</span></span>}>
                     <Select defaultValue={obj1.qualityAssurance} style={{ width: 120 }} bordered={false} onChange={handleChange1}>
                         {
-                            invoiceTypeEnum1.map((item: any) => {
+                            qualityAssuranceEnum.map((item: any) => {
                                 return <Select.Option value={item.value}>{item.label}</Select.Option>
                             })
                         }
@@ -263,7 +264,7 @@ export default function SupplierMngt(): React.ReactNode {
                 <Descriptions.Item label={<span>供应商类型<span style={{ color: 'red' }}>*</span></span>}>
                     <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange}>
                         {
-                            invoiceTypeEnum.map((item: any) => {
+                            supplierTypeEnum.map((item: any) => {
                                 return <Select.Option value={item.value}>{item.label}</Select.Option>
                             })
                         }
@@ -272,7 +273,7 @@ export default function SupplierMngt(): React.ReactNode {
                 <Descriptions.Item label={<span>质量保证体系<span style={{ color: 'red' }}>*</span></span>}>
                     <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange1}>
                         {
-                            invoiceTypeEnum1.map((item: any) => {
+                            qualityAssuranceEnum.map((item: any) => {
                                 return <Select.Option value={item.value}>{item.label}</Select.Option>
                             })
                         }
@@ -297,9 +298,7 @@ export default function SupplierMngt(): React.ReactNode {
             <DetailContent>
                 <DetailTitle title="操作信息" />
                 <CommonTable
-                    columns={[
-                        ...AddEditDetail
-                    ]}
+                    columns={AddEditDetail}
                     dataSource={columnsData}
                 />
             </DetailContent>

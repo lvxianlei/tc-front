@@ -33,6 +33,15 @@ export default function Invoice() {
         }
     }), { manual: true })
 
+    const { run: cancelRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/invoice/cancelInvoice?invoiceId=${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     const onFilterSubmit = (value: any) => {
         if (value.updateEndTime) {
             const formatDate = value.updateEndTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -59,6 +68,22 @@ export default function Invoice() {
         })
     }
 
+    const handleCancel = (id: string) => {
+        Modal.confirm({
+            title: "删除",
+            content: "确定作废此票据吗？",
+            onOk: () => new Promise(async (resove, reject) => {
+                try {
+                    resove(await cancelRun(id))
+                    message.success("作废成功...")
+                    history.go(0)
+                } catch (error) {
+                    reject(error)
+                }
+            })
+        })
+    }
+
     const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
             await editRef.current?.onSubmit()
@@ -73,6 +98,7 @@ export default function Invoice() {
 
     return <>
         <Modal
+            destroyOnClose
             visible={visible}
             width={1011}
             title={type === "new" ? "创建" : "编辑"}
@@ -86,6 +112,7 @@ export default function Invoice() {
             <Edit type={type} ref={editRef} id={detailedId} />
         </Modal>
         <Modal
+            destroyOnClose
             visible={detailVisible}
             width={1011}
             footer={<Button type="primary" onClick={() => setDetailVisible(false)}>确认</Button>}
@@ -116,15 +143,18 @@ export default function Invoice() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link" onClick={() => {
-                                setDetailVisible(true)
-                                setDetailedId(record.id)
-                            }}>查看</Button>
+                            <Button
+                                type="link"
+                                onClick={() => {
+                                    setDetailVisible(true)
+                                    setDetailedId(record.id)
+                                }}>详情</Button>
                             <Button type="link" disabled={![1].includes(record.invoiceStatus)} onClick={() => {
                                 setType("edit")
                                 setDetailedId(record.id)
                                 setVisible(true)
                             }}>编辑</Button>
+                            <Button type="link" disabled={![1].includes(record.invoiceStatus)} onClick={() => handleCancel(record.id)}>作废</Button>
                             <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>
                         </>
                     }
@@ -146,7 +176,8 @@ export default function Invoice() {
                 {
                     name: 'invoiceStatus',
                     label: '状态',
-                    children: <Select style={{ width: 200 }}>
+                    children: <Select style={{ width: 200 }} defaultValue="全部">
+                        <Select.Option value="">全部</Select.Option>
                         <Select.Option value="1">已收票</Select.Option>
                         <Select.Option value="2">待付款</Select.Option>
                         <Select.Option value="3">已付款</Select.Option>
@@ -156,7 +187,8 @@ export default function Invoice() {
                 {
                     name: 'invoiceType',
                     label: '发票类型',
-                    children: <Select style={{ width: 200 }}>
+                    children: <Select style={{ width: 200 }} defaultValue="全部">
+                        <Select.Option value="">全部</Select.Option>
                         {invoiceTypeEnum.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
                     </Select>
                 },

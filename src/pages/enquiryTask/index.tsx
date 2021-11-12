@@ -38,6 +38,15 @@ export default function EnquiryTask(): React.ReactNode {
         }
     }), { manual: true })
 
+    const { run: generateRun } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/initData/inquiry`)
+            resole(result)
+        } catch (error) {
+            reject(false)
+        }
+    }), { manual: true })
+
     const onFilterSubmit = (value: any) => {
         if (value.startStatusUpdateTime) {
             const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -153,7 +162,14 @@ export default function EnquiryTask(): React.ReactNode {
                         </>
                     }
                 }]}
-            extraOperation={<Button type="primary" ghost>导出</Button>}
+            extraOperation={<>
+                <Button type="primary" ghost>导出</Button>
+                <Button type="primary" ghost onClick={async () => {
+                    await generateRun()
+                    await message.success("成功生成询价任务...")
+                    history.go(0)
+                }}>临时生成询价任务</Button>
+            </>}
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
@@ -182,7 +198,7 @@ export default function EnquiryTask(): React.ReactNode {
                 {
                     name: 'fuzzyQuery',
                     label: '查询',
-                    children: <Input maxLength={200} />
+                    children: <Input placeholder="询价任务编号/项目名称/客户名称/项目负责人" style={{ width: "280px" }} />
                 },
             ]}
         />

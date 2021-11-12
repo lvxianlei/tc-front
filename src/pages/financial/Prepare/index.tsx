@@ -80,7 +80,7 @@ export default function ApplyPayment() {
     }
     const handleModalOk = (type?: "saveAndApply" | "save") => new Promise(async (resove, reject) => {
         try {
-            const isClose = await editRef.current?.onSubmit(type)
+            await editRef.current?.onSubmit(type)
             message.success("票据创建成功...")
             setVisible(false)
             history.go(0)
@@ -146,7 +146,7 @@ export default function ApplyPayment() {
     }
 
     return <>
-        <Modal visible={visible}
+        <Modal visible={visible} destroyOnClose
             width={1011} title={type === "new" ? "创建申请信息" : "编辑申请信息"}
             footer={[
                 <Button key="close" type="primary" ghost onClick={async () => {
@@ -156,7 +156,7 @@ export default function ApplyPayment() {
                     setVisible(false)
                 }}>关闭</Button>,
                 <Button key="save" type="primary" onClick={() => handleModalOk()}>保存</Button>,
-                <Button key="saveOr" type="primary" ghost onClick={() => handleModalOk("saveAndApply")} >保存并发起审批</Button>
+                <Button key="saveOr" type="primary" onClick={() => handleModalOk("saveAndApply")} >保存并发起审批</Button>
             ]}
             onCancel={() => {
                 editRef.current?.resetFields()
@@ -167,6 +167,7 @@ export default function ApplyPayment() {
             <Edit type={type} ref={editRef} id={detailId} />
         </Modal>
         <Modal
+            destroyOnClose
             visible={detailVisible} width={1011}
             footer={<Button type="primary" onClick={() => {
                 setDetailId("")
@@ -180,6 +181,7 @@ export default function ApplyPayment() {
             <Overview id={detailId} />
         </Modal>
         <Modal visible={successVisible} width={1011}
+            destroyOnClose
             title="附件上传"
             onCancel={() => {
                 setSuccessVisible(false)
@@ -196,12 +198,12 @@ export default function ApplyPayment() {
                 { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
                 ...ApplicationForPayment.map((item: any) => {
                     if (item.dataIndex === "pleasePayType") {
-                        return ({ ...item, type: "select", enum: pleasePayTypeEnum });
+                        return ({ ...item, type: "select", enum: pleasePayTypeEnum })
                     }
                     if (item.dataIndex === "paymentMethod") {
-                        return ({ ...item, type: "select", enum: paymentMethodEnum });
+                        return ({ ...item, type: "select", enum: paymentMethodEnum })
                     }
-                    return item;
+                    return item
                 }),
                 {
                     title: "操作",
@@ -222,10 +224,10 @@ export default function ApplyPayment() {
                                     setDetailId(record.id)
                                     setVisible(true)
                                 }}>编辑</Button>
-                            {[0, 3].includes(record.applyStatus) && <a onClick={() => handleApprovalRun(record.id)}>发起</a>}
+                            <Button type="link" disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleApprovalRun(record.id)}>发起</Button>
                             <Button type="link" disabled={![1].includes(record.applyStatus)}
                                 onClick={() => handleCancel(record.id)}>撤回</Button>
-                            {[0, 3].includes(record.applyStatus) && <a onClick={() => handleDelete(record.id)}>删除</a>}
+                            <Button type="link" disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleDelete(record.id)}>删除</Button>
                             <Button type="link" onClick={() => {
                                 setDetailId(record.id)
                                 setSuccessVisible(true)
@@ -239,7 +241,7 @@ export default function ApplyPayment() {
                     setType("new")
                     setVisible(true)
                 }}>申请</Button>
-                <span>累计付款金额：{data?.totalPleasePayAmount || 0}</span>
+                <span style={{ fontSize: 16, fontWeight: 600, color: "#FF8C00" }}>累计付款金额：{data?.totalPleasePayAmount || 0}</span>
             </>}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
@@ -252,7 +254,8 @@ export default function ApplyPayment() {
                 {
                     name: 'applyStatus',
                     label: '审批状态',
-                    children: <Select style={{ width: 200 }}>
+                    children: <Select style={{ width: 200 }} defaultValue="全部">
+                        <Select.Option value="">全部</Select.Option>
                         <Select.Option value="0">未发起</Select.Option>
                         <Select.Option value="1">待审批</Select.Option>
                         <Select.Option value="2">已拒绝</Select.Option>
@@ -263,7 +266,8 @@ export default function ApplyPayment() {
                 {
                     name: 'pleasePayStatus',
                     label: '请款状态',
-                    children: <Select style={{ width: 200 }}>
+                    children: <Select style={{ width: 200 }} defaultValue="全部">
+                        <Select.Option value="">全部</Select.Option>
                         <Select.Option value="1">已创建</Select.Option>
                         <Select.Option value="2">待付款</Select.Option>
                         <Select.Option value="3">已付款</Select.Option>
@@ -272,7 +276,8 @@ export default function ApplyPayment() {
                 {
                     name: 'pleasePayType',
                     label: '请款类别',
-                    children: <Select style={{ width: 200 }}>
+                    children: <Select style={{ width: 200 }} defaultValue="全部">
+                        <Select.Option value="">全部</Select.Option>
                         {pleasePayTypeEnum.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
                     </Select>
                 },
