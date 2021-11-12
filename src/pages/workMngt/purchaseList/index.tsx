@@ -5,8 +5,10 @@ import { IntgSelect, Page } from '../../common'
 import { baseInfo } from "./purchaseListData.json"
 import Overview from "./Overview"
 import PurchasePlan from "./PurchasePlan"
+import AuthUtil from "../../../utils/AuthUtil"
 export default function Invoicing() {
     const history = useHistory()
+    const tenantId = AuthUtil.getTenantId()
     const purChasePlanRef = useRef<{ onSubmit: () => void }>({ onSubmit: () => { } })
     const [visible, setVisible] = useState<boolean>(false)
     const [generateVisible, setGenerateVisible] = useState<boolean>(false)
@@ -111,7 +113,7 @@ export default function Invoicing() {
                     },
                     getCheckboxProps: (record: any) => {
                         return ({
-                            disabled: !([1].includes(record.purchaseTaskStatus) && [-1, null].includes(record.purchasePlanId))
+                            disabled: !([1].includes(record.purchaseTaskStatus) && [-1, null].includes(record.purchasePlanId) && record.purchaserId === tenantId)
                         })
                     }
                 }

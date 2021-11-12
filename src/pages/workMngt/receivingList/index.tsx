@@ -70,7 +70,7 @@ export default function Invoicing() {
     }
 
     return <>
-        <Modal destroyOnClose visible={visible} width={1011} title="创建" onOk={handleModalOk} onCancel={() => {
+        <Modal destroyOnClose visible={visible} width={1011} title={type === "new" ? "创建" : "编辑"} onOk={handleModalOk} onCancel={() => {
             setVisible(false)
             editRef.current?.resetFields()
             setMaterialData({})

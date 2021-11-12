@@ -34,9 +34,10 @@ export default function EnquiryList(): React.ReactNode {
     const handleModal = (oprationType: "save" | "saveAndSubmit") => new Promise(async (resove, reject) => {
         try {
             await editRef.current?.onSubmit(oprationType)
-            message.success("保存成功...")
-            history.go(0)
             setVisible(false)
+            await message.success("保存成功...")
+            history.go(0)
+            resove(true)
         } catch (error) {
             reject(false)
         }

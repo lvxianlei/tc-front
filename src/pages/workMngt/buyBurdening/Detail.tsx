@@ -11,8 +11,6 @@ export default function EnquiryList(): React.ReactNode {
     const params = useParams<{ id: string }>()
     const [visible, setVisible] = useState<boolean>(false)
     const ref = useRef<{ data: any }>()
-    const [filterValue, setFilterValue] = useState({ purchaseTaskTowerId: params.id })
-
     const { run } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             const detail: any = await RequestUtil.put(`/tower-supply/purchaseTaskTower/finish/${params.id}`)
@@ -42,14 +40,8 @@ export default function EnquiryList(): React.ReactNode {
 
 
     const onFilterSubmit = (value: any) => {
-        if (value.statusUpdateTime) {
-            const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
-            value.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
-            delete value.statusUpdateTime
-        }
-        setFilterValue(value)
-        return value
+
+        return { ...value, purchaseTaskTowerId: params.id }
     }
 
     const handleSuccess = () => {
@@ -105,45 +97,26 @@ export default function EnquiryList(): React.ReactNode {
         <Page
             path="/tower-supply/purchaseTaskTower/component"
             columns={ComponentDetails.map((item: any) => {
-                if (item.dataIndex === "equipped") {
-                    return ({ ...item, render: (text: any, records: any) => <>{text} / {records.notequipped}</> })
+                if (item.dataIndex === "completionProgres") {
+                    return ({ ...item, render: (text: any, records: any) => <>{records.completionProgres} / {records.num}</> })
                 }
                 return item
             })}
             extraOperation={<>
                 <Button type="primary" ghost>导出</Button>
                 <Button type="primary" ghost onClick={handleSuccess}>完成</Button>
-                <Button type="primary" ghost onClick={() => setVisible(true)}>配料</Button>
+                <Button type="primary" disabled={true} ghost onClick={() => setVisible(true)}>配料</Button>
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
                 <Button type="primary" ghost onClick={() => createBatchingScheme()}>临时创建配料方案</Button>
             </>}
-            filterValue={filterValue}
+            filterValue={{ purchaseTaskTowerId: params.id }}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
-                {
-                    name: 'statusUpdateTime',
-                    label: '最新状态变更时间',
-                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                },
-                {
-                    name: 'status',
-                    label: '配料状态',
-                    children: <Select style={{ width: "100px" }} defaultValue="请选择">
-                        <Select.Option value={1} key={1}>待接收</Select.Option>
-                        <Select.Option value={3} key={3}>待完成</Select.Option>
-                        <Select.Option value={4} key={4}>已完成</Select.Option>
-                    </Select>
-                },
-                {
-                    name: 'confirmId',
-                    label: '配料人',
-                    children: <IntgSelect width={200} />
-                },
                 {
                     name: 'fuzzyQuery',
                     label: '查询',
                     children: <Input placeholder="件号/材质/规格" maxLength={200} />
-                },
+                }
             ]}
         />
     </>

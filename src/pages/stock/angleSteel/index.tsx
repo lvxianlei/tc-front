@@ -55,7 +55,7 @@ const AngleSteel = () => {
             message.success("材质配料设定成功...")
             setVisible(false)
             resove(true)
-            // history.go(0)
+            history.go(0)
         }
     })
 

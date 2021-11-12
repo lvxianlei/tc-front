@@ -125,11 +125,6 @@
             "type": "number"
         },
         {
-            "title": "厚度（mm）",
-            "dataIndex": "thickness",
-            "type": "number"
-        },
-        {
             "title": "长度（mm）",
             "dataIndex": "length",
             "type": "number"
@@ -140,7 +135,7 @@
             "type": "number"
         },
         {
-            "title": "单重（吨）",
+            "title": "重量（吨）",
             "dataIndex": "weight",
             "type": "number"
         },

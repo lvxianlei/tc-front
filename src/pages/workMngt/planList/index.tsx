@@ -33,9 +33,10 @@ export default function Invoicing() {
             content: "确定取消此计划吗？",
             onOk: () => new Promise(async (resove, reject) => {
                 try {
-                    resove(await deleteRun(id))
-                    message.success("计划已取消...")
-                    // history.go(0)
+                    await deleteRun(id)
+                    await message.success("计划已取消...")
+                    history.go(0)
+                    resove(true)
                 } catch (error) {
                     reject(error)
                 }
@@ -60,9 +61,9 @@ export default function Invoicing() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <Link to={`/workMngt/planList/relationTower/${record.id}`}>关联塔形</Link>
+                        <Link to={`/workMngt/planList/relationTower/${record.id}`}>关联塔型</Link>
                         <Link to={`/workMngt/planList/purchaseList/${record.id}`}><Button type="link">采购清单</Button></Link>
-                        <a onClick={() => handleDelete(record.id)}>取消计划</a>
+                        <Button type="link" disabled={record.purchasePlanStatus === 3} onClick={() => handleDelete(record.id)}>取消计划</Button>
                     </>
                 }
             }]}

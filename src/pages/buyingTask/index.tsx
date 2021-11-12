@@ -144,7 +144,12 @@ export default function rawMaterial() {
                         fixed: "left",
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
-                    ...buyingTask,
+                    ...buyingTask.map((item: any) => {
+                        if (item.dataIndex === "completionProgres") {
+                            return ({ ...item, render: (_: any, records: any) => <>{records.completionProgres}/{records.demand}</> })
+                        }
+                        return item
+                    }),
                     {
                         title: "操作",
                         dataIndex: "opration",

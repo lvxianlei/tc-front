@@ -45,7 +45,7 @@
         },
         {
             "title": "已完成（吨）/需求（吨）",
-            "dataIndex": "completionProgresdemand"
+            "dataIndex": "completionProgres"
         },
         {
             "title": "任务单编号",

@@ -263,71 +263,8 @@ export default function PriceMaintain(): React.ReactNode {
         </div>
     ]
     return (
-        <div>
-            <Page
-                path="/tower-supply/materialPrice"
-                columns={[
-                    {
-                        "title": "序号",
-                        "dataIndex": "index",
-                        render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-                    },
-                    ...priceMaintain,
-                    {
-                        key: 'operation',
-                        title: '操作',
-                        dataIndex: 'operation',
-                        fixed: 'right',
-                        width: 100,
-                        render: (_: undefined, record: any): React.ReactNode => {
-                            return <div>
-                                <Button type="link" onClick={() => { edit(record.id, record.price, record.priceSource, record.quotationTime, record) }}>编辑</Button>
-                                <Popconfirm
-                                    title="你确定删除吗?"
-                                    onConfirm={() => confirm(record.id)}
-                                    onCancel={cancel}
-                                    okText="Yes"
-                                    cancelText="No"
-                                >
-                                    <Button type="link">删除</Button>
-                                </Popconfirm>
-                            </div>
-                        }
-                    }
-                ]}
-                filterValue={filterValue}
-                extraOperation={<div>
-                    <Link to="/project/management/new"><Button type="primary">导出</Button></Link>
-                    <Button type="primary" style={{ marginLeft: "16px" }} onClick={() => {
-                        lead();
-                    }}>导入</Button>
-                    <Button type="primary" style={{ marginLeft: "16px" }} onClick={() => { add() }}>添加</Button>
-                    <Button type="primary" style={{ marginLeft: "16px" }} onClick={() => history.push(`/stock/viewRawMaterial`)}>返回上一级</Button>
-                </div>}
-                onFilterSubmit={onFilterSubmit}
-                searchFormItems={[
-                    {
-                        name: 'materialCategoryId',
-                        label: '原材料类型',
-                        children: <Select style={{ width: "150px" }}>
-                            {invoiceTypeEnum1.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
-                        </Select>
-                    },
-                    {
-                        name: 'materialStandard',
-                        label: '原材料标准',
-                        children: <Select style={{ width: "150px" }}>
-                            {invoiceTypeEnum.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
-                        </Select>
-                    },
-                    {
-                        name: 'materialName',
-                        label: '原材料名称',
-                        children: <Input placeholder="原材料名称/规格" />
-                    },
-                ]}
-            />
-            <Modal width="700px" title="编辑" visible={isModalVisible} footer={buttons} onCancel={handleCancel}>
+        <>
+            <Modal width={1011} title="编辑" visible={isModalVisible} footer={buttons} onCancel={handleCancel}>
                 <Descriptions title="价格信息" bordered column={2} labelStyle={{ textAlign: 'right' }}>
                     <Descriptions.Item label="原材料名称">{obj.materialName}</Descriptions.Item>
                     <Descriptions.Item label="原材料规格">{obj.materialSpec}</Descriptions.Item>
@@ -354,17 +291,17 @@ export default function PriceMaintain(): React.ReactNode {
                 </Descriptions>
             </Modal>
             {/* 添加 */}
-            <Modal width="700px" title="添加" visible={isModalVisible1} footer={buttons1} onCancel={handleCancel1}>
+            <Modal width={1011} title="添加" visible={isModalVisible1} footer={buttons1} onCancel={handleCancel1}>
                 <Button type="primary" style={{ marginLeft: "600px" }} onClick={() => setIsModalVisible2(true)}>选择</Button>
                 <Descriptions title="价格信息" bordered column={2} labelStyle={{ textAlign: 'right' }}>
                     <Descriptions.Item label={<span>原材料名称<span style={{ color: 'red' }}>*</span></span>} >
                         <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange}>
-                          {selects.materialNames.map((item: any, index: number) => <Select.Option value={item} key={index}>{item}</Select.Option>)}
+                            {selects.materialNames.map((item: any, index: number) => <Select.Option value={item} key={index}>{item}</Select.Option>)}
                         </Select>
                     </Descriptions.Item>
                     <Descriptions.Item label={<span>原材料规格<span style={{ color: 'red' }}>*</span></span>}>
                         <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange1}>
-                          {selects && selects.structureSpecs && selects.structureSpecs.map((item: any, index: number) => <Select.Option value={item} key={index}>{item}</Select.Option>)}
+                            {selects && selects.structureSpecs && selects.structureSpecs.map((item: any, index: number) => <Select.Option value={item} key={index}>{item}</Select.Option>)}
                         </Select>
                     </Descriptions.Item>
                     <Descriptions.Item label={<span>原材料标准<span style={{ color: 'red' }}>*</span></span>}>
@@ -397,7 +334,7 @@ export default function PriceMaintain(): React.ReactNode {
                     <Descriptions.Item label="">{ }</Descriptions.Item>
                 </Descriptions>
             </Modal>
-            <Modal width="600px" title="选择" visible={isModalVisible2} footer={buttons2} onCancel={handleCancel2}>
+            <Modal width={1011} title="选择" visible={isModalVisible2} footer={buttons2} onCancel={handleCancel2}>
                 <Page
                     path="/tower-supply/materialPurchaseTask/inquirer"
                     columns={[
@@ -465,6 +402,70 @@ export default function PriceMaintain(): React.ReactNode {
                     ]}
                 />
             </Modal>
-        </div>
+            <Page
+                path="/tower-supply/materialPrice"
+                columns={[
+                    {
+                        "title": "序号",
+                        "dataIndex": "index",
+                        render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                    },
+                    ...priceMaintain.map((item: any) => {
+                        if (item.dataIndex === "price") {
+                            return ({ ...item, render: (value: number) => <>¥ {value} / 吨</> })
+                        }
+                        return item
+                    }),
+                    {
+                        key: 'operation',
+                        title: '操作',
+                        dataIndex: 'operation',
+                        fixed: 'right',
+                        width: 100,
+                        render: (_: any, record: any): React.ReactNode => {
+                            return <>
+                                <Button type="link" onClick={() => { edit(record.id, record.price, record.priceSource, record.quotationTime, record) }}>编辑</Button>
+                                <Popconfirm
+                                    title="确定删除吗?"
+                                    onConfirm={() => confirm(record.id)}
+                                    onCancel={cancel}
+                                >
+                                    <Button type="link">删除</Button>
+                                </Popconfirm>
+                            </>
+                        }
+                    }
+                ]}
+                filterValue={filterValue}
+                extraOperation={<>
+                    <Button type="primary">导出</Button>
+                    <Button type="primary">导入</Button>
+                    <Button type="primary" onClick={() => { add() }}>添加</Button>
+                    <Button type="primary" onClick={() => history.goBack()}>返回上一级</Button>
+                </>}
+                onFilterSubmit={onFilterSubmit}
+                searchFormItems={[
+                    {
+                        name: 'materialCategoryId',
+                        label: '原材料类型',
+                        children: <Select style={{ width: "150px" }}>
+                            {invoiceTypeEnum1.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+                        </Select>
+                    },
+                    {
+                        name: 'materialStandard',
+                        label: '原材料标准',
+                        children: <Select style={{ width: "150px" }}>
+                            {invoiceTypeEnum.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+                        </Select>
+                    },
+                    {
+                        name: 'materialName',
+                        label: '原材料名称',
+                        children: <Input placeholder="原材料名称/规格" />
+                    },
+                ]}
+            />
+        </>
     )
 }

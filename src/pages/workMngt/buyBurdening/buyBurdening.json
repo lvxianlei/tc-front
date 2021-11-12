@@ -37,11 +37,11 @@
             "width": 100,
             "enum": [
                 {
-                    "label": "待接收",
+                    "label": "待完成",
                     "value": 1
                 },
                 {
-                    "label": "待完成",
+                    "label": "待接收",
                     "value": 2
                 },
                 {
@@ -134,8 +134,8 @@
             "type": "number"
         },
         {
-            "title": "已配/未配",
-            "dataIndex": "equipped"
+            "title": "已配/全部",
+            "dataIndex": "completionProgres"
         }
     ],
     "detailClassification": [

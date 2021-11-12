@@ -14,6 +14,7 @@ export default forwardRef(function Edit({ detailId }: EditProps, ref): JSX.Eleme
     const { loading, data } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryTask/inquirer/${detailId}`)
+            setInquirerDescription(result.inquirerDescription)
             resole(result)
         } catch (error) {
             reject(error)
@@ -71,14 +72,19 @@ export default forwardRef(function Edit({ detailId }: EditProps, ref): JSX.Eleme
     return <Spin spinning={loading}>
         <Attachment dataSource={data?.projectAttachList} />
         <DetailTitle title="当前价格信息" />
-        <CommonTable haveIndex columns={CurrentPriceInformation} dataSource={data?.materialDetails || []} />
+        <CommonTable haveIndex columns={CurrentPriceInformation.map((item: any) => {
+            if (item.dataIndex === "price") {
+                return ({ ...item, render: (value: number,) => <>¥ {value} / 吨</> })
+            }
+            return item
+        })} dataSource={data?.materialDetails || []} />
         {data?.inquiryStatus === 4 && <>
             <DetailTitle title="补充信息" />
             <Input.TextArea
                 name="inquirerDescription"
                 value={inquirerDescription}
                 onChange={(event: any) => setInquirerDescription(event.target.value)} />
-            <Attachment title="上传附件" edit ref={attchRef} />
+            <Attachment title="上传附件" dataSource={data?.inquirerAttachList || []} edit ref={attchRef} />
         </>}
     </Spin>
 })

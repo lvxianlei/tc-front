@@ -61,7 +61,13 @@
             "title": "配置数据",
             "dataIndex": "configData",
             "type": "string",
-            "width": 100
+            "width": 100,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入配置数据..."
+                }
+            ]
         },
         {
             "title": "说明",
