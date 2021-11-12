@@ -1,5 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef } from "react"
-import { Button, Row, Modal, Spin, Form, InputNumber } from "antd"
+import { Button, Row, Modal, Spin, Form, InputNumber, message, Input } from "antd"
 import { BaseInfo, DetailTitle, Attachment, CommonTable, PopTableContent, IntgSelect } from "../common"
 import { contractBaseInfo, material, comparison, addMaterial } from "./contract.json"
 import ApplicationContext from "../../configuration/ApplicationContext"
@@ -83,10 +83,10 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 comparisonPriceNumber: comparisonPrice.comparisonPrice.value,
                 materialContractDetailDtos: materialList.map((item: any) => ({
                     ...item,
-                    taxPrice: 1,
-                    price: 1,
-                    taxTotalAmount: 1,
-                    totalAmount: 1
+                    taxPrice: item.taxPrice || 0,
+                    price: item.price || 0,
+                    taxTotalAmount: item.taxTotalAmount || 0,
+                    totalAmount: item.totalAmount || 0
                 }))
             })
             resove(true)
@@ -113,16 +113,49 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const handleComparisonPriceChange = async (fields: any) => {
         if (fields.comparisonPrice) {
             const meterialList: any[] = await getComparisonPrice(fields.comparisonPrice.id)
-            setMaterialList(meterialList)
+            setMaterialList(meterialList.map((item: any) => {
+                const num = parseFloat(item.num || "0")
+                const taxPrice = parseFloat(item.taxOffer || "0")
+                const price = parseFloat(item.offer || "0")
+                return ({
+                    ...item,
+                    source: 1,
+                    num,
+                    taxPrice,
+                    price,
+                    taxTotalAmount: (num * taxPrice).toFixed(2),
+                    totalAmount: (num * price).toFixed(2)
+                })
+            }))
         }
     }
 
-    const handleNumChange = (value: number, materialCode: string) => {
-        setMaterialList(materialList.map((item: any) => item.materialCode === materialCode ? ({ ...item, num: value }) : item))
+    const handleNumChange = (value: number, materialCode: string, dataIndex: string) => {
+        setMaterialList(materialList.map((item: any) => {
+            if (item.materialCode === materialCode) {
+                const num = parseFloat(item.num || "0")
+                const taxPrice = parseFloat(item.taxPrice || "0")
+                const price = parseFloat(item.price || "0")
+                return ({
+                    ...item,
+                    taxTotalAmount: (num * taxPrice).toFixed(2),
+                    totalAmount: (num * price).toFixed(2),
+                    [dataIndex]: value
+                })
+            }
+            return item
+        }))
     }
     return <Spin spinning={loading}>
         <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible} onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
-            <PopTableContent data={addMaterial as any} onChange={(fields) => setPopDataList(fields)} />
+            <PopTableContent data={addMaterial as any} onChange={(fields: any[]) => setPopDataList(fields.map((item: any) => ({
+                ...item,
+                source: 2,
+                taxPrice: item.taxPrice || 0.00,
+                price: item.price || 0.00,
+                taxTotalAmount: item.taxTotalAmount || 0.00,
+                totalAmount: item.totalAmount || 0.00
+            })))} />
         </Modal>
         <DetailTitle title="合同基本信息" />
         <BaseInfo
@@ -150,20 +183,34 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         <DetailTitle title="询比价信息" />
         <BaseInfo form={comparisonForm} col={1} onChange={handleComparisonPriceChange} columns={comparison.map((item: any) => {
             if (item.dataIndex === "comparisonPrice") {
-                return ({ ...item, path: `${item.path}?supplierId=${supplierId}` })
+                return ({ ...item, path: `${item.path}?supplierId=${supplierId}&comparisonStatus=2` })
             }
             return item
         })} dataSource={{}} edit />
         <Attachment dataSource={data?.materialContractAttachInfoVos || []} edit ref={attchsRef} />
-        <DetailTitle title="原材料信息" operation={[<Button type="primary" ghost key="add" onClick={() => setVisible(true)}>添加</Button>]} />
+        <DetailTitle
+            title="原材料信息"
+            operation={[<Button
+                type="primary"
+                ghost
+                key="add"
+                onClick={async () => {
+                    const comparisonPrice = await comparisonForm.validateFields()
+                    if (!comparisonPrice.comparisonPrice.id) {
+                        message.warning("请先选择询比价信息...")
+                    } else {
+                        setVisible(true)
+                    }
+
+                }}>添加</Button>]} />
         <Row></Row>
         <CommonTable
             columns={[
                 ...material.map((item: any) => {
-                    if (item.dataIndex === "num") {
+                    if (["num", "taxPrice", "price"].includes(item.dataIndex)) {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => <InputNumber value={value} onChange={(value: number) => handleNumChange(value, records.materialCode)} key={key} />
+                            render: (value: number, records: any, key: number) => <InputNumber value={value || 0} onChange={(value: number) => handleNumChange(value, records.materialCode, item.dataIndex)} key={key} />
                         })
                     }
                     return item
@@ -172,8 +219,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     title: "操作",
                     fixed: "right",
                     dataIndex: "opration",
-                    render: (_: any, records: any) => <a onClick={() => handleRemove(records.materialCode)}>移除</a>
+                    render: (_: any, records: any) => <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.materialCode)}>移除</Button>
                 }]}
+            pagination={false}
             dataSource={materialList} />
     </Spin>
 })
