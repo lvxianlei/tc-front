@@ -24,6 +24,8 @@ export default function ViewRawMaterial(): React.ReactNode {
     //原材料类型
     const [projectType, setProjectType] = useState<any>([]);
     const { RangePicker } = DatePicker;
+    var moment = require('moment');
+    moment().format();
 
     const onFilterSubmit = (value: any) => {
         if (value.startBidBuyEndTime) {
@@ -47,6 +49,9 @@ export default function ViewRawMaterial(): React.ReactNode {
         console.log(materialPriceId);
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPrice/history/${materialPriceId}`)
         console.log(result);
+        result.map((item: any) => {
+            const time = moment(item.updateTime).format("YYYY-MM-DD")
+        })
         setArr(result);
     }
     const handleCancel = () => {
@@ -149,18 +154,6 @@ export default function ViewRawMaterial(): React.ReactNode {
                         <AntdCharts arr={arr} />
                     </div>
                     <div style={{ width: "500px", height: "400px", marginLeft: "50px" }}>
-                        {/* <Page
-                            path={`/tower-supply/materialPrice/history/${materialPriceId}`}
-                            columns={[
-                                {
-                                    title: "序号",
-                                    dataIndex: "index",
-                                    render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-                                },
-                                ...priceInformation
-                            ]}
-                            searchFormItems={[]}
-                        /> */}
                         <CommonTable
                             columns={[
                                 {
@@ -176,18 +169,6 @@ export default function ViewRawMaterial(): React.ReactNode {
                 </div>
             </Modal>
             <Modal width="700px" title="数据源" visible={isModalVisible1} onCancel={handleCancel1} footer={buttons1}>
-                {/* <Page
-                    path={`/tower-supply/materialPrice/priceSource/${materialPriceId}`}
-                    columns={[
-                        {
-                            title: "序号",
-                            dataIndex: "index",
-                            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-                        },
-                        ...dataSource
-                    ]}
-                    searchFormItems={[]}
-                /> */}
                 <CommonTable
                     columns={[
                         {
