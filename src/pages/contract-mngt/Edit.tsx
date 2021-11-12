@@ -131,20 +131,24 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     }
 
     const handleNumChange = (value: number, materialCode: string, dataIndex: string) => {
-        setMaterialList(materialList.map((item: any) => {
+        const newData = materialList.map((item: any) => {
             if (item.materialCode === materialCode) {
-                const num = parseFloat(item.num || "0")
-                const taxPrice = parseFloat(item.taxPrice || "0")
-                const price = parseFloat(item.price || "0")
+                const allData: any = {
+                    num: parseFloat(item.num || "0"),
+                    taxPrice: parseFloat(item.taxPrice || "0"),
+                    price: parseFloat(item.price || "0"),
+                }
+                allData[dataIndex] = value
                 return ({
                     ...item,
-                    taxTotalAmount: (num * taxPrice).toFixed(2),
-                    totalAmount: (num * price).toFixed(2),
+                    taxTotalAmount: (allData.num * allData.taxPrice).toFixed(2),
+                    totalAmount: (allData.num * allData.price).toFixed(2),
                     [dataIndex]: value
                 })
             }
             return item
-        }))
+        })
+        setMaterialList(newData)
     }
     return <Spin spinning={loading}>
         <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible} onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
