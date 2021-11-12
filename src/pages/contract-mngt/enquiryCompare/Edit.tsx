@@ -1,7 +1,7 @@
 import React, { useState, forwardRef, useImperativeHandle, useRef } from "react"
 import { Button, Modal, Select, Input, Form, Row, Col, Spin } from "antd"
 import { BaseInfo, CommonTable, DetailTitle, PopTableContent, IntgSelect } from "../../common"
-import { editBaseInfo, materialColumns, addMaterial, choosePlanList } from "./enquiry.json"
+import { editBaseInfo, materialColumnsSaveOrUpdate, addMaterial, choosePlanList } from "./enquiry.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 interface EditProps {
@@ -113,14 +113,26 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const handleChoosePlanOk = () => {
         const chooseData = choosePlanRef.current?.selectRows
-        setMaterialList([...materialList, ...chooseData[0]?.materials])
+        setMaterialList([...materialList, ...chooseData[0]?.materials.map((item:any)=>({
+            ...item,
+            spec:item.structureSpec,
+            materialTexture:item.structureTexture,
+            standardName:item.standardName,
+            materialStandard:item.standard
+        }))])
         setChooseVisible(false)
     }
     const handleRemove = (id: string) => setMaterialList(materialList.filter((item: any) => item.materialCode !== id))
 
     return <Spin spinning={loading}>
         <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible} onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
-            <PopTableContent data={addMaterial as any} onChange={(fields) => setPopDataList(fields)} />
+            <PopTableContent data={addMaterial as any} onChange={(fields:any[]) => setPopDataList(fields.map((item:any)=>({
+                ...item,
+                spec:item.structureSpec,
+                materialTexture:item.structureTexture,
+                standardName:item.standardName,
+                materialStandard:item.standard
+            })))} />
         </Modal>
         <Modal width={1011} title="选择计划" visible={chooseVisible} onOk={handleChoosePlanOk} onCancel={() => setChooseVisible(false)}>
             <ChoosePlan ref={choosePlanRef} />
@@ -134,7 +146,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         <CommonTable
             haveIndex
             columns={[
-                ...materialColumns,
+                ...materialColumnsSaveOrUpdate,
                 {
                     title: "操作",
                     dataIndex: "opration",

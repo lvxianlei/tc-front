@@ -425,7 +425,7 @@
     ],
     "ApplicationList": [
         {
-            "title": "所属供应商 ",
+            "title": "所属供应商",
             "dataIndex": "supplierName",
             "type": "popTable",
             "path": "/tower-supply/supplier",
@@ -556,6 +556,66 @@
             "type": "select"
         }
     ],
+    "ApplicationOverview": [
+        {
+            "title": "所属供应商",
+            "dataIndex": "supplierName"
+        },
+        {
+            "title": "关联票据",
+            "dataIndex": "billNumbers"
+        },
+        {
+            "title": "请款金额",
+            "dataIndex": "pleasePayAmount",
+            "type": "number",
+            "disabled": true
+        },
+        {
+            "title": "关联收货单",
+            "dataIndex": "receiptNumbers",
+            "disabled": true
+        },
+        {
+            "title": "开户银行",
+            "dataIndex": "openBank",
+            "disabled": true
+        },
+        {
+            "title": "银行账号",
+            "dataIndex": "openBankNumber",
+            "disabled": true
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "paymentMethod",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "电汇",
+                    "value": 1
+                },
+                {
+                    "label": "承兑",
+                    "value": 2
+                },
+                {
+                    "label": "现金",
+                    "value": 3
+                }
+            ]
+        },
+        {
+            "title": "请款类别",
+            "dataIndex": "pleasePayType",
+            "type": "select"
+        },
+        {
+            "title": "请款机构",
+            "dataIndex": "pleasePayOrganization",
+            "type": "select"
+        }
+    ],
     "ApplicationDetail": [
         {
             "title": "开户银行",
@@ -614,7 +674,7 @@
         },
         {
             "title": "关联票据",
-            "dataIndex": "relatednotes"
+            "dataIndex": "billNumbers"
         },
         {
             "title": "请款金额",
@@ -672,7 +732,7 @@
         },
         {
             "title": "关联票据",
-            "dataIndex": "relatednotes"
+            "dataIndex": "billNumber"
         },
         {
             "title": "请款金额",

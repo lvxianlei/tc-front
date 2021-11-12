@@ -58,7 +58,58 @@
         },
         {
             "title": "标准",
-            "dataIndex": "materialStandard"
+            "dataIndex": "materialStandardName"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec"
+        },
+        {
+            "title": "宽度（mm）",
+            "dataIndex": "width",
+            "type": "number"
+        },
+        {
+            "title": "厚度（mm）",
+            "dataIndex": "thickness",
+            "type": "number"
+        },
+        {
+            "title": "长度（mm）",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num",
+            "type": "number"
+        },
+        {
+            "title": "单重（吨）",
+            "dataIndex": "weight",
+            "type": "number"
+        },
+        {
+            "title": "总重（吨）",
+            "dataIndex": "total"
+        }
+    ],
+    "materialColumnsSaveOrUpdate": [
+        {
+            "title": "物料编码",
+            "dataIndex": "materialCode"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "standardName"
         },
         {
             "title": "材质",
@@ -109,7 +160,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "materialStandard"
+            "dataIndex": "materialStandardName"
         },
         {
             "title": "材质",
@@ -182,7 +233,7 @@
         },
         {
             "title": "塔型（个）",
-            "dataIndex": "productCategory",
+            "dataIndex": "productCategoryNum",
             "width": 50,
             "type": "string"
         },
@@ -212,7 +263,7 @@
         },
         {
             "title": "采购人",
-            "dataIndex": "purchaserId",
+            "dataIndex": "purchaserName",
             "type": "string"
         },
         {
@@ -256,7 +307,7 @@
             },
             {
                 "title": "标准",
-                "dataIndex": "standard",
+                "dataIndex": "standardName",
                 "search": true
             },
             {
@@ -265,11 +316,11 @@
             },
             {
                 "title": "材质",
-                "dataIndex": "materialTexture"
+                "dataIndex": "structureTexture"
             },
             {
                 "title": "规格",
-                "dataIndex": "spec"
+                "dataIndex": "structureSpec"
             }
         ]
     },
