@@ -1,5 +1,5 @@
 //原材料看板-价格维护
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, Select, DatePicker, Input, Modal, Descriptions, message, Popconfirm } from 'antd'
 import { Link, useHistory, } from 'react-router-dom'
 import { priceMaintain, change } from "./ViewRawMaterial.json"
@@ -64,20 +64,37 @@ export default function PriceMaintain(): React.ReactNode {
     const [price1, setPrice1] = useState("");
     const [priceSource, setPriceSource] = useState("");//价格来源
     const [quotationTime, setQuotationTime] = useState("");//报价时间
-    const [obj, setObj] = useState<any>({})
+    const [obj, setObj] = useState<any>({});
+    let [selects, setSelects] = useState<any>({
+        materialNames: [],
+        materialTextures: [],
+        specs: [],
+    }); // 获取页面下拉框默认数据
     var moment = require('moment');
     moment().format();
 
+    // 原材料类型
     const invoiceTypeEnum = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
 
+    // 原材料标准
     const invoiceTypeEnum1 = (ApplicationContext.get().dictionaryOption as any)["101"].map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
-    
+
+    // 获取页面默认数据
+    useEffect(() => {
+        getSelectDetail()
+    }, []);
+
+    // 获取选择框信息
+    const getSelectDetail = async () => {
+        const data: any = await RequestUtil.get('/tower-system/material/selectDetail')
+        setSelects(data)
+    }
 
     const onFilterSubmit = (value: any) => {
         if (value.startBidBuyEndTime) {
@@ -342,31 +359,22 @@ export default function PriceMaintain(): React.ReactNode {
                 <Descriptions title="价格信息" bordered column={2} labelStyle={{ textAlign: 'right' }}>
                     <Descriptions.Item label={<span>原材料名称<span style={{ color: 'red' }}>*</span></span>} >
                         <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange}>
-                            <Select.Option value="角钢">角钢</Select.Option>
-                            <Select.Option value="钢板">钢板</Select.Option>
+                          {selects.materialNames.map((item: any, index: number) => <Select.Option value={item} key={index}>{item}</Select.Option>)}
                         </Select>
                     </Descriptions.Item>
                     <Descriptions.Item label={<span>原材料规格<span style={{ color: 'red' }}>*</span></span>}>
                         <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange1}>
-                            <Select.Option value="Q420">Q420</Select.Option>
-                            <Select.Option value="Q355">Q355</Select.Option>
-                            <Select.Option value="35#">35#</Select.Option>
+                          {selects && selects.structureSpecs && selects.structureSpecs.map((item: any, index: number) => <Select.Option value={item} key={index}>{item}</Select.Option>)}
                         </Select>
                     </Descriptions.Item>
                     <Descriptions.Item label={<span>原材料标准<span style={{ color: 'red' }}>*</span></span>}>
                         <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange2}>
-                            <Select.Option value="国网B级">国网B级</Select.Option>
-                            <Select.Option value="国网C级">国网C级</Select.Option>
-                            <Select.Option value="国网D\级">国网D\级</Select.Option>
-                            <Select.Option value="国网正公差">国网正公差</Select.Option>
+                            {invoiceTypeEnum.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                         </Select>
                     </Descriptions.Item>
                     <Descriptions.Item label={<span>原材料类型<span style={{ color: 'red' }}>*</span></span>}>
                         <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange3}>
-                            <Select.Option value="焊管">焊管</Select.Option>
-                            <Select.Option value="钢板">钢板</Select.Option>
-                            <Select.Option value="圆钢">圆钢</Select.Option>
-                            <Select.Option value="大角钢">大角钢</Select.Option>
+                            {invoiceTypeEnum1.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                         </Select>
                     </Descriptions.Item>
                     <Descriptions.Item label={<span>价格<span style={{ color: 'red' }}>*</span></span>}>￥<input placeholder='请输入' type="text" value={price1} maxLength={20} style={{ border: "none", outline: "none" }} onChange={(e) => value1(e)} />/吨</Descriptions.Item>
