@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { Spin, Button, Space, Modal, message, Image, Form, Input, Upload, Table, InputNumber, Popconfirm, Select, TreeSelect } from 'antd';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { DetailTitle, DetailContent, CommonTable } from '../../common';
+import { Spin, Button, Space, message, Form, Input, Table, Popconfirm, Select, TreeSelect } from 'antd';
+import { useHistory, useLocation } from 'react-router-dom';
+import { DetailTitle, DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './DataMngt.module.less';
 import { IData } from './DataMngt';
 import { wrapRole2DataNode } from '../../baseSetting/deptUtil';
 import { TreeNode } from 'antd/lib/tree-select';
-import { type } from 'os';
 
 export default function DataNew(): React.ReactNode {
     const [ form ] = Form.useForm();
@@ -147,19 +146,37 @@ export default function DataNew(): React.ReactNode {
     const save = (tip: number) => {
         if(form) {
             form.validateFields().then(res => {
-                let value = form.getFieldsValue(true);
-                if(tip === 0) {
-                    value = {
-                        ...value,
-                        dataStatus: 0
+                let value = form.getFieldsValue(true).list;
+                if(value.lenght > 0) {
+                    if(tip === 0) {
+                        value = value.map((items: IData, index: number) => {
+                            return {
+                                ...items,
+                                dataStatus: 0,
+                                id: dataList[index].id
+                            }
+                        })
+                    } else {
+                        value = value.map((items: IData, index: number) => {
+                            return {
+                                ...items,
+                                dataStatus: 1,
+                                id: dataList[index].id
+                            }
+                        })
+                    }
+                    if(location.state.type === 'new') {
+                        RequestUtil.post(`/tower-system/dataRecord`, value).then(res => {
+                            history.goBack();
+                        })
+                    }else {
+                        RequestUtil.put(`/tower-system/dataRecord/update`, value).then(res => {
+                            history.goBack();
+                        })
                     }
                 } else {
-                    value = {
-                        ...value,
-                        dataStatus: 1
-                    }
+                    message.warning('请先新增数据');
                 }
-                console.log(value)
             })
         }
     }
