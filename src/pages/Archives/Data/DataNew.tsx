@@ -147,7 +147,7 @@ export default function DataNew(): React.ReactNode {
         if(form) {
             form.validateFields().then(res => {
                 let value = form.getFieldsValue(true).list;
-                if(value.lenght > 0) {
+                if(value.length > 0) {
                     if(tip === 0) {
                         value = value.map((items: IData, index: number) => {
                             return {
