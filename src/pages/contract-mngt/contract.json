@@ -228,7 +228,7 @@
                 },
                 {
                     "title": "联系电话",
-                    "dataIndex": "contactNumber"
+                    "dataIndex": "contactManTel"
                 },
                 {
                     "title": "供货产品",
@@ -335,13 +335,7 @@
         {
             "title": "备注",
             "dataIndex": "description",
-            "type": "textarea",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入备注..."
-                }
-            ]
+            "type": "textarea"
         }
     ],
     "comparison": [

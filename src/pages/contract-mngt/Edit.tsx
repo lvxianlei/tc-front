@@ -115,8 +115,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             const meterialList: any[] = await getComparisonPrice(fields.comparisonPrice.id)
             setMaterialList(meterialList.map((item: any) => {
                 const num = parseFloat(item.num || "0")
-                const taxPrice = parseFloat(item.taxPrice || "0")
-                const price = parseFloat(item.price || "0")
+                const taxPrice = parseFloat(item.taxOffer || "0")
+                const price = parseFloat(item.offer || "0")
                 return ({
                     ...item,
                     source: 1,
@@ -148,7 +148,14 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     }
     return <Spin spinning={loading}>
         <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible} onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
-            <PopTableContent data={addMaterial as any} onChange={(fields: any[]) => setPopDataList(fields.map((item: any) => ({ ...item, source: 2 })))} />
+            <PopTableContent data={addMaterial as any} onChange={(fields: any[]) => setPopDataList(fields.map((item: any) => ({
+                ...item,
+                source: 2,
+                taxPrice: item.taxPrice || 0.00,
+                price: item.price || 0.00,
+                taxTotalAmount: item.taxTotalAmount || 0.00,
+                totalAmount: item.totalAmount || 0.00
+            })))} />
         </Modal>
         <DetailTitle title="合同基本信息" />
         <BaseInfo
@@ -176,7 +183,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         <DetailTitle title="询比价信息" />
         <BaseInfo form={comparisonForm} col={1} onChange={handleComparisonPriceChange} columns={comparison.map((item: any) => {
             if (item.dataIndex === "comparisonPrice") {
-                return ({ ...item, path: `${item.path}?supplierId=${supplierId}` })
+                return ({ ...item, path: `${item.path}?supplierId=${supplierId}&comparisonStatus=2` })
             }
             return item
         })} dataSource={{}} edit />
@@ -214,6 +221,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     dataIndex: "opration",
                     render: (_: any, records: any) => <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.materialCode)}>移除</Button>
                 }]}
+            pagination={false}
             dataSource={materialList} />
     </Spin>
 })
