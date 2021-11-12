@@ -119,6 +119,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 const price = parseFloat(item.price || "0")
                 return ({
                     ...item,
+                    source: 1,
                     num,
                     taxPrice,
                     price,
@@ -147,7 +148,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     }
     return <Spin spinning={loading}>
         <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible} onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
-            <PopTableContent data={addMaterial as any} onChange={(fields) => setPopDataList(fields)} />
+            <PopTableContent data={addMaterial as any} onChange={(fields: any[]) => setPopDataList(fields.map((item: any) => ({ ...item, source: 2 })))} />
         </Modal>
         <DetailTitle title="合同基本信息" />
         <BaseInfo
@@ -211,7 +212,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     title: "操作",
                     fixed: "right",
                     dataIndex: "opration",
-                    render: (_: any, records: any) => <Button type="link" disabled={records.source !== 1} onClick={() => handleRemove(records.materialCode)}>移除</Button>
+                    render: (_: any, records: any) => <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.materialCode)}>移除</Button>
                 }]}
             dataSource={materialList} />
     </Spin>
