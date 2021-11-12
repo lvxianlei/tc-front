@@ -1,5 +1,5 @@
 //供应商管理
-import React, { useRef, useState } from 'react'
+import React, { Key, useRef, useState } from 'react'
 import { Input, Select, Button, Modal, message } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { Page } from '../common'
@@ -130,25 +130,33 @@ export default function SupplierMngt(): React.ReactNode {
                     name: 'supplierType',
                     label: '供应商类型',
                     children: <Select style={{ width: "150px" }} defaultValue="请选择">
-                        <Select.Option value={1} key={1}>原材料</Select.Option>
-                        <Select.Option value={2} key={2}>辅料</Select.Option>
-                        <Select.Option value={2} key={2}>设备</Select.Option>
+                        {
+                            supplierTypeEnum.map((item: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }, index: string | number | undefined) => {
+                                return <Select.Option value={item.value} key={index}>{item.label}</Select.Option>
+                            })
+                        }
                     </Select>
                 },
                 {
                     name: 'supplyProducts',
                     label: '供货产品',
                     children: <Select style={{ width: "150px" }} defaultValue="请选择">
-                        <Select.Option value={1} key={1}>角钢</Select.Option>
-                        <Select.Option value={2} key={2}>钢板</Select.Option>
+                        {
+                            invoiceTypeEnum2.map((item: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }, index: string | number | undefined) => {
+                                return <Select.Option value={item.value} key={index}>{item.label}</Select.Option>
+                            })
+                        }
                     </Select>
                 },
                 {
                     name: 'qualityAssurance',
                     label: '质量保证体系',
                     children: <Select style={{ width: "150px" }} defaultValue="请选择">
-                        <Select.Option value={1} key={1}>角钢</Select.Option>
-                        <Select.Option value={2} key={2}>钢板</Select.Option>
+                        {
+                            qualityAssuranceEnum.map((item: { value: Key; label: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined; }, index: string | number | undefined) => {
+                                return <Select.Option value={item.value} key={index}>{item.label}</Select.Option>
+                            })
+                        }
                     </Select>
                 },
                 {
