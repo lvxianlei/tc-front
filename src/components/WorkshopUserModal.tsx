@@ -99,6 +99,7 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
             isModalVisible: false,
             selectedRowKeys: []
         })
+        this.getForm()?.resetFields();
     };
 
     //componentDidMount
@@ -223,6 +224,7 @@ export default class WorkshopUserSelectionComponent extends AbstractFilteredSele
                                 this.setState({
                                     selectedRowKeys: []
                                 })
+                                this.getForm()?.resetFields();
                                 this.props.onSelect(this.state.selectedRows)
                             }
                         }

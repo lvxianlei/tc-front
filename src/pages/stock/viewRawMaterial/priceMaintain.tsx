@@ -5,6 +5,8 @@ import { Link, useHistory, } from 'react-router-dom'
 import { priceMaintain, change } from "./ViewRawMaterial.json"
 import { Page } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
+import useRequest from '@ahooksjs/use-request'
+import ApplicationContext from "../../../configuration/ApplicationContext"
 //原材料类型
 const projectType = [
     {
@@ -65,6 +67,17 @@ export default function PriceMaintain(): React.ReactNode {
     const [obj, setObj] = useState<any>({})
     var moment = require('moment');
     moment().format();
+
+    const invoiceTypeEnum = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
+
+    const invoiceTypeEnum1 = (ApplicationContext.get().dictionaryOption as any)["101"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
+    
 
     const onFilterSubmit = (value: any) => {
         if (value.startBidBuyEndTime) {
@@ -189,25 +202,30 @@ export default function PriceMaintain(): React.ReactNode {
             const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialPrice`, { id, price, priceSource, quotationTime }, { "Content-Type": "application/json" })
             console.log(result);
             setIsModalVisible(false);
+            history.go(0);
         } else {
             message.info("请填入必填项")
             // setIsModalVisible(false);
         }
     }
-    const save1 = async (materialCategoryName: string, materialName: string, materialSpec: string, materialStandardName: string, priceSource: string, quotationTime: string) => {
-        const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPrice`, { materialCategoryId, materialCategoryName, materialId, materialName, materialSpec, materialStandard, materialStandardName, price, priceSource, quotationTime }, { "Content-Type": "application/json" })
-        console.log(result);
+    const save1 = async (materialCategoryName: string, materialName: string, materialSpec: string, materialStandardName: string, priceSource: string, quotationTime: string, price1: string) => {
+        const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPrice`, { materialCategoryId, materialCategoryName, materialId, materialName, materialSpec, materialStandard, materialStandardName, price: price1, priceSource, quotationTime }, { "Content-Type": "application/json" })
         setIsModalVisible1(false);
+        // 刷新列表
+        history.go(0);
     }
-    const confirm = () => {
-        message.success('Click on Yes');
+    const confirm = (id: number) => {
+        // message.success('Click on Yes');
+        del(id)
     }
     const cancel = () => {
         message.error('Click on No');
     }
     const del = async (materialPriceId: number) => {
         const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/materialPrice/${materialPriceId}`, {});
+        message.success("删除成功！")
         console.log(result);
+        history.go(0);
     }
     const buttons: {} | null | undefined = [
         <div>
@@ -218,7 +236,7 @@ export default function PriceMaintain(): React.ReactNode {
     const buttons1: {} | null | undefined = [
         <div>
             <Button onClick={() => { handleCancel1() }}>关闭</Button>
-            <Button onClick={() => { save1(materialCategoryName, materialName, materialSpec, materialStandardName, priceSource, quotationTime) }}>保存</Button>
+            <Button onClick={() => { save1(materialCategoryName, materialName, materialSpec, materialStandardName, priceSource, quotationTime, price1) }}>保存</Button>
         </div>
     ]
     const buttons2: {} | null | undefined = [
@@ -249,12 +267,12 @@ export default function PriceMaintain(): React.ReactNode {
                                 <Button type="link" onClick={() => { edit(record.id, record.price, record.priceSource, record.quotationTime, record) }}>编辑</Button>
                                 <Popconfirm
                                     title="你确定删除吗?"
-                                    onConfirm={confirm}
+                                    onConfirm={() => confirm(record.id)}
                                     onCancel={cancel}
                                     okText="Yes"
                                     cancelText="No"
                                 >
-                                    <Button type="link" onClick={() => { del(record.id) }}>删除</Button>
+                                    <Button type="link">删除</Button>
                                 </Popconfirm>
                             </div>
                         }
@@ -272,21 +290,21 @@ export default function PriceMaintain(): React.ReactNode {
                 onFilterSubmit={onFilterSubmit}
                 searchFormItems={[
                     {
-                        name: 'rawMaterialType',
+                        name: 'materialCategoryId',
                         label: '原材料类型',
                         children: <Select style={{ width: "150px" }}>
-                            {projectType.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+                            {invoiceTypeEnum1.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                         </Select>
                     },
                     {
                         name: 'materialStandard',
                         label: '原材料标准',
                         children: <Select style={{ width: "150px" }}>
-                            {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+                            {invoiceTypeEnum.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                         </Select>
                     },
                     {
-                        name: 'inquire',
+                        name: 'materialName',
                         label: '原材料名称',
                         children: <Input placeholder="原材料名称/规格" />
                     },
