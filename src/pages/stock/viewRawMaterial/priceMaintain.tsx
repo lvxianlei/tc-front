@@ -88,8 +88,6 @@ export default function PriceMaintain(): React.ReactNode {
         setQuotationTime(quotationTime);
         setIsModalVisible(true);
         setObj(record);
-        console.log(obj);
-
     }
     const add = () => {
         setIsModalVisible1(true);
@@ -265,11 +263,11 @@ export default function PriceMaintain(): React.ReactNode {
                 filterValue={filterValue}
                 extraOperation={<div>
                     <Link to="/project/management/new"><Button type="primary">导出</Button></Link>
-                    <Button type="primary" style={{ marginLeft: "50px" }} onClick={() => {
+                    <Button type="primary" style={{ marginLeft: "16px" }} onClick={() => {
                         lead();
                     }}>导入</Button>
-                    <Button type="primary" style={{ marginLeft: "50px" }} onClick={() => { add() }}>添加</Button>
-                    <Button type="primary" style={{ marginLeft: "50px" }} onClick={() => history.push(`/stock/viewRawMaterial`)}>返回上一级</Button>
+                    <Button type="primary" style={{ marginLeft: "16px" }} onClick={() => { add() }}>添加</Button>
+                    <Button type="primary" style={{ marginLeft: "16px" }} onClick={() => history.push(`/stock/viewRawMaterial`)}>返回上一级</Button>
                 </div>}
                 onFilterSubmit={onFilterSubmit}
                 searchFormItems={[

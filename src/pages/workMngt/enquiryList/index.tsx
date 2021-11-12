@@ -83,7 +83,7 @@ export default function EnquiryList(): React.ReactNode {
                     title: "操作",
                     width: 100,
                     dataIndex: "operation",
-                    render: (_: any, records: any) => <Button type="link"
+                    render: (_: any, records: any) => <Button disabled={records.inquiryStatus === 2} type="link"
                         onClick={() => {
                             setDetailId(records.id)
                             setInquiryStatus(records.inquiryStatus)
