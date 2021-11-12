@@ -1,6 +1,6 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle } from "react"
 import { Button, Upload, Form, message, Spin, Modal, InputNumber, Row, Col } from 'antd'
-import { DetailTitle, BaseInfo, CommonTable } from '../../common'
+import { DetailTitle, BaseInfo, CommonTable, formatData } from '../../common'
 import { BasicInformation, CargoDetails, SelectedArea, Selected } from "./receivingListData.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
@@ -155,6 +155,21 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         setVisible(false)
     }
 
+    const { loading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${id}`)
+            form.setFieldsValue({
+                ...formatData(BasicInformation, result),
+                supplierName: { id: result.supplierId, value: result.supplierName },
+                contractNumber: { id: result.contractId, value: result.contractNumber }
+            })
+            setCargoData(result?.lists || [])
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: type === "new" })
+
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/receiveStock/receiveStock`, { ...data })
@@ -171,7 +186,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 ...baseFormData,
                 supplierId: baseFormData.supplierName.id,
                 supplierName: baseFormData.supplierName.value,
-                contractNumber: baseFormData.contractNumber.id,
+                contractId: baseFormData.contractNumber.id,
+                contractNumber: baseFormData.contractNumber.value,
                 lists: cargoData.map((item: any) => {
                     delete item.id
                     return item
@@ -194,9 +210,16 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         if (fields.contractNumber) {
             setContractId(fields.contractNumber.id)
         }
+        if (fields.supplierName) {
+            const supplierData = fields.supplierName.records[0]
+            form.setFieldsValue({
+                contactsUser: supplierData.contactMan,
+                contactsPhone: supplierData.contactManTel
+            })
+        }
     }
 
-    return <>
+    return <Spin spinning={loading}>
         <Modal
             destroyOnClose
             width={1011}
@@ -221,5 +244,5 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 setVisible(true)
             }}>选择</Button>]} />
         <CommonTable columns={CargoDetails} dataSource={cargoData} />
-    </>
+    </Spin>
 })

@@ -81,7 +81,7 @@ const AngleSteel = () => {
             history.go(0)
         }
     }
-    return <>
+    return <DetailContent>
         <Modal destroyOnClose visible={visible} width={1011} title="创建" onOk={handleModalOk} onCancel={() => {
             setVisible(false)
             setMaterialData({})
@@ -154,7 +154,7 @@ const AngleSteel = () => {
                 </>
             }]}
             dataSource={data?.ingredientsMaterialConfigVos || []} />
-    </>
+    </DetailContent>
 }
 
 export default AngleSteel

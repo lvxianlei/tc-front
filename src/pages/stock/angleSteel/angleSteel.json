@@ -60,8 +60,9 @@
         {
             "title": "配置数据",
             "dataIndex": "configData",
-            "type": "string",
+            "type": "number",
             "width": 100,
+            "disabled": true,
             "rules": [
                 {
                     "required": true,

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
-import { Page } from '../../common'
+import { IntgSelect, Page } from '../../common'
 import { baseInfo } from "./receivingListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -37,6 +37,10 @@ export default function Invoicing() {
             const formatDate = value.startCompleteTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startCompleteTime = formatDate[0] + " 00:00:00"
             value.endCompleteTime = formatDate[1] + " 23:59:59"
+        }
+        if (value.createUserDeptId) {
+            value.createUserDeptId = value.createUserDeptId.first
+            value.createUserId = value.createUserDeptId.second
         }
         return value
     }
@@ -129,13 +133,18 @@ export default function Invoicing() {
                 },
                 {
                     name: 'startReceiveTime',
-                    label: '约定时间',
+                    label: '约定到货时间',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
                     name: 'startCompleteTime',
                     label: '完成时间',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                },
+                {
+                    name: "createUserDeptId",
+                    label: "创建人",
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyQuery',
