@@ -50,6 +50,8 @@ export default function Overview(): JSX.Element {
                         comparisonPriceDetailDtos: materialLists
                     })
                     resove(true)
+                    message.success("您已完成询价！");
+                    history.goBack();
                 } catch (error) {
                     reject(false)
                 }

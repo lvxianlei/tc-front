@@ -246,7 +246,7 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      */
     protected renderTableContent(item: ITabItem): React.ReactNode {
         return (
-            <Table {...this.getTableProps(item)} className={styles.table} scroll={{ x: 'max-content' }} />
+            <Table {...this.getTableProps(item)} size="small" className={styles.table} scroll={{ x: 'max-content' }} />
         );
     }
 

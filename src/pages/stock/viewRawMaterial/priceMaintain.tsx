@@ -1,48 +1,12 @@
 //原材料看板-价格维护
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, Select, DatePicker, Input, Modal, Descriptions, message, Popconfirm } from 'antd'
 import { Link, useHistory, } from 'react-router-dom'
 import { priceMaintain, change } from "./ViewRawMaterial.json"
 import { Page } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
-//原材料类型
-const projectType = [
-    {
-        value: 0,
-        label: "焊管"
-    },
-    {
-        value: 1,
-        label: "钢板"
-    },
-    {
-        value: 2,
-        label: "圆钢"
-    },
-    {
-        value: 3,
-        label: "大角钢"
-    }
-]
-//原材料标准
-const currentProjectStage = [
-    {
-        value: 0,
-        label: "国网B级"
-    },
-    {
-        value: 1,
-        label: "国网C级"
-    },
-    {
-        value: 2,
-        label: "国网D\级"
-    },
-    {
-        value: 3,
-        label: "国网正公差"
-    }
-]
+import useRequest from '@ahooksjs/use-request'
+import ApplicationContext from "../../../configuration/ApplicationContext"
 
 export default function PriceMaintain(): React.ReactNode {
     const history = useHistory()
@@ -62,9 +26,37 @@ export default function PriceMaintain(): React.ReactNode {
     const [price1, setPrice1] = useState(0);
     const [priceSource, setPriceSource] = useState("");//价格来源
     const [quotationTime, setQuotationTime] = useState("");//报价时间
-    const [obj, setObj] = useState<any>({})
+    const [obj, setObj] = useState<any>({});
+    let [selects, setSelects] = useState<any>({
+        materialNames: [],
+        materialTextures: [],
+        specs: [],
+    }); // 获取页面下拉框默认数据
     var moment = require('moment');
     moment().format();
+
+    // 原材料类型
+    const invoiceTypeEnum = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
+
+    // 原材料标准
+    const invoiceTypeEnum1 = (ApplicationContext.get().dictionaryOption as any)["101"].map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
+
+    // 获取页面默认数据
+    useEffect(() => {
+        getSelectDetail()
+    }, []);
+
+    // 获取选择框信息
+    const getSelectDetail = async () => {
+        const data: any = await RequestUtil.get('/tower-system/material/selectDetail')
+        setSelects(data)
+    }
 
     const onFilterSubmit = (value: any) => {
         if (value.startBidBuyEndTime) {
@@ -88,8 +80,6 @@ export default function PriceMaintain(): React.ReactNode {
         setQuotationTime(quotationTime);
         setIsModalVisible(true);
         setObj(record);
-        console.log(obj);
-
     }
     const add = () => {
         setIsModalVisible1(true);
@@ -192,6 +182,7 @@ export default function PriceMaintain(): React.ReactNode {
             const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialPrice`, { id, price, priceSource, quotationTime }, { "Content-Type": "application/json" })
             console.log(result);
             setIsModalVisible(false);
+            history.go(0);
         } else {
             message.info("请填入必填项")
             // setIsModalVisible(false);
@@ -207,16 +198,18 @@ export default function PriceMaintain(): React.ReactNode {
             history.go(0)
         }
     }
-    const confirm = () => {
-        message.success('Click on Yes');
-        history.go(0);
+    const confirm = (id: number) => {
+        // message.success('Click on Yes');
+        del(id)
     }
     const cancel = () => {
         message.error('Click on No');
     }
     const del = async (materialPriceId: number) => {
         const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/materialPrice/${materialPriceId}`, {});
+        message.success("删除成功！")
         console.log(result);
+        history.go(0);
     }
     const buttons: {} | null | undefined = [
         <div>
@@ -258,12 +251,12 @@ export default function PriceMaintain(): React.ReactNode {
                                 <Button type="link" onClick={() => { edit(record.id, record.price, record.priceSource, record.quotationTime, record) }}>编辑</Button>
                                 <Popconfirm
                                     title="你确定删除吗?"
-                                    onConfirm={confirm}
+                                    onConfirm={() => confirm(record.id)}
                                     onCancel={cancel}
                                     okText="Yes"
                                     cancelText="No"
                                 >
-                                    <Button type="link" onClick={() => { del(record.id) }}>删除</Button>
+                                    <Button type="link">删除</Button>
                                 </Popconfirm>
                             </div>
                         }
@@ -272,30 +265,30 @@ export default function PriceMaintain(): React.ReactNode {
                 filterValue={filterValue}
                 extraOperation={<div>
                     <Link to="/project/management/new"><Button type="primary">导出</Button></Link>
-                    <Button type="primary" style={{ marginLeft: "50px" }} onClick={() => {
+                    <Button type="primary" style={{ marginLeft: "16px" }} onClick={() => {
                         lead();
                     }}>导入</Button>
-                    <Button type="primary" style={{ marginLeft: "50px" }} onClick={() => { add() }}>添加</Button>
-                    <Button type="primary" style={{ marginLeft: "50px" }} onClick={() => history.push(`/stock/viewRawMaterial`)}>返回上一级</Button>
+                    <Button type="primary" style={{ marginLeft: "16px" }} onClick={() => { add() }}>添加</Button>
+                    <Button type="primary" style={{ marginLeft: "16px" }} onClick={() => history.push(`/stock/viewRawMaterial`)}>返回上一级</Button>
                 </div>}
                 onFilterSubmit={onFilterSubmit}
                 searchFormItems={[
                     {
-                        name: 'rawMaterialType',
+                        name: 'materialCategoryId',
                         label: '原材料类型',
                         children: <Select style={{ width: "150px" }}>
-                            {projectType.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+                            {invoiceTypeEnum1.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                         </Select>
                     },
                     {
                         name: 'materialStandard',
                         label: '原材料标准',
                         children: <Select style={{ width: "150px" }}>
-                            {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+                            {invoiceTypeEnum.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                         </Select>
                     },
                     {
-                        name: 'inquire',
+                        name: 'materialName',
                         label: '原材料名称',
                         children: <Input placeholder="原材料名称/规格" />
                     },
@@ -333,31 +326,22 @@ export default function PriceMaintain(): React.ReactNode {
                 <Descriptions title="价格信息" bordered column={2} labelStyle={{ textAlign: 'right' }}>
                     <Descriptions.Item label={<span>原材料名称<span style={{ color: 'red' }}>*</span></span>} >
                         <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange}>
-                            <Select.Option value="角钢">角钢</Select.Option>
-                            <Select.Option value="钢板">钢板</Select.Option>
+                          {selects.materialNames.map((item: any, index: number) => <Select.Option value={item} key={index}>{item}</Select.Option>)}
                         </Select>
                     </Descriptions.Item>
                     <Descriptions.Item label={<span>原材料规格<span style={{ color: 'red' }}>*</span></span>}>
                         <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange1}>
-                            <Select.Option value="Q420">Q420</Select.Option>
-                            <Select.Option value="Q355">Q355</Select.Option>
-                            <Select.Option value="35#">35#</Select.Option>
+                          {selects && selects.structureSpecs && selects.structureSpecs.map((item: any, index: number) => <Select.Option value={item} key={index}>{item}</Select.Option>)}
                         </Select>
                     </Descriptions.Item>
                     <Descriptions.Item label={<span>原材料标准<span style={{ color: 'red' }}>*</span></span>}>
                         <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange2}>
-                            <Select.Option value="国网B级">国网B级</Select.Option>
-                            <Select.Option value="国网C级">国网C级</Select.Option>
-                            <Select.Option value="国网D\级">国网D\级</Select.Option>
-                            <Select.Option value="国网正公差">国网正公差</Select.Option>
+                            {invoiceTypeEnum.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                         </Select>
                     </Descriptions.Item>
                     <Descriptions.Item label={<span>原材料类型<span style={{ color: 'red' }}>*</span></span>}>
                         <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange3}>
-                            <Select.Option value="焊管">焊管</Select.Option>
-                            <Select.Option value="钢板">钢板</Select.Option>
-                            <Select.Option value="圆钢">圆钢</Select.Option>
-                            <Select.Option value="大角钢">大角钢</Select.Option>
+                            {invoiceTypeEnum1.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                         </Select>
                     </Descriptions.Item>
                     <Descriptions.Item label={<span>价格<span style={{ color: 'red' }}>*</span></span>}><span>￥</span><Input width="40px" bordered={false} placeholder="请输入" type="text" value={price1} maxLength={20} onChange={(e) => value1(e)} /><span>/吨</span></Descriptions.Item>

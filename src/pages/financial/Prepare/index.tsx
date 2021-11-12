@@ -228,10 +228,14 @@ export default function ApplyPayment() {
                             <Button type="link" disabled={![1].includes(record.applyStatus)}
                                 onClick={() => handleCancel(record.id)}>撤回</Button>
                             <Button type="link" disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleDelete(record.id)}>删除</Button>
-                            <Button type="link" onClick={() => {
-                                setDetailId(record.id)
-                                setSuccessVisible(true)
-                            }}>完成</Button>
+                            <Button
+                                type="link"
+                                onClick={() => {
+                                    setDetailId(record.id)
+                                    setSuccessVisible(true)
+                                }}
+                                disabled={(record.pleasePayStatus === 1 && record.applyStatus === 1) ? true : false}
+                            >完成</Button>
                         </>
                     }
                 }]}
@@ -241,7 +245,7 @@ export default function ApplyPayment() {
                     setType("new")
                     setVisible(true)
                 }}>申请</Button>
-                <span style={{ fontSize: 16, fontWeight: 600, color: "#FF8C00" }}>累计付款金额：{data?.totalPleasePayAmount || 0}</span>
+                <span style={{ fontSize: 16, fontWeight: 600, color: "#FF8C00" }}>累计付款金额：{data?.totalPleasePayAmount && data?.totalPleasePayAmount !== -1 ? data?.totalPleasePayAmount : 0}</span>
             </>}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}

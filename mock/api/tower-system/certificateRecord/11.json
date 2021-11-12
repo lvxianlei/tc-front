@@ -1,0 +1,51 @@
+{
+    "code": 200,
+    "msg":"exercita",
+    "success":true,
+    "data":{
+        "businessRecordVOList":[
+            {
+                "createTime":"1957-10-22T02:44:39.259Z",
+                "createUserName":"cupidatat",
+                "recordType":"et laborum ullamco sint qui",
+                "stateAfter":"aliqua Excepteur",
+                "stateFront":"Lorem minim Excepteur dolore"
+            },
+            {
+                "createTime":"1966-06-13T20:59:46.341Z",
+                "createUserName":"ex dolore irure ullamco",
+                "recordType":"ut",
+                "stateAfter":"nostrud Ut",
+                "stateFront":"reprehenderit quis dolor pariatur"
+            },
+            {
+                "createTime":"2015-08-03T18:34:28.905Z",
+                "createUserName":"sunt",
+                "recordType":"Ut anim aliqua",
+                "stateAfter":"u",
+                "stateFront":"velit Ut ad nulla ullamco"
+            },
+            {
+                "createTime":"1972-04-01T05:33:26.864Z",
+                "createUserName":"voluptate id",
+                "recordType":"eni",
+                "stateAfter":"esse adipisicing reprehenderit aute amet",
+                "stateFront":"enim aute sunt est culpa"
+            }
+        ],
+        "certificateDepartment":"an",
+        "certificateIntroduce":"sed amet Lorem laboris",
+        "certificateLevel":"incididunt consequat occaecat exercitation ex",
+        "certificateName":"enim",
+        "certificateNumber":"enim sit exercitation ullamco culpa",
+        "certificateStatus":-92017618,
+        "certificateType":45533818,
+        "dataPlaceId":-75978078,
+        "designation":"irure sunt deserunt cillum mollit",
+        "endDate":"1944-12-25T11:33:43.351Z",
+        "id":91042273,
+        "staffId":-87510464,
+        "staffName":90173522,
+        "startDate":"2015-07-16T06:03:26.052Z"
+    }
+}

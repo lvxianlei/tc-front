@@ -67,9 +67,7 @@ export default function ViewRawMaterial(): React.ReactNode {
     const handleCancel1 = () => {
         setIsModalVisible1(false);
     };
-    const goPrice = () => {
-        history.push(`/stock/viewRawMaterial/priceMaintain`)
-    }
+
     const buttons: {} | null | undefined = [
         <div>
             <Button onClick={() => setIsModalVisible(false)}>关闭</Button>
@@ -83,7 +81,6 @@ export default function ViewRawMaterial(): React.ReactNode {
     const bb = async () => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/materialCategory?current=1&size=20`);
-            console.log(result);
             setProjectType(result);
         } catch (error) {
             console.log(error);
@@ -118,7 +115,10 @@ export default function ViewRawMaterial(): React.ReactNode {
                     }
                 ]}
                 filterValue={filterValue}
-                extraOperation={<div><Link to="/project/management/new"><Button type="primary">导出</Button></Link><Button style={{ marginLeft: "1090px", borderColor: "orange", color: "orange", borderRadius: "5px" }} onClick={() => { goPrice() }}>价格维护</Button></div>}
+                extraOperation={<div>
+                    <Button type="primary" ghost style={{ marginRight: 16 }}>导出</Button>
+                    <Button type="primary" ghost onClick={() => history.push(`/stock/viewRawMaterial/priceMaintain`)}>价格维护</Button>
+                </div>}
                 onFilterSubmit={onFilterSubmit}
                 searchFormItems={[
                     {
@@ -144,7 +144,7 @@ export default function ViewRawMaterial(): React.ReactNode {
                         name: 'inquire',
                         label: '查询',
                         children: <Input placeholder="原材料名称/规格" />
-                    },
+                    }
                 ]}
             />
             <Modal width="1000px" title="历史价格" visible={isModalVisible} onCancel={handleCancel} footer={buttons}>

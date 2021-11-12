@@ -61,7 +61,8 @@ export default function EnquiryList(): React.ReactNode {
                 return new Promise(async (resove, reject) => {
                     try {
                         const result = await run()
-                        resove(result)
+                        resove(true)
+                        history.goBack();
                     } catch (error) {
                         reject(false)
                     }

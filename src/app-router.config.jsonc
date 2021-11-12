@@ -1680,10 +1680,38 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 档案管理-资料管理-详情
+      "name": "详情",
+      "path": "/archivesMngt/dataMngt/detail/:id",
+      "module": "./pages/Archives/Data/DataDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 档案管理-证件管理
       "name": "证件管理",
       "path": "/archivesMngt/certificateMngt",
       "module": "./pages/Archives/Certificate/CertificateMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 档案管理-证件管理-录入
+      "name": "录入",
+      "path": "/archivesMngt/certificateMngt/certificateNew",
+      "module": "./pages/Archives/Certificate/CertificateNew",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 档案管理-证件管理-编辑
+      "name": "编辑",
+      "path": "/archivesMngt/certificateMngt/certificateSetting",
+      "module": "./pages/Archives/Certificate/CertificateNew",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 档案管理-证件管理-详情
+      "name": "详情",
+      "path": "/archivesMngt/certificateMngt/certificateDetail/:id",
+      "module": "./pages/Archives/Certificate/CertificateDetail",
       "exact": true,
       "authority": "approvalm"
     },
