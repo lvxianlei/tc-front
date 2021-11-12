@@ -33,7 +33,7 @@
         },
         {
             "title": "经办人",
-            "dataIndex": "operator"
+            "dataIndex": "operatorName"
         },
         {
             "title": "总重量",
@@ -45,7 +45,7 @@
         },
         {
             "title": "含税金额（元）合计",
-            "dataIndex": "taxTotalAmount"
+            "dataIndex": "totalTaxAmount"
         },
         {
             "title": "不含税单价（元）合计",
@@ -61,11 +61,33 @@
         },
         {
             "title": "运输承担",
-            "dataIndex": "transportBear"
+            "dataIndex": "transportBear",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "供方"
+                },
+                {
+                    "value": 2,
+                    "label": "需方"
+                }
+            ]
         },
         {
             "title": "卸车承担",
-            "dataIndex": "unloadBear"
+            "dataIndex": "unloadBear",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "供方"
+                },
+                {
+                    "value": 2,
+                    "label": "需方"
+                }
+            ]
         },
         {
             "title": "备注",
@@ -99,7 +121,7 @@
         },
         {
             "title": "数量",
-            "dataIndex": "number"
+            "dataIndex": "num"
         },
         {
             "title": "含税单价",
@@ -223,7 +245,13 @@
         {
             "title": "签订时间",
             "dataIndex": "signingTime",
-            "type": "date"
+            "type": "date",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择签订时间..."
+                }
+            ]
         },
         {
             "title": "经办人",
@@ -232,12 +260,24 @@
         {
             "title": "交货方式",
             "dataIndex": "deliveryMethod",
-            "type": "select"
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择交货方式..."
+                }
+            ]
         },
         {
             "title": "材料标准",
             "dataIndex": "materialStandard",
-            "type": "select"
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择材料标准..."
+                }
+            ]
         },
         {
             "title": "运输承担",
@@ -252,12 +292,24 @@
                     "value": 2,
                     "label": "需方"
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择运输承担..."
+                }
             ]
         },
         {
             "title": "运输方式",
             "dataIndex": "transportMethod",
-            "type": "select"
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择运输方式..."
+                }
+            ]
         },
         {
             "title": "卸车承担",
@@ -272,12 +324,24 @@
                     "value": 2,
                     "label": "需方"
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择卸车承担..."
+                }
             ]
         },
         {
             "title": "备注",
             "dataIndex": "description",
-            "type": "textarea"
+            "type": "textarea",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入备注..."
+                }
+            ]
         }
     ],
     "comparison": [
@@ -287,13 +351,13 @@
             "type": "popTable",
             "path": "/tower-supply/comparisonPrice",
             "width": 1011,
-            "value": "comparisonNumber",
+            "value": "comparisonPriceNumber",
             "dependencies": true,
             "readOnly": true,
             "columns": [
                 {
                     "title": "询比价编号",
-                    "dataIndex": "comparisonNumber"
+                    "dataIndex": "comparisonPriceNumber"
                 },
                 {
                     "title": "用途",

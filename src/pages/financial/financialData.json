@@ -101,7 +101,7 @@
                 },
                 {
                     "title": "联系电话",
-                    "dataIndex": "contactNumber"
+                    "dataIndex": "contactManTel"
                 },
                 {
                     "title": "供货产品",
@@ -180,7 +180,8 @@
                 },
                 {
                     "title": "合同编号",
-                    "dataIndex": "contractNumber"
+                    "dataIndex": "contractNumber",
+                    "search": true
                 },
                 {
                     "title": "完成时间",
@@ -219,6 +220,7 @@
             "title": "开票日",
             "dataIndex": "collectInvoiceDate",
             "type": "date",
+            "format": "YYYY-MM-DD",
             "rules": [
                 {
                     "required": true,
@@ -325,7 +327,7 @@
         },
         {
             "title": "收货单",
-            "dataIndex": "receiptNumber"
+            "dataIndex": "receiptNumbers"
         },
         {
             "title": "开票日",

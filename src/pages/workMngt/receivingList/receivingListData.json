@@ -86,7 +86,7 @@
                 },
                 {
                     "title": "联系电话",
-                    "dataIndex": "contactNumber"
+                    "dataIndex": "contactManTel"
                 },
                 {
                     "title": "供货产品",
@@ -126,29 +126,62 @@
                     "search": true
                 },
                 {
-                    "title": "合同名称",
-                    "dataIndex": "contractName"
+                    "title": "合同状态",
+                    "dataIndex": "contractStatus",
+                    "type": "select",
+                    "enum": [
+                        {
+                            "label": "执行中",
+                            "value": 1
+                        },
+                        {
+                            "label": "已完成",
+                            "value": 2
+                        }
+                    ]
                 },
                 {
-                    "title": "业主单位",
-                    "dataIndex": "customerCompany",
+                    "title": "采购计划编号",
+                    "dataIndex": "purchasePlanNumber",
                     "search": true
                 },
                 {
-                    "title": "合同签订单位",
-                    "dataIndex": "signCustomerName"
+                    "title": "签订时间",
+                    "dataIndex": "signingTime"
                 },
                 {
-                    "title": "合同签订日期",
-                    "dataIndex": "signContractTime",
-                    "type": "date",
-                    "format": "YYYY-MM-DD"
+                    "title": "供应商名称",
+                    "dataIndex": "supplierName"
                 },
                 {
-                    "title": "要求交货日期",
-                    "dataIndex": "deliveryTime",
-                    "type": "date",
-                    "format": "YYYY-MM-DD"
+                    "title": "运输承担",
+                    "dataIndex": "transportBear",
+                    "type": "select",
+                    "enum": [
+                        {
+                            "value": 1,
+                            "label": "供方"
+                        },
+                        {
+                            "value": 2,
+                            "label": "需方"
+                        }
+                    ]
+                },
+                {
+                    "title": "卸货承担",
+                    "dataIndex": "unloadBear",
+                    "type": "select",
+                    "enum": [
+                        {
+                            "value": 1,
+                            "label": "供方"
+                        },
+                        {
+                            "value": 2,
+                            "label": "需方"
+                        }
+                    ]
                 }
             ],
             "rules": [

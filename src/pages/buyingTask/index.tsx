@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 //采购任务下的原材料
 import React, { useState, useRef } from 'react';
-import { Modal, Descriptions, Button, DatePicker, Select, Input } from 'antd';
+import { Modal, Descriptions, Button, DatePicker, Select, Input, message } from 'antd';
 import { CommonTable, DetailContent, DetailTitle, Page } from '../common'
 import { buyingTask, operatingInformation } from "./buyingTask.json"
 import { useHistory } from 'react-router';
@@ -28,10 +28,14 @@ export default function rawMaterial() {
     const [inquiryId, setInquiryId] = useState("");
     const [obj, setObj] = useState<any>({});
     const [rejectionDescription, setRejectionDescription] = useState("");
-    // const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
-    //     const data = await RequestUtil.get(`/materialPurchaseTask?current=1&size=20&type=`);
-    //     resole(data);
-    // }), {})
+    const { run: generaterRun } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            const data = await RequestUtil.get(`/tower-supply/initData/materialPurchaseTask`);
+            resole(data)
+        } catch (error) {
+            reject(false)
+        }
+    }), { manual: true })
     const history = useHistory();
 
     const handleCancel = () => {
@@ -147,6 +151,11 @@ export default function rawMaterial() {
                 ]}
                 filterValue={filterValue}
                 onFilterSubmit={onFilterSubmit}
+                extraOperation={<Button type="primary" ghost onClick={async () => {
+                    await generaterRun()
+                    await message.success("成功生成采购任务...")
+                    history.go(0)
+                }}>临时生成采购任务</Button>}
                 searchFormItems={[
                     {
                         name: 'startStatusUpdateTime',

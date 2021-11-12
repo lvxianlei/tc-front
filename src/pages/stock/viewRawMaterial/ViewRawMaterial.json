@@ -118,5 +118,43 @@
             "title": "添加人",
             "dataIndex": "bidder"
         }
+    ],
+    "change":[
+        {
+            "title": "类别",
+            "dataIndex": "goodsType"
+        },
+        {
+            "title": "类型",
+            "dataIndex": "pattern"
+        },
+        {
+            "title": "物料编号",
+            "dataIndex": "materialCode"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "快捷码",
+            "dataIndex": "shortcutCode"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "standard"
+        },
+        {
+            "title": "材料",
+            "dataIndex": "rowMaterial"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec"
+        }
     ]
 }

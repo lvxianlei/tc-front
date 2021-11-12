@@ -88,8 +88,8 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: string, onC
             setPagenation({ ...pagenation, current: 1, pageSize: 10 })
             await run()
         }}>
-            <Row gutter={2} style={{ height: 32 }}>
-                {searchs.map((fItem: any) => <Col span={searchs.length / 24} key={fItem.dataIndex}><Form.Item
+            <Row gutter={4}>
+                {searchs.map((fItem: any) => <Col style={{ height: 32 }} span={(searchs.length + 1) / 24} key={fItem.dataIndex}><Form.Item
                     name={fItem.dataIndex}
                     label={fItem.title}
                     style={{ height: 32, fontSize: 12 }}
@@ -97,10 +97,12 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: string, onC
                     <FormItemType data={fItem} />
                 </Form.Item>
                 </Col>)}
-                <Form.Item>
-                    <Button type="primary" htmlType="submit" size="small" style={{ marginLeft: 12 }}>搜索</Button>
-                    <Button type="default" size="small" onClick={() => form.resetFields()} style={{ marginLeft: 12 }}>重置</Button>
-                </Form.Item>
+                <Col style={{ height: 32 }} span={(searchs.length + 1) / 24}>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" size="small" style={{ marginLeft: 12 }}>搜索</Button>
+                        <Button type="default" size="small" onClick={() => form.resetFields()} style={{ marginLeft: 12 }}>重置</Button>
+                    </Form.Item>
+                </Col>
             </Row>
         </Form>}
         <CommonTable

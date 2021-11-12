@@ -97,10 +97,15 @@ export default function Overview(): JSX.Element {
                 onClick={handleFinishPrice}
                 disabled={data?.comparisonStatus !== 1}
             >完成询价</Button>,
-            <Button type="primary" style={{ marginRight: 16 }} ghost key="add" onClick={() => {
-                setOprationType("new")
-                setVisible(true)
-            }}>添加报价</Button>
+            <Button
+                disabled={data?.comparisonStatus !== 1}
+                type="primary"
+                style={{ marginRight: 16 }}
+                ghost key="add"
+                onClick={() => {
+                    setOprationType("new")
+                    setVisible(true)
+                }}>添加报价</Button>
         ]} operation={[
             <Button type="primary" ghost key="goback" onClick={() => history.goBack()}>返回</Button>
         ]}>

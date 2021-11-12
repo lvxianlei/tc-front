@@ -141,7 +141,7 @@ export default function EnquiryList(): React.ReactNode {
                 {
                     name: 'fuzzyQuery',
                     label: '查询',
-                    children: <Input placeholder="任务编号/任务单编号/订单编号/内部合同编号" maxLength={200} />
+                    children: <Input placeholder="件号/材质/规格" maxLength={200} />
                 },
             ]}
         />

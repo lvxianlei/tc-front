@@ -9,7 +9,8 @@ export default function EnquiryList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false)
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({})
     const [detailId, setDetailId] = useState<string>("")
-    const editRef = useRef<{ onSubmit: () => void, resetFields: () => void }>({ onSubmit: () => { }, resetFields: () => { } })
+    const [inquiryStatus, setInquiryStatus] = useState<number>(0)
+    const editRef = useRef<{ onSubmit: (type: "save" | "saveAndSubmit") => void, resetFields: () => void }>({ onSubmit: () => { }, resetFields: () => { } })
 
     const onFilterSubmit = (value: any) => {
         if (value.startStatusUpdateTime) {
@@ -30,9 +31,9 @@ export default function EnquiryList(): React.ReactNode {
         return ({ ...filterValue, ...value })
     }
 
-    const handleModal = () => new Promise(async (resove, reject) => {
+    const handleModal = (oprationType: "save" | "saveAndSubmit") => new Promise(async (resove, reject) => {
         try {
-            await editRef.current?.onSubmit()
+            await editRef.current?.onSubmit(oprationType)
             message.success("保存成功...")
             history.go(0)
             setVisible(false)
@@ -54,7 +55,16 @@ export default function EnquiryList(): React.ReactNode {
                         setDetailId("")
                         setVisible(false)
                     }}>关闭</Button>,
-                <Button key="save" type="primary" onClick={handleModal}>保存</Button>
+                <Button
+                    key="save"
+                    type="primary"
+                    style={{ display: inquiryStatus === 4 ? "inline-block" : "none" }}
+                    onClick={() => handleModal("save")}>保存</Button>,
+                <Button
+                    key="saveAndSubmit"
+                    type="primary"
+                    style={{ display: inquiryStatus === 4 ? "inline-block" : "none" }}
+                    onClick={() => handleModal("saveAndSubmit")}>保存并提交</Button>
             ]}
             onCancel={() => {
                 editRef.current?.resetFields()
@@ -73,10 +83,12 @@ export default function EnquiryList(): React.ReactNode {
                     title: "操作",
                     width: 100,
                     dataIndex: "operation",
-                    render: (_: any, records: any) => <Button type="link" onClick={() => {
-                        setDetailId(records.id)
-                        setVisible(true)
-                    }}>询价信息</Button>
+                    render: (_: any, records: any) => <Button type="link"
+                        onClick={() => {
+                            setDetailId(records.id)
+                            setInquiryStatus(records.inquiryStatus)
+                            setVisible(true)
+                        }}>询价信息</Button>
                 }]}
             extraOperation={<Button type="primary">导出</Button>}
             filterValue={filterValue}

@@ -21,7 +21,7 @@ export default function Opreation({ id }: OpreationProps): JSX.Element {
         }
     }), { refreshDeps: [id] })
     if (data?.length === 0) {
-        return <Result title="功能假设中..." status="500" />
+        return <Result title="功能建设中..." status="500" />
     }
     return <CommonTable loading={loading} columns={[{
         "title": "序号",

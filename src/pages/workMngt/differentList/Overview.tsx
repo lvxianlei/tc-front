@@ -10,12 +10,23 @@ import RequestUtil from '../../../utils/RequestUtil'
 export default function Overview() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
+    const [generateIds, setGenerateIds] = useState<string[]>([])
     const [filterValue, setFilterValue] = useState({ diffId: params.id })
     const [visible, setVisible] = useState<boolean>(false)
 
     const { run: submitRun } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
         try {
             await RequestUtil.put(`/tower-supply/componentDiff?diffId=${params.id}`)
+            message.success("提交完成...")
+            resole(true)
+        } catch (error) {
+            reject(false)
+        }
+    }), { manual: true })
+
+    const { run: componentDiffRun } = useRequest<boolean>((data: any) => new Promise(async (resole, reject) => {
+        try {
+            await RequestUtil.post(`/tower-supply/initData/componentDiff`, { componentDiffId: params.id, ...data })
             message.success("提交完成...")
             resole(true)
         } catch (error) {
@@ -53,9 +64,13 @@ export default function Overview() {
             extraOperation={<>
                 <Button type="primary" ghost>导出</Button>
                 <Button type="primary" ghost onClick={handleComponentDiff}>处理完成</Button>
-                <Button type="primary" ghost onClick={() => {
+                <Button type="primary" ghost onClick={async () => {
                     // setVisible(true)
-                    message.warning("算法完成后可用...")
+                    await componentDiffRun({
+                        componentDiffDetailIds: generateIds
+                    })
+                    message.warning("成功生成缺料记录...")
+                    history.go(0)
                 }}>缺料申请</Button>
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
             </>}
@@ -63,7 +78,16 @@ export default function Overview() {
             onFilterSubmit={onFilterSubmit}
             tableProps={{
                 rowSelection: {
-                    type: "checkbox"
+                    type: "checkbox",
+                    selectedRowKeys: generateIds,
+                    onChange: (selectedRowKeys: any[]) => {
+                        setGenerateIds(selectedRowKeys)
+                    },
+                    getCheckboxProps: (record: any) => {
+                        return ({
+                            disabled: ![1].includes(record.diffComponentStatus)
+                        })
+                    }
                 }
             }}
             searchFormItems={[

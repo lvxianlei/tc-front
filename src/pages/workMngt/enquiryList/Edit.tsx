@@ -22,6 +22,15 @@ export default forwardRef(function Edit({ detailId }: EditProps, ref): JSX.Eleme
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/inquiryTask/inquirer/save`, { ...data, id: detailId })
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const { run: saveAndSubmitRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
+        try {
             const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/inquiryTask/inquirer/finish`, { ...data, id: detailId })
             resole(result)
         } catch (error) {
@@ -34,17 +43,24 @@ export default forwardRef(function Edit({ detailId }: EditProps, ref): JSX.Eleme
         attchRef.current?.resetFields()
     }
 
-    const onSubmit = () => new Promise(async (resolve, reject) => {
+    const onSubmit = (type: "save" | "saveAndSubmit") => new Promise(async (resolve, reject) => {
         try {
             if (!inquirerDescription) {
                 message.warning("请输入补充信息")
                 return
             }
-            const result = await saveRun({
-                inquirerDescription: inquirerDescription,
-                inquirerAttachList: attchRef.current?.getDataSource()
-            })
-            resolve(result)
+            if (type === "save") {
+                await saveRun({
+                    inquirerDescription: inquirerDescription,
+                    inquirerAttachList: attchRef.current?.getDataSource()
+                })
+            } else {
+                await saveAndSubmitRun({
+                    inquirerDescription: inquirerDescription,
+                    inquirerAttachList: attchRef.current?.getDataSource()
+                })
+            }
+            resolve(true)
         } catch (error) {
             reject(false)
         }
@@ -56,9 +72,12 @@ export default forwardRef(function Edit({ detailId }: EditProps, ref): JSX.Eleme
         <Attachment dataSource={data?.projectAttachList} />
         <DetailTitle title="当前价格信息" />
         <CommonTable haveIndex columns={CurrentPriceInformation} dataSource={data?.materialDetails || []} />
-        {data?.inquiryStatus !== 2 && <>
+        {data?.inquiryStatus === 4 && <>
             <DetailTitle title="补充信息" />
-            <Input.TextArea name="inquirerDescription" value={inquirerDescription} onChange={(event: any) => setInquirerDescription(event.target.value)} />
+            <Input.TextArea
+                name="inquirerDescription"
+                value={inquirerDescription}
+                onChange={(event: any) => setInquirerDescription(event.target.value)} />
             <Attachment title="上传附件" edit ref={attchRef} />
         </>}
     </Spin>

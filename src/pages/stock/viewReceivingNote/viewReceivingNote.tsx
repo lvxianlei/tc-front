@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, TableColumnProps, Select, DatePicker, Input, Descriptions, Modal } from 'antd'
 import { Link, useHistory, } from 'react-router-dom'
 import { Attachment, CommonTable, DetailContent, DetailTitle, Page } from '../../common'
-import { viewReceivingNote, operatingInformation, ApprovalInformation, operatingInformation1 } from "./viewReceivingNote.json"
+import { viewReceivingNote, operatingInformation, ApprovalInformation, operatingInformation1, aa } from "./viewReceivingNote.json"
 import RequestUtil from '../../../utils/RequestUtil'
 var moment = require('moment');
 moment().format();
@@ -114,33 +114,12 @@ export default function ViewReceivingNote(): React.ReactNode {
                             </div>
                         }
                     },
-                    {
-                        title: "收货完成时间",
-                        dataIndex: "receivingTime"
-                    },
-                    {
-                        title: "重量合集(吨)",
-                        dataIndex: "weight"
-                    },
-                    {
-                        title: "价税合计(元)",
-                        dataIndex: "price"
-                    },
-                    {
-                        title: "运费(元)",
-                        dataIndex: "freight"
-                    },
-                    {
-                        title: "贷款运费合计(元)",
-                        dataIndex: "price"
-                    },
+                    ...aa,
                     {
                         title: "关联请款编号",
                         dataIndex: "pleasePayNumber",
                         render: (text, record: any) => {
                             return <div>
-                                {/* pleasePayId */}
-                                {/*  */}
                                 <Button type="link" onClick={() => { pleasePayNumber(record.pleasePayId) }}>{record.pleasePayNumber}</Button>
                             </div>
                         }
@@ -182,6 +161,7 @@ export default function ViewReceivingNote(): React.ReactNode {
                     },
                 ]}
             />
+            {/* 关联请款编号 */}
             <Modal width="700px" title="详情" visible={isModalVisible} footer={buttons} onCancel={handleCancel} >
                 <DetailTitle title="申请信息" />
                 <Descriptions bordered column={2} labelStyle={{ textAlign: 'center' }}>
@@ -227,6 +207,7 @@ export default function ViewReceivingNote(): React.ReactNode {
                     />
                 </DetailContent>
             </Modal>
+            {/* 关联票据编号 */}
             <Modal width="700px" title="详情" visible={isModalVisible1} footer={buttons1} onCancel={handleCancel1} >
                 <DetailTitle title="票据信息" />
                 <Descriptions bordered column={2} labelStyle={{ textAlign: 'right' }}>

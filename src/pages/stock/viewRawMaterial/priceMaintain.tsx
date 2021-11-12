@@ -1,8 +1,8 @@
 //原材料看板-价格维护
 import React, { useState } from 'react'
-import { Button, Select, DatePicker, Input, Modal, Descriptions } from 'antd'
+import { Button, Select, DatePicker, Input, Modal, Descriptions, message, Popconfirm } from 'antd'
 import { Link, useHistory, } from 'react-router-dom'
-import { priceMaintain } from "./ViewRawMaterial.json"
+import { priceMaintain, change } from "./ViewRawMaterial.json"
 import { Page } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
 //原材料类型
@@ -48,6 +48,7 @@ export default function PriceMaintain(): React.ReactNode {
     const history = useHistory()
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisible1, setIsModalVisible1] = useState(false);
+    const [isModalVisible2, setIsModalVisible2] = useState(false);
     const [filterValue, setFilterValue] = useState({});
     const [id, setId] = useState(0);//原材料价格主键id
     const [materialCategoryId, setMaterialCategoryId] = useState(0);//原材料类型id
@@ -87,16 +88,32 @@ export default function PriceMaintain(): React.ReactNode {
         setQuotationTime(quotationTime);
         setIsModalVisible(true);
         setObj(record);
+        console.log(obj);
+
+    }
+    const add = () => {
+        setIsModalVisible1(true);
+        if (materialName || materialSpec || materialStandardName || materialCategoryName || price || priceSource || quotationTime) {
+            setMaterialName("");
+            setMaterialSpec("");
+            setMaterialStandardName("");
+            setMaterialCategoryName("");
+            setPrice(0);
+            setPriceSource("");
+            setQuotationTime("");
+        }
+        setMaterialCategoryId(Math.floor(Math.random() * 10));
+        setMaterialId(Math.floor(Math.random() * 10));
+        setMaterialStandard(Math.floor(Math.random() * 10));
     }
     const handleCancel = () => {
         setIsModalVisible(false);
     };
-    const del = async (materialPriceId: number) => {
-        const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/materialPrice/${materialPriceId}`, {});
-        console.log(result);
-    }
     const handleCancel1 = () => {
         setIsModalVisible1(false);
+    };
+    const handleCancel2 = () => {
+        setIsModalVisible2(false);
     };
     const handleChange = (value: any) => {
         console.log(`selected ${value}`);
@@ -168,14 +185,31 @@ export default function PriceMaintain(): React.ReactNode {
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPrice/excelTemplate`);
         console.log(result);
     }
-    const save = async (id: any, price: any, priceSource: any, quotationTime: any) => {
-        const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialPrice`, { id, price, priceSource, quotationTime }, { "Content-Type": "application/json" })
-        console.log(result);
+    const save = async (id: number, price: number, priceSource: string, quotationTime: string) => {
+        console.log(price, priceSource, quotationTime, "dfvsvdfvdfbvdf");
+        if (price || priceSource || quotationTime) {
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialPrice`, { id, price, priceSource, quotationTime }, { "Content-Type": "application/json" })
+            console.log(result);
+            setIsModalVisible(false);
+        } else {
+            message.info("请填入必填项")
+            // setIsModalVisible(false);
+        }
     }
     const save1 = async (materialCategoryName: string, materialName: string, materialSpec: string, materialStandardName: string, priceSource: string, quotationTime: string) => {
         const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPrice`, { materialCategoryId, materialCategoryName, materialId, materialName, materialSpec, materialStandard, materialStandardName, price, priceSource, quotationTime }, { "Content-Type": "application/json" })
         console.log(result);
         setIsModalVisible1(false);
+    }
+    const confirm = () => {
+        message.success('Click on Yes');
+    }
+    const cancel = () => {
+        message.error('Click on No');
+    }
+    const del = async (materialPriceId: number) => {
+        const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/materialPrice/${materialPriceId}`, {});
+        console.log(result);
     }
     const buttons: {} | null | undefined = [
         <div>
@@ -187,6 +221,12 @@ export default function PriceMaintain(): React.ReactNode {
         <div>
             <Button onClick={() => { handleCancel1() }}>关闭</Button>
             <Button onClick={() => { save1(materialCategoryName, materialName, materialSpec, materialStandardName, priceSource, quotationTime) }}>保存</Button>
+        </div>
+    ]
+    const buttons2: {} | null | undefined = [
+        <div>
+            <Button onClick={() => setIsModalVisible2(false)}>关闭</Button>
+            <Button>保存</Button>
         </div>
     ]
     return (
@@ -209,7 +249,15 @@ export default function PriceMaintain(): React.ReactNode {
                         render: (_: undefined, record: any): React.ReactNode => {
                             return <div>
                                 <Button type="link" onClick={() => { edit(record.id, record.price, record.priceSource, record.quotationTime, record) }}>编辑</Button>
-                                <Button type="link" onClick={() => { del(record.id) }}>删除</Button>
+                                <Popconfirm
+                                    title="你确定删除吗?"
+                                    onConfirm={confirm}
+                                    onCancel={cancel}
+                                    okText="Yes"
+                                    cancelText="No"
+                                >
+                                    <Button type="link" onClick={() => { del(record.id) }}>删除</Button>
+                                </Popconfirm>
                             </div>
                         }
                     }
@@ -220,12 +268,7 @@ export default function PriceMaintain(): React.ReactNode {
                     <Button type="primary" style={{ marginLeft: "50px" }} onClick={() => {
                         lead();
                     }}>导入</Button>
-                    <Button type="primary" style={{ marginLeft: "50px" }} onClick={() => {
-                        setIsModalVisible1(true);
-                        setMaterialCategoryId(Math.floor(Math.random() * 10));
-                        setMaterialId(Math.floor(Math.random() * 10));
-                        setMaterialStandard(Math.floor(Math.random() * 10));
-                    }}>添加</Button>
+                    <Button type="primary" style={{ marginLeft: "50px" }} onClick={() => { add() }}>添加</Button>
                     <Button type="primary" style={{ marginLeft: "50px" }} onClick={() => history.push(`/stock/viewRawMaterial`)}>返回上一级</Button>
                 </div>}
                 onFilterSubmit={onFilterSubmit}
@@ -257,37 +300,44 @@ export default function PriceMaintain(): React.ReactNode {
                     <Descriptions.Item label="原材料规格">{obj.materialSpec}</Descriptions.Item>
                     <Descriptions.Item label="原材料标准">{obj.materialStandardName}</Descriptions.Item>
                     <Descriptions.Item label="原材料类型">{obj.materialCategoryName}</Descriptions.Item>
-                    <Descriptions.Item label="价格 *">￥<input type="number" maxLength={20} style={{ border: "none", outline: "none" }} value={price} onChange={(e) => { value(e) }} />/吨</Descriptions.Item>
-                    <Descriptions.Item label="价格来源 *">
+                    <Descriptions.Item label={<span>价格<span style={{ color: 'red' }}>*</span></span>}>￥<input type="number" maxLength={20} style={{ border: "none", outline: "none" }} value={price} onChange={(e) => { value(e) }} />/吨</Descriptions.Item>
+                    <Descriptions.Item label={<span>价格来源<span style={{ color: 'red' }}>*</span></span>}>
                         <Select defaultValue={obj.priceSource} style={{ width: 120 }} bordered={false} onChange={handleChange4}>
                             <Select.Option value="南山钢铁有限公司">南山钢铁有限公司</Select.Option>
                             <Select.Option value="钢铁网">钢铁网</Select.Option>
                         </Select>
                     </Descriptions.Item>
-                    <Descriptions.Item label="报价时间 *">
-                        {obj.quotationTime}
+                    <Descriptions.Item label={<span>报价时间<span style={{ color: 'red' }}>*</span></span>}>
+                        <DatePicker
+                            defaultValue={moment(obj.quotationTime)}
+                            format="YYYY-MM-DD HH:mm:ss"
+                            disabledDate={(current) => { return current && current >= moment().endOf('day') }}
+                            disabledTime={disabledDateTime}
+                            showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+                            onChange={onChange}
+                        />
                     </Descriptions.Item>
                     <Descriptions.Item label="">{ }</Descriptions.Item>
                 </Descriptions>
             </Modal>
             {/* 添加 */}
             <Modal width="700px" title="添加" visible={isModalVisible1} footer={buttons1} onCancel={handleCancel1}>
+                <Button type="primary" style={{ marginLeft: "600px" }} onClick={() => setIsModalVisible2(true)}>选择</Button>
                 <Descriptions title="价格信息" bordered column={2} labelStyle={{ textAlign: 'right' }}>
-                    {/* labelStyle */}
-                    <Descriptions.Item label="原材料名称 *" >
+                    <Descriptions.Item label={<span>原材料名称<span style={{ color: 'red' }}>*</span></span>} >
                         <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange}>
                             <Select.Option value="角钢">角钢</Select.Option>
                             <Select.Option value="钢板">钢板</Select.Option>
                         </Select>
                     </Descriptions.Item>
-                    <Descriptions.Item label="原材料规格 *">
+                    <Descriptions.Item label={<span>原材料规格<span style={{ color: 'red' }}>*</span></span>}>
                         <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange1}>
                             <Select.Option value="Q420">Q420</Select.Option>
                             <Select.Option value="Q355">Q355</Select.Option>
                             <Select.Option value="35#">35#</Select.Option>
                         </Select>
                     </Descriptions.Item>
-                    <Descriptions.Item label="原材料标准 *">
+                    <Descriptions.Item label={<span>原材料标准<span style={{ color: 'red' }}>*</span></span>}>
                         <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange2}>
                             <Select.Option value="国网B级">国网B级</Select.Option>
                             <Select.Option value="国网C级">国网C级</Select.Option>
@@ -295,7 +345,7 @@ export default function PriceMaintain(): React.ReactNode {
                             <Select.Option value="国网正公差">国网正公差</Select.Option>
                         </Select>
                     </Descriptions.Item>
-                    <Descriptions.Item label="原材料类型 *">
+                    <Descriptions.Item label={<span>原材料类型<span style={{ color: 'red' }}>*</span></span>}>
                         <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange3}>
                             <Select.Option value="焊管">焊管</Select.Option>
                             <Select.Option value="钢板">钢板</Select.Option>
@@ -303,14 +353,14 @@ export default function PriceMaintain(): React.ReactNode {
                             <Select.Option value="大角钢">大角钢</Select.Option>
                         </Select>
                     </Descriptions.Item>
-                    <Descriptions.Item label="价格 *">￥<input placeholder='请输入' type="text" value={price1} maxLength={20} style={{ border: "none", outline: "none" }} onChange={(e) => value1(e)} />/吨</Descriptions.Item>
-                    <Descriptions.Item label="价格来源 *">
+                    <Descriptions.Item label={<span>价格<span style={{ color: 'red' }}>*</span></span>}>￥<input placeholder='请输入' type="text" value={price1} maxLength={20} style={{ border: "none", outline: "none" }} onChange={(e) => value1(e)} />/吨</Descriptions.Item>
+                    <Descriptions.Item label={<span>价格来源<span style={{ color: 'red' }}>*</span></span>}>
                         <Select defaultValue="请选择" style={{ width: 120 }} bordered={false} onChange={handleChange4}>
                             <Select.Option value="南山钢铁有限公司">南山钢铁有限公司</Select.Option>
                             <Select.Option value="钢铁网">钢铁网</Select.Option>
                         </Select>
                     </Descriptions.Item>
-                    <Descriptions.Item label="报价时间 *">
+                    <Descriptions.Item label={<span>报价时间<span style={{ color: 'red' }}>*</span></span>}>
                         {/* <DatePicker showTime onChange={onChange} /> */}
                         <DatePicker
                             format="YYYY-MM-DD HH:mm:ss"
@@ -322,6 +372,74 @@ export default function PriceMaintain(): React.ReactNode {
                     </Descriptions.Item>
                     <Descriptions.Item label="">{ }</Descriptions.Item>
                 </Descriptions>
+            </Modal>
+            <Modal width="600px" title="选择" visible={isModalVisible2} footer={buttons2} onCancel={handleCancel2}>
+                <Page
+                    path="/tower-supply/materialPurchaseTask/inquirer"
+                    columns={[
+                        ...change,
+                        {
+                            key: 'operation',
+                            title: '操作',
+                            dataIndex: 'operation',
+                            render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                                <Button type="link">选择</Button>
+                            )
+                        }
+                    ]}
+                    searchFormItems={[
+                        {
+                            name: 'goodsType',
+                            label: '类别',
+                            children: <Select style={{ width: '100px' }}>
+                                <Select.Option value={''} key={''}>全部</Select.Option>
+                                <Select.Option value={1} key={1}>新放</Select.Option>
+                                <Select.Option value={3} key={3}>套用</Select.Option>
+                                <Select.Option value={2} key={2}>重新出卡</Select.Option>
+                            </Select>
+                        },
+                        {
+                            name: 'pattern',
+                            label: '类型',
+                            children: <Select style={{ width: '100px' }}>
+                                <Select.Option value={''} key={''}>全部</Select.Option>
+                                <Select.Option value={1} key={1}>新放</Select.Option>
+                                <Select.Option value={3} key={3}>套用</Select.Option>
+                                <Select.Option value={2} key={2}>重新出卡</Select.Option>
+                            </Select>
+                        },
+                        {
+                            name: 'standard',
+                            label: '标准',
+                            children: <Select style={{ width: '100px' }}>
+                                <Select.Option value={''} key={''}>全部</Select.Option>
+                                <Select.Option value={1} key={1}>新放</Select.Option>
+                                <Select.Option value={3} key={3}>套用</Select.Option>
+                                <Select.Option value={2} key={2}>重新出卡</Select.Option>
+                            </Select>
+                        },
+                        {
+                            name: 'materialTexture',
+                            label: '材质',
+                            children: <Select style={{ width: '100px' }}>
+                                <Select.Option value={''} key={''}>全部</Select.Option>
+                                <Select.Option value={1} key={1}>新放</Select.Option>
+                                <Select.Option value={3} key={3}>套用</Select.Option>
+                                <Select.Option value={2} key={2}>重新出卡</Select.Option>
+                            </Select>
+                        },
+                        {
+                            name: 'spec',
+                            label: '规格',
+                            children: <Select style={{ width: '100px' }}>
+                                <Select.Option value={''} key={''}>全部</Select.Option>
+                                <Select.Option value={1} key={1}>新放</Select.Option>
+                                <Select.Option value={3} key={3}>套用</Select.Option>
+                                <Select.Option value={2} key={2}>重新出卡</Select.Option>
+                            </Select>
+                        },
+                    ]}
+                />
             </Modal>
         </div>
     )

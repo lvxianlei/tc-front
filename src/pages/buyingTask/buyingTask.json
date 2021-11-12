@@ -83,7 +83,7 @@
         },
         {
             "title": "任务状态",
-            "dataIndex": "taskStatus"
+            "dataIndex": "optName"
         },
         {
             "title": "备注",
