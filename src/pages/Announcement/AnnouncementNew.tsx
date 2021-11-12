@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Spin, Button, Space, Modal, message, Image, Form, Input, Upload } from 'antd';
+import { Spin, Button, Space, Modal, message, Image, Form, Input, Upload, Transfer, Tree } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { DetailTitle, DetailContent, CommonTable } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
@@ -8,6 +8,13 @@ import styles from './AnnouncementMngt.module.less';
 import { IAnnouncement, IFileList } from './AnnouncementMngt';
 import { downLoadFile } from '../../utils';
 import AuthUtil from '../../utils/AuthUtil';
+import SelectUserTransfer from './SelectUserTransfer';
+
+export interface ITreeData {
+    readonly key: string;
+    readonly title: string;
+    readonly children?: ITreeData[];
+}
 
 export default function AnnouncementNew(): React.ReactNode {
     const [ form ] = Form.useForm();
@@ -48,7 +55,6 @@ export default function AnnouncementNew(): React.ReactNode {
         if(form) {
             form.validateFields().then(res => {
                 let value = form.getFieldsValue(true);
-                console.log(value)
                 if(location.state.type === 'new') {
                     RequestUtil.post<IAnnouncement>(`/tower-system/notice`, {
                         id: detailData.id,
@@ -67,6 +73,27 @@ export default function AnnouncementNew(): React.ReactNode {
         }
     }
 
+    const treeData = [
+        { key: '0-0', title: '0-0' },
+        {
+            key: '0-1',
+            title: '0-1',
+            children: [
+                { key: '0-1-0', title: '0-1-0' },
+                { key: '0-1-1', title: '0-1-1' },
+            ],
+        },
+        { key: '0-2', title: '0-3' },
+    ];
+    const transferDataSource: ITreeData[] = [];
+    const flatten = (list:ITreeData[] = []): void => {
+        list.forEach((item: ITreeData) => {
+            transferDataSource.push(item);
+            flatten(item.children);
+        });
+    }
+    flatten(treeData);
+
     return <>
         <DetailContent operation={ [
             <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
@@ -75,7 +102,7 @@ export default function AnnouncementNew(): React.ReactNode {
                 <Button type="ghost" onClick={() => history.goBack()}>取消</Button>
             </Space>
         ] }>
-            <DetailTitle title="基本信息" />
+            <DetailTitle title="基本信息" key={ 1 }/>
             <Form form={ form } labelCol={{ span: 2 }}>
                 <Form.Item name="title" label="标题" initialValue={ detailData.title } rules={[{
                         "required": true,
@@ -101,10 +128,11 @@ export default function AnnouncementNew(): React.ReactNode {
                         "required": true,
                         "message": "请选择接收人"
                     }]}>
+                    {/* <SelectUserTransfer transferDataSource={ transferDataSource } treeData={ treeData }/> */}
                     <Input bordered={false}/>
                 </Form.Item>
             </Form>
-            <DetailTitle title="上传附件" operation={[<Upload
+            <DetailTitle title="上传附件" key={ 2 } operation={[<Upload
                 action={ () => {
                     const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
                     return baseUrl+'/sinzetech-resource/oss/put-file'

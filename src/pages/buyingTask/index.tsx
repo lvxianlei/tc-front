@@ -67,15 +67,23 @@ export default function rawMaterial() {
         const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialPurchaseTask/taskReceive/${purchaseId}`, {}, { "Content-Type": "application/json" })
         console.log(result);
         setIsModalVisible(false);
+        history.go(0);
     }
     const submit = async (rejectionDescription: string, id: number) => {
         const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialPurchaseTask/taskRejection`, { rejectionDescription, id }, { "Content-Type": "application/json" })
         console.log(result);
+        message.success("拒绝成功！");
+        setIsModalVisible3(false)
+    }
+    // 关闭
+    const handleClose = () => {
+        setIsModalVisible(false);
+        history.go(0);
     }
     // 三个按钮
     const buttons: {} | null | undefined = [
         <div>
-            <Button onClick={() => setIsModalVisible(false)}>关闭</Button>&emsp; &emsp; &emsp; &emsp; &emsp;
+            <Button onClick={() => handleClose()}>关闭</Button>&emsp; &emsp; &emsp; &emsp; &emsp;
             {
                 obj.taskStatus === 1 ? <span>
                     <Button onClick={() => setIsModalVisible3(true)}>拒绝</Button>
@@ -97,8 +105,8 @@ export default function rawMaterial() {
                 onClick={async () => {
                     const result = await tarkRef.current?.onSubmit();
                     setIsModalVisible1(false);
-                    // message.success("保存并提交成功...")
-                    // history.go(0)
+                    message.success("保存并提交成功...")
+                    history.go(0)
                 }}>保存并提交</Button>
         </div>
     ]
