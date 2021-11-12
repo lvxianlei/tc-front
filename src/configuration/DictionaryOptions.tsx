@@ -17,6 +17,7 @@ export enum DictionaryEnums {
     BOLT_TYPE = 105,
     WAREHOUSE_TYPE = 127,
     CAR_TYPE = 146,
+    standard = 104
 }
 
 let productType: IDict[] | undefined = [];
@@ -32,6 +33,7 @@ let saleType: IDict[] | undefined = [];
 let boltType: IDict[] | undefined = [];
 let warehouseType: IDict[] | undefined = [];
 let carType: IDict[] | undefined = [];
+let standard: IDict[] | undefined = [];
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
     voltageGrade = dictionary[DictionaryEnums.VOLTAGE_GRADE];
@@ -46,6 +48,7 @@ if (dictionary) {
     boltType = dictionary[DictionaryEnums.BOLT_TYPE];
     warehouseType = dictionary[DictionaryEnums.WAREHOUSE_TYPE];
     carType = dictionary[DictionaryEnums.CAR_TYPE];
+    standard = dictionary[DictionaryEnums.standard];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -61,3 +64,4 @@ export const saleTypeOptions = saleType; //销售类型
 export const boltTypeOptions = boltType; //螺栓类型
 export const warehouseOptions = warehouseType; //仓库类型
 export const carOptions = carType; //车辆类型
+export const standardOptions = standard; //材料标准
