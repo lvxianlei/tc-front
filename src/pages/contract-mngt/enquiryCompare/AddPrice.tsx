@@ -38,7 +38,7 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
         }
     }), { manual: true })
 
-    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref])
+
 
     const resetFields = () => {
         form.resetFields()
@@ -63,7 +63,7 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
             reject(false)
         }
     })
-
+    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref,onSubmit])
     const handleChange = (id: string, value: number, name: string) => {
         setMaterials(materials.map((item: any) => item.materialCode === id ? ({ ...item, [name]: value }) : item))
     }
