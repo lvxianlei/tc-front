@@ -38,6 +38,15 @@ export default function Overview(): JSX.Element {
         }
     }), { manual: true })
 
+    const {  run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/inquiryQuotation?id=${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     const handleFinishPrice = async () => {
 
         Modal.confirm({
@@ -141,7 +150,18 @@ export default function Overview(): JSX.Element {
                                 setVisible(true)
                             }}>编辑</a>
                             <Button type="link" onClick={() => message.warning("功能开发中...")}>附件</Button>
-                            <a type="link" onClick={() => message.warning("功能开发中...")}>移除</a>
+                            <a type="link" onClick={() => {
+                                Modal.confirm({
+                                    title:"删除",
+                                    content:"确定删除吗？",
+                                    onOk:async ()=>{
+                                        await deleteRun(records.id);
+                                        message.success("成功删除！");
+                                        history.go(0);
+                                    }
+                                })
+                            }
+                            }>移除</a>
                         </>
                     }]}
                 dataSource={data?.inquiryQuotationOfferActionVo?.inquiryQuotationOfferData || []}
