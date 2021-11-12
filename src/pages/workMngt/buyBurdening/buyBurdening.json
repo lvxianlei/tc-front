@@ -37,11 +37,11 @@
             "width": 100,
             "enum": [
                 {
-                    "label": "待完成",
+                    "label": "待接收",
                     "value": 1
                 },
                 {
-                    "label": "待接收",
+                    "label": "待完成",
                     "value": 2
                 },
                 {

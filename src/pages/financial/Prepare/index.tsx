@@ -241,7 +241,7 @@ export default function ApplyPayment() {
                     setType("new")
                     setVisible(true)
                 }}>申请</Button>
-                <span style={{ fontSize: 16, fontWeight: 600, color: "#FF8C00" }}>累计付款金额：{data?.totalPleasePayAmount || 0}</span>
+                <span style={{ fontSize: 16, fontWeight: 600, color: "#FF8C00" }}>累计付款金额：{data?.totalPleasePayAmount && data?.totalPleasePayAmount !== -1 ? data?.totalPleasePayAmount : 0}</span>
             </>}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}

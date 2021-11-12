@@ -91,14 +91,12 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const handleBaseInfoChange = (fields: any) => {
         if (fields.relatednotes) {
             let pleasePayAmount = 0
-            let receiptVos: any[] = []
             fields.relatednotes.records.forEach((item: any) => {
                 pleasePayAmount = Number(pleasePayAmount + parseFloat(item.invoiceAmount || "0").toFixed(2))
-                receiptVos = [...receiptVos, ...item.receiptNumbers]
             })
             baseForm.setFieldsValue({
                 pleasePayAmount,
-                receiptNumbers: receiptVos.map((item: any) => item.receiptNumber).join(",")
+                receiptNumbers: fields.relatednotes.value
             })
         }
         if (fields.supplierName) {
