@@ -294,7 +294,8 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                 path="/tower-production/team/page"
                 columns={ columns }
                 headTabs={ [] }
-                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle('新增'); } } ghost>新增</Button> }
+                extraOperation={ <Button type="primary" onClick={ () => {setVisible(true); setTitle('新增');
+                setLoading(false); } } ghost>新增</Button> }
                 refresh={ refresh }
                 searchFormItems={ [] }
                 requestData={{ ...filterValue }}
