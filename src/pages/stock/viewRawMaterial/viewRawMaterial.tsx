@@ -130,7 +130,7 @@ export default function ViewRawMaterial(): React.ReactNode {
                         name: 'rawMaterialType',
                         label: '原材料类型',
                         children: <Select style={{ width: "150px" }} defaultValue={"全部"}>
-                            {projectType.map((item: any, index: number) => <Select.Option value={item.name} key={index}>{item.name}</Select.Option>)}
+                            {projectType.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
                         </Select>
                     },
                     {

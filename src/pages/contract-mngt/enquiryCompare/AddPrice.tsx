@@ -65,7 +65,7 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
     })
 
     const handleChange = (id: string, value: number, name: string) => {
-        setMaterials(materials.map((item: any) => item.id === id ? ({ ...item, [name]: value }) : item))
+        setMaterials(materials.map((item: any) => item.materialCode === id ? ({ ...item, [name]: value }) : item))
     }
 
     return <Spin spinning={loading}>
@@ -111,10 +111,10 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
         <DetailTitle title="询价原材料" />
         <CommonTable columns={addPriceHead.map((item: any) => {
             if (item.dataIndex === "taxOffer") {
-                return ({ ...item, render: (value: number, records: any) => <InputNumber value={[-1, "-1"].includes(value) ? 0 : value} key={records.id} onChange={(value: number) => handleChange(records.id, value, "taxOffer")} /> })
+                return ({ ...item, render: (value: number, records: any) => <InputNumber value={[-1, "-1"].includes(value) ? 0 : value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode, value, "taxOffer")} /> })
             }
             if (item.dataIndex === "offer") {
-                return ({ ...item, render: (value: number, records: any) => <InputNumber value={[-1, "-1"].includes(value) ? 0 : value} key={records.id} onChange={(value: number) => handleChange(records.id, value, "offer")} /> })
+                return ({ ...item, render: (value: number, records: any) => <InputNumber value={[-1, "-1"].includes(value) ? 0 : value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode, value, "offer")} /> })
             }
             return item
         })} dataSource={materials} />

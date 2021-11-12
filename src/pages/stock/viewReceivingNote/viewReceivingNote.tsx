@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+//收货单看板
+import React, { useEffect, useState } from 'react'
 import { Button, TableColumnProps, Select, DatePicker, Input, Descriptions, Modal } from 'antd'
 import { Link, useHistory, } from 'react-router-dom'
 import { Attachment, CommonTable, DetailContent, DetailTitle, Page } from '../../common'
-import { viewReceivingNote, operatingInformation, ApprovalInformation, operatingInformation1, aa } from "./viewReceivingNote.json"
+import { operatingInformation, ApprovalInformation, operatingInformation1, aa } from "./viewReceivingNote.json"
 import RequestUtil from '../../../utils/RequestUtil'
 var moment = require('moment');
 moment().format();
@@ -42,6 +43,7 @@ export default function ViewReceivingNote(): React.ReactNode {
     const [obj, setObj] = useState<any>({})
     const [obj1, setObj1] = useState<any>({});
     const [receiptVos, setReceiptVos] = useState<any>([]);
+    const [money2, setMoney2] = useState(0);
     const history = useHistory();
     const onFilterSubmit = (value: any) => {
         if (value.startBidBuyEndTime) {
@@ -78,6 +80,29 @@ export default function ViewReceivingNote(): React.ReactNode {
         setObj1(result);
         setColumnsData1(result.operationRecordInfoVos)
     }
+    const bb = async () => {
+        const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/list`)
+        console.log(result.records);
+        var money = result.records.map((item: any) => {
+            if (item.billNumber === "") {
+                // const money = Number(item.price)
+                // console.log(money);
+                return item.price++
+            }
+        })
+        console.log(money,'aaa');
+        
+        const money1 = money.map(String);
+        const aa = money1.splice(0, 9)
+        const b = aa.map((item: number, i: any) => {
+            return item++
+        })
+        const money2 = b.reduce((item: any, i: any) => item + i);
+        setMoney2(money2);
+    }
+    useEffect(() => {
+        bb();
+    }, [])
     const buttons: {} | null | undefined = [
         <div>
             <Button onClick={() => { handleCancel() }}>关闭</Button>
@@ -139,7 +164,7 @@ export default function ViewReceivingNote(): React.ReactNode {
                     }
                 ]}
                 filterValue={filterValue}
-                extraOperation={<div><Link to="/project/management/new"><Button type="primary">导出</Button></Link><span style={{ fontSize: "20px", color: "orange", marginLeft: "40px" }}>累计欠票金额：300,000,00      累计欠费金额：200,000,00</span></div>}
+                extraOperation={<div><Link to=""><Button type="primary">导出</Button></Link><span style={{ fontSize: "20px", color: "orange", marginLeft: "40px" }}>累计欠票金额：{money2}      累计欠费金额：{money2}</span></div>}
                 onFilterSubmit={onFilterSubmit}
                 searchFormItems={[
                     {

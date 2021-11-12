@@ -142,7 +142,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "standard",
+            "dataIndex": "standardName",
             "type": "string"
         },
         {
@@ -194,7 +194,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "standard",
+            "dataIndex": "standardName",
             "type": "string"
         },
         {

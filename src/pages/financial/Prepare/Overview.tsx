@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Spin } from 'antd'
 import { DetailTitle, BaseInfo, CommonTable, Attachment } from '../../common'
-import { ApplicationList, operationInfo } from "../financialData.json"
+import { ApplicationOverview, operationInfo } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import ApplicationContext from "../../../configuration/ApplicationContext"
@@ -28,7 +28,7 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
 
     return <Spin spinning={loading}>
         <DetailTitle title="申请信息" />
-        <BaseInfo columns={ApplicationList.map((item: any) => {
+        <BaseInfo columns={ApplicationOverview.map((item: any) => {
             if (item.dataIndex === "pleasePayType") {
                 return ({ ...item, type: "select", enum: pleasePayTypeEnum })
             }

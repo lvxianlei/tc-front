@@ -90,7 +90,7 @@
         },
         {
             "title": "操作人",
-            "dataIndex": "optUserName"
+            "dataIndex": "updateUserName"
         },
         {
             "title": "更新时间",

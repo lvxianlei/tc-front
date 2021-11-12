@@ -1,46 +1,4 @@
 {
-    "viewReceivingNote": [
-        {
-            "title": "供应商",
-            "dataIndex": "supplierName"
-        },
-        {
-            "title": "收货单编号",
-            "dataIndex": "receiveNumber"
-        },
-        {
-            "title": "收货完成时间",
-            "dataIndex": "receivingTime"
-        },
-        {
-            "title": "重量合计(吨)",
-            "dataIndex": "weight"
-        },
-        {
-            "title": "价税合计(元)",
-            "dataIndex": "price"
-        },
-        {
-            "title": "运费(元)",
-            "dataIndex": "price"
-        },
-        {
-            "title": "货款运费合计(元)",
-            "dataIndex": "price"
-        },
-        {
-            "title": "关联请款编号",
-            "dataIndex": "pleasePayNumber"
-        },
-        {
-            "title": "关联票据编号",
-            "dataIndex": "billNumber"
-        },
-        {
-            "title": "付款状态",
-            "dataIndex": "invoiceStatus"
-        }
-    ],
     "viewReceivingNoteDetail": [
         {
             "title": "品名",
@@ -114,7 +72,7 @@
         },
         {
             "title": "备注",
-            "dataIndex": "taskDescription"
+            "dataIndex": "description"
         }
     ],
     "operatingInformation": [
@@ -132,7 +90,7 @@
         },
         {
             "title": "状态",
-            "dataIndex": "status"
+            "dataIndex": "optName"
         },
         {
             "title": "付款日",
@@ -140,10 +98,10 @@
         },
         {
             "title": "备注",
-            "dataIndex": "taskDescription"
+            "dataIndex": "description"
         }
     ],
-    "operatingInformation1":[
+    "operatingInformation1": [
         {
             "title": "操作部门",
             "dataIndex": "deptName"
@@ -161,13 +119,13 @@
             "dataIndex": "optName"
         }
     ],
-    "aa":[
+    "aa": [
         {
             "title": "收货完成时间",
             "dataIndex": "receivingTime"
         },
         {
-            "title": "重量合集(吨)",
+            "title": "重量合计(吨)",
             "dataIndex": "weight"
         },
         {
@@ -177,10 +135,10 @@
         {
             "title": "运费(元)",
             "dataIndex": "freight",
-            "type":"number"
+            "type": "number"
         },
         {
-            "title": "贷款运费合计(元)",
+            "title": "货款运费合计(元)",
             "dataIndex": "price"
         }
     ]
