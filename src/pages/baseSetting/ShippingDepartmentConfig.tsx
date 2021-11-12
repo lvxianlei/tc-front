@@ -333,6 +333,10 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
                             <Form.Item name="code" label="仓库编号" initialValue={ detailData?.code } rules={[{
                                     "required": true,
                                     "message": "请输入仓库编号"
+                                },
+                                {
+                                  pattern: /^[^\s]*$/,
+                                  message: '禁止输入空格',
                                 }]}>
                                 <Input maxLength={ 50 }/>
                             </Form.Item>

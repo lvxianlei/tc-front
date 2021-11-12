@@ -203,6 +203,10 @@ export default function VehicleMngt(): React.ReactNode {
                             <Form.Item name="registrationNumber" initialValue={ detail?.registrationNumber } label="车辆设备号/车牌号" rules={[{
                                     "required": true,
                                     "message": "请输入车辆设备号/车牌号"
+                                },
+                                {
+                                  pattern: /^[^\s]*$/,
+                                  message: '禁止输入空格',
                                 }]}>
                                 <Input maxLength={ 50 }/>
                             </Form.Item>
