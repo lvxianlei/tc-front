@@ -32,8 +32,8 @@
         },
         {
             "title": "配料负责人",
-            "dataIndex": "batcherName",
-            "type": "integer"
+            "dataIndex": "updateUserName",
+            "type": "string"
         },
         {
             "title": "配料状态",
