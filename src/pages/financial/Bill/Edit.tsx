@@ -46,7 +46,13 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 ...baseData,
                 supplierName: baseData.supplierName.value || data?.supplierName,
                 supplierId: baseData.supplierName.id || data?.supplierId,
-                receiptDtos: baseData.receiptVos.records?.map((item: any) => ({ receiptId: item.id, receiptNumber: item.receiveNumber })) || data?.receiptVos,
+                receiptDtos: baseData.receiptVos.records?.map((item: any) => ({
+                    receiptId: item.id,
+                    receiptNumber: item.receiveNumber
+                })) || data?.receiptVos.map((item: any) => ({
+                    receiptId: item.receiptId,
+                    receiptNumber: item.receiptNumber,
+                })),
                 invoiceAttachInfoDtos: attchsRef.current?.getDataSource()
             })
             resolve(true)

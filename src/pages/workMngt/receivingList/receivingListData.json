@@ -60,7 +60,13 @@
         {
             "title": "收货单号",
             "dataIndex": "receiveNumber",
-            "type": "string"
+            "type": "string",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入收货单号..."
+                }
+            ]
         },
         {
             "title": "供应商",
