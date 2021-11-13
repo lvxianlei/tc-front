@@ -95,7 +95,7 @@
         },
         {
             "title": "总重（吨）",
-            "dataIndex": "total"
+            "dataIndex": "totalWeight"
         }
     ],
     "materialColumnsSaveOrUpdate": [

@@ -1,9 +1,10 @@
-import React, { useState, forwardRef, useImperativeHandle, useRef } from "react"
-import { Button, Modal, Select, Input, Form, Row, Col, Spin, InputNumber } from "antd"
-import { BaseInfo, CommonTable, DetailTitle, PopTableContent, IntgSelect } from "../../common"
-import { editBaseInfo, materialColumnsSaveOrUpdate, addMaterial, choosePlanList } from "./enquiry.json"
+import React, {useState, forwardRef, useImperativeHandle, useRef} from "react"
+import {Button, Modal, Select, Input, Form, Row, Col, Spin, InputNumber} from "antd"
+import {BaseInfo, CommonTable, DetailTitle, PopTableContent, IntgSelect} from "../../common"
+import {editBaseInfo, materialColumnsSaveOrUpdate, addMaterial, choosePlanList} from "./enquiry.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+
 interface EditProps {
     id: string
     type: "new" | "edit"
@@ -12,56 +13,69 @@ interface EditProps {
 const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref) => {
     const [form] = Form.useForm()
     const [selectRows, setSelectRows] = useState<any[]>([])
-    const { loading, data, run } = useRequest<{ [key: string]: any }>((filterValue) => new Promise(async (resole, reject) => {
+    const {
+        loading,
+        data,
+        run
+    } = useRequest<{ [key: string]: any }>((filterValue) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan`, { ...filterValue, planStatus: 1 })
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan`, {
+                ...filterValue,
+                planStatus: 1
+            })
             resole(result)
         } catch (error) {
             reject(error)
         }
     }))
 
-    useImperativeHandle(ref, () => ({ selectRows }), [JSON.stringify(selectRows)])
+    useImperativeHandle(ref, () => ({selectRows}), [JSON.stringify(selectRows)])
 
     return <>
-        <Form form={form} onFinish={(values) => run({ ...values, purchaserId: values.purchaserId?.second, purchaserDeptId: values.purchaserId?.first })}>
+        <Form form={form} onFinish={(values) => run({
+            ...values,
+            purchaserId: values.purchaserId?.second,
+            purchaserDeptId: values.purchaserId?.first
+        })}>
             <Row>
                 <Col><Form.Item label="采购类型" name="purchaseType">
-                    <Select style={{ width: 200 }}>
+                    <Select style={{width: 200}}>
                         <Select.Option value="1">外部</Select.Option>
                         <Select.Option value="2">内部</Select.Option>
                         <Select.Option value="3">缺料</Select.Option>
                     </Select>
                 </Form.Item></Col>
                 <Col><Form.Item label="采购人" name="purchaserId">
-                    <IntgSelect width={200} />
+                    <IntgSelect width={200}/>
                 </Form.Item></Col>
                 <Col><Form.Item label="采购计划编号" name="purchasePlanCode">
-                    <Input />
+                    <Input/>
                 </Form.Item></Col>
                 <Col><Form.Item>
-                    <Button type="primary" htmlType="submit" style={{ marginLeft: 12 }}>搜索</Button>
-                    <Button type="default" onClick={() => form.resetFields()} htmlType="button" style={{ marginLeft: 12 }}>重置</Button>
+                    <Button type="primary" htmlType="submit" style={{marginLeft: 12}}>搜索</Button>
+                    <Button type="default" onClick={() => form.resetFields()} htmlType="button"
+                            style={{marginLeft: 12}}>重置</Button>
                 </Form.Item></Col>
             </Row>
         </Form>
-        <CommonTable loading={loading} haveIndex columns={choosePlanList} dataSource={data?.records || []} rowSelection={{
-            type: "radio",
-            onChange: (_: any, selectedRows: any[]) => {
-                setSelectRows(selectedRows)
-            }
-        }} />
+        <CommonTable loading={loading} haveIndex columns={choosePlanList} dataSource={data?.records || []}
+                     rowSelection={{
+                         type: "radio",
+                         onChange: (_: any, selectedRows: any[]) => {
+                             setSelectRows(selectedRows)
+                         }
+                     }}/>
     </>
 })
 
-export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
-    const choosePlanRef = useRef<{ selectRows: any[] }>({ selectRows: [] })
+export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
+    const choosePlanRef = useRef<{ selectRows: any[] }>({selectRows: []})
     const [visible, setVisible] = useState<boolean>(false)
     const [chooseVisible, setChooseVisible] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [form] = Form.useForm()
-    const { loading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const {loading} = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/comparisonPrice/${id}`)
             form.setFieldsValue(result)
@@ -70,19 +84,19 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === "new" })
+    }), {manual: type === "new"})
 
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
+    const {run: saveRun} = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const postData = type === "new" ? data : ({ ...data, id })
+            const postData = type === "new" ? data : ({...data, id})
             const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/comparisonPrice`, postData)
             resole(result)
         } catch (error) {
             reject(error)
         }
-    }), { manual: true })
+    }), {manual: true})
 
-    useImperativeHandle(ref, () => ({ onSubmit, resetFields }))
+    useImperativeHandle(ref, () => ({onSubmit, resetFields}))
 
     const onSubmit = () => new Promise(async (resove, reject) => {
         try {
@@ -109,20 +123,41 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         setMaterialList([...materialList, ...newMaterialList.map((item: any) => ({
             ...item,
+            num: item.num || "0",
+            width: formatSpec(item.spec).width,
+            thickness: formatSpec(item.spec).thickness,
             totalWeight: (parseFloat(item.num || "0.00") * parseFloat(item.weight || "0.00")).toFixed(2)
         }))])
         setVisible(false)
+    }
+
+    const formatSpec = (spec: any): { width: string, thickness: string } => {
+        if(!spec){
+            return ({
+                width:"0",
+                thickness:"0"
+            })
+        }
+        const splitArr = spec.replace("∠", "").split("*")
+        return ({
+            width: splitArr[0] || "0",
+            thickness: splitArr[1] || "0"
+        })
     }
 
     const handleChoosePlanOk = () => {
         const chooseData = choosePlanRef.current?.selectRows
         setMaterialList([...materialList, ...chooseData[0]?.materials.map((item: any) => ({
             ...item,
+            num: item.num || "0",
             spec: item.structureSpec,
+            width: formatSpec(item.spec).width,
+            thickness: formatSpec(item.spec).thickness,
             totalWeight: (parseFloat(item.num || "0.00") * parseFloat(item.weight || "0.00")).toFixed(2),
             materialTexture: item.structureTexture,
             standardName: item.standardName,
-            materialStandard: item.standard
+            materialStandard: item.standard,
+            materialCode: item.code
         }))])
         setChooseVisible(false)
     }
@@ -142,30 +177,39 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     }
 
     return <Spin spinning={loading}>
-        <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible} onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
-            <PopTableContent data={addMaterial as any} onChange={(fields: any[]) => setPopDataList(fields.map((item: any) => ({
-                ...item,
-                spec: item.structureSpec,
-                materialTexture: item.structureTexture,
-                standardName: item.standardName,
-                materialStandard: item.standard
-            })))} />
+        <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible}
+               onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
+            <PopTableContent data={addMaterial as any}
+                             onChange={(fields: any[]) => setPopDataList(fields.map((item: any) => ({
+                                 ...item,
+                                 spec: item.structureSpec,
+                                 materialTexture: item.structureTexture,
+                                 standardName: item.standardName,
+                                 materialStandard: item.standard
+                             })))}/>
         </Modal>
-        <Modal width={1011} title="选择计划" visible={chooseVisible} onOk={handleChoosePlanOk} onCancel={() => setChooseVisible(false)}>
-            <ChoosePlan ref={choosePlanRef} />
+        <Modal width={1011} title="选择计划" visible={chooseVisible} onOk={handleChoosePlanOk}
+               onCancel={() => setChooseVisible(false)}>
+            <ChoosePlan ref={choosePlanRef}/>
         </Modal>
-        <DetailTitle title="询比价基本信息" />
-        <BaseInfo form={form} col={2} columns={editBaseInfo} dataSource={{}} edit />
+        <DetailTitle title="询比价基本信息"/>
+        <BaseInfo form={form} col={2} columns={editBaseInfo} dataSource={{}} edit/>
         <DetailTitle title="询价原材料 *" operation={[
-            <Button type="primary" ghost key="add" style={{ marginRight: 16 }} onClick={() => setVisible(true)}>添加询价原材料</Button>,
+            <Button type="primary" ghost key="add" style={{marginRight: 16}}
+                    onClick={() => setVisible(true)}>添加询价原材料</Button>,
             <Button type="primary" ghost key="choose" onClick={() => setChooseVisible(true)}>选择计划</Button>
-        ]} />
+        ]}/>
         <CommonTable
             haveIndex
             columns={[
                 ...materialColumnsSaveOrUpdate.map((item: any) => {
                     if (item.dataIndex === "num") {
-                        return ({ ...item, render: (value: number, records: any) => <InputNumber min={0} value={value === -1 ? 0 : value} onChange={(value: number) => handleInputChange(value, records.id)} /> })
+                        return ({
+                            ...item,
+                            render: (value: number, records: any) => <InputNumber min={0}
+                                                                                  value={value === -1 ? 0 : value}
+                                                                                  onChange={(value: number) => handleInputChange(value, records.id)}/>
+                        })
                     }
                     return item
                 }),
@@ -174,6 +218,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     dataIndex: "opration",
                     render: (_: any, records: any) => <a onClick={() => handleRemove(records.materialCode)}>移除</a>
                 }]}
-            dataSource={materialList} />
+            dataSource={materialList}/>
     </Spin>
 })

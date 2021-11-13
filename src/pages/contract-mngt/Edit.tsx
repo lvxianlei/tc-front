@@ -73,6 +73,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             const comparisonPrice = await comparisonForm.validateFields()
             await saveRun({
                 ...baseInfo,
+                materialContractAttachInfoVos:attchsRef.current.getDataSource(),
                 operatorDeptId: baseInfo.operator?.first,
                 operatorId: baseInfo.operator?.second,
                 supplierId: baseInfo.supplier.id,
@@ -81,13 +82,16 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 purchasePlanNumber: baseInfo.purchasePlan.value,
                 comparisonPriceId: comparisonPrice.comparisonPrice.id,
                 comparisonPriceNumber: comparisonPrice.comparisonPrice.value,
-                materialContractDetailDtos: materialList.map((item: any) => ({
-                    ...item,
-                    taxPrice: item.taxPrice || 0,
-                    price: item.price || 0,
-                    taxTotalAmount: item.taxTotalAmount || 0,
-                    totalAmount: item.totalAmount || 0
-                }))
+                materialContractDetailDtos: materialList.map((item: any) => {
+                    delete item.id
+                    return ({
+                        ...item,
+                        taxPrice: item.taxPrice || 0,
+                        price: item.price || 0,
+                        taxTotalAmount: item.taxTotalAmount || 0,
+                        totalAmount: item.totalAmount || 0
+                    })
+                })
             })
             resove(true)
         } catch (error) {
