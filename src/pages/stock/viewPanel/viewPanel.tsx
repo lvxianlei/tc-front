@@ -3,7 +3,6 @@ import React, { useEffect, useState, } from 'react'
 import { Button, Table, Pagination, TableColumnProps, Row, Col, Select, } from 'antd';
 import RequestUtil from '../../../utils/RequestUtil';
 import ApplicationContext from "../../../configuration/ApplicationContext"
-import { Key } from 'rc-select/lib/interface/generator';
 const { Option } = Select;
 const ViewPanel = (): React.ReactNode => {
     const columns: TableColumnProps<object>[] = [
@@ -216,9 +215,9 @@ const ViewPanel = (): React.ReactNode => {
                     >
                         <Option value={''}>全部</Option>
                         {
-                            selects.materialTextures.map((item: string) => {
+                            selects.materialTextures?.map((item: string, index: number) => {
                                 return (
-                                    <Option value={item} key={item}>{item}</Option>
+                                    <Option value={item} key={index}>{item}</Option>
                                 )
                             })
                         }
@@ -241,7 +240,7 @@ const ViewPanel = (): React.ReactNode => {
                     >
                         <Option value={''}>全部</Option>
                         {
-                            selects.specs.map((item: string) => {
+                            selects.specs?.map((item: string) => {
                                 return (
                                     <Option value={item} key={item}>{item}</Option>
                                 )

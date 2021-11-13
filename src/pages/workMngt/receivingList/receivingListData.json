@@ -54,6 +54,26 @@
             "title": "创建人",
             "dataIndex": "createUserName",
             "type": "string"
+        },
+        {
+            "title": "材料名称",
+            "dataIndex": "productName",
+            "type": "string"
+        },
+        {
+            "title": "重量（吨）合计",
+            "dataIndex": "weight",
+            "type": "string"
+        },
+        {
+            "title": "价税合计（元）",
+            "dataIndex": "price",
+            "type": "string"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark",
+            "type": "string"
         }
     ],
     "BasicInformation": [
@@ -242,7 +262,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "standard",
+            "dataIndex": "materialStandardName",
             "type": "string"
         },
         {
