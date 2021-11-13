@@ -3,7 +3,7 @@ import React from 'react'
 import { Button } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailTitle, Page } from '../../common'
-import { particulars } from "./viewContract.json"
+import { particulars } from "./contract.json"
 
 export default function Particulars(): React.ReactNode {
     const history = useHistory()

@@ -15,17 +15,18 @@
             "enum": [
                 {
                     "value": 1,
-                    "label": "已收票"
+                    "label": "执行中"
                 },
                 {
                     "value": 2,
-                    "label": "待付款"
+                    "label": "已完成"
                 }
             ]
         },
         {
             "title": "最新状态变更时间",
-            "dataIndex": "batcheStatusUpdateTime"
+            "dataIndex": "batcheStatusUpdateTime",
+            "format": "YYYY-MM-DD HH:mm"
         },
         {
             "title": "经办人",
@@ -33,7 +34,8 @@
         },
         {
             "title": "完成/总数",
-            "dataIndex": "finish/sum"
+            "dataIndex": "finish",
+            "type": "string"
         },
         {
             "title": "签订时间",
@@ -41,7 +43,8 @@
         },
         {
             "title": "合同实际金额",
-            "dataIndex": "realityTotalAmount"
+            "dataIndex": "realityTotalAmount",
+            "type": "number"
         }
     ],
     "particulars": [
