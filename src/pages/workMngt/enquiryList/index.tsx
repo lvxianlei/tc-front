@@ -84,7 +84,7 @@ export default function EnquiryList(): React.ReactNode {
                     title: "操作",
                     width: 100,
                     dataIndex: "operation",
-                    render: (_: any, records: any) => <Button disabled={records.inquiryStatus === 2} type="link"
+                    render: (_: any, records: any) => <Button type="link"
                         onClick={() => {
                             setDetailId(records.id)
                             setInquiryStatus(records.inquiryStatus)
@@ -98,7 +98,7 @@ export default function EnquiryList(): React.ReactNode {
                 {
                     name: 'fuzzyQuery',
                     label: '查询',
-                    children: <Input placeholder="" maxLength={200} />
+                    children: <Input placeholder="任务编号/项目名称/客户名称/项目负责人" style={{ width: 260 }} />
                 },
                 {
                     name: 'startStatusUpdateTime',
@@ -108,7 +108,7 @@ export default function EnquiryList(): React.ReactNode {
                 {
                     name: 'inquiryStatus',
                     label: '任务状态',
-                    children: <Select defaultValue="全部" style={{ width: "100px" }}>
+                    children: <Select defaultValue="全部" style={{ width: 140 }}>
                         <Select.Option value="" key="">全部</Select.Option>
                         <Select.Option value={2} key={2}>已完成</Select.Option>
                         <Select.Option value={4} key={4}>待完成</Select.Option>

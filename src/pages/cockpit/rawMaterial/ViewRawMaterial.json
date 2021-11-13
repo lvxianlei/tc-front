@@ -1,0 +1,160 @@
+{
+    "materialPrice": [
+        {
+            "title": "原材料名称",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "materialSpec"
+        },
+        {
+            "title": "原材料类型",
+            "dataIndex": "materialCategoryName"
+        },
+        {
+            "title": "原材料标准",
+            "dataIndex": "materialStandardName"
+        },
+        {
+            "title": "报价时间",
+            "dataIndex": "quotationTime"
+        },
+        {
+            "title": "更新时间",
+            "dataIndex": "updateTime"
+        },
+        {
+            "title": "价格来源",
+            "dataIndex": "priceSource"
+        },
+        {
+            "title": "价格",
+            "dataIndex": "price"
+        }
+    ],
+    "dataSource":[
+        {
+            "title": "价格来源",
+            "dataIndex": "priceSource"
+        },
+        {
+            "title": "产地",
+            "dataIndex": "places"
+        },
+        {
+            "title": "价格",
+            "dataIndex": "price"
+        },
+        {
+            "title": "报价时间",
+            "dataIndex": "quotationTime"
+        },
+        {
+            "title": "更新时间",
+            "dataIndex": "updateTime"
+        },
+        {
+            "title": "所属省",
+            "dataIndex": "provinceName"
+        },
+        {
+            "title": "所属市",
+            "dataIndex": "cityName"
+        }
+    ],
+    "priceMaintain":[
+        {
+            "title": "原材料名称",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "原材料规格",
+            "dataIndex": "materialSpec"
+        },
+        {
+            "title": "原材料类型",
+            "dataIndex": "materialCategoryName"
+        },
+        {
+            "title": "原材料标准",
+            "dataIndex": "materialStandardName"
+        },
+        {
+            "title": "价格来源",
+            "dataIndex": "priceSource"
+        },
+        {
+            "title": "报价时间",
+            "dataIndex": "quotationTime"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "updateUserName"
+        },
+        {
+            "title": "更新时间",
+            "dataIndex": "updateTime"
+        },
+        {
+            "title": "价格",
+            "dataIndex": "price"
+        }
+    ],
+    "priceInformation":[
+        {
+            "title": "价格",
+            "dataIndex": "price"
+        },
+        {
+            "title": "更新时间",
+            "dataIndex": "updateTime"
+        },
+        {
+            "title": "来源",
+            "dataIndex": "priceSource"
+        },
+        {
+            "title": "添加人",
+            "dataIndex": "bidder"
+        }
+    ],
+    "change":[
+        {
+            "title": "类别",
+            "dataIndex": "goodsType"
+        },
+        {
+            "title": "类型",
+            "dataIndex": "pattern"
+        },
+        {
+            "title": "物料编号",
+            "dataIndex": "materialCode"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "快捷码",
+            "dataIndex": "shortcutCode"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "standard"
+        },
+        {
+            "title": "材料",
+            "dataIndex": "rowMaterial"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec"
+        }
+    ]
+}

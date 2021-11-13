@@ -1,0 +1,101 @@
+{
+    "contract": [
+        {
+            "title": "供应商",
+            "dataIndex": "supplierName"
+        },
+        {
+            "title": "合同编号",
+            "dataIndex": "contractNumber"
+        },
+        {
+            "title": "合同状态",
+            "dataIndex": "contractStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "已收票"
+                },
+                {
+                    "value": 2,
+                    "label": "待付款"
+                }
+            ]
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "batcheStatusUpdateTime"
+        },
+        {
+            "title": "经办人",
+            "dataIndex": "operatorName"
+        },
+        {
+            "title": "完成/总数",
+            "dataIndex": "finish/sum"
+        },
+        {
+            "title": "签订时间",
+            "dataIndex": "signingTime"
+        },
+        {
+            "title": "合同实际金额",
+            "dataIndex": "realityTotalAmount"
+        }
+    ],
+    "particulars": [
+        {
+            "title": "材质名称",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandard"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTexture"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length"
+        },
+        {
+            "title": "宽度",
+            "dataIndex": "width"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "number"
+        },
+        {
+            "title": "合同单价（元/吨）",
+            "dataIndex": "contractPrice"
+        },
+        {
+            "title": "价税合计（元）",
+            "dataIndex": "price"
+        },
+        {
+            "title": "重量（吨）",
+            "dataIndex": "weight"
+        },
+        {
+            "title": "采购状态",
+            "dataIndex": "purchaseStatus"
+        },
+        {
+            "title": "状态时间",
+            "dataIndex": "statusTime"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "optUserName"
+        }
+    ]
+}

@@ -661,8 +661,8 @@
     },
     { // 驾驶舱-原材料看板
       "name": "原材料看板",
-      "path": "/stock/viewRawMaterial",
-      "module": "./pages/stock/viewRawMaterial/viewRawMaterial",
+      "path": "/cockpit/rawMaterial",
+      "module": "./pages/cockpit/rawMaterial/index",
       "exact": true,
       "authority": "approvalm"
     },
@@ -675,29 +675,29 @@
     },
     { // 驾驶舱-收货单看板
       "name": "收货单看板",
-      "path": "/stock/viewReceivingNote",
-      "module": "./pages/stock/viewReceivingNote/viewReceivingNote",
+      "path": "/cockpit/receiveTask",
+      "module": "./pages/cockpit/receiveTask/index",
       "exact": true,
       "authority": "approvalm"
     },
     { // 驾驶舱-收货单看板-详情
       "name": "收货单看板详情",
-      "path": "/stock/viewReceivingNote/viewReceivingNoteDetail",
-      "module": "./pages/stock/viewReceivingNote/viewReceivingNoteDetail",
+      "path": "/cockpit/receiveTask/:id",
+      "module": "./pages/cockpit/receiveTask/Overview",
       "exact": true,
       "authority": "approvalm"
     },
     { // 驾驶舱-合同看板
       "name": "合同看板",
-      "path": "/stock/viewContract",
-      "module": "./pages/stock/viewContract/viewContract",
+      "path": "/cockpit/contract",
+      "module": "./pages/cockpit/contract/index",
       "exact": true,
       "authority": "approvalm"
     },
     { // 驾驶舱-合同看板-明细
       "name": "明细",
-      "path": "/stock/viewContract/particulars/:contractId",
-      "module": "./pages/stock/viewContract/particulars",
+      "path": "/cockpit/contract/:id",
+      "module": "./pages/cockpit/contract/Overview",
       "exact": true,
       "authority": "approvalm"
     },

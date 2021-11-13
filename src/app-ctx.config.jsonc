@@ -190,17 +190,17 @@
                             },
                             {
                                 "label": "原材料看板",
-                                "path": "/stock/viewRawMaterial",
+                                "path": "/cockpit/rawMaterial",
                                 "authority": "approvalm"
                             },
                             {
                                 "label": "收货单看板",
-                                "path": "/stock/viewReceivingNote",
+                                "path": "/cockpit/receiveTask",
                                 "authority": "approvalm"
                             },
                             {
                                 "label": "合同看板",
-                                "path": "/stock/viewContract",
+                                "path": "/cockpit/contract",
                                 "authority": "approvalm"
                             }
                         ]
