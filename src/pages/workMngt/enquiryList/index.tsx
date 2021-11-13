@@ -108,7 +108,7 @@ export default function EnquiryList(): React.ReactNode {
                 {
                     name: 'inquiryStatus',
                     label: '任务状态',
-                    children: <Select style={{ width: "100px" }}>
+                    children: <Select defaultValue="全部" style={{ width: "100px" }}>
                         <Select.Option value="" key="">全部</Select.Option>
                         <Select.Option value={2} key={2}>已完成</Select.Option>
                         <Select.Option value={4} key={4}>待完成</Select.Option>

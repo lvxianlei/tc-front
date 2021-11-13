@@ -149,9 +149,17 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const [cargoData, setCargoData] = useState<any[]>([])
     const [contractId, setContractId] = useState<string>("")
     const [form] = Form.useForm()
+
     const handleModalOk = () => {
         const dataSource: any[] = modalRef.current?.dataSource
-        setCargoData(dataSource)
+        setCargoData(dataSource.map((item: any) => ({
+            ...item,
+            productName: item.materialName,
+            standard: item.materialStandard,
+            materialStandardName: item.materialStandardName,
+            quantity: item.num,
+            contractUnitPrice: item.price
+        })))
         setVisible(false)
     }
 

@@ -77,8 +77,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 operatorId: baseInfo.operator?.second,
                 supplierId: baseInfo.supplier.id,
                 supplierName: baseInfo.supplier.value,
-                purchasePlanId: baseInfo.purchasePlan?.records[0].id,
-                purchasePlanNumber: baseInfo.purchasePlan.value,
+                purchasePlanId: baseInfo.purchasePlan?.records?.[0].id || data?.purchasePlanId,
+                purchasePlanNumber: baseInfo.purchasePlan.value || data?.purchasePlanNumber,
                 comparisonPriceId: comparisonPrice.comparisonPrice.id,
                 comparisonPriceNumber: comparisonPrice.comparisonPrice.value,
                 materialContractDetailDtos: materialList.map((item: any) => ({
