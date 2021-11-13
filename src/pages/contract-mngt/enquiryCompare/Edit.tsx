@@ -1,5 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle, useRef } from "react"
-import { Button, Modal, Select, Input, Form, Row, Col, Spin } from "antd"
+import { Button, Modal, Select, Input, Form, Row, Col, Spin, InputNumber } from "antd"
 import { BaseInfo, CommonTable, DetailTitle, PopTableContent, IntgSelect } from "../../common"
 import { editBaseInfo, materialColumnsSaveOrUpdate, addMaterial, choosePlanList } from "./enquiry.json"
 import useRequest from '@ahooksjs/use-request'
@@ -107,31 +107,48 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const handleAddModalOk = () => {
         const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
-        setMaterialList([...materialList, ...newMaterialList])
+        setMaterialList([...materialList, ...newMaterialList.map((item: any) => ({
+            ...item,
+            totalWeight: (parseFloat(item.num || "0.00") * parseFloat(item.weight || "0.00")).toFixed(2)
+        }))])
         setVisible(false)
     }
 
     const handleChoosePlanOk = () => {
         const chooseData = choosePlanRef.current?.selectRows
-        setMaterialList([...materialList, ...chooseData[0]?.materials.map((item:any)=>({
+        setMaterialList([...materialList, ...chooseData[0]?.materials.map((item: any) => ({
             ...item,
-            spec:item.structureSpec,
-            materialTexture:item.structureTexture,
-            standardName:item.standardName,
-            materialStandard:item.standard
+            spec: item.structureSpec,
+            totalWeight: (parseFloat(item.num || "0.00") * parseFloat(item.weight || "0.00")).toFixed(2),
+            materialTexture: item.structureTexture,
+            standardName: item.standardName,
+            materialStandard: item.standard
         }))])
         setChooseVisible(false)
     }
     const handleRemove = (id: string) => setMaterialList(materialList.filter((item: any) => item.materialCode !== id))
 
+    const handleInputChange = (value: number, id: string) => {
+        setMaterialList(materialList.map((item: any) => {
+            if (item.id === id) {
+                return ({
+                    ...item,
+                    num: value,
+                    totalWeight: (parseFloat(item.weight || "0.00") * value).toFixed(2)
+                })
+            }
+            return item
+        }))
+    }
+
     return <Spin spinning={loading}>
         <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible} onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
-            <PopTableContent data={addMaterial as any} onChange={(fields:any[]) => setPopDataList(fields.map((item:any)=>({
+            <PopTableContent data={addMaterial as any} onChange={(fields: any[]) => setPopDataList(fields.map((item: any) => ({
                 ...item,
-                spec:item.structureSpec,
-                materialTexture:item.structureTexture,
-                standardName:item.standardName,
-                materialStandard:item.standard
+                spec: item.structureSpec,
+                materialTexture: item.structureTexture,
+                standardName: item.standardName,
+                materialStandard: item.standard
             })))} />
         </Modal>
         <Modal width={1011} title="选择计划" visible={chooseVisible} onOk={handleChoosePlanOk} onCancel={() => setChooseVisible(false)}>
@@ -146,7 +163,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         <CommonTable
             haveIndex
             columns={[
-                ...materialColumnsSaveOrUpdate,
+                ...materialColumnsSaveOrUpdate.map((item: any) => {
+                    if (item.dataIndex === "num") {
+                        return ({ ...item, render: (value: number, records: any) => <InputNumber min={0} value={value === -1 ? 0 : value} onChange={(value: number) => handleInputChange(value, records.id)} /> })
+                    }
+                    return item
+                }),
                 {
                     title: "操作",
                     dataIndex: "opration",

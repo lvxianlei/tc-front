@@ -8,7 +8,7 @@ import PurchasePlan from "./PurchasePlan"
 import AuthUtil from "../../../utils/AuthUtil"
 export default function Invoicing() {
     const history = useHistory()
-    const tenantId = AuthUtil.getTenantId()
+    const userId = AuthUtil.getUserId()
     const purChasePlanRef = useRef<{ onSubmit: () => void }>({ onSubmit: () => { } })
     const [visible, setVisible] = useState<boolean>(false)
     const [generateVisible, setGenerateVisible] = useState<boolean>(false)
@@ -113,7 +113,7 @@ export default function Invoicing() {
                     },
                     getCheckboxProps: (record: any) => {
                         return ({
-                            disabled: !([1].includes(record.purchaseTaskStatus) && [-1, null].includes(record.purchasePlanId) && record.purchaserId === tenantId)
+                            disabled: !([1].includes(record.purchaseTaskStatus) && [-1, null].includes(record.purchasePlanId) && record.purchaserId === userId)
                         })
                     }
                 }

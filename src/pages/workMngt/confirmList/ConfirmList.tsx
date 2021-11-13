@@ -11,8 +11,8 @@ import styles from './confirm.module.less';
 import AuthUtil from '../../../utils/AuthUtil';
 
 export default function ConfirmList(): React.ReactNode {
-    const [confirmLeader, setConfirmLeader] = useState<any|undefined>([]);
-    const [department, setDepartment] = useState<any|undefined>([]);
+    const [confirmLeader, setConfirmLeader] = useState<any | undefined>([]);
+    const [department, setDepartment] = useState<any | undefined>([]);
     const [filterValue, setFilterValue] = useState({});
     const location = useLocation<{ state: number }>();
     const history = useHistory();
@@ -21,8 +21,6 @@ export default function ConfirmList(): React.ReactNode {
         setDepartment(departmentData);
         resole(data)
     }), {})
-   
-    console.log(AuthUtil.getUserId())
     const columns = [
         {
             key: 'index',
@@ -86,7 +84,7 @@ export default function ConfirmList(): React.ReactNode {
                         value: 5,
                         label: "已提交"
                     }
-                  ]
+                ]
                 return <>{renderEnum.find((item: any) => item.value === value).label}</>
             }
         },
@@ -104,34 +102,34 @@ export default function ConfirmList(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type='link' onClick={()=>{history.push(`/workMngt/confirmList/confirmMessage/${record.id}`)}} disabled={AuthUtil.getUserId()!==record.confirmId}>确认信息</Button>
-                    <Button type='link' onClick={()=>{history.push(`/workMngt/confirmList/confirmDetail/${record.id}/${record.status}`)}} disabled={record.status<3 || AuthUtil.getUserId()!==record.confirmId}>确认明细</Button>
+                    <Button type='link' onClick={() => { history.push(`/workMngt/confirmList/confirmMessage/${record.id}`) }} disabled={AuthUtil.getUserId() !== record.confirmId}>确认信息</Button>
+                    <Button type='link' onClick={() => { history.push(`/workMngt/confirmList/confirmDetail/${record.id}/${record.status}`) }} disabled={record.status < 3 || AuthUtil.getUserId() !== record.confirmId}>确认明细</Button>
                 </Space>
             )
         }
     ];
     const onDepartmentChange = async (value: Record<string, any>) => {
-        if(value){
-            const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
+        if (value) {
+            const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
             setConfirmLeader(userData.records);
-        }else{
-            
+        } else {
+
             setConfirmLeader([]);
         }
-       
+
     }
-    const renderTreeNodes = (data:any) =>
-    data.map((item:any) => {
-        if (item.children) {
-            item.disabled = true;
-            return (
-            <TreeNode key={item.id} title={item.title} value={item.id} disabled={item.disabled} className={styles.node}>
-                {renderTreeNodes(item.children)}
-            </TreeNode>
-            );
-        }
-        return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
-    });
+    const renderTreeNodes = (data: any) =>
+        data.map((item: any) => {
+            if (item.children) {
+                item.disabled = true;
+                return (
+                    <TreeNode key={item.id} title={item.title} value={item.id} disabled={item.disabled} className={styles.node}>
+                        {renderTreeNodes(item.children)}
+                    </TreeNode>
+                );
+            }
+            return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
+        });
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles.forEach((role: any & SelectDataNode): void => {
             role.value = role.id;
@@ -145,8 +143,8 @@ export default function ConfirmList(): React.ReactNode {
     const onFilterSubmit = (value: any) => {
         if (value.planTime) {
             const formatDate = value.planTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.plannedDeliveryTimeStart = formatDate[0]+ ' 00:00:00';
-            value.plannedDeliveryTimeEnd = formatDate[1]+ ' 23:59:59';
+            value.plannedDeliveryTimeStart = formatDate[0] + ' 00:00:00';
+            value.plannedDeliveryTimeEnd = formatDate[1] + ' 23:59:59';
             delete value.planTime
         }
         setFilterValue(value)
@@ -159,16 +157,16 @@ export default function ConfirmList(): React.ReactNode {
             filterValue={filterValue}
             // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
-            requestData={{status: location.state}}
+            requestData={{ status: location.state }}
             searchFormItems={[
                 {
                     name: 'status',
                     label: '任务状态',
-                    children: <Form.Item name="status" initialValue={ location.state }>
-                        <Select style={{width:"100px"}}>
+                    children: <Form.Item name="status" initialValue={location.state}>
+                        <Select style={{ width: "100px" }}>
                             {/* <Select.Option value={1} key={1}>待确认</Select.Option>
                             <Select.Option value={2} key={2}>待指派</Select.Option> */}
-                            <Select.Option value={''} key ={''}>全部</Select.Option>
+                            <Select.Option value={''} key={''}>全部</Select.Option>
                             <Select.Option value={3} key={3}>待完成</Select.Option>
                             <Select.Option value={4} key={4}>已完成</Select.Option>
                             {/* <Select.Option value={5} key={5}>已提交</Select.Option>
@@ -178,27 +176,27 @@ export default function ConfirmList(): React.ReactNode {
                 },
                 {
                     name: 'planTime',
-                    label:'计划交付时间',
+                    label: '计划交付时间',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
                     name: 'confirmDept',
                     label: '确认人',
-                    children:  <TreeSelect style={{width:'200px'}}
-                                    allowClear
-                                    onChange={ onDepartmentChange }
-                                >
-                                    {renderTreeNodes(wrapRole2DataNode( department ))}
-                                </TreeSelect>
+                    children: <TreeSelect style={{ width: '200px' }}
+                        allowClear
+                        onChange={onDepartmentChange}
+                    >
+                        {renderTreeNodes(wrapRole2DataNode(department))}
+                    </TreeSelect>
                 },
                 {
                     name: 'confirmId',
-                    label:'',
-                    children:   <Select style={{width:'100px'}} allowClear>
-                                    { confirmLeader && confirmLeader.map((item:any)=>{
-                                        return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                                    }) }
-                                </Select>
+                    label: '',
+                    children: <Select style={{ width: '100px' }} allowClear>
+                        {confirmLeader && confirmLeader.map((item: any) => {
+                            return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                        })}
+                    </Select>
                 },
                 {
                     name: 'fuzzyQueryItem',

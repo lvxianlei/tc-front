@@ -38,7 +38,7 @@ export default function Overview(): JSX.Element {
         }
     }), { manual: true })
 
-    const {  run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/inquiryQuotation?id=${id}`)
             resole(result)
@@ -48,7 +48,6 @@ export default function Overview(): JSX.Element {
     }), { manual: true })
 
     const handleFinishPrice = async () => {
-
         Modal.confirm({
             title: "提交/完成",
             content: "确认提交/完成？",
@@ -56,11 +55,14 @@ export default function Overview(): JSX.Element {
             onOk: () => new Promise(async (resove, reject) => {
                 try {
                     await finishPriceRun({
-                        comparisonPriceDetailDtos: materialLists
+                        comparisonPriceDetailDtos: materialLists.map((item: any) => ({
+                            ...item,
+                            winBidSupplierId: item.winBidSupplierId === -1 ? null : item.winBidSupplierId
+                        }))
                     })
                     resove(true)
-                    message.success("您已完成询价！");
-                    history.goBack();
+                    message.success("您已完成询价...")
+                    history.goBack()
                 } catch (error) {
                     reject(false)
                 }
@@ -152,9 +154,9 @@ export default function Overview(): JSX.Element {
                             <Button type="link" onClick={() => message.warning("功能开发中...")}>附件</Button>
                             <a type="link" onClick={() => {
                                 Modal.confirm({
-                                    title:"删除",
-                                    content:"确定删除吗？",
-                                    onOk:async ()=>{
+                                    title: "删除",
+                                    content: "确定删除吗？",
+                                    onOk: async () => {
                                         await deleteRun(records.id);
                                         message.success("成功删除！");
                                         history.go(0);

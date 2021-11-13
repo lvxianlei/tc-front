@@ -31,7 +31,13 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/applyPayment/${id}`)
             baseForm.setFieldsValue(formatData(ApplicationList, {
                 ...result,
-                relatednotes: { value: result.applyPaymentInvoiceVos?.map((item: any) => item.billNumber).join(","), records: result.applyPaymentInvoiceVos || [] }
+                relatednotes: {
+                    value: result.applyPaymentInvoiceVos?.map((item: any) => item.billNumber).join(","),
+                    records: result.applyPaymentInvoiceVos?.map((item: any) => ({
+                        invoiceId: item.invoiceId,
+                        billNumber: item.billNumber
+                    })) || []
+                }
             }))
             resole(result)
         } catch (error) {
@@ -63,7 +69,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 supplierId: baseData.supplierName?.id || data?.supplierId,
                 supplierName: baseData.supplierName?.value || data?.supplierName,
                 applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
-                    invoiceId: item.id, billNumber: item.billNumber
+                    invoiceId: item.invoiceId,
+                    billNumber: item.billNumber
                 })) || data?.applyPaymentInvoiceVos
             } : {
                 ...baseData,
@@ -71,9 +78,12 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 supplierId: baseData.supplierName?.id || data?.supplierId,
                 supplierName: baseData.supplierName?.value || data?.supplierName,
                 applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
-                    invoiceId: item.id,
+                    invoiceId: item.invoiceId,
                     billNumber: item.billNumber
-                })) || data?.applyPaymentInvoiceVos
+                })) || data?.applyPaymentInvoiceVos.map((item: any) => ({
+                    invoiceId: item.invoiceId,
+                    billNumber: item.billNumber
+                }))
             }
             await saveRun(postData, saveType)
             resolve(true)

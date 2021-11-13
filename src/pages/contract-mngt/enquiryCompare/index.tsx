@@ -103,7 +103,7 @@ export default function ContractMngt() {
             </Modal>
             <Modal destroyOnClose title="操作信息" width={1011}
                 visible={oprationVisible}
-                   onCancel={() => setOprationVisible(false)}
+                onCancel={() => setOprationVisible(false)}
                 footer={[<Button type="primary" ghost key="close" onClick={() => setOprationVisible(false)}>关闭</Button>]}>
                 <OprationInfo id={detailId} />
             </Modal>
@@ -142,8 +142,9 @@ export default function ContractMngt() {
                                 setCancelVisible(true)
                             }}>取消</Button>
                             <Button type="link" onClick={() => {
-                                setDetailId(records.id)
-                                setOprationVisible(true)
+                                // setDetailId(records.id)
+                                // setOprationVisible(true)
+                                message.warning("功能加急开发中...")
                             }}>操作信息</Button>
                             <Button disabled={records.comparisonStatus !== 1} type="link" onClick={() => handleDelete(records.id)}>删除</Button>
                         </>
@@ -162,7 +163,7 @@ export default function ContractMngt() {
                     {
                         name: 'updateStartTime',
                         label: '最新状态变更时间',
-                        children: <DatePicker.RangePicker style={{ width: "200px" }} format="YYYY-MM-DD"/>
+                        children: <DatePicker.RangePicker style={{ width: "200px" }} format="YYYY-MM-DD" />
                     },
                     {
                         name: 'comparisonStatus',

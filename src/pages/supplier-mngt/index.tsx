@@ -51,7 +51,7 @@ export default function SupplierMngt(): React.ReactNode {
     const handleEditOk = () => new Promise(async (resove, reject) => {
         try {
             await editRef.current?.onSubmit()
-            await message.success("成功添加供应商...")
+            message.success("成功添加供应商...")
             history.go(0)
             resove(true)
         } catch (error) {
