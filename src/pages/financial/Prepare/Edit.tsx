@@ -69,7 +69,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 supplierId: baseData.supplierName?.id || data?.supplierId,
                 supplierName: baseData.supplierName?.value || data?.supplierName,
                 applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
-                    invoiceId: item.invoiceId,
+                    invoiceId: item.id,
                     billNumber: item.billNumber
                 })) || data?.applyPaymentInvoiceVos
             } : {
@@ -78,7 +78,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 supplierId: baseData.supplierName?.id || data?.supplierId,
                 supplierName: baseData.supplierName?.value || data?.supplierName,
                 applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
-                    invoiceId: item.invoiceId,
+                    invoiceId: item.id,
                     billNumber: item.billNumber
                 })) || data?.applyPaymentInvoiceVos.map((item: any) => ({
                     invoiceId: item.invoiceId,
