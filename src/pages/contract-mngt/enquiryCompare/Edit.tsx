@@ -149,11 +149,12 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
         const chooseData = choosePlanRef.current?.selectRows
         setMaterialList([...materialList, ...chooseData[0]?.materials.map((item: any) => ({
             ...item,
-            num: item.num || "0",
+            num: item.planPurchaseNum || "0",
             spec: item.structureSpec,
             width: formatSpec(item.spec).width,
             thickness: formatSpec(item.spec).thickness,
-            totalWeight: (parseFloat(item.num || "0.00") * parseFloat(item.weight || "0.00")).toFixed(2),
+            weight:item.singleWeight||0,
+            totalWeight: (parseFloat(item.planPurchaseNum || "0.00") * parseFloat(item.singleWeight || "0.00")).toFixed(2),
             materialTexture: item.structureTexture,
             standardName: item.standardName,
             materialStandard: item.standard,
