@@ -3,7 +3,7 @@ import React from 'react'
 import { Button, Select, DatePicker, Input } from 'antd'
 import { Link, useHistory, } from 'react-router-dom'
 import { Page } from '../../common'
-import { contract } from "./viewContract.json"
+import { contract } from "./contract.json"
 
 export default function ViewContract(): React.ReactNode {
     const history = useHistory()
@@ -31,12 +31,17 @@ export default function ViewContract(): React.ReactNode {
                 width: 50,
                 render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
             },
-            ...contract,
+            ...contract.map((item: any) => {
+                if (item.dataIndex === "finish") {
+                    return ({ ...item, render: (value: string, records: any) => <>{value || "0"}/{records.sum || "0"}</> })
+                }
+                return item
+            }),
             {
                 key: 'operation',
                 title: '操作',
                 dataIndex: 'operation',
-                render: (_: any, records: any) => <Button type="link"><Link to={`/stock/viewContract/particulars/${records.id}`}>明细</Link></Button>
+                render: (_: any, records: any) => <Button type="link"><Link to={`/cockpit/contract/${records.id}`}>明细</Link></Button>
             }]}
         extraOperation={<Button type="primary">导出</Button>}
         onFilterSubmit={onFilterSubmit}

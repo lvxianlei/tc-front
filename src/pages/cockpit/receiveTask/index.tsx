@@ -1,54 +1,50 @@
 //收货单看板
-import React, { useEffect, useState } from 'react'
-import { Button, Select, DatePicker, Input, Descriptions, Modal } from 'antd'
+import React, { useState } from 'react'
+import { Button, Select, DatePicker, Input, Modal } from 'antd'
 import { Link, useHistory, } from 'react-router-dom'
-import { Attachment, CommonTable, DetailContent, DetailTitle, Page } from '../../common'
-import { operatingInformation, ApprovalInformation, operatingInformation1, aa } from "./viewReceivingNote.json"
-import RequestUtil from '../../../utils/RequestUtil'
-var moment = require('moment');
-moment().format();
-//状态
-const projectType = [
-    {
-        value: 0,
-        label: "全部"
-    },
-    {
-        value: 1,
-        label: "待收票"
-    },
-    {
-        value: 2,
-        label: "已收票"
-    },
-    {
-        value: 3,
-        label: "待付款"
-    },
-    {
-        value: 4,
-        label: "已付款"
-    }
-]
-
+import { Page } from '../../common'
+import { receiveColumns } from "./receiveTask.json"
+import PrepareOverview from "../../financial/Prepare/Overview"
+import BillOverview from "../../financial/Bill/Overview"
 export default function ViewReceivingNote(): React.ReactNode {
-    const history = useHistory();
+    const history = useHistory()
+    const [prepareVisible, setPrepareVisible] = useState<boolean>(false)
+    const [billVisible, setBillVisible] = useState<boolean>(false)
+    const [detailId, setDetailId] = useState<string>("")
     const onFilterSubmit = (value: any) => {
-        if (value.startBidBuyEndTime) {
-            const formatDate = value.startBidBuyEndTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startBidBuyEndTime = formatDate[0]
-            value.endBidBuyEndTime = formatDate[1]
-        }
-
-        if (value.startBiddingEndTime) {
-            const formatDate = value.startBiddingEndTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startBiddingEndTime = formatDate[0]
-            value.endBiddingEndTime = formatDate[1]
+        if (value.startCompleteTime) {
+            const formatDate = value.startCompleteTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startCompleteTime = formatDate[0] + " 00:00:00"
+            value.endCompleteTime = formatDate[1] + " 23:59:59"
         }
         return value
     }
 
     return (<>
+        <Modal
+            destroyOnClose
+            visible={prepareVisible} width={1011}
+            footer={<Button type="primary" onClick={() => {
+                setPrepareVisible(false)
+            }}>确认</Button>}
+            title="详情"
+            onCancel={() => {
+                setPrepareVisible(false)
+            }}>
+            <PrepareOverview id={detailId} />
+        </Modal>
+        <Modal
+            destroyOnClose
+            visible={billVisible} width={1011}
+            footer={<Button type="primary" onClick={() => {
+                setBillVisible(false)
+            }}>确认</Button>}
+            title="详情"
+            onCancel={() => {
+                setBillVisible(false)
+            }}>
+            <BillOverview id={detailId} />
+        </Modal>
         <Page
             path="/tower-storage/receiveStock/list"
             columns={[
@@ -59,42 +55,30 @@ export default function ViewReceivingNote(): React.ReactNode {
                     width: 50,
                     render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                 },
-                {
-                    title: "供应商",
-                    dataIndex: "supplierName"
-                },
-                {
-                    title: "收货单编号",
-                    dataIndex: "receiveNumber",
-                    render: (text, record: any) => {
-                        return <div>
-                            <Button type="link" onClick={() => history.push(`/stock/viewReceivingNote/viewReceivingNoteDetail`)}>{record.receiveNumber}</Button>
-                        </div>
+                ...receiveColumns.map((item: any) => {
+                    switch (item.dataIndex) {
+                        case "receiveNumber":
+                            return ({ ...item, render: (value: any, records: any) => <Link to={`/workMngt/receiving/detail/${records.id}`}>{value}</Link> })
+                        case "pleasePayNumber":
+                            return ({
+                                ...item,
+                                render: (value: any, records: any) => <a onClick={() => {
+                                    setDetailId(records.pleasePayId)
+                                    setPrepareVisible(true)
+                                }}>{value}</a>
+                            })
+                        case "billNumber":
+                            return ({
+                                ...item,
+                                render: (value: any, records: any) => <a onClick={() => {
+                                    setDetailId(records.invoiceId)
+                                    setBillVisible(true)
+                                }}>{value}</a>
+                            })
+                        default:
+                            return item
                     }
-                },
-                ...aa,
-                {
-                    title: "关联请款编号",
-                    dataIndex: "pleasePayNumber",
-                    render: (text, record: any) => {
-                        return <div>
-                            <Button type="link" onClick={() => { }}>{record.pleasePayNumber}</Button>
-                        </div>
-                    }
-                },
-                {
-                    title: "关联票据编号",
-                    dataIndex: "billNumber",
-                    render: (text, record: any) => {
-                        return <div>
-                            <Button type="link" onClick={() => { }}>{record.billNumber}</Button>
-                        </div>
-                    }
-                },
-                {
-                    title: "付款状态",
-                    dataIndex: "invoiceStatus"
-                }
+                })
             ]}
             extraOperation={<>
                 <Button type="primary">导出</Button>
@@ -103,22 +87,25 @@ export default function ViewReceivingNote(): React.ReactNode {
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
-                    name: 'updateTime',
+                    name: 'startCompleteTime',
                     label: '收货完成时间',
-                    children: <DatePicker />
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'rawMaterialType',
+                    name: 'receiveStatus',
                     label: '状态',
                     children: <Select style={{ width: "150px" }} defaultValue={"全部"}>
-                        {projectType.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
+                        <Select.Option value={1}>待收票</Select.Option>
+                        <Select.Option value={2}>已收票</Select.Option>
+                        <Select.Option value={3}>待付款</Select.Option>
+                        <Select.Option value={4}>已付款</Select.Option>
                     </Select>
                 },
                 {
-                    name: 'inquire',
+                    name: 'fuzzyQuery',
                     label: '查询',
-                    children: <Input style={{ width: "113px" }} placeholder="供应商/收货单编号/关联申请编号/关联票据编号" />
-                },
+                    children: <Input style={{ width: 280 }} placeholder="供应商/收货单编号/关联申请编号/关联票据编号" />
+                }
             ]}
         />
     </>

@@ -668,8 +668,8 @@
     },
     { // 驾驶舱-原材料看板-价格维护
       "name": "价格维护",
-      "path": "/stock/viewRawMaterial/priceMaintain",
-      "module": "./pages/stock/viewRawMaterial/priceMaintain",
+      "path": "/cockpit/rawMaterial/edit",
+      "module": "./pages/cockpit/rawMaterial/Edit",
       "exact": true,
       "authority": "approvalm"
     },
@@ -677,13 +677,6 @@
       "name": "收货单看板",
       "path": "/cockpit/receiveTask",
       "module": "./pages/cockpit/receiveTask/index",
-      "exact": true,
-      "authority": "approvalm"
-    },
-    { // 驾驶舱-收货单看板-详情
-      "name": "收货单看板详情",
-      "path": "/cockpit/receiveTask/:id",
-      "module": "./pages/cockpit/receiveTask/Overview",
       "exact": true,
       "authority": "approvalm"
     },
