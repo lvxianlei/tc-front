@@ -15,6 +15,13 @@
       "path": "/login",
       "module": "./pages/login/Login",
       "exact": true
+    },
+    { // 司机端任务详情
+      "name": "任务详情",
+      "path": "/driverSide/taskDetail",
+      "module": "./pages/DriverSide/TaskDetail",
+      "exact": true,
+      "authority": "approvalm"
     }
   ],
   "routers": [
@@ -1477,6 +1484,7 @@
       "exact": true,
       "authority": "approvalm"
     },
+    //MC
     { // 车间工作管理-加工任务面板
       "name": "加工任务面板",
       "path": "/workshopManagement/processingTask",
@@ -1624,6 +1632,7 @@
       "exact": true,
       "authority": "approvalm"
     },
+    // 通用
     { // 公告管理
       "name": "公告管理",
       "path": "/announcement",
