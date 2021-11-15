@@ -5,7 +5,6 @@ import { FixedType } from 'rc-table/lib/interface';
 import styles from './DailySchedule.module.less';
 import { Link, useLocation } from 'react-router-dom';
 import RequestUtil from '../../utils/RequestUtil';
-import { CloseOutlined } from '@ant-design/icons';
 import TeamSelectionModal from '../../components/TeamSelectionModal';
 
 interface IDetail {
@@ -193,7 +192,7 @@ export default function DailySchedule(): React.ReactNode {
                 {
                     name: 'fuzzyMsg',
                     label: '',
-                    children: <Input placeholder="请输入订单工程名称/计划号/塔型进行查询"/>
+                    children: <Input style={{ width: '300px' }} placeholder="请输入订单工程名称/计划号/塔型进行查询"/>
                 },
                 {
                     name: 'updateStatusTime',

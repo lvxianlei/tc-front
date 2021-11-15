@@ -132,9 +132,9 @@ class ManagementOrder extends SaleOrder {
         dataIndex: "orderDeliveryTime",
       },
       {
-        key: "createUserName",
+        key: "salesman",
         title: "制单人",
-        dataIndex: "createUserName",
+        dataIndex: "salesman", // createUserName修改为salesman
       },
       {
         key: "createTime",

@@ -20,8 +20,7 @@
       "name": "任务详情",
       "path": "/driverSide/taskDetail",
       "module": "./pages/DriverSide/TaskDetail",
-      "exact": true,
-      "authority": "approvalm"
+      "exact": true
     }
   ],
   "routers": [
@@ -1587,6 +1586,20 @@
       "name": "过磅单列表",
       "path": "/galvanizingWorkshop/weighingList",
       "module": "./pages/GalvanizingWorkshop/WeighingList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 镀锌车间-新增过磅单
+      "name": "新增",
+      "path": "/galvanizingWorkshop/weighingList/weighingNew",
+      "module": "./pages/GalvanizingWorkshop/WeighingNew",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 镀锌车间-编辑过磅单
+      "name": "编辑",
+      "path": "/galvanizingWorkshop/weighingList/weighingSetting/:id",
+      "module": "./pages/GalvanizingWorkshop/WeighingNew",
       "exact": true,
       "authority": "approvalm"
     },

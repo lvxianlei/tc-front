@@ -304,7 +304,6 @@ export default function ShippingDepartmentConfig(): React.ReactNode {
     const [ selectedRows, setSelectedRows ] = useState<IUser[] | any>({});
     const [ warehousePositionDTODeleteList, setWarehousePositionDTODeleteList ] = useState<IProcessList[]>([]);
     const [ warehouseKeeperDTODeleteList, setWarehouseKeeperDTODeleteList ] = useState<IWarehouseKeeperList[]>([]);
-    const [ rows, setRows ] = useState<DataType[]>([]);
     const history = useHistory();
     return (
         <>
