@@ -13,7 +13,7 @@ export default function Overview(): React.ReactNode {
     const [editId, setEditId] = useState<string>("")
     const [oprationType, setOprationType] = useState<"new" | "edit">("new")
     const [visible, setVisible] = useState<boolean>(false)
-    const editRef = useRef<{ onSubmit: () => void }>({ onSubmit: () => { } })
+    const editRef = useRef<{ onSubmit: () => void, loading: boolean }>({ onSubmit: () => { }, loading: false })
     const invoiceTypeEnum = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
@@ -47,10 +47,11 @@ export default function Overview(): React.ReactNode {
         })
     }
 
-    const handleEditOk = () => new Promise(async (resove, reject) => {
+    const handleEditOk = async () => {
         await editRef.current.onSubmit()
         message.success("保存成功...")
-    })
+        setVisible(false)
+    }
 
     return (
         <>
@@ -60,6 +61,7 @@ export default function Overview(): React.ReactNode {
                 visible={visible}
                 destroyOnClose
                 onOk={handleEditOk}
+                confirmLoading={editRef.current?.loading}
                 onCancel={() => {
                     setEditId("")
                     setVisible(false)

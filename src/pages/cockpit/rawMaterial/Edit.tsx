@@ -65,23 +65,26 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const [popContent, setPopContent] = useState<{ id: string, records: any }>({ id: "", records: {} })
     const [materialForm] = Form.useForm()
     const [priceInfoForm] = Form.useForm()
-    const { loading, data } = useRequest<any[]>(() => new Promise(async (resove, reject) => {
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
         try {
-            const result: any[] = await RequestUtil.get(`/tower-supply/materialPrice/${id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPrice/${id}`)
+            materialForm.setFieldsValue(result)
+            priceInfoForm.setFieldsValue(result)
+            setPopContent({ ...popContent, id: result?.materialId })
             resove(result)
         } catch (error) {
             reject(error)
         }
     }), { manual: type === "new", refreshDeps: [id] })
 
-    const { run: saveRun } = useRequest<any[]>((data: any) => new Promise(async (resove, reject) => {
+    const { loading: saveLoading, run: saveRun } = useRequest<any[]>((data: any) => new Promise(async (resove, reject) => {
         try {
             const result: any[] = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/materialPrice`, data)
             resove(result)
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === "new", refreshDeps: [id] })
+    }), { manual: true })
 
     const handleCancel = () => setVisible(false)
     const handleOk = () => {
@@ -112,7 +115,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         }
     })
 
-    useImperativeHandle(ref, () => ({ onSubmit }), [onSubmit])
+    useImperativeHandle(ref, () => ({ onSubmit, loading: saveLoading }), [onSubmit, saveLoading])
 
     return <Spin spinning={loading}>
         <Modal width={1011} title="选择合同" destroyOnClose visible={visible} onOk={handleOk} onCancel={handleCancel}>
@@ -123,11 +126,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         ]} />
         <BaseInfo form={materialForm} col={3} columns={materialInfo} dataSource={data || {}} edit />
         <DetailTitle title="价格信息" />
-        <BaseInfo form={priceInfoForm} col={3} columns={priceInfo.map((item: any) => {
-            if (item.dataIndex === "price") {
-                return ({ ...item, render: (data: any) => <>¥<InputNumber {...data} />/吨</> })
-            }
-            return item
-        })} dataSource={data || {}} edit />
+        <BaseInfo form={priceInfoForm} col={3} columns={priceInfo} dataSource={data || {}} edit />
     </Spin>
 })
