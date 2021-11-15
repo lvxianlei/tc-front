@@ -33,7 +33,7 @@
             "dataIndex": "price"
         }
     ],
-    "dataSource":[
+    "dataSource": [
         {
             "title": "价格来源",
             "dataIndex": "priceSource"
@@ -63,7 +63,7 @@
             "dataIndex": "cityName"
         }
     ],
-    "priceMaintain":[
+    "priceMaintain": [
         {
             "title": "原材料名称",
             "dataIndex": "materialName"
@@ -101,7 +101,7 @@
             "dataIndex": "price"
         }
     ],
-    "priceInformation":[
+    "historyPrice": [
         {
             "title": "价格",
             "dataIndex": "price"
@@ -119,7 +119,7 @@
             "dataIndex": "bidder"
         }
     ],
-    "change":[
+    "change": [
         {
             "title": "类别",
             "dataIndex": "goodsType"
@@ -155,6 +155,63 @@
         {
             "title": "规格",
             "dataIndex": "spec"
+        }
+    ],
+    "materialInfo": [
+        {
+            "title": "原材料名称",
+            "dataIndex": "materialName",
+            "disabled": true
+        },
+        {
+            "title": "原材料规格",
+            "dataIndex": "materialSpec",
+            "disabled": true
+        },
+        {
+            "title": "原材料类型",
+            "dataIndex": "materialCategoryName",
+            "disabled": true
+        },
+        {
+            "title": "原材料标准",
+            "dataIndex": "materialStandardName",
+            "disabled": true
+        }
+    ],
+    "priceInfo": [
+        {
+            "title": "价格",
+            "dataIndex": "price",
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入价格..."
+                }
+            ]
+        },
+        {
+            "title": "价格来源",
+            "dataIndex": "priceSource",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择价格来源..."
+                }
+            ]
+        },
+        {
+            "title": "报价时间",
+            "dataIndex": "quotationTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入报价时间..."
+                }
+            ]
         }
     ]
 }

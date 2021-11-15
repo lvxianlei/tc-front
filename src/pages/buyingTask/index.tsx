@@ -134,7 +134,7 @@ export default function rawMaterial() {
     }
 
     return (
-        <div>
+        <>
             <Page
                 path="/tower-supply/materialPurchaseTask"
                 columns={[
@@ -266,6 +266,6 @@ export default function rawMaterial() {
             <Modal width={1011} title="拒绝" visible={isModalVisible3} footer={buttons3} onCancel={handleCancel3}>
                 拒绝原因 *<Input placeholder="请输入" value={rejectionDescription} onChange={(e) => { setRejectionDescription(e.target.value) }} />
             </Modal>
-        </div>
+        </>
     )
 }

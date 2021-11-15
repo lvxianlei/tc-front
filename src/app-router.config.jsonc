@@ -654,7 +654,7 @@
     },
     { // 驾驶舱-库存看板
       "name": "库存看板",
-      "path": "/stock/viewPanel",
+      "path": "/cockpit/viewPanel",
       "module": "./pages/stock/viewPanel/viewPanel",
       "exact": true,
       "authority": "approvalm"
@@ -668,8 +668,8 @@
     },
     { // 驾驶舱-原材料看板-价格维护
       "name": "价格维护",
-      "path": "/cockpit/rawMaterial/edit",
-      "module": "./pages/cockpit/rawMaterial/Edit",
+      "path": "/cockpit/rawMaterial/price",
+      "module": "./pages/cockpit/rawMaterial/Overview",
       "exact": true,
       "authority": "approvalm"
     },

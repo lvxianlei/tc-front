@@ -1,20 +1,23 @@
 //原材料看板
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Button, Select, DatePicker, Input, Modal } from 'antd'
 import { Link, useHistory, } from 'react-router-dom'
-import { materialPrice, dataSource, priceInformation } from "./rawMaterial.json"
-import AntdCharts from "./antdCharts"
-import { CommonTable, Page } from '../../common'
-import RequestUtil from '../../../utils/RequestUtil'
+import { materialPrice } from "./rawMaterial.json"
+import { Page } from '../../common'
 import ApplicationContext from '../../../configuration/ApplicationContext'
+import HistoryPrice from './HistoryPrice'
+import DataSource from './DataSource'
 
 export default function ViewRawMaterial(): React.ReactNode {
-    //原材料标准
+    const history = useHistory()
     const invoiceTypeEnum = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
-    const history = useHistory()
+    const [detailId, setDetailId] = useState<string>("")
+    const [materialName, setMaterialName] = useState<string>("")
+    const [priceVisible, setPriceVisible] = useState<boolean>(false)
+    const [dataVisible, setDataVisible] = useState<boolean>(false)
     const onFilterSubmit = (value: any) => {
         if (value.startUpdateTime) {
             const formatDate = value.startUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -24,51 +27,41 @@ export default function ViewRawMaterial(): React.ReactNode {
         return value
     }
 
-    // const historyPrice = async (materialPriceId: string) => {
-    //     setIsModalVisible(true)
-    //     setMaterialPriceId(Number(materialPriceId))
-    //     const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPrice/history/${materialPriceId}`)
-    //     result.map((item: any) => {
-    //         const time = moment(item.updateTime).format("YYYY-MM-DD")
-    //     })
-    //     setArr(result);
-    // }
-    // const handleCancel = () => {
-    //     setIsModalVisible(false);
-    // };
-    // const state = async (materialPriceId: number) => {
-    //     setIsModalVisible1(true);
-    //     setMaterialPriceId(materialPriceId);
-    //     const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPrice/priceSource/${materialPriceId}`)
-    //     console.log(result);
-    //     setArr1(result);
-    // }
-    // const handleCancel1 = () => {
-    //     setIsModalVisible1(false);
-    // };
-
-    // const buttons: {} | null | undefined = [
-    //     <div>
-    //         <Button onClick={() => setIsModalVisible(false)}>关闭</Button>
-    //     </div>
-    // ]
-    // const buttons1: {} | null | undefined = [
-    //     <div>
-    //         <Button onClick={() => setIsModalVisible1(false)}>关闭</Button>
-    //     </div>
-    // ]
-    // const bb = async () => {
-    //     try {
-    //         const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/materialCategory?current=1&size=20`);
-    //         setProjectType(result);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
-    // useEffect(() => {
-    //     bb();
-    // }, [])
     return (<>
+        <Modal
+            title="历史价格"
+            visible={priceVisible}
+            destroyOnClose
+            width={1011}
+            footer={[
+                <Button key="close" type="primary" ghost onClick={() => {
+                    setDetailId("")
+                    setPriceVisible(false)
+                }}>关闭</Button>
+            ]}
+            onCancel={() => {
+                setDetailId("")
+                setPriceVisible(false)
+            }} >
+            <HistoryPrice id={detailId} name={materialName} />
+        </Modal>
+        <Modal
+            title="数据源"
+            width={1011}
+            visible={dataVisible}
+            destroyOnClose
+            footer={[
+                <Button key="close" type="primary" ghost onClick={() => {
+                    setDetailId("")
+                    setDataVisible(false)
+                }}>关闭</Button>
+            ]}
+            onCancel={() => {
+                setDetailId("")
+                setDataVisible(false)
+            }} >
+            <DataSource id={detailId} />
+        </Modal>
         <Page
             path="/tower-supply/materialPrice"
             columns={[
@@ -84,17 +77,22 @@ export default function ViewRawMaterial(): React.ReactNode {
                     dataIndex: 'operation',
                     fixed: 'right',
                     width: 100,
-                    render: (_: undefined, record: any): React.ReactNode => {
-                        return <>
-                            <Button type="link" onClick={() => { }}>历史价格</Button>
-                            <Button type="link" onClick={() => { }}>数据源</Button>
-                        </>
-                    }
+                    render: (_: any, record: any): React.ReactNode => (<>
+                        <Button type="link" onClick={() => {
+                            setDetailId(record.id)
+                            setMaterialName(record.materialName)
+                            setPriceVisible(true)
+                        }}>历史价格</Button>
+                        <Button type="link" onClick={() => {
+                            setDetailId(record.id)
+                            setDataVisible(true)
+                        }}>数据源</Button>
+                    </>)
                 }
             ]}
             extraOperation={<>
                 <Button type="primary" ghost >导出</Button>
-                <Button type="primary" ghost onClick={() => history.push(`/cockpit/rawMaterial/edit`)}>价格维护</Button>
+                <Button type="primary" ghost><Link to={`/cockpit/rawMaterial/price`}>价格维护</Link></Button>
             </>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[

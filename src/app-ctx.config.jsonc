@@ -185,7 +185,7 @@
                             },
                             {
                                 "label": "库存看板",
-                                "path": "/stock/viewPanel",
+                                "path": "/cockpit/viewPanel",
                                 "authority": "approvalm"
                             },
                             {
