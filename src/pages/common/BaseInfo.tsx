@@ -91,6 +91,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
     return <Descriptions bordered column={col} size="small" >
         {columns.map((item: any, index: number) => <Descriptions.Item
             contentStyle={{ width: `${100 / (col * 2)}%` }}
+            labelStyle={{ width: `${100 / (col * 4)}%` }}
             span={item.type === "textarea" ? col : 1}
             key={`desc_${index}`}
             label={item.title}>{formatDataType(item, dataSource)}</Descriptions.Item>)}

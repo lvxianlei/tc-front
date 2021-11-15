@@ -377,7 +377,6 @@ export default function WorkshopTeamMngt(): React.ReactNode {
                         const res = new Map();
                         const rows = [...userList, ...selectedRows]
                         let newRows = rows.filter((item: DataType) => !res.has(item.userId) && res.set(item.userId, 1));
-                        console.log()
                         setUserList(newRows);
                     } }/>
                     <CommonTable columns={ tableColumns } dataSource={ userList } pagination={ false } />
