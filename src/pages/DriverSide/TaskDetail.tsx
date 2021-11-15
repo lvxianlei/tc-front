@@ -82,7 +82,6 @@ const baseColums = [
 
 export default function TaskDetail(): React.ReactNode {
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // simulatioOn();
         const tenant = await RequestUtil.get<ITenant>(`/sinzetech-system/tenantClient/info?domain=${window.location.protocol}//${window.location.host}`);
         const { access_token, refresh_token, user_id, tenant_id, ...result } = await RequestUtil.post('/sinzetech-auth/oauth/token', {
             username: 'admin',
@@ -91,7 +90,8 @@ export default function TaskDetail(): React.ReactNode {
             scope: 'all',
             tenantId: tenant.tenantId
         }, {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Tenant-Id': tenant.tenantId
         })
         if (result.error) {
             notification.error({
