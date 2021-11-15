@@ -80,9 +80,9 @@ export default function ViewReceivingNote(): React.ReactNode {
                     }
                 })
             ]}
-            extraOperation={({ receiveStockMessage }: any) => <>
+            extraOperation={(data: any) => <>
                 <Button type="primary">导出</Button>
-                <span style={{ fontSize: "20px", color: "orange", marginLeft: "40px" }}>累计欠票金额：{receiveStockMessage?.arrearsMoney || "0"}      累计欠费金额：{receiveStockMessage?.owingTicketMoney || "0"}</span>
+                <span style={{ fontSize: "20px", color: "orange", marginLeft: "40px" }}>累计欠票金额：{data?.receiveStockMessage?.arrearsMoney || "0"}      累计欠费金额：{data?.receiveStockMessage?.owingTicketMoney || "0"}</span>
             </>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
