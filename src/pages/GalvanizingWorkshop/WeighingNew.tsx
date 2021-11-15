@@ -199,9 +199,9 @@ export default function WeighingNew(): React.ReactNode {
         <Form form={ form }>
             <Descriptions title="" bordered size="small" column={ 2 }>
                 {
-                    specialColums.map((item: Record<string, any>) => {
-                        return <Descriptions.Item label={ item.title } className={ styles.detailItem }>
-                            <Form.Item name={ item.dataIndex } label="" rules={ item.rules || [] } initialValue={ item.initialValue }>
+                    specialColums.map((item: Record<string, any>, index: number) => {
+                        return <Descriptions.Item key={ index } label={ item.title } className={ styles.detailItem }>
+                            <Form.Item key={ item.dataIndex + '_' + index } name={ item.dataIndex } label="" rules={ item.rules || [] } initialValue={ item.initialValue }>
                                 { item.children }
                             </Form.Item>
                         </Descriptions.Item>
