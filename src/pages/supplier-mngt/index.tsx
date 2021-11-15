@@ -59,7 +59,7 @@ export default function SupplierMngt(): React.ReactNode {
         }
     })
     return <>
-        <Modal destroyOnClose width={1011} title="编辑" onOk={handleEditOk} visible={editVisible} onCancel={() => {
+        <Modal destroyOnClose width={1011} title="创建" onOk={handleEditOk} visible={editVisible} onCancel={() => {
             setDetailId("")
             setEditVisible(false)
         }}>
