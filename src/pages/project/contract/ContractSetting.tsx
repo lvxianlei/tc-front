@@ -35,11 +35,11 @@ class ManagementContractSetting extends ContractSetting {
               rules: [
                 {
                   required: true,
-                  message: "请输入合同编号"
+                  message: "请输入采购订单编号"
                 },
               ],
               children: (
-                <Input value={contract?.contractNumber} maxLength={50} />
+                <Input value={contract?.purchaseOrderNumber} maxLength={50} />
               ),
             },
             {
