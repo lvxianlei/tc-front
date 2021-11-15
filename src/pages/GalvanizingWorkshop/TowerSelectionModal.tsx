@@ -1,39 +1,38 @@
 /**
  * @author zyc
  * @copyright © 2021
- * @description 选择班组
+ * @description 选择塔型
  */
-import { Button, FormItemProps, Input, Modal, Select, Space, TableColumnType } from 'antd';
+import { Button, FormItemProps, Input, Modal, Space, TableColumnType } from 'antd';
 import { TablePaginationConfig } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import React from 'react';
 
-import styles from './AbstractSelectableModal.module.less';
-import RequestUtil from '../utils/RequestUtil';
-import AbstractFilteredSelectionModal from './AbstractFilteredSelecableModal';
-import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from './AbstractSelectableModal';
+import styles from '../../components/AbstractSelectableModal.module.less';
+import RequestUtil from '../../utils/RequestUtil';
+import AbstractFilteredSelectionModal from '../../components/AbstractFilteredSelecableModal';
+import { IAbstractSelectableModalProps, IAbstractSelectableModalState, IResponseData } from '../../components/AbstractSelectableModal';
 
-export interface ITeamSelectionModalProps extends IAbstractSelectableModalProps {
+export interface ITowerSelectionModalProps extends IAbstractSelectableModalProps {
 }
-export interface ITeamSelectionModalState extends IAbstractSelectableModalState {
+export interface ITowerSelectionModalState extends IAbstractSelectableModalState {
     readonly tableDataSource: IData[];
 }
 
 export interface IData {
     readonly id?: string;
-    readonly deviceName?: string;
 }
 /**
  * Team Selection Modal
  */
-export default class TeamSelectionModal extends AbstractFilteredSelectionModal<ITeamSelectionModalProps, ITeamSelectionModalState> {
+export default class TowerSelectionModal extends AbstractFilteredSelectionModal<ITowerSelectionModalProps, ITowerSelectionModalState> {
 
     /**
      * @override
      * @description Gets state
      * @returns state 
      */
-    protected getState(): ITeamSelectionModalState {
+    protected getState(): ITowerSelectionModalState {
         return {
             ...super.getState(),
             tablePagination: {
@@ -42,7 +41,7 @@ export default class TeamSelectionModal extends AbstractFilteredSelectionModal<I
                 total: 0,
                 showSizeChanger: false
             },
-            confirmTitle: "选择班组"
+            confirmTitle: "选择塔型"
         };
     }
 
@@ -67,7 +66,7 @@ export default class TeamSelectionModal extends AbstractFilteredSelectionModal<I
     public getFilterFormItemProps(): FormItemProps[] {
         return [{
             name: 'selectName',
-            children: <Input placeholder="请输入班组名称/车间名称/产线进行查询" />
+            children: <Input placeholder="请输入塔型名称/计划号/内部合同编号/工程名称进行查询" />
         }];
     }
     
@@ -99,36 +98,46 @@ export default class TeamSelectionModal extends AbstractFilteredSelectionModal<I
     public getTableColumns(): TableColumnType<object>[] {
         return [{
             key: 'deviceTypeName',
-            title: '班组名称',
+            title: '内部合同编号',
             dataIndex: 'deviceTypeName',
-            width: '25%',
+            width: '20%',
         }, {
             key: 'deviceName',
-            title: '所属车间',
+            title: '计划号',
             dataIndex: 'deviceName',
-            width: '25%',
+            width: '20%',
         }, {
             key: 'spec',
-            title: '工序',
+            title: '工程名称',
             dataIndex: 'spec',
-            width: '25%',
+            width: '20%',
         }, {
             key: 'deviceNumber',
-            title: '设备所属产线',
+            title: '塔型名称',
             dataIndex: 'deviceNumber',
-            width: '25%',
+            width: '20%',
+        }, {
+            key: 'deviceNumber',
+            title: '电压等级',
+            dataIndex: 'deviceNumber',
+            width: '20%',
+        }, {
+            key: 'deviceNumber',
+            title: '总基数',
+            dataIndex: 'deviceNumber',
+            width: '20%',
         }];
     }
 
     public render(): React.ReactNode {
         return (
             <>
-                <Button type="link" onClick={()=>{
+                <Button type="primary" onClick={()=>{
                     this.getTable({});
                     this.setState({
                         isModalVisible: true
                     })
-                }} style={{ padding: '0', lineHeight: 1, height: 'auto' }}>+选择班组</Button>
+                }} style={{ marginBottom: '10px' }}>新增塔型</Button>
                 <Modal
                     title={this.state.confirmTitle}
                     visible={this.state.isModalVisible}
