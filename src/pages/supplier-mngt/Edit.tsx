@@ -14,10 +14,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const [supplierForm] = Form.useForm()
     const supplierTypeEnum = (ApplicationContext.get().dictionaryOption as any)["144"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const qualityAssuranceEnum = (ApplicationContext.get().dictionaryOption as any)["145"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const { loading, data } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
+    const { loading } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/supplier/${id}`)
             baseInfo.setFieldsValue(result)
+            supplierForm.setFieldsValue(result)
             resole(result)
         } catch (error) {
             reject(false)

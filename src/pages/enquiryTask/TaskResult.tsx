@@ -1,9 +1,9 @@
-import React, { useState } from "react"
+import React from "react"
 import { Button, Spin, Row } from 'antd'
 import { CurrentPriceInformation } from "./enquiryTask.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
-import { CommonTable, DetailTitle } from "../common"
+import { CommonTable, DetailTitle, Attachment } from "../common"
 import { downLoadFile } from "../../utils"
 interface OverviewProps {
     id: string
@@ -23,19 +23,6 @@ export default function ({ id }: OverviewProps) {
         <CommonTable columns={CurrentPriceInformation} dataSource={data?.materialDetails || []} />
         <Row style={{ backgroundColor: "#f1f1f1", minHeight: 40, padding: 10 }}>{data?.inquirerDescription}</Row>
         <DetailTitle title="附件" />
-        <CommonTable columns={[
-            {
-                title: "文件名称",
-                dataIndex: "name"
-            },
-            {
-                title: "操作", dataIndex: "opration", render: (_: any, records: any) => {
-                    return <>
-                        <Button type="link" onClick={() => downLoadFile(records.filePath)}>下载</Button>
-                        <Button type="link">查看</Button>
-                    </>
-                }
-            }
-        ]} dataSource={data?.inquirerAttachList || []} />
+        <Attachment dataSource={data?.inquirerAttachList || []} />
     </Spin>
 }

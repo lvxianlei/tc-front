@@ -82,7 +82,6 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: string, onC
     }
 
     const paginationChange = (page: number, pageSize: number) => setPagenation({ ...pagenation, current: page, pageSize })
-
     return <>
         {searchs.length > 0 && <Form form={form} onFinish={async () => {
             setPagenation({ ...pagenation, current: 1, pageSize: 10 })
@@ -94,7 +93,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: string, onC
                     label={fItem.title}
                     style={{ height: 32, fontSize: 12 }}
                 >
-                    <FormItemType data={fItem} />
+                    <FormItemType type={fItem.type} data={fItem} />
                 </Form.Item>
                 </Col>)}
                 <Col style={{ height: 32 }} span={(searchs.length + 1) / 24}>
@@ -181,7 +180,7 @@ interface SelfSelectProps {
     data: SelectData
 }
 const SelfSelect: React.FC<SelfSelectProps> = ({ data, ...props }) => {
-    return <Select {...props} disabled={data.disabled} style={{ width: "100%" }}>
+    return <Select {...props} disabled={data.disabled} style={{ width: "100%", minWidth: 100 }}>
         {data.enum?.map((item: SelectOption, index: number) => (<Select.Option key={`select_option_${index}_${item.value}`} value={item.value} >{item.label}</Select.Option>))}
     </Select>
 }

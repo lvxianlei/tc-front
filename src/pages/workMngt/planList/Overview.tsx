@@ -17,10 +17,11 @@ export default function Edit() {
         }
     }))
 
-    const { loading: purchasePlanLoading, data: purchasePlanData } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+    const { loading: purchasePlanLoading, data: purchasePlanData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: any[] = await RequestUtil.get(`/tower-supply/materialPurchasePlan/list/total/${params.id}`)
-            resole(result)
+            const total: { [key: string]: any } = await RequestUtil.get(`tower-supply/materialPurchasePlan/list/mesg/${params.id}`)
+            resole({ data: result, total })
         } catch (error) {
             reject(error)
         }
@@ -31,8 +32,8 @@ export default function Edit() {
     ]} operation={[<Button key="" type="primary" ghost onClick={() => history.goBack()}>返回</Button>]}>
         <CommonTable loading={loading} columns={PurchaseList} dataSource={data?.records || []} />
         <span>
-            {` 采购类型统计： 圆钢总重（t）：0     角钢总重（t）：66.473         钢板总重（t）：234.000`}
+            {` 采购类型统计： 圆钢总重（t）：${purchasePlanData?.total?.roundSteelTotal === -1 ? "0" : purchasePlanData?.total?.roundSteelTotal}    角钢总重（t）：${purchasePlanData?.total?.angleSteelTotal === -1 ? "0" : purchasePlanData?.total?.angleSteelTotal}        钢板总重（t）：${purchasePlanData?.total?.steelPlateTotal === -1 ? "0" : purchasePlanData?.total?.steelPlateTotal}`}
         </span>
-        <CommonTable loading={purchasePlanLoading} columns={PurchaseTypeStatistics} dataSource={purchasePlanData || []} />
+        <CommonTable loading={purchasePlanLoading} columns={PurchaseTypeStatistics} dataSource={purchasePlanData?.data || []} />
     </DetailContent>
 }

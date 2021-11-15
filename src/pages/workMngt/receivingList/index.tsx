@@ -125,7 +125,7 @@ export default function Invoicing() {
                 {
                     name: 'receiveStatus',
                     label: '收货单状态',
-                    children: <Select style={{ width: 200 }}>
+                    children: <Select style={{ width: 200 }} defaultValue="全部">
                         <Select.Option value="">全部</Select.Option>
                         <Select.Option value="0">待完成</Select.Option>
                         <Select.Option value="1">已完成</Select.Option>

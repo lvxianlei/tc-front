@@ -63,6 +63,15 @@ export function formatData(columns: any[], dataSource: any): object {
     return formatedData
 }
 
+// const validator = ({ getFieldValue }) => ({
+//     validator(_, value) {
+//       if (!value || getFieldValue('password') === value) {
+//         return Promise.resolve();
+//       }
+//       return Promise.reject(new Error('The two passwords that you entered do not match!'));
+//     },
+//   })
+
 export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onChange = () => { } }: BaseInfoProps): JSX.Element {
     if (edit) {
         return <Form
@@ -77,7 +86,12 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
                 {columns.map((item: any, index: number) => <Col key={`form_item_${index}`} span={item.type === "textarea" ? 24 : (24 / col)}>
                     <Col span={24} >
                         <div style={{ height: 56, marginBottom: item.type === "textarea" ? 20 : 0 }}>
-                            <Form.Item className="baseInfoForm" name={item.dataIndex} label={item.title} rules={item.rules || []}>
+                            <Form.Item
+                                className="baseInfoForm"
+                                name={item.dataIndex}
+                                label={item.title}
+                                rules={item.rules || []}
+                            >
                                 {item.render ? item.render(item) : <FormItemType type={item.type} data={item} />}
                             </Form.Item>
                         </div>

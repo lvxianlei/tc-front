@@ -6,7 +6,7 @@ import { baseInfo } from "./shortageListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import Overview from "./Overview"
-import PurchasePlan from "../purchaseList/PurchasePlan"
+import PurchasePlan from "./PurchasePlan"
 export default function Invoicing() {
     const history = useHistory()
     const [filterValue, setFilterValue] = useState<any>({})

@@ -152,14 +152,21 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     const handleModalOk = () => {
         const dataSource: any[] = modalRef.current?.dataSource
-        setCargoData(dataSource.map((item: any) => ({
-            ...item,
-            productName: item.materialName,
-            standard: item.materialStandard,
-            materialStandardName: item.materialStandardName,
-            quantity: item.num,
-            contractUnitPrice: item.price
-        })))
+        let quantity: string = "0.00"
+        let weight: string = "0.00"
+        setCargoData(dataSource.map((item: any) => {
+            quantity = (parseFloat(quantity) + parseFloat(item.num || "0.00")).toFixed(2)
+            weight = (parseFloat(weight) + parseFloat(item.weight || "0.00")).toFixed(2)
+            return ({
+                ...item,
+                productName: item.materialName,
+                standard: item.materialStandard,
+                materialStandardName: item.materialStandardName,
+                quantity: item.num,
+                contractUnitPrice: item.price
+            })
+        }))
+        form.setFieldsValue({ quantity: parseFloat(quantity), weight })
         setVisible(false)
     }
 
@@ -171,6 +178,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 supplierName: { id: result.supplierId, value: result.supplierName },
                 contractNumber: { id: result.contractId, value: result.contractNumber }
             })
+            setContractId(result?.contractId)
             setCargoData(result?.lists || [])
             resole(result)
         } catch (error) {

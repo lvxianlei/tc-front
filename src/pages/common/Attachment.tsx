@@ -21,13 +21,14 @@ interface AttachmentProps {
     title?: string
     dataSource?: FileProps[]
     edit?: boolean
+    maxCount?: number
 }
 export interface AttachmentRef {
     getDataSource: () => FileProps[]
     dataSource?: FileProps[]
     resetFields: () => void
 }
-export default forwardRef(function ({ dataSource = [], title = "相关附件", edit = false }: AttachmentProps, ref): JSX.Element {
+export default forwardRef(function ({ dataSource = [], title = "相关附件", maxCount = 5, edit = false }: AttachmentProps, ref): JSX.Element {
     const [attchs, setAttachs] = useState<FileProps[]>(dataSource)
     const [visible, setVisible] = useState<boolean>(false)
     const [picUrl, setPicUrl] = useState<string>()
@@ -88,6 +89,7 @@ export default forwardRef(function ({ dataSource = [], title = "相关附件", e
                         key="sub"
                         name="file"
                         multiple={false}
+                        maxCount={maxCount}
                         action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
                         headers={{
                             'Authorization': `Basic ${AuthUtil.getAuthorization()}`,

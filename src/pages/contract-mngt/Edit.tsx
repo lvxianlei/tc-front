@@ -27,7 +27,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 ...result,
                 operator: { first: result.operatorDeptId, second: result.operatorId },
                 supplier: { id: result.supplierId, value: result.supplierName },
-                purchasePlan: { id: result.purchasePlanNumber, value: result.purchasePlanNumber }
+                purchasePlan: { id: result.purchasePlanId, value: result.purchasePlanNumber }
             })
             comparisonForm.setFieldsValue({
                 comparisonPrice: { id: result.comparisonPriceId, value: result.comparisonPriceNumber }
@@ -41,7 +41,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialContract`, { ...data })
+            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/materialContract`, type === "new" ? data : ({ ...data, id }))
             resove(result)
         } catch (error) {
             reject(error)
@@ -50,7 +50,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const { run: getComparisonPrice } = useRequest<any[]>((comparisonPriceId: string) => new Promise(async (resove, reject) => {
         try {
-            const result: any[] = await RequestUtil.get(`/tower-supply//comparisonPrice/getComparisonPriceDetailById?comparisonPriceId=${comparisonPriceId}&supplierId=${supplierId}`)
+            const result: any[] = await RequestUtil.get(`/tower-supply/comparisonPrice/getComparisonPriceDetailById?comparisonPriceId=${comparisonPriceId}&supplierId=${supplierId}`)
             resove(result)
         } catch (error) {
             reject(error)
@@ -73,12 +73,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             const comparisonPrice = await comparisonForm.validateFields()
             await saveRun({
                 ...baseInfo,
-                materialContractAttachInfoVos:attchsRef.current.getDataSource(),
+                materialContractAttachInfoVos: attchsRef.current.getDataSource(),
                 operatorDeptId: baseInfo.operator?.first,
                 operatorId: baseInfo.operator?.second,
                 supplierId: baseInfo.supplier.id,
                 supplierName: baseInfo.supplier.value,
-                purchasePlanId: baseInfo.purchasePlan?.records?.[0].id || data?.purchasePlanId,
+                purchasePlanId: baseInfo.purchasePlan?.id || data?.purchasePlanId,
                 purchasePlanNumber: baseInfo.purchasePlan.value || data?.purchasePlanNumber,
                 comparisonPriceId: comparisonPrice.comparisonPrice.id,
                 comparisonPriceNumber: comparisonPrice.comparisonPrice.value,
@@ -95,7 +95,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             })
             resove(true)
         } catch (error) {
-            console.log(error)
             reject(false)
         }
     })

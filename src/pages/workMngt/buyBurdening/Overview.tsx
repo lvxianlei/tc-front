@@ -60,7 +60,9 @@ export default function Overview(): React.ReactNode {
                     width: 250,
                     dataIndex: 'operation',
                     render: (_: any, records: any) => (<>
-                        <Button type="link" disabled={![1, 3].includes(records.batcheTaskStatus)} ><Link to={`/workMngt/buyBurdening/component/${records.id}`}>明细</Link></Button>
+                        <Button type="link" disabled={![1, 3].includes(records.batcheTaskStatus)} >
+                            <Link to={`/workMngt/buyBurdening/component/${records.id}/${records.batcheTaskStatus}`}>明细</Link>
+                        </Button>
                         <Button type="link" disabled={![3].includes(records.batcheTaskStatus)}
                             onClick={() => {
                                 setChooseId(records.id)
@@ -85,8 +87,8 @@ export default function Overview(): React.ReactNode {
                     label: '塔型配料状态',
                     children: <Select style={{ width: "100px" }} defaultValue="请选择">
                         <Select.Option value="">全部</Select.Option>
-                        <Select.Option value="1">待接收</Select.Option>
-                        <Select.Option value="2">待完成</Select.Option>
+                        <Select.Option value="1">待完成</Select.Option>
+                        <Select.Option value="2">待接收</Select.Option>
                         <Select.Option value="3">已完成</Select.Option>
                     </Select>
                 },
@@ -94,7 +96,7 @@ export default function Overview(): React.ReactNode {
                     name: 'fuzzyQuery',
                     label: '查询',
                     children: <Input placeholder="塔型/方案编号" maxLength={200} />
-                },
+                }
             ]}
         />
     </>

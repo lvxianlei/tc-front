@@ -1,8 +1,7 @@
-//合同看板-明细
 import React from 'react'
 import { Button } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailTitle, Page } from '../../common'
+import { Page } from '../../common'
 import { particulars } from "./contract.json"
 
 export default function Particulars(): React.ReactNode {
@@ -29,7 +28,7 @@ export default function Particulars(): React.ReactNode {
         sourceKey={"receiveStockDetailPage.records"}
         extraOperation={<>
             <Button type="primary" ghost>导出</Button>
-            <Button type="primary" ghost onClick={()=>history.goBack()}>返回上一级</Button>
+            <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
         </>}
         filterValue={{ contractId: params.id }}
         searchFormItems={[]}

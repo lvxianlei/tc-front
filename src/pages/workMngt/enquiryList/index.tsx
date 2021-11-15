@@ -7,7 +7,6 @@ import Edit from "./Edit"
 export default function EnquiryList(): React.ReactNode {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
-    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({})
     const [detailId, setDetailId] = useState<string>("")
     const [inquiryStatus, setInquiryStatus] = useState<number>(0)
     const editRef = useRef<{ onSubmit: (type: "save" | "saveAndSubmit") => void, resetFields: () => void }>({ onSubmit: () => { }, resetFields: () => { } })
@@ -18,17 +17,11 @@ export default function EnquiryList(): React.ReactNode {
             value.startStatusUpdateTime = formatDate[0] + " 00:00:00"
             value.endStatusUpdateTime = formatDate[1] + " 23:59:59"
         }
-        if (value.startPlannedDeliveryTime) {
-            const formatDate = value.startPlannedDeliveryTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startPlannedDeliveryTime = formatDate[0] + " 00:00:00"
-            value.endPlannedDeliveryTime = formatDate[1] + " 23:59:59"
-        }
         if (value.inquirerId) {
             value.deptId = value.inquirerId.first
             value.inquirerId = value.inquirerId.second
         }
-        setFilterValue({ ...filterValue, ...value })
-        return ({ ...filterValue, ...value })
+        return value
     }
 
     const handleModal = (oprationType: "save" | "saveAndSubmit") => new Promise(async (resove, reject) => {
@@ -92,7 +85,6 @@ export default function EnquiryList(): React.ReactNode {
                         }}>询价信息</Button>
                 }]}
             extraOperation={<Button type="primary">导出</Button>}
-            filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {

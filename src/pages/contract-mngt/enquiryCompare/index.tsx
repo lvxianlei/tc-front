@@ -137,7 +137,7 @@ export default function ContractMngt() {
                                 setOprationType("edit")
                                 setVisible(true)
                             }}>编辑</Button>
-                            <Button disabled={records.comparisonStatus !== 2} type="link" onClick={() => {
+                            <Button disabled={records.comparisonStatus !== 1} type="link" onClick={() => {
                                 setDetailId(records.id)
                                 setCancelVisible(true)
                             }}>取消</Button>
@@ -168,7 +168,8 @@ export default function ContractMngt() {
                     {
                         name: 'comparisonStatus',
                         label: '状态',
-                        children: <Select placeholder="请选择" style={{ width: "100px" }}>
+                        children: <Select defaultValue="全部" style={{ width: "100px" }}>
+                            <Select.Option value="">全部</Select.Option>
                             <Select.Option value={1}>询价中</Select.Option>
                             <Select.Option value={2}>已询价</Select.Option>
                             <Select.Option value={3}>已取消</Select.Option>
@@ -182,7 +183,7 @@ export default function ContractMngt() {
                     {
                         name: 'comparisonPriceNumber',
                         label: '查询',
-                        children: <Input style={{ width: "150px" }} placeholder="询比价编号" />
+                        children: <Input style={{ width: "150px" }} placeholder="询比价编号/用途" />
                     }
                 ]}
             />

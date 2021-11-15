@@ -63,7 +63,7 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
             reject(false)
         }
     })
-    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref,onSubmit])
+    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit])
     const handleChange = (id: string, value: number, name: string) => {
         setMaterials(materials.map((item: any) => item.materialCode === id ? ({ ...item, [name]: value }) : item))
     }
@@ -111,10 +111,10 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
         <DetailTitle title="询价原材料" />
         <CommonTable columns={addPriceHead.map((item: any) => {
             if (item.dataIndex === "taxOffer") {
-                return ({ ...item, render: (value: number, records: any) => <InputNumber value={[-1, "-1"].includes(value) ? 0 : value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode, value, "taxOffer")} /> })
+                return ({ ...item, render: (value: number, records: any) => <InputNumber min={1} max={999999.99} step={0.01} value={[-1, "-1"].includes(value) ? 1 : value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode, value, "taxOffer")} /> })
             }
             if (item.dataIndex === "offer") {
-                return ({ ...item, render: (value: number, records: any) => <InputNumber value={[-1, "-1"].includes(value) ? 0 : value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode, value, "offer")} /> })
+                return ({ ...item, render: (value: number, records: any) => <InputNumber min={1} max={999999.99} step={0.01} value={[-1, "-1"].includes(value) ? 1 : value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode, value, "offer")} /> })
             }
             return item
         })} dataSource={materials} />

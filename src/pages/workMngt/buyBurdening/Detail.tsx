@@ -8,7 +8,7 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 export default function EnquiryList(): React.ReactNode {
     const history = useHistory()
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string, status: string }>()
     const [visible, setVisible] = useState<boolean>(false)
     const ref = useRef<{ data: any }>()
     const { run } = useRequest<any>(() => new Promise(async (resole, reject) => {
@@ -53,6 +53,7 @@ export default function EnquiryList(): React.ReactNode {
                 return new Promise(async (resove, reject) => {
                     try {
                         const result = await run()
+                        message.success("操作成功...")
                         resove(true)
                         history.goBack();
                     } catch (error) {
@@ -104,8 +105,8 @@ export default function EnquiryList(): React.ReactNode {
             })}
             extraOperation={<>
                 <Button type="primary" ghost>导出</Button>
-                <Button type="primary" ghost onClick={handleSuccess}>完成</Button>
-                <Button type="primary" disabled={true} ghost onClick={() => setVisible(true)}>配料</Button>
+                <Button type="primary" disabled={params.status !== "1"} ghost onClick={handleSuccess}>完成</Button>
+                <Button type="primary" disabled={params.status !== "1"} ghost onClick={() => setVisible(true)}>配料</Button>
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
                 <Button type="primary" ghost onClick={() => createBatchingScheme()}>临时创建配料方案</Button>
             </>}

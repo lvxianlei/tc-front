@@ -78,13 +78,13 @@ export default forwardRef(function Edit({ detailId }: EditProps, ref): JSX.Eleme
             }
             return item
         })} dataSource={data?.materialDetails || []} />
-        {data?.inquiryStatus === 4 && <>
-            <DetailTitle title="补充信息" />
-            <Input.TextArea
-                name="inquirerDescription"
-                value={inquirerDescription}
-                onChange={(event: any) => setInquirerDescription(event.target.value)} />
-            <Attachment title="上传附件" dataSource={data?.inquirerAttachList || []} edit ref={attchRef} />
-        </>}
+        <DetailTitle title="补充信息" />
+        <Input.TextArea
+            name="inquirerDescription"
+            value={inquirerDescription}
+            disabled={data?.inquiryStatus !== 4}
+            onChange={(event: any) => setInquirerDescription(event.target.value)} />
+        <Attachment title="上传附件" dataSource={data?.inquirerAttachList || []} edit={data?.inquiryStatus === 4} ref={attchRef} />
+
     </Spin>
 })

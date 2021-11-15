@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Button, Input, DatePicker, Select, Modal, Form, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
-import { Page } from '../../common'
+import { IntgSelect, Page } from '../../common'
 import { baseInfo } from "./productionData.json"
 import Overview from "./Edit"
 import useRequest from "@ahooksjs/use-request";
@@ -46,6 +46,10 @@ export default function Invoicing() {
             value.startStatusUpdateTime = formatDate[0] + " 00:00:00"
             value.endStatusUpdateTime = formatDate[1] + " 23:59:59"
         }
+        if (value.loftingId) {
+            value.loftingDeptId = value.loftingId.first
+            value.loftingId = value.loftingId.second
+        }
         return value
     }
     const handleGenerateOk = async () => {
@@ -55,7 +59,12 @@ export default function Invoicing() {
         history.go(0)
     }
     return <>
-        <Modal title="配料方案" visible={visible} width={1011} onOk={() => setVisible(false)}
+        <Modal
+            title="配料方案"
+            visible={visible}
+            width={1011}
+            onOk={() => setVisible(false)}
+            destroyOnClose
             onCancel={() => setVisible(false)}>
             <Overview id={detailId} />
         </Modal>
@@ -128,7 +137,7 @@ export default function Invoicing() {
                 {
                     name: 'loftingState',
                     label: '状态',
-                    children: <Select style={{ width: 200 }}>
+                    children: <Select style={{ width: 200 }} defaultValue="全部">
                         <Select.Option value="">全部</Select.Option>、
                         <Select.Option value="1">待完成</Select.Option>、
                         <Select.Option value="2">已完成</Select.Option>
@@ -137,10 +146,7 @@ export default function Invoicing() {
                 {
                     name: 'loftingId',
                     label: '配料负责人',
-                    children: <Select style={{ width: 200 }}>
-                        <Select.Option value="1">待完成</Select.Option>、
-                        <Select.Option value="2">已完成</Select.Option>
-                    </Select>
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyQuery',

@@ -189,7 +189,7 @@
                 },
                 {
                     "title": "创建人",
-                    "dataIndex": "createUser"
+                    "dataIndex": "createUserName"
                 },
                 {
                     "title": "材料名称",
@@ -271,7 +271,7 @@
         },
         {
             "title": "创建人",
-            "dataIndex": "createUser",
+            "dataIndex": "createUserName",
             "type": "integer"
         },
         {
