@@ -23,7 +23,7 @@ export default class AuthorizationFilter implements IFilter {
      */
     public async doFilter(props: RouteComponentProps<{}, StaticContext, unknown>): Promise<boolean> {
         let accessable: boolean = true;
-        if (props.location.pathname !== '/login') {
+        if (props.location.pathname !== '/login' && props.location.pathname !== '/driverSide/taskDetail' ) {
             accessable = !!(AuthUtil.getAuthorization() && AuthUtil.getSinzetechAuth() && AuthUtil.getTenantId());
             if (accessable) {
                 const [, authorities] = await Promise.all([

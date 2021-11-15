@@ -81,11 +81,8 @@ const baseColums = [
 ]
 
 export default function TaskDetail(): React.ReactNode {
-    const params = useParams<{ id: string }>();
-    const [ accessToken, setAccessToken ] = useState('');
-    const [ tenantId, setTenantId ] = useState('');
-
-    const simulatioOn = async () => {
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        // simulatioOn();
         const tenant = await RequestUtil.get<ITenant>(`/sinzetech-system/tenantClient/info?domain=${window.location.protocol}//${window.location.host}`);
         const { access_token, refresh_token, user_id, tenant_id, ...result } = await RequestUtil.post('/sinzetech-auth/oauth/token', {
             username: 'admin',
@@ -101,18 +98,17 @@ export default function TaskDetail(): React.ReactNode {
                 message: result.error_description
             })
         } else {
-            setAccessToken(access_token);
-            setTenantId(tenant.tenantId);
+            // const data = await RequestUtil.get(``, {}, {
+            //     'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+            //     'Tenant-Id': tenant.tenantId,
+            //     'Sinzetech-Auth': access_token
+            // })
+            const data = {
+                recordType: '1'
+            }
+            resole(data)
         }
-    }
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        simulatioOn();
-        const data = await RequestUtil.get(`/tower-science/loftingList/detail?id=${ params.id }`, {}, {
-            'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
-            'Tenant-Id': tenantId,
-            'Sinzetech-Auth': accessToken
-        })
-        resole(data)
+        
     }), {})
     const detailData: any = data;
 
