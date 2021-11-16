@@ -50,6 +50,21 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
             const productType: any = await RequestUtil.get(`/tower-market/askInfo/getAskProductByProId?projectId=${id}`)
             askForm.setFieldsValue({ submit: productType.map((item: any) => ({ productType: `${item.voltage}${item.productName}` })) })
             baseForm.setFieldsValue({ productType: productType?.map((ask: any) => `${ask.voltage}${ask.productName}`).join(",") })
+            if (props.detailOptios) {
+                props.detailOptios && props.detailOptios.startAttachVos && props.detailOptios.startAttachVos.forEach((item: any, index: number) => {
+                    item['link'] = item.filePath;
+                    item['uid'] = index;
+                })
+                setAttachInfo(props.detailOptios?.startAttachVos || []);
+                baseForm.setFieldsValue({
+                    ...props.detailOptios
+                })
+                const ask = props.detailOptios && props.detailOptios.askLogisticsVOS && props.detailOptios.askLogisticsVOS || [];
+                ask.forEach((item:any) => item['productType'] = `${item.voltage}${item.productName}`)
+                askForm.setFieldsValue({
+                    submit: ask
+                })
+            }
             resole(productType)
         } catch (error) {
             reject(error)
@@ -57,8 +72,8 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
     }), { manual: true })
 
     useEffect(() => {
-        ["selectB", "selectC"].includes(props.type) && getAskProduct()
-    }, [props.type])
+        ["selectA", "selectB", "selectC"].includes(props.type) && getAskProduct()
+    }, [props.type, props.count])
 
     const uploadChange = (event: any) => {
         if (event.file.status === "done") {
@@ -153,7 +168,7 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
             <DetailTitle title="询价类型：物流询价" />
             <BaseInfo form={baseForm} columns={logisticBaseInfo} dataSource={data || {}} edit />
 
-            <EditTable form={askForm} haveNewButton={false} haveOpration={false} columns={askLogistics} dataSource={(askData as any) || []} />
+            <EditTable form={askForm} haveNewButton={false} haveOpration={false} columns={askLogistics} dataSource={[]} />
 
             <DetailTitle title="附件" operation={[
                 <Upload
