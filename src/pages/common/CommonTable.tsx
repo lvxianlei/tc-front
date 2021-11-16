@@ -24,14 +24,14 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
             return ({
                 ellipsis: true,
                 onCell: () => ({ className: styles.tableCell }),
-                render: (text: number) => <>{text && text !== -1 ? text : 0}</>,
+                render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : 0}</>,
                 ...data
             })
         case "string":
             return ({
                 ellipsis: true,
                 onCell: () => ({ className: styles.tableCell }),
-                render: (text: number) => <>{text && text !== -1 ? text : "-"}</>,
+                render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : "-"}</>,
                 ...data
             })
         default:

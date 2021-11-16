@@ -304,23 +304,19 @@
     "SelectedArea": [
         {
             "title": "材质",
-            "dataIndex": "materialTexture",
-            "type": "integer"
+            "dataIndex": "materialTexture"
         },
         {
             "title": "标准",
-            "dataIndex": "materialStandardName",
-            "type": "integer"
+            "dataIndex": "materialStandardName"
         },
         {
             "title": "规格",
-            "dataIndex": "spec",
-            "type": "integer"
+            "dataIndex": "spec"
         },
         {
             "title": "配料品名",
-            "dataIndex": "materialName",
-            "type": "string"
+            "dataIndex": "materialName"
         },
         {
             "title": "长度",
@@ -346,18 +342,15 @@
     "Selected": [
         {
             "title": "材质",
-            "dataIndex": "materialTexture",
-            "type": "integer"
+            "dataIndex": "materialTexture"
         },
         {
             "title": "标准",
-            "dataIndex": "materialStandardName",
-            "type": "integer"
+            "dataIndex": "materialStandardName"
         },
         {
             "title": "规格",
-            "dataIndex": "spec",
-            "type": "integer"
+            "dataIndex": "spec"
         },
         {
             "title": "配料品名",

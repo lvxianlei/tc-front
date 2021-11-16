@@ -249,7 +249,12 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             <ChooseModal id={contractId} ref={modalRef} />
         </Modal>
         <DetailTitle title="收货单基础信息" />
-        <BaseInfo form={form} onChange={handleBaseInfoChange} columns={BasicInformation} dataSource={{}} edit />
+        <BaseInfo form={form} onChange={handleBaseInfoChange} columns={BasicInformation.map((item: any) => {
+            if (["receiveNumber", "supplierName"].includes(item.dataIndex)) {
+                return ({ ...item, disabled: type === "edit" })
+            }
+            return item
+        })} dataSource={{}} edit />
         <DetailTitle title="货物明细" operation={[<Button
             type="primary" key="choose" ghost
             onClick={() => {

@@ -92,7 +92,7 @@ export default function ViewReceivingNote(): React.ReactNode {
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'receiveStatus',
+                    name: 'invoiceStatus',
                     label: '状态',
                     children: <Select style={{ width: "150px" }} defaultValue={"全部"}>
                         <Select.Option value={1}>待收票</Select.Option>

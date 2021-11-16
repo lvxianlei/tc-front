@@ -42,26 +42,7 @@
         },
         {
             "title": "付款状态",
-            "dataIndex": "invoiceStatus",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "待收票",
-                    "value": 1
-                },
-                {
-                    "label": "已收票",
-                    "value": 2
-                },
-                {
-                    "label": "待付款",
-                    "value": 3
-                },
-                {
-                    "label": "已付款",
-                    "value": 4
-                }
-            ]
+            "dataIndex": "invoiceStatus"
         }
     ]
 }
