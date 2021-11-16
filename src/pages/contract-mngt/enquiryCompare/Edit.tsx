@@ -154,6 +154,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             width: formatSpec(item.spec).width,
             thickness: formatSpec(item.spec).thickness,
             weight: item.singleWeight || 0,
+            source: 1,
             totalWeight: (parseFloat(item.planPurchaseNum || "0.00") * parseFloat(item.singleWeight || "0.00")).toFixed(2),
             materialTexture: item.structureTexture,
             standardName: item.standardName,
@@ -185,6 +186,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 onChange={(fields: any[]) => setPopDataList(fields.map((item: any) => ({
                     ...item,
                     spec: item.structureSpec,
+                    source: 2,
                     materialTexture: item.structureTexture,
                     standardName: item.standardName,
                     materialStandard: item.standard
@@ -208,7 +210,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     if (item.dataIndex === "num") {
                         return ({
                             ...item,
-                            render: (value: number, records: any) => <InputNumber
+                            render: (value: number, records: any) => records.source === 1 ? value : <InputNumber
                                 min={0}
                                 value={value === -1 ? 0 : value}
                                 onChange={(value: number) => handleInputChange(value, records.id)} />
@@ -219,7 +221,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 {
                     title: "操作",
                     dataIndex: "opration",
-                    render: (_: any, records: any) => <a onClick={() => handleRemove(records.materialCode)}>移除</a>
+                    render: (_: any, records: any) => <Button disabled={records.source === 1} type="link" onClick={() => handleRemove(records.materialCode)}>移除</Button>
                 }]}
             dataSource={materialList} />
     </Spin>

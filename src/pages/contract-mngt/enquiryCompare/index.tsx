@@ -181,7 +181,7 @@ export default function ContractMngt() {
                         children: <IntgSelect width={200} />
                     },
                     {
-                        name: 'comparisonPriceNumber',
+                        name: 'fuzzyQuery',
                         label: '查询',
                         children: <Input style={{ width: "150px" }} placeholder="询比价编号/用途" />
                     }
