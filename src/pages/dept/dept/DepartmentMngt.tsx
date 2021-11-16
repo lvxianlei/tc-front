@@ -5,7 +5,6 @@ import { FixedType } from 'rc-table/lib/interface';
 import styles from './Department.module.less';
 import { Link } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
-import ConfirmableButton from '../../../components/ConfirmableButton';
 
 export interface IDept extends IMetaDept {
     readonly children: IDept[];
@@ -64,7 +63,7 @@ export default function DepartmentMngt(): React.ReactNode {
             width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    <Link to={ `/auth/dept/setting/${ record.id }` }>编辑</Link>
+                    <Link to={ `/dept/deptMngt/setting/${ record.id }` }>编辑</Link>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => {
@@ -77,7 +76,7 @@ export default function DepartmentMngt(): React.ReactNode {
                     >
                         <Button type="link">删除</Button>
                     </Popconfirm>
-                    <Link to={ `/auth/dept/new/${ record.id }` }>新增下级</Link>
+                    <Link to={ `/dept/dept/new/${ record.id }` }>新增下级</Link>
                 </Space>
             )
         }
@@ -105,11 +104,15 @@ export default function DepartmentMngt(): React.ReactNode {
         columns={ columns }
         headTabs={ [] }
         refresh={ refresh }
-        extraOperation={ <ConfirmableButton confirmTitle="确定删除这些部门吗？" danger={ true }
+        extraOperation={ <Popconfirm
+            title="确认删除?"
+            onConfirm={ onBatchDelete }
+            okText="确认"
+            cancelText="取消"
             disabled={ !selectedRoles?.length } 
-            onConfirm={ onBatchDelete }>
-            删除
-        </ConfirmableButton> }
+        >
+            <Button type="link" disabled={ !selectedRoles?.length } >删除</Button>
+        </Popconfirm> }
         searchFormItems={ [
             {
                 name: 'name',

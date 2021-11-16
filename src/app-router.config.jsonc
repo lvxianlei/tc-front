@@ -136,27 +136,6 @@
       "exact": true,
       "authority": "auth_section"
     },
-    { // 部门管理
-      "name": "部门管理",
-      "path": "/auth/dept",
-      "module": "./pages/auth/dept/DepartmentMngt",
-      "exact": true,
-      "authority": "auth_section"
-    },
-    { // 部门修改
-      "name": "部门修改",
-      "path": "/auth/dept/setting/:id",
-      "module": "./pages/auth/dept/DepartmentSetting",
-      "exact": true,
-      "authority": "auth_section"
-    },
-    { // 部门新增
-      "name": "部门新增",
-      "path": "/auth/dept/new/:id",
-      "module": "./pages/auth/dept/DepartmentNew",
-      "exact": true,
-      "authority": "auth_section"
-    },
     { // 成本评估配置
       "name": "成本评估配置",
       "path": "/sys/costconfig",
@@ -1729,6 +1708,41 @@
       "module": "./pages/Archives/Certificate/CertificateDetail",
       "exact": true,
       "authority": "approvalm"
+    },
+    { // 部门管理
+      "name": "部门管理",
+      "path": "/dept/deptMngt",
+      "module": "./pages/dept/dept/DepartmentMngt",
+      "exact": true,
+      "authority": "auth_section"
+    },
+    { // 部门修改
+      "name": "部门修改",
+      "path": "/dept/deptMngt/setting/:id",
+      "module": "./pages/dept/dept/DepartmentSetting",
+      "exact": true,
+      "authority": "auth_section"
+    },
+    { // 部门新增
+      "name": "部门新增",
+      "path": "/dept/deptMngt/new/:id",
+      "module": "./pages/dept/dept/DepartmentNew",
+      "exact": true,
+      "authority": "auth_section"
+    },
+    { // 岗位管理
+      "name": "岗位管理",
+      "path": "/dept/jobsMngt",
+      "module": "./pages/dept/jobs/JobsMngt",
+      "exact": true,
+      "authority": "auth_section"
+    },
+    { // 员工管理
+      "name": "员工管理",
+      "path": "/dept/staffMngt",
+      "module": "./pages/dept/staff/StaffMngt",
+      "exact": true,
+      "authority": "auth_section"
     },
     { // 系统日志
       "name": "登录日志",
