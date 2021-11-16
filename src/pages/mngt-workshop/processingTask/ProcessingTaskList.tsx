@@ -9,7 +9,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from '../workshop.module.less';
 
-export default function DrawTowerMngt(): React.ReactNode {
+export default function ProcessingTaskList(): React.ReactNode {
     const [ refresh, setRefresh ] = useState<boolean>(false);
     const [ filterValue, setFilterValue ] = useState({});
     const history = useHistory();

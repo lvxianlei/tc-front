@@ -21,7 +21,7 @@ const tableColumns = [
     { title: '工艺流程', dataIndex: 'description', key: 'description' }
 ]
 
-export default function ConfirmTaskDetail(): React.ReactNode {
+export default function ComponentDetails(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string ,status: string}>();
     const [ detailData, setDetailData ] = useState<any | undefined>(undefined);

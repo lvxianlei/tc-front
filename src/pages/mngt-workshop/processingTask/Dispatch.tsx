@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
-import { Button, Col, Form, Input, message, Modal, Row, Select, Space, Spin } from 'antd';
+import { Button, Col, DatePicker, Form, Input, message, Modal, Row, Select, Space, Spin } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
 // import { baseInfoData } from './question.json';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import WorkshopEquipmentSelectionComponent, { IUser } from '../../../components/WorkshopEquipmentModal';
+import WorkshopTeamSelectionComponent from '../../../components/WorkshopTeamModal';
 import TextArea from 'antd/lib/input/TextArea';
 import AuthUtil from '../../../utils/AuthUtil';
+import moment from 'moment';
 
 const tableColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
@@ -38,11 +40,14 @@ const tableColumns = [
     { title: '备注', dataIndex: 'description', key: 'description' }
 ]
 
-export default function OtherDetail(): React.ReactNode {
+export default function Dispatch(): React.ReactNode {
     const history = useHistory();
     const [form] = Form.useForm();
+    const [formRef] = Form.useForm();
     const params = useParams<{ id: string }>();
     const [show, setShow] = useState<boolean>(false);
+    const [equipment, setEquipment] = useState({});
+    const [team, setTeam] = useState({});
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         console.log(params.id)
         let data:any = {};
@@ -78,39 +83,44 @@ export default function OtherDetail(): React.ReactNode {
                                     "message": "请选择派工设备"
                                 }
                             ]}>
-                                <Input maxLength={ 50 } addonAfter={ <WorkshopEquipmentSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
-                                    // setSelectedRows(selectedRows);
-                                    // form.setFieldsValue({leaderName: selectedRows[0].name});
-                                } } buttonType="link" buttonTitle="+选择设备" /> }/>
+                                <Input maxLength={ 50 } addonAfter={ <WorkshopEquipmentSelectionComponent onSelect={ (selectedRows: any[] | any) => {
+                                    setEquipment(selectedRows);
+                                    form.setFieldsValue({
+                                        equipmentName: selectedRows[0].name,
+                                        workshopDeptName: selectedRows[0].name,
+                                        deptProcessesName: selectedRows[0].name,
+                                        productionLinesName: selectedRows[0].name
+                                    });
+                                } } buttonType="link" buttonTitle="+选择设备"  disabled={show}/> } disabled={show}/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
                             <Form.Item name="workshopDeptName" label="派工车间" initialValue={undefined}>
-                                <Input/>
+                                <Input disabled/>
                             </Form.Item>
                         </Col>
                     </Row>
                     <Row>
                         <Col span={12}>
                             <Form.Item name="deptProcessesName" label="工序" initialValue={undefined}>
-                                <Input/>
+                                <Input disabled/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
                             <Form.Item name="productionLinesName" label="产线" initialValue={undefined}>
-                                <Input/>
+                                <Input disabled/>
                             </Form.Item>
                         </Col>
                     </Row>
                     <Row>
                         <Col span={12}>
-                            <Form.Item name="startTime" label="任务时间范围" initialValue={undefined} rules={[
+                            <Form.Item name="time" label="任务时间范围" initialValue={[moment('2015-01-01'), moment('2015-01-01')]} style={{width:'100%'}} rules={[
                                 {
                                     "required": true,
                                     "message": "请选择任务时间范围"
                                 }
                             ]}>
-                                <Input/>
+                                <DatePicker.RangePicker showTime style={{width:'100%'}} disabled={show}/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -120,7 +130,7 @@ export default function OtherDetail(): React.ReactNode {
                                     "message": "请选择是否显示未派工明细"
                                 }
                             ]}>
-                                <Select style={{width:'100%'}}>
+                                <Select style={{width:'100%'}} disabled={show}>
                                     <Select.Option value={1} key={1}>是</Select.Option>
                                     <Select.Option value={2} key={2}>否</Select.Option>
                                 </Select>
@@ -130,20 +140,49 @@ export default function OtherDetail(): React.ReactNode {
                 </Form>
                 <Space>
                 <Button type='primary' onClick={()=>{
-                    // RequestUtil.get(`/workshopOperating/dispatchDetail`,{startTime,endTime,equipmentId,noDispatchStatus}).then(()=>{
-                    //     message.success('查询成功！')
-                    // }).then(()=>{
-                    //     setShow(true)
+                    // form.validateFields().then(res => {
+                    //     let value = form.getFieldsValue(true);
+                    //     if (value.time) {
+                    //         const formatDate = value.time.map((item: any) => item.format("YYYY-MM-DD HH:mm:ss"))
+                    //         value.startTime = formatDate[0];
+                    //         value.endTime = formatDate[1];
+                    //         delete value.time
+                    //     }
+                    //     RequestUtil.get(`/workshopOperating/dispatchDetail`,{startTime,endTime,equipmentId,noDispatchStatus}).then(()=>{
+                    //         message.success('查询成功！')
+                    //     }).then(()=>{
+                    //         setShow(true)
+                    //     })
                     // })
                     setShow(true)
                 }}>查询</Button>
                 <Button type='primary' ghost onClick={()=>{
                     setShow(false)
+                    setEquipment({});
+                    setTeam({})
                     form.resetFields();
+                    formRef.resetFields();
                 }}>重置</Button>
                 </Space>
                 {show?<>
                     <DetailTitle title="指派班组选择" />
+                    <Form form={formRef} { ...formItemLayout }>
+                        <Row>
+                            <Col span={12}>
+                                <Form.Item name="equipmentName" label="派工班组" initialValue={undefined} rules={[
+                                    {
+                                        "required": true,
+                                        "message": "请选择派工班组"
+                                    }
+                                ]}>
+                                    <Input maxLength={ 50 } addonAfter={ <WorkshopTeamSelectionComponent onSelect={ (selectedRows: IUser[] | any) => {
+                                        setTeam(selectedRows);
+                                        formRef.setFieldsValue({equipmentName: selectedRows[0].name});
+                                    } } buttonType="link" buttonTitle="+选择班组" /> }/>
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                    </Form>
                     <DetailTitle title="加工明细" />
                     <CommonTable 
                         columns={tableColumns} 

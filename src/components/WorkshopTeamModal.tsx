@@ -13,10 +13,10 @@
  import { ButtonType } from 'antd/lib/button';
  import { RowSelectionType } from 'antd/lib/table/interface';
  
- export interface IWorkshopEquipmentSelectionComponentState extends IAbstractSelectableModalState {
+ export interface IWorkshopTeamSelectionComponentState extends IAbstractSelectableModalState {
      readonly tableDataSource: IUser[];
  }
- export interface IWorkshopEquipmentSelectionComponentProps extends IAbstractSelectableModalProps {
+ export interface IWorkshopTeamSelectionComponentProps extends IAbstractSelectableModalProps {
      readonly saleOrderId?: string | number;
      readonly buttonType?: ButtonType;
      readonly buttonTitle?: string;
@@ -51,14 +51,14 @@
  /**
   * Workshop User Selection Component
   */
- export default class WorkshopEquipmentSelectionComponent extends AbstractFilteredSelecableModal<IWorkshopEquipmentSelectionComponentProps, IWorkshopEquipmentSelectionComponentState> {
+ export default class WorkshopTeamSelectionComponent extends AbstractFilteredSelecableModal<IWorkshopTeamSelectionComponentProps, IWorkshopTeamSelectionComponentState> {
  
      /**
       * @override
       * @description Gets state
       * @returns state 
       */
-     protected getState(): IWorkshopEquipmentSelectionComponentState {
+     protected getState(): IWorkshopTeamSelectionComponentState {
          return {
              ...super.getState(),
              tablePagination: {
@@ -67,7 +67,7 @@
                  total: 0,
                  showSizeChanger: false
              },
-             confirmTitle: "选择设备"
+             confirmTitle: "选择班组"
          };
      }
  
@@ -126,7 +126,7 @@
      public getFilterFormItemProps(): FormItemProps[] {
          return [{
              name: 'name',
-             children: <Input placeholder="请输入派工设备名称/车间名称/产线进行查询" />
+             children: <Input placeholder="请输入班组名称/车间名称/产线进行查询" />
          }, ]
      }
  
@@ -143,13 +143,13 @@
      public getTableColumns(): ColumnType<object>[] {
          return [{
              key: 'type',
-             title: '派工设备名称',
-             width: '20%',
+             title: '班组名称',
+             width: '30%',
              dataIndex: 'type',
          }, {
              key: 'name',
              title: '所属车间',
-             width: '20%',
+             width: '25%',
              dataIndex: 'name'
          }, {
              key: 'departmentName',
@@ -159,13 +159,8 @@
          }, {
              key: 'stationName',
              title: '设备所属产线',
-             width: '20%',
+             width: '25%',
              dataIndex: 'stationName'
-         }, {
-             key: 'phone',
-             title: '班长',
-             width: '20%',
-             dataIndex: 'phone'
          }];
      }
  
@@ -191,7 +186,7 @@
                      this.setState({
                          isModalVisible: true
                      })
-                 }} disabled={this.props.disabled}>{this.props.buttonTitle || '选择设备'}</Button>
+                 }}  disabled={this.props.disabled}>{this.props.buttonTitle || '选择班组'}</Button>
                  <Modal
                      title={this.state.confirmTitle}
                      visible={this.state.isModalVisible}
