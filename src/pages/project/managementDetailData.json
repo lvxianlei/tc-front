@@ -557,7 +557,13 @@
         },
         {
             "title": "协议名称",
-            "dataIndex": "frameAgreementName"
+            "dataIndex": "frameAgreementName",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入协议名称..."
+                }
+            ]
         },
         {
             "title": "项目名称",
@@ -567,7 +573,13 @@
         {
             "title": "合同总重(吨)",
             "dataIndex": "contractWeight",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入合同总重..."
+                }
+            ]
         },
         {
             "title": "合同单价(元/吨)",
@@ -577,12 +589,24 @@
         {
             "title": "合同总价(元)",
             "dataIndex": "contractMoneyCount",
-            "type": "number"
+            "type": "number",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入合同总价..."
+                }
+            ]
         },
         {
             "title": "中标类型",
             "dataIndex": "bidType",
-            "type": "select"
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择中标类型..."
+                }
+            ]
         },
         {
             "title": "销售类型",
@@ -600,6 +624,12 @@
                 {
                     "value": 2,
                     "label": "其他"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择销售类型..."
                 }
             ]
         },
@@ -631,15 +661,33 @@
                     "title": "联系电话",
                     "dataIndex": "phone"
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择业主单位..."
+                }
             ]
         },
         {
             "title": "业主联系人",
-            "dataIndex": "ownerUser"
+            "dataIndex": "ownerUser",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入业主联系人..."
+                }
+            ]
         },
         {
             "title": "业主联系电话",
-            "dataIndex": "ownerPhone"
+            "dataIndex": "ownerPhone",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入业主联系电话..."
+                }
+            ]
         },
         {
             "title": "签订单位",
@@ -669,23 +717,47 @@
                     "title": "联系电话",
                     "dataIndex": "phone"
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择签订单位..."
+                }
             ]
         },
         {
             "title": "签订日期",
             "dataIndex": "signDate",
             "type": "date",
-            "format": "YYYY-MM-DD"
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择签订日期..."
+                }
+            ]
         },
         {
             "title": "签订人",
-            "dataIndex": "signUser"
+            "dataIndex": "signUser",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入签订人..."
+                }
+            ]
         },
         {
             "title": "交货日期",
             "dataIndex": "deliveryDate",
             "type": "date",
-            "format": "YYYY-MM-DD"
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择交货日期..."
+                }
+            ]
         },
         {
             "title": "有无技术协议",
@@ -736,7 +808,13 @@
         },
         {
             "title": "销售员",
-            "dataIndex": "saleUser"
+            "dataIndex": "saleUser",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入销售员..."
+                }
+            ]
         },
         {
             "title": "备注",

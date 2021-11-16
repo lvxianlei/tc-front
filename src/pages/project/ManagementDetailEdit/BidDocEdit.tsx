@@ -11,8 +11,9 @@ import ApplicationContext from "../../../configuration/ApplicationContext"
 export default function BaseInfoEdit(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ tab: TabTypes, id: string }>()
-    const dictionaryOptions: any = ApplicationContext.get().dictionaryOption
-    const bidType = dictionaryOptions["124"]
+    // const dictionaryOptions: any = ApplicationContext.get().dictionaryOption
+    // const bidType = dictionaryOptions["124"]
+    const bidType = (ApplicationContext.get().dictionaryOption as any)["124"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }));
     const [baseInfoForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -60,7 +61,7 @@ export default function BaseInfoEdit(): JSX.Element {
                 <BaseInfo form={baseInfoForm} columns={bidDocColumns.map(item => item.dataIndex === "bidType" ? ({
                     ...item,
                     type: "select",
-                    enum: bidType.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+                    enum: bidType
                 }) : ({ ...item }))} dataSource={data || {}} col={4} edit />
                 <DetailTitle title="填写记录" />
                 <CommonTable columns={[

@@ -146,27 +146,27 @@ export default function Information(): React.ReactNode {
         searchFormItems={[
             {
                 name: 'fuzzyQuery',
-                children: <Input placeholder="项目名称/项目编码/审批编号/关联合同/制单人" style={{ width: 280 }} />
+                children: <Input placeholder="项目名称/项目编码/审批编号/关联合同/制单人" style={{ width: 200 }} />
             },
             {
                 name: 'startBidBuyEndTime',
                 label: '购买截至日期',
-                children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 150 }} />
             },
             {
                 name: 'startReleaseDate',
                 label: '发布日期',
-                children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 150 }} />
             },
             {
                 name: 'startBiddingEndTime',
                 label: '投标截至日期',
-                children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 150 }} />
             },
             {
                 name: 'biddingStatus',
                 label: '是否应标',
-                children: <Select style={{ width: 150 }}>
+                children: <Select style={{ width: 100 }}>
                     <Select.Option value="0">未决定</Select.Option>
                     <Select.Option value="1">是</Select.Option>
                     <Select.Option value="2">否</Select.Option>
@@ -175,7 +175,7 @@ export default function Information(): React.ReactNode {
             {
                 name: 'source',
                 label: '来源',
-                children: <Select mode="multiple" style={{ minWidth: 150 }}>
+                children: <Select mode="multiple" style={{ minWidth: 100 }}>
                     {dictionaryOptions.map((item: any, index: number) => <Select.Option key={index} value={item.name}>{item.name}</Select.Option>)}
                 </Select>
             }
