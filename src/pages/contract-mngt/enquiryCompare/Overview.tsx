@@ -1,12 +1,27 @@
-import React, { useState, forwardRef, useImperativeHandle, useRef } from "react"
+import React, { useState, useRef } from "react"
 import { message, Select } from "antd"
 import { useHistory, useParams } from "react-router-dom"
 import { Button, Modal, Spin } from "antd"
-import { CommonTable, DetailTitle, DetailContent } from "../../common"
+import { CommonTable, DetailTitle, DetailContent, Attachment } from "../../common"
 import { materialColumns } from "./enquiry.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import AddPrice from "./AddPrice"
+
+function AttchFiles({ id }: { id: string }): JSX.Element {
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryQuotation/${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { refreshDeps: [id] })
+    return <Spin spinning={loading}>
+        <Attachment title={false} dataSource={data?.inquiryQuotationAttachInfoVos || []} />
+    </Spin>
+}
+
 interface AddPriceRef {
     onSubmit: () => void
     resetFields: () => void
@@ -16,6 +31,7 @@ export default function Overview(): JSX.Element {
     const addPriceRef = useRef<AddPriceRef>({ onSubmit: () => { }, resetFields: () => { } })
     const params = useParams<{ id: string }>()
     const [visible, setVisible] = useState<boolean>(false)
+    const [attchVisible, setAttchVisible] = useState<boolean>(false)
     const [oprationType, setOprationType] = useState<"new" | "edit">("new")
     const [detailId, setDetailId] = useState<string>("")
     const [materialLists, setMaterialList] = useState<any[]>([])
@@ -100,6 +116,21 @@ export default function Overview(): JSX.Element {
             }}>
             <AddPrice id={detailId} type={oprationType} ref={addPriceRef} materialLists={materialLists} />
         </Modal>
+        <Modal
+            width={1011}
+            destroyOnClose
+            title="附件信息"
+            visible={attchVisible}
+            footer={[<Button type="primary" key="confirm" onClick={() => {
+                setDetailId("")
+                setAttchVisible(false)
+            }}>确定</Button>]}
+            onCancel={() => {
+                setDetailId("")
+                setAttchVisible(false)
+            }}>
+            <AttchFiles id={detailId} />
+        </Modal>
         <DetailContent title={[
             <Button type="primary" ghost key="export" style={{ marginRight: 16 }}>导出</Button>,
             <Button
@@ -140,19 +171,35 @@ export default function Overview(): JSX.Element {
             <CommonTable
                 haveIndex
                 columns={[
-                    ...data?.inquiryQuotationOfferActionVo?.headerColumnVos || [],
+                    ...data?.inquiryQuotationOfferActionVo?.headerColumnVos.map((item: any) => {
+                        if (item.dataIndex !== "supplierName") {
+                            return ({
+                                ...item,
+                                render: (value: string, records: any) => {
+                                    if (records.material.includes(item.dataIndex)) {
+                                        return <span style={{ backgroundColor: "red" }}>{value}</span>
+                                    }
+                                    return <span>{value}</span>
+                                }
+                            })
+                        }
+                        return item
+                    }) || [],
                     {
                         title: "操作",
                         fixed: "right",
                         dataIndex: "opration",
                         render: (_: any, records: any) => <>
-                            <a onClick={() => {
+                            <Button disabled={data?.comparisonStatus !== 1} type="link" onClick={() => {
                                 setDetailId(records.id)
                                 setOprationType("edit")
                                 setVisible(true)
-                            }}>编辑</a>
-                            <Button type="link" onClick={() => message.warning("功能开发中...")}>附件</Button>
-                            <a type="link" onClick={() => {
+                            }}>编辑</Button>
+                            <Button type="link" onClick={() => {
+                                setDetailId(records.id)
+                                setAttchVisible(true)
+                            }}>附件</Button>
+                            <Button disabled={data?.comparisonStatus !== 1} type="link" onClick={() => {
                                 Modal.confirm({
                                     title: "删除",
                                     content: "确定删除吗？",
@@ -163,10 +210,11 @@ export default function Overview(): JSX.Element {
                                     }
                                 })
                             }
-                            }>移除</a>
+                            }>移除</Button>
                         </>
                     }]}
                 dataSource={data?.inquiryQuotationOfferActionVo?.inquiryQuotationOfferData || []}
+
             />
         </DetailContent>
     </Spin>

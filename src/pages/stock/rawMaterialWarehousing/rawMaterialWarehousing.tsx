@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message, Table } from 'antd';
+import { Space, Button, Input, DatePicker, Select, Table } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
-import { FixedType } from 'rc-table/lib/interface';
-import ConfirmableButton from '../../../components/ConfirmableButton';
-import { Page } from '../../common';
-import { IClient } from '../../IClient';
+import { FixedType } from 'rc-table/lib/interface'
 import RequestUtil from '../../../utils/RequestUtil';
 import '../StockPublicStyle.less';
 
@@ -90,7 +87,6 @@ export default function RawMaterialStock(): React.ReactNode {
     ]
     //获取列表数据
     const loadData = async () => {
-        console.log('请求数据')
         const data: any = await RequestUtil.get(`/tower-storage/receiveStock`, {
             current,
             pageSize,
@@ -164,7 +160,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Input
                             placeholder="收货单号/供应商/合同编号/联系人/联系电话"
                             value={keyword}
-                            style={{width:260}}
+                            style={{ width: 260 }}
                             onChange={(e) => {
                                 setKeyword(e.target.value)
                             }}

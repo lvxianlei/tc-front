@@ -1447,6 +1447,14 @@
       // "authority": "rd_workbench"
       "authority": "approvalm"
     },
+    { // 工作台-供应
+      "name": "供应工作台",
+      "path": "/workBench/sw",
+      "module": "./pages/workBench/sw/index",
+      "exact": true,
+      // "authority": "rd_workbench"
+      "authority": "approvalm"
+    },
     //财务管理
     { // 票据管理
       "name": "票据管理",

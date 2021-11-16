@@ -769,7 +769,7 @@
             "dataIndex": "partBidNumber"
         },
         {
-            "title": "货物类别",
+            "title": "物资类别",
             "dataIndex": "goodsType"
         },
         {

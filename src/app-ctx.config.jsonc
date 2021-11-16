@@ -159,6 +159,11 @@
                                 "label": "工作台",
                                 "path": "/workBench/workBenchMngt",
                                 "authority": "approvalm"
+                            },
+                            {
+                                "label": "供应工作台",
+                                "path": "/workBench/sw",
+                                "authority": "approvalm"
                             }
                         ]
                     },

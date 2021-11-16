@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Space, Button, Input, Modal, Form, message, Upload, Select, DatePicker } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { Page, BaseInfo, DetailTitle, CommonTable, EditTable } from '../common'
+import { Page, BaseInfo, DetailTitle, CommonTable, EditTable, Attachment } from '../common'
 import ApprovalTypesView from "./ApprovalTypesView"
 import SelectAuditType from './SelectAuditType'
 import useRequest from '@ahooksjs/use-request'
@@ -387,7 +387,7 @@ export default function Information(): React.ReactNode {
                     'Tenant-Id': AuthUtil.getTenantId(),
                     'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
                 }}
-                onChange={uploadChange}
+                onChange={uploadChange} 
                 showUploadList={false}
             ><Button key="enclosure" type="primary" ghost>上传附件</Button></Upload>]} />
             <CommonTable columns={[{
