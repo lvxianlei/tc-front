@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Button, message, Modal, Form, DatePicker, Row, Col } from 'antd'
+import { Button, message, Modal, Form, DatePicker, Row, Col, Select } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, CommonTable } from '../../common'
 import { CargoDetails } from "./receivingListData.json"
@@ -30,8 +30,15 @@ export default function Edit() {
         </Modal>
         <Form form={form} onFinish={(values) => setFilterValue(values)}>
             <Row>
-                <Col><Form.Item label="最新状态变更时间" name="startPurchaseStatusUpdateTime"><DatePicker.RangePicker format="YYYY-MM-DD" /></Form.Item></Col>
-                <Col><Form.Item label="采购状态" name="startPurchaseStatus"><DatePicker.RangePicker format="YYYY-MM-DD" /></Form.Item></Col>
+                <Col><Form.Item label="最新状态变更时间" name="startStatusUpdateTime"><DatePicker.RangePicker format="YYYY-MM-DD" /></Form.Item></Col>
+                <Col><Form.Item label="采购状态" name="receiveStatus">
+                    <Select defaultValue="全部" style={{ width: 150 }}>
+                        <Select.Option value="">全部</Select.Option>
+                        <Select.Option value={0}>待收货</Select.Option>
+                        <Select.Option value={1}>已收货</Select.Option>
+                        <Select.Option value={2}>已拒绝</Select.Option>
+                    </Select>
+                </Form.Item></Col>
                 <Col><Form.Item>
                     <Button type="primary" htmlType="submit" style={{ marginLeft: 12 }}>搜索</Button>
                     <Button type="default" htmlType="reset" style={{ marginLeft: 12 }}>重置</Button>

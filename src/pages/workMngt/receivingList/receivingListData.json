@@ -276,8 +276,13 @@
             "type": "string"
         },
         {
-            "title": "长度（mm）",
+            "title": "长度",
             "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "宽度",
+            "dataIndex": "width",
             "type": "number"
         },
         {
@@ -296,9 +301,22 @@
             "type": "number"
         },
         {
-            "title": "重量（kg）",
+            "title": "重量（吨）",
             "dataIndex": "weight",
             "type": "number"
+        },
+        {
+            "title": "采购状态",
+            "dataIndex": "receiveStatusName"
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "updateTime",
+            "type": "date"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "operatorMan"
         }
     ],
     "SelectedArea": [

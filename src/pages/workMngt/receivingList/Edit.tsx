@@ -188,7 +188,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/receiveStock/receiveStock`, { ...data })
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/receiveStock/receiveStock`, type === "new" ? data : ({ ...data, id }))
             resole(result)
         } catch (error) {
             reject(error)

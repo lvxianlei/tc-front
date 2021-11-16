@@ -35,8 +35,6 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
         }
     }), { manual: true })
 
-
-
     const resetFields = () => {
         form.resetFields()
         attachRef.current?.resetFields()
@@ -50,7 +48,7 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
                 supplierId: formData.supplier?.id || data?.supplierId,
                 supplierName: formData.supplier?.value || data?.supplierName,
                 inquiryQuotationOfferDtos: materials.map((item: any) => {
-                    delete item.id
+                    type === "new" && delete item.id
                     return item
                 }),
                 comparisonPriceId: params.id,
