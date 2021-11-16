@@ -1780,6 +1780,20 @@
       "exact": true,
       "authority": "auth_section"
     },
+    { // 员工管理-新增
+      "name": "新增",
+      "path": "/dept/staffMngt/new",
+      "module": "./pages/dept/staff/StaffNew",
+      "exact": true,
+      "authority": "auth_section"
+    },
+    { // 员工管理-编辑
+      "name": "编辑",
+      "path": "/dept/staffMngt/setting",
+      "module": "./pages/dept/staff/StaffNew",
+      "exact": true,
+      "authority": "auth_section"
+    },
     { // 系统日志
       "name": "登录日志",
       "path": "/systemLog/login",
