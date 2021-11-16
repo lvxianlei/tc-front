@@ -19,7 +19,7 @@ const tableColumns = [
 ]
 
 
-export default function ConfirmTaskDetail(): React.ReactNode {
+export default function DeliveryView(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string ,status: string}>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {

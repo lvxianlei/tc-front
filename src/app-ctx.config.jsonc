@@ -61,11 +61,6 @@
                                 "label": "角色管理",
                                 "path": "/auth/roles",
                                 "authority": "auth_section"
-                            },
-                            {
-                                "label": "部门管理",
-                                "path": "/auth/dept",
-                                "authority": "auth_section"
                             }
                         ]
                     },
@@ -163,6 +158,11 @@
                             {
                                 "label": "工作台",
                                 "path": "/workBench/workBenchMngt",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "供应工作台",
+                                "path": "/workBench/sw",
                                 "authority": "approvalm"
                             }
                         ]
@@ -639,6 +639,29 @@
                             {
                                 "label": "证件管理",
                                 "path": "/archivesMngt/certificateMngt",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "部门管理",
+                        "icon": "technology",
+                        "path": "/dept",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "部门管理",
+                                "path": "/dept/deptMngt",
+                                "authority": "auth_section"
+                            },
+                            {
+                                "label": "岗位管理",
+                                "path": "/dept/jobsMngt",
+                                "authority": "approvalm"
+                            },
+                            {
+                                "label": "员工管理",
+                                "path": "/dept/staffMngt",
                                 "authority": "approvalm"
                             }
                         ]

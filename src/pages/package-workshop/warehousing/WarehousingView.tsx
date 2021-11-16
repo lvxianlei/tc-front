@@ -25,7 +25,7 @@ const packageColumns = [
     { title: '库位', dataIndex: 'description', key: 'description' }
 ]
 
-export default function ConfirmTaskDetail(): React.ReactNode {
+export default function WarehousingView(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string ,status: string}>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {

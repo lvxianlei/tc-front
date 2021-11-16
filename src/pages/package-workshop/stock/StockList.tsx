@@ -4,7 +4,7 @@ import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import { Link } from 'react-router-dom';
 
-export default function DrawTowerMngt(): React.ReactNode {
+export default function StockList(): React.ReactNode {
     const [ refresh, setRefresh ] = useState<boolean>(false);
     const [ filterValue, setFilterValue ] = useState({});
     

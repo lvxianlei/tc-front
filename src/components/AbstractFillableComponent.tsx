@@ -38,6 +38,7 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
         super(props);
         this.onFormFinish = this.onFormFinish.bind(this);
         this.onSubmitAndContinue = this.onSubmitAndContinue.bind(this);
+        console.log(this)
     }
 
     /**
@@ -160,7 +161,6 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
     protected getPrimaryOperationButton(): React.ReactNode {
         return <Button type="primary" htmlType="submit">保存</Button>;
     }
-
     /**
      * @protected
      * @description Renders form items
@@ -169,6 +169,10 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      * @returns form items 
      */
     protected renderFormItems(items: IFormItemGroup[], itemIndex: number): React.ReactNode {
+        let region:any = null;
+        if (this.getForm()) {
+            region = this.getForm()?.getFieldValue("region");
+        }
         return (
             <div key={itemIndex}>
                 {
@@ -181,11 +185,11 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
                                     <Row gutter={24}>
                                         {
                                             group.itemProps.map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
-                                                <Col span={group.itemCol?.span} key={`${props.name}_${index}`}>
+                                                <Col style={{display:props.name == 'regionOther' && region != 83 ? 'none' : 'block'}} span={group.itemCol?.span} key={`${props.name}_${index}`}>
                                                     <Form.Item {...props} />
                                                 </Col>
                                             ))
-                                        }
+                                            }
                                     </Row>
                                     :
                                     group.itemProps.map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (

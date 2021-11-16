@@ -1,0 +1,42 @@
+{
+    "swWork": [
+        {
+            "title": "差异列表",
+            "dataIndex": "componentDiffWorkBenchVo",
+            "col": 2
+        },
+        {
+            "title": "询价任务",
+            "dataIndex": "inquiryTaskWorkBenchVo",
+            "col":  1
+        },
+        {
+            "title": "采购任务",
+            "dataIndex": "materialPurchaseTaskWorkBenchVo"
+        },
+        {
+            "title": "缺料申请",
+            "dataIndex": "materialShortageWorkBatchVo"
+        },
+        {
+            "title": "生产配料",
+            "dataIndex": "produceIngredientsWorkBatchVo"
+        },
+        {
+            "title": "采购配料",
+            "dataIndex": "purchaseIngredientsWorkBenchVo"
+        },
+        {
+            "title": "采购计划",
+            "dataIndex": "purchasePlanWorkBatchVo"
+        },
+        {
+            "title": "采购列表",
+            "dataIndex": "purchaseTaskTowerWorkBenchVo"
+        },
+        {
+            "title": "收货单",
+            "dataIndex": "receiveStockWorkBatchVo"
+        }
+    ]
+}

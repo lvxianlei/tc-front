@@ -28,17 +28,12 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/inquiryQuotation`, {
-                ...data,
-                comparisonPriceId: params.id
-            })
+            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/inquiryQuotation`, type === "new" ? data : ({ id, ...data }))
             resole(result)
         } catch (error) {
             reject(error)
         }
     }), { manual: true })
-
-
 
     const resetFields = () => {
         form.resetFields()
@@ -53,9 +48,10 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
                 supplierId: formData.supplier?.id || data?.supplierId,
                 supplierName: formData.supplier?.value || data?.supplierName,
                 inquiryQuotationOfferDtos: materials.map((item: any) => {
-                    delete item.id
+                    type === "new" && delete item.id
                     return item
                 }),
+                comparisonPriceId: params.id,
                 inquiryQuotationAttachInfoDtos: attachRef.current?.getDataSource()
             })
             resove(true)

@@ -262,7 +262,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "materialStandardName",
+            "dataIndex": "standardName",
             "type": "string"
         },
         {
@@ -276,8 +276,13 @@
             "type": "string"
         },
         {
-            "title": "长度（mm）",
+            "title": "长度",
             "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "宽度",
+            "dataIndex": "width",
             "type": "number"
         },
         {
@@ -296,31 +301,40 @@
             "type": "number"
         },
         {
-            "title": "重量（kg）",
+            "title": "重量（吨）",
             "dataIndex": "weight",
             "type": "number"
+        },
+        {
+            "title": "采购状态",
+            "dataIndex": "receiveStatusName"
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "updateTime",
+            "type": "date"
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "operatorMan"
         }
     ],
     "SelectedArea": [
         {
             "title": "材质",
-            "dataIndex": "materialTexture",
-            "type": "integer"
+            "dataIndex": "materialTexture"
         },
         {
             "title": "标准",
-            "dataIndex": "materialStandard",
-            "type": "integer"
+            "dataIndex": "materialStandardName"
         },
         {
             "title": "规格",
-            "dataIndex": "spec",
-            "type": "integer"
+            "dataIndex": "spec"
         },
         {
             "title": "配料品名",
-            "dataIndex": "materialName",
-            "type": "string"
+            "dataIndex": "materialName"
         },
         {
             "title": "长度",
@@ -346,18 +360,15 @@
     "Selected": [
         {
             "title": "材质",
-            "dataIndex": "materialTexture",
-            "type": "integer"
+            "dataIndex": "materialTexture"
         },
         {
             "title": "标准",
-            "dataIndex": "materialStandard",
-            "type": "integer"
+            "dataIndex": "materialStandardName"
         },
         {
             "title": "规格",
-            "dataIndex": "spec",
-            "type": "integer"
+            "dataIndex": "spec"
         },
         {
             "title": "配料品名",

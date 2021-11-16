@@ -63,6 +63,7 @@ export interface ProjectContractInfo extends IContractInfo {
     readonly ecpContractNumber: string;
     readonly payCompanyName: string;
     readonly payType: number;
+    readonly regionOther: string;
     readonly takeOverUser: string;
     readonly takeOverTime: string;
     readonly isReceivedContract: number;
@@ -413,7 +414,9 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             contractPrice: parseFloat((contractAmount / contractTotalWeight).toFixed(2))
         })
     }
-
+    public regionChange() {
+        this.forceUpdate();
+    }
     /**
      * @implements
      * @description Gets form item groups

@@ -63,14 +63,10 @@ export function formatData(columns: any[], dataSource: any): object {
     return formatedData
 }
 
-// const validator = ({ getFieldValue }) => ({
-//     validator(_, value) {
-//       if (!value || getFieldValue('password') === value) {
-//         return Promise.resolve();
-//       }
-//       return Promise.reject(new Error('The two passwords that you entered do not match!'));
-//     },
-//   })
+const popTableTransform = (value: any) => {
+    console.log("popTableTransform", value)
+    return value
+}
 
 export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onChange = () => { } }: BaseInfoProps): JSX.Element {
     if (edit) {
@@ -90,7 +86,12 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
                                 className="baseInfoForm"
                                 name={item.dataIndex}
                                 label={item.title}
-                                rules={item.rules || []}
+                                rules={item.type === "popTable" && item.rules ? item.rules.map((item: any) => {
+                                    if (item.required) {
+                                        return ({ ...item, transform: popTableTransform })
+                                    }
+                                    return item
+                                }) : (item.rules || [])}
                             >
                                 {item.render ? item.render(item) : <FormItemType type={item.type} data={item} />}
                             </Form.Item>

@@ -2,7 +2,8 @@
  * @author zyc
  * @copyright © 2021 zyc
  */
-import { Input, InputNumber, TreeSelect } from 'antd';
+import { Input, InputNumber, Select, TreeSelect } from 'antd';
+import { StringGradients } from 'antd/lib/progress/progress';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -21,6 +22,7 @@ export interface IDeptDetail {
     readonly description?: string;
     readonly parentId?: string;
     readonly sort?: string;
+    readonly classification?: string;
 }
 
 export interface IAbstractDepartmentSettingState extends IAbstractFillableComponentState {
@@ -63,7 +65,7 @@ export default abstract class AbstractDepartmentSetting<P extends RouteComponent
      * @returns return path 
      */
     protected getReturnPath(): string {
-        return '/auth/dept';
+        return '/dept/deptMngt';
     }  
 
     /**
@@ -113,6 +115,17 @@ export default abstract class AbstractDepartmentSetting<P extends RouteComponent
                 initialValue: deptDeatil?.parentId,
                 children: <TreeSelect placeholder="请选择上级机构" className={ layoutStyles.width100 }
                     treeData={ this.wrapRole2DataNode( this.state.tree ) } showSearch={ true }/>
+            }, {
+                label: '部门类型',
+                name: 'classification',
+                initialValue: deptDeatil?.classification,
+                // children: <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                //     { warehouseOptions && warehouseOptions.map(({ id, name }, index) => {
+                //         return <Select.Option key={index} value={id+','+name}>
+                //             {name}
+                //         </Select.Option>
+                //     }) }
+                // </Select>
             }]
         }, {
             title: '其他信息',
