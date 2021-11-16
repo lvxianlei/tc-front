@@ -395,6 +395,7 @@ class ManagementContractNew extends ContractNew {
                     this.getForm()?.getFieldValue("countryCode") === 1 ||
                     contract?.countryCode === 1
                   }
+                  onChange={()=> this.regionChange()}
                 >
                   {this.state.regionInfoData?.map((opt: any) => {
                     return (
@@ -403,9 +404,15 @@ class ManagementContractNew extends ContractNew {
                       </Select.Option>
                     );
                   })}
-                  <Select.Option value="其他-国外">其他-国外</Select.Option>
+                  <Select.Option value="83">其他-国外</Select.Option>
                 </Select>
               ),
+            },
+            {
+              label: "其他-国外",
+              name: "regionOther",
+              initialValue: contract?.takeOverUser,
+              children: (<Input value={contract?.takeOverUser} />),
             },
             {
               label: "合同接管人",
