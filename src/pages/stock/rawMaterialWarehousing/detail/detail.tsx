@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Space, Button, TableColumnProps, Modal, Input, DatePicker, Select, message, Table } from 'antd';
-import { Link, useHistory, useParams } from 'react-router-dom';
-import { FixedType } from 'rc-table/lib/interface';
-import ConfirmableButton from '../../../../components/ConfirmableButton';
-import { Page } from '../../../common';
-import { IClient } from '../../../IClient';
+import { Space, Button, Modal, Input, DatePicker, Select, message, Table } from 'antd';
+import { useHistory, useParams } from 'react-router-dom';
+import { FixedType } from 'rc-table/lib/interface'
 import RequestUtil from '../../../../utils/RequestUtil';
 import '../../StockPublicStyle.less';
 import './detail.less';
@@ -43,10 +40,7 @@ export default function RawMaterialStock(): React.ReactNode {
             title: '序号',
             dataIndex: 'key',
             width: 50,
-            render: (text: any, item: any, index: any) => {
-                console.log(item, 'item')
-                return <span>{index + 1}</span>
-            }
+            render: (text: any, item: any, index: any) => <span>{index + 1}</span>
         },
         {
             title: '材质名称',
@@ -54,7 +48,7 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 120,
         }, {
             title: '标准',
-            dataIndex: 'standard',
+            dataIndex: 'standardName',
             width: 120,
         }, {
             title: '规格',
@@ -146,7 +140,6 @@ export default function RawMaterialStock(): React.ReactNode {
     ]
     //获取列表数据
     const loadData = async () => {
-        console.log('请求数据')
         const data: any = await RequestUtil.get(`/tower-storage/receiveStock/detail`, {
             current: current,
             size: pageSize,

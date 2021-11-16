@@ -18,17 +18,19 @@ interface FileProps {
 }
 
 interface AttachmentProps {
-    title?: string
+    title?: string | false
     dataSource?: FileProps[]
     edit?: boolean
+    columns?: any[]
     maxCount?: number
+    showHeader?: boolean
 }
 export interface AttachmentRef {
     getDataSource: () => FileProps[]
     dataSource?: FileProps[]
     resetFields: () => void
 }
-export default forwardRef(function ({ dataSource = [], title = "相关附件", maxCount = 5, edit = false }: AttachmentProps, ref): JSX.Element {
+export default forwardRef(function ({ dataSource = [], columns = [], showHeader = false, title = "相关附件", maxCount = 5, edit = false }: AttachmentProps, ref): JSX.Element {
     const [attchs, setAttachs] = useState<FileProps[]>(dataSource)
     const [visible, setVisible] = useState<boolean>(false)
     const [picUrl, setPicUrl] = useState<string>()
@@ -81,7 +83,7 @@ export default forwardRef(function ({ dataSource = [], title = "相关附件", m
         <Modal width={1011} visible={visible} onCancel={handleCancel} footer={false}>
             <Image src={picUrl} preview={false} />
         </Modal>
-        <DetailTitle
+        {title && <DetailTitle
             title={title}
             {...edit ? {
                 operation: [
@@ -102,12 +104,13 @@ export default forwardRef(function ({ dataSource = [], title = "相关附件", m
                         <Button key="enclosure" type="primary" ghost>上传附件</Button>
                     </Upload>
                 ]
-            } : {}} />
+            } : {}} />}
         <CommonTable columns={[
             {
                 title: "附件名称",
                 dataIndex: "name"
             },
+            ...columns,
             {
                 title: "操作",
                 dataIndex: "opration",
@@ -116,6 +119,6 @@ export default forwardRef(function ({ dataSource = [], title = "相关附件", m
                     <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
                     {edit && <a onClick={() => deleteAttachData(record.uid || record.id)}>删除</a>}
                 </>)
-            }]} showHeader={false} dataSource={attchs} />
+            }]} showHeader={showHeader} dataSource={attchs} />
     </>
 })
