@@ -28,10 +28,7 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/inquiryQuotation`, {
-                ...data,
-                comparisonPriceId: params.id
-            })
+            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/inquiryQuotation`, type === "new" ? data : ({ id, ...data }))
             resole(result)
         } catch (error) {
             reject(error)
@@ -56,6 +53,7 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
                     delete item.id
                     return item
                 }),
+                comparisonPriceId: params.id,
                 inquiryQuotationAttachInfoDtos: attachRef.current?.getDataSource()
             })
             resove(true)

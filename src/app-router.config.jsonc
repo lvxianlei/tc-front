@@ -1447,6 +1447,14 @@
       // "authority": "rd_workbench"
       "authority": "approvalm"
     },
+    { // 工作台-供应
+      "name": "供应工作台",
+      "path": "/workBench/sw",
+      "module": "./pages/workBench/sw/index",
+      "exact": true,
+      // "authority": "rd_workbench"
+      "authority": "approvalm"
+    },
     //财务管理
     { // 票据管理
       "name": "票据管理",
@@ -1467,6 +1475,13 @@
       "name": "加工任务面板",
       "path": "/workshopManagement/processingTask",
       "module": "./pages/mngt-workshop/processingTask/ProcessingTaskList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 车间工作管理-派工
+      "name": "派工",
+      "path": "/workshopManagement/processingTask/dispatch/:id",
+      "module": "./pages/mngt-workshop/processingTask/Dispatch",
       "exact": true,
       "authority": "approvalm"
     },
@@ -1551,6 +1566,27 @@
       "name": "运输任务面板",
       "path": "/vehicleTransport/transportTask",
       "module": "./pages/VehicleTransport/TransportTask",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 车辆转运-派工
+      "name": "派工",
+      "path": "/vehicleTransport/transportTask/dispatch",
+      "module": "./pages/VehicleTransport/TransportDispatch",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 车辆转运-派工-构件明细
+      "name": "构件明细",
+      "path": "/vehicleTransport/transportTask/dispatch/detail/:id",
+      "module": "./pages/VehicleTransport/TransportDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 车辆转运-任务详情
+      "name": "任务详情",
+      "path": "/vehicleTransport/transportTask/taskDetail/:id",
+      "module": "./pages/VehicleTransport/TaskDetail",
       "exact": true,
       "authority": "approvalm"
     },
@@ -1741,6 +1777,20 @@
       "name": "员工管理",
       "path": "/dept/staffMngt",
       "module": "./pages/dept/staff/StaffMngt",
+      "exact": true,
+      "authority": "auth_section"
+    },
+    { // 员工管理-新增
+      "name": "新增",
+      "path": "/dept/staffMngt/new",
+      "module": "./pages/dept/staff/StaffNew",
+      "exact": true,
+      "authority": "auth_section"
+    },
+    { // 员工管理-编辑
+      "name": "编辑",
+      "path": "/dept/staffMngt/setting",
+      "module": "./pages/dept/staff/StaffNew",
       "exact": true,
       "authority": "auth_section"
     },

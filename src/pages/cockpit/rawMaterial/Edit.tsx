@@ -21,16 +21,16 @@ const materialList = {
     "columns": [
         {
             "title": "类别",
-            "dataIndex": "field_3",
+            "dataIndex": "bigCategoryName",
             "search": true
         },
         {
             "title": "类型",
-            "dataIndex": "materialCategory"
+            "dataIndex": "materialCategoryName"
         },
         {
             "title": "物料编号",
-            "dataIndex": "customerCompany",
+            "dataIndex": "materialCode",
             "search": true
         },
         {
@@ -51,11 +51,11 @@ const materialList = {
         },
         {
             "title": "材质",
-            "dataIndex": "materialTexture"
+            "dataIndex": "structureTexture"
         },
         {
             "title": "规格",
-            "dataIndex": "spec"
+            "dataIndex": "structureSpec"
         }
     ]
 }
@@ -65,6 +65,15 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const [popContent, setPopContent] = useState<{ id: string, records: any }>({ id: "", records: {} })
     const [materialForm] = Form.useForm()
     const [priceInfoForm] = Form.useForm()
+    const { data: priceSourceEnum } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/supplier/list`)
+            resove(result.map((item: any) => ({ label: item.supplierName, value: item.id })))
+        } catch (error) {
+            reject(error)
+        }
+    }))
+
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPrice/${id}`)
@@ -79,7 +88,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     const { loading: saveLoading, run: saveRun } = useRequest<any[]>((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: any[] = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/materialPrice`, data)
+            const result: any[] = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/materialPrice`, type === "new" ? data : ({ ...data, id }))
             resove(result)
         } catch (error) {
             reject(error)
@@ -126,6 +135,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         ]} />
         <BaseInfo form={materialForm} col={3} columns={materialInfo} dataSource={data || {}} edit />
         <DetailTitle title="价格信息" />
-        <BaseInfo form={priceInfoForm} col={3} columns={priceInfo} dataSource={data || {}} edit />
+        <BaseInfo form={priceInfoForm} col={3} columns={priceInfo.map((item: any) => {
+            if (item.dataIndex === "priceSource") {
+                return ({ ...item, type: "select", enum: priceSourceEnum })
+            }
+            return item
+        })} dataSource={data || {}} edit />
     </Spin>
 })

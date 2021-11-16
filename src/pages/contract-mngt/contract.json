@@ -524,7 +524,7 @@
             },
             {
                 "title": "标准",
-                "dataIndex": "standard"
+                "dataIndex": "standardName"
             },
             {
                 "title": "材料",
@@ -532,11 +532,11 @@
             },
             {
                 "title": "材质",
-                "dataIndex": "materialTexture"
+                "dataIndex": "structureTexture"
             },
             {
                 "title": "规格",
-                "dataIndex": "spec"
+                "dataIndex": "structureSpec"
             }
         ]
     }

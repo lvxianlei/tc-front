@@ -157,6 +157,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible} onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
             <PopTableContent data={addMaterial as any} onChange={(fields: any[]) => setPopDataList(fields.map((item: any) => ({
                 ...item,
+                materialTexture: item.structureTexture,
+                spec: item.structureSpec,
                 source: 2,
                 taxPrice: item.taxPrice || 0.00,
                 price: item.price || 0.00,

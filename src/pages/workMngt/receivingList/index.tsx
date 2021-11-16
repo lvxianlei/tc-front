@@ -98,11 +98,14 @@ export default function Invoicing() {
                 render: (_: any, record: any) => {
                     return <>
                         <Link to={`/workMngt/receiving/detail/${record.id}`}>详情</Link>
-                        <Button type="link" onClick={() => {
-                            setDetailId(record.id)
-                            setType("edit")
-                            setVisible(true)
-                        }}>编辑</Button>
+                        <Button
+                            type="link"
+                            disabled={record.receiveStatus === 1}
+                            onClick={() => {
+                                setDetailId(record.id)
+                                setType("edit")
+                                setVisible(true)
+                            }}>编辑</Button>
                         <a onClick={() => handleDelete(record.id)}>删除</a>
                     </>
                 }

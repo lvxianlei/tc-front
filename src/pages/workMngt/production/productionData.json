@@ -189,7 +189,7 @@
         },
         {
             "title": "零件1",
-            "dataIndex": "part1",
+            "dataIndex": "code1",
             "type": "string"
         },
         {
@@ -199,7 +199,7 @@
         },
         {
             "title": "零件2",
-            "dataIndex": "part2",
+            "dataIndex": "code2",
             "type": "string"
         },
         {
@@ -209,7 +209,7 @@
         },
         {
             "title": "零件3",
-            "dataIndex": "part3",
+            "dataIndex": "code3",
             "type": "string"
         },
         {
@@ -219,7 +219,7 @@
         },
         {
             "title": "零件4",
-            "dataIndex": "part4",
+            "dataIndex": "code4",
             "type": "string"
         },
         {

@@ -45,14 +45,14 @@ const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref
 
     const handleChange = (fields: any, allfields: any) => {
         const allValue = allfields.submit[0]
-        const fljj: number = parseFloat(allfields.fljj || 0)
-        const gcxh: number = parseFloat(allfields.fljj || 0)
-        const dxcb: number = parseFloat(allfields.dxcb || 0)
-        const jgf: number = parseFloat(allfields.jgf || 0)
-        const gsfs: number = parseFloat(allfields.gsfs || 0)
-        const lszb: number = parseFloat(allfields.lszb || 0)
-        const lsdj: number = parseFloat(allfields.lsdj || 0)
-        const logistics_price: number = parseFloat(allfields.logistics_price || 0)
+        const fljj: number = parseFloat(allValue.fljj || 0)
+        const gcxh: number = parseFloat(allValue.fljj || 0)
+        const dxcb: number = parseFloat(allValue.dxcb || 0)
+        const jgf: number = parseFloat(allValue.jgf || 0)
+        const gsfs: number = parseFloat(allValue.gsfs || 0)
+        const lszb: number = parseFloat(allValue.lszb || 0)
+        const lsdj: number = parseFloat(allValue.lsdj || 0)
+        const logistics_price: number = parseFloat(allValue.logistics_price || 0)
         const yc: number = ycl.reduce((result: number, item: any) => {
             const aa: string = (parseFloat(allValue[item.dj]) * parseFloat(allValue[item.bl]) * 0.01).toFixed(2)
             return result + parseFloat(aa)
@@ -61,6 +61,7 @@ const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref
         const bhls: number = parseFloat((yc + flsh + dxcb + jgf + gsfs).toFixed(2))
         const lscb: number = parseFloat((parseFloat((lsdj - bhls).toFixed(2)) * lszb).toFixed(2))
         const cc: number = parseFloat((yc + logistics_price).toFixed(2))
+        console.log( [{ ...allValue, cc, yc, flsh, bhls, lscb }], '修改后的数据')
         formRef.setFieldsValue({ submit: [{ ...allValue, cc, yc, flsh, bhls, lscb }] })
     }
     return <EditTable

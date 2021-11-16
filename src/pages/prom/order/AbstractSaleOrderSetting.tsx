@@ -79,7 +79,7 @@ export interface IContractInfoDto extends IContract {
     readonly contractId?: string;
     readonly orderProjectName?: string;
     readonly saleOrderNumber?: string;
-    readonly purchaseOrderNumber?: string;
+    readonly purchaseOrderNumber?: string; // 合同编号
 }
 
 interface IOption {
@@ -160,7 +160,8 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                 signCustomerId: selectedRows[0].signCustomerId,
                 signUserName: selectedRows[0].signUserName,
                 contractNumber: selectedRows[0].contractNumber,
-                saleType: selectedRows[0].saleType
+                saleType: selectedRows[0].saleType,
+                purchaseOrderNumber: selectedRows[0].purchaseOrderNumber, // 关联合同编号
             };
             this.setState({
                 saleOrder: {
@@ -324,7 +325,7 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             label: "采购订单号",
                             name: "purchaseOrderNumber",
                             initialValue: saleOrder?.purchaseOrderNumber,
-                            children: <Input maxLength={50} />,
+                            children: <Input maxLength={50} disabled={true}/>,
                         },
                         {
                             label: "关联合同",

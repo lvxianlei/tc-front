@@ -205,7 +205,7 @@
             "title": "报价时间",
             "dataIndex": "quotationTime",
             "type": "date",
-            "format": "YYYY-MM-DD",
+            "format": "YYYY-MM-DD HH:mm:ss",
             "rules": [
                 {
                     "required": true,
