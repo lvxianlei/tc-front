@@ -5,7 +5,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import { Link, useHistory } from 'react-router-dom';
 import WorkshopUserModal from '../../../components/WorkshopUserModal';
 
-export default function DrawTowerMngt(): React.ReactNode {
+export default function TrialAssemblyTaskList(): React.ReactNode {
     const [ refresh, setRefresh ] = useState<boolean>(false);
     const [ visible, setVisible ] = useState<boolean>(false);
     const [ filterValue, setFilterValue ] = useState({});

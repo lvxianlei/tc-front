@@ -16,6 +16,10 @@ import {
 import { downLoadFile } from "../../../utils"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import SelectInquiryEdit from "./SelectInquiryEdit"
+import {
+    useHistory
+} from 'react-router-dom';
 export type SelectType = "selectA" | "selectB" | "selectC"
 type radioTypes = "base" | "records"
 const auditEnum: any = {
@@ -26,6 +30,9 @@ const auditEnum: any = {
 
 export default function SelectInquiryDetail(props: any): JSX.Element {
     const [radioValue, setRadioValue] = useState<radioTypes>("base")
+    const [selectType, setSelectType] = useState<SelectType | "">("")
+    const [count, setCount] = useState<number>(1); // 定义自增器
+    const history = useHistory();
     const { loading, data, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const askPrice: any = await RequestUtil.get(`/tower-market/askPrice/${props.id}`)
@@ -45,6 +52,13 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
         setRadioValue("base")
         props.onCancel && props.onCancel()
     }
+
+    // 点击重新申请
+    const handleSelectInquiryTypeOk = () => {
+        setSelectType(data?.askType === 0 ? 'selectA' : data?.askType === 1 ? 'selectB' : 'selectC');
+        setCount(count + 1)
+    }
+
     return <Modal {...props} width={1011} title={auditEnum[props.type]} onOk={() => props.onOk && props.onOk()} onCancel={handleCancel} destroyOnClose>
         <Spin spinning={loading}>
             {props.type === "selectA" && <>
@@ -153,6 +167,12 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                     }, ...enclosure]} dataSource={data?.startAttachVos || []} />
                 </>}
             </>}
+            { radioValue === "records" && data?.askStatus === 1 && <Button type="primary" style={{marginTop: 10}} onClick={() => handleSelectInquiryTypeOk()}>重新申请</Button> }
+            {/* 申请弹框 */}
+            <SelectInquiryEdit type={selectType} visible={!!selectType} onOk={() => {
+                setSelectType("")
+                history.go(0)
+            }} onCancel={() => setSelectType("")} destroyOnClose detailOptios={data || {}} count={count} />
         </Spin>
     </Modal>
 }

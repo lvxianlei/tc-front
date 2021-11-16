@@ -1478,6 +1478,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 车间工作管理-派工
+      "name": "派工",
+      "path": "/workshopManagement/processingTask/dispatch/:id",
+      "module": "./pages/mngt-workshop/processingTask/Dispatch",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 车间工作管理-试装计划任务列表
       "name": "试装计划任务列表",
       "path": "/workshopManagement/trialAssemblyTask",
@@ -1559,6 +1566,27 @@
       "name": "运输任务面板",
       "path": "/vehicleTransport/transportTask",
       "module": "./pages/VehicleTransport/TransportTask",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 车辆转运-派工
+      "name": "派工",
+      "path": "/vehicleTransport/transportTask/dispatch",
+      "module": "./pages/VehicleTransport/TransportDispatch",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 车辆转运-派工-构件明细
+      "name": "构件明细",
+      "path": "/vehicleTransport/transportTask/dispatch/detail/:id",
+      "module": "./pages/VehicleTransport/TransportDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 车辆转运-任务详情
+      "name": "任务详情",
+      "path": "/vehicleTransport/transportTask/taskDetail/:id",
+      "module": "./pages/VehicleTransport/TaskDetail",
       "exact": true,
       "authority": "approvalm"
     },

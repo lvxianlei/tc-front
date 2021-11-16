@@ -5,7 +5,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import { Link, useHistory } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 
-export default function DrawTowerMngt(): React.ReactNode {
+export default function WorkshopTransferList(): React.ReactNode {
     const [ refresh, setRefresh ] = useState<boolean>(false);
     const [ filterValue, setFilterValue ] = useState({});
     const history = useHistory();

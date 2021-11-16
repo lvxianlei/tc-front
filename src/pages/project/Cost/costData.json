@@ -22,7 +22,7 @@
         },
         {
             "title": "备注",
-            "dataIndex": "replyMessage",
+            "dataIndex": "remark",
             "type": "textarea"
         }
     ],
@@ -135,7 +135,7 @@
         },
         {
             "title": "备注",
-            "dataIndex": "replyMessage"
+            "dataIndex": "remark"
         }
     ],
     "logisticProductType": [

@@ -18,7 +18,7 @@ const tableColumns = [
 ]
 
 
-export default function ConfirmTaskDetail(): React.ReactNode {
+export default function Delivery(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>();
     const [dataSource, setDataSource] = useState<[]>([]);
