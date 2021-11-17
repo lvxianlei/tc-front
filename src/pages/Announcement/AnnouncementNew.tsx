@@ -9,12 +9,7 @@ import { IAnnouncement, IFileList } from './AnnouncementMngt';
 import { downLoadFile } from '../../utils';
 import AuthUtil from '../../utils/AuthUtil';
 import SelectUserTransfer from './SelectUserTransfer';
-
-export interface ITreeData {
-    readonly key: string;
-    readonly title: string;
-    readonly children?: ITreeData[];
-}
+import { IStaff } from '../dept/staff/StaffMngt';
 
 export default function AnnouncementNew(): React.ReactNode {
     const [ form ] = Form.useForm();
@@ -73,27 +68,6 @@ export default function AnnouncementNew(): React.ReactNode {
         }
     }
 
-    const treeData = [
-        { key: '0-0', title: '0-0' },
-        {
-            key: '0-1',
-            title: '0-1',
-            children: [
-                { key: '0-1-0', title: '0-1-0' },
-                { key: '0-1-1', title: '0-1-1' },
-            ],
-        },
-        { key: '0-2', title: '0-3' },
-    ];
-    const transferDataSource: ITreeData[] = [];
-    const flatten = (list:ITreeData[] = []): void => {
-        list.forEach((item: ITreeData) => {
-            transferDataSource.push(item);
-            flatten(item.children);
-        });
-    }
-    flatten(treeData);
-
     return <>
         <DetailContent operation={ [
             <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
@@ -128,7 +102,9 @@ export default function AnnouncementNew(): React.ReactNode {
                         "required": true,
                         "message": "请选择接收人"
                     }]}>
-                    {/* <SelectUserTransfer transferDataSource={ transferDataSource } treeData={ treeData }/> */}
+                    <SelectUserTransfer save={ (selectRows: IStaff[]) => {
+                        console.log(selectRows)
+                    } }/>
                     <Input bordered={false}/>
                 </Form.Item>
             </Form>
