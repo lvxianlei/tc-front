@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Space, Input, Button, Popconfirm, message, Upload } from 'antd';
+import { Space, Input, Button, Popconfirm, message, Upload, Select } from 'antd';
 import { Link } from 'react-router-dom';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -13,6 +13,7 @@ import styles from './StaffMngt.module.less';
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import { downloadTemplate } from '../../workMngt/setOut/downloadTemplate';
+import { staffTypeOptions } from '../../../configuration/DictionaryOptions';
 
 export interface IStaff {
     readonly id?: string;
@@ -197,14 +198,14 @@ export default function StaffMngt(): React.ReactNode {
                 {
                     name: 'category',
                     label: '员工类型',
-                    // children: <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
-                    //     <Select.Option value={''} key="0">全部</Select.Option>
-                    //     { warehouseOptions && warehouseOptions.map(({ id, name }, index) => {
-                    //         return <Select.Option key={index} value={id+','+name}>
-                    //             {name}
-                    //         </Select.Option>
-                    //     }) }
-                    //  </Select>
+                    children: <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                        <Select.Option value={''} key="0">全部</Select.Option>
+                        { staffTypeOptions && staffTypeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={index} value={id+','+name}>
+                                {name}
+                            </Select.Option>
+                        }) }
+                     </Select>
                 },
                 {
                     name: 'fuzzyQuery',

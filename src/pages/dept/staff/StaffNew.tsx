@@ -15,6 +15,7 @@ import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { FixedType } from 'rc-table/lib/interface';
 import { IStaff } from './StaffMngt';
 import { IMetaDept } from '../dept/DepartmentMngt';
+import { staffTypeOptions } from '../../../configuration/DictionaryOptions';
 
 export default function StaffNew(): React.ReactNode {
     const [ form ] = Form.useForm();
@@ -135,7 +136,7 @@ export default function StaffNew(): React.ReactNode {
                     "required": true,
                     "message": "请选择员工类型" }]}>
                     <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
-                        { [] && [{id: '1', name: 'name'}].map(({ id, name }, index) => {
+                        { staffTypeOptions && staffTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={index} value={id}>
                                 {name}
                             </Select.Option>
