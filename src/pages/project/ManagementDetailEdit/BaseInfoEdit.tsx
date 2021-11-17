@@ -1,7 +1,7 @@
-import React, { useState } from "react"
+import React, { useState,useRef } from "react"
 import { useHistory, useParams } from "react-router-dom"
 import { Button, Form, message, Spin, Upload } from "antd"
-import { DetailContent, BaseInfo, EditTable, DetailTitle, CommonTable } from '../../common'
+import { DetailContent, BaseInfo, EditTable, DetailTitle, CommonTable, Attachment, AttachmentRef  } from '../../common'
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { baseInfoData, enclosure, cargoVOListColumns } from '../managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
@@ -18,7 +18,7 @@ export default function BaseInfoEdit(): JSX.Element {
     const [baseInfoForm] = Form.useForm()
     const [cargoVOListForm] = Form.useForm()
     const [attachVosForm] = Form.useForm()
-
+    const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/projectInfo/${params.id}`)
@@ -55,7 +55,8 @@ export default function BaseInfoEdit(): JSX.Element {
             const result = await run({
                 ...baseInfoData,
                 id: data?.id,
-                attachInfoDtos: attachVosData,
+                // attachInfoDtos: attachVosData,
+                attachInfoDtos: attchsRef.current?.getDataSource(),
                 cargoDTOList: cargoVOListData.submit,
                 projectLeaderId: projectLeaderType ? (data as any).projectLeaderId : baseInfoData.projectLeader?.records[0].id,
                 projectLeader: baseInfoData.projectLeader?.value || baseInfoData.projectLeader,
@@ -101,7 +102,6 @@ export default function BaseInfoEdit(): JSX.Element {
             setAddress(fields.address)
         }
     }
-
     return <>
         <ManagementDetailTabsTitle />
         <DetailContent operation={[
@@ -126,7 +126,7 @@ export default function BaseInfoEdit(): JSX.Element {
                     } dataSource={data || {}} edit />
                 <DetailTitle title="物资清单" />
                 <EditTable form={cargoVOListForm} columns={cargoVOListColumns} dataSource={data?.cargoVOList} />
-                <DetailTitle title="附件信息11" operation={[<Upload
+                {/* <DetailTitle title="附件信息11" operation={[<Upload
                     key="sub"
                     name="file"
                     multiple={true}
@@ -145,7 +145,8 @@ export default function BaseInfoEdit(): JSX.Element {
                         <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
                         <Button type="link" onClick={() => downLoadFile(record.link || record.filePath, record.name)}>下载</Button>
                     </>)
-                }, ...enclosure]} dataSource={attachVosData} />
+                }, ...enclosure]} dataSource={attachVosData} /> */}
+                <Attachment showHeader maxCount={10} columns={[...enclosure]} ref={attchsRef} edit  dataSource={attachVosData} />
             </Spin>
         </DetailContent>
     </>

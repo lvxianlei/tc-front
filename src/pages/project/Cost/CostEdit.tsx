@@ -61,7 +61,7 @@ const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref
         const bhls: number = parseFloat((yc + flsh + dxcb + jgf + gsfs).toFixed(2))
         const lscb: number = parseFloat((parseFloat((lsdj - bhls).toFixed(2)) * lszb).toFixed(2))
         const cc: number = parseFloat((yc + logistics_price).toFixed(2))
-        console.log( [{ ...allValue, cc, yc, flsh, bhls, lscb }], '修改后的数据')
+        // console.log( [{ ...allValue, cc, yc, flsh, bhls, lscb }], '修改后的数据')
         formRef.setFieldsValue({ submit: [{ ...allValue, cc, yc, flsh, bhls, lscb }] })
     }
     return <EditTable

@@ -60,14 +60,11 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             reject(false)
         }
     })
-
-    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit])
-
     const resetFields = () => {
         baseForm.resetFields()
         attchsRef.current.resetFields()
     }
-
+    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit,resetFields])
     return <Spin spinning={loading}>
         <DetailTitle title="票据信息" />
         <BaseInfo form={baseForm} columns={bilinformation.map((item: any) => {
