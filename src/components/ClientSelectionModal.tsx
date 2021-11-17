@@ -127,7 +127,7 @@ export default class ClientSelectionComponent extends AbstractFilteredSelectionM
             dataIndex: 'name'
         }, {
             key: 'linkman',
-            title: '首要联系人',
+            title: '首要联系人111',
             width: '25%',
             dataIndex: 'linkman'
         }, {

@@ -519,7 +519,7 @@
             ]
         },
         {
-            "title": "杆塔明细编号",
+            "title": "杆塔明细编号111",
             "dataIndex": "number"
         },
         {
@@ -865,7 +865,7 @@
             "maxLength": 50
         },
         {
-            "title": "工程电压等级",
+            "title": "工程电压等级11",
             "dataIndex": "projectVoltageLevel"
         },
         {
