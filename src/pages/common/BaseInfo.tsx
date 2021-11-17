@@ -63,10 +63,7 @@ export function formatData(columns: any[], dataSource: any): object {
     return formatedData
 }
 
-const popTableTransform = (value: any) => {
-    console.log("popTableTransform", value)
-    return value
-}
+const popTableTransform = (value: any) => value && value.value
 
 export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onChange = () => { } }: BaseInfoProps): JSX.Element {
     if (edit) {
