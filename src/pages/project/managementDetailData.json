@@ -844,7 +844,9 @@
     "cargoVOListColumns": [
         {
             "title": "分标编号",
-            "dataIndex": "partBidNumber"
+            "dataIndex": "partBidNumber",
+            "type": "text",
+            "maxLength": 50
         },
         {
             "title": "物资类别",
@@ -886,7 +888,9 @@
         },
         {
             "title": "交货地点",
-            "dataIndex": "deliveryPlace"
+            "dataIndex": "deliveryPlace",
+            "type": "text",
+            "maxLength": 200
         }
     ],
     "newProductGroup": [
