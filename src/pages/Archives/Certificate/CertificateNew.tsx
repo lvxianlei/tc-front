@@ -61,7 +61,7 @@ export default function CertificateNew(): React.ReactNode {
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "certificateType"] } key={ index } initialValue={ _ } rules={[{ 
                     "required": true,
-                    "message": "请选择资料类型" }]}>
+                    "message": "请选择证书类型" }]}>
                     <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
                         <Select.Option key={1} value={123}>1</Select.Option>
                         {/* { boltTypeOptions && boltTypeOptions.map(({ id, name }, index) => {
