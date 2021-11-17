@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Row, Tabs, Radio, Spin, Modal, message } from 'antd'
-import { useHistory, useParams, Link } from 'react-router-dom'
+import { useHistory, useParams, Link, Prompt } from 'react-router-dom'
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common'
 import CostDetail from './Cost'
 import PayInfo from './payInfo'
@@ -51,6 +51,9 @@ export default function ManagementDetail(): React.ReactNode {
         }
         if (["productGroup", "salesPlan"].includes(params.tab as string)) {
             const result: { [key: string]: any } = await RequestUtil.get(`${paths[params.tab || 'base']}`, { projectId: params.id, ...postData })
+            if (result && result.records && result.records.length > 0) {
+                handleProductGroupClick(result?.records[0].id)
+            }
             resole(result)
             return
         }
@@ -165,7 +168,6 @@ export default function ManagementDetail(): React.ReactNode {
             history.go(0)
         }
     }
-
     const tabItems: { [key: string]: JSX.Element | React.ReactNode } = {
         tab_base: <DetailContent operation={[
             <Button key="edit" style={{ marginRight: '16px' }}
@@ -325,7 +327,7 @@ export default function ManagementDetail(): React.ReactNode {
         </DetailContent>,
         tab_contract: <DetailContent>
             <div style={{marginLeft:"20px"}}>
-            <Tabs>
+            <Tabs defaultActiveKey="第一个">
                 <Tabs.TabPane tab="合同" key="合同">
                     <ManagementContract />
                 </Tabs.TabPane>
@@ -344,16 +346,17 @@ export default function ManagementDetail(): React.ReactNode {
                         title: "操作",
                         dataIndex: "opration",
                         ellipsis: false,
-                        width: 200,
+                        width: 250,
                         render: (_: any, record: any) => <>
+                            <Button type="link" onClick={() => handleProductGroupClick(record.id)}>详情</Button>
                             <Button type="link" onClick={() => history.push(`/project/management/productGroup/item/${params.id}/${record.id}`)} >查看</Button>
                             <Button type="link" onClick={() => history.push(`/project/management/edit/productGroup/${params.id}/${record.id}`)}>编辑</Button>
                             {`${record.status}` === "0" && <Button type="link" onClick={() => deleteProductGroupItem(record.id)} >删除</Button>}
                         </>
                     }]}
-                onRow={(record: any) => ({
-                    onClick: () => handleProductGroupClick(record.id)
-                })}
+                // onRow={(record: any) => ({
+                //     onClick: () => handleProductGroupClick(record.id)
+                // })}
                 dataSource={data?.records}
             />
             <Row><Radio.Group

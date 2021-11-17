@@ -31,12 +31,6 @@ class ManagementContractNew extends ContractNew {
               label: "采购订单编号",
               name: "purchaseOrderNumber",
               initialValue: contract?.purchaseOrderNumber,
-              rules: [
-                {
-                  required: true,
-                  message: "请输入合同编号"
-                },
-              ],
               children: (
                 <Input value={contract?.contractNumber} maxLength={50} />
               ),
@@ -45,7 +39,7 @@ class ManagementContractNew extends ContractNew {
               label: "ECP合同编号",
               name: "ecpContractNumber",
               initialValue: contract?.ecpContractNumber,
-              children: <Input placeholder="内部合同编号自动生成" disabled />,
+              children: <Input placeholder="内部合同编号自动生成" />,
             },
             {
               label: "合同编号",
@@ -134,7 +128,7 @@ class ManagementContractNew extends ContractNew {
               children: (
                 <InputNumber
                   min="0.01"
-                  max="10000000000.00"
+                  max="999999999999.00"
                   step="0.01"
                   stringMode={false}
                   precision={2}
@@ -201,6 +195,7 @@ class ManagementContractNew extends ContractNew {
                       <ClientSelectionComponent
                         onSelect={this.onCustomerCompanySelect}
                         selectKey={[contract?.customerInfoDto?.customerId]}
+                        id="1"
                       />
                     }
                   />
@@ -247,6 +242,7 @@ class ManagementContractNew extends ContractNew {
                       <ClientSelectionComponent
                         onSelect={this.onSelect}
                         selectKey={[contract?.signCustomerId]}
+                        id="2"
                       />
                     }
                   />
@@ -395,7 +391,7 @@ class ManagementContractNew extends ContractNew {
                     this.getForm()?.getFieldValue("countryCode") === 1 ||
                     contract?.countryCode === 1
                   }
-                  onChange={()=> this.regionChange()}
+                  onChange={() => this.regionChange()}
                 >
                   {this.state.regionInfoData?.map((opt: any) => {
                     return (

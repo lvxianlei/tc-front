@@ -1505,6 +1505,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 车间工作管理-加工任务详情
+      "name": "加工任务详情",
+      "path": "/workshopManagement/processingTask/detail/:id/:status",
+      "module": "./pages/mngt-workshop/processingTask/ProcessDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 车间工作管理-试装计划任务列表
       "name": "试装计划任务列表",
       "path": "/workshopManagement/trialAssemblyTask",
@@ -1540,10 +1547,31 @@
       "exact": true,
       "authority": "approvalm"
     },
-    { // 车间工作管理-派工
+    { // 包装车间-派工
       "name": "派工",
       "path": "/packagingWorkshop/processingTask/dispatch/:id",
       "module": "./pages/package-workshop/processingTask/Dispatch",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装车间-加工任务详情
+      "name": "加工任务详情",
+      "path": "/packagingWorkshop/processingTask/detail/:id/:status",
+      "module": "./pages/package-workshop/processingTask/ProcessDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装车间-采集入库
+      "name": "采集入库",
+      "path": "/packagingWorkshop/processingTask/detail/:id/:status/wareHouse",
+      "module": "./pages/package-workshop/processingTask/WareHouseDetail",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 包装车间-包装清单详情
+      "name": "包装清单详情",
+      "path": "/packagingWorkshop/processingTask/detail/:id/:status/detail/:packageId",
+      "module": "./pages/package-workshop/processingTask/PackageDetail",
       "exact": true,
       "authority": "approvalm"
     },

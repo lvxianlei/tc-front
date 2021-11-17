@@ -105,6 +105,7 @@ class ManagementSaleOrderSummary extends SaleOrderSummary {
   protected getAmountInfoGrid(): IRenderedGrid {
     const baseInfo: ManagementSaleOrderBaseInfo | undefined = this.state
       .baseInfo as ManagementSaleOrderBaseInfo;
+    console.log(baseInfo);
     return {
       labelCol: {
         span: 4,

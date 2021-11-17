@@ -23,6 +23,10 @@ export default function BaseInfoEdit(): JSX.Element {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/projectInfo/${params.id}`)
             const addressList: any[] = await RequestUtil.get(`/tower-system/region/00`)
+            // 对数据进行处理
+            if (result && result.cargoVOList && result.cargoVOList.length > 0) {
+                result.cargoVOList.forEach((item: any) => item.amount = item.amount <= 0 ? 0 : item.amount)
+            }
             setAttachVosData(result.attachVos)
             baseInfoForm.setFieldsValue(result)
             cargoVOListForm.setFieldsValue({ submit: result.cargoVOList })
@@ -122,7 +126,7 @@ export default function BaseInfoEdit(): JSX.Element {
                     } dataSource={data || {}} edit />
                 <DetailTitle title="物资清单" />
                 <EditTable form={cargoVOListForm} columns={cargoVOListColumns} dataSource={data?.cargoVOList} />
-                <DetailTitle title="附件信息" operation={[<Upload
+                <DetailTitle title="附件信息11" operation={[<Upload
                     key="sub"
                     name="file"
                     multiple={true}
@@ -139,7 +143,7 @@ export default function BaseInfoEdit(): JSX.Element {
                     title: "操作", dataIndex: "opration",
                     render: (_: any, record: any) => (<>
                         <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
-                        <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
+                        <Button type="link" onClick={() => downLoadFile(record.link || record.filePath, record.name)}>下载</Button>
                     </>)
                 }, ...enclosure]} dataSource={attachVosData} />
             </Spin>

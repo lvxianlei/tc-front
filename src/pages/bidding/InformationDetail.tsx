@@ -27,6 +27,10 @@ const tableColumns = [
         "title": "工程电压等级",
         "dataIndex": "projectVoltageLevel"
     },
+    {
+        "title":"物资描述",
+        "dataIndex":"goodsExplain"
+    },
     { title: '数量', dataIndex: 'amount', type: "number", render: (value: number) => { return value === -1 ? 0 : value } },
     { title: '单位', dataIndex: 'unit' },
     { title: '首批交货日期', dataIndex: 'deliveryDate' },
@@ -107,7 +111,10 @@ export default function InformationDetail(): React.ReactNode {
     return <>
         <Modal zIndex={15} visible={visible} title="是否应标" okText="确定并自动生成项目" onOk={handleModalOk} onCancel={handleModalCancel} >
             <Form form={form} onValuesChange={handleChange}>
-                <Form.Item name="biddingStatus" label="是否应标">
+                <Form.Item name="biddingStatus" label="是否应标" rules={[{
+                    required: true,
+                    message: '请选择是否应标',
+                }]}>
                     <Select>
                         <Select.Option value="1">是</Select.Option>
                         <Select.Option value="2">否</Select.Option>
