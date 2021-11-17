@@ -67,7 +67,7 @@ export default function DepartmentMngt(): React.ReactNode {
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => {
-                            RequestUtil.delete(`/sinzetech-user/department?ids=${ record.id }`).then(res => {
+                            RequestUtil.delete(`/tower-system/department?ids=${ record.id }`).then(res => {
                                 setRefresh(!refresh);
                             });
                         } }
@@ -92,7 +92,7 @@ export default function DepartmentMngt(): React.ReactNode {
      * @returns batch delete 
      */
     const onBatchDelete = () => {
-        RequestUtil.delete(`/sinzetech-user/department?ids=${ selectedRoles.map<number>((item: IDept): number => item.id) }`).then(res => {
+        RequestUtil.delete(`/tower-system/department?ids=${ selectedRoles.map<number>((item: IDept): number => item.id) }`).then(res => {
             setSelectedRoleKeys([]);
             setSelectedRoles([]);
             setRefresh(!refresh);
@@ -100,7 +100,7 @@ export default function DepartmentMngt(): React.ReactNode {
     }
 
     return <Page
-        path="/sinzetech-user/department"
+        path="/tower-system/department"
         columns={ columns }
         headTabs={ [] }
         refresh={ refresh }

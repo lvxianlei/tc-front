@@ -2,8 +2,7 @@
  * @author zyc
  * @copyright © 2021 zyc
  */
-import { Input, InputNumber, Select, TreeSelect } from 'antd';
-import { StringGradients } from 'antd/lib/progress/progress';
+import { Input, InputNumber, TreeSelect } from 'antd';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -53,7 +52,7 @@ export default abstract class AbstractDepartmentSetting<P extends RouteComponent
      * @description Components did mount
      */
     public async componentDidMount() {
-        const tree: IDeptTree[] = await RequestUtil.get<IDeptTree[]>('/sinzetech-user/department/tree');
+        const tree: IDeptTree[] = await RequestUtil.get<IDeptTree[]>('/tower-system/department/tree');
         this.setState({
             tree: tree
         });
