@@ -1,10 +1,8 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-//采购任务下的原材料
 import React, { useState, useRef } from 'react';
 import { Modal, Descriptions, Button, DatePicker, Select, Input, message } from 'antd';
 import { CommonTable, DetailContent, DetailTitle, Page } from '../common'
 import { buyingTask, operatingInformation } from "./buyingTask.json"
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import RequestUtil from '../../utils/RequestUtil';
 import TaskAssign from './TaskAssign';
 import useRequest from '@ahooksjs/use-request';
@@ -13,18 +11,14 @@ interface TaskAssignRef {
     onSubmit: () => void
     resetFields: () => void
 }
-export default function rawMaterial() {
-    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({})
+export default function RawMaterial() {
     const [detailId, setDetailId] = useState<string>("")
     const tarkRef = useRef<TaskAssignRef>({ onSubmit: () => { }, resetFields: () => { } })
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisible1, setIsModalVisible1] = useState(false);
     const [isModalVisible2, setIsModalVisible2] = useState(false);
     const [isModalVisible3, setIsModalVisible3] = useState(false);
-    const [columnsData, setColumnsData] = useState([]);
     const [id, setId] = useState(0);//采购任务id
-    const [purchaserDeptId, setPurchaserDeptId] = useState(0);//采购人部门id
-    const [purchaserId, setPurchaserId] = useState(0);//采购人id
     const [inquiryId, setInquiryId] = useState("");
     const [obj, setObj] = useState<any>({});
     const [rejectionDescription, setRejectionDescription] = useState("");
@@ -129,7 +123,6 @@ export default function rawMaterial() {
             value.startStatusUpdateTime = formatDate[0] + ' 00:00:00';
             value.endStatusUpdateTime = formatDate[1] + ' 23:59:59';
         }
-        setFilterValue({ ...filterValue, ...value })
         return value
     }
 
@@ -162,7 +155,6 @@ export default function rawMaterial() {
                         </>
                     }
                 ]}
-                filterValue={filterValue}
                 onFilterSubmit={onFilterSubmit}
                 extraOperation={<Button type="primary" ghost onClick={async () => {
                     await generaterRun()

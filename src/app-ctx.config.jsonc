@@ -61,6 +61,11 @@
                                 "label": "角色管理",
                                 "path": "/auth/roles",
                                 "authority": "auth_section"
+                            },
+                            {
+                                "label": "部门管理",
+                                "path": "/auth/dept",
+                                "authority": "auth_section"
                             }
                         ]
                     },
@@ -521,11 +526,11 @@
                         "path": "/packagingWorkshop",
                         "authority": "approvalm",
                         "items": [
-                            // {
-                            //     "label": "加工任务面板",
-                            //     "path": "/packagingWorkshop/processingTask",
-                            //     "authority": "approvalm"
-                            // },
+                            {
+                                "label": "加工任务面板",
+                                "path": "/packagingWorkshop/processingTask",
+                                "authority": "approvalm"
+                            },
                             {
                                 "label": "成品入库列表",
                                 "path": "/packagingWorkshop/warehousing",

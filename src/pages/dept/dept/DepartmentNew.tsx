@@ -49,7 +49,7 @@ class DepartmentNew extends AbstractDepartmentSetting<IDepartmentSettingRoutePro
      * @returns submit 
      */
     public async onSubmit(values: Record<string, any>): Promise<void> {
-        await RequestUtil.post('/sinzetech-user/department', { ...values });
+        await RequestUtil.post('/tower-system/department', { ...values });
     }
 }
 

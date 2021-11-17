@@ -27,7 +27,7 @@ export default function HistoryPrice({ id, name }: HistoryPriceProps): JSX.Eleme
             size: 5,
             shape: 'diamond',
         },
-        data: data?.map((item: any) => ({ price: item.price, updateTime: item.updateTime })) || [],
+        data: data?.map((item: any) => ({ price: item.price, updateTime: item.updateTime, id: item.updateTime + item.price })) || [],
     }
     return <Spin spinning={loading}>
         <Row gutter={20}>

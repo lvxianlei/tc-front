@@ -132,10 +132,10 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: string, onC
 
 export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
     const [visible, setVisible] = useState<boolean>(false)
-    const [popContent, setPopContent] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: {} })
-    const [value, setValue] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: {} })
+    const [popContent, setPopContent] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: [] })
+    const [value, setValue] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: [] })
 
-    useEffect(() => setValue(props.value || ({ value: (props as any).value, id: "", records: {} })), [JSON.stringify(props.value || "")])
+    useEffect(() => setValue(props.value || ({ value: (props as any).value, id: "", records: [] })), [JSON.stringify(props.value || "")])
     const handleChange = (event: any) => {
         const newPopContent = { id: event[0]?.id, value: event[0]?.[data.value || "name" || "id"], records: event }
         const checkboxContent = { id: event[0]?.id, value: event.map((item: any) => item[data.value || "name" || "id"]).join(","), records: event }
@@ -193,7 +193,7 @@ const SelfSelect: React.FC<SelfSelectProps> = ({ data, ...props }) => {
 const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, ...props }) => {
     const ItemTypes = {
         string: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} />,
-        text: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} />,
+        text: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} maxLength={data.maxLength} />,
         number: <InputNumber {...props} disabled={data.disabled} max={data?.max || 999999999999} min={data?.min || 0} step={data?.step || 1} style={{ width: "100%", height: "100%", ...props.style }} />,
         select: <SelfSelect {...props} data={data as SelectData} />,
         date: <DatePicker

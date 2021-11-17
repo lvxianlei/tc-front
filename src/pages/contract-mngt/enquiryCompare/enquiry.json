@@ -304,6 +304,7 @@
             {
                 "title": "标准",
                 "dataIndex": "standardName",
+                "type": "select",
                 "search": true
             },
             {

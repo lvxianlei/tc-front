@@ -134,7 +134,7 @@ class ManagementContractNew extends ContractNew {
               children: (
                 <InputNumber
                   min="0.01"
-                  max="10000000000.00"
+                  max="999999999999.00"
                   step="0.01"
                   stringMode={false}
                   precision={2}
