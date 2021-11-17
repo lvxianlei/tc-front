@@ -127,10 +127,10 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: string, onC
 
 export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
     const [visible, setVisible] = useState<boolean>(false)
-    const [popContent, setPopContent] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: {} })
-    const [value, setValue] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: {} })
+    const [popContent, setPopContent] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: [] })
+    const [value, setValue] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: [] })
 
-    useEffect(() => setValue(props.value || ({ value: (props as any).value, id: "", records: {} })), [JSON.stringify(props.value || "")])
+    useEffect(() => setValue(props.value || ({ value: (props as any).value, id: "", records: [] })), [JSON.stringify(props.value || "")])
     const handleChange = (event: any) => {
         const newPopContent = { id: event[0]?.id, value: event[0]?.[data.value || "name" || "id"], records: event }
         const checkboxContent = { id: event[0]?.id, value: event.map((item: any) => item[data.value || "name" || "id"]).join(","), records: event }

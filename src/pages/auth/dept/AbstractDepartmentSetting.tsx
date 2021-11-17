@@ -21,7 +21,6 @@ export interface IDeptDetail {
     readonly description?: string;
     readonly parentId?: string;
     readonly sort?: string;
-    readonly classification?: string;
 }
 
 export interface IAbstractDepartmentSettingState extends IAbstractFillableComponentState {
@@ -52,7 +51,7 @@ export default abstract class AbstractDepartmentSetting<P extends RouteComponent
      * @description Components did mount
      */
     public async componentDidMount() {
-        const tree: IDeptTree[] = await RequestUtil.get<IDeptTree[]>('/tower-system/department/tree');
+        const tree: IDeptTree[] = await RequestUtil.get<IDeptTree[]>('/sinzetech-user/department/tree');
         this.setState({
             tree: tree
         });
@@ -64,7 +63,7 @@ export default abstract class AbstractDepartmentSetting<P extends RouteComponent
      * @returns return path 
      */
     protected getReturnPath(): string {
-        return '/dept/deptMngt';
+        return '/auth/dept';
     }  
 
     /**
@@ -114,17 +113,6 @@ export default abstract class AbstractDepartmentSetting<P extends RouteComponent
                 initialValue: deptDeatil?.parentId,
                 children: <TreeSelect placeholder="请选择上级机构" className={ layoutStyles.width100 }
                     treeData={ this.wrapRole2DataNode( this.state.tree ) } showSearch={ true }/>
-            }, {
-                label: '部门类型',
-                name: 'classification',
-                initialValue: deptDeatil?.classification,
-                // children: <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
-                //     { warehouseOptions && warehouseOptions.map(({ id, name }, index) => {
-                //         return <Select.Option key={index} value={id+','+name}>
-                //             {name}
-                //         </Select.Option>
-                //     }) }
-                // </Select>
             }]
         }, {
             title: '其他信息',

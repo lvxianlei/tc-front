@@ -4,7 +4,7 @@ import { BaseInfo, CommonTable, DetailTitle, PopTableContent, IntgSelect } from 
 import { editBaseInfo, materialColumnsSaveOrUpdate, addMaterial, choosePlanList } from "./enquiry.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-
+import ApplicationContext from "../../../configuration/ApplicationContext"
 interface EditProps {
     id: string
     type: "new" | "edit"
@@ -69,6 +69,7 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
 })
 
 export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
+    const materialStandardEnum = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const choosePlanRef = useRef<{ selectRows: any[] }>({ selectRows: [] })
     const [visible, setVisible] = useState<boolean>(false)
     const [chooseVisible, setChooseVisible] = useState<boolean>(false)
@@ -182,7 +183,15 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     return <Spin spinning={loading}>
         <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible}
             onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
-            <PopTableContent data={addMaterial as any}
+            <PopTableContent data={{
+                ...(addMaterial as any),
+                columns: (addMaterial as any).columns.map((item: any) => {
+                    if (item.dataIndex === "standardName") {
+                        return ({ ...item, type: "select", enum: materialStandardEnum })
+                    }
+                    return item
+                })
+            }}
                 onChange={(fields: any[]) => setPopDataList(fields.map((item: any) => ({
                     ...item,
                     spec: item.structureSpec,

@@ -8,7 +8,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
 import RequestUtil from '../../../utils/RequestUtil';
 
-import AbstractDepartmentSetting, { IDeptDetail, IAbstractDepartmentSettingState } from './AbstractDepartmentSetting';
+import AbstractDepartmentSetting, { IAbstractDepartmentSettingState } from './AbstractDepartmentSetting';
 
 export interface IDepartmentSettingProps {
     readonly id: string;
@@ -16,17 +16,18 @@ export interface IDepartmentSettingProps {
 export interface IDepartmentSettingRouteProps extends RouteComponentProps<IDepartmentSettingProps> {}
 export interface IDepartmentSettingState extends IAbstractDepartmentSettingState {}
 
-class DepartmentSetting extends AbstractDepartmentSetting<IDepartmentSettingRouteProps, IDepartmentSettingState> {
+class DepartmentNew extends AbstractDepartmentSetting<IDepartmentSettingRouteProps, IDepartmentSettingState> {
 
     /**
      * @description Components did mount
      */
     public async componentDidMount() {
-        super.componentDidMount();
-        const deptDeatil: IDeptDetail = await RequestUtil.get<IDeptDetail>(`/tower-system/department/${ this.props.match.params.id }`);
         this.setState({
-            deptDeatil: deptDeatil,
+            deptDeatil: {
+                parentId: this.props.match.params.id
+            },
         });
+        super.componentDidMount();
     }
 
     /**
@@ -48,8 +49,8 @@ class DepartmentSetting extends AbstractDepartmentSetting<IDepartmentSettingRout
      * @returns submit 
      */
     public async onSubmit(values: Record<string, any>): Promise<void> {
-        await RequestUtil.put('/tower-system/department', { ...values, id: this.state.deptDeatil?.id });
+        await RequestUtil.post('/sinzetech-user/department', { ...values });
     }
 }
 
-export default withRouter(withTranslation()(DepartmentSetting));
+export default withRouter(withTranslation()(DepartmentNew));

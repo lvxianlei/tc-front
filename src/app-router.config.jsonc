@@ -135,6 +135,26 @@
       "module": "./pages/auth/role/RoleSetting",
       "exact": true,
       "authority": "auth_section"
+    },{ // 部门管理
+      "name": "部门管理",
+      "path": "/auth/dept",
+      "module": "./pages/auth/dept/DepartmentMngt",
+      "exact": true,
+      "authority": "auth_section"
+    },
+    { // 部门修改
+      "name": "部门修改",
+      "path": "/auth/dept/setting/:id",
+      "module": "./pages/auth/dept/DepartmentSetting",
+      "exact": true,
+      "authority": "auth_section"
+    },
+    { // 部门新增
+      "name": "部门新增",
+      "path": "/auth/dept/new/:id",
+      "module": "./pages/auth/dept/DepartmentNew",
+      "exact": true,
+      "authority": "auth_section"
     },
     { // 成本评估配置
       "name": "成本评估配置",
@@ -1517,6 +1537,13 @@
       "name": "加工任务面板",
       "path": "/packagingWorkshop/processingTask",
       "module": "./pages/package-workshop/processingTask/ProcessingTaskList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 车间工作管理-派工
+      "name": "派工",
+      "path": "/packagingWorkshop/processingTask/dispatch/:id",
+      "module": "./pages/package-workshop/processingTask/Dispatch",
       "exact": true,
       "authority": "approvalm"
     },

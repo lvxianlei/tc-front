@@ -50,6 +50,7 @@ export default function Overview(): React.ReactNode {
     const handleEditOk = async () => {
         await editRef.current.onSubmit()
         message.success("保存成功...")
+        history.go(0)
         setVisible(false)
     }
 
