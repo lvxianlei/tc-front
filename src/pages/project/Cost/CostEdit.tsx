@@ -208,7 +208,7 @@ export default function CostEdit() {
                         "message": "请选择产品类型..."
                     }
                 ]}>
-                    <Select style={{ width: "100%" }}>
+                    <Select style={{ width: "95%",marginLeft:"19px" }}>
                         {productTypeEnum?.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
                     </Select>
                 </Form.Item>

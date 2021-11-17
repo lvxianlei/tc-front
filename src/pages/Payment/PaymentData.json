@@ -51,7 +51,7 @@
             ]
         },
         {
-            "title": "金额",
+            "title": "金额（元）",
             "dataIndex": "sumMoney"
         },
         {
@@ -192,7 +192,7 @@
             "dataIndex": "payType"
         },
         {
-            "title": "金额",
+            "title": "金额（元）",
             "dataIndex": "money"
         },
         {
