@@ -106,7 +106,7 @@ export default function Invoicing() {
                                 setType("edit")
                                 setVisible(true)
                             }}>编辑</Button>
-                        <a onClick={() => handleDelete(record.id)}>删除</a>
+                        <Button type="link" disabled={record.lists.length !== 0} onClick={() => handleDelete(record.id)}>删除</Button>
                     </>
                 }
             }]}
