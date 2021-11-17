@@ -1520,6 +1520,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 车间工作管理-派工
+      "name": "派工",
+      "path": "/packagingWorkshop/processingTask/dispatch/:id",
+      "module": "./pages/package-workshop/processingTask/Dispatch",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 包装车间-成品入库列表
       "name": "成品入库列表",
       "path": "/packagingWorkshop/warehousing",

@@ -12,10 +12,10 @@ import AuthUtil from '../../../utils/AuthUtil';
 import moment from 'moment';
 
 const tableColumns = [
-    { title: '加工班组', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-    { title: '条码', dataIndex: 'createDeptName', key: 'createDeptName', },
-    { title: '件号', dataIndex: 'createUserName', key: 'createUserName' },
-    { title: '材料', dataIndex: 'createTime', key: 'createTime' },
+    { title: '订单工程名称', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+    { title: '电压等级', dataIndex: 'createDeptName', key: 'createDeptName', },
+    { title: '计划号', dataIndex: 'createUserName', key: 'createUserName' },
+    { title: '塔型', dataIndex: 'createTime', key: 'createTime' },
     // { title: '任务状态', dataIndex: 'status', key: 'status',  render: (value: number, record: object): React.ReactNode => {
     //     const renderEnum: any = [
     //         {
@@ -37,20 +37,16 @@ const tableColumns = [
     //     ]
     //     return <>{renderEnum.find((item: any) => item.value === value).label}</>
     // }},
-    { title: '材质', dataIndex: 'description', key: 'description' },
-    { title: '规格', dataIndex: 'description', key: 'description' },
-    { title: '长度(mm)', dataIndex: 'description', key: 'description' },
-    { title: '单件孔数', dataIndex: 'description', key: 'description' },
-    { title: '数量', dataIndex: 'description', key: 'description' },
-    { title: '重量(kg)', dataIndex: 'description', key: 'description' },
-    { title: '电焊', dataIndex: 'description', key: 'description' },
-    { title: '备注', dataIndex: 'description', key: 'description' },
-    { title: '冲引孔', dataIndex: 'description', key: 'description' },
-    { title: '是否弧边', dataIndex: 'description', key: 'description' },
-    { title: '件号类型', dataIndex: 'description', key: 'description' },
-    { title: '个孔径孔数', dataIndex: 'description', key: 'description' },
-    { title: '钻孔孔径孔数', dataIndex: 'description', key: 'description' },
-    { title: '扩孔孔径孔数', dataIndex: 'description', key: 'description' },
+    { title: '基数', dataIndex: 'description', key: 'description' },
+    { title: '下达重量', dataIndex: 'description', key: 'description' },
+    { title: '角钢重量', dataIndex: 'description', key: 'description' },
+    { title: '连板重量', dataIndex: 'description', key: 'description' },
+    { title: '加工厂区', dataIndex: 'description', key: 'description' },
+    { title: '加工车间', dataIndex: 'description', key: 'description' },
+    { title: '送齐成品库时间', dataIndex: 'description', key: 'description' },
+    { title: '报补件时间', dataIndex: 'description', key: 'description' },
+    { title: '包装入库时间', dataIndex: 'description', key: 'description' },
+    { title: '客户交货日期', dataIndex: 'description', key: 'description' },
 ]
 
 export default function Dispatch(): React.ReactNode {
@@ -104,7 +100,7 @@ export default function Dispatch(): React.ReactNode {
                                 history.goBack()
                             })
                         }else{
-                            message.error('未选择加工明细，不可派工！')
+                            message.error('未选择任务明细，不可派工！')
                         }
                        
                     })
@@ -162,10 +158,10 @@ export default function Dispatch(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="noDispatchStatus" label="仅显示未派工明细" initialValue={1} rules={[
+                            <Form.Item name="noDispatchStatus" label="仅显示未派工任务" initialValue={1} rules={[
                                 {
                                     "required": true,
-                                    "message": "请选择是否显示未派工明细"
+                                    "message": "请选择是否显示未派工任务"
                                 }
                             ]}>
                                 <Select style={{width:'100%'}} disabled={show}>
@@ -223,7 +219,7 @@ export default function Dispatch(): React.ReactNode {
                             </Col>
                         </Row>
                     </Form>
-                    <DetailTitle title="加工明细" />
+                    <DetailTitle title="任务明细" />
                     <CommonTable 
                         columns={tableColumns} 
                         rowKey='id'
