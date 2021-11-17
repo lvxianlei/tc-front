@@ -493,6 +493,8 @@
             "type": "popTable",
             "path": "/sinzetech-user/user",
             "readOnly": true,
+            "dependencies": true,
+            "value":"name",
             "columns": [
                 {
                     "title": "登录账号",
@@ -776,12 +778,12 @@
             "type": "string"
         },
         {
-            "title": "单价",
+            "title": "出厂单价",
             "dataIndex": "outFactoryPrice",
             "type": "number"
         },
         {
-            "title": "运费",
+            "title": "物流费用",
             "dataIndex": "logisticsPrice",
             "type": "number"
         },
@@ -852,7 +854,6 @@
         {
             "title": "出厂单价",
             "dataIndex": "outFactoryPrice",
-            "disabled": true,
             "type": "number",
             "rules": [
                 {
