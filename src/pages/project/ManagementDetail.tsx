@@ -309,7 +309,7 @@ export default function ManagementDetail(): React.ReactNode {
         </DetailContent>,
         tab_contract: <DetailContent>
             <div style={{marginLeft:"20px"}}>
-            <Tabs>
+            <Tabs defaultActiveKey="第一个">
                 <Tabs.TabPane tab="合同" key="合同">
                     <ManagementContract />
                 </Tabs.TabPane>

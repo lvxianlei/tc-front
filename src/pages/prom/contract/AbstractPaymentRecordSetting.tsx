@@ -304,7 +304,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
                 label: '备注',
                 name: 'description',
                 initialValue: paymentRecord?.description,
-                children: <Input.TextArea rows={5} showCount={true} maxLength={300} placeholder="请输入备注信息" />
+                children: <Input.TextArea showCount={true} maxLength={300} placeholder="请输入备注信息" />
             }]
         }]];
     }

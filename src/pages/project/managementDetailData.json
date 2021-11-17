@@ -84,9 +84,7 @@
             "columns": [
                 {
                     "title": "客户类型",
-                    "dataIndex": "type",
-                    "type": "select",
-                    "enum": []
+                    "dataIndex": "typeName"
                 },
                 {
                     "title": "客户名称",
@@ -519,7 +517,7 @@
             ]
         },
         {
-            "title": "杆塔明细编号111",
+            "title": "杆塔明细编号",
             "dataIndex": "number"
         },
         {
@@ -644,9 +642,7 @@
             "columns": [
                 {
                     "title": "客户类型",
-                    "dataIndex": "type",
-                    "type": "select",
-                    "enum": []
+                    "dataIndex": "typeName"
                 },
                 {
                     "title": "客户名称",
@@ -700,9 +696,7 @@
             "columns": [
                 {
                     "title": "客户类型",
-                    "dataIndex": "type",
-                    "type": "select",
-                    "enum": []
+                    "dataIndex": "typeName"
                 },
                 {
                     "title": "客户名称",
@@ -785,7 +779,8 @@
         {
             "title": "合同接管日期",
             "dataIndex": "takeOverTime",
-            "type": "date"
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "是否收到原件",
@@ -864,7 +859,7 @@
             "maxLength": 50
         },
         {
-            "title": "工程电压等级11",
+            "title": "工程电压等级",
             "dataIndex": "projectVoltageLevel"
         },
         {
@@ -1220,18 +1215,6 @@
             ]
         },
         {
-            "title": "计划交货日期",
-            "dataIndex": "planDeliveryTime",
-            "type": "date",
-            "format": "YYYY-MM-DD",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择计划交货日期..."
-                }
-            ]
-        },
-        {
             "title": "备注",
             "dataIndex": "description",
             "type": "textarea"
@@ -1266,8 +1249,13 @@
             "dataIndex": "galvanizeDemand"
         },
         {
-            "title": "备注",
+            "title": "结算要求",
             "dataIndex": "peculiarDescription",
+            "type": "textarea"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
             "type": "textarea"
         }
     ],

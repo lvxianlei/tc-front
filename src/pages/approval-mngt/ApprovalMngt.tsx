@@ -148,8 +148,10 @@ export default function Information(): React.ReactNode {
         }
     }
     const outFactoryOk = async () => {
-        const postData = await outFactoryForm.validateFields()
-        const auditOutInfoDTOList = await outFactoryTableForm.validateFields()
+        const postData = await outFactoryForm.validateFields();
+        console.log(postData);
+        const auditOutInfoDTOList = await outFactoryTableForm.validateFields();
+        console.log(auditOutInfoDTOList.submit);
         const result = await run({
             path: "/tower-market/OutFactory/submitAudit", data: {
                 ...postData,
@@ -158,13 +160,17 @@ export default function Information(): React.ReactNode {
                 auditOutInfoDTOList: auditOutInfoDTOList.submit
             }
         })
+        console.log(result);
         if (result) {
             message.success("成功创建申请...")
-            setBidingVisible(false)
-            history.go(0)
+            // setBidingVisible(false)
+            // history.go(0)
         } else {
             message.error(`创建申请失败！原因：${result}`)
         }
+        // if (result.code === 500) {
+        //     message.info("申请明细不可为空");
+        // }
     }
 
     const drawHChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
@@ -387,7 +393,7 @@ export default function Information(): React.ReactNode {
                     'Tenant-Id': AuthUtil.getTenantId(),
                     'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
                 }}
-                onChange={uploadChange} 
+                onChange={uploadChange}
                 showUploadList={false}
             ><Button key="enclosure" type="primary" ghost>上传附件</Button></Upload>]} />
             <CommonTable columns={[{
