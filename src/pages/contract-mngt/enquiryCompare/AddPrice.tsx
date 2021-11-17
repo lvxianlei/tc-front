@@ -11,7 +11,11 @@ interface AddPriceProps {
     materialLists: any[]
 }
 export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, ref): JSX.Element {
-    const [materials, setMaterials] = useState<any[]>(materialLists || [])
+    const [materials, setMaterials] = useState<any[]>(materialLists.map((item: any) => ({
+        ...item,
+        taxOffer: [-1, "-1"].includes(item.taxOffer) ? 1 : item.taxOffer,
+        offer: [-1, "-1"].includes(item.offer) ? 1 : item.offer
+    })) || [])
     const [form] = Form.useForm()
     const attachRef = useRef<AttachmentRef>()
     const params = useParams<{ id: string }>()
