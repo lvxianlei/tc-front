@@ -328,7 +328,7 @@ class DictMngt extends AbstractTabableComponent<IDictMngtWithRouteProps, IDictMn
                 <Form.Item
                     name="name"
                     label="选项值名"
-                    rules={[{ required: true, message: '请填写选项值名！' }]} 
+                    rules={[{required: true, message: '请填写选项值名！',whitespace: true}]} 
                     initialValue={ editValue }
                 >
                     <Input placeholder="请填写选项值名"/>

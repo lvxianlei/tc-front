@@ -5,6 +5,13 @@ import moment from "moment"
 type ColumnsItemsType = "text" | "string" | "number" | "select" | "date" | undefined
 
 export function generateRender(type: ColumnsItemsType, data: (SelectData | TextData)) {
+    //添加kb
+    if (data.dataIndex == 'fileSize') {
+        return ({
+            render: (text: string) => <>{text+"kb"}</>,
+            ...data
+        })
+    }
     switch (type) {
         case "date":
             return ({
@@ -88,5 +95,6 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
         onRow={() => ({ className: styles.tableRow })}
         dataSource={dataSource}
         {...props}
+        
     />
 }

@@ -1,0 +1,50 @@
+{
+    "baseInfoData": [
+        {
+            "dataIndex": "contractName",
+            "title": "内部合同编号"
+        },
+        {
+            "dataIndex": "customerName",
+            "title": "订单编号"
+        },
+        {
+            "dataIndex": "aeName",
+            "title": "产品类型"
+        },
+        {
+            "dataIndex": "aePhone",
+            "title": "工程名称"
+        },
+        {
+            "dataIndex": "designContactsName",
+            "title": "计划号"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "塔型"
+        }
+    ],
+    "packageData": [
+        {
+            "dataIndex": "contractName",
+            "title": "计划号"
+        },
+        {
+            "dataIndex": "customerName",
+            "title": "工程名称"
+        },
+        {
+            "dataIndex": "aeName",
+            "title": "塔型"
+        },
+        {
+            "dataIndex": "aePhone",
+            "title": "杆号"
+        },
+        {
+            "dataIndex": "designContactsName",
+            "title": "总数量"
+        }
+    ]
+}

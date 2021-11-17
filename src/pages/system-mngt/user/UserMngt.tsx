@@ -3,7 +3,7 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 import { DeleteOutlined } from '@ant-design/icons';
-import { FormItemProps, Input, Space, TableColumnType, TablePaginationConfig, TableProps } from 'antd';
+import { FormItemProps, Input, Space, TableColumnType, TablePaginationConfig, TableProps,Button } from 'antd';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -225,11 +225,15 @@ class UserMngt extends AbstractMngtComponent<IUserRouteProps, IUserMngtState> {
         return (
             <Space direction="horizontal" size="middle">
                 {super.renderExtraOperationContent(item)}
-                <ConfirmableButton confirmTitle="确定删除这些用户吗？" danger={true}
-                    icon={<DeleteOutlined />}
-                    disabled={!this.state.selectedUsers?.length} onConfirm={this.onBatchDelete()}>
-                    删除
-                </ConfirmableButton>
+                {!this.state.selectedUsers?.length ?
+                    <Button disabled icon={<DeleteOutlined />}>删除</Button>
+                    :
+                    <ConfirmableButton confirmTitle="确定删除这些用户吗？" danger={true}
+                        icon={<DeleteOutlined />}
+                         onConfirm={this.onBatchDelete()}>
+                        删除
+                    </ConfirmableButton>
+                }
             </Space>
         );
     }

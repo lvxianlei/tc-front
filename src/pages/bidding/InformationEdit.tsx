@@ -43,9 +43,13 @@ export default function InfomationNew(): JSX.Element {
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         try {
             const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
+            data.bidPackageInfoVOS.map((item: any) => {
+                return item.amount = item.amount < 0 ? 0 : 1;
+            });
             bidForm.setFieldsValue({ submit: data.bidPackageInfoVOS })
             setBinddingStatus(data.biddingStatus)
             setAttachVosData(data.attachVos)
+            
             resole(data)
         } catch (error) {
             reject(error)
@@ -163,6 +167,7 @@ export default function InfomationNew(): JSX.Element {
         try {
             const submitData = await form.validateFields()
             await bidResultRun({ ...submitData, biddingStatus: 1 })
+            handleSave();
             setVisible(false)
         } catch (error) {
             console.log(error)
