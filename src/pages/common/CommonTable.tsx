@@ -76,8 +76,7 @@ export default function CommonTable({ columns, dataSource = [], haveIndex = fals
     return <Table
         size="small"
         scroll={{ x: true }}
-        // rowKey={(_: any, record: any) => `common_table_${record.id || record.title || JSON.stringify(record)}`}
-        rowKey='id'
+        rowKey={(_: any, records: any) => records.id}
         columns={haveIndex ? [{
             title: "序号",
             dataIndex: "index",

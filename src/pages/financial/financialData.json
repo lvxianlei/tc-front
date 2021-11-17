@@ -185,16 +185,14 @@
                 },
                 {
                     "title": "完成时间",
-                    "dataIndex": "receiveTime"
+                    "dataIndex": "receiveTime",
+                    "type": "date",
+                    "format": "YYYY-MM-DD",
+                    "search": true
                 },
                 {
                     "title": "创建人",
                     "dataIndex": "createUserName"
-                },
-                {
-                    "title": "材料名称",
-                    "dataIndex": "productName",
-                    "search": true
                 },
                 {
                     "title": "重量（吨）合计",

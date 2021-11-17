@@ -205,7 +205,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 contractId: baseFormData.contractNumber.id,
                 contractNumber: baseFormData.contractNumber.value,
                 lists: cargoData.map((item: any) => {
-                    delete item.id
+                    type === "edit" && delete item.id
                     return item
                 })
             })
@@ -250,7 +250,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         </Modal>
         <DetailTitle title="收货单基础信息" />
         <BaseInfo form={form} onChange={handleBaseInfoChange} columns={BasicInformation.map((item: any) => {
-            if (["receiveNumber", "supplierName"].includes(item.dataIndex)) {
+            if (["contractNumber", "supplierName"].includes(item.dataIndex)) {
                 return ({ ...item, disabled: type === "edit" })
             }
             return item
