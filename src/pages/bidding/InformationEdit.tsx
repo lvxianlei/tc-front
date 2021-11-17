@@ -9,15 +9,17 @@ import RequestUtil from "../../utils/RequestUtil"
 import AuthUtil from "../../utils/AuthUtil"
 import { downLoadFile } from "../../utils"
 const columns = [
-    { title: '分标编号', dataIndex: 'partBidNumber' },
-    { title: '货物类别', dataIndex: 'goodsType' },
+    { title: '分标编号11', dataIndex: 'partBidNumber', "type": "text", "maxLength": 50 },
+    { title: '货物类别', dataIndex: 'goodsType', "type": "text", "maxLength": 50 },
     {
         "title": "包名称",
         "dataIndex": "packageName"
     },
     {
         "title": "包号",
-        "dataIndex": "packageNumber"
+        "dataIndex": "packageNumber",
+        "type": "text",
+        "maxLength": 50
     },
     {
         "title": "工程电压等级",
@@ -26,7 +28,7 @@ const columns = [
     { title: '数量', dataIndex: 'amount', type: "number" },
     { title: '单位', dataIndex: 'unit' },
     { title: '交货日期', dataIndex: 'deliveryDate', type: "date", format: "YYYY-MM-DD" },
-    { title: '交货地点', dataIndex: 'deliveryPlace' }
+    { title: '交货地点', dataIndex: 'deliveryPlace', "type": "text", "maxLength": 200 }
 ]
 
 export default function InfomationNew(): JSX.Element {
@@ -175,6 +177,15 @@ export default function InfomationNew(): JSX.Element {
     const handleChange = (fields: any, allFields: any) => {
 
     }
+    const handleBindChange = (fields: any, allFields: any) => {
+        if (fields.submit.length - 1 >= 0) {
+            const result = allFields.submit[fields.submit.length - 1];
+            const flag = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？ ]")
+            if (flag.test(result['unit'])) {
+                allFields.submit[fields.submit.length - 1]['unit'] = '';
+            }
+        }
+    }
 
     return <DetailContent
         operation={[
@@ -223,7 +234,7 @@ export default function InfomationNew(): JSX.Element {
         <DetailTitle title="基础信息" />
         <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={filterBaseInfoData(baseInfoData)} dataSource={detailData} edit />
         <DetailTitle title="物资清单" />
-        <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoVOS} />
+        <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoVOS} onChange={handleBindChange} />
         <DetailTitle title="附件" operation={[<Upload
             key="sub"
             name="file"

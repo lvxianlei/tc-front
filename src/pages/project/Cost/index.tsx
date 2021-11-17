@@ -100,7 +100,7 @@ export default function CostDetail() {
                     dataSource={data?.askInfo?.askInfoVo || {}} />
                 <DetailTitle title="产品类型成本评估" />
                 {data?.askInfo?.productArr.map((item: any, index: number) => <div key={index}>
-                    <DetailTitle title={`${item.voltage}${item.productName}`} />
+                    <DetailTitle title={`${item.voltage}kv${item.productName}`} />
                     <CommonTable columns={[
                         {
                             title: '序号',

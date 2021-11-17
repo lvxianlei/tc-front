@@ -8,7 +8,7 @@ for (let i = 1; i < 10; ++i) {
         "id": Random.increment(),
         "parentId": Random.increment(),
         "hasChildren": Random.boolean(),
-        "title": Random.cword(3,10),
+        "name": Random.cword(3,10),
         "key":Random.increment(),
         "value":Random.increment(),
         "children": [{
@@ -29,21 +29,21 @@ module.exports = {
         "id": "100000",
         "parentId": Random.increment(),
         "hasChildren": Random.boolean(),
-        "title": Random.cword(3,10),
+        "name": Random.cword(3,10),
         "key":Random.increment(),
         "value":Random.increment(),
         "children": [{
             "id": "101111",
             "parentId": Random.increment(),
             "hasChildren": Random.boolean(),
-            "title": Random.cword(3,5),
+            "name": Random.cword(3,5),
             "key":Random.increment(),
             "value":Random.increment()
         }, {
             "id": "789456",
             "parentId": Random.increment(),
             "hasChildren": Random.boolean(),
-            "title": Random.cword(3,5),
+            "name": Random.cword(3,5),
             "key":Random.increment(),
             "value":Random.increment()
         }]

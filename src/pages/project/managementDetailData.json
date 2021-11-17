@@ -844,11 +844,15 @@
     "cargoVOListColumns": [
         {
             "title": "分标编号",
-            "dataIndex": "partBidNumber"
+            "dataIndex": "partBidNumber",
+            "type": "text",
+            "maxLength": 50
         },
         {
             "title": "物资类别",
-            "dataIndex": "goodsType"
+            "dataIndex": "goodsType",
+            "type": "text",
+            "maxLength": 50
         },
         {
             "title": "包名称",
@@ -856,7 +860,9 @@
         },
         {
             "title": "包号",
-            "dataIndex": "packageNumber"
+            "dataIndex": "packageNumber",
+            "type": "text",
+            "maxLength": 50
         },
         {
             "title": "工程电压等级",
@@ -882,7 +888,9 @@
         },
         {
             "title": "交货地点",
-            "dataIndex": "deliveryPlace"
+            "dataIndex": "deliveryPlace",
+            "type": "text",
+            "maxLength": 200
         }
     ],
     "newProductGroup": [
