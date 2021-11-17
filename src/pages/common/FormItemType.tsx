@@ -88,14 +88,19 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: string, onC
             await run()
         }}>
             <Row gutter={4}>
-                {searchs.map((fItem: any) => <Col style={{ height: 32 }} span={(searchs.length + 1) / 24} key={fItem.dataIndex}><Form.Item
-                    name={fItem.dataIndex}
-                    label={fItem.title}
-                    style={{ height: 32, fontSize: 12 }}
-                >
-                    <FormItemType type={fItem.type} data={fItem} />
-                </Form.Item>
-                </Col>)}
+                {
+                    searchs.map((fItem: any) => 
+                        <Col style={{ height: 32 }} span={(searchs.length + 1) / 24} key={fItem.dataIndex}>
+                            <Form.Item
+                            name={fItem.dataIndex}
+                            label={fItem.title}
+                            style={{ height: 32, fontSize: 12 }}
+                        >
+                            <FormItemType type={fItem.type} data={fItem} />
+                        </Form.Item>
+                        </Col>
+                    )
+                }
                 <Col style={{ height: 32 }} span={(searchs.length + 1) / 24}>
                     <Form.Item>
                         <Button type="primary" htmlType="submit" size="small" style={{ marginLeft: 12 }}>搜索</Button>

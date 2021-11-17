@@ -837,8 +837,7 @@
         {
             "title": "上传时间",
             "dataIndex": "fileUploadTime",
-            "type": "date",
-            "format": "YYYY-MM-DD"
+            "type": "date"
         }
     ],
     "cargoVOListColumns": [

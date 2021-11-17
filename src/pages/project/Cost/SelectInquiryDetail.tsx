@@ -76,7 +76,7 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                         title: "操作",
                         dataIndex: "opration",
                         render: (_: any, records: any) => <>
-                            <Button type="link" >预览</Button>
+                            <Button type="link" onClick={ () => window.open(records.link || records.filePath) }>预览</Button>
                             <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
                         </>
                     }, ...enclosure]} dataSource={data?.replyAttachVos || []} />
@@ -88,7 +88,7 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                         title: "操作",
                         dataIndex: "opration",
                         render: (_: any, records: any) => <>
-                            <Button type="link" >预览</Button>
+                            <Button type="link"  onClick={ () => window.open(records.link || records.filePath) }>预览</Button>
                             <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
                         </>
                     }, ...enclosure]} dataSource={data?.startAttachVos || []} />
@@ -113,7 +113,7 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                         title: "操作",
                         dataIndex: "opration",
                         render: (_: any, records: any) => <>
-                            <Button type="link" >预览</Button>
+                            <Button type="link" onClick={ () => window.open(records.link || records.filePath) }>预览</Button>
                             <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
                         </>
                     }, ...enclosure]} dataSource={data?.replyAttachVos || []} />
@@ -130,7 +130,7 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                         title: "操作",
                         dataIndex: "opration",
                         render: (_: any, records: any) => <>
-                            <Button type="link" >预览</Button>
+                            <Button type="link" onClick={ () => window.open(records.link || records.filePath) }>预览</Button>
                             <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
                         </>
                     }, ...enclosure]} dataSource={data?.startAttachVos || []} />
@@ -149,7 +149,7 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                         title: "操作",
                         dataIndex: "opration",
                         render: (_: any, records: any) => <>
-                            <Button type="link" >预览</Button>
+                            <Button type="link" onClick={ () => window.open(records.link || records.filePath) }>预览</Button>
                             <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
                         </>
                     }, ...enclosure]} dataSource={data?.replyAttachVos || []} />
@@ -161,7 +161,7 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                         title: "操作",
                         dataIndex: "opration",
                         render: (_: any, records: any) => <>
-                            <Button type="link" >预览</Button>
+                            <Button type="link"  onClick={ () => window.open(records.link || records.filePath) }>预览</Button>
                             <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
                         </>
                     }, ...enclosure]} dataSource={data?.startAttachVos || []} />

@@ -11,7 +11,7 @@ import RequestUtil from '../../../utils/RequestUtil'
 export type SelectType = "selectA" | "selectB" | "selectC"
 
 const auditEnum: any = {
-    "selectA": "供应询价任务",
+    "selectA": "供应询价任务22",
     "selectB": "物流询价任务",
     "selectC": "工艺询价任务"
 }
@@ -84,7 +84,7 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
                     id: "",
                     uid: attachInfo.length,
                     link: dataInfo.link,
-                    name: dataInfo.originalName.split(".")[0],
+                    name: dataInfo.originalName,
                     description: "",
                     filePath: dataInfo.name,
                     fileSize: dataInfo.size,
