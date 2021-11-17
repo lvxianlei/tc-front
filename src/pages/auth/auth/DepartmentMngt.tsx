@@ -63,11 +63,11 @@ export default function DepartmentMngt(): React.ReactNode {
             width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    <Link to={ `/dept/deptMngt/setting/${ record.id }` }>编辑</Link>
+                    <Link to={ `/auth/dept/setting/${ record.id }` }>编辑</Link>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => {
-                            RequestUtil.delete(`/tower-system/department?ids=${ record.id }`).then(res => {
+                            RequestUtil.delete(`/sinzetech-user/department?ids=${ record.id }`).then(res => {
                                 setRefresh(!refresh);
                             });
                         } }
@@ -76,7 +76,7 @@ export default function DepartmentMngt(): React.ReactNode {
                     >
                         <Button type="link">删除</Button>
                     </Popconfirm>
-                    <Link to={ `/dept/dept/new/${ record.id }` }>新增下级</Link>
+                    <Link to={ `/auth/dept/new/${ record.id }` }>新增下级</Link>
                 </Space>
             )
         }
@@ -92,7 +92,7 @@ export default function DepartmentMngt(): React.ReactNode {
      * @returns batch delete 
      */
     const onBatchDelete = () => {
-        RequestUtil.delete(`/tower-system/department?ids=${ selectedRoles.map<number>((item: IDept): number => item.id) }`).then(res => {
+        RequestUtil.delete(`/sinzetech-user/department?ids=${ selectedRoles.map<number>((item: IDept): number => item.id) }`).then(res => {
             setSelectedRoleKeys([]);
             setSelectedRoles([]);
             setRefresh(!refresh);
@@ -100,7 +100,7 @@ export default function DepartmentMngt(): React.ReactNode {
     }
 
     return <Page
-        path="/tower-system/department"
+        path="/sinzetech-user/department"
         columns={ columns }
         headTabs={ [] }
         refresh={ refresh }

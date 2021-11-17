@@ -23,7 +23,7 @@ class DepartmentSetting extends AbstractDepartmentSetting<IDepartmentSettingRout
      */
     public async componentDidMount() {
         super.componentDidMount();
-        const deptDeatil: IDeptDetail = await RequestUtil.get<IDeptDetail>(`/tower-system/department/${ this.props.match.params.id }`);
+        const deptDeatil: IDeptDetail = await RequestUtil.get<IDeptDetail>(`/sinzetech-user/department/${ this.props.match.params.id }`);
         this.setState({
             deptDeatil: deptDeatil,
         });
@@ -48,7 +48,7 @@ class DepartmentSetting extends AbstractDepartmentSetting<IDepartmentSettingRout
      * @returns submit 
      */
     public async onSubmit(values: Record<string, any>): Promise<void> {
-        await RequestUtil.put('/tower-system/department', { ...values, id: this.state.deptDeatil?.id });
+        await RequestUtil.put('/sinzetech-user/department', { ...values, id: this.state.deptDeatil?.id });
     }
 }
 
