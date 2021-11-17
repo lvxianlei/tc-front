@@ -1,0 +1,88 @@
+{
+    "baseInfoData": [
+        {
+            "dataIndex": "contractName",
+            "title": "计划号"
+        },
+        {
+            "dataIndex": "customerName",
+            "title": "塔型"
+        },
+        {
+            "dataIndex": "aeName",
+            "title": "钢印号"
+        },
+        {
+            "dataIndex": "aePhone",
+            "title": "工程名称"
+        },
+        {
+            "dataIndex": "designContactsName",
+            "title": "条码"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "件号"
+        },
+        {
+            "dataIndex": "contractName",
+            "title": "材料"
+        },
+        {
+            "dataIndex": "customerName",
+            "title": "材质"
+        },
+        {
+            "dataIndex": "aeName",
+            "title": "规格"
+        },
+        {
+            "dataIndex": "aePhone",
+            "title": "长度（mm）"
+        },
+        {
+            "dataIndex": "designContactsName",
+            "title": "单件孔数"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "数量"
+        },
+        {
+            "dataIndex": "aeName",
+            "title": "重量（kg）"
+        },
+        {
+            "dataIndex": "aePhone",
+            "title": "是否电焊"
+        },
+        {
+            "dataIndex": "designContactsName",
+            "title": "备注"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "冲引孔"
+        },
+        {
+            "dataIndex": "aeName",
+            "title": "是否弧边"
+        },
+        {
+            "dataIndex": "aePhone",
+            "title": "件号类型"
+        },
+        {
+            "dataIndex": "designContactsName",
+            "title": "个孔径孔数"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "钻孔孔径孔数"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "扩孔孔径孔数"
+        }
+    ]
+}
