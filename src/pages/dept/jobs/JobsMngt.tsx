@@ -34,8 +34,9 @@ export default function JobsMngt(): React.ReactNode {
                     <Button type="link" onClick={ async () => {
                         const data: IJobs = await RequestUtil.get(`/tower-system/station/${ record.id }`);
                         setDetail(data);
-                        setVisible(true);
                         setTitle("编辑");
+                        form.setFieldsValue({ ...data });
+                        setVisible(true);
                     } }>编辑</Button>
                     <Popconfirm
                         title="确认删除?"

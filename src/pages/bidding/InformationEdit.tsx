@@ -9,15 +9,17 @@ import RequestUtil from "../../utils/RequestUtil"
 import AuthUtil from "../../utils/AuthUtil"
 import { downLoadFile } from "../../utils"
 const columns = [
-    { title: '分标编号', dataIndex: 'partBidNumber' },
-    { title: '货物类别', dataIndex: 'goodsType' },
+    { title: '分标编号11', dataIndex: 'partBidNumber', "type": "text", "maxLength": 50 },
+    { title: '货物类别', dataIndex: 'goodsType', "type": "text", "maxLength": 50 },
     {
         "title": "包名称",
         "dataIndex": "packageName"
     },
     {
         "title": "包号",
-        "dataIndex": "packageNumber"
+        "dataIndex": "packageNumber",
+        "type": "text",
+        "maxLength": 50
     },
     {
         "title": "工程电压等级",
@@ -45,9 +47,13 @@ export default function InfomationNew(): JSX.Element {
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         try {
             const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
+            data.bidPackageInfoVOS.map((item: any) => {
+                return item.amount = item.amount < 0 ? 0 : 1;
+            });
             bidForm.setFieldsValue({ submit: data.bidPackageInfoVOS })
             setBinddingStatus(data.biddingStatus)
             setAttachVosData(data.attachVos)
+            
             resole(data)
         } catch (error) {
             reject(error)
@@ -165,6 +171,7 @@ export default function InfomationNew(): JSX.Element {
         try {
             const submitData = await form.validateFields()
             await bidResultRun({ ...submitData, biddingStatus: 1 })
+            handleSave();
             setVisible(false)
         } catch (error) {
             console.log(error)
@@ -178,6 +185,15 @@ export default function InfomationNew(): JSX.Element {
     }
     const handleChange = (fields: any, allFields: any) => {
 
+    }
+    const handleBindChange = (fields: any, allFields: any) => {
+        if (fields.submit.length - 1 >= 0) {
+            const result = allFields.submit[fields.submit.length - 1];
+            const flag = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？ ]")
+            if (flag.test(result['unit'])) {
+                allFields.submit[fields.submit.length - 1]['unit'] = '';
+            }
+        }
     }
 
     return <DetailContent
@@ -227,7 +243,7 @@ export default function InfomationNew(): JSX.Element {
         <DetailTitle title="基础信息" />
         <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={filterBaseInfoData(baseInfoData)} dataSource={detailData} edit />
         <DetailTitle title="物资清单" />
-        <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoVOS} />
+        <EditTable form={bidForm} columns={columns} dataSource={detailData.bidPackageInfoVOS} onChange={handleBindChange} />
         <DetailTitle title="附件" operation={[<Upload
             key="sub"
             name="file"

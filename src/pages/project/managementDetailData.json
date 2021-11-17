@@ -84,9 +84,7 @@
             "columns": [
                 {
                     "title": "客户类型",
-                    "dataIndex": "type",
-                    "type": "select",
-                    "enum": []
+                    "dataIndex": "typeName"
                 },
                 {
                     "title": "客户名称",
@@ -644,9 +642,7 @@
             "columns": [
                 {
                     "title": "客户类型",
-                    "dataIndex": "type",
-                    "type": "select",
-                    "enum": []
+                    "dataIndex": "typeName"
                 },
                 {
                     "title": "客户名称",
@@ -700,9 +696,7 @@
             "columns": [
                 {
                     "title": "客户类型",
-                    "dataIndex": "type",
-                    "type": "select",
-                    "enum": []
+                    "dataIndex": "typeName"
                 },
                 {
                     "title": "客户名称",
@@ -838,14 +832,15 @@
         {
             "title": "上传时间",
             "dataIndex": "fileUploadTime",
-            "type": "date",
-            "format": "YYYY-MM-DD"
+            "type": "date"
         }
     ],
     "cargoVOListColumns": [
         {
             "title": "分标编号",
-            "dataIndex": "partBidNumber"
+            "dataIndex": "partBidNumber",
+            "type": "text",
+            "maxLength": 50
         },
         {
             "title": "物资类别",
@@ -887,7 +882,9 @@
         },
         {
             "title": "交货地点",
-            "dataIndex": "deliveryPlace"
+            "dataIndex": "deliveryPlace",
+            "type": "text",
+            "maxLength": 200
         }
     ],
     "newProductGroup": [

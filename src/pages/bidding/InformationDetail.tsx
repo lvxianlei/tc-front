@@ -111,7 +111,10 @@ export default function InformationDetail(): React.ReactNode {
     return <>
         <Modal zIndex={15} visible={visible} title="是否应标" okText="确定并自动生成项目" onOk={handleModalOk} onCancel={handleModalCancel} >
             <Form form={form} onValuesChange={handleChange}>
-                <Form.Item name="biddingStatus" label="是否应标">
+                <Form.Item name="biddingStatus" label="是否应标" rules={[{
+                    required: true,
+                    message: '请选择是否应标',
+                }]}>
                     <Select>
                         <Select.Option value="1">是</Select.Option>
                         <Select.Option value="2">否</Select.Option>
