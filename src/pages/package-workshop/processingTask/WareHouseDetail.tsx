@@ -177,7 +177,7 @@ export default function ProcessDetail(): React.ReactNode {
                                             return item.name
                                         })
                                     });
-                                } }  buttonTitle="+编辑" rowSelectionType="checkbox"/> } disabled/>
+                                } } buttonType="link" buttonTitle="+编辑" rowSelectionType="checkbox"/> } disabled/>
                             </Form.Item>
                         </Col>
                     </Row>
