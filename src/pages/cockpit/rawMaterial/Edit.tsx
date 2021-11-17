@@ -1,5 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react"
-import { InputNumber, Spin, Button, Modal, Form, message } from "antd"
+import { Spin, Button, Modal, Form, message } from "antd"
 import { materialInfo, priceInfo } from "./rawMaterial.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -43,7 +43,7 @@ const materialList = {
         },
         {
             "title": "标准",
-            "dataIndex": "standard"
+            "dataIndex": "standardName"
         },
         {
             "title": "材料",
@@ -95,7 +95,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         }
     }), { manual: true })
 
-    const handleCancel = () => setVisible(false)
     const handleOk = () => {
         materialForm.setFieldsValue({
             materialName: popContent.records.materialName,
@@ -127,7 +126,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     useImperativeHandle(ref, () => ({ onSubmit, loading: saveLoading }), [onSubmit, saveLoading])
 
     return <Spin spinning={loading}>
-        <Modal width={1011} title="选择合同" destroyOnClose visible={visible} onOk={handleOk} onCancel={handleCancel}>
+        <Modal width={1011} title="选择" destroyOnClose visible={visible} onOk={handleOk} onCancel={() => setVisible(false)}>
             <PopTableContent data={materialList as any} onChange={handleChange} />
         </Modal>
         <DetailTitle title="原材料信息" operation={[
