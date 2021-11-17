@@ -672,6 +672,19 @@
                         ]
                     },
                     {
+                        "label": "基础数据",
+                        "icon": "technology",
+                        "path": "/basicData",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "资料库管理",
+                                "path": "/basicData/databaseMngt",
+                                "authority": "auth_section"
+                            }
+                        ]
+                    },
+                    {
                         "label": "系统日志",
                         "icon": "technology",
                         "path": "/systemLog",

@@ -22,6 +22,7 @@ export interface IMetaDept {
     readonly parentName: string;
     readonly sort: number;
     readonly tenantId: string;
+    readonly key: string;
 }
 
 export interface IDeptTree {
