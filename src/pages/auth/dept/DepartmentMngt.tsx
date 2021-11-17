@@ -111,7 +111,7 @@ export default function DepartmentMngt(): React.ReactNode {
             cancelText="取消"
             disabled={ !selectedRoles?.length } 
         >
-            <Button type="link" disabled={ !selectedRoles?.length } >删除</Button>
+            <Button type="primary" disabled={ !selectedRoles?.length } >删除</Button>
         </Popconfirm> }
         searchFormItems={ [
             {
