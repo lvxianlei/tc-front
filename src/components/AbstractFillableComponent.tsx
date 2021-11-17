@@ -82,7 +82,8 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
     protected onCancel = (): void => {
         const returnPath: string = this.getReturnPath();
         if (returnPath) {
-            this.props.history.push(returnPath);
+            // this.props.history.push(returnPath);
+            this.props.history.go(-1);
         }
     }
 

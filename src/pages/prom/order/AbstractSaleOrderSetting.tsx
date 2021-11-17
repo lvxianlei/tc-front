@@ -623,10 +623,10 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                                     : saleOrder?.guaranteeType,
                             children: (
                                 <Select maxLength={50} className={layoutStyles.width100}>
-                                    <Select.Option value="1">履约保函</Select.Option>
-                                    <Select.Option value="2">预付款保函</Select.Option>
-                                    <Select.Option value="3">质保保函以及履约保函</Select.Option>
-                                    <Select.Option value="4">预付款保函和质保保函</Select.Option>
+                                    <Select.Option value="履约保函">履约保函</Select.Option>
+                                    <Select.Option value="预付款保函">预付款保函</Select.Option>
+                                    <Select.Option value="质保保函以及履约保函">质保保函以及履约保函</Select.Option>
+                                    <Select.Option value="预付款保函和质保保函">预付款保函和质保保函</Select.Option>
                                 </Select>
                             ),
                         },

@@ -48,7 +48,7 @@ export default class ClientSelectionComponent extends AbstractFilteredSelectionM
                 total: 0,
                 showSizeChanger: false
             },
-            confirmTitle: "选择客户"
+            confirmTitle: this.props.id === "1" ? "选择业主单位" : "选择签订单位"
         };
     }
 
@@ -61,7 +61,7 @@ export default class ClientSelectionComponent extends AbstractFilteredSelectionM
         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-customer/customer', {
             ...searchValues,
             current: pagination.current || this.state.tablePagination.current,
-            size: pagination.pageSize ||this.state.tablePagination.pageSize
+            size: pagination.pageSize || this.state.tablePagination.pageSize
         });
         this.setState({
             ...filterValues,
@@ -75,21 +75,21 @@ export default class ClientSelectionComponent extends AbstractFilteredSelectionM
         });
     }
 
-    public getFilterFormItemProps(): FormItemProps[]  {
+    public getFilterFormItemProps(): FormItemProps[] {
         return [{
-                name: 'type',
-                children:
-                    <Select placeholder="请选择客户类型" className={ styles.select_width }>
-                        { clientTypeOptions && clientTypeOptions.map(({ id, name }, index) => {
-                            return <Select.Option key={ index } value={ id }>
-                                { name }
-                            </Select.Option>
-                        }) }
-                    </Select>
-            },{
-                name: 'name',
-                children: <Input placeholder="客户名字关键字"/>
-            }];
+            name: 'type',
+            children:
+                <Select placeholder="请选择客户类型" className={styles.select_width}>
+                    {clientTypeOptions && clientTypeOptions.map(({ id, name }, index) => {
+                        return <Select.Option key={index} value={id}>
+                            {name}
+                        </Select.Option>
+                    })}
+                </Select>
+        }, {
+            name: 'name',
+            children: <Input placeholder="客户名字关键字" />
+        }];
     }
 
     public onFilterSubmit = async (values: Record<string, any>) => {
@@ -101,7 +101,7 @@ export default class ClientSelectionComponent extends AbstractFilteredSelectionM
         });
     }
 
-    public getTableDataSource(): object[]  {
+    public getTableDataSource(): object[] {
         return this.state.tableDataSource;
     }
 
@@ -113,8 +113,8 @@ export default class ClientSelectionComponent extends AbstractFilteredSelectionM
             width: '25%',
             dataIndex: 'type',
             render: (type: number | string): React.ReactNode => {
-                return  clientTypeOptions && clientTypeOptions.map(({ id, name }, index) => {
-                    if(id === type) {
+                return clientTypeOptions && clientTypeOptions.map(({ id, name }, index) => {
+                    if (id === type) {
                         return name
                     } else {
                         return ""

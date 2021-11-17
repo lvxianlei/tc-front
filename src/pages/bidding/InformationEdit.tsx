@@ -25,10 +25,14 @@ const columns = [
         "title": "工程电压等级",
         "dataIndex": "projectVoltageLevel"
     },
+    {
+        "title":"物资描述",
+        "dataIndex":"goodsExplain"
+    },
     { title: '数量', dataIndex: 'amount', type: "number" },
     { title: '单位', dataIndex: 'unit' },
-    { title: '交货日期', dataIndex: 'deliveryDate', type: "date", format: "YYYY-MM-DD" },
-    { title: '交货地点', dataIndex: 'deliveryPlace', "type": "text", "maxLength": 200 }
+    { title: '首批交货日期', dataIndex: 'deliveryDate', type: "date", format: "YYYY-MM-DD" },
+    { title: '交货地点', dataIndex: 'deliveryPlace' }
 ]
 
 export default function InfomationNew(): JSX.Element {
