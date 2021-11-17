@@ -56,9 +56,10 @@ export default class ClientSelectionComponent extends AbstractFilteredSelectionM
         this.getTable({})
     }
     
-    public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
+    public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}, flag: boolean = true) {
+        const v = flag ? filterValues : {};
         const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-customer/customer', {
-            ...filterValues,
+            ...v,
             current: pagination.current || this.state.tablePagination.current,
             size: pagination.pageSize ||this.state.tablePagination.pageSize
         });
@@ -127,7 +128,7 @@ export default class ClientSelectionComponent extends AbstractFilteredSelectionM
             dataIndex: 'name'
         }, {
             key: 'linkman',
-            title: '首要联系人111',
+            title: '首要联系人',
             width: '25%',
             dataIndex: 'linkman'
         }, {

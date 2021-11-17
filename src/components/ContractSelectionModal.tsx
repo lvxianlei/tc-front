@@ -63,6 +63,10 @@ export default class ContractSelectionComponent extends AbstractFilteredSelectio
             size: pagination.pageSize || this.state.tablePagination?.pageSize,
             status: this.props.status
         });
+        // 对数据销售类型为-1情况进行处理
+        if (resData && resData.records && resData.records.length > 0) {
+            resData.records.forEach((item: any) => item.saleType = item.saleType < 0 ? "" : item.saleType)
+        }
         this.setState({
             ...filterValues,
             tableDataSource: resData.records,
