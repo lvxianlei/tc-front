@@ -61,6 +61,11 @@
                                 "label": "角色管理",
                                 "path": "/auth/roles",
                                 "authority": "auth_section"
+                            },
+                            {
+                                "label": "部门管理",
+                                "path": "/auth/dept",
+                                "authority": "auth_section"
                             }
                         ]
                     },
