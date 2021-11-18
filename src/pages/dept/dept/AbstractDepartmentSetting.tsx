@@ -11,7 +11,7 @@ import AbstractFillableComponent, {
     IAbstractFillableComponentState,
     IFormItemGroup,
 } from '../../../components/AbstractFillableComponent';
-import { deptTypeOptions } from '../../../configuration/DictionaryOptions';
+// import { deptTypeOptions } from "../../../configuration/DictionaryOptions";
 import layoutStyles from '../../../layout/Layout.module.less';
 import RequestUtil from '../../../utils/RequestUtil';
 import { IDeptTree } from './DepartmentMngt';
@@ -130,11 +130,11 @@ export default abstract class AbstractDepartmentSetting<P extends RouteComponent
                     message: '请选择部门类型'
                 }],
                 children: <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
-                    { deptTypeOptions && deptTypeOptions.map(({ id, name }, index) => {
+                    {/* { deptTypeOptions && deptTypeOptions.map(({ id, name }, index) => {
                         return <Select.Option key={index} value={name}>
                             {name}
                         </Select.Option>
-                    }) }
+                    }) } */}
                 </Select>
             }, {
             label: '部门备注',
