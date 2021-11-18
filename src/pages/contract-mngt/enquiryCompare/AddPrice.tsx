@@ -11,15 +11,23 @@ interface AddPriceProps {
     materialLists: any[]
 }
 export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, ref): JSX.Element {
-    const [materials, setMaterials] = useState<any[]>(materialLists || [])
+    const [materials, setMaterials] = useState<any[]>(materialLists.map((item: any) => ({
+        ...item,
+        taxOffer: [-1, "-1"].includes(item.taxOffer) ? 1 : item.taxOffer,
+        offer: [-1, "-1"].includes(item.offer) ? 1 : item.offer
+    })) || [])
     const [form] = Form.useForm()
     const attachRef = useRef<AttachmentRef>()
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryQuotation/${id}`)
-            form.setFieldsValue({ supplier: result.supplierName })
-            setMaterials(result?.inquiryQuotationOfferVos)
+            form.setFieldsValue({ supplier: { id: result.supplierId, value: result.supplierName } })
+            setMaterials(result?.inquiryQuotationOfferVos.map((item: any) => ({
+                ...item,
+                taxOffer: [-1, "-1"].includes(item.taxOffer) ? 1 : item.taxOffer,
+                offer: [-1, "-1"].includes(item.offer) ? 1 : item.offer
+            })))
             resole(result)
         } catch (error) {
             reject(error)
@@ -59,9 +67,15 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
             reject(false)
         }
     })
-    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit])
+    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields])
+
     const handleChange = (id: string, value: number, name: string) => {
-        setMaterials(materials.map((item: any) => item.materialCode === id ? ({ ...item, [name]: value }) : item))
+        setMaterials(materials.map((item: any) => item.materialCode === id ? ({
+            ...item,
+            [name]: value,
+            taxOffer: [-1, "-1"].includes(item.taxOffer) ? 1 : item.taxOffer,
+            offer: [-1, "-1"].includes(item.offer) ? 1 : item.offer
+        }) : item))
     }
 
     return <Spin spinning={loading}>
@@ -107,10 +121,10 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
         <DetailTitle title="询价原材料" />
         <CommonTable columns={addPriceHead.map((item: any) => {
             if (item.dataIndex === "taxOffer") {
-                return ({ ...item, render: (value: number, records: any) => <InputNumber min={1} max={999999.99} step={0.01} value={[-1, "-1"].includes(value) ? 1 : value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode, value, "taxOffer")} /> })
+                return ({ ...item, render: (value: number, records: any) => <InputNumber min={1} max={999999.99} step={0.01} value={value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode, value, "taxOffer")} /> })
             }
             if (item.dataIndex === "offer") {
-                return ({ ...item, render: (value: number, records: any) => <InputNumber min={1} max={999999.99} step={0.01} value={[-1, "-1"].includes(value) ? 1 : value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode, value, "offer")} /> })
+                return ({ ...item, render: (value: number, records: any) => <InputNumber min={1} max={999999.99} step={0.01} value={value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode, value, "offer")} /> })
             }
             return item
         })} dataSource={materials} />

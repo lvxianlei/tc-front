@@ -45,7 +45,6 @@ export default forwardRef(function ({ dataSource = [], columns = [], showHeader 
                 const dataInfo = event.file.response.data
                 const fileInfo = dataInfo.name.split(".")
                 setAttachs([...attchs, {
-                    id: "",
                     uid: attchs.length,
                     link: dataInfo.link,
                     name: dataInfo.originalName.split(".")[0],
@@ -105,20 +104,22 @@ export default forwardRef(function ({ dataSource = [], columns = [], showHeader 
                     </Upload>
                 ]
             } : {}} />}
-        <CommonTable columns={[
-            {
-                title: "附件名称",
-                dataIndex: "name"
-            },
-            ...columns,
-            {
-                title: "操作",
-                dataIndex: "opration",
-                render: (_: any, record: any) => (<>
-                    {!edit && <a onClick={() => handleCat(record)}>查看</a>}
-                    <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
-                    {edit && <a onClick={() => deleteAttachData(record.uid || record.id)}>删除</a>}
-                </>)
-            }]} showHeader={showHeader} dataSource={attchs} />
+        <CommonTable
+            rowKey={(_: any, records: any) => records.name}
+            columns={[
+                {
+                    title: "附件名称",
+                    dataIndex: "name"
+                },
+                ...columns,
+                {
+                    title: "操作",
+                    dataIndex: "opration",
+                    render: (_: any, record: any) => (<>
+                        {!edit && <a onClick={() => handleCat(record)}>查看</a>}
+                        <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
+                        {edit && <a onClick={() => deleteAttachData(record.uid || record.id)}>删除</a>}
+                    </>)
+                }]} showHeader={showHeader} dataSource={attchs} />
     </>
 })

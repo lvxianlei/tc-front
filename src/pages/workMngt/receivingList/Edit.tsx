@@ -1,7 +1,7 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle } from "react"
-import { Button, Upload, Form, message, Spin, Modal, InputNumber, Row, Col } from 'antd'
+import { Button, Form, message, Spin, Modal, InputNumber, Row, Col } from 'antd'
 import { DetailTitle, BaseInfo, CommonTable, formatData } from '../../common'
-import { BasicInformation, CargoDetails, SelectedArea, Selected } from "./receivingListData.json"
+import { BasicInformation, editCargoDetails, SelectedArea, Selected } from "./receivingListData.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 interface ChooseModalProps {
@@ -36,7 +36,7 @@ const ChooseModal = forwardRef(({ id }: ChooseModalProps, ref) => {
     const handleRemove = async (id: string) => {
         const formData = await form.validateFields()
         const currentData = chooseList.find((item: any) => item.id === id)
-        const currentSelectData = chooseList.find((item: any) => item.id === id)
+        const currentSelectData = selectList.find((item: any) => item.id === id)
         if ((currentData.num - formData.num) === 0) {
             setChooseList(chooseList.filter((item: any) => item.id !== id))
             if (currentSelectData) {
@@ -48,7 +48,7 @@ const ChooseModal = forwardRef(({ id }: ChooseModalProps, ref) => {
             message.error("移除数量不能大于已选数量...")
             return
         } else {
-            setChooseList(selectList.map((item: any) => item.id === id ? ({ ...item, num: item.num - formData.num }) : item))
+            setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: item.num - formData.num }) : item))
             if (currentSelectData) {
                 setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
             } else {
@@ -205,7 +205,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 contractId: baseFormData.contractNumber.id,
                 contractNumber: baseFormData.contractNumber.value,
                 lists: cargoData.map((item: any) => {
-                    delete item.id
+                    type === "edit" && delete item.id
                     return item
                 })
             })
@@ -250,7 +250,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         </Modal>
         <DetailTitle title="收货单基础信息" />
         <BaseInfo form={form} onChange={handleBaseInfoChange} columns={BasicInformation.map((item: any) => {
-            if (["receiveNumber", "supplierName"].includes(item.dataIndex)) {
+            if (["contractNumber", "supplierName"].includes(item.dataIndex)) {
                 return ({ ...item, disabled: type === "edit" })
             }
             return item
@@ -264,6 +264,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 }
                 setVisible(true)
             }}>选择</Button>]} />
-        <CommonTable columns={CargoDetails} dataSource={cargoData} />
+        <CommonTable haveIndex columns={editCargoDetails} dataSource={cargoData} />
     </Spin>
 })
