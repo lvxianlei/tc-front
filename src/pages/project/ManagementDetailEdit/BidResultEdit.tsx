@@ -143,7 +143,6 @@ export default function BidResultEdit(): JSX.Element {
                     {
                         title: '批次',
                         dataIndex: 'batch',
-                        type: "number",
                         rules: [
                             {
                                 required: true,

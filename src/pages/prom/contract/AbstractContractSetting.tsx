@@ -230,6 +230,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
 
     public onCustomerCompanySelect = (selectedRows: DataType[]): void => {
         const contract: IContractInfo | undefined = this.state.contract;
+        console.log(selectedRows,contract)
         if (selectedRows && selectedRows.length > 0) {
             const select = {
                 customerId: selectedRows[0].id,
@@ -241,6 +242,27 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                 contract: {
                     ...(contract || {}),
                     customerInfoDto: select,
+                    // signCustomerName: selectedRows[0].name,
+                    // signCustomerId: selectedRows[0].id,
+                }
+            })
+            this.getForm()?.setFieldsValue(select);
+            // this.getForm()?.setFieldsValue({ signCustomerName: selectedRows[0].name });
+        }
+    }
+    public onCustomerNameSelect = (selectedRows: DataType[]): void => {
+        const contract: IContractInfo | undefined = this.state.contract;
+        if (selectedRows && selectedRows.length > 0) {
+            const select = {
+                customerId: selectedRows[0].id,
+                customerCompany: selectedRows[0].name,
+                customerLinkman: selectedRows[0].linkman,
+                customerPhone: selectedRows[0].phone
+            }
+            this.setState({
+                contract: {
+                    ...(contract || {}),
+                    // customerInfoDto: select,
                     signCustomerName: selectedRows[0].name,
                     signCustomerId: selectedRows[0].id,
                 }

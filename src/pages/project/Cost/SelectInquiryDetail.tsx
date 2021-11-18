@@ -36,6 +36,15 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
     const { loading, data, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const askPrice: any = await RequestUtil.get(`/tower-market/askPrice/${props.id}`)
+            /**
+             * 对于地面交货价格以及物流价格为-1情况处理
+             */
+            if (askPrice?.askLogisticsVOS) {
+                askPrice?.askLogisticsVOS.forEach((item: any) => {
+                    item.logisticsPrice = item.logisticsPrice < 0 ? "" : item.logisticsPrice;
+                    item.groundReceivingPrice = item.groundReceivingPrice < 0 ? "" : item.groundReceivingPrice;
+                })
+            }
             resole(askPrice)
         } catch (error) {
             reject(error)

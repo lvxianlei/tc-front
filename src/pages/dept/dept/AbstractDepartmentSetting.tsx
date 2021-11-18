@@ -2,7 +2,7 @@
  * @author zyc
  * @copyright © 2021 zyc
  */
-import { Input, InputNumber, TreeSelect } from 'antd';
+import { Input, InputNumber, Select, TreeSelect } from 'antd';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -11,15 +11,17 @@ import AbstractFillableComponent, {
     IAbstractFillableComponentState,
     IFormItemGroup,
 } from '../../../components/AbstractFillableComponent';
+import { deptTypeOptions } from '../../../configuration/DictionaryOptions';
 import layoutStyles from '../../../layout/Layout.module.less';
 import RequestUtil from '../../../utils/RequestUtil';
 import { IDeptTree } from './DepartmentMngt';
 
 export interface IDeptDetail {
+    readonly parentName?: string | number;
     readonly name?: string;
     readonly id?: string;
     readonly description?: string;
-    readonly parentId?: string;
+    readonly parentId?: string | number;
     readonly sort?: string;
     readonly classification?: string;
 }
@@ -28,6 +30,7 @@ export interface IAbstractDepartmentSettingState extends IAbstractFillableCompon
     readonly tree?: IDeptTree[];
     readonly deptDeatil?: IDeptDetail;
     readonly id?: string;
+    readonly tip?: boolean;
 }
 
 /**
@@ -107,44 +110,39 @@ export default abstract class AbstractDepartmentSetting<P extends RouteComponent
                 rules: [{
                     required: true,
                     message: '请输入部门名称'
+                },
+                {
+                  pattern: /^[^\s]*$/,
+                  message: '禁止输入空格',
                 }]
             }, {
                 label: '上级机构',
                 name: 'parentId',
-                initialValue: deptDeatil?.parentId,
-                children: <TreeSelect placeholder="请选择上级机构" className={ layoutStyles.width100 }
+                initialValue: deptDeatil?.parentId === 0 ? '' : deptDeatil?.parentId,
+                children: <TreeSelect disabled={ this.state.tip } placeholder="请选择上级机构" className={ layoutStyles.width100 }
                     treeData={ this.wrapRole2DataNode( this.state.tree ) } showSearch={ true }/>
             }, {
                 label: '部门类型',
                 name: 'classification',
                 initialValue: deptDeatil?.classification,
-                // children: <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
-                //     { warehouseOptions && warehouseOptions.map(({ id, name }, index) => {
-                //         return <Select.Option key={index} value={id+','+name}>
-                //             {name}
-                //         </Select.Option>
-                //     }) }
-                // </Select>
-            }]
-        }, {
-            title: '其他信息',
-            itemProps: [{
-                label: '部门排序',
-                name: 'sort',
-                initialValue: deptDeatil?.sort,
-                children: <InputNumber placeholder="请输入部门排序" className={ layoutStyles.width100 }/>,
                 rules: [{
                     required: true,
-                    message: '请输入部门排序'
-                }]
+                    message: '请选择部门类型'
+                }],
+                children: <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                    { deptTypeOptions && deptTypeOptions.map(({ id, name }, index) => {
+                        return <Select.Option key={index} value={name}>
+                            {name}
+                        </Select.Option>
+                    }) }
+                </Select>
             }, {
-                label: '部门备注',
-                name: 'description',
-                initialValue: deptDeatil?.description,
-                children: (
-                    <Input.TextArea placeholder="请输入部门备注" maxLength={ 300 } showCount/>
-                )
-            }]
+            label: '部门备注',
+            name: 'description',
+            initialValue: deptDeatil?.description,
+            children: (
+                <Input.TextArea placeholder="请输入部门备注" maxLength={ 300 } showCount/>
+            )}]
         }]];
     }
 }

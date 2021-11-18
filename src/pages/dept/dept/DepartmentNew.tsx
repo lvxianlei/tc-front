@@ -24,8 +24,9 @@ class DepartmentNew extends AbstractDepartmentSetting<IDepartmentSettingRoutePro
     public async componentDidMount() {
         this.setState({
             deptDeatil: {
-                parentId: this.props.match.params.id
+                parentId: this.props.match.params.id === '0' ? '' : this.props.match.params.id 
             },
+            tip: this.props.match.params.id === '0' ? false : true
         });
         super.componentDidMount();
     }

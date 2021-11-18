@@ -30,6 +30,16 @@
         {
             "title": "来款日期",
             "dataIndex": "payTime"
+        },{
+            "title": "币种",
+            "dataIndex": "currency"
+        },{
+            "title": "汇率",
+            "dataIndex": "exchangeRate"
+        },
+        {
+            "title": "外币金额",
+            "dataIndex": "currency"
         },
         {
             "title": "来款银行",

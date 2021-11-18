@@ -99,7 +99,11 @@ export default function BaseInfoEdit(): JSX.Element {
 
     const handleBaseInfoChange = (fields: any) => {
         if (fields.address) {
-            setAddress(fields.address)
+            setAddress(fields.address);
+            //address 不是其他-国外 country 置空
+            if (fields.address != '其他-国外') {
+                baseInfoForm.setFieldsValue({country:""})
+            }
         }
     }
     return <>
@@ -121,7 +125,8 @@ export default function BaseInfoEdit(): JSX.Element {
                     form={baseInfoForm}
                     columns={
                         address === "其他-国外" ?
-                            baseInfoData.map((item: any) => item.dataIndex === "address" ? ({ ...item, type: "select", enum: data?.addressList }) : item) :
+                            baseInfoData.map((item: any) => item.dataIndex === "address" ?
+                                ({ ...item, type: "select", enum: data?.addressList }) : item) :
                             baseInfoData.map((item: any) => item.dataIndex === "address" ? ({ ...item, type: "select", enum: data?.addressList }) : item).filter((item: any) => item.dataIndex !== "country")
                     } dataSource={data || {}} edit />
                 <DetailTitle title="物资清单" />
