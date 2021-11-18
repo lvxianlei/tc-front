@@ -1,7 +1,16 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: wangxindong
+ * @email: wxd93917787@163.com
+ * @Date: 2021-11-12 13:56:51
+ * @LastEditors: wangxindong
+ * @LastEditTime: 2021-11-17 18:36:04
+ */
 import React from "react"
 import { Button, message, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../common'
+import { DetailContent, DetailTitle, BaseInfo, CommonTable,Attachment } from '../common'
 import { baseInfoHead, invoiceHead, billingHead, batchHead } from "./InvoicingData.json"
 import { enclosure } from '../project/managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
@@ -67,21 +76,9 @@ export default function Edit() {
             <BaseInfo columns={invoiceHead} dataSource={data?.invoicingInfoVo || []} />
 
             <DetailTitle title="开票明细" />
-
             <CommonTable columns={billingHead} dataSource={data?.invoicingDetailVos || []} />
-
-            <DetailTitle title="附件" />
-
-            <CommonTable columns={[{
-                title: "操作", dataIndex: "opration",
-                render: (_: any, record: any) => (<>
-                    <Button type="link" onChange={() => message.info("功能正在加速开发中，敬请期待...")}>预览</Button>
-                    <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
-                </>)
-            }, ...enclosure]} dataSource={data?.attachInfoVos || []} />
-
+            <Attachment showHeader columns={[...enclosure]}  dataSource={data?.attachInfoVos || []} />
             <DetailTitle title="审批记录" />
-
             <CommonTable columns={batchHead} dataSource={data?.invoicingBatchVos || []} />
         </Spin>
     </DetailContent>

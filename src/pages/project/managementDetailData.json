@@ -779,7 +779,8 @@
         {
             "title": "合同接管日期",
             "dataIndex": "takeOverTime",
-            "type": "date"
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "是否收到原件",
@@ -1214,18 +1215,6 @@
             ]
         },
         {
-            "title": "计划交货日期",
-            "dataIndex": "planDeliveryTime",
-            "type": "date",
-            "format": "YYYY-MM-DD",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择计划交货日期..."
-                }
-            ]
-        },
-        {
             "title": "备注",
             "dataIndex": "description",
             "type": "textarea"
@@ -1260,8 +1249,13 @@
             "dataIndex": "galvanizeDemand"
         },
         {
-            "title": "备注",
+            "title": "结算要求",
             "dataIndex": "peculiarDescription",
+            "type": "textarea"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
             "type": "textarea"
         }
     ],

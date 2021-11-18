@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Row, Tabs, Radio, Spin, Modal, message } from 'antd'
 import { useHistory, useParams, Link, Prompt } from 'react-router-dom'
-import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common'
+import { BaseInfo, DetailContent, CommonTable, DetailTitle,Attachment } from '../common'
 import CostDetail from './Cost'
 import PayInfo from './payInfo'
 import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
@@ -190,25 +190,7 @@ export default function ManagementDetail(): React.ReactNode {
                 },
                 ...cargoVOListColumns
             ]} dataSource={data?.cargoVOList} />
-            <DetailTitle title="附件信息" />
-            <CommonTable columns={[
-                {
-                    title: '操作',
-                    width: 60,
-                    dataIndex: 'opration',
-                    render: (_a: any, _b: any, index: number): React.ReactNode => (<Button
-                        type="link"
-                        onClick={() => downLoadFile(_b.filePath, _b.name)}
-                    >下载</Button>)
-                },
-                {
-                    title: '序号',
-                    dataIndex: 'index',
-                    key: 'index',
-                    render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-                },
-                ...enclosure
-            ]} dataSource={data?.attachVos} />
+            <Attachment showHeader columns={[...enclosure]}  dataSource={data?.attachVos || []} />
         </DetailContent>,
         tab_cost: <CostDetail />,
         tab_bidDoc: <DetailContent
@@ -327,7 +309,7 @@ export default function ManagementDetail(): React.ReactNode {
         </DetailContent>,
         tab_contract: <DetailContent>
             <div style={{marginLeft:"20px"}}>
-            <Tabs>
+            <Tabs defaultActiveKey="第一个">
                 <Tabs.TabPane tab="合同" key="合同">
                     <ManagementContract />
                 </Tabs.TabPane>
