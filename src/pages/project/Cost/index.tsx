@@ -33,6 +33,10 @@ export default function CostDetail() {
     }
 
     const handleSelectInquiryTypeOk = (value: SelectType | "") => {
+        if (!value) {
+            message.error("请您先选择任务类型！")
+            return;
+        }
         setSelectType(value)
         setVisible(false)
     }
