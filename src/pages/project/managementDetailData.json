@@ -287,13 +287,15 @@
         },
         {
             "title": "单价（元）",
-            "dataIndex": "price"
+            "dataIndex": "price",
+            "type": "number"
         },
         {
             "title": "总价（万元）",
             "dataIndex": "money",
             "type": "number",
             "required": true,
+            "decimal":"4",
             "rules": [
                 {
                     "required": true,
@@ -305,6 +307,7 @@
             "title": "重量（吨）",
             "dataIndex": "weight",
             "type": "number",
+            "decimal":"3",
             "required": true,
             "rules": [
                 {
@@ -396,7 +399,11 @@
             "dataIndex": "mackUser"
         },
         {
-            "title": "接收人接收及日期",
+            "title": "接收人",
+            "dataIndex": "receiveUser"
+        },
+        {
+            "title": "接收日期",
             "dataIndex": "receiveUserDate",
             "type": "date"
         },

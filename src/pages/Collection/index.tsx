@@ -1,3 +1,12 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: wangxindong
+ * @email: wxd93917787@163.com
+ * @Date: 2021-11-12 13:56:51
+ * @LastEditors: wangxindong
+ * @LastEditTime: 2021-11-18 17:07:28
+ */
 import React, { useState } from "react"
 import { Button, Input, DatePicker, Radio } from 'antd'
 import { useHistory } from 'react-router-dom'
@@ -57,11 +66,11 @@ export default function Collection() {
         searchFormItems={[
             {
                 name: 'fuzzyQuery',
-                children: <Input placeholder="编号/客户名称/来款银行" style={{ width: 300 }} />
+                children: <Input placeholder="编号/来款单位名称/来款银行" style={{ width: 300 }} />
             },
             {
                 name: 'startLaunchTime',
-                label: '来款时间',
+                label: '来款日期',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
             }
         ]}
