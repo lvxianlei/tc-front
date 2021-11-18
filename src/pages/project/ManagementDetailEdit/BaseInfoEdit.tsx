@@ -72,30 +72,30 @@ export default function BaseInfoEdit(): JSX.Element {
         }
     }
 
-    const uploadChange = (event: any) => {
-        if (event.file.status === "done") {
-            if (event.file.response.code === 200) {
-                const dataInfo = event.file.response.data
-                const fileInfo = dataInfo.name.split(".")
-                setAttachVosData([...attachVosData, {
-                    id: "",
-                    uid: attachVosData.length,
-                    link: dataInfo.link,
-                    name: dataInfo.originalName.split(".")[0],
-                    description: "",
-                    filePath: dataInfo.name,
-                    fileSize: dataInfo.size,
-                    fileSuffix: fileInfo[fileInfo.length - 1],
-                    userName: dataInfo.userName,
-                    fileUploadTime: dataInfo.fileUploadTime
-                }])
-            }
-        }
-    }
+    // const uploadChange = (event: any) => {
+    //     if (event.file.status === "done") {
+    //         if (event.file.response.code === 200) {
+    //             const dataInfo = event.file.response.data
+    //             const fileInfo = dataInfo.name.split(".")
+    //             setAttachVosData([...attachVosData, {
+    //                 id: "",
+    //                 uid: attachVosData.length,
+    //                 link: dataInfo.link,
+    //                 name: dataInfo.originalName.split(".")[0],
+    //                 description: "",
+    //                 filePath: dataInfo.name,
+    //                 fileSize: dataInfo.size,
+    //                 fileSuffix: fileInfo[fileInfo.length - 1],
+    //                 userName: dataInfo.userName,
+    //                 fileUploadTime: dataInfo.fileUploadTime
+    //             }])
+    //         }
+    //     }
+    // }
 
-    const deleteAttachData = (id: number) => {
-        setAttachVosData(attachVosData.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
-    }
+    // const deleteAttachData = (id: number) => {
+    //     setAttachVosData(attachVosData.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
+    // }
 
     const handleBaseInfoChange = (fields: any) => {
         if (fields.address) {

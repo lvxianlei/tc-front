@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect,useRef } from "react"
 import { useParams } from "react-router-dom"
 import { Modal, Upload, Button, Form, message } from "antd"
-import { DetailTitle, CommonTable, BaseInfo, EditTable } from "../../common"
+import { DetailTitle, CommonTable, BaseInfo, EditTable, Attachment, AttachmentRef  } from "../../common"
 import { enclosure } from "../managementDetailData.json"
 import { supplyBaseInfo, logisticBaseInfo, workmanshipBaseInfo, askLogistics } from "./costData.json"
 import AuthUtil from "../../../utils/AuthUtil"
@@ -11,7 +11,7 @@ import RequestUtil from '../../../utils/RequestUtil'
 export type SelectType = "selectA" | "selectB" | "selectC"
 
 const auditEnum: any = {
-    "selectA": "供应询价任务22",
+    "selectA": "供应询价任务",
     "selectB": "物流询价任务",
     "selectC": "工艺询价任务"
 }
@@ -27,6 +27,7 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
     const { id } = useParams<{ id: string }>()
     const [baseForm] = Form.useForm()
     const [askForm] = Form.useForm()
+    const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } });
     const { loading, run } = useRequest<{ [key: string]: any }>((saveData: any) => new Promise(async (resole, reject) => {
         try {
             const productType: any = await RequestUtil.post(`/tower-market/askPrice`, { ...saveData, projectId: id, askType: auditCode[props.type] })
@@ -75,30 +76,30 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
         ["selectA", "selectB", "selectC"].includes(props.type) && getAskProduct()
     }, [props.type, props.count])
 
-    const uploadChange = (event: any) => {
-        if (event.file.status === "done") {
-            if (event.file.response.code === 200) {
-                const dataInfo = event.file.response.data
-                const fileInfo = dataInfo.name.split(".")
-                setAttachInfo([...attachInfo, {
-                    id: "",
-                    uid: attachInfo.length,
-                    link: dataInfo.link,
-                    name: dataInfo.originalName,
-                    description: "",
-                    filePath: dataInfo.name,
-                    fileSize: dataInfo.size,
-                    fileSuffix: fileInfo[fileInfo.length - 1],
-                    userName: dataInfo.userName,
-                    fileUploadTime: dataInfo.fileUploadTime
-                }])
-            }
-        }
-    }
+    // const uploadChange = (event: any) => {
+    //     if (event.file.status === "done") {
+    //         if (event.file.response.code === 200) {
+    //             const dataInfo = event.file.response.data
+    //             const fileInfo = dataInfo.name.split(".")
+    //             setAttachInfo([...attachInfo, {
+    //                 id: "",
+    //                 uid: attachInfo.length,
+    //                 link: dataInfo.link,
+    //                 name: dataInfo.originalName,
+    //                 description: "",
+    //                 filePath: dataInfo.name,
+    //                 fileSize: dataInfo.size,
+    //                 fileSuffix: fileInfo[fileInfo.length - 1],
+    //                 userName: dataInfo.userName,
+    //                 fileUploadTime: dataInfo.fileUploadTime
+    //             }])
+    //         }
+    //     }
+    // }
 
-    const deleteAttachData = (id: number) => {
-        setAttachInfo(attachInfo.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
-    }
+    // const deleteAttachData = (id: number) => {
+    //     setAttachInfo(attachInfo.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
+    // }
 
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
@@ -106,7 +107,8 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
             const saveAskData = await askForm.validateFields()
             const saveResult = await run({
                 ...baseInfo,
-                attachInfoDTOS: attachInfo,
+                // attachInfoDTOS: attachInfo,
+                attachInfoDTOS: attchsRef.current?.getDataSource(),
                 startAskLogisticsDTOS: props.type === "selectB" ? askData?.map((item: any, index: number) => ({
                     ...item,
                     ...saveAskData.submit[index]
@@ -140,7 +142,7 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
         {props.type === "selectA" && <>
             <DetailTitle title="询价类型：供应询价" />
             <BaseInfo form={baseForm} columns={supplyBaseInfo} dataSource={data || {}} edit />
-            <DetailTitle title="附件" operation={[
+            {/* <DetailTitle title="附件22" operation={[
                 <Upload
                     key="sub"
                     name="file"
@@ -154,15 +156,16 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
                     onChange={uploadChange}
                     showUploadList={false}
                 ><Button type="primary" ghost>上传附件</Button></Upload>
-            ]} />
-            <CommonTable columns={[{
+            ]} /> */}
+            {/* <CommonTable columns={[{
                 title: "操作",
                 dataIndex: "opration",
                 render: (_: any, records: any) => <>
                     <Button type="link" onClick={() => deleteAttachData(records.uid || records.id)}>删除</Button>
                     <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
                 </>
-            }, ...enclosure]} dataSource={attachInfo} />
+            }, ...enclosure]} dataSource={attachInfo} /> */}
+            <Attachment  showHeader maxCount={10} columns={[...enclosure]} ref={attchsRef} edit  dataSource={attachInfo} />
         </>}
         {props.type === "selectB" && <>
             <DetailTitle title="询价类型：物流询价" />
@@ -170,7 +173,7 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
 
             <EditTable form={askForm} haveNewButton={false} haveOpration={false} columns={askLogistics} dataSource={[]} />
 
-            <DetailTitle title="附件" operation={[
+            {/* <DetailTitle title="附件" operation={[
                 <Upload
                     key="sub"
                     name="file"
@@ -184,20 +187,21 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
                     showUploadList={false}
                     onChange={uploadChange}
                 ><Button type="primary" ghost>上传附件</Button></Upload>
-            ]} />
-            < CommonTable columns={[{
+            ]} /> */}
+            {/* < CommonTable columns={[{
                 title: "操作",
                 dataIndex: "opration",
                 render: (_: any, records: any) => <>
                     <Button type="link" onClick={() => deleteAttachData(records.uid || records.id)}>删除</Button>
                     <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
                 </>
-            }, ...enclosure]} dataSource={attachInfo} />
+            }, ...enclosure]} dataSource={attachInfo} /> */}
+            <Attachment  showHeader maxCount={10} columns={[...enclosure]} ref={attchsRef} edit  dataSource={attachInfo} />
         </>}
         {props.type === "selectC" && <>
             <DetailTitle title="询价类型：工艺询价" />
             <BaseInfo form={baseForm} columns={workmanshipBaseInfo} dataSource={data || {}} edit />
-            <DetailTitle title="附件" operation={[
+            {/* <DetailTitle title="附件" operation={[
                 <Upload
                     key="sub"
                     name="file"
@@ -211,15 +215,16 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
                     showUploadList={false}
                     onChange={uploadChange}
                 ><Button type="primary" ghost>上传附件</Button></Upload>
-            ]} />
-            <CommonTable columns={[{
+            ]} /> */}
+            {/* <CommonTable columns={[{
                 title: "操作",
                 dataIndex: "opration",
                 render: (_: any, records: any) => <>
                     <Button type="link" onClick={() => deleteAttachData(records.uid || records.id)}>删除</Button>
                     <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
                 </>
-            }, ...enclosure]} dataSource={attachInfo} />
+            }, ...enclosure]} dataSource={attachInfo} /> */}
+            <Attachment  showHeader maxCount={10} columns={[...enclosure]} ref={attchsRef} edit  dataSource={attachInfo} />
         </>}
     </Modal>
 }
