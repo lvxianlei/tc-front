@@ -76,7 +76,7 @@ class DeliveryAcceptance extends AsyncComponent<IDeliveryAcceptanceRouteProps, I
         this.setState({
             isVisible: true
         })
-        const [deliveryFiles, detailData] = await Promise.all<IDeliveryFiles, IDetailData>([
+        const [deliveryFiles, detailData] = await Promise.all([
             RequestUtil.get<IDeliveryFiles>(`/tp-task-dispatch/productCategory/getDeliveryFiles/${ this.props.productCategoryId }`),
             RequestUtil.get<IDetailData>(`/tower-data-archive/productCategory/${ this.props.productCategoryId }`)
         ]);
