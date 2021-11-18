@@ -160,9 +160,9 @@ export default function SupplierMngt(): React.ReactNode {
                     </Select>
                 },
                 {
-                    name: 'fuzzyMsg',
+                    name: 'fuzzyQuery',
                     label: '查询',
-                    children: <Input placeholder="供应商编号/供应商名称/联系人/联系电话" maxLength={200} />
+                    children: <Input style={{ width: 280 }} placeholder="供应商编号/供应商名称/联系人/联系电话" maxLength={200} />
                 },
             ]}
         />

@@ -227,6 +227,11 @@ export default function ApplyPayment() {
                             <Button type="link" disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleApprovalRun(record.id)}>发起</Button>
                             <Button type="link" disabled={![1].includes(record.applyStatus)}
                                 onClick={() => handleCancel(record.id)}>撤回</Button>
+                            <Button
+                                type="link"
+                                disabled={![1].includes(record.applyStatus)}
+                                onClick={() => handleCancel(record.id)}
+                            >通过</Button>
                             <Button type="link" disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleDelete(record.id)}>删除</Button>
                             <Button
                                 type="link"

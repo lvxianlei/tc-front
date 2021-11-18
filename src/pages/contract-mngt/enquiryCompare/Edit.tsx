@@ -148,7 +148,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const handleChoosePlanOk = () => {
         const chooseData = choosePlanRef.current?.selectRows
-        const newData = [...materialList, ...chooseData[0]?.materials.filter((item: any) => !(materialList.map((mItem: any) => mItem.id).includes(item.id))).map((item: any) => ({
+        setMaterialList(chooseData[0]?.materials.filter((item: any) => !(materialList.map((mItem: any) => mItem.id).includes(item.id))).map((item: any) => ({
             ...item,
             num: item.planPurchaseNum || "0",
             spec: item.structureSpec,
@@ -161,8 +161,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             standardName: item.standardName,
             materialStandard: item.standard,
             materialCode: item.code
-        }))]
-        setMaterialList(newData)
+        })))
         setChooseVisible(false)
     }
     const handleRemove = (id: string) => setMaterialList(materialList.filter((item: any) => item.materialCode !== id))

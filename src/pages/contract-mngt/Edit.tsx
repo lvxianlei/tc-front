@@ -59,7 +59,22 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const handleAddModalOk = () => {
         const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
-        setMaterialList([...materialList, ...newMaterialList])
+        setMaterialList([...materialList, ...newMaterialList.map((item: any) => {
+            const num = parseFloat(item.num || "1")
+            const taxPrice = parseFloat(item.taxOffer || "1.00")
+            const price = parseFloat(item.offer || "1.00")
+            return ({
+                ...item,
+                num,
+                taxPrice,
+                price,
+                width: formatSpec(item.structureSpec).width,
+                length: formatSpec(item.structureSpec).length,
+                weight: item.weight || "1.00",
+                taxTotalAmount: (num * taxPrice).toFixed(2),
+                totalAmount: (num * price).toFixed(2)
+            })
+        })])
         setVisible(false)
     }
 
@@ -86,10 +101,10 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     delete item.id
                     return ({
                         ...item,
-                        taxPrice: item.taxPrice || 0,
-                        price: item.price || 0,
-                        taxTotalAmount: item.taxTotalAmount || 0,
-                        totalAmount: item.totalAmount || 0
+                        taxPrice: item.taxPrice,
+                        price: item.price,
+                        taxTotalAmount: item.taxTotalAmount,
+                        totalAmount: item.totalAmount
                     })
                 })
             })
@@ -106,6 +121,20 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setMaterialList([])
     }
 
+    const formatSpec = (spec: any): { width: string, length: string } => {
+        if (!spec) {
+            return ({
+                width: "0",
+                length: "0"
+            })
+        }
+        const splitArr = spec.replace("∠", "").split("*")
+        return ({
+            width: splitArr[0] || "0",
+            length: splitArr[1] || "0"
+        })
+    }
+
     const handleBaseInfoChange = (fields: any) => {
         if (fields.supplier) {
             setSupplierId(fields.supplier.id)
@@ -117,15 +146,18 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         if (fields.comparisonPrice) {
             const meterialList: any[] = await getComparisonPrice(fields.comparisonPrice.id)
             setMaterialList(meterialList.map((item: any) => {
-                const num = parseFloat(item.num || "0")
-                const taxPrice = parseFloat(item.taxOffer || "0")
-                const price = parseFloat(item.offer || "0")
+                const num = parseFloat(item.num || "1")
+                const taxPrice = parseFloat(item.taxOffer || "1.00")
+                const price = parseFloat(item.offer || "1.00")
                 return ({
                     ...item,
                     source: 1,
                     num,
                     taxPrice,
                     price,
+                    width: formatSpec(item.structureSpec).width,
+                    length: formatSpec(item.structureSpec).length,
+                    weight: item.weight || "1.00",
                     taxTotalAmount: (num * taxPrice).toFixed(2),
                     totalAmount: (num * price).toFixed(2)
                 })
@@ -137,9 +169,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         const newData = materialList.map((item: any) => {
             if (item.materialCode === materialCode) {
                 const allData: any = {
-                    num: parseFloat(item.num || "0"),
-                    taxPrice: parseFloat(item.taxPrice || "0"),
-                    price: parseFloat(item.price || "0"),
+                    num: parseFloat(item.num || "1"),
+                    taxPrice: parseFloat(item.taxPrice || "1.00"),
+                    price: parseFloat(item.price || "1.00"),
                 }
                 allData[dataIndex] = value
                 return ({
@@ -160,10 +192,10 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 materialTexture: item.structureTexture,
                 spec: item.structureSpec,
                 source: 2,
-                taxPrice: item.taxPrice || 0.00,
-                price: item.price || 0.00,
-                taxTotalAmount: item.taxTotalAmount || 0.00,
-                totalAmount: item.totalAmount || 0.00
+                taxPrice: item.taxPrice || 1.00,
+                price: item.price || 1.00,
+                taxTotalAmount: item.taxTotalAmount || 1.00,
+                totalAmount: item.totalAmount || 1.00
             })))} />
         </Modal>
         <DetailTitle title="合同基本信息" />
@@ -219,7 +251,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     if (["num", "taxPrice", "price"].includes(item.dataIndex)) {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => <InputNumber value={value || 0} onChange={(value: number) => handleNumChange(value, records.materialCode, item.dataIndex)} key={key} />
+                            render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 0} onChange={(value: number) => handleNumChange(value, records.materialCode, item.dataIndex)} key={key} />
                         })
                     }
                     return item
@@ -230,6 +262,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     dataIndex: "opration",
                     render: (_: any, records: any) => <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.materialCode)}>移除</Button>
                 }]}
+            rowKey={(_: any, records: any) => records.materialName}
             pagination={false}
             dataSource={materialList} />
     </Spin>

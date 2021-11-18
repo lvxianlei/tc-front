@@ -76,15 +76,15 @@ interface CommonTableProps {
     dataSource?: object[]
     haveIndex?: boolean
     [key: string]: any
+    rowKey?: any
 }
 
-export default function CommonTable({ columns, dataSource = [], haveIndex = false, ...props }: CommonTableProps): JSX.Element {
+export default function CommonTable({ columns, dataSource = [], rowKey, haveIndex = false, ...props }: CommonTableProps): JSX.Element {
     columns = columns.map((item: any, index: number) => generateRender(item.type || "text", item))
     return <Table
         size="small"
         scroll={{ x: true }}
-        // rowKey={(_: any, record: any) => `common_table_${record.id || record.title || JSON.stringify(record)}`}
-        rowKey='id'
+        rowKey={rowKey || "id"}
         columns={haveIndex ? [{
             title: "序号",
             dataIndex: "index",
