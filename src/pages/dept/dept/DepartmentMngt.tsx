@@ -33,8 +33,6 @@ export interface IDeptTree {
 
 export default function DepartmentMngt(): React.ReactNode {
     const [ refresh, setRefresh ] = useState<boolean>(false);
-    const [ filterValue, setFilterValue ] = useState({});
-    const [ selectedRoleKeys, setSelectedRoleKeys ] = useState<React.Key[]>([]);
     const [ selectedRoles, setSelectedRoles ] = useState<IDept[]>([]);
     
     const columns = [
@@ -45,14 +43,14 @@ export default function DepartmentMngt(): React.ReactNode {
             dataIndex: 'name'
         },
         {
-            key: 'sort',
-            title: '排序',
-            dataIndex: 'sort',
+            key: 'classification',
+            title: '类型',
+            dataIndex: 'classification',
             width: 120
         },
         {
             key: 'description',
-            title: '备注',
+            title: '简介',
             width: 200,
             dataIndex: 'description'
         },
@@ -77,61 +75,18 @@ export default function DepartmentMngt(): React.ReactNode {
                     >
                         <Button type="link">删除</Button>
                     </Popconfirm>
-                    <Link to={ `/dept/dept/new/${ record.id }` }>新增下级</Link>
+                    <Link to={ `/dept/deptMngt/new/${ record.id }` }>新增下级</Link>
                 </Space>
             )
         }
     ]
-
-    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: object[]): void => {
-        setSelectedRoleKeys(selectedRowKeys);
-        setSelectedRoles(selectedRows as IDept[])
-    }
-
-    /**
-     * @description Determines whether batch delete on
-     * @returns batch delete 
-     */
-    const onBatchDelete = () => {
-        RequestUtil.delete(`/tower-system/department?ids=${ selectedRoles.map<number>((item: IDept): number => item.id) }`).then(res => {
-            setSelectedRoleKeys([]);
-            setSelectedRoles([]);
-            setRefresh(!refresh);
-        });   
-    }
 
     return <Page
         path="/tower-system/department"
         columns={ columns }
         headTabs={ [] }
         refresh={ refresh }
-        extraOperation={ <Popconfirm
-            title="确认删除?"
-            onConfirm={ onBatchDelete }
-            okText="确认"
-            cancelText="取消"
-            disabled={ !selectedRoles?.length } 
-        >
-            <Button type="primary" disabled={ !selectedRoles?.length } >删除</Button>
-        </Popconfirm> }
-        searchFormItems={ [
-            {
-                name: 'name',
-                label: '机构名称',
-                children: <Input placeholder="请输入" />
-            }
-        ] }
-        filterValue={ filterValue }
-        onFilterSubmit = { (values: Record<string, any>) => {
-            setFilterValue(values);
-            return values;
-        } }
-        tableProps={{
-            pagination: false,
-            rowSelection: {
-                selectedRowKeys: selectedRoleKeys,
-                onChange: SelectChange
-            }
-        }}
+        extraOperation={ <Link to={ `/dept/deptMngt/new/0` }><Button type="primary">新增</Button></Link> }
+        searchFormItems={ [] }
     />
 }
