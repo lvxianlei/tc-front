@@ -82,7 +82,7 @@ export default forwardRef(function ({ dataSource = [], columns = [], showHeader 
         <Modal width={1011} visible={visible} onCancel={handleCancel} footer={false}>
             <Image src={picUrl} preview={false} />
         </Modal>
-        {title && <DetailTitle
+        <DetailTitle
             title={title}
             {...edit ? {
                 operation: [
@@ -103,9 +103,9 @@ export default forwardRef(function ({ dataSource = [], columns = [], showHeader 
                         <Button key="enclosure" type="primary" ghost>上传附件</Button>
                     </Upload>
                 ]
-            } : {}} />}
+            } : {}} />
         <CommonTable
-            rowKey={(_: any, records: any) => records.name}
+            rowKey={(_: any, records: any) => records.name || records.id}
             columns={[
                 {
                     title: "附件名称",
