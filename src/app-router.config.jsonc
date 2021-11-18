@@ -1849,8 +1849,8 @@
       "exact": true,
       "authority": "auth_section"
     },
-    { // 基础数据-原材料管理
-      "name": "原材料管理",
+    { // 基础数据-资料库管理
+      "name": "资料库管理",
       "path": "/basicData/databaseMngt",
       "module": "./pages/basicData/database/DatabaseMngt",
       "exact": true,
