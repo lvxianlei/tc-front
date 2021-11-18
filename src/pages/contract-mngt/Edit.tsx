@@ -70,6 +70,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 price,
                 width: formatSpec(item.structureSpec).width,
                 length: formatSpec(item.structureSpec).length,
+                weight: item.weight || "1.00",
                 taxTotalAmount: (num * taxPrice).toFixed(2),
                 totalAmount: (num * price).toFixed(2)
             })
@@ -100,10 +101,10 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     delete item.id
                     return ({
                         ...item,
-                        taxPrice: item.taxPrice || 0,
-                        price: item.price || 0,
-                        taxTotalAmount: item.taxTotalAmount || 0,
-                        totalAmount: item.totalAmount || 0
+                        taxPrice: item.taxPrice,
+                        price: item.price,
+                        taxTotalAmount: item.taxTotalAmount,
+                        totalAmount: item.totalAmount
                     })
                 })
             })
@@ -156,6 +157,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     price,
                     width: formatSpec(item.structureSpec).width,
                     length: formatSpec(item.structureSpec).length,
+                    weight: item.weight || "1.00",
                     taxTotalAmount: (num * taxPrice).toFixed(2),
                     totalAmount: (num * price).toFixed(2)
                 })
