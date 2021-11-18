@@ -101,7 +101,10 @@ export default function Management(): React.ReactNode {
         {
             key: 'bidExplain',
             title: '说明',
-            dataIndex: 'bidExplain'
+            dataIndex: 'bidExplain',
+            render: (_: undefined, record: object): React.ReactNode => (
+                <span title={(record as IClient).bidExplain}>{((record as IClient).bidExplain) ? `${(record as IClient).bidExplain?.slice(0, 8)}...` : ''}</span>
+            )
         },
         {
             key: 'operation',
@@ -167,7 +170,7 @@ export default function Management(): React.ReactNode {
             },
             {
                 name: 'currentProjectStage',
-                label: '项目状态',
+                label: '项目阶段',
                 children: <Select style={{ width: "100px" }}>
                     {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                 </Select>

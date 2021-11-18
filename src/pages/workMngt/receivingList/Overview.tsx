@@ -1,16 +1,54 @@
-import React, { useState } from "react"
-import { Button, message, Modal, Form, DatePicker, Row, Col, Select } from 'antd'
+import React, { useState, useRef, forwardRef, useImperativeHandle } from "react"
+import { Button, message, Modal, Form, DatePicker, Row, Col, Select, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, CommonTable } from '../../common'
+import { DetailContent, CommonTable, Attachment, AttachmentRef } from '../../common'
 import { CargoDetails } from "./receivingListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 
+interface ReceiveStrokAttachProps {
+    type: 1 | 2
+    id: string
+}
+const ReceiveStrokAttach = forwardRef(({ type, id }: ReceiveStrokAttachProps, ref): JSX.Element => {
+    const attachRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
+    const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/attach?attachType=${type}&id=${id}`)
+            resole(result?.attachInfoDtos || [])
+        } catch (error) {
+            reject(error)
+        }
+    }), { refreshDeps: [id] })
+
+    const { run: saveRun } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/receiveStock/attach`, {
+                attachTyp: type,
+                id,
+                receiveDetailAttachInfoDTOS: attachRef.current.getDataSource()
+            })
+            resole(result?.attachInfoDtos || [])
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    useImperativeHandle(ref, () => ({ onSubmit: saveRun }), [saveRun, attachRef.current.getDataSource])
+
+    return <Spin spinning={loading}>
+        <Attachment title={false} dataSource={data} edit ref={attachRef} />
+    </Spin>
+})
 export default function Edit() {
+    const receiveRef = useRef<{ onSubmit: () => void }>({ onSubmit: () => { } })
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const [visible, setVisible] = useState<boolean>(false)
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({})
+    const [attchType, setAttachType] = useState<1 | 2>(1)
+    const [detailId, setDetailId] = useState<string>("")
+    const [saveLoding, setSaveLoading] = useState<boolean>(false)
     const [form] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -23,10 +61,27 @@ export default function Edit() {
             reject(error)
         }
     }), { refreshDeps: [JSON.stringify(filterValue)] })
-
+    const handleAttachOk = async () => {
+        setSaveLoading(true)
+        await receiveRef.current.onSubmit()
+        setSaveLoading(false)
+        message.success("保存成功...")
+        setVisible(false)
+    }
     return <DetailContent>
-        <Modal visible={visible} title="质保单" onCancel={() => setVisible(false)}>
-
+        <Modal
+            destroyOnClose
+            visible={visible}
+            title="质保单"
+            confirmLoading={saveLoding}
+            onOk={handleAttachOk}
+            okText="保存"
+            onCancel={() => {
+                setAttachType(1)
+                setDetailId("")
+                setVisible(false)
+            }}>
+            <ReceiveStrokAttach type={attchType} id={detailId} ref={receiveRef} />
         </Modal>
         <Form form={form} onFinish={(values) => setFilterValue(values)}>
             <Row>
@@ -50,14 +105,19 @@ export default function Edit() {
             <Button type="primary" ghost onClick={() => message.warning("功能开发中...")} style={{ marginRight: 16, marginLeft: 16 }}>申请质检</Button>
             <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
         </Row>
-        <Row
-            style={{ lineHeight: "32px", fontWeight: 600 }}
-        >已收货：重量(支)合计：{data?.receiveStockMessage.receiveWeight === -1 ? 0 : data?.receiveStockMessage.receiveWeight}     价税合计(元)合计：{data?.receiveStockMessage.receivePrice === -1 ? 0 : data?.receiveStockMessage.receivePrice}   待收货：重量(支)合计：{data?.receiveStockMessage.waitWeight === -1 ? 0 : data?.receiveStockMessage.waitWeight}     价税合计(元)合计：{data?.receiveStockMessage.waitPrice === -1 ? 0 : data?.receiveStockMessage.waitPrice}</Row>
+        <Row style={{ lineHeight: "32px", fontWeight: 600 }} gutter={10}>
+            <Col>已收货：重量(支)合计：{data?.receiveStockMessage.receiveWeight === -1 ? 0 : data?.receiveStockMessage.receiveWeight}</Col>
+            <Col>价税合计(元)合计：{data?.receiveStockMessage.receivePrice === -1 ? 0 : data?.receiveStockMessage.receivePrice}</Col>
+            <Col>待收货：重量(支)合计：{data?.receiveStockMessage.waitWeight === -1 ? 0 : data?.receiveStockMessage.waitWeight}</Col>
+            <Col>价税合计(元)合计：{data?.receiveStockMessage.waitPrice === -1 ? 0 : data?.receiveStockMessage.waitPrice}</Col>
+        </Row>
         <CommonTable loading={loading} haveIndex columns={[...CargoDetails, {
             title: "操作",
             dataIndex: "opration",
-            render: () => <>
+            render: (_: any, records: any) => <>
                 <a onClick={() => {
+                    setAttachType(1)
+                    setDetailId(records.id)
                     setVisible(true)
                 }}>质保单</a>
                 <Button type="link" onClick={() => message.warning("功能开发中...")}>质检单</Button>

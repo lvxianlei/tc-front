@@ -4,7 +4,7 @@ import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../../utils/RequestUtil';
 
-interface IJobs {
+export interface IJobs {
     readonly id?: string;
     readonly stationName?: string;
 }
@@ -63,6 +63,9 @@ export default function JobsMngt(): React.ReactNode {
                     RequestUtil.post(`/tower-system/station`, value).then(res => {
                         setDetail({});
                         message.success('新增成功');
+                        setRefresh(!refresh);
+                        form.resetFields();
+                        form.setFieldsValue({ stationName: '' });
                         setVisible(false);
                     })
                 } else {
@@ -72,6 +75,9 @@ export default function JobsMngt(): React.ReactNode {
                     }).then(res => {
                         setDetail({});
                         message.success('编辑成功');
+                        setRefresh(!refresh);
+                        form.resetFields();
+                        form.setFieldsValue({ stationName: '' });
                         setVisible(false);
                     })
                 }
@@ -88,7 +94,7 @@ export default function JobsMngt(): React.ReactNode {
             extraOperation={ <Button type="primary" onClick={ () => { setVisible(true); setTitle("新增"); } }>新增</Button> }
             searchFormItems={ [] }
         />
-        <Modal visible={ visible } title={ title + "岗位" } onOk={ () => save } onCancel={ () => { setVisible(false); setDetail({}); } }>
+        <Modal visible={ visible } title={ title + "岗位" } onOk={ save } onCancel={ () => { setVisible(false); setDetail({}); form.resetFields(); form.setFieldsValue({ stationName: '' }); } }>
             <Form form={ form }>
                 <Form.Item label="名称" name="stationName" initialValue={ detail.stationName } rules={[{
                     "required": true,
