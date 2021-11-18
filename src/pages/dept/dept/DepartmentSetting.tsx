@@ -26,6 +26,7 @@ class DepartmentSetting extends AbstractDepartmentSetting<IDepartmentSettingRout
         const deptDeatil: IDeptDetail = await RequestUtil.get<IDeptDetail>(`/tower-system/department/${ this.props.match.params.id }`);
         this.setState({
             deptDeatil: deptDeatil,
+            tip: this.props.match.params.id === '0' ? false : true
         });
     }
 

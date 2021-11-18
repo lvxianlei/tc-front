@@ -12,23 +12,21 @@ export default function SWWorkBench(): React.ReactNode {
         const data: { [key: string]: any } = await RequestUtil.get(`/tower-supply/workbench/getWorkbenchData`);
         resole(data)
     }))
-
+    {/* <div className={item.col !== 2 ? styles.content : styles.content2} > */ }
+    // <p ><CheckCircleOutlined />{item.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
+    {/* <p className={styles.total}>2</p> */ }
+    {/* <div className={styles.draw}><Line keyIndex={dataIndex + '_' + index} valueList={[Math.ceil(Math.random() * 80), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 150), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 90), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100)]} /></div> */ }
+    {/* </div> */ }
+    console.log(data)
     return <Spin spinning={loading}>
         <div className={styles.all}>
             <div className={styles.left}>
                 {swWork.map((item: any, ind: number) => <div key={ind} className={item.col !== 2 ? styles.border : styles.border2}>
                     <DetailTitle title={item.title}></DetailTitle>
-                    <div>
-                        <div className={item.col !== 2 ? styles.content : styles.content2} >
-                            <p ><CheckCircleOutlined />{item.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
-                            <p className={styles.total}>2</p>
-                            {/* <div className={styles.draw}><Line keyIndex={dataIndex + '_' + index} valueList={[Math.ceil(Math.random() * 80), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 150), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 90), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100)]} /></div> */}
-                        </div>
-                        <div className={item.col !== 2 ? styles.content : styles.content2} >
-                            <p ><CheckCircleOutlined />{item.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
-                            <p className={styles.total}>2</p>
-                            {/* <div className={styles.draw}><Line keyIndex={dataIndex + '_' + index} valueList={[Math.ceil(Math.random() * 80), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 150), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 90), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100)]} /></div> */}
-                        </div>
+                    {item.dataIndex}
+                    <div>{data?.[item.dataIndex].workbenchItemVos.map((workbenchItem: any) => {
+
+                    })}
                     </div>
                 </div>)}
             </div>

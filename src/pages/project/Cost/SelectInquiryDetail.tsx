@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Modal, Spin, Button, Radio, Row } from "antd"
-import { DetailTitle, CommonTable, BaseInfo } from "../../common"
+import { DetailTitle, CommonTable, BaseInfo,Attachment } from "../../common"
 import { enclosure } from "../managementDetailData.json"
 import {
     supplyBaseInfo,
@@ -36,6 +36,15 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
     const { loading, data, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const askPrice: any = await RequestUtil.get(`/tower-market/askPrice/${props.id}`)
+            /**
+             * 对于地面交货价格以及物流价格为-1情况处理
+             */
+            if (askPrice?.askLogisticsVOS) {
+                askPrice?.askLogisticsVOS.forEach((item: any) => {
+                    item.logisticsPrice = item.logisticsPrice < 0 ? "" : item.logisticsPrice;
+                    item.groundReceivingPrice = item.groundReceivingPrice < 0 ? "" : item.groundReceivingPrice;
+                })
+            }
             resole(askPrice)
         } catch (error) {
             reject(error)
@@ -71,19 +80,20 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                     <BaseInfo columns={supplyAskInfo} dataSource={data || {}} />
                     <Row style={{ fontSize: 16, textAlign: "center", width: "100%" }}>国网批次招标投标原材料报价</Row>
                     <CommonTable columns={materialPriceHead} dataSource={data?.materialPriceVOS || []} />
-                    <DetailTitle title="相关附件" />
-                    <CommonTable columns={[{
+                    {/* <DetailTitle title="相关附件" /> */}
+                    {/* <CommonTable columns={[{
                         title: "操作",
                         dataIndex: "opration",
                         render: (_: any, records: any) => <>
                             <Button type="link" onClick={ () => window.open(records.link || records.filePath) }>预览</Button>
                             <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
                         </>
-                    }, ...enclosure]} dataSource={data?.replyAttachVos || []} />
+                    }, ...enclosure]} dataSource={data?.replyAttachVos || []} /> */}
+                    <Attachment showHeader columns={[...enclosure]} dataSource={data?.replyAttachVos || []} />
                 </>}
                 {radioValue === "records" && <>
                     <BaseInfo columns={supplyBaseInfo} dataSource={data || {}} />
-                    <DetailTitle title="相关附件" />
+                    {/* <DetailTitle title="相关附件" />
                     <CommonTable columns={[{
                         title: "操作",
                         dataIndex: "opration",
@@ -91,7 +101,8 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                             <Button type="link"  onClick={ () => window.open(records.link || records.filePath) }>预览</Button>
                             <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
                         </>
-                    }, ...enclosure]} dataSource={data?.startAttachVos || []} />
+                    }, ...enclosure]} dataSource={data?.startAttachVos || []} /> */}
+                    <Attachment showHeader columns={[...enclosure]} dataSource={data?.replyAttachVos || []} />
                 </>}
             </>}
 
@@ -108,7 +119,7 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                         ...item,
                         render: (_a: any, record: any) => `${record.voltage}${record.productName}`
                     }) : item)} dataSource={data?.askLogisticsVOS || []} />
-                    <DetailTitle title="咨询附件" />
+                    {/* <DetailTitle title="咨询附件" />
                     <CommonTable columns={[{
                         title: "操作",
                         dataIndex: "opration",
@@ -116,7 +127,8 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                             <Button type="link" onClick={ () => window.open(records.link || records.filePath) }>预览</Button>
                             <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
                         </>
-                    }, ...enclosure]} dataSource={data?.replyAttachVos || []} />
+                    }, ...enclosure]} dataSource={data?.replyAttachVos || []} /> */}
+                    <Attachment showHeader columns={[...enclosure]} dataSource={data?.replyAttachVos || []} />
                 </>}
                 {radioValue === "records" && <>
                     <BaseInfo columns={logisticBaseInfo} dataSource={data || {}} />
@@ -125,7 +137,7 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                         ...item,
                         render: (_a: any, record: any) => `${record.voltage}${record.productName}`
                     }) : item)} dataSource={data?.askLogisticsVOS || {}} />
-                    <DetailTitle title="附件" />
+                    {/* <DetailTitle title="附件" />
                     <CommonTable columns={[{
                         title: "操作",
                         dataIndex: "opration",
@@ -133,7 +145,8 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                             <Button type="link" onClick={ () => window.open(records.link || records.filePath) }>预览</Button>
                             <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
                         </>
-                    }, ...enclosure]} dataSource={data?.startAttachVos || []} />
+                    }, ...enclosure]} dataSource={data?.startAttachVos || []} /> */}
+                    <Attachment showHeader columns={[...enclosure]} dataSource={data?.replyAttachVos || []} />
                 </>}
             </>}
 
@@ -144,7 +157,7 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                 </Radio.Group>
                 {radioValue === "base" && <>
                     <BaseInfo columns={workmanshipReverd} dataSource={data || {}} />
-                    <DetailTitle title="附件" />
+                    {/* <DetailTitle title="附件" />
                     <CommonTable columns={[{
                         title: "操作",
                         dataIndex: "opration",
@@ -152,19 +165,21 @@ export default function SelectInquiryDetail(props: any): JSX.Element {
                             <Button type="link" onClick={ () => window.open(records.link || records.filePath) }>预览</Button>
                             <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
                         </>
-                    }, ...enclosure]} dataSource={data?.replyAttachVos || []} />
+                    }, ...enclosure]} dataSource={data?.replyAttachVos || []} /> */}
+                    <Attachment showHeader columns={[...enclosure]} dataSource={data?.replyAttachVos || []} />
                 </>}
                 {radioValue === "records" && <>
                     <BaseInfo columns={workmanshipBaseInfo} dataSource={data || {}} />
-                    <DetailTitle title="附件" />
-                    <CommonTable columns={[{
+                    {/* <DetailTitle title="附件" /> */}
+                    {/* <CommonTable columns={[{
                         title: "操作",
                         dataIndex: "opration",
                         render: (_: any, records: any) => <>
                             <Button type="link"  onClick={ () => window.open(records.link || records.filePath) }>预览</Button>
                             <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
                         </>
-                    }, ...enclosure]} dataSource={data?.startAttachVos || []} />
+                    }, ...enclosure]} dataSource={data?.startAttachVos || []} /> */}
+                    <Attachment showHeader columns={[...enclosure]} dataSource={data?.replyAttachVos || []} />
                 </>}
             </>}
             { radioValue === "records" && data?.askStatus === 1 && <Button type="primary" style={{marginTop: 10}} onClick={() => handleSelectInquiryTypeOk()}>重新申请</Button> }

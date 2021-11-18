@@ -1849,6 +1849,13 @@
       "exact": true,
       "authority": "auth_section"
     },
+    { // 基础数据-资料库管理
+      "name": "资料库管理",
+      "path": "/basicData/databaseMngt",
+      "module": "./pages/basicData/database/DatabaseMngt",
+      "exact": true,
+      "authority": "auth_section"
+    },
     { // 系统日志
       "name": "登录日志",
       "path": "/systemLog/login",

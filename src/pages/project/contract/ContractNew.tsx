@@ -240,7 +240,7 @@ class ManagementContractNew extends ContractNew {
                     value={contract?.signCustomerName}
                     suffix={
                       <ClientSelectionComponent
-                        onSelect={this.onSelect}
+                        onSelect={this.onCustomerNameSelect}
                         selectKey={[contract?.signCustomerId]}
                         id="2"
                       />

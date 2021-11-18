@@ -101,7 +101,10 @@ export default function Management(): React.ReactNode {
         {
             key: 'bidExplain',
             title: '说明',
-            dataIndex: 'bidExplain'
+            dataIndex: 'bidExplain',
+            render: (_: undefined, record: object): React.ReactNode => (
+                <span title={(record as IClient).bidExplain}>{((record as IClient).bidExplain) ? `${(record as IClient).bidExplain?.slice(0, 8)}...` : ''}</span>
+            )
         },
         {
             key: 'operation',
@@ -153,7 +156,7 @@ export default function Management(): React.ReactNode {
         searchFormItems={[
             {
                 name: 'fuzzyQuery',
-                children: <Input placeholder="项目名称/项目编码/分标编码/项目负责人" style={{ width: 260 }} />
+                children: <Input placeholder="项目名称/项目编码/项目负责人" style={{ width: 260 }} />
             },
             {
                 name: 'startBidBuyEndTime',
@@ -167,7 +170,7 @@ export default function Management(): React.ReactNode {
             },
             {
                 name: 'currentProjectStage',
-                label: '项目状态',
+                label: '项目阶段',
                 children: <Select style={{ width: "100px" }}>
                     {currentProjectStage.map((item: any, index: number) => <Select.Option value={item.value} key={index}>{item.label}</Select.Option>)}
                 </Select>

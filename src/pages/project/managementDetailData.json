@@ -287,13 +287,15 @@
         },
         {
             "title": "单价（元）",
-            "dataIndex": "unitPrice"
+            "dataIndex": "unitPrice",
+            "type": "number"
         },
         {
             "title": "总价（万元）",
             "dataIndex": "money",
             "type": "number",
             "required": true,
+            "decimal":"4",
             "rules": [
                 {
                     "required": true,
@@ -305,6 +307,7 @@
             "title": "重量（吨）",
             "dataIndex": "weight",
             "type": "number",
+            "decimal":"3",
             "required": true,
             "rules": [
                 {
@@ -396,7 +399,11 @@
             "dataIndex": "mackUser"
         },
         {
-            "title": "接收人接收及日期",
+            "title": "接收人",
+            "dataIndex": "receiveUser"
+        },
+        {
+            "title": "接收日期",
             "dataIndex": "receiveUserDate",
             "type": "date"
         },
@@ -846,7 +853,14 @@
             "title": "物资类别",
             "dataIndex": "goodsType",
             "type": "text",
-            "maxLength": 50
+            "maxLength": 50,
+            "dependencies": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入物资类别"
+                }
+            ]
         },
         {
             "title": "包名称",
@@ -868,7 +882,13 @@
             "type": "number",
             "step": 1,
             "min": 0,
-            "max": 9999999999
+            "max": 9999999999,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入数量"
+                }
+            ]
         },
         {
             "title": "单位",

@@ -300,7 +300,7 @@
         },
         {
             "title": "合同/工程名称",
-            "dataIndex": "contractCompany",
+            "dataIndex": "contractName",
             "rules": [
                 {
                     "required": true,
@@ -340,13 +340,13 @@
             "title": "开票合计重量(吨)",
             "dataIndex": "ticketWeight",
             "disabled": true,
-            "type": "number"
+            "type": "text"
         },
         {
             "title": "开票合计金额(元)",
             "dataIndex": "ticketMoney",
             "disabled": true,
-            "type": "number"
+            "type": "text"
         },
         {
             "title": "合同交货日期",

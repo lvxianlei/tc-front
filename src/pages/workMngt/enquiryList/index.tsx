@@ -4,7 +4,9 @@ import { Input, DatePicker, Select, Button, Modal, message } from 'antd'
 import { Page, IntgSelect } from '../../common';
 import { baseInfo } from "./enquiryList.json"
 import Edit from "./Edit"
+import AuthUtil from "../../../utils/AuthUtil"
 export default function EnquiryList(): React.ReactNode {
+    const userId = AuthUtil.getUserId()
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
     const [detailId, setDetailId] = useState<string>("")
@@ -77,7 +79,9 @@ export default function EnquiryList(): React.ReactNode {
                     title: "操作",
                     width: 100,
                     dataIndex: "operation",
-                    render: (_: any, records: any) => <Button type="link"
+                    render: (_: any, records: any) => <Button
+                        type="link"
+                        disabled={records.inquirerId !== userId}
                         onClick={() => {
                             setDetailId(records.id)
                             setInquiryStatus(records.inquiryStatus)

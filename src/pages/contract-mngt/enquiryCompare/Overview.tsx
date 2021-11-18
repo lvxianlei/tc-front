@@ -214,7 +214,6 @@ export default function Overview(): JSX.Element {
                         </>
                     }]}
                 dataSource={data?.inquiryQuotationOfferActionVo?.inquiryQuotationOfferData || []}
-
             />
         </DetailContent>
     </Spin>

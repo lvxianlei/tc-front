@@ -45,7 +45,6 @@ export default forwardRef(function ({ dataSource = [], columns = [], showHeader 
                 const dataInfo = event.file.response.data
                 const fileInfo = dataInfo.name.split(".")
                 setAttachs([...attchs, {
-                    id: "",
                     uid: attchs.length,
                     link: dataInfo.link,
                     name: dataInfo.originalName.split(".")[0],
@@ -83,7 +82,7 @@ export default forwardRef(function ({ dataSource = [], columns = [], showHeader 
         <Modal width={1011} visible={visible} onCancel={handleCancel} footer={false}>
             <Image src={picUrl} preview={false} />
         </Modal>
-        {title && <DetailTitle
+        <DetailTitle
             title={title}
             {...edit ? {
                 operation: [
@@ -104,21 +103,23 @@ export default forwardRef(function ({ dataSource = [], columns = [], showHeader 
                         <Button key="enclosure" type="primary" ghost>上传附件</Button>
                     </Upload>
                 ]
-            } : {}} />}
-        <CommonTable columns={[
-            {
-                title: "附件名称",
-                dataIndex: "name"
-            },
-            ...columns,
-            {
-                title: "操作",
-                dataIndex: "opration",
-                render: (_: any, record: any) => (<>
-                    {!edit && <a onClick={() => handleCat(record)}>查看</a>}
-                    <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
-                    {edit && <a onClick={() => deleteAttachData(record.uid || record.id)}>删除</a>}
-                </>)
-            }]} showHeader={showHeader} dataSource={attchs} />
+            } : {}} />
+        <CommonTable
+            rowKey={(_: any, records: any) => records.name || records.id}
+            columns={[
+                {
+                    title: "附件名称",
+                    dataIndex: "name"
+                },
+                ...columns,
+                {
+                    title: "操作",
+                    dataIndex: "opration",
+                    render: (_: any, record: any) => (<>
+                        {!edit && <a onClick={() => handleCat(record)}>查看</a>}
+                        <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
+                        {edit && <a onClick={() => deleteAttachData(record.uid || record.id)}>删除</a>}
+                    </>)
+                }]} showHeader={showHeader} dataSource={attchs} />
     </>
 })

@@ -8,9 +8,9 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
 import AuthUtil from "../../utils/AuthUtil"
 import { downLoadFile } from "../../utils"
+import { Console } from "console";
 const columns = [
-    { title: '分标编号11', dataIndex: 'partBidNumber', "type": "text", "maxLength": 50 },
-    { title: '货物类别', dataIndex: 'goodsType', "type": "text", "maxLength": 50 },
+    { title: '分标编号', dataIndex: 'partBidNumber', "type": "text", "maxLength": 50 },
     {
         "title": "包名称",
         "dataIndex": "packageName"
@@ -21,6 +21,7 @@ const columns = [
         "type": "text",
         "maxLength": 50
     },
+    { title: '货物类别', dataIndex: 'goodsType', "type": "text", "maxLength": 50 },
     {
         "title": "工程电压等级",
         "dataIndex": "projectVoltageLevel"
@@ -41,6 +42,7 @@ export default function InfomationNew(): JSX.Element {
     const [attachVosData, setAttachVosData] = useState<any[]>([])
     const [binddingStatus, setBinddingStatus] = useState<number>(0)
     const [visible, setVisible] = useState<boolean>(false)
+    const [isEdit, setIsEdit] = useState<boolean>(false)
     const [baseInfoForm] = Form.useForm()
     const [bidForm] = Form.useForm()
     const [form] = Form.useForm()
@@ -126,6 +128,7 @@ export default function InfomationNew(): JSX.Element {
     const deleteAttachData = (id: number) => setAttachVosData(attachVosData.filter((item: any) => (item.id || item.uid) !== id))
 
     const handleBaseInfoChange = (changeFiled: any) => {
+        setIsEdit(true)
         if (Object.keys(changeFiled)[0] === "biddingStatus") {
             const { biddingStatus } = changeFiled
             if (biddingStatus === 2) {
@@ -184,9 +187,10 @@ export default function InfomationNew(): JSX.Element {
         baseInfoForm.setFieldsValue({ biddingStatus: 2 })
     }
     const handleChange = (fields: any, allFields: any) => {
-
+        setIsEdit(true)
     }
     const handleBindChange = (fields: any, allFields: any) => {
+        setIsEdit(true)
         if (fields.submit.length - 1 >= 0) {
             const result = allFields.submit[fields.submit.length - 1];
             const flag = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？ ]")
@@ -195,7 +199,17 @@ export default function InfomationNew(): JSX.Element {
             }
         }
     }
-
+    const handelCancel = () => {
+        if (!isEdit) {
+            history.goBack();
+            return;
+        }
+        Modal.confirm({
+            title: "离开提醒",
+            content: "确定要离开吗？",
+            onOk: () => history.goBack()
+        })
+    }
     return <DetailContent
         operation={[
             <Button
@@ -205,7 +219,7 @@ export default function InfomationNew(): JSX.Element {
                 loading={saveStatus}
                 style={{ marginRight: 16 }}
             >保存</Button>,
-            <Button key="cancel" onClick={() => history.goBack()}>取消</Button>
+            <Button key="cancel" onClick={handelCancel}>取消</Button>
         ]}
     >
         <Modal zIndex={15} visible={visible} title="应标" okText="确定并自动生成项目" onOk={handleModalOk} onCancel={handleModalCancel} >

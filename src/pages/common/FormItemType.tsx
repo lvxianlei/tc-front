@@ -54,8 +54,8 @@ interface PagenationProps {
     pageSize: number
 }
 
-export const PopTableContent: React.FC<{ data: PopTableData, value?: string, onChange?: (event: any) => void }> = ({ data, value = "", onChange }) => {
-    const initValue = data.selectType === "checkbox" && value ? value.split(",") : []
+export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: string, records: any[], value: string }, onChange?: (event: any) => void }> = ({ data, value = { id: "", records: [], value: "" }, onChange }) => {
+    const initValue = value.records.map((item: any) => item.id)
     const [select, setSelect] = useState<any[]>(initValue)
     const [pagenation, setPagenation] = useState<PagenationProps>({
         current: 1,
@@ -68,6 +68,19 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: string, onC
             const params = await form.getFieldsValue()
             params.current = pagenation.current
             params.pageSize = pagenation.pageSize
+            Object.keys(params).forEach((item: any) => {
+                const columnItem = searchs.find((sItem: any) => sItem.dataIndex === item)
+                if (columnItem?.type === "date" && params[item]) {
+                    const startTimeName = columnItem.dataIndex.split("")
+                    const endTimeName = columnItem.dataIndex.split("")
+                    startTimeName[0] = startTimeName[0].toLocaleUpperCase()
+                    endTimeName[0] = endTimeName[0].toLocaleUpperCase()
+                    const formatDate = params[columnItem?.dataIndex].map((item: any) => item.format("YYYY-MM-DD"))
+                    params[`start${startTimeName.join("")}`] = formatDate[0]
+                    params[`end${startTimeName.join("")}`] = formatDate[1]
+                    delete params[columnItem?.dataIndex]
+                }
+            })
             const paramsOptions = Object.keys(params).map((item: string) => `${item}=${params[item] || ""}`).join("&")
             const path = data.path.includes("?") ? `${data.path}&${paramsOptions || ''}` : `${data.path}?${paramsOptions || ''}`
             resolve(await RequestUtil.get<{ data: any }>(path))
@@ -82,25 +95,21 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: string, onC
     }
 
     const paginationChange = (page: number, pageSize: number) => setPagenation({ ...pagenation, current: page, pageSize })
+
     return <>
         {searchs.length > 0 && <Form form={form} onFinish={async () => {
             setPagenation({ ...pagenation, current: 1, pageSize: 10 })
             await run()
         }}>
-            <Row gutter={4}>
-                {
-                    searchs.map((fItem: any) => 
-                        <Col style={{ height: 32 }} span={(searchs.length + 1) / 24} key={fItem.dataIndex}>
-                            <Form.Item
-                            name={fItem.dataIndex}
-                            label={fItem.title}
-                            style={{ height: 32, fontSize: 12 }}
-                        >
-                            <FormItemType type={fItem.type} data={fItem} />
-                        </Form.Item>
-                        </Col>
-                    )
-                }
+            <Row gutter={[8, 8]}>
+                {searchs.map((fItem: any) => <Col style={{ height: 32 }} span={(searchs.length + 1) / 24} key={fItem.dataIndex}><Form.Item
+                    name={fItem.dataIndex}
+                    label={fItem.title}
+                    style={{ height: 32, fontSize: 12 }}
+                >
+                    {fItem.type === "date" ? <DatePicker.RangePicker style={{ height: 32, fontSize: 12 }} format={fItem.format || "YYYY-MM-DD"} /> : <FormItemType type={fItem.type} data={fItem} />}
+                </Form.Item>
+                </Col>)}
                 <Col style={{ height: 32 }} span={(searchs.length + 1) / 24}>
                     <Form.Item>
                         <Button type="primary" htmlType="submit" size="small" style={{ marginLeft: 12 }}>搜索</Button>
@@ -169,7 +178,7 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
 
     return <>
         <Modal width={data.width || 520} title={`选择${data.title}`} destroyOnClose visible={visible} onOk={handleOk} onCancel={handleCancel}>
-            <PopTableContent value={formatValue()} data={data} onChange={handleChange} />
+            <PopTableContent value={props.value} data={data} onChange={handleChange} />
         </Modal>
         <Input
             {...props}
@@ -190,11 +199,20 @@ const SelfSelect: React.FC<SelfSelectProps> = ({ data, ...props }) => {
     </Select>
 }
 
+const limitDecimalsF = (value: string, decimal: number): any => {
+    value.replace(/[^\d.]/g, "");
+    if (value.includes(".") && decimal) {
+        const result = Number(value).toFixed(decimal)
+        return result;
+    }
+  }
 const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, ...props }) => {
     const ItemTypes = {
         string: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} />,
         text: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} maxLength={data.maxLength} />,
-        number: <InputNumber {...props} disabled={data.disabled} max={data?.max || 999999999999} min={data?.min || 0} step={data?.step || 1} style={{ width: "100%", height: "100%", ...props.style }} />,
+        number: <InputNumber {...props} disabled={data.disabled} max={data?.max || 999999999999} min={data?.min || 0} step={data?.step || 1}
+            style={{ width: "100%", height: "100%", ...props.style }}
+            formatter={value => limitDecimalsF(value,data.decimal)} />,
         select: <SelfSelect {...props} data={data as SelectData} />,
         date: <DatePicker
             {...data.picker ? { ...props, picker: data.picker } : { ...props }}

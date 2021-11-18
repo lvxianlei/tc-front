@@ -6,10 +6,11 @@ import { baseInfo } from "./productionData.json"
 import Overview from "./Edit"
 import useRequest from "@ahooksjs/use-request";
 import RequestUtil from "../../../utils/RequestUtil";
-
+import AuthUtil from "../../../utils/AuthUtil"
 export default function Invoicing() {
     const [form] = Form.useForm()
     const history = useHistory()
+    const userId = AuthUtil.getUserId()
     const [visible, setVisible] = useState<boolean>(false)
     const [generaterVisible, setGenerteVisible] = useState<boolean>(false)
     const [detailId, setDetailId] = useState<string>("")
@@ -103,18 +104,18 @@ export default function Invoicing() {
                     width: 100,
                     render: (_: any, record: any) => {
                         return <>
-                            <Link to={`/workMngt/production/detailed/${record.id}`}>明细</Link>
-                            <Button type="link"
+                            <Button type="link" disabled={userId !== record.batcherId}><Link to={`/workMngt/production/detailed/${record.id}`}>明细</Link></Button>
+                            <Button type="link" disabled={userId !== record.batcherId}
                                 onClick={() => {
                                     setDetailId(record.id)
                                     setVisible(true)
                                 }}>配料单</Button>
-                            <Button type="link"
+                            <Button type="link" disabled={userId !== record.batcherId}
                                 onClick={async () => {
                                     await getLoftingRun(record.productionBatch)
                                     message.success("成功生成放样构件...")
                                 }}>生成放样构件</Button>
-                            <Button type="link"
+                            <Button type="link" disabled={userId !== record.batcherId}
                                 onClick={async () => {
                                     await loftingRun(record.productCategoryName, record.materialTaskId, record.productionBatch)
                                     message.warning("成功生成差异列表...")

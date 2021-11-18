@@ -50,11 +50,11 @@
     "particulars": [
         {
             "title": "材质名称",
-            "dataIndex": "materialName"
+            "dataIndex": "productName"
         },
         {
             "title": "标准",
-            "dataIndex": "materialStandard"
+            "dataIndex": "standardName"
         },
         {
             "title": "规格",
@@ -74,11 +74,12 @@
         },
         {
             "title": "数量",
-            "dataIndex": "number"
+            "dataIndex": "quantity"
         },
         {
             "title": "合同单价（元/吨）",
-            "dataIndex": "contractPrice"
+            "dataIndex": "contractUnitPrice",
+            "type": "number"
         },
         {
             "title": "价税合计（元）",
@@ -90,15 +91,15 @@
         },
         {
             "title": "采购状态",
-            "dataIndex": "purchaseStatus"
+            "dataIndex": "receiveStatusName"
         },
         {
             "title": "状态时间",
-            "dataIndex": "statusTime"
+            "dataIndex": "updateTime"
         },
         {
             "title": "操作人",
-            "dataIndex": "optUserName"
+            "dataIndex": "operatorMan"
         }
     ]
 }

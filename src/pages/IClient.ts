@@ -12,4 +12,5 @@ export interface IClient {
     readonly status?: number;
     readonly updateTime?: string;
     readonly updateUser?: string | number;
+    readonly bidExplain?: string;
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Button, Upload, Form, message, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable, EditTable, formatData } from '../common'
@@ -60,7 +60,16 @@ export default function Edit() {
         }
     }), { manual: true })
 
-
+    // 设置默认值
+    useEffect(() => {
+        baseInfo.setFieldsValue({
+            ticketWeight: '0.0000',
+            ticketMoney: '0.00',
+            ticketType: 1,
+            openTicketType: 1,
+            ticketBasis: 1
+        })
+    }, [params.id === 'new'])
 
     const uploadChange = (event: any) => {
         if (event.file.status === "done") {
@@ -91,7 +100,6 @@ export default function Edit() {
             } else if (columnItem.type === "select") {
                 values[columnItem.dataIndex] = null
             }
-
         })
         return values
     }
@@ -129,13 +137,16 @@ export default function Edit() {
             const logicWeight = await logicWeightRun(contractValue.id)
             baseInfo.setFieldsValue({
                 contractCompany: contractValue.signCustomerName,
-                projectCode: contractValue.contractNumber,
+                // projectCode: contractValue.contractNumber,
                 contractSignTime: contractValue.signContractTime,
                 ticketWeight: logicWeight.logicWeight,
                 reasonWeight: logicWeight.logicWeight,
                 planCode: logicWeight.taskNoticeNumbers,
                 contractDevTime: contractValue.deliveryTime,
-                business: contractValue.salesman
+                business: contractValue.salesman,
+                contractName: contractValue.contractName, // 合同/工程名称
+                contractCode: contractValue.internalNumber, // 内部合同编号
+                projectCode: contractValue.projectName, // 项目编码
             })
         }
         if (fields.backProportion) {
@@ -210,7 +221,7 @@ export default function Edit() {
                     }
                     return item
                 })}
-                dataSource={generateInitValues(baseInfoHead)} edit />
+                dataSource={baseInfoHead} edit />
 
             <DetailTitle title="发票信息" />
             <BaseInfo form={invoicForm} columns={invoiceHead} dataSource={data?.invoicingInfoVo || {}} edit/>

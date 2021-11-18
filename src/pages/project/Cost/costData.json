@@ -413,7 +413,9 @@
                     "required": true,
                     "message": "请输入收货地址..."
                 }
-            ]
+            ],
+            "type": "text",
+            "maxLength": 10
         },
         {
             "title": "是否地面交货",

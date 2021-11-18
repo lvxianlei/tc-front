@@ -52,18 +52,18 @@ export default function ViewContract(): React.ReactNode {
                 children: <DatePicker />
             },
             {
-                name: 'rawMaterialType',
+                name: 'contractStatus',
                 label: '状态',
                 children: <Select defaultValue="全部" style={{ width: "150px" }}>
                     <Select.Option value="" >全部</Select.Option>
-                    <Select.Option value={1} >已收票</Select.Option>
-                    <Select.Option value={2} >待付款</Select.Option>
+                    <Select.Option value={1} >执行中</Select.Option>
+                    <Select.Option value={2} >已完成</Select.Option>
                 </Select>
             },
             {
                 name: 'fuzzyQuery',
                 label: '查询',
-                children: <Input style={{ width: "113px" }} placeholder="供应商/收货单编号/关联申请编号/关联票据编号" />
+                children: <Input style={{ width: "113px" }} placeholder="供应商/合同编号" />
             }
         ]}
     />)

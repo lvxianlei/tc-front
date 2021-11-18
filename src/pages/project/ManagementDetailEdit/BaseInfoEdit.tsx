@@ -1,7 +1,7 @@
-import React, { useState } from "react"
+import React, { useState,useRef } from "react"
 import { useHistory, useParams } from "react-router-dom"
 import { Button, Form, message, Spin, Upload } from "antd"
-import { DetailContent, BaseInfo, EditTable, DetailTitle, CommonTable } from '../../common'
+import { DetailContent, BaseInfo, EditTable, DetailTitle, CommonTable, Attachment, AttachmentRef  } from '../../common'
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { baseInfoData, enclosure, cargoVOListColumns } from '../managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
@@ -18,7 +18,7 @@ export default function BaseInfoEdit(): JSX.Element {
     const [baseInfoForm] = Form.useForm()
     const [cargoVOListForm] = Form.useForm()
     const [attachVosForm] = Form.useForm()
-
+    const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/projectInfo/${params.id}`)
@@ -55,7 +55,8 @@ export default function BaseInfoEdit(): JSX.Element {
             const result = await run({
                 ...baseInfoData,
                 id: data?.id,
-                attachInfoDtos: attachVosData,
+                // attachInfoDtos: attachVosData,
+                attachInfoDtos: attchsRef.current?.getDataSource(),
                 cargoDTOList: cargoVOListData.submit,
                 projectLeaderId: projectLeaderType ? (data as any).projectLeaderId : baseInfoData.projectLeader?.records[0].id,
                 projectLeader: baseInfoData.projectLeader?.value || baseInfoData.projectLeader,
@@ -71,37 +72,40 @@ export default function BaseInfoEdit(): JSX.Element {
         }
     }
 
-    const uploadChange = (event: any) => {
-        if (event.file.status === "done") {
-            if (event.file.response.code === 200) {
-                const dataInfo = event.file.response.data
-                const fileInfo = dataInfo.name.split(".")
-                setAttachVosData([...attachVosData, {
-                    id: "",
-                    uid: attachVosData.length,
-                    link: dataInfo.link,
-                    name: dataInfo.originalName.split(".")[0],
-                    description: "",
-                    filePath: dataInfo.name,
-                    fileSize: dataInfo.size,
-                    fileSuffix: fileInfo[fileInfo.length - 1],
-                    userName: dataInfo.userName,
-                    fileUploadTime: dataInfo.fileUploadTime
-                }])
-            }
-        }
-    }
+    // const uploadChange = (event: any) => {
+    //     if (event.file.status === "done") {
+    //         if (event.file.response.code === 200) {
+    //             const dataInfo = event.file.response.data
+    //             const fileInfo = dataInfo.name.split(".")
+    //             setAttachVosData([...attachVosData, {
+    //                 id: "",
+    //                 uid: attachVosData.length,
+    //                 link: dataInfo.link,
+    //                 name: dataInfo.originalName.split(".")[0],
+    //                 description: "",
+    //                 filePath: dataInfo.name,
+    //                 fileSize: dataInfo.size,
+    //                 fileSuffix: fileInfo[fileInfo.length - 1],
+    //                 userName: dataInfo.userName,
+    //                 fileUploadTime: dataInfo.fileUploadTime
+    //             }])
+    //         }
+    //     }
+    // }
 
-    const deleteAttachData = (id: number) => {
-        setAttachVosData(attachVosData.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
-    }
+    // const deleteAttachData = (id: number) => {
+    //     setAttachVosData(attachVosData.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
+    // }
 
     const handleBaseInfoChange = (fields: any) => {
         if (fields.address) {
-            setAddress(fields.address)
+            setAddress(fields.address);
+            //address 不是其他-国外 country 置空
+            if (fields.address != '其他-国外') {
+                baseInfoForm.setFieldsValue({country:""})
+            }
         }
     }
-
     return <>
         <ManagementDetailTabsTitle />
         <DetailContent operation={[
@@ -121,12 +125,13 @@ export default function BaseInfoEdit(): JSX.Element {
                     form={baseInfoForm}
                     columns={
                         address === "其他-国外" ?
-                            baseInfoData.map((item: any) => item.dataIndex === "address" ? ({ ...item, type: "select", enum: data?.addressList }) : item) :
+                            baseInfoData.map((item: any) => item.dataIndex === "address" ?
+                                ({ ...item, type: "select", enum: data?.addressList }) : item) :
                             baseInfoData.map((item: any) => item.dataIndex === "address" ? ({ ...item, type: "select", enum: data?.addressList }) : item).filter((item: any) => item.dataIndex !== "country")
                     } dataSource={data || {}} edit />
                 <DetailTitle title="物资清单" />
                 <EditTable form={cargoVOListForm} columns={cargoVOListColumns} dataSource={data?.cargoVOList} />
-                <DetailTitle title="附件信息11" operation={[<Upload
+                {/* <DetailTitle title="附件信息11" operation={[<Upload
                     key="sub"
                     name="file"
                     multiple={true}
@@ -145,7 +150,8 @@ export default function BaseInfoEdit(): JSX.Element {
                         <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
                         <Button type="link" onClick={() => downLoadFile(record.link || record.filePath, record.name)}>下载</Button>
                     </>)
-                }, ...enclosure]} dataSource={attachVosData} />
+                }, ...enclosure]} dataSource={attachVosData} /> */}
+                <Attachment showHeader maxCount={10} columns={[...enclosure]} ref={attchsRef} edit  dataSource={attachVosData} />
             </Spin>
         </DetailContent>
     </>
