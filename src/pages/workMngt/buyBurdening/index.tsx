@@ -3,9 +3,10 @@ import { Input, DatePicker, Select, Button } from 'antd'
 import { Link } from 'react-router-dom'
 import { baseInfo } from "./buyBurdening.json"
 import { IntgSelect, Page } from '../../common'
-
+import AuthUtil from "../../../utils/AuthUtil"
 export default function EnquiryList(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
+    const userId = AuthUtil.getUserId()
     const onFilterSubmit = (value: any) => {
         if (value.startBatcheStatusUpdateTime) {
             const formatDate = value.startBatcheStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -31,7 +32,7 @@ export default function EnquiryList(): React.ReactNode {
                     width: 100,
                     dataIndex: 'operation',
                     //disabled={![1, 3].includes(records.batcheTaskStatus)}
-                    render: (_: any, records: any) => <Link to={`/workMngt/buyBurdening/detail/${records.id}`}><Button type="link" >查看</Button></Link>
+                    render: (_: any, records: any) => <Button type="link" disabled={userId !== records.batcherId} ><Link to={`/workMngt/buyBurdening/detail/${records.id}`}>查看</Link></Button>
                 }
             ]}
             extraOperation={<Button type="primary" ghost>导出</Button>}
@@ -48,8 +49,8 @@ export default function EnquiryList(): React.ReactNode {
                     label: '配料状态',
                     children: <Select style={{ width: "100px" }} defaultValue="请选择">
                         <Select.Option value="">全部</Select.Option>
-                        <Select.Option value="2">待接收</Select.Option>
                         <Select.Option value="1">待完成</Select.Option>
+                        <Select.Option value="2">待接收</Select.Option>
                         <Select.Option value="3">已完成</Select.Option>
                     </Select>
                 },
