@@ -58,8 +58,13 @@ export default function Edit() {
                 key: 'index',
                 render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
             }, ...enclosure]} dataSource={data?.attachVos || []} />
-            {/* <DetailTitle title="审批记录" />
-            <CommonTable columns={auditIdRecord} dataSource={data?.payInfoVOList || []} /> */}
+            <DetailTitle title="审批记录" />
+            <CommonTable columns={[{
+                title: '序号',
+                dataIndex: 'index',
+                key: 'index',
+                render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+            }, ...auditIdRecord]} dataSource={data?.payInfoVOList || []} />字段不对
         </Spin>
     </DetailContent>
 }

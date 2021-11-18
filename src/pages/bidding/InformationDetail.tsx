@@ -28,8 +28,8 @@ const tableColumns = [
         "dataIndex": "projectVoltageLevel"
     },
     {
-        "title":"物资描述",
-        "dataIndex":"goodsExplain"
+        "title": "物资描述",
+        "dataIndex": "goodsExplain"
     },
     { title: '数量', dataIndex: 'amount', type: "number", render: (value: number) => { return value === -1 ? 0 : value } },
     { title: '单位', dataIndex: 'unit' },

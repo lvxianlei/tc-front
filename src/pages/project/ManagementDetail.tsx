@@ -326,16 +326,16 @@ export default function ManagementDetail(): React.ReactNode {
             ]} dataSource={data || {}} />
         </DetailContent>,
         tab_contract: <DetailContent>
-            <div style={{marginLeft:"20px"}}>
-            <Tabs defaultActiveKey="第一个">
-                <Tabs.TabPane tab="合同" key="合同">
-                    <ManagementContract />
-                </Tabs.TabPane>
-                <Tabs.TabPane tab="订单" key="订单">
-                    <ManagementOrder />
-                </Tabs.TabPane>
-            </Tabs>
-                </div></DetailContent>,
+            <div style={{ marginLeft: "20px" }}>
+                <Tabs defaultActiveKey="合同" >
+                    <Tabs.TabPane tab="合同" key="合同">
+                        <ManagementContract />
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab="订单" key="订单">
+                        <ManagementOrder />
+                    </Tabs.TabPane>
+                </Tabs>
+            </div></DetailContent>,
         tab_productGroup: <DetailContent title={[
             <Button key="new" type="primary" onClick={() => history.push(`/project/management/new/productGroup/${params.id}`)}>新增</Button>
         ]}>

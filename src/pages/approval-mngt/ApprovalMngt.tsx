@@ -151,26 +151,28 @@ export default function Information(): React.ReactNode {
         const postData = await outFactoryForm.validateFields();
         console.log(postData);
         const auditOutInfoDTOList = await outFactoryTableForm.validateFields();
-        console.log(auditOutInfoDTOList.submit);
-        const result = await run({
-            path: "/tower-market/OutFactory/submitAudit", data: {
-                ...postData,
-                projectName: postData.projectName?.value || "",
-                projectId: postData.projectName?.id || "",
-                auditOutInfoDTOList: auditOutInfoDTOList.submit
-            }
-        })
-        console.log(result);
-        if (result) {
-            message.success("成功创建申请...")
-            // setBidingVisible(false)
-            // history.go(0)
+        console.log(auditOutInfoDTOList.submit,"13242343534645");
+        if (auditOutInfoDTOList.submit === []) {
+            message.info("申请明细不可为空")
+            console.log(5675678);
         } else {
-            message.error(`创建申请失败！原因：${result}`)
+            const result = await run({
+                path: "/tower-market/OutFactory/submitAudit", data: {
+                    ...postData,
+                    projectName: postData.projectName?.value || "",
+                    projectId: postData.projectName?.id || "",
+                    auditOutInfoDTOList: auditOutInfoDTOList.submit
+                }
+            })
+            if (result) {
+                message.success("成功创建申请...")
+                // setBidingVisible(false)
+                // history.go(0)
+            } else {
+                message.error(`创建申请失败！原因：${result}`)
+            }
+            console.log(12224);
         }
-        // if (result.code === 500) {
-        //     message.info("申请明细不可为空");
-        // }
     }
 
     const drawHChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {

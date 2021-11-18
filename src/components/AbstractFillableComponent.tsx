@@ -82,8 +82,8 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
     protected onCancel = (): void => {
         const returnPath: string = this.getReturnPath();
         if (returnPath) {
-            // this.props.history.push(returnPath);
-            this.props.history.go(-1);
+            this.props.history.push(returnPath);
+            // this.props.history.go(-1);
         }
     }
 
@@ -95,8 +95,8 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
         if (this.getForm()) {
             this.getForm()?.validateFields().then((res) => {
                 const result: any = (this.getForm() as any).validateFields();
-                if(result){
-                    this.onSubmit(result).then(()=>{
+                if (result) {
+                    this.onSubmit(result).then(() => {
                         message.success("保存成功！");
                         this.getForm()?.resetFields();
                     });
@@ -170,7 +170,7 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      * @returns form items 
      */
     protected renderFormItems(items: IFormItemGroup[], itemIndex: number): React.ReactNode {
-        let region:any = null;
+        let region: any = null;
         if (this.getForm()) {
             region = this.getForm()?.getFieldValue("region");
         }
@@ -186,11 +186,11 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
                                     <Row gutter={24}>
                                         {
                                             group.itemProps.map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
-                                                <Col style={{display:props.name == 'regionOther' && region != 83 ? 'none' : 'block'}} span={group.itemCol?.span} key={`${props.name}_${index}`}>
+                                                <Col style={{ display: props.name == 'regionOther' && region != 83 ? 'none' : 'block' }} span={group.itemCol?.span} key={`${props.name}_${index}`}>
                                                     <Form.Item {...props} />
                                                 </Col>
                                             ))
-                                            }
+                                        }
                                     </Row>
                                     :
                                     group.itemProps.map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (

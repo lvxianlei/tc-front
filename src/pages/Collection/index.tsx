@@ -27,6 +27,33 @@ export default function Collection() {
     }
 
     const operationChange = (event: any) => {
+        // console.log(event.target.value);
+        if (event.target.value === 0) {
+            collectionListHead.map(item => {
+                if (item.dataIndex === "confirmStatus") {
+                    const aa = item.enum;
+                    aa?.map(async item => {
+                        const bb = item.value
+                        console.log(bb);
+                        if (bb === 1) {
+                            try {
+                                const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/backMoney?confirmStatus=1&current=1&size=20&type=`);
+                                console.log(result);
+                            } catch (error) {
+                                console.log(error);
+                            }
+                        } else if (bb === 0) {
+                            try {
+                                const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/backMoney?confirmStatus=0&current=1&size=20&type=`);
+                                console.log(result);
+                            } catch (error) {
+                                console.log(error);
+                            }
+                        }
+                    })
+                }
+            })
+        }
         setConfirmStatus(parseFloat(`${event.target.value}`))
     }
 
@@ -48,7 +75,7 @@ export default function Collection() {
             }]}
         extraOperation={<>
             <Radio.Group defaultValue={confirmStatus} onChange={operationChange}>
-                <Radio.Button value={0}>待确认</Radio.Button>
+                <Radio.Button value={0}>未确认</Radio.Button>
                 <Radio.Button value={1}>已确认</Radio.Button>
             </Radio.Group>
         </>}

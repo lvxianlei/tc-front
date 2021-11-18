@@ -26,8 +26,8 @@ const columns = [
         "dataIndex": "projectVoltageLevel"
     },
     {
-        "title":"物资描述",
-        "dataIndex":"goodsExplain"
+        "title": "物资描述",
+        "dataIndex": "goodsExplain"
     },
     { title: '数量', dataIndex: 'amount', type: "number" },
     { title: '单位', dataIndex: 'unit' },
@@ -53,7 +53,7 @@ export default function InfomationNew(): JSX.Element {
             bidForm.setFieldsValue({ submit: data.bidPackageInfoVOS })
             setBinddingStatus(data.biddingStatus)
             setAttachVosData(data.attachVos)
-            
+
             resole(data)
         } catch (error) {
             reject(error)

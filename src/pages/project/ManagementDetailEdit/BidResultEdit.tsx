@@ -1,12 +1,95 @@
 import React, { useRef, useState } from "react"
 import { useHistory, useParams } from "react-router-dom"
 import { Button, Form, message, Spin, Modal } from "antd"
-import { DetailContent, BaseInfo, DetailTitle, EditTable } from "../../common"
+import { DetailContent, BaseInfo, DetailTitle, EditTable, formatData } from "../../common"
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { bidInfoColumns } from '../managementDetailData.json'
 import { EditTableHasForm, TabsCanEdit, UploadXLS } from "../bidResult"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
+const columns = [
+    {
+        title: '年份',
+        dataIndex: 'date',
+        type: "date",
+        format: "YYYY",
+        picker: "year",
+        rules: [
+            {
+                required: true,
+                message: "请输入年份..."
+            }
+        ]
+    },
+    {
+        title: '批次',
+        dataIndex: 'batch',
+        type: "number",
+        rules: [
+            {
+                required: true,
+                message: "请输入批次..."
+            }
+        ]
+    },
+    {
+        title: '中标包号',
+        dataIndex: "packageNum",
+        rules: [
+            {
+                required: true,
+                message: "请输入中标包号..."
+            }
+        ]
+    },
+    {
+        title: '中标价(元)',
+        dataIndex: "bidMoney",
+        type: "number",
+        rules: [
+            {
+                required: true,
+                message: "请输入中标价(元)..."
+            }
+        ]
+    },
+    {
+        title: '中标重量(吨)',
+        dataIndex: "bidWeight",
+        type: "number",
+        rules: [
+            {
+                required: true,
+                message: "请输入中标重量(吨)..."
+            }
+        ]
+    },
+    {
+        title: '是否中标',
+        dataIndex: "isBid",
+        type: "select",
+        disabled: "true",
+        enum: [
+            {
+                value: -1,
+                label: "未公布"
+            },
+            {
+                value: 0,
+                label: "是"
+            },
+            {
+                value: 1,
+                label: "否"
+            }
+        ],
+        disable: true
+    },
+    {
+        title: '备注',
+        dataIndex: 'description'
+    },
+]
 export default function BidResultEdit(): JSX.Element {
     const history = useHistory()
     const ref = useRef()
@@ -17,7 +100,7 @@ export default function BidResultEdit(): JSX.Element {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidBase/${params.id}`)
-            baseInfoForm.setFieldsValue(result)
+            baseInfoForm.setFieldsValue(formatData(columns, result))
             if (result.bidOpenRecordListVos?.length > 0) {
                 const resultBid = result.bidOpenRecordListVos
                 if (resultBid[resultBid.length - 1].round !== 1) {
@@ -126,89 +209,7 @@ export default function BidResultEdit(): JSX.Element {
         ]}>
             <Spin spinning={loading}>
                 <DetailTitle title="基本信息" />
-                <BaseInfo form={baseInfoForm} edit columns={[
-                    {
-                        title: '年份',
-                        dataIndex: 'date',
-                        type: "date",
-                        format: "YYYY",
-                        picker: "year",
-                        rules: [
-                            {
-                                required: true,
-                                message: "请输入年份..."
-                            }
-                        ]
-                    },
-                    {
-                        title: '批次',
-                        dataIndex: 'batch',
-                        type: "number",
-                        rules: [
-                            {
-                                required: true,
-                                message: "请输入批次..."
-                            }
-                        ]
-                    },
-                    {
-                        title: '中标包号',
-                        dataIndex: "packageNum",
-                        rules: [
-                            {
-                                required: true,
-                                message: "请输入中标包号..."
-                            }
-                        ]
-                    },
-                    {
-                        title: '中标价(元)',
-                        dataIndex: "bidMoney",
-                        type: "number",
-                        rules: [
-                            {
-                                required: true,
-                                message: "请输入中标价(元)..."
-                            }
-                        ]
-                    },
-                    {
-                        title: '中标重量(吨)',
-                        dataIndex: "bidWeight",
-                        type: "number",
-                        rules: [
-                            {
-                                required: true,
-                                message: "请输入中标重量(吨)..."
-                            }
-                        ]
-                    },
-                    {
-                        title: '是否中标',
-                        dataIndex: "isBid",
-                        type: "select",
-                        disabled: "true",
-                        enum: [
-                            {
-                                value: -1,
-                                label: "未公布"
-                            },
-                            {
-                                value: 0,
-                                label: "是"
-                            },
-                            {
-                                value: 1,
-                                label: "否"
-                            }
-                        ],
-                        disable: true
-                    },
-                    {
-                        title: '备注',
-                        dataIndex: 'description'
-                    },
-                ]} dataSource={data || {}} />
+                <BaseInfo form={baseInfoForm} edit columns={columns} dataSource={data || {}} />
                 <DetailTitle title="开标信息" operation={[<Button key="new"
                     type="primary"
                     onClick={() => setBidOpenRecordVos([
