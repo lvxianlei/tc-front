@@ -46,20 +46,21 @@ export default function DatabaseMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type="link" onClick={ () => {
-                        setDetail({ parentName: record.dataPlaceName, pid: record.parentId });
-                        form.setFieldsValue({ parentName: record.dataPlaceName, pid: record.parentId });
+                        setDetail({ parentName: record.dataPlaceName, pid: record.id });
+                        form.setFieldsValue({ parentName: record.dataPlaceName, pid: record.id });
                         setTitle('新增子库');
                         setVisible(true);
                     } }>新增子库</Button>
                     <Button type="link" onClick={ () => {
                         setDetail({ dataPlaceName: record.dataPlaceName, id: record.id });
+                        form.setFieldsValue({ dataPlaceName: record.dataPlaceName, id: record.id });
                         setTitle('编辑');
                         setVisible(true);
                     } }>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => {
-                            RequestUtil.delete(`/tower-system/dataPlace?ids=${ record.id }`).then(res => {
+                            RequestUtil.delete(`/tower-system/dataPlace?id=${ record.id }`).then(res => {
                                 setRefresh(!refresh);
                             });
                         } }
@@ -82,7 +83,7 @@ export default function DatabaseMngt(): React.ReactNode {
                         ...value,
                         id: detail.id
                     }
-                    RequestUtil.post(`/tower-system/dataPlace`, value).then(res => {
+                    RequestUtil.put(`/tower-system/dataPlace`, value).then(res => {
                         setVisible(false); 
                         setDetail({}); 
                         form.resetFields(); 
@@ -94,7 +95,7 @@ export default function DatabaseMngt(): React.ReactNode {
                         ...value,
                         pid: detail.pid
                     }
-                    RequestUtil.put(`/tower-system/dataPlace`, value).then(res => {
+                    RequestUtil.post(`/tower-system/dataPlace`, value).then(res => {
                         setVisible(false); 
                         setDetail({}); 
                         form.resetFields(); 
@@ -102,6 +103,7 @@ export default function DatabaseMngt(): React.ReactNode {
                         form.setFieldsValue({ parentName: '', dataPlaceName: '' });
                     })
                 }
+                console.log(form.getFieldsValue(true))
             })
         }
     }
@@ -118,7 +120,7 @@ export default function DatabaseMngt(): React.ReactNode {
         />
         <Modal visible={ visible } title={ title } onOk={ save } onCancel={ () => { setVisible(false); setDetail({}); form.resetFields(); form.setFieldsValue({ parentName: '', dataPlaceName: '' }); } }>
             <Form form={ form }>
-                { detail.pid ? <Form.Item label={<span><span style={{color: 'red'}}>*</span>上级</span>} name="parentName" initialValue={ detail.parentName }>
+                { detail.pid !== undefined && detail.pid !== '' ? <Form.Item label={<span><span style={{color: 'red'}}>*</span>上级</span>} name="parentName" initialValue={ detail.parentName }>
                     <Input maxLength={ 50 } disabled/>
                 </Form.Item> : null}
                 <Form.Item label="名称" name="dataPlaceName" initialValue={ detail.dataPlaceName } rules={[{
