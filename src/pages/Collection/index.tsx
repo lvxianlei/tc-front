@@ -5,7 +5,7 @@
  * @email: wxd93917787@163.com
  * @Date: 2021-11-12 13:56:51
  * @LastEditors: wangxindong
- * @LastEditTime: 2021-11-18 17:07:28
+ * @LastEditTime: 2021-11-19 15:46:55
  */
 import React, { useState } from "react"
 import { Button, Input, DatePicker, Radio } from 'antd'
@@ -15,6 +15,7 @@ import { collectionListHead } from "./CollectionData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 export default function Collection() {
+    const [ refresh, setRefresh ] = useState<boolean>(false);
     const history = useHistory()
     const [confirmStatus, setConfirmStatus] = useState<number>(0)
     const { loading, data, run } = useRequest<{ [key: string]: any }>((params: any) => new Promise(async (resole, reject) => {
@@ -36,7 +37,9 @@ export default function Collection() {
     }
 
     const operationChange = (event: any) => {
-        setConfirmStatus(parseFloat(`${event.target.value}`))
+        console.log(111)
+        setConfirmStatus(parseFloat(`${event.target.value}`));
+        setRefresh(!refresh);
     }
 
     return <Page
@@ -55,6 +58,7 @@ export default function Collection() {
                     return <Button type="link" onClick={() => history.push(`/project/collection/detail/${record.id}`)}>查看</Button>
                 }
             }]}
+            refresh={ refresh }
         extraOperation={<>
             <Radio.Group defaultValue={confirmStatus} onChange={operationChange}>
                 <Radio.Button value={0}>待确认</Radio.Button>

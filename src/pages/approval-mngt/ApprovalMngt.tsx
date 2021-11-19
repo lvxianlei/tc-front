@@ -149,9 +149,12 @@ export default function Information(): React.ReactNode {
     }
     const outFactoryOk = async () => {
         const postData = await outFactoryForm.validateFields();
-        console.log(postData);
         const auditOutInfoDTOList = await outFactoryTableForm.validateFields();
         console.log(auditOutInfoDTOList.submit);
+        if (!auditOutInfoDTOList.submit.length) {
+            message.warning("申请明细不可为空...")
+            return;
+        }
         const result = await run({
             path: "/tower-market/OutFactory/submitAudit", data: {
                 ...postData,
