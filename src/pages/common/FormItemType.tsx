@@ -55,7 +55,7 @@ interface PagenationProps {
 }
 
 export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: string, records: any[], value: string }, onChange?: (event: any) => void }> = ({ data, value = { id: "", records: [], value: "" }, onChange }) => {
-    const initValue = value.records.map((item: any) => item.id)
+    const initValue = value.records?.map((item: any) => item.id)
     const [select, setSelect] = useState<any[]>(initValue)
     const [pagenation, setPagenation] = useState<PagenationProps>({
         current: 1,

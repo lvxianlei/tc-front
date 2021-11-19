@@ -72,9 +72,7 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
     const handleChange = (id: string, value: number, name: string) => {
         setMaterials(materials.map((item: any) => item.materialCode === id ? ({
             ...item,
-            [name]: value,
-            taxOffer: [-1, "-1"].includes(item.taxOffer) ? 1 : item.taxOffer,
-            offer: [-1, "-1"].includes(item.offer) ? 1 : item.offer
+            [name]: value
         }) : item))
     }
 

@@ -157,6 +157,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         setCargoData(dataSource.map((item: any) => {
             quantity = (parseFloat(quantity) + parseFloat(item.num || "0.00")).toFixed(2)
             weight = (parseFloat(weight) + parseFloat(item.weight || "0.00")).toFixed(2)
+            delete item.id
             return ({
                 ...item,
                 productName: item.materialName,
@@ -205,7 +206,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 contractId: baseFormData.contractNumber.id,
                 contractNumber: baseFormData.contractNumber.value,
                 lists: cargoData.map((item: any) => {
-                    type === "edit" && delete item.id
                     return item
                 })
             })

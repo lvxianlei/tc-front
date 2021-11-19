@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react'
-import { Input, DatePicker, Select, Button, Form, Modal, Row, Col, message } from 'antd'
+import { Input, Button, Modal, message } from 'antd'
 import { useParams, useHistory } from 'react-router-dom'
-import { ComponentDetails, Batchingschemed } from "./buyBurdening.json"
-import { CommonTable, IntgSelect, Page } from '../../common'
+import { ComponentDetails } from "./buyBurdening.json"
+import { Page } from '../../common'
 import Batcher from "./Batcher"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -40,7 +40,6 @@ export default function EnquiryList(): React.ReactNode {
 
 
     const onFilterSubmit = (value: any) => {
-
         return { ...value, purchaseTaskTowerId: params.id }
     }
 
@@ -52,7 +51,7 @@ export default function EnquiryList(): React.ReactNode {
             onOk() {
                 return new Promise(async (resove, reject) => {
                     try {
-                        const result = await run()
+                        await run()
                         message.success("操作成功...")
                         resove(true)
                         history.goBack();

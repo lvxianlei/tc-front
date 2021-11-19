@@ -111,7 +111,6 @@ export default forwardRef(function ({ dataSource = [], columns = [], showHeader 
                     title: "附件名称",
                     dataIndex: "name"
                 },
-                ...columns,
                 {
                     title: "操作",
                     dataIndex: "opration",
@@ -120,6 +119,7 @@ export default forwardRef(function ({ dataSource = [], columns = [], showHeader 
                         <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
                         {edit && <a onClick={() => deleteAttachData(record.uid || record.id)}>删除</a>}
                     </>)
-                }]} showHeader={showHeader} dataSource={attchs} />
+                }]}
+            dataSource={attchs} />
     </>
 })

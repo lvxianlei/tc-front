@@ -73,7 +73,10 @@ export default function Overview(): React.ReactNode {
                     </>)
                 }
             ]}
-            extraOperation={<Button type="primary" ghost>导出</Button>}
+            extraOperation={<>
+                <Button type="primary" ghost>导出</Button>
+                <Button type="primary" ghost onClick={() => history.goBack()}>返回</Button>
+            </>}
             filterValue={{ purchaseTaskId: params.id }}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
