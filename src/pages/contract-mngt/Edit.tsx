@@ -69,7 +69,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 taxPrice,
                 price,
                 width: formatSpec(item.structureSpec).width,
-                length: formatSpec(item.structureSpec).length,
+                // length: formatSpec(item.structureSpec).length,
                 weight: item.weight || "1.00",
                 taxTotalAmount: (num * taxPrice).toFixed(2),
                 totalAmount: (num * price).toFixed(2)
@@ -156,7 +156,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     taxPrice,
                     price,
                     width: formatSpec(item.structureSpec).width,
-                    length: formatSpec(item.structureSpec).length,
+                    // length: formatSpec(item.structureSpec).length,
                     weight: item.weight || "1.00",
                     taxTotalAmount: (num * taxPrice).toFixed(2),
                     totalAmount: (num * price).toFixed(2)

@@ -41,13 +41,7 @@
         {
             "title": "供应商编号",
             "dataIndex": "supplierCode",
-            "disabled": true,
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择供应商编号..."
-                }
-            ]
+            "disabled": true
         },
         {
             "title": "供应商名称",

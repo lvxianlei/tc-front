@@ -155,7 +155,7 @@ export default function Invoice() {
                                 setVisible(true)
                             }}>编辑</Button>
                             <Button type="link" disabled={![1].includes(record.invoiceStatus)} onClick={() => handleCancel(record.id)}>作废</Button>
-                            <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>
+                            <Button type="link" disabled={record.invoiceStatus !== 1} onClick={() => handleDelete(record.id)}>删除</Button>
                         </>
                     }
                 }]}
