@@ -75,5 +75,6 @@ export const warehouseOptions = warehouseType; //仓库类型
 export const carOptions = carType; //车辆类型
 export const standardOptions = standard; //材料标准
 export const staffTypeOptions = staffType; //员工类型
+
 export const deptTypeOptions = deptType; //部门类型
 export const dataTypeOptions = dataType; //资料类型

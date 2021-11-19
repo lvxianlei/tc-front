@@ -80,7 +80,7 @@ export default function CostEdit() {
                 disabled: id !== "new"
             }) : item)} dataSource={data || {}} edit />
             <DetailTitle title="材质比例" />
-            {data?.proport && <EditTable addRowData={initData} form={tableRowForm} columns={data?.proport.head || []} dataSource={dataSource} />}
+            {data?.proport && <EditTable addRowData={initData} form={tableRowForm} columns={data?.proport.head || []} dataSource={dataSource} autoScroll={true} />}
         </Spin>
     </DetailContent>
 }

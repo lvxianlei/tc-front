@@ -5,7 +5,7 @@
  * @email: wxd93917787@163.com
  * @Date: 2021-11-12 13:56:51
  * @LastEditors: wangxindong
- * @LastEditTime: 2021-11-18 17:07:28
+ * @LastEditTime: 2021-11-19 16:52:32
  */
 import React, { useState } from "react"
 import { Button, Input, DatePicker, Radio } from 'antd'
@@ -15,6 +15,7 @@ import { collectionListHead } from "./CollectionData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 export default function Collection() {
+    const [ refresh, setRefresh ] = useState<boolean>(false);
     const history = useHistory()
     const [confirmStatus, setConfirmStatus] = useState<number>(0)
     const { loading, data, run } = useRequest<{ [key: string]: any }>((params: any) => new Promise(async (resole, reject) => {
@@ -27,43 +28,17 @@ export default function Collection() {
     }), { manual: true })
 
     const onFilterSubmit = (value: any) => {
-        if (value.startLaunchTime) {
-            const formatDate = value.startLaunchTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startLaunchTime = formatDate[0]
-            value.endLaunchTime = formatDate[1]
+        if (value.startRefundTime) {
+            const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startRefundTime = formatDate[0]
+            value.endRefundTime = formatDate[1]
         }
         return value
     }
 
     const operationChange = (event: any) => {
-        // console.log(event.target.value);
-        if (event.target.value === 0) {
-            collectionListHead.map(item => {
-                if (item.dataIndex === "confirmStatus") {
-                    const aa = item.enum;
-                    aa?.map(async item => {
-                        const bb = item.value
-                        console.log(bb);
-                        if (bb === 1) {
-                            try {
-                                const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/backMoney?confirmStatus=1&current=1&size=20&type=`);
-                                console.log(result);
-                            } catch (error) {
-                                console.log(error);
-                            }
-                        } else if (bb === 0) {
-                            try {
-                                const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/backMoney?confirmStatus=0&current=1&size=20&type=`);
-                                console.log(result);
-                            } catch (error) {
-                                console.log(error);
-                            }
-                        }
-                    })
-                }
-            })
-        }
-        setConfirmStatus(parseFloat(`${event.target.value}`))
+        setConfirmStatus(parseFloat(`${event.target.value}`));
+        setRefresh(!refresh);
     }
 
     return <Page
@@ -82,6 +57,7 @@ export default function Collection() {
                     return <Button type="link" onClick={() => history.push(`/project/collection/detail/${record.id}`)}>查看</Button>
                 }
             }]}
+            refresh={ refresh }
         extraOperation={<>
             <Radio.Group defaultValue={confirmStatus} onChange={operationChange}>
                 <Radio.Button value={0}>未确认</Radio.Button>
@@ -96,7 +72,7 @@ export default function Collection() {
                 children: <Input placeholder="编号/来款单位名称/来款银行" style={{ width: 300 }} />
             },
             {
-                name: 'startLaunchTime',
+                name: 'startRefundTime',
                 label: '来款日期',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
             }

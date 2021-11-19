@@ -30,10 +30,12 @@
         {
             "title": "来款日期",
             "dataIndex": "payTime"
-        },{
+        },
+        {
             "title": "币种",
             "dataIndex": "currency"
-        },{
+        },
+        {
             "title": "汇率",
             "dataIndex": "exchangeRate"
         },
@@ -166,10 +168,10 @@
         },
         {
             "title": "付款单号",
-            "dataIndex": "payNum",
+            "dataIndex": "payNumber",
             "type": "popTable",
-            "path": "/tower-market/payApply?payStatus=1",
-            "readOnly": false,
+            "path": "/tower-market/payApply",
+            "readOnly": true,
             "width": 1011,
             "value": "payNumber",
             "dependencies": true,

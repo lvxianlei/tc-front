@@ -70,6 +70,10 @@ export default function Information(): React.ReactNode {
 
     const handleNewAudit = () => setVisible(true)
     const handleOk = (value: string) => {
+        if (!value) {
+            message.error("请您先选择审批类型！")
+            return;
+        }
         switch (value) {
             case "performance_bond":
                 setPerformanceBondVisible(true)
@@ -149,12 +153,25 @@ export default function Information(): React.ReactNode {
     }
     const outFactoryOk = async () => {
         const postData = await outFactoryForm.validateFields();
-        console.log(postData);
         const auditOutInfoDTOList = await outFactoryTableForm.validateFields();
-        console.log(auditOutInfoDTOList.submit,"13242343534645");
-        if (auditOutInfoDTOList.submit === []) {
-            message.info("申请明细不可为空")
-            console.log(5675678);
+        console.log(auditOutInfoDTOList.submit);
+        if (!auditOutInfoDTOList.submit.length) {
+            message.warning("申请明细不可为空...")
+            return;
+        }
+        const result = await run({
+            path: "/tower-market/OutFactory/submitAudit", data: {
+                ...postData,
+                projectName: postData.projectName?.value || "",
+                projectId: postData.projectName?.id || "",
+                auditOutInfoDTOList: auditOutInfoDTOList.submit
+            }
+        })
+        console.log(result);
+        if (result) {
+            message.success("成功创建申请...")
+            // setBidingVisible(false)
+            // history.go(0)
         } else {
             const result = await run({
                 path: "/tower-market/OutFactory/submitAudit", data: {

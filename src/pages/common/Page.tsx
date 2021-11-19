@@ -57,11 +57,11 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
         };
     }
     protected async fetchTableData(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
-
         try {
             const sourceDataKey: string[] = this.props.sourceKey?.split(".") || []
             const resData: IResponseData = await RequestUtil.get<IResponseData>(this.props.path, {
                 ...this.props.requestData,
+                ...this.props.filterValue,
                 ...filterValues,
                 current: pagination.current || this.state.tablePagination?.current,
                 size: pagination.pageSize || this.state.tablePagination?.pageSize,
