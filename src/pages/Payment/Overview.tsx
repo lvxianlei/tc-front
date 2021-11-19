@@ -10,7 +10,7 @@
 import React from "react"
 import { Button, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable,Attachment } from '../common'
+import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../common'
 import { PaymentListHead, paymentdetail } from "./PaymentData.json"
 import { enclosure, auditIdRecord } from "../approval-mngt/approvalHeadData.json"
 import useRequest from '@ahooksjs/use-request'
@@ -67,9 +67,9 @@ export default function Edit() {
                 key: 'index',
                 render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                 }, ...enclosure]} dataSource={data?.attachVos || []} /> */}
-            <Attachment showHeader  columns={[...enclosure]} dataSource={data?.attachVos || []} />
-            {/* <DetailTitle title="审批记录" />
-            <CommonTable columns={auditIdRecord} dataSource={data?.payInfoVOList || []} /> */}
+            <Attachment showHeader columns={[...enclosure]} dataSource={data?.attachVos || []} />
+            <DetailTitle title="审批记录" />
+            <CommonTable columns={auditIdRecord} dataSource={data?.payInfoVOList || []} />
         </Spin>
     </DetailContent>
 }

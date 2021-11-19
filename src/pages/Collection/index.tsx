@@ -27,10 +27,10 @@ export default function Collection() {
     }), { manual: true })
 
     const onFilterSubmit = (value: any) => {
-        if (value.startLaunchTime) {
-            const formatDate = value.startLaunchTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startLaunchTime = formatDate[0]
-            value.endLaunchTime = formatDate[1]
+        if (value.startRefundTime) {
+            const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startRefundTime = formatDate[0]
+            value.endRefundTime = formatDate[1]
         }
         return value
     }
@@ -96,7 +96,7 @@ export default function Collection() {
                 children: <Input placeholder="编号/来款单位名称/来款银行" style={{ width: 300 }} />
             },
             {
-                name: 'startLaunchTime',
+                name: 'startRefundTime',
                 label: '来款日期',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
             }
