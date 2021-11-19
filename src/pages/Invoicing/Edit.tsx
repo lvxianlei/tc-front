@@ -137,13 +137,16 @@ export default function Edit() {
             const logicWeight = await logicWeightRun(contractValue.id)
             baseInfo.setFieldsValue({
                 contractCompany: contractValue.signCustomerName,
-                projectCode: contractValue.contractNumber,
+                // projectCode: contractValue.contractNumber,
                 contractSignTime: contractValue.signContractTime,
                 ticketWeight: logicWeight.logicWeight,
                 reasonWeight: logicWeight.logicWeight,
                 planCode: logicWeight.taskNoticeNumbers,
                 contractDevTime: contractValue.deliveryTime,
-                business: contractValue.salesman
+                business: contractValue.salesman,
+                contractName: contractValue.contractName, // 合同/工程名称
+                contractCode: contractValue.internalNumber, // 内部合同编号
+                projectCode: contractValue.projectName, // 项目编码
             })
         }
         if (fields.backProportion) {

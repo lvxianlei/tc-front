@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Spin, Button, Space, Modal, message, Image, Form, Input, Upload, Transfer, Tree } from 'antd';
+import { Spin, Button, Space, Modal, message, Image, Form, Input, Upload } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { DetailTitle, DetailContent, CommonTable } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
@@ -16,22 +16,20 @@ export default function AnnouncementNew(): React.ReactNode {
     const [ attachInfo, setAttachInfo ] = useState<IFileList[]>([]);
     const location = useLocation<{ type: string }>();
     const [ staffList, setStaffList ] = useState<string[]>([]);
+    const [ detailData, setDetailData ] = useState<IAnnouncement>({});
 
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const { loading, data } = useRequest<IAnnouncement>(() => new Promise(async (resole, reject) => {
         if(location.state.type === 'edit') {
             let data = await RequestUtil.get<IAnnouncement>(`/tower-system/notice/getNoticeById/${ params.id }`);
-            data = {
-                ...data,
-            }
+            setDetailData(data);
             setAttachInfo(data.attachVos || []);
             resole(data);
         } else {
             resole({});
         }
     }), {})
-    const detailData: IAnnouncement = data || {};
     const [ pictureVisible, setPictureVisible ] = useState<boolean>(false);
     const [ pictureUrl, setPictureUrl ] = useState('');
     const handlePictureModalCancel = () => { setPictureVisible(false) };
@@ -46,7 +44,7 @@ export default function AnnouncementNew(): React.ReactNode {
         </Spin>
     }
 
-    const save = () => {
+    const save = (state: number) => {
         if(form) {
             form.validateFields().then(res => {
                 let value = form.getFieldsValue(true);
@@ -55,13 +53,20 @@ export default function AnnouncementNew(): React.ReactNode {
                         id: detailData.id,
                         ...value,
                         attachInfoDtos: attachInfo,
-                        staffList: staffList
+                        staffList: staffList,
+                        state: state
+                    }).then(res => {
+                        history.goBack();
                     });
                 } else {
                     RequestUtil.put<IAnnouncement>(`/tower-system/notice`, {
+                        id: detailData.id,
                         ...value,
                         attachInfoDtos: attachInfo,
-                        staffList: staffList
+                        staffList: staffList,
+                        state: state
+                    }).then(res => {
+                        history.goBack();
                     });
                 }
             })
@@ -71,8 +76,8 @@ export default function AnnouncementNew(): React.ReactNode {
     return <>
         <DetailContent operation={ [
             <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
-                <Button type="primary" onClick={ save }>立即发布</Button>
-                <Button type="primary" onClick={ save }>保存草稿</Button>
+                <Button type="primary" onClick={ () => save(1) }>立即发布</Button>
+                <Button type="primary" onClick={ () => save(0) }>保存草稿</Button>
                 <Button type="ghost" onClick={() => history.goBack()}>取消</Button>
             </Space>
         ] }>
@@ -102,10 +107,14 @@ export default function AnnouncementNew(): React.ReactNode {
                         "required": true,
                         "message": "请选择接收人"
                     }]}>
-                    <SelectUserTransfer save={ (selectRows: IStaff[]) => {
-                        console.log(selectRows)
-                    } }/>
-                    <Input bordered={false}/>
+                    
+                    <Input addonBefore={<SelectUserTransfer save={ (selectRows: IStaff[]) => {
+                        const userNames = selectRows.map(res => { return res.name }).join(',');
+                        const staffList: string[] = selectRows.map((res: IStaff) => { return res.id || '' });
+                        form.setFieldsValue({ userNames: userNames, staffList: staffList });
+                        setStaffList(staffList);
+                        setDetailData({ ...detailData, userNames: userNames, staffList: staffList })
+                    } }/>} disabled/>
                 </Form.Item>
             </Form>
             <DetailTitle title="上传附件" key={ 2 } operation={[<Upload

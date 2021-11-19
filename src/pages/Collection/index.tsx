@@ -5,7 +5,7 @@
  * @email: wxd93917787@163.com
  * @Date: 2021-11-12 13:56:51
  * @LastEditors: wangxindong
- * @LastEditTime: 2021-11-19 15:46:55
+ * @LastEditTime: 2021-11-19 16:52:32
  */
 import React, { useState } from "react"
 import { Button, Input, DatePicker, Radio } from 'antd'
@@ -37,7 +37,6 @@ export default function Collection() {
     }
 
     const operationChange = (event: any) => {
-        console.log(111)
         setConfirmStatus(parseFloat(`${event.target.value}`));
         setRefresh(!refresh);
     }
@@ -61,7 +60,7 @@ export default function Collection() {
             refresh={ refresh }
         extraOperation={<>
             <Radio.Group defaultValue={confirmStatus} onChange={operationChange}>
-                <Radio.Button value={0}>待确认</Radio.Button>
+                <Radio.Button value={0}>未确认</Radio.Button>
                 <Radio.Button value={1}>已确认</Radio.Button>
             </Radio.Group>
         </>}

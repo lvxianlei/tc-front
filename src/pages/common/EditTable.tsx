@@ -155,22 +155,24 @@ export default function EditableTable({ columns = [], dataSource = [], form, add
                                         style={{ width: 100, backgroundColor: "#f5f5f5" }}
                                         className={item.required ? styles.required : ""} span={2}>{item.title}</Col>))}
                                 </Row>
-                                {fields.map(({ key, name, fieldKey, ...restField }, index: number) => (
-                                    <Row style={{ width: "100%" }} key={`EditableRow_${key}`} className={`${styles.FormHeader} ${styles.FormRow}`}>
-                                        {columns.map((coItem, coIndex) => (<Col key={`EditableCol_${coIndex}`} span={2}>
-                                            <Form.Item
-                                                {...restField}
-                                                className={styles.formItem}
-                                                name={[name, coItem.dataIndex]}
-                                                fieldKey={[fieldKey, coItem.dataIndex]}
-                                                rules={coItem.rules || []}
-                                            >
-                                                {coItem.editable === false ? <EditableCell columnItem={coItem as EditableCellProps['columnItem']} fieldKey={name} index={index} remove={remove} /> : <FormItemType type={coItem.type} data={coItem} />}
-                                            </Form.Item>
-                                        </Col>)
-                                        )}
-                                    </Row>
-                                ))}
+                                <div style={{height: "600px", overflow: 'auto'}}>
+                                    {fields.map(({ key, name, fieldKey, ...restField }, index: number) => (
+                                        <Row style={{ width: "100%" }} key={`EditableRow_${key}`} className={`${styles.FormHeader} ${styles.FormRow}`}>
+                                            {columns.map((coItem, coIndex) => (<Col key={`EditableCol_${coIndex}`} span={2}>
+                                                <Form.Item
+                                                    {...restField}
+                                                    className={styles.formItem}
+                                                    name={[name, coItem.dataIndex]}
+                                                    fieldKey={[fieldKey, coItem.dataIndex]}
+                                                    rules={coItem.rules || []}
+                                                >
+                                                    {coItem.editable === false ? <EditableCell columnItem={coItem as EditableCellProps['columnItem']} fieldKey={name} index={index} remove={remove} /> : <FormItemType type={coItem.type} data={coItem} />}
+                                                </Form.Item>
+                                            </Col>)
+                                            )}
+                                        </Row>
+                                    ))}
+                                </div>
                             </div>
                         </>
                     )

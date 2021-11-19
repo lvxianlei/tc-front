@@ -2,7 +2,7 @@
  * @author zyc
  * @copyright © 2021 zyc
  */
-import { Input, InputNumber, Select, TreeSelect } from 'antd';
+import { Input, Select, TreeSelect } from 'antd';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -11,7 +11,7 @@ import AbstractFillableComponent, {
     IAbstractFillableComponentState,
     IFormItemGroup,
 } from '../../../components/AbstractFillableComponent';
-import { deptTypeOptions } from '../../../configuration/DictionaryOptions';
+import { deptTypeOptions } from "../../../configuration/DictionaryOptions";
 import layoutStyles from '../../../layout/Layout.module.less';
 import RequestUtil from '../../../utils/RequestUtil';
 import { IDeptTree } from './DepartmentMngt';

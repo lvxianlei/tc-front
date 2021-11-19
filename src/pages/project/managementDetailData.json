@@ -257,7 +257,7 @@
         },
         {
             "title": "电压等级",
-            "dataIndex": "voltagelevel"
+            "dataIndex": "vgrade"
         },
         {
             "title": "包号",
@@ -287,7 +287,7 @@
         },
         {
             "title": "单价（元）",
-            "dataIndex": "price",
+            "dataIndex": "unitPrice",
             "type": "number"
         },
         {

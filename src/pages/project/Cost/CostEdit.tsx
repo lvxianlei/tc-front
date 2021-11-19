@@ -11,6 +11,17 @@ import ApplicationContext from "../../../configuration/ApplicationContext"
 
 export type SelectType = "selectA" | "selectB" | "selectC"
 
+// 保留两位小数
+export function processingNumber(arg: any) {
+    arg = arg.replace(/[^\d.]/g, ""); // 清除"数字"和"."以外的字符
+    arg = arg.replace(/^\./g, ""); // 验证第一个字符是数字而不是
+    arg = arg.replace(/\.{2,}/g, "."); // 只保留第一个. 清除多余的
+    arg = arg.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+    // arg = arg.replace(/^(\-)*(\d+)\.(\d).*$/, '$1$2.$3'); // 只能输入一个小数
+    arg = arg.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'); // 只能输入两个小数
+    return arg
+}
+
 const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref) => {
     const [formRef] = Form.useForm()
     const yclHead: any[] = data.head.filter((headItem: any) => {
@@ -61,8 +72,11 @@ const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref
         const bhls: number = parseFloat((yc + flsh + dxcb + jgf + gsfs).toFixed(2))
         const lscb: number = parseFloat((parseFloat((lsdj - bhls).toFixed(2)) * lszb).toFixed(2))
         const cc: number = parseFloat((yc + logistics_price).toFixed(2))
+        const gbq_dfj: number = processingNumber(allValue.gbq_dfj + "");
+        const gbq_dfj_bl: number = processingNumber(allValue.gbq_dfj_bl + "");
+
         // console.log( [{ ...allValue, cc, yc, flsh, bhls, lscb }], '修改后的数据')
-        formRef.setFieldsValue({ submit: [{ ...allValue, cc, yc, flsh, bhls, lscb }] })
+        formRef.setFieldsValue({ submit: [{ ...allValue, cc, yc, flsh, bhls, lscb, gbq_dfj, gbq_dfj_bl }] })
     }
     return <EditTable
         form={formRef}
@@ -166,6 +180,8 @@ export default function CostEdit() {
             if ((formRef.current as any).data.length <= 0 || !(formRef.current as any).data[0]) {
                 message.error("至少新增一个产品类型")
                 return
+            } else {
+                (formRef.current as any).data = (formRef.current as any).data.filter((item: any) => item != null);
             }
             const askProductDtoDatas = await Promise.all((formRef.current as any).data.map((item: any) => item.formRef.validateFields()))
             await saveRun({
