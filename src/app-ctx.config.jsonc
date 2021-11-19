@@ -503,6 +503,19 @@
                         ]
                     },
                     {
+                        "label": "计划排产",
+                        "icon": "technology",
+                        "path": "/planProd",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "计划排产",
+                                "path": "/planProd/planMgmt",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
                         "label": "镀锌车间",
                         "icon": "technology",
                         "path": "/galvanizingWorkshop",
