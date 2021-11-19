@@ -16,6 +16,16 @@ import { FixedType } from 'rc-table/lib/interface';
 import { IStaff } from './StaffMngt';
 import { IMetaDept } from '../dept/DepartmentMngt';
 import { staffTypeOptions } from '../../../configuration/DictionaryOptions';
+import layoutStyles from '../../../layout/Layout.module.less';
+import { IRole } from '../../auth/role/IRole';
+import { IJobs } from '../jobs/JobsMngt';
+import { checkcustomerPhone } from './RulesUtils';
+import { RuleObject } from 'antd/lib/form';
+import { StoreValue } from 'antd/lib/form/interface';
+
+interface IResponseData {
+    readonly records?: IJobs[];
+}
 
 export default function StaffNew(): React.ReactNode {
     const [ form ] = Form.useForm();
@@ -23,7 +33,8 @@ export default function StaffNew(): React.ReactNode {
     const location = useLocation<{ type: string, data: IStaff[] }>();
     const [ dataList, setDataList ] = useState<IStaff[]>([]);
     const [ departData, setDepartData ] = useState<IMetaDept[]>([]);
-    const [ roleList, setRoleList ] = useState([{id: '4564654', name: '大萨达撒多'}, {id: '3213443', name: '大萨fdsf'}, {id: '654765', name: 'VB大范甘迪'}]);
+    const [ roleList, setRoleList ] = useState<IRole[]>([]);
+    const [ jobsList, setJobsList ] = useState<IJobs[]>([]);
 
     const tableColumns = [
         {
@@ -51,10 +62,18 @@ export default function StaffNew(): React.ReactNode {
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "phone"] } key={ index } initialValue={ _ } rules={[{ 
                     "required": true,
-                    "message": "请输入手机号" },
-                    {
-                      pattern: /^[^\s]*$/,
-                      message: '禁止输入空格',
+                    validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                        if(value) {
+                            checkcustomerPhone(value).then(res => {
+                                if (res) {
+                                    callback()
+                                } else {
+                                    callback('手机号格式有误')
+                                }
+                            }) 
+                        } else {
+                            callback('请输入手机号')
+                        }}
                     }]}>
                     <Input maxLength={ 50 }/>
                 </Form.Item>
@@ -86,14 +105,15 @@ export default function StaffNew(): React.ReactNode {
             width: 150,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "autoAccount"] } key={ index } initialValue={ _ }>
-                    <Checkbox key={ record.id } checked={ _ === 1 } onChange={ (e) => {
-                        dataList[index] = {
-                            ...dataList[index],
-                            autoAccount: e.target.checked ? 1 : 0
+                    <Checkbox key={ record.id } checked={ _ === 2 } onChange={ (e) => {
+                        const data = form.getFieldsValue(true).list;
+                        data[index] = {
+                            ...data[index],
+                            id: dataList[index].id,
+                            autoAccount: e.target.checked ? 2 : 1
                         }
-                        console.log(dataList)
-                        setDataList([...dataList]);
-                        form.setFieldsValue({ list: [...dataList] })
+                        setDataList([...data]);
+                        form.setFieldsValue({ list: [...data] })
                     } }></Checkbox>
                 </Form.Item>
             )  
@@ -105,13 +125,8 @@ export default function StaffNew(): React.ReactNode {
             width: 250,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "roleIdList"] } key={ index } initialValue={ _ }>
-                    <Select placeholder="选择角色" getPopupContainer={triggerNode => triggerNode.parentNode} mode="multiple" allowClear style={{ width: '100%' }}>
-                        { roleList && roleList.map(({ id, name }, index) => {
-                            return <Select.Option key={index} value={id}>
-                                {name}
-                            </Select.Option>
-                        }) }
-                    </Select>
+                    <TreeSelect showSearch={true} placeholder="请选择所属角色" multiple={true}
+                    className={layoutStyles.width100} treeData={wrapRole2DataNode(roleList)} />
                 </Form.Item>
             )  
         },
@@ -155,9 +170,9 @@ export default function StaffNew(): React.ReactNode {
                     "required": true,
                     "message": "请选择岗位" }]}>
                     <Select placeholder="选择岗位" getPopupContainer={triggerNode => triggerNode.parentNode} mode="multiple">
-                        { roleList && roleList.map(({ id, name }, index) => {
-                            return <Select.Option key={index} value={id}>
-                                {name}
+                        { jobsList && jobsList.map(({ id, stationName }, index) => {
+                            return <Select.Option key={index} value={id || ''}>
+                                {stationName}
                             </Select.Option>
                         }) }
                     </Select>
@@ -210,8 +225,6 @@ export default function StaffNew(): React.ReactNode {
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles && roles.forEach((role: any & SelectDataNode): void => {
             role.value = role.id;
-            role.key = role.id;
-            role.title = role.name;
             role.isLeaf = false;
             if (role.children && role.children.length > 0) {
                 wrapRole2DataNode(role.children);
@@ -223,7 +236,7 @@ export default function StaffNew(): React.ReactNode {
     const addRow = () => {
         const dataListValues = form.getFieldsValue(true).list || [];
         const newRow = {
-            autoAccount: 1,
+            autoAccount: 2,
             category: undefined,
             dept: undefined,
             description: '',
@@ -279,7 +292,11 @@ export default function StaffNew(): React.ReactNode {
 
     const { loading } = useRequest(() => new Promise(async (resole, reject) => {
         const deptData: IMetaDept[] = await RequestUtil.get(`/tower-system/department/tree`);
-        setDepartData(deptData)
+        setDepartData(deptData);
+        const roles: IRole[] = await RequestUtil.get<IRole[]>('/sinzetech-system/role/tree');
+        setRoleList(roles);
+        const stations: IResponseData = await RequestUtil.get<IResponseData>('/tower-system/station?size=100');
+        setJobsList(stations.records || []);
         if(location.state.type === 'edit') {
             let data: IStaff[] = location.state.data;
             data = data.map((items: IStaff) => {

@@ -4,15 +4,6 @@ import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../../utils/RequestUtil';
 
-export interface IMetaDept {
-    readonly id?: string;
-    readonly dataPlaceName?: string;
-    readonly parentId?: string;
-    readonly pid?: string;
-    readonly hasChildren?: boolean;
-    readonly parentName?: string;
-}
-
 export interface IDatabaseTree {
     readonly id?: string;
     readonly dataPlaceName?: string;

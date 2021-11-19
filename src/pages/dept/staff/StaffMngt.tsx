@@ -51,10 +51,10 @@ export default function StaffMngt(): React.ReactNode {
             dataIndex: 'phone'
         },
         {
-            key: 'dataType',
+            key: 'deptName',
             title: '部门',
             width: 150,
-            dataIndex: 'dataType'
+            dataIndex: 'deptName'
         },
         {
             key: 'number',
@@ -63,16 +63,16 @@ export default function StaffMngt(): React.ReactNode {
             width: 120
         },
         {
-            key: 'updateTime',
+            key: 'categoryName',
             title: '员工类型',
             width: 200,
-            dataIndex: 'updateTime'
+            dataIndex: 'categoryName'
         },
         {
-            key: 'station',
+            key: 'stationName',
             title: '岗位',
             width: 200,
-            dataIndex: 'station'
+            dataIndex: 'stationName'
         },
         {
             key: 'email',
@@ -87,16 +87,16 @@ export default function StaffMngt(): React.ReactNode {
             dataIndex: 'entryDate'
         },
         {
-            key: 'updateTime',
+            key: 'account',
             title: '关联用户账号',
             width: 200,
-            dataIndex: 'updateTime'
+            dataIndex: 'account'
         },
         {
-            key: 'updateTime',
+            key: 'roleName',
             title: '角色',
             width: 200,
-            dataIndex: 'updateTime'
+            dataIndex: 'roleName'
         },
         {
             key: 'operation',
@@ -149,7 +149,7 @@ export default function StaffMngt(): React.ReactNode {
             columns={ columns }
             headTabs={ [] }
             extraOperation={ <Space direction="horizontal" size="small">
-                <Upload 
+                {/* <Upload 
                     action={ () => {
                         const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
                         return baseUrl+''
@@ -175,9 +175,9 @@ export default function StaffMngt(): React.ReactNode {
                     <Button type="primary">导入</Button>
                 </Upload>
                 <Button type="primary" onClick={ () => downloadTemplate('', '员工管理导入模板') } ghost>下载导入模板</Button>
-                <Button type="primary" ghost>导出</Button>
+                <Button type="primary" ghost>导出</Button> */}
                 <Link to={{pathname: `/dept/staffMngt/new`, state:{ type: 'new' } }}><Button type="primary" ghost>新增</Button></Link>
-                <Link to={{pathname: `/dept/staffMngt/setting`, state:{ type: 'edit', data: [...selectedRows] } }}><Button type="primary" ghost>编辑</Button></Link>
+                { selectedRows.length > 0 ? <Link to={{pathname: `/dept/staffMngt/setting`, state:{ type: 'edit', data: [...selectedRows] } }}><Button type="primary" ghost>编辑</Button></Link> : <Button type="primary" disabled ghost>编辑</Button> }
                 <Popconfirm
                     title="确认删除?"
                     onConfirm={ batchDel }
@@ -198,10 +198,10 @@ export default function StaffMngt(): React.ReactNode {
                 {
                     name: 'category',
                     label: '员工类型',
-                    children: <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                    children: <Select placeholder="请选择" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
                         <Select.Option value={''} key="0">全部</Select.Option>
                         { staffTypeOptions && staffTypeOptions.map(({ id, name }, index) => {
-                            return <Select.Option key={index} value={id+','+name}>
+                            return <Select.Option key={index} value={id}>
                                 {name}
                             </Select.Option>
                         }) }
