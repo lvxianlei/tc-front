@@ -62,7 +62,7 @@ export default function ApplyPayment() {
 
     const { run: successRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/applyPayment/initiateApproval?id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/applyPayment/adoptApply?id=${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -114,6 +114,22 @@ export default function ApplyPayment() {
                 try {
                     resove(await cancelRun(id))
                     message.success("撤回成功...")
+                    history.go(0)
+                } catch (error) {
+                    reject(error)
+                }
+            })
+        })
+    }
+
+    const handleSuccess = (id: string) => {
+        Modal.confirm({
+            title: "通过申请",
+            content: "确定通过此请款申请吗？",
+            onOk: () => new Promise(async (resove, reject) => {
+                try {
+                    resove(await successRun(id))
+                    message.success("通过成功...")
                     history.go(0)
                 } catch (error) {
                     reject(error)
@@ -230,7 +246,7 @@ export default function ApplyPayment() {
                             <Button
                                 type="link"
                                 disabled={![1].includes(record.applyStatus)}
-                                onClick={() => handleCancel(record.id)}
+                                onClick={() => handleSuccess(record.id)}
                             >通过</Button>
                             <Button type="link" disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleDelete(record.id)}>删除</Button>
                             <Button
@@ -239,7 +255,7 @@ export default function ApplyPayment() {
                                     setDetailId(record.id)
                                     setSuccessVisible(true)
                                 }}
-                                disabled={(record.pleasePayStatus === 1 && record.applyStatus === 1) ? true : false}
+                                disabled={(record.pleasePayStatus === 3 && record.applyStatus === 4) ? true : false}
                             >完成</Button>
                         </>
                     }

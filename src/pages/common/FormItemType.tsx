@@ -205,14 +205,21 @@ const limitDecimalsF = (value: string, decimal: number): any => {
         const result = Number(value).toFixed(decimal)
         return result;
     }
-  }
+}
+
 const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, ...props }) => {
     const ItemTypes = {
         string: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} />,
         text: <Input {...props} disabled={data.disabled} style={{ width: "100%", height: "100%", ...props.style }} maxLength={data.maxLength} />,
-        number: <InputNumber {...props} disabled={data.disabled} max={data?.max || 999999999999} min={data?.min || 0} step={data?.step || 1}
+        number: <InputNumber
+            {...props}
+            disabled={data.disabled}
+            max={data?.max || 999999999999}
+            min={data?.min || 0}
+            step={data?.step || 1}
             style={{ width: "100%", height: "100%", ...props.style }}
-            formatter={value => limitDecimalsF(value,data.decimal)} />,
+            // formatter={value => limitDecimalsF(value, data.decimal)}
+        />,
         select: <SelfSelect {...props} data={data as SelectData} />,
         date: <DatePicker
             {...data.picker ? { ...props, picker: data.picker } : { ...props }}
