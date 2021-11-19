@@ -70,6 +70,10 @@ export default function Information(): React.ReactNode {
 
     const handleNewAudit = () => setVisible(true)
     const handleOk = (value: string) => {
+        if (!value) {
+            message.error("请您先选择审批类型！")
+            return;
+        }
         switch (value) {
             case "performance_bond":
                 setPerformanceBondVisible(true)
