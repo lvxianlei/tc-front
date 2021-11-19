@@ -56,27 +56,76 @@ const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref
 
     const handleChange = (fields: any, allfields: any) => {
         const allValue = allfields.submit[0]
-        const fljj: number = parseFloat(allValue.fljj || 0)
-        const gcxh: number = parseFloat(allValue.fljj || 0)
-        const dxcb: number = parseFloat(allValue.dxcb || 0)
-        const jgf: number = parseFloat(allValue.jgf || 0)
-        const gsfs: number = parseFloat(allValue.gsfs || 0)
-        const lszb: number = parseFloat(allValue.lszb || 0)
-        const lsdj: number = parseFloat(allValue.lsdj || 0)
-        const logistics_price: number = parseFloat(allValue.logistics_price || 0)
+        let fljj: number = processingNumber(allValue.fljj + "") || 0
+        let gcxh: number = processingNumber(allValue.gcxh + "") || 0
+        let dxcb: number = processingNumber(allValue.dxcb + "") || 0
+        let jgf: number = processingNumber(allValue.jgf + "") || 0
+        let gsfs: number = processingNumber(allValue.gsfs + "") || 0
+        let lszb: number = parseFloat(allValue.lszb || 0)
+        let lsdj: number = processingNumber(allValue.lsdj + "") || 0
+        let logistics_price: number = processingNumber(allValue.logistics_price + "") || 0
         const yc: number = ycl.reduce((result: number, item: any) => {
             const aa: string = (parseFloat(allValue[item.dj]) * parseFloat(allValue[item.bl]) * 0.01).toFixed(2)
             return result + parseFloat(aa)
         }, 0)
-        const flsh: number = parseFloat((gcxh * (yc - fljj)).toFixed(2))
-        const bhls: number = parseFloat((yc + flsh + dxcb + jgf + gsfs).toFixed(2))
-        const lscb: number = parseFloat((parseFloat((lsdj - bhls).toFixed(2)) * lszb).toFixed(2))
-        const cc: number = parseFloat((yc + logistics_price).toFixed(2))
+        const flsh: number = parseFloat((gcxh * (yc * 1 - fljj * 1)).toFixed(2))
+        const bhls: number = parseFloat((yc * 1 + flsh * 1 + dxcb * 1 + jgf * 1 + gsfs * 1).toFixed(2))
+        const lscb: number = parseFloat((parseFloat((lsdj * 1 - bhls * 1).toFixed(2)) * lszb).toFixed(2))
+        const cc: number = parseFloat((yc * 1 + logistics_price * 1).toFixed(2))
         const gbq_dfj: number = processingNumber(allValue.gbq_dfj + "");
         const gbq_dfj_bl: number = processingNumber(allValue.gbq_dfj_bl + "");
+        const gbq_dbj: number = processingNumber(allValue.gbq_dbj + "");
 
+        const gbq_dbj_bl: number = processingNumber(allValue.gbq_dbj_bl + "");
+        const gbq_cee: number = processingNumber(allValue.gbq_cee + "");
+        const gbq_cee_bl: number = processingNumber(allValue.gbq_cee_bl + "");
+        const gbq_bce_bl: number = processingNumber(allValue.gbq_bce_bl + "");
+        const jgq_dfj: number = processingNumber(allValue.jgq_dfj + "");
+        const jgq_dfj_bl: number = processingNumber(allValue.jgq_dfj_bl + "");
+        const jgq_dbj: number = processingNumber(allValue.jgq_dbj + "");
+        const jgq_dbj_bl: number = processingNumber(allValue.jgq_dbj_bl + "");
+        const jgq_cee: number = processingNumber(allValue.jgq_cee + "");
+        const jgq_cee_bl: number = processingNumber(allValue.jgq_cee_bl + "");
+        const jgq_bce: number = processingNumber(allValue.jgq_bce + "");
+        const jgq_bce_bl: number = processingNumber(allValue.jgq_bce_bl + "");
+        const lr: number = processingNumber(allValue.lr + "");
+        const ground_receiving_price: number = processingNumber(allValue.ground_receiving_price + "");
+        const gbq_bce: number = processingNumber(allValue.gbq_bce + '');
         // console.log( [{ ...allValue, cc, yc, flsh, bhls, lscb }], '修改后的数据')
-        formRef.setFieldsValue({ submit: [{ ...allValue, cc, yc, flsh, bhls, lscb, gbq_dfj, gbq_dfj_bl }] })
+        formRef.setFieldsValue({ submit: [{ 
+            ...allValue,
+            cc,
+            yc,
+            flsh,
+            bhls,
+            lscb,
+            gbq_dfj,
+            gbq_dfj_bl,
+            gbq_dbj,
+            gbq_dbj_bl,
+            gbq_cee,
+            gbq_cee_bl,
+            gbq_bce_bl,
+            jgq_dfj,
+            jgq_dfj_bl,
+            jgq_dbj,
+            jgq_dbj_bl,
+            jgq_cee,
+            jgq_cee_bl,
+            jgq_bce,
+            jgq_bce_bl,
+            lr,
+            ground_receiving_price,
+            gbq_bce,
+            logistics_price,
+            fljj,
+            gcxh,
+            dxcb,
+            jgf,
+            gsfs,
+            lszb,
+            lsdj,
+         }] })
     }
     return <EditTable
         form={formRef}
