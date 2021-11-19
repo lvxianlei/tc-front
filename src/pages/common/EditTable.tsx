@@ -44,10 +44,11 @@ export interface EditTableProps {
     addRowData?: { [key: string]: any }
     haveOpration?: boolean
     onChange?: (changeFiled: any, allChangeFileds: any) => void
+    autoScroll?: boolean
 }
 
 export default function EditableTable({ columns = [], dataSource = [], form, addRowData = {},
-    haveNewButton = true, newButtonTitle, haveOpration = true, opration, onChange }: EditTableProps): JSX.Element {
+    haveNewButton = true, newButtonTitle, haveOpration = true, opration, onChange, autoScroll = false }: EditTableProps): JSX.Element {
     const [dataState] = useState<any>({ data: dataSource || [], loading: false })
     const baseRowData: { [key: string]: string | number | null } = {}
     columns.forEach(item => baseRowData[item.dataIndex] = null)
@@ -155,7 +156,7 @@ export default function EditableTable({ columns = [], dataSource = [], form, add
                                         style={{ width: 100, backgroundColor: "#f5f5f5" }}
                                         className={item.required ? styles.required : ""} span={2}>{item.title}</Col>))}
                                 </Row>
-                                <div style={{height: "600px", overflow: 'auto'}}>
+                                <div style={{ height: autoScroll ? "600px" : '', overflow: autoScroll ? 'auto' : ''}}>
                                     {fields.map(({ key, name, fieldKey, ...restField }, index: number) => (
                                         <Row style={{ width: "100%" }} key={`EditableRow_${key}`} className={`${styles.FormHeader} ${styles.FormRow}`}>
                                             {columns.map((coItem, coIndex) => (<Col key={`EditableCol_${coIndex}`} span={2}>
