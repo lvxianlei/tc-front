@@ -519,32 +519,46 @@ export default abstract class AbstractSaleOrderSetting<P extends RouteComponentP
                             label: "税率",
                             name: "taxRate",
                             initialValue: saleOrder?.taxRate === -1 ? undefined : saleOrder?.taxRate,
+                            rules: [
+                                {
+                                    required: true,
+                                    message: "请输入税率",
+                                },
+                            ],
                             children: (
-                                <Select
-                                    showSearch
-                                    onSearch={this.addNewOption}
+                                // <Select
+                                //     showSearch
+                                //     onSearch={this.addNewOption}
 
-                                    getPopupContainer={(triggerNode) => triggerNode.parentNode}
-                                >
-                                    {this.state.newOption ? (
-                                        <Select.Option
-                                            key={this.state.newOption.value}
-                                            value={this.state.newOption.label}
-                                        >
-                                            {this.state.newOption.value}
-                                        </Select.Option>
-                                    ) : (
-                                        ""
-                                    )}
-                                    {taxRateOptions &&
-                                        taxRateOptions.map(({ id, name }, index) => {
-                                            return (
-                                                <Select.Option key={index} value={name}>
-                                                    {name}
-                                                </Select.Option>
-                                            );
-                                        })}
-                                </Select>
+                                //     getPopupContainer={(triggerNode) => triggerNode.parentNode}
+                                // >
+                                //     {this.state.newOption ? (
+                                //         <Select.Option
+                                //             key={this.state.newOption.value}
+                                //             value={this.state.newOption.label}
+                                //         >
+                                //             {this.state.newOption.value}
+                                //         </Select.Option>
+                                //     ) : (
+                                //         ""
+                                //     )}
+                                //     {taxRateOptions &&
+                                //         taxRateOptions.map(({ id, name }, index) => {
+                                //             return (
+                                //                 <Select.Option key={index} value={name}>
+                                //                     {name}
+                                //                 </Select.Option>
+                                //             );
+                                //         })}
+                                // </Select>
+                                <InputNumber
+                                    min={0}
+                                    step="0.01"
+                                    stringMode={false}
+                                    precision={2}
+                                    max={100}
+                                    className={layoutStyles.width100}
+                                />
                             ),
                         },
                         {

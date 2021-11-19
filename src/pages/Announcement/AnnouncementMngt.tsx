@@ -15,6 +15,7 @@ export interface IAnnouncement {
     readonly userNames?: string;
     readonly attachInfoDtos?: IFileList[];
     readonly attachVos?: IFileList[];
+    readonly staffList?: string[];
 }
 
 export interface IFileList {
@@ -53,7 +54,7 @@ export default function AnnouncementMngt(): React.ReactNode {
         },
         {
             key: 'state',
-            title: '任务状态',
+            title: '状态',
             dataIndex: 'state',
             width: 120,
             render: (state: number): React.ReactNode => {
@@ -82,7 +83,7 @@ export default function AnnouncementMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                     { record.state === 0 ? <Link to={{pathname: `/announcement/edit/${ record.id }`, state:{ type: 'edit' } }}>编辑</Link> : <Button type="link" disabled>编辑</Button> }
-                    <Button type="link" onClick={() => {
+                    <Button type="link" disabled={ !(record.state === 1) } onClick={() => {
                         RequestUtil.post(`/tower-system/notice/withdraw`, {
                             noticeIds: [record.id]
                         }).then(res => {
@@ -98,9 +99,9 @@ export default function AnnouncementMngt(): React.ReactNode {
                         } }
                         okText="确认"
                         cancelText="取消"
-                        disabled={ record.state !== 1 }
+                        disabled={ record.state === 1 }
                     >
-                        <Button type="link" disabled={ record.state !== 1 }>删除</Button>
+                        <Button type="link" disabled={ record.state === 1 }>删除</Button>
                     </Popconfirm>
                 </Space>
             )
@@ -149,8 +150,8 @@ export default function AnnouncementMngt(): React.ReactNode {
         headTabs={ [] }
         extraOperation={ <Space direction="horizontal" size="small">
             <Link to={{pathname: `/announcement/new`, state:{ type: 'new' } }}><Button type="primary">新发布</Button></Link>
-            <Button type="primary" onClick={ batchWithdraw } ghost>撤回</Button>
-            <Button type="primary" onClick={ batchDel } ghost>删除</Button>
+            { selectedRows.length > 0 && selectedRows.map(items => items.state).indexOf(0 || 2) === -1 ? <Button type="primary" onClick={ batchWithdraw } ghost>撤回</Button> : <Button type="primary" disabled ghost>撤回</Button>}
+            { selectedRows.length > 0 && selectedRows.map(items => items.state).indexOf(1) === -1 ? <Button type="primary" onClick={ batchDel } ghost>删除</Button> : <Button type="primary" disabled ghost>删除</Button> }
         </Space> }
         refresh={ refresh }
         tableProps={{
@@ -165,7 +166,7 @@ export default function AnnouncementMngt(): React.ReactNode {
                 label: '状态',
                 children: <Form.Item name="state">
                     <Select placeholder="请选择" style={{ width: "150px" }}>
-                        <Select.Option value={-1} key="-1">全部</Select.Option>
+                        <Select.Option value={''} key="3">全部</Select.Option>
                         <Select.Option value={0} key="0">草稿</Select.Option>
                         <Select.Option value={1} key="1">已发布</Select.Option>
                         <Select.Option value={2} key="2">已撤回</Select.Option>
@@ -175,7 +176,7 @@ export default function AnnouncementMngt(): React.ReactNode {
             {
                 name: 'msg',
                 label: '模糊查询项',
-                children: <Input maxLength={50}/>
+                children: <Input maxLength={50} placeholder="请输入标题/内容查询"/>
             }
         ] }
         filterValue={ filterValue }

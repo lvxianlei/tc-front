@@ -6,15 +6,15 @@ import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './DataMngt.module.less';
 import { IData } from './DataMngt';
-import { wrapRole2DataNode } from '../../baseSetting/deptUtil';
 import { TreeNode } from 'antd/lib/tree-select';
+import { IDatabaseTree } from '../../basicData/database/DatabaseMngt';import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
+import { dataTypeOptions } from '../../../configuration/DictionaryOptions';
 
 export default function DataNew(): React.ReactNode {
     const [ form ] = Form.useForm();
     const history = useHistory();
     const location = useLocation<{ type: string, data: IData[] }>();
     const [ dataList, setDataList ] = useState<IData[]>([]);
-    const [ databaseData, setDatabaseData ] = useState([{id: '121321', title: 'asdasd'}]);
 
     const tableColumns = [
         {
@@ -58,12 +58,11 @@ export default function DataNew(): React.ReactNode {
                     "required": true,
                     "message": "请选择资料类型" }]}>
                     <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
-                        <Select.Option key={1} value={123}>1</Select.Option>
-                        {/* { boltTypeOptions && boltTypeOptions.map(({ id, name }, index) => {
+                        { dataTypeOptions && dataTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={index} value={id}>
                                 {name}
                             </Select.Option>
-                        }) } */}
+                        }) }
                     </Select>
                 </Form.Item>
             )  
@@ -111,16 +110,6 @@ export default function DataNew(): React.ReactNode {
         }
     ]
 
-    const renderTreeNodes = (data:any) => data.map((item:any) => {
-        if (item.children) {
-            item.disabled = true;
-            return (<TreeNode key={ item.id } title={ item.title } value={ item.id } disabled={ item.disabled } className={ styles.node } >
-                { renderTreeNodes(item.children) }
-            </TreeNode>);
-        }
-        return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id } />;
-    });
-
     const addRow = () => {
         const dataListValues = form.getFieldsValue(true).list || [];
         const newRow = {
@@ -141,6 +130,28 @@ export default function DataNew(): React.ReactNode {
         const dataListValues = form.getFieldsValue(true).list;
         dataListValues.splice(index, 1);
         setDataList([...dataListValues]);
+    }
+
+    const renderTreeNodes = (data:any) => data.map((item:any) => {
+        if(item.children && item.children.length > 0) {
+            item.disabled = true;
+            return (<TreeNode key={ item.id } title={ item.title } value={ item.id } disabled={ item.disabled } className={ styles.node } >
+                { renderTreeNodes(item.children) }
+            </TreeNode>);
+        }
+        return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id } />;
+    });
+
+    const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
+        roles && roles.forEach((role: any & SelectDataNode): void => {
+            role.value = role.id;
+            role.title = role.dataPlaceName;
+            role.isLeaf = false;
+            if (role.children && role.children.length > 0) {
+                wrapRole2DataNode(role.children);
+            }
+        });
+        return roles;
     }
 
     const save = (tip: number) => {
@@ -181,14 +192,16 @@ export default function DataNew(): React.ReactNode {
         }
     }
 
-    const { loading } = useRequest(() => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest<IDatabaseTree[]>(() => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get<IDatabaseTree[]>(`/tower-system/dataPlace`);
         if(location.state.type === 'edit') {
             setDataList(location.state.data);
         } else {
             setDataList([]);
         }
-        resole(true)
-    }), {})
+        resole(data)
+    }), {});
+    const databaseData: IDatabaseTree[] = data || [];
     if (loading) {
         return <Spin spinning={loading}>
             <div style={{ width: '100%', height: '300px' }}></div>

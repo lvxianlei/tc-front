@@ -17,8 +17,10 @@ export enum DictionaryEnums {
     BOLT_TYPE = 105,
     WAREHOUSE_TYPE = 127,
     CAR_TYPE = 146,
-    standard = 104,
-    STAFF_TYPE = 1213
+    STANDARD = 104,
+    STAFF_TYPE = 1213,
+    DEPT_TYPE = 150,
+    DATA_TYPE = 151
 }
 
 let productType: IDict[] | undefined = [];
@@ -36,6 +38,8 @@ let warehouseType: IDict[] | undefined = [];
 let carType: IDict[] | undefined = [];
 let standard: IDict[] | undefined = [];
 let staffType: IDict[] | undefined = [];
+let deptType: IDict[] | undefined = [];
+let dataType: IDict[] | undefined = [];
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
     voltageGrade = dictionary[DictionaryEnums.VOLTAGE_GRADE];
@@ -50,8 +54,10 @@ if (dictionary) {
     boltType = dictionary[DictionaryEnums.BOLT_TYPE];
     warehouseType = dictionary[DictionaryEnums.WAREHOUSE_TYPE];
     carType = dictionary[DictionaryEnums.CAR_TYPE];
-    standard = dictionary[DictionaryEnums.standard];
+    standard = dictionary[DictionaryEnums.STANDARD];
     staffType = dictionary[DictionaryEnums.STAFF_TYPE];
+    deptType = dictionary[DictionaryEnums.DEPT_TYPE];
+    dataType = dictionary[DictionaryEnums.DATA_TYPE];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -69,3 +75,5 @@ export const warehouseOptions = warehouseType; //仓库类型
 export const carOptions = carType; //车辆类型
 export const standardOptions = standard; //材料标准
 export const staffTypeOptions = staffType; //员工类型
+export const deptTypeOptions = deptType; //部门类型
+export const dataTypeOptions = dataType; //资料类型

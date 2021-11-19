@@ -180,6 +180,8 @@ export default function CostEdit() {
             if ((formRef.current as any).data.length <= 0 || !(formRef.current as any).data[0]) {
                 message.error("至少新增一个产品类型")
                 return
+            } else {
+                (formRef.current as any).data = (formRef.current as any).data.filter((item: any) => item != null);
             }
             const askProductDtoDatas = await Promise.all((formRef.current as any).data.map((item: any) => item.formRef.validateFields()))
             await saveRun({

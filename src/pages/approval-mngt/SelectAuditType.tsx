@@ -10,7 +10,18 @@ export default function SelectAuditType(props: ModalFuncProps): JSX.Element {
         resolve(result)
     }))
 
-    return <Modal {...props} onOk={() => props.onOk && props.onOk(selectValue)} destroyOnClose>
+    const hanleSure = () => {
+        props.onOk && props.onOk(selectValue);
+        setSelectValue("");
+    }
+
+    // 取消操作，清除select的值
+    const hanleSelectCancle = () => {
+        setSelectValue("");
+        props.onCancel && props.onCancel();
+    }
+
+    return <Modal {...props} onOk={hanleSure} onCancel={hanleSelectCancle} destroyOnClose>
 
         <Spin spinning={loading}>
             <Row>

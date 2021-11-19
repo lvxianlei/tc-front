@@ -14,6 +14,14 @@ import { DataNode } from 'antd/lib/tree';
 import { IStaff } from '../dept/staff/StaffMngt';
 import { TablePaginationConfig } from 'antd/lib/table';
 
+interface IResponseData {
+    readonly records?: IStaff[];
+    readonly total: number | undefined;
+    readonly size: number | undefined;
+    readonly current: number | undefined;
+    readonly parentCode: string;
+}
+
 export interface SelectUserTransferProps {}
 export interface ISelectUserTransferRouteProps extends RouteComponentProps<SelectUserTransferProps>, WithTranslation {
     readonly save: (selectRows: IStaff[]) => void;
@@ -27,6 +35,8 @@ export interface SelectUserTransferState {
     readonly selectedRows?: IStaff[];
     readonly selectedRowKeys?: React.Key[];
     readonly rightData?: IStaff[];
+    readonly detailData?: IResponseData;
+    readonly treeSelectKeys?: React.Key[];
 }
 
 class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, SelectUserTransferState> {
@@ -61,8 +71,12 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
         return roles;
     }
 
-    protected getStaffList = (pagination: TablePaginationConfig) => {
-
+    protected getStaffList = async (selectedKeys: React.Key[], pagination?: TablePaginationConfig) => {
+        const data: IResponseData = await RequestUtil.get<IResponseData>(`/tower-system/employee`, { dept: selectedKeys[0], ...pagination })
+        this.setState({
+            treeData: data.records,
+            detailData: data
+        })
     }
 
 
@@ -79,7 +93,7 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
                 title="选择员工"
                 footer={ <Space>
                     <Button type="link" onClick={() => this.modalCancel() }>取消</Button>
-                    <Button type="primary" onClick={() => this.props.save(this.state.rightData || [])} ghost>确定</Button>
+                    <Button type="primary" onClick={() => { this.setState({ visible: false }); this.props.save(this.state.rightData || [])}} ghost>确定</Button>
                 </Space> } 
                 onCancel={ () => this.modalCancel() }
                 className={styles.modalcontent}
@@ -90,32 +104,18 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
                             defaultExpandAll
                             treeData={ this.wrapRole2DataNode(this.state.deptData) }
                             onSelect={ (selectedKeys) => {
-                                console.log(selectedKeys)
-                                if(selectedKeys[0] === '1399630941441486851'){
-                                    this.setState({
-                                        treeData: [
-                                        {
-                                            id: '123',
-                                            name: 'qaz'
-                                        }]
-                                    })
-
-                                }else {
-                                    this.setState({
-                                        treeData: [{
-                                            id: '445656',
-                                            name: 'ert'
-                                        },{
-                                            id: '534564674',
-                                            name: 'gdfgdgb'
-                                        }]
-                                    })
-                                }
+                                this.getStaffList(selectedKeys)
+                                this.setState({
+                                    treeSelectKeys: selectedKeys
+                                })
                             } }
                         />
                         <Button onClick={ () => {
+                            const rows = [ ...(this.state.rightData || []), ...(this.state.selectedRows || [])];
+                            const res = new Map();
+                            let newRows = rows.filter((item: IStaff) => !res.has(item.id) && res.set(item.id, 1));
                             this.setState({
-                                rightData: [ ...(this.state.rightData || []), ...(this.state.selectedRows || [])]
+                                rightData: newRows
                             })
                         } }>确定</Button>
                         <Table 
@@ -131,14 +131,14 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
                                 }
                             ]} 
                             onChange={ (pagination: TablePaginationConfig) => { 
-                                this.getStaffList(pagination);
+                                this.getStaffList(this.state.treeSelectKeys || [],pagination);
                             } }
-                            // pagination={{
-                            //     current: detailData?.current || 0,
-                            //     pageSize: detailData?.size || 0,
-                            //     total: detailData?.total || 0,
-                            //     showSizeChanger: false
-                            // }}
+                            pagination={{
+                                current: this.state.detailData?.current || 0,
+                                pageSize: this.state.detailData?.size || 0,
+                                total: this.state.detailData?.total || 0,
+                                showSizeChanger: false
+                            }}
                             rowSelection={{
                                 selectedRowKeys: this.state.selectedRowKeys,
                                 onChange: (selectedRowKeys: React.Key[], selectedRows: IStaff[]) => {
@@ -151,7 +151,7 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
                         />
                     </Col>
                     <Col className={styles.right} span={11}>
-                        <Table rowKey='id' dataSource={[...(this.state.rightData || [])]} showHeader={ false } columns={ [
+                        <Table rowKey='id' dataSource={[...(this.state.rightData || [])]} pagination={false} showHeader={ false } columns={ [
                             {
                                 key: 'name',
                                 title: '姓名',
