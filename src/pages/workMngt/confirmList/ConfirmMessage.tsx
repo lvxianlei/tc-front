@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Spin, Space, Modal, Image } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
+import { BaseInfo, DetailContent, CommonTable, DetailTitle, Attachment } from '../../common';
 import { baseInfoData } from './confirm.json';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -25,7 +25,7 @@ export default function ConfirmMessage(): React.ReactNode {
                 <DetailTitle title="基本信息" />
                 <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
                 <DetailTitle title="相关附件"/>
-                <CommonTable columns={[
+                {/* <CommonTable columns={[
                     {
                         title: '附件名称',
                         dataIndex: 'name',
@@ -43,7 +43,8 @@ export default function ConfirmMessage(): React.ReactNode {
                             </Space>
                         )
                     }
-                ]} dataSource={detailData?.attachInfoList} pagination={ false }/>
+                ]} dataSource={detailData?.attachInfoList} pagination={ false }/> */}
+                <Attachment dataSource={detailData?.attachInfoList} />
                 {/* <DetailTitle title="完成信息" />
                 <CommonTable columns={[
                     {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Spin, Space} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { DetailContent, CommonTable, DetailTitle } from '../common';
+import { DetailContent, CommonTable, DetailTitle, Attachment } from '../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
@@ -112,7 +112,7 @@ export default function ConfirmDetail(): React.ReactNode {
             <CommonTable columns={towerColumns} dataSource={detailData?.drawProductDetailList} />
             <DetailTitle title="备注"/>
             <TextArea maxLength={500} showCount rows={3} value={detailData?.description} disabled/>
-            <DetailTitle title="附件"/>
+            {/* <DetailTitle title="附件"/>
             <CommonTable columns={[
                 {
                     title: '附件名称',
@@ -130,7 +130,8 @@ export default function ConfirmDetail(): React.ReactNode {
                         </Space>
                     )
                 }
-            ]} dataSource={detailData?.attachInfoList} />
+            ]} dataSource={detailData?.attachInfoList} /> */}
+            <Attachment dataSource={detailData?.attachInfoList}/>
             </DetailContent>
         </Spin>
     </>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Spin, Space, Modal, Form, message, Image } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../common';
+import { BaseInfo, DetailContent, CommonTable, DetailTitle, Attachment } from '../common';
 import { baseInfoData } from './confirmTaskData.json';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
@@ -126,8 +126,8 @@ export default function ConfirmTaskDetail(): React.ReactNode {
                 </Modal>
                 <DetailTitle title="基本信息" />
                 <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
-                <DetailTitle title="相关附件"/>
-                <CommonTable columns={[
+                {/* <DetailTitle title="相关附件"/> */}
+                {/* <CommonTable columns={[
                     {
                         title: '附件名称',
                         dataIndex: 'name',
@@ -145,7 +145,8 @@ export default function ConfirmTaskDetail(): React.ReactNode {
                             </Space>
                         )
                     }
-                ]} dataSource={detailData?.attachInfoList} pagination={ false } />
+                ]} dataSource={detailData?.attachInfoList} pagination={ false } /> */}
+                <Attachment dataSource={detailData?.attachInfoList}/>
                 <DetailTitle title="操作信息" />
                 <CommonTable columns={tableColumns} dataSource={detailData?.statusRecordList} pagination={ false } />
             </DetailContent>
