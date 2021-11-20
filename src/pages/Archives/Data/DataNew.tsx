@@ -7,7 +7,8 @@ import useRequest from '@ahooksjs/use-request';
 import styles from './DataMngt.module.less';
 import { IData } from './DataMngt';
 import { TreeNode } from 'antd/lib/tree-select';
-import { IDatabaseTree } from '../../basicData/database/DatabaseMngt';import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
+import { IDatabaseTree } from '../../basicData/database/DatabaseMngt';
+import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { dataTypeOptions } from '../../../configuration/DictionaryOptions';
 
 export default function DataNew(): React.ReactNode {

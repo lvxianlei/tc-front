@@ -2,21 +2,24 @@ import React, { useState } from 'react';
 import { Spin, Button, Space, message, Form, Input, Table, Popconfirm, Select, TreeSelect, DatePicker } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { DetailTitle, DetailContent } from '../../common';
-import RequestUtil from '../../../utils/RequestUtil';
+import RequestUtil from '../../../utils/RequestUtil'; 
 import useRequest from '@ahooksjs/use-request';
 import styles from './CertificateMngt.module.less';
 import { ICertificate } from './CertificateMngt';
-import { wrapRole2DataNode } from '../../baseSetting/deptUtil';
 import { TreeNode } from 'antd/lib/tree-select';
 import { FixedType } from 'rc-table/lib/interface';
 import moment from 'moment';
+import { dataTypeOptions } from '../../../configuration/DictionaryOptions';
+import { IDatabaseTree } from '../../basicData/database/DatabaseMngt';
+import SelectUserTransfer from '../../Announcement/SelectUserTransfer';
+import { IStaff } from '../../dept/staff/StaffMngt';
+import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 
 export default function CertificateNew(): React.ReactNode {
     const [ form ] = Form.useForm();
     const history = useHistory();
     const location = useLocation<{ type: string, data: ICertificate[] }>();
     const [ dataList, setDataList ] = useState<ICertificate[]>([]);
-    const [ databaseData, setDatabaseData ] = useState([{id: '121321', title: 'asdasd'}]);
 
     const tableColumns = [
         {
@@ -63,12 +66,11 @@ export default function CertificateNew(): React.ReactNode {
                     "required": true,
                     "message": "请选择证书类型" }]}>
                     <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
-                        <Select.Option key={1} value={123}>1</Select.Option>
-                        {/* { boltTypeOptions && boltTypeOptions.map(({ id, name }, index) => {
+                        { dataTypeOptions && dataTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={index} value={id}>
                                 {name}
                             </Select.Option>
-                        }) } */}
+                        }) }
                     </Select>
                 </Form.Item>
             )  
@@ -155,25 +157,39 @@ export default function CertificateNew(): React.ReactNode {
             )  
         },
         {
-            key: 'staffId',
+            key: 'number',
             title: <span><span style={{ color: 'red' }}>*</span>工号</span>,
-            dataIndex: 'staffId',
+            dataIndex: 'number',
             width: 150,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={ ["list", index, "staffId"] } key={ index } initialValue={ _ } rules={[{ 
+                <Form.Item name={ ["list", index, "number"] } key={ index } initialValue={ _ } rules={[{ 
                     "required": true,
                     "message": "请选择工号" }]}>
-                    <Input maxLength={ 50 }/>
+                    <Input addonBefore={<SelectUserTransfer type="radio" save={ (selectRows: IStaff[]) => {
+                        const values = form.getFieldsValue(true).list;
+                        values[index] = {
+                            ...values[index],
+                            id: dataList[index].id,
+                            staffName: selectRows[0].name, 
+                            number: selectRows[0].number, 
+                            staffId: selectRows[0].id, 
+                            categoryName: selectRows[0].categoryName, 
+                            deptName: selectRows[0].deptName, 
+                            stationName: selectRows[0].stationName
+                        }
+                        form.setFieldsValue({ list: [...values] });
+                        setDataList([...values]);
+                    } }/>} disabled/>
                 </Form.Item>
             )  
         },
         {
-            key: 'name',
+            key: 'staffName',
             title: '姓名',
-            dataIndex: 'name',
+            dataIndex: 'staffName',
             width: 150,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={ ["list", index, "name"] } key={ index } initialValue={ _ }>
+                <Form.Item name={ ["list", index, "staffName"] } key={ index } initialValue={ _ }>
                     <Input disabled bordered={ false }/>
                 </Form.Item>
             )  
@@ -190,23 +206,23 @@ export default function CertificateNew(): React.ReactNode {
             )  
         },
         {
-            key: 'dept',
+            key: 'deptName',
             title: '部门',
-            dataIndex: 'dept',
+            dataIndex: 'deptName',
             width: 150,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={ ["list", index, "dept"] } key={ index } initialValue={ _ }>
+                <Form.Item name={ ["list", index, "deptName"] } key={ index } initialValue={ _ }>
                     <Input disabled bordered={ false }/>
                 </Form.Item>
             )  
         },
         {
-            key: 'dept',
+            key: 'stationName',
             title: '职位',
-            dataIndex: 'dept',
+            dataIndex: 'stationName',
             width: 150,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={ ["list", index, "dept"] } key={ index } initialValue={ _ }>
+                <Form.Item name={ ["list", index, "stationName"] } key={ index } initialValue={ _ }>
                     <Input disabled bordered={ false }/>
                 </Form.Item>
             )  
@@ -231,6 +247,18 @@ export default function CertificateNew(): React.ReactNode {
             )
         }
     ]
+
+    const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
+        roles && roles.forEach((role: any & SelectDataNode): void => {
+            role.value = role.id;
+            role.title = role.dataPlaceName;
+            role.isLeaf = false;
+            if (role.children && role.children.length > 0) {
+                wrapRole2DataNode(role.children);
+            }
+        });
+        return roles;
+    }
 
     const renderTreeNodes = (data:any) => data.map((item:any) => {
         if (item.children) {
@@ -314,7 +342,8 @@ export default function CertificateNew(): React.ReactNode {
         }
     }
 
-    const { loading } = useRequest(() => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest<IDatabaseTree[]>(() => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get<IDatabaseTree[]>(`/tower-system/dataPlace`);
         if(location.state.type === 'edit') {
             let data: ICertificate[] = location.state.data;
             data = data.map((items: ICertificate) => {
@@ -328,8 +357,10 @@ export default function CertificateNew(): React.ReactNode {
         } else {
             setDataList([]);
         }
-        resole(true)
+        resole(data)
     }), {})
+    const databaseData: IDatabaseTree[] = data || [];
+
     if (loading) {
         return <Spin spinning={loading}>
             <div style={{ width: '100%', height: '300px' }}></div>
