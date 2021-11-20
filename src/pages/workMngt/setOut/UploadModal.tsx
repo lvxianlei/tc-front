@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Space, Modal, Upload, message } from 'antd';
-import { DetailContent, CommonTable } from '../../common';
+import { DetailContent, CommonTable, Attachment } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './TowerLoftingAssign.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
@@ -112,7 +112,8 @@ class UploadModal extends React.Component<IUploadModalRouteProps, UploadModalSta
                 onCancel={ () => this.modalCancel() }
             >
                 <DetailContent>
-                    <div className={ styles.topPadding }>相关附件
+                    <Attachment edit={ true } dataSource={ this.state.data?.attachInfoVOList || [] } />
+                    {/* <div className={ styles.topPadding }>相关附件
                         <span style={ { position: 'absolute', right: '1%' } }>
                             <Upload 
                                 action={ () => {
@@ -176,7 +177,7 @@ class UploadModal extends React.Component<IUploadModalRouteProps, UploadModalSta
                     ]}
                         dataSource={ this.state.data?.attachInfoVOList }
                         pagination={ false }
-                    />
+                    /> */}
                     <p className={ styles.topPadding }>操作信息</p>
                     <CommonTable columns={ tableColumns } dataSource={ this.state.data?.productSegmentRecordVOList }  pagination={ false } />
                 </DetailContent>

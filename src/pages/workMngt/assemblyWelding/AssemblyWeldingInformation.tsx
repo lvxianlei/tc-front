@@ -7,7 +7,7 @@
 import React, { useState } from 'react';
 import { Spin, Button, Space, Modal, Image } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../../common';
+import { DetailTitle, BaseInfo, DetailContent, CommonTable, Attachment } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 
@@ -131,7 +131,8 @@ export default function AssemblyWeldingInformation(): React.ReactNode {
             <DetailTitle title="产品信息" />
             <BaseInfo columns={ productColumns } dataSource={ detailData } col={ 2 } />
             <DetailTitle title="相关附件" />
-            <CommonTable columns={[
+            <Attachment dataSource={ detailData.attachInfoList || [] } />
+            {/* <CommonTable columns={[
                 { 
                     key: 'name', 
                     title: '附件名称', 
@@ -159,7 +160,7 @@ export default function AssemblyWeldingInformation(): React.ReactNode {
             ]}
                 dataSource={ detailData.attachInfoList }
                 pagination={ false }
-            />
+            /> */}
             <DetailTitle title="操作信息"/>
             <CommonTable columns={ tableColumns } dataSource={ detailData.statusRecordList } pagination={ false } />
         </DetailContent>

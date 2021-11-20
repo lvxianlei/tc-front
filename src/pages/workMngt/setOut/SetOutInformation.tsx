@@ -7,7 +7,7 @@
 import React from 'react';
 import { Spin, Button, Space } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../../common';
+import { DetailTitle, BaseInfo, DetailContent, CommonTable, Attachment } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './SetOut.module.less';
@@ -19,14 +19,17 @@ interface ISetOut {
 }
 
 interface IAttachVos {
-    readonly description?: string;
-    readonly filePath?: string;
-    readonly fileSize?: string;
-    readonly fileSuffix?: string;
-    readonly fileUploadTime?: string;
     readonly id?: string;
-    readonly name?: string;
-    readonly userName?: string;
+    readonly filePath: string;
+    readonly originalName?: string;
+    readonly name: string;
+    readonly userName: string;
+    readonly link: string;
+    readonly fileSuffix: string;
+    readonly uid?: number | string,
+    readonly description: string,
+    readonly fileSize: string | number,
+    readonly fileUploadTime: string
 }
 
 interface ITaskDataVOList {
@@ -111,7 +114,8 @@ export default function SetOutInformation(): React.ReactNode {
         <BaseInfo columns={ specialColums } dataSource={ detailData } col={ 2 } />
         <DetailTitle title="产品信息" />
         <BaseInfo columns={ productColumns } dataSource={ detailData } col={ 2 } />
-        <DetailTitle title="相关附件" />
+        <Attachment dataSource={ detailData.attachVos || [] } />
+        {/* <DetailTitle title="相关附件" />
         <CommonTable columns={[
             { 
                 key: 'name', 
@@ -134,7 +138,7 @@ export default function SetOutInformation(): React.ReactNode {
         ]}
             dataSource={ detailData.attachVos }
             pagination={ false }
-        />
+        /> */}
         <DetailTitle title="操作信息"/>
         <CommonTable columns={ tableColumns } dataSource={ detailData.stateRecordVOS } pagination={ false }/>
     </DetailContent>
