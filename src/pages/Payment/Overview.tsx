@@ -51,23 +51,7 @@ export default function Edit() {
                     },
                 ] as any : [])
             ]} dataSource={data?.payInfoVOList || []} />
-            {/* <DetailTitle title="附件信息" /> */}
-            {/* <CommonTable columns={[{
-                title: '操作',
-                width: 60,
-                dataIndex: 'opration',
-                render: (_a: any, _b: any): React.ReactNode => (<Button
-                    type="link"
-                    onClick={() => downLoadFile(_b.filePath, _b.name)}
-                >下载</Button>)
-            },
-            {
-                title: '序号',
-                dataIndex: 'index',
-                key: 'index',
-                render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-                }, ...enclosure]} dataSource={data?.attachVos || []} /> */}
-            <Attachment showHeader columns={[...enclosure]} dataSource={data?.attachVos || []} />
+            <Attachment dataSource={data?.attachVos || []} />
             <DetailTitle title="审批记录" />
             <CommonTable columns={auditIdRecord} dataSource={data?.payInfoVOList || []} />
         </Spin>

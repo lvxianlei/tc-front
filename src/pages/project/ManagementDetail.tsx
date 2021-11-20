@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Row, Tabs, Radio, Spin, Modal, message } from 'antd'
 import { useHistory, useParams, Link, Prompt } from 'react-router-dom'
-import { BaseInfo, DetailContent, CommonTable, DetailTitle,Attachment } from '../common'
+import { BaseInfo, DetailContent, CommonTable, DetailTitle, Attachment } from '../common'
 import CostDetail from './Cost'
 import PayInfo from './payInfo'
 import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
@@ -190,7 +190,7 @@ export default function ManagementDetail(): React.ReactNode {
                 },
                 ...cargoVOListColumns
             ]} dataSource={data?.cargoVOList} />
-            <Attachment showHeader columns={[...enclosure]}  dataSource={data?.attachVos || []} />
+            <Attachment dataSource={data?.attachVos || []} />
         </DetailContent>,
         tab_cost: <CostDetail />,
         tab_bidDoc: <DetailContent

@@ -1,7 +1,7 @@
-import React, { useState,useRef } from "react"
+import React, { useState, useRef } from "react"
 import { useHistory, useParams } from "react-router-dom"
 import { Button, Form, message, Spin, Upload } from "antd"
-import { DetailContent, BaseInfo, EditTable, DetailTitle, CommonTable, Attachment, AttachmentRef  } from '../../common'
+import { DetailContent, BaseInfo, EditTable, DetailTitle, CommonTable, Attachment, AttachmentRef } from '../../common'
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { baseInfoData, enclosure, cargoVOListColumns } from '../managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
@@ -102,7 +102,7 @@ export default function BaseInfoEdit(): JSX.Element {
             setAddress(fields.address);
             //address 不是其他-国外 country 置空
             if (fields.address != '其他-国外') {
-                baseInfoForm.setFieldsValue({country:""})
+                baseInfoForm.setFieldsValue({ country: "" })
             }
         }
     }
@@ -131,27 +131,7 @@ export default function BaseInfoEdit(): JSX.Element {
                     } dataSource={data || {}} edit />
                 <DetailTitle title="物资清单" />
                 <EditTable form={cargoVOListForm} columns={cargoVOListColumns} dataSource={data?.cargoVOList} />
-                {/* <DetailTitle title="附件信息11" operation={[<Upload
-                    key="sub"
-                    name="file"
-                    multiple={true}
-                    action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
-                    headers={{
-                        'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                        'Tenant-Id': AuthUtil.getTenantId(),
-                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                    }}
-                    showUploadList={false}
-                    onChange={uploadChange}
-                ><Button key="enclosure" type="primary" ghost>上传附件</Button></Upload>]} />
-                <CommonTable columns={[{
-                    title: "操作", dataIndex: "opration",
-                    render: (_: any, record: any) => (<>
-                        <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
-                        <Button type="link" onClick={() => downLoadFile(record.link || record.filePath, record.name)}>下载</Button>
-                    </>)
-                }, ...enclosure]} dataSource={attachVosData} /> */}
-                <Attachment showHeader maxCount={10} columns={[...enclosure]} ref={attchsRef} edit  dataSource={attachVosData} />
+                <Attachment title="附件信息" maxCount={10} ref={attchsRef} edit dataSource={attachVosData} />
             </Spin>
         </DetailContent>
     </>

@@ -1,10 +1,11 @@
-import React, { useState, useImperativeHandle, forwardRef, useCallback, useEffect } from 'react'
+import React, { useState, useImperativeHandle, forwardRef, useCallback, useEffect, Children } from 'react'
 import { Button, Upload, Modal, Image, message } from 'antd'
 import { DetailTitle, CommonTable } from "../common"
 import AuthUtil from "../../utils/AuthUtil"
+import RequestUtil from "../../utils/RequestUtil"
+import useRequest from '@ahooksjs/use-request'
 import { downLoadFile } from "../../utils"
-
-interface FileProps {
+export interface FileProps {
     id?: string,
     uid?: number | string,
     link: string,
@@ -17,27 +18,54 @@ interface FileProps {
     fileUploadTime: string
 }
 
-interface AttachmentProps {
-    title?: string | false
+export interface AttachmentProps {
+    isTable?: boolean // true 是列表 false title不生效 
+    accept?: string
+    title?: string | false // 列表
     dataSource?: FileProps[]
     edit?: boolean
-    columns?: any[]
     maxCount?: number
-    showHeader?: boolean
+    children?: JSX.Element
+    onDoneChange?: (params: FileProps[]) => void  //同AttachmentRef 文件上传成功后的回调
 }
+
 export interface AttachmentRef {
     getDataSource: () => FileProps[]
     dataSource?: FileProps[]
     resetFields: () => void
+    onDoneChange?: (params: FileProps[]) => void
 }
-export default forwardRef(function ({ dataSource = [], columns = [], showHeader = false, title = "相关附件", maxCount = 5, edit = false }: AttachmentProps, ref): JSX.Element {
+
+interface URLProps {
+
+}
+
+export default forwardRef(function ({ dataSource = [],
+    isTable = true,
+    title = "相关附件",
+    accept = undefined,
+    children = <Button key="enclosure" type="primary" ghost>上传</Button>,
+    maxCount = 5, edit = false }: AttachmentProps, ref): JSX.Element {
+    const inputAccepts = accept ? ({ accept }) : ({})
     const [attchs, setAttachs] = useState<FileProps[]>(dataSource)
     const [visible, setVisible] = useState<boolean>(false)
     const [picUrl, setPicUrl] = useState<string>()
+    const { run: saveFile, data: filesData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/sinzetech-user/department`)
+            resole(result.map((item: any) => ({ label: item.name, value: item.id })))
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
 
     useEffect(() => setAttachs(dataSource), [JSON.stringify(dataSource)])
 
     const deleteAttachData = useCallback((id: number) => setAttachs(attchs.filter((item: any) => item.uid ? item.uid !== id : item.id !== id)), [setAttachs, attchs])
+
+    const handleBeforeUpload = useCallback((event: any) => {
+        console.log(event, "event-----")
+    }, [])
 
     const uploadChange = useCallback((event: any) => {
         if (event.file.status === "done") {
@@ -78,11 +106,13 @@ export default forwardRef(function ({ dataSource = [], columns = [], showHeader 
 
     const handleCancel = useCallback(() => setVisible(false), [setVisible])
 
+
+
     return <>
         <Modal width={1011} visible={visible} onCancel={handleCancel} footer={false}>
             <Image src={picUrl} preview={false} />
         </Modal>
-        <DetailTitle
+        {isTable && <DetailTitle
             title={title}
             {...edit ? {
                 operation: [
@@ -90,6 +120,7 @@ export default forwardRef(function ({ dataSource = [], columns = [], showHeader 
                         key="sub"
                         name="file"
                         multiple={false}
+                        {...inputAccepts}
                         maxCount={maxCount}
                         action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
                         headers={{
@@ -98,13 +129,31 @@ export default forwardRef(function ({ dataSource = [], columns = [], showHeader 
                             'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
                         }}
                         showUploadList={false}
+                        beforeUpload={handleBeforeUpload}
                         onChange={uploadChange}
                     >
                         <Button key="enclosure" type="primary" ghost>上传附件</Button>
                     </Upload>
                 ]
-            } : {}} />
-        <CommonTable
+            } : {}} />}
+        {!isTable && <Upload
+            key="sub"
+            name="file"
+            multiple={false}
+            {...inputAccepts}
+            maxCount={maxCount}
+            action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
+            headers={{
+                'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                'Tenant-Id': AuthUtil.getTenantId(),
+                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+            }}
+            showUploadList={false}
+            onChange={uploadChange}
+        >
+            {children}
+        </Upload>}
+        {isTable && <CommonTable
             rowKey={(_: any, records: any) => records.name || records.id}
             columns={[
                 {
@@ -120,6 +169,6 @@ export default forwardRef(function ({ dataSource = [], columns = [], showHeader 
                         {edit && <a onClick={() => deleteAttachData(record.uid || record.id)}>删除</a>}
                     </>)
                 }]}
-            dataSource={attchs} />
+            dataSource={attchs} />}
     </>
 })

@@ -10,7 +10,7 @@
 import React from "react"
 import { Button, message, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable,Attachment } from '../common'
+import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../common'
 import { baseInfoHead, invoiceHead, billingHead, batchHead } from "./InvoicingData.json"
 import { enclosure } from '../project/managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
@@ -77,7 +77,7 @@ export default function Edit() {
 
             <DetailTitle title="开票明细" />
             <CommonTable columns={billingHead} dataSource={data?.invoicingDetailVos || []} />
-            <Attachment showHeader columns={[...enclosure]}  dataSource={data?.attachInfoVos || []} />
+            <Attachment dataSource={data?.attachInfoVos} />
             <DetailTitle title="审批记录" />
             <CommonTable columns={batchHead} dataSource={data?.invoicingBatchVos || []} />
         </Spin>

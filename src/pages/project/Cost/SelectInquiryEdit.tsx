@@ -1,7 +1,7 @@
-import React, { useState, useEffect,useRef } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { useParams } from "react-router-dom"
 import { Modal, Upload, Button, Form, message } from "antd"
-import { DetailTitle, CommonTable, BaseInfo, EditTable, Attachment, AttachmentRef  } from "../../common"
+import { DetailTitle, CommonTable, BaseInfo, EditTable, Attachment, AttachmentRef } from "../../common"
 import { enclosure } from "../managementDetailData.json"
 import { supplyBaseInfo, logisticBaseInfo, workmanshipBaseInfo, askLogistics } from "./costData.json"
 import AuthUtil from "../../../utils/AuthUtil"
@@ -61,7 +61,7 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
                     ...props.detailOptios
                 })
                 const ask = props.detailOptios && props.detailOptios.askLogisticsVOS && props.detailOptios.askLogisticsVOS || [];
-                ask.forEach((item:any) => item['productType'] = `${item.voltage}${item.productName}`)
+                ask.forEach((item: any) => item['productType'] = `${item.voltage}${item.productName}`)
                 askForm.setFieldsValue({
                     submit: ask
                 })
@@ -142,89 +142,18 @@ export default function SelectInquiryEdit(props: any): JSX.Element {
         {props.type === "selectA" && <>
             <DetailTitle title="询价类型：供应询价" />
             <BaseInfo form={baseForm} columns={supplyBaseInfo} dataSource={data || {}} edit />
-            {/* <DetailTitle title="附件22" operation={[
-                <Upload
-                    key="sub"
-                    name="file"
-                    multiple={true}
-                    action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
-                    headers={{
-                        'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                        'Tenant-Id': AuthUtil.getTenantId(),
-                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                    }}
-                    onChange={uploadChange}
-                    showUploadList={false}
-                ><Button type="primary" ghost>上传附件</Button></Upload>
-            ]} /> */}
-            {/* <CommonTable columns={[{
-                title: "操作",
-                dataIndex: "opration",
-                render: (_: any, records: any) => <>
-                    <Button type="link" onClick={() => deleteAttachData(records.uid || records.id)}>删除</Button>
-                    <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
-                </>
-            }, ...enclosure]} dataSource={attachInfo} /> */}
-            <Attachment  showHeader maxCount={10} columns={[...enclosure]} ref={attchsRef} edit  dataSource={attachInfo} />
+            <Attachment title="附件" maxCount={10} ref={attchsRef} edit dataSource={attachInfo} />
         </>}
         {props.type === "selectB" && <>
             <DetailTitle title="询价类型：物流询价" />
             <BaseInfo form={baseForm} columns={logisticBaseInfo} dataSource={data || {}} edit />
-
             <EditTable form={askForm} haveNewButton={false} haveOpration={false} columns={askLogistics} dataSource={[]} />
-
-            {/* <DetailTitle title="附件" operation={[
-                <Upload
-                    key="sub"
-                    name="file"
-                    multiple={true}
-                    action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
-                    headers={{
-                        'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                        'Tenant-Id': AuthUtil.getTenantId(),
-                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                    }}
-                    showUploadList={false}
-                    onChange={uploadChange}
-                ><Button type="primary" ghost>上传附件</Button></Upload>
-            ]} /> */}
-            {/* < CommonTable columns={[{
-                title: "操作",
-                dataIndex: "opration",
-                render: (_: any, records: any) => <>
-                    <Button type="link" onClick={() => deleteAttachData(records.uid || records.id)}>删除</Button>
-                    <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
-                </>
-            }, ...enclosure]} dataSource={attachInfo} /> */}
-            <Attachment  showHeader maxCount={10} columns={[...enclosure]} ref={attchsRef} edit  dataSource={attachInfo} />
+            <Attachment title="附件" maxCount={10} ref={attchsRef} edit dataSource={attachInfo} />
         </>}
         {props.type === "selectC" && <>
             <DetailTitle title="询价类型：工艺询价" />
             <BaseInfo form={baseForm} columns={workmanshipBaseInfo} dataSource={data || {}} edit />
-            {/* <DetailTitle title="附件" operation={[
-                <Upload
-                    key="sub"
-                    name="file"
-                    multiple={true}
-                    action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
-                    headers={{
-                        'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                        'Tenant-Id': AuthUtil.getTenantId(),
-                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                    }}
-                    showUploadList={false}
-                    onChange={uploadChange}
-                ><Button type="primary" ghost>上传附件</Button></Upload>
-            ]} /> */}
-            {/* <CommonTable columns={[{
-                title: "操作",
-                dataIndex: "opration",
-                render: (_: any, records: any) => <>
-                    <Button type="link" onClick={() => deleteAttachData(records.uid || records.id)}>删除</Button>
-                    <Button type="link" onClick={() => downLoadFile(records.link || records.filePath)}>下载</Button>
-                </>
-            }, ...enclosure]} dataSource={attachInfo} /> */}
-            <Attachment  showHeader maxCount={10} columns={[...enclosure]} ref={attchsRef} edit  dataSource={attachInfo} />
+            <Attachment title="附件" maxCount={10} ref={attchsRef} edit dataSource={attachInfo} />
         </>}
     </Modal>
 }
