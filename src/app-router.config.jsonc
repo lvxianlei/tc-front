@@ -1539,6 +1539,13 @@
       "module": "./pages/mngt-workshop/ComponentDetails",
       "exact": true,
       "authority": "approvalm"
+    },   
+    { // 计划排产
+      "name": "计划排产",
+      "path": "/planProd/planMgmt",
+      "module": "./pages/planProd/PlanProd",
+      "exact": true,
+      "authority": "approvalm"
     },
     { // 包装车间-加工任务面板
       "name": "加工任务面板",

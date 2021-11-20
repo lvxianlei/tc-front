@@ -23,8 +23,15 @@ interface IDetail {
 export interface IFileList {
     readonly id?: string;
     readonly fileName?: string;
-    readonly filePath?: string;
-    readonly fileSuffix?: string;
+    readonly filePath: string;
+    readonly fileSuffix: string;
+    readonly uid?: number | string,
+    readonly link: string,
+    readonly name: string,
+    readonly description: string,
+    readonly fileSize: string | number,
+    readonly userName: string,
+    readonly fileUploadTime: string
 }
 
 interface ItaskDataRecordList {

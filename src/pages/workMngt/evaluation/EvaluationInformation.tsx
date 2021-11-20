@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Space, Modal, Input, Upload, Form, FormInstance, message, Image } from 'antd';
-import { DetailContent, CommonTable } from '../../common';
+import { DetailContent, CommonTable, Attachment } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './Evaluation.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
@@ -17,12 +17,16 @@ interface IResponse {
 
 interface IFileList {
     readonly id?: string;
-    readonly filePath?: string;
-    readonly fileSuffix?: string;
+    readonly filePath: string;
     readonly originalName?: string;
-    readonly name?: string;
-    readonly userName?: string;
-    readonly link?: string;
+    readonly name: string;
+    readonly userName: string;
+    readonly link: string;
+    readonly fileSuffix: string;
+    readonly uid?: number | string,
+    readonly description: string,
+    readonly fileSize: string | number,
+    readonly fileUploadTime: string
 }
 
 
@@ -36,8 +40,8 @@ export interface EvaluationInformationState {
     readonly visible: boolean;
     readonly description?: string;
     readonly information?: IResponse;
-    readonly pictureVisible: boolean;
-    readonly pictureUrl?: string;
+    // readonly pictureVisible: boolean;
+    // readonly pictureUrl?: string;
 }
 
 class EvaluationInformation extends React.Component<IEvaluationInformationRouteProps, EvaluationInformationState> {
@@ -55,7 +59,7 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
 
     public state: EvaluationInformationState = {
         visible: false,
-        pictureVisible: false
+        // pictureVisible: false
     }
 
     private modalCancel(): void {
@@ -134,8 +138,9 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
             >
                 <Form onFinish={ () => this.onSave() } ref={ this.form }>
                     <DetailContent>
-                        <p>说明文件</p>
-                        <CommonTable 
+                        {/* <p>说明文件</p> */}
+                        <Attachment title="说明文件" dataSource={ this.state.information?.instructionFileList || [] } />
+                        {/* <CommonTable 
                             columns={[
                                 { 
                                     key: 'name', 
@@ -165,16 +170,17 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                             ]}
                             dataSource={ this.state.information?.instructionFileList }
                             pagination={ false }
-                        />
+                        /> */}
                         <p className={ styles.topPadding }>评估信息<span style={{ color: 'red' }}>*</span></p>
-                            <Form.Item
-                                name="description"
-                                rules={[{ required: true, message: '请输入评估信息' }]}
-                                initialValue={ this.state.description }
-                            >
-                                <Input.TextArea placeholder="请输入" maxLength={ 300 } disabled={ this.state.information?.status === 4 } showCount />
-                            </Form.Item>
-                        <p className={ styles.topPadding }>评估文件
+                        <Form.Item
+                            name="description"
+                            rules={[{ required: true, message: '请输入评估信息' }]}
+                            initialValue={ this.state.description }
+                        >
+                            <Input.TextArea placeholder="请输入" maxLength={ 300 } disabled={ this.state.information?.status === 4 } showCount />
+                        </Form.Item>
+                        <Attachment title="评估文件" edit={ !(this.state.information?.status === 4) } dataSource={ this.state.information?.assessFileList || [] } />
+                        {/* <p className={ styles.topPadding }>评估文件
                         <span style={ { position: 'absolute', right: '1%' } }>
                             {
                                 this.state.information?.status === 4 ? null :
@@ -219,8 +225,8 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                                 </Upload>
                             }
                             </span> 
-                        </p>
-                        <CommonTable    
+                        </p> */}
+                        {/* <CommonTable    
                             columns={[
                                 { 
                                     key: 'name', 
@@ -266,17 +272,17 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                             ]}
                             dataSource={ this.state.information?.assessFileList }
                             pagination={ false }
-                        />
+                        /> */}
                     </DetailContent>
                 </Form>
             </Modal>
-            <Modal visible={ this.state.pictureVisible } onCancel={ () => {
+            {/* <Modal visible={ this.state.pictureVisible } onCancel={ () => {
                 this.setState({
                     pictureVisible: false
                 })
             } } footer={ false }>
                 <Image src={ this.state.pictureUrl } preview={ false } />
-            </Modal>
+            </Modal> */}
         </>
     }
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Spin, Space, Modal, Image } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
+import { BaseInfo, DetailContent, CommonTable, DetailTitle, Attachment } from '../../common';
 import { specialInfoData, productInfoData } from './pick.json';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -63,8 +63,8 @@ export default function PickDetail(): React.ReactNode {
                 <BaseInfo columns={specialInfoData} dataSource={detailData || {}} />
                 <DetailTitle title="产品信息" />
                 <BaseInfo columns={productInfoData} dataSource={detailData || {}} />
-                <DetailTitle title="相关附件"/>
-                <CommonTable columns={[
+                {/* <DetailTitle title="相关附件"/> */}
+                {/* <CommonTable columns={[
                     {
                         title: '附件名称',
                         dataIndex: 'name',
@@ -82,7 +82,8 @@ export default function PickDetail(): React.ReactNode {
                             </Space>
                         )
                     }
-                ]} dataSource={detailData?.attachVos} pagination={ false }/>
+                ]} dataSource={detailData?.attachVos} pagination={ false }/> */}
+                <Attachment dataSource={detailData?.attachVos} />
                 <DetailTitle title="操作信息" />
                 <CommonTable columns={tableColumns} dataSource={detailData?.stateRecordVOS} pagination={ false }/>
             </DetailContent>

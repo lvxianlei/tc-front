@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Space, Modal, Input, Image } from 'antd';
-import { DetailContent, CommonTable } from '../common';
+import { DetailContent, CommonTable, Attachment } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import styles from './AssessmentTask.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
@@ -69,7 +69,8 @@ class AssessmentInformation extends React.Component<IAssessmentInformationRouteP
                     <p>评估描述</p>
                     <Input.TextArea disabled value={ this.state.description } />
                     <p className={ styles.topPadding }>评估文件</p>
-                    <CommonTable columns={[
+                    <Attachment dataSource={ this.state.assessFileList || [] } />
+                    {/* <CommonTable columns={[
                         { 
                             key: 'name', 
                             title: '附件', 
@@ -96,7 +97,7 @@ class AssessmentInformation extends React.Component<IAssessmentInformationRouteP
                     ]}
                         dataSource={ this.state.assessFileList }
                         pagination={ false }
-                    />
+                    /> */}
                 </DetailContent>
             </Modal>
             <Modal visible={ this.state.pictureVisible } onCancel={ () => {

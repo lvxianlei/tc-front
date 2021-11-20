@@ -13,6 +13,7 @@ import { IDept } from '../dept/dept/DepartmentMngt';
 import { DataNode } from 'antd/lib/tree';
 import { IStaff } from '../dept/staff/StaffMngt';
 import { TablePaginationConfig } from 'antd/lib/table';
+import { RowSelectionType } from 'antd/lib/table/interface';
 
 interface IResponseData {
     readonly records?: IStaff[];
@@ -25,6 +26,7 @@ interface IResponseData {
 export interface SelectUserTransferProps {}
 export interface ISelectUserTransferRouteProps extends RouteComponentProps<SelectUserTransferProps>, WithTranslation {
     readonly save: (selectRows: IStaff[]) => void;
+    readonly type?: RowSelectionType;
 }
 
 export interface SelectUserTransferState {
@@ -101,7 +103,6 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
                 <Row>
                     <Col span={11}>
                         <Tree
-                            defaultExpandAll
                             treeData={ this.wrapRole2DataNode(this.state.deptData) }
                             onSelect={ (selectedKeys) => {
                                 this.getStaffList(selectedKeys)
@@ -111,12 +112,18 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
                             } }
                         />
                         <Button onClick={ () => {
-                            const rows = [ ...(this.state.rightData || []), ...(this.state.selectedRows || [])];
-                            const res = new Map();
-                            let newRows = rows.filter((item: IStaff) => !res.has(item.id) && res.set(item.id, 1));
-                            this.setState({
-                                rightData: newRows
-                            })
+                            if(this.props.type) {
+                                this.setState({
+                                    rightData: this.state.selectedRows
+                                })
+                            } else {
+                                const rows = [ ...(this.state.rightData || []), ...(this.state.selectedRows || [])];
+                                const res = new Map();
+                                let newRows = rows.filter((item: IStaff) => !res.has(item.id) && res.set(item.id, 1));
+                                this.setState({
+                                    rightData: newRows
+                                })
+                            }  
                         } }>确定</Button>
                         <Table 
                             rowKey='id'
@@ -140,6 +147,7 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
                                 showSizeChanger: false
                             }}
                             rowSelection={{
+                                type: this.props.type || 'checkbox',
                                 selectedRowKeys: this.state.selectedRowKeys,
                                 onChange: (selectedRowKeys: React.Key[], selectedRows: IStaff[]) => {
                                     this.setState({

@@ -101,6 +101,7 @@ export default function SetOutTaskDetail(): React.ReactNode {
             <DetailTitle title="产品信息" />
             <BaseInfo columns={ productColumns } dataSource={ detailData } col={ 2 } />
             <DetailTitle title="相关附件" />
+            
             <CommonTable columns={[
                 { 
                     key: 'name', 

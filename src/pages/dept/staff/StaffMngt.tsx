@@ -19,8 +19,10 @@ export interface IStaff {
     readonly id?: string;
     readonly accountId?: string;
     readonly autoAccount?: number;
-    readonly category?: number;
+    readonly category?: string;
+    readonly categoryName?: string;
     readonly dept?: string;
+    readonly deptName?: string;
     readonly description?: string;
     readonly email?: string;
     readonly entryDate?: string;
@@ -29,6 +31,7 @@ export interface IStaff {
     readonly phone?: string;
     readonly roleId?: string;
     readonly station?: string;
+    readonly stationName?: string;
     readonly roleIdList?: string[];
     readonly stationList?: string[];
 }
