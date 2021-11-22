@@ -32,12 +32,6 @@ class ManagementContractSetting extends ContractSetting {
               label: "采购订单编号",
               name: "purchaseOrderNumber",
               initialValue: contract?.purchaseOrderNumber,
-              rules: [
-                {
-                  required: true,
-                  message: "请输入采购订单编号"
-                },
-              ],
               children: (
                 <Input value={contract?.purchaseOrderNumber} maxLength={50} />
               ),
@@ -46,7 +40,7 @@ class ManagementContractSetting extends ContractSetting {
               label: "ECP合同编号",
               name: "ecpContractNumber",
               initialValue: contract?.ecpContractNumber,
-              children: <Input placeholder="内部合同编号自动生成" disabled />,
+              children: <Input placeholder="请输入ECP合同编号" disabled />,
             },
             {
               label: "合同编号",
@@ -407,6 +401,18 @@ class ManagementContractSetting extends ContractSetting {
                   <Select.Option value="其他-国外">其他-国外</Select.Option>
                 </Select>
               ),
+            },
+            {
+              label: "销售业务员",
+              name: "salesman",
+              rules: [
+                {
+                  required: true,
+                  message: "请输入销售业务员",
+                },
+              ],
+              initialValue: contract?.salesman,
+              children: (<Input value={contract?.salesman} />),
             },
             {
               label: "合同接管人",
