@@ -493,7 +493,6 @@
             "type": "popTable",
             "path": "/sinzetech-user/user",
             "readOnly": true,
-            "dependencies": true,
             "value":"name",
             "columns": [
                 {

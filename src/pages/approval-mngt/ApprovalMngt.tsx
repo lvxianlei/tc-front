@@ -145,8 +145,8 @@ export default function Information(): React.ReactNode {
         const result = await run({ path: "/tower-market/biddingEvaluation/submitAudit", data: postData })
         if (result) {
             message.success("成功创建申请...")
-            // setBidingVisible(false)
-            // history.go(0)
+            setBidingVisible(false)
+            history.go(0)
         } else {
             message.error(`创建申请失败！原因：${result}`)
         }
