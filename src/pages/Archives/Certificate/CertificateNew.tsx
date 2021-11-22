@@ -160,7 +160,7 @@ export default function CertificateNew(): React.ReactNode {
             key: 'number',
             title: <span><span style={{ color: 'red' }}>*</span>工号</span>,
             dataIndex: 'number',
-            width: 150,
+            width: 250,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "number"] } key={ index } initialValue={ _ } rules={[{ 
                     "required": true,
@@ -190,7 +190,7 @@ export default function CertificateNew(): React.ReactNode {
             width: 150,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "staffName"] } key={ index } initialValue={ _ }>
-                    <Input disabled bordered={ false }/>
+                    <Input disabled/>
                 </Form.Item>
             )  
         },
@@ -201,7 +201,7 @@ export default function CertificateNew(): React.ReactNode {
             width: 150,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "categoryName"] } key={ index } initialValue={ _ }>
-                    <Input disabled bordered={ false }/>
+                    <Input disabled/>
                 </Form.Item>
             )  
         },
@@ -212,7 +212,7 @@ export default function CertificateNew(): React.ReactNode {
             width: 150,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "deptName"] } key={ index } initialValue={ _ }>
-                    <Input disabled bordered={ false }/>
+                    <Input disabled/>
                 </Form.Item>
             )  
         },
@@ -223,7 +223,7 @@ export default function CertificateNew(): React.ReactNode {
             width: 150,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "stationName"] } key={ index } initialValue={ _ }>
-                    <Input disabled bordered={ false }/>
+                    <Input disabled/>
                 </Form.Item>
             )  
         },
@@ -261,7 +261,7 @@ export default function CertificateNew(): React.ReactNode {
     }
 
     const renderTreeNodes = (data:any) => data.map((item:any) => {
-        if (item.children) {
+        if (item.children && item.children.length > 0) {
             item.disabled = true;
             return (<TreeNode key={ item.id } title={ item.title } value={ item.id } disabled={ item.disabled } className={ styles.node } >
                 { renderTreeNodes(item.children) }
@@ -308,7 +308,7 @@ export default function CertificateNew(): React.ReactNode {
                         value = value.map((items: ICertificate, index: number) => {
                             return {
                                 ...items,
-                                dataStatus: 0,
+                                certificateStatus: 0,
                                 id: dataList[index].id,
                                 startDate: items.startDate && moment(items.startDate).format('YYYY-MM-DD'),
                                 endDate: items.endDate && moment(items.endDate).format('YYYY-MM-DD')
@@ -318,7 +318,7 @@ export default function CertificateNew(): React.ReactNode {
                         value = value.map((items: ICertificate, index: number) => {
                             return {
                                 ...items,
-                                dataStatus: 1,
+                                certificateStatus: 1,
                                 id: dataList[index].id,
                                 startDate: items.startDate && moment(items.startDate).format('YYYY-MM-DD'),
                                 endDate: items.endDate && moment(items.endDate).format('YYYY-MM-DD')
@@ -327,11 +327,11 @@ export default function CertificateNew(): React.ReactNode {
                     }
                     console.log(value)
                     if(location.state.type === 'new') {
-                        RequestUtil.post(`/tower-system/certificateRecord`, value).then(res => {
+                        RequestUtil.post(`/tower-system/certificateRecord`, { certificateRecordDTOS: value }).then(res => {
                             history.goBack();
                         })
                     }else {
-                        RequestUtil.put(`/tower-system/certificateRecord/update`, value).then(res => {
+                        RequestUtil.put(`/tower-system/certificateRecord/update`, { certificateRecordDTOS: value }).then(res => {
                             history.goBack();
                         })
                     }
@@ -353,6 +353,7 @@ export default function CertificateNew(): React.ReactNode {
                     endDate: items.endDate && moment(items.endDate)
                 }
             })
+            console.log(data)
             setDataList(data);
         } else {
             setDataList([]);
