@@ -101,7 +101,7 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
                 className={styles.modalcontent}
             >
                 <Row>
-                    <Col span={11}>
+                    <Col span={11} className={styles.left}>
                         <Tree
                             treeData={ this.wrapRole2DataNode(this.state.deptData) }
                             onSelect={ (selectedKeys) => {
@@ -111,7 +111,7 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
                                 })
                             } }
                         />
-                        <Button onClick={ () => {
+                        <Button className={ styles.btn } onClick={ () => {
                             if(this.props.type) {
                                 this.setState({
                                     rightData: this.state.selectedRows
@@ -124,7 +124,7 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
                                     rightData: newRows
                                 })
                             }  
-                        } }>确定</Button>
+                        } } size="small" type="primary">确定</Button>
                         <Table 
                             rowKey='id'
                             dataSource={[...this.state.treeData || []]} 
@@ -164,13 +164,13 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
                                 key: 'name',
                                 title: '姓名',
                                 dataIndex: 'name',
-                                width: 150
+                                width: '50%'
                             },
                             {
                                 key: 'operation',
                                 title: '操作',
                                 dataIndex: 'operation',
-                                width: 150,
+                                width: '50%',
                                 render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                     <Button type="link" onClick={ () => {
                                         const rightData: IStaff[] = this.state.rightData || [];
