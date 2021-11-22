@@ -24,7 +24,7 @@ export default function ConfirmMessage(): React.ReactNode {
             ]}>
                 <DetailTitle title="基本信息" />
                 <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
-                <DetailTitle title="相关附件"/>
+                {/* <DetailTitle title="相关附件"/> */}
                 {/* <CommonTable columns={[
                     {
                         title: '附件名称',
