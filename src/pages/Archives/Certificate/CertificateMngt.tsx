@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Space, Input, Select, Button, Popconfirm, Form, message, TreeSelect, Upload, Modal, DatePicker } from 'antd';
+import { Space, Input, Select, Button, Popconfirm, Form, message, TreeSelect, Modal, DatePicker } from 'antd';
 import { Link } from 'react-router-dom';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './CertificateMngt.module.less';
 import RequestUtil from '../../../utils/RequestUtil';
 import { TreeNode } from 'antd/lib/tree-select';
-import AuthUtil from '../../../utils/AuthUtil';
-import { downloadTemplate } from '../../workMngt/setOut/downloadTemplate';
+import useRequest from '@ahooksjs/use-request';
+import { IDatabaseTree } from '../../basicData/database/DatabaseMngt';
+import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 
 export interface ICertificate {
     readonly id?: string;
@@ -55,10 +56,10 @@ export default function CertificateMngt(): React.ReactNode {
             dataIndex: 'certificateName'
         },
         {
-            key: 'certificateType',
+            key: 'certificateTypeName',
             title: '证书类型',
             width: 150,
-            dataIndex: 'certificateType'
+            dataIndex: 'certificateTypeName'
         },
         {
             key: 'certificateLevel',
@@ -154,8 +155,9 @@ export default function CertificateMngt(): React.ReactNode {
                         } }
                         okText="确认"
                         cancelText="取消"
+                        disabled={record.certificateStatus !== 0}
                     >
-                        <Button type="link">删除</Button>
+                        <Button type="link" disabled={record.certificateStatus !== 0}>删除</Button>
                     </Popconfirm>
                 </Space>
             )
@@ -211,6 +213,28 @@ export default function CertificateMngt(): React.ReactNode {
         setVisible(false);
     }
 
+    const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
+        roles && roles.forEach((role: any & SelectDataNode): void => {
+            role.value = role.id;
+            role.title = role.dataPlaceName;
+            role.isLeaf = false;
+            if (role.children && role.children.length > 0) {
+                wrapRole2DataNode(role.children);
+            }
+        });
+        return roles;
+    }
+
+    const renderTreeNodes = (data:any) => data.map((item:any) => {
+        if (item.children && item.children.length > 0) {
+            item.disabled = true;
+            return (<TreeNode key={ item.id } title={ item.title } value={ item.id } disabled={ item.disabled } className={ styles.node } >
+                { renderTreeNodes(item.children) }
+            </TreeNode>);
+        }
+        return <TreeNode { ...item } key={ item.id } title={ item.title } value={ item.id } />;
+    });
+
     const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
     const [ selectedRows, setSelectedRows ] = useState<ICertificate[]>([]);
     const [ visible, setVisible ] = useState<boolean>(false);
@@ -218,6 +242,11 @@ export default function CertificateMngt(): React.ReactNode {
     const [ tip, setTip ] = useState<number>(1);
     const [ recordId, setRecordId ] = useState<string>('');
     
+    const { loading, data } = useRequest<IDatabaseTree[]>(() => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get<IDatabaseTree[]>(`/tower-system/dataPlace`);
+        resole(data)
+    }), {})
+    const databaseData: IDatabaseTree[] = data || [];
 
     return <>
         <Page
@@ -225,33 +254,6 @@ export default function CertificateMngt(): React.ReactNode {
             columns={ columns }
             headTabs={ [] }
             extraOperation={ <Space direction="horizontal" size="small">
-                <Upload 
-                    action={ () => {
-                        const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                        return baseUrl+''
-                    } } 
-                    headers={
-                        {
-                            'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
-                            'Tenant-Id': AuthUtil.getTenantId(),
-                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                        }
-                    }
-                    showUploadList={ false }
-                    onChange={ (info) => {
-                        if(info.file.response && !info.file.response?.success) {
-                            message.warning(info.file.response?.msg)
-                        }
-                        if(info.file.response && info.file.response?.success){
-                            message.success('导入成功！');
-                            setRefresh(!refresh);
-                        } 
-                    } }
-                >
-                    <Button type="primary">导入</Button>
-                </Upload>
-                <Button type="primary" onClick={ () => downloadTemplate('', '资料管理导入模板') } ghost>下载导入模板</Button>
-                <Button type="primary" ghost>导出</Button>
                 <Link to={{pathname: `/archivesMngt/certificateMngt/certificateNew`, state:{ type: 'new' } }}><Button type="primary" ghost>录入</Button></Link>
                 { selectedRows.length > 0 && selectedRows.map(items => items.certificateStatus).indexOf(1 || 2 || 3) === -1 ? <Link to={{pathname: `/archivesMngt/certificateMngt/certificateSetting`, state:{ type: 'edit', data: [...selectedRows] } }}><Button type="primary" ghost>编辑</Button></Link> : <Button type="primary" disabled ghost>编辑</Button>}
                 <Button type="primary" onClick={ batchDel } ghost>删除</Button>
@@ -268,43 +270,18 @@ export default function CertificateMngt(): React.ReactNode {
                     name: 'dataPlaceId',
                     label: '资料库',
                     children: <Form.Item name="dataPlaceId">
-                        <TreeSelect
-                            style={{ width: '150px' }}
-                            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                            placeholder="请选择"
-                            allowClear
-                            treeDefaultExpandAll
-                            >
-                            <TreeNode value="parent 1" title="parent 1">
-                                <TreeNode value="parent 1-0" title="parent 1-0">
-                                <TreeNode value="leaf1" title="leaf1" />
-                                <TreeNode value="leaf2" title="leaf2" />
-                                </TreeNode>
-                                <TreeNode value="parent 1-1" title="parent 1-1">
-                                <TreeNode value="leaf3" title="leaf3" />
-                                </TreeNode>
-                            </TreeNode>
-                            </TreeSelect>
-                    </Form.Item>
-                },
-                {
-                    name: 'certificateStatus',
-                    label: '证书状态',
-                    children: <Form.Item name="certificateStatus">
-                        <Select placeholder="请选择" style={{ width: "150px" }}>
-                            <Select.Option value={0} key="0">全部</Select.Option>
-                            <Select.Option value={1} key="1">在库</Select.Option>
-                            <Select.Option value={2} key="2">借出</Select.Option>
-                            <Select.Option value={3} key="3">遗失</Select.Option>
-                        </Select>
+                        <TreeSelect placeholder="请选择" style={{ width: "150px" }}>
+                            { renderTreeNodes(wrapRole2DataNode(databaseData)) }
+                        </TreeSelect>
                     </Form.Item>
                 },
                 {
                     name: 'certificateStatus',
                     label: '在库状态',
-                    children: <Form.Item name="certificateStatus">
+                    children: <Form.Item name="certificateStatus" initialValue="">
                         <Select placeholder="请选择" style={{ width: "150px" }}>
-                            <Select.Option value={0} key="0">全部</Select.Option>
+                            <Select.Option value={''} key="4">全部</Select.Option>
+                            <Select.Option value={0} key="0">待入库</Select.Option>
                             <Select.Option value={1} key="1">在库</Select.Option>
                             <Select.Option value={2} key="2">借出</Select.Option>
                             <Select.Option value={3} key="3">遗失</Select.Option>

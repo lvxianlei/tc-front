@@ -84,15 +84,15 @@ const baseColums = [
 
 const UserColums = [
     {
-        "dataIndex": "dataNumber",
+        "dataIndex": "number",
         "title": "工号："
     },
     {
-        "dataIndex": "name",
+        "dataIndex": "staffName",
         "title": "姓名："
     },
     {
-        "dataIndex": "dataType",
+        "dataIndex": "phone",
         "title": "手机号："
     },
     {
@@ -100,11 +100,11 @@ const UserColums = [
         "title": "员工类型："
     },
     {
-        "dataIndex": "dept",
+        "dataIndex": "deptName",
         "title": "部门："
     },
     {
-        "dataIndex": "station",
+        "dataIndex": "stationName",
         "title": "职位："
     }
 ]

@@ -146,7 +146,7 @@ export default function Edit() {
                 business: contractValue.salesman,
                 contractName: contractValue.contractName, // 合同/工程名称
                 contractCode: contractValue.internalNumber, // 内部合同编号
-                projectCode: contractValue.projectName, // 项目编码
+                projectCode: contractValue.projectNumber, // 项目编码
             })
         }
         if (fields.backProportion) {
