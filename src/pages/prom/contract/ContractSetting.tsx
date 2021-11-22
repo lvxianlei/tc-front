@@ -86,7 +86,8 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
             contractTotalWeight: contract?.contractTotalWeight,
             contractName: contract?.contractName,
             contractPrice: contract?.contractPrice,
-            isIta: contract?.isIta
+            isIta: contract?.isIta,
+            payCompanyName: contract?.payCompanyName
         });
         const region: string[] | undefined = this.state.contract.region;
         let regionInfoData: IRegion[] = this.state.regionInfoData;
