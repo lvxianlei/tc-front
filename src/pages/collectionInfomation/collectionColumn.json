@@ -1,0 +1,168 @@
+{
+    "collectionListHead": [
+        {
+            "title": "来款单位名称",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "来款方式",
+            "dataIndex": "returnType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "投标保证金"
+                },
+                {
+                    "value": 1,
+                    "label": "合同应收款"
+                }
+            ]
+        },
+        {
+            "title": "来款性质",
+            "dataIndex": "payMoney"
+        },
+        {
+            "title": "来款金额",
+            "dataIndex": "payMoney"
+        },
+        {
+            "title": "来款日期",
+            "dataIndex": "payTime"
+        },
+        {
+            "title": "币种",
+            "dataIndex": "currency"
+        },
+        {
+            "title": "汇率",
+            "dataIndex": "exchangeRate"
+        },
+        {
+            "title": "外币金额",
+            "dataIndex": "currency"
+        },
+        {
+            "title": "收款银行",
+            "dataIndex": "returnBank"
+        },
+        {
+            "title": "确认方",
+            "dataIndex": "payType"
+        },
+        {
+            "title": "确认状态",
+            "dataIndex": "returnBank"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark"
+        }
+    ],
+    "approvalStatus": [
+        {
+            "label": "待确认",
+            "value": 0
+        },
+        {
+            "label": "已确认",
+            "value": 1
+        }
+    ],
+    "baseColums": [
+        {
+            "dataIndex": "title",
+            "title": "来款单位名称",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入来款单位名称"
+                }
+            ]
+        },
+        {
+            "dataIndex": "content",
+            "title": "来款方式",
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择来款方式"
+                }
+            ]
+        },
+        {
+            "dataIndex": "userNames",
+            "title": "来款性质",
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择来款性质"
+                }
+            ]
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "来款金额",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入来款金额"
+                }
+            ]
+        },
+        {
+            "dataIndex": "stateName1",
+            "title": "来款日期",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择来款日期"
+                }
+            ]
+        },
+        {
+            "dataIndex": "stateName2",
+            "title": "币种",
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择币种"
+                }
+            ]
+        },
+        {
+            "dataIndex": "releaseTime",
+            "title": "汇率"
+        },
+        {
+            "dataIndex": "releaseTime1",
+            "title": "外币金额"
+        },
+        {
+            "dataIndex": "releaseTime2",
+            "title": "收款银行"
+        },
+        {
+            "dataIndex": "stateName3",
+            "title": "确认方",
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择确认方"
+                }
+            ]
+        },
+        {
+            "dataIndex": "releaseTime6",
+            "title": "备注",
+            "type": "textarea"
+        }
+    ]
+}

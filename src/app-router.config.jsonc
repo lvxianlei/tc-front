@@ -1869,6 +1869,20 @@
       "module": "./pages/system-log/Login",
       "exact": true,
       "authority": "approvalm"
+    },
+    { // 回款信息列表
+      "name": "回款信息管理",
+      "path": "/collection/infomation",
+      "module": "./pages/collectionInfomation/index",
+      "exact": true,
+      "authority": "customer_detail"
+    },
+    { // 保函申请管理
+      "name": "保函申请管理",
+      "path": "/application/guarantee",
+      "module": "./pages/applicationGuarantee/index",
+      "exact": true,
+      "authority": "customer_detail"
     }
   ]
 }

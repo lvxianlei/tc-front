@@ -125,7 +125,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
 
     protected renderExtraOperationContent(): React.ReactNode {
         return (
-            <Space direction="horizontal" size="middle">
+            <Space direction="horizontal" size="middle" className="ttt">
                 {typeof this.props.extraOperation === "function" ? this.props.extraOperation(this.state.resData) : this.props.extraOperation}
             </Space>
         );

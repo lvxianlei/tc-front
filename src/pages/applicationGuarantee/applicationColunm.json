@@ -1,0 +1,81 @@
+{
+    "collectionListHead": [
+        {
+            "title": "保函编号",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "申请编号",
+            "dataIndex": "returnType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "投标保证金"
+                },
+                {
+                    "value": 1,
+                    "label": "合同应收款"
+                }
+            ]
+        },
+        {
+            "title": "申请日期",
+            "dataIndex": "payMoney"
+        },
+        {
+            "title": "申请部门",
+            "dataIndex": "payMoney"
+        },
+        {
+            "title": "项目名称",
+            "dataIndex": "payTime"
+        },
+        {
+            "title": "受益人名称",
+            "dataIndex": "currency"
+        },
+        {
+            "title": "保函类型",
+            "dataIndex": "exchangeRate"
+        },
+        {
+            "title": "保函金额",
+            "dataIndex": "currency"
+        },
+        {
+            "title": "出具日期",
+            "dataIndex": "returnBank"
+        },
+        {
+            "title": "要求交回日期",
+            "dataIndex": "payType"
+        },
+        {
+            "title": "保函交回日期",
+            "dataIndex": "returnBank"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark"
+        },
+        {
+            "title": "申请人",
+            "dataIndex": "returnBank"
+        }
+    ],
+    "approvalStatus": [
+        {
+            "label": "待办理",
+            "value": 0
+        },
+        {
+            "label": "待回收",
+            "value": 1
+        },
+        {
+            "label": "已回收",
+            "value": 2
+        }
+    ]
+}

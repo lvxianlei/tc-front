@@ -1,25 +1,22 @@
 /***
- * 回款信息
+ * 保函申请
  * 2021/11/22
  */
 import React, { useState } from 'react';
-import { Button, Input, DatePicker, Radio } from 'antd'
-import { useHistory } from 'react-router-dom'
-import { Page } from '../common'
-import { collectionListHead, approvalStatus } from "./collectionColumn.json"
+import { Button, Input, DatePicker, Radio, Select } from 'antd';
+import { useHistory } from 'react-router-dom';
+import { Page } from '../common';
+import { collectionListHead, approvalStatus } from "./applicationColunm.json";
 
-import AddModal from './addModal'; // 新增
+const { Option } = Select;
 
-export default function CollectionInfomation() {
+export default function ApplicationColunm() {
     const history = useHistory()
     const [ refresh, setRefresh ] = useState<boolean>(false);
     const [confirmStatus, setConfirmStatus] = useState<number>(0);
-    const [visible, setVisible] = useState(false);
-    const [title, setTitle] = useState<boolean>(true);
 
     // 查询按钮
     const onFilterSubmit = (value: any) => {
-        console.log(value, '搜索的值')
         if (value.startRefundTime) {
             const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startRefundTime = formatDate[0]
@@ -32,24 +29,6 @@ export default function CollectionInfomation() {
     const operationChange = (event: any) => {
         setConfirmStatus(parseFloat(`${event.target.value}`));
         setRefresh(!refresh);
-    }
-
-    // 新增
-    const hanleAdd = () => {
-        setVisible(true);
-        setTitle(true);
-    }
-
-    // 新增回调
-    const handleOk = () => {
-        setVisible(false);
-    }
-
-    // 查看
-    const hanleSee = (record: any) => {
-        console.log(record, 'record');
-        setVisible(true);
-        setTitle(false);
     }
     return (
         <>
@@ -71,45 +50,45 @@ export default function CollectionInfomation() {
                         width: 100,
                         render: (_: any, record: any) => {
                             if (record.confirmStatus === 0) {
-                                return <Button type="link" onClick={(record) => hanleSee(record)}>查看</Button>
+                                return <Button type="link">查看</Button>
                             }
                             return <Button type="link">删除</Button>
                         }
                     }]}
                 refresh={ refresh }
                 extraOperation={
-                    <div style={{display: 'flex', flexWrap: 'nowrap', justifyContent: 'spance-between'}}>
-                        <div>
-                            <Radio.Group defaultValue={confirmStatus} onChange={operationChange}>
-                                {approvalStatus.map((item: any) => <Radio.Button value={item.value}>{item.label}</Radio.Button>)}
-                            </Radio.Group>
-                        </div>
-                        <div style={{marginLeft: '1200px'}}>
-                            <Button type="primary" style={{marginRight: 20}} onClick={hanleAdd}>新增</Button>
-                            <Button type="primary" style={{marginRight: 4}}>导入</Button>
-                            <Button type="link">下载导入模板</Button>
-                        </div>
-                    </div>
+                    <>
+                    <Radio.Group defaultValue={confirmStatus} onChange={operationChange}>
+                        {
+                            approvalStatus.map((item: any) => <Radio.Button value={item.value}>{item.label}</Radio.Button>)
+                        }
+                    </Radio.Group>
+                    </>
                 }
                 onFilterSubmit={onFilterSubmit}
                 filterValue={{ confirmStatus }}
                 searchFormItems={[
                     {
                         name: 'fuzzyQuery',
-                        children: <Input placeholder="请输入来款单位进行查询" style={{ width: 300 }} />
+                        children: <Input placeholder="请输入项目名称/受益人名称/申请人进行查询" style={{ width: 300 }} />
                     },
                     {
                         name: 'startRefundTime',
-                        label: '来款日期',
+                        label: '申请日期',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    },
+                    {
+                        name: 'approvalStatus',
+                        label: '审批状态',
+                        children: (
+                            <Select style={{ width: 120 }} placeholder="请选择">
+                                <Option value="1">全部</Option>
+                                <Option value="2">审批中</Option>
+                                <Option value="3">已通过</Option>
+                            </Select>
+                        )
                     }
                 ]}
-            />
-            <AddModal
-                visible={visible}
-                title={title}
-                onCancel={() => setVisible(false)}
-                onOk={handleOk}
             />
         </>
     )
