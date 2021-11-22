@@ -1,4 +1,4 @@
-import React, { useState, useImperativeHandle, forwardRef, useCallback, useEffect, Children } from 'react'
+import React, { useState, useImperativeHandle, forwardRef, useCallback, useEffect } from 'react'
 import { Button, Upload, Modal, Image, message } from 'antd'
 import { DetailTitle, CommonTable } from "../common"
 import AuthUtil from "../../utils/AuthUtil"
@@ -23,6 +23,7 @@ export interface AttachmentProps {
     accept?: string
     title?: string | false // 列表
     dataSource?: FileProps[]
+    multiple?: boolean
     edit?: boolean
     maxCount?: number
     children?: JSX.Element
@@ -33,27 +34,58 @@ export interface AttachmentRef {
     getDataSource: () => FileProps[]
     dataSource?: FileProps[]
     resetFields: () => void
-    onDoneChange?: (params: FileProps[]) => void
 }
 
 interface URLProps {
-
+    businessId?: string
+    businessType?: string
+    callbackTemplate?: string
+    callbackVar?: string
+    createTime?: string
+    createUser?: string
+    deleteTime?: string
+    deleteUser?: string
+    downloadUrl?: string
+    expirationTime?: string
+    fileName?: string
+    fileSize?: string
+    id?: string
+    isAutoClear?: 1 | 2
+    isDeleted?: number
+    originalName?: string
+    ossId?: string
+    pushUrl: string
+    remark?: string
+    status?: number
+    tenantId?: string
+    updateTime?: string
+    updateUser?: string
+    uploadTime?: string
+    uploadUser?: string
 }
 
-export default forwardRef(function ({ dataSource = [],
+export default forwardRef(function ({
+    dataSource = [],
+    multiple = false,
     isTable = true,
     title = "相关附件",
     accept = undefined,
     children = <Button key="enclosure" type="primary" ghost>上传</Button>,
-    maxCount = 5, edit = false }: AttachmentProps, ref): JSX.Element {
+    maxCount = 5,
+    edit = false,
+    onDoneChange = () => { }
+}: AttachmentProps, ref): JSX.Element {
     const inputAccepts = accept ? ({ accept }) : ({})
     const [attchs, setAttachs] = useState<FileProps[]>(dataSource)
     const [visible, setVisible] = useState<boolean>(false)
+    const [uploadOSSUrlInfo, setUploadOSSUrlInfo] = useState<URLProps>({
+        pushUrl: "http://www."
+    })
     const [picUrl, setPicUrl] = useState<string>()
-    const { run: saveFile, data: filesData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { run: saveFile, data: filesData } = useRequest<URLProps>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/sinzetech-user/department`)
-            resole(result.map((item: any) => ({ label: item.name, value: item.id })))
+            const result: URLProps = await RequestUtil.post(`/sinzetech-resource/oss/endpoint/get-upload-url`, data)
+            resole(result)
         } catch (error) {
             reject(error)
         }
@@ -63,11 +95,23 @@ export default forwardRef(function ({ dataSource = [],
 
     const deleteAttachData = useCallback((id: number) => setAttachs(attchs.filter((item: any) => item.uid ? item.uid !== id : item.id !== id)), [setAttachs, attchs])
 
-    const handleBeforeUpload = useCallback((event: any) => {
-        console.log(event, "event-----")
+    const handleBeforeUpload = useCallback((event: File): Promise<boolean> => {
+        return new Promise(async (resove, reject) => {
+            try {
+                const result: URLProps = await saveFile({
+                    fileName: event.name,
+                    fileSize: event.size
+                })
+                setUploadOSSUrlInfo(result)
+                resove(true)
+            } catch (error) {
+                reject(false)
+            }
+        })
     }, [])
 
     const uploadChange = useCallback((event: any) => {
+        console.log(new URLSearchParams(uploadOSSUrlInfo?.pushUrl).get("Expires"))
         if (event.file.status === "done") {
             if (event.file.response.code === 200) {
                 const dataInfo = event.file.response.data
@@ -75,7 +119,7 @@ export default forwardRef(function ({ dataSource = [],
                 setAttachs([...attchs, {
                     uid: attchs.length,
                     link: dataInfo.link,
-                    name: dataInfo.originalName.split(".")[0],
+                    name: dataInfo.originalName,
                     description: "",
                     filePath: dataInfo.name,
                     fileSize: dataInfo.size,
@@ -83,6 +127,7 @@ export default forwardRef(function ({ dataSource = [],
                     userName: dataInfo.userName,
                     fileUploadTime: dataInfo.fileUploadTime
                 }])
+                onDoneChange(attchs)
             }
         }
     }, [setAttachs, attchs])
@@ -94,7 +139,7 @@ export default forwardRef(function ({ dataSource = [],
     const resetFields = useCallback(() => setAttachs([]), [attchs, setAttachs])
 
     const handleCat = useCallback((record: FileProps) => {
-        if (["png", "jpeg", "jpg"].includes(record.fileSuffix)) {
+        if (["png", "jpeg", "jpg", "gif"].includes(record.fileSuffix)) {
             setPicUrl(record.filePath)
             setVisible(true)
         } else if (["pdf"].includes(record.fileSuffix)) {
@@ -106,8 +151,6 @@ export default forwardRef(function ({ dataSource = [],
 
     const handleCancel = useCallback(() => setVisible(false), [setVisible])
 
-
-
     return <>
         <Modal width={1011} visible={visible} onCancel={handleCancel} footer={false}>
             <Image src={picUrl} preview={false} />
@@ -118,16 +161,18 @@ export default forwardRef(function ({ dataSource = [],
                 operation: [
                     <Upload
                         key="sub"
-                        name="file"
-                        multiple={false}
+                        name="binary"
+                        multiple={multiple}
                         {...inputAccepts}
                         maxCount={maxCount}
-                        action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
+                        action={`${uploadOSSUrlInfo?.pushUrl}`}
                         headers={{
-                            'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                            'Tenant-Id': AuthUtil.getTenantId(),
-                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                            "Content-Type": "application/octet-stream",
+                            "x-oss-callback": "",
+                            "x-oss-callback-var": "",
+                            expires: new URL(uploadOSSUrlInfo?.pushUrl).searchParams.get("Expires") || ""
                         }}
+                        method="put"
                         showUploadList={false}
                         beforeUpload={handleBeforeUpload}
                         onChange={uploadChange}
@@ -138,16 +183,19 @@ export default forwardRef(function ({ dataSource = [],
             } : {}} />}
         {!isTable && <Upload
             key="sub"
-            name="file"
-            multiple={false}
+            name="binary"
+            multiple={multiple}
             {...inputAccepts}
             maxCount={maxCount}
-            action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
+            action={`${uploadOSSUrlInfo?.pushUrl}`}
             headers={{
-                'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                'Tenant-Id': AuthUtil.getTenantId(),
-                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                "Content-Type": "application/octet-stream",
+                "x-oss-callback": "",
+                "x-oss-callback-var": "",
+                expires: new URL(uploadOSSUrlInfo?.pushUrl).searchParams.get("Expires") || ""
             }}
+            method="put"
+            beforeUpload={handleBeforeUpload}
             showUploadList={false}
             onChange={uploadChange}
         >
