@@ -49,10 +49,26 @@ export default function ApplicationColunm() {
                         fixed: "right",
                         width: 100,
                         render: (_: any, record: any) => {
+                            /**
+                             * 这一块重新处理
+                             */
                             if (record.confirmStatus === 0) {
-                                return <Button type="link">查看</Button>
+                                return (
+                                    <>
+                                        <Button type="link">查看</Button>
+                                        <Button type="link">填写保函信息</Button>
+                                        <Button type="link">生成文件</Button>
+                                    </>
+                                )
+                            } else if (record.confirmStatus === 1) {
+                                return (
+                                    <>
+                                        <Button type="link">查看</Button>
+                                        <Button type="link">回收保函</Button>
+                                    </>
+                                )
                             }
-                            return <Button type="link">删除</Button>
+                            return <Button type="link">查看</Button>
                         }
                     }]}
                 refresh={ refresh }

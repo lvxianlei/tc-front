@@ -16,6 +16,10 @@ export default function AddModal(props: ModalFuncProps): JSX.Element {
         props.onOk && props.onOk();
     }
 
+    const handleBaseInfoChange = (fields: any) => {
+        console.log(fields, 'filed')
+    }
+
     return (
         <Modal
           title={props.title ? '新增回款信息' : '查看回款信息'}
@@ -25,7 +29,19 @@ export default function AddModal(props: ModalFuncProps): JSX.Element {
           maskClosable={false}
           width={800}
         >
-            <BaseInfo form={addCollectionForm} columns={ baseColums } dataSource={{}} col={ 2 } edit={props.title ? true : false} />
+            <BaseInfo form={addCollectionForm} dataSource={{}} col={ 2 } edit={props.title ? true : false}
+                columns={ baseColums.map((item: any) => {
+                    if (item.dataIndex === 'content') {
+                        const materialStandardEnum = [
+                            {"label": "是", "value": 1},
+                            {"label": "否", "value": 2}
+                        ]
+                        return ({...item, enum: materialStandardEnum})
+                    }
+                    return item;
+                })}
+                onChange={handleBaseInfoChange}
+            />
         </Modal>
     )
 }
