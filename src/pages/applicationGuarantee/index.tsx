@@ -8,13 +8,22 @@ import { useHistory } from 'react-router-dom';
 import { Page } from '../common';
 import { collectionListHead, approvalStatus } from "./applicationColunm.json";
 
+// 引入填写保函信息的弹框
+import FillGuaranteeInformation from './fillGuaranteeInformation';
+// 引入回收保函信息的弹框
+import RecoveryGuaranteeLayer from './recoveryGuarantee';
+// 引入查看保函申请
+import SeeGuarantee from './seeGuarantee';
+
 const { Option } = Select;
 
 export default function ApplicationColunm() {
-    const history = useHistory()
+    const history = useHistory();
     const [ refresh, setRefresh ] = useState<boolean>(false);
     const [confirmStatus, setConfirmStatus] = useState<number>(0);
-
+    const [ visible, setVisible ] = useState<boolean>(false);
+    const [visibleRecovery, setVisibleRecovery] = useState<boolean>(false);
+    const [ visibleSee, setVisibleSee ] = useState<boolean>(false);
     // 查询按钮
     const onFilterSubmit = (value: any) => {
         if (value.startRefundTime) {
@@ -30,6 +39,17 @@ export default function ApplicationColunm() {
         setConfirmStatus(parseFloat(`${event.target.value}`));
         setRefresh(!refresh);
     }
+
+    // 新增回调
+    const handleOk = () => {
+        setVisible(false);
+    }
+
+    // 回收保函信息
+    const handleOkuseState = () => {
+        setVisibleRecovery(false);
+    }
+
     return (
         <>
             <Page
@@ -55,20 +75,20 @@ export default function ApplicationColunm() {
                             if (record.confirmStatus === 0) {
                                 return (
                                     <>
-                                        <Button type="link">查看</Button>
-                                        <Button type="link">填写保函信息</Button>
+                                        <Button type="link" onClick={() => setVisibleSee(true)}>查看</Button>
+                                        <Button type="link" onClick={() => setVisible(true)}>填写保函信息</Button>
                                         <Button type="link">生成文件</Button>
                                     </>
                                 )
                             } else if (record.confirmStatus === 1) {
                                 return (
                                     <>
-                                        <Button type="link">查看</Button>
-                                        <Button type="link">回收保函</Button>
+                                        <Button type="link" onClick={() => setVisibleSee(true)}>查看</Button>
+                                        <Button type="link" onClick={() => setVisibleRecovery(true)}>回收保函</Button>
                                     </>
                                 )
                             }
-                            return <Button type="link">查看</Button>
+                            return <Button type="link" onClick={() => setVisibleSee(true)}>查看</Button>
                         }
                     }]}
                 refresh={ refresh }
@@ -105,6 +125,24 @@ export default function ApplicationColunm() {
                         )
                     }
                 ]}
+            />
+            {/* 填写保函信息 */}
+            <FillGuaranteeInformation
+                visible={visible}
+                onCancel={() => setVisible(false)}
+                onOk={handleOk}
+            />
+            {/* 回收保函弹框 */}
+            <RecoveryGuaranteeLayer
+                visible={visibleRecovery}
+                onCancel={() => setVisibleRecovery(false)}
+                onOk={handleOkuseState}
+            />
+            {/* 查看保函申请 */}
+            <SeeGuarantee
+                visible={visibleSee}
+                onCancel={() => setVisibleSee(false)}
+                onOk={() => setVisibleSee(false)}
             />
         </>
     )

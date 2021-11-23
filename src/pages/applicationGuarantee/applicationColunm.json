@@ -77,5 +77,266 @@
             "label": "已回收",
             "value": 2
         }
+    ],
+    "baseColums": [
+        {
+            "dataIndex": "title",
+            "title": "出具日期",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择出具日期"
+                }
+            ]
+        },
+        {
+            "dataIndex": "contentsu",
+            "title": "要求交回日期",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择要求交回日期"
+                }
+            ]
+        },
+        {
+            "dataIndex": "userNames",
+            "title": "保函有效截止期",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择保函有效截止期"
+                }
+            ]
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "保函信息备注",
+            "type": "textarea"
+        }
+    ],
+    "enclosure": [
+        {
+            "title": "文件名",
+            "dataIndex": "name"
+        },
+        {
+            "title": "大小",
+            "dataIndex": "fileSize"
+        },
+        {
+            "title": "上传人",
+            "dataIndex": "userName"
+        },
+        {
+            "title": "上传时间",
+            "dataIndex": "fileUploadTime",
+            "type": "date"
+        }
+    ],
+    "recoveryGuarantee": [
+        {
+            "dataIndex": "titles",
+            "title": "要求交回日期",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择出具日期"
+                }
+            ]
+        },
+        {
+            "dataIndex": "contents",
+            "title": "交回日期",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择要求交回日期"
+                }
+            ]
+        },
+        {
+            "dataIndex": "userNames",
+            "title": "是否交回原件",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "投标保证金"
+                },
+                {
+                    "value": 1,
+                    "label": "合同应收款"
+                }
+            ]
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "原因"
+        },
+        {
+            "dataIndex": "stateNames",
+            "title": "备注",
+            "type": "textarea"
+        }
+    ],
+    "seeBaseForm": [
+        {
+            "dataIndex": "stateName",
+            "title": "保函编号"
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "申请编号"
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "申请日期"
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "申请部门"
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "项目名称"
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "受益人名称"
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "合同编号"
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "招标编号"
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "合同总价"
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "保函所占比(%)"
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "保函种类"
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "保函份数"
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "保函金额"
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "办理状态"
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "备注"
+        }
+    ],
+    "guaranteeForm": [
+        {
+            "dataIndex": "stateName",
+            "title": "出具日期"
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "要求交回日期"
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "保函有效截止期"
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "保函信息备注"
+        }
+    ],
+    "recoveryForm": [
+        {
+            "dataIndex": "stateName",
+            "title": "要求交回日期"
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "保函交回日期"
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "是否交回文件"
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "原因"
+        },
+        {
+            "dataIndex": "stateName",
+            "title": "备注"
+        }
+    ],
+    "seeEnclosure": [
+        {
+            "title": "文件名",
+            "dataIndex": "name"
+        },
+        {
+            "title": "大小",
+            "dataIndex": "fileSize"
+        },
+        {
+            "title": "上传人",
+            "dataIndex": "userName"
+        },
+        {
+            "title": "上传时间",
+            "dataIndex": "fileUploadTime",
+            "type": "date"
+        }
+    ],
+    "seeApprovalRecord": [
+        {
+            "title": "部门",
+            "dataIndex": "name"
+        },
+        {
+            "title": "审批人",
+            "dataIndex": "fileSize"
+        },
+        {
+            "title": "职位",
+            "dataIndex": "userName"
+        },
+        {
+            "title": "审批时间",
+            "dataIndex": "fileUploadTime",
+            "type": "date"
+        },
+        {
+            "title": "审批结果",
+            "dataIndex": "userName"
+        },
+        {
+            "title": "意见",
+            "dataIndex": "fileUploadTime",
+            "type": "date"
+        }
     ]
 }

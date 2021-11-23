@@ -90,6 +90,16 @@
                     "required": true,
                     "message": "请选择来款方式"
                 }
+            ],
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "投标保证金"
+                },
+                {
+                    "value": 1,
+                    "label": "合同应收款"
+                }
             ]
         },
         {
@@ -100,6 +110,16 @@
                 {
                     "required": true,
                     "message": "请选择来款性质"
+                }
+            ],
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "投标保证金"
+                },
+                {
+                    "value": 1,
+                    "label": "合同应收款"
                 }
             ]
         },
@@ -134,6 +154,16 @@
                     "required": true,
                     "message": "请选择币种"
                 }
+            ],
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "投标保证金"
+                },
+                {
+                    "value": 1,
+                    "label": "合同应收款"
+                }
             ]
         },
         {
@@ -157,12 +187,64 @@
                     "required": true,
                     "message": "请选择确认方"
                 }
+            ],
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "投标保证金"
+                },
+                {
+                    "value": 1,
+                    "label": "合同应收款"
+                }
             ]
         },
         {
             "dataIndex": "releaseTime6",
             "title": "备注",
             "type": "textarea"
+        }
+    ],
+    "overViewColunms": [
+        {
+            "title": "来款单位名称",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "来款方式",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "来款性质",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "来款金额",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "来款日期",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "币种",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "汇率",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "外币金额",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "收款银行",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "确认方",
+            "dataIndex": "payCompany"
         }
     ]
 }

@@ -9,13 +9,15 @@ import { Page } from '../common'
 import { collectionListHead, approvalStatus } from "./collectionColumn.json"
 
 import AddModal from './addModal'; // 新增
+import OverView from './overView'; // 查看
 
 export default function CollectionInfomation() {
     const history = useHistory()
     const [ refresh, setRefresh ] = useState<boolean>(false);
     const [confirmStatus, setConfirmStatus] = useState<number>(0);
     const [visible, setVisible] = useState(false);
-    const [title, setTitle] = useState<boolean>(true);
+    const [status, setStatus] = useState<boolean>(false); // 用来确认查看时的状态
+    const [ visibleOverView, setVisibleOverView ] = useState<boolean>(false);
 
     // 查询按钮
     const onFilterSubmit = (value: any) => {
@@ -37,19 +39,21 @@ export default function CollectionInfomation() {
     // 新增
     const hanleAdd = () => {
         setVisible(true);
-        setTitle(true);
     }
 
     // 新增回调
-    const handleOk = () => {
-        setVisible(false);
+    const handleOk = (result:object, callBack: any) => {
+        console.log(result, '-------------11111111');
+        setTimeout(() => {
+            callBack();
+            setVisible(false);
+        }, 1000);
     }
 
     // 查看
     const hanleSee = (record: any) => {
         console.log(record, 'record');
-        setVisible(true);
-        setTitle(false);
+        setVisibleOverView(true);
     }
     return (
         <>
@@ -105,11 +109,17 @@ export default function CollectionInfomation() {
                     }
                 ]}
             />
+            {/* 新增 */}
             <AddModal
                 visible={visible}
-                title={title}
                 onCancel={() => setVisible(false)}
                 onOk={handleOk}
+            />
+            {/* 查看 */}
+            <OverView
+                title={status}
+                visible={visibleOverView}
+                onCancel={() => setVisibleOverView(false)}
             />
         </>
     )
