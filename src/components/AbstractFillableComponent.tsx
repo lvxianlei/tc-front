@@ -170,9 +170,20 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
      * @returns form items 
      */
     protected renderFormItems(items: IFormItemGroup[], itemIndex: number): React.ReactNode {
+        const formItemGroups: IFormItemGroup[][] = this.getFormItemGroups();
         let region: any = null;
         if (this.getForm()) {
+            //获取与输入值
             region = this.getForm()?.getFieldValue("region");
+            if (this.getForm()?.getFieldValue("region") == "其他-国外") {
+                region = "其他-国外";
+            }
+            //获取与接口值
+            const region_val = formItemGroups[0][0].itemProps.filter(item => item.name == 'region')[0].initialValue;
+            //没有输入 接口值 == "其他-国外"
+            if (!region && region_val  == "其他-国外") {
+                region = "其他-国外";
+            }
         }
         return (
             <div key={itemIndex}>
@@ -186,7 +197,8 @@ export default abstract class AbstractFillableComponent<P extends RouteComponent
                                     <Row gutter={24}>
                                         {
                                             group.itemProps.map<React.ReactNode>((props: FormItemProps, index: number): React.ReactNode => (
-                                                <Col style={{ display: props.name == 'regionOther' && region != 83 ? 'none' : 'block' }} span={group.itemCol?.span} key={`${props.name}_${index}`}>
+                                                <Col style={{ display: props.name == 'regionOther' && region != "其他-国外" ? 'none' : 'block' }}
+                                                    span={group.itemCol?.span} key={`${props.name}_${index}`}>
                                                     <Form.Item {...props} />
                                                 </Col>
                                             ))

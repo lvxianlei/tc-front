@@ -390,6 +390,7 @@ class ManagementContractSetting extends ContractSetting {
                     this.getForm()?.getFieldValue("countryCode") === 1 ||
                     contract?.countryCode === 1
                   }
+                  onChange={() => this.regionChange()}
                 >
                   {this.state.regionInfoData?.map((opt: any) => {
                     return (
@@ -401,6 +402,13 @@ class ManagementContractSetting extends ContractSetting {
                   <Select.Option value="其他-国外">其他-国外</Select.Option>
                 </Select>
               ),
+            },
+            //region_val  == "其他-国外"
+            {
+              label: "国家",
+              name: "regionOther",
+              initialValue: contract?.regionOther,
+              children: (<Input value={contract?.regionOther} />),
             },
             {
               label: "销售业务员",

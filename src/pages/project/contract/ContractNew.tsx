@@ -400,15 +400,15 @@ class ManagementContractNew extends ContractNew {
                       </Select.Option>
                     );
                   })}
-                  <Select.Option value="83">其他-国外</Select.Option>
+                  <Select.Option value="其他-国外">其他-国外</Select.Option>
                 </Select>
               ),
             },
             {
-              label: "其他-国外",
+              label: "国家",
               name: "regionOther",
-              initialValue: contract?.takeOverUser,
-              children: (<Input value={contract?.takeOverUser} />),
+              initialValue: contract?.regionOther,
+              children: (<Input value={contract?.regionOther} />),
             },
             {
               label: "销售业务员",
