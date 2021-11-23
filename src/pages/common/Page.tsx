@@ -67,6 +67,13 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                 size: pagination.pageSize || this.state.tablePagination?.pageSize,
                 type: this.state.selectedTabKey === 'item_0' ? '' : this.state.selectedTabKey
             });
+            console.log(resData)
+            ///approvalm/management 审批管理处理数据
+            // if (filterValues.auditStatus) {
+            //     resData.records.map(item => {
+            //         (item as any).auditStatus = '已通过'
+            //     })
+            // }
             this.setState({
                 ...filterValues,
                 resData,

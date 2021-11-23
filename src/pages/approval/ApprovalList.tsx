@@ -94,7 +94,6 @@ class ApprovalAll extends AbstractMngtComponent<
                 auditStatus: this.state.selectedTabKey
             }
         );
-
         this.setState({
             ...filterValues,
             tableDataSource: resData.records,
