@@ -111,20 +111,14 @@ export default function SetOutList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Link to={`/workMngt/setOutList/setOutInformation/${record.id}`}>放样信息</Link>
-                    {
-                        // record.status === 1 || record.status === 2 ? 
-                        <Link to={{
-                            pathname: `/workMngt/setOutList/towerInformation/${record.id}`,
-                            state: { loftingLeader: record.loftingLeader, status: record.status }
-                        }}>塔型信息</Link>
-                        // : <Button type="link" disabled>塔型信息</Button>
-                    }
-                    {
-                        record.status === 4 ? <Link to={{
-                            pathname: `/workMngt/setOutList/poleInformation/${record.id}`,
-                            state: record.loftingLeader
-                        }}>杆塔配段</Link> : <Button type="link" disabled>杆塔配段</Button>
-                    }
+                    <Link to={{
+                        pathname: `/workMngt/setOutList/towerInformation/${record.id}`,
+                        state: { loftingLeader: record.loftingLeader, status: record.status }
+                    }}>塔型信息</Link>
+                    <Link to={{
+                        pathname: `/workMngt/setOutList/poleInformation/${record.id}`,
+                        state: { loftingLeader: record.loftingLeader, status: record.status }
+                    }}>杆塔配段</Link>
                     {
                         record.status === 5 || record.status === 6 ? <Deliverables id={record.id} name={record.name} /> : <Button type="link" disabled>交付物</Button>
                     }
@@ -204,14 +198,8 @@ export default function SetOutList(): React.ReactNode {
                         <Select.Option value={3} key="3">组焊中</Select.Option>
                         <Select.Option value={4} key="4">配段中</Select.Option>
                         <Select.Option value={5} key="5">已完成</Select.Option>
-                        <Select.Option value={6} key="6">已提交</Select.Option>
                     </Select>
                 </Form.Item>
-            },
-            {
-                name: 'plannedDeliveryTime',
-                label: '计划交付时间',
-                children: <DatePicker.RangePicker />
             },
             {
                 name: 'pattern',
@@ -234,11 +222,6 @@ export default function SetOutList(): React.ReactNode {
                 const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
                 values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                 values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
-            }
-            if (values.plannedDeliveryTime) {
-                const formatDate = values.plannedDeliveryTime.map((item: any) => item.format("YYYY-MM-DD"));
-                values.plannedDeliveryTimeStart = formatDate[0] + ' 00:00:00';
-                values.plannedDeliveryTimeEnd = formatDate[1] + ' 23:59:59';
             }
             return values;
         }}
