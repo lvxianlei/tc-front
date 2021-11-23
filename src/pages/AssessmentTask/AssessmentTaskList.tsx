@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Select, Button, Popconfirm, Form, Row, Col, TreeSelect } from 'antd';
-import { Link, useLocation, useHistory, useRouteMatch } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Page } from '../common';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { FixedType } from 'rc-table/lib/interface';
@@ -10,16 +10,12 @@ import Assign from './Assign';
 import RequestUtil from '../../utils/RequestUtil';
 import { TreeNode } from 'rc-tree-select';
 import useRequest from '@ahooksjs/use-request';
-import ExportList from '../../components/export/list';
 
 
 export default function AssessmentTaskList(): React.ReactNode {
-    const match = useRouteMatch()
-    const history = useHistory()
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const location = useLocation<{ state: {} }>();
-    const [isExport, setIsExportStoreList] = useState(false)
 
     const columns = [
         {
@@ -137,7 +133,6 @@ export default function AssessmentTaskList(): React.ReactNode {
     const departmentData: any = data || [];
 
     const [startRelease, setStartRelease] = useState([]);
-    const [programLeader, setProgramLeader] = useState([]);
 
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles && roles.forEach((role: any & SelectDataNode): void => {
@@ -165,8 +160,6 @@ export default function AssessmentTaskList(): React.ReactNode {
         switch (title) {
             case "startReleaseDepartment":
                 return setStartRelease(userData.records);
-            case "programLeader":
-                return setProgramLeader(userData.records);
         };
     }
 
@@ -176,7 +169,7 @@ export default function AssessmentTaskList(): React.ReactNode {
                 path="/tower-science/assessTask"
                 columns={columns}
                 headTabs={[]}
-                extraOperation={<Button type="primary" ghost onClick={() => { setIsExportStoreList(true) }}>导出</Button>}
+                exportPath={`/tower-science/assessTask`}
                 requestData={{ status: location.state }}
                 refresh={refresh}
                 searchFormItems={[
@@ -244,27 +237,6 @@ export default function AssessmentTaskList(): React.ReactNode {
                     return values;
                 }}
             />
-            {
-                isExport ?
-                    <ExportList
-                        history={history}
-                        location={location}
-                        match={match}
-                        columnsKey={() => {
-                            let keys = [...columns]
-                            keys.pop()
-                            return keys
-                        }}
-                        current={1}
-                        size={10}
-                        total={10}
-                        url={'/tower-science/assessTask'}
-                        serchObj={{
-                            ...filterValue,
-                        }}
-                        closeExportList={() => { setIsExportStoreList(false) }}
-                    /> : null
-            }
         </>
     )
 }
