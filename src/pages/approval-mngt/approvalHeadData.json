@@ -493,7 +493,7 @@
             "type": "popTable",
             "path": "/sinzetech-user/user",
             "readOnly": true,
-            "value":"name",
+            "value": "name",
             "columns": [
                 {
                     "title": "登录账号",
@@ -835,7 +835,7 @@
         {
             "title": "重量(吨)",
             "dataIndex": "weight",
-            "type":"number",
+            "type": "number",
             "rules": [
                 {
                     "required": true,
@@ -855,6 +855,7 @@
             "title": "出厂单价",
             "dataIndex": "outFactoryPrice",
             "type": "number",
+            "disabled": true,
             "rules": [
                 {
                     "required": true,
