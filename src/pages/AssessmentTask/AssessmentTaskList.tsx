@@ -201,28 +201,6 @@ export default function AssessmentTaskList(): React.ReactNode {
                         </Form.Item>
                     },
                     {
-                        name: 'programLeader',
-                        label: '项目负责人',
-                        children: <Row>
-                            <Col>
-                                <Form.Item name="programLeaderDept">
-                                    <TreeSelect placeholder="请选择" onChange={(value: any) => { onDepartmentChange(value, 'programLeader') }} style={{ width: "150px" }}>
-                                        {renderTreeNodes(wrapRole2DataNode(departmentData))}
-                                    </TreeSelect>
-                                </Form.Item>
-                            </Col>
-                            <Col>
-                                <Form.Item name="programLeader">
-                                    <Select placeholder="请选择" style={{ width: "150px" }}>
-                                        {programLeader && programLeader.map((item: any) => {
-                                            return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                                        })}
-                                    </Select>
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                    },
-                    {
                         name: 'startReleaseDate',
                         label: '评估人',
                         children: <Row>
@@ -245,14 +223,9 @@ export default function AssessmentTaskList(): React.ReactNode {
                         </Row>
                     },
                     {
-                        name: 'bidEndTime',
-                        label: '投标截止时间',
-                        children: <DatePicker.RangePicker />
-                    },
-                    {
                         name: 'fuzzyMsg',
                         label: '模糊查询项',
-                        children: <Input placeholder="任务编号/项目名称/客户名称" />
+                        children: <Input placeholder="任务编号/项目名称/客户名称/项目负责人" />
                     }
                 ]}
                 filterValue={filterValue}
