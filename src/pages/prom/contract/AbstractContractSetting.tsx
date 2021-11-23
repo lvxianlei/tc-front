@@ -437,6 +437,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         })
     }
     public regionChange() {
+        // console.log(111,this.getForm())
         this.forceUpdate();
     }
     /**
@@ -909,7 +910,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                         (file) => {
                                                             const isLt10M = file.size / 1024 / 1024 > 10;
                                                             return new Promise((resolve, reject) => {
-                                                                if (this.state.contract.attachInfoDtos && this.state.contract.attachInfoDtos.length >= 10) {
+                                                                if (this.state.contract.attachInfoDtos && this.state.contract.attachInfoDtos.length == 10) {
                                                                     message.error('文件最多上传10个！')
                                                                     reject()
                                                                 } else {

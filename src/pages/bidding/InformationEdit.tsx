@@ -11,6 +11,7 @@ import { downLoadFile } from "../../utils"
 import { Console } from "console";
 const columns = [
     { title: '分标编号', dataIndex: 'partBidNumber', "type": "text", "maxLength": 50 },
+    { title: '货物类别', dataIndex: 'goodsType', "type": "text", "maxLength": 50 },
     {
         "title": "包名称",
         "dataIndex": "packageName"
@@ -21,19 +22,19 @@ const columns = [
         "type": "text",
         "maxLength": 50
     },
-    { title: '货物类别', dataIndex: 'goodsType', "type": "text", "maxLength": 50 },
+    
     {
         "title": "工程电压等级",
         "dataIndex": "projectVoltageLevel"
     },
+    { title: '数量', dataIndex: 'amount', type: "number" },
+    { title: '单位', dataIndex: 'unit' },
+    { title: '首批交货日期', dataIndex: 'deliveryDate', type: "date", format: "YYYY-MM-DD" },
+    { title: '交货地点', dataIndex: 'deliveryPlace' },
     {
         "title": "物资描述",
         "dataIndex": "goodsExplain"
     },
-    { title: '数量', dataIndex: 'amount', type: "number" },
-    { title: '单位', dataIndex: 'unit' },
-    { title: '首批交货日期', dataIndex: 'deliveryDate', type: "date", format: "YYYY-MM-DD" },
-    { title: '交货地点', dataIndex: 'deliveryPlace' }
 ]
 
 export default function InfomationNew(): JSX.Element {
@@ -222,7 +223,7 @@ export default function InfomationNew(): JSX.Element {
             <Button key="cancel" onClick={handelCancel}>取消</Button>
         ]}
     >
-        <Modal zIndex={15} visible={visible} title="应标" okText="确定并自动生成项目" onOk={handleModalOk} onCancel={handleModalCancel} >
+        <Modal zIndex={15} visible={visible} title="应标" okText="确定" onOk={handleModalOk} onCancel={handleModalCancel} >
             <Form form={form} onValuesChange={handleChange}>
                 <Form.Item name="projectLeaderId" label="设置项目负责人">
                     <PopTable onChange={(event: any) => form.setFieldsValue({ projectLeaderId: event.id })} data={{
