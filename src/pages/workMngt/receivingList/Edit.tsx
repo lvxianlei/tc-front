@@ -20,7 +20,10 @@ const ChooseModal = forwardRef(({ id }: ChooseModalProps, ref) => {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/${id}`)
-            setSelectList(result?.materialContractDetailVos)
+            setSelectList(result?.materialContractDetailVos.map((item: any) => ({
+                ...item,
+                num: item.surplusNum
+            })))
             resole(result)
         } catch (error) {
             reject(error)
