@@ -5,13 +5,13 @@ import RequestUtil from '../../utils/RequestUtil';
 import styles from './AssessmentTask.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { IFileList } from './AssessmentTaskDetail';
+import { FileProps } from '../common/Attachment';
 
 interface IResponse {
     readonly id?: string;
     readonly assessInfo?: string;
     readonly status?: string;
-    readonly assessFileList?: IFileList[];
+    readonly assessFileList?: FileProps[];
 }
 
 export interface AssessmentInformationProps {}
@@ -22,7 +22,7 @@ export interface IAssessmentInformationRouteProps extends RouteComponentProps<As
 export interface AssessmentInformationState {
     readonly visible: boolean;
     readonly description?: string;
-    readonly assessFileList?: IFileList[];
+    readonly assessFileList?: FileProps[];
     readonly pictureVisible: boolean;
     readonly pictureUrl?: string;
 }

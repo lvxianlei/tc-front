@@ -6,31 +6,17 @@ import styles from './Evaluation.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import AuthUtil from '../../../utils/AuthUtil';
+import { FileProps } from '../../common/Attachment';
 
 interface IResponse {
     readonly id?: string;
     readonly assessInfo?: string;
     readonly status?: string | number;
-    readonly assessFileList?: IFileList[];
-    readonly instructionFileList?: IFileList[];
+    readonly assessFileList?: FileProps[];
+    readonly instructionFileList?: FileProps[];
 }
 
-interface IFileList {
-    readonly id?: string;
-    readonly filePath: string;
-    readonly originalName?: string;
-    readonly name: string;
-    readonly userName: string;
-    readonly link: string;
-    readonly fileSuffix: string;
-    readonly uid?: number | string,
-    readonly description: string,
-    readonly fileSize: string | number,
-    readonly fileUploadTime: string
-}
-
-
-export interface EvaluationInformationProps {}
+export interface EvaluationInformationProps { }
 export interface IEvaluationInformationRouteProps extends RouteComponentProps<EvaluationInformationProps>, WithTranslation {
     readonly id: number | string;
     readonly updateList: () => void;
@@ -47,7 +33,7 @@ export interface EvaluationInformationState {
 class EvaluationInformation extends React.Component<IEvaluationInformationRouteProps, EvaluationInformationState> {
 
     private form: React.RefObject<FormInstance> = React.createRef<FormInstance>();
-    
+
     /**
      * @protected
      * @description Gets form
@@ -68,9 +54,9 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
         })
         this.getForm()?.resetFields();
     }
-    
+
     private async modalShow(): Promise<void> {
-        const data: IResponse = await RequestUtil.get<IResponse>(`/tower-science/assessTask/infoDetail/${ this.props.id }`);
+        const data: IResponse = await RequestUtil.get<IResponse>(`/tower-science/assessTask/infoDetail/${this.props.id}`);
         this.setState({
             visible: true,
             information: data,
@@ -92,7 +78,7 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                     this.props.updateList();
                 });
             })
-        }  
+        }
     }
 
     public onSubmit(): void {
@@ -109,37 +95,37 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                     this.props.updateList();
                 });
             })
-        } 
+        }
     }
 
-     /**
-     * @description Renders AbstractDetailComponent
-     * @returns render 
-     */
+    /**
+    * @description Renders AbstractDetailComponent
+    * @returns render 
+    */
     public render(): React.ReactNode {
         return <>
-            <Button type="link" onClick={ () => this.modalShow() }>评估信息</Button>
-            <Modal 
-                visible={ this.state.visible } 
-                width="40%" 
-                title="评估信息" 
-                footer={ 
+            <Button type="link" onClick={() => this.modalShow()}>评估信息</Button>
+            <Modal
+                visible={this.state.visible}
+                width="40%"
+                title="评估信息"
+                footer={
                     <Space direction="horizontal" size="small">
-                        <Button type="ghost" onClick={() => this.modalCancel() }>关闭</Button> 
+                        <Button type="ghost" onClick={() => this.modalCancel()}>关闭</Button>
                         {
-                            this.state.information?.status === 3 ? 
-                            <><Button type="primary" onClick={() => this.onSave() }>保存</Button> 
-                            <Button type="primary" onClick={() => this.onSubmit() } ghost>保存并提交</Button></>
-                            : null
+                            this.state.information?.status === 3 ?
+                                <><Button type="primary" onClick={() => this.onSave()}>保存</Button>
+                                    <Button type="primary" onClick={() => this.onSubmit()} ghost>保存并提交</Button></>
+                                : null
                         }
                     </Space>
-                } 
-                onCancel={ () => this.modalCancel() }
+                }
+                onCancel={() => this.modalCancel()}
             >
-                <Form onFinish={ () => this.onSave() } ref={ this.form }>
+                <Form onFinish={() => this.onSave()} ref={this.form}>
                     <DetailContent>
                         {/* <p>说明文件</p> */}
-                        <Attachment title="说明文件" dataSource={ this.state.information?.instructionFileList || [] } />
+                        <Attachment title="说明文件" dataSource={this.state.information?.instructionFileList || []} />
                         {/* <CommonTable 
                             columns={[
                                 { 
@@ -171,15 +157,15 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                             dataSource={ this.state.information?.instructionFileList }
                             pagination={ false }
                         /> */}
-                        <p className={ styles.topPadding }>评估信息<span style={{ color: 'red' }}>*</span></p>
+                        <p className={styles.topPadding}>评估信息<span style={{ color: 'red' }}>*</span></p>
                         <Form.Item
                             name="description"
                             rules={[{ required: true, message: '请输入评估信息' }]}
-                            initialValue={ this.state.description }
+                            initialValue={this.state.description}
                         >
-                            <Input.TextArea placeholder="请输入" maxLength={ 300 } disabled={ this.state.information?.status === 4 } showCount />
+                            <Input.TextArea placeholder="请输入" maxLength={300} disabled={this.state.information?.status === 4} showCount />
                         </Form.Item>
-                        <Attachment title="评估文件" edit={ !(this.state.information?.status === 4) } dataSource={ this.state.information?.assessFileList || [] } />
+                        <Attachment title="评估文件" edit={!(this.state.information?.status === 4)} dataSource={this.state.information?.assessFileList || []} />
                         {/* <p className={ styles.topPadding }>评估文件
                         <span style={ { position: 'absolute', right: '1%' } }>
                             {
@@ -203,7 +189,7 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                                             message.warning(info.file.response?.msg)
                                         } 
                                         if(info.file.response && info.file.response?.success) {
-                                            let resData: IFileList = info.file.response?.data;
+                                            let resData: FileProps = info.file.response?.data;
                                             this.setState({
                                                 information: {
                                                     ...this.state.information,
