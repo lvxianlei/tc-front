@@ -1,48 +1,19 @@
 /**
  * 查看回款信息
  */
-import React, { useState, useEffect } from 'react';
-import { Modal, Form, Button, ModalFuncProps } from 'antd';
+import React from 'react';
+import { Modal, Form, Button } from 'antd';
 import { BaseInfo } from '../common';
 import { overViewColunms } from './collectionColumn.json';
 
-export default function OverView(props: ModalFuncProps): JSX.Element {
+export default function OverView(props: any): JSX.Element {
     const [addCollectionForm] = Form.useForm();
-    const [ columns, setColumns ] = useState(overViewColunms);
     // 取消
     const handleCancle = () => {
         addCollectionForm.resetFields();
         props.onCancel && props.onCancel();
     }
-
-    useEffect(() => {
-        if (props?.title) {
-            setColumns([
-                ...columns,
-                {
-                    "title": "备注",
-                    "dataIndex": "payCompany"
-                }
-            ])
-        } else {
-            setColumns([
-                ...columns,
-                {
-                    "title": "回款类型",
-                    "dataIndex": "payCompany"
-                },
-                {
-                    "title": "确认日期",
-                    "dataIndex": "payCompany"
-                },
-                {
-                    "title": "备注",
-                    "dataIndex": "payCompany"
-                }
-            ])
-        }
-    }, [props?.title])
-
+    console.log(props.title)
     return (
         <Modal
             title={'查看回款信息'}
@@ -57,7 +28,20 @@ export default function OverView(props: ModalFuncProps): JSX.Element {
             ]}
         >
             <BaseInfo form={addCollectionForm} dataSource={{}} col={ 2 }
-                columns={ columns }
+                columns={[
+                    ...overViewColunms,
+                    ...props.title.map((item: any) => {
+                        if (item.dataIndex === 'returnType') {
+                            return ({
+                                title: item.title,
+                                dataIndex: 'returnType',
+                                width: 50,
+                                render: (_: any, record: any): React.ReactNode => (<span>{record.returnType === 0 ? '投标保证金' : '合同应收款'}</span>)
+                            })
+                        }
+                        return item;
+                    }),
+                ]}
             />
         </Modal>
     )

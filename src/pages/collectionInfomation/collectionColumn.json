@@ -6,22 +6,11 @@
         },
         {
             "title": "来款方式",
-            "dataIndex": "returnType",
-            "type": "select",
-            "enum": [
-                {
-                    "value": 0,
-                    "label": "投标保证金"
-                },
-                {
-                    "value": 1,
-                    "label": "合同应收款"
-                }
-            ]
+            "dataIndex": "payTypeName"
         },
         {
             "title": "来款性质",
-            "dataIndex": "payMoney"
+            "dataIndex": "payCategoryName"
         },
         {
             "title": "来款金额",
@@ -33,7 +22,7 @@
         },
         {
             "title": "币种",
-            "dataIndex": "currency"
+            "dataIndex": "currencyTypeName"
         },
         {
             "title": "汇率",
@@ -41,38 +30,38 @@
         },
         {
             "title": "外币金额",
-            "dataIndex": "currency"
+            "dataIndex": "abroadMoney"
         },
         {
             "title": "收款银行",
-            "dataIndex": "returnBank"
+            "dataIndex": "payBank"
         },
         {
             "title": "确认方",
-            "dataIndex": "payType"
+            "dataIndex": "confirmer"
         },
         {
             "title": "确认状态",
-            "dataIndex": "returnBank"
+            "dataIndex": "confirmStatus"
         },
         {
             "title": "备注",
-            "dataIndex": "remark"
+            "dataIndex": "description"
         }
     ],
     "approvalStatus": [
         {
             "label": "待确认",
-            "value": 0
+            "value": 1
         },
         {
             "label": "已确认",
-            "value": 1
+            "value": 2
         }
     ],
     "baseColums": [
         {
-            "dataIndex": "title",
+            "dataIndex": "payCompany",
             "title": "来款单位名称",
             "rules": [
                 {
@@ -82,7 +71,7 @@
             ]
         },
         {
-            "dataIndex": "content",
+            "dataIndex": "payType",
             "title": "来款方式",
             "type": "select",
             "rules": [
@@ -103,7 +92,7 @@
             ]
         },
         {
-            "dataIndex": "userNames",
+            "dataIndex": "payCategory",
             "title": "来款性质",
             "type": "select",
             "rules": [
@@ -124,7 +113,7 @@
             ]
         },
         {
-            "dataIndex": "stateName",
+            "dataIndex": "payMoney",
             "title": "来款金额",
             "rules": [
                 {
@@ -134,7 +123,7 @@
             ]
         },
         {
-            "dataIndex": "stateName1",
+            "dataIndex": "payTime",
             "title": "来款日期",
             "type": "date",
             "format": "YYYY-MM-DD",
@@ -146,7 +135,7 @@
             ]
         },
         {
-            "dataIndex": "stateName2",
+            "dataIndex": "currencyType",
             "title": "币种",
             "type": "select",
             "rules": [
@@ -167,19 +156,19 @@
             ]
         },
         {
-            "dataIndex": "releaseTime",
+            "dataIndex": "exchangeRate",
             "title": "汇率"
         },
         {
-            "dataIndex": "releaseTime1",
+            "dataIndex": "abroadMoney",
             "title": "外币金额"
         },
         {
-            "dataIndex": "releaseTime2",
+            "dataIndex": "payBank",
             "title": "收款银行"
         },
         {
-            "dataIndex": "stateName3",
+            "dataIndex": "confirmer",
             "title": "确认方",
             "type": "select",
             "rules": [
@@ -200,7 +189,7 @@
             ]
         },
         {
-            "dataIndex": "releaseTime6",
+            "dataIndex": "description",
             "title": "备注",
             "type": "textarea"
         }
@@ -212,39 +201,39 @@
         },
         {
             "title": "来款方式",
-            "dataIndex": "payCompany"
+            "dataIndex": "payTypeName"
         },
         {
             "title": "来款性质",
-            "dataIndex": "payCompany"
+            "dataIndex": "payCategoryName"
         },
         {
             "title": "来款金额",
-            "dataIndex": "payCompany"
+            "dataIndex": "payMoney"
         },
         {
             "title": "来款日期",
-            "dataIndex": "payCompany"
+            "dataIndex": "payTime"
         },
         {
             "title": "币种",
-            "dataIndex": "payCompany"
+            "dataIndex": "currencyTypeName"
         },
         {
             "title": "汇率",
-            "dataIndex": "payCompany"
+            "dataIndex": "exchangeRate"
         },
         {
             "title": "外币金额",
-            "dataIndex": "payCompany"
+            "dataIndex": "abroadMoney"
         },
         {
             "title": "收款银行",
-            "dataIndex": "payCompany"
+            "dataIndex": "payBank"
         },
         {
             "title": "确认方",
-            "dataIndex": "payCompany"
+            "dataIndex": "confirmer"
         }
     ]
 }

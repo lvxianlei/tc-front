@@ -14,18 +14,23 @@ import OverView from './overView'; // 查看
 export default function CollectionInfomation() {
     const history = useHistory()
     const [ refresh, setRefresh ] = useState<boolean>(false);
-    const [confirmStatus, setConfirmStatus] = useState<number>(0);
+    const [confirmStatus, setConfirmStatus] = useState<number>(1);
     const [visible, setVisible] = useState(false);
     const [status, setStatus] = useState<boolean>(false); // 用来确认查看时的状态
     const [ visibleOverView, setVisibleOverView ] = useState<boolean>(false);
-
+    const confirmed = [{ "title": "备注", "dataIndex": "description"}],
+        confirmedEnd = [
+            { "title": "回款类型", "dataIndex": "returnType" },
+            { "title": "确认日期", "dataIndex": "confirmTime" },
+            { "title": "备注", "dataIndex": "description" }
+        ]
     // 查询按钮
     const onFilterSubmit = (value: any) => {
         console.log(value, '搜索的值')
         if (value.startRefundTime) {
             const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startRefundTime = formatDate[0]
-            value.endRefundTime = formatDate[1]
+            value.startPayTime = formatDate[0]
+            value.endPayTime = formatDate[1]
         }
         return value
     }
@@ -67,7 +72,17 @@ export default function CollectionInfomation() {
                         width: 50,
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
-                    ...collectionListHead,
+                    ...collectionListHead.map((item: any) => {
+                        if (item.dataIndex === 'confirmStatus') {
+                            return ({
+                                title: item.title,
+                                dataIndex: 'confirmStatus',
+                                width: 50,
+                                render: (_: any, record: any): React.ReactNode => (<span>{record.confirmStatus === 1 ? '待确认' : '已确认'}</span>)
+                            })
+                        }
+                        return item;
+                    }),
                     {
                         title: "操作",
                         dataIndex: "opration",
@@ -99,7 +114,7 @@ export default function CollectionInfomation() {
                 filterValue={{ confirmStatus }}
                 searchFormItems={[
                     {
-                        name: 'fuzzyQuery',
+                        name: 'payCompany',
                         children: <Input placeholder="请输入来款单位进行查询" style={{ width: 300 }} />
                     },
                     {
@@ -117,7 +132,7 @@ export default function CollectionInfomation() {
             />
             {/* 查看 */}
             <OverView
-                title={status}
+                title={status ? confirmed : confirmedEnd}
                 visible={visibleOverView}
                 onCancel={() => setVisibleOverView(false)}
             />
