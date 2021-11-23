@@ -9,7 +9,6 @@ import TextArea from 'antd/lib/input/TextArea';
 // import { Console } from 'node:console';
 import AuthUtil from '../../../../utils/AuthUtil';
 import { downloadTemplate } from '../../setOut/downloadTemplate';
-
 interface Column extends ColumnType<object> {
     editable?: boolean;
 }
@@ -189,13 +188,20 @@ export default function Lofting(): React.ReactNode {
             ) 
         }
         
-    ]
+    ];
+    const checkColor = (record: Record<string, any>, dataIndex: string) => {
+        const red: number = record.redColumn.indexOf(dataIndex);
+        if(red !== -1) {
+            return 'red';
+        } else {
+            return 'normal'
+        }
+    }
 
-    const columnsSetting: Column[] = columns.map((col: Column) => {
+    const columnsSetting: Column[] = columns.map((col: any) => {
         if (!col.editable) {
             return col;
         }
-        
         if(col.dataIndex === 'operation') {
             return {
                 ...col,
@@ -222,21 +228,23 @@ export default function Lofting(): React.ReactNode {
                     return {
                         ...col,
                         render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                            <span>{(record.basicsWeight&&record.basicsWeight!==-1?record.basicsWeight:0)*(record.basicsPartNum&&record.basicsPartNum!==-1?record.basicsPartNum:0)}</span>
+                            <p className={ checkColor(record, col.dataIndex) === 'red' ? styles.red :  ''}>{(record.basicsWeight&&record.basicsWeight!==-1?record.basicsWeight:0)*(record.basicsPartNum&&record.basicsPartNum!==-1?record.basicsPartNum:0)}</p>
                         )
                     }
                 }else{
                     return {
                         ...col,
                         render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                            <span>{_===-1?0:_}</span>
+                            <p  className={ checkColor(record, col.dataIndex) === 'red' ? styles.red :  ''}>{_===-1?0:_}</p>
                         )
                     }
                 }
             }
             else return {
                 ...col,
-                render: undefined,
+                render:(_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                    <p className={ checkColor(record, col.dataIndex) === 'red' ? styles.red :  '' }>{ _ }</p>
+                )
             }
         }
     })
@@ -258,6 +266,9 @@ export default function Lofting(): React.ReactNode {
                 <Input/>
             </Form.Item>
             <Form.Item label='材质' name='structureTexture'>
+                <Input/>
+            </Form.Item>
+            <Form.Item label='段号' name='partName'>
                 <Input/>
             </Form.Item>
             <Form.Item>
@@ -311,7 +322,7 @@ export default function Lofting(): React.ReactNode {
                 // onFilterSubmit={onFilterSubmit}
                 filterValue={ filterValue }
                 refresh={ refresh }
-                tableProps={{ pagination: false }}
+                tableProps={{ pagination: false, rowKey:'id'}}
                 extraOperation={ 
                     <Space direction="horizontal" size="small">
                         {/* <Button type="primary" ghost>导出</Button> */}
@@ -349,6 +360,7 @@ export default function Lofting(): React.ReactNode {
                         >
                             <Button type="primary" ghost>导入</Button>
                         </Upload>
+                        <Button type="primary" ghost  onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}/add`)}}>添加</Button>
                         <Button type="primary" ghost  onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}/drawApply`)}}>图纸塔型套用</Button>
                         <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}/setOutApply`)}}>放样塔型套用</Button>
                         <Popconfirm

@@ -118,10 +118,10 @@ export default function PickList(): React.ReactNode {
                       value: 4,
                       label: "已完成"
                     },
-                    {
-                      value: 5,
-                      label: "已提交"
-                    },
+                    // {
+                    //   value: 5,
+                    //   label: "已提交"
+                    // },
                 ]
                 return <>{renderEnum.find((item: any) => item.value === value).label}</>
             }
@@ -232,15 +232,15 @@ export default function PickList(): React.ReactNode {
                                 <Select.Option value={2} key={2}>提料中</Select.Option>
                                 <Select.Option value={3} key={3}>配段中</Select.Option>
                                 <Select.Option value={4} key={4}>已完成</Select.Option>
-                                <Select.Option value={5} key={5}>已提交</Select.Option>
+                                {/* <Select.Option value={5} key={5}>已提交</Select.Option> */}
                             </Select>
                         </Form.Item>
                     },
-                    {
-                        name: 'planTime',
-                        label:'计划交付时间',
-                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                    },
+                    // {
+                    //     name: 'planTime',
+                    //     label:'计划交付时间',
+                    //     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    // },
                     {
                         name: 'pattern',
                         label: '模式',

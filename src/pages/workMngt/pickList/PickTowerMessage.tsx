@@ -41,33 +41,45 @@ export default function PickTowerMessage(): React.ReactNode {
         },
         {
             key: 'name',
-            title: '段名',
+            title: '段包信息',
             width: 100,
             dataIndex: 'name'
         },
         {
-            key: 'pattern',
-            title: '模式',
+            key: 'name',
+            title: '段模式',
             width: 100,
-            dataIndex: 'pattern',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                  {
-                    value: 1,
-                    label: "新放"
-                  },
-                  {
-                    value: 2,
-                    label: "重新出卡"
-                  },
-                  {
-                    value: 3,
-                    label: "套用"
-                  },
-                ]
-                return <>{value&&value!==-1?renderEnum.find((item: any) => item.value === value).label:null}</>
-            }
+            dataIndex: 'name'
         },
+        // {
+        //     key: 'name',
+        //     title: '段名',
+        //     width: 100,
+        //     dataIndex: 'name'
+        // },
+        // {
+        //     key: 'pattern',
+        //     title: '模式',
+        //     width: 100,
+        //     dataIndex: 'pattern',
+        //     render: (value: number, record: object): React.ReactNode => {
+        //         const renderEnum: any = [
+        //           {
+        //             value: 1,
+        //             label: "新放"
+        //           },
+        //           {
+        //             value: 2,
+        //             label: "重新出卡"
+        //           },
+        //           {
+        //             value: 3,
+        //             label: "套用"
+        //           },
+        //         ]
+        //         return <>{value&&value!==-1?renderEnum.find((item: any) => item.value === value).label:null}</>
+        //     }
+        // },
         {
             key: 'plannedDeliveryTime',
             title: '计划交付时间',
@@ -130,6 +142,13 @@ export default function PickTowerMessage(): React.ReactNode {
                     <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>提料</Button>
                     <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/check/${record.id}/${record.materialLeader}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>校核</Button>
                     <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/detail/${record.id}`)}} type='link' disabled={record.status<3}>明细</Button>
+                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/detail/${record.id}`)}} type='link'>指派信息</Button>
+                    <Button onClick={()=>{
+
+                    }} type='link' disabled={record.status!== 1}>删除</Button>
+                    <Button onClick={()=>{
+
+                    }} type='link'>段模式</Button>
                 </Space>
             )
         }
@@ -227,7 +246,7 @@ export default function PickTowerMessage(): React.ReactNode {
                         <Select.Option value={1} key={1}>提料中</Select.Option>
                         <Select.Option value={2} key={2}>校核中</Select.Option>
                         <Select.Option value={3} key={3}>已完成</Select.Option>
-                        <Select.Option value={4} key={4}>已提交</Select.Option>
+                        {/* <Select.Option value={4} key={4}>已提交</Select.Option> */}
                     </Select>
                 },
                 {
@@ -267,7 +286,12 @@ export default function PickTowerMessage(): React.ReactNode {
                                         return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
                                     }) }
                                 </Select>
-                }
+                },
+                {
+                    name: 'fuzzyMsg',
+                    label: '模糊查询项',
+                    children: <Input placeholder="请输入..." maxLength={200} />
+                },
             ]}
         />
     )
