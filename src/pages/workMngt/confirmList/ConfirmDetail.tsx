@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Spin, Space, Modal, Form, Row, Col, Upload, message, Image } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { DetailContent, CommonTable, DetailTitle } from '../../common';
+import { DetailContent, CommonTable, DetailTitle, Attachment } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
@@ -320,18 +320,116 @@ export default function ConfirmDetail(): React.ReactNode {
           }
       },
       { 
-          title: '* 杆塔重量（kg）', 
-          dataIndex: 'productWeight', 
-          type:'number',
-          width: 100,
-          editable: true,
-          key: 'productWeight', 
-          render:(value:any)=>{
-            return parseFloat(value).toFixed(4)
-          }  
+        title: '* 本体重量（kg）', 
+        dataIndex: 'description', 
+        type:'number',
+        width: 100,
+        editable: true,
+        key: 'description',
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(4)
+        }   
       },
       { 
-          title: '其他增重（kg）', 
+        title: '接腿配置A', 
+        dataIndex: 'steelProductShape', 
+        type:'text',
+        width: 80,
+        editable: true,
+        key: 'steelProductShape' 
+      },
+      { 
+        title: '接腿配置B', 
+        dataIndex: 'steelProductShape', 
+        type:'text',
+        width: 80,
+        editable: true,
+        key: 'steelProductShape' 
+      },
+      { 
+        title: '接腿配置C', 
+        dataIndex: 'steelProductShape', 
+        type:'text',
+        width: 80,
+        editable: true,
+        key: 'steelProductShape' 
+      },
+      { 
+        title: '接腿配置D', 
+        dataIndex: 'steelProductShape', 
+        type:'text',
+        width: 80,
+        editable: true,
+        key: 'steelProductShape' 
+      },
+      { 
+        title: '接腿重A（kg）', 
+        dataIndex: 'productWeight', 
+        type:'number',
+        width: 100,
+        editable: true,
+        key: 'productWeight', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(4)
+        }  
+      },
+      { 
+        title: '接腿重B（kg）', 
+        dataIndex: 'productWeight', 
+        type:'number',
+        width: 100,
+        editable: true,
+        key: 'productWeight', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(4)
+        }  
+      },
+      { 
+        title: '接腿重C（kg）', 
+        dataIndex: 'productWeight', 
+        type:'number',
+        width: 100,
+        editable: true,
+        key: 'productWeight', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(4)
+        }  
+      },
+      { 
+        title: '接腿重D（kg）', 
+        dataIndex: 'productWeight', 
+        type:'number',
+        width: 100,
+        editable: true,
+        key: 'productWeight', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(4)
+        }  
+      },
+      // { 
+      //     title: '* 杆塔重量（kg）', 
+      //     dataIndex: 'productWeight', 
+      //     type:'number',
+      //     width: 100,
+      //     editable: true,
+      //     key: 'productWeight', 
+      //     render:(value:any)=>{
+      //       return parseFloat(value).toFixed(4)
+      //     }  
+      // },
+      { 
+        title: '单重（kg）', 
+        dataIndex: 'productWeight', 
+        type:'number',
+        width: 100,
+        editable: true,
+        key: 'productWeight', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(4)
+        }  
+      },
+      { 
+          title: '其他重量（kg）', 
           dataIndex: 'otherWeight', 
           type:'number',
           width: 100,
@@ -591,12 +689,12 @@ export default function ConfirmDetail(): React.ReactNode {
                         title="是否放弃已添加信息?"
                         onConfirm={ () => history.goBack() }
                         okText="确定"
-                        cancelText="取消"
+                        cancelText="取消" 
                     >
                          <Button key="goback">返回</Button>
                     </Popconfirm>: <Button key="goback" onClick={() => history.goBack()}>返回</Button>}
                    
-                </Space>: <Button key="goback" onClick={() => history.goBack()}>返回</Button>}
+                </Space>: <Button key="goback" onClick={() => history.goBack()}>返回</Button>} 
             </>]}>
                 <div style={{display:'flex',justifyContent:'space-between'}}>
                     <Space>
@@ -633,7 +731,7 @@ export default function ConfirmDetail(): React.ReactNode {
                 {detailData?<TextArea maxLength={ 200 } defaultValue={detailData?.description} onChange={(e)=>{
                     setDescription(e.target.value)
                 }} disabled={params.status!=='3'}/>:null}
-                <DetailTitle title="附件信息" operation={[params.status==='3'?<Upload
+                {/* <DetailTitle title="附件信息" operation={[params.status==='3'?<Upload
                     action={ () => {
                       const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
                       return baseUrl+'/sinzetech-resource/oss/put-file'
@@ -669,7 +767,8 @@ export default function ConfirmDetail(): React.ReactNode {
                           </Space>
                       )
                   }
-                ]} dataSource={attachInfo}  pagination={ false }/>
+                ]} dataSource={attachInfo}  pagination={ false }/> */}
+                <Attachment dataSource={attachInfo} edit title="附件信息"/>
             </DetailContent>
             <Modal visible={pictureVisible} onCancel={handlePictureModalCancel} footer={false}>
                 <Image src={pictureUrl} preview={false}/>
@@ -774,7 +873,68 @@ export default function ConfirmDetail(): React.ReactNode {
                     </Row>
                     <Row>
                       <Col span={12}>
+                        <Form.Item name="basicHight" label="接腿配置A">
+                            <Input style={{width:'100%'}} />
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item name="basicHight" label="接腿配置B">
+                            <Input style={{width:'100%'}} />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>
+                        <Form.Item name="basicHight" label="接腿配置C">
+                            <Input style={{width:'100%'}} />
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item name="basicHight" label="接腿配置D">
+                            <Input style={{width:'100%'}} />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>
+                        <Form.Item name="productWeight" label="接腿重A（kg）">
+                            <InputNumber precision={4} style={{width:'100%'}} min={0}/>
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item name="productWeight" label="接腿重B（kg）">
+                            <InputNumber precision={4} style={{width:'100%'}} min={0}/>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>
+                        <Form.Item name="productWeight" label="接腿重C（kg）">
+                            <InputNumber precision={4} style={{width:'100%'}} min={0}/>
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item name="productWeight" label="接腿重D（kg）">
+                            <InputNumber precision={4} style={{width:'100%'}} min={0}/>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row>
+                      {/* <Col span={12}>
                         <Form.Item name="productWeight" label="杆塔重量（kg）" rules={[{
+                            "required": true,
+                            "message":"请输入杆塔重量（kg）"
+                        }]}>
+                            <InputNumber precision={4} style={{width:'100%'}} min={0} onChange={(value:number)=>{
+                                const data:number = form.getFieldValue('otherWeight')?form.getFieldValue('otherWeight'):0;
+                                form.setFieldsValue({
+                                    totalWeight:data+value
+                                })
+                            }}/>
+                        </Form.Item>
+                      </Col> */}
+                      <Col span={12}>
+                        <Form.Item name="productWeight" label="单重（kg）" rules={[{
                             "required": true,
                             "message":"请输入杆塔重量（kg）"
                         }]}>
