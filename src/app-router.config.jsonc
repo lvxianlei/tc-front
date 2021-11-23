@@ -1142,7 +1142,7 @@
     },
     { // 工作管理-塔型信息-NC程序
       "name": "NC程序",
-      "path": "/workMngt/setOutList/towerInformation/:id/NCProgram/:productSegmentId",
+      "path": "/workMngt/setOutList/towerInformation/:id/NCProgram",
       "module": "./pages/workMngt/setOut/NCProgram",
       "exact": true,
       // "authority": "rd_product_nc_page"

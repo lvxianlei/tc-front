@@ -6,7 +6,7 @@
 
 import React from 'react'
 import { Button, message, Modal, Popconfirm, Space, Spin, TablePaginationConfig, Upload } from 'antd';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -156,6 +156,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
     const [ record, setRecord ] = useState<IBaseData>({});
     const [ url, setUrl ] = useState<string>('');
     const [ urlVisible, setUrlVisible ] = useState<boolean>(false);
+    const location = useLocation<{ status: number }>();
 
     const getTableDataSource = (pagination: TablePaginationConfig) => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<IResponseData>(`/tower-science/welding/getDetailedById`, { weldingId: params.id, ...pagination });
@@ -176,7 +177,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
         <Spin spinning={ loading }>
             <DetailContent>
                 <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
-                    {/* <Button type="primary" ghost>导出</Button> */}
+                { location.state.status === 2 ? <><Button type="primary" ghost>导出</Button>
                     <Button type="primary" onClick={ () => downloadTemplate('/tower-science/welding/exportTemplate', '组焊模板') } ghost>模板下载</Button>
                     <Button type="primary"  onClick={ () => RequestUtil.post<IResponseData>(`/tower-science/welding/submitForVerification`, { weldingId: params.id }).then(res => {
                         history.goBack();
@@ -212,12 +213,12 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                         } }
                     >
                         <Button type="primary" ghost>导入</Button>
-                    </Upload>
+                    </Upload></> : null }
                     <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
                 </Space>
                 <CommonTable 
                     dataSource={ detailData?.records } 
-                    columns={ towerColumns }
+                    columns={ location.state.status === 2 ? towerColumns : towerColumns.splice(0, 6) }
                     onRow={ (record: Record<string, any>, index: number) => ({
                         onClick: () => { getParagraphData(record.id) },
                         className: styles.tableRow

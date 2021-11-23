@@ -99,12 +99,8 @@ export default function AssemblyWeldingList(): React.ReactNode {
                         return '待开始';
                     case 2:
                         return '组焊中';
-                    case 3:
-                        return '校核中';
                     case 4:
                         return '已完成';
-                    case 5:
-                        return '已提交';
                 }
             }    
         },
@@ -124,24 +120,8 @@ export default function AssemblyWeldingList(): React.ReactNode {
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                     <Link to={ `/workMngt/assemblyWeldingList/assemblyWeldingInformation/${ record.id }` }>组焊信息</Link>
                     {
-                        record.status === 2 && record.weldingLeader === userId ? <Link to={ `/workMngt/assemblyWeldingList/assemblyWeldingListing/${ record.id }/${ record.productCategoryId }` }>组焊清单</Link> : <Button type="link" disabled>组焊清单</Button>
-                    }
-                    {
-                        record.status === 3 && record.weldingCheck === userId ? <Link to={ `/workMngt/assemblyWeldingList/assemblyWeldingCheck/${ record.id }/${ record.productCategoryId }` }>校核</Link> : <Button type="link" disabled>校核</Button>
-                    }
-                    {
-                        record.status === 4 && record.weldingCheck === userId ? 
-                        <Popconfirm
-                            title="确认提交?"
-                            onConfirm={ () => RequestUtil.post(`/tower-science/welding/submitWelding`, { weldingId: record.id }).then(res => {
-                                setRefresh(!refresh)
-                            }) }
-                            okText="提交"
-                            cancelText="取消"
-                        >
-                            <Button type="link">提交</Button>
-                        </Popconfirm> : <Button type="link" disabled>提交</Button>
-                    }
+                        record.weldingLeader === userId ? <Link to={ { pathname: `/workMngt/assemblyWeldingList/assemblyWeldingListing/${ record.id }/${ record.productCategoryId }`, state: { status: record.status } } }>组焊清单</Link> : <Button type="link" disabled>组焊清单</Button>
+                    } 
                 </Space>
             )
         }
@@ -171,9 +151,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
                         <Select.Option value="" key="6">全部</Select.Option>
                         <Select.Option value={1} key="1">待开始</Select.Option>
                         <Select.Option value={2} key="2">组焊中</Select.Option>
-                        <Select.Option value={3} key="3">校核中</Select.Option>
                         <Select.Option value={4} key="4">已完成</Select.Option>
-                        <Select.Option value={5} key="5">已提交</Select.Option>
                     </Select>
                 </Form.Item>
             },
@@ -195,7 +173,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="放样任务编号/任务单编号/订单编号/内部合同编号/塔型/塔型钢印号"/>
+                children: <Input placeholder="放样任务编号/任务单编号/订单编号/内部合同编号/塔型"/>
             }
         ] }
         onFilterSubmit = { (values: Record<string, any>) => {
