@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Select, Button, Popconfirm, Form, Row, Col, TreeSelect } from 'antd';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useHistory, useRouteMatch } from 'react-router-dom';
 import { Page } from '../common';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { FixedType } from 'rc-table/lib/interface';
@@ -14,9 +14,12 @@ import ExportList from '../../components/export/list';
 
 
 export default function AssessmentTaskList(): React.ReactNode {
+    const match = useRouteMatch()
+    const history = useHistory()
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const location = useLocation<{ state: {} }>();
+    const [isExport, setIsExportStoreList] = useState(false)
 
     const columns = [
         {
@@ -173,7 +176,7 @@ export default function AssessmentTaskList(): React.ReactNode {
                 path="/tower-science/assessTask"
                 columns={columns}
                 headTabs={[]}
-                extraOperation={<Button type="primary" ghost onClick={()=>{}}>导出</Button>}
+                extraOperation={<Button type="primary" ghost onClick={() => { setIsExportStoreList(true) }}>导出</Button>}
                 requestData={{ status: location.state }}
                 refresh={refresh}
                 searchFormItems={[
@@ -268,23 +271,27 @@ export default function AssessmentTaskList(): React.ReactNode {
                     return values;
                 }}
             />
-            {/* <ExportList
-                {...this.props}
-                columnsKey={() => {
-                    let keys = [...this.state.columns]
-                    keys.pop()
-                    return keys
-                }}
-                current={this.state.current}
-                size={this.state.size}
-                total={this.state.total}
-                url={customerAPI}
-                serchObj={{
-                    ownerName: this.state.tempQueryOwnerName.trim(),
-                    name: this.state.tempQueryName.trim(),
-                }}
-                closeExportStoreList={() => { this.setState({ isExportStoreList: false, }) }}
-            /> */}
+            {
+                isExport ?
+                    <ExportList
+                        history={history}
+                        location={location}
+                        match={match}
+                        columnsKey={() => {
+                            let keys = [...columns]
+                            keys.pop()
+                            return keys
+                        }}
+                        current={1}
+                        size={10}
+                        total={10}
+                        url={'/tower-science/assessTask'}
+                        serchObj={{
+                            ...filterValue,
+                        }}
+                        closeExportList={() => { setIsExportStoreList(false) }}
+                    /> : null
+            }
         </>
     )
 }
