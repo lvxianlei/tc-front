@@ -66,8 +66,6 @@ export default function PoleInformation(): React.ReactNode {
                         return '出单中';
                     case 4:
                         return '已完成';
-                    case 5:
-                        return '已提交';
                 }
             }
         },
@@ -158,7 +156,7 @@ export default function PoleInformation(): React.ReactNode {
         requestData={{ productCategoryId: params.id }}
         refresh={ refresh }
         extraOperation={ <Space direction="horizontal" size="small">
-            {/* <Button type="primary" ghost>导出</Button> */}
+            <Button type="primary" ghost>导出</Button>
             {/* {
                 userId === location.state.loftingLeader ? 
                 <Button type="primary" onClick={ () => RequestUtil.post(`/tower-science/product/submit`, { productCategoryId: params.id }).then(res => {
@@ -184,7 +182,6 @@ export default function PoleInformation(): React.ReactNode {
                     <Select.Option value={ 2 } key="2">配段中</Select.Option>
                     <Select.Option value={ 3 } key="3">出单中</Select.Option>
                     <Select.Option value={ 4 } key="4">已完成 </Select.Option>
-                    <Select.Option value={ 5 } key="5">已提交</Select.Option>
                 </Select>
             },
             {
