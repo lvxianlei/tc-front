@@ -155,25 +155,25 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const [form] = Form.useForm()
 
     const handleModalOk = () => {
+        let num: string = "0.00"
+        let weight: string = "0.00"
         const dataSource: any[] = modalRef.current?.dataSource.map((item: any) => {
-            quantity = (parseFloat(quantity) + parseFloat(item.num || "0.00")).toFixed(2)
+            num = (parseFloat(num) + parseFloat(item.num || "0.00")).toFixed(2)
             weight = (parseFloat(weight) + parseFloat(item.weight || "0.00")).toFixed(2)
-            delete item.id
-            return ({
+            const postData = {
                 ...item,
+                materialContractDetailId: item.id,
                 productName: item.materialName,
                 standard: item.materialStandard,
                 materialStandardName: item.materialStandardName,
-                quantity: item.num,
+                num: item.num,
                 contractUnitPrice: item.price
-            })
+            }
+            delete postData.id
+            return postData
         })
-        let quantity: string = "0.00"
-        let weight: string = "0.00"
-        const newCargoData: any[] = [...cargoData]
-        //Todo
         setCargoData(dataSource)
-        form.setFieldsValue({ quantity: parseFloat(quantity), weight })
+        form.setFieldsValue({ num: parseFloat(num), weight })
         setVisible(false)
     }
 
@@ -256,7 +256,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             <ChooseModal id={contractId} ref={modalRef} initChooseList={cargoData.map((item: any) => ({
                 ...item,
 
-                num: item.quantity
+                num: item.num
             }))} />
         </Modal>
         <DetailTitle title="收货单基础信息" />
@@ -275,6 +275,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 }
                 setVisible(true)
             }}>选择</Button>]} />
-        <CommonTable haveIndex columns={editCargoDetails} dataSource={cargoData} />
+        <CommonTable haveIndex rowKey="materialContractDetailId" columns={editCargoDetails} dataSource={cargoData} />
     </Spin>
 })
