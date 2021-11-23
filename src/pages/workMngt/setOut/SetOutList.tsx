@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, Upload, message, Form } from 'antd';
+import { Space, Input, DatePicker, Select, Button, Form } from 'antd';
 import { Attachment, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -13,6 +13,7 @@ import { Link, useLocation } from 'react-router-dom';
 import Deliverables from './Deliverables';
 import AuthUtil from '../../../utils/AuthUtil';
 import RequestUtil from '../../../utils/RequestUtil';
+import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 export default function SetOutList(): React.ReactNode {
     const columns = [
         {
@@ -56,17 +57,7 @@ export default function SetOutList(): React.ReactNode {
             key: 'pattern',
             title: '模式',
             width: 200,
-            dataIndex: 'pattern',
-            render: (pattern: number): React.ReactNode => {
-                switch (pattern) {
-                    case 1:
-                        return '新放';
-                    case 2:
-                        return '重新出卡';
-                    case 3:
-                        return '套用';
-                }
-            }
+            dataIndex: 'pattern'
         },
         {
             key: 'loftingLeaderName',
@@ -91,8 +82,6 @@ export default function SetOutList(): React.ReactNode {
                         return '配段中';
                     case 5:
                         return '已完成';
-                    case 6:
-                        return '已提交';
                 }
             }
         },
@@ -122,7 +111,6 @@ export default function SetOutList(): React.ReactNode {
                     {
                         record.status === 5 || record.status === 6 ? <Deliverables id={record.id} name={record.name} /> : <Button type="link" disabled>交付物</Button>
                     }
-
                     {
                         record.status === 2 || record.status === 3 || record.status === 4 ?
                             // <Upload 
@@ -178,7 +166,7 @@ export default function SetOutList(): React.ReactNode {
         path="/tower-science/loftingList/loftingPage"
         columns={columns}
         headTabs={[]}
-        // extraOperation={ <Button type="primary" ghost>导出</Button> }
+        extraOperation={ <Button type="primary" ghost>导出</Button> }
         requestData={{ status: location.state }}
         refresh={refresh}
         searchFormItems={[
@@ -204,11 +192,12 @@ export default function SetOutList(): React.ReactNode {
             {
                 name: 'pattern',
                 label: '模式',
-                children: <Select style={{ width: '120px' }} placeholder="请选择">
-                    <Select.Option value={""} key="4">全部</Select.Option>
-                    <Select.Option value={1} key="1">新放</Select.Option>
-                    <Select.Option value={2} key="2">重新出卡</Select.Option>
-                    <Select.Option value={3} key="3">套用</Select.Option>
+                children: <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                    { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                        return <Select.Option key={ index } value={ id + ',' + name }>
+                            { name }
+                        </Select.Option>
+                    }) }
                 </Select>
             },
             {

@@ -15,17 +15,6 @@ import useRequest from '@ahooksjs/use-request';
 import AuthUtil from '../../../utils/AuthUtil';
 import { downloadTemplate } from './downloadTemplate';
 
-interface IAttachVos {
-    readonly description?: string;
-    readonly filePath?: string;
-    readonly fileSize?: string;
-    readonly fileSuffix?: string;
-    readonly fileUploadTime?: string;
-    readonly id?: string;
-    readonly name?: string;
-    readonly userName?: string;
-}
-
 interface IData {
     readonly ncCount: string; 
     readonly structureCount: string; 
@@ -75,31 +64,23 @@ export default function NCProgram(): React.ReactNode {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
-            fixed: 'right' as FixedType,
+            fixed: 'right' as FixedType,                    
             width: 100,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    <Button type="link" onClick={ async () => { 
-                        const data: IAttachVos[] = await RequestUtil.post<IAttachVos[]>(`/tower-science/productNc/exportProductNc`, { id: record.id }); 
-                        if(data && data.length > 0) {
-                            window.open(data[0].filePath)
-                        }
-                    }} disabled={ !record.ncName }>下载</Button>
-                    <Popconfirm
-                        title="确认删除?"
-                        onConfirm={ () => RequestUtil.delete(`/tower-science/productNc`, {
-                            id: record.id
-                        }).then(res => {
-                            message.success('删除成功');
-                            history.go(0);
-                        }) }
-                        okText="提交"
-                        cancelText="取消"
-                        disabled={ !record.ncName }
-                    >
-                        <Button type="link" disabled={ !record.ncName }>删除</Button>
-                    </Popconfirm>
-                </Space>
+                <Popconfirm
+                    title="确认删除?"
+                    onConfirm={ () => RequestUtil.delete(`/tower-science/productNc`, {
+                        id: record.id
+                    }).then(res => {
+                        message.success('删除成功');
+                        history.go(0);
+                    }) }
+                    okText="提交"
+                    cancelText="取消"
+                    disabled={ !record.ncName }
+                >
+                    <Button type="link" disabled={ !record.ncName }>删除</Button>
+                </Popconfirm>
             )
         }
     ]
@@ -173,7 +154,7 @@ export default function NCProgram(): React.ReactNode {
                     }
                 } }
             >
-                <Button type="primary" ghost>上传</Button>
+                <Button type="primary" ghost>批量上传</Button>
             </Upload>
             <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
         </Space>}
@@ -182,6 +163,11 @@ export default function NCProgram(): React.ReactNode {
                 name: 'createTime',
                 label: '上传时间',
                 children: <DatePicker.RangePicker />
+            },
+            {
+                name: 'partName',
+                label: '段名',
+                children: <Input maxLength={ 50 } />
             },
             {
                 name: 'fuzzyMsg',

@@ -12,6 +12,8 @@ export interface TowerLoftingAssignProps {}
 export interface ITowerLoftingAssignRouteProps extends RouteComponentProps<TowerLoftingAssignProps>, WithTranslation {
     readonly id: number | string;
     readonly update: () => void;
+    readonly title: string;
+    readonly state?: number
 }
 
 export interface TowerLoftingAssignState {
@@ -302,7 +304,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
      */
     public render(): React.ReactNode {
         return <>
-            <Button type="primary" onClick={ () => this.modalShow() } ghost>塔型放样指派</Button>
+            <Button type={ this.props.title === "塔型放样指派" ? "primary" : 'link' } onClick={ () => this.modalShow() } ghost>{ this.props.title }</Button>
             <Modal
                 visible={ this.state.visible } 
                 width="90%" 

@@ -85,6 +85,8 @@ export default function TowerInformation(): React.ReactNode {
             width: 120,
             render: (pattern: number): React.ReactNode => {
                 switch (pattern) {
+                    case 0:
+                        return '紧急';
                     case 1:
                         return '高';
                     case 2:
@@ -96,25 +98,15 @@ export default function TowerInformation(): React.ReactNode {
         },
         {
             key: 'name',
-            title: '段名',
+            title: '段包信息',
             width: 200,
             dataIndex: 'name'
         },
         {
-            key: 'pattern',
-            title: '模式',
+            key: '',
+            title: '段模式',
             width: 150,
-            dataIndex: 'pattern',
-            render: (pattern: number): React.ReactNode => {
-                switch (pattern) {
-                    case 1:
-                        return '新放';
-                    case 2:
-                        return '重新出卡';
-                    case 3:
-                        return '套用';
-                }
-            }
+            dataIndex: ''
         },
         {
             key: 'plannedDeliveryTime',
@@ -147,8 +139,6 @@ export default function TowerInformation(): React.ReactNode {
                         return '校核中';
                     case 3:
                         return '已完成';
-                    case 4:
-                        return '已提交';
                 }
             }
         },
@@ -167,10 +157,10 @@ export default function TowerInformation(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                     { userId === record.loftingUser ?
-                        <>{record.status === 1 ? 
-                        <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/lofting/${ record.id }` }>放样</Link> : <Button type="link" disabled>放样</Button>}
-                        {record.status === 1 ? 
-                        <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/NCProgram/${ record.id }` }>NC程序</Link> : <Button type="link" disabled>NC程序</Button>}</>
+                        <>{ 
+                            record.status === 1 ? 
+                            <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/lofting/${ record.id }` }>放样</Link> : <Button type="link" disabled>放样</Button> 
+                        }</>
                         : null
                     }
                     { userId === record.checkUser ? 
@@ -182,9 +172,16 @@ export default function TowerInformation(): React.ReactNode {
                     }
                     {
                         record.status === 1 ? 
-                        <Button type="link" disabled>塔型放样明细</Button> : <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerLoftingDetails/${ record.id }` }>塔型放样明细</Link>
+                        <Button type="link" disabled>明细</Button> : <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/towerLoftingDetails/${ record.id }` }>明细</Link>
                     }
-                    
+                    {
+                        record.status === 1 ? 
+                        <Button type="link" onClick={ () => RequestUtil.post(``).then(res => {
+                            onRefresh();
+                        }) }>删除</Button> : <Button type="link" disabled>删除</Button>
+                    }
+                    <TowerLoftingAssign title="指派信息" id={ params.id } update={ onRefresh } />
+                    <Button type="link">段模式</Button>
                 </Space>
             )
         }
@@ -201,7 +198,9 @@ export default function TowerInformation(): React.ReactNode {
         refresh={ refresh }
         requestData={{ productCategoryId: params.id }}
         extraOperation={ <Space direction="horizontal" size="small">
-            {/* <Button type="primary" ghost>导出</Button> */}
+            <Button type="primary" ghost>导出</Button>
+            <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/modalList` }><Button type="primary" ghost>模型</Button></Link><Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/processCardList` }><Button type="primary" ghost>大样图工艺卡</Button></Link>
+            <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/NCProgram` }><Button type="primary" ghost>NC程序</Button></Link>
             {
                 userId === location.state.loftingLeader ? <>
                 <Popconfirm
@@ -218,7 +217,7 @@ export default function TowerInformation(): React.ReactNode {
                 >
                     <Button type="primary" disabled={ !(location.state.status < 3) } ghost>提交</Button>
                 </Popconfirm>
-                { location.state.status < 3 ? <TowerLoftingAssign id={ params.id } update={ onRefresh } /> : <Button type="primary" disabled ghost>塔型放样指派</Button> }
+                { location.state.status < 3 ? <TowerLoftingAssign title="塔型放样指派" id={ params.id } update={ onRefresh } /> : <Button type="primary" disabled ghost>塔型放样指派</Button> }
                 </>
                 : null
             }
@@ -238,7 +237,6 @@ export default function TowerInformation(): React.ReactNode {
                     <Select.Option value="1" key="1">放样中</Select.Option>
                     <Select.Option value="2" key="2">校核中</Select.Option>
                     <Select.Option value="3" key="3">已完成</Select.Option>
-                    <Select.Option value="4" key="4">已提交</Select.Option>
                 </Select>
             },
             {

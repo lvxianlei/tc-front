@@ -157,14 +157,6 @@ export default function PoleInformation(): React.ReactNode {
         refresh={ refresh }
         extraOperation={ <Space direction="horizontal" size="small">
             <Button type="primary" ghost>导出</Button>
-            {/* {
-                userId === location.state.loftingLeader ? 
-                <Button type="primary" onClick={ () => RequestUtil.post(`/tower-science/product/submit`, { productCategoryId: params.id }).then(res => {
-                    message.success('包装清单保存成功');
-                    history.goBack();
-                }) } ghost>完成汇总</Button>
-                : null
-            } */}
             <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
         </Space>}
         searchFormItems={ [
