@@ -428,7 +428,7 @@ export default function Information(): React.ReactNode {
             title="招标评审申请"
             width={1011}
             visible={bidingVisible}
-            okText="审请"
+            okText={loading ? "审批已发起" : "审请"}
             onCancel={() => {
                 setBidingVisible(false)
                 handleCancel()
