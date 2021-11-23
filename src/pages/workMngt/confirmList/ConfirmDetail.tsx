@@ -319,17 +319,17 @@ export default function ConfirmDetail(): React.ReactNode {
             return <>{renderEnum.find((item: any) => item.value === value).label}</>
           }
       },
-      { 
-        title: '* 本体重量（kg）', 
-        dataIndex: 'description', 
-        type:'number',
-        width: 100,
-        editable: true,
-        key: 'description',
-        render:(value:any)=>{
-          return parseFloat(value).toFixed(4)
-        }   
-      },
+      // { 
+      //   title: '* 本体重量（kg）', 
+      //   dataIndex: 'description', 
+      //   type:'number',
+      //   width: 100,
+      //   editable: true,
+      //   key: 'description',
+      //   render:(value:any)=>{
+      //     return parseFloat(value).toFixed(4)
+      //   }   
+      // },//范春森于11月23日去掉
       { 
         title: '接腿配置A', 
         dataIndex: 'steelProductShape', 

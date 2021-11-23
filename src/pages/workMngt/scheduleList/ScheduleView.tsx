@@ -13,6 +13,7 @@ import styles from './scheduleList.module.less';
 
 export default function ScheduleView(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
+    const [edit, setEdit] = useState<boolean>(false);
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const [scheduleData, setScheduleData] = useState<any|undefined>({});
@@ -25,7 +26,7 @@ export default function ScheduleView(): React.ReactNode {
     const [loftingPartUser, setLoftingPartUser] = useState<any|undefined>([]);
     const [materialUser, setMaterialUser] = useState<any|undefined>([]);
     const [materialPartUser, setMaterialPartUser] = useState<any|undefined>([]);
-    const [materialLeader, setMaterialLeader] = useState<any|undefined>([]);
+    // const [materialLeader, setMaterialLeader] = useState<any|undefined>([]);
     const [smallSampleUser, setSmallSampleUser] = useState<any|undefined>([]);
     const params = useParams<{ id: string, status: string }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
@@ -138,60 +139,66 @@ export default function ScheduleView(): React.ReactNode {
             width: 200,
             dataIndex: 'materialLeaderName'
         },
-        {
-            key: 'materialDeliverTime',
-            title: '提料计划交付时间',
-            width: 200,
-            dataIndex: 'materialDeliverTime'
-        },
+        // {
+        //     key: 'materialDeliverTime',
+        //     title: '提料计划交付时间',
+        //     width: 200,
+        //     dataIndex: 'materialDeliverTime'
+        // },
         {
             key: 'materialPartLeaderName',
             title: '提料配段负责人',
             width: 100,
             dataIndex: 'materialPartLeaderName'
         },
-        {
-            key: 'materialPartDeliverTime',
-            title: '提料配段计划交付时间',
-            width: 200,
-            dataIndex: 'materialPartDeliverTime'
-        },
+        // {
+        //     key: 'materialPartDeliverTime',
+        //     title: '提料配段计划交付时间',
+        //     width: 200,
+        //     dataIndex: 'materialPartDeliverTime'
+        // },
         {
             key: 'loftingLeaderName',
             title: '放样负责人',
             width: 100,
             dataIndex: 'loftingLeaderName'
         },
+        // {
+        //     key: 'loftingDeliverTime',
+        //     title: '放样计划交付时间',
+        //     width: 200,
+        //     dataIndex: 'loftingDeliverTime'
+        // },
         {
-            key: 'loftingDeliverTime',
-            title: '放样计划交付时间',
-            width: 200,
-            dataIndex: 'loftingDeliverTime'
-        },
-        {
-            key: 'weldingLeaderName',
-            title: '组焊清单负责人',
+            key: 'loftingLeaderName',
+            title: '编程负责人',
             width: 100,
-            dataIndex: 'weldingLeaderName'
+            dataIndex: 'loftingLeaderName'
         },
-        {
-            key: 'weldingDeliverTime',
-            title: '组焊计划交付时间',
-            width: 200,
-            dataIndex: 'weldingDeliverTime'
-        },
-        {
-            key: 'loftingPartLeaderName',
-            title: '放样配段负责人',
-            width: 100,
-            dataIndex: 'loftingPartLeaderName'
-        },
-        {
-            key: 'loftingPartDeliverTime',
-            title: '放样配段计划交付时间',
-            width: 200,
-            dataIndex: 'loftingPartDeliverTime'
-        },
+        // {
+        //     key: 'weldingLeaderName',
+        //     title: '组焊清单负责人',
+        //     width: 100,
+        //     dataIndex: 'weldingLeaderName'
+        // },
+        // {
+        //     key: 'weldingDeliverTime',
+        //     title: '组焊计划交付时间',
+        //     width: 200,
+        //     dataIndex: 'weldingDeliverTime'
+        // },
+        // {
+        //     key: 'loftingPartLeaderName',
+        //     title: '放样配段负责人',
+        //     width: 100,
+        //     dataIndex: 'loftingPartLeaderName'
+        // },
+        // {
+        //     key: 'loftingPartDeliverTime',
+        //     title: '放样配段计划交付时间',
+        //     width: 200,
+        //     dataIndex: 'loftingPartDeliverTime'
+        // },
         {
             key: 'smallSampleLeaderName',
             title: '小样图负责人',
@@ -206,15 +213,21 @@ export default function ScheduleView(): React.ReactNode {
         },
         {
             key: 'boltLeaderName',
-            title: '螺栓清单',
+            title: '螺栓清单负责人',
             width: 100,
             dataIndex: 'boltLeaderName'
         },
+        // {
+        //     key: 'boltDeliverTime',
+        //     title: '螺栓计划交付时间',
+        //     width: 200,
+        //     dataIndex: 'boltDeliverTime'
+        // },
         {
-            key: 'boltDeliverTime',
-            title: '螺栓计划交付时间',
-            width: 200,
-            dataIndex: 'boltDeliverTime'
+            key: 'boltLeaderName',
+            title: '图纸上传负责人',
+            width: 100,
+            dataIndex: 'boltLeaderName'
         },
         {
             key: 'description',
@@ -307,12 +320,90 @@ export default function ScheduleView(): React.ReactNode {
                         });
                         setVisible(true);
                     }} disabled={params.status!=='2'||record.materialLeaderName}>指派</Button>
+                    <Button type='link' onClick={async ()=>{
+                        const resData: any = await RequestUtil.get(`/tower-science/productCategory/${record.id}`);
+                        setScheduleData(resData);
+                        if(resData.materialLeaderDepartment){
+                            const materialLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.materialLeaderDepartment}&size=1000`);
+                            setMaterialUser(materialLeaderDepartment.records);
+                        }
+                        if(resData.materialPartLeaderDepartment){
+                            const materialPartLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.materialPartLeaderDepartment}&size=1000`);
+                            setMaterialPartUser(materialPartLeaderDepartment.records);
+                        }
+                        if(resData.smallSampleLeaderDepartment){
+                            const smallSampleLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.smallSampleLeaderDepartment}&size=1000`);
+                            setSmallSampleUser(smallSampleLeaderDepartment.records);
+                        }
+                        if(resData.loftingPartLeaderDepartment){
+                            const loftingPartLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.loftingPartLeaderDepartment}&size=1000`);
+                            setLoftingPartUser(loftingPartLeaderDepartment.records);
+                        }
+                        if(resData.loftingLeaderDepartment){
+                            const loftingLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.loftingLeaderDepartment}&size=1000`);
+                            setLoftingUser(loftingLeaderDepartment.records);
+                        }
+                        if(resData.weldingLeaderDepartment){
+                            const weldingLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.weldingLeaderDepartment}&size=1000`);
+                            setWeldingUser(weldingLeaderDepartment.records);
+                        }
+                        if(resData.boltLeaderDepartment){
+                            const boltLeaderDepartment: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${resData.boltLeaderDepartment}&size=1000`);
+                            setBoltUser(boltLeaderDepartment.records);
+                        }
+                        if(resData?.assignConfigVO?.materialWithSectionCompletionTime && resData?.materialDeliverTime){
+                            const day = Number(resData.assignConfigVO.materialWithSectionCompletionTime);
+                            let uom = new Date(resData.materialDeliverTime);
+                            let newDate =new Date(uom.setHours(uom.getHours() + day));
+                            resData.materialPartDeliverTime = newDate
+                        }
+                        if(resData?.assignConfigVO?.weldingCompletionTime && resData?.assignConfigVO?.loftingWithSectionCompletionTime && resData?.assignConfigVO.smallSampleCompletionTime && resData?.assignConfigVO.boltCompletionTime && resData?.loftingDeliverTime){
+                            const weldingCompletionTime = Number(resData.assignConfigVO.weldingCompletionTime);
+                            const loftingWithSectionCompletionTime = Number(resData.assignConfigVO.loftingWithSectionCompletionTime);
+                            const smallSampleCompletionTime = Number(resData.assignConfigVO.smallSampleCompletionTime);
+                            const boltCompletionTime = Number(resData.assignConfigVO.boltCompletionTime);
+                            let newWeldingCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + weldingCompletionTime));
+                            let newLoftingWithSectionCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + loftingWithSectionCompletionTime));
+                            let newSmallSampleCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + smallSampleCompletionTime));
+                            let newBoltCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + boltCompletionTime + loftingWithSectionCompletionTime));
+                            resData.weldingDeliverTime=newWeldingCompletionTime
+                            resData.boltDeliverTime=newBoltCompletionTime
+                            resData.smallSampleDeliverTime=newSmallSampleCompletionTime
+                            resData.loftingPartDeliverTime=newLoftingWithSectionCompletionTime
+                        }
+                        form.setFieldsValue({
+                            ...resData,
+                            materialLeader:resData.materialLeader && resData.materialLeader!==-1 ?resData.materialLeader:'',
+                            materialLeaderDepartment:resData.materialLeaderDepartment && resData.materialLeaderDepartment!==-1?resData.materialLeaderDepartment:'',
+                            boltLeader:resData.boltLeader&& resData.boltLeader!==-1?resData.boltLeader:'',
+                            boltLeaderDepartment:resData.boltLeaderDepartment&& resData.boltLeaderDepartment!==-1?resData.boltLeaderDepartment:'',
+                            weldingLeader:resData.weldingLeader&& resData.weldingLeader!==-1?resData.weldingLeader:'',
+                            weldingLeaderDepartment:resData.weldingLeaderDepartment&& resData.weldingLeaderDepartment!==-1?resData.weldingLeaderDepartment:'',
+                            loftingLeader:resData.loftingLeader&& resData.loftingLeader!==-1?resData.loftingLeader:'',
+                            loftingLeaderDepartment:resData.loftingLeaderDepartment&& resData.loftingLeaderDepartment!==-1?resData.loftingLeaderDepartment:'',
+                            loftingPartLeader:resData.loftingPartLeader&& resData.loftingPartLeader!==-1?resData.loftingPartLeader:'',
+                            loftingPartLeaderDepartment:resData.loftingPartLeaderDepartment&& resData.loftingPartLeaderDepartment!==-1?resData.loftingPartLeaderDepartment:'',
+                            materialPartLeader:resData.materialPartLeader&& resData.materialPartLeader!==-1?resData.materialPartLeader:'',
+                            materialPartLeaderDepartment:resData.materialPartLeaderDepartment&& resData.materialPartLeaderDepartment!==-1?resData.materialPartLeaderDepartment:'',
+                            smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
+                            smallSampleLeaderDepartment:resData.smallSampleLeaderDepartment&& resData.smallSampleLeaderDepartment!==-1?resData.smallSampleLeaderDepartment:'',
+                            boltDeliverTime:resData.boltDeliverTime?moment(resData.boltDeliverTime):'',
+                            weldingDeliverTime: resData.weldingDeliverTime?moment(resData.weldingDeliverTime):'',
+                            loftingDeliverTime: resData.loftingDeliverTime?moment(resData.loftingDeliverTime):'',
+                            loftingPartDeliverTime: resData.loftingPartDeliverTime?moment(resData.loftingPartDeliverTime):'',
+                            materialDeliverTime:resData.materialDeliverTime?moment(resData.materialDeliverTime):'',
+                            materialPartDeliverTime: resData.materialPartDeliverTime?moment(resData.materialPartDeliverTime):'',
+                            smallSampleDeliverTime:resData.smallSampleDeliverTime? moment(resData.smallSampleDeliverTime):''
+                        });
+                        setVisible(true);
+                        setEdit(true);
+                    }}>详情</Button>
                 </Space>
             )
         }
     ]
 
-    const handleModalCancel = () => {setVisible(false); form.setFieldsValue({})};
+    const handleModalCancel = () => {setVisible(false); form.setFieldsValue({});setEdit(false);};
     const onDepartmentChange = async (value: Record<string, any>,title?: string) => {
         const userData: any= await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
         switch (title) {
@@ -337,9 +428,9 @@ export default function ScheduleView(): React.ReactNode {
             case "boltLeaderDepartment":
                 form.setFieldsValue({boltLeader:''});
                 return setBoltUser(userData.records);
-            case "materialLeaderDepartmentQuery":
-                form.setFieldsValue({materialLeader:''});
-                return setMaterialLeader(userData.records);
+            // case "materialLeaderDepartmentQuery":
+            //     form.setFieldsValue({materialLeader:''});
+            //     return setMaterialLeader(userData.records);
         };
     }
     const formItemLayout = {
@@ -380,7 +471,7 @@ export default function ScheduleView(): React.ReactNode {
                 visible={visible} 
                 onCancel={handleModalCancel}
                 footer={
-                    <>
+                    edit?null:<>
                         <Button onClick={handleModalCancel}>取消</Button>
                         <Button type='primary' onClick={handleModalOk}>保存并提交</Button>
                     </>
@@ -688,24 +779,24 @@ export default function ScheduleView(): React.ReactNode {
                                         <Select.Option value='3' key='3'>低</Select.Option>
                                     </Select>
                     },
-                    {
-                        name: 'materialLeaderDepartment',
-                        label: '提料负责人',
-                        children:  <TreeSelect style={{width:'200px'}}
-                                        onChange={(value:any)=>{onDepartmentChange(value,'materialLeaderDepartmentQuery')}  }
-                                    >
-                                        {renderTreeNodes(wrapRole2DataNode( department ))}
-                                    </TreeSelect>
-                    },
-                    {
-                        name: 'materialLeader',
-                        label:'',
-                        children:   <Select style={{width:'100px'}}>
-                                        { materialLeader && materialLeader.map((item:any)=>{
-                                            return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                                        }) }
-                                    </Select>
-                    },
+                    // {
+                    //     name: 'materialLeaderDepartment',
+                    //     label: '提料负责人',
+                    //     children:  <TreeSelect style={{width:'200px'}}
+                    //                     onChange={(value:any)=>{onDepartmentChange(value,'materialLeaderDepartmentQuery')}  }
+                    //                 >
+                    //                     {renderTreeNodes(wrapRole2DataNode( department ))}
+                    //                 </TreeSelect>
+                    // },
+                    // {
+                    //     name: 'materialLeader',
+                    //     label:'',
+                    //     children:   <Select style={{width:'100px'}}>
+                    //                     { materialLeader && materialLeader.map((item:any)=>{
+                    //                         return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                    //                     }) }
+                    //                 </Select>
+                    // },
                     {
                         name: 'fuzzyMsg',
                         label: '模糊查询项',
