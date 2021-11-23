@@ -1,12 +1,3 @@
-/*
- * @Descripttion: 
- * @version: 
- * @Author: wangxindong
- * @email: wxd93917787@163.com
- * @Date: 2021-11-12 13:56:51
- * @LastEditors: wangxindong
- * @LastEditTime: 2021-11-19 16:52:32
- */
 import React, { useState } from "react"
 import { Button, Input, DatePicker, Radio } from 'antd'
 import { useHistory } from 'react-router-dom'
