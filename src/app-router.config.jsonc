@@ -1154,6 +1154,22 @@
       // "authority": "rd_package_structure_detail_list"
       "authority": "approvalm"
     },
+    { // 工作管理-塔型信息-模型
+      "name": "模型",
+      "path": "/workMngt/setOutList/towerInformation/:id/modalList",
+      "module": "./pages/workMngt/setOut/ModelList",
+      "exact": true,
+      // "authority": "rd_product_nc_page"
+      "authority": "approvalm"
+    },
+    { // 工作管理-塔型信息-大样图工艺卡
+      "name": "大样图工艺卡",
+      "path": "/workMngt/setOutList/towerInformation/:id/processCardList",
+      "module": "./pages/workMngt/setOut/ProcessCardList",
+      "exact": true,
+      // "authority": "rd_product_nc_page"
+      "authority": "approvalm"
+    },
     { // 工作管理-塔型信息-NC程序
       "name": "NC程序",
       "path": "/workMngt/setOutList/towerInformation/:id/NCProgram",
