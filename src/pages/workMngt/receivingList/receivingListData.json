@@ -444,7 +444,7 @@
         },
         {
             "title": "可选数量",
-            "dataIndex": "num",
+            "dataIndex": "surplusNum",
             "type": "number"
         }
     ],

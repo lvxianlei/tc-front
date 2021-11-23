@@ -5,6 +5,7 @@ import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './AssessmentTask.module.less';
+import { FileProps } from '../common/Attachment';
 
 interface IDetail {
     readonly id?: string;
@@ -16,22 +17,8 @@ interface IDetail {
     readonly programLeaderId?: string;
     readonly programName?: string;
     readonly status?: string | number;
-    readonly fileList?: IFileList[];
+    readonly fileList?: FileProps[];
     readonly statusRecordList?: ItaskDataRecordList[];
-}
-
-export interface IFileList {
-    readonly id?: string;
-    readonly fileName?: string;
-    readonly filePath: string;
-    readonly fileSuffix: string;
-    readonly uid?: number | string,
-    readonly link: string,
-    readonly name: string,
-    readonly description: string,
-    readonly fileSize: string | number,
-    readonly userName: string,
-    readonly fileUploadTime: string
 }
 
 interface ItaskDataRecordList {
@@ -44,30 +31,31 @@ interface ItaskDataRecordList {
 }
 
 const tableColumns = [
-    { 
-        key: 'index', 
-        title: '序号', 
-        dataIndex: 'index', 
-        width: 50, 
-        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
+    {
+        key: 'index',
+        title: '序号',
+        dataIndex: 'index',
+        width: 50,
+        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
+    },
     {
         key: 'createDeptName',
         title: '操作部门',
-        dataIndex: 'createDeptName', 
-    },
-    {  
-        key: 'createUserName', 
-        title: '操作人', 
-        dataIndex: 'createUserName' 
-    },
-    { 
-        key: 'createTime', 
-        title: '操作时间', 
-        dataIndex: 'createTime' 
+        dataIndex: 'createDeptName',
     },
     {
-        key: 'currentStatus', 
-        title: '任务状态', 
+        key: 'createUserName',
+        title: '操作人',
+        dataIndex: 'createUserName'
+    },
+    {
+        key: 'createTime',
+        title: '操作时间',
+        dataIndex: 'createTime'
+    },
+    {
+        key: 'currentStatus',
+        title: '任务状态',
         dataIndex: 'currentStatus',
         render: (currentStatus: number): React.ReactNode => {
             switch (currentStatus) {
@@ -86,10 +74,10 @@ const tableColumns = [
             }
         }
     },
-    { 
-        key: 'description', 
-        title: '备注', 
-        dataIndex: 'description' 
+    {
+        key: 'description',
+        title: '备注',
+        dataIndex: 'description'
     }
 ]
 
@@ -131,14 +119,14 @@ export default function AssessmentTaskDetail(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const { loading, data } = useRequest<IDetail>(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<IDetail>(`/tower-science/assessTask/taskDetail/${ params.id }`);
+        const data = await RequestUtil.get<IDetail>(`/tower-science/assessTask/taskDetail/${params.id}`);
         resole(data);
     }), {})
     const detailData: IDetail = data || {};
-    const [ visible, setVisible ] = useState(false);
-    const [ rejectReason, setRejectReason ] = useState("");
-    const [ pictureVisible, setPictureVisible ] = useState<boolean>(false);
-    const [ pictureUrl, setPictureUrl ] = useState('');
+    const [visible, setVisible] = useState(false);
+    const [rejectReason, setRejectReason] = useState("");
+    const [pictureVisible, setPictureVisible] = useState<boolean>(false);
+    const [pictureUrl, setPictureUrl] = useState('');
     const handlePictureModalCancel = () => { setPictureVisible(false) };
 
     if (loading) {
@@ -148,70 +136,71 @@ export default function AssessmentTaskDetail(): React.ReactNode {
     }
 
     return <>
-        <DetailContent operation={ [
-            <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
+        <DetailContent operation={[
+            <Space direction="horizontal" size="small" className={styles.bottomBtn}>
                 <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
                 {
                     detailData.status === 1 ?
-                    <><Button type="primary" onClick={ () => {
-                        RequestUtil.put(`/tower-science/assessTask/accept?id=${ params.id }`).then(res => {
-                            message.success('接收成功');
-                            history.go(0);
-                        });
-                    } }>接收</Button>
-                    <Button type="ghost" onClick={ () => setVisible(true) }>拒绝</Button></>
-                    :
-                    null
+                        <><Button type="primary" onClick={() => {
+                            RequestUtil.put(`/tower-science/assessTask/accept?id=${params.id}`).then(res => {
+                                message.success('接收成功');
+                                history.go(0);
+                            });
+                        }}>接收</Button>
+                            <Button type="ghost" onClick={() => setVisible(true)}>拒绝</Button></>
+                        :
+                        null
                 }
             </Space>
-        ] }>
+        ]}>
             <DetailTitle title="基本信息" />
-            <BaseInfo columns={ baseColumns } dataSource={ detailData } col={ 2 } />
+            <BaseInfo columns={baseColumns} dataSource={detailData} col={2} />
             <DetailTitle title="相关附件" />
             <CommonTable columns={[
-                { 
-                    key: 'name', 
-                    title: '附件名称', 
+                {
+                    key: 'name',
+                    title: '附件名称',
                     dataIndex: 'name',
-                    width: 350 
+                    width: 350
                 },
-                { 
-                    key: 'operation', 
-                    title: '操作', 
-                    dataIndex: 'operation', 
+                {
+                    key: 'operation',
+                    title: '操作',
+                    dataIndex: 'operation',
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                         <Space direction="horizontal" size="small">
-                            <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
+                            <Button type="link" onClick={() => window.open(record.filePath)}>下载</Button>
                             {
-                                record.fileSuffix === 'pdf' 
-                                ? 
-                                <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : ['jpg', 'jpeg', 'png', 'gif'].includes(record.fileSuffix) 
-                                ? 
-                                <Button type='link' onClick={ () => { setPictureUrl(record.id ? record.filePath : record.link); setPictureVisible(true); } }>预览</Button> 
-                                : null 
+                                record.fileSuffix === 'pdf'
+                                    ?
+                                    <Button type="link" onClick={() => window.open(record.filePath)}>预览</Button> : ['jpg', 'jpeg', 'png', 'gif'].includes(record.fileSuffix)
+                                        ?
+                                        <Button type='link' onClick={() => { setPictureUrl(record.id ? record.filePath : record.link); setPictureVisible(true); }}>预览</Button>
+                                        : null
                             }
                         </Space>
-                ) }
+                    )
+                }
             ]}
-                dataSource={ detailData.fileList }
-                pagination={ false }
+                dataSource={detailData.fileList}
+                pagination={false}
             />
-            <DetailTitle title="操作信息"/>
-            <CommonTable columns={ tableColumns } dataSource={ detailData.statusRecordList } pagination={ false }/>
+            <DetailTitle title="操作信息" />
+            <CommonTable columns={tableColumns} dataSource={detailData.statusRecordList} pagination={false} />
         </DetailContent>
-        <Modal 
-            visible={ visible } 
-            title="拒绝" 
-            onCancel={ () => { 
-                setVisible(false); 
-                setRejectReason(""); 
-            } } 
-            onOk={ () => {
-                if(rejectReason) {
-                    if(/^[^(\s)]*$/.test(rejectReason)) {
+        <Modal
+            visible={visible}
+            title="拒绝"
+            onCancel={() => {
+                setVisible(false);
+                setRejectReason("");
+            }}
+            onOk={() => {
+                if (rejectReason) {
+                    if (/^[^(\s)]*$/.test(rejectReason)) {
                         RequestUtil.put(`/tower-science/assessTask/reject`, { id: params.id, rejectReason: rejectReason }).then(res => {
                             setRejectReason("");
-                            setVisible(false); 
+                            setVisible(false);
                             message.success('拒绝成功');
                             history.go(0);
                         });
@@ -220,19 +209,19 @@ export default function AssessmentTaskDetail(): React.ReactNode {
                     }
                 } else {
                     message.warning('请输入拒绝原因');
-                }     
-            } } 
-            cancelText="关闭" 
-            okText="提交" 
-            className={ styles.rejectModal }
+                }
+            }}
+            cancelText="关闭"
+            okText="提交"
+            className={styles.rejectModal}
         >
             <Row>
-                <Col span={ 4 }>拒绝原因<span style={{ color: 'red' }}>*</span></Col>
-                <Col span={ 19 } offset={ 1 }><Input placeholder="请输入" value={ rejectReason } onChange={ (e) => setRejectReason(e.target.value) }/></Col>
+                <Col span={4}>拒绝原因<span style={{ color: 'red' }}>*</span></Col>
+                <Col span={19} offset={1}><Input placeholder="请输入" value={rejectReason} onChange={(e) => setRejectReason(e.target.value)} /></Col>
             </Row>
         </Modal>
-        <Modal visible={ pictureVisible } onCancel={ handlePictureModalCancel } footer={ false }>
-            <Image src={ pictureUrl } preview={ false } />
+        <Modal visible={pictureVisible} onCancel={handlePictureModalCancel} footer={false}>
+            <Image src={pictureUrl} preview={false} />
         </Modal>
     </>
 }
