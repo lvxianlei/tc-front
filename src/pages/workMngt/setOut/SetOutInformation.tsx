@@ -12,24 +12,11 @@ import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './SetOut.module.less';
 import { specialColums, productColumns } from './SetOutInformation.json';
+import { FileProps } from '../../common/Attachment';
 
 interface ISetOut {
-    readonly attachVos?: IAttachVos[];
+    readonly attachVos?: FileProps[];
     readonly stateRecordVOS?: ITaskDataVOList[];
-}
-
-interface IAttachVos {
-    readonly id?: string;
-    readonly filePath: string;
-    readonly originalName?: string;
-    readonly name: string;
-    readonly userName: string;
-    readonly link: string;
-    readonly fileSuffix: string;
-    readonly uid?: number | string,
-    readonly description: string,
-    readonly fileSize: string | number,
-    readonly fileUploadTime: string
 }
 
 interface ITaskDataVOList {
@@ -41,30 +28,31 @@ interface ITaskDataVOList {
 }
 
 const tableColumns = [
-    { 
-        key: 'index', 
-        title: '序号', 
-        dataIndex: 'index', 
-        width: 100, 
-        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>) },
+    {
+        key: 'index',
+        title: '序号',
+        dataIndex: 'index',
+        width: 100,
+        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
+    },
     {
         key: 'createDeptName',
         title: '操作部门',
-        dataIndex: 'createDeptName', 
-    },
-    {  
-        key: 'createUserName', 
-        title: '操作人', 
-        dataIndex: 'createUserName' 
-    },
-    { 
-        key: 'createTime', 
-        title: '操作时间', 
-        dataIndex: 'createTime' 
+        dataIndex: 'createDeptName',
     },
     {
-        key: 'currentStatus', 
-        title: '任务状态', 
+        key: 'createUserName',
+        title: '操作人',
+        dataIndex: 'createUserName'
+    },
+    {
+        key: 'createTime',
+        title: '操作时间',
+        dataIndex: 'createTime'
+    },
+    {
+        key: 'currentStatus',
+        title: '任务状态',
         dataIndex: 'currentStatus',
         render: (currentStatus: number): React.ReactNode => {
             switch (currentStatus) {
@@ -84,9 +72,9 @@ const tableColumns = [
         }
     },
     {
-        key: 'description', 
-        title: '备注', 
-        dataIndex: 'description' 
+        key: 'description',
+        title: '备注',
+        dataIndex: 'description'
     }
 ]
 
@@ -94,27 +82,27 @@ export default function SetOutInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const { loading, data }: Record<string, any> = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-science/loftingList/detail?productCategoryId=${ params.id }`);
+        const data = await RequestUtil.get(`/tower-science/loftingList/detail?productCategoryId=${params.id}`);
         resole(data)
     }), {})
     const detailData: ISetOut = data;
 
     if (loading) {
-        return <Spin spinning={ loading }>
+        return <Spin spinning={loading}>
             <div style={{ width: '100%', height: '300px' }}></div>
         </Spin>
     }
 
-    return <DetailContent operation={ [
-        <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
-            <Button type="ghost" onClick={ () => history.goBack() }>关闭</Button>
+    return <DetailContent operation={[
+        <Space direction="horizontal" size="small" className={styles.bottomBtn}>
+            <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
         </Space>
-    ] }>
+    ]}>
         <DetailTitle title="特殊要求" />
-        <BaseInfo columns={ specialColums } dataSource={ detailData } col={ 2 } />
+        <BaseInfo columns={specialColums} dataSource={detailData} col={2} />
         <DetailTitle title="产品信息" />
-        <BaseInfo columns={ productColumns } dataSource={ detailData } col={ 2 } />
-        <Attachment dataSource={ detailData.attachVos || [] } />
+        <BaseInfo columns={productColumns} dataSource={detailData} col={2} />
+        <Attachment dataSource={detailData.attachVos || []} />
         {/* <DetailTitle title="相关附件" />
         <CommonTable columns={[
             { 
@@ -139,7 +127,7 @@ export default function SetOutInformation(): React.ReactNode {
             dataSource={ detailData.attachVos }
             pagination={ false }
         /> */}
-        <DetailTitle title="操作信息"/>
-        <CommonTable columns={ tableColumns } dataSource={ detailData.stateRecordVOS } pagination={ false }/>
+        <DetailTitle title="操作信息" />
+        <CommonTable columns={tableColumns} dataSource={detailData.stateRecordVOS} pagination={false} />
     </DetailContent>
 }
