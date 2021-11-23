@@ -1062,6 +1062,20 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 工作管理-样板列表
+      "name": "样板列表",
+      "path": "/workMngt/templateList",
+      "module": "./pages/workMngt/templateList/templateList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-样板列表
+      "name": "样板列表-详情",
+      "path": "/workMngt/templateList/:id",
+      "module": "./pages/workMngt/templateList/detail",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 放样任务
       "name": "放样任务",
       "path": "/setOutTask",
