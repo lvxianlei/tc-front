@@ -96,7 +96,6 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
     }
 
     useEffect(() => {
-        console.log(data.columns,"----")
         setColumns(data.columns)
     }, [JSON.stringify(data.columns)])
 

@@ -282,13 +282,12 @@ export default function Information(): React.ReactNode {
                     ...item,
                     productType: item.productName,
                     price: item.data.cc || "0.00",
-                    accountingPrice: item.data.accountingPrice || "0.00",
-                    logisticsPrice: item.logistics_price || "0.00",
-                    applyPrice: item.applyPrice || "0.00",
-                    outFactoryPrice: (parseFloat(item.data.accountingPrice || "0") - parseFloat(item.logistics_price || "0")).toFixed(2),
-                    offerDiff: (parseFloat(item.data.accountingPrice || "0") - parseFloat(item.applyPrice || "0")).toFixed(2)
+                    accountingPrice: item.data.bhls || "0.00",
+                    logisticsPrice: item.data.logistics_price || "0.00",
+                    applyPrice: item.data.applyPrice || "0.00",
+                    outFactoryPrice: (parseFloat(item.data.bhls || "0.00") - parseFloat(item.data.logistics_price || "0.00")).toFixed(2),
+                    offerDiff: (parseFloat(item.data.accountingPrice || "0.00") - parseFloat(item.data.applyPrice || "0.00")).toFixed(2)
                 })) || []
-
             })
         }
     }

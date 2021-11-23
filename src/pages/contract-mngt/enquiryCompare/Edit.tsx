@@ -154,7 +154,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const handleChoosePlanOk = () => {
         const chooseData = choosePlanRef.current?.selectRows
-        setMaterialList(chooseData[0]?.materials.filter((item: any) => !(materialList.map((mItem: any) => mItem.id).includes(item.id))).map((item: any) => ({
+        setMaterialList(chooseData[0]?.materials.map((item: any) => ({
             ...item,
             num: item.planPurchaseNum || "0",
             spec: item.structureSpec,
