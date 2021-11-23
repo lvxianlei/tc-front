@@ -25,23 +25,23 @@ export function processingNumber(arg: any) {
 const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref) => {
     const [formRef] = Form.useForm()
     const yclHead: any[] = data.head.filter((headItem: any) => {
-        if (headItem.title.includes("单价")) {
-            const cl = headItem.title.replace("单价", "")
-            const bl = data.head.find((hI: any) => hI.title === `${cl}比例`)
+        if (headItem.title.includes("单价(元/吨)")) {
+            const cl = headItem.title.replace("单价(元/吨)", "")
+            const bl = data.head.find((hI: any) => hI.title === `${cl}比例(%)`)
             return !!bl
         }
-        if (headItem.title.includes("比例")) {
-            const cl = headItem.title.replace("比例", "")
-            const bl = data.head.find((hI: any) => hI.title === `${cl}单价`)
+        if (headItem.title.includes("比例(%)")) {
+            const cl = headItem.title.replace("比例(%)", "")
+            const bl = data.head.find((hI: any) => hI.title === `${cl}单价(元/吨)`)
             return !!bl
         }
         return false
     })
     const ycl: { dj: string, bl: string }[] = []
     yclHead.forEach((headItem: any) => {
-        if (headItem.title.includes("单价")) {
-            const cl = headItem.title.replace("单价", "")
-            const bl = data.head.find((hI: any) => hI.title === `${cl}比例`)
+        if (headItem.title.includes("单价(元/吨)")) {
+            const cl = headItem.title.replace("单价(元/吨)", "")
+            const bl = data.head.find((hI: any) => hI.title === `${cl}比例(%)`)
             !!bl && ycl.push({ dj: headItem.dataIndex, bl: bl.dataIndex })
         }
     })
@@ -64,6 +64,7 @@ const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref
         let lszb: number = parseFloat(allValue.lszb || 0)
         let lsdj: number = processingNumber(allValue.lsdj + "") || 0
         let logistics_price: number = processingNumber(allValue.logistics_price + "") || 0
+        console.log(ycl,"-----ycl-----",allValue)
         const yc: number = ycl.reduce((result: number, item: any) => {
             const aa: string = (parseFloat(allValue[item.dj]) * parseFloat(allValue[item.bl]) * 0.01).toFixed(2)
             return result + parseFloat(aa)
@@ -72,6 +73,7 @@ const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref
         const bhls: number = parseFloat((yc * 1 + flsh * 1 + dxcb * 1 + jgf * 1 + gsfs * 1).toFixed(2))
         const lscb: number = parseFloat((parseFloat((lsdj * 1 - bhls * 1).toFixed(2)) * lszb).toFixed(2))
         const cc: number = parseFloat((yc * 1 + logistics_price * 1).toFixed(2))
+
         const gbq_dfj: number = processingNumber(allValue.gbq_dfj + "");
         const gbq_dfj_bl: number = processingNumber(allValue.gbq_dfj_bl + "");
         const gbq_dbj: number = processingNumber(allValue.gbq_dbj + "");

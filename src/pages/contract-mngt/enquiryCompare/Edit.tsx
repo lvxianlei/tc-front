@@ -69,7 +69,13 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
 })
 
 export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
-    const materialStandardEnum = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const materialStandardEnum = (ApplicationContext.get().dictionaryOption as any)["104"].map((item: {
+        id: string,
+        name: string
+    }) => ({
+        value: item.id,
+        label: item.name
+    }))
     const choosePlanRef = useRef<{ selectRows: any[] }>({ selectRows: [] })
     const [visible, setVisible] = useState<boolean>(false)
     const [chooseVisible, setChooseVisible] = useState<boolean>(false)
@@ -148,7 +154,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const handleChoosePlanOk = () => {
         const chooseData = choosePlanRef.current?.selectRows
-        setMaterialList(chooseData[0]?.materials.filter((item: any) => !(materialList.map((mItem: any) => mItem.id).includes(item.id))).map((item: any) => ({
+        setMaterialList(chooseData[0]?.materials.map((item: any) => ({
             ...item,
             num: item.planPurchaseNum || "0",
             spec: item.structureSpec,

@@ -87,7 +87,7 @@ export default function Edit() {
         } else {
             const result = await saveRun({
                 ...baseInfo,
-                payNum: returnType === 0 ? baseInfo.payNum.records?.[0].payNumber || data?.payNum || "" : "",
+                payNum: returnType === 0 ? baseInfo.payNum?.records?.[0].payNumber || data?.payNum || "" : "",
                 confirmBackMoneyInfoDTOList: confirmBackMoneyInfoDTOList?.submit?.map((item: any) => ({
                     ...item,
                     contractId: item.id,

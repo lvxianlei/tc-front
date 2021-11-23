@@ -57,6 +57,7 @@ interface PagenationProps {
 export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: string, records: any[], value: string }, onChange?: (event: any) => void }> = ({ data, value = { id: "", records: [], value: "" }, onChange }) => {
     const initValue = value.records?.map((item: any) => item.id)
     const [select, setSelect] = useState<any[]>(initValue)
+    const [columns, setColumns] = useState<any[]>(data.columns)
     const [pagenation, setPagenation] = useState<PagenationProps>({
         current: 1,
         pageSize: 10
@@ -93,6 +94,10 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         onChange && onChange(selectRows)
         setSelect(selectedRowKeys)
     }
+
+    useEffect(() => {
+        setColumns(data.columns)
+    }, [JSON.stringify(data.columns)])
 
     const paginationChange = (page: number, pageSize: number) => setPagenation({ ...pagenation, current: page, pageSize })
 
@@ -218,7 +223,7 @@ const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, ...props }
             min={data?.min || 0}
             step={data?.step || 1}
             style={{ width: "100%", height: "100%", ...props.style }}
-            // formatter={value => limitDecimalsF(value, data.decimal)}
+        // formatter={value => limitDecimalsF(value, data.decimal)}
         />,
         select: <SelfSelect {...props} data={data as SelectData} />,
         date: <DatePicker

@@ -113,6 +113,7 @@ export default function Edit() {
             const baseInfoData = await baseInfo.validateFields()
             const invoicData = await invoicForm.validateFields()
             const billingData = await billingForm.validateFields()
+            console.log(baseInfoData.contractCode)
             const saveData = {
                 ...baseInfoData,
                 contractCode: baseInfoData.contractCode.id || data?.contractCode,
@@ -137,16 +138,12 @@ export default function Edit() {
             const logicWeight = await logicWeightRun(contractValue.id)
             baseInfo.setFieldsValue({
                 contractCompany: contractValue.signCustomerName,
-                // projectCode: contractValue.contractNumber,
                 contractSignTime: contractValue.signContractTime,
                 ticketWeight: logicWeight.logicWeight,
                 reasonWeight: logicWeight.logicWeight,
-                planCode: logicWeight.taskNoticeNumbers,
                 contractDevTime: contractValue.deliveryTime,
                 business: contractValue.salesman,
-                contractName: contractValue.contractName, // 合同/工程名称
-                contractCode: contractValue.internalNumber, // 内部合同编号
-                projectCode: contractValue.projectNumber, // 项目编码
+                projectCode: contractValue.projectNumber // 项目编码
             })
         }
         if (fields.backProportion) {
@@ -224,7 +221,7 @@ export default function Edit() {
                 dataSource={baseInfoHead} edit />
 
             <DetailTitle title="发票信息" />
-            <BaseInfo form={invoicForm} columns={invoiceHead} dataSource={data?.invoicingInfoVo || {}} edit/>
+            <BaseInfo form={invoicForm} columns={invoiceHead} dataSource={data?.invoicingInfoVo || {}} edit />
             <DetailTitle title="开票明细" operation={[]} />
 
             <EditTable onChange={handleEditTableChange} form={billingForm} columns={billingHead} dataSource={data?.invoicingDetailDtos || []} />

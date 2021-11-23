@@ -5,10 +5,11 @@ import { BasicInformation, editCargoDetails, SelectedArea, Selected } from "./re
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 interface ChooseModalProps {
-    id: string
+    id: string,
+    initChooseList: any[]
 }
-const ChooseModal = forwardRef(({ id }: ChooseModalProps, ref) => {
-    const [chooseList, setChooseList] = useState<any[]>([])
+const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
+    const [chooseList, setChooseList] = useState<any[]>(initChooseList)
     const [selectList, setSelectList] = useState<any[]>([])
     const [visible, setVisible] = useState<boolean>(false)
     const [currentId, setCurrentId] = useState<string>("")
@@ -20,7 +21,10 @@ const ChooseModal = forwardRef(({ id }: ChooseModalProps, ref) => {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/${id}`)
-            setSelectList(result?.materialContractDetailVos)
+            setSelectList(result?.materialContractDetailVos.map((item: any) => ({
+                ...item,
+                num: item.surplusNum
+            })))
             resole(result)
         } catch (error) {
             reject(error)
@@ -30,7 +34,7 @@ const ChooseModal = forwardRef(({ id }: ChooseModalProps, ref) => {
     const resetFields = () => {
         setCurrentId("")
         setChooseList([])
-        setSelectList(data?.materialContractDetailVos || [])
+        setSelectList([])
     }
 
     const handleRemove = async (id: string) => {
@@ -74,7 +78,7 @@ const ChooseModal = forwardRef(({ id }: ChooseModalProps, ref) => {
             message.error("选择数量不能大于可选数量...")
             return
         } else {
-            setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, num: item.num - formData.num }) : item))
+            setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
             if (currentChooseData) {
                 setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
             } else {
@@ -151,10 +155,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const [form] = Form.useForm()
 
     const handleModalOk = () => {
-        const dataSource: any[] = modalRef.current?.dataSource
-        let quantity: string = "0.00"
-        let weight: string = "0.00"
-        setCargoData(dataSource.map((item: any) => {
+        const dataSource: any[] = modalRef.current?.dataSource.map((item: any) => {
             quantity = (parseFloat(quantity) + parseFloat(item.num || "0.00")).toFixed(2)
             weight = (parseFloat(weight) + parseFloat(item.weight || "0.00")).toFixed(2)
             delete item.id
@@ -166,7 +167,12 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 quantity: item.num,
                 contractUnitPrice: item.price
             })
-        }))
+        })
+        let quantity: string = "0.00"
+        let weight: string = "0.00"
+        const newCargoData: any[] = [...cargoData]
+        //Todo
+        setCargoData(dataSource)
         form.setFieldsValue({ quantity: parseFloat(quantity), weight })
         setVisible(false)
     }
@@ -189,7 +195,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/receiveStock/receiveStock`, type === "new" ? data : ({ ...data, id }))
+            const path: string = type === "new" ? `/tower-storage/receiveStock/receiveStock` : `/tower-storage/receiveStock`
+            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](path, type === "new" ? data : ({ ...data, id }))
             resole(result)
         } catch (error) {
             reject(error)
@@ -246,7 +253,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 setVisible(false)
             }}
             onOk={handleModalOk}>
-            <ChooseModal id={contractId} ref={modalRef} />
+            <ChooseModal id={contractId} ref={modalRef} initChooseList={cargoData.map((item: any) => ({
+                ...item,
+
+                num: item.quantity
+            }))} />
         </Modal>
         <DetailTitle title="收货单基础信息" />
         <BaseInfo form={form} onChange={handleBaseInfoChange} columns={BasicInformation.map((item: any) => {
