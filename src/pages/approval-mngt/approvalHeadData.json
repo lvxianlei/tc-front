@@ -589,7 +589,7 @@
                 },
                 {
                     "title": "销售类型",
-                    "dataIndex": "saleType"
+                    "dataIndex": "saleTypeName"
                 },
                 {
                     "title": "业主单位",

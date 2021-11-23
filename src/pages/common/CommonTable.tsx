@@ -95,6 +95,5 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
         onRow={() => ({ className: styles.tableRow })}
         dataSource={dataSource}
         {...props}
-        
     />
 }
