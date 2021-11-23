@@ -14,6 +14,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 
 enum PriorityType {
+    EMERGENCY = '0',   
     HIGH = '1',              
     MIDDLE ='2',         
     LOW = '3',                       
@@ -41,6 +42,8 @@ export default function AssemblyWeldingList(): React.ReactNode {
             dataIndex: 'priority',
             render: (priority: string): React.ReactNode => {
                 switch (priority) {
+                    case PriorityType.EMERGENCY:
+                        return '紧急';
                     case PriorityType.HIGH:
                         return '高';
                     case PriorityType.LOW:
