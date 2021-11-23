@@ -11,7 +11,7 @@ import React from "react"
 import { Button, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../common'
-import { PaymentListHead, paymentdetail } from "./PaymentData.json"
+import { PaymentList, paymentdetail } from "./PaymentData.json"
 import { enclosure, auditIdRecord } from "../approval-mngt/approvalHeadData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
@@ -34,7 +34,7 @@ export default function Edit() {
     ]}>
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
-            <BaseInfo columns={PaymentListHead} dataSource={(data as any) || {}} />
+            <BaseInfo columns={PaymentList} dataSource={(data as any) || {}} />
             <DetailTitle title={data?.payType === 0 ? "请款明细" : "报销明细"} />
             <CommonTable columns={[
                 ...paymentdetail,

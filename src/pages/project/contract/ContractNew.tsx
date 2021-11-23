@@ -39,7 +39,7 @@ class ManagementContractNew extends ContractNew {
               label: "ECP合同编号",
               name: "ecpContractNumber",
               initialValue: contract?.ecpContractNumber,
-              children: <Input placeholder="内部合同编号自动生成" />,
+              children: <Input placeholder="请输入ECP合同编号" />,
             },
             {
               label: "合同编号",
@@ -409,6 +409,18 @@ class ManagementContractNew extends ContractNew {
               name: "regionOther",
               initialValue: contract?.takeOverUser,
               children: (<Input value={contract?.takeOverUser} />),
+            },
+            {
+              label: "销售业务员",
+              name: "salesman",
+              rules: [
+                {
+                  required: true,
+                  message: "请输入销售业务员",
+                },
+              ],
+              initialValue: contract?.salesman,
+              children: (<Input value={contract?.salesman} />),
             },
             {
               label: "合同接管人",
