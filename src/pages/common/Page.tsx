@@ -61,19 +61,11 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
             const sourceDataKey: string[] = this.props.sourceKey?.split(".") || []
             const resData: IResponseData = await RequestUtil.get<IResponseData>(this.props.path, {
                 ...this.props.requestData,
-                ...this.props.filterValue,
                 ...filterValues,
                 current: pagination.current || this.state.tablePagination?.current,
                 size: pagination.pageSize || this.state.tablePagination?.pageSize,
                 type: this.state.selectedTabKey === 'item_0' ? '' : this.state.selectedTabKey
-            });
-            console.log(resData)
-            ///approvalm/management 审批管理处理数据
-            // if (filterValues.auditStatus) {
-            //     resData.records.map(item => {
-            //         (item as any).auditStatus = '已通过'
-            //     })
-            // }
+            })
             this.setState({
                 ...filterValues,
                 resData,
