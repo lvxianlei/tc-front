@@ -55,12 +55,20 @@ export default function AddModal(props: ModalFuncProps): JSX.Element {
     // 定义取消以及确认的时候禁用取消
     const handleDisbled = () => {
         const result:any = [];
-        baseColums.map((item: object) => {
-            const list = {
-                ...item,
-                disabled: false
+        baseColums.map((item: any) => {
+            if (item.dataIndex === "exchangeRate" || item.dataIndex === "abroadMoney") {
+                const list = {
+                    ...item,
+                    disabled: true
+                }
+                result.push(list)
+            } else {
+                const list = {
+                    ...item,
+                    disabled: false
+                }
+                result.push(list)
             }
-            result.push(list)
         })
         return result;
     }
@@ -149,7 +157,7 @@ export default function AddModal(props: ModalFuncProps): JSX.Element {
             <Button key="submit" type="primary" onClick={handleSure} loading={loading}>
               提交
             </Button>,
-            <Button key="back" onClick={props?.onCancel}>
+            <Button key="back" onClick={handleCancle}>
               取消
             </Button>
           ]}

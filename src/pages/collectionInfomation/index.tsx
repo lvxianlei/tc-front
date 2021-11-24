@@ -7,6 +7,7 @@ import { Button, Input, DatePicker, Radio } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { Page } from '../common'
 import { collectionListHead, approvalStatus } from "./collectionColumn.json"
+import RequestUtil from '../../utils/RequestUtil';
 
 import AddModal from './addModal'; // 新增
 import OverView from './overView'; // 查看
@@ -47,8 +48,10 @@ export default function CollectionInfomation() {
     }
 
     // 新增回调
-    const handleOk = (result:object, callBack: any) => {
+    const handleOk = async (result:object, callBack: any) => {
         console.log(result, '-------------11111111');
+        // const data: { [key: string]: any } = await RequestUtil.get(`/tower-supply/initData/materialPurchaseTask`)
+        console.log(result);
         setTimeout(() => {
             callBack();
             setVisible(false);

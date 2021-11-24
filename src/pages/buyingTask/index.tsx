@@ -150,8 +150,8 @@ export default function RawMaterial() {
                         render: (_: any, records: any) => <>
                             <Button type="link" onClick={() => { detail(records.id) }}>任务详情</Button>
                             <Button type="link" disabled={records.taskStatus !== 3} onClick={() => { setDetailId(records.id); setIsModalVisible1(true) }}>指派</Button>
-                            <Button type="link" disabled={records.taskStatus !== 2} onClick={() => history.push(`/buyingTask/materialList`)}>用料清单</Button>
-                            <Button type="link" disabled={records.taskStatus !== 2} onClick={() => setIsModalVisible2(true)}>提交任务</Button>
+                            <Button type="link" disabled={records.taskStatus !== 7} onClick={() => history.push(`/buyingTask/materialList`)}>用料清单</Button>
+                            <Button type="link" disabled={records.taskStatus !== 7} onClick={() => setIsModalVisible2(true)}>提交任务</Button>
                         </>
                     }
                 ]}
@@ -172,12 +172,12 @@ export default function RawMaterial() {
                         label: '任务状态',
                         children: <Select style={{ width: "100px" }}>
                             <Select.Option value={1} key={1}>待确认</Select.Option>
-                            <Select.Option value={2} key={2}>已拒绝</Select.Option>
+                            <Select.Option value={2} key={2}>已完成</Select.Option>
                             <Select.Option value={3} key={3}>待指派</Select.Option>
                             <Select.Option value={4} key={4}>待接收</Select.Option>
                             <Select.Option value={5} key={5}>待完成</Select.Option>
-                            <Select.Option value={0} key={6}>已完成</Select.Option>
-                            <Select.Option value={0} key={7}>已提交</Select.Option>
+                            <Select.Option value={6} key={6}>已提交</Select.Option>
+                            <Select.Option value={7} key={7}>已拒绝</Select.Option>
                         </Select>
                     },
                     {

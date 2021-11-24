@@ -233,7 +233,7 @@
         },
         {
             "title": "数量合计",
-            "dataIndex": "quantity",
+            "dataIndex": "num",
             "type": "number",
             "disabled": true
         },
@@ -322,7 +322,7 @@
     "editCargoDetails": [
         {
             "title": "品名",
-            "dataIndex": "productName",
+            "dataIndex": "materialName",
             "type": "string"
         },
         {
@@ -352,7 +352,7 @@
         },
         {
             "title": "数量",
-            "dataIndex": "quantity",
+            "dataIndex": "num",
             "type": "number"
         },
         {

@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, InputNumber, Select, DatePicker, Cascader } from "antd";
+import { Input, InputNumber, Select, DatePicker } from "antd";
 import { RuleObject } from "antd/lib/form";
 import { StoreValue } from "antd/lib/form/interface";
 import moment from "moment";
@@ -9,7 +9,6 @@ import ClientSelectionComponent from "../../../components/ClientSelectionModal";
 import {
   winBidTypeOptions,
   saleTypeOptions,
-  currencyTypeOptions,
 } from "../../../configuration/DictionaryOptions";
 import { IFormItemGroup } from "../../entrust/EntrustDetail";
 import { ContractSetting } from "../../prom/contract/ContractSetting";
@@ -456,9 +455,10 @@ class ManagementContractSetting extends ContractSetting {
       ],
     ];
   }
-  protected getReturnPath(): string {
-    this.props.history.goBack();
-    return "";
+
+  protected onCancel = (): void => {
+    // console.log(this.props)
+    this.props.history.push(`/project/management/detail/contract/${this.props.match.params.projectId}`);
   }
 }
 
