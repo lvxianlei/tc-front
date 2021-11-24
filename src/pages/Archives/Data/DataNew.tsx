@@ -178,11 +178,11 @@ export default function DataNew(): React.ReactNode {
                         })
                     }
                     if(location.state.type === 'new') {
-                        RequestUtil.post(`/tower-system/dataRecord`, value).then(res => {
+                        RequestUtil.post(`/tower-system/dataRecord`, { dataRecordDTOList: [...value] }).then(res => {
                             history.goBack();
                         })
                     }else {
-                        RequestUtil.put(`/tower-system/dataRecord/update`, value).then(res => {
+                        RequestUtil.put(`/tower-system/dataRecord/update`, { dataRecordDTOList: [...value]  }).then(res => {
                             history.goBack();
                         })
                     }
