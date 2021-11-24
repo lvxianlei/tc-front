@@ -134,16 +134,6 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
         this.getRegionInfo({});
 
     }
-
-    /**
-     * @override
-     * @description Gets return path
-     * @returns return path 
-     */
-    protected getReturnPath(): string {
-        return '/prom/contract';
-    }
-
     /**
      * @override
      * @description Gets form props
@@ -438,7 +428,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
     }
     public regionChange() {
         // console.log(111,this.getForm())
-        this.forceUpdate();
+        // this.forceUpdate();
     }
     /**
      * @implements
