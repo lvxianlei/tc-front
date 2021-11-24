@@ -130,13 +130,14 @@ export default function BoltList(): React.ReactNode {
             width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    <Link to={`/workMngt/boltList/boltInformation/${record.loftingTask}/${record.id}`}>螺栓信息</Link>
+                    {/* <Link to={`/workMngt/boltList/boltInformation/${record.loftingTask}/${record.id}`}>螺栓信息</Link> */}
                     {
                         record.boltStatus === 2 && record.boltLeader === userId ? <Link to={`/workMngt/boltList/boltListing/${record.id}`}>螺栓清单</Link> : <Button type="link" disabled>螺栓清单</Button>
                     }
                     {
                         record.boltStatus === 3 && record.loftingLeader === userId ? <Link to={`/workMngt/boltList/boltCheck/${record.id}`}>校核</Link> : <Button type="link" disabled>校核</Button>
                     }
+                    <Link to={`/workMngt/boltList/boltCheck/${record.id}`}>校核</Link>
                     {/* {
                         record.boltStatus === 4 && record.loftingLeader === userId ? 
                         <Popconfirm
