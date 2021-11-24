@@ -50,6 +50,7 @@ module.exports = {
       // modified the theme
       lessOptions: {
         modifyVars: {
+          'root-entry-name': 'default',
           '@font-size-base': '12px',
           "@primary-color": "#FF8C00",
           "@descriptions-bg": "#F5F5F5"
