@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react"
 import { Button, Upload, Form, message, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable, EditTable, formatData } from '../common'
+import { DetailContent, DetailTitle, BaseInfo, CommonTable, EditTable, formatData } from '../../common'
 import { baseInfoHead, invoiceHead, billingHead } from "./InvoicingData.json"
-import { enclosure } from '../project/managementDetailData.json'
-import RequestUtil from '../../utils/RequestUtil'
+import { enclosure } from '../../project/managementDetailData.json'
+import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import AuthUtil from "../../utils/AuthUtil"
-import { downLoadFile } from "../../utils"
-import ApplicationContext from "../../configuration/ApplicationContext"
+import AuthUtil from "../../../utils/AuthUtil"
+import { downLoadFile } from "../../../utils"
+import ApplicationContext from "../../../configuration/ApplicationContext"
 export default function Edit() {
     const params = useParams<{ id: string }>()
     const history = useHistory()

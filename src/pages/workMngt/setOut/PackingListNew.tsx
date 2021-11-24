@@ -183,7 +183,7 @@ export default function PackingListNew(): React.ReactNode {
         }
     ]
 
-    const PackingColumns = [
+    const packingColumns = [
         {
             key: 'index',
             title: '序号',
@@ -399,7 +399,7 @@ export default function PackingListNew(): React.ReactNode {
                 dataSource={ [...stayDistrict] } 
             />
             <p className={ styles.title }>包装区<span className={ styles.description }>已选择构件数：{ packagingData.length }</span><span className={ styles.description }>已选择构件总重量：{ eval(packagingData.map(item => { return Number(item.num) * Number(item.basicsWeight) }).join('+')) || 0 }吨</span></p>
-            <CommonTable columns={ PackingColumns } pagination={ false } dataSource={ packagingData } />
+            <CommonTable columns={ packingColumns } pagination={ false } dataSource={ packagingData } />
         </DetailContent>
         <Modal visible={ visible } title="创建包" onCancel={ () => setVisible(false) } onOk={ () => {
             if(balesCode) {
