@@ -230,7 +230,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
 
     public onCustomerCompanySelect = (selectedRows: DataType[]): void => {
         const contract: IContractInfo | undefined = this.state.contract;
-        console.log(selectedRows,contract)
+        console.log(selectedRows, contract)
         if (selectedRows && selectedRows.length > 0) {
             const select = {
                 customerId: selectedRows[0].id,
@@ -733,7 +733,9 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             </Modal>
         </>
     }
-
+    protected renderExtraOperationArea(): React.ReactNode {
+        return [];
+    }
     /**
      * @description Renders extra sections
      * @returns extra sections 

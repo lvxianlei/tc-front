@@ -233,7 +233,7 @@
         },
         {
             "title": "数量合计",
-            "dataIndex": "quantity",
+            "dataIndex": "num",
             "type": "number",
             "disabled": true
         },
