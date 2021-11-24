@@ -720,6 +720,11 @@
                                 "label": "请款申请列表",
                                 "path":  "/fundApply/infomation",
                                 "authority": "customer_detail"
+                            },
+                            {
+                                "label": "付款记录",
+                                "path":  "/fundApply/record",
+                                "authority": "customer_detail"
                             }
                         ]
                     },

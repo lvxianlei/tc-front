@@ -2,51 +2,51 @@
     "fundListColumns": [
         {
             "title": "请款编号",
-            "dataIndex": "payCompany"
+            "dataIndex": "payApplyNumber"
         },
         {
             "title": "请款日期",
-            "dataIndex": "payTypeName"
+            "dataIndex": "payApplyTime"
         },
         {
             "title": "请款单号",
-            "dataIndex": "payCategoryName"
+            "dataIndex": "payNumber"
         },
         {
             "title": "收款方",
-            "dataIndex": "payMoney"
+            "dataIndex": "payee"
         },
         {
             "title": "请款方",
-            "dataIndex": "payMoney"
+            "dataIndex": "payer"
         },
         {
             "title": "请款部门",
-            "dataIndex": "payTime"
+            "dataIndex": "payerDepName"
         },
         {
             "title": "费用类型",
-            "dataIndex": "currencyTypeName"
+            "dataIndex": "costType"
         },
         {
             "title": "付款方式",
-            "dataIndex": "exchangeRate"
+            "dataIndex": "payType"
         },
         {
             "title": "请款金额",
-            "dataIndex": "abroadMoney"
+            "dataIndex": "sumMoney"
         },
         {
             "title": "已付金额",
-            "dataIndex": "payBank"
+            "dataIndex": "money"
         },
         {
             "title": "应付款余额",
-            "dataIndex": "confirmer"
+            "dataIndex": "payMoney"
         },
         {
             "title": "付款状态",
-            "dataIndex": "confirmStatus"
+            "dataIndex": "payStatus"
         }
     ],
     "approvalStatus": [
@@ -259,6 +259,48 @@
                     "message": "请输入付款金额..."
                 }
             ]
+        }
+    ],
+    "fundRecordColumns":[
+        {
+            "title": "付款编号",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "请款编号",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "请款日期",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "请款单号",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "付款编号",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "请款部门",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "收款方",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "付款日期",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "已付金额(元)",
+            "dataIndex": "payCompany"
         }
     ]
 }
