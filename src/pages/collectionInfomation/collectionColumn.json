@@ -63,6 +63,7 @@
         {
             "dataIndex": "payCompany",
             "title": "来款单位名称",
+            "placeholder": "请输入单位名称",
             "rules": [
                 {
                     "required": true,
@@ -74,20 +75,11 @@
             "dataIndex": "payType",
             "title": "来款方式",
             "type": "select",
+            "placeholder": "请选择来款方式",
             "rules": [
                 {
                     "required": true,
                     "message": "请选择来款方式"
-                }
-            ],
-            "enum": [
-                {
-                    "value": 0,
-                    "label": "投标保证金"
-                },
-                {
-                    "value": 1,
-                    "label": "合同应收款"
                 }
             ]
         },
@@ -95,26 +87,18 @@
             "dataIndex": "payCategory",
             "title": "来款性质",
             "type": "select",
+            "placeholder": "请选择来款性质",
             "rules": [
                 {
                     "required": true,
                     "message": "请选择来款性质"
-                }
-            ],
-            "enum": [
-                {
-                    "value": 0,
-                    "label": "投标保证金"
-                },
-                {
-                    "value": 1,
-                    "label": "合同应收款"
                 }
             ]
         },
         {
             "dataIndex": "payMoney",
             "title": "来款金额",
+            "placeholder": "请输入来款金额",
             "rules": [
                 {
                     "required": true,
@@ -126,6 +110,7 @@
             "dataIndex": "payTime",
             "title": "来款日期",
             "type": "date",
+            "placeholder": "请选择来款日期",
             "format": "YYYY-MM-DD",
             "rules": [
                 {
@@ -138,39 +123,36 @@
             "dataIndex": "currencyType",
             "title": "币种",
             "type": "select",
+            "placeholder": "请选择币种",
             "rules": [
                 {
                     "required": true,
                     "message": "请选择币种"
                 }
-            ],
-            "enum": [
-                {
-                    "value": 0,
-                    "label": "投标保证金"
-                },
-                {
-                    "value": 1,
-                    "label": "合同应收款"
-                }
             ]
         },
         {
             "dataIndex": "exchangeRate",
-            "title": "汇率"
+            "title": "汇率",
+            "placeholder": "请输入汇率",
+            "disabled": true
         },
         {
             "dataIndex": "abroadMoney",
-            "title": "外币金额"
+            "title": "外币金额",
+            "placeholder": "请输入外币金额",
+            "disabled": true
         },
         {
             "dataIndex": "payBank",
-            "title": "收款银行"
+            "title": "收款银行",
+            "placeholder": "请输入收款银行"
         },
         {
             "dataIndex": "confirmer",
             "title": "确认方",
             "type": "select",
+            "placeholder": "请选择确认方",
             "rules": [
                 {
                     "required": true,
@@ -179,19 +161,20 @@
             ],
             "enum": [
                 {
-                    "value": 0,
-                    "label": "投标保证金"
+                    "value": "营销部",
+                    "label": "营销部"
                 },
                 {
-                    "value": 1,
-                    "label": "合同应收款"
+                    "value": "人资部",
+                    "label": "人资部"
                 }
             ]
         },
         {
             "dataIndex": "description",
             "title": "备注",
-            "type": "textarea"
+            "type": "textarea",
+            "placeholder": "请输入备注"
         }
     ],
     "overViewColunms": [

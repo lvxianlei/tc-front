@@ -2,85 +2,74 @@
     "collectionListHead": [
         {
             "title": "保函编号",
-            "dataIndex": "payCompany"
+            "dataIndex": "guaranteeNumber"
         },
         {
             "title": "申请编号",
-            "dataIndex": "returnType",
-            "type": "select",
-            "enum": [
-                {
-                    "value": 0,
-                    "label": "投标保证金"
-                },
-                {
-                    "value": 1,
-                    "label": "合同应收款"
-                }
-            ]
+            "dataIndex": "applyNumber"
         },
         {
             "title": "申请日期",
-            "dataIndex": "payMoney"
+            "dataIndex": "applyTime"
         },
         {
             "title": "申请部门",
-            "dataIndex": "payMoney"
+            "dataIndex": "applyDeptId"
         },
         {
             "title": "项目名称",
-            "dataIndex": "payTime"
+            "dataIndex": "projectName"
         },
         {
             "title": "受益人名称",
-            "dataIndex": "currency"
+            "dataIndex": "beneficiaryName"
         },
         {
             "title": "保函类型",
-            "dataIndex": "exchangeRate"
+            "dataIndex": "guaranteeType"
         },
         {
             "title": "保函金额",
-            "dataIndex": "currency"
+            "dataIndex": "guaranteePrice"
         },
         {
             "title": "出具日期",
-            "dataIndex": "returnBank"
+            "dataIndex": "issuanceTime"
         },
         {
             "title": "要求交回日期",
-            "dataIndex": "payType"
+            "dataIndex": "requiredReturnTime"
         },
         {
             "title": "保函交回日期",
-            "dataIndex": "returnBank"
+            "dataIndex": "guaranteeReturnTime"
         },
         {
             "title": "备注",
-            "dataIndex": "remark"
+            "dataIndex": "description"
         },
         {
             "title": "申请人",
-            "dataIndex": "returnBank"
+            "dataIndex": "applicant"
         }
     ],
     "approvalStatus": [
         {
             "label": "待办理",
-            "value": 0
-        },
-        {
-            "label": "待回收",
             "value": 1
         },
         {
-            "label": "已回收",
+            "label": "待回收",
             "value": 2
+        },
+        {
+            "label": "已回收",
+            "value": 3
         }
     ],
     "baseColums": [
         {
-            "dataIndex": "title",
+            "dataIndex": "issuanceTime",
             "title": "出具日期",
             "type": "date",
             "format": "YYYY-MM-DD",
@@ -92,7 +81,7 @@
             ]
         },
         {
-            "dataIndex": "contentsu",
+            "dataIndex": "requiredReturnTime",
             "title": "要求交回日期",
             "type": "date",
             "format": "YYYY-MM-DD",
@@ -104,7 +93,7 @@
             ]
         },
         {
-            "dataIndex": "userNames",
+            "dataIndex": "effectiveTime",
             "title": "保函有效截止期",
             "type": "date",
             "format": "YYYY-MM-DD",
@@ -116,7 +105,7 @@
             ]
         },
         {
-            "dataIndex": "stateName",
+            "dataIndex": "description",
             "title": "保函信息备注",
             "type": "textarea"
         }
@@ -142,7 +131,7 @@
     ],
     "recoveryGuarantee": [
         {
-            "dataIndex": "titles",
+            "dataIndex": "requiredReturnTime",
             "title": "要求交回日期",
             "type": "date",
             "format": "YYYY-MM-DD",
@@ -154,7 +143,7 @@
             ]
         },
         {
-            "dataIndex": "contents",
+            "dataIndex": "guaranteeReturnTime",
             "title": "交回日期",
             "type": "date",
             "format": "YYYY-MM-DD",
