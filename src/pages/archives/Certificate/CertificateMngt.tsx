@@ -255,7 +255,7 @@ export default function CertificateMngt(): React.ReactNode {
             headTabs={ [] }
             extraOperation={ <Space direction="horizontal" size="small">
                 <Link to={{pathname: `/archivesMngt/certificateMngt/certificateNew`, state:{ type: 'new' } }}><Button type="primary" ghost>录入</Button></Link>
-                { selectedRows.length > 0 && selectedRows.map(items => items.certificateStatus).indexOf(1 || 2 || 3) === -1 ? <Link to={{pathname: `/archivesMngt/certificateMngt/certificateSetting`, state:{ type: 'edit', data: [...selectedRows] } }}><Button type="primary" ghost>编辑</Button></Link> : <Button type="primary" disabled ghost>编辑</Button>}
+                { selectedRows.length > 0 && selectedRows.map(items => items.certificateStatus).indexOf(1) === -1 && selectedRows.map(items => items.certificateStatus).indexOf(2) === -1 && selectedRows.map(items => items.certificateStatus).indexOf(3) === -1 ? <Link to={{pathname: `/archivesMngt/certificateMngt/certificateSetting`, state:{ type: 'edit', data: [...selectedRows] } }}><Button type="primary" ghost>编辑</Button></Link> : <Button type="primary" disabled ghost>编辑</Button>}
                 <Button type="primary" onClick={ batchDel } ghost>删除</Button>
             </Space> }
             refresh={ refresh }
