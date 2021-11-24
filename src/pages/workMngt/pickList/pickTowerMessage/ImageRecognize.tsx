@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Spin, Image, Space, Upload, message, Popconfirm, Modal } from 'antd';
+import { Button, Spin, Image, Space, Upload, message, Popconfirm, Modal, Form, Table, Input } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable } from '../../../common';
 import useRequest from '@ahooksjs/use-request';
@@ -18,7 +18,8 @@ export default function PickTowerDetail(): React.ReactNode {
     const [ url, setUrl ] = useState<string>('')
     const [ visible, setVisible ] = useState<boolean>(false)
     const [ urlBase, setUrlBase ] = useState<undefined|any>('')
-    const [ tableDataSource, setTableDataSource ] = useState<any[]>([])
+    const [ tableDataSource, setTableDataSource ] = useState<any[]>([]);
+    const [ form ] = Form.useForm();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         // const data: any = await RequestUtil.get(`/tower-market/bidInfo/${params.id}`)
         resole(data)
@@ -57,10 +58,10 @@ export default function PickTowerDetail(): React.ReactNode {
                 <Popconfirm
                     title="确认保存数据?"
                     onConfirm={ async () => {
-                        if(tableDataSource&&tableDataSource.length>0){
-                            const value = await RequestUtil.post(`/tower-science/drawProductStructure/check/cover`,tableDataSource)
+                        if(form.getFieldsValue(true).data&&form.getFieldsValue(true).data.length>0){
+                            const value = await RequestUtil.post(`/tower-science/drawProductStructure/check/cover`,form.getFieldsValue(true).data)
                             if(value){
-                                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=0`,tableDataSource).then(()=>{
+                                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=0`,form.getFieldsValue(true).data).then(()=>{
                                     message.success('保存成功！')
                                 }).then(()=>{
                                     history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}`)
@@ -126,10 +127,70 @@ export default function PickTowerDetail(): React.ReactNode {
                         setTableDataSource(tableDataSource);
                     }} disabled={!cropData}>识别文字</Button>
                 </Space>
-                <div style={{ display: 'flex' }}>
-                    <CommonTable dataSource={[...tableDataSource]} columns={towerColumns} pagination={false} rowKey='index'/>
-                    <div style={{ boxShadow:'0px 0px 5px 5px #ccc', width:'100%', marginLeft:'10px', textAlign:'center'}}>
-                        {urlBase?<div>
+                <div style={{ display: 'flex', width:'100%' }}>
+                    {/* <CommonTable dataSource={[...tableDataSource]} columns={towerColumns} pagination={false} rowKey='index'/> */}
+                    <Form form={form} style={{width:'60%'}}>
+                    <Table
+                        columns={[
+                           
+                            { title: '段号', dataIndex: 'segmentName', key: 'segmentName', render:(_a: any, _b: any, index: number): React.ReactNode =>(
+                                <Form.Item>
+                                    <Input size="small"/>
+                                </Form.Item>
+                            )},
+                            { title: '构件编号', dataIndex: 'code', key: 'code',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                                <Form.Item name={['data',index, "code"]} initialValue={ _ }>
+                                    <Input size="small"/>
+                                </Form.Item>
+                            ) },
+                            { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                                <Form.Item name={['data',index, "structureTexture"]} initialValue={ _ }>
+                                    <Input size="small" />
+                                </Form.Item>
+                            ) },
+                            { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                                <Form.Item name={['data',index, "structureSpec"]} initialValue={ _ }>
+                                    <Input size="small" />
+                                </Form.Item>
+                            ) },
+                            { title: '长度（mm）', dataIndex: 'length', key: 'length',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                                <Form.Item name={['data',index, "length"]} initialValue={ _ }>
+                                    <Input size="small" />
+                                </Form.Item>
+                            ) },
+                            { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                                <Form.Item name={['data',index, "basicsPartNum"]} initialValue={ _ }>
+                                    <Input size="small"/>
+                                </Form.Item>
+                            ) },
+                            { title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                                <Form.Item name={['data',index, "basicsWeight"]} initialValue={ _ }>
+                                    <Input size="small" />
+                                </Form.Item>
+                            ) },
+                            { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                                <Form.Item name={['data',index, "totalWeight"]} initialValue={ _ }>
+                                    <Input size="small" />
+                                </Form.Item>
+                            ) },
+                            { title: '备注', dataIndex: 'description', key: 'description',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                                <Form.Item name={['data',index, "description"]} initialValue={ _ }>
+                                    <Input.TextArea showCount rows={1} />
+                                </Form.Item>
+                            ) },
+                            { title: '操作', key:'operation', render:(_a: any, _b: any, index: number): React.ReactNode =>(
+                                <Button type='link' onClick={()=>{
+                                    tableDataSource&&tableDataSource.splice(index,1);
+                                    tableDataSource&&setTableDataSource([...tableDataSource])
+                                }}>删除</Button>
+                            )}
+                        ]}
+                        pagination={false}
+                        dataSource={[...tableDataSource]}
+                    />
+                    </Form>
+                    <div style={{ boxShadow:'0px 0px 5px 5px #ccc', width:'40%', marginLeft:'10px', textAlign:'center'}}>
+                        {urlBase?<div style={{ width:'100%'}}>
                             <div style={{ width: "100%" }}>
                                 <Cropper
                                     style={{ height: 300, width: "100%" }}
@@ -165,13 +226,13 @@ export default function PickTowerDetail(): React.ReactNode {
                 </div>
             </DetailContent>
             <Modal visible={visible} title='' onCancel={()=>{setVisible(false)}} okText='是' cancelText='否' footer={<Space><Button onClick={async ()=>{
-                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=1`,tableDataSource).then(()=>{
+                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=1`,form.getFieldsValue(true).data).then(()=>{
                     message.success('保存成功！')
                 }).then(()=>{
                     history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}`)
                 })
             }}>是</Button><Button onClick={async ()=>{
-                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=0`,tableDataSource).then(()=>{
+                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=0`,form.getFieldsValue(true).data).then(()=>{
                     message.success('保存成功！')
                 }).then(()=>{
                     setVisible(false);
