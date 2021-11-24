@@ -1,5 +1,5 @@
 import React, { useState, } from "react"
-import { Button, } from 'antd'
+import { Button, Popconfirm, } from 'antd'
 import { Page } from '../../common'
 import { useHistory } from "react-router-dom"
 export default function TemplateDetail() {
@@ -44,11 +44,21 @@ export default function TemplateDetail() {
                             onClick={() => {
                             }}
                         >查看</span>
-                        <span
-                            style={{ cursor: 'pointer', color: '#FF8C00' }}
-                            onClick={() => {
+                        <Popconfirm
+                            placement="bottomRight"
+                            title={text}
+                            onConfirm={() => {
+
                             }}
-                        >删除</span>
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <span
+                                style={{ cursor: 'pointer', color: '#FF8C00' }}
+                                onClick={() => {
+                                }}
+                            >删除</span>
+                        </Popconfirm>
                         <span
                             style={{ cursor: 'pointer', color: '#FF8C00' }}
                             onClick={() => {
