@@ -28,7 +28,9 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [id] })
+    }), {
+        // refreshDeps: [id]
+    })
 
     const resetFields = () => {
         setCurrentId("")
@@ -241,7 +243,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     return <Spin spinning={loading}>
         <Modal
-            destroyOnClose
+            // destroyOnClose
             width={1011}
             visible={visible}
             title="选择货物明细"

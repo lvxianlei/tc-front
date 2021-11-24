@@ -14,7 +14,7 @@
                     "value": 1
                 },
                 {
-                    "label": "已拒绝",
+                    "label": "已完成",
                     "value": 2
                 },
                 {
@@ -30,11 +30,11 @@
                     "value": 5
                 },
                 {
-                    "label": "已完成",
+                    "label": "已提交",
                     "value": 6
                 },
                 {
-                    "label": "已提交",
+                    "label": "已拒绝",
                     "value": 7
                 }
             ]
