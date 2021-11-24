@@ -13,6 +13,7 @@ export type SelectType = "selectA" | "selectB" | "selectC"
 
 // 保留两位小数
 export function processingNumber(arg: any) {
+    arg = typeof arg === "number" ? arg + "" : arg
     arg = arg.replace(/[^\d.]/g, ""); // 清除"数字"和"."以外的字符
     arg = arg.replace(/^\./g, ""); // 验证第一个字符是数字而不是
     arg = arg.replace(/\.{2,}/g, "."); // 只保留第一个. 清除多余的
@@ -56,23 +57,24 @@ const EditableProTableListItem: React.FC<any> = forwardRef(({ data, index }, ref
 
     const handleChange = (fields: any, allfields: any) => {
         const allValue = allfields.submit[0]
-        let fljj: number = processingNumber(allValue.fljj + "") || 0
-        let gcxh: number = processingNumber(allValue.gcxh + "") || 0
-        let dxcb: number = processingNumber(allValue.dxcb + "") || 0
-        let jgf: number = processingNumber(allValue.jgf + "") || 0
-        let gsfs: number = processingNumber(allValue.gsfs + "") || 0
-        let lszb: number = parseFloat(allValue.lszb || 0)
-        let lsdj: number = processingNumber(allValue.lsdj + "") || 0
-        let logistics_price: number = processingNumber(allValue.logistics_price + "") || 0
-        let lr: number = processingNumber(allValue.lr + "") || 0
-        const ground_receiving_price: number = processingNumber(allValue.ground_receiving_price + "");
+        let fljj: number = processingNumber(allValue.fljj || "0")
+        let gcxh: number = processingNumber(allValue.gcxh || "0")
+        let dxcb: number = processingNumber(allValue.dxcb || "0")
+        let jgf: number = processingNumber(allValue.jgf || "0")
+        let gsfs: number = processingNumber(allValue.gsfs || "0")
+        let lszb: number = parseFloat(allValue.lszb || "0")
+        let lsdj: number = processingNumber(allValue.lsdj || "0")
+        let logistics_price: number = processingNumber(allValue.logistics_price || "0")
+        let lr: number = processingNumber(allValue.lr || "0")
+        const ground_receiving_price: number = processingNumber(allValue.ground_receiving_price || "0");
         const yc: number = ycl.reduce((result: number, item: any) => {
             const aa: string = (parseFloat(allValue[item.dj]) * parseFloat(allValue[item.bl]) * 0.01).toFixed(2)
             return result + parseFloat(aa)
         }, 0)
-        const flsh: number = parseFloat((gcxh * ((yc * 1) - (fljj * 1))).toFixed(2))
+        const flsh: number = parseFloat((gcxh * ((yc * 1) - (fljj * 1)) * 0.01).toFixed(2))
         const bhls: number = parseFloat(((yc * 1) + (flsh * 1) + (dxcb * 1) + (jgf * 1) + (gsfs * 1)).toFixed(2))
-        const lscb: number = parseFloat((parseFloat(((lsdj * 1) - (bhls * 1)).toFixed(2)) * lszb).toFixed(2))
+        const lscb: number = parseFloat((parseFloat(((lsdj * 1) - (bhls * 1)).toFixed(2)) * lszb * 0.01).toFixed(2))
+        console.log("----", lscb, bhls, lr, ground_receiving_price, logistics_price)
         const cc: number = parseFloat(((lscb * 1) + (bhls * 1) + (lr * 1) + (ground_receiving_price * 1) + (logistics_price * 1)).toFixed(2))
         const gbq_dfj: number = processingNumber(allValue.gbq_dfj || "0");
         const gbq_dfj_bl: number = processingNumber(allValue.gbq_dfj_bl || "0");
