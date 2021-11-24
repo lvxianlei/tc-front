@@ -59,81 +59,38 @@
             "value": 2
         }
     ],
-    "baseColums": [
-        {
-            "dataIndex": "payCompany",
-            "title": "付款日期",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入来款单位名称"
-                }
-            ]
-        },
-        {
-            "dataIndex": "payCompany",
-            "title": "请选择",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入来款单位名称"
-                }
-            ]
-        },
-        {
-            "dataIndex": "payCompany",
-            "title": "付款方式",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入来款单位名称"
-                }
-            ]
-        },
-        {
-            "dataIndex": "payCompany",
-            "title": "转账/商承/现金/支票",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入来款单位名称"
-                }
-            ]
-        }
-        
-    ],
     "overViewBaseColunms": [
         {
             "title": "请款编号",
-            "dataIndex": "payCompany"
+            "dataIndex": "payApplyNumber"
         },
         {
             "title": "请款单号",
-            "dataIndex": "payCategoryName"
+            "dataIndex": "payNumber"
         },
         {
             "title": "请款日期",
-            "dataIndex": "payTypeName"
+            "dataIndex": "payApplyTime"
         },
         {
             "title": "收款方",
-            "dataIndex": "payMoney"
+            "dataIndex": "payee"
         },
         {
             "title": "请款方",
-            "dataIndex": "payMoney"
+            "dataIndex": "payer"
         },
         {
             "title": "请款部门",
-            "dataIndex": "payTime"
+            "dataIndex": "payerDepName"
         },
         {
             "title": "开户银行",
-            "dataIndex": "payTime"
+            "dataIndex": "bankName"
         },
         {
             "title": "银行账号",
-            "dataIndex": "payTime"
+            "dataIndex": "accNum"
         },
         {
             "title": "请款类别",
@@ -141,23 +98,23 @@
         },
         {
             "title": "付款方式",
-            "dataIndex": "exchangeRate"
+            "dataIndex": "payType"
         },
         {
             "title": "请款金额",
-            "dataIndex": "abroadMoney"
+            "dataIndex": "sumMoney"
         },
         {
             "title": "已付金额",
-            "dataIndex": "payBank"
+            "dataIndex": "money"
         },
         {
             "title": "应付款余额",
-            "dataIndex": "confirmer"
+            "dataIndex": "payMoney"
         },
         {
             "title": "付款状态",
-            "dataIndex": "confirmStatus"
+            "dataIndex": "payStatus"
         },
         {
             "title": "审核状态",
@@ -167,45 +124,45 @@
     "overViewBillColunms": [
         {
             "title": "票据号",
-            "dataIndex": "payCompany"
+            "dataIndex": "billNumber"
         },
         {
             "title": "票据金额",
-            "dataIndex": "payCategoryName"
+            "dataIndex": "billMoney"
         },
         {
             "title": "开票单位",
-            "dataIndex": "payTypeName"
+            "dataIndex": "billCompany"
         },
         {
             "title": "发票类型",
-            "dataIndex": "payMoney"
+            "dataIndex": "billType"
         },
         {
             "title": "开票日期",
-            "dataIndex": "payMoney"
+            "dataIndex": "billTime"
         }
     ],
     "overViewApplyColunms": [
         {
             "title": "部门",
-            "dataIndex": "payCompany"
+            "dataIndex": "department"
         },
         {
             "title": "审批人",
-            "dataIndex": "payCategoryName"
+            "dataIndex": "approver"
         },
         {
             "title": "职位",
-            "dataIndex": "payTypeName"
+            "dataIndex": "position"
         },
         {
             "title": "审批时间",
-            "dataIndex": "payMoney"
+            "dataIndex": "batchTime"
         },
         {
             "title": "审批结果",
-            "dataIndex": "payMoney"
+            "dataIndex": "batchResult"
         },
         {
             "title": "意见",
@@ -216,7 +173,7 @@
     "addColums": [
         {
             "title": "回款金额",
-            "dataIndex": "refundAmount",
+            "dataIndex": "payTime",
             "type": "date",
             "width": 200,
             "rules": [
@@ -228,7 +185,7 @@
         },
         {
             "title": "付款方式",
-            "dataIndex": "fundType",
+            "dataIndex": "payType",
             "type": "select",
             "enum": [
                 {
@@ -250,7 +207,7 @@
         },
         {
             "title": "付款金额",
-            "dataIndex": "fundNumber",
+            "dataIndex": "payMoney",
             "type": "string",
             "width": 200,
             "rules": [
@@ -259,48 +216,6 @@
                     "message": "请输入付款金额..."
                 }
             ]
-        }
-    ],
-    "fundRecordColumns":[
-        {
-            "title": "付款编号",
-            "dataIndex": "payCompany"
-        },
-        {
-            "title": "请款编号",
-            "dataIndex": "payCompany"
-        },
-        {
-            "title": "请款日期",
-            "dataIndex": "payCompany"
-        },
-        {
-            "title": "请款单号",
-            "dataIndex": "payCompany"
-        },
-        {
-            "title": "付款编号",
-            "dataIndex": "payCompany"
-        },
-        {
-            "title": "请款部门",
-            "dataIndex": "payCompany"
-        },
-        {
-            "title": "收款方",
-            "dataIndex": "payCompany"
-        },
-        {
-            "title": "付款方式",
-            "dataIndex": "payCompany"
-        },
-        {
-            "title": "付款日期",
-            "dataIndex": "payCompany"
-        },
-        {
-            "title": "已付金额(元)",
-            "dataIndex": "payCompany"
         }
     ]
 }

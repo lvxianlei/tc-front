@@ -15,9 +15,9 @@ const testDp = [{label:"1",code:1}, {label:"2",code:2}, {label:"3",code:3}];
 export default function FaundInfomation() {
     const [ refresh, setRefresh ] = useState<boolean>(false);
     const [payStatus, setPayStatus] = useState<number>(1);
-    const [filterValue, setFilterValue] = useState({});
-    const [AddVisible, setAddVisible] = useState(false);
-    const [ visibleOverView, setVisibleOverView ] = useState<boolean>(true);
+    // const [filterValue, setFilterValue] = useState({});
+    const [AddVisible, setAddVisible] = useState(true);
+    const [ visibleOverView, setVisibleOverView ] = useState<boolean>(false);
     const confirmed = [{ "title": "备注", "dataIndex": "description"}]
     // 查询按钮
     const onFilterSubmit = (value: any) => {
@@ -26,7 +26,7 @@ export default function FaundInfomation() {
             value.endPayApplyTime = formatDate[0]
             value.startPayApplyTime = formatDate[1]
         }
-        setFilterValue(value)
+        // setFilterValue(value)
         return value
     }
     
@@ -37,7 +37,6 @@ export default function FaundInfomation() {
     }
     // 新增回调
     const handleOk = (result:object, callBack: any) => {
-        console.log(result, '-------------11111111');
         setTimeout(() => {
             callBack();
             setAddVisible(false);
@@ -54,7 +53,7 @@ export default function FaundInfomation() {
             <Page
                 path="/tower-finance/payApply"
                 onFilterSubmit={onFilterSubmit}
-                filterValue={{ ...filterValue,payStatus}}
+                filterValue={{ payStatus}}
                 refresh={ refresh }
                 searchFormItems={[
                     {

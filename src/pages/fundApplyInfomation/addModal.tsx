@@ -5,7 +5,7 @@ import React, { useState,useRef } from 'react';
 import { Modal, Form, Button, ModalFuncProps } from 'antd';
 import { BaseInfo,Attachment,AttachmentRef,EditTable } from '../common';
 import { addColums } from './fundListHead.json';
-
+import RequestUtil from '../../utils/RequestUtil'
 export default function AddModal(props: ModalFuncProps): JSX.Element {
     const [addFund] = Form.useForm();
     // const [columns, setColumns] = useState(baseColums);
@@ -14,13 +14,17 @@ export default function AddModal(props: ModalFuncProps): JSX.Element {
     const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } });
     // 提交
     const handleSure = async () => {
-        const postData = await addFund.validateFields();
-        console.log(postData, 'post')
         setLoading(true);
-        props.onOk && props.onOk({data: 10}, () => {
-            addFund.resetFields();
+        const postData = await addFund.validateFields();
+        console.log(postData)
+        const result: { [key: string]: any } = await RequestUtil.post('/tower-finance/payApply', {
+            ...postData
+        })
+        console.log(result, 'post')
+        // props.onOk && props.onOk({data: 10}, () => {
+        //     addFund.resetFields();
             setLoading(false)
-        });
+        // });
     }
 
     // 取消

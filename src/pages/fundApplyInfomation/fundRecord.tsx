@@ -5,16 +5,13 @@
 import React, { useState } from 'react';
 import { Button, Input, DatePicker, Radio,Select ,Form} from 'antd'
 import { Page } from '../common'
-import { fundRecordColumns } from "./fundListHead.json"
+import { fundRecordColumns } from "./fundRecord.json"
 
-import OverView from './overView'; // 查看付款记录详情
+import OverViewRecord from './overViewRecord'; // 查看付款记录详情
 const test = [{label:"1",code:1}, {label:"2",code:2}, {label:"3",code:3}];
 const testDp = [{label:"1",code:1}, {label:"2",code:2}, {label:"3",code:3}];
 export default function FaundInfomation() {
-    const [filterValue, setFilterValue] = useState({});
-    const [ refresh, setRefresh ] = useState<boolean>(false);
-    // const [AddVisible, setAddVisible] = useState(false);
-    const [ visibleOverView, setVisibleOverView ] = useState<boolean>(false);
+    const [ visibleOverView, setVisibleOverView ] = useState<boolean>(true);
     const confirmed = [{ "title": "备注", "dataIndex": "description"}]
     // 查询按钮
     const onFilterSubmit = (value: any) => {
@@ -23,7 +20,6 @@ export default function FaundInfomation() {
             value.endPayApplyTime = formatDate[0]
             value.startPayApplyTime = formatDate[1]
         }
-        setFilterValue(value)
         return value
     }
     // 新增回调
@@ -45,7 +41,6 @@ export default function FaundInfomation() {
             <Page
                 path="/tower-finance/payApply/payment"
                 onFilterSubmit={onFilterSubmit}
-                filterValue={{ ...filterValue}}
                 searchFormItems={[
                     {
                         name: 'fuzzyQuery',
@@ -84,7 +79,6 @@ export default function FaundInfomation() {
                         金额合计：100000.00元
                     </div>
                 }
-                refresh={ refresh }
                 columns={[
                     ...fundRecordColumns,
                     {
@@ -97,14 +91,8 @@ export default function FaundInfomation() {
                         }
                     }]}
             />
-            {/* 新增 */}
-            {/* <AddModal
-                visible={AddVisible}
-                onCancel={() => setAddVisible(false)}
-                onOk={handleOk}
-            /> */}
             {/* 查看 */}
-            <OverView
+            <OverViewRecord
                 title={confirmed}
                 visible={visibleOverView}
                 onCancel={() => setVisibleOverView(false)}
