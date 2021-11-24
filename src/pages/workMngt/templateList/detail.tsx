@@ -1,10 +1,12 @@
 import React, { useState, } from "react"
 import { Button, Popconfirm, } from 'antd'
 import { Page } from '../../common'
-import { useHistory } from "react-router-dom"
+import { useHistory, useRouteMatch } from "react-router-dom"
+import RequestUtil from "../../../utils/RequestUtil"
 export default function TemplateDetail() {
     const history = useHistory()
-    const [filterValue, setFilterValue] = useState<any>({})
+    const match: any = useRouteMatch()
+    const [refresh, setRefresh] = useState(false);
     const columns: any[] = [
         {
             title: '序号',
@@ -48,15 +50,13 @@ export default function TemplateDetail() {
                             placement="bottomRight"
                             title={text}
                             onConfirm={() => {
-
+                                deleteItem(item.id)
                             }}
-                            okText="Yes"
-                            cancelText="No"
+                            okText="是"
+                            cancelText="否"
                         >
                             <span
                                 style={{ cursor: 'pointer', color: '#FF8C00' }}
-                                onClick={() => {
-                                }}
                             >删除</span>
                         </Popconfirm>
                         <span
@@ -69,31 +69,29 @@ export default function TemplateDetail() {
             }
         },
     ]
-    const onFilterSubmit = (value: any) => {
-        if (value.updateStartTime) {
-            const formatDate = value.updateStartTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateStartTime = formatDate[0]
-            value.updateEndTime = formatDate[1]
-        }
-        setFilterValue({ ...filterValue, ...value })
-        return value
+    /**
+     * 删除
+     * @param templateId 
+     */
+    const deleteItem = async (templateId: string) => {
+        await RequestUtil.put('/tower-science/loftingTemplate/delete', {
+            templateId,
+        })
+        setRefresh(!refresh)
     }
     return (
         <>
             <Page
-                path="/tower-supply/materialShortage"
-                filterValue={filterValue}
+                path={`/tower-science/loftingTemplate/record/${match.params.id}`}
                 columns={columns}
+                refresh={refresh}
                 extraOperation={
                     <div>
-                        <Button type="primary" ghost>导出</Button>
+                        <Button type="primary" ghost>上传</Button>
                         <Button type="primary" ghost onClick={() => { history.go(-1) }}>返回上一级</Button>
                     </div>
                 }
-                onFilterSubmit={onFilterSubmit}
-                searchFormItems={[
-
-                ]}
+                searchFormItems={[]}
             />
         </>
     )

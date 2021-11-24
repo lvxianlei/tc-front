@@ -76,10 +76,10 @@ export default function TemplateList() {
         },
     ]
     const onFilterSubmit = (value: any) => {
-        if (value.updateStartTime) {
-            const formatDate = value.updateStartTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateStartTime = formatDate[0]
-            value.updateEndTime = formatDate[1]
+        if (value.updateStatusTimeStart) {
+            const formatDate = value.updateStatusTimeStart.map((item: any) => item.format("YYYY-MM-DD"))
+            value.updateStatusTimeStart = `${formatDate[0]} 00:00:00`
+            value.updateStatusTimeEnd = `${formatDate[1]} 23:59:59`
         }
         setFilterValue({ ...filterValue, ...value })
         return value
@@ -87,14 +87,14 @@ export default function TemplateList() {
     return (
         <>
             <Page
-                path="/tower-supply/materialShortage"
+                path="/tower-science/loftingTemplate"
                 filterValue={filterValue}
                 columns={columns}
                 extraOperation={<Button type="primary" ghost>导出</Button>}
                 onFilterSubmit={onFilterSubmit}
                 searchFormItems={[
                     {
-                        name: 'handlerId',
+                        name: 'drawType',
                         label: '图纸类型',
                         children: (
                             <Select style={{ width: 200 }} placeholder="请选择">
@@ -105,12 +105,12 @@ export default function TemplateList() {
                         )
                     },
                     {
-                        name: 'updateStartTime',
+                        name: 'updateStatusTimeStart',
                         label: '日期选择',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                     {
-                        name: 'shortageStatus',
+                        name: 'status',
                         label: '上传状态',
                         children: (
                             <Select style={{ width: 200 }} placeholder="请选择">
@@ -121,7 +121,7 @@ export default function TemplateList() {
                         )
                     },
                     {
-                        name: 'fuzzyQuery',
+                        name: 'fuzzyMsg',
                         label: '查询',
                         children: <Input placeholder="放样任务编号/内部合同编号/任务单编号/塔型" style={{ width: 300 }} />
                     }
