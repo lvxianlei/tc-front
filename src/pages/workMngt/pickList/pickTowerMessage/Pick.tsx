@@ -436,25 +436,7 @@ export default function Lofting(): React.ReactNode {
                         <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}`)}}>返回上一级</Button>
                     </Space>
                 }
-                searchFormItems={[
-                    // {
-                    //     name: 'materialName',
-                    //     label: '材料名称',
-                    //     children: <Input />
-                    //     // <Select>
-                    //     //                 { materialStandardOptions && materialStandardOptions.map(({ id, name }, index) => {
-                    //     //                     return <Select.Option key={ index } value={ id }>
-                    //     //                         { name }
-                    //     //                     </Select.Option>
-                    //     //                 }) }
-                    //     //             </Select>
-                    // },
-                    // {
-                    //     name: 'structureTexture',
-                    //     label: '材质',
-                    //     children: <Input />
-                    // }
-                ]}
+                searchFormItems={[]}
             />
     </Form>
     <Modal title='提示' visible={tipVisible} footer={false} onCancel={()=>{
