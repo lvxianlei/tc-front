@@ -234,7 +234,7 @@ export default function DataMngt(): React.ReactNode {
                 {
                     name: 'dataStatus',
                     label: '在库状态',
-                    children: <Form.Item name="dataStatus">
+                    children: <Form.Item name="dataStatus" initialValue="">
                         <Select placeholder="请选择" style={{ width: "150px" }}>
                             <Select.Option value={''} key="4">全部</Select.Option>
                             <Select.Option value={0} key="0">待入库</Select.Option>
