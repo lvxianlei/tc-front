@@ -3,7 +3,6 @@ import { Spin } from 'antd';
 import { BaseInfo, CommonTable, DetailContent, DetailTitle } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-
 const tableColumns = [
     {
         key: 'createUserName',

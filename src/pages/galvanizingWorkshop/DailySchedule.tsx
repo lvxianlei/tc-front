@@ -6,7 +6,6 @@ import styles from './DailySchedule.module.less';
 import { useLocation } from 'react-router-dom';
 import RequestUtil from '../../utils/RequestUtil';
 import TeamSelectionModal from '../../components/TeamSelectionModal';
-
 interface IDetail {
     readonly accountEquipmentName?: string;
 }

@@ -5,7 +5,6 @@ import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './TaskDetail.module.less';
 import { ITenant } from '../system-mngt/ITenant';
-
 const tableColumns = [
     {
         key: 'recordType',
