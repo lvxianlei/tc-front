@@ -180,7 +180,7 @@ export default function TowerInformation(): React.ReactNode {
                             onRefresh();
                         }) }>删除</Button> : <Button type="link" disabled>删除</Button>
                     }
-                    <TowerLoftingAssign title="指派信息" id={ params.id } update={ onRefresh } />
+                    <TowerLoftingAssign type="detail" title="指派信息" detailData={ record } id={ params.id } update={ onRefresh } />
                     <Button type="link">段模式</Button>
                 </Space>
             )
