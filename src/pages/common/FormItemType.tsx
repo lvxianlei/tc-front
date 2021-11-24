@@ -77,8 +77,8 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                     startTimeName[0] = startTimeName[0].toLocaleUpperCase()
                     endTimeName[0] = endTimeName[0].toLocaleUpperCase()
                     const formatDate = params[columnItem?.dataIndex].map((item: any) => item.format("YYYY-MM-DD"))
-                    params[`start${startTimeName.join("")}`] = formatDate[0]
-                    params[`end${startTimeName.join("")}`] = formatDate[1]
+                    params[`start${startTimeName.join("")}`] = formatDate[0] + " 00:00:00"
+                    params[`end${startTimeName.join("")}`] = formatDate[1] + " 23:59:59"
                     delete params[columnItem?.dataIndex]
                 }
             })
@@ -124,7 +124,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
             </Row>
         </Form>}
         <CommonTable
-            columns={data.columns}
+            columns={columns}
             rowSelection={{
                 selectedRowKeys: select,
                 type: data.selectType || "radio",
