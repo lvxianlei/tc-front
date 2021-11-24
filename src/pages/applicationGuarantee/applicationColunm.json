@@ -135,6 +135,7 @@
             "title": "要求交回日期",
             "type": "date",
             "format": "YYYY-MM-DD",
+            "placeholder": "请选择要求交回日期",
             "rules": [
                 {
                     "required": true,
@@ -146,138 +147,144 @@
             "dataIndex": "guaranteeReturnTime",
             "title": "交回日期",
             "type": "date",
+            "placeholder": "请选择交回日期",
             "format": "YYYY-MM-DD",
             "rules": [
                 {
                     "required": true,
-                    "message": "请选择要求交回日期"
+                    "message": "请选择交回日期"
                 }
             ]
         },
         {
-            "dataIndex": "userNames",
+            "dataIndex": "isOriginalScript",
             "title": "是否交回原件",
+            "placeholder": "请选择是否交回原件",
             "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择是否交回原件"
+                }
+            ],
             "enum": [
                 {
-                    "value": 0,
-                    "label": "投标保证金"
+                    "value": 1,
+                    "label": "是"
                 },
                 {
-                    "value": 1,
-                    "label": "合同应收款"
+                    "value": 0,
+                    "label": "否"
                 }
             ]
         },
         {
-            "dataIndex": "stateName",
-            "title": "原因"
+            "dataIndex": "reason",
+            "title": "原因",
+            "placeholder": "请输入原因"
         },
         {
-            "dataIndex": "stateNames",
+            "dataIndex": "description",
             "title": "备注",
+            "placeholder": "请输入备注",
             "type": "textarea"
         }
     ],
     "seeBaseForm": [
         {
-            "dataIndex": "stateName",
+            "dataIndex": "guaranteeNumber",
             "title": "保函编号"
         },
         {
-            "dataIndex": "stateName",
+            "dataIndex": "applyNumber",
             "title": "申请编号"
         },
         {
-            "dataIndex": "stateName",
+            "dataIndex": "applyTime",
             "title": "申请日期"
         },
         {
-            "dataIndex": "stateName",
+            "dataIndex": "applyDeptId",
             "title": "申请部门"
         },
         {
-            "dataIndex": "stateName",
+            "dataIndex": "projectName",
             "title": "项目名称"
         },
         {
-            "dataIndex": "stateName",
+            "dataIndex": "beneficiaryName",
             "title": "受益人名称"
         },
         {
-            "dataIndex": "stateName",
+            "dataIndex": "contractNumber",
             "title": "合同编号"
         },
         {
-            "dataIndex": "stateName",
+            "dataIndex": "biddingNumber",
             "title": "招标编号"
         },
         {
-            "dataIndex": "stateName",
+            "dataIndex": "contractPrice",
             "title": "合同总价"
         },
         {
-            "dataIndex": "stateName",
+            "dataIndex": "guaranteeProportion",
             "title": "保函所占比(%)"
         },
         {
-            "dataIndex": "stateName",
-            "title": "保函种类"
+            "dataIndex": "guaranteeType",
+            "title": "保函类型"
         },
         {
-            "dataIndex": "stateName",
-            "title": "保函份数"
-        },
-        {
-            "dataIndex": "stateName",
+            "dataIndex": "guaranteePrice",
             "title": "保函金额"
         },
         {
-            "dataIndex": "stateName",
+            "dataIndex": "applicantStatus",
             "title": "办理状态"
         },
         {
-            "dataIndex": "stateName",
+            "dataIndex": "description",
             "title": "备注"
         }
     ],
     "guaranteeForm": [
         {
-            "dataIndex": "stateName",
+            "dataIndex": "issuanceTime",
             "title": "出具日期"
         },
         {
-            "dataIndex": "stateName",
+            "dataIndex": "requiredReturnTime",
             "title": "要求交回日期"
         },
         {
-            "dataIndex": "stateName",
+            "dataIndex": "effectiveTime",
             "title": "保函有效截止期"
         },
         {
-            "dataIndex": "stateName",
+            "dataIndex": "guaranteeDescription",
             "title": "保函信息备注"
         }
     ],
     "recoveryForm": [
         {
-            "dataIndex": "stateName",
+            "dataIndex": "requiredReturnTime",
             "title": "要求交回日期"
         },
         {
-            "dataIndex": "stateName",
+            "dataIndex": "guaranteeReturnTime",
             "title": "保函交回日期"
         },
         {
-            "dataIndex": "stateName",
+            "dataIndex": "isOriginalScript",
             "title": "是否交回文件"
         },
         {
-            "dataIndex": "stateName",
+            "dataIndex": "reason",
             "title": "原因"
         },
         {
-            "dataIndex": "stateName",
+            "dataIndex": "recoveryDescription",
             "title": "备注"
         }
     ],
@@ -303,28 +310,28 @@
     "seeApprovalRecord": [
         {
             "title": "部门",
-            "dataIndex": "name"
+            "dataIndex": "department"
         },
         {
             "title": "审批人",
-            "dataIndex": "fileSize"
+            "dataIndex": "approver"
         },
         {
             "title": "职位",
-            "dataIndex": "userName"
+            "dataIndex": "position"
         },
         {
             "title": "审批时间",
-            "dataIndex": "fileUploadTime",
+            "dataIndex": "batchTime",
             "type": "date"
         },
         {
             "title": "审批结果",
-            "dataIndex": "userName"
+            "dataIndex": "batchResult"
         },
         {
             "title": "意见",
-            "dataIndex": "fileUploadTime",
+            "dataIndex": "opinion",
             "type": "date"
         }
     ]

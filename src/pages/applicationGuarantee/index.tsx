@@ -7,6 +7,7 @@ import { Button, Input, DatePicker, Radio, Select } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { Page } from '../common';
 import { collectionListHead, approvalStatus } from "./applicationColunm.json";
+import RequestUtil from '../../utils/RequestUtil';
 
 // 引入填写保函信息的弹框
 import FillGuaranteeInformation from './fillGuaranteeInformation';
@@ -31,6 +32,16 @@ export default function ApplicationColunm() {
             value.startRefundTime = formatDate[0]
             value.endRefundTime = formatDate[1]
         }
+        if (value.issuanceDateTime) {
+            const formatDate = value.issuanceDateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startRefundTime = formatDate[0]
+            value.endRefundTime = formatDate[1]
+        }
+        if (value.guaranteeTime) {
+            const formatDate = value.guaranteeTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startRefundTime = formatDate[0]
+            value.endRefundTime = formatDate[1]
+        }
         return value
     }
     
@@ -46,8 +57,12 @@ export default function ApplicationColunm() {
     }
 
     // 回收保函信息
-    const handleOkuseState = () => {
-        setVisibleRecovery(false);
+    const handleOkuseState = (data: object, callBack: any) => {
+        // setVisibleRecovery(false);
+        setTimeout(() => {
+            callBack();
+            setVisibleRecovery(false);
+        }, 1000);
     }
 
     return (
@@ -111,7 +126,17 @@ export default function ApplicationColunm() {
                     {
                         name: 'startRefundTime',
                         label: '申请日期',
-                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
+                    },
+                    {
+                        name: 'issuanceDateTime',
+                        label: '出具日期',
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
+                    },
+                    {
+                        name: 'guaranteeTime',
+                        label: '保函交回日期',
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
                     },
                     {
                         name: 'approvalStatus',
