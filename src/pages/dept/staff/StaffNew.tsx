@@ -32,6 +32,7 @@ export default function StaffNew(): React.ReactNode {
     const history = useHistory();
     const location = useLocation<{ type: string, data: IStaff[] }>();
     const [ dataList, setDataList ] = useState<IStaff[]>([]);
+    const [ oldDataList, setOldDataList ] = useState<IStaff[]>([]);
     const [ departData, setDepartData ] = useState<IMetaDept[]>([]);
     const [ roleList, setRoleList ] = useState<IRole[]>([]);
     const [ jobsList, setJobsList ] = useState<IJobs[]>([]);
@@ -105,7 +106,7 @@ export default function StaffNew(): React.ReactNode {
             width: 150,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "autoAccount"] } key={ index } initialValue={ _ }>
-                    <Checkbox key={ record.id } checked={ _ === 2 } onChange={ (e) => {
+                    <Checkbox key={ record.id } checked={ _ === 2 } disabled={ location.state.type === 'edit' && oldDataList[index].autoAccount === 2 } onChange={ (e) => {
                         const data = form.getFieldsValue(true).list;
                         data[index] = {
                             ...data[index],
@@ -307,6 +308,7 @@ export default function StaffNew(): React.ReactNode {
                 }
             })
             setDataList(data);
+            setOldDataList(data);
         } else {
             setDataList([]);
         }
