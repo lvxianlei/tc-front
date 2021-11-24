@@ -325,7 +325,6 @@ export default function CertificateNew(): React.ReactNode {
                             }
                         })
                     }
-                    console.log(value)
                     if(location.state.type === 'new') {
                         RequestUtil.post(`/tower-system/certificateRecord`, { certificateRecordDTOS: value }).then(res => {
                             history.goBack();
