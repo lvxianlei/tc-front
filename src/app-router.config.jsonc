@@ -19,7 +19,7 @@
     { // 司机端任务详情
       "name": "任务详情",
       "path": "/driverSide/taskDetail",
-      "module": "./pages/DriverSide/TaskDetail",
+      "module": "./pages/driverSide/TaskDetail",
       "exact": true
     }
   ],
