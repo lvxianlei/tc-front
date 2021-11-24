@@ -1628,56 +1628,56 @@
     { // 车辆转运-运输任务面板
       "name": "运输任务面板",
       "path": "/vehicleTransport/transportTask",
-      "module": "./pages/VehicleTransport/TransportTask",
+      "module": "./pages/vehicleTransport/TransportTask",
       "exact": true,
       "authority": "approvalm"
     },
     { // 车辆转运-派工
       "name": "派工",
       "path": "/vehicleTransport/transportTask/dispatch",
-      "module": "./pages/VehicleTransport/TransportDispatch",
+      "module": "./pages/vehicleTransport/TransportDispatch",
       "exact": true,
       "authority": "approvalm"
     },
     { // 车辆转运-派工-构件明细
       "name": "构件明细",
       "path": "/vehicleTransport/transportTask/dispatch/detail/:id",
-      "module": "./pages/VehicleTransport/TransportDetail",
+      "module": "./pages/vehicleTransport/TransportDetail",
       "exact": true,
       "authority": "approvalm"
     },
     { // 车辆转运-任务详情
       "name": "任务详情",
       "path": "/vehicleTransport/transportTask/taskDetail/:id",
-      "module": "./pages/VehicleTransport/TaskDetail",
+      "module": "./pages/vehicleTransport/TaskDetail",
       "exact": true,
       "authority": "approvalm"
     },
     { // 镀锌车间-日计划列表
       "name": "日计划列表",
       "path": "/galvanizingWorkshop/dailySchedule",
-      "module": "./pages/GalvanizingWorkshop/DailySchedule",
+      "module": "./pages/galvanizingWorkshop/DailySchedule",
       "exact": true,
       "authority": "approvalm"
     },
     { // 镀锌车间-过磅单列表
       "name": "过磅单列表",
       "path": "/galvanizingWorkshop/weighingList",
-      "module": "./pages/GalvanizingWorkshop/WeighingList",
+      "module": "./pages/galvanizingWorkshop/WeighingList",
       "exact": true,
       "authority": "approvalm"
     },
     { // 镀锌车间-新增过磅单
       "name": "新增",
       "path": "/galvanizingWorkshop/weighingList/weighingNew",
-      "module": "./pages/GalvanizingWorkshop/WeighingNew",
+      "module": "./pages/galvanizingWorkshop/WeighingNew",
       "exact": true,
       "authority": "approvalm"
     },
     { // 镀锌车间-编辑过磅单
       "name": "编辑",
       "path": "/galvanizingWorkshop/weighingList/weighingSetting/:id",
-      "module": "./pages/GalvanizingWorkshop/WeighingNew",
+      "module": "./pages/galvanizingWorkshop/WeighingNew",
       "exact": true,
       "authority": "approvalm"
     },
@@ -1727,28 +1727,28 @@
     { // 公告管理
       "name": "公告管理",
       "path": "/announcement",
-      "module": "./pages/Announcement/AnnouncementMngt",
+      "module": "./pages/announcement/AnnouncementMngt",
       "exact": true,
       "authority": "approvalm"
     },
     { // 公告管理-新发布
       "name": "新发布",
       "path": "/announcement/new",
-      "module": "./pages/Announcement/AnnouncementNew",
+      "module": "./pages/announcement/AnnouncementNew",
       "exact": true,
       "authority": "approvalm"
     },
     { // 公告管理-编辑
       "name": "编辑",
       "path": "/announcement/edit/:id",
-      "module": "./pages/Announcement/AnnouncementNew",
+      "module": "./pages/announcement/AnnouncementNew",
       "exact": true,
       "authority": "approvalm"
     },
     { // 公告管理-详情
       "name": "详情",
       "path": "/announcement/detail/:id",
-      "module": "./pages/Announcement/AnnouncementDetail",
+      "module": "./pages/announcement/AnnouncementDetail",
       "exact": true,
       "authority": "approvalm"
     },

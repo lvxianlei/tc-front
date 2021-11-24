@@ -12,17 +12,17 @@ interface IDetail {
 }
 
 export default function DailySchedule(): React.ReactNode {
-    const [ refresh, setRefresh ] = useState<boolean>(false);
-    const [ filterValue, setFilterValue ] = useState({});
+    const [refresh, setRefresh] = useState<boolean>(false);
+    const [filterValue, setFilterValue] = useState({});
     const location = useLocation<{ state: {} }>();
-    
+
     const columns = [
         {
             key: 'index',
             title: '序号',
             dataIndex: 'index',
             width: 50,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
             key: 'taskNum',
@@ -151,16 +151,16 @@ export default function DailySchedule(): React.ReactNode {
             fixed: 'right' as FixedType,
             width: 150,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                <Button type="link" onClick={ () => {
+                <Button type="link" onClick={() => {
                     setVisible(true);
-                } }>派工</Button>
+                }}>派工</Button>
             )
         }
     ]
 
-    const [ visible, setVisible ] = useState(false);
-    const [ detail, setDetail ] = useState<IDetail>({});
-    const [ form ] = Form.useForm();
+    const [visible, setVisible] = useState(false);
+    const [detail, setDetail] = useState<IDetail>({});
+    const [form] = Form.useForm();
 
     const closeModal = () => {
         setVisible(false);
@@ -175,93 +175,93 @@ export default function DailySchedule(): React.ReactNode {
     return <>
         <Page
             path="/tower-science/loftingTask/taskPage"
-            columns={ columns }
-            headTabs={ [{
+            columns={columns}
+            headTabs={[{
                 label: '未指派',
                 key: 0
             }, {
                 label: '已指派',
                 key: 1
-            }] }
-            requestData={ { status: location.state } }
-            extraOperation={ <Button type="primary" onClick={ () => {
+            }]}
+            requestData={{ status: location.state }}
+            extraOperation={<Button type="primary" onClick={() => {
                 setVisible(true);
-            } }>派工</Button> }
-            refresh={ refresh }
-            searchFormItems={ [
+            }}>派工</Button>}
+            refresh={refresh}
+            searchFormItems={[
                 {
                     name: 'fuzzyMsg',
                     label: '',
-                    children: <Input style={{ width: '300px' }} placeholder="请输入订单工程名称/计划号/塔型进行查询"/>
+                    children: <Input style={{ width: '300px' }} placeholder="请输入订单工程名称/计划号/塔型进行查询" />
                 },
                 {
                     name: 'updateStatusTime',
                     label: '送齐时间',
                     children: <DatePicker.RangePicker />
                 }
-            ] }
-            filterValue={ filterValue }
-            onFilterSubmit = { (values: Record<string, any>) => {
-                if(values.updateStatusTime) {
+            ]}
+            filterValue={filterValue}
+            onFilterSubmit={(values: Record<string, any>) => {
+                if (values.updateStatusTime) {
                     const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
                     values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                     values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
                 }
                 setFilterValue(values);
                 return values;
-             } }
+            }}
         />
-        <Modal title="派工" width='50%' visible={ visible } cancelText="取消" okText="确认派工" onCancel={ closeModal } onOk={ submit }>
-            <Form form={ form } labelCol={{ span: 6 }}>
+        <Modal title="派工" width='50%' visible={visible} cancelText="取消" okText="确认派工" onCancel={closeModal} onOk={submit}>
+            <Form form={form} labelCol={{ span: 6 }}>
                 <Row>
-                    <Col span={ 12 }>
+                    <Col span={12}>
                         <Form.Item label="穿挂班组" name="chaungua" rules={[{
                             required: true,
                             message: '请选择穿挂班组'
                         }]}>
-                            <Input maxLength={ 50 } value={ detail.accountEquipmentName } addonBefore={ <TeamSelectionModal onSelect={ (selectedRows: object[] | any) => {
+                            <Input maxLength={50} value={detail.accountEquipmentName} addonBefore={<TeamSelectionModal onSelect={(selectedRows: object[] | any) => {
                                 // setSelectedRows(selectedRows);
                                 setDetail({ ...detail, accountEquipmentName: selectedRows[0].deviceName });
                                 form.setFieldsValue({ accountEquipmentName: selectedRows[0].deviceName })
-                            } }/> } disabled />
+                            }} />} disabled />
                         </Form.Item>
                     </Col>
-                    <Col span={ 12 }>
+                    <Col span={12}>
                         <Form.Item label="酸洗班组" name="chaungua" rules={[{
                             required: true,
                             message: '请选择酸洗班组'
                         }]}>
-                            <Input maxLength={ 50 } value={ detail.accountEquipmentName } addonBefore={ <TeamSelectionModal onSelect={ (selectedRows: object[] | any) => {
+                            <Input maxLength={50} value={detail.accountEquipmentName} addonBefore={<TeamSelectionModal onSelect={(selectedRows: object[] | any) => {
                                 // setSelectedRows(selectedRows);
                                 setDetail({ ...detail, accountEquipmentName: selectedRows[0].deviceName });
                                 form.setFieldsValue({ accountEquipmentName: selectedRows[0].deviceName })
-                            } }/> } disabled />
+                            }} />} disabled />
                         </Form.Item>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={ 12 }>
+                    <Col span={12}>
                         <Form.Item label="检修班组" name="chaungua" rules={[{
                             required: true,
                             message: '请选择检修班组'
                         }]}>
-                            <Input maxLength={ 50 } value={ detail.accountEquipmentName } addonBefore={ <TeamSelectionModal onSelect={ (selectedRows: object[] | any) => {
+                            <Input maxLength={50} value={detail.accountEquipmentName} addonBefore={<TeamSelectionModal onSelect={(selectedRows: object[] | any) => {
                                 // setSelectedRows(selectedRows);
                                 setDetail({ ...detail, accountEquipmentName: selectedRows[0].deviceName });
                                 form.setFieldsValue({ accountEquipmentName: selectedRows[0].deviceName })
-                            } }/> } disabled />
+                            }} />} disabled />
                         </Form.Item>
                     </Col>
-                    <Col span={ 12 }>
+                    <Col span={12}>
                         <Form.Item label="锌锅班组" name="chaungua" rules={[{
                             required: true,
                             message: '请选择锌锅班组'
                         }]}>
-                            <Input maxLength={ 50 } value={ detail.accountEquipmentName } addonBefore={ <TeamSelectionModal onSelect={ (selectedRows: object[] | any) => {
+                            <Input maxLength={50} value={detail.accountEquipmentName} addonBefore={<TeamSelectionModal onSelect={(selectedRows: object[] | any) => {
                                 // setSelectedRows(selectedRows);
                                 setDetail({ ...detail, accountEquipmentName: selectedRows[0].deviceName });
                                 form.setFieldsValue({ accountEquipmentName: selectedRows[0].deviceName })
-                            } }/> } disabled />
+                            }} />} disabled />
                         </Form.Item>
                     </Col>
                 </Row>
