@@ -5,8 +5,8 @@
 */
 
 import React, { useState } from 'react';
-import { Space, DatePicker, Select, Button, Popconfirm, message, Row, Col, Form, TreeSelect } from 'antd';
-import { Page } from '../../common';
+import { Space, DatePicker, Select, Button, Popconfirm, message, Row, Col, Form, TreeSelect, Modal } from 'antd';
+import { CommonTable, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
@@ -16,6 +16,7 @@ import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import useRequest from '@ahooksjs/use-request';
 import AuthUtil from '../../../utils/AuthUtil';
+import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 
 export default function TowerInformation(): React.ReactNode {
     const history = useHistory();
@@ -25,6 +26,8 @@ export default function TowerInformation(): React.ReactNode {
     const [ checkUser, setcheckUser ] = useState([]);
     const location = useLocation<{ loftingLeader: string, status: number }>();
     const userId = AuthUtil.getUserId();
+    const [ visible, setvisible ] = useState(false);
+    const [ sectionData, setSectionData ] = useState([]);
     
     const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
@@ -187,113 +190,147 @@ export default function TowerInformation(): React.ReactNode {
         }
     ]
 
+    const sectionColumns = [
+        { 
+            title: '段号', 
+            dataIndex: 'name', 
+            key: 'name'
+        },
+        { 
+            title: '模式', 
+            dataIndex: 'singleNumberCount', 
+            key: 'singleNumberCount',
+            render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                    { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                        return <Select.Option key={ index } value={ id + ',' + name }>
+                            { name }
+                        </Select.Option>
+                    }) }
+                </Select>
+            )
+        }
+    ]
+
     const onRefresh = () => {
         setRefresh(!refresh);
     }
 
-    return <Page
-        path={ `/tower-science/productSegment` }
-        columns={ columns }
-        headTabs={ [] }
-        refresh={ refresh }
-        requestData={{ productCategoryId: params.id }}
-        extraOperation={ <Space direction="horizontal" size="small">
-            <Button type="primary" ghost>导出</Button>
-            <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/modalList` }><Button type="primary" ghost>模型</Button></Link><Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/processCardList` }><Button type="primary" ghost>大样图工艺卡</Button></Link>
-            <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/NCProgram` }><Button type="primary" ghost>NC程序</Button></Link>
-            {
-                userId === location.state.loftingLeader ? <>
-                <Popconfirm
-                    title="确认提交?"
-                    onConfirm={ () => {
-                        RequestUtil.post(`/tower-science/productCategory/submit`, { productCategoryId: params.id }).then(res => {
-                            message.success('提交成功');
-                            history.goBack();
-                        });
-                    } }
-                    okText="提交"
-                    cancelText="取消"
-                    disabled={ !(location.state.status < 3) }
-                >
-                    <Button type="primary" disabled={ !(location.state.status < 3) } ghost>提交</Button>
-                </Popconfirm>
-                { location.state.status < 3 ? <TowerLoftingAssign title="塔型放样指派" id={ params.id } update={ onRefresh } /> : <Button type="primary" disabled ghost>塔型放样指派</Button> }
-                </>
-                : null
-            }
-            <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
-        </Space> }
-        searchFormItems={ [
-            {
-                name: 'updateStatusTime',
-                label: '最新状态变更时间',
-                children: <DatePicker.RangePicker />
-            },
-            {
-                name: 'status',
-                label: '放样状态',
-                children: <Select style={{ width: '120px' }} placeholder="请选择">
-                    <Select.Option value="" key="4">全部</Select.Option>
-                    <Select.Option value="1" key="1">放样中</Select.Option>
-                    <Select.Option value="2" key="2">校核中</Select.Option>
-                    <Select.Option value="3" key="3">已完成</Select.Option>
-                </Select>
-            },
-            {
-                name: 'loftingUser',
-                label: '放样人',
-                children: <Row>
-                    <Col>
-                        <Form.Item name="loftingUserDept">
-                            <TreeSelect placeholder="请选择" onChange={ (value: any) => { onDepartmentChange(value, 'loftingUserDept') } } style={{ width: "150px" }}>
-                                { renderTreeNodes(wrapRole2DataNode(departmentData)) }
-                            </TreeSelect>
-                        </Form.Item>
-                    </Col>
-                    <Col>
-                        <Form.Item name="loftingUser">
-                            <Select placeholder="请选择" style={{ width: "150px" }}>
-                                { loftingUser && loftingUser.map((item: any) => {
-                                    return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                                }) }
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                </Row>
-            },
-            {
-                name: 'checkUser',
-                label: '校核人',
-                children: <Row>
-                    <Col>
-                        <Form.Item name="checkUserDept">
-                            <TreeSelect placeholder="请选择" onChange={ (value: any) => { onDepartmentChange(value, 'checkUserDept') } } style={{ width: "150px" }}>
-                                { renderTreeNodes(wrapRole2DataNode(departmentData)) }
-                            </TreeSelect>
-                        </Form.Item>
-                    </Col>
-                    <Col>
-                        <Form.Item name="checkUser">
-                            <Select placeholder="请选择" style={{ width: "150px" }}>
-                                { checkUser && checkUser.map((item: any) => {
-                                    return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
-                                }) }
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                </Row>
-            }
-        ] }
-        onFilterSubmit = { (values: Record<string, any>) => {
-            if(values.updateStatusTime) {
-                const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
-                values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
-                values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
-            }
-            return values;
-        } }
-        tableProps={{
-            pagination: false
-        }}
-    />
+    const saveSection = () => {
+
+    }
+
+    return <>
+        <Page
+            path={ `/tower-science/productSegment` }
+            columns={ columns }
+            headTabs={ [] }
+            refresh={ refresh }
+            requestData={{ productCategoryId: params.id }}
+            extraOperation={ <Space direction="horizontal" size="small">
+                <Button type="primary" ghost>导出</Button>
+                <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/modalList` }><Button type="primary" ghost>模型</Button></Link><Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/processCardList` }><Button type="primary" ghost>大样图工艺卡</Button></Link>
+                <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/NCProgram` }><Button type="primary" ghost>NC程序</Button></Link>
+                {
+                    userId === location.state.loftingLeader ? <>
+                    <Popconfirm
+                        title="确认提交?"
+                        onConfirm={ () => {
+                            RequestUtil.post(`/tower-science/productCategory/submit`, { productCategoryId: params.id }).then(res => {
+                                message.success('提交成功');
+                                history.goBack();
+                            });
+                        } }
+                        okText="提交"
+                        cancelText="取消"
+                        disabled={ !(location.state.status < 3) }
+                    >
+                        <Button type="primary" disabled={ !(location.state.status < 3) } ghost>提交</Button>
+                    </Popconfirm>
+                    { location.state.status < 3 ? <TowerLoftingAssign title="塔型放样指派" id={ params.id } update={ onRefresh } /> : <Button type="primary" disabled ghost>塔型放样指派</Button> }
+                    </>
+                    : null
+                }
+                <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
+            </Space> }
+            searchFormItems={ [
+                {
+                    name: 'updateStatusTime',
+                    label: '最新状态变更时间',
+                    children: <DatePicker.RangePicker />
+                },
+                {
+                    name: 'status',
+                    label: '放样状态',
+                    children: <Select style={{ width: '120px' }} placeholder="请选择">
+                        <Select.Option value="" key="4">全部</Select.Option>
+                        <Select.Option value="1" key="1">放样中</Select.Option>
+                        <Select.Option value="2" key="2">校核中</Select.Option>
+                        <Select.Option value="3" key="3">已完成</Select.Option>
+                    </Select>
+                },
+                {
+                    name: 'loftingUser',
+                    label: '放样人',
+                    children: <Row>
+                        <Col>
+                            <Form.Item name="loftingUserDept">
+                                <TreeSelect placeholder="请选择" onChange={ (value: any) => { onDepartmentChange(value, 'loftingUserDept') } } style={{ width: "150px" }}>
+                                    { renderTreeNodes(wrapRole2DataNode(departmentData)) }
+                                </TreeSelect>
+                            </Form.Item>
+                        </Col>
+                        <Col>
+                            <Form.Item name="loftingUser">
+                                <Select placeholder="请选择" style={{ width: "150px" }}>
+                                    { loftingUser && loftingUser.map((item: any) => {
+                                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                    }) }
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                },
+                {
+                    name: 'checkUser',
+                    label: '校核人',
+                    children: <Row>
+                        <Col>
+                            <Form.Item name="checkUserDept">
+                                <TreeSelect placeholder="请选择" onChange={ (value: any) => { onDepartmentChange(value, 'checkUserDept') } } style={{ width: "150px" }}>
+                                    { renderTreeNodes(wrapRole2DataNode(departmentData)) }
+                                </TreeSelect>
+                            </Form.Item>
+                        </Col>
+                        <Col>
+                            <Form.Item name="checkUser">
+                                <Select placeholder="请选择" style={{ width: "150px" }}>
+                                    { checkUser && checkUser.map((item: any) => {
+                                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                                    }) }
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                }
+            ] }
+            onFilterSubmit = { (values: Record<string, any>) => {
+                if(values.updateStatusTime) {
+                    const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
+                    values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
+                    values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
+                }
+                return values;
+            } }
+            tableProps={{
+                pagination: false
+            }}
+        />
+        <Modal title="段模式" visible={ true } onCancel={ () => setvisible(false) } footer={<Space direction="horizontal" size="small" >
+            <Button onClick={ () => setvisible(false) }>关闭</Button>
+            <Button type="primary" onClick={ saveSection } ghost>保存</Button>
+        </Space> }>
+            <CommonTable columns={ sectionColumns } showHeader={ false } pagination={ false } dataSource={ sectionData } />
+        </Modal>
+    </>
 }
