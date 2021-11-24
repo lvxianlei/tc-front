@@ -13,29 +13,29 @@ import useRequest from '@ahooksjs/use-request';
 
 const tableColumns = [
     {
-        key: 'recordType', 
-        title: '操作类型', 
+        key: 'recordType',
+        title: '操作类型',
         dataIndex: 'recordType'
     },
     {
-        key: 'stateFront', 
-        title: '操作前状态', 
+        key: 'stateFront',
+        title: '操作前状态',
         dataIndex: 'stateFront'
     },
     {
-        key: 'stateAfter', 
-        title: '操作后状态', 
+        key: 'stateAfter',
+        title: '操作后状态',
         dataIndex: 'stateAfter'
     },
-    {  
-        key: 'createUserName', 
-        title: '操作人', 
-        dataIndex: 'createUserName' 
+    {
+        key: 'createUserName',
+        title: '操作人',
+        dataIndex: 'createUserName'
     },
-    { 
-        key: 'createTime', 
-        title: '操作时间', 
-        dataIndex: 'createTime' 
+    {
+        key: 'createTime',
+        title: '操作时间',
+        dataIndex: 'createTime'
     }
 ]
 
@@ -113,7 +113,7 @@ export default function CertificateDetail(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-system/certificateRecord/${ params.id }`)
+        const data = await RequestUtil.get(`/tower-system/certificateRecord/${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data;
@@ -124,17 +124,17 @@ export default function CertificateDetail(): React.ReactNode {
     }
 
     return <>
-        <DetailContent operation={ [
+        <DetailContent operation={[
             <Space direction="horizontal" size="small" >
                 <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
             </Space>
-        ] }>
+        ]}>
             <DetailTitle title="证书信息" />
-            <BaseInfo columns={ baseColums } dataSource={ detailData } col={ 2 } />
+            <BaseInfo columns={baseColums} dataSource={detailData} col={2} />
             <DetailTitle title="所属员工信息" />
-            <BaseInfo columns={ UserColums } dataSource={ detailData } col={ 2 } />
-            <DetailTitle title="操作信息"/>
-            <CommonTable columns={ tableColumns } dataSource={ detailData.businessRecordVOList } pagination={ false } />
+            <BaseInfo columns={UserColums} dataSource={detailData} col={2} />
+            <DetailTitle title="操作信息" />
+            <CommonTable columns={tableColumns} dataSource={detailData.businessRecordVOList} pagination={false} />
         </DetailContent>
     </>
 }

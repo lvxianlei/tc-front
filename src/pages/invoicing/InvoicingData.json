@@ -1,20 +1,12 @@
 {
     "invoicingListHead": [
         {
-            "title": "申请编号",
+            "title": "开票任务编号",
             "dataIndex": "invoicingCode"
         },
         {
-            "title": "项目编号",
+            "title": "编号",
             "dataIndex": "projectCode"
-        },
-        {
-            "title": "内部合同编号",
-            "dataIndex": "contractCode"
-        },
-        {
-            "title": "计划号",
-            "dataIndex": "planCode"
         },
         {
             "title": "票面单位",
@@ -25,18 +17,14 @@
             "dataIndex": "contractName"
         },
         {
-            "title": "合计金额(元)",
+            "title": "开票合计金额(元)",
             "dataIndex": "ticketMoney",
             "type": "number"
         },
         {
-            "title": "合计重量(元/吨)",
+            "title": "开票合计重量(元/吨)",
             "dataIndex": "ticketWeight",
             "type": "number"
-        },
-        {
-            "title": "业务经理",
-            "dataIndex": "business"
         },
         {
             "title": "发票类型",
@@ -54,28 +42,18 @@
             ]
         },
         {
-            "title": "开票日期",
+            "title": "申请人",
+            "dataIndex": "ticketTime",
+            "type": "string"
+        },
+        {
+            "title": "申请日期",
             "dataIndex": "ticketTime",
             "type": "date",
             "format": "YYYY-MM-DD"
         },
         {
-            "title": "是否已全开",
-            "dataIndex": "isOpen",
-            "type": "select",
-            "enum": [
-                {
-                    "value": 2,
-                    "label": "发票未开完"
-                },
-                {
-                    "value": 3,
-                    "label": "发票已开完"
-                }
-            ]
-        },
-        {
-            "title": "开票时合同状态",
+            "title": "任务状态",
             "dataIndex": "contractType",
             "type": "select",
             "enum": [
@@ -98,122 +76,6 @@
                 {
                     "value": 5,
                     "label": "已发完货"
-                }
-            ]
-        },
-        {
-            "title": "承诺回款时间",
-            "dataIndex": "businessBackTime"
-        },
-        {
-            "title": "承诺回款比例",
-            "dataIndex": "backProportion",
-            "type": "number"
-        },
-        {
-            "title": "验收单",
-            "dataIndex": "isCheck",
-            "type": "select",
-            "enum": [
-                {
-                    "value": 1,
-                    "label": "无"
-                },
-                {
-                    "value": 2,
-                    "label": "有"
-                }
-            ]
-        },
-        {
-            "title": "合同单位",
-            "dataIndex": "contractCompany"
-        },
-        {
-            "title": "合同签订日期",
-            "dataIndex": "contractSignTime",
-            "type": "date",
-            "format": "YYYY-MM-DD"
-        },
-        {
-            "title": "开票方式",
-            "dataIndex": "openTicketType",
-            "type": "select",
-            "enum": [
-                {
-                    "value": 1,
-                    "label": "按重量开"
-                },
-                {
-                    "value": 2,
-                    "label": "按基数开"
-                }
-            ]
-        },
-        {
-            "title": "开票金额依据",
-            "dataIndex": "ticketBasis",
-            "type": "select",
-            "enum": [
-                {
-                    "value": 1,
-                    "label": "理重"
-                },
-                {
-                    "value": 2,
-                    "label": "过磅重量"
-                },
-                {
-                    "value": 3,
-                    "label": "合同约定"
-                },
-                {
-                    "value": 4,
-                    "label": "海关出口报关单"
-                }
-            ]
-        },
-        {
-            "title": "最后发货日期",
-            "dataIndex": "contractLastTime",
-            "type": "date",
-            "format": "YYYY-MM-DD"
-        },
-        {
-            "title": "开票次数",
-            "dataIndex": "ticketCount",
-            "type": "number"
-        },
-        {
-            "title": "制单人",
-            "dataIndex": "createUserName"
-        },
-        {
-            "title": "制单时间",
-            "dataIndex": "createTime",
-            "type": "date",
-            "format": "YYYY-MM-DD"
-        },
-        {
-            "title": "状态",
-            "dataIndex": "state",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "已创建",
-                    "value": 0
-                },
-                {
-                    "label": "审批中",
-                    "value": 1
-                },
-                {
-                    "label": "审批通过",
-                    "value": 2
-                },
-                {
-                    "label": "被驳回",
-                    "value": 3
                 }
             ]
         }

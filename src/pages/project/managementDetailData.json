@@ -291,7 +291,7 @@
             "type": "number"
         },
         {
-            "title": "总价（万元）",
+            "title": "总价（元）",
             "dataIndex": "money",
             "type": "number",
             "required": true,
@@ -299,7 +299,7 @@
             "rules": [
                 {
                     "required": true,
-                    "message": "请输入总价（万元）..."
+                    "message": "请输入总价（元）..."
                 }
             ]
         },
