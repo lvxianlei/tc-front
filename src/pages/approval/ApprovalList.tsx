@@ -24,7 +24,6 @@ export interface IApprovalState extends IAbstractMngtComponentState {
     readonly tableDataSource: ITaskTableDataItem[];
 
 }
-
 //antd
 const { Option } = Select;
 
@@ -111,11 +110,11 @@ class ApprovalAll extends AbstractMngtComponent<
         super.componentDidMount();
         this.fetchTableData({});
     }
-    
+
     public getTableData(): object[] {
         return this.state.tableDataSource;
     }
-    
+
     public getTableColumns(item: ITabItem): TableColumnType<object>[] {
         return [
             {
@@ -202,7 +201,7 @@ class ApprovalAll extends AbstractMngtComponent<
      * @param values 
      */
     public async onFilterSubmit(values: Record<string, any>) {
-        const tablePagination:TablePaginationConfig = {
+        const tablePagination: TablePaginationConfig = {
             current: 1,
             pageSize: 10,
             total: 0,
