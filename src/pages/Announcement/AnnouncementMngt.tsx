@@ -83,7 +83,7 @@ export default function AnnouncementMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                     { record.state === 0 ? <Link to={{pathname: `/announcement/edit/${ record.id }`, state:{ type: 'edit' } }}>编辑</Link> : <Button type="link" disabled>编辑</Button> }
-                    <Button type="link" disabled={ !(record.state === 1) } onClick={() => {
+                    <Button type="link" disabled={ !(record.state === 1) || selectedKeys.length > 0 } onClick={() => {
                         RequestUtil.post(`/tower-system/notice/withdraw`, {
                             noticeIds: [record.id]
                         }).then(res => {
