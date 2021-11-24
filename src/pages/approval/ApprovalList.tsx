@@ -24,6 +24,7 @@ export interface IApprovalState extends IAbstractMngtComponentState {
     readonly tableDataSource: ITaskTableDataItem[];
 
 }
+
 //antd
 const { Option } = Select;
 
