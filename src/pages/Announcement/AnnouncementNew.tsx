@@ -25,6 +25,7 @@ export default function AnnouncementNew(): React.ReactNode {
             let data = await RequestUtil.get<IAnnouncement>(`/tower-system/notice/getNoticeById/${ params.id }`);
             setDetailData(data);
             setAttachInfo(data.attachVos || []);
+            setStaffList(data.staffList || [])
             resole(data);
         } else {
             resole({});

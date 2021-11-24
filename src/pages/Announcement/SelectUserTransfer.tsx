@@ -17,10 +17,10 @@ import { RowSelectionType } from 'antd/lib/table/interface';
 
 interface IResponseData {
     readonly records?: IStaff[];
-    readonly total: number | undefined;
-    readonly size: number | undefined;
-    readonly current: number | undefined;
-    readonly parentCode: string;
+    readonly total?: number;
+    readonly size?: number;
+    readonly current?: number;
+    readonly parentCode?: string;
 }
 
 export interface SelectUserTransferProps {}
@@ -74,13 +74,23 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
     }
 
     protected getStaffList = async (selectedKeys: React.Key[], pagination?: TablePaginationConfig) => {
-        const data: IResponseData = await RequestUtil.get<IResponseData>(`/tower-system/employee`, { dept: selectedKeys[0], ...pagination })
-        this.setState({
-            treeData: data.records,
-            detailData: data
-        })
+        if(selectedKeys[0] && selectedKeys[0] !== '') {
+            const data: IResponseData = await RequestUtil.get<IResponseData>(`/tower-system/employee`, { dept: selectedKeys[0], ...pagination })
+            this.setState({
+                treeData: data.records,
+                detailData: data
+            })
+        } else {
+            this.setState({
+                treeData: [],
+                detailData: {
+                    current: 0,
+                    size: 10,
+                    total: 0
+                }
+            })
+        }
     }
-
 
      /**
      * @description Renders AbstractDetailComponent
