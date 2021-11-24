@@ -1,11 +1,11 @@
 import React from "react"
 import { Button, message, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../common'
+import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../../common'
 import { baseInfoHead, invoiceHead, billingHead, batchHead } from "./InvoicingData.json"
 import useRequest from '@ahooksjs/use-request'
-import RequestUtil from '../../utils/RequestUtil'
-import ApplicationContext from "../../configuration/ApplicationContext"
+import RequestUtil from '../../../utils/RequestUtil'
+import ApplicationContext from "../../../configuration/ApplicationContext"
 export default function Edit() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
