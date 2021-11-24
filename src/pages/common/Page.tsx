@@ -90,7 +90,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
 
     public async componentDidUpdate(nextProps: any) {
         if (nextProps.refresh !== this.props.refresh) {
-            this.fetchTableData({...this.props.filterValue}, { current: 1, pageSize: 20 })
+            this.fetchTableData({ ...this.props.filterValue }, { current: 1, pageSize: 20 })
         }
     }
 

@@ -79,7 +79,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPrice/${id}`)
             materialForm.setFieldsValue(result)
             priceInfoForm.setFieldsValue(result)
-            setPopContent({ ...popContent, id: result?.materialId })
+            setPopContent({ id: result.id, records: result })
             resove(result)
         } catch (error) {
             reject(error)
@@ -116,7 +116,13 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         const materialData = await materialForm.validateFields()
         const priceInfoData = await priceInfoForm.validateFields()
         try {
-            await saveRun({ ...materialData, ...priceInfoData })
+            await saveRun({
+                ...materialData,
+                ...priceInfoData,
+                materialId: popContent?.records.id || popContent?.records.materialId,
+                materialCategoryId: popContent?.records.materialCategory || popContent?.records.materialCategoryId,
+                materialStandard: popContent?.records.standard || popContent?.records.materialStandard
+            })
             resove(true)
         } catch (error) {
             reject(false)
@@ -130,7 +136,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             <PopTableContent data={materialList as any} onChange={handleChange} />
         </Modal>
         <DetailTitle title="原材料信息" operation={[
-            <Button type="primary" ghost key="choose" onClick={() => setVisible(true)}>选择</Button>
+            <Button disabled={type === "edit"} type="primary" ghost key="choose" onClick={() => setVisible(true)}>选择</Button>
         ]} />
         <BaseInfo form={materialForm} col={3} columns={materialInfo} dataSource={data || {}} edit />
         <DetailTitle title="价格信息" />

@@ -116,7 +116,7 @@ export default function Edit() {
             console.log(baseInfoData.contractCode)
             const saveData = {
                 ...baseInfoData,
-                contractCode: baseInfoData.contractCode.id || data?.contractCode,
+                contractCode: baseInfoData.contractCode.value || data?.contractCode,
                 invoicingDetailDtos: billingData.submit,
                 attachInfoDtos: attachVosData,
                 invoicingInfoDto: { ...invoicData, id: data?.invoicingInfoVo.id || "", invoicingId: data?.invoicingInfoVo.invoicingId || "" }

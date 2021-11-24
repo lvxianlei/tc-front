@@ -13,6 +13,7 @@ import moment from 'moment'
 import { message } from 'antd';
 
 export interface IContractSettingProps {
+    projectId: string;
     readonly id: string;
 }
 export interface IContractSettingRouteProps extends RouteComponentProps<IContractSettingProps>, WithTranslation { }
