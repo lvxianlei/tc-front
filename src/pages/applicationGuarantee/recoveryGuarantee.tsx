@@ -18,7 +18,7 @@
  
      return (
          <Modal
-           title={'填写保函信息'}
+           title={'回收保函'}
            visible={props.visible}
            onOk={handleSure}
            onCancel={props?.onCancel}

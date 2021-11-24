@@ -103,6 +103,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
     }
 
     public onTableChange(pagination: TablePaginationConfig): void {
+        console.log(this.props.filterValue)
         this.fetchTableData({ ...this.props.filterValue }, pagination);
     }
 

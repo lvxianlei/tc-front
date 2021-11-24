@@ -20,7 +20,7 @@ const { Option } = Select;
 export default function ApplicationColunm() {
     const history = useHistory();
     const [ refresh, setRefresh ] = useState<boolean>(false);
-    const [confirmStatus, setConfirmStatus] = useState<number>(0);
+    const [confirmStatus, setConfirmStatus] = useState<number>(1);
     const [ visible, setVisible ] = useState<boolean>(false);
     const [visibleRecovery, setVisibleRecovery] = useState<boolean>(false);
     const [ visibleSee, setVisibleSee ] = useState<boolean>(false);
