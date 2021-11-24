@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, Select, Button, Popconfirm, Input, Form, FormInstance, message, InputNumber, Upload, Modal, TablePaginationConfig } from 'antd';
+import { Space, Select, Button, Popconfirm, Input, Form, FormInstance, message, InputNumber, Upload, Modal, TablePaginationConfig, Table } from 'antd';
 import { Page } from '../../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
 import styles from './Pick.module.less';
@@ -17,15 +17,17 @@ export default function Lofting(): React.ReactNode {
     const params = useParams<{ id: string, productSegmentId: string, status: string}>();
     const [ refresh, setRefresh ] = useState<boolean>(false);
     const [ visible, setVisible ] = useState<boolean>(false);
+    const [ tipVisible, setTipVisible ] = useState<boolean>(false);
+    const [ addVisible, setAddVisible ] = useState<boolean>(false);
     const [ url, setUrl ] = useState<string>('');
     const [ filterValue, setFilterValue ] = useState({});
     const [ editorLock, setEditorLock ] = useState('编辑');
+    const [ form ] = Form.useForm();
+    const [ tableDataSource, setTableDataSource ] = useState<any[]>([])
     const formRef: React.RefObject<FormInstance> = React.createRef<FormInstance>();
-
     const getForm = (): FormInstance | null => {
         return formRef?.current;
     }
-
     const columns = [
         {
             key: 'id',
@@ -39,12 +41,22 @@ export default function Lofting(): React.ReactNode {
         },
         {
             key: 'segmentName',
-            title: '段名',
+            title: '段号',
             width: 150,
             editable: true,
             dataIndex: 'segmentName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <span>{record.segmentName}</span>
+            )
+        },
+        {
+            key: 'patternName',
+            title: '模式',
+            width: 150,
+            editable: true,
+            dataIndex: 'patternName',
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>{record.patternName}</span>
             )
         },
         {
@@ -96,18 +108,6 @@ export default function Lofting(): React.ReactNode {
             ) 
         },
         { 
-            title: '单段件数', 
-            dataIndex: 'basicsPartNum',
-             key: 'basicsPartNum',
-             width: 120,
-            editable: true,
-            render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "basicsPartNum"]} initialValue={_===-1?0:_}>
-                    <InputNumber size="small" precision={0}  min={0} onChange={ () => rowChange(index) }/>
-                </Form.Item>
-            ) 
-        },
-        { 
             title: '长度（mm）', 
             dataIndex: 'length', 
             key: 'length',
@@ -119,40 +119,31 @@ export default function Lofting(): React.ReactNode {
                 </Form.Item>
             ) 
         },
-        { 
-            title: '宽度（mm）', 
-            dataIndex: 'width', 
-            key: 'width' ,
-            width: 120,
-            editable: true,
-            render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "width"]} initialValue={ _===-1?0:_}>
-                    <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
-                </Form.Item>
-            )
-        },
-        { 
-            title: '厚度（mm）', 
-            dataIndex: 'thickness', 
-            key: 'thickness', 
-            editable: true,
-            width: 120,
-            render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data',index, "thickness"]} initialValue={ _===-1?0:_}>
-                    <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
-                </Form.Item>
-            ) 
-        },
-        { 
-            title: '理算重量（kg）', 
-            dataIndex: 'basicsTheoryWeight', 
-            key: 'basicsTheoryWeight',
-            width: 120,
-            editable: true,
-            render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                <span>锁定后，系统自动计算</span>
-            ) 
-        },
+        // { 
+        //     title: '宽度（mm）', 
+        //     dataIndex: 'width', 
+        //     key: 'width' ,
+        //     width: 120,
+        //     editable: true,
+        //     render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+        //         <Form.Item name={['data',index, "width"]} initialValue={ _===-1?0:_}>
+        //             <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
+        //         </Form.Item>
+        //     )
+        // },
+        // { 
+        //     title: '厚度（mm）', 
+        //     dataIndex: 'thickness', 
+        //     key: 'thickness', 
+        //     editable: true,
+        //     width: 120,
+        //     render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+        //         <Form.Item name={['data',index, "thickness"]} initialValue={ _===-1?0:_}>
+        //             <InputNumber size="small" precision={2} min={0} onChange={ () => rowChange(index) }/>
+        //         </Form.Item>
+        //     ) 
+        // },
+      
         { 
             title: '单件重量（kg）', 
             dataIndex: 'basicsWeight', 
@@ -166,9 +157,31 @@ export default function Lofting(): React.ReactNode {
             ) 
         },
         { 
+            title: '单段件数', 
+            dataIndex: 'basicsPartNum',
+             key: 'basicsPartNum',
+             width: 120,
+            editable: true,
+            render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data',index, "basicsPartNum"]} initialValue={_===-1?0:_}>
+                    <InputNumber size="small" precision={0}  min={0} onChange={ () => rowChange(index) }/>
+                </Form.Item>
+            ) 
+        },
+        { 
             title: '小计重量（kg）', 
             dataIndex: 'totalWeight', 
             key: 'totalWeight',
+            width: 120,
+            editable: true,
+            render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>锁定后，系统自动计算</span>
+            ) 
+        },
+        { 
+            title: '理算重量（kg）', 
+            dataIndex: 'basicsTheoryWeight', 
+            key: 'basicsTheoryWeight',
             width: 120,
             editable: true,
             render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
@@ -190,10 +203,15 @@ export default function Lofting(): React.ReactNode {
         
     ];
     const checkColor = (record: Record<string, any>, dataIndex: string) => {
-        const red: number = record.redColumn.indexOf(dataIndex);
-        if(red !== -1) {
-            return 'red';
-        } else {
+        // const red: number = record.redColumn.indexOf(dataIndex);
+        // if(red !== -1) {
+        //     return 'red';
+        // } else {
+        //     return 'normal'
+        // }
+        if( ([-1,0,'-1','0'].indexOf(record.length))!== -1){
+            return 'red'
+        }else{
             return 'normal'
         }
     }
@@ -228,14 +246,21 @@ export default function Lofting(): React.ReactNode {
                     return {
                         ...col,
                         render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                            <p className={ checkColor(record, col.dataIndex) === 'red' ? styles.red :  ''}>{(record.basicsWeight&&record.basicsWeight!==-1?record.basicsWeight:0)*(record.basicsPartNum&&record.basicsPartNum!==-1?record.basicsPartNum:0)}</p>
+                            <p>{(record.basicsWeight&&record.basicsWeight!==-1?record.basicsWeight:0)*(record.basicsPartNum&&record.basicsPartNum!==-1?record.basicsPartNum:0)}</p>
                         )
                     }
-                }else{
+                }else if(col.dataIndex==='length'){
                     return {
                         ...col,
                         render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                            <p  className={ checkColor(record, col.dataIndex) === 'red' ? styles.red :  ''}>{_===-1?0:_}</p>
+                            <p className={ checkColor(record, col.dataIndex) === 'red' ? styles.red :  ''}>{_===-1?0:_}</p>
+                        )
+                    }
+                }else {
+                    return {
+                        ...col,
+                        render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                            <p >{_===-1?0:_}</p>
                         )
                     }
                 }
@@ -243,7 +268,7 @@ export default function Lofting(): React.ReactNode {
             else return {
                 ...col,
                 render:(_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                    <p className={ checkColor(record, col.dataIndex) === 'red' ? styles.red :  '' }>{ _ }</p>
+                    <p>{ _ }</p>
                 )
             }
         }
@@ -327,6 +352,7 @@ export default function Lofting(): React.ReactNode {
                     <Space direction="horizontal" size="small">
                         {/* <Button type="primary" ghost>导出</Button> */}
                         <Button type="primary" ghost onClick={ () => downloadTemplate('/tower-science/drawProductStructure/exportTemplate', '构建明细') }>模板下载</Button>
+                        <Button type="primary" ghost  onClick={()=>{ setTipVisible(true) }}>提示说明</Button>
                         <Upload 
                             accept=".xls,.xlsx"
                             action={ () => {
@@ -360,7 +386,9 @@ export default function Lofting(): React.ReactNode {
                         >
                             <Button type="primary" ghost>导入</Button>
                         </Upload>
-                        <Button type="primary" ghost  onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}/add`)}}>添加</Button>
+                        <Button type="primary" ghost  onClick={()=>{
+                            setAddVisible(true)
+                        }}>添加</Button>
                         <Button type="primary" ghost  onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}/drawApply`)}}>图纸塔型套用</Button>
                         <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}/setOutApply`)}}>放样塔型套用</Button>
                         <Popconfirm
@@ -428,5 +456,118 @@ export default function Lofting(): React.ReactNode {
                     // }
                 ]}
             />
-    </Form></>
+    </Form>
+    <Modal title='提示' visible={tipVisible} footer={false} onCancel={()=>{
+        setTipVisible(false)
+    }}>
+        <Table
+            columns={[
+                { title: '构件编号', dataIndex: 'code', key: 'code' },
+                { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture' },
+                { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec' },
+                { title: '长度（mm）', dataIndex: 'length', key: 'length' },
+                { title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight' },
+                { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight' },
+            ]}
+            pagination={false}
+            dataSource={[{
+                code:"件号不连续时",
+                structureTexture:"原材料管理中没有时",
+                structureSpec:"原材料管理中没有时",
+                length:"为0时",
+                basicsWeight:"单重与理算重差距≥1时",
+                totalWeight:"单重*数量≠小计"
+            }]}
+        />
+    </Modal>
+    <Modal title='添加' visible={addVisible} onCancel={()=>{
+        setAddVisible(false);
+        setTableDataSource([]);
+    }} width={1200} onOk={
+        ()=>{
+            const values = form.getFieldsValue(true).data.map((item:any)=>{
+                return {
+                    ...item,
+                    productCategory: params.id
+                }
+            })
+            RequestUtil.post(`/tower-science/drawProductStructure/submit?productCategoryId=${params.id}`, [ ...values ]).then(res => {
+                setAddVisible(false);
+                setTableDataSource([]);
+                message.success('添加成功！')
+                setRefresh(!refresh);    
+            });
+        }
+    }>
+        <Form form={form}>
+            <Button onClick={()=>{
+                tableDataSource.push([{}])
+                setTableDataSource([...tableDataSource])
+            }} type='primary' ghost>添加一行</Button>
+            <Table
+                columns={[
+                    { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+                    { title: '段号', dataIndex: 'segmentName', key: 'segmentName', render:(_a: any, _b: any, index: number): React.ReactNode =>(
+                        <Form.Item>
+                            <Input size="small"/>
+                        </Form.Item>
+                    )},
+                    { title: '构件编号', dataIndex: 'code', key: 'code',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                        <Form.Item name={['data',index, "code"]} initialValue={ _ }>
+                            <Input size="small"/>
+                        </Form.Item>
+                    ) },
+                    { title: '材料名称', dataIndex: 'materialName', key: 'materialName',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                        <Form.Item name={['data',index, "materialName"]} initialValue={ _ }>
+                            <Input size="small" />
+                        </Form.Item>
+                    ) },
+                    { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                        <Form.Item name={['data',index, "structureTexture"]} initialValue={ _ }>
+                            <Input size="small" />
+                        </Form.Item>
+                    ) },
+                    { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                        <Form.Item name={['data',index, "structureSpec"]} initialValue={ _ }>
+                            <Input size="small" />
+                        </Form.Item>
+                    ) },
+                    { title: '长度（mm）', dataIndex: 'length', key: 'length',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                        <Form.Item name={['data',index, "length"]} initialValue={ _ }>
+                            <Input size="small" />
+                        </Form.Item>
+                    ) },
+                    { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                        <Form.Item name={['data',index, "basicsPartNum"]} initialValue={ _ }>
+                            <Input size="small"/>
+                        </Form.Item>
+                    ) },
+                    { title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                        <Form.Item name={['data',index, "basicsWeight"]} initialValue={ _ }>
+                            <Input size="small" />
+                        </Form.Item>
+                    ) },
+                    { title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                        <Form.Item name={['data',index, "totalWeight"]} initialValue={ _ }>
+                            <Input size="small" />
+                        </Form.Item>
+                    ) },
+                    { title: '备注', dataIndex: 'description', key: 'description',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                        <Form.Item name={['data',index, "description"]} initialValue={ _ }>
+                            <TextArea showCount rows={1} />
+                        </Form.Item>
+                    ) },
+                    { title: '操作', key:'operation', render:(_a: any, _b: any, index: number): React.ReactNode =>(
+                        <Button type='link' onClick={()=>{
+                            tableDataSource&&tableDataSource.splice(index,1);
+                            tableDataSource&&setTableDataSource([...tableDataSource])
+                        }}>删除</Button>
+                    )}
+                ]}
+                pagination={false}
+                dataSource={[...tableDataSource]}
+            />
+        </Form>
+    </Modal>
+    </>
 }
