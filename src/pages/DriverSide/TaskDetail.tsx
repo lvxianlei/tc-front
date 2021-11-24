@@ -1,63 +1,61 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Spin, notification } from 'antd';
-import { useParams } from 'react-router-dom';
 import { BaseInfo, CommonTable } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './TaskDetail.module.less';
-import AuthUtil from '../../utils/AuthUtil';
 import { ITenant } from '../system-mngt/ITenant';
 
 const tableColumns = [
     {
-        key: 'recordType', 
-        title: '所在班组', 
+        key: 'recordType',
+        title: '所在班组',
         dataIndex: 'recordType'
     },
     {
-        key: 'stateFront', 
-        title: '计划号', 
+        key: 'stateFront',
+        title: '计划号',
         dataIndex: 'stateFront'
     },
     {
-        key: 'stateAfter', 
-        title: '塔型', 
+        key: 'stateAfter',
+        title: '塔型',
         dataIndex: 'stateAfter'
     },
-    {  
-        key: 'createUserName', 
-        title: '条码', 
-        dataIndex: 'createUserName' 
+    {
+        key: 'createUserName',
+        title: '条码',
+        dataIndex: 'createUserName'
     },
-    { 
-        key: 'createTime', 
-        title: '件号', 
-        dataIndex: 'createTime' 
+    {
+        key: 'createTime',
+        title: '件号',
+        dataIndex: 'createTime'
     },
-    { 
-        key: 'createTime', 
-        title: '材料', 
-        dataIndex: 'createTime' 
+    {
+        key: 'createTime',
+        title: '材料',
+        dataIndex: 'createTime'
     },
-    { 
-        key: 'createTime', 
-        title: '总重（kg）', 
-        dataIndex: 'createTime' 
+    {
+        key: 'createTime',
+        title: '总重（kg）',
+        dataIndex: 'createTime'
     },
-    { 
-        key: 'createTime', 
-        title: '所在车间', 
-        dataIndex: 'createTime' 
+    {
+        key: 'createTime',
+        title: '所在车间',
+        dataIndex: 'createTime'
     },
-    { 
-        key: 'createTime', 
-        title: '所在工序', 
-        dataIndex: 'createTime' 
+    {
+        key: 'createTime',
+        title: '所在工序',
+        dataIndex: 'createTime'
     },
-    { 
-        key: 'createTime', 
-        title: '所在产线', 
-        dataIndex: 'createTime' 
+    {
+        key: 'createTime',
+        title: '所在产线',
+        dataIndex: 'createTime'
     }
 ]
 
@@ -108,7 +106,7 @@ export default function TaskDetail(): React.ReactNode {
             }
             resole(data)
         }
-        
+
     }), {})
     const detailData: any = data;
 
@@ -119,10 +117,10 @@ export default function TaskDetail(): React.ReactNode {
         </Spin>
     }
 
-    return <div className={ styles.detailContent }>
+    return <div className={styles.detailContent}>
         <p>基本信息</p>
-        <BaseInfo columns={ baseColums } dataSource={ detailData } col={ 2 } />
-        <p className={ styles.detailTitle }>构件明细</p>
-        <CommonTable columns={ tableColumns } dataSource={ detailData.stateRecordVOS } pagination={ false }/>
+        <BaseInfo columns={baseColums} dataSource={detailData} col={2} />
+        <p className={styles.detailTitle}>构件明细</p>
+        <CommonTable columns={tableColumns} dataSource={detailData.stateRecordVOS} pagination={false} />
     </div>
 }

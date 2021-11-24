@@ -3,83 +3,82 @@ import { Spin } from 'antd';
 import { BaseInfo, CommonTable, DetailContent, DetailTitle } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-import styles from './TaskDetail.module.less';
 
 const tableColumns = [
-    {  
-        key: 'createUserName', 
-        title: '条码', 
-        dataIndex: 'createUserName' 
-    },
-    { 
-        key: 'createTime', 
-        title: '件号', 
-        dataIndex: 'createTime' 
-    },
-    { 
-        key: 'createTime', 
-        title: '材料', 
-        dataIndex: 'createTime' 
+    {
+        key: 'createUserName',
+        title: '条码',
+        dataIndex: 'createUserName'
     },
     {
-        key: 'recordType', 
-        title: '材质', 
+        key: 'createTime',
+        title: '件号',
+        dataIndex: 'createTime'
+    },
+    {
+        key: 'createTime',
+        title: '材料',
+        dataIndex: 'createTime'
+    },
+    {
+        key: 'recordType',
+        title: '材质',
         dataIndex: 'recordType'
     },
     {
-        key: 'stateFront', 
-        title: '规格', 
+        key: 'stateFront',
+        title: '规格',
         dataIndex: 'stateFront'
     },
     {
-        key: 'stateAfter', 
-        title: '长度（mm）', 
+        key: 'stateAfter',
+        title: '长度（mm）',
         dataIndex: 'stateAfter'
     },
-    { 
-        key: 'createTime', 
-        title: '类型', 
-        dataIndex: 'createTime' 
+    {
+        key: 'createTime',
+        title: '类型',
+        dataIndex: 'createTime'
     },
     {
-        key: 'recordType', 
-        title: '单件孔数', 
+        key: 'recordType',
+        title: '单件孔数',
         dataIndex: 'recordType'
     },
     {
-        key: 'stateFront', 
-        title: '单段数', 
+        key: 'stateFront',
+        title: '单段数',
         dataIndex: 'stateFront'
     },
     {
-        key: 'stateAfter', 
-        title: '加工数', 
+        key: 'stateAfter',
+        title: '加工数',
         dataIndex: 'stateAfter'
     },
     {
-        key: 'recordType', 
-        title: '试装数', 
+        key: 'recordType',
+        title: '试装数',
         dataIndex: 'recordType'
     },
     {
-        key: 'stateFront', 
-        title: '总重（kg）', 
+        key: 'stateFront',
+        title: '总重（kg）',
         dataIndex: 'stateFront'
     },
     {
-        key: 'stateAfter', 
-        title: '工艺流程', 
+        key: 'stateAfter',
+        title: '工艺流程',
         dataIndex: 'stateAfter'
     },
-    { 
-        key: 'createTime', 
-        title: '所在车间', 
-        dataIndex: 'createTime' 
+    {
+        key: 'createTime',
+        title: '所在车间',
+        dataIndex: 'createTime'
     },
-    { 
-        key: 'createTime', 
-        title: '所在工序', 
-        dataIndex: 'createTime' 
+    {
+        key: 'createTime',
+        title: '所在工序',
+        dataIndex: 'createTime'
     }
 ]
 
@@ -119,7 +118,7 @@ const baseColums = [
 ]
 
 export default function TaskDetail(): React.ReactNode {
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {    
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get(``)
         resole(data)
     }), {})
@@ -133,8 +132,8 @@ export default function TaskDetail(): React.ReactNode {
     }
 
     return <DetailContent>
-        <BaseInfo columns={ baseColums } dataSource={ detailData } col={ 3 } />
-        <DetailTitle title="构件明细列表"/>
-        <CommonTable columns={ tableColumns } dataSource={ detailData.stateRecordVOS } pagination={ false }/>
+        <BaseInfo columns={baseColums} dataSource={detailData} col={3} />
+        <DetailTitle title="构件明细列表" />
+        <CommonTable columns={tableColumns} dataSource={detailData.stateRecordVOS} pagination={false} />
     </DetailContent>
 }
