@@ -1870,6 +1870,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 请款申请管理
+      "name": "请款申请管理",
+      "path":  "/fundApply/infomation",
+      "module": "./pages/fundApplyInfomation/index",
+      "exact": true,
+      "authority": "customer_detail"
+    },
     { // 回款信息列表
       "name": "回款信息管理",
       "path": "/collection/infomation",

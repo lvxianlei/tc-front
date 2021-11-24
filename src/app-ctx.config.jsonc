@@ -711,6 +711,19 @@
                         ]
                     },
                     {
+                        "label": "请款申请管理",
+                        "icon": "customer",
+                        "path": "/fundApply",
+                        "authority": "customer_detail",
+                        "items": [
+                            {
+                                "label": "请款申请列表",
+                                "path":  "/fundApply/infomation",
+                                "authority": "customer_detail"
+                            }
+                        ]
+                    },
+                    {
                         "label": "回款信息管理",
                         "icon": "customer",
                         "path": "/collection",

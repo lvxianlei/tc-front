@@ -1,0 +1,264 @@
+{
+    "fundListColumns": [
+        {
+            "title": "请款编号",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "请款日期",
+            "dataIndex": "payTypeName"
+        },
+        {
+            "title": "请款单号",
+            "dataIndex": "payCategoryName"
+        },
+        {
+            "title": "收款方",
+            "dataIndex": "payMoney"
+        },
+        {
+            "title": "请款方",
+            "dataIndex": "payMoney"
+        },
+        {
+            "title": "请款部门",
+            "dataIndex": "payTime"
+        },
+        {
+            "title": "费用类型",
+            "dataIndex": "currencyTypeName"
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "exchangeRate"
+        },
+        {
+            "title": "请款金额",
+            "dataIndex": "abroadMoney"
+        },
+        {
+            "title": "已付金额",
+            "dataIndex": "payBank"
+        },
+        {
+            "title": "应付款余额",
+            "dataIndex": "confirmer"
+        },
+        {
+            "title": "付款状态",
+            "dataIndex": "confirmStatus"
+        }
+    ],
+    "approvalStatus": [
+        {
+            "label": "待付款",
+            "value": 1
+        },
+        {
+            "label": "已付款",
+            "value": 2
+        }
+    ],
+    "baseColums": [
+        {
+            "dataIndex": "payCompany",
+            "title": "付款日期",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入来款单位名称"
+                }
+            ]
+        },
+        {
+            "dataIndex": "payCompany",
+            "title": "请选择",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入来款单位名称"
+                }
+            ]
+        },
+        {
+            "dataIndex": "payCompany",
+            "title": "付款方式",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入来款单位名称"
+                }
+            ]
+        },
+        {
+            "dataIndex": "payCompany",
+            "title": "转账/商承/现金/支票",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入来款单位名称"
+                }
+            ]
+        }
+        
+    ],
+    "overViewBaseColunms": [
+        {
+            "title": "请款编号",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "请款单号",
+            "dataIndex": "payCategoryName"
+        },
+        {
+            "title": "请款日期",
+            "dataIndex": "payTypeName"
+        },
+        {
+            "title": "收款方",
+            "dataIndex": "payMoney"
+        },
+        {
+            "title": "请款方",
+            "dataIndex": "payMoney"
+        },
+        {
+            "title": "请款部门",
+            "dataIndex": "payTime"
+        },
+        {
+            "title": "开户银行",
+            "dataIndex": "payTime"
+        },
+        {
+            "title": "银行账号",
+            "dataIndex": "payTime"
+        },
+        {
+            "title": "请款类别",
+            "dataIndex": "currencyTypeName"
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "exchangeRate"
+        },
+        {
+            "title": "请款金额",
+            "dataIndex": "abroadMoney"
+        },
+        {
+            "title": "已付金额",
+            "dataIndex": "payBank"
+        },
+        {
+            "title": "应付款余额",
+            "dataIndex": "confirmer"
+        },
+        {
+            "title": "付款状态",
+            "dataIndex": "confirmStatus"
+        },
+        {
+            "title": "审核状态",
+            "dataIndex": "confirmStatus"
+        }
+    ],
+    "overViewBillColunms": [
+        {
+            "title": "票据号",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "票据金额",
+            "dataIndex": "payCategoryName"
+        },
+        {
+            "title": "开票单位",
+            "dataIndex": "payTypeName"
+        },
+        {
+            "title": "发票类型",
+            "dataIndex": "payMoney"
+        },
+        {
+            "title": "开票日期",
+            "dataIndex": "payMoney"
+        }
+    ],
+    "overViewApplyColunms": [
+        {
+            "title": "部门",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "审批人",
+            "dataIndex": "payCategoryName"
+        },
+        {
+            "title": "职位",
+            "dataIndex": "payTypeName"
+        },
+        {
+            "title": "审批时间",
+            "dataIndex": "payMoney"
+        },
+        {
+            "title": "审批结果",
+            "dataIndex": "payMoney"
+        },
+        {
+            "title": "意见",
+            "dataIndex": "payMoney",
+            "width":200
+        }
+    ],
+    "addColums": [
+        {
+            "title": "回款金额",
+            "dataIndex": "refundAmount",
+            "type": "date",
+            "width": 200,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入付款日期..."
+                }
+            ]
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "fundType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "投标保证金"
+                },
+                {
+                    "value": 1,
+                    "label": "合同应收款"
+                }
+            ],
+            "width": 200,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入回款金额..."
+                }
+            ]
+        },
+        {
+            "title": "付款金额",
+            "dataIndex": "fundNumber",
+            "type": "string",
+            "width": 200,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入付款金额..."
+                }
+            ]
+        }
+    ]
+}
