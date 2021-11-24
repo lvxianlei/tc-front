@@ -52,41 +52,29 @@ export default function Invoicing() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <Button type="link" onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</Button>
-                        {[0, 3].includes(record.state) && <Button type="link" onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>}
-                        {[0].includes(record.state) && <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>}
+                        <Button type="link" onClick={() => history.push(`/invoicing/taskInfo/${record.id}`)}>查看任务信息</Button>
+                        <Button type="link" onClick={() => history.push(`/invoicing/edit/${record.id}`)}>填写开票信息</Button>
+                        <Button type="link" onClick={() => history.push(`/invoicing/${record.id}`)}>查看开票信息</Button>
                     </>
                 }
             }]}
-        extraOperation={<Link to="/project/invoicing/edit/new"><Button type="primary">新增开票申请</Button></Link>}
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {
                 name: 'fuzzyQuery',
-                children: <Input placeholder="编号/内部合同编号/工程名称/票面单位/业务经理" style={{ width: 300 }} />
+                children: <Input placeholder="工程名称/票面单位/业务经理" style={{ width: 300 }} />
             },
             {
                 name: 'isOpen',
-                label: '是否已全开',
+                label: '任务状态',
                 children: <Select style={{ width: 200 }}>
                     <Select.Option value="2">发票未开全</Select.Option>
                     <Select.Option value="3">发票已开全</Select.Option>
                 </Select>
             },
             {
-                name: 'contractType',
-                label: '开票时合同状态',
-                children: <Select style={{ width: 200 }}>
-                    <Select.Option value="1">不下计划</Select.Option>
-                    <Select.Option value="2">未下计划</Select.Option>
-                    <Select.Option value="3">未下完计划</Select.Option>
-                    <Select.Option value="4">未发完货</Select.Option>
-                    <Select.Option value="5">已发完货</Select.Option>
-                </Select>
-            },
-            {
                 name: 'startLaunchTime',
-                label: '申请日期',
+                label: '申请时间',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
             }
         ]}
