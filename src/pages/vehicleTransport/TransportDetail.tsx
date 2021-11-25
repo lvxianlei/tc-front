@@ -2,7 +2,6 @@ import React from 'react';
 import { Space, Button } from 'antd';
 import { DetailTitle, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
-import styles from './TransportTask.module.less';
 import { useHistory, useParams } from 'react-router-dom';
 
 const columns = [
@@ -12,7 +11,7 @@ const columns = [
         dataIndex: 'index',
         width: 50,
         fixed: 'left' as FixedType,
-        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
+        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
     },
     {
         key: 'productNumber',
@@ -110,18 +109,18 @@ export default function TransportDetail(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     return <>
-        <DetailTitle title={'构件明细列表'}/>
+        <DetailTitle title={'构件明细列表'} />
         <Page
             path="/vehicle/transport/task/detail"
-            requestData={{ taskId: params.id  }}
-            columns={ columns }
-            headTabs={ [] }
-            extraOperation={ 
+            requestData={{ taskId: params.id }}
+            columns={columns}
+            headTabs={[]}
+            extraOperation={
                 <Space direction="horizontal" size="small">
                     <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
-                </Space> 
+                </Space>
             }
-            searchFormItems={ [] }
+            searchFormItems={[]}
         />
     </>
 }

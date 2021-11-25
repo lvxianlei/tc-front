@@ -142,6 +142,19 @@
                         ]
                     },
                     {
+                        "label": "开票申请管理",
+                        "icon": "examine",
+                        "path": "/invoicing",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "开票申请列表",
+                                "path": "/invoicing",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
                         "label": "审批管理",
                         "icon": "examine",
                         "path": "/approvalm",

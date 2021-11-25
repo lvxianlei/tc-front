@@ -127,7 +127,7 @@ export default abstract class AbstractUserSetting<P extends RouteComponentProps,
                 rules: [{
                     required: true,
                     message: '请输入确认密码!'
-                }, (form: FormInstance): RuleObject => {
+                }, (form: any): any => {
                     return {
                         validator: (rule: RuleObject, value: StoreValue): Promise<void> => {
                             if (!value || form.getFieldValue('password') === value) {

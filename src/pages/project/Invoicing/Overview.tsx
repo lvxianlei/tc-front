@@ -1,22 +1,11 @@
-/*
- * @Descripttion: 
- * @version: 
- * @Author: wangxindong
- * @email: wxd93917787@163.com
- * @Date: 2021-11-12 13:56:51
- * @LastEditors: wangxindong
- * @LastEditTime: 2021-11-17 18:36:04
- */
 import React from "react"
 import { Button, message, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../common'
+import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../../common'
 import { baseInfoHead, invoiceHead, billingHead, batchHead } from "./InvoicingData.json"
-import { enclosure } from '../project/managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
-import RequestUtil from '../../utils/RequestUtil'
-import { downLoadFile } from "../../utils"
-import ApplicationContext from "../../configuration/ApplicationContext"
+import RequestUtil from '../../../utils/RequestUtil'
+import ApplicationContext from "../../../configuration/ApplicationContext"
 export default function Edit() {
     const history = useHistory()
     const params = useParams<{ id: string }>()

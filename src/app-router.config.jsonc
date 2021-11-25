@@ -19,7 +19,7 @@
     { // 司机端任务详情
       "name": "任务详情",
       "path": "/driverSide/taskDetail",
-      "module": "./pages/DriverSide/TaskDetail",
+      "module": "./pages/driverSide/TaskDetail",
       "exact": true
     }
   ],
@@ -135,7 +135,8 @@
       "module": "./pages/auth/role/RoleSetting",
       "exact": true,
       "authority": "auth_section"
-    },{ // 部门管理
+    },
+    { // 部门管理
       "name": "部门管理",
       "path": "/auth/dept",
       "module": "./pages/auth/dept/DepartmentMngt",
@@ -411,56 +412,56 @@
     { // 开票申请
       "name": "开票申请",
       "path": "/project/invoicing",
-      "module": "./pages/Invoicing/index",
+      "module": "./pages/project/Invoicing/index",
       "exact": true,
       "authority": "project"
     },
     { // 开票申请详情
       "name": "开票申请详情",
       "path": "/project/invoicing/detail/:id",
-      "module": "./pages/Invoicing/Overview",
+      "module": "./pages/project/Invoicing/Overview",
       "exact": true,
       "authority": "project"
     },
     { // 开票申请
       "name": "新增开票申请",
       "path": "/project/invoicing/edit/:id",
-      "module": "./pages/Invoicing/Edit",
+      "module": "./pages/project/Invoicing/Edit",
       "exact": true,
       "authority": "project"
     },
     { // 付款申请
       "name": "付款申请",
       "path": "/project/payment",
-      "module": "./pages/Payment/index",
+      "module": "./pages/payment/index",
       "exact": true,
       "authority": "project"
     },
     { // 付款申请详情
       "name": "付款申请详情",
       "path": "/project/payment/detail/:id",
-      "module": "./pages/Payment/Overview",
+      "module": "./pages/payment/Overview",
       "exact": true,
       "authority": "project"
     },
     { // 回款申请
       "name": "回款申请",
       "path": "/project/collection",
-      "module": "./pages/Collection/index",
+      "module": "./pages/collection/index",
       "exact": true,
       "authority": "project"
     },
     { // 回款申请详情
       "name": "回款确认详情",
       "path": "/project/collection/detail/:id",
-      "module": "./pages/Collection/Overview",
+      "module": "./pages/collection/Overview",
       "exact": true,
       "authority": "project"
     },
     { // 回款申请详情
       "name": "回款确认",
       "path": "/project/collection/edit/:id",
-      "module": "./pages/Collection/Edit",
+      "module": "./pages/collection/Edit",
       "exact": true,
       "authority": "project"
     },
@@ -869,7 +870,7 @@
     { // 评估任务
       "name": "评估任务",
       "path": "/assessmentTask",
-      "module": "./pages/AssessmentTask/AssessmentTaskList",
+      "module": "./pages/assessmentTask/AssessmentTaskList",
       "exact": true,
       // "authority": "assess_task_management"
       "authority": "approvalm"
@@ -877,7 +878,7 @@
     { // 评估任务详情
       "name": "评估任务详情",
       "path": "/assessmentTask/assessmentTaskDetail/:id",
-      "module": "./pages/AssessmentTask/AssessmentTaskDetail",
+      "module": "./pages/assessmentTask/AssessmentTaskDetail",
       "exact": true,
       // "authority": "assess_task_management"
       "authority": "approvalm"
@@ -1539,7 +1540,7 @@
       "module": "./pages/mngt-workshop/ComponentDetails",
       "exact": true,
       "authority": "approvalm"
-    },   
+    },
     { // 计划排产
       "name": "计划排产",
       "path": "/planProd/planMgmt",
@@ -1627,56 +1628,56 @@
     { // 车辆转运-运输任务面板
       "name": "运输任务面板",
       "path": "/vehicleTransport/transportTask",
-      "module": "./pages/VehicleTransport/TransportTask",
+      "module": "./pages/vehicleTransport/TransportTask",
       "exact": true,
       "authority": "approvalm"
     },
     { // 车辆转运-派工
       "name": "派工",
       "path": "/vehicleTransport/transportTask/dispatch",
-      "module": "./pages/VehicleTransport/TransportDispatch",
+      "module": "./pages/vehicleTransport/TransportDispatch",
       "exact": true,
       "authority": "approvalm"
     },
     { // 车辆转运-派工-构件明细
       "name": "构件明细",
       "path": "/vehicleTransport/transportTask/dispatch/detail/:id",
-      "module": "./pages/VehicleTransport/TransportDetail",
+      "module": "./pages/vehicleTransport/TransportDetail",
       "exact": true,
       "authority": "approvalm"
     },
     { // 车辆转运-任务详情
       "name": "任务详情",
       "path": "/vehicleTransport/transportTask/taskDetail/:id",
-      "module": "./pages/VehicleTransport/TaskDetail",
+      "module": "./pages/vehicleTransport/TaskDetail",
       "exact": true,
       "authority": "approvalm"
     },
     { // 镀锌车间-日计划列表
       "name": "日计划列表",
       "path": "/galvanizingWorkshop/dailySchedule",
-      "module": "./pages/GalvanizingWorkshop/DailySchedule",
+      "module": "./pages/galvanizingWorkshop/DailySchedule",
       "exact": true,
       "authority": "approvalm"
     },
     { // 镀锌车间-过磅单列表
       "name": "过磅单列表",
       "path": "/galvanizingWorkshop/weighingList",
-      "module": "./pages/GalvanizingWorkshop/WeighingList",
+      "module": "./pages/galvanizingWorkshop/WeighingList",
       "exact": true,
       "authority": "approvalm"
     },
     { // 镀锌车间-新增过磅单
       "name": "新增",
       "path": "/galvanizingWorkshop/weighingList/weighingNew",
-      "module": "./pages/GalvanizingWorkshop/WeighingNew",
+      "module": "./pages/galvanizingWorkshop/WeighingNew",
       "exact": true,
       "authority": "approvalm"
     },
     { // 镀锌车间-编辑过磅单
       "name": "编辑",
       "path": "/galvanizingWorkshop/weighingList/weighingSetting/:id",
-      "module": "./pages/GalvanizingWorkshop/WeighingNew",
+      "module": "./pages/galvanizingWorkshop/WeighingNew",
       "exact": true,
       "authority": "approvalm"
     },
@@ -1726,84 +1727,84 @@
     { // 公告管理
       "name": "公告管理",
       "path": "/announcement",
-      "module": "./pages/Announcement/AnnouncementMngt",
+      "module": "./pages/announcement/AnnouncementMngt",
       "exact": true,
       "authority": "approvalm"
     },
     { // 公告管理-新发布
       "name": "新发布",
       "path": "/announcement/new",
-      "module": "./pages/Announcement/AnnouncementNew",
+      "module": "./pages/announcement/AnnouncementNew",
       "exact": true,
       "authority": "approvalm"
     },
     { // 公告管理-编辑
       "name": "编辑",
       "path": "/announcement/edit/:id",
-      "module": "./pages/Announcement/AnnouncementNew",
+      "module": "./pages/announcement/AnnouncementNew",
       "exact": true,
       "authority": "approvalm"
     },
     { // 公告管理-详情
       "name": "详情",
       "path": "/announcement/detail/:id",
-      "module": "./pages/Announcement/AnnouncementDetail",
+      "module": "./pages/announcement/AnnouncementDetail",
       "exact": true,
       "authority": "approvalm"
     },
     { // 档案管理-资料管理
       "name": "资料管理",
       "path": "/archivesMngt/dataMngt",
-      "module": "./pages/Archives/Data/DataMngt",
+      "module": "./pages/archives/Data/DataMngt",
       "exact": true,
       "authority": "approvalm"
     },
     { // 档案管理-资料管理-录入
       "name": "录入",
       "path": "/archivesMngt/dataMngt/dataNew",
-      "module": "./pages/Archives/Data/DataNew",
+      "module": "./pages/archives/Data/DataNew",
       "exact": true,
       "authority": "approvalm"
     },
     { // 档案管理-资料管理-编辑
       "name": "编辑",
       "path": "/archivesMngt/dataMngt/datasetting",
-      "module": "./pages/Archives/Data/DataNew",
+      "module": "./pages/archives/Data/DataNew",
       "exact": true,
       "authority": "approvalm"
     },
     { // 档案管理-资料管理-详情
       "name": "详情",
       "path": "/archivesMngt/dataMngt/detail/:id",
-      "module": "./pages/Archives/Data/DataDetail",
+      "module": "./pages/archives/Data/DataDetail",
       "exact": true,
       "authority": "approvalm"
     },
     { // 档案管理-证件管理
       "name": "证件管理",
       "path": "/archivesMngt/certificateMngt",
-      "module": "./pages/Archives/Certificate/CertificateMngt",
+      "module": "./pages/archives/Certificate/CertificateMngt",
       "exact": true,
       "authority": "approvalm"
     },
     { // 档案管理-证件管理-录入
       "name": "录入",
       "path": "/archivesMngt/certificateMngt/certificateNew",
-      "module": "./pages/Archives/Certificate/CertificateNew",
+      "module": "./pages/archives/Certificate/CertificateNew",
       "exact": true,
       "authority": "approvalm"
     },
     { // 档案管理-证件管理-编辑
       "name": "编辑",
       "path": "/archivesMngt/certificateMngt/certificateSetting",
-      "module": "./pages/Archives/Certificate/CertificateNew",
+      "module": "./pages/archives/Certificate/CertificateNew",
       "exact": true,
       "authority": "approvalm"
     },
     { // 档案管理-证件管理-详情
       "name": "详情",
       "path": "/archivesMngt/certificateMngt/certificateDetail/:id",
-      "module": "./pages/Archives/Certificate/CertificateDetail",
+      "module": "./pages/archives/Certificate/CertificateDetail",
       "exact": true,
       "authority": "approvalm"
     },
@@ -1897,6 +1898,34 @@
       "module": "./pages/applicationGuarantee/index",
       "exact": true,
       "authority": "customer_detail"
+    },
+    { // 开票申请列表
+      "name": "开票申请列表",
+      "path": "/invoicing",
+      "module": "./pages/invoicing/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 查看开票申请
+      "name": "开票信息",
+      "path": "/invoicing/:invoicingId",
+      "module": "./pages/invoicing/Overview",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 查看任务信息
+      "name": "任务信息",
+      "path": "/invoicing/taskInfo/:invoicingId",
+      "module": "./pages/invoicing/TaskInfo",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 填写开票申请信息
+      "name": "填写开票信息",
+      "path": "/invoicing/edit/:invoicingId",
+      "module": "./pages/invoicing/Edit",
+      "exact": true,
+      "authority": "approvalm"
     }
   ]
 }

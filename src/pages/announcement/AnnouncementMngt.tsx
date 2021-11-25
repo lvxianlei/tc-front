@@ -83,7 +83,7 @@ export default function AnnouncementMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                     { record.state === 0 ? <Link to={{pathname: `/announcement/edit/${ record.id }`, state:{ type: 'edit' } }}>编辑</Link> : <Button type="link" disabled>编辑</Button> }
-                    <Button type="link" disabled={ !(record.state === 1) } onClick={() => {
+                    <Button type="link" disabled={ !(record.state === 1) || selectedKeys.length > 0 } onClick={() => {
                         RequestUtil.post(`/tower-system/notice/withdraw`, {
                             noticeIds: [record.id]
                         }).then(res => {
@@ -150,8 +150,17 @@ export default function AnnouncementMngt(): React.ReactNode {
         headTabs={ [] }
         extraOperation={ <Space direction="horizontal" size="small">
             <Link to={{pathname: `/announcement/new`, state:{ type: 'new' } }}><Button type="primary">新发布</Button></Link>
-            { selectedRows.length > 0 && selectedRows.map(items => items.state).indexOf(0 || 2) === -1 ? <Button type="primary" onClick={ batchWithdraw } ghost>撤回</Button> : <Button type="primary" disabled ghost>撤回</Button>}
-            { selectedRows.length > 0 && selectedRows.map(items => items.state).indexOf(1) === -1 ? <Button type="primary" onClick={ batchDel } ghost>删除</Button> : <Button type="primary" disabled ghost>删除</Button> }
+            { selectedRows.length > 0 && selectedRows.map(items => items.state).indexOf(0) === -1 && selectedRows.map(items => items.state).indexOf(2) === -1 ? <Button type="primary" onClick={ batchWithdraw } ghost>撤回</Button> : <Button type="primary" disabled ghost>撤回</Button>}
+            { selectedRows.length > 0 && selectedRows.map(items => items.state).indexOf(1) === -1 ? 
+                <Popconfirm
+                    title="确认删除?"
+                    onConfirm={ batchDel }
+                    okText="确认"
+                    cancelText="取消"
+                >
+                    <Button type="primary" ghost>删除</Button> 
+                </Popconfirm>
+        : <Button type="primary" disabled ghost>删除</Button> }
         </Space> }
         refresh={ refresh }
         tableProps={{
