@@ -1,10 +1,11 @@
 import React from 'react'
 import { Button, Spin, Space, TablePaginationConfig, Table } from 'antd';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 import { DetailContent, CommonTable } from '../../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../../utils/RequestUtil';
 import { useState } from 'react';
+import ExportList from '../../../../components/export/list';
 
 const towerColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
@@ -35,6 +36,9 @@ export default function PickTowerDetail(): React.ReactNode {
         total: 0,
         showSizeChanger: false
     });
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
+    const [isExport, setIsExportStoreList] = useState(false)
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/check`,{productSegmentId:params.productSegmentId,...tablePagination, size:tablePagination.pageSize})
         setTableDataSource(data.records);
@@ -62,7 +66,23 @@ export default function PickTowerDetail(): React.ReactNode {
             <DetailContent operation={[
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
-                {/* <Button type='primary' onClick={()=>{window.open()}}>导出</Button> */}
+                <Button type='primary' onClick={()=>{setIsExportStoreList(true)}}>导出</Button>
+                {isExport?<ExportList
+                    history={history}
+                    location={location}
+                    match={match}
+                    columnsKey={() => {
+                        let keys = [...towerColumns]
+                        keys.pop()
+                        return keys
+                    }}
+                    current={tablePagination.current}
+                    size={tablePagination.pageSize}
+                    total={tablePagination.total}
+                    url={'/tower-science/assessTask'}
+                    serchObj={{}}
+                    closeExportList={() => { setIsExportStoreList(false) }}
+                />:null}
                 <Table 
                     dataSource={tableDataSource} 
                     columns={towerColumns}
