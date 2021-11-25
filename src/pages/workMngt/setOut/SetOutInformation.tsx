@@ -103,30 +103,6 @@ export default function SetOutInformation(): React.ReactNode {
         <DetailTitle title="产品信息" />
         <BaseInfo columns={productColumns} dataSource={detailData} col={2} />
         <Attachment dataSource={detailData.attachVos || []} />
-        {/* <DetailTitle title="相关附件" />
-        <CommonTable columns={[
-            { 
-                key: 'name', 
-                title: '附件名称', 
-                dataIndex: 'name',
-                width: 350
-            },
-            { 
-                key: 'operation', 
-                title: '操作', 
-                dataIndex: 'operation', 
-                render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                    <Space direction="horizontal" size="small">
-                        <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
-                        {
-                            record.fileSuffix === 'pdf' ? <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : null
-                        }
-                    </Space>
-            ) }
-        ]}
-            dataSource={ detailData.attachVos }
-            pagination={ false }
-        /> */}
         <DetailTitle title="操作信息" />
         <CommonTable columns={tableColumns} dataSource={detailData.stateRecordVOS} pagination={false} />
     </DetailContent>
