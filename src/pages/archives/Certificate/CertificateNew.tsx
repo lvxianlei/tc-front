@@ -11,7 +11,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import moment from 'moment';
 import { dataTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IDatabaseTree } from '../../basicData/database/DatabaseMngt';
-import SelectUserTransfer from '../../Announcement/SelectUserTransfer';
+import SelectUserTransfer from '../../announcement/SelectUserTransfer';
 import { IStaff } from '../../dept/staff/StaffMngt';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 

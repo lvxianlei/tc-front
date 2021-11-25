@@ -3,39 +3,37 @@
  * @copyright © 2021 
  * @description 详情
 */
-
 import React, { useState } from 'react';
 import { Spin, Button, Space, Modal, Image } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-
 const tableColumns = [
     {
-        key: 'recordType', 
-        title: '操作类型', 
+        key: 'recordType',
+        title: '操作类型',
         dataIndex: 'recordType'
     },
     {
-        key: 'stateFront', 
-        title: '操作前状态', 
+        key: 'stateFront',
+        title: '操作前状态',
         dataIndex: 'stateFront'
     },
     {
-        key: 'stateAfter', 
-        title: '操作后状态', 
+        key: 'stateAfter',
+        title: '操作后状态',
         dataIndex: 'stateAfter'
     },
-    {  
-        key: 'createUserName', 
-        title: '操作人', 
-        dataIndex: 'createUserName' 
+    {
+        key: 'createUserName',
+        title: '操作人',
+        dataIndex: 'createUserName'
     },
-    { 
-        key: 'createTime', 
-        title: '操作时间', 
-        dataIndex: 'createTime' 
+    {
+        key: 'createTime',
+        title: '操作时间',
+        dataIndex: 'createTime'
     }
 ]
 
@@ -65,10 +63,10 @@ const baseColums = [
 export default function AssemblyWeldingInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
-    const [ pictureVisible, setPictureVisible ] = useState(false);
-    const [ pictureUrl, setPictureUrl ] = useState('');
+    const [pictureVisible, setPictureVisible] = useState(false);
+    const [pictureUrl, setPictureUrl] = useState('');
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-system/notice/getNoticeById/${ params.id }`)
+        const data = await RequestUtil.get(`/tower-system/notice/getNoticeById/${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data;
@@ -79,48 +77,49 @@ export default function AssemblyWeldingInformation(): React.ReactNode {
     }
 
     return <>
-        <DetailContent operation={ [
+        <DetailContent operation={[
             <Space direction="horizontal" size="small" >
                 <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
             </Space>
-        ] }>
+        ]}>
             <DetailTitle title="基本信息" />
-            <BaseInfo columns={ baseColums } dataSource={ detailData } col={ 2 } />
+            <BaseInfo columns={baseColums} dataSource={detailData} col={2} />
             <DetailTitle title="相关附件" />
             <CommonTable columns={[
-                { 
-                    key: 'name', 
-                    title: '附件名称', 
+                {
+                    key: 'name',
+                    title: '附件名称',
                     dataIndex: 'name',
                     width: 250
                 },
-                { 
-                    key: 'operation', 
-                    title: '操作', 
-                    dataIndex: 'operation', 
+                {
+                    key: 'operation',
+                    title: '操作',
+                    dataIndex: 'operation',
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                         <Space direction="horizontal" size="small">
-                            <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
+                            <Button type="link" onClick={() => window.open(record.filePath)}>下载</Button>
                             {
-                                record.fileSuffix === 'pdf' 
-                                ? 
-                                <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> 
-                                : ['jpg', 'jpeg', 'png', 'gif'].includes(record.fileSuffix) 
-                                ? 
-                                <Button type='link' onClick={ () => { setPictureUrl(record.filePath); setPictureVisible(true) } }>预览</Button> 
-                                : null 
+                                record.fileSuffix === 'pdf'
+                                    ?
+                                    <Button type="link" onClick={() => window.open(record.filePath)}>预览</Button>
+                                    : ['jpg', 'jpeg', 'png', 'gif'].includes(record.fileSuffix)
+                                        ?
+                                        <Button type='link' onClick={() => { setPictureUrl(record.filePath); setPictureVisible(true) }}>预览</Button>
+                                        : null
                             }
                         </Space>
-                ) }
+                    )
+                }
             ]}
-                dataSource={ detailData.attachVos }
-                pagination={ false }
+                dataSource={detailData.attachVos}
+                pagination={false}
             />
-            <DetailTitle title="操作信息"/>
-            <CommonTable columns={ tableColumns } dataSource={ detailData.businessRecordVos } pagination={ false } />
+            <DetailTitle title="操作信息" />
+            <CommonTable columns={tableColumns} dataSource={detailData.businessRecordVos} pagination={false} />
         </DetailContent>
-        <Modal visible={ pictureVisible } onCancel={ () => setPictureVisible(false) } footer={ false }>
-            <Image src={ pictureUrl } preview={ false } />
+        <Modal visible={pictureVisible} onCancel={() => setPictureVisible(false)} footer={false}>
+            <Image src={pictureUrl} preview={false} />
         </Modal>
     </>
 }

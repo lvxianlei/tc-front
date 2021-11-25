@@ -58,6 +58,7 @@ export default function Invoicing() {
                     </>
                 }
             }]}
+        extraOperation={<Link to="/project/invoicing/edit/new"><Button type="primary">新增开票申请</Button></Link>}
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {
