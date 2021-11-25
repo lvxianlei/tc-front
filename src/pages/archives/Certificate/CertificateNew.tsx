@@ -352,8 +352,8 @@ export default function CertificateNew(): React.ReactNode {
                     endDate: items.endDate && moment(items.endDate)
                 }
             })
-            console.log(data)
             setDataList(data);
+            form.setFieldsValue({ list: data });
         } else {
             setDataList([]);
         }
