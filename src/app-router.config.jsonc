@@ -1355,6 +1355,14 @@
       // "authority": "rd_small_sample_management"
       "authority": "approvalm"
     },
+    { // 工作管理-小样图
+      "name": "小样图下载",
+      "path": "/workMngt/sampleDrawList/sampleDraw/:id/:status/downLoad",
+      "module": "./pages/workMngt/sampleDrawList/DownLoadSampleDraw",
+      "exact": true,
+      // "authority": "rd_small_sample_management"
+      "authority": "approvalm"
+    },
     { // 工作管理-校核
       "name": "小样图校核",
       "path": "/workMngt/sampleDrawList/sampleDrawCheck/:id/:status",

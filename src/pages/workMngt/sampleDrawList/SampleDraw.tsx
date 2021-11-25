@@ -168,8 +168,8 @@ export default function SampleDraw(): React.ReactNode {
                         showUploadList={false}
                     ><Button type="primary" >导入</Button></Upload>:null}
                     <Button type="primary" onClick={()=>{
-                        downloadTemplate(`/tower-science/smallSample/download/${params.id}`, '小样图', {} , true)
-                    }}>下载小样图</Button>
+                       history.push(`/workMngt/sampleDrawList/sampleDraw/${params.id}/${params.status}/downLoad`)
+                    }}>下载样图</Button>
                     {params.status==='2'?<Popconfirm
                         title="确认完成小样图?"
                         onConfirm={ async () =>  await RequestUtil.put(`/tower-science/smallSample/sampleComplete?productCategoryId=${params.id}`).then(()=>{
