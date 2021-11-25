@@ -9,9 +9,10 @@ import { Space, Button, Popconfirm, Spin } from 'antd';
 import { CommonTable, DetailContent } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
+import ExportList from '../../../components/export/list';
 
 export default function PackingList(): React.ReactNode {
     const columns = [
@@ -118,6 +119,9 @@ export default function PackingList(): React.ReactNode {
 
     const history = useHistory();
     const params = useParams<{ id: string, productId: string }>();
+    const match = useRouteMatch();
+    const location = useLocation();
+    const [ isExport, setIsExport ] = useState(false);
     const [ bundleData, setBundleData ] = useState([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get(`/tower-science/packageStructure/list`, { productId: params.productId })
@@ -158,5 +162,21 @@ export default function PackingList(): React.ReactNode {
             })}/>
             <CommonTable dataSource={ [...bundleData] } columns={ bundleColumns } pagination={ false }/>
         </DetailContent>
+        {isExport ? <ExportList
+            history={history}
+            location={location}
+            match={match}
+            columnsKey={() => {
+                let keys = [...columns]
+                keys.pop()
+                return keys
+            }}
+            current={detailData?.current || 1}
+            size={detailData?.size || 10}
+            total={detailData?.total || 0}
+            url={``}
+            serchObj={{}}
+            closeExportList={() => setIsExport(false)}
+        /> : null}
     </>
 }
