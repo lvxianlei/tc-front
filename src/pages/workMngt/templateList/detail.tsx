@@ -1,11 +1,13 @@
 import React, { useState, } from "react"
-import { Button, Popconfirm, } from 'antd'
-import { Page } from '../../common'
-import { useHistory, useRouteMatch } from "react-router-dom"
+import { Button, message, Popconfirm, } from 'antd'
+import { Attachment, Page } from '../../common'
+import { useHistory, useParams, } from "react-router-dom"
 import RequestUtil from "../../../utils/RequestUtil"
+import { downLoadFile } from "../../../utils";
+import { FileProps } from '../../common/Attachment';
 export default function TemplateDetail() {
     const history = useHistory()
-    const match: any = useRouteMatch()
+    const params: any = useParams<{ id: string }>()
     const [refresh, setRefresh] = useState(false);
     const columns: any[] = [
         {
@@ -62,6 +64,7 @@ export default function TemplateDetail() {
                         <span
                             style={{ cursor: 'pointer', color: '#FF8C00' }}
                             onClick={() => {
+                                downLoadFile(`/tower-science/loftingTemplate/download/${item.id}`)
                             }}
                         >下载</span>
                     </div>
@@ -71,24 +74,44 @@ export default function TemplateDetail() {
     ]
     /**
      * 删除
-     * @param templateId 
+     * @param templateRecordId 
      */
-    const deleteItem = async (templateId: string) => {
+    const deleteItem = async (templateRecordId: string) => {
         await RequestUtil.put('/tower-science/loftingTemplate/delete', {
-            templateId,
+            templateRecordId,
         })
         setRefresh(!refresh)
     }
     return (
         <>
             <Page
-                path={`/tower-science/loftingTemplate/record/${match.params.id}`}
+                path={`/tower-science/loftingTemplate/record/${params.id}`}
                 columns={columns}
                 refresh={refresh}
                 extraOperation={
                     <div>
-                        <Button type="primary" ghost>上传</Button>
-                        <Button type="primary" ghost onClick={() => { history.go(-1) }}>返回上一级</Button>
+                        {/* <Button type="primary" ghost>上传</Button> */}
+                        <Attachment isTable={false} onDoneChange={(dataInfo: FileProps[]) => {
+                            let fileList = dataInfo.map((item, index) => {
+                                return {
+                                    name: item.fileName,
+                                    fileId: item.uid,
+                                    templateId: params.id,
+                                    createUser: sessionStorage.getItem('USER_ID') || '',
+                                    createUserName: sessionStorage.getItem('USER_NAME') || '',
+                                }
+                            })
+                            if (!fileList.length) {
+                                return;
+                            }
+                            RequestUtil.post(`/tower-science/productNc/importProductNc`, [...fileList]).then(res => {
+                                if (res) {
+                                    message.success('上传成功');
+                                    setRefresh(!refresh);
+                                }
+                            })
+                        }}><Button type="primary" ghost>上传</Button></Attachment>
+                        <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回上一级</Button>
                     </div>
                 }
                 searchFormItems={[]}

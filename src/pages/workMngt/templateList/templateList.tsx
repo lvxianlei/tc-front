@@ -1,5 +1,5 @@
 import React, { useState, } from "react"
-import { Button, Input, DatePicker, Select, } from 'antd'
+import { Input, DatePicker, Select, } from 'antd'
 import { Page } from '../../common'
 import { useHistory } from "react-router-dom"
 export default function TemplateList() {
@@ -8,53 +8,72 @@ export default function TemplateList() {
     const columns: any[] = [
         {
             title: '序号',
-            dataIndex: 'entryNo',
+            dataIndex: 'index',
             fixed: true,
             align: 'center',
+            render: (text: any, item: any, index: number) => {
+                return <span>{index + 1}</span>
+            }
         },
         {
             title: '放样任务编号',
-            dataIndex: 'supplierName',
+            dataIndex: 'taskNum',
             align: 'center',
         },
         {
             title: '上传图纸类型',
-            dataIndex: 'supplierName',
+            dataIndex: 'uploadDrawType',
             align: 'center',
+            render: (text: any) => {
+                switch (text) {
+                    case 1:
+                        return '组装图纸'
+                    case 2:
+                        return '发货图纸'
+                }
+            }
         },
         {
             title: '内部合同编号',
-            dataIndex: 'supplierName',
+            dataIndex: 'internalNumber',
             align: 'center',
         },
         {
             title: '任务单编号',
-            dataIndex: 'supplierName',
+            dataIndex: 'externalTaskNum',
             align: 'center',
         },
         {
             title: '塔型',
-            dataIndex: 'supplierName',
+            dataIndex: 'productCategoryName',
             align: 'center',
         },
         {
             title: '计划交付时间',
-            dataIndex: 'supplierName',
+            dataIndex: 'deliverTime',
             align: 'center',
         },
         {
             title: '图纸负责人',
-            dataIndex: 'supplierName',
+            dataIndex: 'drawLeaderName',
             align: 'center',
         },
         {
             title: '上传状态',
-            dataIndex: 'supplierName',
+            dataIndex: 'uploadStatus',
             align: 'center',
+            render: (text: any) => {
+                switch (text) {
+                    case 1:
+                        return '待上传'
+                    case 2:
+                        return '已上传'
+                }
+            }
         },
         {
             title: '最新状态变更时间',
-            dataIndex: 'supplierName',
+            dataIndex: 'updateStatusTime',
             align: 'center',
         },
         {
@@ -90,7 +109,7 @@ export default function TemplateList() {
                 path="/tower-science/loftingTemplate"
                 filterValue={filterValue}
                 columns={columns}
-                extraOperation={<Button type="primary" ghost>导出</Button>}
+                exportPath={`/tower-science/loftingTemplate`}
                 onFilterSubmit={onFilterSubmit}
                 searchFormItems={[
                     {
