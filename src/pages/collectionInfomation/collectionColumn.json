@@ -25,7 +25,7 @@
             "dataIndex": "currencyTypeName"
         },
         {
-            "title": "汇率",
+            "title": "汇率（%）",
             "dataIndex": "exchangeRate"
         },
         {
@@ -64,6 +64,7 @@
             "dataIndex": "payCompany",
             "title": "来款单位名称",
             "placeholder": "请输入单位名称",
+            "maxLength": 100,
             "rules": [
                 {
                     "required": true,
@@ -146,6 +147,7 @@
         {
             "dataIndex": "payBank",
             "title": "收款银行",
+            "maxLength": 100,
             "placeholder": "请输入收款银行"
         },
         {
@@ -174,6 +176,7 @@
             "dataIndex": "description",
             "title": "备注",
             "type": "textarea",
+            "maxLength": 400,
             "placeholder": "请输入备注"
         }
     ],

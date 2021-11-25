@@ -2,46 +2,67 @@
  * 保函申请
  * 2021/11/22
  */
-import React, { useState } from 'react';
-import { Button, Input, DatePicker, Radio, Select } from 'antd';
+import React, { useState, useRef } from 'react';
+import { Button, Input, DatePicker, Radio, Select, message, Modal } from 'antd';
+import useRequest from '@ahooksjs/use-request'
 import { useHistory } from 'react-router-dom';
+import RequestUtil from '../../utils/RequestUtil';
 import { Page } from '../common';
 import { collectionListHead, approvalStatus } from "./applicationColunm.json";
-import RequestUtil from '../../utils/RequestUtil';
-
 // 引入填写保函信息的弹框
 import FillGuaranteeInformation from './fillGuaranteeInformation';
 // 引入回收保函信息的弹框
 import RecoveryGuaranteeLayer from './recoveryGuarantee';
 // 引入查看保函申请
 import SeeGuarantee from './seeGuarantee';
+interface EditRefProps {
+    id?: string
+    onSubmit: () => void
+    resetFields: () => void
+}
 
-const { Option } = Select;
-
-export default function ApplicationColunm() {
+export default function ApplicationColunm(): React.ReactNode {
     const history = useHistory();
     const [ refresh, setRefresh ] = useState<boolean>(false);
     const [confirmStatus, setConfirmStatus] = useState<number>(1);
     const [ visible, setVisible ] = useState<boolean>(false);
     const [visibleRecovery, setVisibleRecovery] = useState<boolean>(false);
     const [ visibleSee, setVisibleSee ] = useState<boolean>(false);
+    const [id, setId] = useState<string>();
+    const addRef = useRef<EditRefProps>();
+    const addRecoveryRef = useRef<EditRefProps>()
+    const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-finance/guarantee/${id}`)
+            resole(result)
+            setVisibleSee(true);
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
     // 查询按钮
     const onFilterSubmit = (value: any) => {
         if (value.startRefundTime) {
             const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startRefundTime = formatDate[0]
-            value.endRefundTime = formatDate[1]
+            value.applicantStartTime = formatDate[0]
+            value.applicantEndTime = formatDate[1]
+            delete value.startRefundTime
         }
+        // 出具日期
         if (value.issuanceDateTime) {
             const formatDate = value.issuanceDateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startRefundTime = formatDate[0]
-            value.endRefundTime = formatDate[1]
+            value.issuanceStartTime = formatDate[0]
+            value.issuanceEndTime = formatDate[1]
+            delete value.issuanceDateTime
         }
+        // 保函交回日期
         if (value.guaranteeTime) {
             const formatDate = value.guaranteeTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startRefundTime = formatDate[0]
-            value.endRefundTime = formatDate[1]
+            value.recoveryStartTime = formatDate[0]
+            value.recoveryEndTime = formatDate[1]
+            delete value.guaranteeTime
         }
+        value["confirmStatus"] = confirmStatus;
         return value
     }
     
@@ -52,23 +73,35 @@ export default function ApplicationColunm() {
     }
 
     // 新增回调
-    const handleOk = () => {
-        setVisible(false);
-    }
+    const handleOk = () => new Promise(async (resove, reject) => {
+        try {
+            await addRef.current?.onSubmit()
+            message.success("回款信息新增成功...")
+            setVisible(false)
+            history.go(0)
+            resove(true)
+        } catch (error) {
+            reject(false)
+        }
+    })
 
     // 回收保函信息
-    const handleOkuseState = (data: object, callBack: any) => {
-        // setVisibleRecovery(false);
-        setTimeout(() => {
-            callBack();
-            setVisibleRecovery(false);
-        }, 1000);
-    }
+    const handleOkuseState = () => new Promise(async (resove, reject) => {
+        try {
+            await addRecoveryRef.current?.onSubmit()
+            message.success("回款保函新增成功...")
+            setVisibleRecovery(false)
+            history.go(0)
+            resove(true)
+        } catch (error) {
+            reject(false)
+        }
+    })
 
     return (
         <>
             <Page
-                path="/tower-market/backMoney"
+                path="/tower-finance/guarantee"
                 columns={[
                     {
                         key: 'index',
@@ -84,26 +117,17 @@ export default function ApplicationColunm() {
                         fixed: "right",
                         width: 100,
                         render: (_: any, record: any) => {
-                            /**
-                             * 这一块重新处理
-                             */
-                            if (record.confirmStatus === 0) {
-                                return (
-                                    <>
-                                        <Button type="link" onClick={() => setVisibleSee(true)}>查看</Button>
-                                        <Button type="link" onClick={() => setVisible(true)}>填写保函信息</Button>
-                                        <Button type="link">生成文件</Button>
-                                    </>
-                                )
-                            } else if (record.confirmStatus === 1) {
-                                return (
-                                    <>
-                                        <Button type="link" onClick={() => setVisibleSee(true)}>查看</Button>
-                                        <Button type="link" onClick={() => setVisibleRecovery(true)}>回收保函</Button>
-                                    </>
-                                )
-                            }
-                            return <Button type="link" onClick={() => setVisibleSee(true)}>查看</Button>
+                            return (
+                                <>
+                                    <Button type="link" onClick={() => getUser(record.id)}>查看</Button>
+                                    {confirmStatus === 1 && <Button type="link" onClick={() => setVisible(true)}>填写保函信息</Button>}
+                                    {confirmStatus === 2 && <Button type="link" onClick={() => {
+                                        setVisibleRecovery(true);
+                                        setId(record.id);
+                                    }}>回收保函</Button>}
+                                    {confirmStatus === 1 && <Button type="link">生成文件</Button>}
+                                </>
+                            )
                         }
                     }]}
                 refresh={ refresh }
@@ -111,7 +135,7 @@ export default function ApplicationColunm() {
                     <>
                     <Radio.Group defaultValue={confirmStatus} onChange={operationChange}>
                         {
-                            approvalStatus.map((item: any) => <Radio.Button value={item.value}>{item.label}</Radio.Button>)
+                            approvalStatus.map((item: any, index: number) => <Radio.Button value={item.value} key={`${index}_${item.value}`}>{item.label}</Radio.Button>)
                         }
                     </Radio.Group>
                     </>
@@ -137,35 +161,59 @@ export default function ApplicationColunm() {
                         name: 'guaranteeTime',
                         label: '保函交回日期',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
-                    },
-                    {
-                        name: 'approvalStatus',
-                        label: '审批状态',
-                        children: (
-                            <Select style={{ width: 120 }} placeholder="请选择">
-                                <Option value="1">全部</Option>
-                                <Option value="2">审批中</Option>
-                                <Option value="3">已通过</Option>
-                            </Select>
-                        )
                     }
                 ]}
             />
             {/* 填写保函信息 */}
-            <FillGuaranteeInformation
+            <Modal
+                title={'填写保函信息'}
                 visible={visible}
-                onCancel={() => setVisible(false)}
-                onOk={handleOk}
-            />
+                width={1000}
+                onCancel={() => {
+                    addRef.current?.resetFields();
+                    setVisible(false);
+                }}
+                  footer={[
+                    <Button key="submit" type="primary" onClick={() => handleOk()}>
+                      提交
+                    </Button>,
+                    <Button key="back" onClick={() => {
+                        addRef.current?.resetFields();
+                        setVisible(false);
+                    }}>
+                      取消
+                    </Button>
+                  ]}
+            >
+                <FillGuaranteeInformation ref={addRef} />
+            </Modal>
             {/* 回收保函弹框 */}
-            <RecoveryGuaranteeLayer
+            <Modal
+                title={'回收保函'}
                 visible={visibleRecovery}
-                onCancel={() => setVisibleRecovery(false)}
-                onOk={handleOkuseState}
-            />
+                width={1000}
+                onCancel={() => {
+                    setVisibleRecovery(false)
+                    addRecoveryRef.current?.resetFields();
+                }}
+                  footer={[
+                    <Button key="submit" type="primary" onClick={() => handleOkuseState()}>
+                      提交
+                    </Button>,
+                    <Button key="back" onClick={() => {
+                        setVisibleRecovery(false)
+                        addRecoveryRef.current?.resetFields();
+                    }}>
+                      取消
+                    </Button>
+                  ]}
+            >
+                <RecoveryGuaranteeLayer ref={addRecoveryRef} id={id} />
+            </Modal>
             {/* 查看保函申请 */}
             <SeeGuarantee
                 visible={visibleSee}
+                userData={userData}
                 onCancel={() => setVisibleSee(false)}
                 onOk={() => setVisibleSee(false)}
             />

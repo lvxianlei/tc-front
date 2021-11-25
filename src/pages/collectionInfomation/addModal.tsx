@@ -1,16 +1,20 @@
 /**
  * 新增回款信息
  */
-import React, { useState } from 'react';
-import { Modal, Form, Button, ModalFuncProps } from 'antd';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import { Form, Spin } from 'antd';
 import { BaseInfo } from '../common';
 import { baseColums } from './collectionColumn.json';
+import useRequest from '@ahooksjs/use-request'
+import RequestUtil from '../../utils/RequestUtil';
 import ApplicationContext from "../../configuration/ApplicationContext"
+interface EditProps {
+    ref?: React.RefObject<{ onSubmit: () => Promise<any> }>
+}
 
-export default function AddModal(props: ModalFuncProps): JSX.Element {
+export default forwardRef(function AddModal({}: EditProps, ref) {
     const [ addCollectionForm ] = Form.useForm();
     const [ columns, setColumns ] = useState(baseColums);
-    const [ loading, setLoading ] = useState<boolean>(false);
     const [ status, setStatus ] = useState<boolean>(true);
 
     // 币种
@@ -28,30 +32,7 @@ export default function AddModal(props: ModalFuncProps): JSX.Element {
         value: item.id,
         label: item.name
     }))
-
-    // 提交
-    const handleSure = async () => {
-        const postData = await addCollectionForm.validateFields();
-        console.log(postData, 'post')
-        setLoading(true);
-        setStatus(true);
-        props.onOk && props.onOk({data: 10}, () => {
-            addCollectionForm.resetFields();
-            setLoading(false);
-            const result: any = handleDisbled();
-            setColumns(result);
-        });
-    }
-
-    // 取消
-    const handleCancle = () => {
-        addCollectionForm.resetFields();
-        const result: any = handleDisbled();
-        setColumns(result);
-        setStatus(true);
-        props.onCancel && props.onCancel();
-    }
-
+    
     // 定义取消以及确认的时候禁用取消
     const handleDisbled = () => {
         const result:any = [];
@@ -145,23 +126,37 @@ export default function AddModal(props: ModalFuncProps): JSX.Element {
         setStatus(false);
     }
 
+    const resetFields = () => {
+        addCollectionForm.resetFields()
+        const result: any = handleDisbled();
+        setColumns(result);
+        setStatus(true);
+    }
+
+    const { loading, run } = useRequest((postData: { path: string, data: {} }) => new Promise(async (resolve, reject) => {
+        try {
+            const result = await RequestUtil.post(postData.path, postData.data)
+            resolve(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const onSubmit = () => new Promise(async (resolve, reject) => {
+        try {
+            const baseData = await addCollectionForm.validateFields()
+            await run({path: "/tower-finance/backMoney", data: baseData})
+            addCollectionForm.resetFields();
+            const result: any = handleDisbled();
+            setColumns(result);
+            resolve(true)
+        } catch (error) {
+            reject(false)
+        }
+    })
+    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit])
     return (
-        <Modal
-          title={'新增回款信息'}
-          visible={props.visible}
-          onOk={handleSure}
-          onCancel={handleCancle}
-          maskClosable={false}
-          width={800}
-          footer={[
-            <Button key="submit" type="primary" onClick={handleSure} loading={loading}>
-              提交
-            </Button>,
-            <Button key="back" onClick={handleCancle}>
-              取消
-            </Button>
-          ]}
-        >
+        <Spin spinning={loading}>
             <BaseInfo form={addCollectionForm} dataSource={
                 currencyEnum.map((item: any) => {
                     if (item.label === "RMB人民币" && status) {
@@ -185,6 +180,6 @@ export default function AddModal(props: ModalFuncProps): JSX.Element {
                 })}
                 onChange={handleBaseInfoChange}
             />
-        </Modal>
+        </Spin>
     )
-}
+})

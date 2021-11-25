@@ -1,34 +1,39 @@
 /**
  * 回收保函
  */
-import React, { useState } from 'react';
-import { Modal, Form, Button, ModalFuncProps } from 'antd';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import { Form, Spin } from 'antd';
 import { BaseInfo } from '../common';
 import { recoveryGuarantee } from './applicationColunm.json';
-
-export default function RecoveryGuaranteeLayer(props: ModalFuncProps): JSX.Element {
+import useRequest from '@ahooksjs/use-request'
+import RequestUtil from '../../utils/RequestUtil';
+interface EditProps {
+  id?: string
+  ref?: React.RefObject<{ onSubmit: () => Promise<any> }>
+}
+export default forwardRef(function RecoveryGuaranteeLayer({id}: EditProps, ref) {
   const [addCollectionForm] = Form.useForm();
   const [column, setColumn] = useState(recoveryGuarantee);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
-    // 提交
-    const handleSure = async () => {
-        const postData = await addCollectionForm.validateFields();
-        console.log(postData, 'post')
-        setLoading(true);
-        props.onOk && props.onOk(postData, () => {
-          // 回调的形式
-          setLoading(false);
-          addCollectionForm.resetFields();
-        });
-    }
+  //   // 提交
+  //   const handleSure = async () => {
+  //       const postData = await addCollectionForm.validateFields();
+  //       console.log(postData, 'post')
+  //       setLoading(true);
+  //       props.onOk && props.onOk(postData, () => {
+  //         // 回调的形式
+  //         setLoading(false);
+  //         addCollectionForm.resetFields();
+  //       });
+  //   }
 
-    // 取消
-    const handleCancle = () => {
-      addCollectionForm.resetFields();
-      setColumn(recoveryGuarantee);
-      props.onCancel && props.onCancel();
-   }
+  //   // 取消
+  //   const handleCancle = () => {
+  //     addCollectionForm.resetFields();
+  //     setColumn(recoveryGuarantee);
+  //     props.onCancel && props.onCancel();
+  //  }
 
     const handleBaseInfoChange = (fields: any) => {
       let result: any = [];
@@ -60,32 +65,42 @@ export default function RecoveryGuaranteeLayer(props: ModalFuncProps): JSX.Eleme
       }
       setColumn(result);
     }
+    const resetFields = () => {
+      addCollectionForm.resetFields();
+      setColumn(recoveryGuarantee);
+  }
 
-    return (
-        <Modal
-          title={'回收保函'}
-          visible={props.visible}
-          onOk={handleSure}
-          onCancel={handleCancle}
-          maskClosable={false}
-          width={1100}
-          footer={[
-          <Button key="submit" type="primary" onClick={handleSure} loading={loading}>
-            保存
-          </Button>,
-          <Button key="back" onClick={handleCancle}>
-            取消
-          </Button>
-        ]}
-        >
-            <BaseInfo
-              form={addCollectionForm}
-              dataSource={{content: 1}}
-              col={ 2 }
-              edit
-              columns={ column}
-              onChange={handleBaseInfoChange}
-            />
-        </Modal>
-    )
-}
+
+  const { loading, run } = useRequest((postData: { path: string, data: {} }) => new Promise(async (resolve, reject) => {
+      try {
+          const result = await RequestUtil.put(postData.path, postData.data)
+          resolve(result);
+          addCollectionForm.resetFields();
+      } catch (error) {
+          reject(error)
+      }
+  }), { manual: true })
+
+  const onSubmit = () => new Promise(async (resolve, reject) => {
+      try {
+          const baseData = await addCollectionForm.validateFields()
+          await run({path: "/tower-finance/guarantee/saveRecycledGuarantee", data: {...baseData, id}})
+          resolve(true)
+      } catch (error) {
+          reject(false)
+      }
+  })
+  useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit]);
+  return (
+    <Spin spinning={loading}>
+      <BaseInfo
+        form={addCollectionForm}
+        dataSource={{content: 1}}
+        col={ 2 }
+        edit
+        columns={ column}
+        onChange={handleBaseInfoChange}
+      />
+    </Spin>
+  )
+})

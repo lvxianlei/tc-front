@@ -73,6 +73,7 @@
             "title": "出具日期",
             "type": "date",
             "format": "YYYY-MM-DD",
+            "placeholder": "请选择出具日期",
             "rules": [
                 {
                     "required": true,
@@ -85,6 +86,7 @@
             "title": "要求交回日期",
             "type": "date",
             "format": "YYYY-MM-DD",
+            "placeholder": "请选择要求交回日期",
             "rules": [
                 {
                     "required": true,
@@ -97,6 +99,7 @@
             "title": "保函有效截止期",
             "type": "date",
             "format": "YYYY-MM-DD",
+            "placeholder": "请选择保函有效截止期",
             "rules": [
                 {
                     "required": true,
@@ -107,6 +110,7 @@
         {
             "dataIndex": "description",
             "title": "保函信息备注",
+            "placeholder": "请输入保函信息备注",
             "type": "textarea"
         }
     ],

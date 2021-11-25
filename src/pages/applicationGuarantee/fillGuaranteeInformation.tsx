@@ -1,24 +1,30 @@
 /**
  * 填写保函信息
  */
- import React, { useState } from 'react';
- import { Modal, Form, Upload, Button, ModalFuncProps } from 'antd';
+ import React, { useState, forwardRef, useImperativeHandle } from 'react';
+ import { Modal, Form, Upload, Button, Spin } from 'antd';
  import { BaseInfo, DetailTitle, CommonTable } from '../common';
  import AuthUtil from "../../utils/AuthUtil"
  import { downLoadFile } from "../../utils"
+ import useRequest from '@ahooksjs/use-request'
+ import RequestUtil from '../../utils/RequestUtil';
  import { baseColums, enclosure } from './applicationColunm.json';
+ interface EditProps {
+    id?: string
+    ref?: React.RefObject<{ onSubmit: () => Promise<any> }>
+}
  
- export default function FillGuaranteeInformation(props: ModalFuncProps): JSX.Element {
+ export default forwardRef(function FillGuaranteeInformation({id}: EditProps, ref) {
     const [addCollectionForm] = Form.useForm();
      
     const [attachVosData, setAttachVosData] = useState<any[]>([])
  
      // 提交
-     const handleSure = async () => {
-         const postData = await addCollectionForm.validateFields();
-         console.log(postData, 'post')
-         props.onOk && props.onOk();
-     }
+    //  const handleSure = async () => {
+    //      const postData = await addCollectionForm.validateFields();
+    //      console.log(postData, 'post')
+    //      props.onOk && props.onOk();
+    //  }
  
      const handleBaseInfoChange = (fields: any) => {
          console.log(fields, 'filed')
@@ -55,25 +61,40 @@
     const deleteAttachData = (id: number) => {
         setAttachVosData(attachVosData.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
     }
- 
-     return (
-         <Modal
-           title={'填写保函信息'}
-           visible={props.visible}
-           onOk={handleSure}
-           onCancel={props?.onCancel}
-           maskClosable={false}
-           width={1100}
-           footer={[
-            <Button key="submit" type="primary" onClick={handleSure}>
-              保存并提交
-            </Button>,
-            <Button key="back" onClick={props?.onCancel}>
-              取消
-            </Button>
-          ]}
-         >
-             <BaseInfo
+
+    const resetFields = () => {
+        addCollectionForm.resetFields()
+    }
+
+
+    const { loading, run } = useRequest((postData: { path: string, data: {} }) => new Promise(async (resolve, reject) => {
+        try {
+            const result = await RequestUtil.put(postData.path, postData.data)
+            resolve(result);
+            addCollectionForm.resetFields();
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const onSubmit = () => new Promise(async (resolve, reject) => {
+        try {
+            const baseData = await addCollectionForm.validateFields();
+            console.log(baseData, 'baseData');
+            console.log(attachVosData, "附件");
+            await run({path: "/tower-finance/guarantee", data: {...baseData, file: [], id}})
+            resolve(true)
+        } catch (error) {
+            reject(false)
+        }
+    })
+
+    
+    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit])
+
+    return (
+        <Spin spinning={loading}>
+            <BaseInfo
                 form={addCollectionForm}
                 dataSource={{content: 1}}
                 col={ 2 }
@@ -100,6 +121,6 @@
                     <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
                 </>)
             }, ...enclosure]} dataSource={attachVosData} />
-         </Modal>
-     )
- }
+        </Spin>
+    )
+ })

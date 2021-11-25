@@ -6,14 +6,24 @@ import { Modal, Form, Button } from 'antd';
 import { BaseInfo } from '../common';
 import { overViewColunms } from './collectionColumn.json';
 
-export default function OverView(props: any): JSX.Element {
+interface TitleType {
+    title: string
+    dataIndex: string
+}
+interface OverViewProps {
+    title: TitleType[]
+    visible?: boolean
+    userData?: object | undefined
+    onCancel: () => void
+}
+
+export default function OverView(props: OverViewProps): JSX.Element {
     const [addCollectionForm] = Form.useForm();
     // 取消
     const handleCancle = () => {
         addCollectionForm.resetFields();
         props.onCancel && props.onCancel();
     }
-    console.log(props.title)
     return (
         <Modal
             title={'查看回款信息'}
@@ -27,7 +37,7 @@ export default function OverView(props: any): JSX.Element {
                 </Button>
             ]}
         >
-            <BaseInfo form={addCollectionForm} dataSource={{}} col={ 2 }
+            <BaseInfo form={addCollectionForm} dataSource={props.userData || {}} col={ 2 }
                 columns={[
                     ...overViewColunms,
                     ...props.title.map((item: any) => {
