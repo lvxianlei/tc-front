@@ -2,7 +2,6 @@ import React, { forwardRef, useRef, useState } from 'react';
 import { Button, Space, Modal, Form, Input } from 'antd';
 import { DetailContent, Attachment, CommonTable, AttachmentRef } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
-import styles from './TowerLoftingAssign.module.less';
 import { FileProps } from '../../common/Attachment';
 
 export interface UploadModalProps {}

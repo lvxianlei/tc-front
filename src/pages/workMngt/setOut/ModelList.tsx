@@ -11,7 +11,6 @@ import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
-import AuthUtil from '../../../utils/AuthUtil';
 import UploadModal from './UploadModal';
 
 export default function ModelList(): React.ReactNode {
