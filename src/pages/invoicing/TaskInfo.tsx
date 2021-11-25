@@ -2,30 +2,22 @@ import React from "react"
 import { Button, message, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../common'
-import { baseInfoHead, invoiceHead, billingHead, batchHead } from "../project/Invoicing/InvoicingData.json"
+import { baseInfoHead, invoiceHead, billingHead } from "./InvoicingData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import ApplicationContext from "../../configuration/ApplicationContext"
-export default function Edit() {
+export default function Overview() {
     const history = useHistory()
-    const params = useParams<{ invoicing: string }>()
+    const params = useParams<{ invoicingId: string }>()
     const productType: any = (ApplicationContext.get().dictionaryOption as any)["101"]
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/invoicing/getInvoicingInfo/${params.invoicing}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-finance/invoicing/getTaskInfo/${params.invoicingId}`)
             resole(result)
         } catch (error) {
             reject(error)
         }
     }))
-    const { loading: approvalLoading, run } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/invoicing/approval`, { ...data, invoicingId: params.invoicing })
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
 
     return <DetailContent operation={[<Button key="cancel" onClick={() => history.go(-1)}>返回</Button>]}>
         <Spin spinning={loading}>

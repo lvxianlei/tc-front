@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react"
-import { Button, Upload, Form, message, Spin } from 'antd'
+import { Button, Form, message, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable, EditTable, formatData } from '../common'
-import { baseInfoHead, invoiceHead, billingHead } from "./InvoicingData.json"
-import { enclosure } from '../project/managementDetailData.json'
+import { DetailContent, DetailTitle, BaseInfo, CommonTable, EditTable, formatData, Attachment } from '../common'
+import { invoicingInfoHead, billingHead, editInvoicingHead } from "./InvoicingData.json"
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import AuthUtil from "../../utils/AuthUtil"
-import { downLoadFile } from "../../utils"
 import ApplicationContext from "../../configuration/ApplicationContext"
 export default function Edit() {
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ invoicingId: string }>()
     const history = useHistory()
     const [attachVosData, setAttachVosData] = useState<any[]>([])
     const [baseInfo] = Form.useForm()
@@ -21,8 +18,8 @@ export default function Edit() {
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/invoicing/getInvoicingInfo/${params.id}`)
-            baseInfo.setFieldsValue({ ...formatData(baseInfoHead, result) })
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-finance/invoicing/getInvoicingInfo/${params.invoicingId}`)
+            baseInfo.setFieldsValue({ ...formatData(invoicingInfoHead, result) })
             invoicForm.setFieldsValue({ ...result.invoicingInfoVo })
             billingForm.setFieldsValue({ submit: result.invoicingDetailVos.map((item: any) => formatData(billingHead, item)) })
             setAttachVosData(result.attachInfoVos)
@@ -30,26 +27,7 @@ export default function Edit() {
         } catch (error) {
             reject(error)
         }
-    }), { manual: params.id === "new" })
-
-    const { run: logicWeightRun } = useRequest<{ [key: string]: any }>((id) => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/taskNotice/getLogicWeightByContractId?contractId=
-            ${id}`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
-
-    const { loading: creteLoading, run: createRun } = useRequest<{ [key: string]: any }>((saveData) => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/invoicing`, saveData)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
+    }))
 
     const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((saveData) => new Promise(async (resole, reject) => {
         try {
@@ -69,44 +47,7 @@ export default function Edit() {
             openTicketType: 1,
             ticketBasis: 1
         })
-    }, [params.id === 'new'])
-
-    const uploadChange = (event: any) => {
-        if (event.file.status === "done") {
-            if (event.file.response.code === 200) {
-                const dataInfo = event.file.response.data
-                const fileInfo = dataInfo.name.split(".")
-                setAttachVosData([...attachVosData, {
-                    id: "",
-                    uid: attachVosData.length,
-                    link: dataInfo.link,
-                    name: dataInfo.originalName.split(".")[0],
-                    description: "",
-                    filePath: dataInfo.name,
-                    fileSize: dataInfo.size,
-                    fileSuffix: fileInfo[fileInfo.length - 1],
-                    userName: dataInfo.userName,
-                    fileUploadTime: dataInfo.fileUploadTime
-                }])
-            }
-        }
-    }
-
-    const generateInitValues = (columns: any[]) => {
-        const values: any = {}
-        columns.forEach((columnItem: any) => {
-            if (columnItem.type === "numbe") {
-                values[columnItem.dataIndex] = 0
-            } else if (columnItem.type === "select") {
-                values[columnItem.dataIndex] = null
-            }
-        })
-        return values
-    }
-
-    const deleteAttachData = (id: number) => {
-        setAttachVosData(attachVosData.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
-    }
+    }, [params.invoicingId === 'new'])
 
     const handleSave = async () => {
         try {
@@ -121,11 +62,11 @@ export default function Edit() {
                 attachInfoDtos: attachVosData,
                 invoicingInfoDto: { ...invoicData, id: data?.invoicingInfoVo.id || "", invoicingId: data?.invoicingInfoVo.invoicingId || "" }
             }
-            const result = params.id === "new" ? await createRun(saveData) : await saveRun({ ...saveData, id: data?.id })
-            if (result) {
-                message.success("数据保存成功...")
-                history.go(-1)
-            }
+            // const result = params.id === "new" ? await createRun(saveData) : await saveRun({ ...saveData, id: data?.id })
+            // if (result) {
+            //     message.success("数据保存成功...")
+            //     history.go(-1)
+            // }
         } catch (error) {
             console.log(error)
         }
@@ -135,12 +76,12 @@ export default function Edit() {
     const handleBaseInfoChange = async (fields: any) => {
         if (fields.contractCode) {
             const contractValue = fields.contractCode.records[0]
-            const logicWeight = await logicWeightRun(contractValue.id)
+            // const logicWeight = await logicWeightRun(contractValue.id)
             baseInfo.setFieldsValue({
                 contractCompany: contractValue.signCustomerName,
                 contractSignTime: contractValue.signContractTime,
-                ticketWeight: logicWeight.logicWeight,
-                reasonWeight: logicWeight.logicWeight,
+                // ticketWeight: logicWeight.logicWeight,
+                // reasonWeight: logicWeight.logicWeight,
                 contractDevTime: contractValue.deliveryTime,
                 business: contractValue.salesman,
                 projectCode: contractValue.projectNumber // 项目编码
@@ -197,7 +138,7 @@ export default function Edit() {
             <BaseInfo
                 onChange={handleBaseInfoChange}
                 form={baseInfo}
-                columns={baseInfoHead.map((item: any) => {
+                columns={invoicingInfoHead.map((item: any) => {
                     if (item.dataIndex === "productTypeId") {
                         return ({
                             ...item,
@@ -218,34 +159,10 @@ export default function Edit() {
                     }
                     return item
                 })}
-                dataSource={baseInfoHead} edit />
-
-            <DetailTitle title="发票信息" />
-            <BaseInfo form={invoicForm} columns={invoiceHead} dataSource={data?.invoicingInfoVo || {}} edit />
+                dataSource={{}} edit />
             <DetailTitle title="开票明细" operation={[]} />
-
-            <EditTable onChange={handleEditTableChange} form={billingForm} columns={billingHead} dataSource={data?.invoicingDetailDtos || []} />
-
-            <DetailTitle title="附件" operation={[<Upload
-                key="sub"
-                name="file"
-                multiple={true}
-                action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
-                headers={{
-                    'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                    'Tenant-Id': AuthUtil.getTenantId(),
-                    'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                }}
-                showUploadList={false}
-                onChange={uploadChange}
-            ><Button key="enclosure" type="primary" ghost>上传附件</Button></Upload>]} />
-            <CommonTable columns={[{
-                title: "操作", dataIndex: "opration",
-                render: (_: any, record: any) => (<>
-                    <Button type="link" onClick={() => deleteAttachData(record.uid || record.id)}>删除</Button>
-                    <Button type="link" onClick={() => downLoadFile(record.link || record.filePath)}>下载</Button>
-                </>)
-            }, ...enclosure]} dataSource={attachVosData} />
+            <EditTable onChange={handleEditTableChange} form={billingForm} columns={editInvoicingHead} dataSource={data?.invoicingDetailDtos || []} />
+            <Attachment edit />
         </Spin>
     </DetailContent>
 }

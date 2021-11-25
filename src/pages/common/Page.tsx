@@ -57,6 +57,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
         };
     }
     protected async fetchTableData(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
+        this.setState({ loading: true })
         try {
             const sourceDataKey: string[] = this.props.sourceKey?.split(".") || []
             const resData: IResponseData = await RequestUtil.get<IResponseData>(this.props.path, {
@@ -77,9 +78,11 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                     current: resData.current,
                     pageSize: resData.size,
                     total: resData.total
-                }
+                },
+                loading: false
             });
         } catch (error) {
+            this.setState({ loading: false })
             console.log(error)
         }
     }

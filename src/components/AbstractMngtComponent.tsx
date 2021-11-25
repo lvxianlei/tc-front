@@ -2,19 +2,19 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
+import React from 'react';
 import { Button, Card, Form, FormItemProps, Space, Table, Tabs, TabsProps } from 'antd';
 import { ColumnType, TablePaginationConfig, TableProps } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
-import React from 'react';
 import { RouteComponentProps } from 'react-router';
-
 import layoutStyles from '../layout/Layout.module.less';
 import styles from './AbstractMngtComponent.module.less';
 import './AbstractMngtComponent.module.less';
 import AbstractTabableComponent from './AbstractTabableComponent';
 import { ITabItem } from './ITabableComponent';
-
+import CommonTable from "../pages/common/CommonTable"
 export interface IAbstractMngtComponentState {
+    loading: boolean,
     selectedTabKey: React.Key;
     tablePagination: TablePaginationConfig | undefined;
 }
@@ -43,6 +43,7 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      */
     protected getState(): S {
         return {
+            loading: false,
             selectedTabKey: this.getTabItems()[0].key,
             tablePagination: {
                 current: 1,
@@ -246,7 +247,7 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      */
     protected renderTableContent(item: ITabItem): React.ReactNode {
         return (
-            <Table {...this.getTableProps(item)} size="small" className={styles.table} scroll={{ x: 'max-content' }} />
+            <CommonTable {...(this.getTableProps(item) as any)} loading={this.state.loading} />
         );
     }
 

@@ -1,17 +1,11 @@
 import React from "react"
 import { Table, TableColumnProps } from "antd"
+import { Resizable, ResizableBox } from "react-resizable"
 import styles from "./CommonTable.module.less"
 import moment from "moment"
 type ColumnsItemsType = "text" | "string" | "number" | "select" | "date" | undefined
 
 export function generateRender(type: ColumnsItemsType, data: (SelectData | TextData)) {
-    //添加kb
-    if (data.dataIndex == 'fileSize') {
-        return ({
-            render: (text: string) => <>{text+"kb"}</>,
-            ...data
-        })
-    }
     switch (type) {
         case "date":
             return ({
@@ -79,19 +73,41 @@ interface CommonTableProps {
     rowKey?: any
 }
 
+interface ResizableTitleProps extends React.Attributes {
+    isResizable?: boolean
+}
+
+export function ResizableTitle({ isResizable = false, ...props }: ResizableTitleProps): JSX.Element {
+    //TODO 拖拽改变宽度
+
+    const onResize = ({ ...arg }) => {
+        console.log(arg)
+    }
+
+    return isResizable ? <Resizable {...props as any} onResize={onResize}>
+        <th {...props} />
+    </ Resizable > : <th {...props} />
+}
+
 export default function CommonTable({ columns, dataSource = [], rowKey, haveIndex = false, ...props }: CommonTableProps): JSX.Element {
-    columns = columns.map((item: any, index: number) => generateRender(item.type || "text", item))
+    const formatColumns = columns.map((item: any) => generateRender(item.type || "text", item))
+    const columnsResult = haveIndex ? [{
+        title: "",
+        dataIndex: "index",
+        width: 50,
+        className: styles.tableCell,
+        render: (_: any, _a: any, index: number) => <>{index + 1}</>
+    }, ...formatColumns] : formatColumns
     return <Table
         size="small"
         scroll={{ x: true }}
         rowKey={rowKey || "id"}
-        columns={haveIndex ? [{
-            title: "序号",
-            dataIndex: "index",
-            width: 50,
-            className: styles.tableCell,
-            render: (_: any, _a: any, index: number) => <>{index + 1}</>
-        }, ...columns] : columns}
+        columns={columnsResult}
+        components={props.components || ({
+            header: {
+                cell: ResizableTitle
+            }
+        })}
         onRow={() => ({ className: styles.tableRow })}
         dataSource={dataSource}
         {...props}
