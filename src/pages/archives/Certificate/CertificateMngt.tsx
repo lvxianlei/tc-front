@@ -291,7 +291,7 @@ export default function CertificateMngt(): React.ReactNode {
                 {
                     name: 'fuzzyQuery',
                     label: '模糊查询项',
-                    children: <Input maxLength={50}/>
+                    children: <Input maxLength={50} placeholder="编号/名称/等级/姓名"/>
                 }
             ] }
             filterValue={ filterValue }

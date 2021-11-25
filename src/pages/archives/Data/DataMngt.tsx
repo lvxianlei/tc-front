@@ -49,10 +49,10 @@ export default function DataMngt(): React.ReactNode {
             dataIndex: 'dataName'
         },
         {
-            key: 'dataType',
+            key: 'dataTypeName',
             title: '资料类型',
             width: 150,
-            dataIndex: 'dataType'
+            dataIndex: 'dataTypeName'
         },
         {
             key: 'dataStatus',
@@ -247,7 +247,7 @@ export default function DataMngt(): React.ReactNode {
                 {
                     name: 'fuzzyQuery',
                     label: '模糊查询项',
-                    children: <Input maxLength={50}/>
+                    children: <Input maxLength={50} placeholder="编号/名称"/>
                 }
             ] }
             filterValue={ filterValue }
