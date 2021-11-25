@@ -4,7 +4,7 @@
  * @description 工作管理-螺栓列表
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Space, Input, DatePicker, Select, Button, Form } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -101,8 +101,6 @@ export default function BoltList(): React.ReactNode {
             dataIndex: 'boltStatus',
             render: (status: number): React.ReactNode => {
                 switch (status) {
-                    case 0:
-                        return '已拒绝';
                     case 1:
                         return '待开始';
                     case 2:
@@ -111,8 +109,6 @@ export default function BoltList(): React.ReactNode {
                         return '校核中';
                     case 4:
                         return '已完成';
-                    case 5:
-                        return '已提交';
                 }
             }
         },
@@ -130,42 +126,25 @@ export default function BoltList(): React.ReactNode {
             width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    {/* <Link to={`/workMngt/boltList/boltInformation/${record.loftingTask}/${record.id}`}>螺栓信息</Link> */}
                     {
-                        record.boltStatus === 2 && record.boltLeader === userId ? <Link to={`/workMngt/boltList/boltListing/${record.id}`}>螺栓清单</Link> : <Button type="link" disabled>螺栓清单</Button>
+                        record.boltLeader === userId ? <Link to={`/workMngt/boltList/boltListing/${record.id}`}>螺栓清单</Link> : <Button type="link" disabled>螺栓清单</Button>
                     }
                     {
                         record.boltStatus === 3 && record.loftingLeader === userId ? <Link to={`/workMngt/boltList/boltCheck/${record.id}`}>校核</Link> : <Button type="link" disabled>校核</Button>
                     }
-                    <Link to={`/workMngt/boltList/boltCheck/${record.id}`}>校核</Link>
-                    {/* {
-                        record.boltStatus === 4 && record.loftingLeader === userId ? 
-                        <Popconfirm
-                            title="确认提交?"
-                            onConfirm={ () => RequestUtil.put(`/tower-science/boltRecord/submit?id=${ record.id }`).then(res => {
-                                setRefresh(!refresh)
-                            }) }
-                            okText="提交"
-                            cancelText="取消"
-                        >
-                            <Button type="link">提交任务</Button>
-                        </Popconfirm> : <Button type="link" disabled>提交任务</Button>
-                    } */}
                 </Space>
             )
         }
     ]
 
-    const [refresh, setRefresh] = useState(false);
     const location = useLocation<{ state: {} }>();
     const userId = AuthUtil.getUserId();
     return <Page
         path="/tower-science/boltRecord"
         columns={columns}
         headTabs={[]}
-        refresh={refresh}
+        exportPath={`/tower-science/boltRecord`}
         requestData={{ boltStatus: location.state }}
-        // extraOperation={ <Button type="primary" ghost>导出</Button> }
         searchFormItems={[
             {
                 name: 'updateTime',
@@ -182,20 +161,15 @@ export default function BoltList(): React.ReactNode {
                         <Select.Option value="2" key="2">进行中</Select.Option>
                         <Select.Option value="3" key="3">校核中</Select.Option>
                         <Select.Option value="4" key="4">已完成</Select.Option>
-                        <Select.Option value="5" key="5">已提交</Select.Option>
                     </Select>
                 </Form.Item>
-            },
-            {
-                name: 'plannedTime',
-                label: '计划交付时间',
-                children: <DatePicker.RangePicker />
             },
             {
                 name: 'priority',
                 label: '优先级',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
-                    <Select.Option value="" key="0">全部</Select.Option>
+                    <Select.Option value="" key="">全部</Select.Option>
+                    <Select.Option value="" key="0">紧急</Select.Option>
                     <Select.Option value="1" key="1">高</Select.Option>
                     <Select.Option value="2" key="2">中</Select.Option>
                     <Select.Option value="3" key="3">低</Select.Option>
@@ -212,11 +186,6 @@ export default function BoltList(): React.ReactNode {
                 const formatDate = values.updateTime.map((item: any) => item.format("YYYY-MM-DD"));
                 values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                 values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
-            }
-            if (values.plannedTime) {
-                const formatDate = values.plannedTime.map((item: any) => item.format("YYYY-MM-DD"));
-                values.boltDeliverTimeStart = formatDate[0] + ' 00:00:00';
-                values.boltDeliverTimeEnd = formatDate[1] + ' 23:59:59';
             }
             return values;
         }}
