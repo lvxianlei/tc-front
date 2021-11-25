@@ -10,6 +10,7 @@ import TreeSelect, { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import styles from './pick.module.less';
 import useRequest from '@ahooksjs/use-request';
+import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 
 export default function PickTowerMessage(): React.ReactNode {
     const history = useHistory();
@@ -261,10 +262,12 @@ export default function PickTowerMessage(): React.ReactNode {
                                         <Col span={1}></Col>
                                         <Col span={ 11 }>
                                         <Form.Item  name={[ field.name , 'pattern']} label='模式' initialValue={[ field.name , 'pattern']}>
-                                            <Select style={{width:'100px'}}>
-                                                <Select.Option value={1} key={1}>新放</Select.Option>
-                                                <Select.Option value={2} key={2}>重新出卡</Select.Option>
-                                                <Select.Option value={3} key={3}>套用</Select.Option>
+                                            <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                                                { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                                    return <Select.Option key={ index } value={ id + ',' + name }>
+                                                        { name }
+                                                    </Select.Option>
+                                                }) }
                                             </Select>
                                         </Form.Item>
                                         </Col>

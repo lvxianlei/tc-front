@@ -4,6 +4,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { CommonTable, Page } from '../../common';
 import { downloadTemplate } from '../setOut/downloadTemplate';
+import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 
 export default function PickList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
@@ -63,27 +64,10 @@ export default function PickList(): React.ReactNode {
             dataIndex: 'plannedDeliveryTime'
         },
         {
-            key: 'pattern',
+            key: 'patternName',
             title: '模式',
             width: 100,
-            dataIndex: 'pattern',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                  {
-                    value: 1,
-                    label: "新放"
-                  },
-                  {
-                    value: 2,
-                    label: "重新出卡"
-                  },
-                  {
-                    value: 3,
-                    label: "套用"
-                  },
-                ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            dataIndex: 'patternName',
         },
         {
             key: 'materialLeaderName',
@@ -244,11 +228,12 @@ export default function PickList(): React.ReactNode {
                     {
                         name: 'pattern',
                         label: '模式',
-                        children: <Select style={{width:'100px'}}>
-                            <Select.Option value={''} key ={''}>全部</Select.Option>
-                            <Select.Option value={1} key={1}>新放</Select.Option>
-                            <Select.Option value={2} key={2}>重新出卡</Select.Option>
-                            <Select.Option value={3} key={3}>套用</Select.Option>
+                        children: <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                            { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                return <Select.Option key={ index } value={ id + ',' + name }>
+                                    { name }
+                                </Select.Option>
+                            }) }
                         </Select>
                     },
                     {

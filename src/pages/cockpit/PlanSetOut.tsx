@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Input, Select } from 'antd';
 import { Page } from '../common';
 import moment from 'moment';
+import { patternTypeOptions } from '../../configuration/DictionaryOptions';
 
 export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负责人直接返回名称，无需增加-Name字段   30号：加Name
     const [filterValue, setFilterValue] = useState({});
@@ -79,27 +80,10 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             dataIndex: 'weight'
         },
         {
-            key: 'pattern',
+            key: 'patternName',
             title: '模式',
             width: 100,
-            dataIndex: 'pattern',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                  {
-                    value: 1,
-                    label: "新放"
-                  },
-                  {
-                    value: 2,
-                    label: "重新出卡"
-                  },
-                  {
-                    value: 3,
-                    label: "套用"
-                  },
-                ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            dataIndex: 'patternName',
         },
         {
             key: 'materialStatus',
@@ -350,12 +334,13 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             {
                 name: 'pattern',
                 label: '模式',
-                children:  <Select style={{width:'100px'}}>
-                                <Select.Option value={''} key ={''}>全部</Select.Option>
-                                <Select.Option value={1} key={1}>新放</Select.Option>
-                                <Select.Option value={2} key={2}>重新出卡</Select.Option>
-                                <Select.Option value={3} key={3}>套用</Select.Option>
-                            </Select>
+                children:  <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                        { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={ index } value={ id + ',' + name }>
+                                { name }
+                            </Select.Option>
+                        }) }
+                    </Select>
             },
             {
                 name: 'fuzzyMsg',

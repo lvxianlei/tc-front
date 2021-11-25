@@ -8,7 +8,7 @@ import TextArea from 'antd/lib/input/TextArea';
 import { Table, Input, InputNumber, Popconfirm, Typography, Select } from 'antd';
 import AuthUtil from '../../../utils/AuthUtil';
 import { downLoadFile } from '../../../utils';
-import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
+import { patternTypeOptions, productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
 interface Item {
   key: string;
   name: string;
@@ -287,37 +287,21 @@ export default function ConfirmDetail(): React.ReactNode {
           width: 90,
           editable: true,
           key: 'pattern',
-          enums: [
-            {
-                value: 1,
-                label: "新放"
-            },
-            {
-                value: 2,
-                label: "重新出卡"
-            },
-            {
-                value: 3,
-                label: "套用"
+          enums:patternTypeOptions && patternTypeOptions.map(({ id, name }) => {
+            return {
+                label:name,
+                value: id,
             }
-          ],
+          }),
           render: (value: number, record: object): React.ReactNode => {
-            const renderEnum: any = [
-              {
-                value: 1,
-                label: "新放"
-              },
-              {
-                value: 2,
-                label: "重新出卡"
-              },
-              {
-                value: 3,
-                label: "套用"
-              },
-            ]
-            return <>{renderEnum.find((item: any) => item.value === value).label}</>
-          }
+            const renderEnum: any = patternTypeOptions && patternTypeOptions.map(({ id, name }) => {
+              return {
+                  label:name,
+                  value: id,
+              }
+            })
+            return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value).label}</>
+          } 
       },
       // { 
       //   title: '* 本体重量（kg）', 
@@ -863,11 +847,13 @@ export default function ConfirmDetail(): React.ReactNode {
                             "required": true,
                             "message":"请选择模式"
                         }]}>
-                            <Select>
-                                <Select.Option value={1} key={1}>新放</Select.Option>
-                                <Select.Option value={3} key={3}>套用</Select.Option>
-                                <Select.Option value={2} key={2}>重新出卡</Select.Option>
-                            </Select>
+                            <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                              { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                  return <Select.Option key={ index } value={ id + ',' + name }>
+                                      { name }
+                                  </Select.Option>
+                              }) }
+                          </Select>
                         </Form.Item>
                       </Col>
                     </Row>
