@@ -179,7 +179,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                 footer={ 
                     <Space direction="horizontal" className={ styles.bottomBtn }>
                         <Button type="ghost" onClick={ () => this.modalCancel() }>关闭</Button>
-                        <Button type="primary" onClick={ () => this.onSubmit() } ghost>提交</Button>
+                        {this.props.type === 'detail'?null:<Button type="primary" onClick={ () => this.onSubmit() } ghost>提交</Button>}
                     </Space>
                 } 
                 onCancel={ () => this.modalCancel() }

@@ -146,7 +146,7 @@ export default function PickTowerMessage(): React.ReactNode {
                     <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>提料</Button>
                     <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/check/${record.id}/${record.materialLeader}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>校核</Button>
                     <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/detail/${record.id}`)}} type='link' disabled={record.status<3}>明细</Button>
-                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/detail/${record.id}`)}} type='link'>指派信息</Button>
+                    <TowerPickAssign type={ record.status < 3 ? '' : "detail" } title="指派信息" detailData={ record } id={ params.id } update={ onRefresh } />
                     <Button onClick={()=>{
 
                     }} type='link' disabled={record.status!== 1}>删除</Button>
@@ -304,7 +304,7 @@ export default function PickTowerMessage(): React.ReactNode {
                     >   
                         <Button type="primary" ghost>提交</Button>
                     </Popconfirm>:null}
-                    { params.status==='1'&& location.state===AuthUtil.getUserId() ? <TowerPickAssign id={ params.id } onRefresh={onRefresh}/> : null }
+                    { params.status==='1'&& location.state===AuthUtil.getUserId() ? <TowerPickAssign title="塔型提料指派" id={ params.id } update={ onRefresh } /> : null }
                     <Button type="primary" onClick={()=>history.push('/workMngt/pickList')} ghost>返回上一级</Button>
                     </Space>
                 }
