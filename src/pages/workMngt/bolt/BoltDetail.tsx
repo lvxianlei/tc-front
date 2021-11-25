@@ -1,12 +1,12 @@
-import { Button, message, Modal, Upload, } from 'antd';
+import { Button, message, Modal, Popconfirm, Upload, } from 'antd';
 import React, { useState } from 'react';
 import { useHistory, useParams, } from 'react-router-dom';
 import AuthUtil from '../../../utils/AuthUtil';
+import RequestUtil from '../../../utils/RequestUtil';
 import { Page } from '../../common';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import BoltDetailAdd from './addModal';
 import './BoltDetailList.less';
-import BoltDetailProblem from './problemModal';
 
 export default function BoltCheck(): React.ReactNode {
     const params = useParams<{ id: string, boltId: string }>();
@@ -50,27 +50,27 @@ export default function BoltCheck(): React.ReactNode {
         {
             title: '小计',
             width: 150,
-            dataIndex: 'specs',
+            dataIndex: 'subtotal',
         },
         {
             title: '合计',
             width: 150,
-            dataIndex: 'specs',
+            dataIndex: 'total',
         },
         {
             title: '单重（kg）',
             width: 150,
-            dataIndex: 'specs',
+            dataIndex: 'singleWeight',
         },
         {
             title: '合计重（kg）',
             width: 150,
-            dataIndex: 'specs',
+            dataIndex: 'totalWeight',
         },
         {
             title: '备注',
             width: 150,
-            dataIndex: 'specs',
+            dataIndex: 'description',
         },
         {
             title: '操作',
@@ -80,29 +80,32 @@ export default function BoltCheck(): React.ReactNode {
                 return (
                     <div className='operation'>
                         <span
+                            style={{ color: '#FF8C00', marginRight: 10, cursor: 'pointer' }}
                             onClick={() => {
                                 setId(item.id)
                                 setIsAddModal(true)
                             }}
                         >编辑</span>
-                        <span
-                            onClick={() => {
-                                setId(item.id)
-                                setIsProblemModal(true)
+                        <Popconfirm
+                            placement="bottomRight"
+                            title={text}
+                            onConfirm={() => {
+                                deleteItem(item.id)
                             }}
-                        >提交问题单</span>
-                        <span
-                            onClick={() => {
-                            }}
-                        >删除</span>
+                            okText="是"
+                            cancelText="否"
+                        >
+                            <span
+                                style={{ color: '#FF8C00', marginRight: 10, cursor: 'pointer' }}
+                            >删除</span>
+                        </Popconfirm>
                     </div>
                 )
             }
         },
     ]
     const [isAddModal, setIsAddModal] = useState<boolean>(false);//添加弹框显示
-    const [isProblemModal, setIsProblemModal] = useState<boolean>(false);//提交问题弹框显示
-    const [refresh, setRefresh] = useState(false);
+    const [refresh, setRefresh] = useState<boolean>(false);
     const [id, setId] = useState<string | null>(null)
     /**
      * 
@@ -113,12 +116,21 @@ export default function BoltCheck(): React.ReactNode {
             setRefresh(!refresh)
         }
         setIsAddModal(false)
-        setIsProblemModal(false)
+    }
+    /**
+     * 删除
+     * @param boltId 
+     */
+    const deleteItem = async (boltId: string) => {
+        await RequestUtil.delete(`/tower-science/boltRecord/delete/${boltId}`)
+        message.success('操作成功')
+        setRefresh(!refresh)
     }
     return (
         <div>
             <Page
-                path={`/tower-science/boltRecord/basicHeight/${params.boltId}`}
+                path={`/tower-science/boltRecord/boltList`}
+                requestData={{ productCategoryId: params.boltId, basicHeightId: params.id }}
                 columns={columns}
                 refresh={refresh}
                 extraOperation={
@@ -156,7 +168,7 @@ export default function BoltCheck(): React.ReactNode {
                         >
                             <Button type="primary" ghost onClick={() => { }} style={{ marginLeft: 10, }}>导入</Button>
                         </Upload>
-                        <Button type="primary" ghost onClick={() => { setIsProblemModal(true) }} style={{ marginLeft: 10, }}>添加</Button>
+                        <Button type="primary" ghost onClick={() => { setIsAddModal(true) }} style={{ marginLeft: 10, }}>添加</Button>
                         <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回上一级</Button>
                     </div>
                 }
@@ -178,13 +190,6 @@ export default function BoltCheck(): React.ReactNode {
             {
                 isAddModal ?
                     <BoltDetailAdd
-                        cancelModal={onCancel}
-                        id={id}
-                    /> : null
-            }
-            {
-                isProblemModal ?
-                    <BoltDetailProblem
                         cancelModal={onCancel}
                         id={id}
                     /> : null

@@ -1,4 +1,4 @@
-import { Button, Input, message, Modal, Select } from 'antd';
+import { Button, Input, message, Modal, Popconfirm, Select } from 'antd';
 import TextArea from 'rc-textarea';
 import React, { useState } from 'react';
 import { useHistory, useParams, } from 'react-router-dom';
@@ -9,7 +9,7 @@ import './BoltDetailList.less';
 export default function BoltCheck(): React.ReactNode {
     const params = useParams<{ id: string, }>();
     const history = useHistory()
-    const columns = [
+    const columns: any[] = [
         {
             title: '序号',
             dataIndex: 'index',
@@ -21,46 +21,71 @@ export default function BoltCheck(): React.ReactNode {
         {
             title: '塔位号',
             width: 150,
-            dataIndex: 'typeName',
+            dataIndex: 'productNumVOList',
+            // render: (text: any,): React.ReactNode => {
+            //     return (
+            //         <span>
+            //             {
+            //                 text.map((item: any) => `${item.productNumber}，`)
+            //             }
+            //         </span>
+            //     )
+            // }
         },
         {
             title: '呼高m',
             width: 150,
-            dataIndex: 'name',
+            dataIndex: 'basicHeight',
         },
         {
             title: '基数',
             width: 150,
-            dataIndex: 'level',
+            dataIndex: 'num',
         },
         {
             title: '总重',
             width: 150,
-            dataIndex: 'specs',
+            dataIndex: 'totalWeight',
         },
         {
             title: '说明',
-            dataIndex: 'unbuckleLength',
+            dataIndex: 'description',
             width: 120,
         },
         {
             title: '操作',
             width: 120,
             dataIndex: 'operation',
+            fixed: 'right',
             render: (text: any, item: any,) => {
                 return (
                     <div className='operation'>
-                        <span
-                            onClick={() => {
-                                history.push('')
+                        <Popconfirm
+                            placement="bottomRight"
+                            title={text}
+                            onConfirm={() => {
+                                deleteItem(item.id)
                             }}
-                        >删除</span>
+                            okText="是"
+                            cancelText="否"
+                        >
+                            <span
+                                style={{ color: '#FF8C00', marginRight: 10, cursor: 'pointer' }}
+                            >删除</span>
+                        </Popconfirm>
                         <span
+                            style={{ color: '#FF8C00', marginRight: 10, cursor: 'pointer' }}
                             onClick={() => {
-                                history.push('')
+                                setId(item.id)
+                                setbasicHeight(item.basicHeight)
+                                setdescription(item.description)
+                                setVisible(true)
+                                // let idList: string[] = item.map((item: { id: string }) => item.id)
+                                // setproductIdList(idList)
                             }}
                         >编辑</span>
                         <span
+                            style={{ color: '#FF8C00', marginRight: 10, cursor: 'pointer' }}
                             onClick={() => {
                                 history.push(`/workMngt/boltList/boltListing/${params.id}/${item.id}`)
                             }}
@@ -70,37 +95,51 @@ export default function BoltCheck(): React.ReactNode {
             }
         },
     ]
+    const [id, setId] = useState<string | null>(null);//添加弹框显示
     const [visible, setVisible] = useState<boolean>(false);//添加弹框显示
-    const [callHeight, setCallHeight] = useState<number | string>('');//呼高
-    const [towerTagNo, setTowerTagNo] = useState<any>([]);//塔位号
+    const [basicHeight, setbasicHeight] = useState<number | string>('');//呼高
+    const [productIdList, setproductIdList] = useState<any>([]);//塔位号
     const [towerTagList, setTowerTagList] = useState<any>([]);//塔位列表
-    const [explain, setExplain] = useState<any>('');//说明
+    const [description, setdescription] = useState<any>('');//说明
     const [refresh, setRefresh] = useState(false);
     /**
      * 完成
      */
     const successCheck = async () => {
-        await RequestUtil.put('/tower-science/boltRecord/completeCheck', {
+        await RequestUtil.get('/tower-science/boltRecord/complete', {
+            id: params.id,
         })
+        message.success('操作成功')
+        history.go(-1)
     }
     // 添加
     const onSubmit = async () => {
-        if (!callHeight) {
+        if (!basicHeight) {
             message.error("请输入呼高")
             return
         }
-        if (towerTagNo.length == 0) {
+        if (!productIdList.length) {
             message.error("请选择塔位号")
             return
         }
         await RequestUtil.post('/tower-science/boltRecord/saveBasicHeight', {
-            basicHeight: callHeight,
-            productIdList: towerTagNo,
-            description: explain,
-            productCategoryId: params.id
+            basicHeight,
+            productIdList,
+            description,
+            productCategoryId: params.id,
+            id,
         })
         setRefresh(!refresh)
         onCancel()
+    }
+    /**
+     * 删除
+     * @param heightId 
+     */
+    const deleteItem = async (heightId: string) => {
+        await RequestUtil.delete(`/tower-science/boltRecord/deleteHeight/${heightId}`)
+        message.success('操作成功')
+        setRefresh(!refresh)
     }
     // 获取塔位号
     const getBoltlist = async () => {
@@ -112,9 +151,9 @@ export default function BoltCheck(): React.ReactNode {
     // 弹框取消
     const onCancel = () => {
         setVisible(false)
-        setTowerTagNo([])
-        setExplain('')
-        setCallHeight('')
+        setproductIdList([])
+        setdescription('')
+        setbasicHeight('')
     }
     return (
         <div>
@@ -136,7 +175,7 @@ export default function BoltCheck(): React.ReactNode {
             <Modal
                 className='Modal_hugao'
                 visible={visible}
-                width="50%"
+                width={1000}
                 title="添加"
                 onCancel={() => { onCancel(); }}
                 onOk={() => onSubmit()}
@@ -153,9 +192,9 @@ export default function BoltCheck(): React.ReactNode {
                                     placeholder="请输入"
                                     bordered={false}
                                     maxLength={3}
-                                    value={callHeight}
+                                    value={basicHeight}
                                     onChange={(e) => {
-                                        setCallHeight(e.target.value.replace(/\D/g, ''))
+                                        setbasicHeight(e.target.value.replace(/\D/g, ''))
                                     }}
                                 ></Input>
                             </div>
@@ -168,14 +207,14 @@ export default function BoltCheck(): React.ReactNode {
                                     style={{ width: '100%' }}
                                     mode="multiple"
                                     maxLength={3}
-                                    value={towerTagNo}
+                                    value={productIdList}
                                     onChange={(value) => {
                                         if (value.length > 99) {
                                             message.error('塔位号最多99个')
                                             return
                                         }
                                         console.log(value)
-                                        setTowerTagNo(value)
+                                        setproductIdList(value)
                                     }}
                                 >
                                     {
@@ -196,9 +235,9 @@ export default function BoltCheck(): React.ReactNode {
                                     placeholder="请输入"
                                     style={{ width: '100%' }}
                                     maxLength={400}
-                                    value={explain}
+                                    value={description}
                                     onChange={(e) => {
-                                        setExplain(e.target.value)
+                                        setdescription(e.target.value)
                                     }}
                                 ></TextArea>
                             </div>

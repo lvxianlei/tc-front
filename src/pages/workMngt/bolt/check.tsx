@@ -1,18 +1,18 @@
 import { Button } from 'antd';
-import React, { useState } from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import React from 'react';
+import { useHistory, useParams, } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import { Page } from '../../common';
 
 export default function BoltCheck(): React.ReactNode {
-    const match: any = useRouteMatch()
+    const params = useParams<{ id: string }>()
     const history = useHistory()
     const columns = [
         {
             title: '序号',
             dataIndex: 'index',
             width: 100,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => {
+            render: (text: any, item: any, index: number): React.ReactNode => {
                 return <span>{index + 1}</span>
             }
         },
@@ -45,12 +45,12 @@ export default function BoltCheck(): React.ReactNode {
             title: '操作',
             width: 120,
             dataIndex: 'operation',
-            render: () => {
+            render: (text: any, item: any) => {
                 return (
                     <div className='operation'>
                         <span
                             onClick={() => {
-                                history.push('')
+                                history.push(`/workMngt/boltList/boltCheck/${params.id}/${item.id}`)
                             }}
                         >螺栓明细</span>
                     </div>
@@ -63,13 +63,13 @@ export default function BoltCheck(): React.ReactNode {
      */
     const successCheck = async () => {
         await RequestUtil.put('/tower-science/boltRecord/completeCheck', {
-            productCategoryId: match.params.id,
+            productCategoryId: params.id,
         })
     }
     return (
         <div>
             <Page
-                path={`/tower-science/boltRecord/basicHeight/${match.params.id}`}
+                path={`/tower-science/boltRecord/basicHeight/${params.id}`}
                 columns={columns}
                 extraOperation={
                     <div>

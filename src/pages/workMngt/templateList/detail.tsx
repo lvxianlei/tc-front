@@ -77,7 +77,7 @@ export default function TemplateDetail() {
      * @param templateRecordId 
      */
     const deleteItem = async (templateRecordId: string) => {
-        await RequestUtil.put('/tower-science/loftingTemplate/delete', {
+        await RequestUtil.delete('/tower-science/loftingTemplate/delete', {
             templateRecordId,
         })
         setRefresh(!refresh)

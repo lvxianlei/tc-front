@@ -1,22 +1,60 @@
 import { Modal, Input, Select, Row, Col, message } from 'antd';
 import React, { useState } from 'react';
+import { useParams } from 'react-router';
 import RequestUtil from '../../../utils/RequestUtil';
 import './BoltDetailList.less';
 
 export default function BoltDetailAdd(props: { cancelModal: (refresh?: boolean) => void; id: string | null }) {
     const [contentObj, setContentObj] = useState<any>({})
+    const params = useParams<{ id: string, boltId: string }>();
     /**
      * 螺栓信息添加
      */
     const onSubmit = async () => {
+        if (!contentObj.type) {
+            message.error('请选择类型')
+            return
+        }
+        if (!contentObj.name) {
+            message.error('请输入名称')
+            return
+        }
+        if (!contentObj.specs) {
+            message.error('请输入规格')
+            return
+        }
+        if (!contentObj.level) {
+            message.error('请输入等级')
+            return
+        }
+        if (!contentObj.singleWeight) {
+            message.error('请输入单重')
+            return
+        }
+        if (!contentObj.subtotal) {
+            message.error('请输入小计')
+            return
+        }
+        if (!contentObj.total) {
+            message.error('请输入合计')
+            return
+        }
+        if (!contentObj.totalWeight) {
+            message.error('请输入总重')
+            return
+        }
         if (props.id) {
-            await RequestUtil.put('/tower-science/loftingTemplate/delete', {
-                ...contentObj,
-            })
-        } else {
-            await RequestUtil.put('/tower-science/loftingTemplate/delete', {
+            await RequestUtil.put('/tower-science/boltRecord', {
                 ...contentObj,
                 id: props.id,
+                basicHeightId:params.id,
+                productCategoryId:params.boltId,
+            })
+        } else {
+            await RequestUtil.post('/tower-science/boltRecord', {
+                ...contentObj,
+                basicHeightId:params.id,
+                productCategoryId:params.boltId,
             })
         }
         message.success('操作成功')
@@ -28,8 +66,8 @@ export default function BoltDetailAdd(props: { cancelModal: (refresh?: boolean) 
      * @param key 对象key属性
      */
     const changecontentObj = (value: string, key: string) => {
-        contentObj[key] = value
-        setContentObj(contentObj)
+        contentObj[key] = value;
+        setContentObj({...contentObj})
     }
     return (
         <div>
