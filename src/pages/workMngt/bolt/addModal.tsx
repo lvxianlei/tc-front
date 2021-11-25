@@ -36,7 +36,7 @@ export default function BoltDetailAdd(props: { cancelModal: (refresh?: boolean) 
             <Modal
                 className='Modal_hugao'
                 visible={true}
-                width="50%"
+                width={1000}
                 title="添加"
                 onCancel={() => { props.cancelModal() }}
                 onOk={() => onSubmit()}

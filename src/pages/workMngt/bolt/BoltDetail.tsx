@@ -1,19 +1,20 @@
-import { Button, Modal, Input, Table } from 'antd';
+import { Button, } from 'antd';
 import React, { useState } from 'react';
 import { useHistory, useParams, } from 'react-router-dom';
 import { Page } from '../../common';
 import BoltDetailAdd from './addModal';
 import './BoltDetailList.less';
+import BoltDetailProblem from './problemModal';
 
 export default function BoltCheck(): React.ReactNode {
     const params = useParams<{ id: string, boltId: string }>();
     const history = useHistory()
-    const columns = [
+    const columns: any = [
         {
             title: '序号',
             dataIndex: 'index',
             width: 100,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => {
+            render: (_text: any, _item: any, index: number): React.ReactNode => {
                 return <span>{index + 1}</span>
             }
         },
@@ -71,9 +72,21 @@ export default function BoltCheck(): React.ReactNode {
             title: '操作',
             width: 120,
             dataIndex: 'operation',
-            render: () => {
+            render: (text: string, item: { id: string }) => {
                 return (
                     <div className='operation'>
+                        <span
+                            onClick={() => {
+                                setId(item.id)
+                                setIsAddModal(true)
+                            }}
+                        >编辑</span>
+                        <span
+                            onClick={() => {
+                                setId(item.id)
+                                setIsProblemModal(true)
+                            }}
+                        >提交问题单</span>
                         <span
                             onClick={() => {
                             }}
@@ -81,42 +94,6 @@ export default function BoltCheck(): React.ReactNode {
                     </div>
                 )
             }
-        },
-    ]
-    // 提交问题单表头
-    const columnsTow = [
-        {
-            title: '序号',
-            dataIndex: 'index',
-            width: 100,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => {
-                return <span>{index + 1}</span>
-            }
-        },
-        {
-            title: '操作部门',
-            width: 150,
-            dataIndex: 'typeName',
-        },
-        {
-            title: '操作人',
-            width: 150,
-            dataIndex: 'name',
-        },
-        {
-            title: '操作时间',
-            width: 150,
-            dataIndex: 'level',
-        },
-        {
-            title: '问题单状态',
-            width: 150,
-            dataIndex: 'specs',
-        },
-        {
-            title: '备注',
-            dataIndex: 'unbuckleLength',
-            width: 120,
         },
     ]
     const [isAddModal, setIsAddModal] = useState<boolean>(false);//添加弹框显示
@@ -134,10 +111,6 @@ export default function BoltCheck(): React.ReactNode {
         setIsAddModal(false)
         setIsProblemModal(false)
     }
-    // 螺栓信息添加
-    const onSubmit = () => {
-
-    }
     return (
         <div>
             <Page
@@ -149,7 +122,7 @@ export default function BoltCheck(): React.ReactNode {
                         <Button type="primary" ghost>模板下载</Button>
                         <Button type="primary" ghost onClick={() => { }} style={{ marginLeft: 10, }}>编辑/锁定</Button>
                         <Button type="primary" ghost onClick={() => { }} style={{ marginLeft: 10, }}>导入</Button>
-                        <Button type="primary" ghost onClick={() => { setIsAddModal(true) }} style={{ marginLeft: 10, }}>添加</Button>
+                        <Button type="primary" ghost onClick={() => { setIsProblemModal(true) }} style={{ marginLeft: 10, }}>添加</Button>
                         <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回上一级</Button>
                     </div>
                 }
@@ -163,100 +136,13 @@ export default function BoltCheck(): React.ReactNode {
                         id={id}
                     /> : null
             }
-            {/* 提交问题 */}
-            <Modal
-                className='Modal_hugao'
-                visible={isProblemModal}
-                width="60%"
-                title="提交问题"
-                onCancel={() => { onCancel(); }}
-                onOk={() => onSubmit()}
-                okText="提交问题"
-                cancelText="关闭"
-            >
-                <div className='title_ON'>
-                    问题信息
-                </div>
-                <div className="add_HuGao">
-                    <div className="tr">
-                        <div className="td">
-                            <div className="title">问题字段*</div>
-                            <div className="val">
-                                <Input
-                                    className="input"
-                                    placeholder="请输入"
-                                    bordered={false}
-                                    maxLength={20}
-                                    // value={callHeight}
-                                    onChange={(e) => {
-                                        // setCallHeight(e.target.value.replace(/\D/g, ''))
-                                    }}
-                                ></Input>
-                            </div>
-                        </div>
-                        <div className="td">
-                            <div className="title">原字段信息</div>
-                            <div className="val">
-                                <Input
-                                    className="input"
-                                    placeholder="请输入"
-                                    bordered={false}
-                                    maxLength={3}
-                                    // value={callHeight}
-                                    onChange={(e) => {
-                                        // setCallHeight(e.target.value.replace(/\D/g, ''))
-                                    }}
-                                ></Input>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="tr">
-                        <div className="td">
-                            <div className="title">备注</div>
-                            <div className="val">
-                                <Input
-                                    className="input"
-                                    placeholder="请输入"
-                                    bordered={false}
-                                    maxLength={10}
-                                    // value={callHeight}
-                                    onChange={(e) => {
-                                        // setCallHeight(e.target.value.replace(/\D/g, ''))
-                                    }}
-                                ></Input>
-                            </div>
-                        </div>
-                        <div className="td">
-                            <div className="title">校对后信息*</div>
-                            <div className="val">
-                                <Input
-                                    className="input"
-                                    placeholder="请输入"
-                                    bordered={false}
-                                    maxLength={10}
-                                    // value={callHeight}
-                                    onChange={(e) => {
-                                        // setCallHeight(e.target.value.replace(/\D/g, ''))
-                                    }}
-                                ></Input>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className='title_ON'>
-                    操作信息
-                </div>
-                <Table
-                    scroll={{ x: true }}
-                    className='public_table'
-                    columns={columnsTow}
-                    // dataSource={columnsData}
-                    pagination={false}
-                    size='small'
-                >
-
-                </Table>
-            </Modal>
+            {
+                isProblemModal ?
+                    <BoltDetailProblem
+                        cancelModal={onCancel}
+                        id={id}
+                    /> : null
+            }
         </div>
     )
 }
