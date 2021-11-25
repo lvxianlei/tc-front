@@ -51,18 +51,22 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             dataIndex: 'priority',
             render: (value: number, record: object): React.ReactNode => {
                 const renderEnum: any = [
-                  {
-                    value: 1,
-                    label: "高"
-                  },
-                  {
-                    value: 2,
-                    label: "中"
-                  },
-                  {
-                    value: 3,
-                    label: "低"
-                  },
+                    {
+                        value: 0,
+                        label: "紧急"
+                    },
+                    {
+                        value: 1,
+                        label: "高"
+                    },
+                    {
+                        value: 2,
+                        label: "中"
+                    },
+                    {
+                        value: 3,
+                        label: "低"
+                    },
                 ]
                 return <>{renderEnum.find((item: any) => item.value === value).label}</>
             }
@@ -326,6 +330,7 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
                 label: '优先级',
                 children:  <Select style={{width:'100px'}}>
                                 <Select.Option value={''} key ={''}>全部</Select.Option>
+                                <Select.Option value={0} key={0}>紧急</Select.Option>
                                 <Select.Option value={1} key={1}>高</Select.Option>
                                 <Select.Option value={2} key={2}>中</Select.Option>
                                 <Select.Option value={3} key={3}>低</Select.Option>

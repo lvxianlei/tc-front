@@ -194,7 +194,6 @@ export default function PickList(): React.ReactNode {
             </Modal>
             <Page
                 path="/tower-science/materialTask"
-                // path="/tower-market/bidInfo"
                 columns={columns}
                 filterValue={filterValue}
                 onFilterSubmit={onFilterSubmit}

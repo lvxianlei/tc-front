@@ -10,6 +10,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import moment from 'moment';
 import { TreeNode } from 'antd/lib/tree-select';
 import styles from './scheduleList.module.less';
+import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 
 export default function ScheduleView(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
@@ -117,6 +118,10 @@ export default function ScheduleView(): React.ReactNode {
             dataIndex: 'priority',
             render: (value: number, record: object): React.ReactNode => {
                 const renderEnum: any = [
+                  {
+                    value: 0,
+                    label: "紧急"
+                  },
                   {
                     value: 1,
                     label: "高"
@@ -729,6 +734,7 @@ export default function ScheduleView(): React.ReactNode {
                                 <Col span={15}>
                                     <Form.Item name="priority" label="优先级" rules={[{required: true,message:'请选择优先级'}]} > 
                                         <Select>
+                                            <Select.Option value={0} key={0}>紧急</Select.Option>
                                             <Select.Option value={1} key={1}>高</Select.Option>
                                             <Select.Option value={2} key={2}>中</Select.Option>
                                             <Select.Option value={3} key={3}>低</Select.Option>
@@ -762,18 +768,20 @@ export default function ScheduleView(): React.ReactNode {
                     {
                         name: 'pattern',
                         label: '模式',
-                        children:   <Select style={{width:"100px"}}>
-                                        <Select.Option value={''} key ={''}>全部</Select.Option>
-                                        <Select.Option value='1' key='1'>新放</Select.Option>
-                                        <Select.Option value='3' key='3'>套用</Select.Option>
-                                        <Select.Option value='2' key='2'>重新出卡</Select.Option>
-                                    </Select>
+                        children:   <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                            { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                return <Select.Option key={ index } value={ id + ',' + name }>
+                                    { name }
+                                </Select.Option>
+                            }) }
+                        </Select>
                     },
                     {
                         name: 'priority',
                         label:'优先级',
                         children:   <Select style={{width:"100px"}}>
                                         <Select.Option value={''} key ={''}>全部</Select.Option>
+                                        <Select.Option value='0' key='0'>紧急</Select.Option>
                                         <Select.Option value='1' key='1'>高</Select.Option>
                                         <Select.Option value='2' key='2'>中</Select.Option>
                                         <Select.Option value='3' key='3'>低</Select.Option>
