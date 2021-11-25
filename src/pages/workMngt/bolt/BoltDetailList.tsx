@@ -1,13 +1,13 @@
 import { Button, Input, message, Modal, Select } from 'antd';
 import TextArea from 'rc-textarea';
 import React, { useState } from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useHistory, useParams, } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import { Page } from '../../common';
 import './BoltDetailList.less';
 
 export default function BoltCheck(): React.ReactNode {
-    const match: any = useRouteMatch()
+    const params = useParams<{ id: string, }>();
     const history = useHistory()
     const columns = [
         {
@@ -62,7 +62,7 @@ export default function BoltCheck(): React.ReactNode {
                         >编辑</span>
                         <span
                             onClick={() => {
-                                history.push(`/workMngt/boltList/boltListing/${match.params.id}/${item.id}`)
+                                history.push(`/workMngt/boltList/boltListing/${params.id}/${item.id}`)
                             }}
                         >螺栓明细</span>
                     </div>
@@ -76,7 +76,6 @@ export default function BoltCheck(): React.ReactNode {
     const [towerTagList, setTowerTagList] = useState<any>([]);//塔位列表
     const [explain, setExplain] = useState<any>('');//说明
     const [refresh, setRefresh] = useState(false);
-    console.log(match, 'match')
     /**
      * 完成
      */
@@ -90,14 +89,14 @@ export default function BoltCheck(): React.ReactNode {
             basicHeight: callHeight,
             productIdList: towerTagNo,
             description: explain,
-            productCategoryId: match.params.id
+            productCategoryId: params.id
         })
         setRefresh(!refresh)
     }
     // 获取塔位号
     const getBoltlist = async () => {
         let ary = await RequestUtil.get('/tower-science/product/listByBolt', {
-            productCategoryId: match.params.id
+            productCategoryId: params.id
         })
         setTowerTagList(ary)
     }
@@ -108,12 +107,12 @@ export default function BoltCheck(): React.ReactNode {
     return (
         <div>
             <Page
-                path={`/tower-science/boltRecord/basicHeight/${match.params.id}`}
+                path={`/tower-science/boltRecord/basicHeight/${params.id}`}
                 columns={columns}
                 refresh={refresh}
+                exportPath={`/tower-science/boltRecord/exportBoltList/${params.id}`}
                 extraOperation={
                     <div>
-                        <Button type="primary" ghost>导出</Button>
                         <Button type="primary" ghost onClick={() => { successCheck() }} style={{ marginLeft: 10, }}>完成</Button>
                         <Button type="primary" ghost onClick={() => { setVisible(true); getBoltlist() }} style={{ marginLeft: 10, }}>添加</Button>
                         <Button type="primary" ghost onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回上一级</Button>

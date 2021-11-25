@@ -130,12 +130,14 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
         return (
             <>
                 <Space direction="horizontal" size="middle">
-                    { this.props.exportPath ? <Button type="primary" ghost onClick={() => { this.setState({
-                        isExport: true
-                    }) }}>导出</Button> : null }
+                    {this.props.exportPath ? <Button type="primary" ghost onClick={() => {
+                        this.setState({
+                            isExport: true
+                        })
+                    }}>导出</Button> : null}
                     {typeof this.props.extraOperation === "function" ? this.props.extraOperation(this.state.resData) : this.props.extraOperation}
                 </Space>
-                { this.state.isExport ? <ExportList
+                {this.state.isExport ? <ExportList
                     history={this.props.history}
                     location={this.props.location}
                     match={this.props.match}
@@ -145,16 +147,18 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                         return keys
                     }}
                     current={this.state.tablePagination?.current || 1}
-                    size={this.state.tablePagination?.pageSize || 10 }
+                    size={this.state.tablePagination?.pageSize || 10}
                     total={this.state.tablePagination?.total || 0}
-                    url={'/tower-science/assessTask'}
+                    url={this.props.exportPath}
                     serchObj={{
                         ...this.props.filterValue,
                     }}
-                    closeExportList={() => { this.setState({
-                        isExport: false
-                    }) }}
-                /> : null }
+                    closeExportList={() => {
+                        this.setState({
+                            isExport: false
+                        })
+                    }}
+                /> : null}
             </>
         );
     }

@@ -15,7 +15,7 @@ interface Props extends RouteComponentProps {
     size: number,
     current: number,
     total: number,
-    url: string,
+    url: string | undefined,
 }
 
 interface State {
