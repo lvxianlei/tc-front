@@ -11,7 +11,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
-import AuthUtil from '../../../utils/AuthUtil';
+import UploadModal from './UploadModal';
 
 export default function ProcessCardList(): React.ReactNode {
     const history = useHistory();
@@ -78,7 +78,7 @@ export default function ProcessCardList(): React.ReactNode {
         requestData={{ productCategoryId: params.id }}
         extraOperation={ <Space direction="horizontal" size="small">
             <Button type="primary" ghost>导出</Button>
-            <Button>上传</Button>
+            <UploadModal id={ params.id }/>
             <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
         </Space> }
         searchFormItems={ [] }

@@ -6,13 +6,11 @@
 
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Select, Button, Form } from 'antd';
-import { Attachment, Page } from '../../common';
+import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { Link, useLocation } from 'react-router-dom';
 import Deliverables from './Deliverables';
-import AuthUtil from '../../../utils/AuthUtil';
-import RequestUtil from '../../../utils/RequestUtil';
 import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 export default function SetOutList(): React.ReactNode {
     const columns = [
@@ -109,51 +107,7 @@ export default function SetOutList(): React.ReactNode {
                         state: { loftingLeader: record.loftingLeader, status: record.status }
                     }}>杆塔配段</Link>
                     {
-                        record.status === 5 || record.status === 6 ? <Deliverables id={record.id} name={record.name} /> : <Button type="link" disabled>交付物</Button>
-                    }
-                    {
-                        record.status === 2 || record.status === 3 || record.status === 4 ?
-                            // <Upload 
-                            //     action={ () => {
-                            //         const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                            //         return baseUrl + '/sinzetech-resource/oss/put-file'
-                            //     } } 
-                            //     headers={
-                            //         {
-                            //             'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
-                            //             'Tenant-Id': AuthUtil.getTenantId(),
-                            //             'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                            //         }
-                            //     }
-                            //     showUploadList={ false }
-                            //     onChange={ (info) => {
-                            //         if(info.file.response && !info.file.response?.success) {
-                            //             message.warning(info.file.response?.msg)
-                            //         } 
-                            //         if(info.file.response && info.file.response?.success) {
-                            //             const dataInfo = info.file.response.data;
-                            //             const fileInfo = dataInfo.name.split(".")
-                            //             RequestUtil.post(`/tower-science/productCategory/lofting/draw/upload`, {
-                            //                 attachInfoDTOList: [{
-                            //                     filePath: dataInfo.name,
-                            //                     fileSize: dataInfo.size,
-                            //                     fileUploadTime: dataInfo.fileUploadTime,
-                            //                     name: dataInfo.originalName,
-                            //                     userName: dataInfo.userName,
-                            //                     fileSuffix: fileInfo[fileInfo.length - 1]
-                            //                 }],
-                            //                 productCategoryId: record.id
-                            //             }).then(res => {
-                            //                 message.success('上传成功');
-                            //                 setRefresh(!refresh);
-                            //             })
-                            //         }
-                            //     }}> <Button type='link'>图纸上传</Button>
-                            // </Upload>
-                            <Attachment title="图纸上传" isTable={false}>
-                               <Button type='link'>图纸上传</Button>
-                            </Attachment> :
-                            <Button type='link' disabled>图纸上传</Button>
+                        record.status === 5 ? <Deliverables id={record.id} name={record.name} /> : <Button type="link" disabled>交付物</Button>
                     }
                 </Space>
             )
