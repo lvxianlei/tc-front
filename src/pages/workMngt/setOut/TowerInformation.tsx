@@ -26,7 +26,7 @@ export default function TowerInformation(): React.ReactNode {
     const [ checkUser, setcheckUser ] = useState([]);
     const location = useLocation<{ loftingLeader: string, status: number }>();
     const userId = AuthUtil.getUserId();
-    const [ visible, setvisible ] = useState(false);
+    const [ visible, setVisible ] = useState(false);
     const [ sectionData, setSectionData ] = useState([]);
     
     const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
@@ -184,7 +184,7 @@ export default function TowerInformation(): React.ReactNode {
                         }) }>删除</Button> : <Button type="link" disabled>删除</Button>
                     }
                     <TowerLoftingAssign type="detail" title="指派信息" detailData={ record } id={ params.id } update={ onRefresh } />
-                    <Button type="link">段模式</Button>
+                    <Button type="link" onClick={() => setVisible(false)}>段模式</Button>
                 </Space>
             )
         }
@@ -326,8 +326,8 @@ export default function TowerInformation(): React.ReactNode {
                 pagination: false
             }}
         />
-        <Modal title="段模式" visible={ true } onCancel={ () => setvisible(false) } footer={<Space direction="horizontal" size="small" >
-            <Button onClick={ () => setvisible(false) }>关闭</Button>
+        <Modal title="段模式" visible={ visible } onCancel={ () => setVisible(false) } footer={<Space direction="horizontal" size="small" >
+            <Button onClick={ () => setVisible(false) }>关闭</Button>
             <Button type="primary" onClick={ saveSection } ghost>保存</Button>
         </Space> }>
             <CommonTable columns={ sectionColumns } showHeader={ false } pagination={ false } dataSource={ sectionData } />

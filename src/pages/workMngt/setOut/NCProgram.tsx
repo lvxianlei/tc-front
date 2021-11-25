@@ -5,15 +5,14 @@
 */
 
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Button, Popconfirm, Upload, message, Spin } from 'antd';
-import { Page } from '../../common';
+import { Space, Input, DatePicker, Button, Popconfirm, message, Spin } from 'antd';
+import { Attachment, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
-import styles from './SetOut.module.less';
 import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-import AuthUtil from '../../../utils/AuthUtil';
 import { downloadTemplate } from './downloadTemplate';
+import { FileProps } from '../../common/Attachment';
 
 interface IData {
     readonly ncCount: string; 
@@ -112,50 +111,19 @@ export default function NCProgram(): React.ReactNode {
         refresh={ refresh }
         extraOperation={ <Space direction="horizontal" size="small">
             <Button type="primary" ghost onClick={ () => downloadTemplate(`/tower-science/productNc/downloadSummary?productCategoryId=${ params.id }`, "NC文件汇总" , {}, true ) }>下载</Button>
-            <p>NC程序数 { data?.ncCount }/{ data?.structureCount }</p>
-            <Upload 
-                action={ () => {
-                    const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                    return baseUrl+'/sinzetech-resource/oss/put-file'
-                } } 
-                headers={
-                    {
-                        'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
-                        'Tenant-Id': AuthUtil.getTenantId(),
-                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+            <p>NC程序数 { data?.ncCount || 0 }/{ data?.structureCount || 0 }</p>
+            <Attachment isTable={ false } onDoneChange={ (dataInfo: FileProps[]) => {
+                RequestUtil.post(`/tower-science/productNc/importProductNc`, {
+                    attachInfoList: [...dataInfo],
+                    segmentId: params.productSegmentId
+                }).then(res => {
+                    if(res) {
+                        message.success('上传成功');
+                        setRefresh(!refresh);
+                        getData();
                     }
-                }
-                multiple={ true }
-                showUploadList={ false }
-                onChange={ (info) => {
-                    if(info.file.response && !info.file.response?.success) {
-                        message.warning(info.file.response?.msg)
-                    } 
-                    if(info.file.response && info.file.response?.success){
-                        const dataInfo = info.file.response.data
-                        const fileInfo = dataInfo.name.split(".")
-                        RequestUtil.post(`/tower-science/productNc/importProductNc`, {
-                            attachInfoList: [{
-                                filePath: dataInfo.name,
-                                fileSize: dataInfo.size,
-                                fileUploadTime: dataInfo.fileUploadTime,
-                                name: dataInfo.originalName,
-                                userName: dataInfo.userName,
-                                fileSuffix: fileInfo[fileInfo.length - 1]
-                            }],
-                            segmentId: params.productSegmentId
-                        }).then(res => {
-                            if(res) {
-                                message.success('上传成功');
-                                setRefresh(!refresh);
-                                getData();
-                            }
-                        })
-                    }
-                } }
-            >
-                <Button type="primary" ghost>批量上传</Button>
-            </Upload>
+                })
+            } }><Button type="primary" ghost>批量上传</Button></Attachment>
             <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
         </Space>}
         searchFormItems={ [

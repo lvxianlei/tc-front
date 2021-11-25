@@ -10,7 +10,6 @@ import { Page } from '../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
 import styles from './TowerLoftingAssign.module.less';
 import { Link, useHistory, useParams } from 'react-router-dom';
-import UploadModal from './UploadModal';
 import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import { downloadTemplate } from './downloadTemplate';
