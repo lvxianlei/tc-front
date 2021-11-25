@@ -79,7 +79,6 @@ interface ResizableTitleProps extends React.Attributes {
 
 export function ResizableTitle({ isResizable = false, ...props }: ResizableTitleProps): JSX.Element {
     //TODO 拖拽改变宽度
-
     const onResize = ({ ...arg }) => {
         console.log(arg)
     }
