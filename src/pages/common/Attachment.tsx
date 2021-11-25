@@ -9,7 +9,8 @@ import { UploadFile } from 'antd/lib/upload/interface'
 export interface FileProps {
     id?: string,
     uid?: number | string,
-    fileName: string,
+    originalName?: string,
+    fileName?: string,
     filePath: string,
     fileSuffix: string
     fileSize: string | number
@@ -121,7 +122,7 @@ export default forwardRef(function ({
                     id: uploadOSSUrlInfo?.id || "",
                     uid: event.file.uid,
                     filePath: uploadOSSUrlInfo?.filePath || "",
-                    fileName: uploadOSSUrlInfo?.originalName || "",
+                    originalName: uploadOSSUrlInfo?.originalName || "",
                     fileSuffix: uploadOSSUrlInfo?.fileSuffix || "",
                     fileSize: uploadOSSUrlInfo?.fileSize || "",
                     downloadUrl: uploadOSSUrlInfo?.downloadUrl || ""
@@ -161,7 +162,7 @@ export default forwardRef(function ({
         return <>
             {!edit && <Button type="link" onClick={() => handlePreview(records)}>预览</Button>}
             <Button type="link" onClick={() => downLoadFile(records.downloadUrl)}>下载</Button>
-            <Button type="link" onClick={() => deleteAttachData(records.id)}>删除</Button>
+            {edit&&<Button type="link" onClick={() => deleteAttachData(records.id)}>删除</Button>}
         </>
     }, [])
 
@@ -212,7 +213,7 @@ export default forwardRef(function ({
             {children}
         </Upload>}
         {isTable && <CommonTable columns={[
-            { title: "文件名称", dataIndex: "fileName" },
+            { title: "文件名称", dataIndex: "originalName" },
             {
                 title: "操作",
                 dataIndex: "operation",
