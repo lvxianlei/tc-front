@@ -5,12 +5,11 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, Popconfirm, Form } from 'antd';
+import { Space, Input, DatePicker, Select, Button, Form } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './AssemblyWelding.module.less';
 import { Link, useLocation } from 'react-router-dom';
-import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 
 enum PriorityType {
@@ -167,7 +166,8 @@ export default function AssemblyWeldingList(): React.ReactNode {
                 name: 'priority',
                 label: '优先级',
                 children: <Select style={{ width: '120px' }} placeholder="请选择">
-                    <Select.Option value="" key="0">全部</Select.Option>
+                    <Select.Option value="" key="4">全部</Select.Option>
+                    <Select.Option value="0" key="0">紧急</Select.Option>
                     <Select.Option value="1" key="1">高</Select.Option>
                     <Select.Option value="2" key="2">中</Select.Option>
                     <Select.Option value="3" key="3">低</Select.Option>
