@@ -284,7 +284,13 @@ export default function Lofting(): React.ReactNode {
         rowChangeList.push(index);
         setRowChangeList([...rowChangeList]);    
     }
+    const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
+    const [ selectedRows, setSelectedRows ] = useState<any[]>([]);
     const [ rowChangeList, setRowChangeList ] = useState<number[]>([]);
+    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
+        setSelectedKeys(selectedRowKeys);
+        setSelectedRows(selectedRows)
+    }
     return <>
         <Form layout="inline" style={{margin:'20px'}} onFinish={onFilterSubmit}>
             <Form.Item label='材料名称' name='materialName'>
@@ -347,7 +353,13 @@ export default function Lofting(): React.ReactNode {
                 // onFilterSubmit={onFilterSubmit}
                 filterValue={ filterValue }
                 refresh={ refresh }
-                tableProps={{ pagination: false, rowKey:'id'}}
+                tableProps={{
+                    pagination: false,
+                    rowSelection: {
+                        selectedRowKeys: selectedKeys,
+                        onChange: SelectChange
+                    }
+                }}
                 extraOperation={ 
                     <Space direction="horizontal" size="small">
                         {/* <Button type="primary" ghost>导出</Button> */}
@@ -433,6 +445,24 @@ export default function Lofting(): React.ReactNode {
                             console.log(getForm()?.getFieldsValue(true)) 
                         } }>{ editorLock }</Button>
                         <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}/recognize`)}}>识别</Button>
+                        <Popconfirm
+                            title="确认删除?"
+                            onConfirm={ () => { 
+                                if(selectedKeys.length > 0) {
+                                    // RequestUtil.delete(`/tower-science/productStructure?productStructureId=${ record.id }`).then(res => {
+                                    //     message.success('删除成功');
+                                    //     history.go(0);
+                                    // }) 
+                                } else {
+                                    message.warning('请选择要删除的数据')
+                                }
+                                    
+                            }}
+                            okText="确认"
+                            cancelText="取消"
+                        >
+                            <Button type="primary" ghost>删除</Button>
+                        </Popconfirm>
                         <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}`)}}>返回上一级</Button>
                     </Space>
                 }
