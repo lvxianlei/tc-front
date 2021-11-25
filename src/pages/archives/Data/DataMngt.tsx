@@ -112,8 +112,9 @@ export default function DataMngt(): React.ReactNode {
                         } }
                         okText="确认"
                         cancelText="取消"
+                        disabled={ record.dataStatus !== 0 }
                     >
-                        <Button type="link">删除</Button>
+                        <Button type="link" disabled={ record.dataStatus !== 0 }>删除</Button>
                     </Popconfirm>
                 </Space>
             )
@@ -268,7 +269,7 @@ export default function DataMngt(): React.ReactNode {
                     }]}>
                     <Input placeholder="请输入" maxLength={ 50 } />
                 </Form.Item>
-                <Form.Item name="lendOrLostTime" label={  tip === recordState.LEND ? '借出时间' : tip === recordState.GIVE_BACK ? '归还人' : '遗失人' } rules={[{
+                <Form.Item name="lendOrLostTime" label={  tip === recordState.LEND ? '借出时间' : tip === recordState.GIVE_BACK ? '归还时间' : '遗失时间' } rules={[{
                         "required": true,
                         "message": "请选择" + `${tip === recordState.LEND ? '借出时间' : tip === recordState.GIVE_BACK ? '归还时间' : '遗失时间'}`
                     }]}>

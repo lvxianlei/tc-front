@@ -312,7 +312,7 @@ export default function CertificateMngt(): React.ReactNode {
                     }]}>
                     <Input placeholder="请输入" maxLength={ 50 } />
                 </Form.Item>
-                <Form.Item name="lendOrLostTime" label={  tip === recordState.LEND ? '借出时间' : tip === recordState.GIVE_BACK ? '归还人' : '遗失人' } rules={[{
+                <Form.Item name="lendOrLostTime" label={  tip === recordState.LEND ? '借出时间' : tip === recordState.GIVE_BACK ? '归还时间' : '遗失时间' } rules={[{
                         "required": true,
                         "message": "请选择" + `${tip === recordState.LEND ? '借出时间' : tip === recordState.GIVE_BACK ? '归还时间' : '遗失时间'}`
                     }]}>
