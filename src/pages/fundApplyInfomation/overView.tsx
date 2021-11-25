@@ -1,15 +1,36 @@
 /**
  * 请款申请详情
  */
-import React, { useState } from 'react';
-import { Modal, Form, Button } from 'antd';
+import React, { useState,useEffect } from 'react';
+import { Modal, Button,ModalFuncProps } from 'antd';
 import { DetailTitle,BaseInfo,CommonTable,Attachment } from '../common';
 import { overViewBaseColunms,overViewBillColunms,overViewApplyColunms } from './fundListHead.json';
+import useRequest from '@ahooksjs/use-request';
+ import RequestUtil from '../../utils/RequestUtil';
+interface AddModalProps extends ModalFuncProps {
+    payApplyId?: string;
+  }
+export default function OverView(props: AddModalProps): JSX.Element {
+    const [loadig, setloadig] = useState<boolean>(false);
+    const [baseInfo, setBaseInfo] = useState<any>({});//基本信息
+    const [payApplyBillVOList, setBillVOList] = useState<any>([]);//票据信息
+    const [attachInfoVOList, setInfoVOList] = useState<any>([]);//附件信息
+    const [approveRecordVOList, setRecordVOList] = useState<any>([]);//审批记录
+    //请求详情
+    const getDetail = async () =>  {
+        const detail: any = await RequestUtil.get(`/tower-finance/payApply/${props.payApplyId}`);
+        setBaseInfo(detail);
+        setBillVOList(detail.payApplyBillVOList);
+        setInfoVOList(detail.attachInfoVOList);
+        setRecordVOList(detail.approveRecordVOList);
 
-export default function OverView(props: any): JSX.Element {
-    const [attachVosData, setAttachVosData] = useState<any[]>([])
-    // 取消
+    };
+    if(props.visible && !loadig){
+        setloadig(true)
+        getDetail()
+    }
     const handleCancle = () => {
+        setloadig(false)
         props.onCancel && props.onCancel();
     }
     return (
@@ -26,30 +47,20 @@ export default function OverView(props: any): JSX.Element {
             ]}
         >
             <DetailTitle title="基本信息" />
-            <BaseInfo dataSource={{}} col={ 2 }
+            <BaseInfo dataSource={baseInfo} col={ 2 }
                 columns={[
-                    ...overViewBaseColunms,
-                    ...props.title.map((item: any) => {
-                        if (item.dataIndex === 'returnType') {
-                            return ({
-                                title: item.title,
-                                dataIndex: 'returnType',
-                                width: 50,
-                                render: (_: any, record: any): React.ReactNode => (<span>{record.returnType === 0 ? '投标保证金' : '合同应收款'}</span>)
-                            })
-                        }
-                        return item;
-                    }),
+                    ...overViewBaseColunms
                 ]}
             />
             <DetailTitle title="票据信息" />
-            <BaseInfo dataSource={{}} col={ 2 }
+            <BaseInfo dataSource={payApplyBillVOList} col={ 2 }
                 columns={[
                     ...overViewBillColunms
                 ]}
             />
+            {/* <DetailTitle title="附件" /> */}
+            <Attachment title="附件" dataSource={attachInfoVOList || [] } />
             {/* <DetailTitle title="审批记录" /> */}
-            <Attachment title="附件" dataSource={attachVosData || [] } />
             <DetailTitle title="审批记录" />
             <CommonTable columns={[
                 {
@@ -60,7 +71,7 @@ export default function OverView(props: any): JSX.Element {
                     render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                 },
                 ...overViewApplyColunms
-            ]} dataSource={attachVosData} />
+            ]} dataSource={approveRecordVOList} />
         </Modal>
     )
 }

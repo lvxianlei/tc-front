@@ -5,10 +5,27 @@ import React, { useState,useRef } from 'react';
 import { Modal, Form, Button, ModalFuncProps } from 'antd';
 import { BaseInfo,Attachment,AttachmentRef,EditTable } from '../common';
 import { addColums } from './fundListHead.json';
-import RequestUtil from '../../utils/RequestUtil'
-export default function AddModal(props: ModalFuncProps): JSX.Element {
+import { payTypeOptions } from '../../configuration/DictionaryOptions';
+import RequestUtil from '../../utils/RequestUtil';
+interface AddModalProps extends ModalFuncProps {
+  payApplyId?: string;
+}
+export default function AddModal(props: AddModalProps): JSX.Element {
+  //处理是addColums enum
+    if(props.visible){
+        const enums:any = payTypeOptions?.map(item=>{
+          return {
+            label:item.name,
+            value:item.id
+          }
+        })
+        addColums.map((item)=>{
+          if(item.dataIndex == "payType"){
+            item.enum = enums
+          }
+        })
+    }
     const [addFund] = Form.useForm();
-    // const [columns, setColumns] = useState(baseColums);
     const [ loading, setLoading ] = useState<boolean>(false);
     const [attachVosData, setAttachVosData] = useState<any[]>([]);
     const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } });
@@ -16,15 +33,17 @@ export default function AddModal(props: ModalFuncProps): JSX.Element {
     const handleSure = async () => {
         setLoading(true);
         const postData = await addFund.validateFields();
-        console.log(postData)
+      try{
         const result: { [key: string]: any } = await RequestUtil.post('/tower-finance/payApply', {
-            ...postData
-        })
-        console.log(result, 'post')
-        // props.onOk && props.onOk({data: 10}, () => {
-        //     addFund.resetFields();
-            setLoading(false)
-        // });
+            ...postData,
+            payApplyId:props.payApplyId || 0,
+            attachInfoDTOList:attchsRef.current?.getDataSource()
+        });
+        setLoading(false)
+        props.onOk && props.onOk()
+      }catch{
+        setLoading(false)
+      }
     }
 
     // 取消

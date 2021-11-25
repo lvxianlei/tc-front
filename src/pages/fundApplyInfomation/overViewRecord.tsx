@@ -5,11 +5,20 @@ import React, { useState } from 'react';
 import { Modal, Form, Button } from 'antd';
 import { DetailTitle,BaseInfo,CommonTable,Attachment } from '../common';
 import { fundRecordColumns } from './fundRecord.json';
-
+import RequestUtil from '../../utils/RequestUtil';
 export default function OverView(props: any): JSX.Element {
-    const [attachVosData, setAttachVosData] = useState<any[]>([])
+    const [loadig, setloadig] = useState<boolean>(false);
+    const [baseInfo, setBaseInfo] = useState<any>({});//基本信息
+    const [attachInfoVOList, setInfoVOList] = useState<any>([]);//附件信息
+    //请求详情
+    const getDetail = async () =>  {
+        const detail: any = await RequestUtil.get(`/tower-finance/payApply/payment/${props.payApplyId}`);
+        setBaseInfo(detail);
+        setInfoVOList(detail.attachInfoVOList);
+    };
     // 取消
     const handleCancle = () => {
+        setloadig(true)
         props.onCancel && props.onCancel();
     }
     return (
@@ -26,12 +35,12 @@ export default function OverView(props: any): JSX.Element {
             ]}
         >
             <DetailTitle title="付款记录" />
-            <BaseInfo dataSource={{}} col={ 2 }
+            <BaseInfo dataSource={baseInfo} col={ 2 }
                 columns={[
                     ...fundRecordColumns
                 ]}
             />
-            <Attachment title="附件" dataSource={attachVosData || [] } />
+            <Attachment title="附件" dataSource={attachInfoVOList || [] } />
         </Modal>
     )
 }
