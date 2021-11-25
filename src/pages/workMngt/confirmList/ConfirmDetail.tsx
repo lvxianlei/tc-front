@@ -68,11 +68,11 @@ export default function ConfirmDetail(): React.ReactNode {
     }) => {
       const inputNode = inputType === 'number' ? <InputNumber style={{width:'100%'}} onChange={(value:number)=>{
         let number = 0;
-        if(dataIndex==='productWeight'){
+        if(dataIndex==='monomerWeight'){
             number = formRef.getFieldValue('otherWeight')?formRef.getFieldValue('otherWeight'):0;
         }
         if(dataIndex==='otherWeight'){
-          number = formRef.getFieldValue('productWeight')?formRef.getFieldValue('productWeight'):0;;
+          number = formRef.getFieldValue('monomerWeight')?formRef.getFieldValue('monomerWeight'):0;;
         }
         formRef.setFieldsValue({
             totalWeight:value+number
@@ -316,98 +316,98 @@ export default function ConfirmDetail(): React.ReactNode {
       // },//范春森于11月23日去掉
       { 
         title: '接腿配置A', 
-        dataIndex: 'steelProductShape', 
+        dataIndex: 'legConfigurationA', 
         type:'text',
         width: 80,
         editable: true,
-        key: 'steelProductShape' 
+        key: 'legConfigurationA' 
       },
       { 
         title: '接腿配置B', 
-        dataIndex: 'steelProductShape', 
+        dataIndex: 'legConfigurationB', 
         type:'text',
         width: 80,
         editable: true,
-        key: 'steelProductShape' 
+        key: 'legConfigurationB' 
       },
       { 
         title: '接腿配置C', 
-        dataIndex: 'steelProductShape', 
+        dataIndex: 'legConfigurationC', 
         type:'text',
         width: 80,
         editable: true,
-        key: 'steelProductShape' 
+        key: 'legConfigurationC' 
       },
       { 
         title: '接腿配置D', 
-        dataIndex: 'steelProductShape', 
+        dataIndex: 'legConfigurationD', 
         type:'text',
         width: 80,
         editable: true,
-        key: 'steelProductShape' 
+        key: 'legConfigurationD' 
       },
       { 
         title: '接腿重A（kg）', 
-        dataIndex: 'productWeight', 
+        dataIndex: 'legWeightA', 
         type:'number',
         width: 100,
         editable: true,
-        key: 'productWeight', 
+        key: 'legWeightA', 
         render:(value:any)=>{
           return parseFloat(value).toFixed(4)
         }  
       },
       { 
         title: '接腿重B（kg）', 
-        dataIndex: 'productWeight', 
+        dataIndex: 'legWeightB', 
         type:'number',
         width: 100,
         editable: true,
-        key: 'productWeight', 
+        key: 'legWeightB', 
         render:(value:any)=>{
           return parseFloat(value).toFixed(4)
         }  
       },
       { 
         title: '接腿重C（kg）', 
-        dataIndex: 'productWeight', 
+        dataIndex: 'legWeightC', 
         type:'number',
         width: 100,
         editable: true,
-        key: 'productWeight', 
+        key: 'legWeightC', 
         render:(value:any)=>{
           return parseFloat(value).toFixed(4)
         }  
       },
       { 
         title: '接腿重D（kg）', 
-        dataIndex: 'productWeight', 
+        dataIndex: 'legWeightD', 
         type:'number',
         width: 100,
         editable: true,
-        key: 'productWeight', 
+        key: 'legWeightD', 
         render:(value:any)=>{
           return parseFloat(value).toFixed(4)
         }  
       },
       // { 
       //     title: '* 杆塔重量（kg）', 
-      //     dataIndex: 'productWeight', 
+      //     dataIndex: 'monomerWeight', 
       //     type:'number',
       //     width: 100,
       //     editable: true,
-      //     key: 'productWeight', 
+      //     key: 'monomerWeight', 
       //     render:(value:any)=>{
       //       return parseFloat(value).toFixed(4)
       //     }  
       // },
       { 
         title: '单重（kg）', 
-        dataIndex: 'productWeight', 
+        dataIndex: 'monomerWeight', 
         type:'number',
         width: 100,
         editable: true,
-        key: 'productWeight', 
+        key: 'monomerWeight', 
         render:(value:any)=>{
           return parseFloat(value).toFixed(4)
         }  
@@ -431,7 +431,7 @@ export default function ConfirmDetail(): React.ReactNode {
           editable: true,
           key: 'totalWeight',
           render:(_:any,record:any)=>{
-              return <span>{(parseFloat(record.otherWeight)+parseFloat(record.productWeight)).toFixed(4)}</span>
+              return <span>{(parseFloat(record.otherWeight)+parseFloat(record.monomerWeight)).toFixed(4)}</span>
           } 
       },
       { 
@@ -500,7 +500,7 @@ export default function ConfirmDetail(): React.ReactNode {
         const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
         resole(data);
         setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString(),index: index }}));
-        setAttachInfo([...data.attachInfoList]);
+        setAttachInfo([...data.fileVOList]);
         setDescription(data?.description);
         let totalNumber = '0';
         data?.drawProductDetailList.forEach((item:any)=>{
@@ -859,55 +859,67 @@ export default function ConfirmDetail(): React.ReactNode {
                     </Row>
                     <Row>
                       <Col span={12}>
-                        <Form.Item name="basicHight" label="接腿配置A">
+                        <Form.Item name="legConfigurationA" label="接腿配置A">
                             <Input style={{width:'100%'}} />
                         </Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item name="basicHight" label="接腿配置B">
-                            <Input style={{width:'100%'}} />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col span={12}>
-                        <Form.Item name="basicHight" label="接腿配置C">
-                            <Input style={{width:'100%'}} />
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item name="basicHight" label="接腿配置D">
+                        <Form.Item name="legConfigurationB" label="接腿配置B">
                             <Input style={{width:'100%'}} />
                         </Form.Item>
                       </Col>
                     </Row>
                     <Row>
                       <Col span={12}>
-                        <Form.Item name="productWeight" label="接腿重A（kg）">
+                        <Form.Item name="legConfigurationC" label="接腿配置C">
+                            <Input style={{width:'100%'}} />
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item name="legConfigurationD" label="接腿配置D">
+                            <Input style={{width:'100%'}} />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>
+                        <Form.Item name="legWeightA" label="接腿重A（kg）" rules={[{
+                            "required": true,
+                            "message":"请输入接腿重A（kg）"
+                        }]}>
                             <InputNumber precision={4} style={{width:'100%'}} min={0}/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item name="productWeight" label="接腿重B（kg）">
+                        <Form.Item name="legWeightB" label="接腿重B（kg）" rules={[{
+                            "required": true,
+                            "message":"请输入接腿重B（kg）"
+                        }]}>
                             <InputNumber precision={4} style={{width:'100%'}} min={0}/>
                         </Form.Item>
                       </Col>
                     </Row>
                     <Row>
                       <Col span={12}>
-                        <Form.Item name="productWeight" label="接腿重C（kg）">
+                        <Form.Item name="legWeightC" label="接腿重C（kg）" rules={[{
+                            "required": true,
+                            "message":"请输入接腿重C（kg）"
+                        }]}>
                             <InputNumber precision={4} style={{width:'100%'}} min={0}/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item name="productWeight" label="接腿重D（kg）">
+                        <Form.Item name="legWeightD" label="接腿重D（kg）" rules={[{
+                            "required": true,
+                            "message":"请输入接腿重D（kg）"
+                        }]}>
                             <InputNumber precision={4} style={{width:'100%'}} min={0}/>
                         </Form.Item>
                       </Col>
                     </Row>
                     <Row>
                       {/* <Col span={12}>
-                        <Form.Item name="productWeight" label="杆塔重量（kg）" rules={[{
+                        <Form.Item name="monomerWeight" label="杆塔重量（kg）" rules={[{
                             "required": true,
                             "message":"请输入杆塔重量（kg）"
                         }]}>
@@ -920,7 +932,7 @@ export default function ConfirmDetail(): React.ReactNode {
                         </Form.Item>
                       </Col> */}
                       <Col span={12}>
-                        <Form.Item name="productWeight" label="单重（kg）" rules={[{
+                        <Form.Item name="monomerWeight" label="单重（kg）" rules={[{
                             "required": true,
                             "message":"请输入杆塔重量（kg）"
                         }]}>
@@ -935,7 +947,7 @@ export default function ConfirmDetail(): React.ReactNode {
                       <Col span={12}>
                         <Form.Item name="otherWeight" label="其他增重（kg）">
                             <InputNumber precision={4} style={{width:'100%'}} min={0} onChange={(value:number)=>{
-                                const data:number = form.getFieldValue('productWeight')?form.getFieldValue('productWeight'):0;
+                                const data:number = form.getFieldValue('monomerWeight')?form.getFieldValue('monomerWeight'):0;
                                 form.setFieldsValue({
                                     totalWeight:data+value
                                 })

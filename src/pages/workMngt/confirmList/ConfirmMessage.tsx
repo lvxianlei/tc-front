@@ -44,7 +44,7 @@ export default function ConfirmMessage(): React.ReactNode {
                         )
                     }
                 ]} dataSource={detailData?.attachInfoList} pagination={ false }/> */}
-                <Attachment dataSource={detailData?.attachInfoList} />
+                <Attachment dataSource={detailData?.fileVOList} />
                 {/* <DetailTitle title="完成信息" />
                 <CommonTable columns={[
                     {
