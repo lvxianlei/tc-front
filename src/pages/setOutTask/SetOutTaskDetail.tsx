@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Spin, Button, Space, Modal, Row, Col, Input, message, Image } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common';
+import { DetailTitle, BaseInfo, DetailContent, CommonTable, Attachment } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { baseColumns, specialColums, productColumns } from './SetOutTaskDetail.json';
@@ -100,36 +100,7 @@ export default function SetOutTaskDetail(): React.ReactNode {
             <BaseInfo columns={ specialColums } dataSource={ detailData } col={ 2 } />
             <DetailTitle title="产品信息" />
             <BaseInfo columns={ productColumns } dataSource={ detailData } col={ 2 } />
-            <DetailTitle title="相关附件" />
-            
-            <CommonTable columns={[
-                { 
-                    key: 'name', 
-                    title: '附件名称', 
-                    dataIndex: 'name',
-                    width: 350
-                },
-                { 
-                    key: 'operation', 
-                    title: '操作', 
-                    dataIndex: 'operation', 
-                    render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                        <Space direction="horizontal" size="small">
-                            <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
-                            {
-                                record.fileSuffix === 'pdf' 
-                                ? 
-                                <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : ['jpg', 'jpeg', 'png', 'gif'].includes(record.fileSuffix) 
-                                ? 
-                                <Button type='link' onClick={ () => { setPictureUrl(record.id ? record.filePath : record.link); setPictureVisible(true); } }>预览</Button> 
-                                : null 
-                            }
-                        </Space>
-                ) }
-            ]}
-                dataSource={ detailData.attachVos } 
-                pagination={ false }
-            />
+            <Attachment dataSource={ detailData.attachVos } />
             <DetailTitle title="操作信息"/>
             <CommonTable columns={ tableColumns } dataSource={ detailData.stateRecordVOS } pagination={ false }/>
         </DetailContent>
