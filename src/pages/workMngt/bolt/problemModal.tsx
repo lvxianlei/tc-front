@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Modal, Input, Row, Col, message, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -36,13 +37,13 @@ export default function BoltDetailProblem(props: { cancelModal: (refresh?: boole
             render: ((text: any, item: any, index: any) => {
                 return <span>
                     {
-                        item.status == 1 ?
+                        item.status === 1 ?
                             '待修改' :
-                            item.status == 2 ?
+                            item.status === 2 ?
                                 '已修改' :
-                                item.status == 3 ?
+                                item.status === 3 ?
                                     '已拒绝' :
-                                    item.status == 4 ?
+                                    item.status === 4 ?
                                         '已删除' : ''
                     }
                 </span>
@@ -60,7 +61,7 @@ export default function BoltDetailProblem(props: { cancelModal: (refresh?: boole
         if (props.id) {
             getDetail()
         }
-    }, [props.id])
+    }, [])
     /**
      * 获取详情
      */

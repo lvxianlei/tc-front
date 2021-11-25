@@ -13,6 +13,7 @@ export default function BoltCheck(): React.ReactNode {
     const history = useHistory()
     const [urlVisible, setUrlVisible] = useState<boolean>(false);
     const [url, setUrl] = useState<string>('');
+    const [item, setItem] = useState<any>({})
     const columns: any = [
         {
             title: '序号',
@@ -84,6 +85,7 @@ export default function BoltCheck(): React.ReactNode {
                             onClick={() => {
                                 setId(item.id)
                                 setIsAddModal(true)
+                                setItem(item)
                             }}
                         >编辑</span>
                         <Popconfirm
@@ -191,6 +193,7 @@ export default function BoltCheck(): React.ReactNode {
                 isAddModal ?
                     <BoltDetailAdd
                         cancelModal={onCancel}
+                        item={item}
                         id={id}
                     /> : null
             }
