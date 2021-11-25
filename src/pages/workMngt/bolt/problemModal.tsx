@@ -17,26 +17,40 @@ export default function BoltDetailProblem(props: { cancelModal: (refresh?: boole
         {
             title: '操作部门',
             width: 150,
-            dataIndex: 'typeName',
+            dataIndex: 'createDeptName',
         },
         {
             title: '操作人',
             width: 150,
-            dataIndex: 'name',
+            dataIndex: 'createUser',
         },
         {
             title: '操作时间',
             width: 150,
-            dataIndex: 'level',
+            dataIndex: 'createTime',
         },
         {
             title: '问题单状态',
             width: 150,
-            dataIndex: 'specs',
+            dataIndex: 'status',
+            render: ((text: any, item: any, index: any) => {
+                return <span>
+                    {
+                        item.status == 1 ?
+                            '待修改' :
+                            item.status == 2 ?
+                                '已修改' :
+                                item.status == 3 ?
+                                    '已拒绝' :
+                                    item.status == 4 ?
+                                        '已删除' : ''
+                    }
+                </span>
+            })
         },
         {
             title: '备注',
-            dataIndex: 'unbuckleLength',
+            dataIndex: 'description',
             width: 120,
         },
     ]
@@ -50,25 +64,29 @@ export default function BoltDetailProblem(props: { cancelModal: (refresh?: boole
     /**
      * 获取详情
      */
-    const getDetail = () => {
-        setColumnsData([])
+    const getDetail = async () => {
+        let data: any = await RequestUtil.get('/tower-science/boltRecord/issueDetail', {
+            keyId: props.id,
+            problemField: '',
+        })
+        setColumnsData(data.issueRecordVOList)
+        setContentObj(data)
     }
     /**
      * 螺栓信息添加
      */
     const onSubmit = async () => {
-        if (props.id) {
-            await RequestUtil.put('/tower-science/', {
-                ...contentObj,
-            })
-        } else {
-            await RequestUtil.put('/tower-science/', {
-                ...contentObj,
-                id: props.id,
-            })
+        if (!contentObj.newValue) {
+            message.error('请填写校对后信息')
+            return
         }
-        message.success('操作成功')
-        props.cancelModal(true)
+        if (props.id) {
+            await RequestUtil.post('/tower-science/boltRecord/saveIssue', {
+                ...contentObj,
+            })
+            message.success('操作成功')
+            props.cancelModal(true)
+        }
     }
     /**
      * 
@@ -85,7 +103,7 @@ export default function BoltDetailProblem(props: { cancelModal: (refresh?: boole
                 className='Modal_hugao'
                 visible={true}
                 width={1000}
-                title="添加"
+                title="提交问题"
                 onCancel={() => { props.cancelModal() }}
                 onOk={() => onSubmit()}
                 okText="确定"
@@ -103,12 +121,10 @@ export default function BoltDetailProblem(props: { cancelModal: (refresh?: boole
                             >
                                 <span className='tip'>问题字段：</span>
                                 <Input
-                                    placeholder='请输入'
-                                    value={contentObj.name}
+                                    placeholder='无扣长（mm）'
                                     maxLength={20}
-                                    onChange={(ev) => {
-                                        changecontentObj(ev.target.value.trim(), 'name')
-                                    }}
+                                    value={contentObj.problemFieldName}
+                                    disabled
                                 />
                             </Col>
                             <Col
@@ -120,11 +136,9 @@ export default function BoltDetailProblem(props: { cancelModal: (refresh?: boole
                                 <span className='tip'>原字段信息：</span>
                                 <Input
                                     placeholder='请输入'
-                                    value={contentObj.name}
+                                    value={contentObj.currentValue}
                                     maxLength={20}
-                                    onChange={(ev) => {
-                                        changecontentObj(ev.target.value.trim(), 'name')
-                                    }}
+                                    disabled
                                 />
                             </Col>
                             <Col
@@ -136,10 +150,10 @@ export default function BoltDetailProblem(props: { cancelModal: (refresh?: boole
                                 <span className='tip'>备注：</span>
                                 <Input
                                     placeholder='请输入'
-                                    value={contentObj.specs}
-                                    maxLength={20}
+                                    value={contentObj.description}
+                                    maxLength={50}
                                     onChange={(ev) => {
-                                        changecontentObj(ev.target.value.trim(), 'specs')
+                                        changecontentObj(ev.target.value.trim(), 'description')
                                     }}
                                 />
                             </Col>
@@ -152,10 +166,10 @@ export default function BoltDetailProblem(props: { cancelModal: (refresh?: boole
                                 <span className='tip'>校对后信息 *：</span>
                                 <Input
                                     placeholder='请输入'
-                                    value={contentObj.unbuckleLength}
+                                    value={contentObj.newValue}
                                     maxLength={20}
                                     onChange={(ev) => {
-                                        changecontentObj(ev.target.value.trim(), 'unbuckleLength')
+                                        changecontentObj(ev.target.value.trim(), 'newValue')
                                     }}
                                 />
                             </Col>

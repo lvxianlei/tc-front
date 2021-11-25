@@ -86,6 +86,14 @@ export default function BoltCheck(): React.ReactNode {
     }
     // 添加
     const onSubmit = async () => {
+        if (!callHeight) {
+            message.error("请输入呼高")
+            return
+        }
+        if (towerTagNo.length == 0) {
+            message.error("请选择塔位号")
+            return
+        }
         await RequestUtil.post('/tower-science/boltRecord/saveBasicHeight', {
             basicHeight: callHeight,
             productIdList: towerTagNo,
@@ -93,6 +101,7 @@ export default function BoltCheck(): React.ReactNode {
             productCategoryId: match.params.id
         })
         setRefresh(!refresh)
+        onCancel()
     }
     // 获取塔位号
     const getBoltlist = async () => {
@@ -104,6 +113,9 @@ export default function BoltCheck(): React.ReactNode {
     // 弹框取消
     const onCancel = () => {
         setVisible(false)
+        setTowerTagNo([])
+        setExplain('')
+        setCallHeight('')
     }
     return (
         <div>
@@ -135,7 +147,7 @@ export default function BoltCheck(): React.ReactNode {
                 <div className="add_HuGao">
                     <div className="tr">
                         <div className="td">
-                            <div className="title">呼高</div>
+                            <div className="title">呼高*</div>
                             <div className="val">
                                 <Input
                                     className="input"
@@ -150,7 +162,7 @@ export default function BoltCheck(): React.ReactNode {
                             </div>
                         </div>
                         <div className="td">
-                            <div className="title">塔位号</div>
+                            <div className="title">塔位号*</div>
                             <div className="val">
                                 <Select
                                     className='input'
@@ -172,10 +184,6 @@ export default function BoltCheck(): React.ReactNode {
                                             return <Select.Option value={item.id} key={index}>{item.productNumber}</Select.Option>
                                         })
                                     }
-
-                                    <Select.Option value={155} key={155}>塔位1</Select.Option>
-                                    <Select.Option value={152} key={152}>塔位2</Select.Option>
-                                    <Select.Option value={154} key={154}>塔位3</Select.Option>
                                 </Select>
                             </div>
                         </div>
