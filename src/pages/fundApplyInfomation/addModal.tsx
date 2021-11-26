@@ -11,7 +11,6 @@ interface AddModalProps extends ModalFuncProps {
   payApplyId?: string;
 }
 export default function AddModal(props: AddModalProps): JSX.Element {
-  console.log(props.visible)
   //处理是addColums enum
     if(props.visible){
         const enums:any = payTypeOptions?.map(item=>{
@@ -48,7 +47,7 @@ export default function AddModal(props: AddModalProps): JSX.Element {
     }
     // 取消
     const handleCancle = () => {
-        addFund.resetFields();
+         addFund.resetFields();
         setLoading(false)
         props.onCancel && props.onCancel();
     }
@@ -64,7 +63,7 @@ export default function AddModal(props: AddModalProps): JSX.Element {
             <Button key="submit" type="primary" onClick={handleSure} loading={loading}>
               确认付款
             </Button>,
-            <Button key="back" onClick={props?.onCancel}>
+            <Button key="back" onClick={handleCancle}>
               取消
             </Button>
           ]}
