@@ -4,7 +4,8 @@
 import React, { useState,useEffect } from 'react';
 import { Modal, Button,ModalFuncProps } from 'antd';
 import { DetailTitle,BaseInfo,CommonTable,Attachment } from '../common';
-import { overViewBaseColunms,overViewBillColunms,overViewApplyColunms } from './fundListHead.json';
+import { overViewBaseColunms,overViewBillColunms,overViewApplyColunms,
+    payStatuOptions } from './fundListHead.json';
 import useRequest from '@ahooksjs/use-request';
  import RequestUtil from '../../utils/RequestUtil';
 interface AddModalProps extends ModalFuncProps {
@@ -19,6 +20,7 @@ export default function OverView(props: AddModalProps): JSX.Element {
     //请求详情
     const getDetail = async () =>  {
         const detail: any = await RequestUtil.get(`/tower-finance/payApply/${props.payApplyId}`);
+        detail.payStatus = payStatuOptions[detail.payStatus]
         setBaseInfo(detail);
         setBillVOList(detail.payApplyBillVOList);
         setInfoVOList(detail.attachInfoVOList);
@@ -53,10 +55,18 @@ export default function OverView(props: AddModalProps): JSX.Element {
                 ]}
             />
             <DetailTitle title="票据信息" />
-            <BaseInfo dataSource={payApplyBillVOList} col={ 2 }
+            <CommonTable 
                 columns={[
+                    {
+                        key: 'index',
+                        title: '序号',
+                        dataIndex: 'index',
+                        width: 50,
+                        render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                    },
                     ...overViewBillColunms
                 ]}
+                dataSource={payApplyBillVOList}
             />
             {/* <DetailTitle title="附件" /> */}
             <Attachment title="附件" dataSource={attachInfoVOList || [] } />

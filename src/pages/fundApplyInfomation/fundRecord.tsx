@@ -100,11 +100,28 @@
                  ]}
                  sourceKey="paymentDetailListVOIPage.records"
                  extraOperation={(data: any) => <>
-                    金额合计：{data ? data.totalSumMoney : null}元
+                    金额合计：{data ? Number(data.totalSumMoney).toFixed(2) : null}元
                 </>}
                 isSunmryLine={addList}
                  columns={[
-                     ...fundRecordColumns,
+                     ...fundRecordColumns.map((item: any) => {
+                        if (item.dataIndex === 'payType') {
+                            return ({
+                                title: item.title,
+                                dataIndex: 'payType',
+                                width: 50,
+                                render: (_: any, record: any):
+                                React.ReactNode => (
+                                    <span>{
+                                           !record.Sunmry ?
+                                                (payTypeOptions as Array<any>)?.find((item:any)=>item.id == record.payType)['name'] :""
+                                        }
+                                    </span>
+                                )
+                            })
+                        }
+                        return item;
+                    }),
                      {
                          title: "操作",
                          dataIndex: "opration",

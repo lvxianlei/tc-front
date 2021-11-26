@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { Modal, Form, Button } from 'antd';
 import { DetailTitle,BaseInfo,CommonTable,Attachment } from '../common';
 import { fundRecordColumns } from './fundRecord.json';
+import { payTypeOptions } from '../../configuration/DictionaryOptions';
 import RequestUtil from '../../utils/RequestUtil';
 export default function OverView(props: any): JSX.Element {
     const [loadig, setloadig] = useState<boolean>(false);
@@ -13,6 +14,7 @@ export default function OverView(props: any): JSX.Element {
     //请求详情
     const getDetail = async () =>  {
         const detail: any = await RequestUtil.get(`/tower-finance/payApply/payment/${props.payApplyId}`);
+        detail.payType = (payTypeOptions as Array<any>)?.find((item:any)=>item.id == detail.payType)['name']
         setBaseInfo(detail);
         setInfoVOList(detail.attachInfoVOList);
     };

@@ -94,7 +94,7 @@
         },
         {
             "title": "请款类别",
-            "dataIndex": "currencyTypeName"
+            "dataIndex": "costType"
         },
         {
             "title": "付款方式",
@@ -115,10 +115,6 @@
         {
             "title": "付款状态",
             "dataIndex": "payStatus"
-        },
-        {
-            "title": "审核状态",
-            "dataIndex": "confirmStatus"
         }
     ],
     "overViewBillColunms": [
@@ -170,6 +166,7 @@
             "width":200
         }
     ],
+    "payStatuOptions": ["待付款","部分付款","已付款"],
     "addColums": [
         {
             "title": "付款日期",

@@ -6,7 +6,7 @@
  import { Button, Input, DatePicker, Radio,Select ,Form,TreeSelect} from 'antd'
  // import { useHistory } from 'react-router-dom'
  import { Page } from '../common'
- import { fundListColumns, approvalStatus } from "./fundListHead.json"
+ import { fundListColumns, approvalStatus,payStatuOptions } from "./fundListHead.json"
  import { costTypeOptions } from '../../configuration/DictionaryOptions';
  import AddModal from './addModal'; // 新增付款记录
  import OverView from './overView'; // 查看付款记录详情
@@ -43,6 +43,7 @@
              value.endPayApplyTime = formatDate[0]
              value.startPayApplyTime = formatDate[1]
          }
+         value.payStatus=payStatus;
          return value
      }
      
@@ -78,6 +79,11 @@
         list.payMoney=payMoney;
         records.push(list)
     }
+    //添加底部计算行
+            // if(this.props.isSunmryLine){
+                // this.props.isSunmryLine(resData)
+            // }
+            // isSunmryLine?: (result:IResponseData) => void;//添加计算行
      return (
          <>
              <Page
@@ -154,7 +160,7 @@
                                  width: 50,
                                  render: (_: any, record: any): 
                                  React.ReactNode => (
-                                 <span>{!record.Sunmry ? record.payStatus === 1 ? '待确认' : '已确认' : ""}</span>
+                                 <span>{!record.Sunmry ? payStatuOptions[record.payStatus]: ""}</span>
                                  )
                              })
                          }
@@ -170,8 +176,11 @@
                                 if (payStatus === 1) {
                                     return (
                                         <>
-                                        <Button type="link" onClick={() => { setAddVisible(true);setPayApplyId(record.id) } }>新增付款记录</Button>
-                                        <Button type="link"  onClick={() => { setVisibleOverView(true); setPayApplyId(record.id) }}>详情</Button>
+                                        {/* 等于2为已付款 */}
+                                        {record.payStatus != 2 ?
+                                            <Button type="link" onClick={() => { setAddVisible(true);setPayApplyId(record.id) } }>新增付款记录</Button>
+                                        :""}
+                                            <Button type="link"  onClick={() => { setVisibleOverView(true); setPayApplyId(record.id) }}>详情</Button>
                                         </>
                                     )
                                 }
