@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Button, Space, Modal, Input, Form, FormInstance } from 'antd';
-import { DetailContent, Attachment } from '../../common';
+import { DetailContent, Attachment, AttachmentRef } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './Evaluation.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
@@ -11,7 +11,7 @@ interface IResponse {
     readonly id?: string;
     readonly assessInfo?: string;
     readonly status?: string | number;
-    readonly assessFileList?: FileProps[];
+    readonly assessFileVOList?: FileProps[];
     readonly instructionFileList?: FileProps[];
 }
 
@@ -25,13 +25,20 @@ export interface EvaluationInformationState {
     readonly visible: boolean;
     readonly description?: string;
     readonly information?: IResponse;
-    // readonly pictureVisible: boolean;
-    // readonly pictureUrl?: string;
 }
 
 class EvaluationInformation extends React.Component<IEvaluationInformationRouteProps, EvaluationInformationState> {
 
     private form: React.RefObject<FormInstance> = React.createRef<FormInstance>();
+    private attchsRef: React.RefObject<AttachmentRef> = React.createRef<AttachmentRef>();
+    /**
+     * @protected
+     * @description Gets ref
+     * @returns ref 
+     */
+     protected getAttchsRef(): AttachmentRef | null {
+        return this.attchsRef?.current
+    }
 
     /**
      * @protected
@@ -43,8 +50,7 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
     }
 
     public state: EvaluationInformationState = {
-        visible: false,
-        // pictureVisible: false
+        visible: false
     }
 
     private modalCancel(): void {
@@ -69,7 +75,7 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                 RequestUtil.post(`/tower-science/assessTask/infoSave`, {
                     assessInfo: this.getForm()?.getFieldsValue(true).description,
                     id: this.props.id,
-                    attachInfoDTOList: this.state.information?.assessFileList
+                    fileIdList: this.getAttchsRef()?.getDataSource().map(res => { return res.id })
                 }).then(res => {
                     this.setState({
                         visible: false
@@ -86,7 +92,7 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                 RequestUtil.post(`/tower-science/assessTask/infoSubmit`, {
                     assessInfo: this.getForm()?.getFieldsValue(true).description,
                     id: this.props.id,
-                    attachInfoDTOList: this.state.information?.assessFileList
+                    fileIdList: this.getAttchsRef()?.getDataSource().map(res => { return res.id })
                 }).then(res => {
                     this.setState({
                         visible: false
@@ -132,7 +138,7 @@ class EvaluationInformation extends React.Component<IEvaluationInformationRouteP
                         >
                             <Input.TextArea placeholder="请输入" maxLength={300} disabled={this.state.information?.status === 4} showCount />
                         </Form.Item>
-                        <Attachment title="评估文件" edit={!(this.state.information?.status === 4)} dataSource={this.state.information?.assessFileList || []} />
+                        <Attachment title="评估文件" ref={ this.attchsRef } edit={!(this.state.information?.status === 4)} dataSource={this.state.information?.assessFileVOList}/>
                     </DetailContent>
                 </Form>
             </Modal>

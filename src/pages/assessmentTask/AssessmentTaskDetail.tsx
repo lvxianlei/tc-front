@@ -17,7 +17,7 @@ interface IDetail {
     readonly programLeaderId?: string;
     readonly programName?: string;
     readonly status?: string | number;
-    readonly fileList?: FileProps[];
+    readonly fileVOList?: FileProps[];
     readonly statusRecordList?: ItaskDataRecordList[];
 }
 
@@ -155,7 +155,7 @@ export default function AssessmentTaskDetail(): React.ReactNode {
         ]}>
             <DetailTitle title="基本信息" />
             <BaseInfo columns={baseColumns} dataSource={detailData} col={2} />
-            <Attachment dataSource={ detailData.fileList } />
+            <Attachment dataSource={ detailData.fileVOList } />
             <DetailTitle title="操作信息" />
             <CommonTable columns={tableColumns} dataSource={detailData.statusRecordList} pagination={false} />
         </DetailContent>

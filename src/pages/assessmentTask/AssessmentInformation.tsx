@@ -10,7 +10,7 @@ interface IResponse {
     readonly id?: string;
     readonly assessInfo?: string;
     readonly status?: string;
-    readonly assessFileList?: FileProps[];
+    readonly assessFileVOList?: FileProps[];
 }
 
 export interface AssessmentInformationProps {}
@@ -21,7 +21,7 @@ export interface IAssessmentInformationRouteProps extends RouteComponentProps<As
 export interface AssessmentInformationState {
     readonly visible: boolean;
     readonly description?: string;
-    readonly assessFileList?: FileProps[];
+    readonly assessFileVOList?: FileProps[];
     readonly pictureVisible: boolean;
     readonly pictureUrl?: string;
 }
@@ -45,7 +45,7 @@ class AssessmentInformation extends React.Component<IAssessmentInformationRouteP
         const data: IResponse = await RequestUtil.get<IResponse>(`/tower-science/assessTask/infoDetail/${ this.props.id }`);
         this.setState({
             visible: true,
-            assessFileList: data.assessFileList,
+            assessFileVOList: data.assessFileVOList,
             description: data.assessInfo
         })
     }
@@ -67,7 +67,7 @@ class AssessmentInformation extends React.Component<IAssessmentInformationRouteP
                 <DetailContent>
                     <p>评估描述</p>
                     <Input.TextArea disabled value={ this.state.description } />
-                    <Attachment title="评估文件" dataSource={ this.state.assessFileList || [] } />
+                    <Attachment title="评估文件" dataSource={ this.state.assessFileVOList || [] } />
                 </DetailContent>
             </Modal>
             <Modal visible={ this.state.pictureVisible } onCancel={ () => {

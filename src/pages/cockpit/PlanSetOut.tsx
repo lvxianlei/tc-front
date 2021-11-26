@@ -52,6 +52,10 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             render: (value: number, record: object): React.ReactNode => {
                 const renderEnum: any = [
                     {
+                        value: -1,
+                        label: "-"
+                    },
+                    {
                         value: 0,
                         label: "紧急"
                     },
@@ -290,6 +294,36 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             dataIndex: 'boltDeliverRealTime'
         },
         {
+            key: 'drawLeaderName',
+            title: '样板组负责人',
+            width: 200,
+            dataIndex: 'drawLeaderName'
+        },
+        {
+            key: 'weldingDrawDeliverTime',
+            title: '组装图纸计划交付时间',
+            width: 200,
+            dataIndex: 'weldingDrawDeliverTime'
+        },
+        {
+            key: 'weldingDrawDeliverRealTime',
+            title: '组装图纸实际交付时间',
+            width: 200,
+            dataIndex: 'weldingDrawDeliverRealTime'
+        },
+        {
+            key: 'boltDrawDeliverTime',
+            title: '发货图纸计划交付时间',
+            width: 200,
+            dataIndex: 'boltDrawDeliverTime'
+        },
+        {
+            key: 'boltDrawDeliverRealTime',
+            title: '发货图纸实际交付时间',
+            width: 200,
+            dataIndex: 'boltDrawDeliverRealTime'
+        },
+        {
             key: 'description',
             title: '备注',
             width: 200,
@@ -314,6 +348,8 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
                 : col.dataIndex === 'loftingDeliverRealTime'&& moment(record.loftingDeliverTime)<moment(record.loftingDeliverRealTime?record.loftingDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
                 : col.dataIndex === 'materialPartDeliverRealTime'&& moment(record.materialPartDeliverTime)<moment(record.materialPartDeliverRealTime?record.materialPartDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
                 : col.dataIndex === 'materialDeliverRealTime'&& moment(record.materialDeliverTime)<moment(record.materialDeliverRealTime?record.materialDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
+                : col.dataIndex === 'boltDrawDeliverRealTime'&& moment(record.boltDrawDeliverTime)<moment(record.boltDrawDeliverRealTime?record.boltDrawDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
+                : col.dataIndex === 'weldingDrawDeliverRealTime'&& moment(record.weldingDrawDeliverTime)<moment(record.weldingDrawDeliverRealTime?record.weldingDrawDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
                 : <div>{ _?_:'-' }</div>
             )  
         }     
