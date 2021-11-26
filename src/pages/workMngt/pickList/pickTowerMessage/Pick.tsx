@@ -14,7 +14,7 @@ interface Column extends ColumnType<object> {
 }
 export default function Lofting(): React.ReactNode {
     const history = useHistory();
-    const params = useParams<{ id: string, productSegmentId: string, status: string}>();
+    const params = useParams<{ id: string, productSegmentId: string, status: string, materialLeader: string}>();
     const [ refresh, setRefresh ] = useState<boolean>(false);
     const [ visible, setVisible ] = useState<boolean>(false);
     const [ tipVisible, setTipVisible ] = useState<boolean>(false);
@@ -401,15 +401,15 @@ export default function Lofting(): React.ReactNode {
                         <Button type="primary" ghost  onClick={()=>{
                             setAddVisible(true)
                         }}>添加</Button>
-                        <Button type="primary" ghost  onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}/drawApply`)}}>图纸塔型套用</Button>
-                        <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}/setOutApply`)}}>放样塔型套用</Button>
+                        <Button type="primary" ghost  onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/drawApply`)}}>图纸塔型套用</Button>
+                        <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/setOutApply`)}}>放样塔型套用</Button>
                         <Popconfirm
                             title="确认完成提料?"
                             onConfirm={ async () => {
                                 await RequestUtil.post(`/tower-science/drawProductSegment/completedLofting?productSegmentId=${params.productSegmentId}`).then(()=>{
                                     message.success('提料成功！')
                                 }).then(()=>{
-                                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}`)
+                                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`)
                                 })
                             } }
                             okText="确认"
@@ -444,7 +444,7 @@ export default function Lofting(): React.ReactNode {
                             }
                             console.log(getForm()?.getFieldsValue(true)) 
                         } }>{ editorLock }</Button>
-                        <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}/recognize`)}}>识别</Button>
+                        <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/recognize`)}}>识别</Button>
                         <Popconfirm
                             title="确认删除?"
                             onConfirm={ () => { 
@@ -463,7 +463,7 @@ export default function Lofting(): React.ReactNode {
                         >
                             <Button type="primary" ghost>删除</Button>
                         </Popconfirm>
-                        <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}`)}}>返回上一级</Button>
+                        <Button type="primary" ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`)}}>返回上一级</Button>
                     </Space>
                 }
                 searchFormItems={[]}

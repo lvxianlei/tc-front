@@ -17,14 +17,13 @@ export default function PickTowerMessage(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [visible, setVisible] = useState<boolean>(false);
     const [edit, setEdit] = useState<boolean>(false);
-    const params = useParams<{ id: string, status: string }>();
+    const params = useParams<{ id: string, status: string, materialLeader: string }>();
     const [filterValue, setFilterValue] = useState({});
     const [pickLeader, setPickLeader] = useState<any|undefined>([]);
     const [checkLeader, setCheckLeader] = useState<any|undefined>([]);
     const [department, setDepartment] = useState<any|undefined>([]);
     const [detail, setDetail] = useState<any>([]);
     const [form] = Form.useForm();
-    const location = useLocation<{ state: {} }>();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
         setDepartment(departmentData);
@@ -51,10 +50,10 @@ export default function PickTowerMessage(): React.ReactNode {
             dataIndex: 'name'
         },
         {
-            key: 'name',
+            key: 'patternName',
             title: '段模式',
             width: 100,
-            dataIndex: 'name'
+            dataIndex: 'patternName'
         },
         // {
         //     key: 'name',
@@ -122,10 +121,10 @@ export default function PickTowerMessage(): React.ReactNode {
                         value: 3,
                         label: "已完成"
                     },
-                    {
-                        value: 4,
-                        label: "已提交"
-                    }
+                    // {
+                    //     value: 4,
+                    //     label: "已提交"
+                    // }
                 ]
                      return <>{value&&renderEnum.find((item: any) => item.value === value).label}</>
             }
@@ -144,16 +143,20 @@ export default function PickTowerMessage(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>提料</Button>
-                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/check/${record.id}/${record.materialLeader}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>校核</Button>
-                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/detail/${record.id}`)}} type='link' disabled={record.status<3}>明细</Button>
+                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>提料</Button>
+                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/check/${record.id}/${record.materialLeader}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>校核</Button>
+                    <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/detail/${record.id}`)}} type='link' disabled={record.status<3}>明细</Button>
                     <TowerPickAssign type={ record.status < 3 ? '' : "detail" } title="指派信息" detailData={ record } id={ params.id } update={ onRefresh } />
                     <Button onClick={()=>{
-
+                        RequestUtil.delete(`/tower-science/drawProductSegment/${record.id}`).then(()=>{
+                            message.success('删除成功！')
+                        }).then(()=>{
+                            setRefresh(!refresh)
+                        })
                     }} type='link' disabled={record.status!== 1}>删除</Button>
                     <Button onClick={async ()=>{
-                        // const data = await RequestUtil.get(``)
-                        setDetail([{segmentName:1,pattern:1}]);
+                        const data = await RequestUtil.get(`/tower-science/drawProductSegment/pattern/${record.id}`)
+                        setDetail(data);
                         if(record.status == 2){
                             setEdit(true);
                         }else{
@@ -262,9 +265,9 @@ export default function PickTowerMessage(): React.ReactNode {
                                         <Col span={1}></Col>
                                         <Col span={ 11 }>
                                         <Form.Item  name={[ field.name , 'pattern']} label='模式' initialValue={[ field.name , 'pattern']}>
-                                            <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                                            <Select style={{ width: '150px' }}>
                                                 { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-                                                    return <Select.Option key={ index } value={ id + ',' + name }>
+                                                    return <Select.Option key={ index } value={ id  }>
                                                         { name }
                                                     </Select.Option>
                                                 }) }
@@ -293,7 +296,7 @@ export default function PickTowerMessage(): React.ReactNode {
                 extraOperation={
                     <Space>
                     {/* <Button type="primary" ghost>导出</Button> */}
-                    { location.state===AuthUtil.getUserId()?<Popconfirm
+                    { params.materialLeader===AuthUtil.getUserId()?<Popconfirm
                         title="确认提交?"
                         onConfirm={ async () => {
                             await RequestUtil.post(`/tower-science/drawProductSegment/${params.id}/submit`).then(()=>{
@@ -307,7 +310,7 @@ export default function PickTowerMessage(): React.ReactNode {
                     >   
                         <Button type="primary" ghost>提交</Button>
                     </Popconfirm>:null}
-                    { params.status==='1'&& location.state===AuthUtil.getUserId() ? <TowerPickAssign title="塔型提料指派" id={ params.id } update={ onRefresh } /> : null }
+                    { (params.status==='1'||params.status==='2')&& params.materialLeader===AuthUtil.getUserId() ? <TowerPickAssign title="塔型提料指派" id={ params.id } update={ onRefresh } /> : null }
                     <Button type="primary" onClick={()=>history.push('/workMngt/pickList')} ghost>返回上一级</Button>
                     </Space>
                 }
