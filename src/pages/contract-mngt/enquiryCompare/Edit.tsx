@@ -190,12 +190,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
             <PopTableContent data={{
                 ...(addMaterial as any),
-                columns: (addMaterial as any).columns.map((item: any) => {
-                    if (item.dataIndex === "standardName") {
-                        return ({ ...item, type: "select", enum: materialStandardEnum })
-                    }
-                    return item
-                })
+                columns: (addMaterial as any).columns
             }}
                 onChange={(fields: any[]) => setPopDataList(fields.map((item: any) => ({
                     ...item,

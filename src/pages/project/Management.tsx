@@ -42,7 +42,7 @@ const currentProjectStage = [
 export default function Management(): React.ReactNode {
     const history = useHistory()
     const [filterValue, setFilterValue] = useState({});
-    const columns: TableColumnProps<object>[] = [
+    const columns: any[] = [
         {
             key: 'index',
             title: '序号',
@@ -54,6 +54,8 @@ export default function Management(): React.ReactNode {
             key: 'projectName',
             title: '项目名称',
             dataIndex: 'projectName',
+            isResizable: true,
+            width:120,
             render: (_a: any, _b: any) => <Link to={`/project/management/detail/base/${_b.id}`}>{_b.projectName}</Link>
         },
         {

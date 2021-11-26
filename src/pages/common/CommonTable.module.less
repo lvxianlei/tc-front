@@ -10,3 +10,34 @@
     padding: 0 12px !important;
     border: none;
 }
+
+.isResizable{
+    border-right: 1px solid #666;
+}
+
+.ellipsisText {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+}
+//显示拖拽样式
+.componentsTableResizableColumn .reactResizable {
+    position: relative ;
+    background-clip: padding-box;
+    border: #f0f0f0 1px solid;
+}
+.componentsTableResizableColumn .reactResizableHandle {
+    box-sizing: border-box;
+    padding: 8px 0;
+    position: absolute;
+    margin: auto 0;
+    width: 10px;
+    height: 70%;
+    top:0;
+    bottom: 0;
+    right: -9px;
+    cursor: col-resize;
+    z-index: 1;
+    border-left: #f0f0f0 1px solid;
+}
