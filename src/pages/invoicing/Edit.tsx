@@ -1,28 +1,23 @@
-import React, { useState, useEffect } from "react"
-import { Button, Form, message, Spin } from 'antd'
+import React, { useState } from "react"
+import { Button, Form, message, Spin, Input, InputNumber } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable, EditTable, formatData, Attachment } from '../common'
-import { invoicingInfoHead, billingHead, editInvoicingHead } from "./InvoicingData.json"
+import { DetailContent, DetailTitle, BaseInfo, CommonTable, formatData, Attachment } from '../common'
+import { invoicingInfoHead, editInvoicingHead } from "./InvoicingData.json"
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import ApplicationContext from "../../configuration/ApplicationContext"
 export default function Edit() {
     const params = useParams<{ invoicingId: string }>()
     const history = useHistory()
-    const [attachVosData, setAttachVosData] = useState<any[]>([])
+    const [invoicingDetailVos, setInvoicingDetailVos] = useState<any[]>([])
     const [baseInfo] = Form.useForm()
-    const [invoicForm] = Form.useForm()
-    const [billingForm] = Form.useForm()
     const productType: any = (ApplicationContext.get().dictionaryOption as any)["101"]
     const saleTypeEnum: any = (ApplicationContext.get().dictionaryOption as any)["123"].map((item: any) => ({ value: item.code, label: item.name }))
-
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-finance/invoicing/getInvoicingInfo/${params.invoicingId}`)
             baseInfo.setFieldsValue({ ...formatData(invoicingInfoHead, result) })
-            invoicForm.setFieldsValue({ ...result.invoicingInfoVo })
-            billingForm.setFieldsValue({ submit: result.invoicingDetailVos.map((item: any) => formatData(billingHead, item)) })
-            setAttachVosData(result.attachInfoVos)
+            setInvoicingDetailVos(result?.invoicingDetailVos)
             resole(result)
         } catch (error) {
             reject(error)
@@ -31,98 +26,37 @@ export default function Edit() {
 
     const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((saveData) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.put(`/tower-market/invoicing/updateInvoicing`, saveData)
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-finance/invoicing`, saveData)
             resole(result)
         } catch (error) {
             reject(error)
         }
     }), { manual: true })
 
-    // 设置默认值
-    useEffect(() => {
-        baseInfo.setFieldsValue({
-            ticketWeight: '0.0000',
-            ticketMoney: '0.00',
-            ticketType: 1,
-            openTicketType: 1,
-            ticketBasis: 1
-        })
-    }, [params.invoicingId === 'new'])
-
-    const handleSave = async () => {
+    const handleSave = async (saveType: 1 | 2) => {
         try {
-            const baseInfoData = await baseInfo.validateFields()
-            const invoicData = await invoicForm.validateFields()
-            const billingData = await billingForm.validateFields()
-            console.log(baseInfoData.contractCode)
-            const saveData = {
-                ...baseInfoData,
-                contractCode: baseInfoData.contractCode.value || data?.contractCode,
-                invoicingDetailDtos: billingData.submit,
-                attachInfoDtos: attachVosData,
-                invoicingInfoDto: { ...invoicData, id: data?.invoicingInfoVo.id || "", invoicingId: data?.invoicingInfoVo.invoicingId || "" }
-            }
-            // const result = params.id === "new" ? await createRun(saveData) : await saveRun({ ...saveData, id: data?.id })
-            // if (result) {
-            //     message.success("数据保存成功...")
-            //     history.go(-1)
-            // }
+            await saveRun({
+                id: params.invoicingId,
+                invoicingDetailFillDtos: invoicingDetailVos,
+                saveType
+            })
+            message.success(`${saveType === 1 ? "保存" : "保存并提交"}成功...`)
+            history.goBack()
         } catch (error) {
             console.log(error)
         }
-
     }
 
-    const handleBaseInfoChange = async (fields: any) => {
-        if (fields.contractCode) {
-            const contractValue = fields.contractCode.records[0]
-            // const logicWeight = await logicWeightRun(contractValue.id)
-            baseInfo.setFieldsValue({
-                contractCompany: contractValue.signCustomerName,
-                contractSignTime: contractValue.signContractTime,
-                // ticketWeight: logicWeight.logicWeight,
-                // reasonWeight: logicWeight.logicWeight,
-                contractDevTime: contractValue.deliveryTime,
-                business: contractValue.salesman,
-                projectCode: contractValue.projectNumber // 项目编码
-            })
-        }
-        if (fields.backProportion) {
-            const ticketMoney = baseInfo.getFieldValue("ticketMoney")
-            baseInfo.setFieldsValue({
-                backMoney: (parseFloat(fields.backProportion) * parseFloat(ticketMoney || "0") * 0.01).toFixed(2)
-            })
-        }
-    }
-
-    const handleEditTableChange = (fields: any, allFields: any) => {
-        if (fields.submit.length - 1 >= 0) {
-            const currentRowData = fields.submit[fields.submit.length - 1]
-            const ticketMoney = baseInfo.getFieldValue("ticketMoney") || "0"
-            const backProportion = baseInfo.getFieldValue("backProportion") || "0"
-            if (currentRowData.weight || currentRowData.moneyCount) {
-                const { weight, moneyCount } = allFields.submit.reduce((result: { weight: string, moneyCount: string }, item: any) => ({
-                    weight: parseFloat(result.weight || "0") + parseFloat(item.weight || "0"),
-                    moneyCount: parseFloat(result.moneyCount || "0") + parseFloat(item.moneyCount || "0")
-                }), { weight: "0", moneyCount: "0" })
-                const newFields = allFields.submit.map((item: any, index: number) => index === fields.submit.length - 1 ? ({
-                    ...item,
-                    money: ["0", 0].includes(item.weight) || !item.weight ? "0" : (item.moneyCount / item.weight).toFixed(2)
-                }) : item)
-                billingForm.setFieldsValue({ submit: newFields })
-                baseInfo.setFieldsValue({
-                    ticketWeight: weight,
-                    ticketMoney: moneyCount,
-                    backMoney: (parseFloat(backProportion) * parseFloat(ticketMoney || "0") * 0.01).toFixed(2)
-                })
+    const handleEditTableChange = (changeKey: "ticketNumber" | "taxRate", value: any, changeIndex: number) => {
+        setInvoicingDetailVos(invoicingDetailVos.map((item: any, index: number) => {
+            if (index === changeIndex) {
+                if (changeKey === "taxRate") {
+                    return ({ ...item, [changeKey]: value, taxMoney: ((item.moneyCount||0) * value).toFixed(2) })
+                }
+                return ({ ...item, [changeKey]: value })
             }
-        } else {
-            baseInfo.setFieldsValue({
-                ticketWeight: 0,
-                ticketMoney: 0,
-                backMoney: 0
-            })
-        }
+            return item
+        }))
     }
 
     return <DetailContent operation={[
@@ -130,13 +64,17 @@ export default function Edit() {
             type="primary" key="save"
             style={{ marginRight: 16 }}
             loading={saveLoading}
-            onClick={handleSave}>保存</Button>,
+            onClick={() => handleSave(1)}>保存</Button>,
+        <Button
+            type="primary" key="saveAndSubmit"
+            style={{ marginRight: 16 }}
+            loading={saveLoading}
+            onClick={() => handleSave(2)}>保存并提交</Button>,
         <Button key="cancel" onClick={() => history.go(-1)}>取消</Button>
     ]}>
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
             <BaseInfo
-                onChange={handleBaseInfoChange}
                 form={baseInfo}
                 columns={invoicingInfoHead.map((item: any) => {
                     if (item.dataIndex === "productTypeId") {
@@ -160,9 +98,18 @@ export default function Edit() {
                     return item
                 })}
                 dataSource={{}} edit />
-            <DetailTitle title="开票明细" operation={[]} />
-            <EditTable onChange={handleEditTableChange} form={billingForm} columns={editInvoicingHead} dataSource={data?.invoicingDetailDtos || []} />
-            <Attachment edit />
+            <DetailTitle title="开票明细" />
+            <CommonTable haveIndex columns={editInvoicingHead.map((item: any) => {
+                switch (item.dataIndex) {
+                    case "ticketNumber":
+                        return ({ ...item, width: 150, render: (value: string, _: any, index) => <Input value={value} onChange={(event) => handleEditTableChange("ticketNumber", event?.target.value, index)} style={{ width: "100%" }} /> })
+                    case "taxRate":
+                        return ({ ...item, render: (value: number, _: any, index) => <InputNumber value={value} step={0.01} onChange={(value: number) => handleEditTableChange("taxRate", value, index)} /> })
+                    default:
+                        return item
+                }
+            })} dataSource={invoicingDetailVos} />
+            <Attachment edit dataSource={data?.attachInfoVos} />
         </Spin>
     </DetailContent>
 }

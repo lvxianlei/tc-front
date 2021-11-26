@@ -101,7 +101,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
         return this.state.tableDataSource;
     }
 
-    public getTableColumns(): TableColumnType<object>[] {
+    public getTableColumns(): any[] {
         return (this.props.columns || []).map((item: any) => generateRender(item.type || "text", item))
     }
 

@@ -26,6 +26,7 @@ export default function Overview() {
                 if (item.dataIndex === "productTypeId") {
                     return ({
                         ...item,
+                        type: "select",
                         enum: productType.map((product: any) => ({
                             value: product.id,
                             label: product.name

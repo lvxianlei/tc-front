@@ -44,7 +44,7 @@
         },
         {
             "title": "申请人",
-            "dataIndex": "createUser",
+            "dataIndex": "createUserName",
             "type": "string"
         },
         {
@@ -413,58 +413,46 @@
     "invoicingInfoHead": [
         {
             "title": "合同编号",
-            "dataIndex": "invoicingNumber",
+            "dataIndex": "contractNumber",
             "disabled": true
         },
         {
             "title": "合同/工程名称",
             "dataIndex": "contractName",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入合同/工程名称..."
-                }
-            ]
+            "disabled": true
         },
         {
             "title": "开票重量(吨)",
             "dataIndex": "ticketWeight",
-            "type": "string"
+            "disabled": true
         },
         {
             "title": "开票金额(元)",
             "dataIndex": "ticketMoney",
-            "type": "string"
+            "type": "string",
+            "disabled": true
         },
         {
             "title": "开票单位",
             "dataIndex": "ticketCompany",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入票面单位..."
-                }
-            ]
+            "disabled": true
         },
         {
             "title": "票面单位",
             "dataIndex": "ticketCompany",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入票面单位..."
-                }
-            ]
+            "disabled": true
         },
         {
             "title": "币种",
-            "dataIndex": ""
+            "dataIndex": "",
+            "disabled": true
         },
         {
             "title": "开票日期",
             "dataIndex": "ticketTime",
             "type": "date",
-            "format": "YYYY-MM-DD"
+            "format": "YYYY-MM-DD",
+            "disabled": true
         },
         {
             "title": "业务经理",
@@ -583,51 +571,55 @@
     "editInvoicingHead": [
         {
             "title": "发票号码",
-            "dataIndex": "department"
+            "dataIndex": "ticketNumber"
         },
         {
             "title": "发票类型",
-            "dataIndex": "approver"
+            "dataIndex": "ticketTypeName"
         },
         {
             "title": "产品名称(票面)",
-            "dataIndex": "position"
+            "dataIndex": "productName"
         },
         {
             "title": "型号规格",
-            "dataIndex": "batchTime"
+            "dataIndex": "model"
         },
         {
             "title": "基数",
-            "dataIndex": "batchResult"
+            "dataIndex": "baseNum"
         },
         {
             "title": "单位",
-            "dataIndex": "opinion"
+            "dataIndex": "company"
         },
         {
             "title": "数量",
-            "dataIndex": "opinion"
+            "dataIndex": "weight",
+            "type": "number"
         },
         {
-            "title": "单价",
-            "dataIndex": "opinion"
+            "title": "单价（元/吨）",
+            "dataIndex": "money",
+            "type": "number"
         },
         {
-            "title": " 金额(元)",
-            "dataIndex": "opinion"
+            "title": "金额(元)",
+            "dataIndex": "moneyCount",
+            "type": "number"
         },
         {
             "title": "税率(%)",
-            "dataIndex": "opinion"
+            "dataIndex": "taxRate"
         },
         {
             "title": "税额(元)",
-            "dataIndex": "opinion"
+            "dataIndex": "taxMoney",
+            "type": "number"
         },
         {
             "title": "备注",
-            "dataIndex": "opinion"
+            "dataIndex": "description"
         }
     ]
 }
