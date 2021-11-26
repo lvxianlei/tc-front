@@ -40,12 +40,14 @@ export default function TemplateDetail() {
             title: '操作',
             dataIndex: 'operation',
             align: 'center',
-            render: (text: string, item: { id: string },) => {
+            render: (text: string, item: { id: string, isView: number },) => {
                 return (
                     <div className='operation'>
                         <span
+                            hidden={item.isView === 2}
                             style={{ cursor: 'pointer', color: '#FF8C00' }}
                             onClick={() => {
+                                seeFile(item.id)
                             }}
                         >查看</span>
                         <Popconfirm
@@ -72,6 +74,14 @@ export default function TemplateDetail() {
             }
         },
     ]
+    /**
+     * 
+     * @param templateId 
+     */
+    const seeFile = async (templateId: string) => {
+        let data: any = await RequestUtil.get(`/tower-science/loftingTemplate/view/${templateId}`)
+        window.open(data.downloadUrl)
+    }
     /**
      * 删除
      * @param templateRecordId 

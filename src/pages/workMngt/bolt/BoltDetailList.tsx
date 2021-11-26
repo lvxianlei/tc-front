@@ -21,16 +21,16 @@ export default function BoltCheck(): React.ReactNode {
         {
             title: '塔位号',
             width: 150,
-            dataIndex: 'productNumVOList',
-            // render: (text: any,): React.ReactNode => {
-            //     return (
-            //         <span>
-            //             {
-            //                 text.map((item: any) => `${item.productNumber}，`)
-            //             }
-            //         </span>
-            //     )
-            // }
+            dataIndex: 'gantahao',
+            render: (text: any, item: { productNumVOList: { id: string, productNumber: string }[] }): React.ReactNode => {
+                return (
+                    <span>
+                        {
+                            item.productNumVOList?.map((item: any) => `${item.productNumber}，`)
+                        }
+                    </span>
+                )
+            }
         },
         {
             title: '呼高m',
@@ -80,8 +80,8 @@ export default function BoltCheck(): React.ReactNode {
                                 setbasicHeight(item.basicHeight)
                                 setdescription(item.description)
                                 setVisible(true)
-                                // let idList: string[] = item.map((item: { id: string }) => item.id)
-                                // setproductIdList(idList)
+                                let idList: string[] = item.productNumVOList.map((item: { id: string }) => item.id)
+                                setproductIdList(idList)
                             }}
                         >编辑</span>
                         <span
@@ -122,13 +122,22 @@ export default function BoltCheck(): React.ReactNode {
             message.error("请选择塔位号")
             return
         }
-        await RequestUtil.post('/tower-science/boltRecord/saveBasicHeight', {
-            basicHeight,
-            productIdList,
-            description,
-            productCategoryId: params.id,
-            id,
-        })
+        if (id) {
+            await RequestUtil.put('/tower-science/boltRecord/updateBasicHeight', {
+                basicHeight,
+                productIdList,
+                description,
+                productCategoryId: params.id,
+                id,
+            })
+        } else {
+            await RequestUtil.post('/tower-science/boltRecord/saveBasicHeight', {
+                basicHeight,
+                productIdList,
+                description,
+                productCategoryId: params.id,
+            })
+        }
         setRefresh(!refresh)
         onCancel()
     }
