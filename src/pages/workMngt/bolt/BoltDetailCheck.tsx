@@ -2,7 +2,6 @@ import { Button, } from 'antd';
 import React, { useState } from 'react';
 import { useHistory, useParams, } from 'react-router-dom';
 import { Page } from '../../common';
-import './BoltDetailList.less';
 import BoltDetailProblem from './problemModal';
 
 export default function BoltCheck(): React.ReactNode {

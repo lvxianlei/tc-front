@@ -2,7 +2,6 @@
 import { Modal, Input, Row, Col, message, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import RequestUtil from '../../../utils/RequestUtil';
-import './BoltDetailList.less';
 
 export default function BoltDetailProblem(props: { cancelModal: (refresh?: boolean) => void; id: string | null }) {
     // 提交问题单表头

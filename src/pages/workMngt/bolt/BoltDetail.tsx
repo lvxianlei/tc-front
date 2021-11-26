@@ -6,7 +6,6 @@ import RequestUtil from '../../../utils/RequestUtil';
 import { Page } from '../../common';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import BoltDetailAdd from './addModal';
-import './BoltDetailList.less';
 
 export default function BoltCheck(): React.ReactNode {
     const params = useParams<{ id: string, boltId: string }>();
@@ -113,8 +112,8 @@ export default function BoltCheck(): React.ReactNode {
      * 
      * @param refresh 是否刷新列表
      */
-    const onCancel = (refresh?: boolean) => {
-        if (refresh) {
+    const onCancel = (refreshList?: boolean) => {
+        if (refreshList) {
             setRefresh(!refresh)
         }
         setIsAddModal(false)

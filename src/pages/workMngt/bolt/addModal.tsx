@@ -1,13 +1,13 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Modal, Input, Select, Row, Col, message } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import RequestUtil from '../../../utils/RequestUtil';
-import './BoltDetailList.less';
+import './bolt.less';
 
 export default function BoltDetailAdd(props: { cancelModal: (refresh?: boolean) => void; id: string | null, item: any }) {
     const [contentObj, setContentObj] = useState<any>({})
     const params = useParams<{ id: string, boltId: string }>();
+    console.log(contentObj,'00000000000')
     /**
      * 螺栓信息添加
      */
@@ -68,6 +68,7 @@ export default function BoltDetailAdd(props: { cancelModal: (refresh?: boolean) 
     }
     useEffect(() => {
         setContentObj(props.item)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     /**
      * 
@@ -90,7 +91,7 @@ export default function BoltDetailAdd(props: { cancelModal: (refresh?: boolean) 
                 okText="确定"
                 cancelText="关闭"
             >
-                <div className="public_page">
+                <div className="public_page bolt_add_modal">
                     <div className='public_table_item' style={{ paddingTop: 0 }}>
                         <h3>螺栓信息</h3>
                         <Row className='search_content'>
@@ -104,7 +105,6 @@ export default function BoltDetailAdd(props: { cancelModal: (refresh?: boolean) 
                                 <Select
                                     className='input'
                                     value={contentObj.type ? contentObj.type : '请选择'}
-                                    style={{ width: 120 }}
                                     onChange={(value) => {
                                         changecontentObj(value, 'type')
                                     }}
@@ -122,6 +122,7 @@ export default function BoltDetailAdd(props: { cancelModal: (refresh?: boolean) 
                                 <span className='tip'>名称*：</span>
                                 <Input
                                     placeholder='请输入'
+                                    className='input'
                                     value={contentObj.name}
                                     maxLength={20}
                                     onChange={(ev) => {
@@ -138,6 +139,7 @@ export default function BoltDetailAdd(props: { cancelModal: (refresh?: boolean) 
                                 <span className='tip'>规格*：</span>
                                 <Input
                                     placeholder='请输入'
+                                    className='input'
                                     value={contentObj.specs}
                                     maxLength={20}
                                     onChange={(ev) => {
@@ -153,6 +155,7 @@ export default function BoltDetailAdd(props: { cancelModal: (refresh?: boolean) 
                             >
                                 <span className='tip'>无扣长：</span>
                                 <Input
+                                    className='input'
                                     placeholder='请输入'
                                     value={contentObj.unbuckleLength}
                                     maxLength={20}
@@ -170,6 +173,7 @@ export default function BoltDetailAdd(props: { cancelModal: (refresh?: boolean) 
                                 <span className='tip'>等级*：</span>
                                 <Input
                                     placeholder='请输入'
+                                    className='input'
                                     value={contentObj.level}
                                     maxLength={20}
                                     onChange={(ev) => {
@@ -186,6 +190,7 @@ export default function BoltDetailAdd(props: { cancelModal: (refresh?: boolean) 
                                 <span className='tip'>单重*：</span>
                                 <Input
                                     placeholder='请输入'
+                                    className='input'
                                     value={contentObj.singleWeight}
                                     maxLength={20}
                                     onChange={(ev) => {
@@ -202,6 +207,7 @@ export default function BoltDetailAdd(props: { cancelModal: (refresh?: boolean) 
                                 <span className='tip'>小计*：</span>
                                 <Input
                                     placeholder='请输入'
+                                    className='input'
                                     value={contentObj.subtotal}
                                     maxLength={20}
                                     onChange={(ev) => {
@@ -217,6 +223,7 @@ export default function BoltDetailAdd(props: { cancelModal: (refresh?: boolean) 
                             >
                                 <span className='tip'>合计*：</span>
                                 <Input
+                                    className='input'
                                     placeholder='请输入'
                                     value={contentObj.total}
                                     maxLength={20}
@@ -233,6 +240,7 @@ export default function BoltDetailAdd(props: { cancelModal: (refresh?: boolean) 
                             >
                                 <span className='tip'>总重（kg）*：</span>
                                 <Input
+                                    className='input'
                                     placeholder='请输入'
                                     value={contentObj.totalWeight}
                                     maxLength={20}
@@ -249,6 +257,7 @@ export default function BoltDetailAdd(props: { cancelModal: (refresh?: boolean) 
                             >
                                 <span className='tip'>备注：</span>
                                 <Input
+                                    className='input'
                                     placeholder='请输入'
                                     value={contentObj.assessUser}
                                     maxLength={20}

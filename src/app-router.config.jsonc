@@ -1334,7 +1334,7 @@
     { // 工作管理-螺栓列表-校核-螺栓清单
       "name": "螺栓明细",
       "path": "/workMngt/boltList/boltCheck/:boltId/:id",
-      "module": "./pages/workMngt/bolt/BoltDetailCheck",
+      "module": "./pages/workMngt/bolt/BoltCheck",
       "exact": true,
       // "authority": "rd_bolt_management"
       "authority": "approvalm"
