@@ -5,18 +5,22 @@
 */
 
 import React, { useState } from 'react';
-import { Space, Button } from 'antd';
+import { Space, Button, Modal, Row, Col, Input, message } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import UploadModal from './UploadModal';
+import { FileProps } from '../../common/Attachment';
 
 export default function ModelList(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const [ refresh, setRefresh ] = useState(false);
+    const [ visible, setVisible ] = useState(false);
+    const [ segmentName, setSegmentName ] = useState('');
+    const [ segmentId, setSegmentId ] = useState('');
 
     const columns = [
         {
@@ -28,28 +32,28 @@ export default function ModelList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{ index + 1 }</span>)
         },
         {
-            key: 'productCategoryName',
+            key: 'name',
             title: '模型名称',
             width: 150,
-            dataIndex: 'productCategoryName'
+            dataIndex: 'name'
         },
         {
-            key: 'priority',
+            key: 'segmentName',
             title: '段包信息',
-            dataIndex: 'priority',
+            dataIndex: 'segmentName',
             width: 120
         },
         {
-            key: 'plannedDeliveryTime',
+            key: 'createTime',
             title: '上传时间',
-            dataIndex: 'plannedDeliveryTime',
+            dataIndex: 'createTime',
             width: 200,
         },
         {
-            key: 'loftingUserName',
+            key: 'createUser',
             title: '上传人',
             width: 200,
-            dataIndex: 'loftingUserName'
+            dataIndex: 'createUser'
         },
         {
             key: 'operation',
@@ -59,28 +63,52 @@ export default function ModelList(): React.ReactNode {
             width: 250,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
-                    <Button type="link">下载</Button>
-                    <Button type="link">编辑</Button>
-                </Space>
+                    <Button type="link" onClick={ async ()  => {
+                        const data: FileProps = await RequestUtil.get(`/tower-science/productSegment/segmentModelDownload?segmentRecordId=${ record.id }`);
+                        window.open(data?.downloadUrl)
+                    }}>下载</Button>
+                    <Button type="link" onClick={ () => {
+                        setVisible(true);
+                        setSegmentName(record.segmentName);
+                        setSegmentId(record.id)
+                    } }>编辑</Button>
+                </Space> 
             )
         }
     ]
 
-    const onRefresh = () => {
-        setRefresh(!refresh);
-    }
-
-    return <Page
-        path={ `/tower-science/productSegment` }
-        columns={ columns }
-        headTabs={ [] }
-        refresh={ refresh }
-        requestData={{ productCategoryId: params.id }}
-        extraOperation={ <Space direction="horizontal" size="small">
-            <Button type="primary" ghost>导出</Button>
-            <UploadModal id={ params.id }/>
-            <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
-        </Space> }
-        searchFormItems={ [] }
-    />
+    return <>
+        <Page
+            path={ `/tower-science/productSegment/modelList` }
+            columns={ columns }
+            headTabs={ [] }
+            refresh={ refresh }
+            requestData={{ productCategoryId: params.id }}
+            extraOperation={ <Space direction="horizontal" size="small">
+                <Button type="primary" ghost>导出</Button>
+                <UploadModal id={ params.id } path="/tower-science/productSegment/segmentModelUpload" updateList={ () => setRefresh(!refresh) }/>
+                <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
+            </Space> }
+            searchFormItems={ [] }
+        />
+        <Modal visible={ visible } title="编辑" onCancel={ () => setVisible(false) } onOk={ () => {
+            if(segmentName) {
+                RequestUtil.put(`/tower-science/productSegment/segmentModelUpdate`, {
+                    id: segmentId,
+                    productCategoryId: params.id,
+                    segmentName: segmentName
+                }).then(res => {
+                    setVisible(false);
+                    setRefresh(!refresh);
+                });
+            } else {
+                message.warning('请输入段信息')
+            }
+        } }>
+            <Row>
+                <Col span={ 4 }>段名</Col>
+                <Col span={ 20 }><Input defaultValue={ segmentName }/></Col>
+            </Row>
+        </Modal>
+    </>
 }

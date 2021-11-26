@@ -8,6 +8,7 @@ export interface UploadModalProps {}
 export interface IUploadModalRouteProps {
     readonly id: number | string;
     readonly updateList?: () => void;
+    readonly path: string;
 }
 
 export interface UploadModalState {
@@ -18,6 +19,7 @@ export interface UploadModalState {
 
 interface IFile extends FileProps {
     readonly name?: string;
+    readonly segmentName?: string
 }
 
 interface IData{
@@ -26,7 +28,11 @@ interface IData{
     readonly productSegmentRecordVOList?: [];
 }
 
-export default forwardRef(function ({}: IUploadModalRouteProps, ref): JSX.Element {
+export default forwardRef(function ({
+    id = '',
+    path = '',
+    updateList = () => {}
+}: IUploadModalRouteProps, ref): JSX.Element {
     const [ visible, setVisible ] = useState(false);
     const [ form ] = Form.useForm();
     const [ list, setList ] = useState<IFile[]>([]);
@@ -36,13 +42,7 @@ export default forwardRef(function ({}: IUploadModalRouteProps, ref): JSX.Elemen
         setVisible(false);
     }
 
-    const getDetail = async (): Promise<void> => {
-        // const data = await RequestUtil.get<IData>(`${ props.path }`);
-
-    }
-
     const modalShow = (): void => {
-        getDetail();
         setVisible(true);
     }
 
@@ -54,8 +54,17 @@ export default forwardRef(function ({}: IUploadModalRouteProps, ref): JSX.Elemen
 
     const save = () => {
         let value = form.getFieldsValue(true).data;
-        console.log(value)
-        
+        value = value.map((res: IFile) => {
+            return {
+                fileVo: res,
+                productCategoryId: id,
+                segmentName: res.segmentName
+            }
+        })
+        RequestUtil.post(path, [...value]).then(res => {
+            setVisible(false);
+            updateList();
+        })
     }
 
     return <>
@@ -66,28 +75,34 @@ export default forwardRef(function ({}: IUploadModalRouteProps, ref): JSX.Elemen
             title="上传"
             footer={ <Space direction="horizontal" size="small">
                 <Button type="ghost" onClick={() => modalCancel() }>关闭</Button>
-                <Button type="primary" onClick={() => save() } ghost>确定</Button>
+                <Button type="primary" onClick={save} ghost>确定</Button>
             </Space> } 
             onCancel={ () => modalCancel() }
         >
             <DetailContent>
-                <Attachment ref={ attchsRef } isTable={ false } dataSource={ [] } onDoneChange={ (attachs: FileProps[]) => { setList(attchsRef.current.getDataSource()); form.setFieldsValue({ data: attchsRef.current.getDataSource() }); console.log(attchsRef.current.getDataSource()) } }/>
+                <Attachment ref={ attchsRef } isTable={ false } onDoneChange={ (attachs: FileProps[]) => { 
+                    setList(attchsRef.current.getDataSource()); 
+                    form.setFieldsValue({ data: attchsRef.current.getDataSource() });
+                } }/>
                 <Form form={ form }>
                     <CommonTable columns={[
                         { 
-                            key: 'name', 
+                            key: 'originalName', 
                             title: '附件名称', 
-                            dataIndex: 'name',
+                            dataIndex: 'originalName',
                             width: 300 
                         },
                         { 
-                            key: 'name', 
+                            key: 'segmentName', 
                             title: '段信息', 
-                            dataIndex: 'name',
+                            dataIndex: 'segmentName',
                             width: 150,
                             render: (_: undefined, record: Record<string, any>, index: number
                                 ): React.ReactNode => (
-                                <Form.Item name={['data', index, 'name']}>
+                                <Form.Item name={['data', index, 'segmentName']} rules={[{
+                                    required: true,
+                                    message: '请输入段信息 '
+                                }]}>
                                     <Input placeholder="请输入段信息" maxLength={ 50 }/>
                                 </Form.Item>
                             ) 

@@ -105,7 +105,7 @@ export default function NCProgram(): React.ReactNode {
     
     return <Page
         path="/tower-science/productNc"
-        requestData={{ id: params.productSegmentId }}
+        requestData={{ id: params.productSegmentId, productCategoryId: params.id }}
         columns={ columns }
         headTabs={ [] }
         refresh={ refresh }
