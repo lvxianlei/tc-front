@@ -104,7 +104,7 @@ export default function CollectionInfomation(): React.ReactNode {
                         if (item.dataIndex === 'confirmStatus') {
                             return ({
                                 title: item.title,
-                                dataIndex: 'confirmStatus',
+                                dataIndex: item.dataIndex,
                                 width: 50,
                                 render: (_: any, record: any): React.ReactNode => (<span>{record.confirmStatus === 1 ? '待确认' : '已确认'}</span>)
                             })
@@ -112,7 +112,7 @@ export default function CollectionInfomation(): React.ReactNode {
                         if (item.dataIndex === "payMoney") {
                             return ({
                                 title: item.title,
-                                dataIndex: 'payMoney',
+                                dataIndex: item.dataIndex,
                                 width: 50,
                                 render: (_: any, record: any): React.ReactNode => (<span>{record.payMoney ? changeTwoDecimal_f(record.payMoney) : ''}</span>)
                             })

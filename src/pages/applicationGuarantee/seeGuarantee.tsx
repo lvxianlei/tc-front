@@ -74,7 +74,18 @@ export default function SeeGuarantee(props: OverViewProps): JSX.Element {
                         form={addCollectionForm}
                         dataSource={props?.userData?.guaranteeRecoveryVO || {}}
                         col={ 2 }
-                        columns={ recoveryForm}
+                        columns={[
+                            ...recoveryForm.map((item: any) => {
+                                if (item.dataIndex === "isOriginalScript") {
+                                    const v = [
+                                        { value: 1, label: "是" },
+                                        { value: 0, label: "否" }
+                                    ]
+                                    return ({ ...item, type: "select", enum: v })
+                                }
+                                return item
+                            })
+                        ]}
                     />
                 </>
             )}
