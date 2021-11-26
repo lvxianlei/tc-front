@@ -32,8 +32,8 @@ export default function AddModal(props: AddModalProps): JSX.Element {
     // 提交
     const handleSure = async () => {
         setLoading(true);
-      try{
         const postData = await addFund.validateFields();
+      try{
         const result: { [key: string]: any } = await RequestUtil.post('/tower-finance/payApply', {
             ...postData,
             payApplyId:props.payApplyId || 0,
@@ -47,7 +47,7 @@ export default function AddModal(props: AddModalProps): JSX.Element {
     }
     // 取消
     const handleCancle = () => {
-         addFund.resetFields();
+        addFund.resetFields();
         setLoading(false)
         props.onCancel && props.onCancel();
     }

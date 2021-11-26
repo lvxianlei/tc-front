@@ -31,7 +31,7 @@ export default forwardRef(function OverView(props: AddModalProps,ref): JSX.Eleme
     const handleCancle = () => {
         props.onCancel && props.onCancel();
     }
-    useImperativeHandle(ref, () => ({ getDetail}), [ref,getDetail])
+    useImperativeHandle(ref, () => ({ getDetail}), [ref,getDetail]);
     return (
         <Modal
             title={'查看回款信息'}
