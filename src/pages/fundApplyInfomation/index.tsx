@@ -2,7 +2,7 @@
  * 请款申请列表
  * 2021/11/22
  */
- import React, { useState } from 'react';
+ import React, { useState ,useRef} from 'react';
  import { Button, Input, DatePicker, Radio,Select ,Form,TreeSelect} from 'antd'
  // import { useHistory } from 'react-router-dom'
  import { Page } from '../common'
@@ -13,6 +13,9 @@
  import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
  import useRequest from '@ahooksjs/use-request';
  import RequestUtil from '../../utils/RequestUtil';
+ interface ViewRefProps {
+    getDetail: () => void
+}
  export default function FaundInfomation() {
      const [ refresh, setRefresh ] = useState<boolean>(false);
      const [payStatus, setPayStatus] = useState<number>(1);
@@ -21,6 +24,7 @@
      const [ visibleOverView, setVisibleOverView ] = useState<boolean>(false);
      const [ payApplyId, setPayApplyId ] = useState<string>("");
      const confirmed = [{ "title": "备注", "dataIndex": "description"}];
+     const viewRef = useRef<ViewRefProps>();
      //请求部门
      useRequest(() => new Promise(async (resole, reject) => {
          const deptData: SelectDataNode[] = await RequestUtil.get(`/tower-system/department/tree`);
@@ -57,7 +61,12 @@
         setAddVisible(false);
         setRefresh(!refresh);
      }
+     //表格增加底部计算
     const addList = (data:any)=> {
+        //如果没有数据
+        if(!data.payApplyListVOIPage.records.length){
+            return;
+        }
         const records = data.payApplyListVOIPage.records;
         let sumMoney=0,
                 money=0,
@@ -79,11 +88,14 @@
         list.payMoney=payMoney;
         records.push(list)
     }
-    //添加底部计算行
-            // if(this.props.isSunmryLine){
-                // this.props.isSunmryLine(resData)
-            // }
-            // isSunmryLine?: (result:IResponseData) => void;//添加计算行
+    //查看详情
+    const viewShow = (record:{id:string})=>{
+        setVisibleOverView(true);
+        setPayApplyId(record.id);
+        setTimeout(()=>{
+            viewRef.current?.getDetail()
+        }) 
+    }
      return (
          <>
              <Page
@@ -120,11 +132,6 @@
                                  placeholder="请选择"
                                  
                              />
-                             {/* <Select placeholder="请款部门" style={{ width: "100px" }}>
-                                 {testDp.map(({label,code},index)=>{
-                                     return <Select.Option value={code} key={index}>{label}</Select.Option>
-                                 })}
-                             </Select> */}
                          </Form.Item>
                      },
                      {
@@ -180,11 +187,11 @@
                                         {record.payStatus != 2 ?
                                             <Button type="link" onClick={() => { setAddVisible(true);setPayApplyId(record.id) } }>新增付款记录</Button>
                                         :""}
-                                            <Button type="link"  onClick={() => { setVisibleOverView(true); setPayApplyId(record.id) }}>详情</Button>
+                                            <Button type="link"  onClick={() => {viewShow(record)}}>详情</Button>
                                         </>
                                     )
                                 }
-                                return <Button type="link"onClick={() => { setVisibleOverView(true); setPayApplyId(record.id) }}>详情</Button>
+                                return <Button type="link"onClick={() => { viewShow(record) }}>详情</Button>
                             }
                          }
                      }]}
@@ -202,6 +209,7 @@
                 payApplyId={payApplyId}
                  title={confirmed}
                  visible={visibleOverView}
+                 ref={viewRef}
                  onCancel={() => setVisibleOverView(false)}
              />
          </>

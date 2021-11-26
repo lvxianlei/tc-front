@@ -11,6 +11,7 @@ interface AddModalProps extends ModalFuncProps {
   payApplyId?: string;
 }
 export default function AddModal(props: AddModalProps): JSX.Element {
+  console.log(props.visible)
   //处理是addColums enum
     if(props.visible){
         const enums:any = payTypeOptions?.map(item=>{
@@ -32,8 +33,8 @@ export default function AddModal(props: AddModalProps): JSX.Element {
     // 提交
     const handleSure = async () => {
         setLoading(true);
-        const postData = await addFund.validateFields();
       try{
+        const postData = await addFund.validateFields();
         const result: { [key: string]: any } = await RequestUtil.post('/tower-finance/payApply', {
             ...postData,
             payApplyId:props.payApplyId || 0,
@@ -45,10 +46,10 @@ export default function AddModal(props: AddModalProps): JSX.Element {
         setLoading(false)
       }
     }
-
     // 取消
     const handleCancle = () => {
         addFund.resetFields();
+        setLoading(false)
         props.onCancel && props.onCancel();
     }
     return (

@@ -1,7 +1,7 @@
 /**
  * 请款申请详情
  */
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,forwardRef,useImperativeHandle } from 'react';
 import { Modal, Button,ModalFuncProps } from 'antd';
 import { DetailTitle,BaseInfo,CommonTable,Attachment } from '../common';
 import { overViewBaseColunms,overViewBillColunms,overViewApplyColunms,
@@ -10,9 +10,9 @@ import useRequest from '@ahooksjs/use-request';
  import RequestUtil from '../../utils/RequestUtil';
 interface AddModalProps extends ModalFuncProps {
     payApplyId?: string;
+    ref?: { getDetail: () => Promise<any> }
   }
-export default function OverView(props: AddModalProps): JSX.Element {
-    const [loadig, setloadig] = useState<boolean>(false);
+export default forwardRef(function OverView(props: AddModalProps,ref): JSX.Element {
     const [baseInfo, setBaseInfo] = useState<any>({});//基本信息
     const [payApplyBillVOList, setBillVOList] = useState<any>([]);//票据信息
     const [attachInfoVOList, setInfoVOList] = useState<any>([]);//附件信息
@@ -27,14 +27,11 @@ export default function OverView(props: AddModalProps): JSX.Element {
         setRecordVOList(detail.approveRecordVOList);
 
     };
-    if(props.visible && !loadig){
-        setloadig(true)
-        getDetail()
-    }
+    //取消
     const handleCancle = () => {
-        setloadig(false)
         props.onCancel && props.onCancel();
     }
+    useImperativeHandle(ref, () => ({ getDetail}), [ref,getDetail])
     return (
         <Modal
             title={'查看回款信息'}
@@ -85,3 +82,4 @@ export default function OverView(props: AddModalProps): JSX.Element {
         </Modal>
     )
 }
+)
