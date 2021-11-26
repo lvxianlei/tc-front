@@ -103,11 +103,7 @@ export default function AssessmentTaskList(): React.ReactNode {
                             <Assign id={record.id} updataList={() => { setRefresh(!refresh); }} />
                             : <Button type="link" disabled>指派</Button>
                     }
-                    {
-                        record.status === 4 || record.status === 5 ?
-                            <AssessmentInformation id={record.id} />
-                            : <Button type="link" disabled>评估信息</Button>
-                    }
+                    <AssessmentInformation id={record.id} />
                     <Popconfirm
                         title="确认提交?"
                         onConfirm={() => {
@@ -169,7 +165,7 @@ export default function AssessmentTaskList(): React.ReactNode {
                 path="/tower-science/assessTask"
                 columns={columns}
                 headTabs={[]}
-                exportPath={`/tower-science/assessTask`}
+                exportPath={`/tower-science/assessTask/exportAssessTask`}
                 requestData={{ status: location.state }}
                 refresh={refresh}
                 searchFormItems={[
