@@ -12,6 +12,7 @@
  import useRequest from '@ahooksjs/use-request';
  import RequestUtil from '../../utils/RequestUtil'
  export default function FaundInfomation() {
+    const [ payApplyId, setPayApplyId ] = useState<string>("");
      const [ visibleOverView, setVisibleOverView ] = useState<boolean>(false);
      const [ departData, setDepartData ] = useState<SelectDataNode[]>([]);
      const confirmed = [{ "title": "备注", "dataIndex": "description"}];
@@ -39,20 +40,22 @@
          }
          return value
      }
-     // 新增回调
-     const handleOk = (result:object, callBack: any) => {
-         console.log(result, '-------------11111111');
-         setTimeout(() => {
-             callBack();
-             // setAddVisible(false);
-         }, 1000);
-     }
- 
-     // 查看
-     const hanleSee = (record: any) => {
-         console.log(record, 'record');
-         setVisibleOverView(true);
-     }
+     const addList = (data:any)=> {
+        const records = data.paymentDetailListVOIPage.records;
+        let payMoney=0;
+        records.forEach((item:any) => {
+            payMoney= (payMoney*100+Number(item.payMoney)*100)/100;
+        });
+        let list:{[t:string]:any} ={}
+        fundRecordColumns.forEach((item:any)=>{
+            list[item.dataIndex]=""
+        });
+        list.id=1000;
+        list.paymentNumber = "合计";
+        list.Sunmry=true;
+        list.payMoney=payMoney;
+        records.push(list)
+    }
      return (
          <>
              <Page
@@ -99,6 +102,7 @@
                  extraOperation={(data: any) => <>
                     金额合计：{data ? data.totalSumMoney : null}元
                 </>}
+                isSunmryLine={addList}
                  columns={[
                      ...fundRecordColumns,
                      {
@@ -107,12 +111,16 @@
                          fixed: "right",
                          width: 100,
                          render: (_: any, record: any) => {
-                             return <Button type="link"onClick={() => setVisibleOverView(true)}>详情</Button>
+                            if(!record.Sunmry){
+                                return <Button type="link" 
+                                onClick={() => { setVisibleOverView(true); setPayApplyId(record.id)} }>详情</Button>
+                            }
                          }
                      }]}
              />
              {/* 查看 */}
              <OverViewRecord
+                payApplyId={payApplyId}
                  title={confirmed}
                  visible={visibleOverView}
                  onCancel={() => setVisibleOverView(false)}

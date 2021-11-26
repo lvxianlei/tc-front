@@ -56,11 +56,28 @@
         setAddVisible(false);
         setRefresh(!refresh);
      }
-     // 查看
-     const hanleSee = (record: any) => {
-         console.log(record, 'record');
-         setVisibleOverView(true);
-     }
+    const addList = (data:any)=> {
+        const records = data.payApplyListVOIPage.records;
+        let sumMoney=0,
+                money=0,
+                payMoney=0;
+        records.forEach((item:any) => {
+            sumMoney= (sumMoney*100+Number(item.sumMoney)*100)/100;
+            money= (money*100+Number(item.money)*100)/100;
+            payMoney= (payMoney*100+Number(item.payMoney)*100)/100;
+        });
+        let list:{[t:string]:any} ={}
+        fundListColumns.forEach((item:any)=>{
+            list[item.dataIndex]=""
+        });
+        list.id=1000;
+        list.payApplyNumber = "合计";
+        list.Sunmry=true;
+        list.sumMoney=sumMoney;
+        list.money=money;
+        list.payMoney=payMoney;
+        records.push(list)
+    }
      return (
          <>
              <Page
@@ -127,6 +144,7 @@
                                  <span style={{marginLeft:"20px"}}>请款金额总计：{data ?data.totalSumMoney : null}元</span>
                              }
                  </>}
+                  isSunmryLine={addList}
                  columns={[
                      ...fundListColumns.map((item: any) => {
                          if (item.dataIndex === 'payStatus') {
@@ -134,7 +152,10 @@
                                  title: item.title,
                                  dataIndex: 'payStatus',
                                  width: 50,
-                                 render: (_: any, record: any): React.ReactNode => (<span>{record.payStatus === 1 ? '待确认' : '已确认'}</span>)
+                                 render: (_: any, record: any): 
+                                 React.ReactNode => (
+                                 <span>{!record.Sunmry ? record.payStatus === 1 ? '待确认' : '已确认' : ""}</span>
+                                 )
                              })
                          }
                          return item;
@@ -145,17 +166,20 @@
                          fixed: "right",
                          width: 100,
                          render: (_: any, record: any) => {
-                             if (payStatus === 1) {
-                                 return (
-                                     <>
-                                     <Button type="link" onClick={() => { setAddVisible(true);setPayApplyId(record.id) } }>新增付款记录</Button>
-                                     <Button type="link"  onClick={() => { setVisibleOverView(true); setPayApplyId(record.id) }}>详情</Button>
-                                     </>
-                                 )
-                             }
-                             return <Button type="link"onClick={() => { setVisibleOverView(true); setPayApplyId(record.id) }}>详情</Button>
+                             if(!record.Sunmry){
+                                if (payStatus === 1) {
+                                    return (
+                                        <>
+                                        <Button type="link" onClick={() => { setAddVisible(true);setPayApplyId(record.id) } }>新增付款记录</Button>
+                                        <Button type="link"  onClick={() => { setVisibleOverView(true); setPayApplyId(record.id) }}>详情</Button>
+                                        </>
+                                    )
+                                }
+                                return <Button type="link"onClick={() => { setVisibleOverView(true); setPayApplyId(record.id) }}>详情</Button>
+                            }
                          }
                      }]}
+                     
              />
              {/* 新增 */}
              <AddModal

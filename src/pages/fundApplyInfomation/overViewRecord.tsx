@@ -16,9 +16,13 @@ export default function OverView(props: any): JSX.Element {
         setBaseInfo(detail);
         setInfoVOList(detail.attachInfoVOList);
     };
+    if(props.visible && !loadig){
+        setloadig(true)
+        getDetail()
+    }
     // 取消
     const handleCancle = () => {
-        setloadig(true)
+        setloadig(false)
         props.onCancel && props.onCancel();
     }
     return (
