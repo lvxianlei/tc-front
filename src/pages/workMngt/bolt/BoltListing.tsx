@@ -4,25 +4,18 @@
  * @description 工作管理-螺栓列表
  */
 
-import React, { useState } from 'react';
-import { Space, Button, Popconfirm, Spin, Tabs, message, Form, Input, Modal, Row, Col, Select, Upload } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Space, Button, Popconfirm, message, Form, Input, Modal, Select, Upload } from 'antd';
 import { CommonTable, DetailContent } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './BoltList.module.less';
 import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
-import useRequest from '@ahooksjs/use-request';
 import { ColumnType } from 'antd/lib/table';
 import BoltNewModal from './BoltNewModal';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import AuthUtil from '../../../utils/AuthUtil';
 import { boltTypeOptions } from '../../../configuration/DictionaryOptions';
-
-interface ITab {
-    readonly basicHeight?: string;
-    readonly id?: string;
-    readonly productCategoryId?: string;
-}
 
 interface IData {
     readonly unbuckleLength?: number
@@ -34,15 +27,12 @@ interface Column extends ColumnType<object> {
 
 export default function BoltList(): React.ReactNode {
     const history = useHistory();
-    const params = useParams<{ id: string }>();
+    const params = useParams<{ id: string, boltId: string }>();
     const [dataSource, setDataSource] = useState<[]>([]);
     const [editorLock, setEditorLock] = useState('编辑');
     const [rowChangeList, setRowChangeList] = useState<number[]>([]);
-    const [activeKey, setActiveKey] = useState<string>('');
-    const [visible, setVisible] = useState<boolean>(false);
     const [urlVisible, setUrlVisible] = useState<boolean>(false);
     const [url, setUrl] = useState<string>('');
-    const [basicHeight, setBasicHeight] = useState<string>('');
     const [form] = Form.useForm();
 
     const columns = [
@@ -239,7 +229,7 @@ export default function BoltList(): React.ReactNode {
                             title="确认删除?"
                             onConfirm={() => RequestUtil.delete(`/tower-science/boltRecord/delete/${record.id}`).then(res => {
                                 message.success('删除成功');
-                                getDataSource(record.basicHeightId);
+                                getDataSource();
 
                             })}
                             okText="确认"
@@ -267,44 +257,18 @@ export default function BoltList(): React.ReactNode {
 
     const [tableColumns, setColumns] = useState(columnsSetting);
 
-    const getDataSource = async (basicHeightId?: string) => {
+    const getDataSource = async () => {
         let data: [] = await RequestUtil.get(`/tower-science/boltRecord/boltList`, {
-            basicHeightId: basicHeightId,
-            productCategoryId: params.id
+            basicHeightId: params.id,
+            productCategoryId: params.boltId
         })
         setDataSource(data);
     }
 
-    const { loading, data } = useRequest<ITab[]>(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<ITab[]>(`/tower-science/boltRecord/basicHeight/${params.id}`);
-        if (data && data[0]) {
-            getDataSource(data[0].id);
-            setActiveKey(data[0].id || '');
-        }
-        resole(data)
-    }), {})
-    const detailData: ITab[] = data || [];
-
-    if (loading) {
-        return <Spin spinning={loading}>
-            <div style={{ width: '100%', height: '300px' }}></div>
-        </Spin>
-    }
-
-    const tabChange = (activeKey: string) => {
-        getDataSource(activeKey);
-        setActiveKey(activeKey);
-    }
-
-    const onSubmit = () => {
-        if (basicHeight && /^[^(\s)]*$/.test(basicHeight)) {
-            RequestUtil.post(`/tower-science/boltRecord/saveBasicHeight`, { basicHeight: basicHeight, productCategoryId: params.id }).then(res => {
-                history.go(0);
-            })
-        } else {
-            message.warning('请输入呼高');
-        }
-    }
+    useEffect(() => {
+        getDataSource();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return <>
         <DetailContent>
@@ -313,7 +277,7 @@ export default function BoltList(): React.ReactNode {
                 <Button type="primary" onClick={() => downloadTemplate('/tower-science/boltRecord/exportTemplate', '螺栓导入模板')} ghost>模板下载</Button>
             </Space>
             <Space direction="horizontal" size="small" className={`${styles.topbtn} ${styles.btnRight}`}>
-                <Button type="primary" disabled={!(detailData.length > 0)} ghost onClick={() => {
+                <Button type="primary" ghost onClick={() => {
                     if (editorLock === '编辑') {
                         setColumns(columns);
                         setEditorLock('锁定');
@@ -334,8 +298,8 @@ export default function BoltList(): React.ReactNode {
                             changeValues = changeValues.map((res: []) => {
                                 return {
                                     ...res,
-                                    basicHeightId: activeKey,
-                                    productCategoryId: params.id
+                                    basicHeightId: params.id,
+                                    productCategoryId: params.boltId,
                                 }
                             })
                             RequestUtil.put(`/tower-science/boltRecord`, [...changeValues]).then(res => {
@@ -343,13 +307,13 @@ export default function BoltList(): React.ReactNode {
                                 setEditorLock('编辑');
                                 setRowChangeList([]);
                                 form.resetFields();
-                                getDataSource(activeKey);
+                                getDataSource();
                             });
                         } else {
                             setColumns(columnsSetting);
                             setEditorLock('编辑');
                             form.resetFields();
-                            getDataSource(activeKey);
+                            getDataSource();
                         }
                     }
                 }}>{editorLock}</Button>
@@ -365,7 +329,7 @@ export default function BoltList(): React.ReactNode {
                             'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
                         }
                     }
-                    data={{ basicHeightId: activeKey, productCategoryId: params.id }}
+                    data={{ basicHeightId: params.id, productCategoryId: params.id }}
                     showUploadList={false}
                     onChange={(info) => {
                         if (info.file.response && !info.file.response?.success) {
@@ -377,29 +341,20 @@ export default function BoltList(): React.ReactNode {
                                 setUrlVisible(true);
                             } else {
                                 message.success('导入成功！');
-                                getDataSource(activeKey);
+                                getDataSource();
                             }
                         }
                     }}
-                    disabled={!(detailData.length > 0)}
                 >
-                    <Button type="primary" disabled={!(detailData.length > 0)} ghost>导入</Button>
+                    <Button type="primary" ghost>导入</Button>
                 </Upload>
-                {editorLock === '锁定' || !(detailData.length > 0) ? <Button type="primary" disabled ghost>添加</Button> : <BoltNewModal id={params.id} basicHeightId={activeKey} updataList={() => getDataSource(activeKey)} />}
+                {editorLock === '锁定' ? <Button type="primary" disabled ghost>添加</Button> : <BoltNewModal id={params.boltId} basicHeightId={params.id} updataList={() => getDataSource()} />}
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
             </Space>
-            <CommonTable columns={tableColumns} dataSource={dataSource} pagination={false} />
+            <Form form={form}>
+                <CommonTable columns={tableColumns} dataSource={dataSource} pagination={false} />
+            </Form>
         </DetailContent>
-        <Modal
-            visible={visible}
-            width="40%"
-            title="添加"
-            onCancel={() => { setVisible(false); setBasicHeight(''); }}
-            onOk={() => onSubmit()}
-            okText="确定"
-            cancelText="关闭">
-            <Row className={styles.content}><Col offset={2} span={4}>呼高 <span style={{ color: 'red' }}>*</span></Col><Col span={16}><Input type="number" min={0} value={basicHeight} onChange={(e) => setBasicHeight(e.target.value)} placeholder="请输入" /></Col></Row>
-        </Modal>
         <Modal
             visible={urlVisible}
             onOk={() => {

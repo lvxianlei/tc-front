@@ -80,13 +80,13 @@ export default function TemplateList() {
             title: '操作',
             dataIndex: 'operation',
             align: 'center',
-            render: (text: string, item: { id: string },) => {
+            render: (text: string, item: { id: string,productCategoryId:string,},) => {
                 return (
                     <div className='operation'>
                         <span
                             style={{ cursor: 'pointer', color: '#FF8C00' }}
                             onClick={() => {
-                                history.push(`/workMngt/templateList/${item.id}`)
+                                history.push(`/workMngt/templateList/${item.id}/${item.productCategoryId}`)
                             }}
                         >查看</span>
                     </div>

@@ -1072,7 +1072,7 @@
     },
     { // 工作管理-样板列表
       "name": "样板列表-详情",
-      "path": "/workMngt/templateList/:id",
+      "path": "/workMngt/templateList/:id/:productCategoryId",
       "module": "./pages/workMngt/templateList/detail",
       "exact": true,
       "authority": "approvalm"
@@ -1318,7 +1318,7 @@
     { // 工作管理-螺栓列表-螺栓清单
       "name": "螺栓明细",
       "path": "/workMngt/boltList/boltListing/:boltId/:id",
-      "module": "./pages/workMngt/bolt/BoltDetail",
+      "module": "./pages/workMngt/bolt/BoltListing",
       "exact": true,
       // "authority": "rd_bolt_management"
       "authority": "approvalm"
