@@ -107,7 +107,7 @@ export default function AssessmentTaskList(): React.ReactNode {
                     <Popconfirm
                         title="确认提交?"
                         onConfirm={() => {
-                            RequestUtil.put(`/tower-science/assessTask/submit?id=${record.id}`, { id: record.id }).then(res => {
+                            RequestUtil.put(`/tower-science/assessTask/submit?id=${record.id}`).then(res => {
                                 setRefresh(!refresh);
                             });
                         }}
