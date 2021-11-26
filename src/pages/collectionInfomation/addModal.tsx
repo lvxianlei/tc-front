@@ -54,13 +54,14 @@ export default forwardRef(function AddModal({}: EditProps, ref) {
         return result;
     }
 
-    const processingNumber = (arg: any) => {
+    const processingNumber = (arg: any, num: number) => {
         arg = arg.replace(/[^\d.]/g, ""); // 清除"数字"和"."以外的字符
         arg = arg.replace(/^\./g, ""); // 验证第一个字符是数字而不是
         arg = arg.replace(/\.{2,}/g, "."); // 只保留第一个. 清除多余的
         arg = arg.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
-        // arg = arg.replace(/^(\-)*(\d+)\.(\d).*$/, '$1$2.$3'); // 只能输入一个小数
-        arg = arg.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'); // 只能输入两个小数
+        arg = num === 2 ?
+          arg.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3')
+          : arg.replace(/^(\-)*(\d+)\.(\d\d\d\d).*$/, '$1$2.$3');
         return arg
     }
 
@@ -114,12 +115,18 @@ export default forwardRef(function AddModal({}: EditProps, ref) {
         });
         // 输入对来款金额的处理
         if (results && results[0].label !== 'RMB人民币') {
-            const exchangeRate = addCollectionForm.getFieldValue("exchangeRate") ? processingNumber(addCollectionForm.getFieldValue("exchangeRate") + "") : 0,
-            abroadMoney = addCollectionForm.getFieldValue("abroadMoney") ? processingNumber(addCollectionForm.getFieldValue("abroadMoney") + "") : 0,
-            payMoney = processingNumber(exchangeRate * abroadMoney + "");
-            addCollectionForm.setFieldsValue({payMoney: payMoney * 1 === 0 ? "" : payMoney, exchangeRate: exchangeRate * 1 === 0 ? "" : exchangeRate, abroadMoney: abroadMoney * 1 === 0 ? "" : abroadMoney})
+            const exchangeRate = addCollectionForm.getFieldValue("exchangeRate") ? 
+                  processingNumber(addCollectionForm.getFieldValue("exchangeRate") + "", 4)
+                : 0,
+            abroadMoney = addCollectionForm.getFieldValue("abroadMoney") ?
+                  processingNumber(addCollectionForm.getFieldValue("abroadMoney") + "", 2)
+                : 0,
+            payMoney = (exchangeRate * abroadMoney + '').indexOf(".") === -1 ? (exchangeRate * abroadMoney) : ((exchangeRate * abroadMoney * 1).toFixed(2));
+            addCollectionForm.setFieldsValue({payMoney: payMoney == 0 ? "" : payMoney, exchangeRate: exchangeRate * 1 === 0 ? "" : exchangeRate, abroadMoney: abroadMoney * 1 === 0 ? "" : abroadMoney})
         } else {
-            const payMoney = addCollectionForm.getFieldValue("payMoney") ? processingNumber(addCollectionForm.getFieldValue("payMoney") + "") : 0;
+            const payMoney = addCollectionForm.getFieldValue("payMoney") ?
+                  processingNumber(addCollectionForm.getFieldValue("payMoney") + "", 2)
+                : 0;
             addCollectionForm.setFieldsValue({payMoney: payMoney * 1 === 0 ? "" : payMoney})
         }
         setColumns(result);

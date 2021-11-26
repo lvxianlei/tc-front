@@ -16,28 +16,8 @@
  
  export default forwardRef(function FillGuaranteeInformation({id}: EditProps, ref) {
     const [addCollectionForm] = Form.useForm();
-     
     const [attachVosData, setAttachVosData] = useState<any[]>([])
- 
-     // 提交
-    //  const handleSure = async () => {
-    //      const postData = await addCollectionForm.validateFields();
-    //      console.log(postData, 'post')
-    //      props.onOk && props.onOk();
-    //  }
- 
-     const handleBaseInfoChange = (fields: any) => {
-         console.log(fields, 'filed')
-         // "disabled": true,  stateName
-         baseColums.map((item: any) => {
-             if (item.dataIndex === 'stateName') {
-                 item['disabled'] = true;
-             }
-             return item;
-         })
-     }
-
-     const uploadChange = (event: any) => {
+    const uploadChange = (event: any) => {
         if (event.file.status === "done") {
             if (event.file.response.code === 200) {
                 const dataInfo = event.file.response.data

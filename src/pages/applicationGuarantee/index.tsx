@@ -24,7 +24,7 @@ interface EditRefProps {
 export default function ApplicationColunm(): React.ReactNode {
     const history = useHistory();
     const [ refresh, setRefresh ] = useState<boolean>(false);
-    const [confirmStatus, setConfirmStatus] = useState<number>(1);
+    const [acceptStatus, setAcceptStatus] = useState<number>(1);
     const [ visible, setVisible ] = useState<boolean>(false);
     const [visibleRecovery, setVisibleRecovery] = useState<boolean>(false);
     const [ visibleSee, setVisibleSee ] = useState<boolean>(false);
@@ -44,31 +44,31 @@ export default function ApplicationColunm(): React.ReactNode {
     const onFilterSubmit = (value: any) => {
         if (value.startRefundTime) {
             const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.applicantStartTime = formatDate[0]
-            value.applicantEndTime = formatDate[1]
+            value.applicantStartTime = `${formatDate[0]} 00:00:00`
+            value.applicantEndTime = `${formatDate[1]} 23:59:59`
             delete value.startRefundTime
         }
         // 出具日期
         if (value.issuanceDateTime) {
             const formatDate = value.issuanceDateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.issuanceStartTime = formatDate[0]
-            value.issuanceEndTime = formatDate[1]
+            value.issuanceStartTime = `${formatDate[0]} 00:00:00`
+            value.issuanceEndTime = `${formatDate[1]} 23:59:59`
             delete value.issuanceDateTime
         }
         // 保函交回日期
         if (value.guaranteeTime) {
             const formatDate = value.guaranteeTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.recoveryStartTime = formatDate[0]
-            value.recoveryEndTime = formatDate[1]
+            value.recoveryStartTime = `${formatDate[0]} 00:00:00`
+            value.recoveryEndTime = `${formatDate[1]} 23:59:59`
             delete value.guaranteeTime
         }
-        value["confirmStatus"] = confirmStatus;
+        value["acceptStatus"] = acceptStatus;
         return value
     }
     
     // tab切换
     const operationChange = (event: any) => {
-        setConfirmStatus(parseFloat(`${event.target.value}`));
+        setAcceptStatus(parseFloat(`${event.target.value}`));
         setRefresh(!refresh);
     }
 
@@ -120,12 +120,15 @@ export default function ApplicationColunm(): React.ReactNode {
                             return (
                                 <>
                                     <Button type="link" onClick={() => getUser(record.id)}>查看</Button>
-                                    {confirmStatus === 1 && <Button type="link" onClick={() => setVisible(true)}>填写保函信息</Button>}
-                                    {confirmStatus === 2 && <Button type="link" onClick={() => {
+                                    {acceptStatus === 1 && <Button type="link" onClick={() => {
+                                        setVisible(true);
+                                        setId(record.id);
+                                    }}>填写保函信息</Button>}
+                                    {acceptStatus === 2 && <Button type="link" onClick={() => {
                                         setVisibleRecovery(true);
                                         setId(record.id);
                                     }}>回收保函</Button>}
-                                    {confirmStatus === 1 && <Button type="link">生成文件</Button>}
+                                    {acceptStatus === 1 && <Button type="link" onClick={()=>{window.open(record.filePath)}}>生成文件</Button>}
                                 </>
                             )
                         }
@@ -133,7 +136,7 @@ export default function ApplicationColunm(): React.ReactNode {
                 refresh={ refresh }
                 extraOperation={
                     <>
-                    <Radio.Group defaultValue={confirmStatus} onChange={operationChange}>
+                    <Radio.Group defaultValue={acceptStatus} onChange={operationChange}>
                         {
                             approvalStatus.map((item: any, index: number) => <Radio.Button value={item.value} key={`${index}_${item.value}`}>{item.label}</Radio.Button>)
                         }
@@ -141,7 +144,7 @@ export default function ApplicationColunm(): React.ReactNode {
                     </>
                 }
                 onFilterSubmit={onFilterSubmit}
-                filterValue={{ confirmStatus }}
+                filterValue={{ acceptStatus }}
                 searchFormItems={[
                     {
                         name: 'fuzzyQuery',
@@ -185,7 +188,7 @@ export default function ApplicationColunm(): React.ReactNode {
                     </Button>
                   ]}
             >
-                <FillGuaranteeInformation ref={addRef} />
+                <FillGuaranteeInformation ref={addRef} id={id} />
             </Modal>
             {/* 回收保函弹框 */}
             <Modal

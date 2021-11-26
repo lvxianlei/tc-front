@@ -14,60 +14,39 @@ interface EditProps {
 export default forwardRef(function RecoveryGuaranteeLayer({id}: EditProps, ref) {
   const [addCollectionForm] = Form.useForm();
   const [column, setColumn] = useState(recoveryGuarantee);
-  // const [loading, setLoading] = useState(false);
-
-  //   // 提交
-  //   const handleSure = async () => {
-  //       const postData = await addCollectionForm.validateFields();
-  //       console.log(postData, 'post')
-  //       setLoading(true);
-  //       props.onOk && props.onOk(postData, () => {
-  //         // 回调的形式
-  //         setLoading(false);
-  //         addCollectionForm.resetFields();
-  //       });
-  //   }
-
-  //   // 取消
-  //   const handleCancle = () => {
-  //     addCollectionForm.resetFields();
-  //     setColumn(recoveryGuarantee);
-  //     props.onCancel && props.onCancel();
-  //  }
-
-    const handleBaseInfoChange = (fields: any) => {
-      let result: any = [];
-      // 当触发的是是否交回原件并且他的值为是（1）
-      if (fields.isOriginalScript && addCollectionForm.getFieldValue("isOriginalScript") === 1) {
-        // 移除原因
-        result = column.filter((item: any) => item.dataIndex !== 'reason')
-      } else if (addCollectionForm.getFieldValue("isOriginalScript") !== 1) {
-        // 添加原因 并且必填
-        result = column.filter((item: any) => item.dataIndex !== 'reason');
-        const index = column.findIndex((item: any) => item.dataIndex === "isOriginalScript");
-        const v = {
-            "dataIndex": "reason",
-            "title": "原因",
-            "rules": [
-              {
-                  "required": true,
-                  "message": "请输入原因"
-              }
-          ]
-        }
-        result.splice(index + 1, 0, v);
-        console.log(result, 'result')
-      } else {
-        result = column;
-        addCollectionForm.setFieldsValue({
-          ...fields
-        })
+  const handleBaseInfoChange = (fields: any) => {
+    let result: any = [];
+    // 当触发的是是否交回原件并且他的值为是（1）
+    if (fields.isOriginalScript && addCollectionForm.getFieldValue("isOriginalScript") === 1) {
+      // 移除原因
+      result = column.filter((item: any) => item.dataIndex !== 'reason')
+    } else if (addCollectionForm.getFieldValue("isOriginalScript") !== 1) {
+      // 添加原因 并且必填
+      result = column.filter((item: any) => item.dataIndex !== 'reason');
+      const index = column.findIndex((item: any) => item.dataIndex === "isOriginalScript");
+      const v = {
+          "dataIndex": "reason",
+          "title": "原因",
+          "rules": [
+            {
+                "required": true,
+                "message": "请输入原因"
+            }
+        ]
       }
-      setColumn(result);
+      result.splice(index + 1, 0, v);
+      console.log(result, 'result')
+    } else {
+      result = column;
+      addCollectionForm.setFieldsValue({
+        ...fields
+      })
     }
-    const resetFields = () => {
-      addCollectionForm.resetFields();
-      setColumn(recoveryGuarantee);
+    setColumn(result);
+  }
+  const resetFields = () => {
+    addCollectionForm.resetFields();
+    setColumn(recoveryGuarantee);
   }
 
 
