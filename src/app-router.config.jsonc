@@ -901,7 +901,7 @@
     },
     { // 工作管理-提料-塔型信息
       "name": "塔型信息",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/:status",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader",
       "module": "./pages/workMngt/pickList/PickTowerMessage",
       "exact": true,
       // "authority": "product_material_list"
@@ -909,7 +909,7 @@
     },
     { // 工作管理-提料-塔型信息-提料
       "name": "提料",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader/pick/:productSegmentId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Pick",
       "exact": true,
       // "authority": "product_material_list"
@@ -917,7 +917,7 @@
     },
     { // 工作管理-提料-塔型信息-提料-放样塔型套用
       "name": "放样塔型套用",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId/setOutApply",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader/pick/:productSegmentId/setOutApply",
       "module": "./pages/workMngt/pickList/pickTowerMessage/SetOutApply",
       "exact": true,
       // "authority": "product_material_list"
@@ -925,7 +925,7 @@
     },
     { // 工作管理-提料-塔型信息-提料-图形塔型套用
       "name": "图形塔型套用",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId/drawApply",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader/pick/:productSegmentId/drawApply",
       "module": "./pages/workMngt/pickList/pickTowerMessage/DrawApply",
       "exact": true,
       // "authority": "product_material_list"
@@ -933,7 +933,7 @@
     },
     { // 工作管理-提料-塔型信息-提料-识别
       "name": "识别",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId/recognize",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader/pick/:productSegmentId/recognize",
       "module": "./pages/workMngt/pickList/pickTowerMessage/ImageRecognize",
       "exact": true,
       // "authority": "product_material_list"
@@ -941,7 +941,7 @@
     },
     { // 工作管理-提料-塔型信息-校核
       "name": "校核",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/check/:productSegmentId/:materialLeaderId",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader/check/:productSegmentId/:materialLeaderId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Check",
       "exact": true,
       // "authority": "product_material_list"
@@ -949,7 +949,7 @@
     },
     { // 工作管理-提料-塔型信息-明细
       "name": "明细",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/detail/:productSegmentId",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader/detail/:productSegmentId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Detail",
       "exact": true,
       // "authority": "product_material_list"

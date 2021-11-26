@@ -59,14 +59,14 @@ export default function SampleDrawList(): React.ReactNode {
             fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type="primary" onClick={ () => downloadTemplate('/tower-science/welding/exportTemplate', '小样图') } ghost>下载</Button>
+                    <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productSegment/segmentModelDownload', '小样图', {segmentRecordId: record.id}) } ghost>下载</Button>
                 </Space>
             )
         }
     ]
     return (
         <Page
-            path="/tower-science/smallSample"
+            path="/tower-science/productSegment/sampleList"
             columns={columns}
             filterValue={filterValue}
             refresh={refresh}
@@ -81,7 +81,7 @@ export default function SampleDrawList(): React.ReactNode {
             extraOperation={
                 <Space>
                 {/* <Button type="primary">导出</Button> */}
-                <Button type="primary" onClick={ () => downloadTemplate('/tower-science/welding/exportTemplate', '小样图', {selectedKeys}) } ghost>下载</Button>
+                <Button type="primary" onClick={ () => downloadTemplate('/tower-science/productSegment/segmentModelDownload', '小样图', {segmentRecordId: selectedKeys}) } ghost>下载</Button>
                 <Button type="primary" onClick={() => history.goBack()} ghost>返回上一级</Button>
                 </Space>
             }

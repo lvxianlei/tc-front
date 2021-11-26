@@ -430,6 +430,8 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
+import moment from 'moment';
+import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 
 export interface TowerPickAssignProps {}
 export interface ITowerPickAssignRouteProps extends RouteComponentProps<TowerPickAssignProps>, WithTranslation {
@@ -449,6 +451,7 @@ export interface TowerPickAssignState {
     readonly repeatNum?: number;
     readonly selectKey?: number;
     user?: any[];
+    pattern?: any[];
     materialCheckLeader?: any[];
     departmentData?: SelectDataNode[];
 }
@@ -485,6 +488,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
         user: [],
         materialCheckLeader: [],
         departmentData: [],
+        pattern: undefined,
     }
 
     private modalCancel(): void {
@@ -495,14 +499,22 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
     }
 
     private async modalShow(): Promise<void> {
-        const data = await RequestUtil.get<IAppointed>(`/tower-science/productSegment/detail?productCategoryId=${ this.props.id }`);
+        const data = await RequestUtil.get<IAppointed>(this.props.type==='message'?`/tower-science/drawProductSegment/detail/${ this.props.id }`:`/tower-science/productSegment/detail?productCategoryId=${ this.props.id }`)
         const departmentData = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
+        const renderEnum: any = patternTypeOptions && patternTypeOptions.map(({ id, name }) => {
+            return {
+                label:name,
+                value: id,
+            }
+        })
         this.setState({
             departmentData: departmentData,
             visible: true,
-            appointed: data
+            appointed: data,
+            pattern: renderEnum
         })
-        this.getForm()?.setFieldsValue({ ...data });
+        
+        this.getForm()?.setFieldsValue({ ...data, plannedDeliveryTime: this.props.type==='message'?moment(data.plannedDeliveryTime):''});
     }
     
     /**
@@ -614,7 +626,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                 { this.state.appointed?.productCategoryName }
                             </Descriptions.Item>
                             <Descriptions.Item label="模式">
-                                { this.state.appointed?.pattern === 1 ? '新放' :  this.state.appointed?.pattern === 2 ? '重新出卡' : '套用' }
+                                {this.props.type==='message'|| this.props.type==='detail'?this.state.appointed?.pattern: this.state.pattern&&this.state.pattern.length>0&&this.state.appointed?.pattern&&this.state.pattern.find((item: any) => item.value === this.state.appointed?.pattern).label }
                             </Descriptions.Item>
                             { this.props.type === 'detail' ?
                                 <><Descriptions.Item label="段信息">
@@ -642,7 +654,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                     <Input placeholder="请输入（1-3，5，ac，w）"/>
                                 </Form.Item>
                             </Descriptions.Item>
-                            <Descriptions.Item label="放样人">
+                            <Descriptions.Item label="提料人">
                                 <Form.Item name="materialLeaderDepartment"
                                     rules={[{
                                         required: true,

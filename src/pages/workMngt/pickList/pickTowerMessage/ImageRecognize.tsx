@@ -14,7 +14,7 @@ import "./recognize.less";
 
 export default function PickTowerDetail(): React.ReactNode {
     const history = useHistory()
-    const params = useParams<{ id: string, productSegmentId: string, status: string }>()
+    const params = useParams<{ id: string, productSegmentId: string, status: string, materialLeader: string }>()
     const [ url, setUrl ] = useState<string>('')
     const [ visible, setVisible ] = useState<boolean>(false)
     const [ urlBase, setUrlBase ] = useState<undefined|any>('')
@@ -64,7 +64,7 @@ export default function PickTowerDetail(): React.ReactNode {
                                 await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=0`,form.getFieldsValue(true).data).then(()=>{
                                     message.success('保存成功！')
                                 }).then(()=>{
-                                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}`)
+                                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}`)
                                 })
                             }else{
                                 setVisible(true)
@@ -229,14 +229,14 @@ export default function PickTowerDetail(): React.ReactNode {
                 await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=1`,form.getFieldsValue(true).data).then(()=>{
                     message.success('保存成功！')
                 }).then(()=>{
-                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}`)
+                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}`)
                 })
             }}>是</Button><Button onClick={async ()=>{
                 await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=0`,form.getFieldsValue(true).data).then(()=>{
                     message.success('保存成功！')
                 }).then(()=>{
                     setVisible(false);
-                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/pick/${params.productSegmentId}`)
+                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}`)
                 })
                 
             }}>否</Button></Space>}>

@@ -125,7 +125,7 @@ export default function PickList(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickMessage/${record.id}`)}}>提料信息</Button>
-                    <Button type='link' onClick={() =>{history.push({pathname:`/workMngt/pickList/pickTowerMessage/${record.id}/${record.status}`,state: record.materialLeader})}} disabled={record.status!==1&&record.status!==2}>塔型信息</Button>
+                    <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTowerMessage/${record.id}/${record.status}/${record.materialLeader}`)}} disabled={record.status!==1&&record.status!==2}>塔型信息</Button>
                     <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTower/${record.id}`)}} disabled={record.status!==3}>杆塔配段</Button>
                     <Button type='link' onClick={() =>{setTaskId(record.id); setVisible(true)}} disabled={record.status<3} >交付物</Button>
                 </Space>
@@ -229,7 +229,7 @@ export default function PickList(): React.ReactNode {
                         label: '模式',
                         children: <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
                             { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-                                return <Select.Option key={ index } value={ id + ',' + name }>
+                                return <Select.Option key={ index } value={ id }>
                                     { name }
                                 </Select.Option>
                             }) }
