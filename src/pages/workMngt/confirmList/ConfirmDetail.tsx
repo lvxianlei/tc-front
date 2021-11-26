@@ -77,7 +77,7 @@ export default function ConfirmDetail(): React.ReactNode {
         formRef.setFieldsValue({
             totalWeight:value+number
         })
-      }} min={0} precision={4}/> : inputType === 'select' ?<Select style={{width:'100%'}}>{enums&&enums.map((item:any)=>{
+      }} min={0} precision={2}/> : inputType === 'select' ?<Select style={{width:'100%'}}>{enums&&enums.map((item:any)=>{
         return <Select.Option value={item.value} key ={item.value}>{item.label}</Select.Option>
       })}</Select> : inputType === 'edit'?<span>保存后自动计算</span>: inputType === 'textArea'?<TextArea maxLength={500} rows={1} showCount/>:<Input />;
       if(dataIndex === 'name'){
@@ -146,7 +146,7 @@ export default function ConfirmDetail(): React.ReactNode {
       setTableDataSource(newData);
       let totalNumber = '0';
         newData.forEach((item:any)=>{
-          totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(4)
+          totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
         })
         setWeight(totalNumber);
     };
@@ -175,7 +175,7 @@ export default function ConfirmDetail(): React.ReactNode {
         }
         let totalNumber = '0';
         newData.forEach((item:any)=>{
-          totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(4)
+          totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
         })
         setWeight(totalNumber);
       } catch (errInfo) {
@@ -277,7 +277,7 @@ export default function ConfirmDetail(): React.ReactNode {
           editable: true,
           key: 'basicHight',
           render:(value:any)=>{
-            return parseFloat(value).toFixed(4)
+            return parseFloat(value).toFixed(2)
           }  
       },
       { 
@@ -303,17 +303,17 @@ export default function ConfirmDetail(): React.ReactNode {
             return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value).label}</>
           } 
       },
-      // { 
-      //   title: '* 本体重量（kg）', 
-      //   dataIndex: 'description', 
-      //   type:'number',
-      //   width: 100,
-      //   editable: true,
-      //   key: 'description',
-      //   render:(value:any)=>{
-      //     return parseFloat(value).toFixed(4)
-      //   }   
-      // },//范春森于11月23日去掉
+      { 
+        title: '* 本体重量（kg）', 
+        dataIndex: 'bodyWeight', 
+        type:'number',
+        width: 100,
+        editable: true,
+        key: 'bodyWeight',
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }   
+      },//范春森于11月23日去掉，于龙于11月25号加上
       { 
         title: '接腿配置A', 
         dataIndex: 'legConfigurationA', 
@@ -354,7 +354,7 @@ export default function ConfirmDetail(): React.ReactNode {
         editable: true,
         key: 'legWeightA', 
         render:(value:any)=>{
-          return parseFloat(value).toFixed(4)
+          return parseFloat(value).toFixed(2)
         }  
       },
       { 
@@ -365,7 +365,7 @@ export default function ConfirmDetail(): React.ReactNode {
         editable: true,
         key: 'legWeightB', 
         render:(value:any)=>{
-          return parseFloat(value).toFixed(4)
+          return parseFloat(value).toFixed(2)
         }  
       },
       { 
@@ -376,7 +376,7 @@ export default function ConfirmDetail(): React.ReactNode {
         editable: true,
         key: 'legWeightC', 
         render:(value:any)=>{
-          return parseFloat(value).toFixed(4)
+          return parseFloat(value).toFixed(2)
         }  
       },
       { 
@@ -387,7 +387,7 @@ export default function ConfirmDetail(): React.ReactNode {
         editable: true,
         key: 'legWeightD', 
         render:(value:any)=>{
-          return parseFloat(value).toFixed(4)
+          return parseFloat(value).toFixed(2)
         }  
       },
       // { 
@@ -398,18 +398,18 @@ export default function ConfirmDetail(): React.ReactNode {
       //     editable: true,
       //     key: 'monomerWeight', 
       //     render:(value:any)=>{
-      //       return parseFloat(value).toFixed(4)
+      //       return parseFloat(value).toFixed(2)
       //     }  
       // },
       { 
-        title: '单重（kg）', 
+        title: '* 单重（kg）', 
         dataIndex: 'monomerWeight', 
         type:'number',
         width: 100,
         editable: true,
         key: 'monomerWeight', 
-        render:(value:any)=>{
-          return parseFloat(value).toFixed(4)
+        render:(_:any,record:any)=>{
+          return <span>{(parseFloat(record.legWeightA)+parseFloat(record.legWeightB)+parseFloat(record.legWeightC)+parseFloat(record.legWeightD)+parseFloat(record.monomerWeight)).toFixed(2)}</span>
         }  
       },
       { 
@@ -420,7 +420,7 @@ export default function ConfirmDetail(): React.ReactNode {
           editable: true,
           key: 'otherWeight',
           render:(value:any)=>{
-            return parseFloat(value).toFixed(4)
+            return parseFloat(value).toFixed(2)
           }  
       },
       { 
@@ -431,7 +431,7 @@ export default function ConfirmDetail(): React.ReactNode {
           editable: true,
           key: 'totalWeight',
           render:(_:any,record:any)=>{
-              return <span>{(parseFloat(record.otherWeight)+parseFloat(record.monomerWeight)).toFixed(4)}</span>
+              return <span>{(parseFloat(record.otherWeight)+parseFloat(record.monomerWeight)).toFixed(2)}</span>
           } 
       },
       { 
@@ -484,7 +484,7 @@ export default function ConfirmDetail(): React.ReactNode {
             setTableDataSource(tableDataSource);
             let number = '0';
             tableDataSource.forEach((item:any)=>{
-                number = (parseFloat(item.totalWeight)+parseFloat(number)).toFixed(4)
+                number = (parseFloat(item.totalWeight)+parseFloat(number)).toFixed(2)
             })
             setWeight(number);
             form.resetFields();
@@ -504,7 +504,7 @@ export default function ConfirmDetail(): React.ReactNode {
         setDescription(data?.description);
         let totalNumber = '0';
         data?.drawProductDetailList.forEach((item:any)=>{
-          totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(4)
+          totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
         })
         setWeight(totalNumber);
     }), {})
@@ -839,7 +839,7 @@ export default function ConfirmDetail(): React.ReactNode {
                             "required": true,
                             "message":"请输入呼高（m）"
                         }]}>
-                            <InputNumber precision={4} style={{width:'100%'}} min={0}/>
+                            <InputNumber precision={2} style={{width:'100%'}} min={0}/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>
@@ -887,7 +887,15 @@ export default function ConfirmDetail(): React.ReactNode {
                             "required": true,
                             "message":"请输入接腿重A（kg）"
                         }]}>
-                            <InputNumber precision={4} style={{width:'100%'}} min={0}/>
+                            <InputNumber precision={2} style={{width:'100%'}} min={0}  defaultValue={0} onChange={(value:number)=>{
+                                const dataA:number = form.getFieldValue('legWeightB')?form.getFieldValue('legWeightB'):0;
+                                const dataB:number = form.getFieldValue('legWeightC')?form.getFieldValue('legWeightC'):0;
+                                const dataC:number = form.getFieldValue('legWeightD')?form.getFieldValue('legWeightD'):0;
+                                const dataD:number = form.getFieldValue('bodyWeight')?form.getFieldValue('bodyWeight'):0;
+                                form.setFieldsValue({
+                                    monomerWeight:dataA+dataB+dataC+dataD+value
+                                })
+                            }}/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>
@@ -895,7 +903,15 @@ export default function ConfirmDetail(): React.ReactNode {
                             "required": true,
                             "message":"请输入接腿重B（kg）"
                         }]}>
-                            <InputNumber precision={4} style={{width:'100%'}} min={0}/>
+                            <InputNumber precision={2} style={{width:'100%'}} min={0} defaultValue={0} onChange={(value:number)=>{
+                                const dataA:number = form.getFieldValue('legWeightA')?form.getFieldValue('legWeightA'):0;
+                                const dataB:number = form.getFieldValue('legWeightC')?form.getFieldValue('legWeightC'):0;
+                                const dataC:number = form.getFieldValue('legWeightD')?form.getFieldValue('legWeightD'):0;
+                                const dataD:number = form.getFieldValue('bodyWeight')?form.getFieldValue('bodyWeight'):0;
+                                form.setFieldsValue({
+                                    monomerWeight:dataA+dataB+dataC+dataD+value
+                                })
+                            }}/>
                         </Form.Item>
                       </Col>
                     </Row>
@@ -905,7 +921,15 @@ export default function ConfirmDetail(): React.ReactNode {
                             "required": true,
                             "message":"请输入接腿重C（kg）"
                         }]}>
-                            <InputNumber precision={4} style={{width:'100%'}} min={0}/>
+                            <InputNumber precision={2} style={{width:'100%'}} min={0}  defaultValue={0} onChange={(value:number)=>{
+                                const dataA:number = form.getFieldValue('legWeightA')?form.getFieldValue('legWeightA'):0;
+                                const dataB:number = form.getFieldValue('legWeightB')?form.getFieldValue('legWeightB'):0;
+                                const dataC:number = form.getFieldValue('legWeightD')?form.getFieldValue('legWeightD'):0;
+                                const dataD:number = form.getFieldValue('bodyWeight')?form.getFieldValue('bodyWeight'):0;
+                                form.setFieldsValue({
+                                    monomerWeight:dataA+dataB+dataC+dataD+value
+                                })
+                            }}/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>
@@ -913,40 +937,48 @@ export default function ConfirmDetail(): React.ReactNode {
                             "required": true,
                             "message":"请输入接腿重D（kg）"
                         }]}>
-                            <InputNumber precision={4} style={{width:'100%'}} min={0}/>
+                            <InputNumber precision={2} style={{width:'100%'}} min={0} defaultValue={0} onChange={(value:number)=>{
+                                const dataA:number = form.getFieldValue('legWeightA')?form.getFieldValue('legWeightA'):0;
+                                const dataB:number = form.getFieldValue('legWeightB')?form.getFieldValue('legWeightB'):0;
+                                const dataC:number = form.getFieldValue('legWeightC')?form.getFieldValue('legWeightC'):0;
+                                const dataD:number = form.getFieldValue('bodyWeight')?form.getFieldValue('bodyWeight'):0;
+                                form.setFieldsValue({
+                                    monomerWeight:dataA+dataB+dataC+dataD+value
+                                })
+                            }}/>
                         </Form.Item>
                       </Col>
                     </Row>
                     <Row>
-                      {/* <Col span={12}>
-                        <Form.Item name="monomerWeight" label="杆塔重量（kg）" rules={[{
-                            "required": true,
-                            "message":"请输入杆塔重量（kg）"
-                        }]}>
-                            <InputNumber precision={4} style={{width:'100%'}} min={0} onChange={(value:number)=>{
-                                const data:number = form.getFieldValue('otherWeight')?form.getFieldValue('otherWeight'):0;
-                                form.setFieldsValue({
-                                    totalWeight:data+value
-                                })
-                            }}/>
-                        </Form.Item>
-                      </Col> */}
                       <Col span={12}>
-                        <Form.Item name="monomerWeight" label="单重（kg）" rules={[{
+                        <Form.Item name="bodyWeight" label="本体重量（kg）" rules={[{
                             "required": true,
-                            "message":"请输入杆塔重量（kg）"
+                            "message":"请输入本体重量（kg）"
                         }]}>
-                            <InputNumber precision={4} style={{width:'100%'}} min={0} onChange={(value:number)=>{
-                                const data:number = form.getFieldValue('otherWeight')?form.getFieldValue('otherWeight'):0;
+                            <InputNumber precision={2} style={{width:'100%'}} min={0}  defaultValue={0} onChange={(value:number)=>{
+                                const dataA:number = form.getFieldValue('legWeightA')?form.getFieldValue('legWeightA'):0;
+                                const dataB:number = form.getFieldValue('legWeightB')?form.getFieldValue('legWeightB'):0;
+                                const dataC:number = form.getFieldValue('legWeightC')?form.getFieldValue('legWeightC'):0;
+                                const dataD:number = form.getFieldValue('legWeightD')?form.getFieldValue('legWeightD'):0;
                                 form.setFieldsValue({
-                                    totalWeight:data+value
+                                    monomerWeight:dataA+dataB+dataC+dataD+value
                                 })
                             }}/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>
+                        <Form.Item name="monomerWeight" label="单重（kg）" rules={[{
+                            "required": true,
+                            "message":"请输入单重（kg）"
+                        }]}>
+                            <InputNumber precision={2} style={{width:'100%'}} disabled defaultValue={0}/>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>
                         <Form.Item name="otherWeight" label="其他增重（kg）">
-                            <InputNumber precision={4} style={{width:'100%'}} min={0} onChange={(value:number)=>{
+                            <InputNumber precision={2} style={{width:'100%'}} min={0} onChange={(value:number)=>{
                                 const data:number = form.getFieldValue('monomerWeight')?form.getFieldValue('monomerWeight'):0;
                                 form.setFieldsValue({
                                     totalWeight:data+value
@@ -954,19 +986,24 @@ export default function ConfirmDetail(): React.ReactNode {
                             }}/>
                         </Form.Item>
                       </Col>
-                    </Row>
-                    <Row>
                       <Col span={12}>
                         <Form.Item name="totalWeight" label="总重（kg）" rules={[{
                             "required": true,
                             "message":"请输入总重（kg）"
                         }]}>
-                            <InputNumber precision={4} style={{width:'100%'}} disabled/>
+                            <InputNumber precision={2} style={{width:'100%'}} disabled defaultValue={0}/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>
                         <Form.Item name="description" label="备注">
-                            <TextArea rows={1} showCount maxLength={500}/>
+                            <TextArea rows={1} showCount maxLength={400}/>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>
+                        <Form.Item name="description" label="备注">
+                            <TextArea rows={1} showCount maxLength={400}/>
                         </Form.Item>
                       </Col>
                     </Row>
