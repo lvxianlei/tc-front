@@ -344,7 +344,16 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                                 </Form.Item>
                             </Col>
                             <Col span={ 8 }>
-                                <Form.Item name="accountEquipmentName" initialValue={ detail.accountEquipmentName } label="台账设备关联">
+                                <Form.Item name="status" initialValue={ detail.status } label="状态">
+                                    <Select placeholder="请选择">
+                                        <Select.Option value={ 1 } key="1">正常</Select.Option>
+                                        <Select.Option value={ 2 } key="2">停用</Select.Option>
+                                        <Select.Option value={ 3 } key="3">维修中</Select.Option>
+                                    </Select>
+                                </Form.Item>
+                            </Col>
+                            <Col span={ 16 } >
+                                <Form.Item name="accountEquipmentName" initialValue={ detail.accountEquipmentName } label="台账设备关联" labelCol={{span: 4}}>
                                     <Input maxLength={ 50 } value={ detail.accountEquipmentName } addonBefore={ <EquipmentSelectionModal onSelect={ (selectedRows: object[] | any) => {
                                             setSelectedRows(selectedRows);
                                             setDetail({ ...detail, accountEquipmentName: selectedRows[0].deviceName });
@@ -354,15 +363,6 @@ export default function WorkshopEquipmentMngt(): React.ReactNode {
                                             setDetail({ ...detail, accountEquipmentName: '', accountEquipmentId: '' });
                                             form.setFieldsValue({ accountEquipmentName: '', accountEquipmentId: '' })
                                         } }><CloseOutlined /></Button>} disabled />
-                                </Form.Item>
-                            </Col>
-                            <Col span={ 8 }>
-                                <Form.Item name="status" initialValue={ detail.status } label="状态">
-                                    <Select placeholder="请选择">
-                                        <Select.Option value={ 1 } key="1">正常</Select.Option>
-                                        <Select.Option value={ 2 } key="2">停用</Select.Option>
-                                        <Select.Option value={ 3 } key="3">维修中</Select.Option>
-                                    </Select>
                                 </Form.Item>
                             </Col>
                         </Row>

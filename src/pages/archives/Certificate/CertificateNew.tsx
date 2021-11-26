@@ -9,7 +9,7 @@ import { ICertificate } from './CertificateMngt';
 import { TreeNode } from 'antd/lib/tree-select';
 import { FixedType } from 'rc-table/lib/interface';
 import moment from 'moment';
-import { dataTypeOptions } from '../../../configuration/DictionaryOptions';
+import { certificateTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IDatabaseTree } from '../../basicData/database/DatabaseMngt';
 import SelectUserTransfer from '../../announcement/SelectUserTransfer';
 import { IStaff } from '../../dept/staff/StaffMngt';
@@ -66,7 +66,7 @@ export default function CertificateNew(): React.ReactNode {
                     "required": true,
                     "message": "请选择证书类型" }]}>
                     <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
-                        { dataTypeOptions && dataTypeOptions.map(({ id, name }, index) => {
+                        { certificateTypeOptions && certificateTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={index} value={id}>
                                 {name}
                             </Select.Option>
