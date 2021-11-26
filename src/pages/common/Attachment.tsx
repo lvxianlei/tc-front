@@ -121,7 +121,7 @@ export default forwardRef(function ({
                 setAttachs([...attchs, {
                     id: uploadOSSUrlInfo?.id || "",
                     uid: event.file.uid,
-                    filePath: uploadOSSUrlInfo?.filePath || "",
+                    filePath: uploadOSSUrlInfo?.downloadUrl || "",
                     originalName: uploadOSSUrlInfo?.originalName || "",
                     fileSuffix: uploadOSSUrlInfo?.fileSuffix || "",
                     fileSize: uploadOSSUrlInfo?.fileSize || "",
@@ -130,7 +130,7 @@ export default forwardRef(function ({
                 onDoneChange(attchs)
             }
         }
-    }, [setAttachs, attchs, setUploadOSSUrlInfo, onDoneChange])
+    }, [setAttachs, attchs, setUploadOSSUrlInfo, onDoneChange, uploadOSSUrlInfo])
 
     const getDataSource = useCallback(() => attchs, [attchs])
 
@@ -162,7 +162,7 @@ export default forwardRef(function ({
         return <>
             {!edit && <Button type="link" onClick={() => handlePreview(records)}>预览</Button>}
             <Button type="link" onClick={() => downLoadFile(records.downloadUrl)}>下载</Button>
-            {edit&&<Button type="link" onClick={() => deleteAttachData(records.id)}>删除</Button>}
+            {edit && <Button type="link" onClick={() => deleteAttachData(records.id)}>删除</Button>}
         </>
     }, [])
 
