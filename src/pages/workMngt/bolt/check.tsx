@@ -7,7 +7,7 @@ import { Page } from '../../common';
 export default function BoltCheck(): React.ReactNode {
     const params = useParams<{ id: string }>()
     const history = useHistory()
-    const columns = [
+    const columns:any = [
         {
             title: '序号',
             dataIndex: 'index',
@@ -19,26 +19,35 @@ export default function BoltCheck(): React.ReactNode {
         {
             title: '塔位号',
             width: 150,
-            dataIndex: 'typeName',
+            dataIndex: 'gantahao',
+            render: (text: any, item: { productNumVOList: { id: string, productNumber: string }[] }): React.ReactNode => {
+                return (
+                    <span>
+                        {
+                            item.productNumVOList?.map((item: any) => `${item.productNumber}，`)
+                        }
+                    </span>
+                )
+            }
         },
         {
             title: '呼高m',
             width: 150,
-            dataIndex: 'name',
+            dataIndex: 'basicHeight',
         },
         {
             title: '基数',
             width: 150,
-            dataIndex: 'level',
+            dataIndex: 'num',
         },
         {
             title: '总重',
             width: 150,
-            dataIndex: 'specs',
+            dataIndex: 'totalWeight',
         },
         {
             title: '说明',
-            dataIndex: 'unbuckleLength',
+            dataIndex: 'description',
             width: 120,
         },
         {
@@ -49,6 +58,7 @@ export default function BoltCheck(): React.ReactNode {
                 return (
                     <div className='operation'>
                         <span
+                            style={{ color: '#FF8C00', marginRight: 10, cursor: 'pointer' }}
                             onClick={() => {
                                 history.push(`/workMngt/boltList/boltCheck/${params.id}/${item.id}`)
                             }}

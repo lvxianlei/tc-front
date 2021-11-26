@@ -1,10 +1,9 @@
-import { Button, Input, message, Modal, Popconfirm, Select } from 'antd';
+import { Button, Col, Input, message, Modal, Popconfirm, Row, Select } from 'antd';
 import TextArea from 'rc-textarea';
 import React, { useState } from 'react';
 import { useHistory, useParams, } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import { Page } from '../../common';
-import './BoltDetailList.less';
 
 export default function BoltCheck(): React.ReactNode {
     const params = useParams<{ id: string, }>();
@@ -182,7 +181,6 @@ export default function BoltCheck(): React.ReactNode {
                 searchFormItems={[]}
             />
             <Modal
-                className='Modal_hugao'
                 visible={visible}
                 width={1000}
                 title="添加"
@@ -191,7 +189,68 @@ export default function BoltCheck(): React.ReactNode {
                 okText="确定"
                 cancelText="关闭"
             >
-                <div className="add_HuGao">
+                <div className='public_page'>
+                    <Row className='search_content'>
+                        <Col
+                            md={12}
+                            className='search_item'
+                        >
+                            <span className='tip'>呼高*：</span>
+                            <Input
+                                placeholder='请输入'
+                                className='input'
+                                value={basicHeight}
+                                maxLength={20}
+                                onChange={(ev) => {
+                                    setbasicHeight(ev.target.value.replace(/\D/g, ''))
+                                }}
+                            />
+                        </Col>
+                        <Col
+                            md={12}
+                            className='search_item'
+                        >
+                            <span className='tip'>塔位号*：</span>
+                            <Select
+                                className='input'
+                                style={{ width: '100%' }}
+                                mode="multiple"
+                                maxLength={3}
+                                value={productIdList}
+                                onChange={(value) => {
+                                    if (value.length > 99) {
+                                        message.error('塔位号最多99个')
+                                        return
+                                    }
+                                    console.log(value)
+                                    setproductIdList(value)
+                                }}
+                            >
+                                {
+                                    towerTagList.map((item: any, index: any) => {
+                                        return <Select.Option value={item.id} key={index}>{item.productNumber}</Select.Option>
+                                    })
+                                }
+                            </Select>
+                        </Col>
+                        <Col
+                            md={24}
+                            className='search_item'
+                        >
+                            <span className='tip'>说明*：</span>
+                            <TextArea
+                                className="input"
+                                placeholder="请输入"
+                                maxLength={400}
+                                value={description}
+                                onChange={(e) => {
+                                    setdescription(e.target.value)
+                                }}
+                            />
+                        </Col>
+                    </Row>
+                </div>
+                {/* <div className="add_HuGao">
                     <div className="tr">
                         <div className="td">
                             <div className="title">呼高*</div>
@@ -257,7 +316,7 @@ export default function BoltCheck(): React.ReactNode {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </Modal>
         </div>
     )
