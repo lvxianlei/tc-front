@@ -232,7 +232,7 @@ export default function PlanTrack(): React.ReactNode {
                                 <Select.Option value={2} key={2}>提料中</Select.Option>
                                 <Select.Option value={3} key={3}>配段中</Select.Option>
                                 <Select.Option value={4} key={4}>已完成</Select.Option>
-                                <Select.Option value={5} key={5}>已提交</Select.Option>
+                                {/* <Select.Option value={5} key={5}>已提交</Select.Option> */}
                             </Select>
             },
             {
@@ -245,7 +245,7 @@ export default function PlanTrack(): React.ReactNode {
                                 <Select.Option value={3} key={3}>组焊中</Select.Option>
                                 <Select.Option value={4} key={4}>配段中</Select.Option>
                                 <Select.Option value={5} key={5}>已完成</Select.Option>
-                                <Select.Option value={6} key={6}>已提交</Select.Option>
+                                {/* <Select.Option value={6} key={6}>已提交</Select.Option> */}
                             </Select>
             },
             {
