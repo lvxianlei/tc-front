@@ -517,7 +517,7 @@ export default function ScheduleView(): React.ReactNode {
                             <Form.Item name="pattern" label="模式" rules={[{required: true,message:'请选择模式'}]}>
                                 <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} disabled={edit}>
                                     { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-                                        return <Select.Option key={ index } value={ id + ',' + name }>
+                                        return <Select.Option key={ index } value={ id }>
                                             { name }
                                         </Select.Option>
                                     }) }
@@ -805,6 +805,7 @@ export default function ScheduleView(): React.ReactNode {
             <Page
                 path={ `/tower-science/productCategory/taskPage` }
                 columns={ columns }
+                exportPath={`/tower-science/productCategory`}
                 extraOperation={
                     <Space>
                         {/* <Button type="primary">导出</Button> */}
@@ -821,7 +822,7 @@ export default function ScheduleView(): React.ReactNode {
                         label: '模式',
                         children:   <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
                             { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-                                return <Select.Option key={ index } value={ id + ',' + name }>
+                                return <Select.Option key={ index } value={ id }>
                                     { name }
                                 </Select.Option>
                             }) }
