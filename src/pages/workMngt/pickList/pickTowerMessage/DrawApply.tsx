@@ -112,7 +112,7 @@ export default function LoftingTowerApplication(): React.ReactNode {
         resole(data);
     });
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => { 
-        const data: [] = await RequestUtil.get<[]>(``);
+        const data: [] = await RequestUtil.get(`/tower-science/drawProductSegment/getSegmentBySegmentGroupId`,{segmentGroupId:params.productSegmentId});
         getTableDataSource(page, {})
         resole(data);
     }), {})
@@ -167,12 +167,12 @@ export default function LoftingTowerApplication(): React.ReactNode {
                         showSizeChanger: false
                     }}
                 />
-                <span>套用至段落</span>
+                <span style={{marginRight:'10px'}}>套用至段落</span>
                 <Select placeholder="请选择" onChange={ (e: string) => {
                     setParagraph(e);
                 } } style={{width:'120px'}}>
                     { paragraphList.map((item: any) => {
-                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                        return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
                     }) }
                 </Select>
                 <p className={ styles.title }>段落信息</p>
