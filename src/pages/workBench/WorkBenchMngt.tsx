@@ -306,19 +306,19 @@ export default function WorkBenchMngt(): React.ReactNode {
 	return <div className={styles.all}>
 		<div className={styles.left}>
 			{
-				Object.keys(detailData.director).length > 0 ? directorList.map((res: IList, ind: number) => {
+				detailData.director ? directorList.map((res: IList, ind: number) => {
 					return <>{getChildContent(res, ind, detailData.director)}</>
 				})
 				: null
 			}
 			{
-				Object.keys(detailData.leaderToDoVO).length > 0 ? groupLeaderList.map((res: IList, ind: number) => {
+				detailData.leaderToDoVO ? groupLeaderList.map((res: IList, ind: number) => {
 					return <>{getChildContent(res, ind, detailData.leaderToDoVO)}</>
 				})
 				: null
 			}
 			{
-				Object.keys(detailData.staffToDoVO).length > 0 ? workmanList.map((res: IList, ind: number) => {
+				detailData.staffToDoVO ? workmanList.map((res: IList, ind: number) => {
 					return <>{getChildContent(res, ind, detailData.staffToDoVO)}</>
 				})
 				: null
