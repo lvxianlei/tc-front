@@ -5,14 +5,13 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, Upload, message, Form } from 'antd';
-import { Attachment, Page } from '../../common';
+import { Space, Input, DatePicker, Select, Button, Form } from 'antd';
+import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { Link, useLocation } from 'react-router-dom';
 import Deliverables from './Deliverables';
-import AuthUtil from '../../../utils/AuthUtil';
-import RequestUtil from '../../../utils/RequestUtil';
+import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 export default function SetOutList(): React.ReactNode {
     const columns = [
         {
@@ -56,17 +55,7 @@ export default function SetOutList(): React.ReactNode {
             key: 'pattern',
             title: '模式',
             width: 200,
-            dataIndex: 'pattern',
-            render: (pattern: number): React.ReactNode => {
-                switch (pattern) {
-                    case 1:
-                        return '新放';
-                    case 2:
-                        return '重新出卡';
-                    case 3:
-                        return '套用';
-                }
-            }
+            dataIndex: 'pattern'
         },
         {
             key: 'loftingLeaderName',
@@ -91,8 +80,6 @@ export default function SetOutList(): React.ReactNode {
                         return '配段中';
                     case 5:
                         return '已完成';
-                    case 6:
-                        return '已提交';
                 }
             }
         },
@@ -111,67 +98,16 @@ export default function SetOutList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Link to={`/workMngt/setOutList/setOutInformation/${record.id}`}>放样信息</Link>
+                    <Link to={{
+                        pathname: `/workMngt/setOutList/towerInformation/${record.id}`,
+                        state: { loftingLeader: record.loftingLeader, status: record.status }
+                    }}>塔型信息</Link>
+                    <Link to={{
+                        pathname: `/workMngt/setOutList/poleInformation/${record.id}`,
+                        state: { loftingLeader: record.loftingLeader, status: record.status }
+                    }}>杆塔配段</Link>
                     {
-                        // record.status === 1 || record.status === 2 ? 
-                        <Link to={{
-                            pathname: `/workMngt/setOutList/towerInformation/${record.id}`,
-                            state: { loftingLeader: record.loftingLeader, status: record.status }
-                        }}>塔型信息</Link>
-                        // : <Button type="link" disabled>塔型信息</Button>
-                    }
-                    {
-                        record.status === 4 ? <Link to={{
-                            pathname: `/workMngt/setOutList/poleInformation/${record.id}`,
-                            state: record.loftingLeader
-                        }}>杆塔配段</Link> : <Button type="link" disabled>杆塔配段</Button>
-                    }
-                    {
-                        record.status === 5 || record.status === 6 ? <Deliverables id={record.id} name={record.name} /> : <Button type="link" disabled>交付物</Button>
-                    }
-
-                    {
-                        record.status === 2 || record.status === 3 || record.status === 4 ?
-                            // <Upload 
-                            //     action={ () => {
-                            //         const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                            //         return baseUrl + '/sinzetech-resource/oss/put-file'
-                            //     } } 
-                            //     headers={
-                            //         {
-                            //             'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
-                            //             'Tenant-Id': AuthUtil.getTenantId(),
-                            //             'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                            //         }
-                            //     }
-                            //     showUploadList={ false }
-                            //     onChange={ (info) => {
-                            //         if(info.file.response && !info.file.response?.success) {
-                            //             message.warning(info.file.response?.msg)
-                            //         } 
-                            //         if(info.file.response && info.file.response?.success) {
-                            //             const dataInfo = info.file.response.data;
-                            //             const fileInfo = dataInfo.name.split(".")
-                            //             RequestUtil.post(`/tower-science/productCategory/lofting/draw/upload`, {
-                            //                 attachInfoDTOList: [{
-                            //                     filePath: dataInfo.name,
-                            //                     fileSize: dataInfo.size,
-                            //                     fileUploadTime: dataInfo.fileUploadTime,
-                            //                     name: dataInfo.originalName,
-                            //                     userName: dataInfo.userName,
-                            //                     fileSuffix: fileInfo[fileInfo.length - 1]
-                            //                 }],
-                            //                 productCategoryId: record.id
-                            //             }).then(res => {
-                            //                 message.success('上传成功');
-                            //                 setRefresh(!refresh);
-                            //             })
-                            //         }
-                            //     }}> <Button type='link'>图纸上传</Button>
-                            // </Upload>
-                            <Attachment title="图纸上传" isTable={false}>
-                               <Button type='link'>图纸上传</Button>
-                            </Attachment> :
-                            <Button type='link' disabled>图纸上传</Button>
+                        record.status === 5 ? <Deliverables id={record.id} name={record.name} /> : <Button type="link" disabled>交付物</Button>
                     }
                 </Space>
             )
@@ -184,7 +120,7 @@ export default function SetOutList(): React.ReactNode {
         path="/tower-science/loftingList/loftingPage"
         columns={columns}
         headTabs={[]}
-        // extraOperation={ <Button type="primary" ghost>导出</Button> }
+        extraOperation={ <Button type="primary" ghost>导出</Button> }
         requestData={{ status: location.state }}
         refresh={refresh}
         searchFormItems={[
@@ -204,23 +140,18 @@ export default function SetOutList(): React.ReactNode {
                         <Select.Option value={3} key="3">组焊中</Select.Option>
                         <Select.Option value={4} key="4">配段中</Select.Option>
                         <Select.Option value={5} key="5">已完成</Select.Option>
-                        <Select.Option value={6} key="6">已提交</Select.Option>
                     </Select>
                 </Form.Item>
             },
             {
-                name: 'plannedDeliveryTime',
-                label: '计划交付时间',
-                children: <DatePicker.RangePicker />
-            },
-            {
                 name: 'pattern',
                 label: '模式',
-                children: <Select style={{ width: '120px' }} placeholder="请选择">
-                    <Select.Option value={""} key="4">全部</Select.Option>
-                    <Select.Option value={1} key="1">新放</Select.Option>
-                    <Select.Option value={2} key="2">重新出卡</Select.Option>
-                    <Select.Option value={3} key="3">套用</Select.Option>
+                children: <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                    { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                        return <Select.Option key={ index } value={ id + ',' + name }>
+                            { name }
+                        </Select.Option>
+                    }) }
                 </Select>
             },
             {
@@ -234,11 +165,6 @@ export default function SetOutList(): React.ReactNode {
                 const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
                 values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                 values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
-            }
-            if (values.plannedDeliveryTime) {
-                const formatDate = values.plannedDeliveryTime.map((item: any) => item.format("YYYY-MM-DD"));
-                values.plannedDeliveryTimeStart = formatDate[0] + ' 00:00:00';
-                values.plannedDeliveryTimeEnd = formatDate[1] + ' 23:59:59';
             }
             return values;
         }}

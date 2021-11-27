@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Button, Popconfirm, Spin, Tabs, Form } from 'antd';
+import { Space, Button, Spin, } from 'antd';
 import { CommonTable, DetailContent } from '../../common';
 import styles from './BoltList.module.less';
 import { useHistory, useParams } from 'react-router-dom';
@@ -27,8 +27,8 @@ export default function BoltCheck(): React.ReactNode {
             dataIndex: 'index',
             width: 100,
             editable: false,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => { 
-                return <span>{ index + 1 }</span>
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => {
+                return <span>{index + 1}</span>
             }
         },
         {
@@ -95,12 +95,11 @@ export default function BoltCheck(): React.ReactNode {
             editable: false
         }
     ]
-
     const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {
         setVisible(true);
-        if(tip !== 'normal') {   
-            const data: IRecord = await RequestUtil.get<{}>(`/tower-science/boltRecord/issueDetail`, { keyId: record.id, problemField: col.dataIndex }); 
-            if( tip === 'red' ) {
+        if (tip !== 'normal') {
+            const data: IRecord = await RequestUtil.get<{}>(`/tower-science/boltRecord/issueDetail`, { keyId: record.id, problemField: col.dataIndex });
+            if (tip === 'red') {
                 setRecord({ dataSource: [record], problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data });
                 setTitle('查看问题单');
             } else {
@@ -117,11 +116,11 @@ export default function BoltCheck(): React.ReactNode {
         const red: number = record.redColumn.indexOf(dataIndex);
         const green: number = record.greenColumn.indexOf(dataIndex);
         const yellow: number = record.yellowColumn.indexOf(dataIndex);
-        if(red !== -1) {
+        if (red !== -1) {
             return 'red';
-        } else if(green !== -1) {
+        } else if (green !== -1) {
             return 'green';
-        } else if(yellow !== -1) {
+        } else if (yellow !== -1) {
             return 'yellow';
         } else {
             return 'normal'
@@ -131,81 +130,52 @@ export default function BoltCheck(): React.ReactNode {
     const columnsSetting = columns.map(col => {
         return {
             ...col,
-            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                col.dataIndex === 'index' ? index + 1 
-                : !col.editable ? _ 
-                : <p onDoubleClick={ (e) => { questionnaire( _, record, col, checkColor(record, col.dataIndex)) }} className={ checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow : '' }>{  _ === -1 ? "-" :  _ }</p>
-            )  
-        }     
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                col.dataIndex === 'index' ? index + 1
+                    : !col.editable ? _
+                        : <p onDoubleClick={(e) => { questionnaire(_, record, col, checkColor(record, col.dataIndex)) }} className={checkColor(record, col.dataIndex) === 'red' ? styles.red : checkColor(record, col.dataIndex) === 'green' ? styles.green : checkColor(record, col.dataIndex) === 'yellow' ? styles.yellow : ''}>{_ === -1 ? "-" : _}</p>
+            )
+        }
     })
 
     const history = useHistory();
-    const params = useParams<{ id: string }>();
-    const [ dataSource, setDataSource ] = useState<[]>([]);
-    const [ activeKey, setActiveKey ] = useState<string>('');
-    const [ form ] = Form.useForm();
-    const [ record, setRecord ] = useState({});
-    const [ title, setTitle ] = useState('提交问题');
-    const [ visible, setVisible ] = useState(false);
+    const params = useParams<{ id: string, boltId: string }>();
+    const [dataSource, setDataSource] = useState<[]>([]);
+    const [record, setRecord] = useState({});
+    const [title, setTitle] = useState('提交问题');
+    const [visible, setVisible] = useState(false);
 
-    
+
     const getDataSource = async (basicHeightId?: string) => {
         const data: [] = await RequestUtil.get(`/tower-science/boltRecord/checkList`, {
             basicHeightId: basicHeightId,
-            productCategoryId: params.id
+            productCategoryId: params.boltId
         })
         setDataSource(data);
     }
 
     const { loading, data } = useRequest<ITab[]>(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<ITab[]>(`/tower-science/boltRecord/basicHeight/${ params.id }`);
-        if(data[0]) {
+        const data = await RequestUtil.get<ITab[]>(`/tower-science/boltRecord/basicHeight/${params.boltId}`);
+        if (data[0]) {
             getDataSource(data[0].id);
-            setActiveKey(data[0].id || '');
         }
         resole(data)
     }), {})
-    const detailData: ITab[] = data || [];
 
     if (loading) {
-        return <Spin spinning={ loading }>
+        return <Spin spinning={loading}>
             <div style={{ width: '100%', height: '300px' }}></div>
         </Spin>
     }
 
-    const tabChange = (activeKey: string) => {
-        getDataSource(activeKey);
-        setActiveKey(activeKey);
-    }
-    
+
     return <>
         <DetailContent>
-            <Space direction="horizontal" size="small" className={ styles.topbtn }>
-                {/* <Button type="primary" ghost>导出</Button> */}
-                <Popconfirm
-                    title="确认完成?"
-                    onConfirm={ () => RequestUtil.put(`/tower-science/boltRecord/completeCheck?productCategoryId=${ params.id }`).then(res => {
-                        history.goBack();
-                    }) }
-                    okText="确认"
-                    cancelText="取消"
-                >
-                    <Button type="primary">完成校核</Button>
-                </Popconfirm>
+            <Space direction="horizontal" size="small" className={styles.topbtn}>
                 <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
             </Space>
-            <Tabs onChange={ tabChange } type="card">
-                {
-                    detailData.map((item: ITab) => {
-                        return <Tabs.TabPane tab={ item.basicHeight + 'm呼高' } key={ item.id }>
-                            <Form form={ form } className={ styles.descripForm }>
-                                <CommonTable columns={ columnsSetting } dataSource={ dataSource } pagination={ false } />
-                            </Form>
-                        </Tabs.TabPane>
-                    })
-                }
-            </Tabs>
+            <CommonTable columns={columnsSetting} dataSource={dataSource} pagination={false} />
         </DetailContent>
-        <BoltQuestionnaireModal title={ title } visible={ visible }  modalCancel={ () => { setVisible(false); getDataSource(activeKey) } } record={ record } update={ () => getDataSource(activeKey) } productCategory={ params.id } />
+        <BoltQuestionnaireModal title={title} visible={visible} modalCancel={() => { setVisible(false); getDataSource(params.id) }} record={record} update={() => getDataSource(params.id)} productCategory={params.boltId} />
     </>
 }

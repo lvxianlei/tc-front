@@ -5,7 +5,7 @@
 // 整个common文件夹为让原继承形式组件可以通过传递参数形式复用。
 // 此组件为table页改造
 import React, { ReactNode } from 'react'
-import { TablePaginationConfig, TableColumnType, TableProps, FormItemProps, Space } from 'antd'
+import { TablePaginationConfig, TableColumnType, TableProps, FormItemProps, Space, Button } from 'antd'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { WithTranslation, withTranslation } from 'react-i18next'
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../components/AbstractMngtComponent'
@@ -14,6 +14,7 @@ import { ITabItem } from '../../components/ITabableComponent'
 import RequestUtil from '../../utils/RequestUtil'
 import { IClient } from '../IClient'
 import '../../components/AbstractMngtComponent.module.less'
+import ExportList from '../../components/export/list'
 export interface PageProps extends RouteComponentProps, WithTranslation {
     path: string
     columns: TableColumnType<object>[]
@@ -25,6 +26,7 @@ export interface PageProps extends RouteComponentProps, WithTranslation {
     requestData?: {}
     refresh?: boolean//刷新
     filterValue?: {} //查询条件
+    readonly exportPath?: string; //导出接口
     sourceKey?: string,
     isSunmryLine?: (result:IResponseData) => void;//添加计算行
 }
@@ -42,6 +44,7 @@ interface PageState extends IAbstractMngtComponentState {
     resData: any
     readonly selectedUserKeys: []
     readonly selectedUsers: []
+    readonly isExport?: boolean;
 }
 
 class Page extends AbstractMngtComponent<PageProps, PageState> {
@@ -54,7 +57,8 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
         return {
             ...super.getState(),
             name: '',
-            tableDataSource: []
+            tableDataSource: [],
+            isExport: false
         };
     }
     protected async fetchTableData(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
@@ -132,9 +136,38 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
 
     protected renderExtraOperationContent(): React.ReactNode {
         return (
-            <Space direction="horizontal" size="middle" className="ttt">
-                {typeof this.props.extraOperation === "function" ? this.props.extraOperation(this.state.resData) : this.props.extraOperation}
-            </Space>
+            <>
+                <Space direction="horizontal" size="middle">
+                    {this.props.exportPath ? <Button type="primary" ghost onClick={() => {
+                        this.setState({
+                            isExport: true
+                        })
+                    }}>导出</Button> : null}
+                    {typeof this.props.extraOperation === "function" ? this.props.extraOperation(this.state.resData) : this.props.extraOperation}
+                </Space>
+                {this.state.isExport ? <ExportList
+                    history={this.props.history}
+                    location={this.props.location}
+                    match={this.props.match}
+                    columnsKey={() => {
+                        let keys = [...this.getTableColumns()]
+                        keys.pop()
+                        return keys
+                    }}
+                    current={this.state.tablePagination?.current || 1}
+                    size={this.state.tablePagination?.pageSize || 10}
+                    total={this.state.tablePagination?.total || 0}
+                    url={this.props.exportPath}
+                    serchObj={{
+                        ...this.props.filterValue,
+                    }}
+                    closeExportList={() => {
+                        this.setState({
+                            isExport: false
+                        })
+                    }}
+                /> : null}
+            </>
         );
     }
 

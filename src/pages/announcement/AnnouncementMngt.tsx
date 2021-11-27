@@ -5,6 +5,7 @@ import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './AnnouncementMngt.module.less';
 import RequestUtil from '../../utils/RequestUtil';
+import { FileProps } from '../common/Attachment';
 
 export interface IAnnouncement {
     readonly id?: string;
@@ -13,23 +14,9 @@ export interface IAnnouncement {
     readonly state?: number;
     readonly updateTime?: string;
     readonly userNames?: string;
-    readonly attachInfoDtos?: IFileList[];
-    readonly attachVos?: IFileList[];
+    readonly attachInfoDtos?: FileProps[];
+    readonly attachVos?: FileProps[];
     readonly staffList?: string[];
-}
-
-export interface IFileList {
-    readonly id?: string;
-    readonly fileName?: string;
-    readonly filePath?: string;
-    readonly fileSuffix?: string;
-    readonly uid?: number;
-    readonly name?: string;
-    readonly description?: string;
-    readonly userName?: string;
-    readonly link?: string;
-    readonly fileSize?: string;
-    readonly fileUploadTime?: string;
 }
 
 export default function AnnouncementMngt(): React.ReactNode {

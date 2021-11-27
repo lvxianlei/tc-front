@@ -1,14 +1,16 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Button, Spin, Space, Modal, Form, Row, Col, Upload, message, Image } from 'antd';
-import { useHistory, useParams } from 'react-router-dom';
-import { DetailContent, CommonTable, DetailTitle } from '../../common';
+import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
+import { DetailContent, CommonTable, DetailTitle, Attachment, AttachmentRef } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
 import { Table, Input, InputNumber, Popconfirm, Typography, Select } from 'antd';
 import AuthUtil from '../../../utils/AuthUtil';
 import { downLoadFile } from '../../../utils';
-import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
+import { patternTypeOptions, productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
+import { downloadTemplate } from '../setOut/downloadTemplate';
+import ExportList from '../../../components/export/list';
 interface Item {
   key: string;
   name: string;
@@ -51,6 +53,9 @@ export default function ConfirmDetail(): React.ReactNode {
     const [attachInfo, setAttachInfo] = useState<any[]>([])
     const [form] = Form.useForm();
     const [formRef] = Form.useForm();
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
+    const [isExport, setIsExportStoreList] = useState(false)
 
     const [editingKey, setEditingKey] = useState('');
     const isEditing = (record: Item) => record.key === editingKey;
@@ -68,18 +73,52 @@ export default function ConfirmDetail(): React.ReactNode {
     }) => {
       const inputNode = inputType === 'number' ? <InputNumber style={{width:'100%'}} onChange={(value:number)=>{
         let number = 0;
-        if(dataIndex==='productWeight'){
-            number = formRef.getFieldValue('otherWeight')?formRef.getFieldValue('otherWeight'):0;
-        }
         if(dataIndex==='otherWeight'){
-          number = formRef.getFieldValue('productWeight')?formRef.getFieldValue('productWeight'):0;;
+          const dataA:number = formRef.getFieldValue('legWeightA')?formRef.getFieldValue('legWeightA'):0;
+          const dataB:number = formRef.getFieldValue('legWeightB')?formRef.getFieldValue('legWeightB'):0;
+          const dataC:number = formRef.getFieldValue('legWeightC')?formRef.getFieldValue('legWeightC'):0;
+          const dataD:number = formRef.getFieldValue('legWeightD')?formRef.getFieldValue('legWeightD'):0;
+          const data:number = formRef.getFieldValue('bodyWeight')?formRef.getFieldValue('bodyWeight'):0;
+          number = dataA+dataB+dataC+dataD+data;
+        }
+        if(dataIndex==='legWeightA'){
+          const dataA:number = formRef.getFieldValue('legWeightB')?formRef.getFieldValue('legWeightB'):0;
+          const dataB:number = formRef.getFieldValue('legWeightC')?formRef.getFieldValue('legWeightC'):0;
+          const dataC:number = formRef.getFieldValue('legWeightD')?formRef.getFieldValue('legWeightD'):0;
+          const dataD:number = formRef.getFieldValue('bodyWeight')?formRef.getFieldValue('bodyWeight'):0;
+          const data:number = formRef.getFieldValue('otherWeight')?formRef.getFieldValue('otherWeight'):0;
+          number = dataA+dataB+dataC+dataD+data;
+        }
+        if(dataIndex==='legWeightB'){
+          const dataA:number = formRef.getFieldValue('legWeightA')?formRef.getFieldValue('legWeightA'):0;
+          const dataB:number = formRef.getFieldValue('legWeightC')?formRef.getFieldValue('legWeightC'):0;
+          const dataC:number = formRef.getFieldValue('legWeightD')?formRef.getFieldValue('legWeightD'):0;
+          const dataD:number = formRef.getFieldValue('bodyWeight')?formRef.getFieldValue('bodyWeight'):0;
+          const data:number = formRef.getFieldValue('otherWeight')?formRef.getFieldValue('otherWeight'):0;
+          number = dataA+dataB+dataC+dataD+data;
+        }
+        if(dataIndex==='legWeightC'){
+          const dataA:number = formRef.getFieldValue('legWeightA')?formRef.getFieldValue('legWeightA'):0;
+          const dataB:number = formRef.getFieldValue('legWeightB')?formRef.getFieldValue('legWeightB'):0;
+          const dataC:number = formRef.getFieldValue('legWeightD')?formRef.getFieldValue('legWeightD'):0;
+          const dataD:number = formRef.getFieldValue('bodyWeight')?formRef.getFieldValue('bodyWeight'):0;
+          const data:number = formRef.getFieldValue('otherWeight')?formRef.getFieldValue('otherWeight'):0;
+          number = dataA+dataB+dataC+dataD+data;
+        }
+        if(dataIndex==='legWeightD'){
+          const dataA:number = formRef.getFieldValue('legWeightA')?formRef.getFieldValue('legWeightA'):0;
+          const dataB:number = formRef.getFieldValue('legWeightB')?formRef.getFieldValue('legWeightB'):0;
+          const dataC:number = formRef.getFieldValue('legWeightC')?formRef.getFieldValue('legWeightC'):0;
+          const dataD:number = formRef.getFieldValue('bodyWeight')?formRef.getFieldValue('bodyWeight'):0;
+          const data:number = formRef.getFieldValue('otherWeight')?formRef.getFieldValue('otherWeight'):0;
+          number = dataA+dataB+dataC+dataD+data;
         }
         formRef.setFieldsValue({
-            totalWeight:value+number
+            totalWeight:number + value
         })
-      }} min={0} precision={4}/> : inputType === 'select' ?<Select style={{width:'100%'}}>{enums&&enums.map((item:any)=>{
+      }} min={0} precision={2}/> : inputType === 'select' ?<Select style={{width:'100%'}}>{enums&&enums.map((item:any)=>{
         return <Select.Option value={item.value} key ={item.value}>{item.label}</Select.Option>
-      })}</Select> : inputType === 'edit'?<span>保存后自动计算</span>: inputType === 'textArea'?<TextArea maxLength={500} rows={1} showCount/>:<Input />;
+      })}</Select> : inputType === 'edit'?<span>保存后自动计算</span>: inputType === 'textArea'?<TextArea maxLength={dataIndex==='description'?400:10} rows={1}/>:<Input />;
       if(dataIndex === 'name'){
         return (
         <td {...restProps}>
@@ -146,7 +185,7 @@ export default function ConfirmDetail(): React.ReactNode {
       setTableDataSource(newData);
       let totalNumber = '0';
         newData.forEach((item:any)=>{
-          totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(4)
+          totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
         })
         setWeight(totalNumber);
     };
@@ -175,7 +214,7 @@ export default function ConfirmDetail(): React.ReactNode {
         }
         let totalNumber = '0';
         newData.forEach((item:any)=>{
-          totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(4)
+          totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
         })
         setWeight(totalNumber);
       } catch (errInfo) {
@@ -271,13 +310,13 @@ export default function ConfirmDetail(): React.ReactNode {
       },
       { 
           title: '* 呼高（m）', 
-          dataIndex: 'basicHight', 
+          dataIndex: 'basicHeight', 
           type:'number',
           width: 70,
           editable: true,
-          key: 'basicHight',
+          key: 'basicHeight',
           render:(value:any)=>{
-            return parseFloat(value).toFixed(4)
+            return parseFloat(value).toFixed(2)
           }  
       },
       { 
@@ -287,58 +326,140 @@ export default function ConfirmDetail(): React.ReactNode {
           width: 90,
           editable: true,
           key: 'pattern',
-          enums: [
-            {
-                value: 1,
-                label: "新放"
-            },
-            {
-                value: 2,
-                label: "重新出卡"
-            },
-            {
-                value: 3,
-                label: "套用"
+          enums:patternTypeOptions && patternTypeOptions.map(({ id, name }) => {
+            return {
+                label:name,
+                value: id,
             }
-          ],
-          render: (value: number, record: object): React.ReactNode => {
-            const renderEnum: any = [
-              {
-                value: 1,
-                label: "新放"
-              },
-              {
-                value: 2,
-                label: "重新出卡"
-              },
-              {
-                value: 3,
-                label: "套用"
-              },
-            ]
-            return <>{renderEnum.find((item: any) => item.value === value).label}</>
-          }
+          }),
+          render: (value: string, record: object): React.ReactNode => {
+            const renderEnum: any = patternTypeOptions && patternTypeOptions.map(({ id, name }) => {
+              return {
+                  label:name,
+                  value: id,
+              }
+            })
+            return <>{renderEnum&&value&&renderEnum.find((item: any) => item.value === value).label}</>
+          } 
       },
       { 
-          title: '* 杆塔重量（kg）', 
-          dataIndex: 'productWeight', 
-          type:'number',
-          width: 100,
-          editable: true,
-          key: 'productWeight', 
-          render:(value:any)=>{
-            return parseFloat(value).toFixed(4)
-          }  
+        title: '* 本体重量（kg）', 
+        dataIndex: 'bodyWeight', 
+        type:'number',
+        width: 100,
+        editable: true,
+        key: 'bodyWeight',
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }   
+      },//范春森于11月23日去掉，于龙于11月25号加上
+      { 
+        title: '接腿配置A', 
+        dataIndex: 'legConfigurationA', 
+        type:'textArea',
+        width: 80,
+        editable: true,
+        key: 'legConfigurationA' 
       },
       { 
-          title: '其他增重（kg）', 
+        title: '接腿配置B', 
+        dataIndex: 'legConfigurationB', 
+        type:'textArea',
+        width: 80,
+        editable: true,
+        key: 'legConfigurationB' 
+      },
+      { 
+        title: '接腿配置C', 
+        dataIndex: 'legConfigurationC', 
+        type:'textArea',
+        width: 80,
+        editable: true,
+        key: 'legConfigurationC' 
+      },
+      { 
+        title: '接腿配置D', 
+        dataIndex: 'legConfigurationD', 
+        type:'textArea',
+        width: 80,
+        editable: true,
+        key: 'legConfigurationD' 
+      },
+      { 
+        title: '接腿重A（kg）', 
+        dataIndex: 'legWeightA', 
+        type:'number',
+        width: 100,
+        editable: true,
+        key: 'legWeightA', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+      { 
+        title: '接腿重B（kg）', 
+        dataIndex: 'legWeightB', 
+        type:'number',
+        width: 100,
+        editable: true,
+        key: 'legWeightB', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+      { 
+        title: '接腿重C（kg）', 
+        dataIndex: 'legWeightC', 
+        type:'number',
+        width: 100,
+        editable: true,
+        key: 'legWeightC', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+      { 
+        title: '接腿重D（kg）', 
+        dataIndex: 'legWeightD', 
+        type:'number',
+        width: 100,
+        editable: true,
+        key: 'legWeightD', 
+        render:(value:any)=>{
+          return parseFloat(value).toFixed(2)
+        }  
+      },
+      // { 
+      //     title: '* 杆塔重量（kg）', 
+      //     dataIndex: 'monomerWeight', 
+      //     type:'number',
+      //     width: 100,
+      //     editable: true,
+      //     key: 'monomerWeight', 
+      //     render:(value:any)=>{
+      //       return parseFloat(value).toFixed(2)
+      //     }  
+      // },
+      { 
+        title: '* 单重（kg）', 
+        dataIndex: 'monomerWeight', 
+        type:'edit',
+        width: 100,
+        editable: true,
+        key: 'monomerWeight', 
+        render:(_:any,record:any)=>{
+          return <span>{(parseFloat(record.legWeightA)+parseFloat(record.legWeightB)+parseFloat(record.legWeightC)+parseFloat(record.legWeightD)+parseFloat(record.bodyWeight)).toFixed(2)}</span>
+        }  
+      },
+      { 
+          title: '其他重量（kg）', 
           dataIndex: 'otherWeight', 
           type:'number',
           width: 100,
           editable: true,
           key: 'otherWeight',
           render:(value:any)=>{
-            return parseFloat(value).toFixed(4)
+            return parseFloat(value).toFixed(2)
           }  
       },
       { 
@@ -349,7 +470,7 @@ export default function ConfirmDetail(): React.ReactNode {
           editable: true,
           key: 'totalWeight',
           render:(_:any,record:any)=>{
-              return <span>{(parseFloat(record.otherWeight)+parseFloat(record.productWeight)).toFixed(4)}</span>
+              return <span>{(parseFloat(record.otherWeight)+parseFloat(record.legWeightA)+parseFloat(record.legWeightB)+parseFloat(record.legWeightC)+parseFloat(record.legWeightD)+parseFloat(record.bodyWeight)).toFixed(2)}</span>
           } 
       },
       { 
@@ -378,11 +499,11 @@ export default function ConfirmDetail(): React.ReactNode {
             </span>
           ) : (
               <Space>
-                  <Typography.Link disabled={editingKey !== ''||params.status==='3'} onClick={() => edit(record)}>
+                  <Typography.Link disabled={editingKey !== ''||params.status!=='3'} onClick={() => edit(record)}>
                       编辑
                   </Typography.Link>
-                  <Popconfirm title="确定删除该条数据吗？" onConfirm={() => onDelete(record.key)} disabled={editingKey !== ''}>
-                    <Typography.Link disabled={editingKey !== ''||params.status==='3'}>
+                  <Popconfirm title="确定删除该条数据吗？" onConfirm={() => onDelete(record.key)} disabled={editingKey !== ''||params.status!=='3'}>
+                    <Typography.Link disabled={editingKey !== ''||params.status!=='3'}>
                         删除
                     </Typography.Link>
                   </Popconfirm>
@@ -402,7 +523,7 @@ export default function ConfirmDetail(): React.ReactNode {
             setTableDataSource(tableDataSource);
             let number = '0';
             tableDataSource.forEach((item:any)=>{
-                number = (parseFloat(item.totalWeight)+parseFloat(number)).toFixed(4)
+                number = (parseFloat(item.totalWeight)+parseFloat(number)).toFixed(2)
             })
             setWeight(number);
             form.resetFields();
@@ -413,16 +534,19 @@ export default function ConfirmDetail(): React.ReactNode {
     }
     const handleModalCancel = () => {setVisible(false);form.resetFields();}
     const handlePictureModalCancel = () => {setPictureVisible(false)}
+    const [urlVisible, setUrlVisible] = useState<boolean>(false);
+    const [url, setUrl] = useState<string>('');
+    const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
     const params = useParams<{ id: string, status: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
         resole(data);
         setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString(),index: index }}));
-        setAttachInfo([...data.attachInfoList]);
+        setAttachInfo([...data.fileVOList]);
         setDescription(data?.description);
         let totalNumber = '0';
         data?.drawProductDetailList.forEach((item:any)=>{
-          totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(4)
+          totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
         })
         setWeight(totalNumber);
     }), {})
@@ -448,29 +572,6 @@ export default function ConfirmDetail(): React.ReactNode {
       };
     });
 
-    const uploadChange = (event: any) => {
-      if (event.file.status === "done") {
-          if (event.file.response.code === 200) {
-              const dataInfo = event.file.response.data
-              const fileInfo = dataInfo.name.split(".")
-              setAttachInfo([...attachInfo, {
-                  id: "",
-                  uid: attachInfo.length,
-                  name: dataInfo.originalName,
-                  description: "",
-                  filePath: dataInfo.name,
-                  link: dataInfo.link,
-                  fileSize: dataInfo.size,
-                  fileSuffix: fileInfo[fileInfo.length - 1],
-                  userName: dataInfo.userName,
-                  fileUploadTime: dataInfo.fileUploadTime
-              }])
-          }
-      }
-    }
-    const deleteAttachData = (id: number) => {
-      setAttachInfo(attachInfo.filter((item: any) => item.uid ? item.uid !== id : item.id !== id))
-    }
 
     /**
      * @description 验证杆塔号
@@ -519,7 +620,7 @@ export default function ConfirmDetail(): React.ReactNode {
                         try {
                           const saveData:any = {
                               drawTaskId: params.id,
-                              attachInfoList:attachInfo,
+                              fileVOList:attchsRef.current.getDataSource(),
                               drawProductDetailList:tableDataSource.map((item:any)=>{
                                 return {
                                   ...item,
@@ -555,7 +656,7 @@ export default function ConfirmDetail(): React.ReactNode {
                         try {
                           const submitData:any = {
                             drawTaskId: params.id,
-                            attachInfoList:attachInfo,
+                            fileVOList:attchsRef.current.getDataSource(),
                             drawProductDetailList:tableDataSource.map((item:any)=>{
                               return {
                                 ...item,
@@ -586,30 +687,103 @@ export default function ConfirmDetail(): React.ReactNode {
                       } catch (error) {
                           console.log(error)
                       }
-                    }}>保存并提交</Button>
+                    }}>完成确认明细</Button>
                      {tableDataSource.length>0||attachInfo.length>0||description?<Popconfirm
                         title="是否放弃已添加信息?"
                         onConfirm={ () => history.goBack() }
                         okText="确定"
-                        cancelText="取消"
+                        cancelText="取消" 
                     >
                          <Button key="goback">返回</Button>
                     </Popconfirm>: <Button key="goback" onClick={() => history.goBack()}>返回</Button>}
                    
-                </Space>: <Button key="goback" onClick={() => history.goBack()}>返回</Button>}
+                </Space>: <Button key="goback" onClick={() => history.goBack()}>返回</Button>} 
             </>]}>
                 <div style={{display:'flex',justifyContent:'space-between'}}>
                     <Space>
-                        {/* <Button type='primary' ghost onClick={() => history.goBack()}>导出</Button>
-                        <Button type='primary' ghost onClick={() => history.goBack()}>模板下载</Button> */}
+                    <Button type='primary' onClick={()=>{setIsExportStoreList(true)}}>导出</Button>
+                    {isExport?<ExportList
+                        history={history}
+                        location={location}
+                        match={match}
+                        columnsKey={() => {
+                            let keys = [...mergedColumns]
+                            keys.pop()
+                            return keys
+                        }}
+                        current={0}
+                        size={0}
+                        total={0}
+                        url={'/tower-science/drawProductDetail/export'}
+                        serchObj={{
+                          drawTaskId: params.id
+                        }}
+                        closeExportList={() => { setIsExportStoreList(false) }}
+                    />:null}
+                        <Button type="primary" onClick={ () => downloadTemplate('/tower-science/drawProductDetail/importTemplate', '确认明细模板') } ghost>模板下载</Button>
                         <span>总基数：{tableDataSource.length}基</span>
                         <span>总重量：{weight}kg</span>
                     </Space>
                     <Space>
-                        {/* <Button type='primary' ghost onClick={() => history.goBack()}>导入</Button> */}
+                        {params.status==='3'?
+                        <Upload 
+                            action={ () => {
+                                const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                                return baseUrl+'/tower-science/drawProductDetail/import'
+                            } } 
+                            headers={
+                                {
+                                    'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                                    'Tenant-Id': AuthUtil.getTenantId(),
+                                    'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                                }
+                            }
+                            data={ { drawTaskId: params.id } }
+                            showUploadList={ false }
+                            onChange={ async (info) => {
+                                if(info.file.response && !info.file.response?.success) {
+                                    message.warning(info.file.response?.msg)
+                                }
+                                if(info.file.response && info.file.response?.success){
+                                    message.success('导入成功！');
+                                    if (info.file.response && info.file.response?.success) {
+                                      if (info.file.response?.data) {
+                                          setUrl(info.file.response?.data);
+                                          setUrlVisible(true);
+                                      } else {
+                                          message.success('导入成功！');
+                                          const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
+                                          setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString(),index: index }}));
+                                          setAttachInfo([...data.fileVOList]);
+                                          setDescription(data?.description);
+                                          let totalNumber = '0';
+                                          data?.drawProductDetailList.forEach((item:any)=>{
+                                            totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
+                                          })
+                                          setWeight(totalNumber);
+                                      }
+                                  }
+                                } 
+                            } }
+                        >
+                            <Button type="primary" ghost>导入</Button>
+                        </Upload>:null}
+                
                         {params.status==='3'?<Button type='primary' ghost onClick={() => setVisible(true)}>添加</Button>:null}
                     </Space>
                 </div>
+                <Modal
+                    visible={urlVisible}
+                    onOk={() => {
+                        window.open(url);
+                        setUrlVisible(false);
+                    }}
+                    onCancel={() => { setUrlVisible(false); setUrl('') }}
+                    title='提示'
+                    okText='下载'
+                >
+                    当前存在错误数据，请重新下载上传！
+                </Modal>
                 <Form form={formRef} component={false}>
                     <Table
                       components={{
@@ -626,6 +800,7 @@ export default function ConfirmDetail(): React.ReactNode {
                       // pagination={{
                       //   onChange: cancel,
                       // }}
+                      scroll={{x:1000}}
                       pagination={false}
                     />
                 </Form>
@@ -633,7 +808,7 @@ export default function ConfirmDetail(): React.ReactNode {
                 {detailData?<TextArea maxLength={ 200 } defaultValue={detailData?.description} onChange={(e)=>{
                     setDescription(e.target.value)
                 }} disabled={params.status!=='3'}/>:null}
-                <DetailTitle title="附件信息" operation={[params.status==='3'?<Upload
+                {/* <DetailTitle title="附件信息" operation={[params.status==='3'?<Upload
                     action={ () => {
                       const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
                       return baseUrl+'/sinzetech-resource/oss/put-file'
@@ -669,7 +844,8 @@ export default function ConfirmDetail(): React.ReactNode {
                           </Space>
                       )
                   }
-                ]} dataSource={attachInfo}  pagination={ false }/>
+                ]} dataSource={attachInfo}  pagination={ false }/> */}
+                <Attachment dataSource={attachInfo} edit title="附件信息" ref={attchsRef}/>
             </DetailContent>
             <Modal visible={pictureVisible} onCancel={handlePictureModalCancel} footer={false}>
                 <Image src={pictureUrl} preview={false}/>
@@ -682,7 +858,7 @@ export default function ConfirmDetail(): React.ReactNode {
                             "required": true,
                             "message":"请输入线路名称"
                         }]}>
-                            <Input/>
+                            <Input  maxLength={50}/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>
@@ -698,7 +874,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                 })
                             }
                         }]}>
-                            <Input/>
+                            <Input  maxLength={50}/>
                         </Form.Item>
                       </Col>
                     </Row>
@@ -708,7 +884,7 @@ export default function ConfirmDetail(): React.ReactNode {
                             "required": true,
                             "message":"请输入塔型"
                         }]}>
-                            <Input/>
+                            <Input  maxLength={50}/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>
@@ -716,7 +892,7 @@ export default function ConfirmDetail(): React.ReactNode {
                             "required": true,
                             "message":"请输入塔型钢印号"
                         }]}>
-                            <Input/>
+                            <Input  maxLength={50}/>
                         </Form.Item>
                       </Col>
                     </Row>
@@ -752,11 +928,11 @@ export default function ConfirmDetail(): React.ReactNode {
                     </Row>
                     <Row>
                       <Col span={12}>
-                        <Form.Item name="basicHight" label="呼高（m）" rules={[{
+                        <Form.Item name="basicHeight" label="呼高（m）" rules={[{
                             "required": true,
                             "message":"请输入呼高（m）"
                         }]}>
-                            <InputNumber precision={4} style={{width:'100%'}} min={0}/>
+                            <InputNumber precision={2} style={{width:'100%'}} min={0} max={99.99}/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>
@@ -764,51 +940,162 @@ export default function ConfirmDetail(): React.ReactNode {
                             "required": true,
                             "message":"请选择模式"
                         }]}>
-                            <Select>
-                                <Select.Option value={1} key={1}>新放</Select.Option>
-                                <Select.Option value={3} key={3}>套用</Select.Option>
-                                <Select.Option value={2} key={2}>重新出卡</Select.Option>
-                            </Select>
+                            <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                              { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                  return <Select.Option key={ index } value={ id }>
+                                      { name }
+                                  </Select.Option>
+                              }) }
+                          </Select>
                         </Form.Item>
                       </Col>
                     </Row>
                     <Row>
                       <Col span={12}>
-                        <Form.Item name="productWeight" label="杆塔重量（kg）" rules={[{
-                            "required": true,
-                            "message":"请输入杆塔重量（kg）"
-                        }]}>
-                            <InputNumber precision={4} style={{width:'100%'}} min={0} onChange={(value:number)=>{
+                        <Form.Item name="legConfigurationA" label="接腿配置A">
+                            <Input style={{width:'100%'}}  maxLength={10}/>
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item name="legConfigurationB" label="接腿配置B">
+                            <Input style={{width:'100%'}}  maxLength={10}/>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>
+                        <Form.Item name="legConfigurationC" label="接腿配置C">
+                            <Input style={{width:'100%'}}  maxLength={10}/>
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item name="legConfigurationD" label="接腿配置D">
+                            <Input style={{width:'100%'}} maxLength={10}/>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>
+                        <Form.Item name="legWeightA" label="接腿重A（kg）" 
+                        // rules={[{
+                        //     "required": true,
+                        //     "message":"请输入接腿重A（kg）"
+                        // }]}
+                        initialValue={0}
+                        >
+                            <InputNumber precision={2} style={{width:'100%'}} min={0}  onChange={(value:number)=>{
+                                const dataA:number = form.getFieldValue('legWeightB')?form.getFieldValue('legWeightB'):0;
+                                const dataB:number = form.getFieldValue('legWeightC')?form.getFieldValue('legWeightC'):0;
+                                const dataC:number = form.getFieldValue('legWeightD')?form.getFieldValue('legWeightD'):0;
+                                const dataD:number = form.getFieldValue('bodyWeight')?form.getFieldValue('bodyWeight'):0;
                                 const data:number = form.getFieldValue('otherWeight')?form.getFieldValue('otherWeight'):0;
                                 form.setFieldsValue({
-                                    totalWeight:data+value
+                                    monomerWeight:dataA+dataB+dataC+dataD+value,
+                                    totalWeight:data+dataA+dataB+dataC+dataD+value
                                 })
-                            }}/>
+                            }} max={999.99}/>
                         </Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item name="otherWeight" label="其他增重（kg）">
-                            <InputNumber precision={4} style={{width:'100%'}} min={0} onChange={(value:number)=>{
-                                const data:number = form.getFieldValue('productWeight')?form.getFieldValue('productWeight'):0;
+                        <Form.Item name="legWeightB" label="接腿重B（kg）" initialValue={0}>
+                            <InputNumber precision={2} style={{width:'100%'}} min={0}  onChange={(value:number)=>{
+                                const dataA:number = form.getFieldValue('legWeightA')?form.getFieldValue('legWeightA'):0;
+                                const dataB:number = form.getFieldValue('legWeightC')?form.getFieldValue('legWeightC'):0;
+                                const dataC:number = form.getFieldValue('legWeightD')?form.getFieldValue('legWeightD'):0;
+                                const dataD:number = form.getFieldValue('bodyWeight')?form.getFieldValue('bodyWeight'):0;
+                                const data:number = form.getFieldValue('otherWeight')?form.getFieldValue('otherWeight'):0;
                                 form.setFieldsValue({
-                                    totalWeight:data+value
+                                    monomerWeight:dataA+dataB+dataC+dataD+value,
+                                    totalWeight:data+dataA+dataB+dataC+dataD+value
                                 })
-                            }}/>
+                            }} max={999.99}/>
                         </Form.Item>
                       </Col>
                     </Row>
                     <Row>
+                      <Col span={12}>
+                        <Form.Item name="legWeightC" label="接腿重C（kg）" initialValue={0}>
+                            <InputNumber precision={2} style={{width:'100%'}} min={0}   onChange={(value:number)=>{
+                                const dataA:number = form.getFieldValue('legWeightA')?form.getFieldValue('legWeightA'):0;
+                                const dataB:number = form.getFieldValue('legWeightB')?form.getFieldValue('legWeightB'):0;
+                                const dataC:number = form.getFieldValue('legWeightD')?form.getFieldValue('legWeightD'):0;
+                                const dataD:number = form.getFieldValue('bodyWeight')?form.getFieldValue('bodyWeight'):0;
+                                const data:number = form.getFieldValue('otherWeight')?form.getFieldValue('otherWeight'):0;
+                                form.setFieldsValue({
+                                    monomerWeight:dataA+dataB+dataC+dataD+value,
+                                    totalWeight:data+dataA+dataB+dataC+dataD+value
+                                })
+                            }} max={999.99}/>
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item name="legWeightD" label="接腿重D（kg）" initialValue={0}>
+                            <InputNumber precision={2} style={{width:'100%'}} min={0}  onChange={(value:number)=>{
+                                const dataA:number = form.getFieldValue('legWeightA')?form.getFieldValue('legWeightA'):0;
+                                const dataB:number = form.getFieldValue('legWeightB')?form.getFieldValue('legWeightB'):0;
+                                const dataC:number = form.getFieldValue('legWeightC')?form.getFieldValue('legWeightC'):0;
+                                const dataD:number = form.getFieldValue('bodyWeight')?form.getFieldValue('bodyWeight'):0;
+                                const data:number = form.getFieldValue('otherWeight')?form.getFieldValue('otherWeight'):0;
+                                form.setFieldsValue({
+                                    monomerWeight:dataA+dataB+dataC+dataD+value,
+                                    totalWeight:data+dataA+dataB+dataC+dataD+value
+                                })
+                            }} max={999.99}/>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>
+                        <Form.Item name="bodyWeight" label="本体重量（kg）" rules={[{
+                            "required": true,
+                            "message":"请输入本体重量（kg）"
+                        }]} initialValue={0}>
+                            <InputNumber precision={2} style={{width:'100%'}} min={0}  onChange={(value:number)=>{
+                                const dataA:number = form.getFieldValue('legWeightA')?form.getFieldValue('legWeightA'):0;
+                                const dataB:number = form.getFieldValue('legWeightB')?form.getFieldValue('legWeightB'):0;
+                                const dataC:number = form.getFieldValue('legWeightC')?form.getFieldValue('legWeightC'):0;
+                                const dataD:number = form.getFieldValue('legWeightD')?form.getFieldValue('legWeightD'):0;
+                                const data:number = form.getFieldValue('otherWeight')?form.getFieldValue('otherWeight'):0;
+                                form.setFieldsValue({
+                                    monomerWeight:dataA+dataB+dataC+dataD+value,
+                                    totalWeight:data+dataA+dataB+dataC+dataD+value
+                                })
+                            }} max={999.99}/>
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item name="monomerWeight" label="单重（kg）" rules={[{
+                            "required": true,
+                            "message":"请输入单重（kg）"
+                        }]} initialValue={0}>
+                            <InputNumber precision={2} style={{width:'100%'}} disabled  max={999.99}/>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>
+                        <Form.Item name="otherWeight" label="其他增重（kg）">
+                            <InputNumber precision={2} style={{width:'100%'}} min={0} onChange={(value:number)=>{
+                                const data:number = form.getFieldValue('monomerWeight')?form.getFieldValue('monomerWeight'):0;
+                                form.setFieldsValue({
+                                    totalWeight:data+value
+                                })
+                            }} max={999.99}/>
+                        </Form.Item>
+                      </Col>
                       <Col span={12}>
                         <Form.Item name="totalWeight" label="总重（kg）" rules={[{
                             "required": true,
                             "message":"请输入总重（kg）"
-                        }]}>
-                            <InputNumber precision={4} style={{width:'100%'}} disabled/>
+                        }]} initialValue={0}>
+                            <InputNumber precision={2} style={{width:'100%'}} disabled />
                         </Form.Item>
                       </Col>
+                    </Row>
+                    <Row>
                       <Col span={12}>
                         <Form.Item name="description" label="备注">
-                            <TextArea rows={1} showCount maxLength={500}/>
+                            <TextArea rows={1} showCount maxLength={400}/>
                         </Form.Item>
                       </Col>
                     </Row>

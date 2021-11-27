@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Spin, Space } from 'antd';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 import { BaseInfo, DetailContent, CommonTable, DetailTitle } from '../../common';
 import { specialInfoData, productInfoData } from './pick.json';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
+import ExportList from '../../../components/export/list';
 
 const towerColumns = [
     { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
@@ -28,6 +29,9 @@ const towerColumns = [
 export default function PickTowerDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ productId: string }>()
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
+    const [isExport, setIsExportStoreList] = useState(false)
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/material/${params.productId}`)
         // const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/material/productId=${params.id}`)
@@ -39,7 +43,23 @@ export default function PickTowerDetail(): React.ReactNode {
             <DetailContent operation={[
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
             ]}>
-                {/* <Button type='primary' onClick={()=>{window.open()}}>导出</Button> */}
+                <Button type='primary' onClick={()=>{setIsExportStoreList(true)}}>导出</Button>
+                {isExport?<ExportList
+                    history={history}
+                    location={location}
+                    match={match}
+                    columnsKey={() => {
+                        let keys = [...towerColumns]
+                        keys.pop()
+                        return keys
+                    }}
+                    current={0}
+                    size={0}
+                    total={0}
+                    url={'/tower-science/assessTask'}
+                    serchObj={{}}
+                    closeExportList={() => { setIsExportStoreList(false) }}
+                />:null}
                 <CommonTable dataSource={detailData} columns={towerColumns} pagination={false}/>
             </DetailContent>
         </Spin>

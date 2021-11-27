@@ -1,8 +1,7 @@
 import React from 'react';
-import { Button, Space, Modal, Input, Image } from 'antd';
-import { DetailContent, CommonTable, Attachment } from '../common';
+import { Button, Modal, Input, Image } from 'antd';
+import { DetailContent, Attachment } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
-import styles from './AssessmentTask.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { FileProps } from '../common/Attachment';
@@ -11,7 +10,7 @@ interface IResponse {
     readonly id?: string;
     readonly assessInfo?: string;
     readonly status?: string;
-    readonly assessFileList?: FileProps[];
+    readonly assessFileVOList?: FileProps[];
 }
 
 export interface AssessmentInformationProps {}
@@ -22,7 +21,7 @@ export interface IAssessmentInformationRouteProps extends RouteComponentProps<As
 export interface AssessmentInformationState {
     readonly visible: boolean;
     readonly description?: string;
-    readonly assessFileList?: FileProps[];
+    readonly assessFileVOList?: FileProps[];
     readonly pictureVisible: boolean;
     readonly pictureUrl?: string;
 }
@@ -46,7 +45,7 @@ class AssessmentInformation extends React.Component<IAssessmentInformationRouteP
         const data: IResponse = await RequestUtil.get<IResponse>(`/tower-science/assessTask/infoDetail/${ this.props.id }`);
         this.setState({
             visible: true,
-            assessFileList: data.assessFileList,
+            assessFileVOList: data.assessFileVOList,
             description: data.assessInfo
         })
     }
@@ -68,36 +67,7 @@ class AssessmentInformation extends React.Component<IAssessmentInformationRouteP
                 <DetailContent>
                     <p>评估描述</p>
                     <Input.TextArea disabled value={ this.state.description } />
-                    <p className={ styles.topPadding }>评估文件</p>
-                    <Attachment dataSource={ this.state.assessFileList || [] } />
-                    {/* <CommonTable columns={[
-                        { 
-                            key: 'name', 
-                            title: '附件', 
-                            dataIndex: 'name',
-                            width: 350 
-                        },
-                        { 
-                            key: 'operation', 
-                            title: '操作', 
-                            dataIndex: 'operation', 
-                            render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                                <Space direction="horizontal" size="small">
-                                    <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
-                                    {
-                                        record.fileSuffix === 'pdf' 
-                                        ? 
-                                        <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> : ['jpg', 'jpeg', 'png', 'gif'].includes(record.fileSuffix) 
-                                        ? 
-                                        <Button type='link' onClick={ () => { this.setState({ pictureUrl: record.id ? record.filePath : record.link, pictureVisible: true }) } }>预览</Button> 
-                                        : null 
-                                    }
-                                </Space>
-                        ) }
-                    ]}
-                        dataSource={ this.state.assessFileList }
-                        pagination={ false }
-                    /> */}
+                    <Attachment title="评估文件" dataSource={ this.state.assessFileVOList || [] } />
                 </DetailContent>
             </Modal>
             <Modal visible={ this.state.pictureVisible } onCancel={ () => {

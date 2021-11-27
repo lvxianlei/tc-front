@@ -10,7 +10,7 @@ import styles from './SetOut.module.less';
 
 export default function PickCheckList(): React.ReactNode {
     const [form] = Form.useForm();
-    const params = useParams<{ productSegmentId: string, id: string, materialLeaderId: string,status: string}>();
+    const params = useParams<{ productSegmentId: string, id: string, materialLeaderId: string,status: string, materialLeader: string}>();
     const history = useHistory();
     const [ visible, setVisible ] = useState(false);
     const [ refresh, setRefresh] = useState(false);
@@ -21,13 +21,14 @@ export default function PickCheckList(): React.ReactNode {
    
     const columns = [
         { title: '序号', dataIndex: 'index', key: 'index', editable: true, render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
-        { title: '段名', dataIndex: 'segmentName', key: 'segmentName', editable: false},
+        { title: '段号', dataIndex: 'segmentName', key: 'segmentName', editable: false},
+        { title: '模式', dataIndex: 'patternName', key: 'patternName', editable: false},
         { title: '构件编号', dataIndex: 'code', key: 'code',editable: true },
         { title: '材料名称', dataIndex: 'materialName', key: 'materialName', editable: true },
         { title: '材质', dataIndex: 'structureTexture', key: 'structureTexture', editable: true },
         { title: '规格', dataIndex: 'structureSpec', key: 'structureSpec', editable: true },
-        { title: '宽度（mm）', dataIndex: 'width', key: 'width', editable: true },
-        { title: '厚度（mm）', dataIndex: 'thickness', key: 'thickness', editable: true },
+        // { title: '宽度（mm）', dataIndex: 'width', key: 'width', editable: true },
+        // { title: '厚度（mm）', dataIndex: 'thickness', key: 'thickness', editable: true },
         { title: '长度（mm）', dataIndex: 'length', key: 'length', editable: true },
         { title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum', editable: true },
         { title: '理算重量（kg）', dataIndex: 'basicsTheoryWeight', key: 'basicsTheoryWeight', editable: false },
@@ -102,7 +103,7 @@ export default function PickCheckList(): React.ReactNode {
                                 await RequestUtil.post(`/tower-science/drawProductStructure/completed/check?productSegmentId=${params.productSegmentId}`).then(()=>{
                                     message.success('校核成功！')
                                 }).then(()=>{
-                                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}`)
+                                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`)
                                 })
                             } }
                             okText="确认"
@@ -110,7 +111,7 @@ export default function PickCheckList(): React.ReactNode {
                         > 
                             <Button type='primary' ghost >完成校核</Button>
                         </Popconfirm>
-                        <Button type='primary' ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}`)}}>返回上一级</Button>
+                        <Button type='primary' ghost onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`)}}>返回上一级</Button>
                     </Space>
                 }
                 searchFormItems={[
@@ -122,6 +123,11 @@ export default function PickCheckList(): React.ReactNode {
                     {
                         name: 'structureTexture',
                         label: '材质',
+                        children: <Input  maxLength={200} />
+                    },
+                    {
+                        name: 'partName',
+                        label: '段号',
                         children: <Input  maxLength={200} />
                     },
                 ]}

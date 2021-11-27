@@ -112,6 +112,12 @@ export default function SetOutTaskList(): React.ReactNode {
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                     <Link to={ `/setOutTask/setOutTaskDetail/${ record.id }` }>任务详情</Link>
                     {
+                        record.status === 3 || record.status === 4 || record.status === 5 ? 
+                        <Deliverables id={ record.id }/>
+                        : 
+                        <Button type="link" disabled>交付物</Button>
+                    }
+                    {
                         record.status === 4 ? 
                         <Popconfirm
                             title="确认提交?"
@@ -128,12 +134,6 @@ export default function SetOutTaskList(): React.ReactNode {
                         : 
                         <Button type="link" disabled>提交任务</Button>
                     }
-                    {
-                        record.status === 4 || record.status === 5 ? 
-                        <Deliverables id={ record.id }/>
-                        : 
-                        <Button type="link" disabled>交付物</Button>
-                    }
                 </Space>
             )
         }
@@ -144,7 +144,7 @@ export default function SetOutTaskList(): React.ReactNode {
         columns={ columns }
         headTabs={ [] }
         requestData={ { status: location.state } }
-        // extraOperation={ <Button type="primary" ghost>导出</Button> }
+        exportPath={`/tower-science/loftingTask/exportLoftingTask`}
         refresh={ refresh }
         searchFormItems={ [
             {
@@ -168,11 +168,6 @@ export default function SetOutTaskList(): React.ReactNode {
                 </Form.Item>
             },
             {
-                name: 'plannedDeliveryTime',
-                label: '计划交付时间',
-                children: <DatePicker.RangePicker />
-            },
-            {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
                 children: <Input placeholder="放样任务编号/任务单编号/订单编号/内部合同编号"/>
@@ -184,11 +179,6 @@ export default function SetOutTaskList(): React.ReactNode {
                 const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
                 values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                 values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
-            }
-            if(values.plannedDeliveryTime) {
-                const formatDate = values.plannedDeliveryTime.map((item: any) => item.format("YYYY-MM-DD"));
-                values.plannedDeliveryTimeStart = formatDate[0] + ' 00:00:00';
-                values.plannedDeliveryTimeEnd = formatDate[1] + ' 23:59:59';
             }
             setFilterValue(values);
             return values;

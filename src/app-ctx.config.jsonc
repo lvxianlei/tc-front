@@ -450,6 +450,11 @@
                                 "label": "缺料列表",
                                 "path": "/workMngt/shortageList",
                                 "authority": "approvalm"
+                            },
+                            {
+                                "label": "样板列表",
+                                "path": "/workMngt/templateList",
+                                "authority": "approvalm"
                             }
                         ]
                     },

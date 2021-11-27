@@ -4,6 +4,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { CommonTable, Page } from '../../common';
 import { downloadTemplate } from '../setOut/downloadTemplate';
+import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 
 export default function PickList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
@@ -63,27 +64,10 @@ export default function PickList(): React.ReactNode {
             dataIndex: 'plannedDeliveryTime'
         },
         {
-            key: 'pattern',
+            key: 'patternName',
             title: '模式',
             width: 100,
-            dataIndex: 'pattern',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                  {
-                    value: 1,
-                    label: "新放"
-                  },
-                  {
-                    value: 2,
-                    label: "重新出卡"
-                  },
-                  {
-                    value: 3,
-                    label: "套用"
-                  },
-                ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            dataIndex: 'patternName',
         },
         {
             key: 'materialLeaderName',
@@ -118,10 +102,10 @@ export default function PickList(): React.ReactNode {
                       value: 4,
                       label: "已完成"
                     },
-                    {
-                      value: 5,
-                      label: "已提交"
-                    },
+                    // {
+                    //   value: 5,
+                    //   label: "已提交"
+                    // },
                 ]
                 return <>{renderEnum.find((item: any) => item.value === value).label}</>
             }
@@ -141,9 +125,9 @@ export default function PickList(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickMessage/${record.id}`)}}>提料信息</Button>
-                    <Button type='link' onClick={() =>{history.push({pathname:`/workMngt/pickList/pickTowerMessage/${record.id}/${record.status}`,state: record.materialLeader})}} disabled={record.status!==1&&record.status!==2}>塔型信息</Button>
+                    <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTowerMessage/${record.id}/${record.status}/${record.materialLeader}`)}} disabled={record.status!==1&&record.status!==2}>塔型信息</Button>
                     <Button type='link' onClick={() =>{history.push(`/workMngt/pickList/pickTower/${record.id}`)}} disabled={record.status!==3}>杆塔配段</Button>
-                    <Button type='link' onClick={() =>{setTaskId(record.id); setVisible(true)}} disabled={record.status<4} >交付物</Button>
+                    <Button type='link' onClick={() =>{setTaskId(record.id); setVisible(true)}} disabled={record.status<3} >交付物</Button>
                 </Space>
             )
         }
@@ -210,7 +194,6 @@ export default function PickList(): React.ReactNode {
             </Modal>
             <Page
                 path="/tower-science/materialTask"
-                // path="/tower-market/bidInfo"
                 columns={columns}
                 filterValue={filterValue}
                 onFilterSubmit={onFilterSubmit}
@@ -232,23 +215,24 @@ export default function PickList(): React.ReactNode {
                                 <Select.Option value={2} key={2}>提料中</Select.Option>
                                 <Select.Option value={3} key={3}>配段中</Select.Option>
                                 <Select.Option value={4} key={4}>已完成</Select.Option>
-                                <Select.Option value={5} key={5}>已提交</Select.Option>
+                                {/* <Select.Option value={5} key={5}>已提交</Select.Option> */}
                             </Select>
                         </Form.Item>
                     },
-                    {
-                        name: 'planTime',
-                        label:'计划交付时间',
-                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                    },
+                    // {
+                    //     name: 'planTime',
+                    //     label:'计划交付时间',
+                    //     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    // },
                     {
                         name: 'pattern',
                         label: '模式',
-                        children: <Select style={{width:'100px'}}>
-                            <Select.Option value={''} key ={''}>全部</Select.Option>
-                            <Select.Option value={1} key={1}>新放</Select.Option>
-                            <Select.Option value={2} key={2}>重新出卡</Select.Option>
-                            <Select.Option value={3} key={3}>套用</Select.Option>
+                        children: <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                            { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                return <Select.Option key={ index } value={ id }>
+                                    { name }
+                                </Select.Option>
+                            }) }
                         </Select>
                     },
                     {

@@ -901,7 +901,7 @@
     },
     { // 工作管理-提料-塔型信息
       "name": "塔型信息",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/:status",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader",
       "module": "./pages/workMngt/pickList/PickTowerMessage",
       "exact": true,
       // "authority": "product_material_list"
@@ -909,7 +909,7 @@
     },
     { // 工作管理-提料-塔型信息-提料
       "name": "提料",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader/pick/:productSegmentId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Pick",
       "exact": true,
       // "authority": "product_material_list"
@@ -917,7 +917,7 @@
     },
     { // 工作管理-提料-塔型信息-提料-放样塔型套用
       "name": "放样塔型套用",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId/setOutApply",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader/pick/:productSegmentId/setOutApply",
       "module": "./pages/workMngt/pickList/pickTowerMessage/SetOutApply",
       "exact": true,
       // "authority": "product_material_list"
@@ -925,7 +925,7 @@
     },
     { // 工作管理-提料-塔型信息-提料-图形塔型套用
       "name": "图形塔型套用",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId/drawApply",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader/pick/:productSegmentId/drawApply",
       "module": "./pages/workMngt/pickList/pickTowerMessage/DrawApply",
       "exact": true,
       // "authority": "product_material_list"
@@ -933,7 +933,7 @@
     },
     { // 工作管理-提料-塔型信息-提料-识别
       "name": "识别",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/pick/:productSegmentId/recognize",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader/pick/:productSegmentId/recognize",
       "module": "./pages/workMngt/pickList/pickTowerMessage/ImageRecognize",
       "exact": true,
       // "authority": "product_material_list"
@@ -941,7 +941,7 @@
     },
     { // 工作管理-提料-塔型信息-校核
       "name": "校核",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/check/:productSegmentId/:materialLeaderId",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader/check/:productSegmentId/:materialLeaderId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Check",
       "exact": true,
       // "authority": "product_material_list"
@@ -949,7 +949,7 @@
     },
     { // 工作管理-提料-塔型信息-明细
       "name": "明细",
-      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/detail/:productSegmentId",
+      "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader/detail/:productSegmentId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Detail",
       "exact": true,
       // "authority": "product_material_list"
@@ -1063,6 +1063,20 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 工作管理-样板列表
+      "name": "样板列表",
+      "path": "/workMngt/templateList",
+      "module": "./pages/workMngt/templateList/templateList",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作管理-样板列表
+      "name": "样板列表-详情",
+      "path": "/workMngt/templateList/:id/:productCategoryId",
+      "module": "./pages/workMngt/templateList/detail",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 放样任务
       "name": "放样任务",
       "path": "/setOutTask",
@@ -1141,9 +1155,25 @@
       // "authority": "rd_package_structure_detail_list"
       "authority": "approvalm"
     },
+    { // 工作管理-塔型信息-模型
+      "name": "模型",
+      "path": "/workMngt/setOutList/towerInformation/:id/modalList",
+      "module": "./pages/workMngt/setOut/ModelList",
+      "exact": true,
+      // "authority": "rd_product_nc_page"
+      "authority": "approvalm"
+    },
+    { // 工作管理-塔型信息-大样图工艺卡
+      "name": "大样图工艺卡",
+      "path": "/workMngt/setOutList/towerInformation/:id/processCardList",
+      "module": "./pages/workMngt/setOut/ProcessCardList",
+      "exact": true,
+      // "authority": "rd_product_nc_page"
+      "authority": "approvalm"
+    },
     { // 工作管理-塔型信息-NC程序
       "name": "NC程序",
-      "path": "/workMngt/setOutList/towerInformation/:id/NCProgram/:productSegmentId",
+      "path": "/workMngt/setOutList/towerInformation/:id/NCProgram",
       "module": "./pages/workMngt/setOut/NCProgram",
       "exact": true,
       // "authority": "rd_product_nc_page"
@@ -1280,6 +1310,14 @@
     { // 工作管理-螺栓列表-螺栓清单
       "name": "螺栓清单",
       "path": "/workMngt/boltList/boltListing/:id",
+      "module": "./pages/workMngt/bolt/BoltDetailList",
+      "exact": true,
+      // "authority": "rd_bolt_management"
+      "authority": "approvalm"
+    },
+    { // 工作管理-螺栓列表-螺栓清单
+      "name": "螺栓明细",
+      "path": "/workMngt/boltList/boltListing/:boltId/:id",
       "module": "./pages/workMngt/bolt/BoltListing",
       "exact": true,
       // "authority": "rd_bolt_management"
@@ -1288,6 +1326,14 @@
     { // 工作管理-螺栓列表-校核
       "name": "校核",
       "path": "/workMngt/boltList/boltCheck/:id",
+      "module": "./pages/workMngt/bolt/check",
+      "exact": true,
+      // "authority": "rd_bolt_management"
+      "authority": "approvalm"
+    },
+    { // 工作管理-螺栓列表-校核-螺栓清单
+      "name": "螺栓明细",
+      "path": "/workMngt/boltList/boltCheck/:boltId/:id",
       "module": "./pages/workMngt/bolt/BoltCheck",
       "exact": true,
       // "authority": "rd_bolt_management"
@@ -1313,6 +1359,14 @@
       "name": "小样图",
       "path": "/workMngt/sampleDrawList/sampleDraw/:id/:status",
       "module": "./pages/workMngt/sampleDrawList/SampleDraw",
+      "exact": true,
+      // "authority": "rd_small_sample_management"
+      "authority": "approvalm"
+    },
+    { // 工作管理-小样图
+      "name": "小样图下载",
+      "path": "/workMngt/sampleDrawList/sampleDraw/:id/:status/downLoad",
+      "module": "./pages/workMngt/sampleDrawList/DownLoadSampleDraw",
       "exact": true,
       // "authority": "rd_small_sample_management"
       "authority": "approvalm"

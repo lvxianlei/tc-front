@@ -142,10 +142,10 @@ export default function PickTower(): React.ReactNode {
                         value: 3,
                         label: "已完成"
                     },
-                    {
-                        value: 4,
-                        label: "已提交"
-                    }
+                    // {
+                    //     value: 4,
+                    //     label: "已提交"
+                    // }
                 ]
                 return <>{value&&value!==-1?renderEnum.find((item: any) => item.value === value).label:null}</>
             }
@@ -326,7 +326,7 @@ export default function PickTower(): React.ReactNode {
                             <Select.Option value={1} key={1}>待开始</Select.Option>
                             <Select.Option value={2} key={2}>配段中</Select.Option>
                             <Select.Option value={3} key={3}>已完成</Select.Option>
-                            <Select.Option value={4} key={4}>已提交</Select.Option>
+                            {/* <Select.Option value={4} key={4}>已提交</Select.Option> */}
                         </Select>
                     },
                     {
