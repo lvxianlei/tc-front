@@ -1778,6 +1778,13 @@
       "authority": "approvalm"
     },
     // 通用
+    { // 首页-个人中心
+      "name": "个人中心",
+      "path": "/homePage/personalCenter",
+      "module": "./pages/homePage/personalCenter/PersonalCenter",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 公告管理
       "name": "公告管理",
       "path": "/announcement",
