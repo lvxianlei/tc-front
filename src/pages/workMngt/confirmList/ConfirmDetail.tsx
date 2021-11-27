@@ -534,6 +534,8 @@ export default function ConfirmDetail(): React.ReactNode {
     }
     const handleModalCancel = () => {setVisible(false);form.resetFields();}
     const handlePictureModalCancel = () => {setPictureVisible(false)}
+    const [urlVisible, setUrlVisible] = useState<boolean>(false);
+    const [url, setUrl] = useState<string>('');
     const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
     const params = useParams<{ id: string, status: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
@@ -738,14 +740,29 @@ export default function ConfirmDetail(): React.ReactNode {
                             }
                             data={ { drawTaskId: params.id } }
                             showUploadList={ false }
-                            onChange={ (info) => {
+                            onChange={ async (info) => {
                                 if(info.file.response && !info.file.response?.success) {
                                     message.warning(info.file.response?.msg)
                                 }
                                 if(info.file.response && info.file.response?.success){
                                     message.success('导入成功！');
-                                    console.log(info.file.response)
-                                    // setTableDataSource(info.file.response.data)
+                                    if (info.file.response && info.file.response?.success) {
+                                      if (info.file.response?.data) {
+                                          setUrl(info.file.response?.data);
+                                          setUrlVisible(true);
+                                      } else {
+                                          message.success('导入成功！');
+                                          const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
+                                          setTableDataSource(data?.drawProductDetailList.map(( item:any ,index: number )=>{return{ ...item, key: index.toString(),index: index }}));
+                                          setAttachInfo([...data.fileVOList]);
+                                          setDescription(data?.description);
+                                          let totalNumber = '0';
+                                          data?.drawProductDetailList.forEach((item:any)=>{
+                                            totalNumber = (parseFloat(item.totalWeight)+parseFloat(totalNumber)).toFixed(2)
+                                          })
+                                          setWeight(totalNumber);
+                                      }
+                                  }
                                 } 
                             } }
                         >
@@ -755,6 +772,18 @@ export default function ConfirmDetail(): React.ReactNode {
                         {params.status==='3'?<Button type='primary' ghost onClick={() => setVisible(true)}>添加</Button>:null}
                     </Space>
                 </div>
+                <Modal
+                    visible={urlVisible}
+                    onOk={() => {
+                        window.open(url);
+                        setUrlVisible(false);
+                    }}
+                    onCancel={() => { setUrlVisible(false); setUrl('') }}
+                    title='提示'
+                    okText='下载'
+                >
+                    当前存在错误数据，请重新下载上传！
+                </Modal>
                 <Form form={formRef} component={false}>
                     <Table
                       components={{

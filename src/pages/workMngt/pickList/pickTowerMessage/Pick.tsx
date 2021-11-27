@@ -384,7 +384,7 @@ export default function Lofting(): React.ReactNode {
                                 if(info.file.response && !info.file.response?.success) {
                                     message.warning(info.file.response?.msg)
                                 }else if(info.file.response && info.file.response?.success){
-                                    if(Object.keys(info.file.response?.data).length > 0){
+                                    if(info.file.response?.data){
                                         setUrl(info.file.response?.data);
                                         setVisible(true);
                                     }else{

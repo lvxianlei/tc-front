@@ -156,15 +156,15 @@ export default function SampleDraw(): React.ReactNode {
                     <Space>
                     {/* <Button type="primary">导出</Button> */}
                     {params.status==='2'?<Upload
-                        accept="zip"
+                        accept=".zip,.rar,.7z"
                         multiple={true}
-                        action={`${process.env.REQUEST_API_PATH_PREFIX}/tower-science/smallSample/sampleUploadByZip`}
+                        action={`${process.env.REQUEST_API_PATH_PREFIX}/tower-science/smallSample/sampleUploadByZip/${params.id}`}
                         headers={{
                             'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
                             'Tenant-Id': AuthUtil.getTenantId(),
                             'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
                         }}
-                        data={ { productCategoryId:params.id } }
+                        // data={ { productCategoryId:params.id } }
                         onChange={uploadChange}
                         showUploadList={false}
                     ><Button type="primary" >导入</Button></Upload>:null}

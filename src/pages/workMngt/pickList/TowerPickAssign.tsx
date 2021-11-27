@@ -458,13 +458,14 @@ export interface TowerPickAssignState {
 
 interface IAppointed {
     readonly productCategoryName?: string;
+    readonly productCategory?: string;
     readonly productCategoryId?: string;
     readonly pattern?: string | number;
     readonly sectionNum?: number;
     readonly name?: string;
-    readonly materialLeaderDepartment?: string;
+    readonly materialLeaderDepartment?: string | any;
     readonly materialLeader?: string;
-    readonly materialCheckLeaderDepartment?: string;
+    readonly materialCheckLeaderDepartment?: string | any;
     readonly materialCheckLeader?: string;
     readonly plannedDeliveryTime?: string;
 }
@@ -515,6 +516,10 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
         })
         
         this.getForm()?.setFieldsValue({ ...data, plannedDeliveryTime: this.props.type==='message'?moment(data.plannedDeliveryTime):''});
+        if(this.props.type==='message'&& data?.materialCheckLeaderDepartment && data.materialLeaderDepartment){
+            this.onDepartmentChange(data.materialCheckLeaderDepartment, "校核人");
+            this.onDepartmentChange(data.materialLeaderDepartment,"提料人");
+        }
     }
     
     /**
@@ -530,7 +535,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                 values = {
                     ...values,
                     plannedDeliveryTime: values?.plannedDeliveryTime && values?.plannedDeliveryTime.format('YYYY-MM-DD') + ' 00:00:00',
-                    productCategoryId: this.state.appointed?.productCategoryId,
+                    productCategory: this.state.appointed?.productCategory || this.state.appointed?.productCategoryId,
                     productCategoryName: this.state.appointed?.productCategoryName,
                     pattern: this.state.appointed?.pattern,
                     materialLeader: values.materialLeader.split('-')[0],
@@ -565,8 +570,9 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                     materialCheckLeader: ''
                 }
             })
+            this.getForm()?.setFieldsValue({ materialCheckLeader:'' })
         }
-        else{
+        else if(title === '提料'){
             this.setState({
                 user: userData.records,
                 appointed: {
@@ -574,8 +580,18 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                     materialLeader: ''
                 }
             })
+            this.getForm()?.setFieldsValue({ materialLeader:'' })
+        }else if(title === '提料人'){
+            this.setState({
+                user: userData.records,
+            })
+            this.getForm()?.setFieldsValue({ ...appointed })
+        }if(title === '校核人'){
+            this.setState({
+                materialCheckLeader: userData.records,
+            })
+            this.getForm()?.setFieldsValue({ ...appointed })
         }
-        this.getForm()?.setFieldsValue({ ...appointed })
     }
 
     public wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
@@ -660,7 +676,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                         required: true,
                                         message: '请选择部门'
                                     }]} style={ { width: '50%', display: 'inline-block' } }>
-                                    <TreeSelect placeholder="请选择" style={{width:'120px'}} onChange={ (value: any) => { this.onDepartmentChange(value,'放样') } } className={ styles.width200 }>
+                                    <TreeSelect placeholder="请选择" style={{width:'120px'}} onChange={ (value: any) => { this.onDepartmentChange(value,'提料') } } className={ styles.width200 }>
                                         { this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
                                     </TreeSelect>
                                 </Form.Item>
@@ -671,7 +687,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                     }]} style={ { width: '50%', display: 'inline-block' } }>
                                     <Select placeholder="请选择" style={{width:'120px'}}>
                                         { this.state?.user && this.state.user.map((item: any) => {
-                                            return <Select.Option key={ item.id } value={ item.id + '-' + item.name }>{ item.name }</Select.Option>
+                                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
                                         }) }
                                     </Select>
                                 </Form.Item>
@@ -693,7 +709,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                     }]} style={ { width: '50%', display: 'inline-block' } }>
                                     <Select placeholder="请选择" style={{width:'120px'}}>
                                         { this.state?.materialCheckLeader && this.state.materialCheckLeader.map((item: any) => {
-                                            return <Select.Option key={ item.id } value={ item.id + '-' + item.name }>{ item.name }</Select.Option>
+                                            return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
                                         }) }
                                     </Select>
                                 </Form.Item>

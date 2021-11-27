@@ -50,10 +50,10 @@ export default function PickTowerMessage(): React.ReactNode {
             dataIndex: 'name'
         },
         {
-            key: 'patternName',
+            key: 'pattern',
             title: '段模式',
             width: 100,
-            dataIndex: 'patternName'
+            dataIndex: 'pattern'
         },
         // {
         //     key: 'name',
@@ -228,12 +228,12 @@ export default function PickTowerMessage(): React.ReactNode {
                     id: item.id===-1?'':item.id,
                 }
             });
-            const saveData={
-                productCategoryId: params.id,
-                // productId: productId,
-                productSegmentListDTOList: saveTableData
-            }
-            RequestUtil.post(`/tower-science/product/material/segment/save`,saveData).then(()=>{
+            // const saveData={
+            //     productCategoryId: params.id,
+            //     // productId: productId,
+            //     productSegmentListDTOList: saveTableData
+            // }
+            RequestUtil.post(`/tower-science/drawProductSegment/pattern/submit`,saveTableData).then(()=>{
                 message.success('保存成功！');
                 setVisible(false);
                 // setProductId('');

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Button, Form, Select, message } from 'antd';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
 import { Popconfirm } from 'antd';
@@ -15,6 +15,7 @@ export default function SampleDrawList(): React.ReactNode {
     const location = useLocation<{ state: {} }>();
     const [ selectedKeys, setSelectedKeys ] = useState<React.Key[]>([]);
     const [ selectedRows, setSelectedRows ] = useState<any[]>([]);
+    const params = useParams<{ id: string, status: string }>()
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
@@ -78,6 +79,7 @@ export default function SampleDrawList(): React.ReactNode {
                     onChange: SelectChange
                 }
             }}
+            exportPath={`/tower-science/productSegment/exportSample/${params.id}`}
             extraOperation={
                 <Space>
                 {/* <Button type="primary">导出</Button> */}
