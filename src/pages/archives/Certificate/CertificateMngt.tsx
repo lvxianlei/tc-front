@@ -26,6 +26,8 @@ export interface ICertificate {
     readonly staffName?: string;
     readonly startDate?: string | moment.Moment;
     readonly updateTime?: string;
+    readonly effective?: string;
+    readonly businessRecordVOList?: []
 }
 
 enum recordState {
