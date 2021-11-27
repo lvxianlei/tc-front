@@ -143,7 +143,12 @@ export default function StaffNew(): React.ReactNode {
             dataIndex: 'number',
             width: 150,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={ ["list", index, "number"] } key={ index } initialValue={ _ }>
+                <Form.Item name={ ["list", index, "number"] } key={ index } initialValue={ _ } rules={[
+                    {
+                        pattern: /^[0-9]*$/,
+                        message: '仅可输入数字',
+                    }
+                ]}>
                     <Input maxLength={ 50 }/>
                 </Form.Item>
             )  
