@@ -13,6 +13,15 @@ import { Link, useHistory, useLocation, useParams, useRouteMatch } from 'react-r
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import ExportList from '../../../components/export/list';
+import { IBundle, IPackingList } from './PackingListNew';
+
+interface IResponseData {
+    readonly id: number;
+    readonly size: number;
+    readonly current: number;
+    readonly total: number;
+    readonly records: [];
+}
 
 export default function PackingList(): React.ReactNode {
     const columns = [
@@ -31,28 +40,28 @@ export default function PackingList(): React.ReactNode {
             dataIndex: 'balesCode'
         },
         {
-            key: 'structureCodes',
+            key: 'balesCount',
             title: '捆件数',
-            dataIndex: 'structureCodes',
+            dataIndex: 'balesCount',
             width: 120
         },
         {
-            key: 'structureCodes',
+            key: 'weightCount',
             title: '包重量（吨）',
-            dataIndex: 'structureCodes',
+            dataIndex: 'weightCount',
             width: 120
         },
         {
-            key: 'description',
+            key: 'createUserName',
             title: '创建人',
             width: 200,
-            dataIndex: 'description'
+            dataIndex: 'createUserName'
         },
         {
-            key: 'description',
+            key: 'createTime',
             title: '创建时间',
             width: 200,
-            dataIndex: 'description'
+            dataIndex: 'createTime'
         },
         {
             key: 'operation',
@@ -92,22 +101,22 @@ export default function PackingList(): React.ReactNode {
             dataIndex: 'balesCode'
         },
         {
-            key: 'structureCodes',
+            key: 'materialSpec',
             title: '材料规格',
-            dataIndex: 'structureCodes',
+            dataIndex: 'materialSpec',
             width: 120
         },
         {
-            key: 'structureCodes',
+            key: 'length',
             title: '长度',
-            dataIndex: 'structureCodes',
+            dataIndex: 'length',
             width: 120
         },
         {
-            key: 'description',
+            key: 'num',
             title: '数量',
             width: 200,
-            dataIndex: 'description'
+            dataIndex: 'num'
         },
         {
             key: 'description',
@@ -122,7 +131,7 @@ export default function PackingList(): React.ReactNode {
     const match = useRouteMatch();
     const location = useLocation();
     const [ isExport, setIsExport ] = useState(false);
-    const [ bundleData, setBundleData ] = useState([]);
+    const [ bundleData, setBundleData ] = useState<IBundle[]>([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get(`/tower-science/packageStructure/list`, { productId: params.productId })
         resole(data)
@@ -136,8 +145,8 @@ export default function PackingList(): React.ReactNode {
     }
 
     const getBundleData = async (id: string) => {
-        const resData: [] = await RequestUtil.get(`/tower-science/welding/getStructureById`, { segmentId: id });
-        setBundleData([...resData]);
+        const resData: IPackingList = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${ id }`);
+        setBundleData([...(resData.packageRecordVOList || [])]);
     }
     
     return <>

@@ -13,7 +13,7 @@ import styles from './SetOut.module.less';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 
-interface IBundle {
+export interface IBundle {
     readonly id?: string;
     readonly towerStructureId?: string;
     readonly productCategoryId?: string;
@@ -33,7 +33,7 @@ interface IBundle {
     readonly basicsWeight?: number;
 }
 
-interface IPackingList {
+export interface IPackingList {
     readonly balesCode?: string;
     readonly productCategoryId?: string;
     readonly productCategoryName?: string;
