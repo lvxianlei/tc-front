@@ -64,7 +64,7 @@ export default function ProcessCardList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                     <Button type="link" onClick={ async ()  => {
-                        const data: FileProps = await RequestUtil.get(`/tower-science/productSegment/segmentDrawDownload?productSegmentId=${ record.id }`);
+                        const data: FileProps = await RequestUtil.get(`/tower-science/productSegment/segmentModelDownload?segmentRecordId=${ record.id }`);
                         window.open(data?.downloadUrl)
                     }}>下载</Button>
                     <Button type="link" onClick={ () => {
