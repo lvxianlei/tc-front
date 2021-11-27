@@ -130,37 +130,7 @@ export default function AssemblyWeldingInformation(): React.ReactNode {
             <BaseInfo columns={ specialColums } dataSource={ detailData } col={ 2 } />
             <DetailTitle title="产品信息" />
             <BaseInfo columns={ productColumns } dataSource={ detailData } col={ 2 } />
-            <DetailTitle title="相关附件" />
             <Attachment dataSource={ detailData.attachInfoList || [] } />
-            {/* <CommonTable columns={[
-                { 
-                    key: 'name', 
-                    title: '附件名称', 
-                    dataIndex: 'name',
-                    width: 250
-                },
-                { 
-                    key: 'operation', 
-                    title: '操作', 
-                    dataIndex: 'operation', 
-                    render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                        <Space direction="horizontal" size="small">
-                            <Button type="link" onClick={ () => window.open(record.filePath) }>下载</Button>
-                            {
-                                record.fileSuffix === 'pdf' 
-                                ? 
-                                <Button type="link" onClick={ () => window.open(record.filePath) }>预览</Button> 
-                                : ['jpg', 'jpeg', 'png', 'gif'].includes(record.fileSuffix) 
-                                ? 
-                                <Button type='link' onClick={ () => { setPictureUrl(record.filePath); setPictureVisible(true) } }>预览</Button> 
-                                : null 
-                            }
-                        </Space>
-                ) }
-            ]}
-                dataSource={ detailData.attachInfoList }
-                pagination={ false }
-            /> */}
             <DetailTitle title="操作信息"/>
             <CommonTable columns={ tableColumns } dataSource={ detailData.statusRecordList } pagination={ false } />
         </DetailContent>

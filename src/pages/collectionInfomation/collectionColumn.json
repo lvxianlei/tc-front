@@ -1,0 +1,227 @@
+{
+    "collectionListHead": [
+        {
+            "title": "来款单位名称",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "来款方式",
+            "dataIndex": "payTypeName"
+        },
+        {
+            "title": "来款性质",
+            "dataIndex": "payCategoryName"
+        },
+        {
+            "title": "来款金额",
+            "dataIndex": "payMoney"
+        },
+        {
+            "title": "来款日期",
+            "dataIndex": "payTime"
+        },
+        {
+            "title": "币种",
+            "dataIndex": "currencyTypeName"
+        },
+        {
+            "title": "汇率（%）",
+            "dataIndex": "exchangeRate"
+        },
+        {
+            "title": "外币金额",
+            "dataIndex": "abroadMoney"
+        },
+        {
+            "title": "收款银行",
+            "dataIndex": "payBank"
+        },
+        {
+            "title": "确认方",
+            "dataIndex": "confirmer"
+        },
+        {
+            "title": "确认状态",
+            "dataIndex": "confirmStatus"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        }
+    ],
+    "approvalStatus": [
+        {
+            "label": "待确认",
+            "value": 1
+        },
+        {
+            "label": "已确认",
+            "value": 2
+        }
+    ],
+    "baseColums": [
+        {
+            "dataIndex": "payCompany",
+            "title": "来款单位名称",
+            "placeholder": "请输入单位名称",
+            "maxLength": 100,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入来款单位名称"
+                }
+            ]
+        },
+        {
+            "dataIndex": "payType",
+            "title": "来款方式",
+            "type": "select",
+            "placeholder": "请选择来款方式",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择来款方式"
+                }
+            ]
+        },
+        {
+            "dataIndex": "payCategory",
+            "title": "来款性质",
+            "type": "select",
+            "placeholder": "请选择来款性质",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择来款性质"
+                }
+            ]
+        },
+        {
+            "dataIndex": "payMoney",
+            "title": "来款金额",
+            "placeholder": "请输入来款金额",
+            "maxLength": 18,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入来款金额"
+                }
+            ]
+        },
+        {
+            "dataIndex": "payTime",
+            "title": "来款日期",
+            "type": "date",
+            "placeholder": "请选择来款日期",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择来款日期"
+                }
+            ]
+        },
+        {
+            "dataIndex": "currencyType",
+            "title": "币种",
+            "type": "select",
+            "placeholder": "请选择币种",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择币种"
+                }
+            ]
+        },
+        {
+            "dataIndex": "exchangeRate",
+            "title": "汇率",
+            "placeholder": "请输入汇率",
+            "disabled": true
+        },
+        {
+            "dataIndex": "abroadMoney",
+            "title": "外币金额",
+            "placeholder": "请输入外币金额",
+            "maxLength": 13,
+            "disabled": true
+        },
+        {
+            "dataIndex": "payBank",
+            "title": "收款银行",
+            "maxLength": 100,
+            "placeholder": "请输入收款银行"
+        },
+        {
+            "dataIndex": "confirmer",
+            "title": "确认方",
+            "type": "select",
+            "placeholder": "请选择确认方",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择确认方"
+                }
+            ],
+            "enum": [
+                {
+                    "value": "营销部",
+                    "label": "营销部"
+                },
+                {
+                    "value": "人资部",
+                    "label": "人资部"
+                }
+            ]
+        },
+        {
+            "dataIndex": "description",
+            "title": "备注",
+            "type": "textarea",
+            "maxLength": 400,
+            "placeholder": "请输入备注"
+        }
+    ],
+    "overViewColunms": [
+        {
+            "title": "来款单位名称",
+            "dataIndex": "payCompany"
+        },
+        {
+            "title": "来款方式",
+            "dataIndex": "payTypeName"
+        },
+        {
+            "title": "来款性质",
+            "dataIndex": "payCategoryName"
+        },
+        {
+            "title": "来款金额",
+            "dataIndex": "payMoney"
+        },
+        {
+            "title": "来款日期",
+            "dataIndex": "payTime"
+        },
+        {
+            "title": "币种",
+            "dataIndex": "currencyTypeName"
+        },
+        {
+            "title": "汇率",
+            "dataIndex": "exchangeRate"
+        },
+        {
+            "title": "外币金额",
+            "dataIndex": "abroadMoney"
+        },
+        {
+            "title": "收款银行",
+            "dataIndex": "payBank"
+        },
+        {
+            "title": "确认方",
+            "dataIndex": "confirmer"
+        }
+    ]
+}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Input, Select } from 'antd';
 import { Page } from '../common';
 import moment from 'moment';
+import { patternTypeOptions } from '../../configuration/DictionaryOptions';
 
 export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负责人直接返回名称，无需增加-Name字段   30号：加Name
     const [filterValue, setFilterValue] = useState({});
@@ -50,18 +51,26 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             dataIndex: 'priority',
             render: (value: number, record: object): React.ReactNode => {
                 const renderEnum: any = [
-                  {
-                    value: 1,
-                    label: "高"
-                  },
-                  {
-                    value: 2,
-                    label: "中"
-                  },
-                  {
-                    value: 3,
-                    label: "低"
-                  },
+                    {
+                        value: -1,
+                        label: "-"
+                    },
+                    {
+                        value: 0,
+                        label: "紧急"
+                    },
+                    {
+                        value: 1,
+                        label: "高"
+                    },
+                    {
+                        value: 2,
+                        label: "中"
+                    },
+                    {
+                        value: 3,
+                        label: "低"
+                    },
                 ]
                 return <>{renderEnum.find((item: any) => item.value === value).label}</>
             }
@@ -79,27 +88,10 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             dataIndex: 'weight'
         },
         {
-            key: 'pattern',
+            key: 'patternName',
             title: '模式',
             width: 100,
-            dataIndex: 'pattern',
-            render: (value: number, record: object): React.ReactNode => {
-                const renderEnum: any = [
-                  {
-                    value: 1,
-                    label: "新放"
-                  },
-                  {
-                    value: 2,
-                    label: "重新出卡"
-                  },
-                  {
-                    value: 3,
-                    label: "套用"
-                  },
-                ]
-                return <>{renderEnum.find((item: any) => item.value === value).label}</>
-            }
+            dataIndex: 'patternName',
         },
         {
             key: 'materialStatus',
@@ -302,6 +294,36 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             dataIndex: 'boltDeliverRealTime'
         },
         {
+            key: 'drawLeaderName',
+            title: '样板组负责人',
+            width: 200,
+            dataIndex: 'drawLeaderName'
+        },
+        {
+            key: 'weldingDrawDeliverTime',
+            title: '组装图纸计划交付时间',
+            width: 200,
+            dataIndex: 'weldingDrawDeliverTime'
+        },
+        {
+            key: 'weldingDrawDeliverRealTime',
+            title: '组装图纸实际交付时间',
+            width: 200,
+            dataIndex: 'weldingDrawDeliverRealTime'
+        },
+        {
+            key: 'boltDrawDeliverTime',
+            title: '发货图纸计划交付时间',
+            width: 200,
+            dataIndex: 'boltDrawDeliverTime'
+        },
+        {
+            key: 'boltDrawDeliverRealTime',
+            title: '发货图纸实际交付时间',
+            width: 200,
+            dataIndex: 'boltDrawDeliverRealTime'
+        },
+        {
             key: 'description',
             title: '备注',
             width: 200,
@@ -326,6 +348,8 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
                 : col.dataIndex === 'loftingDeliverRealTime'&& moment(record.loftingDeliverTime)<moment(record.loftingDeliverRealTime?record.loftingDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
                 : col.dataIndex === 'materialPartDeliverRealTime'&& moment(record.materialPartDeliverTime)<moment(record.materialPartDeliverRealTime?record.materialPartDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
                 : col.dataIndex === 'materialDeliverRealTime'&& moment(record.materialDeliverTime)<moment(record.materialDeliverRealTime?record.materialDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
+                : col.dataIndex === 'boltDrawDeliverRealTime'&& moment(record.boltDrawDeliverTime)<moment(record.boltDrawDeliverRealTime?record.boltDrawDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
+                : col.dataIndex === 'weldingDrawDeliverRealTime'&& moment(record.weldingDrawDeliverTime)<moment(record.weldingDrawDeliverRealTime?record.weldingDrawDeliverRealTime:undefined)?<div style={{ backgroundColor:'#F9A1A1',color: '#FFF'}}>{ _?_:'-' }</div>
                 : <div>{ _?_:'-' }</div>
             )  
         }     
@@ -342,6 +366,7 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
                 label: '优先级',
                 children:  <Select style={{width:'100px'}}>
                                 <Select.Option value={''} key ={''}>全部</Select.Option>
+                                <Select.Option value={0} key={0}>紧急</Select.Option>
                                 <Select.Option value={1} key={1}>高</Select.Option>
                                 <Select.Option value={2} key={2}>中</Select.Option>
                                 <Select.Option value={3} key={3}>低</Select.Option>
@@ -350,12 +375,13 @@ export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负
             {
                 name: 'pattern',
                 label: '模式',
-                children:  <Select style={{width:'100px'}}>
-                                <Select.Option value={''} key ={''}>全部</Select.Option>
-                                <Select.Option value={1} key={1}>新放</Select.Option>
-                                <Select.Option value={2} key={2}>重新出卡</Select.Option>
-                                <Select.Option value={3} key={3}>套用</Select.Option>
-                            </Select>
+                children:  <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                        { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={ index } value={ id + ',' + name }>
+                                { name }
+                            </Select.Option>
+                        }) }
+                    </Select>
             },
             {
                 name: 'fuzzyMsg',

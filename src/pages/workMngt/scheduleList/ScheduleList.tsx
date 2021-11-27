@@ -154,11 +154,11 @@ export default function ScheduleList(): React.ReactNode {
                         <Select.Option value={5} key={5}>已提交</Select.Option> */}
                     </Select>
                 },
-                {
-                    name: 'planTime',
-                    label: '计划交付时间',
-                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                },
+                // {
+                //     name: 'planTime',
+                //     label: '计划交付时间',
+                //     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                // },
                 
                 {
                     name: 'fuzzyMsg',

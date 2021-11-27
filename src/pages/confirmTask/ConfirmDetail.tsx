@@ -131,7 +131,7 @@ export default function ConfirmDetail(): React.ReactNode {
                     )
                 }
             ]} dataSource={detailData?.attachInfoList} /> */}
-            <Attachment dataSource={detailData?.attachInfoList}/>
+            <Attachment dataSource={detailData?.fileVOList}/>
             </DetailContent>
         </Spin>
     </>

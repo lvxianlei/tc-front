@@ -5,7 +5,7 @@ import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './AssessmentTask.module.less';
-import { FileProps } from '../common/Attachment';
+import Attachment, { FileProps } from '../common/Attachment';
 
 interface IDetail {
     readonly id?: string;
@@ -17,7 +17,7 @@ interface IDetail {
     readonly programLeaderId?: string;
     readonly programName?: string;
     readonly status?: string | number;
-    readonly fileList?: FileProps[];
+    readonly fileVOList?: FileProps[];
     readonly statusRecordList?: ItaskDataRecordList[];
 }
 
@@ -155,36 +155,7 @@ export default function AssessmentTaskDetail(): React.ReactNode {
         ]}>
             <DetailTitle title="基本信息" />
             <BaseInfo columns={baseColumns} dataSource={detailData} col={2} />
-            <DetailTitle title="相关附件" />
-            <CommonTable columns={[
-                {
-                    key: 'name',
-                    title: '附件名称',
-                    dataIndex: 'name',
-                    width: 350
-                },
-                {
-                    key: 'operation',
-                    title: '操作',
-                    dataIndex: 'operation',
-                    render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                        <Space direction="horizontal" size="small">
-                            <Button type="link" onClick={() => window.open(record.filePath)}>下载</Button>
-                            {
-                                record.fileSuffix === 'pdf'
-                                    ?
-                                    <Button type="link" onClick={() => window.open(record.filePath)}>预览</Button> : ['jpg', 'jpeg', 'png', 'gif'].includes(record.fileSuffix)
-                                        ?
-                                        <Button type='link' onClick={() => { setPictureUrl(record.id ? record.filePath : record.link); setPictureVisible(true); }}>预览</Button>
-                                        : null
-                            }
-                        </Space>
-                    )
-                }
-            ]}
-                dataSource={detailData.fileList}
-                pagination={false}
-            />
+            <Attachment dataSource={ detailData.fileVOList } />
             <DetailTitle title="操作信息" />
             <CommonTable columns={tableColumns} dataSource={detailData.statusRecordList} pagination={false} />
         </DetailContent>

@@ -33,18 +33,22 @@ export default function SampleDrawList(): React.ReactNode {
             dataIndex: 'priority',
             render: (value: number, record: object): React.ReactNode => {
                 const renderEnum: any = [
-                  {
-                    value: 1,
-                    label: "高"
-                  },
-                  {
-                    value: 2,
-                    label: "中"
-                  },
-                  {
-                    value: 3,
-                    label: "低"
-                  },
+                    {
+                        value: 0,
+                        label: "紧急"
+                    },
+                    {
+                        value: 1,
+                        label: "高"
+                    },
+                    {
+                        value: 2,
+                        label: "中"
+                    },
+                    {
+                        value: 3,
+                        label: "低"
+                    },
                 ]
                 return <>{value&&renderEnum.find((item: any) => item.value === value).label}</>
             }
@@ -106,15 +110,7 @@ export default function SampleDrawList(): React.ReactNode {
                     },
                     {
                         value: 3,
-                        label: "校核中"
-                    },
-                    {
-                        value: 4,
                         label: "已完成"
-                    },
-                    {
-                        value: 5,
-                        label: "已提交"
                     },
                 ]
                 return <>{value && renderEnum.find((item: any) => item.value === value).label}</>
@@ -183,6 +179,7 @@ export default function SampleDrawList(): React.ReactNode {
             filterValue={filterValue}
             refresh={refresh}
             requestData={ { smallSampleStatus: location.state } }
+            exportPath="/tower-science/smallSample/exportSmallSampleTask"
             // extraOperation={<Button type="primary">导出</Button>}
             searchFormItems={[
                 {
@@ -198,9 +195,7 @@ export default function SampleDrawList(): React.ReactNode {
                             <Select.Option value={''} key ={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>待开始</Select.Option>
                             <Select.Option value={2} key={2}>进行中</Select.Option>
-                            <Select.Option value={3} key={3}>校核中</Select.Option>
-                            <Select.Option value={4} key={4}>已完成</Select.Option>
-                            <Select.Option value={5} key={5}>已提交</Select.Option>
+                            <Select.Option value={3} key={3}>已完成</Select.Option>
                             {/* <Select.Option value={0} key={0}>已拒绝</Select.Option> */}
                         </Select>
                     </Form.Item> 
@@ -215,6 +210,7 @@ export default function SampleDrawList(): React.ReactNode {
                     label:'优先级',
                     children:   <Select style={{width:"100px"}}>
                                     <Select.Option value={''} key ={''}>全部</Select.Option>
+                                    <Select.Option value={0} key={0}>紧急</Select.Option>
                                     <Select.Option value={1} key={1}>高</Select.Option>
                                     <Select.Option value={2} key={2}>中</Select.Option>
                                     <Select.Option value={3} key={3}>低</Select.Option>

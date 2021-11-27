@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal, Input, FormProps, DatePicker, TreeSelect, Select } from 'antd';
+import { Button, Modal, FormProps, DatePicker, TreeSelect, Select } from 'antd';
 import RequestUtil from '../../utils/RequestUtil';
 import styles from './AssessmentTask.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
@@ -7,7 +7,6 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGroup } from '../../components/AbstractFillableComponent';
 import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
-import useRequest from '@ahooksjs/use-request';
 
 export interface AssignProps {}
 export interface IAssignRouteProps extends RouteComponentProps<AssignProps>, WithTranslation {

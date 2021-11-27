@@ -185,9 +185,10 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
                                     <Button type="link" onClick={() => {
                                         const rightData: IStaff[] = this.state.rightData || [];
                                         rightData.splice(index, 1);
-                                        console.log(rightData)
                                         this.setState({
-                                            rightData: rightData
+                                            rightData: rightData,
+                                            selectedRowKeys: rightData.map(res =>{return res.id || ''}),
+                                            selectedRows: rightData
                                         })
                                     }} danger>删除</Button>
                                 )

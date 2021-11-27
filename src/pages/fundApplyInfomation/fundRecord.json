@@ -1,0 +1,40 @@
+{
+    "fundRecordColumns":[
+        {
+            "title": "付款编号",
+            "dataIndex": "paymentNumber"
+        },
+        {
+            "title": "请款编号",
+            "dataIndex": "payApplyNumber"
+        },
+        {
+            "title": "请款日期",
+            "dataIndex": "payApplyTime"
+        },
+        {
+            "title": "请款单号",
+            "dataIndex": "payNumber"
+        },
+        {
+            "title": "请款部门",
+            "dataIndex": "payerDeptId"
+        },
+        {
+            "title": "收款方",
+            "dataIndex": "payee"
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "payType"
+        },
+        {
+            "title": "付款日期",
+            "dataIndex": "payTime"
+        },
+        {
+            "title": "已付金额(元)",
+            "dataIndex": "payMoney"
+        }
+    ]
+}

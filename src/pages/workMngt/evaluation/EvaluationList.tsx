@@ -54,18 +54,10 @@ export default function EvaluationList(): React.ReactNode {
             width: 200,
             render: (status: number): React.ReactNode => {
                 switch (status) {
-                    case 0:
-                        return '已拒绝';
-                    case 1:
-                        return '待接收';
-                    case 2:
-                        return '待指派';
                     case 3:
                         return '待完成';
                     case 4:
                         return '已完成';
-                    case 5:
-                        return '已提交';
                 }
             }
         },
@@ -133,7 +125,7 @@ export default function EvaluationList(): React.ReactNode {
         path="/tower-science/assessTask/assessList"
         columns={ columns }
         headTabs={ [] }
-        // extraOperation={ <Button type="primary" ghost>导出</Button> }
+        exportPath={`/tower-science/assessTask/exportAssessInfo`}
         refresh={ refresh }
         requestData={ { status: location.state } }
         searchFormItems={ [

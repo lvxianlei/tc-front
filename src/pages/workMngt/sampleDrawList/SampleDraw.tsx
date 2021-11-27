@@ -156,20 +156,21 @@ export default function SampleDraw(): React.ReactNode {
                     <Space>
                     {/* <Button type="primary">导出</Button> */}
                     {params.status==='2'?<Upload
-                        accept="image/png,image/jpeg"
+                        accept=".zip,.rar,.7z"
                         multiple={true}
-                        action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
+                        action={`${process.env.REQUEST_API_PATH_PREFIX}/tower-science/smallSample/sampleUploadByZip/${params.id}`}
                         headers={{
                             'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
                             'Tenant-Id': AuthUtil.getTenantId(),
                             'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
                         }}
+                        // data={ { productCategoryId:params.id } }
                         onChange={uploadChange}
                         showUploadList={false}
                     ><Button type="primary" >导入</Button></Upload>:null}
                     <Button type="primary" onClick={()=>{
-                        downloadTemplate(`/tower-science/smallSample/download/${params.id}`, '小样图', {} , true)
-                    }}>下载小样图</Button>
+                       history.push(`/workMngt/sampleDrawList/sampleDraw/${params.id}/${params.status}/downLoad`)
+                    }}>下载样图</Button>
                     {params.status==='2'?<Popconfirm
                         title="确认完成小样图?"
                         onConfirm={ async () =>  await RequestUtil.put(`/tower-science/smallSample/sampleComplete?productCategoryId=${params.id}`).then(()=>{
