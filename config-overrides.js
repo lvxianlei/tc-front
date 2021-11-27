@@ -29,7 +29,40 @@ module.exports = {
         ({ constructor }) =>
           constructor && constructor.name === "ModuleScopePlugin"
       );
-
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          rcRelevant: {
+            name: 'rc-relevant',
+            test: /[\\/]node_modules[\\/](@ant-design|rc-table|rc-picker|rc-select|rc-util|rc-menu|rc-tree|rc-pagination|rc-image|rc-virtual-list|rc-textarea|rc-trigger)[\\/]/,
+            chunks: 'all',
+            priority: 4,
+          },
+          antd: {
+            name: 'antd',
+            test: /[\\/]node_modules[\\/]antd[\\/]/,
+            chunks: 'all',
+            priority: 3,
+          },
+          vendor: {
+            name: 'vendor',
+            priority: 2,
+            test: /node_modules/,
+            // test: /[\\/]node_modules[\\/](react|react-dom|moment|react-document-title|bind-decorator)[\\/]/,
+            chunks: 'all',
+            minSize: 0,
+            minChunks: 2,
+          },
+          common: {
+            name: 'common',
+            priority: 1,
+            test: /src/,
+            chunks: 'all',
+            minSize: 0,
+            minChunks: 2,
+          },
+        }
+      }
       config.resolve.plugins.splice(scopePluginIndex, 1);
       return config;
     },
