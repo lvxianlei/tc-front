@@ -47,6 +47,7 @@ interface IAppointed {
     readonly checkUserDepartmentName?: string;
     readonly checkUserName?: string;
     readonly plannedDeliveryTime?: string;
+    readonly patternName?: string;
 }
 
 class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, TowerLoftingAssignState> {
@@ -201,7 +202,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                 { this.state.appointed?.productCategoryName }
                             </Descriptions.Item>
                             <Descriptions.Item label="模式">
-                                { this.state.appointed?.pattern === 1 ? '新放' :  this.state.appointed?.pattern === 2 ? '重新出卡' : '套用' }
+                                { this.state.appointed?.patternName }
                             </Descriptions.Item>
                             { this.props.type === 'detail' ?
                                 <><Descriptions.Item label="段信息">
