@@ -83,6 +83,10 @@ export default function PickList(): React.ReactNode {
             render: (value: number, record: object): React.ReactNode => {
                 const renderEnum: any = [
                     {
+                        value: null,
+                        label: "-"
+                    },
+                    {
                         value: -1,
                         label: "-"
                     },
