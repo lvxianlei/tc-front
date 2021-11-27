@@ -84,13 +84,13 @@ export default forwardRef(function ({
     onDoneChange = () => { }
 }: AttachmentProps, ref): JSX.Element {
     const inputAccepts = accept ? ({ accept }) : ({})
-    const [attchs, setAttachs] = useState<FileProps[]>(dataSource.map(item => ({ ...item, uid: item.id })))
+    const [attchs, setAttachs] = useState<FileProps[]>(dataSource.map(item => ({ ...item, uid: item.id, loading: false })))
     const [visible, setVisible] = useState<boolean>(false)
     const [uploadOSSUrlInfo, setUploadOSSUrlInfo] = useState<URLProps>({
         pushUrl: "http://www."
     })
     const [picUrl, setPicUrl] = useState<string>()
-    const { run: saveFile, loading } = useRequest<URLProps>((data: any) => new Promise(async (resole, reject) => {
+    const { run: saveFile } = useRequest<URLProps>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: URLProps = await RequestUtil.post(`/sinzetech-resource/oss/endpoint/get-upload-url`, data)
             resole(result)
@@ -99,7 +99,7 @@ export default forwardRef(function ({
         }
     }), { manual: true })
 
-    useEffect(() => setAttachs(dataSource), [JSON.stringify(dataSource)])
+    useEffect(() => setAttachs(dataSource.map(item => ({ ...item, uid: item.id, loading: false }))), [JSON.stringify(dataSource)])
 
     const deleteAttachData = useCallback((uid: string) => setAttachs(attchs.filter((item: any) => item.uid ? item.uid !== uid : item.id !== uid)), [setAttachs, attchs])
 
@@ -183,7 +183,7 @@ export default forwardRef(function ({
             <Button size="small" type="link" onClick={() => downLoadFile(records.downloadUrl)}>下载</Button>
             {edit && <Button size="small" type="link" onClick={() => deleteAttachData(records.uid)}>删除</Button>}
         </>
-    }, [])
+    }, [attchs])
 
     return <>
         <Modal width={1011} visible={visible} onCancel={handleCancel} footer={false}>
