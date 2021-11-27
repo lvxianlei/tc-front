@@ -255,12 +255,12 @@ export default function TowerCheck(): React.ReactNode {
     const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {
         setVisible(true);
         const data: IRecord = await RequestUtil.get<{}>(`/tower-science/productStructure/issue/detail?id=${ record.id }&problemField=${ col.dataIndex }`);
-        // if(tip === 'red') {
-        //     setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data });
-        //     setTitle('查看问题单');
-        // } else {
-        //     setRecord({ issueRecordList: data.issueRecordList, problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id });
-        // }
+        if(tip === 'red') {
+            setRecord({ problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id, ...data });
+            setTitle('查看问题单');
+        } else {
+            setRecord({ issueRecordList: data.issueRecordList, problemFieldName: col.title, currentValue: _, problemField: col.dataIndex, rowId: record.id });
+        }
     }
 
     const checkColor = (record: Record<string, any>, dataIndex: string) => {
@@ -301,7 +301,7 @@ export default function TowerCheck(): React.ReactNode {
                 <Popconfirm
                     title="确认完成校核?"
                     onConfirm={ () => { 
-                        RequestUtil.post<{}>(`/tower-science/productSegment/completed/check?productSegmentId=${ params.productSegmentId }`).then(res => {
+                        RequestUtil.post<{}>(`/tower-science/productSegment/completed/check?productSegmentGroupId=${ params.productSegmentId }`).then(res => {
                             history.goBack();
                         }) 
                     } }

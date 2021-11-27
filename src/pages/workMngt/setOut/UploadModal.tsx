@@ -36,7 +36,6 @@ export default forwardRef(function ({
     const [ visible, setVisible ] = useState(false);
     const [ form ] = Form.useForm();
     const [ list, setList ] = useState<IFile[]>([]);
-    const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
 
     const modalCancel = (): void => {
         setVisible(false);
@@ -80,9 +79,10 @@ export default forwardRef(function ({
             onCancel={ () => modalCancel() }
         >
             <DetailContent>
-                <Attachment ref={ attchsRef } isTable={ false } onDoneChange={ (attachs: FileProps[]) => { 
-                    setList(attchsRef.current.getDataSource()); 
-                    form.setFieldsValue({ data: attchsRef.current.getDataSource() });
+                <Attachment isTable={ false } onDoneChange={ (attachs: FileProps[]) => { 
+                    let data = form.getFieldsValue(true).data || [];
+                    setList([...data, ...attachs]); 
+                    form.setFieldsValue({ data: [...data, ...attachs] });
                 } }/>
                 <Form form={ form }>
                     <CommonTable columns={[

@@ -34,6 +34,7 @@ export default function TowerInformation(): React.ReactNode {
     const [ visible, setVisible ] = useState(false);
     const [ sectionData, setSectionData ] = useState<ISectionData[]>([]);
     const [ form ] = useForm();
+    const [ recordStatus, setRecordStatus ] = useState();
      
     const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
@@ -122,6 +123,7 @@ export default function TowerInformation(): React.ReactNode {
             title: '计划交付时间',
             dataIndex: 'plannedDeliveryTime',
             width: 200,
+            
         },
         {
             key: 'loftingUserName',
@@ -196,12 +198,13 @@ export default function TowerInformation(): React.ReactNode {
                             <Button type="link">删除</Button>
                         </Popconfirm> : <Button type="link" disabled>删除</Button>
                     }
-                    <TowerLoftingAssign type={record.status === 3 ? "detail" : ''} title="指派信息" detailData={ record } id={ params.id } update={ onRefresh } rowId={ record.id }/>
+                    <TowerLoftingAssign type={record.status === 1 ? '' : 'detail'} title="指派信息" detailData={ record } id={ params.id } update={ onRefresh } rowId={ record.id }/>
                     <Button type="link" onClick={async () => {
                         const data: ISectionData[] = await RequestUtil.get(`/tower-science/productSegment/segmentList`, { productSegmentGroupId: record.id });
                         setSectionData(data);
                         setVisible(true);
-                        form.setFieldsValue({ data: [...data] })
+                        form.setFieldsValue({ data: [...data] });
+                        setRecordStatus(record.status)
                     }}>段模式</Button>  
                 </Space>
             )
@@ -225,7 +228,7 @@ export default function TowerInformation(): React.ReactNode {
                     required: true,
                     message: '请选择模式'
                 }]}>
-                    <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                    <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} disabled={ recordStatus === 3 }>
                         { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={ index } value={ id }>
                                 { name }
@@ -258,7 +261,8 @@ export default function TowerInformation(): React.ReactNode {
             requestData={{ productCategoryId: params.id }}
             extraOperation={ <Space direction="horizontal" size="small">
                 <Button type="primary" ghost>导出</Button>
-                <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/modalList` }><Button type="primary" ghost>模型</Button></Link><Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/processCardList` }><Button type="primary" ghost>大样图工艺卡</Button></Link>
+                <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/modalList`, state: { status: location.state.status } }}><Button type="primary" ghost>模型</Button></Link>
+                <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/processCardList`, state: { status: location.state.status } }}><Button type="primary" ghost>大样图工艺卡</Button></Link>
                 <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/NCProgram` }><Button type="primary" ghost>NC程序</Button></Link>
                 {
                     userId === location.state.loftingLeader ? <>
@@ -357,7 +361,10 @@ export default function TowerInformation(): React.ReactNode {
         />
         <Modal title="段模式" visible={ visible } onCancel={ () => setVisible(false) } footer={<Space direction="horizontal" size="small" >
             <Button onClick={ () => setVisible(false) }>关闭</Button>
-            <Button type="primary" onClick={ saveSection } ghost>保存</Button>
+            {
+                recordStatus === 3 ? 
+                null : <Button type="primary" onClick={ saveSection } ghost>保存</Button>
+            }
         </Space> }>
             <Form form={ form }>
                 <Table columns={ sectionColumns } showHeader={ false } pagination={ false } dataSource={ sectionData } />
