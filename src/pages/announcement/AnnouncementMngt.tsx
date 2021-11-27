@@ -160,7 +160,7 @@ export default function AnnouncementMngt(): React.ReactNode {
             {
                 name: 'state',
                 label: '状态',
-                children: <Form.Item name="state">
+                children: <Form.Item name="state" initialValue="">
                     <Select placeholder="请选择" style={{ width: "150px" }}>
                         <Select.Option value={''} key="3">全部</Select.Option>
                         <Select.Option value={0} key="0">草稿</Select.Option>

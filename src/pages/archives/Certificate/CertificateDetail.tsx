@@ -49,7 +49,7 @@ const baseColums = [
         "title": "证书名称："
     },
     {
-        "dataIndex": "certificateType",
+        "dataIndex": "certificateTypeName",
         "title": "证书类型："
     },
     {

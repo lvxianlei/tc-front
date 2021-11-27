@@ -26,8 +26,9 @@ export interface PageProps extends RouteComponentProps, WithTranslation {
     requestData?: {}
     refresh?: boolean//刷新
     filterValue?: {} //查询条件
-    sourceKey?: string
     readonly exportPath?: string; //导出接口
+    sourceKey?: string,
+    isSunmryLine?: (result:IResponseData) => void;//添加计算行
 }
 
 export interface IResponseData {
@@ -61,6 +62,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
         };
     }
     protected async fetchTableData(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
+        this.setState({ loading: true })
         try {
             const sourceDataKey: string[] = this.props.sourceKey?.split(".") || []
             const resData: IResponseData = await RequestUtil.get<IResponseData>(this.props.path, {
@@ -70,6 +72,10 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                 size: pagination.pageSize || this.state.tablePagination?.pageSize,
                 type: this.state.selectedTabKey === 'item_0' ? '' : this.state.selectedTabKey
             })
+            //添加底部计算行
+            if(this.props.isSunmryLine){
+                this.props.isSunmryLine(resData)
+            }
             this.setState({
                 ...filterValues,
                 resData,
@@ -81,9 +87,11 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                     current: resData.current,
                     pageSize: resData.size,
                     total: resData.total
-                }
+                },
+                loading: false
             });
         } catch (error) {
+            this.setState({ loading: false })
             console.log(error)
         }
     }
@@ -102,7 +110,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
         return this.state.tableDataSource;
     }
 
-    public getTableColumns(): TableColumnType<object>[] {
+    public getTableColumns(): any[] {
         return (this.props.columns || []).map((item: any) => generateRender(item.type || "text", item))
     }
 

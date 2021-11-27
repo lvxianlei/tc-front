@@ -49,7 +49,7 @@ const baseColums = [
         "title": "资料名称"
     },
     {
-        "dataIndex": "dataType",
+        "dataIndex": "dataTypeName",
         "title": "资料类型"
     },
     {

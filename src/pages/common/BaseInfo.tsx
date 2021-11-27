@@ -95,7 +95,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
                                     return item
                                 }) : (item.rules || [])}
                             >
-                                {item.render ? item.render(item) : <FormItemType type={item.type} data={item} />}
+                                {item.render ? item.render(item) : <FormItemType type={item.type} data={item} placeholder={item.placeholder || ""} />}
                             </Form.Item>
                         </div>
                     </Col>

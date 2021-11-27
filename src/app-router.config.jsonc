@@ -1925,6 +1925,34 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 请款申请管理
+      "name": "请款申请管理",
+      "path":  "/fundApply/infomation",
+      "module": "./pages/fundApplyInfomation/index",
+      "exact": true,
+      "authority": "customer_detail"
+    },
+    { // 请款申请管理
+      "name": "付款记录",
+      "path":  "/fundApply/record",
+      "module": "./pages/fundApplyInfomation/fundRecord",
+      "exact": true,
+      "authority": "customer_detail"
+    },
+    { // 回款信息列表
+      "name": "回款信息管理",
+      "path": "/collection/infomation",
+      "module": "./pages/collectionInfomation/index",
+      "exact": true,
+      "authority": "customer_detail"
+    },
+    { // 保函申请管理
+      "name": "保函申请管理",
+      "path": "/application/guarantee",
+      "module": "./pages/applicationGuarantee/index",
+      "exact": true,
+      "authority": "customer_detail"
+    },
     { // 开票申请列表
       "name": "开票申请列表",
       "path": "/invoicing",
