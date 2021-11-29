@@ -22,7 +22,7 @@
         },
         {
             "title": "请款部门",
-            "dataIndex": "payerDepName"
+            "dataIndex": "payerDeptName"
         },
         {
             "title": "费用类型",
@@ -82,7 +82,7 @@
         },
         {
             "title": "请款部门",
-            "dataIndex": "payerDepName"
+            "dataIndex": "payerDeptName"
         },
         {
             "title": "开户银行",
