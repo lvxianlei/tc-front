@@ -25,7 +25,7 @@
             "dataIndex": "currencyTypeName"
         },
         {
-            "title": "汇率（%）",
+            "title": "汇率",
             "dataIndex": "exchangeRate"
         },
         {
