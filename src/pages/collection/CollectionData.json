@@ -168,7 +168,7 @@
         },
         {
             "title": "付款单号",
-            "dataIndex": "payNumber",
+            "dataIndex": "payNum",
             "type": "popTable",
             "path": "/tower-market/payApply",
             "readOnly": true,
