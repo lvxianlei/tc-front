@@ -3,7 +3,7 @@
  * 2021/11/22
  */
  import React, { useState,useRef } from 'react';
- import { Button, Input, DatePicker,Select ,Form,TreeSelect} from 'antd'
+ import { Button, Input, DatePicker,Select ,Form,TreeSelect,Table} from 'antd'
  import { Page } from '../common'
  import { fundRecordColumns } from "./fundRecord.json"
  import { payTypeOptions } from '../../configuration/DictionaryOptions';
@@ -45,13 +45,20 @@
          }
          return value
      }
-     //表格增加底部计算
-     const addList = (data:any)=> {
-         //如果没有数据
-        if(!data.paymentDetailListVOIPage.records.length){
+    //查看详情
+    const viewShow = (record:{id:string})=>{
+        setVisibleOverView(true);
+        setPayApplyId(record.id);
+        setTimeout(()=>{
+            viewRef.current?.getDetail()
+        }) 
+    }
+        //table footer
+    const footerElement = (data:any)=>{
+        if(!data.length){
             return;
         }
-        const records = data.paymentDetailListVOIPage.records;
+        const records = data;
         let payMoney=0;
         records.forEach((item:any) => {
             payMoney= (payMoney*100+Number(item.payMoney)*100)/100;
@@ -60,19 +67,13 @@
         fundRecordColumns.forEach((item:any)=>{
             list[item.dataIndex]=""
         });
-        list.id=1000;
+        list.key=1000;
         list.paymentNumber = "合计";
         list.Sunmry=true;
         list.payMoney=payMoney;
-        records.push(list)
-    }
-    //查看详情
-    const viewShow = (record:{id:string})=>{
-        setVisibleOverView(true);
-        setPayApplyId(record.id);
-        setTimeout(()=>{
-            viewRef.current?.getDetail()
-        }) 
+        return (
+            <Table showHeader={false} columns={fundRecordColumns} dataSource={[list]}></Table>
+        )
     }
      return (
          <>
@@ -121,6 +122,9 @@
                     金额合计：{data ? Number(data.totalSumMoney).toFixed(2) : null}元
                 </>}
                 // isSunmryLine={addList}
+                tableProps={
+                    {footer:footerElement}
+                }
                  columns={[
                      ...fundRecordColumns.map((item: any) => {
                         if (item.dataIndex === 'payType') {
@@ -148,13 +152,7 @@
                          render: (_: any, record: any) => {
                             if(!record.Sunmry){
                                 return <Button type="link" 
-                                onClick={() => { 
-                                    setVisibleOverView(true); 
-                                    setPayApplyId(record.id);
-                                   setTimeout(()=>{
-                                    viewRef.current?.getDetail()
-                                   })
-                                }}>详情</Button>
+                                onClick={() => {viewShow(record)}}>详情</Button>
                             }
                          }
                      }]}
