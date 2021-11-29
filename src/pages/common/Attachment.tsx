@@ -84,7 +84,7 @@ export default forwardRef(function ({
     onDoneChange = () => { }
 }: AttachmentProps, ref): JSX.Element {
     const inputAccepts = accept ? ({ accept }) : ({})
-    const [attchs, setAttachs] = useState<FileProps[]>(dataSource.map(item => ({ ...item, uid: item.id, loading: false })))
+    const [attchs, setAttachs] = useState<FileProps[]>(dataSource?.map(item => ({ ...item, uid: item.id, loading: false })) || [])
     const [visible, setVisible] = useState<boolean>(false)
     const [uploadOSSUrlInfo, setUploadOSSUrlInfo] = useState<URLProps>({
         pushUrl: "http://www."
