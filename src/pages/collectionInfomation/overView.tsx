@@ -41,7 +41,10 @@ export default function OverView(props: OverViewProps): JSX.Element {
                 form={addCollectionForm}
                 dataSource={props.userData || {}}
                 col={ 2 }
-                columns={overViewColunms}
+                columns={[
+                    ...overViewColunms,
+                    ...props.title
+                ]}
             />
         </Modal>
     )

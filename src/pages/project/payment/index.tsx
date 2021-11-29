@@ -1,10 +1,10 @@
 import React, { useState } from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { Page } from '../common'
+import { Page } from '../../common'
 import { PaymentListHead } from "./PaymentData.json"
-import useRequest from '@ahooksjs/use-request' 
-import RequestUtil from '../../utils/RequestUtil'
+import useRequest from '@ahooksjs/use-request'
+import RequestUtil from '../../../utils/RequestUtil'
 export default function Payment() {
     const history = useHistory()
     const [filterValue, setFilterValue] = useState({})
@@ -54,8 +54,8 @@ export default function Payment() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <Button type="link" onClick={() => history.push(`/project/payment/detail/${record.id}`)}>查看</Button>
-                        {[4, 6].includes(record.applyStatus) && <Button type="link" onClick={() => handleDelete(record.id)}>删除</Button>}
+                        <Button type="link" size="small" onClick={() => history.push(`/project/payment/detail/${record.id}`)}>查看</Button>
+                        <Button type="link" size="small" disabled={![4, 6].includes(record.applyStatus)} onClick={() => handleDelete(record.id)}>删除</Button>
                     </>
                 }
             }]}

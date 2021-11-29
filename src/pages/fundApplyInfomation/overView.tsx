@@ -34,7 +34,7 @@ export default forwardRef(function OverView(props: AddModalProps,ref): JSX.Eleme
     useImperativeHandle(ref, () => ({ getDetail}), [ref,getDetail]);
     return (
         <Modal
-            title={'查看回款信息'}
+            title={'详情'}
             visible={props.visible}
             onCancel={handleCancle}
             maskClosable={false}
