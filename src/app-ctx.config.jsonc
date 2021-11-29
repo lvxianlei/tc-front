@@ -649,6 +649,19 @@
                         ]
                     },
                     {
+                        "label": "首页",
+                        "icon": "technology",
+                        "path": "/homePage",
+                        "authority": "approvalm",
+                        "items": [
+                            {
+                                "label": "个人中心",
+                                "path": "/homePage/personalCenter",
+                                "authority": "approvalm"
+                            }
+                        ]
+                    },
+                    {
                         "label": "公告管理",
                         "icon": "technology",
                         "path": "/announcement",

@@ -3,7 +3,7 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 import React from 'react';
-import { Button, Card, Form, FormItemProps, Space, Table, Tabs, TabsProps } from 'antd';
+import { Button, Card, Form, FormItemProps, Space, Pagination, Tabs, TabsProps } from 'antd';
 import { ColumnType, TablePaginationConfig, TableProps } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
 import { RouteComponentProps } from 'react-router';
@@ -122,17 +122,10 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
         return {
             rowKey: this.getTableRowKey(),
             bordered: false,
-            // pagination: this.state.tablePagination || false,
-            pagination: {
-                ...this.state.tablePagination || false,
-                showSizeChanger: true,
-                showTotal: (total) => `共${total} 条记录`,
-            },
+            pagination: false,
             onChange: this.onTableChange,
             dataSource: this.getTableDataSource(item),
-            columns: this.getTableColumns(item).map(item => ({ ...item, ellipsis: true, onCell: () => ({ className: styles.tableCell }) })),
-            size: "small",
-            onRow: () => ({ className: styles.tableRow })
+            columns: this.getTableColumns(item)
         };
     }
 
@@ -193,16 +186,22 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
                 {
                     this.getFilterFormItemProps(item).length
                         ?
-                        <Card className={styles.filterCard}>
+                        <Card className={styles.filterCard} bordered={false}>
                             {this.renderFilterContent(item)}
                         </Card>
                         :
                         null
                 }
-                <Card>
+                <Card bordered={false}>
                     <Space className={layoutStyles.width100} direction="vertical" size="large">
                         {this.renderExtraOperationContent(item)}
                         {this.renderTableContent(item)}
+                        <Pagination
+                            {...this.state.tablePagination}
+                            showSizeChanger={true}
+                            style={{ float: "right" }}
+                            showTotal={(total) => `共${total} 条记录`}
+                        />
                     </Space>
                 </Card>
             </Space>
