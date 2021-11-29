@@ -810,8 +810,8 @@
       "path": "/confirmTask/ConfirmTaskMngt",
       "module": "./pages/confirmTask/ConfirmTaskMngt",
       "exact": true,
-      // "authority": "rd_draw"
-      "authority": "confirm_task_list"
+      "authority": "approvalm"
+      // "authority": "confirm_task_list"
     },
     { // 确认任务详情
       "name": "确认任务详情",
@@ -834,8 +834,8 @@
       "path": "/workMngt/confirmList",
       "module": "./pages/workMngt/confirmList/ConfirmList",
       "exact": true,
-      // "authority": "rd_draw_product_detail"
-      "authority": "work_management_confirmation_list"
+      "authority": "approvalm"
+      // "authority": "work_management_confirmation_list"
     },
     { // 工作管理-确认列表-确认信息
       "name": "确认信息",
@@ -858,7 +858,9 @@
       "path": "/workMngt/scheduleList",
       "module": "./pages/workMngt/scheduleList/ScheduleList",
       "exact": true,
-      "authority": "work_management_assignment_list"
+      // "authority": "work_management_assignment_list"
+      "authority": "approvalm"
+
     },
     { // 工作管理-指派列表
       "name": "指派查看",
@@ -872,8 +874,8 @@
       "path": "/assessmentTask",
       "module": "./pages/assessmentTask/AssessmentTaskList",
       "exact": true,
-      // "authority": "assess_task_management"
-      "authority": "assessment_task_list"
+      "authority": "approvalm"
+      // "authority": "assessment_task_list"
     },
     { // 评估任务详情
       "name": "评估任务详情",
@@ -888,8 +890,8 @@
       "path": "/workMngt/pickList",
       "module": "./pages/workMngt/pickList/PickList",
       "exact": true,
-      // "authority": "product_material_list"
-      "authority": "work_management_picking_list"
+      "authority": "approvalm"
+      // "authority": "work_management_picking_list"
     },
     { // 工作管理-提料-提料信息
       "name": "提料信息",
@@ -976,8 +978,8 @@
       "path": "/workMngt/evaluationList",
       "module": "./pages/workMngt/evaluation/EvaluationList",
       "exact": true,
-      // "authority": "assess_list_management"
-      "authority": "work_management_evaluation_list"
+      "authority": "approvalm"
+      // "authority": "work_management_evaluation_list"
     },
     { // 工作管理-采购列表
       "name": "采购列表",
