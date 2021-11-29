@@ -566,9 +566,8 @@ export default function Lofting(): React.ReactNode {
                             <Input size="small" />
                         </Form.Item>
                     ) },
-                    { title: '长度（mm）', dataIndex: 'length', key: '1',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name={['dataV',index, "length"]} initialValue={ _ }>
-                            { console.log(_) }
+                    { title: '长度（mm）', dataIndex: 'length', key: 'length',render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                        <Form.Item name={['dataV',index, "length"]} initialValue={ record.length }>
                             <InputNumber size="small" min={0}/>
                         </Form.Item>
                     ) },
