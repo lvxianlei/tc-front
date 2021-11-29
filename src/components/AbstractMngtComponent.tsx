@@ -2,19 +2,19 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
-import { Button, Card, Form, FormItemProps, Space, Table, Tabs, TabsProps } from 'antd';
+import React from 'react';
+import { Button, Card, Form, FormItemProps, Space, Pagination, Tabs, TabsProps } from 'antd';
 import { ColumnType, TablePaginationConfig, TableProps } from 'antd/lib/table';
 import { GetRowKey } from 'rc-table/lib/interface';
-import React from 'react';
 import { RouteComponentProps } from 'react-router';
-
 import layoutStyles from '../layout/Layout.module.less';
 import styles from './AbstractMngtComponent.module.less';
 import './AbstractMngtComponent.module.less';
 import AbstractTabableComponent from './AbstractTabableComponent';
 import { ITabItem } from './ITabableComponent';
-
+import CommonTable from "../pages/common/CommonTable"
 export interface IAbstractMngtComponentState {
+    loading: boolean,
     selectedTabKey: React.Key;
     tablePagination: TablePaginationConfig | undefined;
 }
@@ -43,6 +43,7 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      */
     protected getState(): S {
         return {
+            loading: false,
             selectedTabKey: this.getTabItems()[0].key,
             tablePagination: {
                 current: 1,
@@ -121,7 +122,6 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
         return {
             rowKey: this.getTableRowKey(),
             bordered: false,
-            // pagination: this.state.tablePagination || false,
             pagination: {
                 ...this.state.tablePagination || false,
                 showSizeChanger: true,
@@ -129,8 +129,7 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
             },
             onChange: this.onTableChange,
             dataSource: this.getTableDataSource(item),
-            columns: this.getTableColumns(item).map(item => ({ ...item, ellipsis: true, onCell: () => ({ className: styles.tableCell }) })),
-            size: "small",
+            columns: this.getTableColumns(item),
             onRow: () => ({ className: styles.tableRow })
         };
     }
@@ -192,13 +191,13 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
                 {
                     this.getFilterFormItemProps(item).length
                         ?
-                        <Card className={styles.filterCard}>
+                        <Card className={styles.filterCard} bordered={false}>
                             {this.renderFilterContent(item)}
                         </Card>
                         :
                         null
                 }
-                <Card>
+                <Card bordered={false}>
                     <Space className={layoutStyles.width100} direction="vertical" size="large">
                         {this.renderExtraOperationContent(item)}
                         {this.renderTableContent(item)}
@@ -246,7 +245,7 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
      */
     protected renderTableContent(item: ITabItem): React.ReactNode {
         return (
-            <Table {...this.getTableProps(item)} size="small" className={styles.table} scroll={{ x: 'max-content' }} />
+            <CommonTable {...(this.getTableProps(item) as any)} loading={this.state.loading} />
         );
     }
 

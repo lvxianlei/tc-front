@@ -51,18 +51,22 @@ export default function PlanTrack(): React.ReactNode {
             dataIndex: 'priority',
             render: (value: any, record: object): React.ReactNode => {
                 const renderEnum: any = [
-                  {
-                    value: 1,
-                    label: "高"
-                  },
-                  {
-                    value: 2,
-                    label: "中"
-                  },
-                  {
-                    value: 3,
-                    label: "低"
-                  },
+                    {
+                        value: 0,
+                        label: "紧急"
+                    },
+                    {
+                        value: 1,
+                        label: "高"
+                    },
+                    {
+                        value: 2,
+                        label: "中"
+                    },
+                    {
+                        value: 3,
+                        label: "低"
+                    },
                 ]
                 return <>{renderEnum.find((item: any) => item.value === value).label}</>
             }
@@ -86,6 +90,10 @@ export default function PlanTrack(): React.ReactNode {
             dataIndex: 'materialStatus',
             render: (value: number, record: object): React.ReactNode => {
                 const renderEnum: any = [
+                    {
+                        value: null,
+                        label: "-"
+                    },
                     {
                         value: -1,
                         label: "-"
@@ -133,6 +141,10 @@ export default function PlanTrack(): React.ReactNode {
             dataIndex: 'loftingStatus',
             render: (value: number, record: object): React.ReactNode => {
                 const renderEnum: any = [
+                    {
+                        value: null,
+                        label: "-"
+                    },
                     {
                         value: -1,
                         label: "-"
@@ -206,13 +218,14 @@ export default function PlanTrack(): React.ReactNode {
         columns={columnsSetting}
         filterValue={filterValue}
         onFilterSubmit={onFilterSubmit}
-        // extraOperation={<Button type="primary">导出</Button>}
+        exportPath="/tower-science/loftingTask/planTrackExport"
         searchFormItems={[
             {
                 name: 'priority',
                 label: '优先级',
                 children:   <Select style={{width:'100px'}}>
                                 <Select.Option value={''} key ={''}>全部</Select.Option>
+                                <Select.Option value={0} key={0}>紧急</Select.Option>
                                 <Select.Option value={1} key={1}>高</Select.Option>
                                 <Select.Option value={2} key={2}>中</Select.Option>
                                 <Select.Option value={3} key={3}>低</Select.Option>
@@ -227,7 +240,7 @@ export default function PlanTrack(): React.ReactNode {
                                 <Select.Option value={2} key={2}>提料中</Select.Option>
                                 <Select.Option value={3} key={3}>配段中</Select.Option>
                                 <Select.Option value={4} key={4}>已完成</Select.Option>
-                                <Select.Option value={5} key={5}>已提交</Select.Option>
+                                {/* <Select.Option value={5} key={5}>已提交</Select.Option> */}
                             </Select>
             },
             {
@@ -240,7 +253,7 @@ export default function PlanTrack(): React.ReactNode {
                                 <Select.Option value={3} key={3}>组焊中</Select.Option>
                                 <Select.Option value={4} key={4}>配段中</Select.Option>
                                 <Select.Option value={5} key={5}>已完成</Select.Option>
-                                <Select.Option value={6} key={6}>已提交</Select.Option>
+                                {/* <Select.Option value={6} key={6}>已提交</Select.Option> */}
                             </Select>
             },
             {

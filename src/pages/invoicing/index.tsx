@@ -1,6 +1,6 @@
 import React from "react"
 import { Button, Input, DatePicker, Select } from 'antd'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { Page } from '../common'
 import { invoicingListHead } from "./InvoicingData.json"
 export default function Invoicing() {
@@ -15,7 +15,7 @@ export default function Invoicing() {
     }
 
     return <Page
-        path="/tower-market/invoicing"
+        path="/tower-finance/invoicing"
         columns={[
             ...invoicingListHead,
             {
@@ -26,8 +26,8 @@ export default function Invoicing() {
                 render: (_: any, record: any) => {
                     return <>
                         <Button type="link" onClick={() => history.push(`/invoicing/taskInfo/${record.id}`)}>查看任务信息</Button>
-                        <Button type="link" onClick={() => history.push(`/invoicing/edit/${record.id}`)}>填写开票信息</Button>
-                        <Button type="link" onClick={() => history.push(`/invoicing/${record.id}`)}>查看开票信息</Button>
+                        {record.taskType === 1 && <Button type="link" onClick={() => history.push(`/invoicing/edit/${record.id}`)}>填写开票信息</Button>}
+                        {record.taskType === 2 && <Button type="link" onClick={() => history.push(`/invoicing/${record.id}`)}>查看开票信息</Button>}
                     </>
                 }
             }]}
@@ -38,11 +38,11 @@ export default function Invoicing() {
                 children: <Input placeholder="工程名称/票面单位/业务经理" style={{ width: 300 }} />
             },
             {
-                name: 'isOpen',
+                name: 'taskType',
                 label: '任务状态',
                 children: <Select style={{ width: 200 }}>
-                    <Select.Option value="2">发票未开全</Select.Option>
-                    <Select.Option value="3">发票已开全</Select.Option>
+                    <Select.Option value="1">待完成</Select.Option>
+                    <Select.Option value="2">已完成</Select.Option>
                 </Select>
             },
             {

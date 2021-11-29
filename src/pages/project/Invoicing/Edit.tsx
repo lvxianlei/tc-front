@@ -113,10 +113,10 @@ export default function Edit() {
             const baseInfoData = await baseInfo.validateFields()
             const invoicData = await invoicForm.validateFields()
             const billingData = await billingForm.validateFields()
-            console.log(baseInfoData.contractCode)
+            console.log(baseInfoData)
             const saveData = {
                 ...baseInfoData,
-                contractCode: baseInfoData.contractCode.value || data?.contractCode,
+                contractCode: baseInfoData.contractCode || data?.contractCode,
                 invoicingDetailDtos: billingData.submit,
                 attachInfoDtos: attachVosData,
                 invoicingInfoDto: { ...invoicData, id: data?.invoicingInfoVo.id || "", invoicingId: data?.invoicingInfoVo.invoicingId || "" }
@@ -143,7 +143,8 @@ export default function Edit() {
                 reasonWeight: logicWeight.logicWeight,
                 contractDevTime: contractValue.deliveryTime,
                 business: contractValue.salesman,
-                projectCode: contractValue.projectNumber // 项目编码
+                projectCode: contractValue.projectNumber, // 项目编码
+                contractCode: contractValue.internalNumber
             })
         }
         if (fields.backProportion) {

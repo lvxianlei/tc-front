@@ -2,11 +2,12 @@
     "invoicingListHead": [
         {
             "title": "开票任务编号",
-            "dataIndex": "invoicingCode"
+            "dataIndex": "ticketTaskNumber",
+            "isResizable": true
         },
         {
             "title": "编号",
-            "dataIndex": "projectCode"
+            "dataIndex": "invoicingNumber"
         },
         {
             "title": "票面单位",
@@ -43,39 +44,27 @@
         },
         {
             "title": "申请人",
-            "dataIndex": "ticketTime",
+            "dataIndex": "createUserName",
             "type": "string"
         },
         {
             "title": "申请日期",
-            "dataIndex": "ticketTime",
+            "dataIndex": "createTime",
             "type": "date",
             "format": "YYYY-MM-DD"
         },
         {
             "title": "任务状态",
-            "dataIndex": "contractType",
+            "dataIndex": "taskType",
             "type": "select",
             "enum": [
                 {
                     "value": 1,
-                    "label": "不下计划"
+                    "label": "待完成"
                 },
                 {
                     "value": 2,
-                    "label": "未下计划"
-                },
-                {
-                    "value": 3,
-                    "label": "未下完计划"
-                },
-                {
-                    "value": 4,
-                    "label": "未发完货"
-                },
-                {
-                    "value": 5,
-                    "label": "已发完货"
+                    "label": "已完成"
                 }
             ]
         }
@@ -83,12 +72,12 @@
     "baseInfoHead": [
         {
             "title": "申请编号",
-            "dataIndex": "invoicingCode",
+            "dataIndex": "invoicingNumber",
             "disabled": true
         },
         {
             "title": "内部合同编号",
-            "dataIndex": "contractCode",
+            "dataIndex": "contractNumber",
             "type": "popTable",
             "path": "/tower-market/contract",
             "width": 1011,
@@ -141,7 +130,7 @@
         },
         {
             "title": "项目编号",
-            "dataIndex": "projectCode",
+            "dataIndex": "projectNumber",
             "disabled": true,
             "rules": [
                 {
@@ -201,14 +190,12 @@
         {
             "title": "开票合计重量(吨)",
             "dataIndex": "ticketWeight",
-            "disabled": true,
-            "type": "text"
+            "type": "string"
         },
         {
             "title": "开票合计金额(元)",
             "dataIndex": "ticketMoney",
-            "disabled": true,
-            "type": "text"
+            "type": "string"
         },
         {
             "title": "合同交货日期",
@@ -284,7 +271,7 @@
         },
         {
             "title": "计划号",
-            "dataIndex": "planCode",
+            "dataIndex": "planNumber",
             "disabled": true
         },
         {
@@ -423,6 +410,84 @@
             "type": "textarea"
         }
     ],
+    "invoicingInfoHead": [
+        {
+            "title": "合同编号",
+            "dataIndex": "contractNumber",
+            "disabled": true
+        },
+        {
+            "title": "合同/工程名称",
+            "dataIndex": "contractName",
+            "disabled": true
+        },
+        {
+            "title": "开票重量(吨)",
+            "dataIndex": "ticketWeight",
+            "disabled": true
+        },
+        {
+            "title": "开票金额(元)",
+            "dataIndex": "ticketMoney",
+            "type": "string",
+            "disabled": true
+        },
+        {
+            "title": "开票单位",
+            "dataIndex": "ticketCompany",
+            "disabled": true
+        },
+        {
+            "title": "票面单位",
+            "dataIndex": "ticketCompany",
+            "disabled": true
+        },
+        {
+            "title": "合同开票状态",
+            "dataIndex": "contractType",
+            "disabled": true,
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "不下计划"
+                },
+                {
+                    "value": 2,
+                    "label": "未下计划"
+                },
+                {
+                    "value": 3,
+                    "label": "未下完计划"
+                },
+                {
+                    "value": 4,
+                    "label": "未发完货"
+                },
+                {
+                    "value": 5,
+                    "label": "已发完货"
+                }
+            ]
+        },
+        {
+            "title": "币种",
+            "dataIndex": "",
+            "disabled": true
+        },
+        {
+            "title": "开票日期",
+            "dataIndex": "ticketTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "disabled": true
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": "business",
+            "disabled": true
+        }
+    ],
     "invoiceHead": [
         {
             "title": "名称",
@@ -430,7 +495,7 @@
         },
         {
             "title": "纳税人识别号",
-            "dataIndex": "taxCode"
+            "dataIndex": "taxNumber"
         },
         {
             "title": "地址、电话",
@@ -438,7 +503,7 @@
         },
         {
             "title": "开户行及账号",
-            "dataIndex": "bankCode"
+            "dataIndex": "bankNumber"
         },
         {
             "title": "发票备注栏",
@@ -453,15 +518,19 @@
     ],
     "billingHead": [
         {
+            "title": "发票号码",
+            "dataIndex": "ticketNumber"
+        },
+        {
+            "title": "发票类型",
+            "dataIndex": "ticketTypeName"
+        },
+        {
             "title": "产品名称(票面)",
             "dataIndex": "productName"
         },
         {
-            "title": "生产名称(实际)",
-            "dataIndex": "devName"
-        },
-        {
-            "title": "规格型号",
+            "title": "型号规格",
             "dataIndex": "model"
         },
         {
@@ -473,32 +542,32 @@
             "dataIndex": "company"
         },
         {
-            "title": "重量(吨)",
+            "title": "数量",
             "dataIndex": "weight",
-            "type": "number",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入重量..."
-                }
-            ]
+            "type": "number"
         },
         {
             "title": "单价（元/吨）",
             "dataIndex": "money",
-            "type": "number",
-            "disabled": true
+            "type": "number"
         },
         {
             "title": "金额(元)",
             "dataIndex": "moneyCount",
-            "type": "number",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入金额..."
-                }
-            ]
+            "type": "number"
+        },
+        {
+            "title": "税率(%)",
+            "dataIndex": "taxRate"
+        },
+        {
+            "title": "税额(元)",
+            "dataIndex": "taxMoney",
+            "type": "number"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
         }
     ],
     "billingHeader": [
@@ -531,30 +600,58 @@
             "dataIndex": "moneyCount"
         }
     ],
-    "batchHead": [
+    "editInvoicingHead": [
         {
-            "title": "部门",
-            "dataIndex": "department"
+            "title": "发票号码",
+            "dataIndex": "ticketNumber"
         },
         {
-            "title": "审批人",
-            "dataIndex": "approver"
+            "title": "发票类型",
+            "dataIndex": "ticketTypeName"
         },
         {
-            "title": "职位",
-            "dataIndex": "position"
+            "title": "产品名称(票面)",
+            "dataIndex": "productName"
         },
         {
-            "title": "审批时间",
-            "dataIndex": "batchTime"
+            "title": "型号规格",
+            "dataIndex": "model"
         },
         {
-            "title": "审批结果",
-            "dataIndex": "batchResult"
+            "title": "基数",
+            "dataIndex": "baseNum"
         },
         {
-            "title": "意见",
-            "dataIndex": "opinion"
+            "title": "单位",
+            "dataIndex": "company"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "weight",
+            "type": "number"
+        },
+        {
+            "title": "单价（元/吨）",
+            "dataIndex": "money",
+            "type": "number"
+        },
+        {
+            "title": "金额(元)",
+            "dataIndex": "moneyCount",
+            "type": "number"
+        },
+        {
+            "title": "税率(%)",
+            "dataIndex": "taxRate"
+        },
+        {
+            "title": "税额(元)",
+            "dataIndex": "taxMoney",
+            "type": "number"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
         }
     ]
 }

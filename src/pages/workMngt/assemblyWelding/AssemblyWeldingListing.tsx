@@ -6,7 +6,7 @@
 
 import React from 'react'
 import { Button, message, Modal, Popconfirm, Space, Spin, TablePaginationConfig, Upload } from 'antd';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 import { DetailContent, CommonTable } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -15,6 +15,7 @@ import styles from './AssemblyWelding.module.less';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import AssemblyWeldingNew, { IBaseData } from './AssemblyWeldingNew';
 import AuthUtil from '../../../utils/AuthUtil';
+import ExportList from '../../../components/export/list';
 
 interface IResponseData {
     readonly id: number;
@@ -25,6 +26,10 @@ interface IResponseData {
 }
 
 interface IData {
+    readonly id?: string;
+}
+
+export interface ISegmentNameList {
     readonly id?: string;
 }
 
@@ -156,6 +161,10 @@ export default function AssemblyWeldingListing(): React.ReactNode {
     const [ record, setRecord ] = useState<IBaseData>({});
     const [ url, setUrl ] = useState<string>('');
     const [ urlVisible, setUrlVisible ] = useState<boolean>(false);
+    const location = useLocation<{ status: number }>();
+    const match = useRouteMatch();
+    const [ isExport, setIsExport ] = useState(false);
+    const [ segmentNameList, setSegmentNameList ] = useState<ISegmentNameList[]>([]);
 
     const getTableDataSource = (pagination: TablePaginationConfig) => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<IResponseData>(`/tower-science/welding/getDetailedById`, { weldingId: params.id, ...pagination });
@@ -176,12 +185,18 @@ export default function AssemblyWeldingListing(): React.ReactNode {
         <Spin spinning={ loading }>
             <DetailContent>
                 <Space direction="horizontal" size="small" className={ styles.bottomBtn }>
-                    {/* <Button type="primary" ghost>导出</Button> */}
+                { location.state.status === 2 ? <>
+                    <Button type="primary" onClick={ () => setIsExport(true) } ghost>导出</Button>
                     <Button type="primary" onClick={ () => downloadTemplate('/tower-science/welding/exportTemplate', '组焊模板') } ghost>模板下载</Button>
-                    <Button type="primary"  onClick={ () => RequestUtil.post<IResponseData>(`/tower-science/welding/submitForVerification`, { weldingId: params.id }).then(res => {
+                    <Button type="primary"  onClick={ () => RequestUtil.post<IResponseData>(`/tower-science/welding/completeWeldingTask`, { weldingId: params.id }).then(res => {
                         history.goBack();
                     }) } >完成组焊清单</Button>
-                    <Button type="primary" onClick={ () => { setVisible(true); setName('添加组焊'); } }>添加组焊</Button>
+                    <Button type="primary" onClick={ async () => { 
+                        setVisible(true); 
+                        setName('添加组焊'); 
+                        const data: ISegmentNameList[] = await RequestUtil.get(`/tower-science/welding/getWeldingSegment?weldingId=${ params.id }`);
+                        setSegmentNameList(data);
+                    } }>添加组焊</Button>
                     <Upload 
                         action={ () => {
                             const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
@@ -212,12 +227,12 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                         } }
                     >
                         <Button type="primary" ghost>导入</Button>
-                    </Upload>
+                    </Upload></> : null }
                     <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
                 </Space>
                 <CommonTable 
                     dataSource={ detailData?.records } 
-                    columns={ towerColumns }
+                    columns={ location.state.status === 2 ? towerColumns : towerColumns.splice(0, 6) }
                     onRow={ (record: Record<string, any>, index: number) => ({
                         onClick: () => { getParagraphData(record.id) },
                         className: styles.tableRow
@@ -236,7 +251,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                 <CommonTable dataSource={ paragraphData } columns={ paragraphColumns } pagination={ false }/>
             </DetailContent>
         </Spin>
-        { visible ? <AssemblyWeldingNew id={ params.id } segmentId={ record.id } record={ record } productCategoryId={ params.productCategoryId } name={ name } updateList={ () => history.go(0) } visible={ visible } modalCancel={ () => setVisible(false) }/> : null}
+        { visible ? <AssemblyWeldingNew id={ params.id } segmentId={ record.id } record={ record } productCategoryId={ params.productCategoryId } name={ name } updateList={ () => history.go(0) } visible={ visible } modalCancel={ () => setVisible(false) } segmentNameList={segmentNameList}/> : null}
         <Modal 
             visible={urlVisible} 
             onOk={()=>{
@@ -248,6 +263,22 @@ export default function AssemblyWeldingListing(): React.ReactNode {
             okText='下载'
         >
             当前存在错误数据，请重新下载上传！
-        </Modal>
+        </Modal>  
+        {isExport ? <ExportList
+            history={history}
+            location={location}
+            match={match}
+            columnsKey={() => {
+                let keys = [...towerColumns]
+                keys.pop()
+                return keys
+            }}
+            current={detailData?.current || 1}
+            size={detailData?.size || 10}
+            total={detailData?.total || 0}
+            url={``}
+            serchObj={{}}
+            closeExportList={() => setIsExport(false)}
+        /> : null}
     </>
 }

@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Space, DatePicker, Select, Button, Row, Col, Form, TreeSelect, Spin, message } from 'antd';
+import { Space, DatePicker, Select, Button, Row, Col, Form, TreeSelect, Spin } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -61,13 +61,11 @@ export default function PoleInformation(): React.ReactNode {
                     case 1:
                         return '待开始';
                     case 2:
-                        return '配段中';
+                        return '待配段';
                     case 3:
-                        return '出单中';
+                        return '待出单';
                     case 4:
                         return '已完成';
-                    case 5:
-                        return '已提交';
                 }
             }
         },
@@ -87,14 +85,14 @@ export default function PoleInformation(): React.ReactNode {
                 <Space direction="horizontal" size="small" className={ styles.operationBtn }>
                     {   userId === record.loftingUser ?
                         <>{  
-                            record.loftingStatus === 2 ? <WithSectionModal key={ record.id } id={ record.id } updateList={ () => setRefresh(!refresh) }/> : <Button type="link" disabled>配段</Button> 
+                            record.loftingStatus === 2 && location.state.status === 4 ? <WithSectionModal key={ record.id } id={ record.id } updateList={ () => setRefresh(!refresh) }/> : <Button type="link" disabled>配段</Button> 
                         }</>
                         : null
                     }
-                    <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/poleLoftingDetails/${ record.id }` }>杆塔放样明细</Link>
+                    { location.state.status === 4 ? <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/poleLoftingDetails/${ record.id }` }>杆塔放样明细</Link> : <Button type="link" disabled>杆塔放样明细</Button>}
                     {   userId === record.loftingUser ?
                         <>{  
-                            record.loftingStatus === 3 ? <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ record.id }` }>包装清单</Link> : <Button type="link" disabled>包装清单</Button> 
+                            record.loftingStatus === 3 && location.state.status === 4 ? <Link to={ `/workMngt/setOutList/poleInformation/${ params.id }/packingList/${ record.id }` }>包装清单</Link> : <Button type="link" disabled>包装清单</Button> 
                         }</>
                         : null
                     }
@@ -113,7 +111,7 @@ export default function PoleInformation(): React.ReactNode {
     }), {})
     const departmentData: any = data || [];
     const [ materialUser,setMaterialUser ] = useState([]);
-    const location = useLocation<{ state: string }>();
+    const location = useLocation<{ loftingLeader: string, status: number }>();
     const userId = AuthUtil.getUserId();
 
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
@@ -158,15 +156,7 @@ export default function PoleInformation(): React.ReactNode {
         requestData={{ productCategoryId: params.id }}
         refresh={ refresh }
         extraOperation={ <Space direction="horizontal" size="small">
-            {/* <Button type="primary" ghost>导出</Button> */}
-            {
-                userId === location.state ? 
-                <Button type="primary" onClick={ () => RequestUtil.post(`/tower-science/product/submit`, { productCategoryId: params.id }).then(res => {
-                    message.success('包装清单保存成功');
-                    history.goBack();
-                }) } ghost>完成汇总</Button>
-                : null
-            }
+            <Button type="primary" ghost>导出</Button>
             <Button type="primary" onClick={ () => history.goBack() } ghost>返回上一级</Button>
         </Space>}
         searchFormItems={ [
@@ -184,7 +174,6 @@ export default function PoleInformation(): React.ReactNode {
                     <Select.Option value={ 2 } key="2">配段中</Select.Option>
                     <Select.Option value={ 3 } key="3">出单中</Select.Option>
                     <Select.Option value={ 4 } key="4">已完成 </Select.Option>
-                    <Select.Option value={ 5 } key="5">已提交</Select.Option>
                 </Select>
             },
             {

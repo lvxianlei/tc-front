@@ -89,7 +89,7 @@ class BoltNewModal extends AbstractFillableComponent<IBoltNewModalRouteProps, Bo
                     required: true,
                     message: '请选择类型'
                 }],
-                children: <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
+                children: <Select getPopupContainer={triggerNode => triggerNode.parentNode} placeholder='请选择'>
                     { boltTypeOptions && boltTypeOptions.map(({ id, name }, index) => {
                         return <Select.Option key={index} value={id}>
                             {name}

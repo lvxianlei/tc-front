@@ -9,28 +9,8 @@
             "title": "塔型钢印号"
         },
         {
-            "dataIndex": "pattern",
-            "title": "模式",
-            "type": "select",
-            "enum": [
-                {
-                    "value": -1,
-                    "label": "-"
-                },
-                {
-                    "value": 1,
-                    "label": "新放"
-                },
-                {
-                    "value": 2,
-                    "label": "重新出卡"
-                },
-                {
-                    "value": 3,
-                    "label": "套用"
-                }
-            ]
-
+            "dataIndex": "patternName",
+            "title": "模式"
         },
         {
             "dataIndex": "taskNumber",

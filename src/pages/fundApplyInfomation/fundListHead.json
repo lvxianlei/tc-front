@@ -1,0 +1,209 @@
+{
+    "fundListColumns": [
+        {
+            "title": "请款编号",
+            "dataIndex": "payApplyNumber"
+        },
+        {
+            "title": "请款日期",
+            "dataIndex": "payApplyTime"
+        },
+        {
+            "title": "请款单号",
+            "dataIndex": "payNumber"
+        },
+        {
+            "title": "收款方",
+            "dataIndex": "payee"
+        },
+        {
+            "title": "请款方",
+            "dataIndex": "payer"
+        },
+        {
+            "title": "请款部门",
+            "dataIndex": "payerDepName"
+        },
+        {
+            "title": "费用类型",
+            "dataIndex": "costType"
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "payType"
+        },
+        {
+            "title": "请款金额",
+            "dataIndex": "sumMoney"
+        },
+        {
+            "title": "已付金额",
+            "dataIndex": "money"
+        },
+        {
+            "title": "应付款余额",
+            "dataIndex": "payMoney"
+        },
+        {
+            "title": "付款状态",
+            "dataIndex": "payStatus"
+        }
+    ],
+    "approvalStatus": [
+        {
+            "label": "待付款",
+            "value": 1
+        },
+        {
+            "label": "已付款",
+            "value": 2
+        }
+    ],
+    "overViewBaseColunms": [
+        {
+            "title": "请款编号",
+            "dataIndex": "payApplyNumber"
+        },
+        {
+            "title": "请款单号",
+            "dataIndex": "payNumber"
+        },
+        {
+            "title": "请款日期",
+            "dataIndex": "payApplyTime"
+        },
+        {
+            "title": "收款方",
+            "dataIndex": "payee"
+        },
+        {
+            "title": "请款方",
+            "dataIndex": "payer"
+        },
+        {
+            "title": "请款部门",
+            "dataIndex": "payerDepName"
+        },
+        {
+            "title": "开户银行",
+            "dataIndex": "bankName"
+        },
+        {
+            "title": "银行账号",
+            "dataIndex": "accNum"
+        },
+        {
+            "title": "请款类别",
+            "dataIndex": "costType"
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "payType"
+        },
+        {
+            "title": "请款金额",
+            "dataIndex": "sumMoney"
+        },
+        {
+            "title": "已付金额",
+            "dataIndex": "money"
+        },
+        {
+            "title": "应付款余额",
+            "dataIndex": "payMoney"
+        },
+        {
+            "title": "付款状态",
+            "dataIndex": "payStatus"
+        }
+    ],
+    "overViewBillColunms": [
+        {
+            "title": "票据号",
+            "dataIndex": "billNumber"
+        },
+        {
+            "title": "票据金额",
+            "dataIndex": "billMoney"
+        },
+        {
+            "title": "开票单位",
+            "dataIndex": "billCompany"
+        },
+        {
+            "title": "发票类型",
+            "dataIndex": "billType"
+        },
+        {
+            "title": "开票日期",
+            "dataIndex": "billTime"
+        }
+    ],
+    "overViewApplyColunms": [
+        {
+            "title": "部门",
+            "dataIndex": "department"
+        },
+        {
+            "title": "审批人",
+            "dataIndex": "approver"
+        },
+        {
+            "title": "职位",
+            "dataIndex": "position"
+        },
+        {
+            "title": "审批时间",
+            "dataIndex": "batchTime"
+        },
+        {
+            "title": "审批结果",
+            "dataIndex": "batchResult"
+        },
+        {
+            "title": "意见",
+            "dataIndex": "payMoney",
+            "width":200
+        }
+    ],
+    "payStatuOptions": ["待付款","部分付款","已付款"],
+    "addColums": [
+        {
+            "title": "付款日期",
+            "dataIndex": "payTime",
+            "type": "date",
+            "width": 200,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入付款日期..."
+                }
+            ]
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "payType",
+            "type": "select",
+            "enum": [],
+            "width": 200,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入回款金额..."
+                }
+            ]
+        },
+        {
+            "title": "付款金额",
+            "dataIndex": "payMoney",
+            "type": "string",
+            "width": 200,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入付款金额..."
+                }
+            ]
+        }
+    ]
+}

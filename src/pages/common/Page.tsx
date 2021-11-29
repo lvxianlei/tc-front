@@ -5,7 +5,7 @@
 // 整个common文件夹为让原继承形式组件可以通过传递参数形式复用。
 // 此组件为table页改造
 import React, { ReactNode } from 'react'
-import { TablePaginationConfig, TableColumnType, TableProps, FormItemProps, Space } from 'antd'
+import { TablePaginationConfig, TableColumnType, TableProps, FormItemProps, Space, Button } from 'antd'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { WithTranslation, withTranslation } from 'react-i18next'
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../components/AbstractMngtComponent'
@@ -14,6 +14,7 @@ import { ITabItem } from '../../components/ITabableComponent'
 import RequestUtil from '../../utils/RequestUtil'
 import { IClient } from '../IClient'
 import '../../components/AbstractMngtComponent.module.less'
+import ExportList from '../../components/export/list'
 export interface PageProps extends RouteComponentProps, WithTranslation {
     path: string
     columns: TableColumnType<object>[]
@@ -25,7 +26,8 @@ export interface PageProps extends RouteComponentProps, WithTranslation {
     requestData?: {}
     refresh?: boolean//刷新
     filterValue?: {} //查询条件
-    sourceKey?: string
+    readonly exportPath?: string; //导出接口
+    sourceKey?: string,
 }
 
 export interface IResponseData {
@@ -41,6 +43,7 @@ interface PageState extends IAbstractMngtComponentState {
     resData: any
     readonly selectedUserKeys: []
     readonly selectedUsers: []
+    readonly isExport?: boolean;
 }
 
 class Page extends AbstractMngtComponent<PageProps, PageState> {
@@ -53,10 +56,12 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
         return {
             ...super.getState(),
             name: '',
-            tableDataSource: []
+            tableDataSource: [],
+            isExport: false
         };
     }
     protected async fetchTableData(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}) {
+        this.setState({ loading: true })
         try {
             const sourceDataKey: string[] = this.props.sourceKey?.split(".") || []
             const resData: IResponseData = await RequestUtil.get<IResponseData>(this.props.path, {
@@ -77,9 +82,11 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                     current: resData.current,
                     pageSize: resData.size,
                     total: resData.total
-                }
+                },
+                loading: false
             });
         } catch (error) {
+            this.setState({ loading: false })
             console.log(error)
         }
     }
@@ -98,8 +105,8 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
         return this.state.tableDataSource;
     }
 
-    public getTableColumns(): TableColumnType<object>[] {
-        return (this.props.columns || []).map((item: any) => generateRender(item.type || "text", item))
+    public getTableColumns(): any[] {
+        return this.props.columns || []
     }
 
     public onTableChange(pagination: TablePaginationConfig): void {
@@ -124,9 +131,38 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
 
     protected renderExtraOperationContent(): React.ReactNode {
         return (
-            <Space direction="horizontal" size="middle">
-                {typeof this.props.extraOperation === "function" ? this.props.extraOperation(this.state.resData) : this.props.extraOperation}
-            </Space>
+            <>
+                <Space direction="horizontal" size="middle">
+                    {this.props.exportPath ? <Button type="primary" ghost onClick={() => {
+                        this.setState({
+                            isExport: true
+                        })
+                    }}>导出</Button> : null}
+                    {typeof this.props.extraOperation === "function" ? this.props.extraOperation(this.state.resData) : this.props.extraOperation}
+                </Space>
+                {this.state.isExport ? <ExportList
+                    history={this.props.history}
+                    location={this.props.location}
+                    match={this.props.match}
+                    columnsKey={() => {
+                        let keys = [...this.getTableColumns()]
+                        keys.pop()
+                        return keys
+                    }}
+                    current={this.state.tablePagination?.current || 1}
+                    size={this.state.tablePagination?.pageSize || 10}
+                    total={this.state.tablePagination?.total || 0}
+                    url={this.props.exportPath}
+                    serchObj={{
+                        ...this.props.filterValue,
+                    }}
+                    closeExportList={() => {
+                        this.setState({
+                            isExport: false
+                        })
+                    }}
+                /> : null}
+            </>
         );
     }
 

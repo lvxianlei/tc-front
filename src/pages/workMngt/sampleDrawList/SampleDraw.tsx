@@ -96,7 +96,7 @@ export default function SampleDraw(): React.ReactNode {
                     </Popconfirm>:null}
                     <Button type='link' onClick={async () => {
                         const url:any = await RequestUtil.get(`/tower-science/smallSample/sampleView/${record.id}`);
-                        setUrl(url?.filePath);
+                        setUrl(url?.downloadUrl);
                         setVisible(true)
                     }}>查看</Button>
                 </Space>
@@ -118,22 +118,19 @@ export default function SampleDraw(): React.ReactNode {
     const uploadChange = async (event: any) => {
         if (event.file.status === "done") {
             if (event.file.response.code === 200) {
-                const dataInfo = event.file.response.data
-                const fileInfo = dataInfo.name.split(".");
-                const value=[{
-                    name: dataInfo.originalName.split('.')[0],
-                    fileSuffix:fileInfo[fileInfo.length - 1],
-                    filePath: dataInfo.name,
-                    userName:dataInfo.userName
-                }]
-                await RequestUtil.post(`/tower-science/smallSample/sampleUpload/${params.id}`,value).then(()=>{
-                    message.success('导入成功！')
-                }).then(async ()=>{
-                    const data: any = await RequestUtil.get(`/tower-science/smallSample/sampleStat/${params.id}`)
-                    setHeaderName(data);
-                }).then(()=>{
+                // const dataInfo = event.file.response.data
+                // const fileInfo = dataInfo.name.split(".");
+                // const value=[{
+                //     name: dataInfo.originalName.split('.')[0],
+                //     fileSuffix:fileInfo[fileInfo.length - 1],
+                //     filePath: dataInfo.name,
+                //     userName:dataInfo.userName
+                // }]
+                const data: any = await RequestUtil.get(`/tower-science/smallSample/sampleStat/${params.id}`)
+                setHeaderName(data);
+                // }).then(()=>{
                     setRefresh(!refresh);
-                })
+                // })
             }
         }
     }
@@ -156,20 +153,21 @@ export default function SampleDraw(): React.ReactNode {
                     <Space>
                     {/* <Button type="primary">导出</Button> */}
                     {params.status==='2'?<Upload
-                        accept="image/png,image/jpeg"
+                        accept=".zip,.rar,.7z"
                         multiple={true}
-                        action={`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-resource/oss/put-file`}
+                        action={`${process.env.REQUEST_API_PATH_PREFIX}/tower-science/smallSample/sampleUploadByZip/${params.id}`}
                         headers={{
                             'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
                             'Tenant-Id': AuthUtil.getTenantId(),
                             'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
                         }}
+                        // data={ { productCategoryId:params.id } }
                         onChange={uploadChange}
                         showUploadList={false}
                     ><Button type="primary" >导入</Button></Upload>:null}
                     <Button type="primary" onClick={()=>{
-                        downloadTemplate(`/tower-science/smallSample/download/${params.id}`, '小样图', {} , true)
-                    }}>下载小样图</Button>
+                       history.push(`/workMngt/sampleDrawList/sampleDraw/${params.id}/${params.status}/downLoad`)
+                    }}>下载样图</Button>
                     {params.status==='2'?<Popconfirm
                         title="确认完成小样图?"
                         onConfirm={ async () =>  await RequestUtil.put(`/tower-science/smallSample/sampleComplete?productCategoryId=${params.id}`).then(()=>{

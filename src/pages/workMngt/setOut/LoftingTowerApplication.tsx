@@ -5,7 +5,7 @@
 */
 
 import React from 'react'
-import { Button, Form, Input, message, Space, Spin, TablePaginationConfig } from 'antd';
+import { Button, Form, Input, message, Select, Space, Spin, TablePaginationConfig } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle } from '../../common';
 import useRequest from '@ahooksjs/use-request';
@@ -113,14 +113,21 @@ export default function LoftingTowerApplication(): React.ReactNode {
     const [ externalTaskNum, setExternalTaskNum ] = useState<string>('');
     const [ productCategoryName, setProductCategoryName ] = useState<string>('');
     const [ steelProductShape, setSteelProductShape ] = useState<string>('');
+    const [ paragraph, setParagraph ] = useState<string>('');
 
     const getTableDataSource = (pagination: TablePaginationConfig, filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<IResponseData>(`/tower-science/productCategory`, { ...pagination, ...filterValues });
         setDetailData(data);
-        resole(data);
     });
 
-    const { loading } = useRequest<IResponseData>(() => getTableDataSource(page, {}), {});
+    const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => { 
+        const data: [] = await RequestUtil.get<[]>(`/tower-science/productSegment/segmentList`, {
+            productSegmentGroupId: params.loftId
+        });
+        getTableDataSource(page, {})
+        resole(data);
+    }), {})
+    const paragraphList: [] = data || [];
 
     const onFinish = (value: Record<string, any>) => {
         getTableDataSource(page, value);
@@ -136,14 +143,8 @@ export default function LoftingTowerApplication(): React.ReactNode {
             ]}>
                 <DetailTitle title="套用" />
                 <Form form={ form } onFinish={ onFinish } layout="inline"  className={ styles.topForm }>
-                    <Form.Item name="externalTaskNum" label="放样任务单号">
-                        <Input placeholder="请输入"/>
-                    </Form.Item>
-                    <Form.Item name="productCategoryName" label="塔型名称">
-                        <Input placeholder="请输入"/>
-                    </Form.Item>
-                    <Form.Item name="steelProductShape" label="塔型钢印号">
-                        <Input placeholder="请输入" />
+                    <Form.Item name="steelProductShape" label="查询">
+                        <Input placeholder="放样任务单号/塔型名称/塔型钢印号" />
                     </Form.Item>
                     <Space direction="horizontal" className={ styles.btnRight }>
                         <Button type="primary" htmlType="submit">搜索</Button>
@@ -154,13 +155,12 @@ export default function LoftingTowerApplication(): React.ReactNode {
                     dataSource={ detailData?.records } 
                     columns={ towerColumns }
                     onRow={ (record: Record<string, any>, index: number) => ({
-                            onClick: async () => { 
-                                const resData: [] = await RequestUtil.get(`/tower-science/productSegment/reuse/productCategory`, { productCategoryId: record.id });
-                                setParagraphData([...resData]);
-                            },
-                            className: styles.tableRow
-                        })
-                    }
+                        onClick: async () => { 
+                            const resData: [] = await RequestUtil.get(`/tower-science/productSegment/reuse/productCategory`, { productCategoryId: record.id });
+                            setParagraphData([...resData]);
+                        },
+                        className: styles.tableRow
+                    })}
                     onChange={ (pagination: TablePaginationConfig) => { 
                         getTableDataSource(pagination, { externalTaskNum: externalTaskNum, productCategoryName: productCategoryName, steelProductShape: steelProductShape });
                     } }
@@ -171,6 +171,15 @@ export default function LoftingTowerApplication(): React.ReactNode {
                         showSizeChanger: false
                     }}
                 />
+                <span>套用至段落</span>
+                <Select placeholder="请选择" onChange={ (e: string) => {
+                    setParagraph(e);
+                } } style={{width:'120px'}}>
+                    { paragraphList.map((item: any) => {
+                        return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
+                    }) }
+                </Select>
+                <p className={ styles.title }>段落信息</p>
                 <CommonTable dataSource={ paragraphData } columns={ paragraphColumns } pagination={ false }/>
             </DetailContent>
         </Spin>

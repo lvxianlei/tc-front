@@ -1,0 +1,342 @@
+{
+    "collectionListHead": [
+        {
+            "title": "保函编号",
+            "dataIndex": "guaranteeNumber"
+        },
+        {
+            "title": "申请编号",
+            "dataIndex": "applyNumber"
+        },
+        {
+            "title": "申请日期",
+            "dataIndex": "applyTime"
+        },
+        {
+            "title": "申请部门",
+            "dataIndex": "applyDeptId"
+        },
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName"
+        },
+        {
+            "title": "受益人名称",
+            "dataIndex": "beneficiaryName"
+        },
+        {
+            "title": "保函类型",
+            "dataIndex": "guaranteeType"
+        },
+        {
+            "title": "保函金额",
+            "dataIndex": "guaranteePrice"
+        },
+        {
+            "title": "出具日期",
+            "dataIndex": "issuanceTime"
+        },
+        {
+            "title": "要求交回日期",
+            "dataIndex": "requiredReturnTime"
+        },
+        {
+            "title": "保函交回日期",
+            "dataIndex": "guaranteeReturnTime"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        },
+        {
+            "title": "申请人",
+            "dataIndex": "applicant"
+        }
+    ],
+    "approvalStatus": [
+        {
+            "label": "待办理",
+            "value": 1
+        },
+        {
+            "label": "待回收",
+            "value": 2
+        },
+        {
+            "label": "已回收",
+            "value": 3
+        }
+    ],
+    "baseColums": [
+        {
+            "dataIndex": "issuanceTime",
+            "title": "出具日期",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "placeholder": "请选择出具日期",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择出具日期"
+                }
+            ]
+        },
+        {
+            "dataIndex": "requiredReturnTime",
+            "title": "要求交回日期",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "placeholder": "请选择要求交回日期",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择要求交回日期"
+                }
+            ]
+        },
+        {
+            "dataIndex": "effectiveTime",
+            "title": "保函有效截止期",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "placeholder": "请选择保函有效截止期",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择保函有效截止期"
+                }
+            ]
+        },
+        {
+            "dataIndex": "description",
+            "title": "保函信息备注",
+            "placeholder": "请输入保函信息备注",
+            "type": "textarea"
+        }
+    ],
+    "enclosure": [
+        {
+            "title": "文件名",
+            "dataIndex": "name"
+        },
+        {
+            "title": "大小",
+            "dataIndex": "fileSize"
+        },
+        {
+            "title": "上传人",
+            "dataIndex": "userName"
+        },
+        {
+            "title": "上传时间",
+            "dataIndex": "fileUploadTime",
+            "type": "date"
+        }
+    ],
+    "recoveryGuarantee": [
+        {
+            "dataIndex": "requiredReturnTime",
+            "title": "要求交回日期",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "placeholder": "请选择要求交回日期",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择出具日期"
+                }
+            ]
+        },
+        {
+            "dataIndex": "guaranteeReturnTime",
+            "title": "交回日期",
+            "type": "date",
+            "placeholder": "请选择交回日期",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择交回日期"
+                }
+            ]
+        },
+        {
+            "dataIndex": "isOriginalScript",
+            "title": "是否交回原件",
+            "placeholder": "请选择是否交回原件",
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择是否交回原件"
+                }
+            ],
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "是"
+                },
+                {
+                    "value": 0,
+                    "label": "否"
+                }
+            ]
+        },
+        {
+            "dataIndex": "reason",
+            "title": "原因",
+            "placeholder": "请输入原因"
+        },
+        {
+            "dataIndex": "description",
+            "title": "备注",
+            "placeholder": "请输入备注",
+            "type": "textarea"
+        }
+    ],
+    "seeBaseForm": [
+        {
+            "dataIndex": "guaranteeNumber",
+            "title": "保函编号"
+        },
+        {
+            "dataIndex": "applyNumber",
+            "title": "申请编号"
+        },
+        {
+            "dataIndex": "applyTime",
+            "title": "申请日期"
+        },
+        {
+            "dataIndex": "applyDeptId",
+            "title": "申请部门"
+        },
+        {
+            "dataIndex": "projectName",
+            "title": "项目名称"
+        },
+        {
+            "dataIndex": "beneficiaryName",
+            "title": "受益人名称"
+        },
+        {
+            "dataIndex": "contractNumber",
+            "title": "合同编号"
+        },
+        {
+            "dataIndex": "biddingNumber",
+            "title": "招标编号"
+        },
+        {
+            "dataIndex": "contractPrice",
+            "title": "合同总价"
+        },
+        {
+            "dataIndex": "guaranteeProportion",
+            "title": "保函所占比(%)"
+        },
+        {
+            "dataIndex": "guaranteeType",
+            "title": "保函类型"
+        },
+        {
+            "dataIndex": "guaranteePrice",
+            "title": "保函金额"
+        },
+        {
+            "dataIndex": "applicantStatus",
+            "title": "办理状态"
+        },
+        {
+            "dataIndex": "description",
+            "title": "备注"
+        }
+    ],
+    "guaranteeForm": [
+        {
+            "dataIndex": "issuanceTime",
+            "title": "出具日期"
+        },
+        {
+            "dataIndex": "requiredReturnTime",
+            "title": "要求交回日期"
+        },
+        {
+            "dataIndex": "effectiveTime",
+            "title": "保函有效截止期"
+        },
+        {
+            "dataIndex": "guaranteeDescription",
+            "title": "保函信息备注"
+        }
+    ],
+    "recoveryForm": [
+        {
+            "dataIndex": "requiredReturnTime",
+            "title": "要求交回日期"
+        },
+        {
+            "dataIndex": "guaranteeReturnTime",
+            "title": "保函交回日期"
+        },
+        {
+            "dataIndex": "isOriginalScript",
+            "title": "是否交回文件"
+        },
+        {
+            "dataIndex": "reason",
+            "title": "原因"
+        },
+        {
+            "dataIndex": "recoveryDescription",
+            "title": "备注"
+        }
+    ],
+    "seeEnclosure": [
+        {
+            "title": "文件名",
+            "dataIndex": "name"
+        },
+        {
+            "title": "大小",
+            "dataIndex": "fileSize"
+        },
+        {
+            "title": "上传人",
+            "dataIndex": "userName"
+        },
+        {
+            "title": "上传时间",
+            "dataIndex": "fileUploadTime",
+            "type": "date"
+        }
+    ],
+    "seeApprovalRecord": [
+        {
+            "title": "部门",
+            "dataIndex": "department"
+        },
+        {
+            "title": "审批人",
+            "dataIndex": "approver"
+        },
+        {
+            "title": "职位",
+            "dataIndex": "position"
+        },
+        {
+            "title": "审批时间",
+            "dataIndex": "batchTime",
+            "type": "date"
+        },
+        {
+            "title": "审批结果",
+            "dataIndex": "batchResult"
+        },
+        {
+            "title": "意见",
+            "dataIndex": "opinion",
+            "type": "date"
+        }
+    ]
+}

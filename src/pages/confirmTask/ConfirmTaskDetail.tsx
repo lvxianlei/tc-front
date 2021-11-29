@@ -146,7 +146,7 @@ export default function ConfirmTaskDetail(): React.ReactNode {
                         )
                     }
                 ]} dataSource={detailData?.attachInfoList} pagination={ false } /> */}
-                <Attachment dataSource={detailData?.attachInfoList}/>
+                <Attachment dataSource={detailData?.fileVOList}/>
                 <DetailTitle title="操作信息" />
                 <CommonTable columns={tableColumns} dataSource={detailData?.statusRecordList} pagination={ false } />
             </DetailContent>

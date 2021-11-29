@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Space, Input, Button, Popconfirm, message, Upload, Select } from 'antd';
+import { Space, Input, Button, Popconfirm, message, Upload, Select, Form } from 'antd';
 import { Link } from 'react-router-dom';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -82,12 +82,6 @@ export default function StaffMngt(): React.ReactNode {
             title: '邮箱',
             width: 200,
             dataIndex: 'email'
-        },
-        {
-            key: 'entryDate',
-            title: '入职时间',
-            width: 200,
-            dataIndex: 'entryDate'
         },
         {
             key: 'account',
@@ -201,14 +195,16 @@ export default function StaffMngt(): React.ReactNode {
                 {
                     name: 'category',
                     label: '员工类型',
-                    children: <Select placeholder="请选择" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
-                        <Select.Option value={''} key="0">全部</Select.Option>
-                        { staffTypeOptions && staffTypeOptions.map(({ id, name }, index) => {
-                            return <Select.Option key={index} value={id}>
-                                {name}
-                            </Select.Option>
-                        }) }
-                     </Select>
+                    children: <Form.Item name="category" initialValue="">
+                            <Select placeholder="请选择" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                            <Select.Option value={''} key="0">全部</Select.Option>
+                            { staffTypeOptions && staffTypeOptions.map(({ id, name }, index) => {
+                                return <Select.Option key={index} value={id}>
+                                    {name}
+                                </Select.Option>
+                            }) }
+                        </Select>
+                    </Form.Item>
                 },
                 {
                     name: 'fuzzyQuery',

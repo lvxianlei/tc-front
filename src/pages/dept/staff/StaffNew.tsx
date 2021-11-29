@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Spin, Button, Space, message, Form, Input, Table, Popconfirm, DatePicker, TreeSelect, Checkbox, Select, Radio } from 'antd';
+import { Spin, Button, Space, message, Form, Input, Table, Popconfirm, TreeSelect, Checkbox, Select } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { DetailTitle, DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -107,7 +107,13 @@ export default function StaffNew(): React.ReactNode {
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "autoAccount"] } key={ index } initialValue={ _ }>
                     <Checkbox key={ record.id } checked={ _ === 2 } disabled={ location.state.type === 'edit' && oldDataList[index].autoAccount === 2 } onChange={ (e) => {
-                        const data = form.getFieldsValue(true).list;
+                        let data = form.getFieldsValue(true).list;
+                        data = data.map((item: IStaff, ind: number) => {
+                            return {
+                                ...item,
+                                id: dataList[ind].id,
+                            }
+                        })
                         data[index] = {
                             ...data[index],
                             id: dataList[index].id,
@@ -137,7 +143,12 @@ export default function StaffNew(): React.ReactNode {
             dataIndex: 'number',
             width: 150,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={ ["list", index, "number"] } key={ index } initialValue={ _ }>
+                <Form.Item name={ ["list", index, "number"] } key={ index } initialValue={ _ } rules={[
+                    {
+                        pattern: /^[0-9]*$/,
+                        message: '仅可输入数字',
+                    }
+                ]}>
                     <Input maxLength={ 50 }/>
                 </Form.Item>
             )  
@@ -274,7 +285,6 @@ export default function StaffNew(): React.ReactNode {
                             station: items.stationList && items.stationList.join(',')
                         }
                     })
-                    console.log(value)
                     if(location.state.type === 'new') {
                         RequestUtil.post(`/tower-system/employee`, { employeeList: value }).then(res => {
                             history.goBack();

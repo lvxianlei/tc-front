@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
-import { Spin, Button, Space, Modal, message, Image, Form, Input, Upload } from 'antd';
+import { Spin, Button, Space, Modal, Image, Form, Input } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { DetailTitle, DetailContent, CommonTable } from '../common';
+import { DetailTitle, DetailContent, CommonTable, Attachment } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './AnnouncementMngt.module.less';
-import { IAnnouncement, IFileList } from './AnnouncementMngt';
+import { IAnnouncement } from './AnnouncementMngt';
 import { downLoadFile } from '../../utils';
-import AuthUtil from '../../utils/AuthUtil';
 import SelectUserTransfer from './SelectUserTransfer';
 import { IStaff } from '../dept/staff/StaffMngt';
+import { FileProps } from '../common/Attachment';
 
 export default function AnnouncementNew(): React.ReactNode {
     const [form] = Form.useForm();
-    const [attachInfo, setAttachInfo] = useState<IFileList[]>([]);
+    const [attachInfo, setAttachInfo] = useState<FileProps[]>([]);
     const location = useLocation<{ type: string }>();
     const [staffList, setStaffList] = useState<string[]>([]);
     const [detailData, setDetailData] = useState<IAnnouncement>({});
@@ -118,42 +118,11 @@ export default function AnnouncementNew(): React.ReactNode {
                     }} />} disabled />
                 </Form.Item>
             </Form>
-            <DetailTitle title="上传附件" key={2} operation={[<Upload
-                action={() => {
-                    const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                    return baseUrl + '/sinzetech-resource/oss/put-file'
-                }}
-                headers={
-                    {
-                        'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                        'Tenant-Id': AuthUtil.getTenantId(),
-                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                    }
+            <Attachment dataSource={ attachInfo } onDoneChange={
+                (attachs: FileProps[]) => {
+                    setAttachInfo([...attachInfo, ...attachs]);
                 }
-                showUploadList={false}
-                data={{ productCategoryId: params.id }}
-                onChange={(info) => {
-                    if (info.file.response && !info.file.response?.success) {
-                        message.warning(info.file.response?.msg)
-                    }
-                    if (info.file.response && info.file.response?.success) {
-                        const dataInfo = info.file.response.data
-                        const fileInfo = dataInfo.name.split(".")
-                        setAttachInfo([...attachInfo, {
-                            id: "",
-                            uid: attachInfo.length,
-                            name: dataInfo.originalName,
-                            description: "",
-                            filePath: dataInfo.name,
-                            link: dataInfo.link,
-                            fileSize: dataInfo.size,
-                            fileSuffix: fileInfo[fileInfo.length - 1],
-                            userName: dataInfo.userName,
-                            fileUploadTime: dataInfo.fileUploadTime
-                        }])
-                    }
-                }}
-            ><Button key="enclosure" type="primary" ghost>添加</Button></Upload>]} />
+            }><Button key="enclosure" type="primary" ghost>添加</Button></Attachment>
             <CommonTable columns={[
                 {
                     key: 'name',
