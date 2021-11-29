@@ -89,7 +89,7 @@ export default function PickCheckList(): React.ReactNode {
         <>
             <Page
                 path={`/tower-science/drawProductStructure/check`}
-                requestData={{productSegmentId:params.productSegmentId}}
+                requestData={{segmentGroupId:params.productSegmentId}}
                 columns={ columnsSetting }
                 onFilterSubmit={onFilterSubmit}
                 refresh={refresh}

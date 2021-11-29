@@ -40,7 +40,7 @@ export default function PickTowerDetail(): React.ReactNode {
     const location = useLocation<{ state: {} }>();
     const [isExport, setIsExportStoreList] = useState(false)
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/check`,{productSegmentId:params.productSegmentId,...tablePagination, size:tablePagination.pageSize})
+        const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/check`,{segmentGroupId:params.productSegmentId,...tablePagination, size:tablePagination.pageSize})
         setTableDataSource(data.records);
         setTablePagination({
             ...tablePagination,
@@ -52,7 +52,7 @@ export default function PickTowerDetail(): React.ReactNode {
     }), {});
     
     const onTableChange=async (pagination: TablePaginationConfig)=> {
-        const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/check`,{productSegmentId:params.productSegmentId,...pagination, size:pagination.pageSize})
+        const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/check`,{segmentGroupId:params.productSegmentId,...pagination, size:pagination.pageSize})
         setTableDataSource(data.records);
         setTablePagination({
             ...tablePagination,
