@@ -10,6 +10,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
+import { ICertificate } from './CertificateMngt';
 
 const tableColumns = [
     {
@@ -53,7 +54,7 @@ const baseColums = [
         "title": "证书类型："
     },
     {
-        "dataIndex": "designation",
+        "dataIndex": "effective",
         "title": "有效："
     },
     {
@@ -112,11 +113,16 @@ const UserColums = [
 export default function CertificateDetail(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(`/tower-system/certificateRecord/${params.id}`)
+    const { loading, data } = useRequest<ICertificate>(() => new Promise(async (resole, reject) => {
+        const data: ICertificate = await RequestUtil.get<ICertificate>(`/tower-system/certificateRecord/${params.id}`)
         resole(data)
     }), {})
-    const detailData: any = data;
+    const now = new Date();
+    const time =  new Date(data?.endDate && data?.endDate.toString().replace("-","/") || '');
+    const detailData: ICertificate = {
+        ...data,
+        effective: now < time ? '失效' : '有效'
+    };
     if (loading) {
         return <Spin spinning={loading}>
             <div style={{ width: '100%', height: '300px' }}></div>
