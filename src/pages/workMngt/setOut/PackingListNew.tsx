@@ -217,7 +217,7 @@ export default function PackingListNew(): React.ReactNode {
             dataIndex: 'num',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <InputNumber
-                    key={ record.id } 
+                    key={ record.structureId } 
                     bordered={false} 
                     defaultValue={ record.num } 
                     min={ 1 }

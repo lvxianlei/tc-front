@@ -8,7 +8,7 @@ import React, { useRef, useState } from 'react';
 import { Space, Input, DatePicker, Button, Popconfirm, message, Spin } from 'antd';
 import { Attachment, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, useLocation } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { downloadTemplate } from './downloadTemplate';
@@ -86,6 +86,7 @@ export default function NCProgram(): React.ReactNode {
     const [ refresh, setRefresh ] = useState(false);
     const [ data, setData ] = useState<IData>();
     const attachRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
+    const location = useLocation<{ status: number }>();
 
     const getData = async () => {
         const data = await RequestUtil.get<IData>(`/tower-science/productNc/count?productCategoryId=${ params.id }`);
@@ -111,7 +112,7 @@ export default function NCProgram(): React.ReactNode {
         extraOperation={ <Space direction="horizontal" size="small">
             <Button type="primary" ghost onClick={ () => downloadTemplate(`/tower-science/productNc/downloadSummary?productCategoryId=${ params.id }`, "NC文件汇总" , {}, true ) }>下载</Button>
             <p>NC程序数 { data?.ncCount || 0 }/{ data?.structureCount || 0 }</p>
-            <Attachment ref={ attachRef } isTable={ false } dataSource={[]} onDoneChange={ (dataInfo: FileProps[]) => {
+            { location.state.status === 1 || location.state.status === 2 ? <Attachment ref={ attachRef } isTable={ false } dataSource={[]} onDoneChange={ (dataInfo: FileProps[]) => {
                 RequestUtil.post(`/tower-science/productNc/importProductNc`, {
                     fileVOList: [...dataInfo],
                     productCategoryId: params.id
@@ -122,7 +123,7 @@ export default function NCProgram(): React.ReactNode {
                         getData();
                     }
                 })
-            } }><Button type="primary" ghost>批量上传</Button></Attachment>
+            } }><Button type="primary" ghost>批量上传</Button></Attachment> : null}
             <Button type="primary" ghost onClick={() => history.goBack()}>返回上一级</Button>
         </Space>}
         searchFormItems={ [

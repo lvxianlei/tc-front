@@ -263,7 +263,7 @@ export default function TowerInformation(): React.ReactNode {
                 <Button type="primary" ghost>导出</Button>
                 <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/modalList`, state: { status: location.state.status } }}><Button type="primary" ghost>模型</Button></Link>
                 <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/processCardList`, state: { status: location.state.status } }}><Button type="primary" ghost>大样图工艺卡</Button></Link>
-                <Link to={ `/workMngt/setOutList/towerInformation/${ params.id }/NCProgram` }><Button type="primary" ghost>NC程序</Button></Link>
+                <Link to={{pathname: `/workMngt/setOutList/towerInformation/${ params.id }/NCProgram`, state: { status: location.state.status } }}><Button type="primary" ghost>NC程序</Button></Link>
                 {
                     userId === location.state.loftingLeader ? <>
                     <Popconfirm
