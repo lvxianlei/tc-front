@@ -518,15 +518,19 @@
     ],
     "billingHead": [
         {
+            "title": "发票号码",
+            "dataIndex": "ticketNumber"
+        },
+        {
+            "title": "发票类型",
+            "dataIndex": "ticketTypeName"
+        },
+        {
             "title": "产品名称(票面)",
             "dataIndex": "productName"
         },
         {
-            "title": "生产名称(实际)",
-            "dataIndex": "productionName"
-        },
-        {
-            "title": "规格型号",
+            "title": "型号规格",
             "dataIndex": "model"
         },
         {
@@ -538,21 +542,19 @@
             "dataIndex": "company"
         },
         {
-            "title": "重量(吨)",
+            "title": "数量",
             "dataIndex": "weight",
-            "type": "number",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入重量..."
-                }
-            ]
+            "type": "number"
         },
         {
             "title": "单价（元/吨）",
             "dataIndex": "money",
-            "type": "number",
-            "disabled": true
+            "type": "number"
+        },
+        {
+            "title": "金额(元)",
+            "dataIndex": "moneyCount",
+            "type": "number"
         },
         {
             "title": "税率(%)",
@@ -564,15 +566,8 @@
             "type": "number"
         },
         {
-            "title": "金额(元)",
-            "dataIndex": "moneyCount",
-            "type": "number",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入金额..."
-                }
-            ]
+            "title": "备注",
+            "dataIndex": "description"
         }
     ],
     "billingHeader": [

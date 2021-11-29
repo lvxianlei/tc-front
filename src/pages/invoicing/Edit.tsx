@@ -51,7 +51,7 @@ export default function Edit() {
         setInvoicingDetailVos(invoicingDetailVos.map((item: any, index: number) => {
             if (index === changeIndex) {
                 if (changeKey === "taxRate") {
-                    return ({ ...item, [changeKey]: value, taxMoney: ((item.moneyCount||0) * value).toFixed(2) })
+                    return ({ ...item, [changeKey]: value, taxMoney: (((item.moneyCount || 0) * value) * 0.01).toFixed(2) })
                 }
                 return ({ ...item, [changeKey]: value })
             }
@@ -104,7 +104,7 @@ export default function Edit() {
                     case "ticketNumber":
                         return ({ ...item, width: 150, render: (value: string, _: any, index) => <Input value={value} onChange={(event) => handleEditTableChange("ticketNumber", event?.target.value, index)} style={{ width: "100%" }} /> })
                     case "taxRate":
-                        return ({ ...item, render: (value: number, _: any, index) => <InputNumber value={value} step={0.01} onChange={(value: number) => handleEditTableChange("taxRate", value, index)} /> })
+                        return ({ ...item, render: (value: number, _: any, index) => <InputNumber value={value} step={1} min={0} max={100} onChange={(value: number) => handleEditTableChange("taxRate", value, index)} /> })
                     default:
                         return item
                 }
